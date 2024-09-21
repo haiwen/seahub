@@ -1,12 +1,15 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 
-const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
+const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick }) => {
+  const imageRef = useRef(null);
+
   const imageHeight = useMemo(() => size + gap, [size, gap]);
 
-  const renderDisplayGroup = useCallback((group) => {
+  const renderDisplayGroup = useCallback((group, groupIndex) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
     const { name, children, height, top, paddingTop } = group;
 
@@ -36,6 +39,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
       <div key={name} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
+          ref={imageRef}
           className="metadata-gallery-image-list"
           style={{
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -43,10 +47,21 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
             paddingBottom: (children.length - 1 - childrenEndIndex) * imageHeight,
           }}
         >
-          {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
-            return row.children.map(img => {
+          {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row, rowIndex) => {
+            return row.children.map((img) => {
+              const isSelected = selectedImages.includes(img);
               return (
-                <div key={img.src} tabIndex={1} className="metadata-gallery-image-item" style={{ width: size, height: size, background: '#f1f1f1' }}>
+                <div
+                  key={img.src}
+                  tabIndex={1}
+                  className={classnames('metadata-gallery-image-item', {
+                    'metadata-gallery-image-item-selected': isSelected,
+                  })}
+                  style={{ width: size, height: size, background: '#f1f1f1' }}
+                  onClick={(e) => onImageClick(e, img)}
+                  onDoubleClick={(e) => onImageDoubleClick(e, img)}
+                  onContextMenu={(e) => onImageRightClick(e, img)}
+                >
                   <img className="metadata-gallery-grid-image" src={img.src} alt={img.name} />
                 </div>
               );
@@ -55,7 +70,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight]);
+  }, [overScan, columns, size, imageHeight, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -87,6 +102,10 @@ GalleryMain.propTypes = {
   columns: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
+  selectedImages: PropTypes.array.isRequired,
+  onImageClick: PropTypes.func.isRequired,
+  onImageDoubleClick: PropTypes.func.isRequired,
+  onImageRightClick: PropTypes.func.isRequired,
 };
 
 export default GalleryMain;

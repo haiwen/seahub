@@ -1,11 +1,17 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import metadataAPI from '../../api';
+import URLDecorator from '../../../utils/url-decorator';
 import toaster from '../../../components/toast';
 import GalleryMain from './gallery-main';
+import ContextMenu from './context-menu';
+import ImageDialog from '../../../components/dialog/image-dialog';
+import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
+import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString } from '../../utils/cell';
-import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid, fileServerRoot, useGoFileserver, gettext } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT } from '../../constants';
 
 import './index.css';
@@ -19,6 +25,11 @@ const Gallery = () => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
   const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
@@ -48,18 +59,20 @@ const Gallery = () => {
     }
   }, [mode]);
 
-  const groups = useMemo(() => {
+  const calculateGroups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows
-      .filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
+    let init = metadata.rows.filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
       .reduce((_init, record) => {
+        const id = record[PRIVATE_COLUMN_KEY.ID];
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
         const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
+          id,
           name: fileName,
+          path: parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
           date: date,
@@ -106,6 +119,10 @@ const Gallery = () => {
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
+
+  useEffect(() => {
+    setGroups(calculateGroups);
+  }, [calculateGroups]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -173,6 +190,18 @@ const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target) || e.target.tagName.toLowerCase() !== 'img') {
+        setSelectedImages([]);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -190,12 +219,134 @@ const Gallery = () => {
     }
   }, [imageSize, loadMore, renderMoreTimer]);
 
+  const imageItems = useMemo(() => {
+    return groups.flatMap(group => group.children.flatMap(row => row.children));
+  }, [groups]);
+
+  const handleClick = useCallback((event, image) => {
+    if (event.metaKey || event.ctrlKey) {
+      setSelectedImages(prev =>
+        prev.includes(image) ? prev.filter(img => img !== image) : [...prev, image]
+      );
+    } else if (event.shiftKey && selectedImages.length > 0) {
+      const lastSelected = selectedImages[selectedImages.length - 1];
+      const start = imageItems.indexOf(lastSelected);
+      const end = imageItems.indexOf(image);
+      const range = imageItems.slice(Math.min(start, end), Math.max(start, end) + 1);
+      setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
+    } else {
+      setSelectedImages([image]);
+    }
+  }, [imageItems, selectedImages]);
+
+  const handleDoubleClick = useCallback((event, image) => {
+    const index = imageItems.findIndex(item => item.id === image.id);
+    setImageIndex(index);
+    setIsImagePopupOpen(true);
+  }, [imageItems]);
+
+
+  const handleRightClick = useCallback((event, image) => {
+    event.preventDefault();
+    const index = imageItems.findIndex(item => item.id === image.id);
+    if (isNaN(index) || index === -1) return;
+
+    setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
+  }, [imageItems]);
+
+  const moveToPrevImage = () => {
+    const imageItemsLength = imageItems.length;
+    setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
+  };
+
+  const moveToNextImage = () => {
+    const imageItemsLength = imageItems.length;
+    setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
+  };
+
+
+  const closeImagePopup = () => {
+    setIsImagePopupOpen(false);
+  };
+
+  const handleDownload = useCallback(() => {
+    if (selectedImages.length) {
+      if (selectedImages.length === 1) {
+        const image = selectedImages[0];
+        let direntPath = image.path === '/' ? image.name : Utils.joinPath(image.path, image.name);
+        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+        location.href = url;
+      } else {
+        if (!useGoFileserver) {
+          setIsZipDialogOpen(true);
+        } else {
+          const dirents = selectedImages.map(image => {
+            const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
+            return value;
+          });
+          metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
+            const zipToken = res.data['zip_token'];
+            location.href = `${fileServerRoot}zip/${zipToken}`;
+          }).catch(error => {
+            const errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
+      }
+
+    }
+  }, [repoID, selectedImages]);
+
+  const handleDelete = () => {
+    if (selectedImages.length) {
+      const imagesToDelete = selectedImages.map(image => image.name);
+
+      setGroups(prevGroups => prevGroups.map(group => ({
+        ...group,
+        children: group.children.map(row => ({
+          ...row,
+          children: row.children.filter(img => !imagesToDelete.includes(img.name))
+        })).filter(row => row.children.length > 0)
+      })).filter(group => group.children.length > 0));
+
+      setSelectedImages([]);
+
+      metadataAPI.deleteImages(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
+        .then(() => {
+          setSelectedImages([]);
+          let msg = selectedImages.length > 1
+            ? gettext('Successfully deleted {n} images.')
+            : gettext('Successfully deleted {name}');
+          msg = msg.replace('{name}', selectedImages[0].name)
+            .replace('{n}', selectedImages.length);
+          toaster.success(msg, { duration: 3 });
+        }).catch(error => {
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+    }
+  };
+
+  const closeZipDialog = () => {
+    setIsZipDialogOpen(false);
+  };
+
   return (
     <div className="sf-metadata-container">
       <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            <GalleryMain groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
+            <GalleryMain
+              groups={groups}
+              size={imageSize}
+              columns={columns}
+              overScan={overScan}
+              gap={IMAGE_GAP}
+              selectedImages={selectedImages}
+              onImageClick={handleClick}
+              onImageDoubleClick={handleDoubleClick}
+              onImageRightClick={handleRightClick}
+            />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
                 <CenteredLoading />
@@ -204,6 +355,33 @@ const Gallery = () => {
           </>
         )}
       </div>
+      <ContextMenu
+        getContentRect={() => containerRef.current.getBoundingClientRect()}
+        getContainerRect={() => containerRef.current.getBoundingClientRect()}
+        onDownload={handleDownload}
+        onDelete={handleDelete}
+      />
+      {isImagePopupOpen &&
+      <ModalPortal>
+        <ImageDialog
+          imageItems={imageItems}
+          imageIndex={imageIndex}
+          closeImagePopup={closeImagePopup}
+          moveToPrevImage={moveToPrevImage}
+          moveToNextImage={moveToNextImage}
+        />
+      </ModalPortal>
+      }
+      {isZipDialogOpen &&
+        <ModalPortal>
+          <ZipDownloadDialog
+            repoID={repoID}
+            path={'/'}
+            target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
+            toggleDialog={closeZipDialog}
+          />
+        </ModalPortal>
+      }
     </div>
   );
 };
