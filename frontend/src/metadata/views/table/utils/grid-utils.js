@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
-import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, TRANSFER_TYPES } from '../../../constants';
+import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import { convertCellValue } from './convert-utils';
+import { Utils } from '../../../../utils/utils';
 
 const NORMAL_RULE = ({ value }) => {
   return value;
@@ -95,10 +96,14 @@ class GridUtils {
       let originalOldRecordData = {};
       let originalKeyOldRecordData = {};
       const { canModifyRow, canModifyColumn } = window.sfMetadataContext;
+      const filename = pasteRecord[PRIVATE_COLUMN_KEY.FILE_NAME];
 
       for (let j = 0; j < pasteColumnsLen; j++) {
         const pasteColumn = getColumnByIndex(j + startColumnIndex, columns);
         if (!pasteColumn || !(canModifyRow(pasteRecord) && canModifyColumn(pasteColumn))) {
+          continue;
+        }
+        if (pasteColumn.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME && !(Utils.imageCheck(filename) || Utils.videoCheck(filename))) {
           continue;
         }
         const copiedColumnIndex = j % copiedColumnsLen;
