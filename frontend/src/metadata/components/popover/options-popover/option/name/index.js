@@ -7,6 +7,7 @@ import './index.css';
 
 const Name = ({
   isEditing,
+  isPredefined,
   option,
   onOpen,
   onClose,
@@ -50,8 +51,9 @@ const Name = ({
   const onToggle = useCallback((event) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
+    if (isPredefined) return;
     onOpen(option.id);
-  }, [option, onOpen]);
+  }, [isPredefined, option, onOpen]);
 
   useEffect(() => {
     document.addEventListener('mousedown', onClick);

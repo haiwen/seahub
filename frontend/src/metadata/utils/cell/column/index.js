@@ -8,6 +8,7 @@ export {
   getFloatNumber,
 } from './number';
 export {
+  checkIsPredefinedOption,
   getOption,
   getColumnOptionNameById,
   getColumnOptionNamesByIds,

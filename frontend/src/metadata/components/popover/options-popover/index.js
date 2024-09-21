@@ -8,6 +8,7 @@ import Option from './option';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getColumnOptions, getOptionNameById, generateNewOption } from '../../../utils/column';
+import { checkIsPredefinedOption } from '../../../utils/cell';
 
 import './index.css';
 
@@ -159,6 +160,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
           key={id}
           option={option}
           index={index}
+          isPredefined={checkIsPredefinedOption(column, id)}
           isEditing={editingOptionId === id}
           isDeleting={deletingOptionId === id}
           isViewing={viewingOptionId === id}
@@ -173,7 +175,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
         />
       );
     }) : [];
-  }, [displayOptions, editingOptionId, deletingOptionId, viewingOptionId, onMove, onUpdate, updateDeleteOption, onMouseEnter, onMouseLeave, onToggleFreeze, onOpenNameEditor, onCloseNameEditor]);
+  }, [column, displayOptions, editingOptionId, deletingOptionId, viewingOptionId, onMove, onUpdate, updateDeleteOption, onMouseEnter, onMouseLeave, onToggleFreeze, onOpenNameEditor, onCloseNameEditor]);
 
   return (
     <>
