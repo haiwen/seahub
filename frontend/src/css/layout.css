@@ -346,3 +346,8 @@ img[src=""],img:not([src]) { /* for first loading img*/
   align-items: center;
   text-align: center;
 }
+
+.sf-tip-default {
+  font-size: 13px;
+  color: #666;
+}
