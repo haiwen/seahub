@@ -221,6 +221,32 @@ class MetadataManagerAPI {
     };
     return this.req.post(url, params);
   };
+
+  zipDownload(repoID, parent_dir, dirents) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
+    const form = new FormData();
+    form.append('parent_dir', parent_dir);
+    dirents.forEach(item => {
+      form.append('dirents', item);
+    });
+
+    return this._sendPostRequest(url, form);
+  }
+
+  /**
+   * Delete multiple files or folders in a repository, used to delete images in gallery originally
+   * @param {string} repoID - The ID of the repository
+   * @param {string[]} dirents - Array of file/folder paths to delete
+   * @returns {Promise} Axios delete request promise
+   */
+  deleteImages(repoID, dirents) {
+    const url = this.server + '/api/v2.1/repos/batch-delete-folders-item/';
+    const data = {
+      repo_id: repoID,
+      file_names: dirents
+    };
+    return this.req.delete(url, { data });
+  }
 }
 
 const metadataAPI = new MetadataManagerAPI();

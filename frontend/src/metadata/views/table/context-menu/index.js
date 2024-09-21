@@ -6,7 +6,7 @@ import { gettext, siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
-
+import { VIEW_TYPE } from '../../../constants/view';
 import './index.css';
 
 const OPERATION = {
@@ -16,6 +16,8 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
+  DOWNLOAD: 'download',
+  DELETE: 'delete',
 };
 
 const ContextMenu = ({
@@ -29,6 +31,8 @@ const ContextMenu = ({
   updateRecords,
   getTableContentRect,
   getTableCanvasContainerRect,
+  onDownload,
+  onDelete,
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -43,6 +47,11 @@ const ContextMenu = ({
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const canModifyRow = window.sfMetadataContext.canModifyRow;
     let list = [];
+
+    if (metadata.view.type === VIEW_TYPE.GALLERY) {
+      list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download') });
+      list.push({ value: OPERATION.DELETE, label: gettext('Delete') });
+    }
 
     if (selectedRange) {
       !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
@@ -62,7 +71,7 @@ const ContextMenu = ({
       return list;
     }
 
-    const selectedRecords = Object.keys(recordMetrics.idSelectedRecordMap);
+    const selectedRecords = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
     if (selectedRecords.length > 1) {
       if (descriptionColumn) {
         const isIncludeSdocRecord = selectedRecords.filter(id => {
@@ -229,12 +238,20 @@ const ContextMenu = ({
         imageCaption && imageCaption();
         break;
       }
+      case OPERATION.DOWNLOAD: {
+        onDownload && onDownload();
+        break;
+      }
+      case OPERATION.DELETE: {
+        onDelete && onDelete();
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, onDownload, onDelete]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
