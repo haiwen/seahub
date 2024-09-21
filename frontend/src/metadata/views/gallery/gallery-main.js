@@ -48,7 +48,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
     }
 
     return (
-      <div key={`${name}-${groupIndex}`} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
+      <div key={groupIndex} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
           ref={imageRef}
@@ -60,11 +60,11 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
           }}
         >
           {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row, rowIndex) => {
-            return row.children.map((img, imgIndex) => {
+            return row.children.map((img) => {
               const isSelected = selectedImages.includes(img);
               return (
                 <div
-                  key={`${img.src}-${groupIndex}-${rowIndex}-${imgIndex}`}
+                  key={img.src}
                   tabIndex={1}
                   className={classnames('metadata-gallery-image-item', {
                     'metadata-gallery-image-item-selected': isSelected,

@@ -4,7 +4,7 @@ import metadataAPI from '../../api';
 import URLDecorator from '../../../utils/url-decorator';
 import toaster from '../../../components/toast';
 import GalleryMain from './gallery-main';
-import ContextMenu from '../table/context-menu';
+import ContextMenu from './context-menu';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
