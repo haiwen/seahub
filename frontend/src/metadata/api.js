@@ -226,13 +226,9 @@ class MetadataManagerAPI {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
     const form = new FormData();
     form.append('parent_dir', parent_dir);
-    if (Array.isArray(dirents)) {
-      dirents.forEach(item => {
-        form.append('dirents', item);
-      });
-    } else {
-      form.append('dirents', dirents);
-    }
+    dirents.forEach(item => {
+      form.append('dirents', item);
+    });
 
     return this._sendPostRequest(url, form);
   }

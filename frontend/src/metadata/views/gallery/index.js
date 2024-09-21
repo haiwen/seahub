@@ -262,26 +262,28 @@ const Gallery = () => {
   const handleDownload = useCallback(() => {
     if (selectedImages.length) {
       if (selectedImages.length === 1) {
-        const direntPath = Utils.joinPath(selectedImages[0].path, selectedImages[0].name);
-        const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+        const image = selectedImages[0];
+        let direntPath = image.path === '/' ? image.name : Utils.joinPath(image.path, image.name);
+        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
         location.href = url;
-        return;
-      }
-      if (!useGoFileserver) {
-        setIsZipDialogOpen(true);
       } else {
-        const dirents = selectedImages.map(image => {
-          const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
-          return value;
-        });
-        metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
-          const zipToken = res.data['zip_token'];
-          location.href = `${fileServerRoot}zip/${zipToken}`;
-        }).catch(error => {
-          const errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
+        if (!useGoFileserver) {
+          setIsZipDialogOpen(true);
+        } else {
+          const dirents = selectedImages.map(image => {
+            const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
+            return value;
+          });
+          metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
+            const zipToken = res.data['zip_token'];
+            location.href = `${fileServerRoot}zip/${zipToken}`;
+          }).catch(error => {
+            const errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
       }
+
     }
   }, [repoID, selectedImages]);
 
