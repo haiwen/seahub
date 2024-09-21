@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import { DEFAULT_DATE_FORMAT, DATE_UNIT } from '../constants';
 import { getFloatNumber } from './cell';
 
@@ -211,10 +212,10 @@ const formatTextToDate = (text, format = 'YYYY-MM-DD') => {
   } else {
     dateObj = DateUtils.parseDateWithFormat(text, format);
   }
-  if (format.indexOf('HH:mm') < 0) {
-    return DateUtils.format(dateObj, 'YYYY-MM-DD') || null;
-  }
-  return DateUtils.format(dateObj, 'YYYY-MM-DD HH:MM') || null;
+  let timeUnit = format.split(' ')[1] || '';
+  timeUnit = timeUnit.toUpperCase();
+  const newFormat = classnames('YYYY-MM-DD', timeUnit);
+  return DateUtils.format(dateObj, newFormat) || null;
 };
 
 export default DateUtils;

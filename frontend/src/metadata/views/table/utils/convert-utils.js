@@ -69,14 +69,8 @@ function convert2Number(cellValue, oldCellValue, fromColumnType, targetColumnDat
 
 function convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, targetColumnData) {
   const currentFormat = targetColumnData?.format || DEFAULT_DATE_FORMAT;
-  const fromFormat = fromColumnData?.format || DEFAULT_DATE_FORMAT;
   switch (fromColumnType) {
     case CellType.DATE: {
-      const fromTimeIdx = fromFormat.indexOf('HH:mm');
-      const currentTimeIdx = currentFormat.indexOf('HH:mm');
-      if ((fromTimeIdx > -1 && currentTimeIdx > -1) || fromTimeIdx === currentTimeIdx) {
-        return cellValue;
-      }
       return formatTextToDate(cellValue, currentFormat);
     }
     case CellType.CTIME:
