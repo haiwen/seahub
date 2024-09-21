@@ -11,6 +11,7 @@
 .metadata-gallery-group-by-setter .metadata-gallery-group-by-button {
   width: 66px;
   height: 28px;
+  color: #212529;
   background-color: #fff;
   position: relative;
   display: flex;
