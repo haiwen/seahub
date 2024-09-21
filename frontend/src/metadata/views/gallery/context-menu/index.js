@@ -4,34 +4,21 @@ import { gettext } from '../../../../utils/constants';
 import './index.css';
 
 const OPERATION = {
-  CLEAR_SELECTED: 'clear-selected',
-  COPY_SELECTED: 'copy-selected',
-  OPEN_PARENT_FOLDER: 'open-parent-folder',
-  OPEN_IN_NEW_TAB: 'open-new-tab',
-  GENERATE_DESCRIPTION: 'generate-description',
-  IMAGE_CAPTION: 'image-caption',
   DOWNLOAD: 'download',
   DELETE: 'delete',
 };
 
-const ContextMenu = ({
-  getTableContentRect,
-  getTableCanvasContainerRect,
-  onDownload,
-  onDelete,
-}) => {
+const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const options = useMemo(() => {
     if (!visible) return [];
-    let list = [];
-
-    list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download') });
-    list.push({ value: OPERATION.DELETE, label: gettext('Delete') });
-
-    return list;
+    return [
+      { value: OPERATION.DOWNLOAD, label: gettext('Download') },
+      { value: OPERATION.DELETE, label: gettext('Delete') }
+    ];
   }, [visible]);
 
   const handleHide = useCallback((event) => {
@@ -65,11 +52,10 @@ const ContextMenu = ({
     };
     if (!menuRef.current) return menuStyles;
     const rect = menuRef.current.getBoundingClientRect();
-    const tableCanvasContainerRect = getTableCanvasContainerRect();
-    const tableContentRect = getTableContentRect();
-    const { right: innerWidth, bottom: innerHeight } = tableContentRect;
-    menuStyles.top = menuStyles.top - tableCanvasContainerRect.top;
-    menuStyles.left = menuStyles.left - tableCanvasContainerRect.left;
+    const containerRect = getContainerRect();
+    const { right: innerWidth, bottom: innerHeight } = getContentRect();
+    menuStyles.top = menuStyles.top - containerRect.top;
+    menuStyles.left = menuStyles.left - containerRect.left;
 
     if (y + rect.height > innerHeight - 10) {
       menuStyles.top -= rect.height;
@@ -84,7 +70,7 @@ const ContextMenu = ({
       menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
     }
     return menuStyles;
-  }, [getTableContentRect, getTableCanvasContainerRect]);
+  }, [getContentRect, getContainerRect]);
 
   useEffect(() => {
     const handleShow = (event) => {
@@ -144,8 +130,8 @@ const ContextMenu = ({
 };
 
 ContextMenu.propTypes = {
-  getTableContentRect: PropTypes.func.isRequired,
-  getTableCanvasContainerRect: PropTypes.func.isRequired,
+  getContentRect: PropTypes.func.isRequired,
+  getContainerRect: PropTypes.func.isRequired,
   onDownload: PropTypes.func,
   onDelete: PropTypes.func,
 };

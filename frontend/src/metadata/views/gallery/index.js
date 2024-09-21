@@ -358,8 +358,8 @@ const Gallery = () => {
         )}
       </div>
       <ContextMenu
-        getTableContentRect={() => containerRef.current.getBoundingClientRect()}
-        getTableCanvasContainerRect={() => containerRef.current.getBoundingClientRect()}
+        getContentRect={() => containerRef.current.getBoundingClientRect()}
+        getContainerRect={() => containerRef.current.getBoundingClientRect()}
         onDownload={handleDownload}
         onDelete={handleDelete}
       />
