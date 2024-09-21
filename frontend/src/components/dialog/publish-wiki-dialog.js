@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import { gettext, serviceURL } from '../../utils/constants';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, InputGroup, InputGroupText } from 'reactstrap';
 import toaster from '../toast';
 import wikiAPI from '../../utils/wiki-api';
+
+import '../../css/publish-wiki-dialog.css';
 
 const propTypes = {
   wiki: PropTypes.object,
@@ -12,16 +14,27 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
 };
 
+const DEFAULT_URL = serviceURL + '/wiki/publish/';
+
 class PublishWikiDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      url: serviceURL + '/wiki/publish/' + this.props.customUrl,
+      url: this.props.customUrl,
       errMessage: '',
       isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
+    this.preTextRef = React.createRef();
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      const preTextWidth = this.preTextRef.current.offsetWidth;
+      this.newInput.current.style.paddingLeft = (preTextWidth + 12) + 'px';
+      this.newInput.current.focus();
+    }, 1);
   }
 
   handleChange = (e) => {
@@ -36,18 +49,19 @@ class PublishWikiDialog extends React.Component {
     if (!isValid) {
       this.setState({
         errMessage: errMessage,
-        url: serviceURL + '/wiki/publish/',
+        url: '',
       });
     } else {
-      this.props.onPublish(this.state.url.trim());
+      this.props.onPublish(DEFAULT_URL + this.state.url.trim());
+      this.toggle();
     }
   };
 
   deleteCustomUrl = () => {
     let wiki_id = this.props.wiki.id;
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
-      this.setState({ url: serviceURL + '/wiki/publish/' });
-      toaster.success(gettext('Successfully.'));
+      this.setState({ url: '' });
+      toaster.success(gettext('Successfully'));
     }).catch((error) => {
       if (error.response) {
         let errorMsg = error.response.data.error_msg;
@@ -55,7 +69,6 @@ class PublishWikiDialog extends React.Component {
       }
     });
   };
-
 
   handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -73,20 +86,19 @@ class PublishWikiDialog extends React.Component {
     let errMessage = '';
     if (!url) {
       isValid = false;
-      errMessage = gettext('url is required.');
-      return { isValid, errMessage };
-    }
-    if (!(url.includes(serviceURL + '/wiki/publish/'))) {
-      isValid = false;
-      errMessage = gettext('url  need include specific prefix.');
+      errMessage = gettext('URL is required');
       return { isValid, errMessage };
     }
     return { isValid, errMessage };
   };
 
   copyLink = () => {
-    copy(this.state.url);
+    copy(DEFAULT_URL + this.state.url.trim());
     toaster.success(gettext('URL is copied to the clipboard'));
+  };
+
+  onClickPreText = () => {
+    this.newInput.current.focus();
   };
 
   render() {
@@ -95,21 +107,23 @@ class PublishWikiDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Publish Wiki')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Customize URL')}</p>
-          <InputGroup>
-            <Input
-              onKeyDown={this.handleKeyDown}
-              innerRef={this.newInput}
-              placeholder="customize url"
+          <InputGroup className="publish-wiki-custom-url-inputs">
+            <span className="input-pretext" ref={this.preTextRef} onClick={this.onClickPreText}>{DEFAULT_URL}</span>
+            <input
+              className="publish-wiki-custom-url-input form-control"
+              type="text"
               value={this.state.url}
               onChange={this.handleChange}
+              onKeyDown={this.handleKeyDown}
+              ref={this.newInput}
             />
-            <InputGroupAddon addonType="append">
+            <InputGroupText>
               <Button color="primary" onClick={this.copyLink} className="border-0">{gettext('Copy')}</Button>
-            </InputGroupAddon>
+            </InputGroupText>
           </InputGroup>
-          <span className='tip mb-1' style={{ fontSize: '14px' }}>
+          <p className='sf-tip-default mt-2'>
             {gettext('The custom part of the URL must be between 5 and 30 characters long and may only contain letters (a-z), numbers, and hyphens.')}
-          </span>
+          </p>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>

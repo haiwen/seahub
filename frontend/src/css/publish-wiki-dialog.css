@@ -1,0 +1,24 @@
+.publish-wiki-custom-url-inputs .input-pretext {
+  position: absolute;
+  left: 12px;
+  top: 0;
+  height: 38px;
+  line-height: 38px;
+  z-index: 1;
+  color: #666;
+}
+
+.publish-wiki-custom-url-inputs .publish-wiki-custom-url-input {
+  background-color: transparent;
+  border-radius: 4px 0 0 4px !important;
+  border-right: none;
+}
+
+.publish-wiki-custom-url-inputs .input-group-text {
+  padding: 0;
+  border: none;
+}
+
+.publish-wiki-custom-url-inputs .input-group-text .btn {
+  border-radius: 0 4px 4px 0;
+}
