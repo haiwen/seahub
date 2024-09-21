@@ -28,9 +28,12 @@ USER_ADD = 'user_add'
 # 'user_delete': {'email': deleted_user}
 USER_DELETE = 'user_delete'
 
+# 'user_migrate': {'from': from_user, 'to': to_user}
+USER_MIGRATE = 'user_migrate'
+
 ADMIN_LOG_OPERATION_TYPE = (REPO_TRANSFER, REPO_DELETE,
         GROUP_CREATE, GROUP_TRANSFER, GROUP_DELETE,
-        USER_ADD, USER_DELETE)
+        USER_ADD, USER_DELETE, USER_MIGRATE)
 
 
 class AdminLogManager(models.Manager):
