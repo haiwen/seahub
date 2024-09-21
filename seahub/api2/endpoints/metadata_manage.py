@@ -12,7 +12,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_sys_columns
+    get_unmodifiable_columns
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -256,7 +256,7 @@ class MetadataRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        sys_column_names = [column.get('name') for column in get_sys_columns()]
+        unmodifiable_column_names = [column.get('name') for column in get_unmodifiable_columns()]
 
         record_id_to_record = {}
         obj_id_to_record = {}
@@ -306,7 +306,7 @@ class MetadataRecords(APIView):
                 METADATA_TABLE.columns.id.name: record_id,
             }
             for column_name, value in to_updated_record.items():
-                if column_name not in sys_column_names:
+                if column_name not in unmodifiable_column_names:
                     try:
                         column = next(column for column in columns if column['name'] == column_name)
                         if value and column['type'] == 'date':
