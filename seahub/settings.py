@@ -646,79 +646,154 @@ TERMS_OF_SERVICE_LINK = ''
 ALLOWED_HOSTS = ['*']
 
 # Logging
-LOGGING = {
-    'version': 1,
-
-    # Enable existing loggers so that gunicorn errors will be bubbled up when
-    # server side error page "Internal Server Error" occurs.
-    # ref: https://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/
-    'disable_existing_loggers': False,
-
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
+seafile_log_to_stdout = os.getenv('SEAFILE_LOG_TO_STDOUT', None)
+if int(seafile_log_to_stdout):
+    LOGGING = {
+        'version': 1,
+        # Enable existing loggers so that gunicorn errors will be bubbled up when
+        # server side error page "Internal Server Error" occurs.
+        # ref: https://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/
+        'disable_existing_loggers': False,
+        'formatters': {
+            'standard': {
+                # [2024-09-05 16:57:40] [info] xxx
+                'format': '[seahub] [%(asctime)s] [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
+            },
         },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            },
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue'
+            },
         },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue'
+        'handlers': {
+            'console': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'stream': sys.stdout,
+            },
+            'default': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'stream': sys.stdout,
+            },
+            'onlyoffice_handler': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'stream': sys.stdout,
+            },
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
         },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-        'default': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'seahub.log'),
-            'maxBytes': 1024*1024*100,  # 100 MB
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
-        'onlyoffice_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'onlyoffice.log'),
-            'maxBytes': 1024*1024*100,  # 100 MB
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+        'loggers': {
+            '': {
+                'handlers': ['default'],
+                'level': 'INFO',
+                'propagate': True
+            },
+            'django.request': {
+                'handlers': ['default', 'mail_admins'],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'py.warnings': {
+                'handlers': ['console', ],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'onlyoffice': {
+                'handlers': ['onlyoffice_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            },
         }
-    },
-    'loggers': {
-        '': {
-            'handlers': ['default'],
-            'level': 'INFO',
-            'propagate': True
-        },
-        'django.request': {
-            'handlers': ['default', 'mail_admins'],
-            'level': 'INFO',
-            'propagate': False
-        },
-        'py.warnings': {
-            'handlers': ['console', ],
-            'level': 'INFO',
-            'propagate': False
-        },
-        'onlyoffice': {
-            'handlers': ['onlyoffice_handler', ],
-            'level': 'INFO',
-            'propagate': False
-        },
     }
-}
+else:
+    LOGGING = {
+        'version': 1,
+
+        # Enable existing loggers so that gunicorn errors will be bubbled up when
+        # server side error page "Internal Server Error" occurs.
+        # ref: https://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/
+        'disable_existing_loggers': False,
+
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
+            },
+        },
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            },
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue'
+            },
+        },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+            },
+            'default': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(LOG_DIR, 'seahub.log'),
+                'maxBytes': 1024*1024*100,  # 100 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'onlyoffice_handler': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(LOG_DIR, 'onlyoffice.log'),
+                'maxBytes': 1024*1024*100,  # 100 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            '': {
+                'handlers': ['default'],
+                'level': 'INFO',
+                'propagate': True
+            },
+            'django.request': {
+                'handlers': ['default', 'mail_admins'],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'py.warnings': {
+                'handlers': ['console', ],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'onlyoffice': {
+                'handlers': ['onlyoffice_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            },
+        }
+    }
 
 #Login Attempt
 LOGIN_ATTEMPT_LIMIT = 5
