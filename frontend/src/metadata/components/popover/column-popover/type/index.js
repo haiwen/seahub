@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY,
-  DEFAULT_RATE_FORMAT,
+  DEFAULT_RATE_DATA,
 } from '../../../../constants';
 import { getColumnDisplayName } from '../../../../utils/column';
 import ColumnTypes from './column-types';
@@ -142,7 +142,7 @@ const COLUMNS = [
     name: gettext('Rate'),
     canChangeName: true,
     key: CellType.RATE,
-    data: DEFAULT_RATE_FORMAT,
+    data: DEFAULT_RATE_DATA,
     groupby: 'basics',
   },
 ];

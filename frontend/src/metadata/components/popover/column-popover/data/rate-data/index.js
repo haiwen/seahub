@@ -4,12 +4,12 @@ import { FormGroup, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { CustomizeSelect, CustomizePopover, Icon, IconBtn } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../../utils/constants';
-import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_FORMAT } from '../../../../../constants';
+import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_DATA } from '../../../../../constants';
 
 import './index.css';
 
 const RateData = ({ value, onChange, updatePopoverState }) => {
-  const initValue = { ...DEFAULT_RATE_FORMAT, ...value };
+  const initValue = { ...DEFAULT_RATE_DATA, ...value };
   const { max, color, type } = initValue;
   const [isShowStylePopover, setIsShowStylePopover] = useState(false);
   const maxOptions = useMemo(() => {
