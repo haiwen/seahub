@@ -206,7 +206,7 @@ export const getColumnDisplayName = (key, name) => {
     case PRIVATE_COLUMN_KEY.SHOOTING_TIME:
       return gettext('Shooting time');
     case PRIVATE_COLUMN_KEY.OWNER:
-      return gettext('Owner');
+      return gettext('File owner');
     default:
       return name;
   }
@@ -256,7 +256,7 @@ export const getNormalizedColumnType = (key, type) => {
     case PRIVATE_COLUMN_KEY.LOCATION:
       return CellType.GEOLOCATION;
     case PRIVATE_COLUMN_KEY.OWNER:
-      return CellType.CREATOR;
+      return CellType.COLLABORATOR;
     default:
       return type;
   }
