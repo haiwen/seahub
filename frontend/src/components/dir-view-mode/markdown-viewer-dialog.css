@@ -16,18 +16,18 @@
   height: 48px;
 }
 
-.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-left-name > span {
+.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-left-name img {
   margin-right: 6px;
 }
 
-.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-right-tool > span {
+.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-right-tool>span {
   margin-left: 10px;
   cursor: pointer;
   color: #000;
   opacity: 0.5;
 }
 
-.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-right-tool > span:hover {
+.seafile-markdown-viewer-modal-header .seafile-markdown-viewer-modal-header-right-tool>span:hover {
   opacity: 0.75;
 }
 
