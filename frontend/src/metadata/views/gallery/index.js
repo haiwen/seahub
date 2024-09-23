@@ -11,7 +11,7 @@ import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString } from '../../utils/cell';
-import { siteRoot, thumbnailSizeForGrid, fileServerRoot, useGoFileserver, gettext } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT } from '../../constants';
 
 import './index.css';
@@ -75,6 +75,7 @@ const Gallery = () => {
           path: parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           date: date,
         };
         let _group = _init.find(g => g.name === date);
