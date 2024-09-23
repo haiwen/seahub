@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { UTC_FORMAT_DEFAULT } from '../../constants';
+import { PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../../constants';
 import { OPERATION_TYPE } from './constants';
 import Column from '../../model/metadata/column';
 import View from '../../model/metadata/view';
+import { getColumnOriginName } from '../../utils/column';
 
 dayjs.extend(utc);
 
@@ -131,10 +132,22 @@ export default function apply(data, operation) {
       const { column_key } = operation;
       const newColumns = data.columns.slice(0);
       const columnIndex = newColumns.findIndex(column => column.key === column_key);
+      const deletedColumn = data.columns[columnIndex];
       if (columnIndex !== -1) {
         newColumns.splice(columnIndex, 1);
         data.columns = newColumns;
         data.view = new View(data.view, data.columns);
+
+        // Delete invalid file attribute data
+        const columnOriginName = getColumnOriginName(deletedColumn);
+        let rows = [];
+        let id_row_map = {};
+        data.rows.forEach(row => {
+          delete row[columnOriginName];
+          rows.push(row);
+          id_row_map[row[PRIVATE_COLUMN_KEY.ID]] = row;
+        });
+        data.id_row_map = id_row_map;
       }
       return data;
     }

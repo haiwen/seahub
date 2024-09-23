@@ -64,6 +64,7 @@ class ServerOperator {
         window.sfMetadataContext.deleteColumn(repo_id, column_key).then(res => {
           callback({ operation });
         }).catch(error => {
+          console.log(error)
           callback({ error: gettext('Failed to delete property') });
         });
         break;
