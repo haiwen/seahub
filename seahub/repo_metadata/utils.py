@@ -6,6 +6,7 @@ import random
 from urllib.parse import urljoin
 
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
 
@@ -92,3 +93,10 @@ def init_metadata(metadata_server_api):
 
 def get_file_download_token(repo_id, file_id, username):
     return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
+
+
+def can_read_metadata(request, repo_id):
+    permission = check_folder_permission(request, repo_id, '/')
+    if permission:
+        return True
+    return False
