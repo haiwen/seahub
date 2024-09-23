@@ -141,10 +141,6 @@ class ShareLinkZipTaskView(APIView):
         """
 
         # argument check
-        # if zip_request_over_limit(request):
-        #     error_msg = 'Too many zip download requests.'
-        #     return api_error(status.HTTP_429_TOO_MANY_REQUESTS, error_msg)
-        
         share_link_token = request.data.get('token', None)
         if not share_link_token:
             error_msg = 'share_link_token invalid.'
