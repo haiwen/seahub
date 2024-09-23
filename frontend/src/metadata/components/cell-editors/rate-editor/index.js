@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import RateItem from './rate-item';
+import { DEFAULT_RATE_DATA } from '../../../constants';
 
 import './index.css';
 
@@ -27,7 +28,7 @@ const RateEditor = ({ isCellSelected, field, value: oldValue, onChange }) => {
   }, [value, field, onChange]);
 
   const renderRate = useCallback(() => {
-    const { max = 5 } = field.data || {};
+    const { max = 5 } = field.data || DEFAULT_RATE_DATA;
     let rateList = [];
     if (value || isCellSelected) {
       for (let i = 0; i < max; i++) {
