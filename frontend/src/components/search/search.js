@@ -11,6 +11,7 @@ import SearchResultLibrary from './search-result-library';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
+import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -722,8 +723,8 @@ class Search extends Component {
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
           <div className="search">
-            <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
-            <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
+            <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
+            <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={{ zIndex: SEARCH_CONTAINER }}>
               <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
                 <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
                 <input
@@ -758,8 +759,8 @@ class Search extends Component {
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
-              <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
-              <div className="search-container">
+              <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
+              <div className="search-container" style={{ zIndex: SEARCH_CONTAINER }}>
                 <div className="input-icon">
                   <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
                   <input
