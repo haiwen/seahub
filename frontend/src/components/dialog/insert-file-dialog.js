@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import FileChooser from '../file-chooser/file-chooser';
+import FileChooser from '../file-chooser';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

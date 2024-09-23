@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import FileChooser from '../file-chooser/file-chooser';
+import FileChooser from '../file-chooser';
 import toaster from '../../components/toast';
 
 class UserItem extends React.Component {

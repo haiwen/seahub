@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
+import FileChooser from '../file-chooser';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

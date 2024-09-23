@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
+import { Modal, ModalHeader } from 'reactstrap';
+import SelectDirentBody from './select-dirent-body';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -14,10 +14,8 @@ const propTypes = {
   onItemMove: PropTypes.func,
   onItemsMove: PropTypes.func,
   onCancelMove: PropTypes.func.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
 };
 
-// need dirent file Path；
 class MoveDirent extends React.Component {
 
   constructor(props) {
@@ -26,7 +24,6 @@ class MoveDirent extends React.Component {
       repo: { repo_id: this.props.repoID },
       selectedPath: this.props.path,
       errMessage: '',
-      mode: 'only_current_library',
     };
   }
 
@@ -44,7 +41,7 @@ class MoveDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || selectedPath === '') {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -57,13 +54,13 @@ class MoveDirent extends React.Component {
 
     // move dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
     // move dirents to current path
     if (selectedPath && selectedPath === this.props.path && (repo.repo_id === repoID)) {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -81,7 +78,7 @@ class MoveDirent extends React.Component {
       message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
       message = message.replace('%(src)s', moveDirentPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -96,19 +93,19 @@ class MoveDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
     // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
     // copy the dirent to current path
     if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -117,7 +114,7 @@ class MoveDirent extends React.Component {
       message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
       message = message.replace('%(src)s', direntPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -129,24 +126,16 @@ class MoveDirent extends React.Component {
     this.props.onCancelMove();
   };
 
-  onDirentItemClick = (repo, selectedPath) => {
-    this.setState({
-      repo: repo,
-      selectedPath: selectedPath,
-      errMessage: ''
-    });
+  selectRepo = (repo) => {
+    this.setState({ repo });
   };
 
-  onRepoItemClick = (repo) => {
-    this.setState({
-      repo: repo,
-      selectedPath: '/',
-      errMessage: ''
-    });
+  setSelectedPath = (selectedPath) => {
+    this.setState({ selectedPath });
   };
 
-  onSelectedMode = (mode) => {
-    this.setState({ mode: mode });
+  setErrMessage = (message) => {
+    this.setState({ errMessage: message });
   };
 
   renderTitle = () => {
@@ -161,48 +150,28 @@ class MoveDirent extends React.Component {
   };
 
   render() {
-    const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
-    const { mode, errMessage } = this.state;
-
+    const { dirent, selectedDirentList, isMultipleOperation, path, repoID } = this.props;
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
-
-    const LibraryOption = ({ mode, label }) => (
-      <div className={`repo-list-item ${this.state.mode === mode ? 'active' : ''}`} onClick={() => this.onSelectedMode(mode)}>
-        <span className='library'>{label}</span>
-      </div>
-    );
 
     return (
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex mw-100'></div>}
         </ModalHeader>
-        <Row>
-          <Col className='repo-list-col border-right' >
-            <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
-            {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
-            <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
-          </Col>
-          <Col className='file-list-col'>
-            <ModalBody>
-              <FileChooser
-                repoID={repoID}
-                currentPath={path}
-                onDirentItemClick={this.onDirentItemClick}
-                onRepoItemClick={this.onRepoItemClick}
-                mode={mode}
-                hideLibraryName={false}
-              />
-              {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-              <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-            </ModalFooter>
-          </Col>
-        </Row>
+        <SelectDirentBody
+          path={path}
+          selectedPath={this.state.selectedPath}
+          repoID={repoID}
+          isSupportOtherLibraries={!isCustomPermission}
+          errMessage={this.state.errMessage}
+          onCancel={this.toggle}
+          selectRepo={this.selectRepo}
+          setSelectedPath={this.setSelectedPath}
+          setErrMessage={this.setErrMessage}
+          handleSubmit={this.handleSubmit}
+        />
       </Modal>
     );
   }
