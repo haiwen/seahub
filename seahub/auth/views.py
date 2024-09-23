@@ -97,7 +97,6 @@ def login(request, template_name='registration/login.html',
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm):
     """Displays the login form and handles the login action."""
-
     redirect_to = request.GET.get(redirect_field_name, '')
     if request.user.is_authenticated:
         if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=request.get_host()):
@@ -130,7 +129,8 @@ def login(request, template_name='registration/login.html',
                                             redirect_to, remember_me)
 
         # form is invalid
-        user_logged_in_failed.send(sender=None, request=request)
+        form.db_record and user_logged_in_failed.send(sender=None, request=request)
+        
         failed_attempt = incr_login_failed_attempts(username=login,
                                                     ip=ip)
 
