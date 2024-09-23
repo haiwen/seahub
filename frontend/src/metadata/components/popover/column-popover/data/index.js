@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useState, useImperativeHandle, useCallback, useEffect } from 'react';
+import React, { forwardRef, useMemo, useState, useImperativeHandle, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CellType } from '../../../../constants';
 import DateData from './date-data';
@@ -11,6 +11,7 @@ const Data = forwardRef(({ column }, ref) => {
   const type = useMemo(() => column.type, [column]);
   const [value, setValue] = useState(column.data || {});
   const [popoverShow, setPopoverShow] = useState(false);
+  const columnKey = useRef(null);
   // const [error, setError] = useState('');
 
   useImperativeHandle(ref, () => ({
@@ -25,6 +26,8 @@ const Data = forwardRef(({ column }, ref) => {
   }, []);
 
   useEffect(() => {
+    if (columnKey.current === column.key) return;
+    columnKey.current = column.key;
     setValue(column.data || {});
   }, [column]);
 

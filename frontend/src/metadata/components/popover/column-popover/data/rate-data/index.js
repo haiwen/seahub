@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { CustomizeSelect, CustomizePopover, Icon, IconBtn } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../../utils/constants';
-import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES } from '../../../../../constants';
+import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_FORMAT } from '../../../../../constants';
 
 import './index.css';
 
 const RateData = ({ value, onChange, updatePopoverState }) => {
-  const initValue = { max: 5, color: '#FF8000', type: 'rate', ...value };
+  const initValue = { ...DEFAULT_RATE_FORMAT, ...value };
   const { max, color, type } = initValue;
   const [isShowStylePopover, setIsShowStylePopover] = useState(false);
   const maxOptions = useMemo(() => {
@@ -17,11 +17,6 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
       label: max.name,
       value: max.name,
     }));
-  }, []);
-
-  useEffect(() => {
-    onChange(initValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectedMaxOption = useMemo(() => {

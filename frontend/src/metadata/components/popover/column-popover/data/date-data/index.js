@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { FormGroup, Label } from 'reactstrap';
@@ -54,12 +54,6 @@ const DateData = ({ value, column, onChange }) => {
   //   newFormat = format.indexOf('ss') === -1 ? newFormat + ':ss' : newFormat.slice(0, -3);
   //   onChange({ format: newFormat });
   // }, [format, onChange]);
-
-  useEffect(() => {
-    if (format) return;
-    onChange({ format: 'YYYY-MM-DD' });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const selectedValue = options.find(o => o.value === format) || options[0];
   const showMinute = format ? format.indexOf('HH:mm') > -1 : false;

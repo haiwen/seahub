@@ -88,6 +88,13 @@ const GEOLOCATION_FORMAT = {
   MAP_SELECTION: 'map_selection',
 };
 
+// rate
+const DEFAULT_RATE_FORMAT = {
+  max: 5,
+  color: '#FF8000',
+  type: 'rate'
+};
+
 export {
   COLLABORATOR_COLUMN_TYPES,
   DATE_COLUMN_OPTIONS,
@@ -104,4 +111,5 @@ export {
   MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP,
   SINGLE_CELL_VALUE_COLUMN_TYPE_MAP,
   GEOLOCATION_FORMAT,
+  DEFAULT_RATE_FORMAT,
 };
