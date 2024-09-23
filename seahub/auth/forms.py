@@ -24,7 +24,7 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    login = forms.CharField(label=_("Email or Username"), max_length=255)
+    login = forms.CharField(label=_("Email or Username") )
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
@@ -36,6 +36,7 @@ class AuthenticationForm(forms.Form):
         """
         self.request = request
         self.user_cache = None
+        self.db_record = True
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
     def clean_login(self):
@@ -44,9 +45,15 @@ class AuthenticationForm(forms.Form):
     def clean(self):
         username = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
-
+        
         if username and password:
-            # First check user account active or not
+            # First check the account length for validation.
+            if len(username) > 255:
+                self.errors['invalid_input'] = _("The login name is too long.")
+                self.db_record = False
+                raise forms.ValidationError(_("The login name is too long."))
+            
+            # Check user account active or not
             email = Profile.objects.convert_login_str_to_username(username)
             try:
                 user = User.objects.get(email=email)
