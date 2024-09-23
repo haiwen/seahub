@@ -56,36 +56,11 @@ const ContextMenu = ({
     if (selectedRange) {
       !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
-
-      if (descriptionColumn) {
-        const { topLeft, bottomRight } = selectedRange;
-        for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
-          const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
-          const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-          if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
-            list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
-            break;
-          }
-        }
-      }
       return list;
     }
 
     const selectedRecords = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
     if (selectedRecords.length > 1) {
-      if (descriptionColumn) {
-        const isIncludeSdocRecord = selectedRecords.filter(id => {
-          const record = metadata.id_row_map[id];
-          if (record) {
-            const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-            return Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record);
-          }
-          return false;
-        });
-        if (isIncludeSdocRecord.length > 0) {
-          list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
-        }
-      }
       return list;
     }
 
