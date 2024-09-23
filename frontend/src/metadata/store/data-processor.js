@@ -7,6 +7,7 @@ import { getRowsByIds } from '../utils/table';
 import { isGroupView } from '../utils/view';
 import { username } from '../../utils/constants';
 import { OPERATION_TYPE } from './operations';
+import { CellType } from '../constants';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -217,11 +218,11 @@ class DataProcessor {
       case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
         const { column_key, new_data, old_data } = operation;
         const column = getColumnByKey(table.columns, column_key);
-        if (column) {
+        if (column && (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT)) {
           table.rows.forEach(row => {
             const cellValue = row[column.name];
-            if (cellValue !== null) {
-              row[column.name] = this.applyColumnDataToCell(row[column.name], new_data.options, old_data.options);
+            if (cellValue !== null && cellValue !== undefined) {
+              row[column.name] = this.applyColumnDataToCell(column.type, cellValue, new_data.options, old_data.options);
             }
           });
 
@@ -238,17 +239,30 @@ class DataProcessor {
     }
   }
 
-  static applyColumnDataToCell(cellValue, newOptions, oldOptions) {
+  static applyColumnDataToCell(columnType, cellValue, newOptions, oldOptions) {
     if (cellValue === null || cellValue === undefined) {
       return cellValue;
     }
 
-    const oldOption = oldOptions.find(option => option.name === cellValue);
-    if (oldOption) {
-      const newOption = newOptions.find(option => option.id === oldOption.id);
-      return newOption ? newOption.name : cellValue;
+    if (columnType === CellType.SINGLE_SELECT) {
+      const oldOption = oldOptions.find(option => option.name === cellValue);
+      if (oldOption) {
+        const newOption = newOptions.find(option => option.id === oldOption.id);
+        return newOption ? newOption.name : cellValue;
+      }
+    } else if (columnType === CellType.MULTIPLE_SELECT) {
+      const newValues = cellValue.map(value => {
+        const oldOption = oldOptions.find(option => option.name === value);
+        if (oldOption) {
+          const newOption = newOptions.find(option => option.id === oldOption.id);
+          return newOption ? newOption.name : value;
+        }
+        return value;
+      });
+      return newValues;
     }
-    return null;
+
+    return cellValue;
   }
 }
 
