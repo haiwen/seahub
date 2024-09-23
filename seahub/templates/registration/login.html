@@ -56,6 +56,8 @@ html, body, #wrapper { height:100%; }
         <p class="error mt-2">{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
         <p class="error mt-2">{{ form.errors.inactive }}</p>
+        {% elif form.errors.invalid_input %}
+        <p class="error mt-2">{{ form.errors.invalid_input }}</p>
         {% elif form.errors.not_found %}
         <p class="error mt-2">{{ form.errors.not_found }}</p>
         {% elif form.errors.disable_pwd_login %}
