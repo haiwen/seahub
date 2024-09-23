@@ -29,7 +29,6 @@ const Gallery = () => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [groups, setGroups] = useState([]);
 
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
@@ -59,7 +58,7 @@ const Gallery = () => {
     }
   }, [mode]);
 
-  const calculateGroups = useMemo(() => {
+  const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
     let init = metadata.rows.filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
@@ -119,10 +118,6 @@ const Gallery = () => {
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
-
-  useEffect(() => {
-    setGroups(calculateGroups);
-  }, [calculateGroups]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -293,24 +288,11 @@ const Gallery = () => {
           });
         }
       }
-
     }
   }, [repoID, selectedImages]);
 
   const handleDelete = () => {
     if (selectedImages.length) {
-      const imagesToDelete = selectedImages.map(image => image.name);
-
-      setGroups(prevGroups => prevGroups.map(group => ({
-        ...group,
-        children: group.children.map(row => ({
-          ...row,
-          children: row.children.filter(img => !imagesToDelete.includes(img.name))
-        })).filter(row => row.children.length > 0)
-      })).filter(group => group.children.length > 0));
-
-      setSelectedImages([]);
-
       metadataAPI.deleteImages(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
         .then(() => {
           setSelectedImages([]);
@@ -320,6 +302,14 @@ const Gallery = () => {
           msg = msg.replace('{name}', selectedImages[0].name)
             .replace('{n}', selectedImages.length);
           toaster.success(msg, { duration: 3 });
+
+          // filter out ralated rows according to selected images, then update metadata's rows
+          const selectedImageIds = selectedImages.map(image => image.id);
+          const newMetadata = {
+            ...metadata,
+            rows: metadata.rows.filter(row => !selectedImageIds.includes(row[PRIVATE_COLUMN_KEY.ID])),
+          };
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, newMetadata);
         }).catch(error => {
           const errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
