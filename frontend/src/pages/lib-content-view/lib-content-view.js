@@ -1072,11 +1072,7 @@ class LibContentView extends React.Component {
       if (item.is_dir) {
         this.showDir(path);
       } else {
-        if (Utils.isMarkdownFile(path)) {
-          this.showFile(path);
-        } else {
-          this.openSearchedNewTab(item);
-        }
+        this.openSearchedNewTab(item);
       }
     } else {
       if (item.is_dir) {
