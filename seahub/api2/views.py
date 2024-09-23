@@ -1596,6 +1596,9 @@ class DownloadRepo(APIView):
         forbidden_path = resp_json.get('forbidden_path', '')
 
         if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower():
+            # This is to help the desktop client to show error to the user.
+            # The actual permission check will be done at the file download time.
+            
             if not is_syncable and forbidden_path == '/':
                 error_msg = 'unsyncable share permission'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
