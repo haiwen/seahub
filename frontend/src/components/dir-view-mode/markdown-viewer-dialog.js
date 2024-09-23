@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
+import InternalLinkOperation from '../operations/internal-link-operation';
+import { Utils } from '../../utils/utils';
 
 import './markdown-viewer-dialog.css';
 
@@ -22,6 +24,7 @@ const propTypes = {
 class MarkdownViewerDialog extends React.Component {
 
   render() {
+    const { repoID, filePath, fileName } = this.props;
     return (
       <Modal
         isOpen={true}
@@ -33,7 +36,8 @@ class MarkdownViewerDialog extends React.Component {
         <div className='seafile-markdown-viewer-modal-header'>
           <div className='seafile-markdown-viewer-modal-header-left-name'>
             <span><img src={`${mediaUrl}img/file/256/md.png`} width='24' alt='' /></span>
-            <span>{this.props.fileName}</span>
+            <span>{fileName}</span>
+            <InternalLinkOperation path={Utils.joinPath(filePath, fileName)} repoID={repoID} />
           </div>
           <div className='seafile-markdown-viewer-modal-header-right-tool'>
             <span className='sf3-font sf3-font-open' onClick={this.props.openMarkdownFile}></span>
@@ -48,8 +52,8 @@ class MarkdownViewerDialog extends React.Component {
             lastModified = {this.props.lastModified}
             latestContributor={this.props.latestContributor}
             onLinkClick={this.props.onLinkClick}
-            repoID={this.props.repoID}
-            path={this.props.filePath}
+            repoID={repoID}
+            path={filePath}
           >
           </SeafileMarkdownViewer>
         </ModalBody>

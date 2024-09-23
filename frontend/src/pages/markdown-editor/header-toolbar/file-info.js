@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gettext } from '../../../utils/constants';
-import { InternalLinkOperation } from '../../../components/operations';
+import InternalLinkOperation from '../../../components/operations/internal-link-operation';
 
 const { repoID, filePath } = window.app.pageOptions;
 

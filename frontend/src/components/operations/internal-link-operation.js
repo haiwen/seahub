@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import InternalLinkDialog from '../../dialog/internal-link-dialog';
+import { gettext } from '../../utils/constants';
+import InternalLinkDialog from '../dialog/internal-link-dialog';
+import './internal-link-operation.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
