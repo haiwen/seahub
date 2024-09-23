@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
+import { DEFAULT_RATE_DATA } from '../../../constants';
 
 const RateItem = ({
   isShowRateItem,
@@ -30,7 +31,7 @@ const RateItem = ({
 
   if (!isShowRateItem && index > value) return null;
 
-  const { color, type } = field.data || {};
+  const { color, type } = field.data || DEFAULT_RATE_DATA;
   let style = { fill: value >= index ? color : '#e5e5e5' };
 
   if (enterIndex >= index) {
