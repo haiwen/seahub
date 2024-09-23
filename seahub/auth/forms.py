@@ -49,9 +49,9 @@ class AuthenticationForm(forms.Form):
         if username and password:
             # First check the account length for validation.
             if len(username) > 255:
-                self.errors['invalid_input'] = _("The login name is too long.")
+                self.errors['invalid_input'] = "The login name is too long."
                 self.db_record = False
-                raise forms.ValidationError(_("The login name is too long."))
+                raise forms.ValidationError("The login name is too long.")
             
             # Check user account active or not
             email = Profile.objects.convert_login_str_to_username(username)
