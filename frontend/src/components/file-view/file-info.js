@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isPro, gettext, mediaUrl, siteRoot } from '../../utils/constants';
-import { InternalLinkOperation } from '../operations';
+import InternalLinkOperation from '../operations/internal-link-operation';
 
 const propTypes = {
   toggleStar: PropTypes.func.isRequired,
