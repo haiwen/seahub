@@ -88,30 +88,3 @@ def rate_limit(number=REQUEST_RATE_LIMIT_NUMBER,
             return func(request, *args, **kwargs)
         return wrapped
     return decorator
-
-
-def check_request_over_limit_by_ip(request, number, interval, cache_key_prefix='rate_limit'):
-    '''
-
-    :param request: http_request
-    :param number:  number of requests
-    :param interval:  within secconds
-    :param cache_key_prefix:  custom the cache for client_ip
-    :return:
-    '''
-    
-    client_ip = request.META.get('REMOTE_ADDR')
-    cache_key = f'{cache_key_prefix}:{client_ip}'
-    current_time = time.time()
-    data = cache.get(cache_key, {'count': 0, 'start_time': current_time})
-    
-    if current_time - data['start_time'] > interval:
-        data = {'count': 1, 'start_time': current_time}
-    else:
-        data['count'] += 1
-    
-    cache.set(cache_key, data, timeout=interval)
-    if data['count'] > number:
-        return True
-    
-    return False
