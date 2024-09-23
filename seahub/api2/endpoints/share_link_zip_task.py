@@ -12,6 +12,7 @@ from django.conf import settings
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.utils.http import check_request_over_limit_by_ip
 
 from seahub.views.file import send_file_access_msg
 from seahub.share.models import FileShare, check_share_link_access
@@ -25,6 +26,12 @@ from seaserv import seafile_api
 logger = logging.getLogger(__name__)
 
 
+def zip_request_over_limit(request):
+    within_seconds = 60
+    request_limits = 10
+    cache_prefix = 'sharelink_zip_task'
+    return check_request_over_limit_by_ip(request, request_limits, within_seconds, cache_prefix)
+
 class ShareLinkZipTaskView(APIView):
 
     throttle_classes = (UserRateThrottle,)
@@ -36,7 +43,11 @@ class ShareLinkZipTaskView(APIView):
         Permission checking:
         1. authenticated user OR anonymous user has passed email code check(if necessary);
         """
-
+        
+        if zip_request_over_limit(request):
+            error_msg = 'Too many zip download requests.'
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, error_msg)
+        
         # permission check
         if is_pro_version() and settings.ENABLE_SHARE_LINK_AUDIT:
             if not request.user.is_authenticated and \
@@ -141,6 +152,10 @@ class ShareLinkZipTaskView(APIView):
         """
 
         # argument check
+        if zip_request_over_limit(request):
+            error_msg = 'Too many zip download requests.'
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, error_msg)
+        
         share_link_token = request.data.get('token', None)
         if not share_link_token:
             error_msg = 'share_link_token invalid.'
