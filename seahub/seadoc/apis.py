@@ -10,6 +10,7 @@ from urllib.parse import unquote, quote
 import time
 import shutil
 from datetime import datetime, timedelta
+
 from pypinyin import lazy_pinyin
 from zipfile import is_zipfile, ZipFile
 
@@ -19,12 +20,15 @@ from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect, HttpResponse, FileResponse
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotModified
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.http import condition
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
@@ -397,12 +401,30 @@ class SeadocUploadImage(APIView):
         return Response({'relative_path': relative_path})
 
 
+def latest_entry(request, file_uuid, filename):
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    if uuid_map:
+        try:
+            repo_id = uuid_map.repo_id
+            username = request.user.username
+            parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+            filepath = os.path.join(parent_path, filename)
+            file_obj = seafile_api.get_dirent_by_path(repo_id, filepath)
+            dt = datetime.fromtimestamp(file_obj.mtime)
+            return dt
+        except Exception as e:
+            logger.error(e)
+            return None
+    else:
+        return None
+
 class SeadocDownloadImage(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = ()
     throttle_classes = (UserRateThrottle, )
 
+    @method_decorator(condition(last_modified_func=latest_entry))
     def get(self, request, file_uuid, filename):
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
@@ -431,8 +453,10 @@ class SeadocDownloadImage(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         filetype, fileext = get_file_type_and_ext(filename)
-        return HttpResponse(
+        response = HttpResponse(
             content=resp.content, content_type='image/' + fileext)
+        response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
+        return response
 
 
 class SeadocAsyncCopyImages(APIView):
