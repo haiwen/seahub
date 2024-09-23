@@ -10,8 +10,7 @@ from django.utils.html import format_html
 
 from seahub.base.accounts import User
 
-from seahub.avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFAULT,
-                             AVATAR_DEFAULT_SIZE)
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
     cache_result, get_default_avatar_non_registered_url
 from seahub.utils import get_service_url
@@ -29,15 +28,7 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
     if avatar:
         url = avatar.avatar_url(size)
     else:
-        if AVATAR_GRAVATAR_BACKUP:
-            params = {'s': str(size)}
-            if AVATAR_GRAVATAR_DEFAULT:
-                params['d'] = AVATAR_GRAVATAR_DEFAULT
-            return "http://www.gravatar.com/avatar/%s/?%s" % (
-                hashlib.md5(user.email.encode('utf-8')).hexdigest(),
-                urllib.parse.urlencode(params))
-        else:
-            url = get_default_avatar_url()
+        url = get_default_avatar_url()
 
     # when store avatars in the media directory
     if not AVATAR_FILE_STORAGE:
