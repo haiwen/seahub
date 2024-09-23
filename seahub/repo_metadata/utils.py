@@ -51,6 +51,7 @@ def get_sys_columns():
         METADATA_TABLE.columns.suffix.to_dict(),
         METADATA_TABLE.columns.file_details.to_dict(),
         METADATA_TABLE.columns.description.to_dict(),
+        METADATA_TABLE.columns.owner.to_dict(),
     ]
 
     return columns
