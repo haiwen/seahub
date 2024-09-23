@@ -5,7 +5,8 @@ import Context from '../context';
 import Store from '../store';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import { Utils } from '../../utils/utils';
-import { useCollaborators, useMetadata } from '.';
+import { useMetadata } from './metadata';
+import { useCollaborators } from './collaborators';
 import { gettext } from '../../utils/constants';
 
 const MetadataViewContext = React.createContext(null);
@@ -116,7 +117,15 @@ export const MetadataViewProvider = ({
   }, [repoID, viewID]);
 
   return (
-    <MetadataViewContext.Provider value={{ isLoading, metadata, store: storeRef.current }}>
+    <MetadataViewContext.Provider
+      value={{
+        isLoading,
+        metadata,
+        store: storeRef.current,
+        deleteFilesCallback: params.deleteFilesCallback,
+        renameFileCallback: params.renameFileCallback,
+      }}
+    >
       {children}
     </MetadataViewContext.Provider>
   );
@@ -127,6 +136,5 @@ export const useMetadataView = () => {
   if (!context) {
     throw new Error('\'MetadataContext\' is null');
   }
-  const { isLoading, metadata, store } = context;
-  return { isLoading, metadata, store };
+  return context;
 };

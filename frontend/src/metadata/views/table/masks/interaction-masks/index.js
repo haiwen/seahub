@@ -27,6 +27,7 @@ import RecordMetrics from '../../utils/record-metrics';
 import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
 import { getGroupRecordByIndex } from '../../utils/group-metrics';
+import { isNameColumn } from '../../../../utils/column';
 
 import './index.css';
 
@@ -219,6 +220,7 @@ class InteractionMasks extends React.Component {
     const { selectedPosition, openEditorMode } = this.state;
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
+    const _isNameColumn = isNameColumn(selectedColumn);
     const { type: columnType } = selectedColumn;
 
     if (NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES.includes(columnType)) return null;
@@ -226,7 +228,7 @@ class InteractionMasks extends React.Component {
     // how to open editors?
     // 1. editor is closed
     // 2. record-cell is editable or open editor with preview mode
-    if (((this.isSelectedCellEditable() || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !this.state.isEditorEnabled)) {
+    if (((this.isSelectedCellEditable() || _isNameColumn || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !this.state.isEditorEnabled)) {
       this.setState({
         isEditorEnabled: true,
         firstEditorKeyDown: key,

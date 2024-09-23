@@ -68,6 +68,9 @@ class TreeHelper {
   renameNodeByPath(tree, nodePath, newName) {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
+    if (!node) {
+      return treeCopy;
+    }
     treeCopy.renameNode(node, newName);
     return treeCopy;
   }

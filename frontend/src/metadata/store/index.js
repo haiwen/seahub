@@ -5,10 +5,13 @@ import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
   VIEW_OPERATION, COLUMN_OPERATION
 } from './operations';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import Metadata from '../model/metadata';
+import { checkIsDir } from '../utils/row';
+import { Utils } from '../../utils/utils';
+import { getFileNameFromRecord } from '../utils/cell';
 
 class Store {
 
@@ -140,13 +143,13 @@ class Store {
       return;
     }
     const operation = this.pendingOperations.shift();
-    this.serverOperator.applyOperation(operation, this.sendOperationCallback.bind(this, undoRedoHandler));
+    this.serverOperator.applyOperation(operation, this.data, this.sendOperationCallback.bind(this, undoRedoHandler));
   }
 
   sendOperationCallback = (undoRedoHandler, { operation, error }) => {
     if (error) {
-      operation && operation.fail_callback && operation.fail_callback();
       this.context.eventBus.dispatch(EVENT_BUS_TYPE.TABLE_ERROR, { error });
+      operation && operation.fail_callback && operation.fail_callback(error);
       this.sendNextOperation(undoRedoHandler);
       return;
     }
@@ -160,8 +163,8 @@ class Store {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     }
 
-    operation.success_callback && operation.success_callback();
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
+    operation.success_callback && operation.success_callback();
 
     // need reload records if has related formula columns
     this.serverOperator.handleReloadRecords(this.data, operation, ({ reloadedRecords, idRecordNotExistMap, relatedColumnKeyMap }) => {
@@ -230,30 +233,7 @@ class Store {
     DataProcessor.syncOperationOnData(this.data, operation, { collaborators: this.collaborators });
   }
 
-  /**
-   * @param {String} row_id target row id
-   * @param {Object} updates { [column.name]: cell_value }
-   * @param {Object} original_updates { [column.key]: cell_value }
-   * @param {Object} old_row_data { [column.name]: cell_value }
-   * @param {Object} original_old_row_data { [column.key]: cell_value }
-   */
-  modifyRecord(row_id, updates, old_row_data, original_updates, original_old_row_data) {
-    const row = getRowById(this.data, row_id);
-    if (!row || !this.context.canModifyRow(row)) return;
-    const type = OPERATION_TYPE.MODIFY_RECORD;
-    const operation = this.createOperation({
-      type,
-      repo_id: this.repoId,
-      row_id,
-      updates,
-      old_row_data,
-      original_updates,
-      original_old_row_data,
-    });
-    this.applyOperation(operation);
-  }
-
-  modifyRecords(row_ids, id_row_updates, id_original_row_updates, id_old_row_data, id_original_old_row_data, is_copy_paste) {
+  modifyRecords(row_ids, id_row_updates, id_original_row_updates, id_old_row_data, id_original_old_row_data, is_copy_paste, is_rename, { fail_callback, success_callback }) {
     const originalRows = getRowsByIds(this.data, row_ids);
     let valid_row_ids = [];
     let valid_id_row_updates = {};
@@ -262,17 +242,47 @@ class Store {
     let valid_id_original_old_row_data = {};
     let id_obj_id = {};
     originalRows.forEach(row => {
-      if (!row || !this.context.canModifyRow(row)) {
-        return;
+      if (row && this.context.canModifyRow(row)) {
+        const rowId = row._id;
+        valid_row_ids.push(rowId);
+        id_obj_id[rowId] = row._obj_id;
+        valid_id_row_updates[rowId] = id_row_updates[rowId];
+        valid_id_original_row_updates[rowId] = id_original_row_updates[rowId];
+        valid_id_old_row_data[rowId] = id_old_row_data[rowId];
+        valid_id_original_old_row_data[rowId] = id_original_old_row_data[rowId];
       }
-      const rowId = row._id;
-      valid_row_ids.push(rowId);
-      valid_id_row_updates[rowId] = id_row_updates[rowId];
-      id_obj_id[rowId] = row._obj_id;
-      valid_id_original_row_updates[rowId] = id_original_row_updates[rowId];
-      valid_id_old_row_data[rowId] = id_old_row_data[rowId];
-      valid_id_original_old_row_data[rowId] = id_original_old_row_data[rowId];
     });
+
+    // get updates which the parent dir is changed
+    let oldParentDirPath = null;
+    let newParentDirPath = null;
+    if (is_rename) {
+      const rowId = valid_row_ids[0];
+      const row = getRowById(this.data, rowId);
+      if (row && checkIsDir(row)) {
+        const rowUpdates = id_original_row_updates[rowId];
+        const oldName = getFileNameFromRecord(row);
+        const newName = getFileNameFromRecord(rowUpdates);
+        const { _parent_dir } = row;
+        oldParentDirPath = Utils.joinPath(_parent_dir, oldName);
+        newParentDirPath = Utils.joinPath(_parent_dir, newName);
+      }
+
+      if (newParentDirPath) {
+        this.data.rows.forEach((row) => {
+          const { _id: rowId, _parent_dir: currentParentDir } = row;
+          if (currentParentDir.includes(oldParentDirPath) && !valid_row_ids.includes(rowId)) {
+            valid_row_ids.push(rowId);
+            id_obj_id[rowId] = row._obj_id;
+            const updates = { _parent_dir: currentParentDir.replace(oldParentDirPath, newParentDirPath) };
+            valid_id_row_updates[rowId] = Object.assign({}, valid_id_row_updates[rowId], updates);
+            valid_id_original_row_updates[rowId] = Object.assign({}, valid_id_original_row_updates[rowId], updates);
+            valid_id_old_row_data[rowId] = Object.assign({}, valid_id_old_row_data[rowId], { _parent_dir: currentParentDir });
+            valid_id_original_old_row_data[rowId] = Object.assign({}, valid_id_original_old_row_data[rowId], { _parent_dir: currentParentDir });
+          }
+        });
+      }
+    }
 
     const type = OPERATION_TYPE.MODIFY_RECORDS;
     const operation = this.createOperation({
@@ -284,7 +294,53 @@ class Store {
       id_old_row_data: valid_id_old_row_data,
       id_original_old_row_data: valid_id_original_old_row_data,
       is_copy_paste,
-      id_obj_id: id_obj_id
+      is_rename,
+      id_obj_id: id_obj_id,
+      fail_callback,
+      success_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  deleteRecords(rows_ids, { fail_callback, success_callback }) {
+    const type = OPERATION_TYPE.DELETE_RECORDS;
+
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) {
+      return;
+    }
+    const valid_rows_ids = Array.isArray(rows_ids) ? rows_ids.filter((rowId) => {
+      const row = getRowById(this.data, rowId);
+      return row && this.context.canModifyRow(row);
+    }) : [];
+
+
+    // delete rows where parent dir is deleted
+    const deletedDirsPaths = rows_ids.map((rowId) => {
+      const row = getRowById(this.data, rowId);
+      if (row && checkIsDir(row)) {
+        const { _parent_dir, _name } = row;
+        return Utils.joinPath(_parent_dir, _name);
+      }
+      return null;
+    }).filter(Boolean);
+    if (deletedDirsPaths.length > 0) {
+      this.data.rows.forEach((row) => {
+        if (deletedDirsPaths.some((deletedDirPath) => row._parent_dir.includes(deletedDirPath)) && !valid_rows_ids.includes(row._id)) {
+          valid_rows_ids.push(row._id);
+        }
+      });
+    }
+
+    if (valid_rows_ids.length === 0) {
+      return;
+    }
+
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      rows_ids: valid_rows_ids,
+      fail_callback,
+      success_callback,
     });
     this.applyOperation(operation);
   }
@@ -441,6 +497,24 @@ class Store {
       type, repo_id: this.repoId, view_id: this.viewId, new_columns_keys: newColumnsKeys, old_columns_keys: columns_keys
     });
     this.applyOperation(operation);
+  };
+
+  checkIsRenameFileOperator = (rows_ids, id_original_row_updates) => {
+    if (rows_ids.length > 1) {
+      return false;
+    }
+    const rowId = rows_ids[0];
+    const rowUpdates = id_original_row_updates[rowId];
+    const updatedKeys = rowUpdates && Object.keys(rowUpdates);
+    if (!updatedKeys || updatedKeys.length > 1 || updatedKeys[0] !== PRIVATE_COLUMN_KEY.FILE_NAME) {
+      return false;
+    }
+    return true;
+  };
+
+  checkDuplicatedName = (name, parentDir) => {
+    const newPath = Utils.joinPath(parentDir, name);
+    return this.data.rows.some((row) => newPath === Utils.joinPath(row._parent_dir, row._name));
   };
 
 }

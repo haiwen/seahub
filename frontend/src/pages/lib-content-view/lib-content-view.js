@@ -932,13 +932,7 @@ class LibContentView extends React.Component {
 
     this.setState({ currentDirent: null });
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
-      if (this.state.isTreePanelShown) {
-        this.deleteTreeNodes(direntPaths);
-      }
-
-      this.deleteDirents(dirNames);
-
-      this.removeFromRecentlyUsed(repoID, this.state.path);
+      this.deleteItemsAjaxCallback(direntPaths, dirNames);
 
       let msg = '';
       if (direntPaths.length > 1) {
@@ -1174,12 +1168,12 @@ class LibContentView extends React.Component {
     }
   };
 
-  renameItemAjaxCallback(path, newName) {
+  renameItemAjaxCallback = (path, newName) => {
     if (this.state.isTreePanelShown) {
       this.renameTreeNode(path, newName);
     }
     this.renameDirent(path, newName);
-  }
+  };
 
   toggleDeleteFolderDialog = () => {
     this.setState({ isDeleteFolderDialogOpen: !this.state.isDeleteFolderDialogOpen });
@@ -1245,6 +1239,14 @@ class LibContentView extends React.Component {
     this.deleteDirent(path);
     this.removeFromRecentlyUsed(this.props.repoID, path);
   }
+
+  deleteItemsAjaxCallback = (direntPaths, dirNames) => {
+    if (this.state.isTreePanelShown) {
+      this.deleteTreeNodes(direntPaths);
+    }
+    this.deleteDirents(dirNames);
+    this.removeFromRecentlyUsed(this.props.repoID, this.state.path);
+  };
 
   // list operations
   onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath) => {
@@ -2368,6 +2370,8 @@ class LibContentView extends React.Component {
                     onItemSelected={this.onDirentSelected}
                     onItemDelete={this.onMainPanelItemDelete}
                     onItemRename={this.onMainPanelItemRename}
+                    deleteFilesCallback={this.deleteItemsAjaxCallback}
+                    renameFileCallback={this.renameItemAjaxCallback}
                     onItemMove={this.onMoveItem}
                     onItemCopy={this.onCopyItem}
                     onItemConvert={this.onConvertItem}

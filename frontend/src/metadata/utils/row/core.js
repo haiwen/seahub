@@ -1,3 +1,4 @@
+import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { getTableById } from '../table';
 
 /**
@@ -23,6 +24,14 @@ const updateTableRowsWithRowsData = (tables, tableId, recordsData = []) => {
     table.rows[index] = newRow;
     table.id_row_map[rowId] = newRow;
   });
+};
+
+export const checkIsDir = (record) => {
+  const isDir = record[PRIVATE_COLUMN_KEY.IS_DIR];
+  if (typeof isDir === 'string') {
+    return isDir.toUpperCase() === 'TRUE';
+  }
+  return isDir;
 };
 
 export {

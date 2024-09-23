@@ -7,7 +7,7 @@ import DetailItem from '../../../components/dirent-detail/detail-item';
 import { Utils } from '../../../utils/utils';
 import metadataAPI from '../../api';
 import Column from '../../model/metadata/column';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById } from '../../utils/cell';
+import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getFileNameFromRecord } from '../../utils/cell';
 import { normalizeFields } from './utils';
 import { gettext } from '../../../utils/constants';
 import { CellType, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
@@ -102,7 +102,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
   if (isLoading) return null;
   const { fields, record } = metadata;
   if (!record._id) return null;
-  const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+  const fileName = getFileNameFromRecord(record);
   const isImage = record && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
   return (
     <>

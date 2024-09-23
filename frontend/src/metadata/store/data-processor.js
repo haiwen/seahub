@@ -109,6 +109,19 @@ class DataProcessor {
     // todo update sort and filter and ui change
   }
 
+  static updatePageDataWithDeleteRecords(deletedRowsIds, table) {
+    const { available_columns, groupbys, groups, rows } = table.view;
+    const idNeedDeletedMap = deletedRowsIds.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
+    table.view.rows = rows.filter(rowId => !idNeedDeletedMap[rowId]);
+
+    // remove record from group view
+    const _isGroupView = isGroupView({ groupbys }, available_columns);
+    if (_isGroupView) {
+      this.deleteGroupRows(groups, idNeedDeletedMap);
+      table.view.groups = this.deleteEmptyGroups(groups);
+    }
+  }
+
   static handleReloadedRecords(table, reloadedRecords, relatedColumnKeyMap) {
     const idReloadedRecordMap = reloadedRecords.reduce((map, record) => {
       map[record._id] = record;
@@ -175,7 +188,6 @@ class DataProcessor {
 
   static syncOperationOnData(table, operation, { collaborators }) {
     switch (operation.op_type) {
-      case OPERATION_TYPE.MODIFY_RECORD:
       case OPERATION_TYPE.MODIFY_RECORDS: {
         const { available_columns } = table.view;
         const { id_original_row_updates, row_ids } = operation;
@@ -210,6 +222,12 @@ class DataProcessor {
           }
         }
         this.updateDataWithModifyRecords();
+        this.updateSummaries();
+        break;
+      }
+      case OPERATION_TYPE.DELETE_RECORDS: {
+        const { rows_ids } = operation;
+        this.updatePageDataWithDeleteRecords(rows_ids, table);
         this.updateSummaries();
         break;
       }

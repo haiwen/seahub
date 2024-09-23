@@ -1,27 +1,36 @@
+import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
-import { gettext } from '../../utils/constants';
+import { getRowById } from '../utils/table';
+import { checkIsDir } from '../utils/row';
+import { getFileNameFromRecord } from '../utils/cell';
 
 const MAX_LOAD_RECORDS = 100;
 
 class ServerOperator {
 
-  applyOperation(operation, callback) {
+  applyOperation(operation, data, callback) {
     const { op_type } = operation;
 
     switch (op_type) {
-      case OPERATION_TYPE.MODIFY_RECORD: {
-        const { repo_id, row_id, updates } = operation;
-        const recordsData = [{ record_id: row_id, record: updates }];
-        window.sfMetadataContext.modifyRecords(repo_id, recordsData).then(res => {
-          callback({ operation });
-        }).catch(error => {
-          callback({ error: gettext('Failed to modify record') });
-        });
-        break;
-      }
       case OPERATION_TYPE.MODIFY_RECORDS: {
-        const { repo_id, row_ids, id_row_updates, is_copy_paste, id_obj_id } = operation;
+        const { repo_id, row_ids, id_row_updates, id_original_row_updates, is_copy_paste, is_rename, id_obj_id } = operation;
+        if (is_rename) {
+          const rowId = row_ids[0];
+          const rowUpdates = id_original_row_updates[rowId];
+          const newName = getFileNameFromRecord(rowUpdates);
+          this.renameFile(newName, repo_id, rowId, data, {
+            fail_callback: (error) => {
+              callback({ error });
+            },
+            success_callback: () => {
+              callback({ operation });
+            }
+          });
+          return;
+        }
         const recordsData = row_ids.map(rowId => {
           return { record_id: rowId, record: id_row_updates[rowId], obj_id: id_obj_id[rowId] };
         });
@@ -29,6 +38,23 @@ class ServerOperator {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify records') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.DELETE_RECORDS: {
+        const { repo_id, rows_ids } = operation;
+        const file_names = rows_ids.map((rowId) => {
+          const row = getRowById(data, rowId);
+          const { _parent_dir, _name } = row || {};
+          if (_parent_dir && _name) {
+            return Utils.joinPath(_parent_dir, _name);
+          }
+          return null;
+        }).filter(Boolean);
+        window.sfMetadataContext.batchDeleteFiles(repo_id, file_names).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to delete records') });
         });
         break;
       }
@@ -307,6 +333,46 @@ class ServerOperator {
       return keys;
     }, []);
   }
+
+  renameFile = (newName, repo_id, rowId, data, { fail_callback, success_callback }) => {
+    const row = getRowById(data, rowId);
+    if (!row) {
+      return;
+    }
+
+    const { _parent_dir, _name } = row;
+    const path = Utils.joinPath(_parent_dir, _name);
+
+    // rename folder
+    if (checkIsDir(row)) {
+      seafileAPI.renameDir(repo_id, path, newName).then(() => {
+        success_callback();
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          errMessage = gettext('Renaming {name} failed').replace('{name}', _name);
+        }
+        fail_callback(errMessage);
+      });
+      return;
+    }
+
+    // rename file
+    seafileAPI.renameFile(repo_id, path, newName).then(() => {
+      success_callback();
+    }).catch((error) => {
+      let errMessage = '';
+      if (error && error.response.status == 403 && error.response.data && error.response.data['error_msg']) {
+        errMessage = error.response.data['error_msg'];
+      } else {
+        errMessage = Utils.getErrorMsg(error);
+      }
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Renaming {name} failed').replace('{name}', _name);
+      }
+      fail_callback(errMessage);
+    });
+  };
 }
 
 export default ServerOperator;

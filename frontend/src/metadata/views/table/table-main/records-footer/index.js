@@ -120,8 +120,8 @@ class RecordsFooter extends React.Component {
     let recordsCountText;
     if (recordsCount > 1) {
       recordsCountText = gettext('xxx records').replace('xxx', recordsCount);
-    } else if (recordsCount === 1) {
-      recordsCountText = gettext('1 record');
+    } else {
+      recordsCountText = gettext('xxx record').replace('xxx', recordsCount);
     }
     if (hasMore) {
       recordsCountText += ' +';

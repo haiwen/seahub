@@ -5,7 +5,9 @@ import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { Utils } from '../../../../../../../../utils/utils';
 import { gettext, siteRoot } from '../../../../../../../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../../../../../../..//components/common/event-bus-type';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../../../constants';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../constants';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../../../../../utils/cell';
+import { checkIsDir } from '../../../../../../../utils/row';
 
 import './index.css';
 
@@ -18,19 +20,13 @@ const FILE_TYPE = {
 
 const CellOperationBtn = ({ isDir, column, record, cellValue, ...props }) => {
 
-  const _isDir = useMemo(() => {
-    const isDirValue = record[PRIVATE_COLUMN_KEY.IS_DIR];
-    if (typeof isDirValue === 'string') return isDirValue.toUpperCase() === 'TRUE';
-    return isDirValue;
-  }, [record]);
-
   const fileName = useMemo(() => {
     const { key } = column;
     return record[key];
   }, [column, record]);
 
   const fileType = useMemo(() => {
-    if (_isDir) return FILE_TYPE.FOLDER;
+    if (checkIsDir(record)) return FILE_TYPE.FOLDER;
     if (!fileName) return '';
     const index = fileName.lastIndexOf('.');
     if (index === -1) return '';
@@ -40,10 +36,10 @@ const CellOperationBtn = ({ isDir, column, record, cellValue, ...props }) => {
     if (Utils.isMarkdownFile(fileName)) return FILE_TYPE.MARKDOWN;
     if (Utils.isSdocFile(fileName)) return FILE_TYPE.SDOC;
     return '';
-  }, [_isDir, fileName]);
+  }, [record, fileName]);
 
   const getParentDir = () => {
-    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    const parentDir = getParentDirFromRecord(record);
     if (parentDir === '/') {
       return '';
     }
@@ -62,8 +58,8 @@ const CellOperationBtn = ({ isDir, column, record, cellValue, ...props }) => {
   };
 
   const openMarkdown = () => {
-    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    const fileName = getFileNameFromRecord(record);
+    const parentDir = getParentDirFromRecord(record);
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, fileName);
   };
 

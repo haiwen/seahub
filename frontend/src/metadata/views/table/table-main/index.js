@@ -7,7 +7,7 @@ import { GROUP_VIEW_OFFSET } from '../../../constants';
 
 import './index.css';
 
-const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, modifyColumnData, ...params }) => {
+const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, modifyColumnData, ...props }) => {
 
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData });
@@ -60,11 +60,12 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         groupOffsetLeft={groupOffset}
         modifyRecord={updateRecord}
         updateRecords={updateRecords}
+        deleteRecords={props.deleteRecords}
         getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         modifyColumnData={modifyColumnData}
-        {...params}
+        {...props}
       />
     </div>
   );

@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toaster from '../../../../components/toast';
-import { getColumnByKey } from '../../../utils/column';
 import { gettext, siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { VIEW_TYPE } from '../../../constants/view';
+import { getColumnByKey, isNameColumn } from '../../../utils/column';
+import { checkIsDir } from '../../../utils/row';
+import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
+
 import './index.css';
 
 const OPERATION = {
@@ -16,28 +18,34 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
-  DOWNLOAD: 'download',
-  DELETE: 'delete',
+  DELETE_RECORD: 'delete-record',
+  DELETE_RECORDS: 'delete-records',
+  RENAME_FILE: 'rename-file',
 };
 
-const ContextMenu = ({
-  isGroupView,
-  selectedRange,
-  selectedPosition,
-  recordMetrics,
-  recordGetterByIndex,
-  onClearSelected,
-  onCopySelected,
-  updateRecords,
-  getTableContentRect,
-  getTableCanvasContainerRect,
-  onDownload,
-  onDelete,
-}) => {
+const ContextMenu = (props) => {
+  const {
+    isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
+    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone,
+  } = props;
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+
   const { metadata } = useMetadataView();
+
+  const checkCanModifyRow = (row) => {
+    return window.sfMetadataContext.canModifyRow(row);
+  };
+
+  const checkIsDescribableDoc = useCallback((record) => {
+    const fileName = getFileNameFromRecord(record);
+    return checkCanModifyRow(record) && Utils.isDescriptionSupportedFile(fileName);
+  }, []);
+
+  const getAbleDeleteRecords = useCallback((records) => {
+    return records.filter(record => window.sfMetadataContext.checkCanDeleteRow(record));
+  }, []);
 
   const options = useMemo(() => {
     if (!visible) return [];
@@ -45,76 +53,109 @@ const ContextMenu = ({
     const isReadonly = permission === 'r';
     const { columns } = metadata;
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
-    const canModifyRow = window.sfMetadataContext.canModifyRow;
     let list = [];
 
-    if (metadata.view.type === VIEW_TYPE.GALLERY) {
-      list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download') });
-      list.push({ value: OPERATION.DELETE, label: gettext('Delete') });
-    }
-
+    // handle selected multiple cells
     if (selectedRange) {
       !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
+
+      const { topLeft, bottomRight } = selectedRange;
+      let records = [];
+      for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
+        const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
+        if (record) {
+          records.push(record);
+        }
+      }
+
+      const ableDeleteRecords = getAbleDeleteRecords(records);
+      if (ableDeleteRecords.length > 0) {
+        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
+      }
+
       return list;
     }
 
-    const selectedRecords = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
-    if (selectedRecords.length > 1) {
+    // handle selected records
+    const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
+    if (selectedRecordsIds.length > 1) {
+      let records = [];
+      selectedRecordsIds.forEach(id => {
+        const record = metadata.id_row_map[id];
+        if (record) {
+          records.push(record);
+        }
+      });
+
+      const ableDeleteRecords = getAbleDeleteRecords(records);
+      if (ableDeleteRecords.length > 0) {
+        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
+      }
       return list;
     }
 
+    // handle selected cell
     if (!selectedPosition) return list;
-    const { groupRecordIndex, rowIdx: recordIndex } = selectedPosition;
+    const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
+    const column = columns[idx];
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
     if (!record) return list;
-    const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
-    list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab') });
-    list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
+
+    const canModifyRow = checkCanModifyRow(record);
+    const canDeleteRow = window.sfMetadataContext.checkCanDeleteRow(record);
+    const isFolder = checkIsDir(record);
+    list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab'), record });
+    list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
+
     if (descriptionColumn) {
-      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
-        list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
-      } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
-        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description') });
+      if (checkIsDescribableDoc(record)) {
+        list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
+      } else if (canModifyRow && Utils.imageCheck(getFileNameFromRecord(record))) {
+        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description'), record });
       }
     }
 
+    // handle delete folder/file
+    if (canDeleteRow) {
+      list.push({ value: OPERATION.DELETE_RECORD, label: gettext('Delete'), record });
+    }
+
+    if (canModifyRow && column && isNameColumn(column)) {
+      list.push({ value: OPERATION.RENAME_FILE, label: gettext('Rename'), record });
+    }
+
     return list;
-  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex]);
+  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, getAbleDeleteRecords]);
 
   const handleHide = useCallback((event) => {
+    if (!menuRef.current && visible) {
+      setVisible(false);
+      return;
+    }
+
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setVisible(false);
     }
-  }, [menuRef]);
+  }, [menuRef, visible]);
 
-  const onOpenFileInNewTab = useCallback(() => {
-    const { groupRecordIndex, rowIdx } = selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    if (!record) return;
+  const onOpenFileInNewTab = useCallback((record) => {
     const repoID = window.sfMetadataStore.repoId;
-    const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
-    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
-    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+    const isFolder = checkIsDir(record);
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
 
-    let url;
-    if (isFolder) {
-      url = window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName));
-    } else {
-      url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
-    }
+    const url = isFolder ?
+      window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)) :
+      `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
 
     window.open(url, '_blank');
-  }, [isGroupView, recordGetterByIndex, selectedPosition]);
+  }, []);
 
-  const onOpenParentFolder = useCallback((event) => {
+  const onOpenParentFolder = useCallback((event, record) => {
     event.preventDefault();
     event.stopPropagation();
-    const { groupRecordIndex, rowIdx } = selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    if (!record) return;
-    let parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    let parentDir = getParentDirFromRecord(record);
 
     if (window.location.pathname.endsWith('/')) {
       parentDir = parentDir.slice(1);
@@ -122,19 +163,16 @@ const ContextMenu = ({
 
     const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
     window.open(url, '_blank');
-  }, [isGroupView, recordGetterByIndex, selectedPosition]);
+  }, []);
 
-  const generateDescription = useCallback(() => {
-    const canModifyRow = window.sfMetadataContext.canModifyRow;
+  const generateDescription = useCallback((record) => {
     const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
-    const { groupRecordIndex, rowIdx } = selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
-      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    const fileName = getFileNameFromRecord(record);
+    if (Utils.isDescriptionSupportedFile(fileName) && checkCanModifyRow(record)) {
+      const parentDir = getParentDirFromRecord(record);
       path = Utils.joinPath(parentDir, fileName);
       idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
       idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
@@ -153,19 +191,16 @@ const ContextMenu = ({
       const errorMessage = gettext('Failed to generate description');
       toaster.danger(errorMessage);
     });
-  }, [isGroupView, selectedPosition, recordGetterByIndex, updateRecords]);
+  }, [updateRecords]);
 
-  const imageCaption = useCallback(() => {
-    const canModifyRow = window.sfMetadataContext.canModifyRow;
+  const imageCaption = useCallback((record) => {
     const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
-    const { groupRecordIndex, rowIdx } = selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.imageCheck(fileName) && canModifyRow(record)) {
-      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    const fileName = getFileNameFromRecord(record);
+    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
+      const parentDir = getParentDirFromRecord(record);
       path = Utils.joinPath(parentDir, fileName);
       idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
       idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
@@ -184,17 +219,21 @@ const ContextMenu = ({
       const errorMessage = gettext('Failed to generate image description');
       toaster.danger(errorMessage);
     });
-  }, [isGroupView, selectedPosition, recordGetterByIndex, updateRecords]);
+  }, [updateRecords]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
-        onOpenFileInNewTab();
+        const { record } = option;
+        if (!record) break;
+        onOpenFileInNewTab(record);
         break;
       }
       case OPERATION.OPEN_PARENT_FOLDER: {
-        onOpenParentFolder(event);
+        const { record } = option;
+        if (!record) break;
+        onOpenParentFolder(event, record);
         break;
       }
       case OPERATION.COPY_SELECTED: {
@@ -206,19 +245,43 @@ const ContextMenu = ({
         break;
       }
       case OPERATION.GENERATE_DESCRIPTION: {
-        generateDescription && generateDescription();
+        const { record } = option;
+        if (!record) break;
+        generateDescription(record);
         break;
       }
       case OPERATION.IMAGE_CAPTION: {
-        imageCaption && imageCaption();
+        const { record } = option;
+        if (!record) break;
+        imageCaption(record);
         break;
       }
-      case OPERATION.DOWNLOAD: {
-        onDownload && onDownload();
+      case OPERATION.DELETE_RECORD: {
+        const { record } = option;
+        if (!record || !record._id || !deleteRecords) break;
+        if (checkIsDir(record)) {
+          toggleDeleteFolderDialog(record);
+          break;
+        }
+        deleteRecords([record._id]);
         break;
       }
-      case OPERATION.DELETE: {
-        onDelete && onDelete();
+      case OPERATION.DELETE_RECORDS: {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        selectNone && selectNone();
+
+        const { records } = option;
+        const recordsIds = Array.isArray(records) ? records.map((record) => record._id).filter(Boolean) : [];
+        if (recordsIds.length === 0 || !deleteRecords) break;
+        deleteRecords(recordsIds);
+        break;
+      }
+      case OPERATION.RENAME_FILE: {
+        const { record } = option;
+        if (!record || !record._id) break;
+
+        // rename file via FileNameEditor
+        window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR);
         break;
       }
       default: {
@@ -226,7 +289,7 @@ const ContextMenu = ({
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, onDownload, onDelete]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -272,7 +335,8 @@ const ContextMenu = ({
     return () => {
       document.removeEventListener('contextmenu', handleShow);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -314,8 +378,10 @@ ContextMenu.propTypes = {
   selectedRange: PropTypes.object,
   selectedPosition: PropTypes.object,
   recordMetrics: PropTypes.object,
+  selectNone: PropTypes.func,
   getTableContentRect: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
+  deleteRecords: PropTypes.func,
 };
 
 export default ContextMenu;

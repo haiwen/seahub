@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getCellValueByColumn } from '../../../utils/cell';
+import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell';
 import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
 import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
@@ -96,7 +96,7 @@ class GridUtils {
       let originalOldRecordData = {};
       let originalKeyOldRecordData = {};
       const { canModifyRow, canModifyColumn } = window.sfMetadataContext;
-      const filename = pasteRecord[PRIVATE_COLUMN_KEY.FILE_NAME];
+      const filename = getFileNameFromRecord(pasteRecord);
 
       for (let j = 0; j < pasteColumnsLen; j++) {
         const pasteColumn = getColumnByIndex(j + startColumnIndex, columns);

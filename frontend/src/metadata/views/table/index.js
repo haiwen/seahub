@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toaster from '../../../components/toast';
 import TableMain from './table-main';
 import { useMetadataView } from '../../hooks/metadata-view';
-import { Utils } from '../../../utils/utils';
+import { Utils, validateName } from '../../../utils/utils';
 import { isModF } from '../../utils/hotkey';
+import { gettext } from '../../../utils/constants';
+import { getFileNameFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 
@@ -11,7 +13,7 @@ import './index.css';
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
-  const { isLoading, metadata, store } = useMetadataView();
+  const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback } = useMetadataView();
   const containerRef = useRef(null);
 
   const onKeyDown = useCallback((event) => {
@@ -67,18 +69,80 @@ const Table = () => {
     }
   }, [metadata, store]);
 
-  const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
-    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste);
-  }, [store]);
+  const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
+    const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
+    let oldPath = null;
+    let newName = null;
+    if (isRename) {
+      const rowId = rowIds[0];
+      const row = recordGetterById(rowId);
+      const rowUpdates = idOriginalRowUpdates[rowId];
+      const { _parent_dir, _name } = row;
+      oldPath = Utils.joinPath(_parent_dir, _name);
+      newName = getFileNameFromRecord(rowUpdates);
+      const { isValid, errMessage } = validateName(newName);
+      if (!isValid) {
+        toaster.danger(errMessage);
+        return;
+      }
+      if (newName === _name) {
+        return;
+      }
+      if (store.checkDuplicatedName(newName, _parent_dir)) {
+        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+        toaster.danger(errMessage);
+        return;
+      }
+    }
+    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, isRename, {
+      fail_callback: (error) => {
+        toaster.danger(error);
+      },
+      success_callback: () => {
+        if (isRename) {
+          renameFileCallback(oldPath, newName);
+        }
+      },
+    });
+  };
 
-  const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
+  const deleteRecords = (recordsIds) => {
+    let paths = [];
+    let fileNames = [];
+    recordsIds.forEach((recordId) => {
+      const record = recordGetterById(recordId);
+      const { _parent_dir, _name } = record || {};
+      if (_parent_dir && _name) {
+        const path = Utils.joinPath(_parent_dir, _name);
+        paths.push(path);
+        fileNames.push(_name);
+      }
+    });
+    store.deleteRecords(recordsIds, {
+      fail_callback: (error) => {
+        toaster.danger(error);
+      },
+      success_callback: () => {
+        deleteFilesCallback(paths, fileNames);
+        let msg = fileNames.length > 1
+          ? gettext('Successfully deleted {name} and {n} other items')
+          : gettext('Successfully deleted {name}');
+        msg = msg.replace('{name}', fileNames[0])
+          .replace('{n}', fileNames.length - 1);
+        toaster.success(msg);
+      },
+    });
+  };
+
+  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
     const idOriginalRowUpdates = { [rowId]: originalUpdates };
     const idOldRowData = { [rowId]: oldRowData };
     const idOriginalOldRowData = { [rowId]: originalOldRowData };
     modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData);
-  }, [modifyRecords]);
+  };
 
   const getAdjacentRowsIds = useCallback((rowIds) => {
     const rowIdsLen = metadata.row_ids.length;
@@ -162,6 +226,7 @@ const Table = () => {
         metadata={metadata}
         modifyRecord={modifyRecord}
         modifyRecords={modifyRecords}
+        deleteRecords={deleteRecords}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         getTableContentRect={getTableContentRect}
