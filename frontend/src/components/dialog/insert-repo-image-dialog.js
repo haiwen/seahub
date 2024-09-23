@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import FileChooser from '../file-chooser/file-chooser';
+import FileChooser from '../file-chooser';
 import '../../css/insert-repo-image-dialog.css';
 
 const { siteRoot, serviceUrl } = window.app.config;

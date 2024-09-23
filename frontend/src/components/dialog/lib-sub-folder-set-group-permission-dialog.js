@@ -5,7 +5,7 @@ import { gettext, isPro, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import FileChooser from '../file-chooser/file-chooser';
+import FileChooser from '../file-chooser';
 import { SeahubSelect, NoGroupMessage } from '../common/select';
 import toaster from '../../components/toast';
 

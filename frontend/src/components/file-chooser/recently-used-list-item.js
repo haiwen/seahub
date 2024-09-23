@@ -1,7 +1,7 @@
 import React from 'react';
 
 const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
-  const title = item.path.split('/').pop();
+  const title = item.path === '/' ? item.path : item.path.split('/').pop();
 
   const handleItemClick = () => {
     onItemClick(item.repo, item.path);

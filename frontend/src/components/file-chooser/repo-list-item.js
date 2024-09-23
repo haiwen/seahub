@@ -35,6 +35,7 @@ class RepoListItem extends React.Component {
       hasLoaded: false,
       isMounted: false,
     };
+    this.loadRepoTimer = null;
   }
 
   componentDidMount() {
@@ -45,17 +46,16 @@ class RepoListItem extends React.Component {
     const { repoID, filePath } = selectedItemInfo || {};
     if (repoID && repoID === repo.repo_id) {
       this.loadRepoDirentList(repo);
-      setTimeout(() => {
+      this.loadRepoTimer = setTimeout(() => {
         this.setState({ isShowChildren: true });
         this.loadNodeAndParentsByPath(repoID, filePath);
       }, 0);
       return;
     }
 
-    // the repo is current repo and currentPath is not '/'
-    if (isCurrentRepo && !repoID) {
+    if (repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
       this.loadRepoDirentList(repo);
-      setTimeout(() => {
+      this.loadRepoTimer = setTimeout(() => {
         const repoID = repo.repo_id;
         if (isCurrentRepo && currentPath && currentPath != '/') {
           const expandNode = true;
@@ -65,38 +65,20 @@ class RepoListItem extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isBrowsing && !this.props.isBrowsing) {
-      this.setState({
-        treeData: treeHelper.buildTree(),
-        isShowChildren: this.props.initToShowChildren,
-      });
-
-      const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
-      const { repoID } = selectedItemInfo || {};
-
-      if (isCurrentRepo && !repoID) {
-        this.loadRepoDirentList(repo);
-        setTimeout(() => {
-          const repoID = repo.repo_id;
-          if (isCurrentRepo && currentPath && currentPath != '/') {
-            const expandNode = true;
-            this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
-          }
-        }, 0);
-      }
-    }
-
-  }
-
   componentWillUnmount() {
-    this.setState({ isMounted: false });
+    this.clearLoadRepoTimer();
+    this.setState({ isMounted: false, hasLoaded: false });
   }
+
+  clearLoadRepoTimer = () => {
+    if (!this.loadRepoTimer) return;
+    clearTimeout(this.loadRepoTimer);
+    this.loadRepoTimer = null;
+  };
 
   loadRepoDirentList = async (repo) => {
     const { hasLoaded } = this.state;
     if (hasLoaded) return;
-
     const repoID = repo.repo_id;
 
     try {

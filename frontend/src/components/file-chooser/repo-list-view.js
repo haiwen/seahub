@@ -19,6 +19,20 @@ const propTypes = {
   browsingPath: PropTypes.string,
 };
 
+const defaultProps = {
+  currentRepoInfo: null,
+  isShowFile: false,
+  repo: null,
+  repoList: [],
+  selectedRepo: null,
+  selectedPath: '',
+  fileSuffixes: [],
+  selectedItemInfo: null,
+  currentPath: '',
+  isBrowsing: false,
+  browsingPath: '',
+};
+
 class RepoListView extends React.Component {
 
   render() {
@@ -56,5 +70,6 @@ class RepoListView extends React.Component {
 }
 
 RepoListView.propTypes = propTypes;
+RepoListView.defaultProps = defaultProps;
 
 export default RepoListView;
