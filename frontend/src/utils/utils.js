@@ -1183,6 +1183,8 @@ export const Utils = {
           );
         }
         errorMsg = gettext('Permission denied');
+      } else if (error.response.status == 429) {
+        errorMsg = gettext('Too many requests');
       } else if (error.response.data &&
         error.response.data['error_msg']) {
         errorMsg = error.response.data['error_msg'];

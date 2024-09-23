@@ -10,7 +10,7 @@ from rest_framework import status
 
 from django.conf import settings
 
-from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.throttling import ShareLinkZipTaskThrottle
 from seahub.api2.utils import api_error
 
 from seahub.views.file import send_file_access_msg
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class ShareLinkZipTaskView(APIView):
 
-    throttle_classes = (UserRateThrottle,)
+    throttle_classes = (ShareLinkZipTaskThrottle, )
 
     def get(self, request, format=None):
         """ Only used for download dir when view dir share link from web.
