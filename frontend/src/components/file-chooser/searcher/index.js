@@ -8,6 +8,7 @@ import SearchedListView from '../searched-list-view';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
+import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
 
 import './index.css';
 
@@ -157,7 +158,7 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
   };
 
   return (
-    <div className='search-container file-chooser-searcher'>
+    <div className='search-container file-chooser-searcher' style={{ zIndex: SEARCH_CONTAINER }}>
       <div className='search-input-container'>
         <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
         <Input
