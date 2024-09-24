@@ -11,7 +11,7 @@ import { DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../../constant
 import './index.css';
 
 const DateData = ({ value, column, onChange }) => {
-  const isShootingTime = column.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME;
+  const isShootingTime = column.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME;
   const { format } = value || { format: DEFAULT_DATE_FORMAT };
   const today = useMemo(() => {
     let todayDate = new Date();
