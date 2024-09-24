@@ -304,10 +304,11 @@ const Gallery = () => {
           toaster.success(msg, { duration: 3 });
 
           // filter out ralated rows according to selected images, then update metadata's rows
-          const selectedImageIds = selectedImages.map(image => image.id);
+          const selectedIdMap = {};
+          selectedImages.forEach(image => selectedIdMap[image.id] = true);
           const newMetadata = {
             ...metadata,
-            rows: metadata.rows.filter(row => !selectedImageIds.includes(row[PRIVATE_COLUMN_KEY.ID])),
+            rows: metadata.rows.filter(row => !selectedIdMap[row[PRIVATE_COLUMN_KEY.ID]]),
           };
           window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, newMetadata);
         }).catch(error => {
