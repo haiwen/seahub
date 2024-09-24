@@ -303,7 +303,7 @@ const Gallery = () => {
             .replace('{n}', selectedImages.length);
           toaster.success(msg, { duration: 3 });
 
-          // filter out ralated rows according to selected images, then update metadata's rows
+          // filter out related rows according to selected images, then update metadata's rows
           const selectedIdMap = {};
           selectedImages.forEach(image => selectedIdMap[image.id] = true);
           const newMetadata = {
