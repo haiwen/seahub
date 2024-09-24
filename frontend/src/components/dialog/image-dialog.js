@@ -16,16 +16,8 @@ const propTypes = {
 
 class ImageDialog extends React.Component {
 
-  downloadImage = (imageSrc) => {
-    let downloadUrl = imageSrc;
-    if (document.getElementById('downloadFrame')) {
-      document.body.removeChild(document.getElementById('downloadFrame'));
-    }
-    let iframe = document.createElement('iframe');
-    iframe.setAttribute('id', 'downloadFrame');
-    iframe.style.display = 'none';
-    iframe.src = downloadUrl;
-    document.body.appendChild(iframe);
+  downloadImage = (url) => {
+    location.href = url;
   };
 
   onViewOriginal = () => {
@@ -58,7 +50,7 @@ class ImageDialog extends React.Component {
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
         enableRotate={true}
-        onClickDownload={() => this.downloadImage(imageItems[imageIndex].url)}
+        onClickDownload={() => this.downloadImage(imageItems[imageIndex].downloadURL)}
         onClickDelete={onDeleteImage ? () => onDeleteImage(name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}
