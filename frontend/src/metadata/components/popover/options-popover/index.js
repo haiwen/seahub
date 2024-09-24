@@ -9,6 +9,7 @@ import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getColumnOptions, getOptionNameById, generateNewOption } from '../../../utils/column';
 import { checkIsPredefinedOption } from '../../../utils/cell';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 
 import './index.css';
 
@@ -35,12 +36,12 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     });
   }, [options, searchValue]);
 
-  const onChange = useCallback((options) => {
-    onSubmit(options.filter(item => item.name));
+  const onChange = useCallback((options, optionModifyType) => {
+    onSubmit(options.filter(item => item.name), optionModifyType);
     setOptions(options);
   }, [onSubmit]);
 
-  const onUpdate = useCallback((newOption, successCallback, failCallback) => {
+  const onUpdate = useCallback((newOption, type, successCallback, failCallback) => {
     const duplicateNameOption = options.find(o => o.name === newOption.name && o.id !== newOption.id);
     if (duplicateNameOption) {
       toaster.danger(gettext('There is another option with this name'));
@@ -53,7 +54,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     const newOptions = options.slice(0);
     const optionIndex = newOptions.findIndex(item => item.id === newOption.id);
     newOptions.splice(optionIndex, 1, newOption);
-    onChange(newOptions);
+    onChange(newOptions, type);
   }, [options, onChange, isValidEditingOption]);
 
   const onMove = useCallback((optionSource, optionTarget) => {
@@ -66,7 +67,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       insertIndex++;
     }
     newOptions.splice(insertIndex, 0, movedOption);
-    onChange(newOptions);
+    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.MOVE_OPTION);
   }, [options, displayOptions, onChange]);
 
   const onAdd = useCallback(() => {
@@ -74,7 +75,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     const newOption = generateNewOption(options, newOptionName);
     const newOptions = options.slice(0);
     newOptions.push(newOption);
-    onChange(newOptions);
+    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.ADD_OPTION);
     setEditingOptionId(newOptionName ? '' : newOption.id);
   }, [searchValue, options, onChange]);
 
@@ -85,7 +86,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       setViewingOptionId(displayOptions[displayOptions.length - 2]?.id || '');
     }
     setDeletingOptionId('');
-    onChange(newOptions);
+    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.DELETE_OPTION);
   }, [displayOptions, options, onChange]);
 
   const onMouseEnter = useCallback((optionId) => {
@@ -125,7 +126,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, [deletingOptionId, onDelete]);
 
   const onImportOptions = useCallback((options) => {
-    onSubmit(options);
+    onSubmit(options, COLUMN_DATA_OPERATION_TYPE.ADD_OPTION);
     setOptions(options);
   }, [onSubmit]);
 

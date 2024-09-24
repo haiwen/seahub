@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { KeyCodes } from '../../../../../../constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
 import './index.css';
 
@@ -21,7 +22,7 @@ const Name = ({
     let newName = name.trim();
     if (newName === option.name || newName === '') return;
     const newOption = Object.assign({}, option, { name: newName });
-    onChange(newOption, () => {
+    onChange(newOption, COLUMN_DATA_OPERATION_TYPE.RENAME_OPTION, () => {
       onToggleFreeze(false);
       onClose();
     }, () => {

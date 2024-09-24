@@ -63,10 +63,10 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
     setOptionPopoverShow(false);
   }, []);
 
-  const onUpdateOptions = useCallback((options) => {
+  const onUpdateOptions = useCallback((options, optionModifyType) => {
     const oldData = column.data || {};
     setMenuShow(false);
-    modifyColumnData(column.key, { options }, { options: oldData.options || [] });
+    modifyColumnData(column.key, { options }, { options: oldData.options || [] }, { optionModifyType });
   }, [column, modifyColumnData]);
 
   // const toggleDefineCascade = useCallback(() => {

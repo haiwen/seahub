@@ -413,10 +413,10 @@ class Store {
     this.applyOperation(operation);
   };
 
-  modifyColumnData = (columnKey, newData, oldData) => {
+  modifyColumnData = (columnKey, newData, oldData, { optionModifyType } = {}) => {
     const type = OPERATION_TYPE.MODIFY_COLUMN_DATA;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, column_key: columnKey, new_data: newData, old_data: oldData
+      type, repo_id: this.repoId, column_key: columnKey, new_data: newData, old_data: oldData, option_modify_type: optionModifyType
     });
     this.applyOperation(operation);
   };
