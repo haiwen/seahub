@@ -839,7 +839,7 @@ class OrgAdminInviteUser(APIView):
                 new_user = User.objects.create_user(email, '!',
                                                     is_staff=False,
                                                     is_active=False)
-                set_org_user(org_id, email)
+                set_org_user(org_id, new_user.username)
 
             # send invitation link
             i = Invitation.objects.add(inviter=username,

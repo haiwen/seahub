@@ -29,7 +29,7 @@ from django.http import HttpResponse
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
 from django.utils.translation import gettext as _
-
+from seahub.auth.utils import get_virtual_id_by_email
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
@@ -131,6 +131,11 @@ try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
 except ImportError:
     ENABLE_OFFICE_WEB_APP = False
+    
+try:
+    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
+except ImportError:
+    ORG_MEMBER_QUOTA_ENABLED = False
 
 try:
     from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
@@ -1756,6 +1761,9 @@ class DownloadRepo(APIView):
         forbidden_path = resp_json.get('forbidden_path', '')
 
         if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower():
+            # This is to help the desktop client to show error to the user.
+            # The actual permission check will be done at the file download time.
+            
             if not is_syncable and forbidden_path == '/':
                 error_msg = 'unsyncable share permission'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -5338,7 +5346,7 @@ class OrganizationView(APIView):
         member_limit = request.POST.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
 
         if not org_name or not username or not password or \
-                not prefix or not quota or not member_limit:
+                not prefix or not quota:
             return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
         if not is_valid_username(username):
@@ -5350,8 +5358,9 @@ class OrganizationView(APIView):
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
 
+        vid = get_virtual_id_by_email(username)
         try:
-            User.objects.get(email = username)
+            User.objects.get(email = vid)
             user_exist = True
         except User.DoesNotExist:
             user_exist = False
@@ -5367,15 +5376,16 @@ class OrganizationView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, "An organization with this prefix already exists")
 
         try:
-            User.objects.create_user(username, password, is_staff=False, is_active=True)
-            create_org(org_name, prefix, username)
+            new_user = User.objects.create_user(username, password, is_staff=False, is_active=True)
+            create_org(org_name, prefix, new_user.username)
 
             org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
             org_id = org.org_id
 
             # set member limit
-            from seahub.organizations.models import OrgMemberQuota
-            OrgMemberQuota.objects.set_quota(org_id, member_limit)
+            if ORG_MEMBER_QUOTA_ENABLED:
+                from seahub.organizations.models import OrgMemberQuota
+                OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
             # set quota
             quota = quota_mb * get_file_size_unit('MB')

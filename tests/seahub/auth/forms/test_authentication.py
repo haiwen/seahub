@@ -48,7 +48,8 @@ class AuthenticationFormTest(BaseTestCase):
         }
 
         form = AuthenticationForm(None, data)
-        self.assertFailed(form)
+        assert form.is_valid() is False
+        assert 'This account is inactive.' in form.non_field_errors()
 
     def test_login_success(self):
         data = {

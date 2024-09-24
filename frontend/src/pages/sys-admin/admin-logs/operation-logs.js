@@ -104,6 +104,7 @@ class Item extends Component {
       case 'group_delete': return gettext('Delete Group');
       case 'user_add': return gettext('Add User');
       case 'user_delete': return gettext('Delete User');
+      case 'user_migrate': return gettext('Migrate User');
       default: return '';
     }
   };
@@ -181,6 +182,12 @@ class Item extends Component {
       case 'user_delete':
         detailText = gettext('Deleted user {user}')
           .replace('{user}', '<span class="font-weight-bold">' + detail.email + '</span>');
+        return detailText;
+
+      case 'user_migrate':
+        detailText = gettext('User migrate from {user_from} to {user_to}')
+          .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
+          .replace('{user_to}', '<span class="font-weight-bold">' + detail.to+ '</span>');
         return detailText;
 
       default: return '';

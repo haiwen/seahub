@@ -13,6 +13,7 @@ REST_FRAMEWORK = {
         'ping': '90000/minute',
         'anon': '90000/minute',
         'user': '90000/minute',
+        'share_link_zip_task': '90000/minute'
     },
 }
 
