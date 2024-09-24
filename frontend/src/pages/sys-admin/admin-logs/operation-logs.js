@@ -187,7 +187,7 @@ class Item extends Component {
       case 'user_migrate':
         detailText = gettext('User migrate from {user_from} to {user_to}')
           .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
-          .replace('{user_to}', '<span class="font-weight-bold">' + detail.to+ '</span>');
+          .replace('{user_to}', '<span class="font-weight-bold">' + detail.to + '</span>');
         return detailText;
 
       default: return '';
