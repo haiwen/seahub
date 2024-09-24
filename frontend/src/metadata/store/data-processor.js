@@ -1,5 +1,5 @@
 import { isTableRows } from '../utils/row';
-import { getColumnByKey } from '../utils/column';
+import { checkIsPrivateColumn, getColumnByKey } from '../utils/column';
 import { getFilteredRows } from '../utils/filter';
 import { getGroupRows } from '../utils/group';
 import { sortTableRows } from '../utils/sort';
@@ -8,6 +8,7 @@ import { isGroupView } from '../utils/view';
 import { username } from '../../utils/constants';
 import { OPERATION_TYPE } from './operations';
 import { CellType } from '../constants';
+import { getCellValueByColumn, isValidCellValue } from '../utils/cell';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -218,18 +219,16 @@ class DataProcessor {
       case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
         const { column_key, new_data, old_data } = operation;
         const column = getColumnByKey(table.columns, column_key);
-        if (column && (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT)) {
-          table.rows.forEach(row => {
-            const cellValue = row[column.name];
-            if (cellValue !== null && cellValue !== undefined) {
+        if (column && !checkIsPrivateColumn(column)) {
+          let idRowMap = {};
+          for (const row of table.rows) {
+            const cellValue = getCellValueByColumn(row, column);
+            if (isValidCellValue(cellValue)) {
               row[column.name] = this.applyColumnDataToCell(column.type, cellValue, new_data.options, old_data.options);
             }
-          });
-
-          table.id_row_map = table.rows.reduce((map, row) => {
-            map[row._id] = row;
-            return map;
-          }, {});
+            idRowMap[row._id] = row;
+          }
+          table.id_row_map = idRowMap;
         }
         break;
       }
