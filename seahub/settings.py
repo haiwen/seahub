@@ -660,7 +660,7 @@ if enable_log_to_stdout:
         'disable_existing_loggers': False,
         'formatters': {
             'standard': {
-                # [2024-09-05 16:57:40] [info] xxx
+                # [seahub] [2024-09-05 16:57:40] [INFO] xxx
                 'format': '[seahub] [%(asctime)s] [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s',
                 'datefmt': '%Y-%m-%d %H:%M:%S',
             },
