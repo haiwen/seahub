@@ -81,9 +81,9 @@ const COLUMNS = [
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.DATE],
     type: CellType.DATE,
-    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.SHOOTING_TIME),
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.CAPTURE_TIME),
     unique: true,
-    key: PRIVATE_COLUMN_KEY.SHOOTING_TIME,
+    key: PRIVATE_COLUMN_KEY.CAPTURE_TIME,
     canChangeName: false,
     data: { format: DEFAULT_SHOOTING_TIME_FORMAT },
     groupby: 'predefined'

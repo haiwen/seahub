@@ -50,7 +50,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
   const imageRow = row && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
   isCellEditable = isCellEditable && canEditCell(column, row, enableCellSelect);
   if (imageRow) return isCellEditable;
-  if (column?.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME) return false;
+  if (column?.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) return false;
   return isCellEditable;
 };
 

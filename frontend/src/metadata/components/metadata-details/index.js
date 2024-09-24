@@ -108,7 +108,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
     <>
       {fields.map(field => {
         let canEdit = permission === 'rw' && field.editable;
-        if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME) {
+        if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
           canEdit = false;
         }
         const value = getCellValueByColumn(record, field);
