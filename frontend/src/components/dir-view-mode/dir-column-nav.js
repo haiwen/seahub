@@ -9,12 +9,15 @@ import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
-import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
+import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../../components/tree-section';
 import DirViews from './dir-views';
 import DirOthers from './dir-others';
+import imageAPI from '../../utils/image-api';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 
 import './dir-column-nav.css';
 
@@ -40,6 +43,7 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   getMenuContainerSize: PropTypes.func,
+  updateDirent: PropTypes.func,
   direntList: PropTypes.array
 };
 
@@ -319,6 +323,37 @@ class DirColumnNav extends React.Component {
     }
   };
 
+  handleError = (error) => {
+    toaster.danger(Utils.getErrorMsg(error));
+  };
+
+  rotateImage = (imageIndex, angle) => {
+    if (imageIndex >= 0 && angle !== 0) {
+      let { repoID } = this.props;
+      let imageName = this.state.imageNodeItems[imageIndex].name;
+      let path = this.state.opNode.path;
+      imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
+        seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
+          // Generate a unique query parameter to bust the cache
+          const cacheBuster = new Date().getTime();
+          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+          this.setState((prevState) => {
+            const updatedImageItems = [...prevState.imageNodeItems];
+            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            return { imageNodeItems: updatedImageItems };
+          });
+          // Update the thumbnail URL with the cache-busting query parameter
+          const item = this.props.direntList.find((item) => item.name === imageName);
+          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+        }).catch(error => {
+          this.handleError(error);
+        });
+      }).catch(error => {
+        this.handleError(error);
+      });
+    }
+  };
+
   stopTreeScrollPropagation = (e) => {
     e.stopPropagation();
   };
@@ -457,6 +492,7 @@ class DirColumnNav extends React.Component {
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
+              onRotateImage={this.rotateImage}
             />
           </ModalPortal>
         )}

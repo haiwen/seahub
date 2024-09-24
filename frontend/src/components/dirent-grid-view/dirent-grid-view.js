@@ -514,6 +514,10 @@ class DirentGridView extends React.Component {
     this.setState({ isPermissionDialogOpen: !this.state.isPermissionDialogOpen });
   };
 
+  handleError = (error) => {
+    toaster.danger(Utils.getErrorMsg(error));
+  };
+
   onLockItem = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
@@ -523,8 +527,7 @@ class DirentGridView extends React.Component {
       let lockName = username.split('@');
       this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.handleError(error);
     });
   };
 
@@ -538,8 +541,7 @@ class DirentGridView extends React.Component {
       let lockName = username.split('@');
       this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.handleError(error);
     });
   };
 
@@ -551,8 +553,7 @@ class DirentGridView extends React.Component {
       this.props.updateDirent(currentObject, 'locked_by_me', false);
       this.props.updateDirent(currentObject, 'lock_owner_name', '');
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.handleError(error);
     });
   };
 
@@ -646,29 +647,27 @@ class DirentGridView extends React.Component {
 
   rotateImage = (imageIndex, angle) => {
     if (imageIndex >= 0 && angle !== 0) {
-      const path = this.state.path === '/' ? this.props.path + this.state.imageItems[imageIndex].name : this.props.path + '/' + this.state.imageItems[imageIndex].name;
-      imageAPI.rotateImage(this.props.repoID, path, 360 - angle).then((res) => {
-        seafileAPI.createThumbnail(this.props.repoID, path, thumbnailDefaultSize).then((res) => {
+      let { repoID } = this.props;
+      let imageName = this.state.imageItems[imageIndex].name;
+      let path = Utils.joinPath(this.props.path, imageName);
+      imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
+        seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
-
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
             updatedImageItems[imageIndex].src = newThumbnailSrc;
             return { imageItems: updatedImageItems };
           });
-
           // Update the thumbnail URL with the cache-busting query parameter
-          const item = this.props.direntList.find((item) => item.name === this.state.imageItems[imageIndex].name);
+          const item = this.props.direntList.find((item) => item.name === imageName);
           this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
         }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+          this.handleError(error);
         });
       }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
+        this.handleError(error);
       });
     }
   };
