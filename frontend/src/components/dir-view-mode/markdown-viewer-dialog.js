@@ -34,7 +34,7 @@ class MarkdownViewerDialog extends React.Component {
         zIndex={1046}
       >
         <div className='seafile-markdown-viewer-modal-header'>
-          <div className='seafile-markdown-viewer-modal-header-left-name'>
+          <div className='seafile-markdown-viewer-modal-header-left-name d-flex align-items-center'>
             <span><img src={`${mediaUrl}img/file/256/md.png`} width='24' alt='' /></span>
             <span>{fileName}</span>
             <InternalLinkOperation path={Utils.joinPath(filePath, fileName)} repoID={repoID} />
