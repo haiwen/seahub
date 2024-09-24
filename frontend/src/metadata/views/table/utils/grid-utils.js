@@ -103,7 +103,7 @@ class GridUtils {
         if (!pasteColumn || !(canModifyRow(pasteRecord) && canModifyColumn(pasteColumn))) {
           continue;
         }
-        if (pasteColumn.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME && !(Utils.imageCheck(filename) || Utils.videoCheck(filename))) {
+        if (pasteColumn.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME && !(Utils.imageCheck(filename) || Utils.videoCheck(filename))) {
           continue;
         }
         const copiedColumnIndex = j % copiedColumnsLen;
