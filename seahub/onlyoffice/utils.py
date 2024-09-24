@@ -103,12 +103,21 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     if not file_id:
         file_id = seafile_api.get_file_id_by_path(origin_repo_id,
                                                   origin_file_path)
+    try:
+        dl_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=False)
+    except Exception as e:
+        logger.error('office file get download token error: %s file_id=%s, repo_id=%s, username=%s' % (e, file_id, repo_id, username))
+        dl_token = None
 
-    dl_token = seafile_api.get_fileserver_access_token(repo_id,
-                                                       file_id,
-                                                       'download',
-                                                       username,
-                                                       use_onetime=False)
+    if not dl_token:
+        new_file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+        try:
+            dl_token = seafile_api.get_fileserver_access_token(repo_id, new_file_id, 'download', username, use_onetime=False)
+        except Exception as e:
+            logger.error('office file get download token error:%s new_file_id=%s, repo_id=%s, username=%s, error:%s' % (e, file_id, repo_id, username))
+            dl_token = None
+
+
     if not dl_token:
         return None
 
