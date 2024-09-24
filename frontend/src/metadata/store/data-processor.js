@@ -1,12 +1,16 @@
 import { isTableRows } from '../utils/row';
-import { getColumnByKey } from '../utils/column';
+import { getColumnByKey, getColumnOriginName } from '../utils/column';
 import { getFilteredRows } from '../utils/filter';
 import { getGroupRows } from '../utils/group';
 import { sortTableRows } from '../utils/sort';
 import { getRowsByIds } from '../utils/table';
 import { isGroupView } from '../utils/view';
 import { username } from '../../utils/constants';
-import { OPERATION_TYPE } from './operations';
+import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
+import { CellType, PRIVATE_COLUMN_KEY } from '../constants';
+import { getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
+  getColumnOptionNamesByIds
+} from '../utils/cell';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -142,6 +146,33 @@ class DataProcessor {
     this.updateSummaries();
   }
 
+  static updateRecordsWithModifyColumnData(table, column, operation) {
+    const { old_data, new_data } = operation;
+    const columnOriginalName = getColumnOriginName(column);
+    const columnType = column.type;
+    const oldColumn = { ...column, data: old_data };
+    const newColumn = { ...column, data: new_data };
+
+    // modify row data
+    for (const row of table.rows) {
+      const cellValue = getCellValueByColumn(row, column);
+      if (isValidCellValue(cellValue)) {
+        if (columnType === CellType.SINGLE_SELECT && !checkIsPredefinedOption(column, cellValue)) {
+          const oldOptions = old_data?.options || [];
+          const newOptions = new_data?.options || [];
+          const oldOption = getOption(oldOptions, cellValue);
+          const newOption = getOption(newOptions, oldOption?.id);
+          row[columnOriginalName] = newOption ? newOption.name : null;
+        } else if (columnType === CellType.MULTIPLE_SELECT) {
+          const oldOptionIds = getColumnOptionIdsByNames(oldColumn, cellValue);
+          const newOptionNames = getColumnOptionNamesByIds(newColumn, oldOptionIds);
+          row[columnOriginalName] = newOptionNames ? newOptionNames : null;
+        }
+        table.id_row_map[row[PRIVATE_COLUMN_KEY.ID]] = row;
+      }
+    }
+  }
+
   static syncOperationOnData(table, operation, { collaborators }) {
     switch (operation.op_type) {
       case OPERATION_TYPE.MODIFY_RECORD:
@@ -214,12 +245,22 @@ class DataProcessor {
         table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
         break;
       }
+      case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+        const { column_key, option_modify_type } = operation;
+        const column = getColumnByKey(table.columns, column_key);
+        if (!column) break;
+        if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
+          if (option_modify_type === COLUMN_DATA_OPERATION_TYPE.RENAME_OPTION) {
+            this.updateRecordsWithModifyColumnData(table, column, operation);
+          }
+        }
+        break;
+      }
       default: {
         break;
       }
     }
   }
-
 }
 
 export default DataProcessor;
