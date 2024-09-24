@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { CustomizePopover, IconBtn } from '@seafile/sf-metadata-ui-component';
 import { SELECT_OPTION_COLORS } from '../../../../../constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
 import './index.css';
 
@@ -31,7 +32,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
       textColor: selected.TEXT_COLOR,
       borderColor: selected.BORDER_COLOR,
     });
-    onChange(newOption);
+    onChange(newOption, COLUMN_DATA_OPERATION_TYPE.MODIFY_OPTION_COLOR);
   }, [option, onChange]);
 
   useEffect(() => {

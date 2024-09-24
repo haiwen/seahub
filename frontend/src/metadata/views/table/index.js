@@ -108,8 +108,8 @@ const Table = () => {
     store.deleteColumn(columnKey, oldColumn);
   }, [store]);
 
-  const modifyColumnData = useCallback((columnKey, newData, oldData) => {
-    store.modifyColumnData(columnKey, newData, oldData);
+  const modifyColumnData = useCallback((columnKey, newData, oldData, { optionModifyType }) => {
+    store.modifyColumnData(columnKey, newData, oldData, { optionModifyType });
   }, [store]);
 
   const modifyColumnWidth = useCallback((columnKey, newWidth) => {
