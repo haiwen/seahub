@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, fileServerRoot } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
@@ -19,6 +19,8 @@ import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
+import imageAPI from '../../utils/image-api';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -236,6 +238,37 @@ class DirentListView extends React.Component {
       imageItems: newImageItems,
       imageIndex: prevState.imageIndex % newImageItems.length,
     }));
+  };
+
+  handleError = (error) => {
+    toaster.danger(Utils.getErrorMsg(error));
+  };
+
+  rotateImage = (imageIndex, angle) => {
+    if (imageIndex >= 0 && angle !== 0) {
+      let { repoID } = this.props;
+      let imageName = this.state.imageItems[imageIndex].name;
+      let path = Utils.joinPath(this.props.path, imageName);
+      imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
+        seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
+          // Generate a unique query parameter to bust the cache
+          const cacheBuster = new Date().getTime();
+          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+          this.setState((prevState) => {
+            const updatedImageItems = [...prevState.imageItems];
+            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            return { imageItems: updatedImageItems };
+          });
+          // Update the thumbnail URL with the cache-busting query parameter
+          const item = this.props.direntList.find((item) => item.name === imageName);
+          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+        }).catch(error => {
+          this.handleError(error);
+        });
+      }).catch(error => {
+        this.handleError(error);
+      });
+    }
   };
 
   closeImagePopup = () => {
@@ -772,6 +805,7 @@ class DirentListView extends React.Component {
                 moveToPrevImage={this.moveToPrevImage}
                 moveToNextImage={this.moveToNextImage}
                 onDeleteImage={this.deleteImage}
+                onRotateImage={this.rotateImage}
               />
             </ModalPortal>
           )}

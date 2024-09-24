@@ -175,6 +175,7 @@ class DirColumnView extends React.Component {
               onItemsMove={this.props.onItemsMove}
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
+              updateDirent={this.props.updateDirent}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}
