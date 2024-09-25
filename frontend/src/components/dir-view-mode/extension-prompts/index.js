@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Icon from '../../icon';
 import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
 const ExtensionPrompts = () => {
-  const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       className='extension-prompts-container'
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       aria-label={gettext('Extension Prompts')}
     >
       <div className='extension-prompts-icon-wrapper'>
         <Icon
-          symbol={isHovered ? 'color-bell' : 'bell'}
+          symbol={'bell'}
           className='extension-prompts-icon'
-          aria-label={isHovered ? gettext('Color Bell Icon') : gettext('Bell Icon')}
+          aria-label={gettext('Bell Icon')}
         />
       </div>
       <div className='extension-prompts-content'>

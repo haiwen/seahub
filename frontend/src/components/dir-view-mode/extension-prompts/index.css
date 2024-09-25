@@ -18,6 +18,10 @@
   background-color: #fffbed;
 }
 
+.extension-prompts-container:hover .extension-prompts-icon {
+  fill: #fc6440;
+}
+
 .extension-prompts-content p {
   margin: 0;
 }
