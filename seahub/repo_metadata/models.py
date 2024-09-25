@@ -93,8 +93,13 @@ class RepoMetadataViewsManager(models.Manager):
             from seafevents.repo_metadata.utils import METADATA_TABLE
 
             # init view data
+            basic_filters = [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }]
+
+            if view_type == 'table':
+                basic_filters.append({ 'column_key': METADATA_TABLE.columns.file_type.key, 'filter_predicate': 'is_any_of', 'filter_term': [] })
+
             new_view = RepoView(view_name, view_type, {
-                'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
+                'basic_filters': basic_filters,
                 'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
             })
 

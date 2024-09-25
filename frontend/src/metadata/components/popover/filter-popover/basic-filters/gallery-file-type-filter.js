@@ -4,12 +4,12 @@ import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
-  { value: 'file', name: gettext('Only files') },
-  { value: 'folder', name: gettext('Only directories') },
-  { value: 'all', name: gettext('Files and directories') },
+  { value: 'picture', name: gettext('Only pictures') },
+  { value: 'video', name: gettext('Only videos') },
+  { value: 'all', name: gettext('Pictures and videos') },
 ];
 
-const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) => {
+const GalleryFileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) => {
 
   const options = useMemo(() => {
     return OPTIONS.map(o => {
@@ -60,10 +60,10 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
   );
 };
 
-FileOrFolderFilter.propTypes = {
+GalleryFileTypeFilter.propTypes = {
   readOnly: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default FileOrFolderFilter;
+export default GalleryFileTypeFilter;

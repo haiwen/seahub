@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 import FileOrFolderFilter from './file-folder-filter';
 import FileTypeFilter from './file-type-filter';
+import GalleryFileTypeFilter from './gallery-file-type-filter';
 import { gettext } from '../../../../../utils/constants';
-import { PRIVATE_COLUMN_KEY } from '../../../../constants';
+import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
 
 import './index.css';
 
-const BasicFilters = ({ readOnly, filters = [], onChange }) => {
+const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
 
   const onChangeFileOrFolderFilter = useCallback((newValue) => {
     const filterIndex = filters.findIndex(filter => filter.column_key === PRIVATE_COLUMN_KEY.IS_DIR);
@@ -31,7 +32,7 @@ const BasicFilters = ({ readOnly, filters = [], onChange }) => {
       <Label className="filter-group-name">{gettext('Basic')}</Label>
       <div className="filter-group-container">
         <div className="sf-metadata-filters-list">
-          {filters.map((filter, index) => {
+          {filters.map((filter) => {
             const { column_key, filter_term } = filter;
             if (column_key === PRIVATE_COLUMN_KEY.IS_DIR) {
               return (
@@ -39,8 +40,10 @@ const BasicFilters = ({ readOnly, filters = [], onChange }) => {
               );
             }
             if (column_key === PRIVATE_COLUMN_KEY.FILE_TYPE) {
-              return (
+              return viewType === VIEW_TYPE.TABLE ? (
                 <FileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
+              ) : (
+                <GalleryFileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
               );
             }
             return null;
@@ -56,6 +59,7 @@ BasicFilters.propTypes = {
   filters: PropTypes.array,
   columns: PropTypes.array,
   onChange: PropTypes.func,
+  viewType: PropTypes.oneOf(Object.values(VIEW_TYPE)),
 };
 
 export default BasicFilters;

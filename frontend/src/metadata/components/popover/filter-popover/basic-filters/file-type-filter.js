@@ -1,15 +1,18 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
-  { value: 'picture', name: gettext('Only pictures') },
-  { value: 'video', name: gettext('Only videos') },
-  { value: 'all', name: gettext('Pictures and videos') },
+  { value: 'picture', name: gettext('Pictures') },
+  { value: 'document', name: gettext('Document') },
+  { value: 'video', name: gettext('Video') },
+  { value: 'audio', name: gettext('Audio') },
+  { value: 'code', name: gettext('Code') },
+  { value: 'compressed', name: gettext('Compressed') },
 ];
 
-const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) => {
+const FileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
 
   const options = useMemo(() => {
     return OPTIONS.map(o => {
@@ -18,10 +21,10 @@ const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) 
         value: o.value,
         label: (
           <div className="select-basic-filter-option">
-            <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
-            <div className="select-basic-filter-option-check-icon">
-              {value === o.value && (<Icon iconName="check-mark" />)}
+            <div className='select-basic-filter-option-checkbox'>
+              <input type="checkbox" checked={value.includes(o.value)} readOnly />
             </div>
+            <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
           </div>
         )
       };
@@ -29,28 +32,32 @@ const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) 
   }, [value]);
 
   const displayValue = useMemo(() => {
-    const selectedOption = OPTIONS.find(o => o.value === value) || OPTIONS[2];
+    const selectedOptions = OPTIONS.filter(o => value.includes(o.value));
     return {
       label: (
-        <div>
-          {selectedOption.name}
+        <div className='select-basic-filter-display-name'>
+          {selectedOptions.length > 0 ? selectedOptions.map(o => o.name).join(', ') : gettext('File type')}
         </div>
       )
     };
   }, [value]);
 
   const onChange = useCallback((newValue) => {
-    if (newValue === value) return;
-    onChangeAPI(newValue);
+    if (value.includes(newValue)) {
+      onChangeAPI(value.filter(v => v !== newValue));
+    } else {
+      onChangeAPI([...value, newValue]);
+    }
   }, [value, onChangeAPI]);
 
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select"
+      className="sf-metadata-basic-filters-select sf-metadata-basic-filters-select-file-type"
       value={displayValue}
       options={options}
       onSelectOption={onChange}
+      supportMultipleSelect={true}
       component={{
         DropDownIcon: (
           <i className="sf3-font sf3-font-down"></i>
@@ -62,7 +69,7 @@ const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) 
 
 FileTypeFilter.propTypes = {
   readOnly: PropTypes.bool,
-  value: PropTypes.string,
+  value: PropTypes.array,
   onChange: PropTypes.func,
 };
 

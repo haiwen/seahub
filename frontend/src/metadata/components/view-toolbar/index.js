@@ -89,6 +89,7 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns}
           modifyFilters={modifyFilters}
           collaborators={collaborators}
+          viewType={viewType}
         />
         <SortSetter
           isNeedSubmit={true}

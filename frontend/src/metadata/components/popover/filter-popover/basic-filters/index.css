@@ -1,6 +1,6 @@
 .sf-metadata-basic-filters-select.custom-select {
   width: fit-content;
-  max-width: 100%;
+  max-width: 200px;
   background-image: none;
   border: none;
   padding: 0 6px;
@@ -21,14 +21,11 @@
   box-shadow: none;
 }
 
-.sf-metadata-basic-filters-select .selected-option-show {
-  margin-right: 8px;
-}
-
 .select-basic-filter-option {
   width: 100%;
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .select-basic-filter-option .select-basic-filter-option-name {
@@ -52,10 +49,28 @@
   fill: #fff;
 }
 
-.sf-metadata-basic-filters-select .sf-metadata-option-group {
-  margin-left: 6px;
-}
-
 .filter-group-basic .sf-metadata-filters-list {
   min-height: unset;
+  display: flex;
+  gap: 1rem;
+}
+
+.sf-metadata-basic-filters-select .select-basic-filter-display-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-metadata-basic-filters-select-file-type .sf-metadata-option-group {
+  width: 200px;
+  max-width: 200px;
+}
+
+.sf-metadata-basic-filters-select-file-type .sf-metadata-option {
+  padding: 0.25rem 1rem;
+}
+
+.select-basic-filter-option .select-basic-filter-option-checkbox {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
 }
