@@ -3,11 +3,13 @@ import { UncontrolledPopover } from 'reactstrap';
 import classNames from 'classnames';
 import Picker from '@emoji-mart/react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../../utils/utils';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { data } from './../utils/emoji-utils';
 
 const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
   const popoverRef = useRef(null);
+  const isDesktop = Utils.isDesktop();
 
   const handleSetIcon = useCallback((emoji) => {
     onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: emoji });
@@ -27,7 +29,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
           <span>{currentPageConfig.icon}</span>
         </div>
       </div>
-      {wikiPermission !== 'public' &&
+      {isDesktop && wikiPermission !== 'public' &&
         <UncontrolledPopover
           ref={popoverRef}
           flip
