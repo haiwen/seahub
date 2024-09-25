@@ -50,15 +50,13 @@ from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
-    get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
+    get_file_type_and_ext, gen_file_get_url, \
     render_permission_error, is_pro_version, is_textual_file, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
-    generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
-from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
@@ -861,9 +859,12 @@ def view_lib_file(request, repo_id, path):
                     ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
+            from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+            can_copy_content = permission not in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
             onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
                                                   can_edit=can_edit,
-                                                  can_download=parse_repo_perm(permission).can_download)
+                                                  can_download=parse_repo_perm(permission).can_download,
+                                                  can_copy=can_copy_content)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
@@ -999,8 +1000,12 @@ def view_history_file_common(request, repo_id, ret_dict):
 
             if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
+                from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+                can_copy_content = user_perm not in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
                 onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
-                        file_id=obj_id, can_download=parse_repo_perm(user_perm).can_download)
+                                                      file_id=obj_id,
+                                                      can_download=parse_repo_perm(user_perm).can_download,
+                                                      can_copy=can_copy_content)
 
                 if onlyoffice_dict:
                     # send file audit message
@@ -1222,9 +1227,9 @@ def view_shared_file(request, fileshare):
     locked_by_online_office = if_locked_by_online_office(repo_id, path)
 
     # get share link permission
+    can_copy_content = fileshare.get_permissions()['can_copy_content']
     can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit'] and \
-            (not is_locked or locked_by_online_office)
+    can_edit = fileshare.get_permissions()['can_edit'] and (not is_locked or locked_by_online_office)
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1237,8 +1242,8 @@ def view_shared_file(request, fileshare):
         return _download_file_from_share_link(request, fileshare)
 
     # get raw file
-    access_token = seafile_api.get_fileserver_access_token(repo_id,
-            obj_id, 'view', '', use_onetime=False)
+    access_token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
+                                                           '', use_onetime=False)
 
     if not access_token:
         return render_error(request, _('Unable to view file'))
@@ -1261,7 +1266,7 @@ def view_shared_file(request, fileshare):
     filetype, fileext = get_file_type_and_ext(filename)
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
-    
+
     if filetype == VIDEO:
         raw_path = gen_file_get_url_new(repo_id, path)
 
@@ -1299,8 +1304,9 @@ def view_shared_file(request, fileshare):
 
             action_name = 'edit' if can_edit else 'view'
             wopi_dict = get_wopi_dict(username, repo_id, path,
-                    action_name=action_name, can_download=can_download,
-                    language_code=request.LANGUAGE_CODE)
+                                      action_name=action_name,
+                                      can_download=can_download,
+                                      language_code=request.LANGUAGE_CODE)
 
             if wopi_dict:
 
@@ -1316,7 +1322,9 @@ def view_shared_file(request, fileshare):
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
             onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
-                    can_edit=can_edit, can_download=can_download)
+                                                  can_edit=can_edit,
+                                                  can_download=can_download,
+                                                  can_copy=can_copy_content)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
@@ -1327,8 +1335,7 @@ def view_shared_file(request, fileshare):
                 # send file audit message
                 send_file_access_msg(request, repo, path, 'share-link')
 
-                return render(request, 'view_file_onlyoffice.html',
-                        onlyoffice_dict)
+                return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
