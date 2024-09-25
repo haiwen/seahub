@@ -727,6 +727,9 @@ class AdminUsers(APIView):
                 users = all_ldap_users[start: start + per_page]
 
         data = []
+        email_list = [user.email for user in users]
+        social_auth_user_queryset = SocialAuthUser.objects.filter(username__in=email_list)
+
         for user in users:
             profile = Profile.objects.get_profile_by_user(user.email)
 
@@ -774,6 +777,9 @@ class AdminUsers(APIView):
                     info['institution'] = profile.institution
                 else:
                     info['institution'] = ''
+
+            social_auth_user = social_auth_user_queryset.filter(username=user.email)
+            info['social_auth'] = [{'provider': item.provider, 'uid': item.uid} for item in social_auth_user]
 
             data.append(info)
 
