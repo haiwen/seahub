@@ -191,7 +191,7 @@ class DirentListView extends React.Component {
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
       'src': `${siteRoot}repo/${repoID}/raw${path}`,
-      'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
+      'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
     };
   };
 
