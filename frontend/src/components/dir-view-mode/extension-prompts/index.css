@@ -1,0 +1,27 @@
+.extension-prompts-container {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #f8fafd;
+  font-size: 13px;
+  color: #868e96;
+}
+
+.extension-prompts-container:hover {
+  color: #703719;
+  background-color: #fffbed;
+}
+
+.extension-prompts-container:hover .extension-prompts-icon {
+  fill: #fc6440;
+}
+
+.extension-prompts-content p {
+  margin: 0;
+}
