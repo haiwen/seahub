@@ -207,6 +207,10 @@ class MetadataRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        if not view:
+            error_msg = 'Metadata view %s not found.' % view_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
             results = list_metadata_view_records(repo_id, request.user.username, view, start, limit)
         except Exception as err:
@@ -251,12 +255,10 @@ class MetadataRecords(APIView):
         unmodifiable_column_names = [column.get('name') for column in get_unmodifiable_columns()]
 
         record_id_to_record = {}
-        obj_id_to_record = {}
-        sql = f'SELECT `_id`, `_obj_id`, `_file_modifier` FROM `{METADATA_TABLE.name}` WHERE '
+        sql = f'SELECT `_id` FROM `{METADATA_TABLE.name}` WHERE '
         parameters = []
         for record_data in records_data:
             record = record_data.get('record', {})
-            obj_id = record_data.get('obj_id', '')
             record_id = record_data.get('record_id', '')
             if not record_id:
                 error_msg = 'record_id invalid.'
@@ -265,11 +267,6 @@ class MetadataRecords(APIView):
             sql += f' `{METADATA_TABLE.columns.id.name}` = ? OR '
             parameters.append(record_id)
             record_id_to_record[record_id] = record
-
-            if obj_id and obj_id != '0000000000000000000000000000000000000000':
-                sql += f' `{METADATA_TABLE.columns.obj_id.name}` = ? OR '
-                parameters.append(obj_id)
-                obj_id_to_record[obj_id] = record
 
         sql = sql.rstrip('OR ')
         sql += ';'
@@ -288,37 +285,33 @@ class MetadataRecords(APIView):
 
         rows = []
         for record in results:
-            obj_id = record.get('_obj_id')
             record_id = record.get('_id')
             to_updated_record = record_id_to_record.get(record_id)
-            if not to_updated_record:
-                to_updated_record = obj_id_to_record.get(obj_id)
-
             update = {
                 METADATA_TABLE.columns.id.name: record_id,
             }
-            for column_name, value in to_updated_record.items():
-                if column_name not in unmodifiable_column_names:
-                    try:
-                        column = next(column for column in columns if column['name'] == column_name)
-                        if value and column['type'] == 'date':
-                            column_data = column.get('data', {})
-                            format = column_data.get('format', 'YYYY-MM-DD')
-                            saved_format = '%Y-%m-%d'
-                            if 'HH:mm:ss' in format:
-                                saved_format = '%Y-%m-%d %H:%M:%S'
-                            elif 'HH:mm' in format:
-                                saved_format = '%Y-%m-%d %H:%M'
+            column_name, value = list(to_updated_record.items())[0]
+            if column_name not in unmodifiable_column_names:
+                try:
+                    column = next(column for column in columns if column['name'] == column_name)
+                    if value and column['type'] == 'date':
+                        column_data = column.get('data', {})
+                        format = column_data.get('format', 'YYYY-MM-DD')
+                        saved_format = '%Y-%m-%d'
+                        if 'HH:mm:ss' in format:
+                            saved_format = '%Y-%m-%d %H:%M:%S'
+                        elif 'HH:mm' in format:
+                            saved_format = '%Y-%m-%d %H:%M'
 
-                            datetime_obj = datetime.strptime(value, saved_format)
-                            update[column_name] = datetime_to_isoformat_timestr(datetime_obj)
-                        elif column['type'] == 'single-select' and not value:
-                            update[column_name] = None
-                        else:
-                            update[column_name] = value
-                        rows.append(update)
-                    except Exception as e:
-                        pass
+                        datetime_obj = datetime.strptime(value, saved_format)
+                        update[column_name] = datetime_to_isoformat_timestr(datetime_obj)
+                    elif column['type'] == 'single-select' and not value:
+                        update[column_name] = None
+                    else:
+                        update[column_name] = value
+                    rows.append(update)
+                except Exception as e:
+                    pass
         if rows:
             try:
                 metadata_server_api.update_rows(METADATA_TABLE.id, rows)
