@@ -9,7 +9,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
 
-  const renderDisplayGroup = useCallback((group, groupIndex) => {
+  const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
     const { name, children, height, top, paddingTop } = group;
 
@@ -47,7 +47,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
             paddingBottom: (children.length - 1 - childrenEndIndex) * imageHeight,
           }}
         >
-          {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row, rowIndex) => {
+          {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
             return row.children.map((img) => {
               const isSelected = selectedImages.includes(img);
               return (
