@@ -3,16 +3,20 @@ import PropTypes from 'prop-types';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { Utils } from '../../../utils/utils';
 import ImageDialog from '../../../components/dialog/image-dialog';
-import { siteRoot, thumbnailSizeForOriginal, fileServerRoot } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
+import imageAPI from '../../../utils/image-api';
+import { seafileAPI } from '../../../utils/seafile-api';
+import toaster from '../../../components/toast';
 
 const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
   const [imageIndex, setImageIndex] = useState(0);
+  const [imageItems, setImageItems] = useState([]);
 
-  const imageItems = useMemo(() => {
+  useEffect(() => {
     const repoID = window.sfMetadataContext.getSetting('repoID');
-
-    return table.rows
+    const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
+    const newImageItems = table.rows
       .filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
       .map(item => {
         const fileName = item[PRIVATE_COLUMN_KEY.FILE_NAME];
@@ -20,10 +24,9 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const fileExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
         const isGIF = fileExt === 'gif';
-        const useThumbnail = window.sfMetadataContext.getSetting('repoInfo')?.encrypted;
+        const useThumbnail = repoInfo?.encrypted;
         const basePath = `${siteRoot}${useThumbnail && !isGIF ? 'thumbnail' : 'repo'}/${repoID}`;
         const src = `${basePath}/${useThumbnail && !isGIF ? thumbnailSizeForOriginal : 'raw'}${path}`;
-
         return {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
@@ -32,6 +35,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
         };
       });
+    setImageItems(newImageItems);
   }, [table]);
 
   useEffect(() => {
@@ -48,8 +52,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
   }, [record]);
 
   const fileName = useMemo(() => {
-    const { key } = column;
-    return record[key];
+    return record[column.key];
   }, [column, record]);
 
   const fileType = useMemo(() => {
@@ -75,6 +78,30 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
 
+  const rotateImage = (imageIndex, angle) => {
+    if (imageIndex >= 0 && angle !== 0) {
+      const repoID = window.sfMetadataContext.getSetting('repoID');
+      const imageItem = imageItems[imageIndex];
+      const path = imageItem.url.slice(imageItem.url.indexOf('/file/') + 5);
+      imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
+        if (res.data?.success) {
+          seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
+            if (res.data?.encoded_thumbnail_src) {
+              const cacheBuster = new Date().getTime();
+              const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+              imageItems[imageIndex].src = newThumbnailSrc;
+              setImageItems(imageItems);
+            }
+          }).catch(error => {
+            toaster.danger(Utils.getErrorMsg(error));
+          });
+        }
+      }).catch(error => {
+        toaster.danger(Utils.getErrorMsg(error));
+      });
+    }
+  };
+
   if (fileType === 'image') {
     return (
       <ModalPortal>
@@ -84,6 +111,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
           closeImagePopup={onCommitCancel}
           moveToPrevImage={moveToPrevImage}
           moveToNextImage={moveToNextImage}
+          onRotateImage={rotateImage}
         />
       </ModalPortal>
     );
