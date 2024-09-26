@@ -157,15 +157,19 @@ class SidePanel extends Component {
 
   render() {
     const { isLoading } = this.props;
+    const isDesktop = Utils.isDesktop();
     return (
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
-          {wikiPermission !== 'public' &&
+          {isDesktop && wikiPermission !== 'public' &&
             <div>
-              <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
-                <i className='sf3-font sf3-font-new-page'></i>
-              </div>
+              <i
+                id='wiki-add-new-page'
+                onClick={this.handleAddNewPage.bind(true)}
+                className='sf3-font sf3-font-new-page add-new-page p-1'
+              >
+              </i>
               <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
                 {gettext('New page')}
               </UncontrolledTooltip>

@@ -1,11 +1,15 @@
 .wiki2-top-nav .wiki2-top-nav-item {
-  align-items: center;
   padding: 2px 6px;
-  max-width: 300px;
+  max-width: 150px;
+}
+@media (min-width: 768px) {
+  .wiki2-top-nav .wiki2-top-nav-item {
+    max-width: 300px;
+  }
 }
 
-.wiki2-top-nav>div:not(.wiki2-top-nav-item) {
-  margin: 2px 2px 0 2px;
+.wiki2-top-nav .item-split {
+  margin: 0 2px;
 }
 
 .wiki2-top-nav .wiki2-top-nav-item:hover {

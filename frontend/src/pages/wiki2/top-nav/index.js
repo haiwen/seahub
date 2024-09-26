@@ -44,15 +44,15 @@ function WikiTopNav({ config, currentPageId }) {
   const paths = getPaths(navigation, currentPageId, pages);
 
   return (
-    <div className="wiki2-top-nav d-flex">
+    <div className="wiki2-top-nav d-flex align-items-center">
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
-            <div className='wiki2-top-nav-item d-flex'>
+            <div className='wiki2-top-nav-item d-flex align-items-center'>
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
-              <span className='text-truncate'>{item.name}</span>
+              <span className='text-truncate' title={item.name}>{item.name}</span>
             </div>
-            {index !== paths.length - 1 && <div>/</div>}
+            {index !== paths.length - 1 && <span className="item-split">/</span>}
           </Fragment>
         );
       })}
