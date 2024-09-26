@@ -164,7 +164,7 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
         <Input
           innerRef={inputRef}
           className='search-input'
-          placeholder={gettext('Global search')}
+          placeholder={gettext('Search')}
           type='text'
           value={inputValue}
           onChange={handleSearchInputChange}
