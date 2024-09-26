@@ -224,7 +224,7 @@ class PageItem extends Component {
                     )}
                   </div>
                 </div>
-                <div className="d-flex">
+                <div className="d-none d-md-flex">
                   {isEditMode && wikiPermission !== 'public' &&
                     <>
                       <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>

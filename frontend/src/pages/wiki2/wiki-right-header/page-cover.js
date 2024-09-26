@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { UncontrolledPopover } from 'reactstrap';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { Utils } from '../../../utils/utils';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { WIKI_COVER_LIST } from '../constant';
 
@@ -11,6 +12,7 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
 
   const [isShowCoverController, setIsShowCoverController] = useState(false);
   const popoverRef = useRef(null);
+  const isDesktop = Utils.isDesktop();
 
   const onMouseEnter = useCallback(() => {
     setIsShowCoverController(true);
@@ -51,13 +53,13 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
     <>
       <div id="wiki-page-cover" className='wiki-page-cover' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         <img className='wiki-page-cover__img' alt={gettext('Cover')} src={getCoverImgUrl(currentPageConfig.cover_img_url)} />
-        <div className={classNames('wiki-page-cover__controller', { show: isShowCoverController })}>
+        <div className={classNames('wiki-page-cover__controller', { show: isShowCoverController, 'd-none': !isDesktop })}>
           {wikiPermission !== 'public' &&
             <div className='wiki-cover-controller-btn' id='wiki-change-cover-btn'>{gettext('Change cover')}</div>
           }
         </div>
       </div>
-      {wikiPermission !== 'public' &&
+      {isDesktop && wikiPermission !== 'public' &&
         <UncontrolledPopover
           ref={popoverRef}
           flip

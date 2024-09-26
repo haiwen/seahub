@@ -253,7 +253,6 @@ class Wiki extends Component {
         <SidePanel
           isLoading={this.state.isConfigLoading}
           closeSideBar={this.state.closeSideBar}
-          onCloseSide={this.onCloseSide}
           config={this.state.config}
           updateWikiConfig={this.updateWikiConfig}
           getWikiConfig={this.getWikiConfig}
@@ -262,6 +261,7 @@ class Wiki extends Component {
           onUpdatePage={this.onUpdatePage}
         />
         <MainPanel
+          onCloseSide={this.onCloseSide}
           path={this.state.path}
           config={this.state.config}
           currentPageId={this.state.currentPageId}
@@ -275,7 +275,7 @@ class Wiki extends Component {
           isUpdateBySide={this.state.isUpdateBySide}
         />
         <MediaQuery query="(max-width: 767.8px)">
-          <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
+          <Modal zIndex="1030" isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
         </MediaQuery>
       </div>
     );

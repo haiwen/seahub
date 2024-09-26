@@ -3,7 +3,7 @@ body {
 }
 
 .wiki2-main-panel {
-  width: calc(100% - 300px);
+  flex: calc(100% - 300px);
   display: flex;
   flex-direction: column;
   min-height: 0;

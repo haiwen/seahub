@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../../utils/utils';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { WIKI_COVER_LIST } from '../constant';
 import PageIcon from './page-icon';
@@ -17,6 +18,7 @@ const propTypes = {
 
 const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
   const [isShowController, setIsShowController] = useState(false);
+  const isDesktop = Utils.isDesktop();
 
   const onMouseEnter = useCallback(() => {
     setIsShowController(true);
@@ -55,7 +57,7 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
       {currentPageConfig.icon && (
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}
-      <div className={classnames('wiki-page-controller', { 'show': isShowController })}>
+      <div className={classnames('wiki-page-controller', { 'show': isShowController, 'd-none': !isDesktop })}>
         {!currentPageConfig.icon && wikiPermission !== 'public' && (
           <div className='wiki-page-controller-item' onClick={handleAddIcon}>
             <i className='sf3-font sf3-font-icon'></i>
