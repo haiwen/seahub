@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
 import { MetadataStatusManagementDialog, MetadataTreeView, useMetadata } from '../../metadata';
+import ExtensionPrompts from './extension-prompts';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -44,9 +45,11 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
         moreOperations={moreOperations}
         moreOperationClick={moreOperationClick}
       >
-        {enableMetadata && Array.isArray(navigation) && navigation.length > 0 && (
+        {!enableMetadata ? (
+          <ExtensionPrompts />
+        ) : Array.isArray(navigation) && navigation.length > 0 ? (
           <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
-        )}
+        ) : null}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog
