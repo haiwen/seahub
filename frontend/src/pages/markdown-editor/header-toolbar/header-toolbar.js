@@ -163,7 +163,7 @@ class HeaderToolbar extends React.Component {
                     id='info'
                     text={gettext('Info')}
                     icon='info'
-                    onClick={() => {
+                    onMouseDown={() => {
                       this.onArticleInfoDetailToggle();
                       this.onArticleInfoToggle();
                     }}
