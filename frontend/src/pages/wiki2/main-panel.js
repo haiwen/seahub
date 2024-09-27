@@ -65,17 +65,17 @@ class MainPanel extends Component {
     return (
       <div className="wiki2-main-panel">
         <div className='wiki2-main-panel-north'>
-          <div className='wiki2-main-panel-north-content'>
-            <div className="d-flex align-items-center flex-fill o-hidden">
+          <div className="d-flex align-items-center flex-fill o-hidden">
+            <div className='wiki2-main-panel-north-content'>
               <i role="button" aria-label={gettext('Side Nav Menu')} onClick={this.props.onCloseSide} className="sf2-icon-menu side-nav-toggle d-md-none"></i>
+              <WikiTopNav
+                config={config}
+                currentPageId={this.props.currentPageId}
+                currentPageConfig={currentPageConfig}
+                setCurrentPage={this.props.setCurrentPage}
+              />
+              <DocInfo initContext={true}/>
             </div>
-            <WikiTopNav
-              config={config}
-              currentPageId={this.props.currentPageId}
-              currentPageConfig={currentPageConfig}
-              setCurrentPage={this.props.setCurrentPage}
-            />
-            <DocInfo initContext={true}/>
           </div>
           {username && wikiPermission !== 'public' && <Account />}
         </div>

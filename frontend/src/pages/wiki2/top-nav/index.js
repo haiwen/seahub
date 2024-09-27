@@ -48,7 +48,7 @@ function WikiTopNav({ config, currentPageId, setCurrentPage }) {
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
-            <div className='wiki2-top-nav-item d-flex' onClick={() => {setCurrentPage(item.id);}}>
+            <div className='wiki2-top-nav-item d-flex align-items-center' onClick={() => {setCurrentPage(item.id);}}>
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               <span className='text-truncate' title={item.name}>{item.name}</span>
             </div>
