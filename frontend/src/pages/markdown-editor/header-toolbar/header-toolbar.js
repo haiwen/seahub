@@ -63,7 +63,6 @@ class HeaderToolbar extends React.Component {
   };
 
   componentDidMount() {
-    this.calculateDirPath();
     this.getDirentList();
   }
 
@@ -72,15 +71,9 @@ class HeaderToolbar extends React.Component {
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE);
   };
 
-  calculateDirPath = () => {
-    const { filePath } = window.app.pageOptions;
-    const dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0);
-    this.setState({ dirPath: dirPath || '/' });
-  };
-
   getDirentList = () => {
     const { repoID, filePath } = window.app.pageOptions;
-    return seafileAPI.listDir(repoID, this.state.dirPath, { 'with_thumbnail': true }).then(res => {
+    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
       res.data.dirent_list.forEach(item => {
         const dirent = new Dirent(item);
         if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
