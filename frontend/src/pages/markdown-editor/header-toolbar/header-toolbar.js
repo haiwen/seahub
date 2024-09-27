@@ -105,7 +105,6 @@ class HeaderToolbar extends React.Component {
         repoInfo: repoInfo,
         dirent: currentDirent,
         path: filePath,
-        type: 'global',
         onClose: this.onArticleInfoToggle,
         width: 300,
         component: {
@@ -158,17 +157,15 @@ class HeaderToolbar extends React.Component {
                     onMouseDown={this.props.toggleLockFile}
                   />
                 )}
-                {canGenerateShareLink && (
-                  <ButtonItem
-                    id='info'
-                    text={gettext('Info')}
-                    icon='info'
-                    onMouseDown={() => {
-                      this.onArticleInfoDetailToggle();
-                      this.onArticleInfoToggle();
-                    }}
-                  />
-                )}
+                <ButtonItem
+                  id='info'
+                  text={gettext('Info')}
+                  icon='info'
+                  onMouseDown={() => {
+                    this.onArticleInfoDetailToggle();
+                    this.onArticleInfoToggle();
+                  }}
+                />
                 {canGenerateShareLink && (
                   <ButtonItem
                     id='shareBtn'
