@@ -20,6 +20,15 @@ body {
   z-index: 100;
 }
 
+.wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content {
+  display: flex;
+  align-items: center;
+}
+
+.wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content .doc-info {
+  margin-left: 8px;
+}
+
 .main-panel-center .cur-view-content {
   padding: 0;
 }
