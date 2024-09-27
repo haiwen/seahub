@@ -122,7 +122,7 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
-JWT_PRIVATE_KEY =  'M@O8VWUb81YvmtWLHGB2I_V7di5-@0p(MF*GrE!sIws23F'
+JWT_PRIVATE_KEY = ''
 
 ENABLE_REMOTE_USER_AUTHENTICATION = False
 
