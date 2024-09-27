@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SdocWikiEditor } from '@seafile/sdoc-editor';
+import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
 import { gettext, username, wikiPermission } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
@@ -13,6 +13,7 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
   isDataLoading: PropTypes.bool.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
   editorContent: PropTypes.object,
   permission: PropTypes.string,
   seadoc_access_token: PropTypes.string,
@@ -61,17 +62,20 @@ class MainPanel extends Component {
     const { currentPageConfig = {} } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = !(permission === 'rw');
-
     return (
       <div className="wiki2-main-panel">
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
-            <i role="button" aria-label={gettext('Side Nav Menu')} onClick={this.props.onCloseSide} className="sf2-icon-menu side-nav-toggle d-md-none"></i>
-            <WikiTopNav
-              config={config}
-              currentPageId={this.props.currentPageId}
-              currentPageConfig={currentPageConfig}
-            />
+            <div className='wiki2-main-panel-north-content'>
+              <i role="button" aria-label={gettext('Side Nav Menu')} onClick={this.props.onCloseSide} className="sf2-icon-menu side-nav-toggle d-md-none"></i>
+              <WikiTopNav
+                config={config}
+                currentPageId={this.props.currentPageId}
+                currentPageConfig={currentPageConfig}
+                setCurrentPage={this.props.setCurrentPage}
+              />
+              <DocInfo initContext={true}/>
+            </div>
           </div>
           {username && wikiPermission !== 'public' && <Account />}
         </div>

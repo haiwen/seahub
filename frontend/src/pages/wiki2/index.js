@@ -272,6 +272,7 @@ class Wiki extends Component {
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
+          setCurrentPage={this.setCurrentPage}
           isUpdateBySide={this.state.isUpdateBySide}
         />
         <MediaQuery query="(max-width: 767.8px)">

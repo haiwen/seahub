@@ -39,7 +39,7 @@ function getPaths(navigation, currentPageId, pages) {
   return pathStr.split('-').map(id => idPageMap[id]);
 }
 
-function WikiTopNav({ config, currentPageId }) {
+function WikiTopNav({ config, currentPageId, setCurrentPage }) {
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
 
@@ -48,7 +48,7 @@ function WikiTopNav({ config, currentPageId }) {
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
-            <div className='wiki2-top-nav-item d-flex align-items-center'>
+            <div className='wiki2-top-nav-item d-flex align-items-center' onClick={() => {setCurrentPage(item.id);}}>
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               <span className='text-truncate' title={item.name}>{item.name}</span>
             </div>
@@ -63,6 +63,7 @@ function WikiTopNav({ config, currentPageId }) {
 WikiTopNav.propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
+  setCurrentPage: PropTypes.func.isRequired
 };
 
 export default WikiTopNav;
