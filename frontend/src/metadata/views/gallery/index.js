@@ -73,6 +73,7 @@ const Gallery = () => {
           url: `${siteRoot}lib/${repoID}/file${path}`,
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+          downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           date: date,
         };
         let _group = _init.find(g => g.name === date);
