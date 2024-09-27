@@ -113,7 +113,7 @@ class SearchUsers extends Component {
     }
   };
 
-  getItems = (page = 1) => {
+  getItems = (page) => {
     seafileAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
       this.setState({
         userList: res.data.user_list,
