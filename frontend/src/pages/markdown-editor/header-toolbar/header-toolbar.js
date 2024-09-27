@@ -42,9 +42,13 @@ class HeaderToolbar extends React.Component {
 
   constructor(props) {
     super(props);
+    const { repoID, filePath } = window.app.pageOptions;
+    const dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0) || '/';
     this.state = {
+      repoID: repoID,
+      filePath: filePath,
+      dirPath: dirPath,
       currentDirent: null,
-      dirPath: '/',
     };
   }
 
@@ -72,8 +76,8 @@ class HeaderToolbar extends React.Component {
   };
 
   getDirentList = () => {
-    const { repoID, filePath } = window.app.pageOptions;
-    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
+    const { repoID, filePath, dirPath } = this.state;
+    return seafileAPI.listDir(repoID, dirPath, { 'with_thumbnail': true }).then(res => {
       res.data.dirent_list.forEach(item => {
         const dirent = new Dirent(item);
         if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
@@ -86,8 +90,7 @@ class HeaderToolbar extends React.Component {
   };
 
   onArticleInfoDetailToggle = () => {
-    const { repoID, filePath } = window.app.pageOptions;
-    const { currentDirent } = this.state;
+    const { repoID, filePath, currentDirent } = this.state;
     const repoInfo = { permission: 'rw' };
 
     const eventBus = EventBus.getInstance();
@@ -151,7 +154,7 @@ class HeaderToolbar extends React.Component {
                   />
                 )}
                 <ButtonItem
-                  id='info'
+                  id='file-info'
                   text={gettext('Info')}
                   icon='info'
                   onMouseDown={() => {
