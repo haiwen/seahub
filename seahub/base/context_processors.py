@@ -182,6 +182,7 @@ def base(request):
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
         'enable_whiteboard': ENABLE_WHITEBOARD,
         'enable_excalidraw': ENABLE_EXCALIDRAW,
+        'notification_server_url': os.environ.get('NOTIFICATION_SERVER_URL', ''),
     }
 
     if request.user.is_staff:

@@ -941,7 +941,6 @@ SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system 
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
 
-
 ##########################
 # Settings for seadoc    #
 ##########################

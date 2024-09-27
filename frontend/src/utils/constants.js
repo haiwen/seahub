@@ -31,6 +31,7 @@ export const fileServerRoot = window.app.config.fileServerRoot;
 export const useGoFileserver = window.app.config.useGoFileserver;
 export const seafileVersion = window.app.config.seafileVersion;
 export const serviceURL = window.app.config.serviceURL;
+export const notificationServerUrl = window.app.config.notificationServerUrl;
 export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
