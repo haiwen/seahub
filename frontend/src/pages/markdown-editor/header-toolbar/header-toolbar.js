@@ -67,13 +67,6 @@ class HeaderToolbar extends React.Component {
     this.getDirentList();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.fileInfo.filePath !== this.props.fileInfo.filePath) {
-      this.calculateDirPath();
-      this.props.onArticleInfoDetailToggle();
-    }
-  }
-
   onArticleInfoToggle = () => {
     const eventBus = EventBus.getInstance();
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE);
@@ -108,7 +101,7 @@ class HeaderToolbar extends React.Component {
       component: EmbeddedFileDetails,
       props: {
         repoID: repoID,
-        repoInfo: { permission: repoInfo.permission },
+        repoInfo: repoInfo,
         dirent: currentDirent,
         path: filePath,
         type: 'global',
@@ -166,7 +159,7 @@ class HeaderToolbar extends React.Component {
                 )}
                 {canGenerateShareLink && (
                   <ButtonItem
-                    id='Info'
+                    id='info'
                     text={gettext('Info')}
                     icon='info'
                     onClick={() => {
