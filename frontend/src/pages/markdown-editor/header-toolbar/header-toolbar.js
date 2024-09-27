@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
-import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile, dirPath } from '../../../utils/constants';
+import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
 import CollabUsersButton from './collab-users-button';
@@ -80,7 +80,7 @@ class HeaderToolbar extends React.Component {
 
   getDirentList = () => {
     const { repoID, filePath } = window.app.pageOptions;
-    return seafileAPI.listDir(repoID, dirPath, { 'with_thumbnail': true }).then(res => {
+    return seafileAPI.listDir(repoID, this.state.dirPath, { 'with_thumbnail': true }).then(res => {
       res.data.dirent_list.forEach(item => {
         const dirent = new Dirent(item);
         if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
