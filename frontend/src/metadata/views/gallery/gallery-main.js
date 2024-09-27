@@ -1,13 +1,84 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 
-const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick }) => {
+const GalleryMain = ({
+  groups,
+  overScan,
+  columns,
+  size,
+  gap,
+  selectedImages,
+  setSelectedImages,
+  onImageClick,
+  onImageDoubleClick,
+  onImageRightClick
+}) => {
+  const containerRef = useRef(null);
   const imageRef = useRef(null);
+  const animationFrameRef = useRef(null);
+
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectionStart, setSelectionStart] = useState(null);
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
+
+  const handleMouseDown = useCallback((e) => {
+    if (e.button !== 0) return;
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+    setIsSelecting(true);
+    setSelectionStart({ x: e.clientX, y: e.clientY });
+    setSelectedImages([]);
+
+  }, [setSelectedImages]);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!isSelecting) return;
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+
+    animationFrameRef.current = requestAnimationFrame(() => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const selectionEnd = { x: e.clientX, y: e.clientY };
+      const selected = [];
+
+      groups.forEach(group => {
+        group.children.forEach((row) => {
+          row.children.forEach((img) => {
+            const imgElement = document.getElementById(img.id);
+            if (imgElement) {
+              const rect = imgElement.getBoundingClientRect();
+              if (
+                rect.left < Math.max(selectionStart.x, selectionEnd.x) &&
+            rect.right > Math.min(selectionStart.x, selectionEnd.x) &&
+            rect.top < Math.max(selectionStart.y, selectionEnd.y) &&
+            rect.bottom > Math.min(selectionStart.y, selectionEnd.y)
+              ) {
+                selected.push(img);
+              }
+            }
+          });
+        });
+      });
+
+      setSelectedImages(selected);
+    });
+  }, [groups, isSelecting, selectionStart, setSelectedImages]);
+
+  const handleMouseUp = useCallback((e) => {
+    if (e.button !== 0) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    setIsSelecting(false);
+  }, []);
 
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
@@ -36,7 +107,12 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
     }
 
     return (
-      <div key={name} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
+      <div
+        key={name}
+        className="metadata-gallery-date-group"
+        style={{ height, paddingTop }}
+
+      >
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
           ref={imageRef}
@@ -53,6 +129,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
               return (
                 <div
                   key={img.src}
+                  id={img.id}
                   tabIndex={1}
                   className={classnames('metadata-gallery-image-item', {
                     'metadata-gallery-image-item-selected': isSelected,
@@ -62,7 +139,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
                   onDoubleClick={(e) => onImageDoubleClick(e, img)}
                   onContextMenu={(e) => onImageRightClick(e, img)}
                 >
-                  <img className="metadata-gallery-grid-image" src={img.src} alt={img.name} />
+                  <img className="metadata-gallery-grid-image" src={img.src} alt={img.name} draggable="false" />
                 </div>
               );
             });
@@ -76,9 +153,19 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
     return <EmptyTip text={gettext('No record')}/>;
   }
 
-  return groups.map((group, index) => {
-    return renderDisplayGroup(group, index);
-  });
+  return (
+    <div
+      ref={containerRef}
+      className='metadata-gallery-main'
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+    >
+      {groups.map((group) => {
+        return renderDisplayGroup(group);
+      })}
+    </div>
+  );
 };
 
 GalleryMain.propTypes = {

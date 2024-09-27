@@ -12,11 +12,9 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 
 import './index.css';
-
-const IMAGE_GAP = 2;
 
 const Gallery = () => {
   const [isFirstLoading, setFirstLoading] = useState(true);
@@ -90,7 +88,7 @@ const Gallery = () => {
       }, []);
 
     let _groups = [];
-    const imageHeight = imageSize + IMAGE_GAP;
+    const imageHeight = imageSize + GALLERY_IMAGE_GAP;
     init.forEach((_init, index) => {
       const { children, ...__init } = _init;
       let top = 0;
@@ -160,7 +158,7 @@ const Gallery = () => {
       // Calculate initial overScan information
       const columns = 8 - gear;
       const imageSize = (offsetWidth - columns * 2 - 2) / columns;
-      setOverScan({ top: 0, bottom: clientHeight + (imageSize + IMAGE_GAP) * 2 });
+      setOverScan({ top: 0, bottom: clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 2 });
     }
     setFirstLoading(false);
 
@@ -186,18 +184,6 @@ const Gallery = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target) || e.target.tagName.toLowerCase() !== 'img') {
-        setSelectedImages([]);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -207,8 +193,8 @@ const Gallery = () => {
       renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
       renderMoreTimer.current = setTimeout(() => {
         const { scrollTop, clientHeight } = containerRef.current;
-        const overScanTop = Math.max(0, scrollTop - (imageSize + IMAGE_GAP) * 3);
-        const overScanBottom = scrollTop + clientHeight + (imageSize + IMAGE_GAP) * 3;
+        const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * 3);
+        const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 3;
         setOverScan({ top: overScanTop, bottom: overScanBottom });
         renderMoreTimer.current = null;
       }, 200);
@@ -240,7 +226,6 @@ const Gallery = () => {
     setImageIndex(index);
     setIsImagePopupOpen(true);
   }, [imageItems]);
-
 
   const handleRightClick = useCallback((event, image) => {
     event.preventDefault();
@@ -333,8 +318,9 @@ const Gallery = () => {
               size={imageSize}
               columns={columns}
               overScan={overScan}
-              gap={IMAGE_GAP}
+              gap={GALLERY_IMAGE_GAP}
               selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onImageRightClick={handleRightClick}
