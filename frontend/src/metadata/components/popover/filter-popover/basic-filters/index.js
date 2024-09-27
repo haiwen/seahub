@@ -40,11 +40,8 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
               );
             }
             if (column_key === PRIVATE_COLUMN_KEY.FILE_TYPE) {
-              return viewType === VIEW_TYPE.TABLE ? (
-                <TableFileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
-              ) : (
-                <GalleryFileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
-              );
+              const FileTypeFilter = viewType === VIEW_TYPE.GALLERY ? GalleryFileTypeFilter : TableFileTypeFilter;
+              return (<FileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />);
             }
             return null;
           })}

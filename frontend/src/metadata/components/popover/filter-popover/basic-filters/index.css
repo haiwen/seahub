@@ -1,6 +1,6 @@
 .sf-metadata-basic-filters-select.custom-select {
   width: fit-content;
-  max-width: 200px;
+  max-width: 100%;
   background-image: none;
   border: none;
   padding: 0 6px;
@@ -21,11 +21,18 @@
   box-shadow: none;
 }
 
+.sf-metadata-basic-filters-select .selected-option-show {
+  margin-right: 8px;
+}
+
+.sf-metadata-select .selected-option .custom-select-dropdown-icon {
+  margin-left: 0;
+}
+
 .select-basic-filter-option {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .select-basic-filter-option .select-basic-filter-option-name {
@@ -52,25 +59,19 @@
 .filter-group-basic .sf-metadata-filters-list {
   min-height: unset;
   display: flex;
-  gap: 1rem;
 }
 
-.sf-metadata-basic-filters-select .select-basic-filter-display-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sf-metadata-basic-filters-select-file-type .sf-metadata-option-group {
-  width: 200px;
-  max-width: 200px;
-}
-
-.sf-metadata-basic-filters-select-file-type .sf-metadata-option {
+.sf-metadata-table-view-basic-filter-file-type-select .sf-metadata-option {
   padding: 0.25rem 1rem;
 }
 
-.select-basic-filter-option .select-basic-filter-option-checkbox {
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+}
+
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox,
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox input {
+  cursor: inherit;
 }

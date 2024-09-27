@@ -22,7 +22,7 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
         value: o.value,
         label: (
           <div className="select-basic-filter-option">
-            <div className="select-basic-filter-option-checkbox">
+            <div className="select-basic-filter-option-checkbox mr-2">
               <input type="checkbox" checked={value.includes(o.value)} readOnly />
             </div>
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
@@ -54,7 +54,7 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select sf-metadata-basic-filters-select-file-type"
+      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select ml-4"
       value={displayValue}
       options={options}
       onSelectOption={onChange}

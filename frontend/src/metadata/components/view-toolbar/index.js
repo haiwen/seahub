@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
-import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../constants';
 
 import './index.css';
 
@@ -13,6 +13,10 @@ const ViewToolBar = ({ viewId }) => {
     if (!view) return [];
     return view.columns;
   }, [view]);
+
+  const filterColumns = useMemo(() => {
+    return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);
+  }, [viewColumns]);
 
   const onHeaderClick = useCallback(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
@@ -86,7 +90,7 @@ const ViewToolBar = ({ viewId }) => {
           filterConjunction={view.filter_conjunction}
           basicFilters={view.basic_filters}
           filters={view.filters}
-          columns={viewColumns}
+          columns={filterColumns}
           modifyFilters={modifyFilters}
           collaborators={collaborators}
           viewType={viewType}
