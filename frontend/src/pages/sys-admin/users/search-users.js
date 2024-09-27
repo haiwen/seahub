@@ -42,7 +42,9 @@ class SearchUsers extends Component {
       query: params.get('query') || '',
       currentPage: parseInt(params.get('page') || currentPage),
       perPage: parseInt(params.get('per_page') || perPage)
-    }, () => {this.getItems(this.state.currentPage);});
+    }, () => {
+      this.getItems(this.state.currentPage);
+    });
   }
 
   toggleBatchSetQuotaDialog = () => {
@@ -276,7 +278,7 @@ class SearchUsers extends Component {
     if (e.keyCode === 13) {
       const { isSubmitBtnActive } = this.state;
       if (isSubmitBtnActive) {
-        this.getItems();
+        this.getItems(1);
       }
     }
   };
@@ -315,7 +317,12 @@ class SearchUsers extends Component {
                   </FormGroup>
                   <FormGroup row>
                     <Col sm={{ size: 5 }}>
-                      <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getItems}>{gettext('Submit')}</button>
+                      <button
+                        className="btn btn-outline-primary"
+                        disabled={!isSubmitBtnActive}
+                        onClick={() => this.getItems(1)}
+                      >{gettext('Submit')}
+                      </button>
                     </Col>
                   </FormGroup>
                 </Form>
@@ -329,6 +336,7 @@ class SearchUsers extends Component {
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}
                   items={this.state.userList}
+                  curPerPage={this.state.perPage}
                   updateUser={this.updateUser}
                   deleteUser={this.deleteUser}
                   updateAdminRole={this.updateAdminRole}
