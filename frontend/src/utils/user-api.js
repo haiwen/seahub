@@ -47,7 +47,7 @@ class UserAPI {
     const url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
     return this.req.get(url);
   }
-
+  
   depAdminTransferRepo(repo_id, group_id, email, reshare) {
     const url = this.server + '/api/v2.1/groups/' + group_id + '/group-owned-libraries/' + repo_id + '/transfer/';
     const formData = new FormData();
@@ -62,6 +62,10 @@ class UserAPI {
     form.append('owner', owner);
     form.append('reshare', reshare);
     return this.req.put(url, form);
+
+  getNotificationToken(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/repo-notification-jwt-token/'
+    return this.req.get(url);
   }
 }
 
