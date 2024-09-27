@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
@@ -7,6 +8,10 @@ import CollabUsersButton from './collab-users-button';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
+import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Dirent from '../../../../src/models/dirent';
 
 import '../css/header-toolbar.css';
 
@@ -37,6 +42,10 @@ class HeaderToolbar extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      currentDirent: null,
+      dirPath: '/',
+    };
   }
 
   downloadFile = () => {
@@ -51,6 +60,61 @@ class HeaderToolbar extends React.Component {
   openParentDirectory = () => {
     const { editorApi } = this.props;
     window.location.href = editorApi.getParentDictionaryUrl();
+  };
+
+  componentDidMount() {
+    this.calculateDirPath();
+    this.getDirentList();
+  }
+
+  onArticleInfoToggle = () => {
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE);
+  };
+
+  calculateDirPath = () => {
+    const { filePath } = window.app.pageOptions;
+    const dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0);
+    this.setState({ dirPath: dirPath || '/' });
+  };
+
+  getDirentList = () => {
+    const { repoID, filePath } = window.app.pageOptions;
+    return seafileAPI.listDir(repoID, this.state.dirPath, { 'with_thumbnail': true }).then(res => {
+      res.data.dirent_list.forEach(item => {
+        const dirent = new Dirent(item);
+        if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
+          this.setState({ currentDirent: dirent });
+        }
+      });
+    }).catch((err) => {
+      Utils.getErrorMsg(err, true);
+    });
+  };
+
+  onArticleInfoDetailToggle = () => {
+    const { repoID, filePath } = window.app.pageOptions;
+    const { currentDirent } = this.state;
+    const repoInfo = { permission: 'rw' };
+
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_DETAIL_TOGGLE, {
+      component: EmbeddedFileDetails,
+      props: {
+        repoID: repoID,
+        repoInfo: repoInfo,
+        dirent: currentDirent,
+        path: filePath,
+        type: 'global',
+        onClose: this.onArticleInfoToggle,
+        width: 300,
+        component: {
+          headerComponent: {
+            closeIcon: (<i className="iconfont icon-x"></i>)
+          }
+        }
+      }
+    });
   };
 
   render() {
@@ -92,6 +156,17 @@ class HeaderToolbar extends React.Component {
                     icon='unlock'
                     text={gettext('Unlock')}
                     onMouseDown={this.props.toggleLockFile}
+                  />
+                )}
+                {canGenerateShareLink && (
+                  <ButtonItem
+                    id='info'
+                    text={gettext('Info')}
+                    icon='info'
+                    onClick={() => {
+                      this.onArticleInfoDetailToggle();
+                      this.onArticleInfoToggle();
+                    }}
                   />
                 )}
                 {canGenerateShareLink && (
