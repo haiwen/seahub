@@ -29,6 +29,16 @@ body {
   margin-left: 8px;
 }
 
+.wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content .doc-info .tip-message {
+  font-size: 12px;
+  opacity: 0.75;
+  color: #999;
+}
+
+.wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content .doc-info .tip-message .sdocfont {
+  font-size: 14px;
+}
+
 .main-panel-center .cur-view-content {
   padding: 0;
 }
