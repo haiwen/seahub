@@ -18,7 +18,7 @@ from django.contrib.auth.hashers import check_password
 from seahub.signals import repo_deleted
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils.hasher import AESPasswordHasher
-from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
+from seahub.utils import normalize_file_path, normalize_dir_path, gen_token, \
     get_service_url, is_valid_org_id
 from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
 
@@ -416,22 +416,27 @@ class FileShare(models.Model):
             perm_dict['can_edit'] = False
             perm_dict['can_download'] = True
             perm_dict['can_upload'] = False
+            perm_dict['can_copy_content'] = True
         elif self.permission == FileShare.PERM_VIEW_ONLY:
             perm_dict['can_edit'] = False
             perm_dict['can_download'] = False
             perm_dict['can_upload'] = False
+            perm_dict['can_copy_content'] = False
         elif self.permission == FileShare.PERM_EDIT_DL:
             perm_dict['can_edit'] = True
             perm_dict['can_download'] = True
             perm_dict['can_upload'] = False
+            perm_dict['can_copy_content'] = True
         elif self.permission == FileShare.PERM_EDIT_ONLY:
             perm_dict['can_edit'] = True
             perm_dict['can_download'] = False
             perm_dict['can_upload'] = False
+            perm_dict['can_copy_content'] = False
         elif self.permission == FileShare.PERM_VIEW_DL_UPLOAD:
             perm_dict['can_edit'] = False
             perm_dict['can_download'] = True
             perm_dict['can_upload'] = True
+            perm_dict['can_copy_content'] = True
         else:
             assert False
         return perm_dict

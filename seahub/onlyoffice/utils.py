@@ -87,7 +87,7 @@ def delete_doc_key(doc_key):
 
 
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
-                        can_edit=False, can_download=True):
+                        can_edit=False, can_download=True, can_copy=True):
 
     logger.info('{} open file {} in repo {} with can_edit {}'.format(username, file_path, repo_id, can_edit))
 
@@ -144,6 +144,9 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     avatar_url, _, _ = api_avatar_url(username, 72)
     import jwt
+
+    http_user_agent = request.headers.get('user-agent', '')
+
     return_dict = {
         'repo_id': repo_id,
         'path': file_path,
@@ -156,21 +159,22 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'callback_url': callback_url,
         'can_edit': can_edit,
         'can_download': can_download,
+        'can_copy': can_copy,
         'username': username,
         'avatar_url': avatar_url,
         'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK,
-        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in http_user_agent,
         'file_key': jwt.encode({
             'repo_id': origin_repo_id,
             'file_path': origin_file_path,
-            
+
         }, ONLYOFFICE_JWT_SECRET),
         'instance_id': base_url,
     }
 
     if ONLYOFFICE_JWT_SECRET:
-       
+
         config = {
             "document": {
                 "fileType": fileext,
@@ -180,6 +184,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "permissions": {
                     "download": can_download,
                     "edit": can_edit,
+                    "copy": can_copy,
                     "print": can_download,
                     "review": True
                 }
