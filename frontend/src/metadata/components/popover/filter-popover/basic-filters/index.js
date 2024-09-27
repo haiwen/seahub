@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 import FileOrFolderFilter from './file-folder-filter';
-import FileTypeFilter from './file-type-filter';
+import TableFileTypeFilter from './table-file-type-filter';
 import GalleryFileTypeFilter from './gallery-file-type-filter';
 import { gettext } from '../../../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
@@ -41,7 +41,7 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
             }
             if (column_key === PRIVATE_COLUMN_KEY.FILE_TYPE) {
               return viewType === VIEW_TYPE.TABLE ? (
-                <FileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
+                <TableFileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
               ) : (
                 <GalleryFileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />
               );

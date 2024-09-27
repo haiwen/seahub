@@ -5,8 +5,8 @@ import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
   { value: 'file', name: gettext('Only files') },
-  { value: 'folder', name: gettext('Only directories') },
-  { value: 'all', name: gettext('Files and directories') },
+  { value: 'folder', name: gettext('Only folders') },
+  { value: 'all', name: gettext('Files and folders') },
 ];
 
 const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) => {

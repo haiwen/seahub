@@ -2,17 +2,18 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
+import { getFileTypeColumnOptions } from '../../../../utils/column';
 
-const OPTIONS = [
-  { value: 'picture', name: gettext('Pictures') },
-  { value: 'document', name: gettext('Document') },
-  { value: 'video', name: gettext('Video') },
-  { value: 'audio', name: gettext('Audio') },
-  { value: 'code', name: gettext('Code') },
-  { value: 'compressed', name: gettext('Compressed') },
-];
+const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
 
-const FileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
+  const OPTIONS = useMemo(() => {
+    const optionsMap = getFileTypeColumnOptions();
+    let options = [];
+    for (const [key, option] of Object.entries(optionsMap)) {
+      options.push({ value: key, name: option.name });
+    }
+    return options;
+  }, []);
 
   const options = useMemo(() => {
     return OPTIONS.map(o => {
@@ -21,7 +22,7 @@ const FileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
         value: o.value,
         label: (
           <div className="select-basic-filter-option">
-            <div className='select-basic-filter-option-checkbox'>
+            <div className="select-basic-filter-option-checkbox">
               <input type="checkbox" checked={value.includes(o.value)} readOnly />
             </div>
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
@@ -29,18 +30,18 @@ const FileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
         )
       };
     });
-  }, [value]);
+  }, [OPTIONS, value]);
 
   const displayValue = useMemo(() => {
     const selectedOptions = OPTIONS.filter(o => value.includes(o.value));
     return {
       label: (
-        <div className='select-basic-filter-display-name'>
+        <div className="select-basic-filter-display-name">
           {selectedOptions.length > 0 ? selectedOptions.map(o => o.name).join(', ') : gettext('File type')}
         </div>
       )
     };
-  }, [value]);
+  }, [OPTIONS, value]);
 
   const onChange = useCallback((newValue) => {
     if (value.includes(newValue)) {
@@ -67,10 +68,10 @@ const FileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   );
 };
 
-FileTypeFilter.propTypes = {
+TableFileTypeFilter.propTypes = {
   readOnly: PropTypes.bool,
   value: PropTypes.array,
   onChange: PropTypes.func,
 };
 
-export default FileTypeFilter;
+export default TableFileTypeFilter;

@@ -17,6 +17,10 @@ class View {
 
     this.basic_filters = object.basic_filters && object.basic_filters.length > 0 ? object.basic_filters : VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type];
 
+    if (this.basic_filters.length !== VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type].length) {
+      this.basic_filters = [...this.basic_filters, ...VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type].slice(this.basic_filters.length)];
+    }
+
     // sort
     this.sorts = object.sorts && object.sorts.length > 0 ? object.sorts : VIEW_TYPE_DEFAULT_SORTS[this.type];
 
