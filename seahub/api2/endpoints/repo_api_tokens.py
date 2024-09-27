@@ -1,5 +1,6 @@
 import logging
 import jwt
+import time
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -180,7 +181,7 @@ class RepoNotificationJwtTokenView(APIView):
             payload = {
                 'username': username,
                 'repo_id': repo_id,
-                'exp': 3 * 3600 * 24  # default by three days
+                'exp': int(time.time()) + 3 * 3600 * 24  # default by three days
             }
             jwt_token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
         except Exception as e:
