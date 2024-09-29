@@ -7,6 +7,7 @@ import { FilterPopover } from '../popover';
 import { getValidFilters } from '../../utils/filter';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
+import { VIEW_TYPE } from '../../constants';
 
 const FilterSetter = ({
   readOnly,
@@ -20,7 +21,8 @@ const FilterSetter = ({
   target,
   filterConjunction,
   basicFilters,
-  modifyFilters
+  modifyFilters,
+  viewType,
 }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
@@ -84,6 +86,7 @@ const FilterSetter = ({
           hidePopover={onSetterToggle}
           update={onChange}
           isPre={isPre}
+          viewType={viewType}
         />
       }
     </>
@@ -104,12 +107,14 @@ FilterSetter.propTypes = {
   collaborators: PropTypes.array,
   isPre: PropTypes.bool,
   basicFilters: PropTypes.array,
+  viewType: PropTypes.string,
 };
 
 FilterSetter.defaultProps = {
   target: 'sf-metadata-filter-popover',
   isNeedSubmit: false,
   basicFilters: [],
+  viewType: VIEW_TYPE.TABLE,
 };
 
 export default FilterSetter;

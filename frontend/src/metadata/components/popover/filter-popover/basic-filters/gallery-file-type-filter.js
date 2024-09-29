@@ -9,7 +9,7 @@ const OPTIONS = [
   { value: 'all', name: gettext('Pictures and videos') },
 ];
 
-const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) => {
+const GalleryFileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) => {
 
   const options = useMemo(() => {
     return OPTIONS.map(o => {
@@ -60,10 +60,10 @@ const FileTypeFilter = ({ readOnly, value = 'picture', onChange: onChangeAPI }) 
   );
 };
 
-FileTypeFilter.propTypes = {
+GalleryFileTypeFilter.propTypes = {
   readOnly: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default FileTypeFilter;
+export default GalleryFileTypeFilter;

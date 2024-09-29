@@ -262,9 +262,8 @@ export const getNormalizedColumnType = (key, type) => {
   }
 };
 
-const getFileTypeColumnData = (column) => {
-  const { data } = column;
-  const _OPTIONS = {
+export const getFileTypeColumnOptions = () => {
+  return {
     [PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE]: { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428' },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.DOCUMENT]: { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428' },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
@@ -272,6 +271,11 @@ const getFileTypeColumnData = (column) => {
     [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
   };
+};
+
+const getFileTypeColumnData = (column) => {
+  const { data } = column;
+  const _OPTIONS = getFileTypeColumnOptions();
   let newData = { ...data };
   newData.options = Array.isArray(data.options) ? data.options.map(o => {
     return { ...o, ..._OPTIONS[o.id] };

@@ -25,6 +25,10 @@
   margin-right: 8px;
 }
 
+.sf-metadata-basic-filters-select .selected-option .custom-select-dropdown-icon {
+  margin-left: 0;
+}
+
 .select-basic-filter-option {
   width: 100%;
   display: flex;
@@ -52,10 +56,22 @@
   fill: #fff;
 }
 
-.sf-metadata-basic-filters-select .sf-metadata-option-group {
-  margin-left: 6px;
-}
-
 .filter-group-basic .sf-metadata-filters-list {
   min-height: unset;
+  display: flex;
+}
+
+.sf-metadata-table-view-basic-filter-file-type-select .sf-metadata-option {
+  padding: 0.25rem 1rem;
+}
+
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox,
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox input {
+  cursor: inherit;
 }

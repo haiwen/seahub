@@ -153,7 +153,7 @@ class FilterPopover extends Component {
   };
 
   render() {
-    const { readOnly, target, columns, placement } = this.props;
+    const { readOnly, target, columns, placement, viewType } = this.props;
     const { filters, filterConjunction, basicFilters } = this.state;
     const canAddFilter = columns.length > 0;
     return (
@@ -168,7 +168,7 @@ class FilterPopover extends Component {
       >
         {({ scheduleUpdate }) => (
           <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
-            <BasicFilters filters={basicFilters} onChange={this.onBasicFilterChange} />
+            <BasicFilters filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType}/>
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>
               <div className="filter-group-container">
@@ -222,6 +222,7 @@ FilterPopover.propTypes = {
   basicFilters: PropTypes.array,
   hidePopover: PropTypes.func,
   update: PropTypes.func,
+  viewType: PropTypes.string,
 };
 
 export default FilterPopover;
