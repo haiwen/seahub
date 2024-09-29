@@ -167,9 +167,9 @@ def render_permission_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render(request, 'error.html', ctx)
+    return render(request, 'error.html', ctx, status=403)
 
-def render_error(request, msg=None, extra_ctx=None):
+def render_error(request, msg=None, extra_ctx=None, status=None):
     """
     Return normal error page.
 
@@ -181,7 +181,7 @@ def render_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render(request, 'error.html', ctx)
+    return render(request, 'error.html', ctx, status=status)
 
 def list_to_string(l):
     """
