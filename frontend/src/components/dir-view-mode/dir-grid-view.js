@@ -28,7 +28,6 @@ const propTypes = {
   userPerm: PropTypes.string,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
@@ -90,7 +89,6 @@ class DirGridView extends React.Component {
           onRenameNode={this.props.onRenameNode}
           showDirentDetail={this.props.showDirentDetail}
           onGridItemClick={this.props.onGridItemClick}
-          isDirentDetailShow={this.props.isDirentDetailShow}
           onItemRename={this.props.onItemRename}
           onAddFolder={this.props.onAddFolder}
           repoTags={this.props.repoTags}

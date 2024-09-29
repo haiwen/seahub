@@ -2383,7 +2383,6 @@ class LibContentView extends React.Component {
                     onFileTagChanged={this.onFileTagChanged}
                     showDirentDetail={this.showDirentDetail}
                     onItemsScroll={this.onItemsScroll}
-                    isDirentDetailShow={this.state.isDirentDetailShow}
                     eventBus={this.props.eventBus}
                     onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
                     getMarkDownFilePath={this.getMarkDownFilePath}

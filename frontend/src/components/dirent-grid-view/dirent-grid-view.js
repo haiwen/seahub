@@ -51,7 +51,6 @@ const propTypes = {
   userPerm: PropTypes.string, // current path's user permission
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
