@@ -179,3 +179,8 @@ class MetadataServerAPI:
         }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+    def get_metadata(self):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/metadata'
+        response = requests.get(url, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)

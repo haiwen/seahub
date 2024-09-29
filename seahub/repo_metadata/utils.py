@@ -20,6 +20,42 @@ def add_init_metadata_task(params):
     return json.loads(resp.content)['task_id']
 
 
+def add_init_face_recognition_task(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-face-recognition-task')
+    resp = requests.get(url, params=params, headers=headers)
+    return json.loads(resp.content)['task_id']
+
+
+def get_metadata_by_faces(faces, metadata_server_api):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
+    parameters = []
+    query_result = []
+    for face in faces:
+        link_row_ids = [item['row_id'] for item in face.get(FACES_TABLE.columns.photo_links.name, [])]
+        if not link_row_ids:
+            continue
+        for link_row_id in link_row_ids:
+            sql += '?, '
+            parameters.append(link_row_id)
+            if len(parameters) >= 10000:
+                sql = sql.rstrip(', ') + ');'
+                results = metadata_server_api.query_rows(sql, parameters).get('results', [])
+                query_result.extend(results)
+                sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
+                parameters = []
+
+    if parameters:
+        sql = sql.rstrip(', ') + ');'
+        results = metadata_server_api.query_rows(sql, parameters).get('results', [])
+        query_result.extend(results)
+
+    return query_result
+
+
 def generator_base64_code(length=4):
     possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'
     ids = random.sample(possible, length)
@@ -35,8 +71,8 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 
-def get_sys_columns(face_table_id):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
+def get_sys_columns():
+    from seafevents.repo_metadata.utils import METADATA_TABLE
     columns = [
         METADATA_TABLE.columns.file_creator.to_dict(),
         METADATA_TABLE.columns.file_ctime.to_dict(),
@@ -52,12 +88,19 @@ def get_sys_columns(face_table_id):
         METADATA_TABLE.columns.suffix.to_dict(),
         METADATA_TABLE.columns.file_details.to_dict(),
         METADATA_TABLE.columns.description.to_dict(),
-        METADATA_TABLE.columns.face_features.to_dict(),
+    ]
+
+    return columns
+
+
+def get_link_column(face_table_id):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    columns = [
         METADATA_TABLE.columns.face_links.to_dict({
-            'link_id': FACE_TABLE.link_id,
+            'link_id': FACES_TABLE.link_id,
             'table_id': METADATA_TABLE.id,
             'other_table_id': face_table_id,
-            'display_column_key': FACE_TABLE.columns.face_feature.key,
+            'display_column_key': FACES_TABLE.columns.name.key,
         }),
     ]
 
@@ -65,15 +108,16 @@ def get_sys_columns(face_table_id):
 
 
 def get_face_columns(face_table_id):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
     columns = [
-        FACE_TABLE.columns.image_links.to_dict({
-            'link_id': FACE_TABLE.link_id,
+        FACES_TABLE.columns.photo_links.to_dict({
+            'link_id': FACES_TABLE.link_id,
             'table_id': METADATA_TABLE.id,
             'other_table_id': face_table_id,
-            'display_column_key': METADATA_TABLE.columns.face_features.key,
+            'display_column_key': METADATA_TABLE.columns.obj_id.key,
         }),
-        FACE_TABLE.columns.face_feature.to_dict(),
+        FACES_TABLE.columns.vector.to_dict(),
+        FACES_TABLE.columns.name.to_dict(),
     ]
 
     return columns
@@ -101,16 +145,25 @@ def get_unmodifiable_columns():
 
 
 def init_metadata(metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
+    from seafevents.repo_metadata.utils import METADATA_TABLE
 
     # delete base to prevent dirty data caused by last failure
     metadata_server_api.delete_base()
     metadata_server_api.create_base()
-    resp = metadata_server_api.create_table(FACE_TABLE.name)
 
     # init sys column
-    sys_columns = get_sys_columns(resp['id'])
+    sys_columns = get_sys_columns()
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
+
+
+def init_faces(metadata_server_api):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+
+    resp = metadata_server_api.create_table(FACES_TABLE.name)
+
+    # init link column
+    link_column = get_link_column(resp['id'])
+    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
 
     # init face column
     face_columns = get_face_columns(resp['id'])
