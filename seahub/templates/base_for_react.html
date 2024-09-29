@@ -50,7 +50,10 @@
             useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
-            avatarURL: '{{ avatar_url }}'
+            avatarURL: '{{ avatar_url }}',
+            cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
+            isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+
         },
         pageOptions: {
             csrfToken: "{{ csrf_token }}",
