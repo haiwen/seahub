@@ -268,7 +268,15 @@ class Wikis2View(APIView):
             wiki_info['owner_nickname'] = email2nickname(wiki.owner)
         else:
             group_id = int(wiki.owner.split('@')[0])
+            try:
+                ccnet_db = CcnetDB()
+                group_ids_admins_map = ccnet_db.get_group_ids_admins_map([group_id])
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             wiki_info['owner_nickname'] = group_id_to_name(group_id)
+            wiki_info['group_admins'] = group_ids_admins_map[group_id]
 
         return Response(wiki_info)
 
