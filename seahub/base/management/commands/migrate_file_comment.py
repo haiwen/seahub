@@ -17,12 +17,15 @@ class Command(BaseCommand):
 
     def migrate_schema(self):
         mysql = False
+        pgsql = False
         sqlite = False
         engine = settings.DATABASES['default']['ENGINE']
         if 'mysql' in engine:
             mysql = True
         elif 'sqlite' in engine:
             sqlite = True
+        elif 'pgsql' in engine or 'postgres' in engine or 'psycopg' in engine:
+            pgsql = True
         else:
             print('Unsupported database. Exit.')
             return
@@ -52,6 +55,28 @@ class Command(BaseCommand):
   CONSTRAINT `base_filecomment_uuid_id_%s_fk_tags_fileuuidmap_uuid` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
             ''' % (random_key(), random_key(), random_key())
+
+                cursor.execute(sql)
+                print(sql)
+
+            if pgsql:
+                sql = '''
+CREATE TABLE IF NOT EXISTS "base_filecomment"
+(
+    "id"         serial primary key,
+    "author"     varchar(255) NOT NULL,
+    "comment"    text         NOT NULL,
+    "created_at" timestamptz  NOT NULL,
+    "updated_at" timestamptz  NOT NULL,
+    "uuid_id"    char(32)     NOT NULL,
+    "detail"     text         NOT NULL,
+    "resolved"   boolean      NOT NULL,
+    CONSTRAINT "base_filecomment_uuid_id_fk_tags_fileuuidmap_uuid" FOREIGN KEY ("uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
+);
+CREATE INDEX IF NOT EXISTS "base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid" ON "base_filecomment" ("uuid_id");
+CREATE INDEX IF NOT EXISTS "base_filecomment_author_8a4d7e91" ON "base_filecomment" ("author");
+CREATE INDEX IF NOT EXISTS "base_filecomment_resolved_e0717eca" ON "base_filecomment" ("resolved");
+            '''
 
                 cursor.execute(sql)
                 print(sql)
