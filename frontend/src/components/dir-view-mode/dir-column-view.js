@@ -60,6 +60,8 @@ const propTypes = {
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
+  deleteFilesCallback: PropTypes.func,
+  renameFileCallback: PropTypes.func,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
@@ -198,6 +200,8 @@ class DirColumnView extends React.Component {
               repoID={this.props.repoID}
               repoInfo={this.props.currentRepoInfo}
               viewID={this.props.viewId}
+              deleteFilesCallback={this.props.deleteFilesCallback}
+              renameFileCallback={this.props.renameFileCallback}
             />
           }
           {currentMode === LIST_MODE &&

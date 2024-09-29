@@ -12,44 +12,40 @@ export default function apply(data, operation) {
   const { op_type } = operation;
 
   switch (op_type) {
-
-    case OPERATION_TYPE.MODIFY_RECORD: {
-      const { row_id, original_updates } = operation;
-      const { rows } = data;
-      const updatedRowIndex = rows.findIndex(row => row_id === row._id);
-      if (updatedRowIndex < 0) {
-        return data;
-      }
-      const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
-      const modifier = window.sfMetadataContext.getUsername();
-      const updatedRow = Object.assign({},
-        rows[updatedRowIndex],
-        original_updates,
-        { '_mtime': modifyTime, '_last_modifier': modifier },
-      );
-      data.rows[updatedRowIndex] = updatedRow;
-      data.id_row_map[row_id] = updatedRow;
-      return data;
-    }
     case OPERATION_TYPE.MODIFY_RECORDS: {
       const { id_original_row_updates, id_row_updates } = operation;
       const { rows } = data;
       const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
       const modifier = window.sfMetadataContext.getUsername();
       let updatedRows = [...rows];
+
       rows.forEach((row, index) => {
-        const rowId = row._id;
+        const { _id: rowId } = row;
         const originalRowUpdates = id_original_row_updates[rowId];
         const rowUpdates = id_row_updates[rowId];
-        if (!rowUpdates && !originalRowUpdates) return;
-        const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
-          '_mtime': modifyTime,
-          '_last_modifier': modifier,
-        });
-        updatedRows[index] = updatedRow;
-        data.id_row_map[rowId] = updatedRow;
+        if (rowUpdates || originalRowUpdates) {
+          const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
+            '_mtime': modifyTime,
+            '_last_modifier': modifier,
+          });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
       });
+
       data.rows = updatedRows;
+      return data;
+    }
+    case OPERATION_TYPE.DELETE_RECORDS: {
+      const { rows_ids } = operation;
+      const idNeedDeletedMap = rows_ids.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
+      data.rows = data.rows.filter((row) => !idNeedDeletedMap[row._id]);
+
+      // delete rows in id_row_map
+      rows_ids.forEach(rowId => {
+        delete data.id_row_map[rowId];
+      });
+
       return data;
     }
     case OPERATION_TYPE.RESTORE_RECORDS: {

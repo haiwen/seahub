@@ -1,5 +1,5 @@
 import { Utils } from '../../../../utils/utils';
-import { getCellValueByColumn } from '../../../utils/cell';
+import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell';
 import { getGroupByPath } from '../../../utils/view';
 import { getColumnByIndex, canEditCell } from '../../../utils/column';
 import { PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
@@ -46,7 +46,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
   if (!window.sfMetadataContext.canModifyRow(row)) return false;
   let isCellEditable = Utils.isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
-  const fileName = row ? row[PRIVATE_COLUMN_KEY.FILE_NAME] : '';
+  const fileName = getFileNameFromRecord(row);
   const imageRow = row && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
   isCellEditable = isCellEditable && canEditCell(column, row, enableCellSelect);
   if (imageRow) return isCellEditable;

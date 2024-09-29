@@ -9,18 +9,6 @@ function createOperation(op) {
 export default function invert(operation) {
   const { op_type } = operation.clone();
   switch (op_type) {
-    case OPERATION_TYPE.MODIFY_RECORD: {
-      const { page_id, row_id, updates, old_row_data, original_updates, original_old_row_data } = operation;
-      return createOperation({
-        type: OPERATION_TYPE.MODIFY_RECORD,
-        page_id,
-        row_id,
-        updates: deepCopy(old_row_data),
-        old_row_data: deepCopy(updates),
-        original_updates: deepCopy(original_old_row_data),
-        original_old_row_data: deepCopy(original_updates),
-      });
-    }
     case OPERATION_TYPE.MODIFY_RECORDS: {
       const {
         page_id, is_copy_paste, row_ids, id_row_updates, id_original_row_updates,

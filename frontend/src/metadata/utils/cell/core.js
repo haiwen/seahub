@@ -1,4 +1,4 @@
-import { PRIVATE_COLUMN_KEYS } from '../../constants';
+import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 
 /**
  * @param {any} value
@@ -22,4 +22,12 @@ export const getCellValueByColumn = (record, column) => {
   const { key, name } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) return record[key];
   return record[name];
+};
+
+export const getParentDirFromRecord = (record) => {
+  return record ? record[PRIVATE_COLUMN_KEY.PARENT_DIR] : '';
+};
+
+export const getFileNameFromRecord = (record) => {
+  return record ? record[PRIVATE_COLUMN_KEY.FILE_NAME] : '';
 };

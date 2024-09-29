@@ -6,7 +6,8 @@ import CellOperationBtn from './operation-btn';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../utils/object-utils';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
-import { CellType, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { checkIsDir } from '../../../../../../utils/row';
 
 import './index.css';
 
@@ -41,9 +42,7 @@ const Cell = React.memo(({
     return column.type === CellType.FILE_NAME;
   }, [column]);
   const isDir = useMemo(() => {
-    const isDirValue = record[PRIVATE_COLUMN_KEY.IS_DIR];
-    if (typeof isDirValue === 'string') return isDirValue.toUpperCase() === 'TRUE';
-    return isDirValue;
+    return checkIsDir(record);
   }, [record]);
   const style = useMemo(() => {
     const { left, width } = column;

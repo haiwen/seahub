@@ -104,6 +104,11 @@ class Context {
     return true;
   };
 
+  checkCanDeleteRow = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   canModifyRows = () => {
     if (this.permission === 'r') return false;
     return true;
@@ -187,6 +192,10 @@ class Context {
 
   modifyRecords = (repoId, recordsData, isCopyPaste) => {
     return this.metadataAPI.modifyRecords(repoId, recordsData, isCopyPaste);
+  };
+
+  batchDeleteFiles = (repoId, fileNames) => {
+    return this.metadataAPI.batchDeleteFiles(repoId, fileNames);
   };
 
   // view

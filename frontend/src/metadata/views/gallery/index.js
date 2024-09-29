@@ -10,7 +10,7 @@ import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
-import { getDateDisplayString } from '../../utils/cell';
+import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 
@@ -59,11 +59,11 @@ const Gallery = () => {
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
+    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
-        const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-        const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+        const fileName = getFileNameFromRecord(record);
+        const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
@@ -279,7 +279,7 @@ const Gallery = () => {
 
   const handleDelete = () => {
     if (selectedImages.length) {
-      metadataAPI.deleteImages(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
+      metadataAPI.batchDeleteFiles(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
         .then(() => {
           setSelectedImages([]);
           let msg = selectedImages.length > 1

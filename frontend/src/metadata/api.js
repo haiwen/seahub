@@ -239,11 +239,11 @@ class MetadataManagerAPI {
    * @param {string[]} dirents - Array of file/folder paths to delete
    * @returns {Promise} Axios delete request promise
    */
-  deleteImages(repoID, dirents) {
+  batchDeleteFiles(repo_id, file_names) {
     const url = this.server + '/api/v2.1/repos/batch-delete-folders-item/';
     const data = {
-      repo_id: repoID,
-      file_names: dirents
+      repo_id,
+      file_names,
     };
     return this.req.delete(url, { data });
   }

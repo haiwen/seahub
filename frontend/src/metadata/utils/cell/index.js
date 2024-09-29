@@ -1,6 +1,8 @@
 export {
   isValidCellValue,
   getCellValueByColumn,
+  getParentDirFromRecord,
+  getFileNameFromRecord,
 } from './core';
 
 export {
