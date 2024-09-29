@@ -168,6 +168,7 @@
     "url-loader": "4.1.1",
     "web-vitals": "2.1.4",
     "webpack": "^5.64.4",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-bundle-tracker": "1.7.0",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
