@@ -27,8 +27,8 @@ const RecordsHeader = ({
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
-  const [draggingCellKey, setDraggingCellKey] = useState(null);
-  const [dragOverCellKey, setDragOverCellKey] = useState(null);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
   const settings = useMemo(() => table.header_settings || {}, [table]);
   const isHideTriangle = useMemo(() => settings && settings.is_hide_triangle, [settings]);
   const height = useMemo(() => {
@@ -63,6 +63,13 @@ const RecordsHeader = ({
     return value;
   }, [isGroupView, columnMetrics, height]);
 
+  const columnIndexMap = useMemo(() => {
+    return columnMetrics.columns.reduce((orderIndexMap, currentColumn, currentIndex) => {
+      orderIndexMap[currentColumn.key] = currentIndex;
+      return orderIndexMap;
+    }, {});
+  }, [columnMetrics]);
+
   const modifyLocalColumnWidth = useCallback((column, width) => {
     setResizingColumnMetrics(recalculateColumnMetricsByResizeColumn(propsColumnMetrics, column.key, Math.max(width, 50)));
   }, [propsColumnMetrics]);
@@ -77,14 +84,20 @@ const RecordsHeader = ({
   }, [modifyColumnOrderAPI]);
 
   const updateDraggingKey = useCallback((cellKey) => {
-    if (cellKey === draggingCellKey) return;
+    if (cellKey === draggingColumnKey) return;
     setDraggingCellKey(cellKey);
-  }, [draggingCellKey]);
+  }, [draggingColumnKey]);
 
   const updateDragOverKey = useCallback((cellKey) => {
-    if (cellKey === dragOverCellKey) return;
+    if (cellKey === dragOverColumnKey) return;
     setDragOverCellKey(cellKey);
-  }, [dragOverCellKey]);
+  }, [dragOverColumnKey]);
+
+  const getColumnIndexByKey = useCallback((key) => {
+    const index = columnIndexMap[key];
+    if (index === undefined) return -1;
+    return index;
+  }, [columnIndexMap]);
 
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -119,14 +132,15 @@ const RecordsHeader = ({
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
-                isDragging={draggingCellKey === column.key}
-                isOver={dragOverCellKey === column.key}
+                draggingColumnKey={draggingColumnKey}
+                dragOverColumnKey={dragOverColumnKey}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
                 onMove={modifyColumnOrder}
                 updateDraggingKey={updateDraggingKey}
                 updateDragOverKey={updateDragOverKey}
+                getColumnIndexByKey={getColumnIndexByKey}
                 {...props}
               />
             );
@@ -141,8 +155,8 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
-              isDragging={draggingCellKey === column.key}
-              isOver={dragOverCellKey === column.key}
+              draggingColumnKey={draggingColumnKey}
+              dragOverColumnKey={dragOverColumnKey}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
@@ -150,6 +164,7 @@ const RecordsHeader = ({
               onMove={modifyColumnOrder}
               updateDraggingKey={updateDraggingKey}
               updateDragOverKey={updateDragOverKey}
+              getColumnIndexByKey={getColumnIndexByKey}
               {...props}
             />
           );

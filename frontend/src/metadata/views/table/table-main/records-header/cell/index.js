@@ -11,8 +11,6 @@ import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE } from '../../..
 import './index.css';
 
 const Cell = ({
-  isOver,
-  isDragging,
   frozen,
   groupOffsetLeft,
   isLastFrozenCell,
@@ -20,6 +18,8 @@ const Cell = ({
   isHideTriangle,
   column,
   style: propsStyle,
+  draggingColumnKey,
+  dragOverColumnKey,
   view,
   frozenColumnsWidth,
   renameColumn,
@@ -27,9 +27,10 @@ const Cell = ({
   modifyColumnData,
   modifyLocalColumnWidth,
   modifyColumnWidth,
+  onMove,
   updateDraggingKey,
   updateDragOverKey,
-  onMove,
+  getColumnIndexByKey,
 }) => {
   const headerCellRef = useRef(null);
 
@@ -175,12 +176,20 @@ const Cell = ({
     );
   }
 
+  const draggingColumnIndex = getColumnIndexByKey(draggingColumnKey);
+  const dragOverColumnIndex = getColumnIndexByKey(dragOverColumnKey);
+  const isOver = dragOverColumnKey === column.key;
+
   return (
     <div key={key} className="sf-metadata-record-header-cell">
       <div
         draggable="true"
-        style={{ opacity: isDragging ? 0.2 : 1 }}
-        className={classnames('rdg-can-drop', { 'rdg-dropping': isOver })}
+        style={{ opacity: draggingColumnKey === column.key ? 0.2 : 1 }}
+        className={classnames('rdg-can-drop', {
+          'rdg-dropping': isOver,
+          'rgd-dropping-left': isOver && draggingColumnIndex > dragOverColumnIndex,
+          'rgd-dropping-right': isOver && draggingColumnIndex < dragOverColumnIndex,
+        })}
         onDragStart={onDragStart}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
@@ -206,11 +215,16 @@ Cell.propTypes = {
   frozen: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
   isHideTriangle: PropTypes.bool,
+  draggingColumnKey: PropTypes.string,
+  dragOverColumnKey: PropTypes.string,
   view: PropTypes.object,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
   modifyLocalColumnWidth: PropTypes.func,
+  updateDraggingKey: PropTypes.func,
+  updateDragOverKey: PropTypes.func,
+  getColumnIndexByKey: PropTypes.func,
 };
 
 export default Cell;
