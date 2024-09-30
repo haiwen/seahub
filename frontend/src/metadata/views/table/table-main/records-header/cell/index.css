@@ -17,24 +17,20 @@
   position: relative;
 }
 
-.sf-metadata-record-header-cell .rgd-dropping-left > .sf-metadata-result-table-cell.column::before {
+.sf-metadata-record-header-cell .rdg-dropping-position > .sf-metadata-result-table-cell.column::before {
   content: '';
   position: absolute;
   top: 10%;
-  left: 0;
   height: 80%;
   width: 1px;
   background-color: #2d7ff9;
   border-radius: 50%;
 }
 
-.sf-metadata-record-header-cell .rgd-dropping-right > .sf-metadata-result-table-cell.column::before {
-  content: '';
-  position: absolute;
-  top: 10%;
+.sf-metadata-record-header-cell .rdg-dropping-position-left > .sf-metadata-result-table-cell.column::before {
+  left: 0;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position-right > .sf-metadata-result-table-cell.column::before {
   right: 0;
-  height: 80%;
-  width: 1px;
-  background-color: #2d7ff9;
-  border-radius: 50%;
 }

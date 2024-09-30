@@ -186,9 +186,9 @@ const Cell = ({
         draggable="true"
         style={{ opacity: draggingColumnKey === column.key ? 0.2 : 1 }}
         className={classnames('rdg-can-drop', {
-          'rdg-dropping': isOver,
-          'rgd-dropping-left': isOver && draggingColumnIndex > dragOverColumnIndex,
-          'rgd-dropping-right': isOver && draggingColumnIndex < dragOverColumnIndex,
+          'rdg-dropping rdg-dropping-position': isOver,
+          'rdg-dropping-position-left': isOver && draggingColumnIndex > dragOverColumnIndex,
+          'rdg-dropping-position-right': isOver && draggingColumnIndex < dragOverColumnIndex,
         })}
         onDragStart={onDragStart}
         onDragEnter={onDragEnter}
