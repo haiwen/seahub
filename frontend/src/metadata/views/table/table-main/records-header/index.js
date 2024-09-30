@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
 import InsertColumn from './insert-column';
@@ -29,6 +27,8 @@ const RecordsHeader = ({
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
+  const [draggingCellKey, setDraggingCellKey] = useState(null);
+  const [dragOverCellKey, setDragOverCellKey] = useState(null);
   const settings = useMemo(() => table.header_settings || {}, [table]);
   const isHideTriangle = useMemo(() => settings && settings.is_hide_triangle, [settings]);
   const height = useMemo(() => {
@@ -76,6 +76,16 @@ const RecordsHeader = ({
     modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
   }, [modifyColumnOrderAPI]);
 
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingCellKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingCellKey]);
+
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverCellKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverCellKey]);
+
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
   const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, groupOffsetLeft + SEQUENCE_COLUMN_WIDTH);
@@ -109,10 +119,14 @@ const RecordsHeader = ({
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
+                isDragging={draggingCellKey === column.key}
+                isOver={dragOverCellKey === column.key}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
                 onMove={modifyColumnOrder}
+                updateDraggingKey={updateDraggingKey}
+                updateDragOverKey={updateDragOverKey}
                 {...props}
               />
             );
@@ -127,11 +141,15 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              isDragging={draggingCellKey === column.key}
+              isOver={dragOverCellKey === column.key}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
               modifyColumnWidth={modifyColumnWidth}
               onMove={modifyColumnOrder}
+              updateDraggingKey={updateDraggingKey}
+              updateDragOverKey={updateDragOverKey}
               {...props}
             />
           );
@@ -158,8 +176,4 @@ RecordsHeader.propTypes = {
   selectAllRecords: PropTypes.func,
 };
 
-const DndRecordHeaderContainer = DropTarget('sfMetadataRecordHeaderCell', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(RecordsHeader);
-
-export default html5DragDropContext(DndRecordHeaderContainer);
+export default RecordsHeader;

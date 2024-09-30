@@ -2,7 +2,6 @@ import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { DragSource, DropTarget } from 'react-dnd';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import ResizeColumnHandle from './resize-column-handle';
 import DropdownMenu from './dropdown-menu';
@@ -11,76 +10,9 @@ import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE } from '../../..
 
 import './index.css';
 
-
-const dragSource = {
-  beginDrag: props => {
-    return { key: props.column.key, column: props.column };
-  },
-  endDrag(props, monitor) {
-    const source = monitor.getItem();
-    const didDrop = monitor.didDrop();
-    let target = {};
-    if (!didDrop) {
-      return { source, target };
-    }
-  },
-  isDragging(props) {
-    const { column, dragged } = props;
-    const { key } = dragged;
-    return key === column.key;
-  }
-};
-
-const dropTarget = {
-  hover(props, monitor, component) {
-    // This is fired very often and lets you perform side effects.
-    if (!window.sfMetadataBody) return;
-    let defaultColumnWidth = 200;
-    const offsetX = monitor.getClientOffset().x;
-    const width = document.querySelector('.sf-metadata-wrapper')?.clientWidth;
-    const left = window.innerWidth - width;
-    if (width <= 800) {
-      defaultColumnWidth = 20;
-    }
-    if (offsetX > window.innerWidth - defaultColumnWidth) {
-      window.sfMetadataBody.scrollToRight();
-    } else if (offsetX < props.frozenColumnsWidth + defaultColumnWidth + left) {
-      window.sfMetadataBody.scrollToLeft();
-    } else {
-      window.sfMetadataBody.clearHorizontalScroll();
-    }
-  },
-  drop(props, monitor) {
-    const source = monitor.getItem();
-    const { column: targetColumn } = props;
-    if (targetColumn.key !== source.key && source.column.frozen === targetColumn.frozen) {
-      let target = { key: targetColumn.key };
-      props.onMove(source, target);
-      window.sfMetadataBody.clearHorizontalScroll();
-    }
-  }
-};
-
-const dragCollect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-});
-
-const dropCollect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  dragged: monitor.getItem(),
-});
-
 const Cell = ({
   isOver,
   isDragging,
-  canDrop,
-  connectDragSource,
-  connectDragPreview,
-  connectDropTarget,
   frozen,
   groupOffsetLeft,
   isLastFrozenCell,
@@ -89,11 +21,15 @@ const Cell = ({
   column,
   style: propsStyle,
   view,
+  frozenColumnsWidth,
   renameColumn,
   deleteColumn,
   modifyColumnData,
   modifyLocalColumnWidth,
   modifyColumnWidth,
+  updateDraggingKey,
+  updateDragOverKey,
+  onMove,
 }) => {
   const headerCellRef = useRef(null);
 
@@ -120,14 +56,14 @@ const Cell = ({
     return right - left;
   }, []);
 
-  const onDrag = useCallback((e) => {
+  const onDraggingColumnWidth = useCallback((e) => {
     const width = getWidthFromMouseEvent(e);
     if (width > 0) {
       modifyLocalColumnWidth(column, width);
     }
   }, [column, getWidthFromMouseEvent, modifyLocalColumnWidth]);
 
-  const onDragEnd = useCallback((e) => {
+  const handleColumnWidth = useCallback((e) => {
     const width = getWidthFromMouseEvent(e);
     if (width > 0) {
       modifyColumnWidth(column, Math.max(width, 50));
@@ -142,6 +78,58 @@ const Cell = ({
     event.preventDefault();
     event.stopPropagation();
   }, []);
+
+  const onDragStart = useCallback((event) => {
+    const dragData = JSON.stringify({ type: 'sf-metadata-view-header-order', column_key: column.key, column });
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('application/drag-sf-metadata-view-header-order', dragData);
+    updateDraggingKey(column.key);
+  }, [column, updateDraggingKey]);
+
+  const onDragEnter = useCallback(() => {
+    updateDragOverKey(column.key);
+  }, [column, updateDragOverKey]);
+
+  const onDragLeave = useCallback(() => {
+    updateDragOverKey(null);
+  }, [updateDragOverKey]);
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    updateDragOverKey(column.key);
+    if (!window.sfMetadataBody) return;
+    let defaultColumnWidth = 200;
+    const offsetX = event.clientX;
+    const width = document.querySelector('.sf-metadata-wrapper')?.clientWidth;
+    const left = window.innerWidth - width;
+    if (width <= 800) {
+      defaultColumnWidth = 20;
+    }
+    if (offsetX > window.innerWidth - defaultColumnWidth) {
+      window.sfMetadataBody.scrollToRight();
+    } else if (offsetX < frozenColumnsWidth + defaultColumnWidth + left) {
+      window.sfMetadataBody.scrollToLeft();
+    } else {
+      window.sfMetadataBody.clearHorizontalScroll();
+    }
+  }, [column, frozenColumnsWidth, updateDragOverKey]);
+
+  const onDrop = useCallback((event) => {
+    event.stopPropagation();
+    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view-header-order');
+    if (!dragData) return false;
+    dragData = JSON.parse(dragData);
+    if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
+    if (dragData.column_key !== column.key && dragData.column.frozen === column.frozen) {
+      onMove && onMove({ key: dragData.column_key }, { key: column.key });
+    }
+  }, [column, onMove]);
+
+  const onDragEnd = useCallback(() => {
+    updateDraggingKey(null);
+    updateDragOverKey(null);
+  }, [updateDraggingKey, updateDragOverKey]);
 
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];
@@ -175,7 +163,7 @@ const Cell = ({
           modifyColumnData={modifyColumnData}
         />
       )}
-      <ResizeColumnHandle onDrag={onDrag} onDragEnd={onDragEnd} />
+      <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleColumnWidth} />
     </div>
   );
 
@@ -189,15 +177,19 @@ const Cell = ({
 
   return (
     <div key={key} className="sf-metadata-record-header-cell">
-      {connectDropTarget(
-        connectDragPreview(
-          connectDragSource(
-            <div style={{ opacity: isDragging ? 0.2 : 1 }} className={classnames('rdg-can-drop', { 'rdg-dropping': isOver && canDrop })}>
-              {cell}
-            </div>
-          )
-        )
-      )}
+      <div
+        draggable="true"
+        style={{ opacity: isDragging ? 0.2 : 1 }}
+        className={classnames('rdg-can-drop', { 'rdg-dropping': isOver })}
+        onDragStart={onDragStart}
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        onDragEnd={onDragEnd}
+      >
+        {cell}
+      </div>
     </div>
   );
 };
@@ -221,6 +213,4 @@ Cell.propTypes = {
   modifyLocalColumnWidth: PropTypes.func,
 };
 
-export default DropTarget('sfMetadataRecordHeaderCell', dropTarget, dropCollect)(
-  DragSource('sfMetadataRecordHeaderCell', dragSource, dragCollect)(Cell)
-);
+export default Cell;
