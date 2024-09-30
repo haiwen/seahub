@@ -14,4 +14,27 @@
 
 .sf-metadata-record-header-cell .rdg-dropping > .sf-metadata-result-table-cell.column {
   background: #ececec;
+  position: relative;
+}
+
+.sf-metadata-record-header-cell .rgd-dropping-left > .sf-metadata-result-table-cell.column::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 0;
+  height: 80%;
+  width: 1px;
+  background-color: #2d7ff9;
+  border-radius: 50%;
+}
+
+.sf-metadata-record-header-cell .rgd-dropping-right > .sf-metadata-result-table-cell.column::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 0;
+  height: 80%;
+  width: 1px;
+  background-color: #2d7ff9;
+  border-radius: 50%;
 }
