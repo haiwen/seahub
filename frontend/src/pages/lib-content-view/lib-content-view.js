@@ -50,42 +50,39 @@ class LibContentView extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props.repoID)
     const onMessageCallback = (data) => {
       if (data.type === 'file-lock-changed') {
         const currentUrl = window.location.href;
         const parsedUrl = new URL(currentUrl);
-        const pathParts = parsedUrl.pathname.split('/');
-        const dirRouter = pathParts.slice(4).join('/');
-        const notiUrlIndex = data.content.path.lastIndexOf('/')
+        const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
+        const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
+        let notiUrlIndex = ''
+        if (data.content.path.includes('/')){
+          notiUrlIndex = data.content.path.lastIndexOf('/')
+        }
         const notiRouter = data.content.path.slice(0, notiUrlIndex)
         if(dirRouter === notiRouter){
           const dirent = { name: data.content.path.split('/').pop() }
           if (data.content.change_event == 'locked'){
             if (dirent.name.endsWith('.sdoc')){
               this.updateDirent(dirent, 'is_freezed', true);
-              this.updateDirent(dirent, 'is_locked', true);
-            }else{
-              this.updateDirent(dirent, 'is_locked', true);
             }
+            this.updateDirent(dirent, 'is_locked', true);
             this.updateDirent(dirent, 'locked_by_me', true);
-            let lockName = data.content.lock_user
-            this.updateDirent(dirent, 'lock_owner_name', lockName[0]);
+            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
           }
           else if (data.content.change_event == 'unlocked'){
             this.updateDirent(dirent, 'is_locked', false);
             this.updateDirent(dirent, 'locked_by_me', false);
             this.updateDirent(dirent, 'lock_owner_name', '');
           }
-
         }
- 
       } else {
         console.log('Custom handling other message:', data);
       }
     };
-    const url = 'ws://localhost:8083';// WebSocket 服务器地址
-    this.socket = new WebSocketService("ws://localhost:8083", onMessageCallback);
+    const url = 'ws://localhost:8083';// WebSocket address
+    this.socket = new WebSocketService("ws://localhost:8083", onMessageCallback, this.props.repoID);
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
     if (storedTreePanelState != undefined) {
