@@ -78,7 +78,6 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
   onItemsScroll: PropTypes.func.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired,
   eventBus: PropTypes.object,
 };
 
@@ -276,7 +275,6 @@ class DirColumnView extends React.Component {
               onAddFolder={this.props.onAddFolder}
               showDirentDetail={this.props.showDirentDetail}
               onGridItemClick={this.props.onDirentClick}
-              isDirentDetailShow={this.props.isDirentDetailShow}
               onItemRename={this.props.onItemRename}
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
