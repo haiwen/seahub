@@ -23,7 +23,6 @@ const MetadataFaceRecognitionDialog = ({ value, repoID, toggle, submit }) => {
       toaster.danger(errorMsg);
       setSubmitting(false);
     });
-    submit();
   }, [repoID, submit, toggle]);
 
   return (

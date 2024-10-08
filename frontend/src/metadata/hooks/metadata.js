@@ -67,6 +67,9 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const updateEnableFaceRecognition = useCallback((newValue) => {
     if (newValue === enableFaceRecognition) return;
     setEnableFaceRecognition(newValue);
+    if (newValue) {
+      toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
+    }
   }, [enableFaceRecognition]);
 
   // views
