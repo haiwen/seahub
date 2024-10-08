@@ -15,8 +15,10 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
+  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
+  const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
   const viewsMap = useRef({});
 
@@ -55,11 +57,17 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     if (!newValue) {
       hideMetadataView && hideMetadataView();
       cancelURLView();
+      setEnableFaceRecognition(false);
     } else {
       setShowFirstView(true);
     }
     setEnableExtendedProperties(newValue);
   }, [enableMetadata, hideMetadataView, cancelURLView]);
+
+  const updateEnableFaceRecognition = useCallback((newValue) => {
+    if (newValue === enableFaceRecognition) return;
+    setEnableFaceRecognition(newValue);
+  }, [enableFaceRecognition]);
 
   // views
   useEffect(() => {
@@ -71,14 +79,10 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
             viewsMap.current[view._id] = view;
           });
         }
-        navigation.push({
-          _id: '_person_image',
-          type: 'view',
-        });
-        viewsMap.current['_person_image'] = {
-          _id: '_person_image',
+        viewsMap.current['_face_recognition'] = {
+          _id: '_face_recognition',
           name: gettext('Photos - Classify By People'),
-          type: PRIVATE_FILE_TYPE.PERSON_IMAGE,
+          type: PRIVATE_FILE_TYPE.FACE_RECOGNITION,
         };
         setNavigation(navigation);
       }).catch(error => {
@@ -93,8 +97,31 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadata]);
 
+  useEffect(() => {
+    if (!enableMetadata) {
+      setStaticView([]);
+      setEnableFaceRecognition(false);
+      return;
+    }
+    metadataAPI.getFaceRecognitionStatus(repoID).then(res => {
+      setEnableFaceRecognition(res.data.enabled);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID, enableMetadata]);
+
+  useEffect(() => {
+    if (!enableFaceRecognition) {
+      setStaticView([]);
+      return;
+    }
+    setStaticView([{ _id: '_face_recognition', type: 'view' }]);
+  }, [enableFaceRecognition]);
+
   const selectView = useCallback((view, isSelected) => {
     if (isSelected) return;
+    const isFaceRecognitionView = view.type === PRIVATE_FILE_TYPE.FACE_RECOGNITION;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id,
@@ -103,9 +130,9 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       isPreload: true,
       object: {
         file_tags: [],
-        id: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? PRIVATE_FILE_TYPE.PERSON_IMAGE : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
-        name: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? gettext('Person image') : gettext('File extended properties'),
-        type: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? PRIVATE_FILE_TYPE.PERSON_IMAGE : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        id: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        name: isFaceRecognitionView ? gettext('Photos - Classify By People') : gettext('File extended properties'),
+        type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
       },
       parentNode: {},
@@ -186,9 +213,12 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     <MetadataContext.Provider value={{
       enableMetadata,
       updateEnableMetadata,
+      enableFaceRecognition,
+      updateEnableFaceRecognition,
       showFirstView,
       setShowFirstView,
       navigation,
+      staticView,
       viewsMap: viewsMap.current,
       selectView,
       addView,

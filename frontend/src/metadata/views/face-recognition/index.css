@@ -1,0 +1,14 @@
+.sf-metadata-face-recognition {
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-item {
+  margin-bottom: 16px;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-name {
+  border-color: transparent;
+  cursor: pointer;
+}

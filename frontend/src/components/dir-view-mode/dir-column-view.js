@@ -9,8 +9,8 @@ import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { SeafileMetadata } from '../../metadata';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE, PERSON_IMAGE_MODE } from './constants';
-import PersonImage from '../../person-image';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE } from './constants';
+import FaceRecognition from '../../metadata/views/face-recognition';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -205,8 +205,8 @@ class DirColumnView extends React.Component {
               renameFileCallback={this.props.renameFileCallback}
             />
           }
-          {currentMode === PERSON_IMAGE_MODE &&
-            <PersonImage repoID={this.props.repoID}/>
+          {currentMode === FACE_RECOGNITION_MODE &&
+            <FaceRecognition repoID={this.props.repoID}/>
           }
           {currentMode === LIST_MODE &&
             <DirListView
