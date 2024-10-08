@@ -363,7 +363,7 @@
   "Style": "样式",
   "Insert": "插入",
   "Image": "图片",
-  "Table": "子表",
+  "Table": "表格",
   "Link": "链接",
   "Transform_to": "转化为",
   "Last_modification": "上一个修改",
@@ -562,5 +562,7 @@
   "the_past_year": "去年",
   "the_next_numbers_of_days": "今天之后的指定天数",
   "the_past_numbers_of_days": "今天之前的指定天数",
-  "Double_click_to_enter_edit_mode_and_adjust_field_width" : "双击可进入编辑模式并调整字段宽度"
+  "Double_click_to_enter_edit_mode_and_adjust_field_width" : "双击可进入编辑模式并调整字段宽度",
+  "Enter_comment_Enter_for_new_line_shift_enter_to_send": "输入评论，Enter 换行，Shift + Enter 发送",
+  "Sub_table": "子表"
 }
