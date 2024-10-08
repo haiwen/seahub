@@ -17,6 +17,7 @@ const SORT_COLUMN_OPTIONS = [
   CellType.CHECKBOX,
   CellType.NUMBER,
   CellType.RATE,
+  CellType.CAPTURE_TIME,
 ];
 
 const SHOW_DISABLED_SORT_COLUMNS = [
@@ -32,11 +33,13 @@ const GALLERY_SORT_COLUMN_OPTIONS = [
   CellType.RATE,
   CellType.NUMBER,
   CellType.FILE_NAME,
+  CellType.CAPTURE_TIME,
 ];
 
 const GALLERY_FIRST_SORT_COLUMN_OPTIONS = [
   CellType.CTIME,
   CellType.MTIME,
+  CellType.CAPTURE_TIME,
 ];
 
 const TEXT_SORTER_COLUMN_TYPES = [CellType.TEXT];

@@ -15,6 +15,7 @@ const CellType = {
   NUMBER: 'number',
   GEOLOCATION: 'geolocation',
   RATE: 'rate',
+  CAPTURE_TIME: 'capture-time',
 };
 
 export default CellType;
