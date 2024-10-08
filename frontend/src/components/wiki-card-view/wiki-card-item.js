@@ -247,10 +247,10 @@ class WikiCardItem extends Component {
           <div className="wiki-item-owner">
             {isShowAvatar && (isDepartment ? this.renderDept() : this.renderAvatar())}
           </div>
-          <div className="wiki-item-updated-time">
+          <div className="wiki-item-bottom">
             {moment(wiki.updated_at).fromNow()}
             {wiki.is_published &&
-              <span style={{ marginLeft: '25%' }}>published</span>
+              <span>{gettext('published')}</span>
             }
           </div>
         </div>
