@@ -16,12 +16,14 @@ class ServerOperator {
 
     switch (op_type) {
       case OPERATION_TYPE.MODIFY_RECORDS: {
-        const { repo_id, row_ids, id_row_updates, id_original_row_updates, is_copy_paste, is_rename, id_obj_id } = operation;
+        const { repo_id, row_ids, id_row_updates, id_original_row_updates, id_original_old_row_data, is_copy_paste, is_rename, id_obj_id } = operation;
         if (is_rename) {
           const rowId = row_ids[0];
+          const oldRowData = id_original_old_row_data[rowId];
           const rowUpdates = id_original_row_updates[rowId];
+          const oldName = getFileNameFromRecord(oldRowData);
           const newName = getFileNameFromRecord(rowUpdates);
-          this.renameFile(newName, repo_id, rowId, data, {
+          this.renameFile(newName, oldName, repo_id, rowId, data, {
             fail_callback: (error) => {
               callback({ error });
             },
@@ -42,9 +44,8 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.DELETE_RECORDS: {
-        const { repo_id, rows_ids } = operation;
-        const file_names = rows_ids.map((rowId) => {
-          const row = getRowById(data, rowId);
+        const { repo_id, deleted_rows } = operation;
+        const file_names = deleted_rows.map((row) => {
           const { _parent_dir, _name } = row || {};
           if (_parent_dir && _name) {
             return Utils.joinPath(_parent_dir, _name);
@@ -110,17 +111,6 @@ class ServerOperator {
         }).catch(error => {
           callback({ error: gettext('Failed to modify property data') });
         });
-        break;
-      }
-      case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {
-        const { column_key, new_width } = operation;
-        try {
-          const oldValue = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
-          window.sfMetadataContext.localStorage.setItem('columns_width', { ...oldValue, [column_key]: new_width });
-          callback({ operation });
-        } catch {
-          callback({ error: gettext('Failed to modify property width') });
-        }
         break;
       }
       case OPERATION_TYPE.MODIFY_COLUMN_ORDER: {
@@ -334,14 +324,15 @@ class ServerOperator {
     }, []);
   }
 
-  renameFile = (newName, repo_id, rowId, data, { fail_callback, success_callback }) => {
+  renameFile = (newName, oldName, repo_id, rowId, data, { fail_callback, success_callback }) => {
     const row = getRowById(data, rowId);
     if (!row) {
+      fail_callback();
       return;
     }
 
-    const { _parent_dir, _name } = row;
-    const path = Utils.joinPath(_parent_dir, _name);
+    const { _parent_dir } = row;
+    const path = Utils.joinPath(_parent_dir, oldName);
 
     // rename folder
     if (checkIsDir(row)) {
@@ -350,7 +341,7 @@ class ServerOperator {
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
-          errMessage = gettext('Renaming {name} failed').replace('{name}', _name);
+          errMessage = gettext('Renaming {name} failed').replace('{name}', oldName);
         }
         fail_callback(errMessage);
       });
@@ -368,7 +359,7 @@ class ServerOperator {
         errMessage = Utils.getErrorMsg(error);
       }
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Renaming {name} failed').replace('{name}', _name);
+        errMessage = gettext('Renaming {name} failed').replace('{name}', oldName);
       }
       fail_callback(errMessage);
     });

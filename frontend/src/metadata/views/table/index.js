@@ -97,7 +97,7 @@ const Table = () => {
     }
     store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, isRename, {
       fail_callback: (error) => {
-        toaster.danger(error);
+        error && toaster.danger(error);
       },
       success_callback: () => {
         if (isRename) {

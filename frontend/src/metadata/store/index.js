@@ -8,6 +8,7 @@ import {
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
+import LocalOperator from './local-operator';
 import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
@@ -27,6 +28,7 @@ class Store {
     this.isSendingOperation = false;
     this.isReadonly = false;
     this.serverOperator = new ServerOperator();
+    this.localOperator = new LocalOperator();
     this.collaborators = props.collaborators || [];
   }
 
@@ -108,15 +110,16 @@ class Store {
 
   applyOperation(operation, undoRedoHandler = { handleUndo: true }) {
     const { op_type } = operation;
+
+    if (LOCAL_APPLY_OPERATION_TYPE.includes(op_type)) {
+      this.localOperator.applyOperation(operation);
+    }
+
     if (!NEED_APPLY_AFTER_SERVER_OPERATION.includes(op_type)) {
       this.handleUndoRedos(undoRedoHandler, operation);
       this.data = deepCopy(operation.apply(this.data));
       this.syncOperationOnData(operation);
       this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
-    }
-
-    if (LOCAL_APPLY_OPERATION_TYPE.includes(op_type)) {
-      return;
     }
 
     this.addPendingOperations(operation, undoRedoHandler);
@@ -153,7 +156,9 @@ class Store {
       this.sendNextOperation(undoRedoHandler);
       return;
     }
-    if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(operation.op_type)) {
+
+    const isAfterServerOperation = NEED_APPLY_AFTER_SERVER_OPERATION.includes(operation.op_type);
+    if (isAfterServerOperation) {
       this.handleUndoRedos(undoRedoHandler, operation);
       this.data = deepCopy(operation.apply(this.data));
       this.syncOperationOnData(operation);
@@ -163,7 +168,9 @@ class Store {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     }
 
-    this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
+    if (isAfterServerOperation) {
+      this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
+    }
     operation.success_callback && operation.success_callback();
 
     // need reload records if has related formula columns
@@ -335,10 +342,13 @@ class Store {
       return;
     }
 
+    const deleted_rows = valid_rows_ids.map((rowId) => getRowById(this.data, rowId));
+
     const operation = this.createOperation({
       type,
       repo_id: this.repoId,
       rows_ids: valid_rows_ids,
+      deleted_rows,
       fail_callback,
       success_callback,
     });
