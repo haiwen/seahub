@@ -4,11 +4,11 @@ import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { GroupbysPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
-import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
+import { EVENT_BUS_TYPE, SUPPORT_GROUP_COLUMN_TYPES, VIEW_TYPE } from '../../constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
 
-const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
+const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys, type }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const columns = useMemo(() => {
@@ -39,7 +39,11 @@ const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: 
   const onChange = useCallback((groupbys) => {
     const validGroupbys = getValidGroupbys(groupbys, columns);
     modifyGroupbys(validGroupbys);
-  }, [columns, modifyGroupbys]);
+
+    if (type === VIEW_TYPE.GALLERY) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_GALLERY_GROUP_BY, validGroupbys);
+    }
+  }, [columns, modifyGroupbys, type]);
 
   const className = classnames(wrapperClass, { 'active': groupbys.length > 0 });
   return (
@@ -66,6 +70,7 @@ const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: 
           columns={columns}
           hidePopover={onSetterToggle}
           onChange={onChange}
+          type={type}
         />
       )}
     </>
@@ -86,6 +91,7 @@ GroupbySetter.propTypes = {
   modifyGroupbys: PropTypes.func,
   target: PropTypes.string,
   isNeedSubmit: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 export default GroupbySetter;

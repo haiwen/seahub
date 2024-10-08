@@ -24,7 +24,7 @@ const GalleryGroupBySetter = ({ view }) => {
   const handleGroupByChange = useCallback((newMode) => {
     setCurrentMode(newMode);
     window.sfMetadataContext.localStorage.setItem('gallery-group-by', newMode);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, newMode);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_DATE_MODE, newMode);
   }, []);
 
   return (

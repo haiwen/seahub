@@ -1,3 +1,4 @@
+import { PRIVATE_COLUMN_KEY } from './column';
 import CellType from './column/type';
 import { EVENT_BUS_TYPE } from './event-bus-type';
 import TRANSFER_TYPES from './TransferTypes';
@@ -132,4 +133,9 @@ export const GALLERY_DATE_MODE = {
   MONTH: 'month',
   DAY: 'day',
   ALL: 'all',
+};
+
+export const GALLERY_GROUP_BY = {
+  CAPTURE_TIME: PRIVATE_COLUMN_KEY.CAPTURE_TIME,
+  DATE: PRIVATE_COLUMN_KEY.MTIME,
 };
