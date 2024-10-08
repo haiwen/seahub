@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
@@ -12,8 +12,8 @@ const GalleryMain = ({
   size,
   gap,
   mode,
-  selectedImages,
-  setSelectedImages,
+  selectedImageIDs,
+  onImageSelect,
   onImageClick,
   onImageDoubleClick,
   onImageRightClick
@@ -33,9 +33,7 @@ const GalleryMain = ({
 
     setIsSelecting(true);
     setSelectionStart({ x: e.clientX, y: e.clientY });
-    setSelectedImages([]);
-
-  }, [setSelectedImages]);
+  }, []);
 
   const handleMouseMove = useCallback((e) => {
     if (!isSelecting) return;
@@ -59,9 +57,9 @@ const GalleryMain = ({
               const rect = imgElement.getBoundingClientRect();
               if (
                 rect.left < Math.max(selectionStart.x, selectionEnd.x) &&
-            rect.right > Math.min(selectionStart.x, selectionEnd.x) &&
-            rect.top < Math.max(selectionStart.y, selectionEnd.y) &&
-            rect.bottom > Math.min(selectionStart.y, selectionEnd.y)
+                rect.right > Math.min(selectionStart.x, selectionEnd.x) &&
+                rect.top < Math.max(selectionStart.y, selectionEnd.y) &&
+                rect.bottom > Math.min(selectionStart.y, selectionEnd.y)
               ) {
                 selected.push(img);
               }
@@ -70,9 +68,9 @@ const GalleryMain = ({
         });
       });
 
-      setSelectedImages(selected);
+      onImageSelect(selected);
     });
-  }, [groups, isSelecting, selectionStart, setSelectedImages]);
+  }, [groups, isSelecting, selectionStart, onImageSelect]);
 
   const handleMouseUp = useCallback((e) => {
     if (e.button !== 0) return;
@@ -81,6 +79,19 @@ const GalleryMain = ({
     e.stopPropagation();
     setIsSelecting(false);
   }, []);
+
+  const handleClickOutside = useCallback((e) => {
+    if (imageRef.current && !imageRef.current.contains(e.target) && containerRef.current && containerRef.current.contains(e.target)) {
+      onImageSelect([]);
+    }
+  }, [onImageSelect]);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
@@ -113,7 +124,6 @@ const GalleryMain = ({
         key={name}
         className="metadata-gallery-date-group"
         style={{ height, paddingTop }}
-
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
           <div className="metadata-gallery-date-tag">{name || gettext('Empty')}</div>
@@ -129,7 +139,7 @@ const GalleryMain = ({
         >
           {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
             return row.children.map((img) => {
-              const isSelected = selectedImages.includes(img);
+              const isSelected = selectedImageIDs.includes(img.id);
               return (
                 <div
                   key={img.src}
@@ -151,7 +161,7 @@ const GalleryMain = ({
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight, mode, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick]);
+  }, [overScan, columns, size, imageHeight, mode, selectedImageIDs, onImageClick, onImageDoubleClick, onImageRightClick]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -194,7 +204,8 @@ GalleryMain.propTypes = {
   size: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
   mode: PropTypes.string,
-  selectedImages: PropTypes.array.isRequired,
+  selectedImageIDs: PropTypes.array.isRequired,
+  onImageSelect: PropTypes.func.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,
   onImageRightClick: PropTypes.func.isRequired,

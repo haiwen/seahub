@@ -20,6 +20,8 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [navigation, setNavigation] = useState([]);
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
+  const [currentImage, setCurrentImage] = useState(null);
+
   const viewsMap = useRef({});
 
   const cancelURLView = useCallback(() => {
@@ -212,6 +214,10 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     });
   }, [repoID]);
 
+  const updateCurrentImage = useCallback((image) => {
+    setCurrentImage(image);
+  }, []);
+
   return (
     <MetadataContext.Provider value={{
       enableMetadata,
@@ -229,6 +235,8 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       deleteView,
       updateView,
       moveView,
+      currentImage,
+      updateCurrentImage,
     }}>
       {children}
     </MetadataContext.Provider>

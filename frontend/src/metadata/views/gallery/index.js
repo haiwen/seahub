@@ -13,6 +13,7 @@ import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
+import { useMetadata } from '../../hooks';
 
 import './index.css';
 
@@ -31,8 +32,17 @@ const Gallery = () => {
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
 
+  const { updateCurrentImage } = useMetadata();
   const { metadata, store } = useMetadataView();
-  const repoID = window.sfMetadataContext.getSetting('repoID');
+  const repoID = store.repoId;
+
+  useEffect(() => {
+    updateCurrentImage(selectedImages[0]);
+  }, [selectedImages, updateCurrentImage]);
+
+  const selectedImageIDs = useMemo(() => {
+    return selectedImages.map(image => image.id);
+  }, [selectedImages]);
 
   // Number of images per row
   const columns = useMemo(() => {
@@ -62,12 +72,14 @@ const Gallery = () => {
     let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
+        const obj_id = record[PRIVATE_COLUMN_KEY.OBJ_ID];
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
           id,
+          obj_id,
           name: fileName,
           path: parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
@@ -218,9 +230,10 @@ const Gallery = () => {
       const range = imageItems.slice(Math.min(start, end), Math.max(start, end) + 1);
       setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
     } else {
+      updateCurrentImage(image);
       setSelectedImages([image]);
     }
-  }, [imageItems, selectedImages]);
+  }, [imageItems, selectedImages, updateCurrentImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
     const index = imageItems.findIndex(item => item.id === image.id);
@@ -245,6 +258,10 @@ const Gallery = () => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
+
+  const handleImageSelection = useCallback((selectedImages) => {
+    setSelectedImages(selectedImages);
+  }, []);
 
   const closeImagePopup = () => {
     setIsImagePopupOpen(false);
@@ -320,8 +337,8 @@ const Gallery = () => {
               overScan={overScan}
               gap={GALLERY_IMAGE_GAP}
               mode={mode}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
+              selectedImageIDs={selectedImageIDs}
+              onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onImageRightClick={handleRightClick}

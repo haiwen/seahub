@@ -2442,6 +2442,7 @@ class LibContentView extends React.Component {
                     fileTags={this.state.isViewFile ? this.state.fileTags : []}
                     onFileTagChanged={this.onFileTagChanged}
                     onClose={this.closeDirentDetail}
+                    mode={this.state.currentMode}
                   />
                 )}
               </div>

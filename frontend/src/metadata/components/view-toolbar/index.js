@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../constants';
+import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
-const ViewToolBar = ({ viewId }) => {
+const ViewToolBar = ({ viewId, isCustomPermission, switchViewMode }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -105,6 +106,11 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns}
           modifySorts={modifySorts}
         />
+        {viewType === VIEW_TYPE.GALLERY && !isCustomPermission && (
+          <div className="cur-view-path-btn ml-2" onClick={() => switchViewMode('detail')}>
+            <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
+          </div>
+        )}
         {viewType !== VIEW_TYPE.GALLERY && (
           <GroupbySetter
             isNeedSubmit={true}
@@ -135,6 +141,8 @@ const ViewToolBar = ({ viewId }) => {
 
 ViewToolBar.propTypes = {
   viewId: PropTypes.string,
+  isCustomPermission: PropTypes.bool,
+  switchViewMode: PropTypes.func,
 };
 
 export default ViewToolBar;

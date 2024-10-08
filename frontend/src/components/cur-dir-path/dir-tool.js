@@ -100,7 +100,7 @@ class DirTool extends React.Component {
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, switchViewMode, isCustomPermission } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
 
@@ -114,7 +114,7 @@ class DirTool extends React.Component {
     if (isFileExtended) {
       return (
         <div className="dir-tool">
-          <MetadataViewToolBar viewId={viewId} />
+          <MetadataViewToolBar viewId={viewId} isCustomPermission={isCustomPermission} switchViewMode={switchViewMode} />
         </div>
       );
     }
@@ -122,10 +122,10 @@ class DirTool extends React.Component {
     return (
       <React.Fragment>
         <div className="dir-tool d-flex">
-          <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+          <ViewModes currentViewMode={currentMode} switchViewMode={switchViewMode} />
           <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
-          {(!this.props.isCustomPermission) &&
-            <div className="cur-view-path-btn" onClick={() => this.props.switchViewMode('detail')}>
+          {(!isCustomPermission) &&
+            <div className="cur-view-path-btn" onClick={() => switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </div>
           }
