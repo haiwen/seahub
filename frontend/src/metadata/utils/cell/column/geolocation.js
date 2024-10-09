@@ -1,6 +1,32 @@
 import { GROUP_GEOLOCATION_GRANULARITY, GEOLOCATION_FORMAT } from '../../../constants';
 import { isValidPosition } from '../../validate';
 
+const _convertLatitudeDecimalToDMS = (latitudeDecimal) => {
+  if (!latitudeDecimal && latitudeDecimal !== 0) return '';
+  if (latitudeDecimal < -90 || latitudeDecimal > 90) {
+    return '';
+  }
+  const degrees = Math.floor(Math.abs(latitudeDecimal));
+  const minutesDecimal = (Math.abs(latitudeDecimal) - degrees) * 60;
+  const minutes = Math.floor(minutesDecimal);
+  const seconds = Math.round((minutesDecimal - minutes) * 60);
+  const latitudeNS = latitudeDecimal >= 0 ? 'N' : 'S';
+  return `${latitudeNS}${degrees}°${minutes}'${seconds}"`;
+};
+
+const _convertLongitudeDecimalToDMS = (longitudeDecimal) => {
+  if (!longitudeDecimal && longitudeDecimal !== 0) return '';
+  if (longitudeDecimal < -180 || longitudeDecimal > 180) {
+    return '';
+  }
+  const degrees = Math.floor(Math.abs(longitudeDecimal));
+  const minutesDecimal = (Math.abs(longitudeDecimal) - degrees) * 60;
+  const minutes = Math.floor(minutesDecimal);
+  const seconds = Math.round((minutesDecimal - minutes) * 60);
+  const longitudeNS = longitudeDecimal >= 0 ? 'E' : 'W';
+  return `${longitudeNS}${degrees}°${minutes}'${seconds}"`;
+};
+
 /**
  * Get formatted geolocation
  * @param {object} loc
@@ -16,7 +42,9 @@ const getGeolocationDisplayString = (loc, formats, { isBaiduMap = true, hyphen =
     case GEOLOCATION_FORMAT.LNG_LAT: {
       const { lng, lat } = loc;
       if (!isValidPosition(lng, lat)) return '';
-      return isBaiduMap ? `${lng}, ${lat}` : `${lat}, ${lng}`;
+      const lngDMS = _convertLongitudeDecimalToDMS(lng);
+      const latDMS = _convertLatitudeDecimalToDMS(lat);
+      return `${latDMS}, ${lngDMS}`;
     }
     case GEOLOCATION_FORMAT.COUNTRY_REGION: {
       const { country_region } = loc;
