@@ -41,7 +41,7 @@ const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: 
     modifyGroupbys(validGroupbys);
 
     if (type === VIEW_TYPE.GALLERY) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_GALLERY_GROUP_BY, validGroupbys);
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY_STATUS, validGroupbys.length !== 0);
     }
   }, [columns, modifyGroupbys, type]);
 

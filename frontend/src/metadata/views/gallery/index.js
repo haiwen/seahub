@@ -13,7 +13,7 @@ import { Utils } from '../../../utils/utils';
 import DateUtils from '../../utils/date';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP, GALLERY_GROUP_BY } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 
 import './index.css';
 
@@ -28,7 +28,6 @@ const Gallery = () => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [groupBy, setGroupBy] = useState(GALLERY_GROUP_BY.DATE);
 
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
@@ -58,19 +57,27 @@ const Gallery = () => {
     }
   }, [mode]);
 
+
+  const groupBy = useMemo(() => {
+    const groupBy = metadata.view.groupbys[0]?.column_key;
+    return groupBy;
+  }, [metadata.view.groupbys]);
+
+  const countType = useMemo(() => metadata.view.groupbys[0]?.count_type, [metadata.view.groupbys], [metadata.view.groupbys]);
+
+  const isGroupMode = useMemo(() => {
+    return mode !== GALLERY_DATE_MODE.ALL || groupBy;
+  }, [mode, groupBy]);
+
   const buildImageItem = useCallback((record) => {
     const id = record[PRIVATE_COLUMN_KEY.ID];
     const fileName = getFileNameFromRecord(record);
     const parentDir = getParentDirFromRecord(record);
     const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
     const firstSort = metadata.view.sorts[0];
-    const countType = metadata.view.groupbys[0]?.count_type;
-    let date;
-    if (groupBy === GALLERY_GROUP_BY.DATE) {
-      date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
-    } else {
-      date = DateUtils.getDateByGranularity(record[PRIVATE_COLUMN_KEY.CAPTURE_TIME], countType) || gettext('Unknown capture time');
-    }
+    const date = isGroupMode ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
+    const captureTime = DateUtils.getDateByGranularity(record[groupBy], countType) || gettext('Unknown capture time');
+    const groupName = groupBy ? captureTime : date;
 
     return {
       id,
@@ -79,20 +86,20 @@ const Gallery = () => {
       url: `${siteRoot}lib/${repoID}/file${path}`,
       src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
       thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
-      date,
+      groupName,
     };
-  }, [metadata.view, mode, repoID, dateMode, groupBy]);
+  }, [metadata.view, repoID, dateMode, isGroupMode, groupBy, countType]);
 
   const groupImages = useMemo(() => {
     return metadata.rows
       .filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
       .reduce((groups, record) => {
         const img = buildImageItem(record);
-        let group = groups.find(g => g.name === img.date);
+        let group = groups.find(g => g.name === img.groupName);
         if (group) {
           group.children.push(img);
         } else {
-          groups.push({ name: img.date, children: [img] });
+          groups.push({ name: img.groupName, children: [img] });
         }
         return groups;
       }, []);
@@ -130,7 +137,7 @@ const Gallery = () => {
         rows[rowIndex].children.push(child);
       });
 
-      const paddingTop = groupBy === GALLERY_GROUP_BY.DATE && mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+      const paddingTop = isGroupMode ? DATE_TAG_HEIGHT : 0;
       const height = rows.length * imageHeight + paddingTop;
       const groupTop = top;
 
@@ -144,18 +151,18 @@ const Gallery = () => {
         children: rows
       };
     });
-  }, [groupBy, mode, columns, imageSize]);
+  }, [columns, imageSize, isGroupMode]);
 
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     let groupedImages = groupImages;
-    if (groupBy === GALLERY_GROUP_BY.CAPTURE_TIME) {
+    if (isGroupMode) {
       groupedImages = sortGroups(groupedImages);
     }
     groupedImages = calculateGroupPositions(groupedImages);
 
     return groupedImages;
-  }, [isFirstLoading, groupImages, sortGroups, calculateGroupPositions, groupBy]);
+  }, [isFirstLoading, groupImages, sortGroups, calculateGroupPositions, isGroupMode]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -184,20 +191,10 @@ const Gallery = () => {
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
       EVENT_BUS_TYPE.SWITCH_GALLERY_DATE_MODE,
       (mode) => {
-        setGroupBy(GALLERY_GROUP_BY.DATE);
         setMode(mode);
         window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
       }
     );
-
-    const updateGalleryGroupBySubscribe = window.sfMetadataContext.eventBus.subscribe(
-      EVENT_BUS_TYPE.UPDATE_GALLERY_GROUP_BY, (groupbys) => {
-        if (groupbys.length === 0) {
-          setGroupBy(GALLERY_GROUP_BY.DATE);
-        } else {
-          setGroupBy(GALLERY_GROUP_BY.CAPTURE_TIME);
-        }
-      });
 
     const container = containerRef.current;
     if (container) {
@@ -229,7 +226,6 @@ const Gallery = () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
-      updateGalleryGroupBySubscribe();
       renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
   }, []);

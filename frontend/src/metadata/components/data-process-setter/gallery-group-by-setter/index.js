@@ -15,10 +15,17 @@ const DATE_MODE_MAP = {
 
 const GalleryGroupBySetter = ({ view }) => {
   const [currentMode, setCurrentMode] = useState(GALLERY_DATE_MODE.DAY);
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     const savedValue = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.DAY);
     setCurrentMode(savedValue || GALLERY_DATE_MODE.DAY);
+
+    const unsubscribeGalleryGroupBy = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY_STATUS, (disable) => setDisable(disable));
+
+    return () => {
+      unsubscribeGalleryGroupBy();
+    };
   }, [view?._id]);
 
   const handleGroupByChange = useCallback((newMode) => {
@@ -32,7 +39,10 @@ const GalleryGroupBySetter = ({ view }) => {
       {Object.entries(DATE_MODE_MAP).map(([dateMode, label]) => (
         <button
           key={dateMode}
-          className={classnames('metadata-gallery-group-by-button', { active: currentMode === dateMode })}
+          className={classnames('metadata-gallery-group-by-button', {
+            active: currentMode === dateMode,
+            disabled: disable
+          })}
           onClick={() => handleGroupByChange(dateMode)}
         >
           <span>{label}</span>

@@ -55,3 +55,16 @@
 .metadata-gallery-group-by-button.active + .metadata-gallery-group-by-button::before {
   opacity: 0;
 }
+
+.metadata-gallery-group-by-button.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.metadata-gallery-group-by-button.disabled.active {
+  background-color: initial;
+}
+
+.metadata-gallery-group-by-button.disabled:hover {
+  background-color: initial;
+}

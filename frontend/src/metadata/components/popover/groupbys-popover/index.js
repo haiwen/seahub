@@ -104,7 +104,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hide
     event.stopPropagation();
   }, []);
 
-  const filteredColumns = useMemo(() => {
+  const galleryGroupByColumns = useMemo(() => {
     return getGroupbyColumns(columns, viewType);
   }, [viewType, columns]);
 
@@ -119,7 +119,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hide
       boundariesElement={document.body}
     >
       <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-groupbys">
-        <Groupbys readOnly={readOnly} groupbys={groupbys} columns={viewType === VIEW_TYPE.GALLERY ? filteredColumns : columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
+        <Groupbys readOnly={readOnly} groupbys={groupbys} columns={viewType === VIEW_TYPE.GALLERY ? galleryGroupByColumns : columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
         {!readOnly && (groupbys.length < MAX_GROUP_LEVEL) && (
           <CustomizeAddTool
             className="popover-add-tool"
