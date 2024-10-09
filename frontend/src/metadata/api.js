@@ -247,6 +247,32 @@ class MetadataManagerAPI {
     };
     return this.req.delete(url, { data });
   }
+
+  // face recognition
+  getFaceRecognitionStatus(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-recognition/';
+    return this.req.get(url);
+  }
+
+  openFaceRecognition = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-recognition/';
+    return this.req.post(url);
+  };
+
+  getFaceData = (repoID, start = 0, limit = 1000) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-records/?start=' + start + '&limit=' + limit;
+    return this.req.get(url);
+  };
+
+  updateFaceName = (repoID, recordID, name) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-record/';
+    const params = {
+      record_id: recordID,
+      name: name,
+    };
+    return this.req.put(url, params);
+  };
+
 }
 
 const metadataAPI = new MetadataManagerAPI();
