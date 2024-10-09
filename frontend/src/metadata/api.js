@@ -259,8 +259,8 @@ class MetadataManagerAPI {
     return this.req.post(url);
   };
 
-  getFaceData = (repoID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-records/';
+  getFaceData = (repoID, start = 0, limit = 1000) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-records/?start=' + start + '&limit=' + limit;
     return this.req.get(url);
   };
 

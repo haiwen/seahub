@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Input } from 'reactstrap';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
-import { gettext, siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 import metadataAPI from '../../api';
 import isHotkey from 'is-hotkey';
 import { isEnter } from '../../utils/hotkey';
@@ -17,14 +17,15 @@ const theadData = [
   { width: '11%', text: gettext('Last Update') },
 ];
 
-const FaceGroup = ({ repoID, group }) => {
-  const [name, setName] = useState(group.name || gettext('Person Image'));
+const FaceGroup = ({ repoID, group, onPhotoClick }) => {
+  const [name, setName] = useState(group.name);
   const [isRenaming, setRenaming] = useState(false);
-  const serverName = useRef(group.name || gettext('Person Image'));
+  const serverName = useRef(group.name);
 
-  const showImage = useCallback((event) => {
+  const showPhoto = useCallback((event, photo) => {
     event.preventDefault();
-  }, []);
+    onPhotoClick(photo);
+  }, [onPhotoClick]);
 
   const changeName = useCallback((event) => {
     const value = event.target.value;
@@ -83,12 +84,11 @@ const FaceGroup = ({ repoID, group }) => {
           </tr>
         </thead>
         <tbody>
-          {group.link_photos.map((photo, index) => {
-            const url = `/thumbnail/${repoID}/${thumbnailDefaultSize}${photo.path}`;
+          {group.photos.map((photo, index) => {
             return (
-              <tr key={index}>
-                <td className="text-center"><img src={url} alt="" className="thumbnail cursor-pointer" /></td>
-                <td><a href={`${siteRoot}lib/${repoID}/file${photo.path}`} onClick={showImage}>{photo.file_name}</a></td>
+              <tr key={index} onClick={(event) => showPhoto(event, photo)}>
+                <td className="text-center"><img src={photo.src} alt="" className="thumbnail cursor-pointer" /></td>
+                <td><a href={`${siteRoot}lib/${repoID}/file${photo.path}`} onClick={(event) => showPhoto(event, photo)}>{photo.file_name}</a></td>
                 <td>{photo.parent_dir}</td>
                 <td>{Utils.bytesToSize(photo.size)}</td>
                 <td title={moment(photo.mtime).fromNow()}>{moment(photo.mtime).fromNow()}</td>
@@ -102,7 +102,9 @@ const FaceGroup = ({ repoID, group }) => {
 };
 
 FaceGroup.propTypes = {
+  repoID: PropTypes.string,
   group: PropTypes.object.isRequired,
+  onPhotoClick: PropTypes.func,
 };
 
 export default FaceGroup;

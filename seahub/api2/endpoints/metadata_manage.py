@@ -827,8 +827,19 @@ class FacesRecords(APIView):
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 100)
 
-        if not isinstance(start, int) or not isinstance(limit, int):
-            error_msg = 'start and limit must be integer.'
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
