@@ -16,7 +16,7 @@ import { SYSTEM_FOLDERS } from './constants';
 
 import './index.css';
 
-const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
+const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateFileDetails, updateFileLocation }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
@@ -38,9 +38,11 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
       let fields = normalizeFields(metadata).map(field => new Column(field));
-      if (!Utils.imageCheck(fileName)) {
-        fields = fields.filter(filed => filed.key !== PRIVATE_COLUMN_KEY.LOCATION);
-      }
+      // if (!Utils.imageCheck(fileName)) {
+      //   fields = fields.filter(filed => filed.key !== PRIVATE_COLUMN_KEY.LOCATION);
+      // }
+      updateFileDetails(record[PRIVATE_COLUMN_KEY.FILE_DETAILS]);
+      updateFileLocation(record[PRIVATE_COLUMN_KEY.LOCATION]);
       setMetadata({ record, fields });
       setLoading(false);
     }).catch(error => {
@@ -48,7 +50,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
       toaster.danger(errMessage);
       setLoading(false);
     });
-  }, [repoID, filePath, direntType]);
+  }, [repoID, filePath, direntType, updateFileDetails, updateFileLocation]);
 
   const onChange = useCallback((fieldKey, newValue) => {
     const { record, fields } = metadata;
