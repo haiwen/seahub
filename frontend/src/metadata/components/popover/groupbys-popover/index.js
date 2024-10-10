@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
@@ -7,11 +7,11 @@ import Groupbys from './groupbys';
 import { gettext } from '../../../../utils/constants';
 import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
 import { getEventClassName } from '../../../utils/common';
-import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
+import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL, VIEW_TYPE } from '../../../constants';
 
 import './index.css';
 
-const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hidePopover, onChange, target, placement, columns }) => {
+const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hidePopover, onChange, target, placement, columns, type: viewType }) => {
   const [groupbys, setGroupbys] = useState(propsGroupBys);
   const [isChanged, setChanged] = useState(false);
   const isSelectOpenRef = useState(false);
@@ -65,13 +65,13 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hide
 
   const addGroupby = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
-    const groupbyColumns = getGroupbyColumns(columns);
+    const groupbyColumns = getGroupbyColumns(columns, viewType);
     if (!Array.isArray(groupbyColumns) || groupbyColumns.length === 0) return;
     const groupby = generateDefaultGroupby(groupbyColumns);
     const newGroupBys = groupbys.slice(0);
     newGroupBys.push(groupby);
     updateGroups(newGroupBys);
-  }, [groupbys, columns, updateGroups]);
+  }, [groupbys, columns, updateGroups, viewType]);
 
   const deleteGroup = useCallback((groupbyIndex) => {
     const newGroupBys = groupbys.slice(0);
@@ -104,6 +104,10 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hide
     event.stopPropagation();
   }, []);
 
+  const galleryGroupByColumns = useMemo(() => {
+    return getGroupbyColumns(columns, viewType);
+  }, [viewType, columns]);
+
   return (
     <UncontrolledPopover
       placement={placement}
@@ -115,7 +119,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hide
       boundariesElement={document.body}
     >
       <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-groupbys">
-        <Groupbys readOnly={readOnly} groupbys={groupbys} columns={columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
+        <Groupbys readOnly={readOnly} groupbys={groupbys} columns={viewType === VIEW_TYPE.GALLERY ? galleryGroupByColumns : columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
         {!readOnly && (groupbys.length < MAX_GROUP_LEVEL) && (
           <CustomizeAddTool
             className="popover-add-tool"
@@ -149,6 +153,7 @@ GroupbysPopover.propTypes = {
   columns: PropTypes.array,
   hidePopover: PropTypes.func,
   modifyGroupbys: PropTypes.func,
+  type: PropTypes.string,
 };
 
 export default GroupbysPopover;

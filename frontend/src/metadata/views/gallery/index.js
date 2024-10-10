@@ -10,6 +10,7 @@ import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
+import DateUtils from '../../utils/date';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
@@ -56,67 +57,112 @@ const Gallery = () => {
     }
   }, [mode]);
 
-  const groups = useMemo(() => {
-    if (isFirstLoading) return [];
-    const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
-      .reduce((_init, record) => {
-        const id = record[PRIVATE_COLUMN_KEY.ID];
-        const fileName = getFileNameFromRecord(record);
-        const parentDir = getParentDirFromRecord(record);
-        const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
-        const img = {
-          id,
-          name: fileName,
-          path: parentDir,
-          url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
-          date: date,
-        };
-        let _group = _init.find(g => g.name === date);
-        if (_group) {
-          _group.children.push(img);
-        } else {
-          _init.push({
-            name: date,
-            children: [img],
-          });
-        }
-        return _init;
-      }, []);
 
-    let _groups = [];
+  const groupBy = useMemo(() => {
+    const groupBy = metadata.view.groupbys[0]?.column_key;
+    return groupBy;
+  }, [metadata.view.groupbys]);
+
+  const countType = useMemo(() => metadata.view.groupbys[0]?.count_type, [metadata.view.groupbys], [metadata.view.groupbys]);
+
+  const isGroupMode = useMemo(() => {
+    return mode !== GALLERY_DATE_MODE.ALL || groupBy;
+  }, [mode, groupBy]);
+
+  const buildImageItem = useCallback((record) => {
+    const id = record[PRIVATE_COLUMN_KEY.ID];
+    const fileName = getFileNameFromRecord(record);
+    const parentDir = getParentDirFromRecord(record);
+    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+    const firstSort = metadata.view.sorts[0];
+    const date = isGroupMode ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
+    const captureTime = DateUtils.getDateByGranularity(record[groupBy], countType) || gettext('Unknown capture time');
+    const groupName = groupBy ? captureTime : date;
+
+    return {
+      id,
+      name: fileName,
+      path: parentDir,
+      url: `${siteRoot}lib/${repoID}/file${path}`,
+      src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+      thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+      groupName,
+    };
+  }, [metadata.view, repoID, dateMode, isGroupMode, groupBy, countType]);
+
+  const groupImages = useMemo(() => {
+    return metadata.rows
+      .filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
+      .reduce((groups, record) => {
+        const img = buildImageItem(record);
+        let group = groups.find(g => g.name === img.groupName);
+        if (group) {
+          group.children.push(img);
+        } else {
+          groups.push({ name: img.groupName, children: [img] });
+        }
+        return groups;
+      }, []);
+  }, [metadata.rows, buildImageItem]);
+
+  const sortGroups = useCallback((groups) => {
+    const sortType = metadata.view.groupbys[0]?.sort_type;
+    return groups.sort((a, b) => {
+      if (a.name === gettext('Unknown capture time')) return 1;
+      if (b.name === gettext('Unknown capture time')) return -1;
+
+      const parseDate = (dateStr) => {
+        if (dateStr.includes('Q')) {
+          const [year, quarter] = dateStr.split('-Q');
+          return new Date(year, (quarter - 1) * 3);
+        }
+        return new Date(dateStr);
+      };
+
+      const dateA = parseDate(a.name);
+      const dateB = parseDate(b.name);
+
+      return sortType === 'up' ? dateA - dateB : dateB - dateA;
+    });
+  }, [metadata.view]);
+
+  const calculateGroupPositions = useCallback((groups) => {
     const imageHeight = imageSize + GALLERY_IMAGE_GAP;
-    init.forEach((_init, index) => {
-      const { children, ...__init } = _init;
-      let top = 0;
-      let rows = [];
-      if (index > 0) {
-        const lastGroup = _groups[index - 1];
-        const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
-        top = lastGroupTop + lastGroupHeight;
-      }
-      children.forEach((child, childIndex) => {
-        const rowIndex = ~~(childIndex / columns);
+    let top = 0;
+    return groups.map((group, index) => {
+      const rows = [];
+      group.children.forEach((child, childIndex) => {
+        const rowIndex = Math.floor(childIndex / columns);
         if (!rows[rowIndex]) rows[rowIndex] = { top: top + rowIndex * imageHeight, children: [] };
         rows[rowIndex].children.push(child);
       });
 
-      const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+      const paddingTop = isGroupMode ? DATE_TAG_HEIGHT : 0;
       const height = rows.length * imageHeight + paddingTop;
-      _groups.push({
-        ...__init,
-        top,
+      const groupTop = top;
+
+      // Update top for the next group
+      top += height;
+      return {
+        ...group,
+        top: groupTop,
         height,
         paddingTop,
         children: rows
-      });
+      };
     });
-    return _groups;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
+  }, [columns, imageSize, isGroupMode]);
+
+  const groups = useMemo(() => {
+    if (isFirstLoading) return [];
+    let groupedImages = groupImages;
+    if (isGroupMode) {
+      groupedImages = sortGroups(groupedImages);
+    }
+    groupedImages = calculateGroupPositions(groupedImages);
+
+    return groupedImages;
+  }, [isFirstLoading, groupImages, sortGroups, calculateGroupPositions, isGroupMode]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -143,7 +189,7 @@ const Gallery = () => {
     setMode(mode);
 
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
-      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
+      EVENT_BUS_TYPE.SWITCH_GALLERY_DATE_MODE,
       (mode) => {
         setMode(mode);
         window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
@@ -244,7 +290,6 @@ const Gallery = () => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
-
 
   const closeImagePopup = () => {
     setIsImagePopupOpen(false);

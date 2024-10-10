@@ -105,17 +105,16 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        {viewType !== VIEW_TYPE.GALLERY && (
-          <GroupbySetter
-            isNeedSubmit={true}
-            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
-            target="sf-metadata-groupby-popover"
-            readOnly={readOnly}
-            columns={viewColumns}
-            groupbys={view.groupbys}
-            modifyGroupbys={modifyGroupbys}
-          />
-        )}
+        <GroupbySetter
+          isNeedSubmit={true}
+          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
+          target="sf-metadata-groupby-popover"
+          readOnly={readOnly}
+          columns={viewColumns}
+          groupbys={view.groupbys}
+          modifyGroupbys={modifyGroupbys}
+          type={viewType}
+        />
         {viewType !== VIEW_TYPE.GALLERY && (
           <HideColumnSetter
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"

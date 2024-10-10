@@ -2,6 +2,8 @@ import { isDateColumn } from '../column';
 import {
   CellType, DISPLAY_GROUP_DATE_GRANULARITY, GROUP_DATE_GRANULARITY, SORT_TYPE, SUPPORT_GROUP_COLUMN_TYPES, GROUPBY_DATE_GRANULARITY_LIST,
   GROUP_GEOLOCATION_GRANULARITY, DISPLAY_GROUP_GEOLOCATION_GRANULARITY,
+  GALLERY_SUPPORTED_GROUPBYS,
+  VIEW_TYPE,
 } from '../../constants';
 
 const GROUPBY_GEOLOCATION_GRANULARITY_LIST = [
@@ -25,7 +27,7 @@ export const getDefaultCountType = (column) => {
   return null;
 };
 
-export const getGroupbyColumns = (columns, groupbys = []) => {
+export const getGroupbyColumns = (columns, viewType, groupbys = []) => {
   let groupbyColumnKeyMap = {};
   groupbys.forEach(groupby => {
     const { column_key } = groupby;
@@ -38,6 +40,7 @@ export const getGroupbyColumns = (columns, groupbys = []) => {
     if (!SUPPORT_GROUP_COLUMN_TYPES.includes(type)) {
       return false;
     }
+    if (viewType === VIEW_TYPE.GALLERY && !GALLERY_SUPPORTED_GROUPBYS.includes(key)) return false;
     if (groupbyColumnKeyMap[key]) return false; // group by has already exist
     return true;
   });
