@@ -111,15 +111,16 @@ class Store {
   applyOperation(operation, undoRedoHandler = { handleUndo: true }) {
     const { op_type } = operation;
 
-    if (LOCAL_APPLY_OPERATION_TYPE.includes(op_type)) {
-      this.localOperator.applyOperation(operation);
-    }
-
     if (!NEED_APPLY_AFTER_SERVER_OPERATION.includes(op_type)) {
       this.handleUndoRedos(undoRedoHandler, operation);
       this.data = deepCopy(operation.apply(this.data));
       this.syncOperationOnData(operation);
       this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+    }
+
+    if (LOCAL_APPLY_OPERATION_TYPE.includes(op_type)) {
+      this.localOperator.applyOperation(operation);
+      return;
     }
 
     this.addPendingOperations(operation, undoRedoHandler);
