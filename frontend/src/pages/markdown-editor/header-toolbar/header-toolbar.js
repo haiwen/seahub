@@ -49,6 +49,7 @@ class HeaderToolbar extends React.Component {
       filePath: filePath,
       dirPath: dirPath,
       currentDirent: null,
+      isArticeleInfoOpen: false
     };
   }
 
@@ -68,11 +69,18 @@ class HeaderToolbar extends React.Component {
 
   componentDidMount() {
     this.getDirentList();
+
+    const eventBus = EventBus.getInstance();
+    eventBus.subscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
   }
 
-  onArticleInfoToggle = () => {
+  componentWillUnmount() {
     const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE);
+    eventBus.unsubscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
+  }
+
+  handleHelpClick = () => {
+    this.setState({ isArticeleInfoOpen: false });
   };
 
   getDirentList = () => {
@@ -89,27 +97,33 @@ class HeaderToolbar extends React.Component {
     });
   };
 
-  onArticleInfoDetailToggle = () => {
-    const { repoID, filePath, currentDirent } = this.state;
-    const repoInfo = { permission: 'rw' };
+  onArticleInfoToggle = () => {
+    const { repoID, filePath, currentDirent, isArticeleInfoOpen } = this.state;
+    const repoInfo = { permission: currentDirent.permission };
 
     const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_DETAIL_TOGGLE, {
-      component: EmbeddedFileDetails,
-      props: {
-        repoID: repoID,
-        repoInfo: repoInfo,
-        dirent: currentDirent,
-        path: filePath,
-        onClose: this.onArticleInfoToggle,
-        width: 300,
-        component: {
-          headerComponent: {
-            closeIcon: (<i className="iconfont icon-x"></i>)
+    if (isArticeleInfoOpen) {
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, { component: null, props: null });
+      this.setState({ isArticeleInfoOpen: false });
+    } else {
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, {
+        component: EmbeddedFileDetails,
+        props: {
+          repoID: repoID,
+          repoInfo: repoInfo,
+          dirent: currentDirent,
+          path: filePath,
+          onClose: this.onArticleInfoToggle,
+          width: 300,
+          component: {
+            headerComponent: {
+              closeIcon: (<i className="iconfont icon-x"></i>)
+            }
           }
         }
-      }
-    });
+      });
+      this.setState({ isArticeleInfoOpen: true });
+    }
   };
 
   render() {
@@ -157,10 +171,7 @@ class HeaderToolbar extends React.Component {
                   id='file-info'
                   text={gettext('Info')}
                   icon='info'
-                  onMouseDown={() => {
-                    this.onArticleInfoDetailToggle();
-                    this.onArticleInfoToggle();
-                  }}
+                  onMouseDown={this.onArticleInfoToggle}
                 />
                 {canGenerateShareLink && (
                   <ButtonItem
