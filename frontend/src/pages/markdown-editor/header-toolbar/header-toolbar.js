@@ -16,7 +16,7 @@ import Dirent from '../../../../src/models/dirent';
 import '../css/header-toolbar.css';
 
 const { seafileCollabServer } = window.app.config;
-const { canDownloadFile } = window.app.pageOptions;
+const { canDownloadFile, repoID, filePath } = window.app.pageOptions;
 
 const propTypes = {
   editorApi: PropTypes.object.isRequired,
@@ -42,15 +42,10 @@ class HeaderToolbar extends React.Component {
 
   constructor(props) {
     super(props);
-    const { repoID, filePath } = window.app.pageOptions;
-    const dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0) || '/';
-    this.state = {
-      repoID: repoID,
-      filePath: filePath,
-      dirPath: dirPath,
-      currentDirent: null,
-      isArticeleInfoOpen: false
-    };
+    this.dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0) || '/';
+    this.isFileInfoShow = false;
+    this.currentDirent = null;
+    this.helpInfoToggleSubscribe = null;
   }
 
   downloadFile = () => {
@@ -71,59 +66,54 @@ class HeaderToolbar extends React.Component {
     this.getDirentList();
 
     const eventBus = EventBus.getInstance();
-    eventBus.subscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
+    this.helpInfoToggleSubscribe = eventBus.subscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
   }
 
   componentWillUnmount() {
-    const eventBus = EventBus.getInstance();
-    eventBus.unsubscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
+    this.helpInfoToggleSubscribe && this.helpInfoToggleSubscribe();
   }
 
   handleHelpClick = () => {
-    this.setState({ isArticeleInfoOpen: false });
+    this.isFileInfoShow = false;
   };
 
   getDirentList = () => {
-    const { repoID, filePath, dirPath } = this.state;
-    return seafileAPI.listDir(repoID, dirPath, { 'with_thumbnail': true }).then(res => {
-      res.data.dirent_list.forEach(item => {
+    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
+      const direntList = res.data.dirent_list || [];
+      for (let i = 0; i < direntList.length; i++) {
+        const item = direntList[i];
         const dirent = new Dirent(item);
         if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
-          this.setState({ currentDirent: dirent });
+          this.currentDirent = dirent;
+          break;
         }
-      });
+      }
     }).catch((err) => {
       Utils.getErrorMsg(err, true);
     });
   };
 
   onArticleInfoToggle = () => {
-    const { repoID, filePath, currentDirent, isArticeleInfoOpen } = this.state;
-    const repoInfo = { permission: currentDirent.permission };
-
+    const repoInfo = { permission: this.currentDirent.permission };
     const eventBus = EventBus.getInstance();
-    if (isArticeleInfoOpen) {
-      eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, { component: null, props: null });
-      this.setState({ isArticeleInfoOpen: false });
-    } else {
-      eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, {
-        component: EmbeddedFileDetails,
-        props: {
-          repoID: repoID,
-          repoInfo: repoInfo,
-          dirent: currentDirent,
-          path: filePath,
-          onClose: this.onArticleInfoToggle,
-          width: 300,
-          component: {
-            headerComponent: {
-              closeIcon: (<i className="iconfont icon-x"></i>)
-            }
+
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {
+      component: EmbeddedFileDetails,
+      props: {
+        repoID: repoID,
+        repoInfo: repoInfo,
+        dirent: this.currentDirent,
+        path: filePath,
+        onClose: this.onArticleInfoToggle,
+        width: 300,
+        component: {
+          headerComponent: {
+            closeIcon: (<i className="iconfont icon-x"></i>)
           }
         }
-      });
-      this.setState({ isArticeleInfoOpen: true });
-    }
+      }
+    });
+    this.isFileInfoShow = !this.isFileInfoShow;
   };
 
   render() {
@@ -168,7 +158,7 @@ class HeaderToolbar extends React.Component {
                   />
                 )}
                 <ButtonItem
-                  id='file-info'
+                  id="file-info"
                   text={gettext('Info')}
                   icon='info'
                   onMouseDown={this.onArticleInfoToggle}
