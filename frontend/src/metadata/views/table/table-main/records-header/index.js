@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
 import InsertColumn from './insert-column';
@@ -29,6 +27,8 @@ const RecordsHeader = ({
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
   const settings = useMemo(() => table.header_settings || {}, [table]);
   const isHideTriangle = useMemo(() => settings && settings.is_hide_triangle, [settings]);
   const height = useMemo(() => {
@@ -63,6 +63,13 @@ const RecordsHeader = ({
     return value;
   }, [isGroupView, columnMetrics, height]);
 
+  const columnIndexMap = useMemo(() => {
+    return columnMetrics.columns.reduce((orderIndexMap, currentColumn, currentIndex) => {
+      orderIndexMap[currentColumn.key] = currentIndex;
+      return orderIndexMap;
+    }, {});
+  }, [columnMetrics]);
+
   const modifyLocalColumnWidth = useCallback((column, width) => {
     setResizingColumnMetrics(recalculateColumnMetricsByResizeColumn(propsColumnMetrics, column.key, Math.max(width, 50)));
   }, [propsColumnMetrics]);
@@ -75,6 +82,22 @@ const RecordsHeader = ({
   const modifyColumnOrder = useCallback((source, target) => {
     modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
   }, [modifyColumnOrderAPI]);
+
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingColumnKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingColumnKey]);
+
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverColumnKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverColumnKey]);
+
+  const getColumnIndexByKey = useCallback((key) => {
+    const index = columnIndexMap[key];
+    if (index === undefined) return -1;
+    return index;
+  }, [columnIndexMap]);
 
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -109,10 +132,15 @@ const RecordsHeader = ({
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
+                draggingColumnKey={draggingColumnKey}
+                dragOverColumnKey={dragOverColumnKey}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
                 onMove={modifyColumnOrder}
+                updateDraggingKey={updateDraggingKey}
+                updateDragOverKey={updateDragOverKey}
+                getColumnIndexByKey={getColumnIndexByKey}
                 {...props}
               />
             );
@@ -127,11 +155,16 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              draggingColumnKey={draggingColumnKey}
+              dragOverColumnKey={dragOverColumnKey}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
               modifyColumnWidth={modifyColumnWidth}
               onMove={modifyColumnOrder}
+              updateDraggingKey={updateDraggingKey}
+              updateDragOverKey={updateDragOverKey}
+              getColumnIndexByKey={getColumnIndexByKey}
               {...props}
             />
           );
@@ -158,8 +191,4 @@ RecordsHeader.propTypes = {
   selectAllRecords: PropTypes.func,
 };
 
-const DndRecordHeaderContainer = DropTarget('sfMetadataRecordHeaderCell', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(RecordsHeader);
-
-export default html5DragDropContext(DndRecordHeaderContainer);
+export default RecordsHeader;
