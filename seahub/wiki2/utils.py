@@ -22,6 +22,10 @@ WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
 WIKI_CONFIG_FILE_NAME = 'index.json'
 
+SEARCH_WIKIS_LIMIT = 200
+RELATED_WIKIS_PREFIX = 'RELATED_WIKIS_'
+RELATED_WIKIS_CACHE_TIMEOUT = 2 * 60 * 60
+
 
 def is_valid_wiki_name(name):
     name = name.strip()
