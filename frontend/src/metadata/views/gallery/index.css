@@ -10,6 +10,10 @@
   overflow-y: auto;
 }
 
+.sf-metadata-gallery-container-all {
+  padding-top: 4px;
+}
+
 .metadata-gallery-date-group {
   width: 100%;
   position: relative;

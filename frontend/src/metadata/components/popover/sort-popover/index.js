@@ -45,8 +45,8 @@ class SortPopover extends Component {
     super(props);
     const { sorts, columns, type } = this.props;
     this.sortTypeOptions = this.createSortTypeOptions();
-    this.supportFirstSortColumnRule = VIEW_FIRST_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
-    this.supportSortColumnRule = VIEW_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
+    this.checkColumnEnableFirstSortRule = VIEW_FIRST_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
+    this.checkColumnEnableSortRule = VIEW_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
@@ -155,7 +155,7 @@ class SortPopover extends Component {
   };
 
   createColumnsOptions = (columns = []) => {
-    const sortableColumns = columns.filter(column => this.supportSortColumnRule(column));
+    const sortableColumns = columns.filter(column => this.checkColumnEnableSortRule(column));
     return sortableColumns.map((column) => {
       const { type, name } = column;
       return {
@@ -208,7 +208,7 @@ class SortPopover extends Component {
 
     let columnsOptions = this.columnsOptions;
     if (index === 0) {
-      columnsOptions = columnsOptions.filter(o => this.supportFirstSortColumnRule(o.value.column));
+      columnsOptions = columnsOptions.filter(o => this.checkColumnEnableFirstSortRule(o.value.column));
     }
 
     return (

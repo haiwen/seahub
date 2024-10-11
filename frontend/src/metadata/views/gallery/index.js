@@ -245,7 +245,6 @@ const Gallery = () => {
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
 
-
   const closeImagePopup = () => {
     setIsImagePopupOpen(false);
   };
@@ -310,7 +309,7 @@ const Gallery = () => {
 
   return (
     <div className="sf-metadata-container">
-      <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
+      <div className={`sf-metadata-gallery-container sf-metadata-gallery-container-${mode}`} ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
             <GalleryMain
@@ -319,6 +318,7 @@ const Gallery = () => {
               columns={columns}
               overScan={overScan}
               gap={GALLERY_IMAGE_GAP}
+              mode={mode}
               selectedImages={selectedImages}
               setSelectedImages={setSelectedImages}
               onImageClick={handleClick}
