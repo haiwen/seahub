@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
@@ -7,11 +8,15 @@ import CollabUsersButton from './collab-users-button';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
+import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Dirent from '../../../../src/models/dirent';
 
 import '../css/header-toolbar.css';
 
 const { seafileCollabServer } = window.app.config;
-const { canDownloadFile } = window.app.pageOptions;
+const { canDownloadFile, repoID, filePath } = window.app.pageOptions;
 
 const propTypes = {
   editorApi: PropTypes.object.isRequired,
@@ -37,6 +42,10 @@ class HeaderToolbar extends React.Component {
 
   constructor(props) {
     super(props);
+    this.dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0) || '/';
+    this.isFileInfoShow = false;
+    this.currentDirent = null;
+    this.helpInfoToggleSubscribe = null;
   }
 
   downloadFile = () => {
@@ -51,6 +60,60 @@ class HeaderToolbar extends React.Component {
   openParentDirectory = () => {
     const { editorApi } = this.props;
     window.location.href = editorApi.getParentDictionaryUrl();
+  };
+
+  componentDidMount() {
+    this.getDirentList();
+
+    const eventBus = EventBus.getInstance();
+    this.helpInfoToggleSubscribe = eventBus.subscribe(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, this.handleHelpClick);
+  }
+
+  componentWillUnmount() {
+    this.helpInfoToggleSubscribe && this.helpInfoToggleSubscribe();
+  }
+
+  handleHelpClick = () => {
+    this.isFileInfoShow = false;
+  };
+
+  getDirentList = () => {
+    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
+      const direntList = res.data.dirent_list || [];
+      for (let i = 0; i < direntList.length; i++) {
+        const item = direntList[i];
+        const dirent = new Dirent(item);
+        if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
+          this.currentDirent = dirent;
+          break;
+        }
+      }
+    }).catch((err) => {
+      Utils.getErrorMsg(err, true);
+    });
+  };
+
+  onArticleInfoToggle = () => {
+    const repoInfo = { permission: this.currentDirent.permission };
+    const eventBus = EventBus.getInstance();
+
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {
+      component: EmbeddedFileDetails,
+      props: {
+        repoID: repoID,
+        repoInfo: repoInfo,
+        dirent: this.currentDirent,
+        path: filePath,
+        onClose: this.onArticleInfoToggle,
+        width: 300,
+        component: {
+          headerComponent: {
+            closeIcon: (<i className="iconfont icon-x"></i>)
+          }
+        }
+      }
+    });
+    this.isFileInfoShow = !this.isFileInfoShow;
   };
 
   render() {
@@ -94,6 +157,12 @@ class HeaderToolbar extends React.Component {
                     onMouseDown={this.props.toggleLockFile}
                   />
                 )}
+                <ButtonItem
+                  id="file-info"
+                  text={gettext('Info')}
+                  icon='info'
+                  onMouseDown={this.onArticleInfoToggle}
+                />
                 {canGenerateShareLink && (
                   <ButtonItem
                     id='shareBtn'
