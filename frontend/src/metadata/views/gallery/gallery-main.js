@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
+import { GALLERY_DATE_MODE } from '../../constants';
 
 const GalleryMain = ({
   groups,
@@ -10,6 +11,7 @@ const GalleryMain = ({
   columns,
   size,
   gap,
+  mode,
   selectedImages,
   setSelectedImages,
   onImageClick,
@@ -113,7 +115,9 @@ const GalleryMain = ({
         style={{ height, paddingTop }}
 
       >
-        {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
+        {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
+          <div className="metadata-gallery-date-tag">{name || gettext('Empty')}</div>
+        )}
         <div
           ref={imageRef}
           className="metadata-gallery-image-list"
@@ -147,7 +151,7 @@ const GalleryMain = ({
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick]);
+  }, [overScan, columns, size, imageHeight, mode, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -189,6 +193,7 @@ GalleryMain.propTypes = {
   columns: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
+  mode: PropTypes.string,
   selectedImages: PropTypes.array.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,
