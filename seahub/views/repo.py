@@ -422,15 +422,21 @@ def view_shared_upload_link(request, uploadlink):
         logger.error(e)
         max_upload_file_size = -1
 
-    return render(request, 'view_shared_upload_link_react.html', {
-            'repo': repo,
-            'path': path,
-            'username': username,
-            'dir_name': dir_name,
-            'max_upload_file_size': max_upload_file_size,
-            'no_quota': no_quota,
-            'uploadlink': uploadlink,
-            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
-            'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
-            'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            })
+    data = {
+        'repo': repo,
+        'path': path,
+        'username': username,
+        'dir_name': dir_name,
+        'max_upload_file_size': max_upload_file_size,
+        'no_quota': no_quota,
+        'uploadlink': uploadlink,
+        'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
+        'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
+        'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+    }
+
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(uploadlink.username)
+
+    return render(request, 'view_shared_upload_link_react.html', data)
