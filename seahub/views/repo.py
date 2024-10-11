@@ -349,28 +349,34 @@ def view_shared_dir(request, fileshare):
     dir_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % dir_name
 
-    return render(request, template, {
-            'repo': repo,
-            'token': token,
-            'path': req_path,
-            'username': username,
-            'dir_name': dir_name,
-            'dir_path': real_path,
-            'file_list': file_list,
-            'dir_list': dir_list,
-            'zipped': zipped,
-            'traffic_over_limit': False,
-            'max_upload_file_size': max_upload_file_size,
-            'no_quota': no_quota,
-            'permissions': permissions,
-            'mode': mode,
-            'thumbnail_size': thumbnail_size,
-            'dir_share_link': dir_share_link,
-            'desc_for_ogp': desc_for_ogp,
-            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
-            'enable_pdf_thumbnail': ENABLE_PDF_THUMBNAIL,
-            })
+    data = {
+        'repo': repo,
+        'token': token,
+        'path': req_path,
+        'username': username,
+        'dir_name': dir_name,
+        'dir_path': real_path,
+        'file_list': file_list,
+        'dir_list': dir_list,
+        'zipped': zipped,
+        'traffic_over_limit': False,
+        'max_upload_file_size': max_upload_file_size,
+        'no_quota': no_quota,
+        'permissions': permissions,
+        'mode': mode,
+        'thumbnail_size': thumbnail_size,
+        'dir_share_link': dir_share_link,
+        'desc_for_ogp': desc_for_ogp,
+        'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
+        'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
+        'enable_pdf_thumbnail': ENABLE_PDF_THUMBNAIL,
+    }
+
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(fileshare.username)
+
+    return render(request, template, data)
 
 
 @share_link_audit
