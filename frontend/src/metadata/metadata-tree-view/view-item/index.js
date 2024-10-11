@@ -1,13 +1,16 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
-import { Rename } from '../../components/popover/view-popover';
 import { Utils, isMobile } from '../../../utils/utils';
 import { useMetadata } from '../../hooks';
 import { VIEW_TYPE_ICON } from '../../constants';
+import { isValidViewName } from '../../utils/validate';
+import { isEnter } from '../../utils/hotkey';
+import toaster from '../../../components/toast';
 
 import './index.css';
 
@@ -25,7 +28,11 @@ const ViewItem = ({
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
-  const [isShowRenamePopover, setRenamePopoverShow] = useState(false);
+  const [isRenaming, setRenaming] = useState(false);
+  const [inputValue, setInputValue] = useState(view.name || '');
+
+  const inputRef = useRef(null);
+
   const { viewsMap } = useMetadata();
 
   const otherViewsName = Object.values(viewsMap).filter(v => v._id !== view._id).map(v => v.name);
@@ -78,7 +85,7 @@ const ViewItem = ({
 
   const operationClick = useCallback((operationKey) => {
     if (operationKey === 'rename') {
-      setRenamePopoverShow(true);
+      setRenaming(true);
       return;
     }
 
@@ -93,13 +100,9 @@ const ViewItem = ({
     }
   }, [onDelete, onCopy]);
 
-  const closeRenamePopover = useCallback(() => {
-    setRenamePopoverShow(false);
-  }, []);
-
   const renameView = useCallback((name, failCallback) => {
     onUpdate({ name }, () => {
-      setRenamePopoverShow(false);
+      setRenaming(false);
       document.title = `${name} - Seafile`;
     }, (error) => {
       failCallback(error);
@@ -143,6 +146,57 @@ const ViewItem = ({
     onMove && onMove(dragData.view_id, view._id);
   }, [canDrop, view, onMove]);
 
+  const onChange = useCallback((e) => {
+    setInputValue(e.target.value);
+  }, []);
+
+  const handleSubmit = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { isValid, message } = isValidViewName(inputValue, otherViewsName);
+    if (!isValid) {
+      toaster.danger(message);
+      return;
+    }
+    if (message === view.name) {
+      setRenaming(false);
+      return;
+    }
+    renameView(message);
+  }, [view, inputValue, otherViewsName, renameView]);
+
+  const onKeyDown = useCallback((event) => {
+    if (isEnter(event)) {
+      handleSubmit(event);
+      unfreezeItem();
+    }
+  }, [handleSubmit, unfreezeItem]);
+
+  useEffect(() => {
+    if (isRenaming && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isRenaming]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        handleSubmit(event);
+      }
+    };
+
+    if (isRenaming) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isRenaming, handleSubmit]);
+
   return (
     <>
       <div
@@ -162,7 +216,17 @@ const ViewItem = ({
           onDragOver={onDragMove}
           onDrop={onDrop}
         >
-          {view.name}
+          {isRenaming ? (
+            <Input
+              innerRef={inputRef}
+              className="sf-metadata-view-input mt-0"
+              value={inputValue}
+              onChange={onChange}
+              autoFocus={true}
+              onBlur={() => setRenaming(false)}
+              onKeyDown={onKeyDown}
+            />
+          ) : view.name}
         </div>
         <div className="left-icon">
           <div className="tree-node-icon">
@@ -183,9 +247,6 @@ const ViewItem = ({
           )}
         </div>
       </div>
-      {isShowRenamePopover && (
-        <Rename value={view.name} otherViewsName={otherViewsName} target={`metadata-view-dropdown-item-${view._id}`} toggle={closeRenamePopover} onSubmit={renameView} />
-      )}
     </>
   );
 };

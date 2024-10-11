@@ -59,11 +59,12 @@
 }
 
 .metadata-tree-view .sf-metadata-view-input {
-  width: 100%;
+  width: 95%;
   height: 24px;
   position: relative;
   font-size: 14px;
   margin-top: 2px;
+  box-shadow: none;
 }
 
 .metadata-tree-view .metadata-views-icon {
