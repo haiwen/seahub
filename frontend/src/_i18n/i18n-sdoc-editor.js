@@ -13,13 +13,13 @@ i18n
   .init({
     lng: lang,
     fallbackLng: 'en',
-    ns: ['sdoc-editor'],
+    ns: ['sdoc-editor', 'seafile-editor'],
     defaultNS: 'sdoc-editor',
 
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
-      loadPath: mediaUrl + 'sdoc-editor/locales/{{ lng }}/{{ ns }}.json',
+      loadPath: mediaUrl + '{{ ns }}/locales/{{ lng }}/{{ ns }}.json',
       // loadPath: '/media/locales/{{lng}}/{{ns}}.json',
     },
 

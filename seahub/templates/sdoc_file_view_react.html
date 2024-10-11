@@ -4,7 +4,7 @@
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
 {% render_bundle 'viewFileSdoc' 'css' %}
 {% endblock %}
 
@@ -29,7 +29,8 @@ publisherNickname: '{{ publisher_nickname }}',
 isPublished: {% if is_published %}true{% else %}false{% endif %},
 revisionCreatedAt: '{{ revision_created_at }}',
 revisionUpdatedAt: '{{ revision_updated_at }}',
-isFreezed: {% if is_freezed %}true{% else %}false{% endif %}
+isFreezed: {% if is_freezed %}true{% else %}false{% endif %},
+lang: '{{ lang }}',
 {% endblock %}
 
 {% block render_bundle %}
