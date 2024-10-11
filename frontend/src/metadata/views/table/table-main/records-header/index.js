@@ -63,13 +63,6 @@ const RecordsHeader = ({
     return value;
   }, [isGroupView, columnMetrics, height]);
 
-  const columnIndexMap = useMemo(() => {
-    return columnMetrics.columns.reduce((orderIndexMap, currentColumn, currentIndex) => {
-      orderIndexMap[currentColumn.key] = currentIndex;
-      return orderIndexMap;
-    }, {});
-  }, [columnMetrics]);
-
   const modifyLocalColumnWidth = useCallback((column, width) => {
     setResizingColumnMetrics(recalculateColumnMetricsByResizeColumn(propsColumnMetrics, column.key, Math.max(width, 50)));
   }, [propsColumnMetrics]);
@@ -93,15 +86,11 @@ const RecordsHeader = ({
     setDragOverCellKey(cellKey);
   }, [dragOverColumnKey]);
 
-  const getColumnIndexByKey = useCallback((key) => {
-    const index = columnIndexMap[key];
-    if (index === undefined) return -1;
-    return index;
-  }, [columnIndexMap]);
-
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
   const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, groupOffsetLeft + SEQUENCE_COLUMN_WIDTH);
+  const draggingColumnIndex = columnMetrics.columns.findIndex(c => c.key === draggingColumnKey);
+  const dragOverColumnIndex = columnMetrics.columns.findIndex(c => c.key === dragOverColumnKey);
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
@@ -133,14 +122,15 @@ const RecordsHeader = ({
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
                 draggingColumnKey={draggingColumnKey}
+                draggingColumnIndex={draggingColumnIndex}
                 dragOverColumnKey={dragOverColumnKey}
+                dragOverColumnIndex={dragOverColumnIndex}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
                 onMove={modifyColumnOrder}
                 updateDraggingKey={updateDraggingKey}
                 updateDragOverKey={updateDragOverKey}
-                getColumnIndexByKey={getColumnIndexByKey}
                 {...props}
               />
             );
@@ -156,7 +146,9 @@ const RecordsHeader = ({
               height={height}
               column={column}
               draggingColumnKey={draggingColumnKey}
+              draggingColumnIndex={draggingColumnIndex}
               dragOverColumnKey={dragOverColumnKey}
+              dragOverColumnIndex={dragOverColumnIndex}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
@@ -164,7 +156,6 @@ const RecordsHeader = ({
               onMove={modifyColumnOrder}
               updateDraggingKey={updateDraggingKey}
               updateDragOverKey={updateDragOverKey}
-              getColumnIndexByKey={getColumnIndexByKey}
               {...props}
             />
           );

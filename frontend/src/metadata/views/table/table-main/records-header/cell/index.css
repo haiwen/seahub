@@ -8,6 +8,10 @@
   transform: scale(.8);
 }
 
+.sf-metadata-record-header-cell .sf-metadata-result-table-cell.column.name-column {
+  cursor: default;
+}
+
 .sf-metadata-record-header-cell .rdg-can-drop > .sf-metadata-result-table-cell.column {
   cursor: move;
 }
@@ -25,12 +29,17 @@
   width: 1px;
   background-color: #2d7ff9;
   border-radius: 50%;
+  z-index: 1;
 }
 
 .sf-metadata-record-header-cell .rdg-dropping-position-left > .sf-metadata-result-table-cell.column::before {
-  left: 0;
+  left: -1px;
 }
 
 .sf-metadata-record-header-cell .rdg-dropping-position-right > .sf-metadata-result-table-cell.column::before {
-  right: 0;
+  right: -1px;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position-none > .sf-metadata-result-table-cell.column::before {
+  display: none;
 }

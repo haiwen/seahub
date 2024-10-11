@@ -6,7 +6,7 @@ import { Icon } from '@seafile/sf-metadata-ui-component';
 import ResizeColumnHandle from './resize-column-handle';
 import DropdownMenu from './dropdown-menu';
 import { gettext } from '../../../../../../utils/constants';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE } from '../../../../../constants';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../constants';
 
 import './index.css';
 
@@ -19,7 +19,9 @@ const Cell = ({
   column,
   style: propsStyle,
   draggingColumnKey,
+  draggingColumnIndex,
   dragOverColumnKey,
+  dragOverColumnIndex,
   view,
   frozenColumnsWidth,
   renameColumn,
@@ -30,7 +32,6 @@ const Cell = ({
   onMove,
   updateDraggingKey,
   updateDragOverKey,
-  getColumnIndexByKey,
 }) => {
   const headerCellRef = useRef(null);
 
@@ -135,9 +136,10 @@ const Cell = ({
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];
   const canModifyColumnOrder = window.sfMetadataContext.canModifyColumnOrder();
+  const isNameColumn = key === PRIVATE_COLUMN_KEY.FILE_NAME;
   const cell = (
     <div
-      className={classnames('sf-metadata-result-table-cell column', { 'table-last--frozen': isLastFrozenCell })}
+      className={classnames('sf-metadata-result-table-cell column', { 'table-last--frozen': isLastFrozenCell, 'name-column': isNameColumn })}
       ref={headerCellRef}
       style={style}
       id={`sf-metadata-column-${key}`}
@@ -168,7 +170,7 @@ const Cell = ({
     </div>
   );
 
-  if (!canModifyColumnOrder) {
+  if (!canModifyColumnOrder || isNameColumn) {
     return (
       <div key={key} className="sf-metadata-record-header-cell">
         {cell}
@@ -176,8 +178,6 @@ const Cell = ({
     );
   }
 
-  const draggingColumnIndex = getColumnIndexByKey(draggingColumnKey);
-  const dragOverColumnIndex = getColumnIndexByKey(dragOverColumnKey);
   const isOver = dragOverColumnKey === column.key;
 
   return (
@@ -189,6 +189,7 @@ const Cell = ({
           'rdg-dropping rdg-dropping-position': isOver,
           'rdg-dropping-position-left': isOver && draggingColumnIndex > dragOverColumnIndex,
           'rdg-dropping-position-right': isOver && draggingColumnIndex < dragOverColumnIndex,
+          'rdg-dropping-position-none': isOver && draggingColumnIndex === dragOverColumnIndex
         })}
         onDragStart={onDragStart}
         onDragEnter={onDragEnter}
@@ -216,7 +217,9 @@ Cell.propTypes = {
   isLastFrozenCell: PropTypes.bool,
   isHideTriangle: PropTypes.bool,
   draggingColumnKey: PropTypes.string,
+  draggingColumnIndex: PropTypes.number,
   dragOverColumnKey: PropTypes.string,
+  dragOverColumnIndex: PropTypes.number,
   view: PropTypes.object,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
@@ -224,7 +227,6 @@ Cell.propTypes = {
   modifyLocalColumnWidth: PropTypes.func,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
-  getColumnIndexByKey: PropTypes.func,
 };
 
 export default Cell;
