@@ -1005,11 +1005,6 @@ if getattr(settings, 'ENABLE_ONLYOFFICE', False):
         path('onlyoffice-api/', include('seahub.onlyoffice.api_urls')),
     ]
 
-if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):
-    from seahub.bisheng_office.views import BishengOfficeView
-    urlpatterns += [
-        re_path(r'^api/v2.1/bisheng-office/$', BishengOfficeView.as_view(), name='api-v2.1-bisheng-office'),
-    ]
 
 if getattr(settings, 'ENABLE_CAS', False):
     from seahub.django_cas_ng.views import login as cas_login

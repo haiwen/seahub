@@ -127,12 +127,6 @@ try:
 except ImportError:
     ONLYOFFICE_EDIT_FILE_EXTENSION = ()
 
-# bisheng office
-from seahub.bisheng_office.utils import get_bisheng_dict, \
-        get_bisheng_editor_url, get_bisheng_preivew_url
-from seahub.bisheng_office.settings import ENABLE_BISHENG_OFFICE
-from seahub.bisheng_office.settings import BISHENG_OFFICE_FILE_EXTENSION
-
 from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
@@ -736,25 +730,12 @@ def view_lib_file(request, repo_id, path):
             mode = 'viewer'
         if mode == 'plain':
             template = 'plain_' + template
-
-        is_draft = is_draft_file(repo.id, path)
-
-        has_draft = False
-        if not is_draft:
-            has_draft = has_draft_file(repo.id, path)
-
-        draft = get_file_draft(repo.id, path, is_draft, has_draft)
-
+        
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
         return_dict['language_code'] = get_language()
         return_dict['mode'] = mode
-        return_dict['is_draft'] = is_draft
-        return_dict['has_draft'] = has_draft
-        return_dict['draft_id'] = draft['draft_id']
-        return_dict['draft_file_path'] = draft['draft_file_path']
-        return_dict['draft_origin_file_path'] = draft['draft_origin_file_path']
         return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
@@ -885,30 +866,6 @@ def view_lib_file(request, repo_id, path):
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
-
-        if ENABLE_BISHENG_OFFICE and fileext in BISHENG_OFFICE_FILE_EXTENSION:
-
-            bisheng_info_dict = get_bisheng_dict(username, repo_id, path)
-            doc_id = bisheng_info_dict['doc_id']
-            call_url = bisheng_info_dict['call_url']
-            sign = bisheng_info_dict['sign']
-
-            # openEditor vs openPreview
-            can_edit = False
-            if parse_repo_perm(permission).can_edit_on_web and \
-                    ((not is_locked) or (is_locked and locked_by_online_office)):
-                can_edit = True
-
-            if can_edit:
-                editor_url = get_bisheng_editor_url(call_url, sign)
-            else:
-                editor_url = get_bisheng_preivew_url(call_url, sign)
-
-            # store info to cache
-            bisheng_info_dict['can_edit'] = can_edit
-            cache.set('BISHENG_OFFICE_' + doc_id, bisheng_info_dict, None)
-
-            return HttpResponseRedirect(editor_url)
 
         if not HAS_OFFICE_CONVERTER:
             return_dict['err'] = "File preview unsupported"
