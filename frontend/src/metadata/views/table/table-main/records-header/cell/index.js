@@ -17,11 +17,11 @@ const Cell = ({
   height,
   isHideTriangle,
   column,
+  columnIndex,
   style: propsStyle,
   draggingColumnKey,
   draggingColumnIndex,
   dragOverColumnKey,
-  dragOverColumnIndex,
   view,
   frozenColumnsWidth,
   renameColumn,
@@ -187,9 +187,9 @@ const Cell = ({
         style={{ opacity: draggingColumnKey === column.key ? 0.2 : 1 }}
         className={classnames('rdg-can-drop', {
           'rdg-dropping rdg-dropping-position': isOver,
-          'rdg-dropping-position-left': isOver && draggingColumnIndex > dragOverColumnIndex,
-          'rdg-dropping-position-right': isOver && draggingColumnIndex < dragOverColumnIndex,
-          'rdg-dropping-position-none': isOver && draggingColumnIndex === dragOverColumnIndex
+          'rdg-dropping-position-left': isOver && draggingColumnIndex > columnIndex,
+          'rdg-dropping-position-right': isOver && draggingColumnIndex < columnIndex,
+          'rdg-dropping-position-none': isOver && draggingColumnIndex === columnIndex
         })}
         onDragStart={onDragStart}
         onDragEnter={onDragEnter}
@@ -212,6 +212,7 @@ Cell.propTypes = {
   groupOffsetLeft: PropTypes.number,
   height: PropTypes.number,
   column: PropTypes.object,
+  columnIndex: PropTypes.number,
   style: PropTypes.object,
   frozen: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
@@ -219,7 +220,6 @@ Cell.propTypes = {
   draggingColumnKey: PropTypes.string,
   draggingColumnIndex: PropTypes.number,
   dragOverColumnKey: PropTypes.string,
-  dragOverColumnIndex: PropTypes.number,
   view: PropTypes.object,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,

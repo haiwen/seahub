@@ -89,8 +89,7 @@ const RecordsHeader = ({
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
   const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, groupOffsetLeft + SEQUENCE_COLUMN_WIDTH);
-  const draggingColumnIndex = columnMetrics.columns.findIndex(c => c.key === draggingColumnKey);
-  const dragOverColumnIndex = columnMetrics.columns.findIndex(c => c.key === dragOverColumnKey);
+  const draggingColumnIndex = draggingColumnKey ? columnMetrics.columns.findIndex(c => c.key === draggingColumnKey) : -1;
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
@@ -107,7 +106,7 @@ const RecordsHeader = ({
             selectNoneRecords={selectNoneRecords}
             selectAllRecords={selectAllRecords}
           />
-          {frozenColumns.map(column => {
+          {frozenColumns.map((column, columnIndex) => {
             const { key } = column;
             const style = { backgroundColor: '#f9f9f9' };
             const isLastFrozenCell = key === lastFrozenColumnKey;
@@ -117,6 +116,7 @@ const RecordsHeader = ({
                 key={key}
                 height={height}
                 column={column}
+                columnIndex={columnIndex}
                 style={style}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
@@ -124,7 +124,6 @@ const RecordsHeader = ({
                 draggingColumnKey={draggingColumnKey}
                 draggingColumnIndex={draggingColumnIndex}
                 dragOverColumnKey={dragOverColumnKey}
-                dragOverColumnIndex={dragOverColumnIndex}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
@@ -137,7 +136,7 @@ const RecordsHeader = ({
           })}
         </div>
         {/* scroll */}
-        {displayColumns.map(column => {
+        {displayColumns.map((column, columnIndex) => {
           return (
             <Cell
               isHideTriangle={isHideTriangle}
@@ -145,10 +144,10 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              columnIndex={columnIndex}
               draggingColumnKey={draggingColumnKey}
               draggingColumnIndex={draggingColumnIndex}
               dragOverColumnKey={dragOverColumnKey}
-              dragOverColumnIndex={dragOverColumnIndex}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
