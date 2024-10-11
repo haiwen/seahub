@@ -1434,7 +1434,7 @@ class AdminUser(APIView):
                 try:
                     send_html_email(_(u'Your account on %s is activated') % get_site_name(),
                                     'sysadmin/user_activation_email.html',
-                                    {'username': user_obj.email},
+                                    {'username': email2contact_email(user_obj.email)},
                                     None,
                                     [email2contact_email(user_obj.email)])
                     update_status_tip = _('Edit succeeded, an email has been sent.')
