@@ -216,21 +216,19 @@ const ViewItem = ({
             <Icon symbol={VIEW_TYPE_ICON[view.type] || 'table'} className="metadata-views-icon" />
           </div>
         </div>
-        {!isRenaming && (
-          <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
-            {highlight && (
-              <ItemDropdownMenu
-                item={{ name: 'metadata-view' }}
-                toggleClass="sf3-font sf3-font-more"
-                freezeItem={freezeItem}
-                unfreezeItem={unfreezeItem}
-                getMenuList={() => operations}
-                onMenuItemClick={operationClick}
-                menuStyle={isMobile ? { zIndex: 1050 } : {}}
-              />
-            )}
-          </div>
-        )}
+        <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
+          {highlight && (
+            <ItemDropdownMenu
+              item={{ name: 'metadata-view' }}
+              toggleClass="sf3-font sf3-font-more"
+              freezeItem={freezeItem}
+              unfreezeItem={unfreezeItem}
+              getMenuList={() => operations}
+              onMenuItemClick={operationClick}
+              menuStyle={isMobile ? { zIndex: 1050 } : {}}
+            />
+          )}
+        </div>
       </div>
       {errorMessage && (<Alert color="danger" className="mt-1 mb-0 custom-alert">{errorMessage}</Alert>)}
     </>
