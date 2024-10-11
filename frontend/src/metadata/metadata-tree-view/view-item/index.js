@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Input } from 'reactstrap';
+import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
@@ -10,6 +10,7 @@ import { useMetadata } from '../../hooks';
 import { VIEW_TYPE_ICON } from '../../constants';
 import { isValidViewName } from '../../utils/validate';
 import { isEnter } from '../../utils/hotkey';
+import toaster from '../../../components/toast';
 
 import './index.css';
 
@@ -29,7 +30,6 @@ const ViewItem = ({
   const [isDropShow, setDropShow] = useState(false);
   const [isRenaming, setRenaming] = useState(false);
   const [inputValue, setInputValue] = useState(view.name || '');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const inputRef = useRef(null);
 
@@ -155,7 +155,7 @@ const ViewItem = ({
     event.stopPropagation();
     const { isValid, message } = isValidViewName(inputValue, otherViewsName);
     if (!isValid) {
-      setErrorMessage(message);
+      toaster.danger(message);
       return;
     }
     if (message === view.name) {
@@ -163,7 +163,6 @@ const ViewItem = ({
       return;
     }
     renameView(message);
-    setErrorMessage('');
   }, [view, inputValue, otherViewsName, renameView]);
 
   const onKeyDown = useCallback((event) => {
@@ -248,7 +247,6 @@ const ViewItem = ({
           )}
         </div>
       </div>
-      {errorMessage && (<Alert color="danger" className="mt-1 mb-0 custom-alert">{errorMessage}</Alert>)}
     </>
   );
 };

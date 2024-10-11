@@ -1,4 +1,3 @@
-.sf-metadata-rename-view-popover .popover,
 .sf-metadata-addview-popover .popover {
   min-width: 280px;
   padding: 0.5rem 0;
@@ -14,18 +13,6 @@
 .sf-metadata-addview-popover .sf-metadata-addview-popover-header {
   width: 100%;
   height: 2rem;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  color: #666;
-  opacity: 1;
-  font-size: 0.875rem;
-}
-
-.sf-metadata-rename-view-popover .sf-metadata-rename-view-popover-header {
-  width: 100%;
-  height: 1.5rem;
   padding: 0 1rem;
   display: flex;
   align-items: center;
@@ -56,10 +43,6 @@
   font-size: 1rem;
   color: #666;
   fill: #666;
-}
-
-.sf-metadata-rename-view-popover-body {
-  padding: 0 0.5rem;
 }
 
 .dropdown-item:hover .metadata-view-icon {
