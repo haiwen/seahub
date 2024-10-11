@@ -19,6 +19,7 @@ const GalleryDetail = ({ currentRepoInfo, viewID, onClose }) => {
   const [repo, setRepo] = useState({});
   const [direntDetail, setDirentDetail] = useState(null);
   const { viewsMap, currentImage } = useMetadata();
+
   const view = useMemo(() => viewsMap[viewID], [viewID, viewsMap]);
   const icon = useMemo(() => Utils.getFolderIconUrl(), []);
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
@@ -89,8 +90,8 @@ const GalleryDetail = ({ currentRepoInfo, viewID, onClose }) => {
     }) : null;
   }, [currentImage]);
 
-  const smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : '';
-  const bigIconUrl = dirent ? `${siteRoot}thumbnail/${currentRepoInfo.repo_id}/${thumbnailSizeForGrid}` + Utils.encodePath(`${currentImage.path === '/' ? '' : currentImage.path}/${dirent.name}`) : '';
+  const smallIconUrl = useMemo(() => dirent ? Utils.getDirentIcon(dirent) : '', [dirent]);
+  const bigIconUrl = useMemo(() => dirent ? `${siteRoot}thumbnail/${currentRepoInfo.repo_id}/${thumbnailSizeForGrid}${Utils.encodePath(`${currentImage.path === '/' ? '' : currentImage.path}/${dirent.name}`)}` : '', [dirent, currentRepoInfo.repo_id, currentImage]);
 
   const renderGalleryInfo = () => (
     <Detail>

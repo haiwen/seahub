@@ -72,14 +72,12 @@ const Gallery = () => {
     let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
-        const obj_id = record[PRIVATE_COLUMN_KEY.OBJ_ID];
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
           id,
-          obj_id,
           name: fileName,
           path: parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
