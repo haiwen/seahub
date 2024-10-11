@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
 import InsertColumn from './insert-column';
@@ -29,6 +27,8 @@ const RecordsHeader = ({
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
   const settings = useMemo(() => table.header_settings || {}, [table]);
   const isHideTriangle = useMemo(() => settings && settings.is_hide_triangle, [settings]);
   const height = useMemo(() => {
@@ -76,9 +76,20 @@ const RecordsHeader = ({
     modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
   }, [modifyColumnOrderAPI]);
 
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingColumnKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingColumnKey]);
+
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverColumnKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverColumnKey]);
+
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
   const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, groupOffsetLeft + SEQUENCE_COLUMN_WIDTH);
+  const draggingColumnIndex = draggingColumnKey ? columnMetrics.columns.findIndex(c => c.key === draggingColumnKey) : -1;
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
@@ -95,7 +106,7 @@ const RecordsHeader = ({
             selectNoneRecords={selectNoneRecords}
             selectAllRecords={selectAllRecords}
           />
-          {frozenColumns.map(column => {
+          {frozenColumns.map((column, columnIndex) => {
             const { key } = column;
             const style = { backgroundColor: '#f9f9f9' };
             const isLastFrozenCell = key === lastFrozenColumnKey;
@@ -105,21 +116,27 @@ const RecordsHeader = ({
                 key={key}
                 height={height}
                 column={column}
+                columnIndex={columnIndex}
                 style={style}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
+                draggingColumnKey={draggingColumnKey}
+                draggingColumnIndex={draggingColumnIndex}
+                dragOverColumnKey={dragOverColumnKey}
                 view={table.view}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
                 onMove={modifyColumnOrder}
+                updateDraggingKey={updateDraggingKey}
+                updateDragOverKey={updateDragOverKey}
                 {...props}
               />
             );
           })}
         </div>
         {/* scroll */}
-        {displayColumns.map(column => {
+        {displayColumns.map((column, columnIndex) => {
           return (
             <Cell
               isHideTriangle={isHideTriangle}
@@ -127,11 +144,17 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              columnIndex={columnIndex}
+              draggingColumnKey={draggingColumnKey}
+              draggingColumnIndex={draggingColumnIndex}
+              dragOverColumnKey={dragOverColumnKey}
               view={table.view}
               frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
               modifyColumnWidth={modifyColumnWidth}
               onMove={modifyColumnOrder}
+              updateDraggingKey={updateDraggingKey}
+              updateDragOverKey={updateDragOverKey}
               {...props}
             />
           );
@@ -158,8 +181,4 @@ RecordsHeader.propTypes = {
   selectAllRecords: PropTypes.func,
 };
 
-const DndRecordHeaderContainer = DropTarget('sfMetadataRecordHeaderCell', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(RecordsHeader);
-
-export default html5DragDropContext(DndRecordHeaderContainer);
+export default RecordsHeader;
