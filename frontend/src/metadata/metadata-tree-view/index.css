@@ -64,6 +64,7 @@
   position: relative;
   font-size: 14px;
   margin-top: 2px;
+  box-shadow: none;
 }
 
 .metadata-tree-view .metadata-views-icon {

@@ -180,6 +180,24 @@ const ViewItem = ({
     }
   }, [isRenaming]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        handleSubmit(event);
+      }
+    };
+
+    if (isRenaming) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isRenaming, handleSubmit]);
+
   return (
     <>
       <div
@@ -202,7 +220,7 @@ const ViewItem = ({
           {isRenaming ? (
             <Input
               innerRef={inputRef}
-              className="sf-metadata-view-input"
+              className="sf-metadata-view-input mt-0"
               value={inputValue}
               onChange={onChange}
               autoFocus={true}
