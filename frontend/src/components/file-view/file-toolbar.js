@@ -84,8 +84,9 @@ class FileToolbar extends React.Component {
       return null;
     }
 
-    const { isLocked, lockedByMe } = this.props;
     const { moreDropdownOpen } = this.state;
+
+    const { isLocked, lockedByMe } = this.props;
     let showLockUnlockBtn = false;
     let lockUnlockText; let lockUnlockIcon;
     if (canLockUnlockFile) {

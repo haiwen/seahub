@@ -509,7 +509,7 @@ def view_lib_file(request, repo_id, path):
             token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, operation, username,
                 use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
-        
+
             if not token:
                 return render_permission_error(request, _('Unable to view file'))
 
@@ -675,7 +675,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
 
         # draft
-        
+
 
         # revision
         revision_info = is_seadoc_revision(file_uuid)
@@ -863,7 +863,7 @@ def view_lib_file(request, repo_id, path):
 
                 send_file_access_msg(request, repo, path, 'web')
 
-                return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
+                return render(request, 'onlyoffice_file_view_react.html', {**return_dict, **onlyoffice_dict})
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
@@ -1112,13 +1112,13 @@ def _download_file_from_share_link(request, fileshare, use_tmp_token=False):
     if not obj_id:
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
-    
+
     if use_tmp_token:
         dl_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'download-link', fileshare.username, use_onetime=False)
         if not dl_token:
             messages.error(request, _('Unable to download file.'))
-        
+
         return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
     return HttpResponseRedirect(gen_file_get_url_by_sharelink(fileshare.token))

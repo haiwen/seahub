@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteName } from '../../utils/constants';
+import { gettext, siteName } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import IconButton from '../icon-button';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
+import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import FileDetails from '../dirent-detail/old-file-details';
 
 import '../../css/file-view.css';
@@ -16,6 +18,7 @@ const propTypes = {
   content: PropTypes.object.isRequired,
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
+  isOnlyofficeFile: PropTypes.bool,
   participants: PropTypes.array,
   onParticipantsChange: PropTypes.func,
 };
@@ -34,6 +37,7 @@ class FileView extends React.Component {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
+      isHeaderShown: true,
       isDetailsPanelOpen: false
     };
   }
@@ -93,27 +97,49 @@ class FileView extends React.Component {
     }
   };
 
+  toggleHeader = () => {
+    this.setState({
+      isHeaderShown: !this.state.isHeaderShown
+    });
+  };
+
   render() {
-    const { isDetailsPanelOpen } = this.state;
+    const { isOnlyofficeFile } = this.props;
+    const { isDetailsPanelOpen, isHeaderShown } = this.state;
     return (
       <div className="h-100 d-flex flex-column">
-        <div className="file-view-header d-flex justify-content-between align-items-center d-print-none">
+        <div className={`file-view-header d-flex justify-content-between align-items-center d-print-none ${isOnlyofficeFile ? (isHeaderShown ? 'onlyoffice-file-view-header-shown' : 'onlyoffice-file-view-header-hidden') : ''}`}>
           <FileInfo
             isStarred={this.state.isStarred}
             isLocked={this.state.isLocked}
             toggleStar={this.toggleStar}
+            isOnlyofficeFile={isOnlyofficeFile}
           />
-          <FileToolbar
-            isLocked={this.state.isLocked}
-            lockedByMe={this.state.lockedByMe}
-            onSave={this.props.onSave}
-            isSaving={this.props.isSaving}
-            needSave={this.props.needSave}
-            toggleLockFile={this.toggleLockFile}
-            toggleDetailsPanel={this.toggleDetailsPanel}
-          />
+          {isOnlyofficeFile ?
+            <OnlyofficeFileToolbar
+              toggleDetailsPanel={this.toggleDetailsPanel}
+              toggleHeader={this.toggleHeader}
+            /> :
+            <FileToolbar
+              isLocked={this.state.isLocked}
+              lockedByMe={this.state.lockedByMe}
+              onSave={this.props.onSave}
+              isSaving={this.props.isSaving}
+              needSave={this.props.needSave}
+              toggleLockFile={this.toggleLockFile}
+              toggleDetailsPanel={this.toggleDetailsPanel}
+            />
+          }
         </div>
-        <div className="file-view-body flex-auto d-flex o-hidden">
+        <div className={`file-view-body flex-auto d-flex o-hidden ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
+          {(isOnlyofficeFile && !isHeaderShown) &&
+            <IconButton
+              id="unfold-onlyoffice-file-view-header"
+              icon='double-arrow-down'
+              text={gettext('Unfold')}
+              onClick={this.toggleHeader}
+            />
+          }
           {this.props.content}
           {isDetailsPanelOpen &&
           <FileDetails
