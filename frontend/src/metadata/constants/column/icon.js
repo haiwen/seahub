@@ -17,7 +17,6 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.NUMBER]: 'number',
   [CellType.GEOLOCATION]: 'location',
   [CellType.RATE]: 'rate',
-  [CellType.CAPTURE_TIME]: 'creation-time',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -37,7 +36,6 @@ const COLUMNS_ICON_NAME = {
   [CellType.NUMBER]: 'Number',
   [CellType.GEOLOCATION]: 'Geolocation',
   [CellType.RATE]: 'Rate',
-  [CellType.CAPTURE_TIME]: 'Capture time',
 };
 
 export {

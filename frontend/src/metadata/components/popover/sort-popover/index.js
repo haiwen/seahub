@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 import { getColumnByKey } from '../../../utils/column';
 import { getEventClassName } from '../../../utils/common';
 import {
-  EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_OPTIONS, VIEW_FIRST_SORT_COLUMN_OPTIONS, SORT_TYPE, VIEW_TYPE,
+  EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
 } from '../../../constants';
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
 
@@ -45,8 +45,8 @@ class SortPopover extends Component {
     super(props);
     const { sorts, columns, type } = this.props;
     this.sortTypeOptions = this.createSortTypeOptions();
-    this.supportFirstSortColumnOptions = VIEW_FIRST_SORT_COLUMN_OPTIONS[type || VIEW_TYPE.TABLE];
-    this.supportSortColumnOptions = VIEW_SORT_COLUMN_OPTIONS[type || VIEW_TYPE.TABLE];
+    this.supportFirstSortColumnRule = VIEW_FIRST_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
+    this.supportSortColumnRule = VIEW_SORT_COLUMN_RULES[type || VIEW_TYPE.TABLE];
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
@@ -155,7 +155,7 @@ class SortPopover extends Component {
   };
 
   createColumnsOptions = (columns = []) => {
-    const sortableColumns = columns.filter(column => this.supportSortColumnOptions.includes(column.type));
+    const sortableColumns = columns.filter(column => this.supportSortColumnRule(column));
     return sortableColumns.map((column) => {
       const { type, name } = column;
       return {
@@ -208,7 +208,7 @@ class SortPopover extends Component {
 
     let columnsOptions = this.columnsOptions;
     if (index === 0) {
-      columnsOptions = columnsOptions.filter(o => this.supportFirstSortColumnOptions.includes(o.value.column.type));
+      columnsOptions = columnsOptions.filter(o => this.supportFirstSortColumnRule(o.value.column));
     }
 
     return (

@@ -257,8 +257,6 @@ export const getNormalizedColumnType = (key, type) => {
       return CellType.GEOLOCATION;
     case PRIVATE_COLUMN_KEY.OWNER:
       return CellType.COLLABORATOR;
-    case PRIVATE_COLUMN_KEY.CAPTURE_TIME:
-      return CellType.CAPTURE_TIME;
     default:
       return type;
   }
