@@ -132,8 +132,9 @@ class Search extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { highlightIndex, resultItems } = this.state;
+    const { highlightIndex, resultItems, isResultGetted } = this.state;
 
+    // 01 init search, display and highlight recent search results
     if (this.state.showRecent) {
       if (highlightIndex > 0) {
         this.setState({ highlightIndex: highlightIndex - 1 }, () => {
@@ -148,8 +149,8 @@ class Search extends Component {
       return;
     }
 
-    // global searching, searched repos needs to support up and down keys
-    if (!this.props.repoID && resultItems.length > 0) {
+    // 02 global search, display and highlight searched repos
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
         highlightSearchTypesIndex = resultItems.length;
@@ -165,7 +166,8 @@ class Search extends Component {
       return;
     }
 
-    if (!this.state.isResultGetted) {
+    // 03 Internal repo search, highlight search types
+    if (!isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
         highlightSearchTypesIndex = this.state.searchTypesMax;
@@ -174,6 +176,7 @@ class Search extends Component {
       return;
     }
 
+    // 04 When there are search results, highlighte searched items
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
         if (this.highlightRef) {
@@ -189,8 +192,9 @@ class Search extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { highlightIndex, resultItems } = this.state;
+    const { highlightIndex, resultItems, isResultGetted } = this.state;
 
+    // 01 init search, display and highlight recent search results
     if (this.state.showRecent) {
       const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
       if (highlightIndex < visitedItems.length - 1) {
@@ -208,8 +212,8 @@ class Search extends Component {
       return;
     }
 
-    // global searching, searched repos needs to support up and down keys
-    if (!this.props.repoID && resultItems.length > 0) {
+    // 02 global search, display and highlight searched repos
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > resultItems.length) {
         highlightSearchTypesIndex = 0;
@@ -227,6 +231,7 @@ class Search extends Component {
       return;
     }
 
+    // 03 Internal repo search, highlight search types
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > this.state.searchTypesMax) {
@@ -236,6 +241,7 @@ class Search extends Component {
       return;
     }
 
+    // 04 When there are search results, highlighte searched items
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
         if (this.highlightRef) {
@@ -264,8 +270,8 @@ class Search extends Component {
       return;
     }
     // global searching, searched repos needs to support enter
-    const { highlightSearchTypesIndex, resultItems } = this.state;
-    if (!this.props.repoID && resultItems.length > 0) {
+    const { highlightSearchTypesIndex, resultItems, isResultGetted } = this.state;
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
       if (highlightSearchTypesIndex === 0) {
         this.searchAllRepos();
       } else {
