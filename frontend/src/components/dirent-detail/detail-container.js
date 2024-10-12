@@ -31,7 +31,9 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
   }
 
   if (path === '/' && !dirent) {
-    return <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />;
+    return (
+      <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />
+    );
   }
 
   return (

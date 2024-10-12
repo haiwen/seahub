@@ -20,7 +20,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [navigation, setNavigation] = useState([]);
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
-
   const viewsMap = useRef({});
 
   const cancelURLView = useCallback(() => {
