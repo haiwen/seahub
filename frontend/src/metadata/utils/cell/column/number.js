@@ -281,6 +281,15 @@ const formatTextToNumber = (value) => {
   return isNaN(newData) ? null : newData;
 };
 
+const decimalToExposureTime = (decimal) => {
+  if (!decimal) return 0;
+  const integerPart = Math.floor(decimal);
+  const decimalPart = decimal - integerPart;
+  if (integerPart > 0) return integerPart;
+  const denominator = Math.round(1 / decimalPart);
+  return '1/' + denominator;
+};
+
 export {
   getPrecisionNumber,
   getNumberDisplayString,
@@ -288,4 +297,5 @@ export {
   formatStringToNumber,
   formatTextToNumber,
   getFloatNumber,
+  decimalToExposureTime,
 };

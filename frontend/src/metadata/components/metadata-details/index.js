@@ -16,7 +16,7 @@ import { SYSTEM_FOLDERS } from './constants';
 
 import './index.css';
 
-const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
+const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
@@ -37,10 +37,8 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
     metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      let fields = normalizeFields(metadata).map(field => new Column(field));
-      if (!Utils.imageCheck(fileName)) {
-        fields = fields.filter(filed => filed.key !== PRIVATE_COLUMN_KEY.LOCATION);
-      }
+      const fields = normalizeFields(metadata).map(field => new Column(field));
+      updateRecord && updateRecord(record);
       setMetadata({ record, fields });
       setLoading(false);
     }).catch(error => {
@@ -48,7 +46,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
       toaster.danger(errMessage);
       setLoading(false);
     });
-  }, [repoID, filePath, direntType]);
+  }, [repoID, filePath, direntType, updateRecord]);
 
   const onChange = useCallback((fieldKey, newValue) => {
     const { record, fields } = metadata;
@@ -132,6 +130,7 @@ MetadataDetails.propTypes = {
   repoInfo: PropTypes.object,
   direntType: PropTypes.string,
   direntDetail: PropTypes.object,
+  updateRecord: PropTypes.func,
 };
 
 export default MetadataDetails;

@@ -6,6 +6,7 @@ export {
   formatStringToNumber,
   formatTextToNumber,
   getFloatNumber,
+  decimalToExposureTime,
 } from './number';
 export {
   checkIsPredefinedOption,
