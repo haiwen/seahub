@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { siteRoot } from './utils/constants';
+import { siteRoot, siteTitle, mediaUrl, faviconPath } from './utils/constants';
 import { Utils, isMobile } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import EventBus from './components/common/event-bus';
@@ -105,6 +105,12 @@ class App extends Component {
     this.setState({ currentTab: currentTab });
   }
 
+  resetTitle = () => {
+    const favicon = document.getElementById('favicon');
+    favicon.href = `${mediaUrl}${faviconPath}`;
+    document.title = siteTitle;
+  };
+
   onCloseSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
@@ -162,6 +168,7 @@ class App extends Component {
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
+    this.resetTitle();
   };
 
   generatorPrefix = (tabName, groupID) => {
@@ -337,6 +344,7 @@ class App extends Component {
                 isSidePanelFolded={isSidePanelFolded}
                 onTabNavClick={this.tabItemClick}
                 eventBus={this.eventBus}
+                resetTitle={this.resetTitle}
               />
             </Router>
           </div>

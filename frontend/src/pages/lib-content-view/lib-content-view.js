@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import { faviconPath, gettext, siteRoot, siteTitle, username } from '../../utils/constants';
+import { faviconPath, gettext, mediaUrl, siteRoot, siteTitle, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -452,6 +452,7 @@ class LibContentView extends React.Component {
 
   showDir = (path) => {
     let repoID = this.props.repoID;
+    this.props.resetTitle();
 
     if (!this.state.isSessionExpired) {
       // update state
@@ -1815,11 +1816,6 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) {
-      if (document.title !== siteTitle) {
-        const favicon = document.getElementById('favicon');
-        favicon.href = faviconPath;
-        document.title = siteTitle;
-      }
       let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
