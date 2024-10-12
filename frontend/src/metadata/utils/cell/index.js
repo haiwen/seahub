@@ -32,6 +32,7 @@ export {
   getFloatNumber,
   getColumnOptionNamesByIds,
   getColumnOptionIdsByNames,
+  decimalToExposureTime,
 } from './column';
 
 export { isCellValueChanged } from './cell-comparer';
