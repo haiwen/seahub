@@ -399,14 +399,14 @@ export const Utils = {
     if (!dirent) return '';
     let size = Utils.isHiDPI() ? 48 : 24;
     size = isBig ? 192 : size;
-    if (dirent.isDir()) {
+    if (dirent.type == 'file') {
+      return Utils.getFileIconUrl(dirent.name);
+    } else {
       let readonly = false;
       if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
         readonly = true;
       }
       return Utils.getFolderIconUrl(readonly, size, dirent.has_been_shared_out);
-    } else {
-      return Utils.getFileIconUrl(dirent.name);
     }
   },
 

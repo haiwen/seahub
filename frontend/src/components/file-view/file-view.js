@@ -10,6 +10,8 @@ import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import FileDetails from '../dirent-detail/old-file-details';
+import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
+import { CollaboratorsProvider, EnableMetadataProvider } from '../../metadata';
 
 import '../../css/file-view.css';
 
@@ -24,10 +26,9 @@ const propTypes = {
 };
 
 const { isStarred, isLocked, lockedByMe,
-  repoID, filePath, enableWatermark, userNickName,
+  repoID, filePath, filePerm, enableWatermark, userNickName,
   repoName, parentDir, fileName
 } = window.app.pageOptions;
-
 
 class FileView extends React.Component {
 
@@ -104,7 +105,7 @@ class FileView extends React.Component {
   };
 
   render() {
-    const { isOnlyofficeFile } = this.props;
+    const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
     return (
       <div className="h-100 d-flex flex-column">
@@ -141,15 +142,31 @@ class FileView extends React.Component {
             />
           }
           {this.props.content}
-          {isDetailsPanelOpen &&
-          <FileDetails
-            repoID={repoID}
-            repoName={repoName}
-            path={parentDir}
-            dirent={{ 'name': fileName, type: 'file' }}
-            togglePanel={this.toggleDetailsPanel}
-          />
-          }
+          {isDetailsPanelOpen && (
+            <>
+              {isOnlyofficeFile ?
+                <EnableMetadataProvider repoID={repoID} >
+                  <CollaboratorsProvider repoID={repoID}>
+                    <EmbeddedFileDetails
+                      repoID={repoID}
+                      path={filePath}
+                      dirent={{ 'name': fileName, type: 'file' }}
+                      repoInfo={{ permission: filePerm }}
+                      onClose={this.toggleDetailsPanel}
+                    />
+                  </CollaboratorsProvider>
+                </EnableMetadataProvider>
+                :
+                <FileDetails
+                  repoID={repoID}
+                  repoName={repoName}
+                  path={parentDir}
+                  dirent={{ 'name': fileName, type: 'file' }}
+                  togglePanel={this.toggleDetailsPanel}
+                />
+              }
+            </>
+          )}
         </div>
       </div>
     );
