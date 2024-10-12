@@ -23,6 +23,7 @@
   font-size: 14px;
   font-weight: normal;
   color: #666;
+  text-align: center;
 }
 
 @media (min-width: 768px) {

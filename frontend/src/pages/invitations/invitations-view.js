@@ -182,7 +182,7 @@ class Content extends Component {
       return (
         <EmptyTip
           title={gettext('No guest invitations')}
-          text={gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" button in the menu bar.')}
+          text={gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" item in the menu.')}
         />
       );
     }
