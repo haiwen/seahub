@@ -19,7 +19,7 @@ i18n
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
-      loadPath: mediaUrl + 'locales/{{ lng }}/{{ ns }}.json',
+      loadPath: mediaUrl + '{{ ns }}/locales/{{ lng }}/{{ ns }}.json',
       // loadPath: '/media/locales/{{lng}}/{{ns}}.json',
     },
 
