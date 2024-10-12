@@ -888,7 +888,7 @@ METADATA_SERVER_SECRET_KEY = ''
 ENABLE_FILE_TAGS = True
 
 METADATA_FILE_TYPES = {
-    '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'mpo', 'jpe', 'xbm',
+    '_picture': ('gif', 'jpeg', 'jpg', 'heic', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'mpo', 'jpe', 'xbm',
                  'svg', 'ppm', 'pcx', 'xcf', 'xpm', 'mgn', 'ufo', 'ai'),
     '_document': ('oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'pdf', 'xls', 'xlsx', 'ods',
                   'fods', 'xmind', 'ac', 'am', 'bat', 'diff', 'org', 'properties', 'vi', 'vim', 'xml', 'log',
