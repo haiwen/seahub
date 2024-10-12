@@ -168,7 +168,7 @@ class FilterPopover extends Component {
       >
         {({ scheduleUpdate }) => (
           <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
-            <BasicFilters filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType}/>
+            <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType}/>
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>
               <div className="filter-group-container">
