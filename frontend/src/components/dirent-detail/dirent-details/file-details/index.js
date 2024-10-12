@@ -52,7 +52,7 @@ const getImageInfoValue = (key, value) => {
     case 'Focal length':
       return value.replace('mm', ' ' + gettext('mm'));
     case 'Exposure time':
-      return decimalToExposureTime(value);
+      return decimalToExposureTime(value) + ' ' + gettext('s');
     default:
       return value;
   }

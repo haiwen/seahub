@@ -1,11 +1,11 @@
 .file-details-collapse {
   display: flex;
   flex-direction: column;
-  width: calc(100% + 16px);
+  width: 100%;
   height: auto;
   margin-bottom: 10px;
-  margin-left: -8px;
-  margin-right: 8px;
+  /* margin-left: -8px;
+  margin-right: 8px; */
 }
 
 .file-details-collapse .file-details-collapse-header {
@@ -53,5 +53,5 @@
 }
 
 .file-details-collapse .file-details-collapse-body {
-  padding: 0 8px;
+  padding: 0 4px;
 }
