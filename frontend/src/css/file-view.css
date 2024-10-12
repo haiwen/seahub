@@ -13,10 +13,39 @@ body {
   flex-shrink: 0;
 }
 
+.onlyoffice-file-view-header-shown {
+  transition: height .3s ease-in-out;
+  height: 56px;
+}
+
+.onlyoffice-file-view-header-hidden {
+  transition: all .3s ease-in-out;
+  display: none!important;
+}
+
+#unfold-onlyoffice-file-view-header {
+  position: absolute;
+  top: 0;
+  right: 40px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255,255,255, 0.6);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 0 8px rgba(0,0,0, 0.4);
+  cursor: pointer;
+}
+
+#unfold-onlyoffice-file-view-header:hover {
+  background: rgba(255,255,255, 1);
+}
+
 .file-view-header .file-toolbar-btn {
   width: 28px;
   height: 28px;
-  margin-right: 10px;
+  margin-left: 10px;
   cursor: pointer;
   display: flex;
   justify-content: center;

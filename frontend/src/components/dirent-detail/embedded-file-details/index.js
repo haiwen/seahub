@@ -10,7 +10,7 @@ import { MetadataContext } from '../../../metadata';
 
 import './index.css';
 
-const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component }) => {
+const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
 

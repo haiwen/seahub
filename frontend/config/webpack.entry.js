@@ -30,6 +30,7 @@ const entryFiles = {
   viewFileText: '/view-file-text.js',
   viewFileSdoc: '/view-file-sdoc.js',
   viewFileDocument: '/view-file-document.js',
+  viewFileOnlyoffice: '/view-file-onlyoffice.js',
   viewFileSpreadsheet: '/view-file-spreadsheet.js',
   settings: '/settings.js',
   repoHistory: '/repo-history.js',
