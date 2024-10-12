@@ -81,7 +81,16 @@ const GalleryMain = ({
   }, []);
 
   const handleClickOutside = useCallback((e) => {
-    if (imageRef.current && !imageRef.current.contains(e.target) && containerRef.current && containerRef.current.contains(e.target)) {
+    const images = containerRef.current.querySelectorAll('.metadata-gallery-image-item');
+    let isClickInsideImage = false;
+
+    images.forEach(img => {
+      if (img.contains(e.target)) {
+        isClickInsideImage = true;
+      }
+    });
+
+    if (!isClickInsideImage && containerRef.current.contains(e.target)) {
       onImageSelect([]);
     }
   }, [onImageSelect]);
@@ -129,7 +138,6 @@ const GalleryMain = ({
           <div className="metadata-gallery-date-tag">{name || gettext('Empty')}</div>
         )}
         <div
-          ref={imageRef}
           className="metadata-gallery-image-list"
           style={{
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -142,6 +150,7 @@ const GalleryMain = ({
               const isSelected = selectedImageIDs.includes(img.id);
               return (
                 <div
+                  ref={imageRef}
                   key={img.src}
                   id={img.id}
                   tabIndex={1}

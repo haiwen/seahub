@@ -20,7 +20,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [navigation, setNavigation] = useState([]);
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
-  const [currentImage, setCurrentImage] = useState(null);
 
   const viewsMap = useRef({});
 
@@ -139,6 +138,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
         name: isFaceRecognitionView ? gettext('Photos - classfied by people') : gettext('File extended properties'),
         type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
+        viewType: view.type,
       },
       parentNode: {},
       key: repoID,
@@ -214,10 +214,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     });
   }, [repoID]);
 
-  const updateCurrentImage = useCallback((image) => {
-    setCurrentImage(image);
-  }, []);
-
   return (
     <MetadataContext.Provider value={{
       enableMetadata,
@@ -235,8 +231,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       deleteView,
       updateView,
       moveView,
-      currentImage,
-      updateCurrentImage,
     }}>
       {children}
     </MetadataContext.Provider>

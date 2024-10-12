@@ -1,38 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
 import GalleryDetail from '../../metadata/components/gallery-details';
 import ObjectUtils from '../../metadata/utils/object-utils';
+import { MetadataContext } from '../../metadata';
 import { METADATA_MODE } from '../dir-view-mode/constants';
 
 const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged, mode }) => {
 
-  const renderContent = () => {
-    if (mode === METADATA_MODE) {
-      const viewID = path.split('/').pop();
-      return <GalleryDetail currentRepoInfo={currentRepoInfo} viewID={viewID} onClose={onClose} />;
+  useEffect(() => {
+    // init context
+    if (!window.sfMetadataContext) {
+      const context = new MetadataContext();
+      window.sfMetadataContext = context;
+      window.sfMetadataContext.init({ repoID, repoInfo: currentRepoInfo });
     }
 
-    if (path === '/' && !dirent) {
-      return <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />;
-    }
+    return () => {
+      if (window.sfMetadataContext && mode !== METADATA_MODE) {
+        window.sfMetadataContext.destroy();
+        delete window['sfMetadataContext'];
+      }
+    };
+  }, [repoID, currentRepoInfo, mode]);
 
-    return (
-      <DirentDetail
-        repoID={repoID}
-        path={path}
-        dirent={dirent}
-        currentRepoInfo={currentRepoInfo}
-        repoTags={repoTags}
-        fileTags={fileTags}
-        onFileTagChanged={onFileTagChanged}
-        onClose={onClose}
-      />
-    );
-  };
+  if (mode === METADATA_MODE) {
+    const viewID = path.split('/').pop();
+    return <GalleryDetail currentRepoInfo={currentRepoInfo} viewID={viewID} onClose={onClose} />;
+  }
 
-  return renderContent();
+  if (path === '/' && !dirent) {
+    return <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />;
+  }
+
+  return (
+    <DirentDetail
+      repoID={repoID}
+      path={path}
+      dirent={dirent}
+      currentRepoInfo={currentRepoInfo}
+      repoTags={repoTags}
+      fileTags={fileTags}
+      onFileTagChanged={onFileTagChanged}
+      onClose={onClose}
+    />
+  );
 }, (props, nextProps) => {
   const isChanged =
     props.repoID !== nextProps.repoID ||

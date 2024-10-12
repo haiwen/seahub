@@ -13,7 +13,7 @@ import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
-import { useMetadata } from '../../hooks';
+import { useGallery } from '../../hooks';
 
 import './index.css';
 
@@ -32,13 +32,11 @@ const Gallery = () => {
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
 
-  const { updateCurrentImage } = useMetadata();
+  const { updateCurrentImage } = useGallery();
   const { metadata, store } = useMetadataView();
   const repoID = store.repoId;
 
-  useEffect(() => {
-    updateCurrentImage(selectedImages[0]);
-  }, [selectedImages, updateCurrentImage]);
+  useEffect(() => updateCurrentImage(selectedImages[0]), [selectedImages, updateCurrentImage]);
 
   const selectedImageIDs = useMemo(() => {
     return selectedImages.map(image => image.id);

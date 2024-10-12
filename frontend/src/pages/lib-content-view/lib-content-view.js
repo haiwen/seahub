@@ -21,8 +21,8 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE } from '../../components/dir-view-mode/constants';
+import { MetadataProvider, CollaboratorsProvider, GalleryProvider } from '../../metadata/hooks';
+import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE, VIEW_TYPE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import DetailContainer from '../../components/dirent-detail/detail-container';
@@ -538,14 +538,14 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId) => {
+  showFileMetadata = (filePath, viewId, viewType) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
     this.setState({
       currentMode: METADATA_MODE,
       path: filePath,
       viewId: viewId,
-      isDirentDetailShow: false
+      isDirentDetailShow: viewType === VIEW_TYPE.GALLERY ? this.state.isDirentDetailShow : false,
     }, () => {
       setTimeout(() => {
         this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
@@ -1897,7 +1897,7 @@ class LibContentView extends React.Component {
         }
       } else if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000');
+          this.showFileMetadata(node.path, node.view_id || '0000', node.object.viewType);
         }
       } else if (Utils.isFaceRecognition(node?.object?.type)) {
         if (node.path !== this.state.path) {
@@ -2360,92 +2360,94 @@ class LibContentView extends React.Component {
                   </div>
                 }
               </div>
-              <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
-                {this.state.pathExist ?
-                  <DirColumnView
-                    isSidePanelFolded={this.props.isSidePanelFolded}
-                    isTreePanelShown={this.state.isTreePanelShown}
-                    currentMode={this.state.currentMode}
-                    path={this.state.path}
-                    repoID={this.props.repoID}
-                    currentRepoInfo={this.state.currentRepoInfo}
-                    isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                    userPerm={userPerm}
-                    enableDirPrivateShare={enableDirPrivateShare}
-                    isTreeDataLoading={this.state.isTreeDataLoading}
-                    treeData={this.state.treeData}
-                    currentNode={this.state.currentNode}
-                    onNodeClick={this.onTreeNodeClick}
-                    onNodeCollapse={this.onTreeNodeCollapse}
-                    onNodeExpanded={this.onTreeNodeExpanded}
-                    onAddFolderNode={this.onAddFolder}
-                    onAddFileNode={this.onAddFile}
-                    onRenameNode={this.onRenameTreeNode}
-                    onDeleteNode={this.onDeleteTreeNode}
-                    isViewFile={this.state.isViewFile}
-                    isFileLoading={this.state.isFileLoading}
-                    filePermission={this.state.filePermission}
-                    content={this.state.content}
-                    viewId={this.state.viewId}
-                    lastModified={this.state.lastModified}
-                    latestContributor={this.state.latestContributor}
-                    onLinkClick={this.onLinkClick}
-                    isRepoInfoBarShow={isRepoInfoBarShow}
-                    repoTags={this.state.repoTags}
-                    usedRepoTags={this.state.usedRepoTags}
-                    updateUsedRepoTags={this.updateUsedRepoTags}
-                    isDirentListLoading={this.state.isDirentListLoading}
-                    direntList={direntItemsList}
-                    fullDirentList={this.state.direntList}
-                    sortBy={this.state.sortBy}
-                    sortOrder={this.state.sortOrder}
-                    sortItems={this.sortItems}
-                    onAddFolder={this.onAddFolder}
-                    onAddFile={this.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemSelected={this.onDirentSelected}
-                    onItemDelete={this.onMainPanelItemDelete}
-                    onItemRename={this.onMainPanelItemRename}
-                    deleteFilesCallback={this.deleteItemsAjaxCallback}
-                    renameFileCallback={this.renameItemAjaxCallback}
-                    onItemMove={this.onMoveItem}
-                    onItemCopy={this.onCopyItem}
-                    onItemConvert={this.onConvertItem}
-                    onDirentClick={this.onDirentClick}
-                    updateDirent={this.updateDirent}
-                    isAllItemSelected={this.state.isAllDirentSelected}
-                    onAllItemSelected={this.onAllDirentSelected}
-                    selectedDirentList={this.state.selectedDirentList}
-                    onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
-                    onItemsMove={this.onMoveItems}
-                    onItemsCopy={this.onCopyItems}
-                    onItemsDelete={this.onDeleteItems}
-                    onFileTagChanged={this.onFileTagChanged}
-                    showDirentDetail={this.showDirentDetail}
-                    onItemsScroll={this.onItemsScroll}
-                    eventBus={this.props.eventBus}
-                    onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
-                    getMarkDownFilePath={this.getMarkDownFilePath}
-                    getMarkDownFileName={this.getMarkDownFileName}
-                    openMarkdownFile={this.openMarkdownFile}
-                  />
-                  :
-                  <div className="message err-tip">{gettext('Folder does not exist.')}</div>
-                }
-                {this.state.isDirentDetailShow && (
-                  <DetailContainer
-                    path={this.state.path}
-                    repoID={this.props.repoID}
-                    currentRepoInfo={this.state.currentRepoInfo}
-                    dirent={this.state.currentDirent}
-                    repoTags={this.state.repoTags}
-                    fileTags={this.state.isViewFile ? this.state.fileTags : []}
-                    onFileTagChanged={this.onFileTagChanged}
-                    onClose={this.closeDirentDetail}
-                    mode={this.state.currentMode}
-                  />
-                )}
-              </div>
+              <GalleryProvider>
+                <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
+                  {this.state.pathExist ?
+                    <DirColumnView
+                      isSidePanelFolded={this.props.isSidePanelFolded}
+                      isTreePanelShown={this.state.isTreePanelShown}
+                      currentMode={this.state.currentMode}
+                      path={this.state.path}
+                      repoID={this.props.repoID}
+                      currentRepoInfo={this.state.currentRepoInfo}
+                      isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                      userPerm={userPerm}
+                      enableDirPrivateShare={enableDirPrivateShare}
+                      isTreeDataLoading={this.state.isTreeDataLoading}
+                      treeData={this.state.treeData}
+                      currentNode={this.state.currentNode}
+                      onNodeClick={this.onTreeNodeClick}
+                      onNodeCollapse={this.onTreeNodeCollapse}
+                      onNodeExpanded={this.onTreeNodeExpanded}
+                      onAddFolderNode={this.onAddFolder}
+                      onAddFileNode={this.onAddFile}
+                      onRenameNode={this.onRenameTreeNode}
+                      onDeleteNode={this.onDeleteTreeNode}
+                      isViewFile={this.state.isViewFile}
+                      isFileLoading={this.state.isFileLoading}
+                      filePermission={this.state.filePermission}
+                      content={this.state.content}
+                      viewId={this.state.viewId}
+                      lastModified={this.state.lastModified}
+                      latestContributor={this.state.latestContributor}
+                      onLinkClick={this.onLinkClick}
+                      isRepoInfoBarShow={isRepoInfoBarShow}
+                      repoTags={this.state.repoTags}
+                      usedRepoTags={this.state.usedRepoTags}
+                      updateUsedRepoTags={this.updateUsedRepoTags}
+                      isDirentListLoading={this.state.isDirentListLoading}
+                      direntList={direntItemsList}
+                      fullDirentList={this.state.direntList}
+                      sortBy={this.state.sortBy}
+                      sortOrder={this.state.sortOrder}
+                      sortItems={this.sortItems}
+                      onAddFolder={this.onAddFolder}
+                      onAddFile={this.onAddFile}
+                      onItemClick={this.onItemClick}
+                      onItemSelected={this.onDirentSelected}
+                      onItemDelete={this.onMainPanelItemDelete}
+                      onItemRename={this.onMainPanelItemRename}
+                      deleteFilesCallback={this.deleteItemsAjaxCallback}
+                      renameFileCallback={this.renameItemAjaxCallback}
+                      onItemMove={this.onMoveItem}
+                      onItemCopy={this.onCopyItem}
+                      onItemConvert={this.onConvertItem}
+                      onDirentClick={this.onDirentClick}
+                      updateDirent={this.updateDirent}
+                      isAllItemSelected={this.state.isAllDirentSelected}
+                      onAllItemSelected={this.onAllDirentSelected}
+                      selectedDirentList={this.state.selectedDirentList}
+                      onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
+                      onItemsMove={this.onMoveItems}
+                      onItemsCopy={this.onCopyItems}
+                      onItemsDelete={this.onDeleteItems}
+                      onFileTagChanged={this.onFileTagChanged}
+                      showDirentDetail={this.showDirentDetail}
+                      onItemsScroll={this.onItemsScroll}
+                      eventBus={this.props.eventBus}
+                      onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
+                      getMarkDownFilePath={this.getMarkDownFilePath}
+                      getMarkDownFileName={this.getMarkDownFileName}
+                      openMarkdownFile={this.openMarkdownFile}
+                    />
+                    :
+                    <div className="message err-tip">{gettext('Folder does not exist.')}</div>
+                  }
+                  {this.state.isDirentDetailShow && (
+                    <DetailContainer
+                      path={this.state.path}
+                      repoID={this.props.repoID}
+                      currentRepoInfo={this.state.currentRepoInfo}
+                      dirent={this.state.currentDirent}
+                      repoTags={this.state.repoTags}
+                      fileTags={this.state.isViewFile ? this.state.fileTags : []}
+                      onFileTagChanged={this.onFileTagChanged}
+                      onClose={this.closeDirentDetail}
+                      mode={this.state.currentMode}
+                    />
+                  )}
+                </div>
+              </GalleryProvider>
             </div>
             {canUpload && this.state.pathExist && !this.state.isViewFile && this.state.currentMode !== METADATA_MODE && (
               <FileUploader

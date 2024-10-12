@@ -9,7 +9,7 @@ import { Utils } from '../../../utils/utils';
 import { gettext, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { Detail, Header, Body } from '../../../components/dirent-detail/detail';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../constants';
-import { useMetadata } from '../../../metadata';
+import { useMetadata, useGallery } from '../../../metadata';
 import { seafileAPI } from '../../../utils/seafile-api';
 import FileDetails from '../../../components/dirent-detail/dirent-details/file-details';
 import { Dirent } from '../../../models';
@@ -18,38 +18,13 @@ const GalleryDetail = ({ currentRepoInfo, viewID, onClose }) => {
   const [isLoading, setLoading] = useState(true);
   const [repo, setRepo] = useState({});
   const [direntDetail, setDirentDetail] = useState(null);
-  const { viewsMap, currentImage } = useMetadata();
+  const { viewsMap } = useMetadata();
+  const { currentImage } = useGallery();
 
   const view = useMemo(() => viewsMap[viewID], [viewID, viewsMap]);
   const icon = useMemo(() => Utils.getFolderIconUrl(), []);
-  const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
-  const sizeField = useMemo(() => ({ type: CellType.TEXT, name: gettext('Size') }), []);
   const creatorField = useMemo(() => ({ type: CellType.CREATOR, name: gettext('Creator') }), []);
   const mtimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
-
-  const filesCount = useMemo(() => {
-    if (!window.sfMetadataContext || !window.sfMetadataStore) return 0;
-
-    const store = window.sfMetadataStore;
-    return store.data.rows.reduce((count, row) => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]) ? count + 1 : count, 0);
-  }, []);
-
-  const sizeCount = useMemo(() => {
-    // count all images size
-    if (!window.sfMetadataContext || !window.sfMetadataStore) return 0;
-
-    const store = window.sfMetadataStore;
-    const total = store.data.rows.reduce((size, row) => {
-      if (Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME])) {
-        const sizeStr = row[PRIVATE_COLUMN_KEY.SIZE];
-        const sizeNum = parseInt(sizeStr);
-        return size + sizeNum;
-      }
-      return size;
-    }, 0);
-
-    return Utils.bytesToSize(total);
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -101,18 +76,9 @@ const GalleryDetail = ({ currentRepoInfo, viewID, onClose }) => {
           <div className="w-100 h-100 d-flex align-items-center justify-content-center"><Loading /></div>
         ) : (
           <div className="detail-content">
-            <DetailItem field={filesField} value={filesCount} className="sf-metadata-property-detail-formatter">
-              <Formatter field={filesField} value={filesCount} />
-            </DetailItem>
-
-            <DetailItem field={sizeField} value={sizeCount} className="sf-metadata-property-detail-formatter">
-              <Formatter field={sizeField} value={sizeCount} />
-            </DetailItem>
-
             <DetailItem field={mtimeField} className="sf-metadata-property-detail-formatter">
               <Formatter field={mtimeField} value={repo.last_modified} />
             </DetailItem>
-
             <DetailItem field={creatorField} className="sf-metadata-property-detail-formatter">
               <Formatter
                 field={creatorField}
