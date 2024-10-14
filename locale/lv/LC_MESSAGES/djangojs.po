@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-23 18:32+0800\n"
+"POT-Creation-Date: 2024-10-14 17:02+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Qubit Bit, 2015-2016,2018\n"
 "Language-Team: Latvian (http://app.transifex.com/haiwen/seahub/language/lv/)\n"
@@ -231,13 +231,13 @@ msgid "A file is being uploaded. Are you sure you want to leave this page?"
 msgstr ""
 
 #: frontend/src/components/cur-dir-path/dir-path.js:132
-#: frontend/src/components/dir-view-mode/dir-views.js:42
+#: frontend/src/components/dir-view-mode/dir-views.js:43
 msgid "Views"
 msgstr ""
 
 #: frontend/src/components/cur-dir-path/dir-path.js:217
 #: frontend/src/components/cur-dir-path/dir-path.js:223
-#: frontend/src/components/dir-view-mode/dir-column-nav.js:349
+#: frontend/src/components/dir-view-mode/dir-column-nav.js:384
 #: frontend/src/components/dirent-detail/lib-details.js:18
 #: frontend/src/components/main-side-nav.js:212
 #: frontend/src/components/main-side-nav.js:214
@@ -281,13 +281,16 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-tool.js:140
 #: frontend/src/components/dialog/op-menu.js:53
 #: frontend/src/components/dialog/op-menu.js:54
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:924
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:925
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:926
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:927
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:155
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:156
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:185
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:188
-#: frontend/src/components/file-view/file-toolbar.js:227
+#: frontend/src/components/file-view/file-toolbar.js:228
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:54
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:55
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:75
 #: frontend/src/components/history-list-view/history-list-item.js:99
 #: frontend/src/components/history-list-view/history-list-item.js:100
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:458
@@ -487,7 +490,7 @@ msgstr "Apraksts"
 #: frontend/src/components/dialog/reset-webdav-password.js:89
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:66
 #: frontend/src/components/dialog/save-shared-file-dialog.js:74
-#: frontend/src/components/dialog/select-dirent-body.js:207
+#: frontend/src/components/dialog/select-dirent-body.js:199
 #: frontend/src/components/dialog/set-org-user-contact-email.js:65
 #: frontend/src/components/dialog/set-org-user-default-quota.js:78
 #: frontend/src/components/dialog/set-org-user-name.js:67
@@ -597,7 +600,7 @@ msgstr "Atcelt"
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:70
 #: frontend/src/components/dialog/save-shared-file-dialog.js:76
 #: frontend/src/components/dialog/save-shared-file-dialog.js:78
-#: frontend/src/components/dialog/select-dirent-body.js:208
+#: frontend/src/components/dialog/select-dirent-body.js:200
 #: frontend/src/components/dialog/set-org-user-contact-email.js:66
 #: frontend/src/components/dialog/set-org-user-default-quota.js:79
 #: frontend/src/components/dialog/set-org-user-name.js:68
@@ -644,7 +647,7 @@ msgstr "Atcelt"
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:199
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:202
 #: frontend/src/components/user-settings/email-notice.js:91
-#: frontend/src/components/user-settings/user-basic-info-form.js:87
+#: frontend/src/components/user-settings/user-basic-info-form.js:89
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:83
 #: frontend/src/metadata/components/popover/column-popover/index.js:106
 #: frontend/src/metadata/components/popover/filter-popover/index.js:201
@@ -662,7 +665,7 @@ msgstr "Atcelt"
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:121
 #: frontend/src/pages/sys-admin/repos/search-repos.js:155
 #: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:128
-#: frontend/src/pages/sys-admin/users/search-users.js:318
+#: frontend/src/pages/sys-admin/users/search-users.js:324
 #: frontend/src/pages/sys-admin/web-settings/input-item.js:69
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:119
 msgid "Submit"
@@ -670,7 +673,7 @@ msgstr "Pielietot"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:85
 #: frontend/src/components/wiki-card-view/wiki-card-item-add.js:12
-#: frontend/src/pages/wikis/wikis.js:287
+#: frontend/src/pages/wikis/wikis.js:288
 msgid "Add Wiki"
 msgstr "Pievienot Wiki"
 
@@ -704,7 +707,7 @@ msgstr "Pievienot Wiki"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:82
 #: frontend/src/components/dialog/trash-dialog.js:252
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:674
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:707
 #: frontend/src/components/group-members.js:30
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:125
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:23
@@ -803,12 +806,12 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:210
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:348
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:460
-#: frontend/src/metadata/components/popover/options-popover/index.js:151
+#: frontend/src/metadata/components/popover/options-popover/index.js:152
 msgid "No options available"
 msgstr ""
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:57
-#: frontend/src/pages/wiki2/side-panel.js:170
+#: frontend/src/pages/wiki2/side-panel.js:174
 msgid "New page"
 msgstr ""
 
@@ -999,8 +1002,8 @@ msgstr "Tiešām dzēst kontu?"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:39
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:60
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:60
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:740
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:763
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:741
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:764
 #: frontend/src/components/group-members.js:163
 #: frontend/src/components/popover/tag-list-item.js:55
 #: frontend/src/components/popover/tag-list-item.js:56
@@ -1021,14 +1024,16 @@ msgstr "Tiešām dzēst kontu?"
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:91
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:237
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:273
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:285
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:271
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:283
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:15
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:176
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:32
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:50
+#: frontend/src/metadata/metadata-tree-view/view-item/index.js:57
 #: frontend/src/metadata/views/gallery/context-menu/index.js:20
-#: frontend/src/metadata/views/table/context-menu/index.js:53
+#: frontend/src/metadata/views/table/context-menu/index.js:74
+#: frontend/src/metadata/views/table/context-menu/index.js:93
+#: frontend/src/metadata/views/table/context-menu/index.js:121
 #: frontend/src/pages/institution-admin/user-list-search/index.js:92
 #: frontend/src/pages/institution-admin/user-list/index.js:144
 #: frontend/src/pages/institution-admin/user-list/user-item.js:85
@@ -1072,7 +1077,7 @@ msgstr "Tiešām dzēst kontu?"
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:257
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:111
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:155
-#: frontend/src/pages/sys-admin/users/search-users.js:355
+#: frontend/src/pages/sys-admin/users/search-users.js:363
 #: frontend/src/pages/sys-admin/users/user-links.js:135
 #: frontend/src/pages/sys-admin/users/user-repos.js:162
 #: frontend/src/pages/sys-admin/users/user-repos.js:217
@@ -1188,7 +1193,7 @@ msgid "Copy selected item(s) to:"
 msgstr "Kopēt atlasīto(s) ierakstu(s) uz:"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:171
-#: frontend/src/components/dialog/select-dirent-body.js:174
+#: frontend/src/components/dialog/select-dirent-body.js:166
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:65
 msgid "Other Libraries"
 msgstr "Cita bibliotēka"
@@ -1214,7 +1219,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:48
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:25
 #: frontend/src/metadata/utils/validate/view.js:9
-#: frontend/src/utils/utils.js:1737
+#: frontend/src/utils/utils.js:1742
 msgid "Name is required"
 msgstr "Nepieciešams nosaukums"
 
@@ -1233,8 +1238,9 @@ msgstr ""
 #: frontend/src/components/dialog/create-folder-dialog.js:57
 #: frontend/src/components/dialog/rename-dialog.js:58
 #: frontend/src/components/dialog/rename-dirent.js:58
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:138
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:140
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:81
+#: frontend/src/metadata/views/table/index.js:92
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
@@ -1350,14 +1356,14 @@ msgstr "Tiesības"
 #: frontend/src/components/dialog/share-repo-dialog.js:40
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:22
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:712
+#: frontend/src/utils/utils.js:715
 msgid "Read-Write"
 msgstr "Lasīt-Rakstīt"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:227
 #: frontend/src/components/dialog/share-repo-dialog.js:41
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:715
+#: frontend/src/utils/utils.js:718
 msgid "Read-Only"
 msgstr "Tikai lasīt"
 
@@ -1427,12 +1433,12 @@ msgstr ""
 
 #: frontend/src/components/dialog/create-tag-dialog.js:108
 #: frontend/src/components/dialog/create-tag-dialog.js:109
-#: frontend/src/components/file-view/file-toolbar.js:151
-#: frontend/src/components/file-view/file-toolbar.js:215
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:111
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:162
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:210
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:240
+#: frontend/src/components/file-view/file-toolbar.js:152
+#: frontend/src/components/file-view/file-toolbar.js:216
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:180
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:231
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:279
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:309
 #: frontend/src/shared-dir-view.js:493
 msgid "Save"
 msgstr ""
@@ -1479,10 +1485,10 @@ msgstr "Augšuplādēt"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:157
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:180
 #: frontend/src/components/dialog/zip-download-dialog.js:123
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:734
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:757
-#: frontend/src/components/file-view/file-toolbar.js:165
-#: frontend/src/components/file-view/file-toolbar.js:249
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:735
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:758
+#: frontend/src/components/file-view/file-toolbar.js:166
+#: frontend/src/components/file-view/file-toolbar.js:250
 #: frontend/src/components/file-view/file-view-tip.js:25
 #: frontend/src/components/history-list-view/history-list-item.js:104
 #: frontend/src/components/history-trash-file-view/download.js:10
@@ -1490,9 +1496,8 @@ msgstr "Augšuplādēt"
 #: frontend/src/components/shared-file-view/shared-file-view.js:133
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:399
 #: frontend/src/metadata/views/gallery/context-menu/index.js:19
-#: frontend/src/metadata/views/table/context-menu/index.js:52
 #: frontend/src/pages/file-history-old/history-item.js:127
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:123
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:192
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:254
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:63
@@ -1665,8 +1670,8 @@ msgstr ""
 #: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:67
-#: frontend/src/components/search/search.js:743
-#: frontend/src/components/search/search.js:778
+#: frontend/src/components/search/search.js:749
+#: frontend/src/components/search/search.js:784
 #: frontend/src/components/system-notification.js:46
 msgid "Close"
 msgstr "Aizvērt"
@@ -1884,6 +1889,34 @@ msgid ""
 "can not create libraries."
 msgstr ""
 
+#: frontend/src/components/dialog/image-dialog.js:46
+msgid "The image could not be loaded."
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:47
+msgid "Previous (Left arrow key)"
+msgstr "Iepriekšējais (bultiņa pa kreisi)"
+
+#: frontend/src/components/dialog/image-dialog.js:48
+msgid "Next (Right arrow key)"
+msgstr "Nākamais (bultiņa pa labi)"
+
+#: frontend/src/components/dialog/image-dialog.js:49
+msgid "Close (Esc)"
+msgstr "Aizvērt (Esc)"
+
+#: frontend/src/components/dialog/image-dialog.js:50
+msgid "Zoom in"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:51
+msgid "Zoom out"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:56
+msgid "View original image"
+msgstr ""
+
 #: frontend/src/components/dialog/import-members-dialog.js:37
 #: frontend/src/components/dialog/org-import-users-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:38
@@ -1934,6 +1967,7 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link-dialog.js:67
 #: frontend/src/components/dialog/share-dialog.js:128
 #: frontend/src/components/dialog/share-dialog.js:277
+#: frontend/src/components/operations/internal-link-operation.js:28
 msgid "Internal Link"
 msgstr ""
 
@@ -2022,8 +2056,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/leave-group-dialog.js:33
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:240
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:279
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:291
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:277
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:289
 msgid "Leave"
 msgstr ""
 
@@ -2149,7 +2183,7 @@ msgstr "Atlasīt grupu"
 #: frontend/src/pages/institution-admin/main-panel.js:23
 #: frontend/src/pages/org-admin/org-users-search-users.js:196
 #: frontend/src/pages/org-admin/org-users-users.js:260
-#: frontend/src/pages/sys-admin/users/search-users.js:313
+#: frontend/src/pages/sys-admin/users/search-users.js:315
 #: frontend/src/pages/sys-admin/users/users.js:463
 msgid "Search users"
 msgstr ""
@@ -2182,11 +2216,11 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:94
 #: frontend/src/components/dialog/trash-dialog.js:256
 #: frontend/src/components/dirent-detail/detail-list-view.js:103
-#: frontend/src/components/dirent-detail/dirent-details/file-details.js:22
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:68
 #: frontend/src/components/dirent-detail/embedded-file-details/file-details.js:13
 #: frontend/src/components/dirent-detail/lib-details.js:19
 #: frontend/src/components/dirent-detail/old-file-details.js:58
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:677
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:710
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:127
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
@@ -2225,7 +2259,7 @@ msgstr "Izmērs "
 #: frontend/src/components/dirent-detail/detail-list-view.js:81
 #: frontend/src/components/dirent-detail/detail-list-view.js:105
 #: frontend/src/components/dirent-detail/old-file-details.js:60
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:678
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:711
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:128
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:40
@@ -2451,7 +2485,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:59
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:49
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:59
-#: frontend/src/pages/sys-admin/users/search-users.js:296
+#: frontend/src/pages/sys-admin/users/search-users.js:298
 #: frontend/src/pages/sys-admin/users/users.js:487
 msgid "Set Quota"
 msgstr "Iestatīt kvotas"
@@ -2549,7 +2583,7 @@ msgstr ""
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
 #: frontend/src/components/dialog/trash-dialog.js:127
 #: frontend/src/pages/lib-content-view/lib-content-view.js:233
-#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1239
+#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1242
 msgid "Permission denied"
 msgstr "Pieeja liegta"
 
@@ -2558,17 +2592,19 @@ msgstr "Pieeja liegta"
 #: frontend/src/components/dialog/trash-dialog.js:365
 #: frontend/src/components/dialog/zip-download-dialog.js:76
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:281
+#: frontend/src/metadata/store/server-operator.js:343
+#: frontend/src/metadata/store/server-operator.js:361
 #: frontend/src/pages/lib-content-view/lib-content-view.js:239
-#: frontend/src/pages/lib-content-view/lib-content-view.js:816
-#: frontend/src/pages/lib-content-view/lib-content-view.js:864
-#: frontend/src/pages/lib-content-view/lib-content-view.js:961
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1152
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1168
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1204
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1232
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1300
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1356
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1394
+#: frontend/src/pages/lib-content-view/lib-content-view.js:817
+#: frontend/src/pages/lib-content-view/lib-content-view.js:865
+#: frontend/src/pages/lib-content-view/lib-content-view.js:956
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1147
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1163
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1199
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1227
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1303
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1359
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1397
 #: frontend/src/pages/my-libs/my-libs-deleted.js:148
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:274
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:296
@@ -2583,7 +2619,7 @@ msgstr "Pieeja liegta"
 #: frontend/src/pages/upload-link/file-uploader.js:432
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:232
 #: frontend/src/repo-folder-trash.js:137 frontend/src/repo-folder-trash.js:334
-#: frontend/src/utils/utils.js:1244
+#: frontend/src/utils/utils.js:1249
 msgid "Error"
 msgstr "Kļūda"
 
@@ -2597,7 +2633,7 @@ msgstr "Kļūda"
 #: frontend/src/repo-folder-trash.js:143 frontend/src/repo-folder-trash.js:336
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1247 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1252 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "Lūdzu pārbaudiet tīkla pieslēgumu"
@@ -2752,6 +2788,7 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:77
 #: frontend/src/components/dialog/search-file-dialog.js:81
 #: frontend/src/components/file-chooser/index.js:469
+#: frontend/src/components/file-chooser/searcher/index.js:167
 msgid "Search"
 msgstr ""
 
@@ -2765,12 +2802,12 @@ msgstr "Meklēt datnes bibliotēkā"
 msgid "No result"
 msgstr "Nav rezultāta"
 
-#: frontend/src/components/dialog/select-dirent-body.js:167
+#: frontend/src/components/dialog/select-dirent-body.js:159
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:45
 msgid "Current Library"
 msgstr "Pašreizējā bibliotēka"
 
-#: frontend/src/components/dialog/select-dirent-body.js:181
+#: frontend/src/components/dialog/select-dirent-body.js:173
 msgid "Recently Used"
 msgstr ""
 
@@ -2834,16 +2871,16 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:327
 #: frontend/src/components/dialog/share-wiki-dialog.js:160
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:84
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:737
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:760
-#: frontend/src/components/file-view/file-toolbar.js:138
-#: frontend/src/components/file-view/file-toolbar.js:243
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:738
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:761
+#: frontend/src/components/file-view/file-toolbar.js:139
+#: frontend/src/components/file-view/file-toolbar.js:244
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:328
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:488
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:261
 #: frontend/src/components/toolbar/view-file-toolbar.js:136
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:231
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:100
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:169
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:70
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:347
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:401
@@ -3152,8 +3189,8 @@ msgid "Visit old version page"
 msgstr ""
 
 #: frontend/src/components/dialog/trash-dialog.js:208
-#: frontend/src/components/dirent-grid-view/dirent-grid-view.js:871
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:737
+#: frontend/src/components/dirent-grid-view/dirent-grid-view.js:869
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:770
 msgid "No file"
 msgstr ""
 
@@ -3292,19 +3329,34 @@ msgstr "Atkritne"
 
 #: frontend/src/components/dir-view-mode/dir-others.js:28
 #: frontend/src/components/dir-view-mode/dir-others.js:30
-#: frontend/src/components/file-view/file-toolbar.js:195
+#: frontend/src/components/file-view/file-toolbar.js:196
 #: frontend/src/components/toolbar/view-file-toolbar.js:143
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:65
 #: frontend/src/utils/text-translation.js:108
 msgid "History"
 msgstr "Vēsture"
 
-#: frontend/src/components/dir-view-mode/dir-views.js:18
+#: frontend/src/components/dir-view-mode/dir-views.js:19
 msgid "Extended properties"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/extension-prompts/index.js:11
+msgid "Extension Prompts"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/extension-prompts/index.js:17
+msgid "Bell Icon"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/extension-prompts/index.js:22
+msgid ""
+"Turn on extensible properties and views to experience a new way of managing "
+"files"
 msgstr ""
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:80
 #: frontend/src/components/dirent-detail/detail-list-view.js:104
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:148
 #: frontend/src/components/dirent-detail/old-file-details.js:59
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:75
 msgid "Location"
@@ -3316,7 +3368,7 @@ msgid "Edit metadata properties"
 msgstr ""
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:107
-#: frontend/src/components/dirent-detail/dirent-details/file-details.js:25
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:71
 #: frontend/src/components/toolbar/view-file-toolbar.js:142
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:78
 #: frontend/src/utils/text-translation.js:120
@@ -3324,20 +3376,63 @@ msgid "Tags"
 msgstr ""
 
 #: frontend/src/components/dirent-detail/dirent-details/dir-details.js:14
-#: frontend/src/components/dirent-detail/dirent-details/file-details.js:24
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:70
 #: frontend/src/components/dirent-detail/embedded-file-details/file-details.js:15
 #: frontend/src/components/dirent-detail/lib-details.js:21
 #: frontend/src/metadata/utils/column/index.js:171
 msgid "Last modified time"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/dirent-details/file-details.js:23
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:25
+msgid "Dimensions"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:27
+msgid "Device make"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:29
+msgid "Device model"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:31
+msgid "Color space"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:33
+#: frontend/src/metadata/utils/column/index.js:207
+msgid "Capture time"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:35
+msgid "Focal length"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:37
+msgid "F number"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:39
+msgid "Exposure time"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:53
+msgid "mm"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:55
+msgid "s"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:69
 #: frontend/src/components/dirent-detail/embedded-file-details/file-details.js:14
 #: frontend/src/metadata/utils/column/index.js:177
 msgid "Last modifier"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/dirent-details/file-details.js:65
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:115
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:142
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:149
 #: frontend/src/metadata/components/detail-editor/collaborator-editor/index.js:90
 #: frontend/src/metadata/components/detail-editor/date-editor/index.js:45
 #: frontend/src/metadata/components/detail-editor/long-text-editor/index.js:32
@@ -3346,44 +3441,53 @@ msgstr ""
 #: frontend/src/metadata/components/detail-editor/rate-editor/index.js:17
 #: frontend/src/metadata/components/detail-editor/single-select-editor/index.js:91
 #: frontend/src/metadata/components/detail-editor/text-editor/index.js:75
-#: frontend/src/metadata/components/metadata-details/index.js:120
+#: frontend/src/metadata/components/metadata-details/index.js:118
+#: frontend/src/metadata/views/gallery/gallery-main.js:119
 #: frontend/src/metadata/views/table/table-main/records/group-body/group-container/group-title.js:11
 msgid "Empty"
 msgstr "Tukšs"
 
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:134
+msgid "General information"
+msgstr ""
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:137
+msgid "Capture information"
+msgstr ""
+
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:332
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:796
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:797
 msgid "freezed"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:332
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:796
-#: frontend/src/components/file-view/file-info.js:31
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:797
+#: frontend/src/components/file-view/file-info.js:32
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:17
 msgid "locked"
 msgstr "bloķēts"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:333
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:790
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:791
 msgid "Frozen by {name}"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:333
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:790
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:791
 msgid "locked by {name}"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:827
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:829
 msgid "Unselect this item"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:827
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:829
 msgid "Select this item"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:834
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:934
-#: frontend/src/components/file-view/file-info.js:40
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:836
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:936
+#: frontend/src/components/file-view/file-info.js:41
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:634
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:635
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:672
@@ -3404,9 +3508,9 @@ msgstr ""
 msgid "Unstar"
 msgstr "Bez zvaigznītes"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:834
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:934
-#: frontend/src/components/file-view/file-info.js:40
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:836
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:936
+#: frontend/src/components/file-view/file-info.js:41
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:634
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:635
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:318
@@ -3418,13 +3522,13 @@ msgstr "Bez zvaigznītes"
 msgid "Star"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:667
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:668
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:700
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:701
 msgid "Unselect all items"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:667
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:668
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:700
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:701
 msgid "Select all items"
 msgstr ""
 
@@ -3459,10 +3563,6 @@ msgstr ""
 #: frontend/src/pages/sys-admin/side-panel.js:90
 msgid "Libraries"
 msgstr "Bibliotēkas"
-
-#: frontend/src/components/file-chooser/searcher/index.js:167
-msgid "Global search"
-msgstr ""
 
 #: frontend/src/components/file-uploader/file-uploader.js:147
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:145
@@ -3518,12 +3618,12 @@ msgstr ""
 
 #: frontend/src/components/file-uploader/upload-list-item.js:96
 #: frontend/src/components/file-uploader/upload-list-item.js:122
-#: frontend/src/components/file-view/file-toolbar.js:145
-#: frontend/src/components/file-view/file-toolbar.js:209
+#: frontend/src/components/file-view/file-toolbar.js:146
+#: frontend/src/components/file-view/file-toolbar.js:210
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:96
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:122
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:106
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:157
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:175
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:226
 #: frontend/src/pages/upload-link/upload-list-item.js:96
 #: frontend/src/pages/upload-link/upload-list-item.js:122
 msgid "Saving..."
@@ -3612,49 +3712,53 @@ msgstr ""
 msgid "state"
 msgstr ""
 
-#: frontend/src/components/file-view/file-info.js:30
+#: frontend/src/components/file-view/file-info.js:31
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:13
 msgid "starred"
 msgstr "zvaigžņotas"
 
-#: frontend/src/components/file-view/file-info.js:30
+#: frontend/src/components/file-view/file-info.js:31
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:13
 msgid "unstarred"
 msgstr "bez zvaigzīnes"
 
-#: frontend/src/components/file-view/file-toolbar.js:94
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:85
+#: frontend/src/components/file-view/file-toolbar.js:95
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:148
 #: frontend/src/utils/text-translation.js:72
 msgid "Lock"
 msgstr "Bloķēt"
 
-#: frontend/src/components/file-view/file-toolbar.js:98
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:93
+#: frontend/src/components/file-view/file-toolbar.js:99
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:156
 #: frontend/src/utils/text-translation.js:76
 msgid "Unlock"
 msgstr "Atbloķēt"
 
-#: frontend/src/components/file-view/file-toolbar.js:123
+#: frontend/src/components/file-view/file-toolbar.js:124
 msgid "Print"
 msgstr ""
 
-#: frontend/src/components/file-view/file-toolbar.js:172
-#: frontend/src/components/file-view/file-toolbar.js:253
+#: frontend/src/components/file-view/file-toolbar.js:173
+#: frontend/src/components/file-view/file-toolbar.js:254
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:48
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:80
 #: frontend/src/pages/org-admin/org-logs-file-update.js:260
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:136
 #: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:64
 msgid "Details"
 msgstr "Detaļas"
 
-#: frontend/src/components/file-view/file-toolbar.js:179
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:131
+#: frontend/src/components/file-view/file-toolbar.js:180
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:200
 #: frontend/src/utils/text-translation.js:68
 msgid "Open via Client"
 msgstr "Atvērt ar klientu"
 
-#: frontend/src/components/file-view/file-toolbar.js:199
-#: frontend/src/components/file-view/file-toolbar.js:233
-#: frontend/src/metadata/views/table/context-menu/index.js:73
+#: frontend/src/components/file-view/file-toolbar.js:200
+#: frontend/src/components/file-view/file-toolbar.js:234
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:62
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:83
+#: frontend/src/metadata/views/table/context-menu/index.js:109
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:69
 msgid "Open parent folder"
 msgstr ""
@@ -3663,6 +3767,15 @@ msgstr ""
 #: frontend/src/components/history-trash-file-view/file-view-tip.js:17
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:15
 msgid "Online view is not applicable to this file format"
+msgstr ""
+
+#: frontend/src/components/file-view/file-view.js:140
+msgid "Unfold"
+msgstr ""
+
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:69
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:79
+msgid "Fold"
 msgstr ""
 
 #: frontend/src/components/files-sub-nav.js:55
@@ -3702,7 +3815,7 @@ msgstr "Koplietot visiem"
 #: frontend/src/pages/sys-admin/users/user-groups.js:121
 #: frontend/src/pages/sys-admin/users/user-links.js:161
 #: frontend/src/pages/sys-admin/users/users-nav.js:25
-#: frontend/src/utils/utils.js:718
+#: frontend/src/utils/utils.js:721
 msgid "Admin"
 msgstr "Administrators"
 
@@ -3722,7 +3835,7 @@ msgstr "Dalībnieks"
 
 #: frontend/src/components/group-members.js:96
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:277
-#: frontend/src/pages/lib-content-view/lib-content-view.js:949
+#: frontend/src/pages/lib-content-view/lib-content-view.js:944
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:292
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:155
 #: frontend/src/pages/org-admin/org-group-repos.js:146
@@ -3778,7 +3891,7 @@ msgstr "Aktivitātes"
 #: frontend/src/components/main-side-nav-folded.js:168
 #: frontend/src/components/main-side-nav.js:242
 #: frontend/src/components/main-side-nav.js:244
-#: frontend/src/pages/wikis/wikis.js:274
+#: frontend/src/pages/wikis/wikis.js:275
 msgid "Wikis"
 msgstr ""
 
@@ -3934,26 +4047,26 @@ msgstr ""
 msgid "Last modified by"
 msgstr ""
 
-#: frontend/src/components/search/search.js:544
+#: frontend/src/components/search/search.js:550
 msgid "Type characters to start search"
 msgstr ""
 
-#: frontend/src/components/search/search.js:571
-#: frontend/src/components/search/search.js:619
-#: frontend/src/components/search/search.js:636
+#: frontend/src/components/search/search.js:577
+#: frontend/src/components/search/search.js:625
+#: frontend/src/components/search/search.js:642
 msgid "in all libraries"
 msgstr ""
 
-#: frontend/src/components/search/search.js:607
-#: frontend/src/components/search/search.js:630
+#: frontend/src/components/search/search.js:613
+#: frontend/src/components/search/search.js:636
 msgid "in this library"
 msgstr ""
 
-#: frontend/src/components/search/search.js:613
+#: frontend/src/components/search/search.js:619
 msgid "in this folder"
 msgstr ""
 
-#: frontend/src/components/search/search.js:680
+#: frontend/src/components/search/search.js:686
 msgid "Search results visited recently"
 msgstr ""
 
@@ -4165,7 +4278,8 @@ msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:319
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:227
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:46
+#: frontend/src/metadata/metadata-tree-view/view-item/index.js:53
+#: frontend/src/metadata/views/table/context-menu/index.js:125
 #: frontend/src/pages/groups/group-view.js:366
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:145
 #: frontend/src/pages/org-admin/departments/group-item.js:50
@@ -4329,11 +4443,11 @@ msgstr ""
 msgid "Move"
 msgstr "Pārvietot"
 
-#: frontend/src/components/user-select.js:100
+#: frontend/src/components/user-select.js:97
 msgid "User not found"
 msgstr ""
 
-#: frontend/src/components/user-select.js:100
+#: frontend/src/components/user-select.js:97
 msgid "Enter characters to start searching"
 msgstr ""
 
@@ -4514,19 +4628,19 @@ msgstr ""
 msgid "Avatar:"
 msgstr "Avatars:  "
 
-#: frontend/src/components/user-settings/user-basic-info-form.js:69
+#: frontend/src/components/user-settings/user-basic-info-form.js:71
 msgid "Username:"
 msgstr "Lietotājvārds:"
 
-#: frontend/src/components/user-settings/user-basic-info-form.js:73
+#: frontend/src/components/user-settings/user-basic-info-form.js:75
 msgid "You can use this field at login."
 msgstr ""
 
-#: frontend/src/components/user-settings/user-basic-info-form.js:79
+#: frontend/src/components/user-settings/user-basic-info-form.js:81
 msgid "Contact Email:"
 msgstr "Kontaktpersonas e-pasts:"
 
-#: frontend/src/components/user-settings/user-basic-info-form.js:83
+#: frontend/src/components/user-settings/user-basic-info-form.js:85
 msgid "Your notifications will be sent to this email."
 msgstr ""
 
@@ -4587,35 +4701,40 @@ msgid "Publish"
 msgstr ""
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:234
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:265
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:263
 msgid "Unpublish"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:263
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:252
+#: frontend/src/translate.js:34
+msgid "Published"
+msgstr ""
+
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:261
 msgid "Unpublish Wiki"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:264
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:262
 msgid "Are you sure you want to unpublish Wiki"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:271
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:283
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:269
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:281
 msgid "Delete Wiki"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:272
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:284
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:270
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:282
 msgid "Are you sure you want to delete Wiki"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:277
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:289
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:275
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:287
 msgid "Leave Share Wiki"
 msgstr ""
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:278
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:290
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:276
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:288
 msgid "Are you sure you want to leave share Wiki"
 msgstr ""
 
@@ -4666,37 +4785,37 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:248
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:347
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:459
-#: frontend/src/metadata/components/popover/options-popover/index.js:193
+#: frontend/src/metadata/components/popover/options-popover/index.js:194
 msgid "Search option"
 msgstr ""
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:267
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:261
-#: frontend/src/metadata/components/popover/options-popover/index.js:207
+#: frontend/src/metadata/components/popover/options-popover/index.js:208
 msgid "Add option"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:36
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "1 preset filter"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:36
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "1 filter"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Preset filters"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Filters"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:40
 msgid "Preset filter"
 msgstr ""
 
-#: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
+#: frontend/src/metadata/components/data-process-setter/filter-setter.js:40
 msgid "Filter"
 msgstr ""
 
@@ -4911,7 +5030,7 @@ msgid "Name cannot contain dots"
 msgstr ""
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:17
-#: frontend/src/utils/utils.js:1747
+#: frontend/src/utils/utils.js:1752
 msgid "Name cannot contain backtick"
 msgstr ""
 
@@ -4990,20 +5109,25 @@ msgstr ""
 msgid "Files and folders"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-type-filter.js:7
+#: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:7
 msgid "Only pictures"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-type-filter.js:8
+#: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:8
 msgid "Only videos"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-type-filter.js:9
+#: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:9
 msgid "Pictures and videos"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/filter-popover/basic-filters/index.js:31
+#: frontend/src/metadata/components/popover/filter-popover/basic-filters/index.js:32
 msgid "Basic"
+msgstr ""
+
+#: frontend/src/metadata/components/popover/filter-popover/basic-filters/table-file-type-filter.js:40
+#: frontend/src/metadata/utils/column/index.js:185
+msgid "File type"
 msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:179
@@ -5081,11 +5205,11 @@ msgstr ""
 msgid "Are you sure you want to delete this option?"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/options-popover/index.js:46
+#: frontend/src/metadata/components/popover/options-popover/index.js:47
 msgid "There is another option with this name"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/options-popover/index.js:152
+#: frontend/src/metadata/components/popover/options-popover/index.js:153
 msgid "No options"
 msgstr ""
 
@@ -5134,16 +5258,12 @@ msgid "Table"
 msgstr "Tabula"
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:45
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:72
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:74
 msgid "Gallery"
 msgstr ""
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:63
 msgid "New view"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/rename/index.js:59
-msgid "Rename view"
 msgstr ""
 
 #: frontend/src/metadata/constants/column/limit.js:15
@@ -5318,14 +5438,14 @@ msgstr ""
 msgid "is none of..."
 msgstr ""
 
-#: frontend/src/metadata/hooks/metadata-view.js:80
+#: frontend/src/metadata/hooks/metadata-view.js:81
 msgid ""
 "The files' metadata is being created. This may take a minute or so. Please "
 "refresh the page later."
 msgstr ""
 
 #: frontend/src/metadata/hooks/metadata.js:98
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:150
+#: frontend/src/metadata/metadata-tree-view/view-item/index.js:204
 msgid "File extended properties"
 msgstr ""
 
@@ -5334,7 +5454,7 @@ msgstr ""
 msgid "Untitled"
 msgstr ""
 
-#: frontend/src/metadata/metadata-tree-view/index.js:197
+#: frontend/src/metadata/metadata-tree-view/index.js:204
 msgid "Add view"
 msgstr ""
 
@@ -5346,72 +5466,75 @@ msgstr ""
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:28
 #: frontend/src/metadata/utils/validate/view.js:12
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:55
-#: frontend/src/utils/utils.js:1742
+#: frontend/src/utils/utils.js:1747
 msgid "Name cannot contain slash"
 msgstr ""
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:31
 #: frontend/src/metadata/utils/validate/view.js:15
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:59
-#: frontend/src/utils/utils.js:1752
+#: frontend/src/utils/utils.js:1757
 msgid "Name cannot contain backslash"
 msgstr ""
 
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:47
+#: frontend/src/metadata/metadata-tree-view/view-item/index.js:54
 msgid "Duplicate"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:19
-msgid "Failed to modify record"
-msgstr ""
-
-#: frontend/src/metadata/store/server-operator.js:31
+#: frontend/src/metadata/store/server-operator.js:42
 msgid "Failed to modify records"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:38
-#: frontend/src/metadata/store/server-operator.js:44
+#: frontend/src/metadata/store/server-operator.js:58
+msgid "Failed to delete records"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:65
+#: frontend/src/metadata/store/server-operator.js:71
 msgid "Failed to restore records"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:58
+#: frontend/src/metadata/store/server-operator.js:85
 msgid "Failed to insert property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:67
+#: frontend/src/metadata/store/server-operator.js:94
 msgid "Failed to delete property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:76
+#: frontend/src/metadata/store/server-operator.js:103
 msgid "Failed to rename property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:85
+#: frontend/src/metadata/store/server-operator.js:112
 msgid "Failed to modify property data"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:96
-msgid "Failed to modify property width"
-msgstr ""
-
-#: frontend/src/metadata/store/server-operator.js:105
+#: frontend/src/metadata/store/server-operator.js:121
 msgid "Failed to modify property order"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:114
+#: frontend/src/metadata/store/server-operator.js:130
 msgid "Failed to modify filter"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:123
+#: frontend/src/metadata/store/server-operator.js:139
 msgid "Failed to modify sort"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:132
+#: frontend/src/metadata/store/server-operator.js:148
 msgid "Failed to modify group"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:141
+#: frontend/src/metadata/store/server-operator.js:157
 msgid "Failed to modify hidden properties"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:344
+#: frontend/src/metadata/store/server-operator.js:362
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1149
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1165
+msgid "Renaming {name} failed"
 msgstr ""
 
 #: frontend/src/metadata/utils/column/index.js:168
@@ -5424,10 +5547,6 @@ msgstr ""
 
 #: frontend/src/metadata/utils/column/index.js:183
 msgid "File name"
-msgstr ""
-
-#: frontend/src/metadata/utils/column/index.js:185
-msgid "File type"
 msgstr ""
 
 #: frontend/src/metadata/utils/column/index.js:187
@@ -5462,56 +5581,52 @@ msgstr ""
 msgid "File details"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:207
-msgid "Shooting time"
-msgstr ""
-
 #: frontend/src/metadata/utils/column/index.js:209
 msgid "File owner"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:268
+#: frontend/src/metadata/utils/column/index.js:267
 msgid "Picture"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:269
+#: frontend/src/metadata/utils/column/index.js:268
 #: frontend/src/pages/search/advanced-search.js:18
 msgid "Document"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:270
+#: frontend/src/metadata/utils/column/index.js:269
 #: frontend/src/pages/search/advanced-search.js:18
 #: frontend/src/pages/search/advanced-search.js:164
 msgid "Video"
 msgstr "Video"
 
-#: frontend/src/metadata/utils/column/index.js:271
+#: frontend/src/metadata/utils/column/index.js:270
 #: frontend/src/pages/search/advanced-search.js:18
 #: frontend/src/pages/search/advanced-search.js:168
 msgid "Audio"
 msgstr "Audio"
 
-#: frontend/src/metadata/utils/column/index.js:272
+#: frontend/src/metadata/utils/column/index.js:271
 msgid "Code"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:273
+#: frontend/src/metadata/utils/column/index.js:272
 msgid "Compressed"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:295
+#: frontend/src/metadata/utils/column/index.js:299
 msgid "In progress"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:296
+#: frontend/src/metadata/utils/column/index.js:300
 msgid "In review"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:297
+#: frontend/src/metadata/utils/column/index.js:301
 msgid "Done"
 msgstr ""
 
-#: frontend/src/metadata/utils/column/index.js:298
+#: frontend/src/metadata/utils/column/index.js:302
 msgid "Outdated"
 msgstr ""
 
@@ -5519,56 +5634,69 @@ msgstr ""
 msgid "Name already exists"
 msgstr ""
 
-#: frontend/src/metadata/views/gallery/gallery-main.js:76
-#: frontend/src/metadata/views/table/table-main/records/index.js:670
+#: frontend/src/metadata/views/gallery/gallery-main.js:157
+#: frontend/src/metadata/views/table/table-main/records/index.js:700
 msgid "No record"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:57
+#: frontend/src/metadata/views/table/context-menu/index.js:60
 msgid "Clear selected"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:58
+#: frontend/src/metadata/views/table/context-menu/index.js:61
 msgid "Copy selected"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:72
+#: frontend/src/metadata/views/table/context-menu/index.js:108
 msgid "Open folder in new tab"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:72
+#: frontend/src/metadata/views/table/context-menu/index.js:108
 msgid "Open file in new tab"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:77
+#: frontend/src/metadata/views/table/context-menu/index.js:113
 msgid "Generate description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:79
+#: frontend/src/metadata/views/table/context-menu/index.js:115
 msgid "Generate image description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:153
+#: frontend/src/metadata/views/table/context-menu/index.js:191
 msgid "Failed to generate description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:184
+#: frontend/src/metadata/views/table/context-menu/index.js:219
 msgid "Failed to generate image description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:651
+#: frontend/src/metadata/views/table/index.js:129
+msgid "Successfully deleted {name} and {n} other items"
+msgstr ""
+
+#: frontend/src/metadata/views/table/index.js:130
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1189
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1217
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:375
+#: frontend/src/pages/org-admin/org-groups-search-groups.js:229
+#: frontend/src/pages/org-admin/org-groups.js:128
+msgid "Successfully deleted {name}"
+msgstr ""
+
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:653
 msgid "xxx rows are copied."
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:651
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:653
 msgid "1 row is copied."
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:683
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:685
 msgid "xxx cells copied"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:683
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:685
 msgid "1 cell copied"
 msgstr ""
 
@@ -5601,7 +5729,7 @@ msgid "xxx records"
 msgstr ""
 
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:124
-msgid "1 record"
+msgid "xxx record"
 msgstr ""
 
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:142
@@ -5691,11 +5819,11 @@ msgstr ""
 msgid "Select"
 msgstr "Atlasīt"
 
-#: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/index.js:132
+#: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/index.js:128
 msgid "Open folder"
 msgstr ""
 
-#: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/index.js:132
+#: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/index.js:128
 msgid "Open file"
 msgstr ""
 
@@ -5910,12 +6038,13 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:133
-#: frontend/src/pages/sys-admin/users/search-users.js:305
+#: frontend/src/pages/sys-admin/users/search-users.js:307
 #: frontend/src/pages/sys-admin/users/user-nav.js:30
 msgid "Users"
 msgstr "Lietotāji"
 
 #: frontend/src/pages/institution-admin/user-content/index.js:7
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:162
 #: frontend/src/pages/org-admin/org-info.js:66
 #: frontend/src/pages/org-admin/side-panel.js:39
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:104
@@ -6074,111 +6203,98 @@ msgstr ""
 msgid ""
 "You have not invited any guests yet. A guest can access shared libraries "
 "through the web interface allowing more efficient ways to collaborate than "
-"through links. You can invite a guest by clicking the \"Invite Guest\" "
-"button in the menu bar."
+"through links. You can invite a guest by clicking the \"Invite Guest\" item "
+"in the menu."
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:236
 msgid "Library share permission not found."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:677
+#: frontend/src/pages/lib-content-view/lib-content-view.js:678
 msgid "Failed to move files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:679
+#: frontend/src/pages/lib-content-view/lib-content-view.js:680
 #: frontend/src/shared-dir-view.js:216
 msgid "Failed to copy files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:709
+#: frontend/src/pages/lib-content-view/lib-content-view.js:710
 msgid "Successfully moved files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:711
+#: frontend/src/pages/lib-content-view/lib-content-view.js:712
 #: frontend/src/shared-dir-view.js:230
 msgid "Successfully copied files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:908
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
 msgid "Restored {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:909
+#: frontend/src/pages/lib-content-view/lib-content-view.js:910
 msgid "Restored {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:916
+#: frontend/src/pages/lib-content-view/lib-content-view.js:917
 msgid "Failed to restore {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:917
+#: frontend/src/pages/lib-content-view/lib-content-view.js:918
 msgid "Failed to restore {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:945
+#: frontend/src/pages/lib-content-view/lib-content-view.js:940
 msgid "Successfully deleted {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:955
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1198
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1226
+#: frontend/src/pages/lib-content-view/lib-content-view.js:950
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1193
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1221
 msgid "Undo"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:962
+#: frontend/src/pages/lib-content-view/lib-content-view.js:957
 msgid "Failed to delete {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1154
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1170
-msgid "Renaming {name} failed"
-msgstr ""
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1194
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1222
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:375
-#: frontend/src/pages/org-admin/org-groups-search-groups.js:229
-#: frontend/src/pages/org-admin/org-groups.js:128
-msgid "Successfully deleted {name}"
-msgstr ""
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1206
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1234
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1201
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1229
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1290
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1293
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1301
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1304
 msgid "Failed to move {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1349
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1352
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:127
-#: frontend/src/utils/utils.js:1340
+#: frontend/src/utils/utils.js:1345
 msgid "Successfully copied %(name)s."
 msgstr "Veiksmīgi kopēts %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1357
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1360
 msgid "Failed to copy %(name)s"
 msgstr "Kļūda kopējot %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1377
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1380
 msgid "Converting, please wait..."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1389
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1392
 msgid "Successfully converted the file."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1396
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1399
 msgid "Failed to convert {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2189
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2225
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:256
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:108
 #: frontend/src/pages/shared-libs/shared-libs.js:313
@@ -6187,13 +6303,13 @@ msgstr ""
 msgid "Leave Share"
 msgstr "Atļauja koplietojumam"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2235
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2271
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2394
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2431
 #: frontend/src/pages/wiki/main-panel.js:82
-#: frontend/src/pages/wiki2/main-panel.js:77
+#: frontend/src/pages/wiki2/main-panel.js:85
 msgid "Folder does not exist."
 msgstr ""
 
@@ -6438,12 +6554,12 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:206
-#: frontend/src/utils/utils.js:448
+#: frontend/src/utils/utils.js:451
 msgid "Encrypted library"
 msgstr "Šifrēta bibliotēka"
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:209
-#: frontend/src/utils/utils.js:454
+#: frontend/src/utils/utils.js:457
 msgid "Read-Write library"
 msgstr "Lasīt-Rakstīt bibliotēka"
 
@@ -6492,7 +6608,7 @@ msgstr "Meklēt grupas"
 #: frontend/src/pages/sys-admin/groups/search-groups.js:131
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:127
 #: frontend/src/pages/sys-admin/repos/search-repos.js:161
-#: frontend/src/pages/sys-admin/users/search-users.js:324
+#: frontend/src/pages/sys-admin/users/search-users.js:331
 msgid "Result"
 msgstr "Rezultāts"
 
@@ -6731,7 +6847,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-users-admins.js:44
 #: frontend/src/pages/org-admin/org-users-search-users.js:115
 #: frontend/src/pages/org-admin/org-users-users.js:202
-#: frontend/src/pages/sys-admin/users/search-users.js:143
+#: frontend/src/pages/sys-admin/users/search-users.js:145
 #: frontend/src/pages/sys-admin/users/users.js:244
 #, javascript-format
 msgid "Deleted user %s"
@@ -6761,8 +6877,8 @@ msgstr "Pievienot administratoru"
 #: frontend/src/pages/org-admin/org-users-search-users.js:134
 #: frontend/src/pages/sys-admin/orgs/orgs.js:80
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:56
-#: frontend/src/pages/sys-admin/users/search-users.js:215
-#: frontend/src/pages/sys-admin/users/search-users.js:232
+#: frontend/src/pages/sys-admin/users/search-users.js:217
+#: frontend/src/pages/sys-admin/users/search-users.js:234
 #: frontend/src/pages/sys-admin/users/user-info.js:280
 #: frontend/src/pages/sys-admin/users/users.js:364
 #: frontend/src/pages/sys-admin/users/users.js:381
@@ -6770,7 +6886,7 @@ msgid "Edit succeeded"
 msgstr "Rediģēšana izdevās"
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:192
-#: frontend/src/pages/sys-admin/users/search-users.js:309
+#: frontend/src/pages/sys-admin/users/search-users.js:311
 msgid "Search Users"
 msgstr ""
 
@@ -7139,8 +7255,8 @@ msgstr ""
 #: frontend/src/pages/sys-admin/groups/group-members.js:186
 #: frontend/src/pages/sys-admin/links/share-links.js:168
 #: frontend/src/pages/sys-admin/links/upload-links.js:146
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:73
-#: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:43
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:75
+#: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:45
 msgid "Remove"
 msgstr "Aizvākt"
 
@@ -7240,36 +7356,44 @@ msgstr "Pārsūtīt bibliotēku"
 msgid "Create Group"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:134
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:107
+msgid "Migrate User"
+msgstr ""
+
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:135
 msgid "Created library {library_name} with {owner} as its owner"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:144
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:145
 msgid "Deleted library {library_name}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:149
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:150
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:160
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:161
 msgid "Created group {group_name}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:165
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:166
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:172
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:173
 msgid "Deleted group {group_name}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:177
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:178
 msgid "Added user {user}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:182
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:183
 msgid "Deleted user {user}"
+msgstr ""
+
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:188
+msgid "User migrate from {user_from} to {user_to}"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
@@ -7410,7 +7534,7 @@ msgid "Revoke"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:252
-#: frontend/src/pages/sys-admin/users/search-users.js:247
+#: frontend/src/pages/sys-admin/users/search-users.js:249
 #: frontend/src/pages/sys-admin/users/users.js:396
 msgid "Successfully revoked the admin permission of {placeholder}."
 msgstr ""
@@ -7491,6 +7615,7 @@ msgid "Add"
 msgstr "Pievienot"
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
+#: frontend/src/pages/wiki2/main-panel.js:70
 msgid "Side Nav Menu"
 msgstr ""
 
@@ -7602,24 +7727,24 @@ msgstr ""
 msgid "Update succeeded."
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/search-users.js:190
+#: frontend/src/pages/sys-admin/users/search-users.js:192
 #: frontend/src/pages/sys-admin/users/users.js:291
 msgid "Successfully deleted 1 user."
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/search-users.js:191
+#: frontend/src/pages/sys-admin/users/search-users.js:193
 #: frontend/src/pages/sys-admin/users/users.js:292
 msgid "Successfully deleted {user_number_placeholder} users."
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/search-users.js:297
-#: frontend/src/pages/sys-admin/users/search-users.js:352
+#: frontend/src/pages/sys-admin/users/search-users.js:299
+#: frontend/src/pages/sys-admin/users/search-users.js:360
 #: frontend/src/pages/sys-admin/users/users.js:488
 #: frontend/src/pages/sys-admin/users/users.js:550
 msgid "Delete Users"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/search-users.js:353
+#: frontend/src/pages/sys-admin/users/search-users.js:361
 #: frontend/src/pages/sys-admin/users/users.js:551
 msgid "Are you sure you want to delete the selected user(s) ?"
 msgstr ""
@@ -7971,24 +8096,24 @@ msgstr ""
 msgid "Add page inside"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:53
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:77
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:55
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:79
 msgid "Cover"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:56
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:58
 msgid "Change cover"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:42
+#: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:44
 msgid "Emojis"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:62
+#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:64
 msgid "Add icon"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:68
+#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:70
 msgid "Add cover"
 msgstr ""
 
@@ -7996,16 +8121,16 @@ msgstr ""
 msgid "{placeholder} Wiki Trash"
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:309
+#: frontend/src/pages/wikis/wikis.js:311
 msgid "No Wikis"
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:310
-msgid "You do not have any wikis yet."
+#: frontend/src/pages/wikis/wikis.js:314
+msgid "You do not have any Wikis yet."
 msgstr ""
 
-#: frontend/src/pages/wikis/wikis.js:311
-msgid "You can add a wiki by clicking the \"Add Wiki\" button in the menu."
+#: frontend/src/pages/wikis/wikis.js:315
+msgid "You can add a Wiki by clicking the \"Add Wiki\" item in the menu."
 msgstr ""
 
 #: frontend/src/repo-history.js:96
@@ -8279,128 +8404,132 @@ msgstr ""
 msgid "Export as zip"
 msgstr ""
 
-#: frontend/src/utils/utils.js:450
+#: frontend/src/utils/utils.js:453
 msgid "Admin access"
 msgstr ""
 
-#: frontend/src/utils/utils.js:457
+#: frontend/src/utils/utils.js:460
 msgid "Read-Only library"
 msgstr "Tikai lasīt bibliotēka"
 
-#: frontend/src/utils/utils.js:460
+#: frontend/src/utils/utils.js:463
 msgid "Online Read-Write library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:463
+#: frontend/src/utils/utils.js:466
 msgid "Online Read-Only library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:474
+#: frontend/src/utils/utils.js:477
 msgid "Read-Write folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:477
+#: frontend/src/utils/utils.js:480
 msgid "Read-Only folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:480
+#: frontend/src/utils/utils.js:483
 msgid "Online Read-Write folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:483
+#: frontend/src/utils/utils.js:486
 msgid "Online Read-Only folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:721
+#: frontend/src/utils/utils.js:724
 msgid "Online Read-Write"
 msgstr ""
 
-#: frontend/src/utils/utils.js:724
+#: frontend/src/utils/utils.js:727
 msgid "Online Read-Only"
 msgstr ""
 
-#: frontend/src/utils/utils.js:727
+#: frontend/src/utils/utils.js:730
 msgid "Invisible"
 msgstr ""
 
-#: frontend/src/utils/utils.js:737
+#: frontend/src/utils/utils.js:740
 msgid "User can read, write, upload, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:740
+#: frontend/src/utils/utils.js:743
 msgid "User can read, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:743
-msgid "Besides Write permission, user can also share the library."
-msgstr ""
-
 #: frontend/src/utils/utils.js:746
-msgid ""
-"User can view and edit file online via browser. Files can't be downloaded."
+msgid "Besides Write permission, user can also share the library."
 msgstr ""
 
 #: frontend/src/utils/utils.js:749
 msgid ""
-"User can only view files online via browser. Files can't be downloaded."
+"User can view and edit file online via browser. Files can't be downloaded."
 msgstr ""
 
 #: frontend/src/utils/utils.js:752
+msgid ""
+"User can only view files online via browser. Files can't be downloaded."
+msgstr ""
+
+#: frontend/src/utils/utils.js:755
 msgid "User can not see this folder."
 msgstr ""
 
-#: frontend/src/utils/utils.js:763
+#: frontend/src/utils/utils.js:766
 msgid "Preview and download"
 msgstr ""
 
-#: frontend/src/utils/utils.js:773
+#: frontend/src/utils/utils.js:776
 msgid "Preview only"
 msgstr ""
 
-#: frontend/src/utils/utils.js:783
+#: frontend/src/utils/utils.js:786
 msgid "Download and upload"
 msgstr ""
 
-#: frontend/src/utils/utils.js:793
+#: frontend/src/utils/utils.js:796
 msgid "Edit on cloud and download"
 msgstr ""
 
-#: frontend/src/utils/utils.js:803
+#: frontend/src/utils/utils.js:806
 msgid "Edit on cloud only"
 msgstr ""
 
-#: frontend/src/utils/utils.js:1342
+#: frontend/src/utils/utils.js:1244
+msgid "Too many requests"
+msgstr ""
+
+#: frontend/src/utils/utils.js:1347
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Veiksmīgi kopēts %(name)s un 1 cits ieraksts."
 
-#: frontend/src/utils/utils.js:1344
+#: frontend/src/utils/utils.js:1349
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Veiksmīgi kopēts %(name)s un %(amount)s citi ieraksti."
 
-#: frontend/src/utils/utils.js:1355
+#: frontend/src/utils/utils.js:1360
 msgid "Successfully moved %(name)s."
 msgstr " Veiksmīgi pārsūtīts %(name)s."
 
-#: frontend/src/utils/utils.js:1357
+#: frontend/src/utils/utils.js:1362
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Veiksmīgi pārsūtīts %(name)s un 1 cits ieraksts"
 
-#: frontend/src/utils/utils.js:1359
+#: frontend/src/utils/utils.js:1364
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Veiksmīgi pārsūtīts %(name)s un %(amount)s citi ieraksti."
 
-#: frontend/src/utils/utils.js:1371
+#: frontend/src/utils/utils.js:1376
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:1374
+#: frontend/src/utils/utils.js:1379
 msgid "Failed to copy %(name)s."
 msgstr ""
 
-#: frontend/src/utils/utils.js:1384
+#: frontend/src/utils/utils.js:1389
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:1387
+#: frontend/src/utils/utils.js:1392
 msgid "Failed to move %(name)s."
 msgstr ""

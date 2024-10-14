@@ -249,9 +249,7 @@ class WikiCardItem extends Component {
           </div>
           <div className="wiki-item-bottom">
             {moment(wiki.updated_at).fromNow()}
-            {wiki.is_published &&
-              <span>{gettext('published')}</span>
-            }
+            {wiki.is_published && <span>{gettext('Published')}</span>}
           </div>
         </div>
         {this.state.isShowDeleteDialog &&
