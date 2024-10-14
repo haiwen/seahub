@@ -42,7 +42,6 @@ class SelectDirentBody extends React.Component {
     try {
       const res = await seafileAPI.getRepoInfo(this.props.repoID);
       const repoInfo = new RepoInfo(res.data);
-
       this.setState({
         currentRepoInfo: repoInfo,
         selectedRepo: repoInfo,
@@ -60,7 +59,6 @@ class SelectDirentBody extends React.Component {
       const repoList = repos.filter((repo) => repo.permission === 'rw' && repo.repo_id !== this.props.repoID);
       const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
       const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
-
       this.setState({
         repoList: sortedRepoList,
         selectedRepo: selectedRepo || this.state.selectedRepo,
@@ -88,10 +86,6 @@ class SelectDirentBody extends React.Component {
       selectedRepo: repo,
       mode: repo.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
     });
-  };
-
-  selectPath = (path) => {
-    this.props.setSelectedPath(path);
   };
 
   setBrowsingPath = (path) => {
@@ -156,7 +150,7 @@ class SelectDirentBody extends React.Component {
               onDirentItemClick={this.onDirentItemClick}
               selectSearchedItem={this.selectSearchedItem}
               selectRepo={this.onSelectSearchedRepo}
-              selectPath={this.selectPath}
+              setSelectedPath={this.props.setSelectedPath}
               setBrowsingPath={this.setBrowsingPath}
             />
           )}
