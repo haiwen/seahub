@@ -1,14 +1,14 @@
 @font-face {
   font-family: "iconfont";
   /* Project id 4375832 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1726105923189');
+  src: url('./seafile-editor-font/iconfont.eot?t=1728893172756');
   /* IE9 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1726105923189#iefix') format('embedded-opentype'),
+  src: url('./seafile-editor-font/iconfont.eot?t=1728893172756#iefix') format('embedded-opentype'),
     /* IE6-IE8 */
-    url('./seafile-editor-font/iconfont.woff2?t=1726105923189') format('woff2'),
-    url('./seafile-editor-font/iconfont.woff?t=1726105923189') format('woff'),
-    url('./seafile-editor-font/iconfont.ttf?t=1726105923189') format('truetype'),
-    url('./seafile-editor-font/iconfont.svg?t=1726105923189#iconfont') format('svg');
+    url('./seafile-editor-font/iconfont.woff2?t=1728893172756') format('woff2'),
+    url('./seafile-editor-font/iconfont.woff?t=1728893172756') format('woff'),
+    url('./seafile-editor-font/iconfont.ttf?t=1728893172756') format('truetype'),
+    url('./seafile-editor-font/iconfont.svg?t=1728893172756#iconfont') format('svg');
 }
 
 .iconfont {
@@ -20,7 +20,7 @@
 }
 
 .icon-outline:before {
-  content: "\e687";
+  content: "\e629";
 }
 
 .icon-description:before {
