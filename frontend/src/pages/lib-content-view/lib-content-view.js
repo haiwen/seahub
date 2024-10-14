@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import { faviconPath, gettext, mediaUrl, siteRoot, siteTitle, username } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -2440,7 +2440,7 @@ class LibContentView extends React.Component {
             />
           )}
           <MediaQuery query="(max-width: 767.8px)">
-            <Modal zIndex="1030" isOpen={!Utils.isDesktop() && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
+            <Modal zIndex="1030" isOpen={!isDesktop && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
           </MediaQuery>
         </CollaboratorsProvider>
       </MetadataProvider>
