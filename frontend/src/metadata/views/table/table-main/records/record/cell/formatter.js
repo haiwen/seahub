@@ -15,7 +15,7 @@ const Formatter = ({ isCellSelected, isDir, field, value, onChange, record }) =>
   if (type === CellType.RATE && cellEditAble) {
     return (<RateEditor isCellSelected={isCellSelected} value={value} field={field} onChange={onChange} />);
   }
-  return (<CellFormatter readonly={true} value={value} field={field} isDir={isDir} />);
+  return (<CellFormatter readonly={true} value={value} field={field} isDir={isDir} record={record} />);
 };
 
 Formatter.propTypes = {
