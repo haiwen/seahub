@@ -20,7 +20,7 @@ export const SearchStatus = {
   BROWSING: 'browsing',
 };
 
-const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selectSearchedItem, selectRepo, selectPath, setBrowsingPath }) => {
+const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selectSearchedItem, selectRepo, setSelectedPath, setBrowsingPath }) => {
   const [inputValue, setInputValue] = useState('');
   const [isResultsPopoverOpen, setIsResultsPopoverOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -125,7 +125,7 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
       const repoInfo = new RepoInfo(res.data);
       const path = item.path.substring(0, item.path.length - 1);
       selectRepo(repoInfo);
-      selectPath(path);
+      setSelectedPath(path);
       setBrowsingPath(item.path.substring(0, item.path.length - 1));
     }).catch(err => {
       const errMessage = Utils.getErrorMsg(err);
@@ -199,7 +199,7 @@ Searcher.propTypes = {
   onDirentItemClick: PropTypes.func,
   selectSearchedItem: PropTypes.func,
   selectRepo: PropTypes.func,
-  selectPath: PropTypes.func,
+  setSelectedPath: PropTypes.func,
   setBrowsingPath: PropTypes.func,
 };
 
