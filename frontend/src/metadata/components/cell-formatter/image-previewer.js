@@ -34,6 +34,7 @@ const ImagePreviewer = (props) => {
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           src: src,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
+          rawPath: Utils.joinPath(parentDir, fileName),
         };
       });
     setImageItems(newImageItems);
@@ -60,7 +61,7 @@ const ImagePreviewer = (props) => {
     if (imageIndex >= 0 && angle !== 0) {
       const repoID = window.sfMetadataContext.getSetting('repoID');
       const imageItem = imageItems[imageIndex];
-      const path = imageItem.url.slice(imageItem.url.indexOf('/file/') + 5);
+      const path = imageItem.rawPath;
       imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
         if (res.data?.success) {
           seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
