@@ -106,7 +106,7 @@ export const Utils = {
     'bmp': 'pic.png',
     'ico': 'pic.png',
     'heic': 'pic.png',
-    
+
     // photoshop file
     'psd': 'psd.png',
 
