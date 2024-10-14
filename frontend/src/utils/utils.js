@@ -105,6 +105,9 @@ export const Utils = {
     'gif': 'pic.png',
     'bmp': 'pic.png',
     'ico': 'pic.png',
+    'heic': 'pic.png',
+    
+    // photoshop file
     'psd': 'psd.png',
 
     // zip file
