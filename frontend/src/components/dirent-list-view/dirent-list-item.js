@@ -230,8 +230,9 @@ class DirentListItem extends React.Component {
   };
 
   // buiness handler
-  onItemSelected = () => {
-    this.props.onItemSelected(this.state.dirent);
+  onItemSelected = (event) => {
+    event.stopPropagation();
+    this.props.onItemSelected(this.state.dirent, event);
   };
 
   onItemStarred = (e) => {
@@ -822,7 +823,8 @@ class DirentListItem extends React.Component {
               <input
                 type="checkbox"
                 className="vam"
-                onChange={this.onItemSelected}
+                onClick={this.onItemSelected}
+                onChange={() => {}}
                 checked={isSelected}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />

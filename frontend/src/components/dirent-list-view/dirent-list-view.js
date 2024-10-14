@@ -149,9 +149,9 @@ class DirentListView extends React.Component {
     this.freezeItem();
   };
 
-  onItemSelected = (dirent) => {
+  onItemSelected = (dirent, event) => {
     this.setState({ activeDirent: null });
-    this.props.onItemSelected(dirent);
+    this.props.onItemSelected(dirent, event);
   };
 
   onDirentClick = (dirent, event) => {

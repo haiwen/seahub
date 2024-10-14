@@ -1521,40 +1521,73 @@ class LibContentView extends React.Component {
     }
   };
 
-  onDirentSelected = (dirent) => {
+  onDirentSelected = (dirent, event) => {
     this.setState({
       currentDirent: dirent && dirent.isActive ? null : dirent
     });
-    let direntList = this.state.direntList.map(item => {
-      if (dirent && item.name === dirent.name) {
-        item.isSelected = !item.isSelected;
+
+    const { direntList, lastSelectedIndex, selectedDirentList } = this.state;
+    const clickedDirentIndex = dirent ? direntList.findIndex((currDirent) => currDirent.name === dirent.name) : -1;
+    const clickedDirent = clickedDirentIndex > -1 ? direntList[clickedDirentIndex] : null;
+    let nextSelectedIndex = null;
+    if (clickedDirent && !clickedDirent.isSelected) {
+      nextSelectedIndex = clickedDirentIndex;
+    }
+
+    let nextDirentList = direntList;
+    if (event && event.shiftKey && lastSelectedIndex !== null && nextSelectedIndex !== null) {
+      // select multiple files with shift key
+      const start = Math.min(lastSelectedIndex, nextSelectedIndex);
+      const end = Math.max(lastSelectedIndex, nextSelectedIndex);
+      const direntListInRange = direntList.slice(start, end + 1);
+      if (direntListInRange.length > 0) {
+        const nameDirentSelectedMap = selectedDirentList.reduce((currNameDirentSelectedMap, currDirent) => {
+          return { ...currNameDirentSelectedMap, [currDirent.name]: true };
+        }, {});
+        const nameDirentSelectingMap = direntListInRange.reduce((currNameDirentSelectingMap, currDirent) => {
+          return { ...currNameDirentSelectingMap, [currDirent.name]: true };
+        }, {});
+        nextDirentList = direntList.map((currDirent) => {
+          if (nameDirentSelectedMap[currDirent.name] || nameDirentSelectingMap[currDirent.name]) {
+            currDirent.isSelected = true;
+          }
+          return currDirent;
+        });
       }
-      return item;
-    });
-    let selectedDirentList = direntList.filter(item => {
-      return item.isSelected;
-    });
-    if (selectedDirentList.length) {
+    } else {
+      nextDirentList = direntList.map(item => {
+        if (dirent && item.name === dirent.name) {
+          item.isSelected = !item.isSelected;
+        }
+        return item;
+      });
+    }
+
+    const nextSelectedDirentList = nextDirentList.filter(item => item.isSelected);
+    if (nextSelectedDirentList.length) {
       this.setState({ isDirentSelected: true });
-      if (selectedDirentList.length === direntList.length) {
+      if (nextSelectedDirentList.length === nextDirentList.length) {
         this.setState({
           isAllDirentSelected: true,
-          direntList: direntList,
-          selectedDirentList: selectedDirentList,
+          direntList: nextDirentList,
+          selectedDirentList: nextSelectedDirentList,
+          lastSelectedIndex: nextSelectedIndex,
         });
       } else {
         this.setState({
           isAllDirentSelected: false,
-          direntList: direntList,
-          selectedDirentList: selectedDirentList
+          direntList: nextDirentList,
+          selectedDirentList: nextSelectedDirentList,
+          lastSelectedIndex: nextSelectedIndex,
         });
       }
     } else {
       this.setState({
         isDirentSelected: false,
         isAllDirentSelected: false,
-        direntList: direntList,
-        selectedDirentList: []
+        direntList: nextDirentList,
+        selectedDirentList: [],
+        lastSelectedIndex: nextSelectedIndex,
       });
     }
   };
