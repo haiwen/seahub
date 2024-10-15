@@ -6,7 +6,7 @@ from seahub.ai.apis import ImageCaption, GenerateSummary
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess
-from seahub.auth.views import multi_adfs_sso
+from seahub.auth.views import multi_adfs_sso, login_simple_check
 from seahub.views import *
 from seahub.views.mobile import mobile_login
 from seahub.views.sysadmin import *
@@ -949,6 +949,12 @@ if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
 if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
     urlpatterns += [
         re_path(r'^krb5-login/', shib_login, name="krb5_login"),
+    ]
+    
+    
+if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
+    urlpatterns += [
+        re_path(r'^sso-auto-login/', login_simple_check),
     ]
 
 # serve office converter static files

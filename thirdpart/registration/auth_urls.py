@@ -54,13 +54,6 @@ urlpatterns = [
         name='two_factor_auth'),
 ]
 
-if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
-    urlpatterns += [
-        path('login/simple_check/',
-            auth_views.login_simple_check),
-    ]
-
-
 urlpatterns += [
     path('login/',
         auth_views.login,
