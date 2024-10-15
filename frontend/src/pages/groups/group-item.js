@@ -14,7 +14,9 @@ const propTypes = {
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,
-  updateGroup: PropTypes.func.isRequired
+  updateGroup: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired
+
 };
 
 
@@ -139,6 +141,7 @@ class GroupItem extends React.Component {
             onItemDelete={this.onItemDelete}
             onItemRename={this.onItemRename}
             onMonitorRepo={this.onMonitorRepo}
+            onTransferRepo={this.props.onTransferRepo}
             currentViewMode={currentViewMode}
           />
         }

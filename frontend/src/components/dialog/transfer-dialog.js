@@ -28,6 +28,8 @@ const propTypes = {
   canTransferToDept: PropTypes.bool,
   isOrgAdmin: PropTypes.bool,
   isSysAdmin: PropTypes.bool,
+  isDepAdminTransfer: PropTypes.bool,
+
 };
 
 const TRANS_USER = 'transUser';
@@ -41,7 +43,7 @@ class TransferDialog extends React.Component {
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
-      activeTab: TRANS_USER
+      activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
     this.options = [];
   }
@@ -131,16 +133,18 @@ class TransferDialog extends React.Component {
       <Fragment>
         <div className="transfer-dialog-side">
           <Nav pills>
-            <NavItem role="tab" aria-selected={activeTab === TRANS_USER} aria-controls="transfer-user-panel">
-              <NavLink
-                className={activeTab === TRANS_USER ? 'active' : ''}
-                onClick={(this.toggle.bind(this, TRANS_USER))}
-                tabIndex="0"
-                onKeyDown={this.onTabKeyDown}
-              >
-                {gettext('Transfer to user')}
-              </NavLink>
-            </NavItem>
+            {!this.props.isDepAdminTransfer &&
+              <NavItem role="tab" aria-selected={activeTab === TRANS_USER} aria-controls="transfer-user-panel">
+                <NavLink
+                  className={activeTab === TRANS_USER ? 'active' : ''}
+                  onClick={(this.toggle.bind(this, TRANS_USER))}
+                  tabIndex="0"
+                  onKeyDown={this.onTabKeyDown}
+                >
+                  {gettext('Transfer to user')}
+                </NavLink>
+              </NavItem>
+            }
             {isPro &&
             <NavItem role="tab" aria-selected={activeTab === TRANS_DEPART} aria-controls="transfer-depart-panel">
               <NavLink

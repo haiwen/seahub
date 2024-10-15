@@ -227,7 +227,13 @@ class RepoItem extends React.Component {
 
   onTransferRepo = (user) => {
     let repo = this.props.repo;
-    seafileAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, user.email).then(res => {
+    let email = null;
+    if (Array.isArray(user)) {
+      email = user[0].email;
+    } else {
+      email = user.email;
+    }
+    seafileAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, email).then(res => {
       this.props.transferRepoItem(repo.repoID, user);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);
