@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc, enableFileTags } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc, enableFileTags, enableRepoSnapshotLabel, enableRepoAutoDel, enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -706,6 +706,154 @@ export const Utils = {
   getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     const operationListGetter = dirent.type === 'dir' ? Utils.getFolderOperationList : Utils.getFileOperationList;
     return operationListGetter(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+  },
+
+  getRepoOperationList: function (repo) {
+    const showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
+    const operations = [];
+    const DIVIDER = 'Divider';
+    const { SHARE, DELETE, RENAME, TRANSFER, FOLDER_PERMISSION, SHARE_ADMIN, CHANGE_PASSWORD, RESET_PASSWORD, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, HISTORY_SETTING, ADVANCED } = TextTranslation;
+
+    operations.push(SHARE, DELETE, DIVIDER, RENAME, TRANSFER);
+
+    if (folderPermEnabled) {
+      operations.push(FOLDER_PERMISSION);
+    }
+
+    operations.push(SHARE_ADMIN, DIVIDER);
+
+    if (repo.encrypted) {
+      operations.push(CHANGE_PASSWORD);
+    }
+    if (showResetPasswordMenuItem) {
+      operations.push(RESET_PASSWORD);
+    }
+
+    if (isPro) {
+      const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
+      operations.push(monitorOp);
+    }
+
+    operations.push(DIVIDER, HISTORY_SETTING);
+    const subOpList = Utils.getAdvancedOperations();
+    operations.push({ ...ADVANCED, subOpList });
+
+    // Remove adjacent excess 'Divider'
+    return operations.filter((op, i, arr) => !(op === DIVIDER && arr[i + 1] === DIVIDER));
+  },
+
+  getAdvancedOperations: function () {
+    const operations = [];
+    const { API_TOKEN, LABEL_CURRENT_STATE, OLD_FILES_AUTO_DELETE } = TextTranslation;
+
+    operations.push(API_TOKEN);
+
+    if (enableRepoSnapshotLabel) {
+      operations.push(LABEL_CURRENT_STATE);
+    }
+
+    if (enableRepoAutoDel) {
+      operations.push(OLD_FILES_AUTO_DELETE);
+    }
+
+    return operations;
+  },
+
+  getSharedLibsOperationList: function (lib) {
+    const { SHARE, UNSHARE, WATCH_FILE_CHANGES, UNWATCH_FILE_CHANGES } = TextTranslation;
+    const operations = [];
+
+    if (isPro && lib.is_admin) {
+      operations.push(SHARE);
+    }
+    operations.push(UNSHARE);
+
+    const monitorOp = lib.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
+    operations.push(monitorOp);
+
+    return operations;
+  },
+
+  getPublicSharedRepoOperationList: function (repo) {
+    const { UNSHARE } = TextTranslation;
+    const operations = [];
+    const isRepoOwner = repo.owner_email === username;
+
+    if (isSystemStaff || isRepoOwner) {
+      operations.push(UNSHARE);
+    }
+
+    return operations;
+  },
+
+  getSharedRepoOperationList: function (repo, currentGroup, isPublic) {
+    const operations = [];
+    const { SHARE, UNSHARE, DELETE, RENAME, FOLDER_PERMISSION, SHARE_ADMIN, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, HISTORY_SETTING, ADVANCED, CHANGE_PASSWORD, RESET_PASSWORD } = TextTranslation;
+
+    const isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1;
+    const isRepoOwner = repo.owner_email === username;
+    const isAdmin = repo.is_admin;
+    const DIVIDER = 'Divider';
+
+    if (isPublic) {
+      if (isSystemStaff || isRepoOwner) {
+        operations.push(UNSHARE);
+      }
+      return operations;
+    }
+
+    if (isPro) {
+      if (repo.owner_email.indexOf('@seafile_group') !== -1) {
+        // is group admin
+        if (isStaff) {
+          if (repo.owner_email === `${currentGroup.id}@seafile_group`) {
+            operations.push(SHARE, DELETE, RENAME);
+            if (folderPermEnabled) {
+              operations.push(FOLDER_PERMISSION);
+            }
+            operations.push(SHARE_ADMIN, DIVIDER);
+            if (repo.encrypted) {
+              operations.push(CHANGE_PASSWORD);
+            }
+            if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
+              operations.push(RESET_PASSWORD);
+            }
+            if (repo.permission === 'r' || repo.permission === 'rw') {
+              const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
+              operations.push(monitorOp);
+            }
+            operations.push(DIVIDER, HISTORY_SETTING);
+            if (Utils.isDesktop()) {
+              const subOpList = Utils.getAdvancedOperations();
+              operations.push({ ...ADVANCED, subOpList });
+            }
+            return operations;
+          } else {
+            operations.push(UNSHARE);
+          }
+        }
+      } else {
+        if (isRepoOwner || isAdmin) {
+          operations.push(SHARE);
+        }
+        if (isStaff || isRepoOwner || isAdmin) {
+          operations.push(UNSHARE);
+        }
+      }
+      if (repo.permission === 'r' || repo.permission === 'rw') {
+        const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
+        operations.push(monitorOp);
+      }
+    } else {
+      if (isRepoOwner) {
+        operations.push(SHARE);
+      }
+      if (isStaff || isRepoOwner) {
+        operations.push(UNSHARE);
+      }
+    }
+
+    return operations;
   },
 
   sharePerms: function (permission) {

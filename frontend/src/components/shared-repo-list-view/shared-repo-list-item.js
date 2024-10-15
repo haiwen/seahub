@@ -32,7 +32,8 @@ const propTypes = {
   onItemUnshare: PropTypes.func.isRequired,
   onItemRename: PropTypes.func,
   onItemDelete: PropTypes.func,
-  onMonitorRepo: PropTypes.func
+  onMonitorRepo: PropTypes.func,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -157,7 +158,7 @@ class SharedRepoListItem extends React.Component {
   };
 
   onMenuItemClick = (e) => {
-    let operation = e.target.dataset.toggle;
+    let operation = e.target.dataset.toggle || e.target.dataset.operation;
     switch (operation) {
       case 'Rename':
         this.onItemRenameToggle();
@@ -616,6 +617,10 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
+  handleContextMenu = (e) => {
+    this.props.onContextMenu(e, this.props.repo);
+  };
+
   renderPCUI = () => {
     const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
@@ -627,6 +632,7 @@ class SharedRepoListItem extends React.Component {
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
+        onContextMenu={this.handleContextMenu}
       >
         <td className="text-center">
           <i

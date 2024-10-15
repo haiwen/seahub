@@ -17,6 +17,8 @@ import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
+import ContextMenu from '../../components/context-menu/context-menu';
+import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
 
 class Content extends Component {
 
@@ -25,6 +27,7 @@ class Content extends Component {
     this.state = {
       isItemFreezed: false
     };
+    this.libItems = [];
   }
 
   freezeItem = (freezed) => {
@@ -52,6 +55,30 @@ class Content extends Component {
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
+  };
+
+  onContextMenu = (event, repo) => {
+    event.preventDefault();
+    const id = 'shared-libs-item-menu';
+    const menuList = Utils.getSharedLibsOperationList(repo);
+    handleContextClick(event, id, menuList, repo);
+  };
+
+  setLibItemRef = (index) => item => {
+    this.libItems[index] = item;
+  };
+
+  getLibIndex = (lib) => {
+    return this.props.items.findIndex(item => {
+      return item.repo_id === lib.repo_id;
+    });
+  };
+
+  onMenuItemClick = (operation, currentObject, event) => {
+    const index = this.getLibIndex(currentObject);
+    this.libItems[index].onMenuItemClick(operation, event);
+
+    hideMenu();
   };
 
   render() {
@@ -95,6 +122,7 @@ class Content extends Component {
         <>
           {items.map((item, index) => {
             return <Item
+              ref={this.setLibItemRef(index)}
               key={index}
               data={item}
               isDesktop={isDesktop}
@@ -102,17 +130,24 @@ class Content extends Component {
               freezeItem={this.freezeItem}
               onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={currentViewMode}
+              onContextMenu={this.onContextMenu}
             />;
           })}
         </>
       );
       const content = currentViewMode == LIST_MODE ? (
-        <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
-          {isDesktop ? desktopThead : <LibsMobileThead inAllLibs={inAllLibs} />}
-          <tbody>
-            {itemsContent}
-          </tbody>
-        </table>
+        <>
+          <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
+            {isDesktop ? desktopThead : <LibsMobileThead inAllLibs={inAllLibs} />}
+            <tbody>
+              {itemsContent}
+            </tbody>
+          </table>
+          <ContextMenu
+            id="shared-libs-item-menu"
+            onMenuItemClick={this.onMenuItemClick}
+          />
+        </>
       ) : (
         <div className="d-flex justify-content-between flex-wrap">
           {itemsContent}
@@ -265,6 +300,29 @@ class Item extends Component {
     });
   };
 
+  handleContextMenu = (event) => {
+    this.props.onContextMenu(event, this.props.data);
+  };
+
+  onMenuItemClick = (operation, event) => {
+    switch (operation) {
+      case 'Share':
+        this.share(event);
+        break;
+      case 'Unshare':
+        this.leaveShare(event);
+        break;
+      case 'Watch File Changes':
+        this.watchFileChanges();
+        break;
+      case 'Unwatch File Changes':
+        this.unwatchFileChanges();
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     if (this.state.unshared) {
       return null;
@@ -288,7 +346,7 @@ class Item extends Component {
       return (
         <Fragment>
           {currentViewMode == LIST_MODE ? (
-            <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+            <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver} onContextMenu={this.handleContextMenu}>
               <td className="text-center">
                 <i
                   role="button"
@@ -459,7 +517,8 @@ Item.propTypes = {
   data: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   freezeItem: PropTypes.func.isRequired,
-  onMonitorRepo: PropTypes.func.isRequired
+  onMonitorRepo: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 class SharedLibraries extends Component {

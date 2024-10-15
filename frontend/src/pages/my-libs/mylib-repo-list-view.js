@@ -5,6 +5,9 @@ import { gettext, storages } from '../../utils/constants';
 import MylibRepoListItem from './mylib-repo-list-item';
 import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import ContextMenu from '../../components/context-menu/context-menu';
+import { Utils } from '../../utils/utils';
+import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
 
 const propTypes = {
   sortBy: PropTypes.string.isRequired,
@@ -26,6 +29,7 @@ class MylibRepoListView extends React.Component {
     this.state = {
       isItemFreezed: false,
     };
+    this.repoItems = [];
   }
 
   onFreezedItem = () => {
@@ -57,12 +61,37 @@ class MylibRepoListView extends React.Component {
     this.props.sortRepoList(sortBy, sortOrder);
   };
 
+  onContextMenu = (event, repo) => {
+    event.preventDefault();
+    const id = 'mylib-repo-item-menu';
+    const menuList = Utils.getRepoOperationList(repo);
+    handleContextClick(event, id, menuList, repo);
+  };
+
+  setRepoItemRef = (index) => item => {
+    this.repoItems[index] = item;
+  };
+
+  getRepoIndex = (repo) => {
+    return this.props.repoList.findIndex(item => {
+      return item.repo_id === repo.repo_id;
+    });
+  };
+
+  onMenuItemClick = (operation, currentObject) => {
+    const index = this.getRepoIndex(currentObject);
+    this.repoItems[index].onMenuItemClick(operation);
+
+    hideMenu();
+  };
+
   renderRepoListView = () => {
     return (
       <Fragment>
-        {this.props.repoList.map(item => {
+        {this.props.repoList.map((item, index) => {
           return (
             <MylibRepoListItem
+              ref={this.setRepoItemRef(index)}
               key={item.repo_id}
               repo={item}
               isItemFreezed={this.state.isItemFreezed}
@@ -73,6 +102,7 @@ class MylibRepoListView extends React.Component {
               onTransferRepo={this.props.onTransferRepo}
               onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={this.props.currentViewMode}
+              onContextMenu={this.onContextMenu}
             />
           );
         })}
@@ -130,6 +160,10 @@ class MylibRepoListView extends React.Component {
         <MediaQuery query="(max-width: 767.8px)">
           {this.renderMobileUI()}
         </MediaQuery>
+        <ContextMenu
+          id="mylib-repo-item-menu"
+          onMenuItemClick={this.onMenuItemClick}
+        />
       </Fragment>
     );
   }

@@ -34,6 +34,7 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 class MylibRepoListItem extends React.Component {
@@ -303,6 +304,10 @@ class MylibRepoListItem extends React.Component {
     });
   };
 
+  handleContextMenu = (event) => {
+    this.props.onContextMenu(event, this.props.repo);
+  };
+
   renderPCUI = () => {
     const { isStarred } = this.state;
     const { repo, currentViewMode = LIST_MODE } = this.props;
@@ -311,7 +316,7 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return currentViewMode == LIST_MODE ? (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onContextMenu={this.handleContextMenu}>
         <td className="text-center">
           <i
             role="button"
