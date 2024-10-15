@@ -212,7 +212,7 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
-    FaceRecognitionManage, FacesRecord
+    FaceRecognitionManage, FacesRecord, MetadataInitFileDetails
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 
@@ -1056,6 +1056,7 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-record/$', FacesRecord.as_view(), name='api-v2.1-metadata-face-record'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/init-file-details/$', MetadataInitFileDetails.as_view(), name='api-v2.1-metadata-init-file-details'),
     ]
 
 # ai API
