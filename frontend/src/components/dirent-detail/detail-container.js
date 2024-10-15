@@ -20,7 +20,10 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
 
   if (path === '/' && !dirent) {
     return (
-      <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />
+      <LibDetail
+        currentRepoInfo={currentRepoInfo}
+        onClose={onClose}
+      />
     );
   }
   return (
@@ -36,7 +39,8 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
     />
   );
 }, (props, nextProps) => {
-  const isChanged = props.repoID !== nextProps.repoID ||
+  const isChanged =
+    props.repoID !== nextProps.repoID ||
     props.path !== nextProps.path ||
     !ObjectUtils.isSameObject(props.dirent, nextProps.dirent) ||
     !ObjectUtils.isSameObject(props.currentRepoInfo, nextProps.currentRepoInfo) ||
