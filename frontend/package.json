@@ -36,7 +36,7 @@
     "qrcode.react": "^1.0.1",
     "react": "17.0.2",
     "react-app-polyfill": "^2.0.0",
-    "react-chartjs-2": "^2.8.0",
+    "react-chartjs-2": "4.0.0",
     "react-cookies": "^0.1.0",
     "react-dnd": "^2.6.0",
     "react-dnd-html5-backend": "^2.6.0",
