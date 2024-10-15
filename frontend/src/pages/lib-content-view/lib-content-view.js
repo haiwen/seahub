@@ -567,26 +567,24 @@ class LibContentView extends React.Component {
   };
 
   loadDirentList = (path) => {
+    const { repoID } = this.props;
+    const { sortBy, sortOrder } = this.state;
     this.setState({
       isDirentListLoading: true,
       direntList: [],
     });
-    let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
-      let direntList = [];
-      res.data.dirent_list.forEach(item => {
-        let dirent = new Dirent(item);
-        direntList.push(dirent);
-      });
-
+      const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
+      const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), sortBy, sortOrder);
       this.setState({
         pathExist: true,
-        userPerm: res.data.user_perm,
+        userPerm,
         isDirentListLoading: false,
-        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
-        dirID: res.data.dir_id,
-        path: path,
+        direntList,
+        dirID,
+        path,
         isSessionExpired: false,
+        currentDirent: null,
       });
 
       if (this.state.currentRepoInfo.is_admin) {
@@ -633,8 +631,7 @@ class LibContentView extends React.Component {
   };
 
   onListContainerScroll = () => {
-    let itemsShowLength = this.state.itemsShowLength + 100;
-    this.setState({ itemsShowLength: itemsShowLength });
+    this.setState({ itemsShowLength: this.state.itemsShowLength + 100 });
   };
 
   resetShowLength = () => {
@@ -2018,19 +2015,11 @@ class LibContentView extends React.Component {
   };
 
   getSelectedDirentPaths = () => {
-    let paths = [];
-    this.state.selectedDirentList.forEach(selectedDirent => {
-      paths.push(Utils.joinPath(this.state.path, selectedDirent.name));
-    });
-    return paths;
+    return this.state.selectedDirentList.map(selectedDirent => Utils.joinPath(this.state.path, selectedDirent.name));
   };
 
   getSelectedDirentNames = () => {
-    let names = [];
-    this.state.selectedDirentList.forEach(selectedDirent => {
-      names.push(selectedDirent.name);
-    });
-    return names;
+    return this.state.selectedDirentList.map(selectedDirent => selectedDirent.name);
   };
 
   resetSelected = () => {
