@@ -35,6 +35,10 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     updateEnableMetadata(value);
   }, [updateEnableMetadata]);
 
+  const onExtendedProperties = useCallback(() => {
+    setShowMetadataStatusManagementDialog(true);
+  }, []);
+
   if (!enableMetadataManagement) return null;
 
   return (
@@ -46,7 +50,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
         moreOperationClick={moreOperationClick}
       >
         {!enableMetadata ? (
-          <ExtensionPrompts />
+          <ExtensionPrompts onExtendedProperties={onExtendedProperties} />
         ) : Array.isArray(navigation) && navigation.length > 0 ? (
           <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
         ) : null}

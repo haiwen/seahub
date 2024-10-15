@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Icon from '../../icon';
 import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
-const ExtensionPrompts = () => {
+const ExtensionPrompts = ({ onExtendedProperties }) => {
+  const handlePromptsClick = useCallback(() => {
+    onExtendedProperties();
+  }, [onExtendedProperties]);
+
   return (
     <div
       className='extension-prompts-container'
       aria-label={gettext('Extension Prompts')}
+      onClick={handlePromptsClick}
     >
       <div className='extension-prompts-icon-wrapper'>
         <Icon
