@@ -12,6 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -604,7 +605,9 @@ class Search extends Component {
       );
     }
     if (this.props.repoID) {
-      if (this.props.path && this.props.path !== '/' && !this.props.isViewFile) {
+      const { path } = this.props;
+      const isMetadataView = path && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
+      if (path && path !== '/' && !this.props.isViewFile && !isMetadataView) {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
