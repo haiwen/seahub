@@ -14,12 +14,14 @@ import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encr
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
+import { userAPI } from '../../utils/user-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../dir-view-mode/constants';
+import TransferDialog from '../dialog/transfer-dialog';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -32,7 +34,8 @@ const propTypes = {
   onItemUnshare: PropTypes.func.isRequired,
   onItemRename: PropTypes.func,
   onItemDelete: PropTypes.func,
-  onMonitorRepo: PropTypes.func
+  onMonitorRepo: PropTypes.func,
+  onTransferRepo: PropTypes.func
 };
 
 class SharedRepoListItem extends React.Component {
@@ -51,6 +54,7 @@ class SharedRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
+      isTransferDialogShow: false,
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isChangePasswordDialogShow: false,
@@ -162,6 +166,9 @@ class SharedRepoListItem extends React.Component {
       case 'Rename':
         this.onItemRenameToggle();
         break;
+      case 'Transfer':
+        this.onTransferToggle();
+        break;
       case 'Folder Permission':
         this.onItemFolderPermissionToggle();
         break;
@@ -225,6 +232,33 @@ class SharedRepoListItem extends React.Component {
       isRenaming: !this.state.isRenaming,
       isOperationShow: !this.state.isOperationShow
     });
+  };
+
+  onTransferToggle = () => {
+    this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
+  };
+
+  onTransferRepo = (user) => {
+    let repoID = this.props.repo.repo_id;
+    let groupID = this.props.currentGroup.id;
+    let email = null;
+    if (Array.isArray(user)) {
+      email = user[0].email;
+    } else {
+      email = user.email;
+    }
+    userAPI.depAdminTransferRepo(repoID, groupID, email).then(res => {
+      this.props.onTransferRepo(repoID, groupID, email);
+      let message = gettext('Successfully transferred the library.');
+      toaster.success(message);
+    }).catch(error => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
+      }
+    });
+    this.onTransferToggle();
   };
 
   onRenameConfirm = (name) => {
@@ -318,6 +352,9 @@ class SharedRepoListItem extends React.Component {
       case 'Rename':
         translateResult = gettext('Rename');
         break;
+      case 'Transfer':
+        translateResult = gettext('Transfer');
+        break;
       case 'Folder Permission':
         translateResult = gettext('Folder Permission');
         break;
@@ -385,7 +422,7 @@ class SharedRepoListItem extends React.Component {
         if (isStaff) {
           if (repo.owner_email == currentGroup.id + '@seafile_group') {
             this.isDeparementOnwerGroupMember = true;
-            operations = ['Rename'];
+            operations = ['Rename', 'Transfer'];
             if (folderPermEnabled) {
               operations.push('Folder Permission');
             }
@@ -809,6 +846,17 @@ class SharedRepoListItem extends React.Component {
             <LibOldFilesAutoDelDialog
               repoID={repo.repo_id}
               toggleDialog={this.toggleOldFilesAutoDelDialog}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isTransferDialogShow && (
+          <ModalPortal>
+            <TransferDialog
+              itemName={repo.repo_name}
+              submit={this.onTransferRepo}
+              canTransferToDept={true}
+              toggleDialog={this.onTransferToggle}
+              isDepAdminTransfer={true}
             />
           </ModalPortal>
         )}
