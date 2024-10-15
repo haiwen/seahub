@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import hashlib
 import logging
+import jwt
 from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
@@ -17,7 +18,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from saml2.ident import decode
 from seaserv import seafile_api, ccnet_api
-
+from seahub.settings import SSO_SECRET_KEY
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
 from seahub.auth.models import SocialAuthUser
@@ -215,42 +216,43 @@ def login(request, template_name='registration/login.html',
     })
 
 def login_simple_check(request):
-    """A simple check for login called by thirdpart systems(OA, etc).
 
-    Token generation: MD5(secret_key + foo@foo.com + 2014-1-1).hexdigest()
-    Token length: 32 hexadecimal digits.
-    """
-    username = request.GET.get('user', '')
-    random_key = request.GET.get('token', '')
+    if not SSO_SECRET_KEY:
+        return render_error(request, 'Permission denied.')
+    
+    login_token = request.GET.get('token', '')
+    if not login_token:
+        return render_error(request, 'token invalid.')
 
-    if not username or not random_key:
-        raise Http404
+    try:
+        payload = jwt.decode(login_token, SSO_SECRET_KEY, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        return render_error(request, 'token expired.')
+    except jwt.PyJWTError:
+        return render_error(request, 'token invalid.')
 
-    today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
-    if expect == random_key:
-        try:
-            user = User.objects.get(email=username)
-        except User.DoesNotExist:
-            raise Http404
-
-        for backend in get_backends():
-            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-
-        auth_login(request, user)
-
-        # Ensure the user-originating redirection url is safe.
-        if REDIRECT_FIELD_NAME in request.GET:
-            next_page = request.GET[REDIRECT_FIELD_NAME]
-            if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
-                next_page = settings.LOGIN_REDIRECT_URL
-        else:
-            next_page = settings.SITE_ROOT
-
-        return HttpResponseRedirect(next_page)
+    if 'exp' not in payload:
+        return render_error(request, 'token invalid.')
+    
+    user_id = payload.get('user_id')
+    if not user_id:
+        return render_error(request, 'token invalid.')
+    
+    try:
+        user = User.objects.get(email=user_id)
+    except User.DoesNotExist:
+        return render_error(request, 'token invalid.')
+    
+    for backend in get_backends():
+        user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+    auth_login(request, user)
+    if REDIRECT_FIELD_NAME in request.GET:
+        next_page = request.GET[REDIRECT_FIELD_NAME]
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+            next_page = settings.LOGIN_REDIRECT_URL
     else:
-        raise Http404
-
+        next_page = settings.SITE_ROOT
+    return HttpResponseRedirect(next_page)
 
 def logout(request, next_page=None,
            template_name='registration/logged_out.html',
