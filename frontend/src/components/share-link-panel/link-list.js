@@ -73,7 +73,7 @@ class LinkList extends React.Component {
           </div>
         </div>
         {shareLinks.length == 0 ? (
-          <EmptyTip text={gettext('No share links')}/>
+          <EmptyTip text={gettext('No share links')} className='m-0' />
         ) : (
           <div className='share-list-container share-link-list'>
             <table className="table-place-header">
