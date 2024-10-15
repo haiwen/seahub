@@ -1,7 +1,7 @@
 import React from 'react';
-import { Loading } from 'dtable-ui-component';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import Loading from '../loading';
 
 function TipDialog({ modalTitle, modalTip }) {
   return (

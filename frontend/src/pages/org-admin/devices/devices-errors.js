@@ -1,18 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext, orgID } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
-import { Link } from '@gatsbyjs/reach-router';
 import DevicesNav from './devices-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -109,7 +112,7 @@ class Item extends Component {
         <td><Link to={`${siteRoot}sysadmin/#libs/${item.repo_id}`}>{item.repo_name}</Link></td>
         <td>{item.error_msg}</td>
         <td>
-          <span className="item-meta-info" title={moment(item.last_accessed).format('llll')}>{moment(item.error_time).fromNow()}</span>
+          <span className="item-meta-info" title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.error_time).fromNow()}</span>
         </td>
       </tr>
     );

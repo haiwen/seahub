@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -358,7 +358,7 @@ class Item extends React.Component {
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
         <td>{item.parent_dir}</td>
-        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
           <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
@@ -369,7 +369,7 @@ class Item extends React.Component {
         <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank" rel="noreferrer">{item.obj_name}</a></td>
         <td>{item.parent_dir}</td>
-        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
           <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>

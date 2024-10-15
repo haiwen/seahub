@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
@@ -89,7 +89,7 @@ class LinkDetails extends React.Component {
     const { expType, expireDays, expDate } = this.state;
     let expirationTime = '';
     if (expType === 'by-days') {
-      expirationTime = moment().add(parseInt(expireDays), 'days').format();
+      expirationTime = dayjs().add(parseInt(expireDays), 'days').format();
     } else {
       expirationTime = expDate.format();
     }
@@ -234,7 +234,7 @@ class LinkDetails extends React.Component {
                   </div>
                 ) : (
                   <InputGroup className="share-link-details-item">
-                    <Input type="text" readOnly={true} value={moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
+                    <Input type="text" readOnly={true} value={dayjs(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
                     <InputGroupAddon addonType="append">
                       <Button
                         aria-label={gettext('Edit')}

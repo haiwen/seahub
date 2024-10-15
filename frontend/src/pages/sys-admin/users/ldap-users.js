@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -10,6 +11,8 @@ import Paginator from '../../../components/paginator';
 import UsersNav from './users-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -93,7 +96,7 @@ class Item extends Component {
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
           </td>
           <td>
-            {item.last_login ? moment(item.last_login).fromNow() : '--'}
+            {item.last_login ? dayjs(item.last_login).fromNow() : '--'}
           </td>
         </tr>
       </Fragment>

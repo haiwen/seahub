@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, gettext } from '../../../utils/constants';
 import Loading from '../../../components/loading';
@@ -12,6 +13,8 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
 import ChangeGroupDialog from '../../../components/dialog/change-group-dialog';
 import UserLink from '../user-link';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -232,7 +235,7 @@ class Item extends Component {
             }
           </td>
           <td>
-            <span title={moment(item.created_at).format('llll')}>{moment(item.created_at).fromNow()}</span>
+            <span title={dayjs(item.created_at).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.created_at).fromNow()}</span>
           </td>
           <td>
             {(isOpIconShown && item.owner != 'system admin') &&

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { siteRoot, gettext, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -8,6 +9,8 @@ import toaster from '../toast';
 import Header from './detail/header';
 
 import '../../css/dirent-detail.css';
+
+dayjs.extend(relativeTime);
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -57,7 +60,7 @@ class FileDetails extends React.Component {
             <tbody>
               <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
               <tr><th>{gettext('Location')}</th><td>{repoName + path}</td></tr>
-              <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
+              <tr><th>{gettext('Last Update')}</th><td>{dayjs(direntDetail.last_modified).fromNow()}</td></tr>
             </tbody>
           </table>
         </div>

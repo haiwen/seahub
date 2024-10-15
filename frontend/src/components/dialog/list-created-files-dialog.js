@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -9,6 +10,8 @@ const propTypes = {
   activity: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
+
+dayjs.extend(relativeTime);
 
 class ListCreatedFileDialog extends React.Component {
 
@@ -40,7 +43,7 @@ class ListCreatedFileDialog extends React.Component {
                   return (
                     <tr key={index}>
                       <td>{fileLink}</td>
-                      <td>{moment(item.time).fromNow()}</td>
+                      <td>{dayjs(item.time).fromNow()}</td>
                     </tr>
                   );
                 })

@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import dayjs from 'dayjs';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
-import moment from 'moment';
 import MainPanelTopbar from './main-panel-topbar';
 
 class AbuseReports extends Component {
@@ -64,7 +64,7 @@ class AbuseReports extends Component {
           <td>{item.reporter}</td>
           <td>{item.abuse_type}</td>
           <td>{item.description}</td>
-          <td>{moment(item.time).format('YYYY-MM-DD')}</td>
+          <td>{dayjs(item.time).format('YYYY-MM-DD')}</td>
           <td>
             <p
               onClick={this.updateAbuseReport.bind(this, handled, abuseReportId)}

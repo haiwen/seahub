@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
@@ -11,7 +11,7 @@ import EmptyTip from '../../../components/empty-tip';
 
 import '../../../css/org-department-item.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 const SubDepartmentsPropTypes = {
   groupID: PropTypes.string

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
 import '../../css/history-record-item.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   index: PropTypes.number.isRequired,
@@ -68,7 +68,7 @@ class HistoryListItem extends React.Component {
       return '';
     }
     let item = this.props.item;
-    let time = moment(item.ctime).format('YYYY-MM-DD HH:mm');
+    let time = dayjs(item.ctime).format('YYYY-MM-DD HH:mm');
     let isHigtlightItem = false;
     if (this.props.item && this.props.currentItem) {
       isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
@@ -106,7 +106,7 @@ class LinkItem extends React.Component {
             {permissions && Utils.getShareLinkPermissionObject(currentPermission).text}
           </td>
           <td>
-            {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
+            {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>

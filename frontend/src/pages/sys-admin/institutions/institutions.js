@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -13,6 +14,8 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import MainPanelTopbar from '../main-panel-topbar';
 import SysAdminAddInstitutionDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog';
 import Paginator from '../../../components/paginator';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -129,7 +132,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><Link to={`${siteRoot}sys/institutions/${item.id}/info/`}>{item.name}</Link></td>
-          <td>{moment(item.ctime).fromNow()}</td>
+          <td>{dayjs(item.ctime).fromNow()}</td>
           <td>
             <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>

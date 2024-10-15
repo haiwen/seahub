@@ -1,7 +1,7 @@
 import { lang } from '../utils/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgLogsPermAuditEvent {
   constructor(object) {
@@ -18,7 +18,7 @@ class OrgLogsPermAuditEvent {
     this.repo_name = object.repo_name;
     this.folder_name = object.folder_name;
     this.folder_path = object.folder_path;
-    this.time = moment(object.time).format('YYYY-MM-DD HH:mm:ss');
+    this.time = dayjs(object.time).format('YYYY-MM-DD HH:mm:ss');
     this.permission = object.permission;
   }
 }

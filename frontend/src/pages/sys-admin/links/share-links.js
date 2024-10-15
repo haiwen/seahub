@@ -1,17 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LinksNav from './links-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -147,8 +150,8 @@ class Item extends Component {
     if (!item.expire_date) {
       return '--';
     }
-    const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
-    const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
+    const expire_date = dayjs(item.expire_date).format('YYYY-MM-DD');
+    const expire_time = dayjs(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
   };
 
@@ -161,7 +164,7 @@ class Item extends Component {
         <td>{item.obj_name}</td>
         <td>{item.token}</td>
         <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
-        <td>{moment(item.ctime).fromNow()}</td>
+        <td>{dayjs(item.ctime).fromNow()}</td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>

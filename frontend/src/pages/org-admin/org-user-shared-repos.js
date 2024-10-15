@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -104,7 +104,7 @@ class Item extends Component {
         <td>{repo.repo_name}</td>
         <td>{repo.owner_name}</td>
         <td>{Utils.bytesToSize(repo.size)}</td>
-        <td title={moment(repo.last_modified).format('LLLL')}>{moment(repo.last_modified).format('YYYY-MM-DD')}</td>
+        <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).format('YYYY-MM-DD')}</td>
       </tr>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -22,6 +23,8 @@ const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 const MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change';
 const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
+
+dayjs.extend(relativeTime);
 
 class NoticeItem extends React.Component {
 
@@ -390,7 +393,7 @@ class NoticeItem extends React.Component {
           <p className="m-0" dangerouslySetInnerHTML={{ __html: notice }}></p>
         </td>
         <td>
-          {moment(noticeItem.time).fromNow()}
+          {dayjs(noticeItem.time).fromNow()}
         </td>
       </tr>
     ) : (
@@ -400,7 +403,7 @@ class NoticeItem extends React.Component {
             <img src={avatar_url} width="32" height="32" className="avatar" alt=""/>
             <p className="brief" dangerouslySetInnerHTML={{ __html: notice }}></p>
           </div>
-          <p className="time">{moment(noticeItem.time).fromNow()}</p>
+          <p className="time">{dayjs(noticeItem.time).fromNow()}</p>
         </div>
       </li>
     );

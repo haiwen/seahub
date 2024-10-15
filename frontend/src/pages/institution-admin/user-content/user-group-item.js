@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import { gettext, siteRoot } from '../../../utils/constants';
-import moment from 'moment';
 import { Link } from '@gatsbyjs/reach-router';
 
 const UserGroupItem = ({ group }) => {
@@ -36,7 +36,7 @@ const UserGroupItem = ({ group }) => {
     <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <td><Link to={`${siteRoot}sys/groups/${group.id}/libraries/`}>{group.name}</Link></td>
       <td>{getRoleText(group)}</td>
-      <td>{moment(group.created_at).format('YYYY-MM-DD HH:mm')}</td>
+      <td>{dayjs(group.created_at).format('YYYY-MM-DD HH:mm')}</td>
       <td></td>
     </tr>
   );

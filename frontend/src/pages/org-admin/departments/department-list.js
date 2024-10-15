@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { seafileAPI } from '../../../utils/seafile-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
@@ -10,7 +10,7 @@ import EmptyTip from '../../../components/empty-tip';
 
 import '../../../css/org-department-item.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgDepartmentsList extends React.Component {
 
