@@ -1,7 +1,9 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { lang } from '../utils/constants';
-import moment from 'moment';
 
-moment.locale(lang);
+dayjs.locale(lang);
+dayjs.extend(relativeTime);
 
 class OrgUserInfo {
   constructor(object) {
@@ -12,8 +14,8 @@ class OrgUserInfo {
     this.is_active = object.is_active;
     this.quota_usage = object.quota_usage;
     this.quota_total = object.quota_total;
-    this.last_login = object.last_login ? moment(object.last_login).fromNow() : '--';
-    this.ctime = moment(object.ctime).format('YYYY-MM-DD HH:mm:ss');
+    this.last_login = object.last_login ? dayjs(object.last_login).fromNow() : '--';
+    this.ctime = dayjs(object.ctime).format('YYYY-MM-DD HH:mm:ss');
   }
 }
 

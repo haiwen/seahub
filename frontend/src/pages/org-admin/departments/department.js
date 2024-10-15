@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
@@ -13,7 +13,7 @@ import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
 import { siteRoot, gettext, orgID, lang } from '../../../utils/constants';
 import '../../../css/org-department-item.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgDepartmentItem extends React.Component {
 

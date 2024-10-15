@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import { navigate } from '@gatsbyjs/reach-router';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import { Button } from 'reactstrap';
-import { navigate } from '@gatsbyjs/reach-router';
-import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
@@ -17,6 +18,7 @@ import ToggleFilter from './file-access-toggle-filter';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -206,7 +208,7 @@ class Item extends Component {
         </td>
         <td>{item.event_type}</td>
         <td>{item.ip}{' / '}{item.device || '--'}</td>
-        <td>{moment(item.time).fromNow()}</td>
+        <td>{dayjs(item.time).fromNow()}</td>
         <td>
           {item.repo_name ? item.repo_name : gettext('Deleted')}
           {isOpIconShown && item.repo_name && !repoFilteredBy && (

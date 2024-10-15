@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -35,6 +36,8 @@ const propTypes = {
   onTransferRepo: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
 };
+
+dayjs.extend(relativeTime);
 
 class MylibRepoListItem extends React.Component {
 
@@ -358,7 +361,7 @@ class MylibRepoListItem extends React.Component {
         </td>
         <td>{repo.size}</td>
         {storages.length > 0 && <td>{repo.storage_name}</td>}
-        <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
+        <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</td>
       </tr>
     ) : (
       <div
@@ -440,7 +443,7 @@ class MylibRepoListItem extends React.Component {
             <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
           }
           <span className="item-meta-info">{repo.size}</span>
-          <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
+          <span className="item-meta-info" title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</span>
         </td>
         <td>
           {repo.repo_name && (

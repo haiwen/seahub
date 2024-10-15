@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -12,6 +13,8 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import UserLink from '../user-link';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -172,7 +175,7 @@ class Item extends Component {
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
           <td>
-            {moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')}{' / '}{item.last_login ? moment(item.last_login).fromNow() : '--'}
+            {dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}{' / '}{item.last_login ? dayjs(item.last_login).fromNow() : '--'}
           </td>
           <td>
             {isOpIconShown &&

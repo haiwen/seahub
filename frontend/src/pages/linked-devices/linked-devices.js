@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import { Utils } from '../../utils/utils';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -137,7 +140,7 @@ class Item extends Component {
         <td>{data.platform}</td>
         <td>{data.device_name}</td>
         <td>{data.last_login_ip}</td>
-        <td>{moment(data.last_accessed).fromNow()}</td>
+        <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
           <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
         </td>
@@ -152,7 +155,7 @@ class Item extends Component {
         <td>
           {data.device_name}<br />
           <span className="item-meta-info">{data.last_login_ip}</span>
-          <span className="item-meta-info">{moment(data.last_accessed).fromNow()}</span>
+          <span className="item-meta-info">{dayjs(data.last_accessed).fromNow()}</span>
           <span className="item-meta-info">{data.platform}</span>
         </td>
         <td>

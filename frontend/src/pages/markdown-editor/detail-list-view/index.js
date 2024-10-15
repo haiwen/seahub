@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -12,6 +13,8 @@ import FileTagList from '../../../components/file-tag-list';
 
 import '../../../css/dirent-detail.css';
 import '../css/detail-list-view.css';
+
+dayjs.extend(relativeTime);
 
 const { repoID, filePath } = window.app.pageOptions;
 
@@ -73,7 +76,7 @@ class DetailListView extends React.Component {
             <tbody>
               <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(fileInfo.size)}</td></tr>
               <tr><th>{gettext('Location')}</th><td>{filePath}</td></tr>
-              <tr><th>{gettext('Last Update')}</th><td>{moment(fileInfo.mtime * 1000).fromNow()}</td></tr>
+              <tr><th>{gettext('Last Update')}</th><td>{dayjs(fileInfo.mtime * 1000).fromNow()}</td></tr>
               <tr className="file-tag-container">
                 <th>{gettext('Tags')}</th>
                 <td>

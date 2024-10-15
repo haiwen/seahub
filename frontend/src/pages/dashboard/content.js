@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EmptyTip from '../../components/empty-tip';
@@ -8,7 +8,7 @@ import ActivityItem from './activity-item';
 
 import '../../css/files-activities.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const contentPropTypes = {
   isLoadingMore: PropTypes.bool.isRequired,

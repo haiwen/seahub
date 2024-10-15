@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, wikiId } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
@@ -250,7 +250,7 @@ class Item extends React.Component {
         <td><NavItemIcon symbol={'file'} disable={true} /></td>
         <td>{item.name}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
-        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>
           {isAdmin &&
             <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>

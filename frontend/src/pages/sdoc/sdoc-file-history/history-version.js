@@ -1,6 +1,6 @@
-import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalBody } from 'reactstrap';
 import classnames from 'classnames';
 import { gettext, filePath } from '../../../utils/constants';
@@ -10,7 +10,7 @@ import { isMobile } from '../../../utils/utils';
 
 import '../../../css/history-record-item.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 class HistoryVersion extends React.Component {
 
@@ -58,7 +58,7 @@ class HistoryVersion extends React.Component {
 
   onItemCopy = () => {
     const { historyVersion } = this.props;
-    historyVersion.ctime_format = moment(historyVersion.ctime).format('YYYY-MM-DD HH:mm');
+    historyVersion.ctime_format = dayjs(historyVersion.ctime).format('YYYY-MM-DD HH:mm');
     this.props.onCopy(historyVersion);
   };
 
@@ -114,7 +114,7 @@ class HistoryVersion extends React.Component {
             <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
             : <div className="name">{name}</div>
           }
-          <div className="time">{moment(ctime).format('YYYY-MM-DD HH:mm')}</div>
+          <div className="time">{dayjs(ctime).format('YYYY-MM-DD HH:mm')}</div>
           <div className="owner">
             <span className="squire-icon"></span>
             <span>{creator_name}</span>

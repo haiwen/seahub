@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
+import dayjs from 'dayjs';
 import { gettext, siteRoot, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { userAPI } from '../../utils/user-api';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
-import moment from 'moment';
 
 class OrgLogsExportExcelDialog extends React.Component {
 
@@ -82,9 +82,9 @@ class OrgLogsExportExcelDialog extends React.Component {
 
   isValidDateStr = () => {
     let { startDateStr, endDateStr } = this.state;
-    if (moment(startDateStr, 'YYYY-MM-DD', true).isValid() &&
-      moment(endDateStr, 'YYYY-MM-DD', true).isValid() &&
-      moment(startDateStr).isBefore(endDateStr)
+    if (dayjs(startDateStr, 'YYYY-MM-DD', true).isValid() &&
+      dayjs(endDateStr, 'YYYY-MM-DD', true).isValid() &&
+      dayjs(startDateStr).isBefore(endDateStr)
     ) {
       return true;
     } else {

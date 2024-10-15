@@ -232,6 +232,14 @@ module.exports = function (webpackEnv) {
         : isEnvDevelopment &&
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
+    // externals: {
+    //   'video.js': isEnvProduction
+    //     ? 'static/js/[name].[contenthash:8].chunk.js'
+    //     : isEnvDevelopment && 'static/js/[name].chunk.js',
+    //   '@seafile/sdoc-editor': isEnvProduction
+    //     ? 'static/js/[name].[contenthash:8].chunk.js'
+    //     : isEnvDevelopment && 'static/js/[name].chunk.js',
+    // },
     // cache: {
     //   type: 'filesystem',
     //   version: createEnvironmentHash(env.raw),

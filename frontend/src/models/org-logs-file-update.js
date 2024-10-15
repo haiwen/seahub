@@ -1,7 +1,7 @@
 import { lang } from '../utils/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgLogsFileUpdateEvent {
   constructor(object) {
@@ -13,7 +13,7 @@ class OrgLogsFileUpdateEvent {
     this.repo_encrypted = object.repo_encrypted;
     this.repo_commit_id = object.repo_commit_id;
     this.user_contact_email = object.user_contact_email;
-    this.time = moment(object.time).format('YYYY-MM-DD HH:mm:ss');
+    this.time = dayjs(object.time).format('YYYY-MM-DD HH:mm:ss');
   }
 }
 

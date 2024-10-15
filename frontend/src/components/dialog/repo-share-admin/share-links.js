@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
@@ -92,7 +92,7 @@ class Item extends Component {
           </a>
         </td>
         <td>
-          {item.expire_date ? moment(item.expire_date).format('YYYY-MM-DD HH:mm') : '--'}
+          {item.expire_date ? dayjs(item.expire_date).format('YYYY-MM-DD HH:mm') : '--'}
         </td>
         <td>{item.view_cnt}</td>
         <td>

@@ -1,6 +1,6 @@
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { siteRoot, gettext } from '../../utils/constants';
 
@@ -45,7 +45,7 @@ class ResultsItem extends React.Component {
             <a href={this.handlerParentDirURL(item)} target="_blank" rel="noreferrer" >{item.repo_name}{this.handlerParentDirPath(item)}</a>
           </div>
           <div className="item-link ellipsis">
-            {Utils.bytesToSize(item.size) + ' ' + moment(item.last_modified * 1000).format('YYYY-MM-DD')}
+            {Utils.bytesToSize(item.size) + ' ' + dayjs(item.last_modified * 1000).format('YYYY-MM-DD')}
           </div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content_highlight }}></div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -11,7 +11,7 @@ import EmptyTip from '../empty-tip';
 
 import '../../css/file-access-log.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -118,7 +118,7 @@ class FileAccessLog extends React.Component {
                             <td className="pr-4">
                               {`${item.ip}${item.device ? '/' + item.device : ''}`}
                             </td>
-                            <td>{moment(item.time).format('YYYY-MM-DD HH:mm:ss')}</td>
+                            <td>{dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}</td>
                           </tr>
                         );
                       })}
