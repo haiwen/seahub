@@ -16,6 +16,7 @@
 .extension-prompts-container:hover {
   color: #703719;
   background-color: #fffbed;
+  cursor: pointer;
 }
 
 .extension-prompts-container:hover .extension-prompts-icon {
