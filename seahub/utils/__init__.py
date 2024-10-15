@@ -1457,3 +1457,33 @@ ASCII_RE = re.compile(r'[^\x00-\x7f]')
 def is_valid_password(password):
 
     return False if ASCII_RE.search(password) else True
+
+
+def get_logo_path_by_user(username):
+
+    logo_path = LOGO_PATH
+
+    # custom logo
+    custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
+    if os.path.exists(custom_logo_file):
+        logo_path = CUSTOM_LOGO_PATH
+
+    # org custom logo
+    orgs = ccnet_api.get_orgs_by_user(username)
+    if orgs:
+
+        from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
+        if ORG_ENABLE_ADMIN_CUSTOM_LOGO:
+
+            org = orgs[0]
+            from seahub.organizations.models import OrgAdminSettings
+            org_logo_url = OrgAdminSettings.objects.get_org_logo_url(org.org_id)
+
+            if org_logo_url:
+                logo_path = org_logo_url
+
+                from seahub.avatar.settings import AVATAR_FILE_STORAGE
+                if AVATAR_FILE_STORAGE == 'seahub.base.database_storage.DatabaseStorage':
+                    logo_path = "/image-view/" + logo_path
+
+    return logo_path

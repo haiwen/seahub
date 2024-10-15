@@ -349,28 +349,34 @@ def view_shared_dir(request, fileshare):
     dir_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % dir_name
 
-    return render(request, template, {
-            'repo': repo,
-            'token': token,
-            'path': req_path,
-            'username': username,
-            'dir_name': dir_name,
-            'dir_path': real_path,
-            'file_list': file_list,
-            'dir_list': dir_list,
-            'zipped': zipped,
-            'traffic_over_limit': False,
-            'max_upload_file_size': max_upload_file_size,
-            'no_quota': no_quota,
-            'permissions': permissions,
-            'mode': mode,
-            'thumbnail_size': thumbnail_size,
-            'dir_share_link': dir_share_link,
-            'desc_for_ogp': desc_for_ogp,
-            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
-            'enable_pdf_thumbnail': ENABLE_PDF_THUMBNAIL,
-            })
+    data = {
+        'repo': repo,
+        'token': token,
+        'path': req_path,
+        'username': username,
+        'dir_name': dir_name,
+        'dir_path': real_path,
+        'file_list': file_list,
+        'dir_list': dir_list,
+        'zipped': zipped,
+        'traffic_over_limit': False,
+        'max_upload_file_size': max_upload_file_size,
+        'no_quota': no_quota,
+        'permissions': permissions,
+        'mode': mode,
+        'thumbnail_size': thumbnail_size,
+        'dir_share_link': dir_share_link,
+        'desc_for_ogp': desc_for_ogp,
+        'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
+        'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
+        'enable_pdf_thumbnail': ENABLE_PDF_THUMBNAIL,
+    }
+
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(fileshare.username)
+
+    return render(request, template, data)
 
 
 @share_link_audit
@@ -416,15 +422,21 @@ def view_shared_upload_link(request, uploadlink):
         logger.error(e)
         max_upload_file_size = -1
 
-    return render(request, 'view_shared_upload_link_react.html', {
-            'repo': repo,
-            'path': path,
-            'username': username,
-            'dir_name': dir_name,
-            'max_upload_file_size': max_upload_file_size,
-            'no_quota': no_quota,
-            'uploadlink': uploadlink,
-            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
-            'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
-            'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            })
+    data = {
+        'repo': repo,
+        'path': path,
+        'username': username,
+        'dir_name': dir_name,
+        'max_upload_file_size': max_upload_file_size,
+        'no_quota': no_quota,
+        'uploadlink': uploadlink,
+        'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
+        'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
+        'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+    }
+
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(uploadlink.username)
+
+    return render(request, 'view_shared_upload_link_react.html', data)

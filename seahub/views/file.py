@@ -1326,7 +1326,6 @@ def view_shared_file(request, fileshare):
 
     permissions = fileshare.get_permissions()
 
-    #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
 
     file_share_link = request.path
@@ -1367,7 +1366,12 @@ def view_shared_file(request, fileshare):
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
 
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(shared_by)
+
     return render(request, template, data)
+
 
 @share_link_audit
 @share_link_login_required
@@ -1625,6 +1629,10 @@ def view_file_via_shared_dir(request, fileshare):
         data['seadoc_access_token'] = ret_dict['seadoc_access_token']
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
+
+    if not request.user.is_authenticated:
+        from seahub.utils import get_logo_path_by_user
+        data['logo_path'] = get_logo_path_by_user(shared_by)
 
     return render(request, template, data)
 
