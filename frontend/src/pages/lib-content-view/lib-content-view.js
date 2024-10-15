@@ -587,6 +587,7 @@ class LibContentView extends React.Component {
         dirID: res.data.dir_id,
         path: path,
         isSessionExpired: false,
+        currentDirent: null,
       });
 
       if (this.state.currentRepoInfo.is_admin) {
