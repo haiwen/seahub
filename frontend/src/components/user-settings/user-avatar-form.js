@@ -56,7 +56,7 @@ class UserAvatarForm extends React.Component {
       this.setState({
         avatarSrc: res.data.avatar_url
       });
-      toaster.success(gettext('User avatar updated'));
+      toaster.success(gettext('Avatar updated'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

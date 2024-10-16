@@ -62,7 +62,7 @@ class OrgSAMLConfig extends Component {
         domainVerified: res.data.saml_config.domain_verified || false,
         idpCertificate: res.data.saml_config.idp_certificate || '',
       });
-      toaster.success(gettext('Saml config updated'));
+      toaster.success(gettext('SAML config updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
