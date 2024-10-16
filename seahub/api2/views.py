@@ -1196,67 +1196,74 @@ class Repos(APIView):
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+
         if not config.ENABLE_ENCRYPTED_LIBRARY:
-            return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
+            error_msg = 'NOT allow to create encrypted library.'
+            return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if org_id and org_id > 0:
-            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id,
+                                                                        key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
             if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
-                return None, api_error(status.HTTP_403_FORBIDDEN,
-                                       'NOT allow to create encrypted library.')
+                error_msg = 'NOT allow to create encrypted library.'
+                return None, api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if not _REPO_ID_PATTERN.match(repo_id):
-            return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
+            error_msg = 'Repo id must be a valid uuid'
+            return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            enc_version = int(request.data.get('enc_version', 0))
+        except ValueError:
+            error_msg = 'Invalid enc_version param.'
+            return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if enc_version > settings.ENCRYPTED_LIBRARY_VERSION:
+            error_msg = 'Invalid enc_version param.'
+            return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         magic = request.data.get('magic', None)
         random_key = request.data.get('random_key', None)
+        salt = request.data.get('salt', None)
+
         pwd_hash = request.data.get('pwd_hash', None)
         pwd_hash_algo = request.data.get('pwd_hash_algo', None)
         pwd_hash_params = request.data.get('pwd_hash_params', None)
 
         try:
-            enc_version = int(request.data.get('enc_version', 0))
-        except ValueError:
-            return None, api_error(status.HTTP_400_BAD_REQUEST,
-                             'Invalid enc_version param.')
-
-        if enc_version > settings.ENCRYPTED_LIBRARY_VERSION:
-            return None, api_error(status.HTTP_400_BAD_REQUEST,
-                             'Invalid enc_version param.')
-
-        salt = None
-        if enc_version >= 3 and settings.ENCRYPTED_LIBRARY_VERSION >= 3:
-            salt = request.data.get('salt', '')
-            if not salt:
-                error_msg = 'salt invalid.'
-                return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if len(magic) != 64 or len(random_key) != 96 or enc_version < 0:
-            return None, api_error(status.HTTP_400_BAD_REQUEST,
-                             'You must provide magic, random_key and enc_version.')
-
-        if org_id and org_id > 0:
-            repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name,
-                                                      repo_desc, username,
-                                                      magic, random_key, salt,
-                                                      enc_version,
-                                                      org_id,
-                                                      pwd_hash=pwd_hash,
-                                                      pwd_hash_algo=pwd_hash_algo,
-                                                      pwd_hash_params=pwd_hash_params)
-        else:
-            if is_pro_version() and ENABLE_STORAGE_CLASSES and \
-                    STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
-
-                storages = get_library_storages(request)
-
-                if not storages:
-                    logger.error('no library storage found.')
-                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+            if org_id and org_id > 0:
+                repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name,
                                                           repo_desc, username,
                                                           magic, random_key, salt,
                                                           enc_version,
+                                                          org_id,
                                                           pwd_hash=pwd_hash,
                                                           pwd_hash_algo=pwd_hash_algo,
                                                           pwd_hash_params=pwd_hash_params)
+            else:
+                if is_pro_version() and ENABLE_STORAGE_CLASSES and \
+                        STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
+
+                    storages = get_library_storages(request)
+
+                    if not storages:
+                        logger.error('no library storage found.')
+                        repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+                                                              repo_desc, username,
+                                                              magic, random_key, salt,
+                                                              enc_version,
+                                                              pwd_hash=pwd_hash,
+                                                              pwd_hash_algo=pwd_hash_algo,
+                                                              pwd_hash_params=pwd_hash_params)
+                    else:
+                        repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+                                                              repo_desc, username,
+                                                              magic, random_key, salt,
+                                                              enc_version,
+                                                              pwd_hash=pwd_hash,
+                                                              pwd_hash_algo=pwd_hash_algo,
+                                                              pwd_hash_params=pwd_hash_params,
+                                                              storage_id=storages[0].get('storage_id', None))
                 else:
                     repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
                                                           repo_desc, username,
@@ -1264,16 +1271,10 @@ class Repos(APIView):
                                                           enc_version,
                                                           pwd_hash=pwd_hash,
                                                           pwd_hash_algo=pwd_hash_algo,
-                                                          pwd_hash_params=pwd_hash_params,
-                                                          storage_id=storages[0].get('storage_id', None))
-            else:
-                repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
-                                                      repo_desc, username,
-                                                      magic, random_key, salt,
-                                                      enc_version,
-                                                      pwd_hash=pwd_hash,
-                                                      pwd_hash_algo=pwd_hash_algo,
-                                                      pwd_hash_params=pwd_hash_params)
+                                                          pwd_hash_params=pwd_hash_params)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
 
         return repo_id, None
 
