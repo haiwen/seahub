@@ -1644,10 +1644,6 @@ class LibContentView extends React.Component {
       if (this.state.isTreePanelShown) {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
       }
-
-      if (direntObject.type !== 'dir') {
-        this.loadDirentList(this.state.path);
-      }
     }
   };
 
