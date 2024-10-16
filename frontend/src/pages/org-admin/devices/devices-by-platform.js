@@ -170,7 +170,7 @@ class DevicesByPlatform extends Component {
       errorMsg: '',
       devicesData: [],
       pageInfo: {},
-      perPage: 25
+      perPage: 100
     };
   }
 

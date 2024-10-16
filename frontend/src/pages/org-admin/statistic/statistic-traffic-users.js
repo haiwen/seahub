@@ -17,7 +17,7 @@ class UsersTraffic extends React.Component {
     this.state = {
       userTrafficList: [],
       hasNextPage: false,
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       month: moment().format('YYYYMM'),
       isLoading: false,

@@ -135,7 +135,7 @@ class DeviceErrors extends Component {
       devicesErrors: [],
       isCleanBtnShown: false,
       pageInfo: {},
-      perPage: 25
+      perPage: 100
     };
   }
 

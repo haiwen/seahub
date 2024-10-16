@@ -257,7 +257,7 @@ class Invitations extends Component {
       totalItemCount: 0,
       hasNextPage: false,
       currentPage: 1,
-      perPage: 25
+      perPage: 100
     };
   }
 

@@ -166,7 +166,7 @@ class UploadLinks extends Component {
       loading: true,
       errorMsg: '',
       uploadLinkList: [],
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       hasNextPage: false,
     };

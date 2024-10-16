@@ -16,7 +16,7 @@ class OrgsTraffic extends React.Component {
     super(props);
     this.state = {
       orgTrafficList: [],
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       hasNextPage: false,
       month: moment().format('YYYYMM'),
