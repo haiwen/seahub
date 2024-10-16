@@ -71,7 +71,7 @@ const ContextMenu = (props) => {
 
       const ableDeleteRecords = getAbleDeleteRecords(records);
       if (ableDeleteRecords.length > 0) {
-        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
+        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
       }
 
       return list;
@@ -116,13 +116,12 @@ const ContextMenu = (props) => {
       }
     }
 
-    // handle delete folder/file
     if (canDeleteRow) {
-      list.push({ value: OPERATION.DELETE_RECORD, label: gettext('Delete'), record });
+      list.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
     }
 
     if (canModifyRow && column && isNameColumn(column)) {
-      list.push({ value: OPERATION.RENAME_FILE, label: gettext('Rename'), record });
+      list.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
     }
 
     return list;
