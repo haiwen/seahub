@@ -22,7 +22,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import DetailContainer from '../../components/dirent-detail/detail-container';
@@ -550,6 +550,19 @@ class LibContentView extends React.Component {
       setTimeout(() => {
         this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
       }, 1);
+    });
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
+    window.history.pushState({ url: url, path: '' }, '', url);
+  };
+
+  showFaceRecognition = (filePath, viewId) => {
+    const repoID = this.props.repoID;
+    const repoInfo = this.state.currentRepoInfo;
+    this.setState({
+      currentMode: FACE_RECOGNITION_MODE,
+      path: filePath,
+      viewId: viewId,
+      isDirentDetailShow: false
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
@@ -1890,6 +1903,10 @@ class LibContentView extends React.Component {
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000');
         }
+      } else if (Utils.isFaceRecognition(node?.object?.type)) {
+        if (node.path !== this.state.path) {
+          this.showFaceRecognition(node.path, node.view_id || '0000');
+        }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         let dirent = node.object;
@@ -2027,7 +2044,7 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
-    if (this.state.currentMode === METADATA_MODE) {
+    if (this.state.currentMode === METADATA_MODE || this.state.currentMode === FACE_RECOGNITION_MODE) {
       this.setState({
         currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       });

@@ -6,7 +6,7 @@ import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_CO
 
 export const VIEW_TYPE = {
   TABLE: 'table',
-  GALLERY: 'gallery'
+  GALLERY: 'gallery',
 };
 
 export const VIEW_TYPE_ICON = {

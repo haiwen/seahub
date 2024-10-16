@@ -154,6 +154,10 @@ export const Utils = {
     }
   },
 
+  isFaceRecognition: function (type) {
+    return type === PRIVATE_FILE_TYPE.FACE_RECOGNITION;
+  },
+
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview, custom-*

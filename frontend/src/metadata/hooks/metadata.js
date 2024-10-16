@@ -15,8 +15,10 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
+  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
+  const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
   const viewsMap = useRef({});
 
@@ -55,11 +57,20 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     if (!newValue) {
       hideMetadataView && hideMetadataView();
       cancelURLView();
+      setEnableFaceRecognition(false);
     } else {
       setShowFirstView(true);
     }
     setEnableExtendedProperties(newValue);
   }, [enableMetadata, hideMetadataView, cancelURLView]);
+
+  const updateEnableFaceRecognition = useCallback((newValue) => {
+    if (newValue === enableFaceRecognition) return;
+    setEnableFaceRecognition(newValue);
+    if (newValue) {
+      toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
+    }
+  }, [enableFaceRecognition]);
 
   // views
   useEffect(() => {
@@ -71,6 +82,11 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
             viewsMap.current[view._id] = view;
           });
         }
+        viewsMap.current['_face_recognition'] = {
+          _id: '_face_recognition',
+          name: gettext('Photos - classfied by people'),
+          type: PRIVATE_FILE_TYPE.FACE_RECOGNITION,
+        };
         setNavigation(navigation);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
@@ -84,8 +100,31 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadata]);
 
+  useEffect(() => {
+    if (!enableMetadata) {
+      setStaticView([]);
+      setEnableFaceRecognition(false);
+      return;
+    }
+    metadataAPI.getFaceRecognitionStatus(repoID).then(res => {
+      setEnableFaceRecognition(res.data.enabled);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID, enableMetadata]);
+
+  useEffect(() => {
+    if (!enableFaceRecognition) {
+      setStaticView([]);
+      return;
+    }
+    setStaticView([{ _id: '_face_recognition', type: 'view' }]);
+  }, [enableFaceRecognition]);
+
   const selectView = useCallback((view, isSelected) => {
     if (isSelected) return;
+    const isFaceRecognitionView = view.type === PRIVATE_FILE_TYPE.FACE_RECOGNITION;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id,
@@ -94,9 +133,9 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       isPreload: true,
       object: {
         file_tags: [],
-        id: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
-        name: gettext('File extended properties'),
-        type: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        id: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        name: isFaceRecognitionView ? gettext('Photos - classfied by people') : gettext('File extended properties'),
+        type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
       },
       parentNode: {},
@@ -177,9 +216,12 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     <MetadataContext.Provider value={{
       enableMetadata,
       updateEnableMetadata,
+      enableFaceRecognition,
+      updateEnableFaceRecognition,
       showFirstView,
       setShowFirstView,
       navigation,
+      staticView,
       viewsMap: viewsMap.current,
       selectView,
       addView,

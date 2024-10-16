@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
-import { MetadataStatusManagementDialog, MetadataTreeView, useMetadata } from '../../metadata';
+import { MetadataStatusManagementDialog, MetadataFaceRecognitionDialog, MetadataTreeView, useMetadata } from '../../metadata';
 import ExtensionPrompts from './extension-prompts';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
@@ -12,24 +12,45 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
-  const { enableMetadata, updateEnableMetadata, navigation } = useMetadata();
+  const [showMetadataFaceRecognitionDialog, setShowMetadataFaceRecognitionDialog] = useState(false);
+  const { enableMetadata, updateEnableMetadata, enableFaceRecognition, updateEnableFaceRecognition, navigation } = useMetadata();
   const moreOperations = useMemo(() => {
     if (!enableMetadataManagement || !currentRepoInfo.is_admin) return [];
-    return [
+    let operations = [
       { key: 'extended-properties', value: gettext('Extended properties') }
     ];
-  }, [enableMetadataManagement, currentRepoInfo]);
+    if (enableMetadata) {
+      operations.push({ key: 'face-recognition', value: gettext('Face recognition') });
+    }
+    return operations;
+  }, [enableMetadataManagement, enableMetadata, currentRepoInfo]);
 
   const moreOperationClick = useCallback((operationKey) => {
-    if (operationKey === 'extended-properties') {
-      setShowMetadataStatusManagementDialog(true);
-      return;
+    switch (operationKey) {
+      case 'extended-properties': {
+        setShowMetadataStatusManagementDialog(true);
+        break;
+      }
+      case 'face-recognition': {
+        setShowMetadataFaceRecognitionDialog(true);
+        break;
+      }
+      default:
+        break;
     }
   }, []);
 
   const closeMetadataManagementDialog = useCallback(() => {
     setShowMetadataStatusManagementDialog(false);
   }, []);
+
+  const closeMetadataFaceRecognitionDialog = useCallback(() => {
+    setShowMetadataFaceRecognitionDialog(false);
+  }, []);
+
+  const openMetadataFaceRecognition = useCallback(() => {
+    updateEnableFaceRecognition(true);
+  }, [updateEnableFaceRecognition]);
 
   const toggleMetadataStatus = useCallback((value) => {
     updateEnableMetadata(value);
@@ -61,6 +82,14 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
           repoID={repoID}
           toggle={closeMetadataManagementDialog}
           submit={toggleMetadataStatus}
+        />
+      )}
+      {showMetadataFaceRecognitionDialog && (
+        <MetadataFaceRecognitionDialog
+          value={enableFaceRecognition}
+          repoID={repoID}
+          toggle={closeMetadataFaceRecognitionDialog}
+          submit={openMetadataFaceRecognition}
         />
       )}
     </>

@@ -340,17 +340,17 @@ const Gallery = () => {
         onDownload={handleDownload}
         onDelete={handleDelete}
       />
-      {isImagePopupOpen &&
-      <ModalPortal>
-        <ImageDialog
-          imageItems={imageItems}
-          imageIndex={imageIndex}
-          closeImagePopup={closeImagePopup}
-          moveToPrevImage={moveToPrevImage}
-          moveToNextImage={moveToNextImage}
-        />
-      </ModalPortal>
-      }
+      {isImagePopupOpen && (
+        <ModalPortal>
+          <ImageDialog
+            imageItems={imageItems}
+            imageIndex={imageIndex}
+            closeImagePopup={closeImagePopup}
+            moveToPrevImage={moveToPrevImage}
+            moveToNextImage={moveToNextImage}
+          />
+        </ModalPortal>
+      )}
       {isZipDialogOpen &&
         <ModalPortal>
           <ZipDownloadDialog

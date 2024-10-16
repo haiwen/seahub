@@ -1,0 +1,29 @@
+.sf-metadata-face-recognition {
+  height: 100%;
+  width: 100%;
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-item {
+  margin-bottom: 16px;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-item:last-child {
+  margin-bottom: 0;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-name {
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.sf-metadata-face-recognition .sf-metadata-face-recognition-loading-more {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
