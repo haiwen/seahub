@@ -6,6 +6,7 @@ import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/org-add-department-dialog';
 import { gettext, orgID, lang } from '../../../utils/constants';
 import GroupItem from './group-item';
+import EmptyTip from '../../../components/empty-tip';
 
 import '../../../css/org-department-item.css';
 
@@ -139,7 +140,7 @@ class OrgDepartmentsList extends React.Component {
                   </tbody>
                 </table>
                 :
-                <p className="no-group">{gettext('No departments')}</p>
+                <EmptyTip text={gettext('No departments')}/>
               }
             </div>
           </div>

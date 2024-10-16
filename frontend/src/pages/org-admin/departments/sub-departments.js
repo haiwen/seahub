@@ -5,7 +5,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import { gettext, orgID, lang } from '../../../utils/constants';
-
+import EmptyTip from '../../../components/empty-tip';
 import Department from './department';
 import GroupItem from './group-item';
 import '../../../css/org-department-item.css';
@@ -149,7 +149,7 @@ class OrgDepartmentItem extends React.Component {
                   })}
                 </tbody>
               </table>
-              : <p className="no-group">{gettext('No sub-departments')}</p>
+              : <EmptyTip text={gettext('No sub-departments')}/>
             }
           </div>
         </Department>

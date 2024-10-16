@@ -8,6 +8,7 @@ import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/org-delete-repo-dialog';
 import { gettext, orgID, lang } from '../../../utils/constants';
 import Department from './department';
+import EmptyTip from '../../../components/empty-tip';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -84,7 +85,7 @@ class OrgDepartmentItem extends React.Component {
                 </tbody>
               </table>
             </div>
-            : <p className="no-libraty">{gettext('No libraries')}</p>
+            : <EmptyTip text={gettext('No libraries')} />
           }
         </Department>
       </Fragment>

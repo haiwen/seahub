@@ -4,7 +4,7 @@ import Account from '../../components/common/account';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.any,
   search: PropTypes.any,
   toggleSidePanel: PropTypes.func
 };

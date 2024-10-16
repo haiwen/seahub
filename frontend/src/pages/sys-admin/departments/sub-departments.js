@@ -7,6 +7,7 @@ import toaster from '../../../components/toast';
 import { gettext, lang } from '../../../utils/constants';
 import GroupItem from './group-item';
 import Department from './department';
+import EmptyTip from '../../../components/empty-tip';
 
 import '../../../css/org-department-item.css';
 
@@ -129,7 +130,7 @@ class SubDepartments extends React.Component {
                 })}
               </tbody>
             </table>
-            : <p className="no-group">{gettext('No sub-departments')}</p>
+            : <EmptyTip text={gettext('No sub-departments')}/>
           }
         </div>
       </Department>

@@ -10,6 +10,7 @@
 .empty-tip .no-items-img-tip {
   display: inline-block;
   margin-bottom: 10px;
+  -webkit-user-drag: none;
 }
 
 .empty-tip .empty-tip-title {

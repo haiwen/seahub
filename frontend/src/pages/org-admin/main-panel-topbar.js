@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Account from '../../components/common/account';
 
 const propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.any,
   search: PropTypes.any,
 };
 
