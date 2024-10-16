@@ -89,7 +89,7 @@ class Settings extends React.Component {
       this.setState({
         userInfo: res.data
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('User info updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

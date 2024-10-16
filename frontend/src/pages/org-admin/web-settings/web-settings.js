@@ -54,7 +54,7 @@ class OrgWebSettings extends Component {
       this.setState({
         config_dict: res.data
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Name updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -66,7 +66,7 @@ class OrgWebSettings extends Component {
       this.setState({
         logoPath: res.data.logo_path
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Logo updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -75,7 +75,7 @@ class OrgWebSettings extends Component {
 
   orgSaveSetting = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('System settings updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

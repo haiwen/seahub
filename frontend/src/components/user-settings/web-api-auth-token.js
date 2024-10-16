@@ -35,7 +35,7 @@ class WebAPIAuthToken extends React.Component {
         authToken: res.data.token,
         isAuthTokenVisible: false
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Auth Token created'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -48,7 +48,7 @@ class WebAPIAuthToken extends React.Component {
         authToken: '',
         isAuthTokenVisible: false
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Auth Token deleted'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

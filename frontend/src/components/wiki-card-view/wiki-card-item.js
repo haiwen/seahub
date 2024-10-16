@@ -92,7 +92,7 @@ class WikiCardItem extends Component {
     wikiAPI.publishWiki(this.props.wiki.id, publish_url).then((res) => {
       const { publish_url } = res.data;
       this.setState({ customUrl: publish_url });
-      toaster.success(gettext('Successfully'));
+      toaster.success(gettext('Wiki published'));
     }).catch((error) => {
       if (error.response) {
         let errorMsg = error.response.data.error_msg;

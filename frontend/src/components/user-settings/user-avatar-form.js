@@ -52,12 +52,11 @@ class UserAvatarForm extends React.Component {
       return false;
     }
 
-    // this.form.current.submit();
     seafileAPI.updateUserAvatar(file, 160).then((res) => {
       this.setState({
         avatarSrc: res.data.avatar_url
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('User avatar updated'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

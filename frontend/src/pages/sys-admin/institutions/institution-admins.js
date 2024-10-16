@@ -262,7 +262,7 @@ class InstitutionAdmins extends Component {
         return user.email != email;
       });
       this.setState({ userList: newUserList });
-      toaster.success(gettext('Successfully'));
+      toaster.success(gettext('User deleted'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

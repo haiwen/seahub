@@ -305,7 +305,7 @@ class InstitutionUsers extends Component {
         return user;
       });
       this.setState({ userList: userList });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Admin updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -346,7 +346,7 @@ class InstitutionUsers extends Component {
         return user.email != email;
       });
       this.setState({ userList: newUserList });
-      toaster.success(gettext('Successfully'));
+      toaster.success(gettext('User deleted'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
