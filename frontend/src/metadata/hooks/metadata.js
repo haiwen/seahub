@@ -84,7 +84,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
         }
         viewsMap.current['_face_recognition'] = {
           _id: '_face_recognition',
-          name: gettext('Photos - Classify By People'),
+          name: gettext('Photos - classfied by people'),
           type: PRIVATE_FILE_TYPE.FACE_RECOGNITION,
         };
         setNavigation(navigation);
@@ -134,7 +134,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       object: {
         file_tags: [],
         id: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
-        name: isFaceRecognitionView ? gettext('Photos - Classify By People') : gettext('File extended properties'),
+        name: isFaceRecognitionView ? gettext('Photos - classfied by people') : gettext('File extended properties'),
         type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
       },
