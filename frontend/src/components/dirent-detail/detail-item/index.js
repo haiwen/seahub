@@ -15,7 +15,7 @@ const DetailItem = ({ readonly, field, className, children }) => {
   return (
     <div className={classnames('dirent-detail-item', className)}>
       <div className="dirent-detail-item-name d-flex">
-        <Icon iconName={icon} />
+        <div><Icon iconName={icon} /></div>
         <span className="dirent-detail-item-name-value">{field.name}</span>
       </div>
       <div className={classnames('dirent-detail-item-value', { 'editable': !readonly })} >
