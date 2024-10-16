@@ -37,7 +37,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggle, submit
 
   return (
     <Modal className="metadata-face-recognition-dialog" isOpen={true} toggle={onToggle}>
-      <ModalHeader toggle={onToggle}>{gettext('Face recognition')}</ModalHeader>
+      <ModalHeader toggle={onToggle}>{gettext('Face recognition management')}</ModalHeader>
       <ModalBody>
         <Switch
           checked={value}
