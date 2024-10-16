@@ -62,7 +62,7 @@ class OrgSAMLConfig extends Component {
         domainVerified: res.data.saml_config.domain_verified || false,
         idpCertificate: res.data.saml_config.idp_certificate || '',
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('SAML config updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -73,7 +73,7 @@ class OrgSAMLConfig extends Component {
     const { domain } = this.state;
     seafileAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
       this.setState({ domainVerified: res.data.domain_verified });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Domain verified'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

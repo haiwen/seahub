@@ -38,7 +38,7 @@ class RenameDepartmentDialog extends React.Component {
       seafileAPI.orgAdminUpdateDepartGroup(orgID, groupID, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
         this.props.onDepartmentNameChanged(res.data);
-        toaster.success(gettext('Success'));
+        toaster.success(gettext('Name updated'));
       }).catch(error => {
         let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });

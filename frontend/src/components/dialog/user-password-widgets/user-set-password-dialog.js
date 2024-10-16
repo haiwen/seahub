@@ -38,7 +38,7 @@ const UserSetPassword = ({ toggle }) => {
     setErrorMessage('');
     setCanSubmit(false);
     userAPI.resetPassword(null, password).then(() => {
-      toaster.success('Password set');
+      toaster.success(gettext('Password set'));
       location.reload();
       toggle();
     }).catch(error => {

@@ -45,7 +45,7 @@ const UserUpdatePassword = ({ toggle }) => {
     setErrorMessage('');
     setCanSubmit(false);
     userAPI.resetPassword(currentPassword, newPassword).then(() => {
-      toaster.success('Password updated');
+      toaster.success(gettext('Password updated'));
       toggle();
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);

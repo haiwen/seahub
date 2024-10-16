@@ -54,7 +54,7 @@ class EmailNotice extends React.Component {
     e.preventDefault();
     let { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;
     seafileAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval).then((res) => {
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Email notification updated'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

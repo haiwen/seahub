@@ -34,7 +34,7 @@ class WebdavPassword extends React.Component {
       this.setState({
         isWebdavPasswordSetted: !this.state.isWebdavPasswordSetted,
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Password updated'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.toggleSetPasswordDialog();
@@ -51,7 +51,7 @@ class WebdavPassword extends React.Component {
   resetPassword = (password) => {
     seafileAPI.updateWebdavSecret(password).then((res) => {
       this.toggleResetPasswordDialog();
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Password reset'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.toggleResetPasswordDialog();
@@ -71,7 +71,7 @@ class WebdavPassword extends React.Component {
       this.setState({
         isWebdavPasswordSetted: !this.state.isWebdavPasswordSetted,
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('Password removed'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.toggleRemovePasswordDialog();

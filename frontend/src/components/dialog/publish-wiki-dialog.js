@@ -61,7 +61,7 @@ class PublishWikiDialog extends React.Component {
     let wiki_id = this.props.wiki.id;
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
       this.setState({ url: '' });
-      toaster.success(gettext('Successfully'));
+      toaster.success(gettext('Wiki custom URL deleted'));
     }).catch((error) => {
       if (error.response) {
         let errorMsg = error.response.data.error_msg;

@@ -45,7 +45,7 @@ class WebSettings extends Component {
       this.setState({
         config_dict: res.data
       });
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('System settings updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -75,7 +75,7 @@ class WebSettings extends Component {
           loginBGPath: res.data.login_bg_image_path
         });
       }
-      toaster.success(gettext('Success'));
+      toaster.success(gettext('System settings updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
