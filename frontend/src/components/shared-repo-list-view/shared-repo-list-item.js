@@ -665,6 +665,7 @@ class SharedRepoListItem extends React.Component {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
+        onContextMenu={this.handleContextMenu}
       >
         <div className="d-flex align-items-center text-truncate">
           <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />

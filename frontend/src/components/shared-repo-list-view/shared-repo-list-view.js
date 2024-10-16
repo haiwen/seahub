@@ -117,7 +117,7 @@ class SharedRepoListView extends React.Component {
   };
 
   renderRepoListView = () => {
-    const { currentViewMode = LIST_MODE } = this.props;
+    const { currentViewMode = LIST_MODE, currentGroup, libraryType } = this.props;
     return (
       <Fragment>
         {this.props.repoList.map((repo, index) => {
@@ -140,12 +140,16 @@ class SharedRepoListView extends React.Component {
             />
           );
         })}
+        <ContextMenu
+          id={`${libraryType === 'public' ? 'shared-repo-item-menu' : `shared-repo-item-menu-${currentGroup.id}`}`}
+          onMenuItemClick={this.onMenuItemClick}
+        />
       </Fragment>
     );
   };
 
   renderPCUI = () => {
-    const { theadHidden = false, currentViewMode = LIST_MODE, currentGroup, libraryType } = this.props;
+    const { theadHidden = false, currentViewMode = LIST_MODE } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     return currentViewMode == LIST_MODE ? (
@@ -166,10 +170,6 @@ class SharedRepoListView extends React.Component {
             {this.renderRepoListView()}
           </tbody>
         </table>
-        <ContextMenu
-          id={`${libraryType === 'public' ? 'shared-repo-item-menu' : `shared-repo-item-menu-${currentGroup.id}`}`}
-          onMenuItemClick={this.onMenuItemClick}
-        />
       </>
     ) : (
       <div className="d-flex justify-content-between flex-wrap">

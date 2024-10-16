@@ -143,10 +143,6 @@ class Content extends Component {
               {itemsContent}
             </tbody>
           </table>
-          <ContextMenu
-            id="shared-libs-item-menu"
-            onMenuItemClick={this.onMenuItemClick}
-          />
         </>
       ) : (
         <div className="d-flex justify-content-between flex-wrap">
@@ -154,7 +150,15 @@ class Content extends Component {
         </div>
       );
 
-      return items.length ? content : emptyTip;
+      return items.length ? (
+        <>
+          {content}
+          <ContextMenu
+            id="shared-libs-item-menu"
+            onMenuItemClick={this.onMenuItemClick}
+          />
+        </>
+      ) : emptyTip;
     }
   }
 }
@@ -397,6 +401,7 @@ class Item extends Component {
               onMouseOver={this.handleMouseOver}
               onMouseOut={this.handleMouseOut}
               onFocus={this.handleMouseOver}
+              onContextMenu={this.handleContextMenu}
             >
               <div className="d-flex align-items-center text-truncate">
                 <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
