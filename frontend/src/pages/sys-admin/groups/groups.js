@@ -20,7 +20,7 @@ class Groups extends Component {
       errorMsg: '',
       groupList: [],
       pageInfo: {},
-      perPage: 25,
+      perPage: 100,
       isCreateGroupDialogOpen: false
     };
   }

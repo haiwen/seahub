@@ -186,7 +186,7 @@ class ShareLinks extends Component {
       loading: true,
       errorMsg: '',
       shareLinkList: [],
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       hasNextPage: false,
       sortBy: '',

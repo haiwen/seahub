@@ -36,7 +36,7 @@ class Users extends Component {
       userList: [],
       hasNextPage: false,
       currentPage: 1,
-      perPage: 25,
+      perPage: 100,
       hasUserSelected: false,
       selectedUserList: [],
       isAllUsersSelected: false,

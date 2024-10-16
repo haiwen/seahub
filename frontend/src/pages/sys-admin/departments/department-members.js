@@ -28,7 +28,7 @@ class DepartmentMembers extends React.Component {
       currentPageInfo: {
       },
       currentPage: 1,
-      perPage: 25,
+      perPage: 100,
       deletedMember: {},
       showDeleteMemberDialog: false
     };

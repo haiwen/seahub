@@ -20,7 +20,7 @@ class AllRepos extends Component {
       errorMsg: '',
       repos: [],
       pageInfo: {},
-      perPage: 25,
+      perPage: 100,
       sortBy: '',
       isCreateRepoDialogOpen: false
     };

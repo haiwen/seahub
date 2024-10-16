@@ -166,7 +166,7 @@ class FileUpdateLogs extends Component {
       loading: true,
       errorMsg: '',
       logList: [],
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,

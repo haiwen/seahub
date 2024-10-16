@@ -15,7 +15,7 @@ class SearchRepos extends Component {
     this.state = {
       name: '',
       currentPage: 1,
-      perPage: 25,
+      perPage: 100,
       isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',

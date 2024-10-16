@@ -293,7 +293,7 @@ class TrashRepos extends Component {
       errorMsg: '',
       repos: [],
       pageInfo: {},
-      perPage: 25,
+      perPage: 100,
       isCleanTrashDialogOpen: false
     };
   }

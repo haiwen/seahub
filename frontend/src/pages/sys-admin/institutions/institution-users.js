@@ -254,7 +254,7 @@ class InstitutionUsers extends Component {
       errorMsg: '',
       institutionName: '',
       userList: [],
-      perPage: 25,
+      perPage: 100,
       currentPage: 1,
       hasNextPage: false,
       isAddUserDialogOpen: false

@@ -211,7 +211,7 @@ class GroupMembers extends Component {
       memberList: [],
       pageInfo: {},
       currentPage: 1,
-      perPage: 25,
+      perPage: 100,
       isAddMemberDialogOpen: false
     };
   }

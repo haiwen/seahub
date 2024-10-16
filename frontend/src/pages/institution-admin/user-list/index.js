@@ -11,7 +11,7 @@ const UserList = ({ onUserLinkClick }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userList, setUserList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [curPerPage, setCurPrePage] = useState(25);
+  const [curPerPage, setCurPrePage] = useState(100);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [deleteUser, setDeleteUser] = useState(null);
   const [deleteMessage, setDeleteMessage] = useState('');
