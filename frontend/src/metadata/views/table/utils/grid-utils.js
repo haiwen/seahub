@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
-import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell';
+import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
-import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES } from '../../../constants';
+import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES,
+  REG_NUMBER_DIGIT, REG_STRING_NUMBER_PARTS, COLUMN_RATE_MAX_NUMBER,
+} from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import { convertCellValue } from './convert-utils';
 import { Utils } from '../../../../utils/utils';
@@ -209,14 +211,15 @@ class GridUtils {
           const value = draggedRangeMatrix[j - startColumnIdx][idx];
           const rule = rules[cellKey];
           const fillingValue = rule({ n: fillingIndex - 1, value });
+          if (isCellValueChanged(fillingValue, dragRow[columnName], type)) {
+            updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
+            oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: dragRow[columnName] });
+            const update = updatedOriginalRows[dragRowId];
+            const oldUpdate = oldOriginalRows[dragRowId];
 
-          updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
-          oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: dragRow[columnName] });
-          const update = updatedOriginalRows[dragRowId];
-          const oldUpdate = oldOriginalRows[dragRowId];
-
-          updatedRows[dragRowId] = Object.assign({}, updatedRows[dragRowId], update);
-          oldRows[dragRowId] = Object.assign({}, oldRows[dragRowId], oldUpdate);
+            updatedRows[dragRowId] = Object.assign({}, updatedRows[dragRowId], update);
+            oldRows[dragRowId] = Object.assign({}, oldRows[dragRowId], oldUpdate);
+          }
         }
       }
       currentGroupRowIndex++;
@@ -260,21 +263,21 @@ class GridUtils {
           case CellType.DATE: {
             let format = data && data.format && data.format.indexOf('HH:mm') > -1 ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD';
             let value0 = valueList[0];
-            let yearTolerance = this.getYearTolerance(valueList);
+            let yearTolerance = this._getYearTolerance(valueList);
             if (yearTolerance) {
               ruleMatrixItem = ({ n }) => {
                 return dayjs(value0).add(n * yearTolerance, 'years').format(format);
               };
               break;
             }
-            let monthTolerance = this.getMonthTolerance(valueList);
+            let monthTolerance = this._getMonthTolerance(valueList);
             if (monthTolerance) {
               ruleMatrixItem = ({ n }) => {
                 return dayjs(value0).add(n * monthTolerance, 'months').format(format);
               };
               break;
             }
-            let dayTolerance = this.getDayTolerance(valueList);
+            let dayTolerance = this._getDayTolerance(valueList);
             if (dayTolerance) {
               ruleMatrixItem = ({ n }) => {
                 let time = n * dayTolerance + this.getDateStringValue(value0);
@@ -285,7 +288,7 @@ class GridUtils {
             break;
           }
           case CellType.NUMBER: {
-            ruleMatrixItem = this.getLeastSquares(valueList);
+            ruleMatrixItem = this._getLeastSquares(valueList);
             break;
           }
           case CellType.TEXT: {
@@ -293,7 +296,7 @@ class GridUtils {
             break;
           }
           case CellType.RATE: {
-            ruleMatrixItem = this.getRatingLeastSquares(valueList, data);
+            ruleMatrixItem = this._getRatingLeastSquares(valueList, data);
             break;
           }
           default: {
@@ -312,7 +315,7 @@ class GridUtils {
     return dateObject.isValid() ? dateObject.valueOf() : 0;
   }
 
-  getYearTolerance(dateList) {
+  _getYearTolerance(dateList) {
     let date0 = dayjs(dateList[0]);
     let date1 = dayjs(dateList[1]);
     if (!date0.isValid() || !date1.isValid()) {
@@ -334,7 +337,7 @@ class GridUtils {
     return isYearArithmeticSequence ? tolerance : 0;
   }
 
-  getMonthTolerance(dateList) {
+  _getMonthTolerance(dateList) {
     let date0 = dayjs(dateList[0]);
     let date1 = dayjs(dateList[1]);
     if (!date0.isValid() || !date1.isValid()) {
@@ -355,7 +358,7 @@ class GridUtils {
     return isMonthArithmeticSequence ? tolerance : 0;
   }
 
-  getDayTolerance(dateList) {
+  _getDayTolerance(dateList) {
     let date0 = this.getDateStringValue(dateList[0]);
     let tolerance = this.getDateStringValue(dateList[1]) - date0;
     let isDayArithmeticSequence = dateList.every((date, i) => {
@@ -367,7 +370,7 @@ class GridUtils {
     return isDayArithmeticSequence ? tolerance : 0;
   }
 
-  getLeastSquares(numberList) {
+  _getLeastSquares(numberList) {
     let slope;
     let intercept;
     let xAverage;
@@ -402,6 +405,124 @@ class GridUtils {
       }
       let y = n * slope + intercept;
       return Number(parseFloat(y).toFixed(8));
+    };
+  }
+
+  _isArithmeticSequence(numberList) {
+    let number0 = numberList[0];
+    let tolerance = numberList[1] - number0;
+    let func = (v, n) => {
+      return v === n * (tolerance) + number0;
+    };
+    return numberList.every(func);
+  }
+
+  _getTextItemStructureInfo(textItem) {
+    let validTextItem = textItem || '';
+    let lastNumberPosition = -1;
+    let lastNumber = validTextItem;
+    let valueList = validTextItem.match(REG_STRING_NUMBER_PARTS) || [];
+    for (let i = valueList.length - 1; i > -1; i--) {
+      let valueItem = valueList[i];
+      if (REG_NUMBER_DIGIT.test(valueItem)) {
+        lastNumberPosition = i;
+        lastNumber = valueItem;
+        break;
+      }
+    }
+    if (lastNumberPosition !== -1) {
+      valueList[lastNumberPosition] = '-|*|-seaTable-|*|-';
+    }
+
+    return { lastNumberPosition, lastNumber, structure: valueList.join('') };
+  }
+
+  _getTextRule(textList) {
+    let isAllNotIncludeNumber = textList.every(item => !REG_NUMBER_DIGIT.test(item || ''));
+    if (isAllNotIncludeNumber) {
+      return NORMAL_RULE;
+    }
+    if (textList.length === 1) {
+      let valueList = textList[0].match(REG_STRING_NUMBER_PARTS);
+      let { lastNumberPosition, lastNumber } = this._getTextItemStructureInfo(textList[0]);
+      return this._getTextFillNumberRule(valueList, lastNumber, lastNumberPosition, ({ lastNumber, n }) => {
+        let lastNumberValue = parseInt(lastNumber, 10);
+        return (lastNumberValue + n) + '';
+      });
+    }
+    // isStructureConsistent: the last number part is not equal, other is equal
+    let structureList = textList.map((text) => this._getTextItemStructureInfo(text));
+    let firstStructure = structureList[0];
+    let isStructureConsistent = structureList.every(structure => structure['lastNumberPosition'] === firstStructure['lastNumberPosition'] && structure['structure'] === firstStructure['structure']);
+    if (isStructureConsistent) {
+      let numberList = structureList.map(structure => parseInt(structure.lastNumber, 10));
+      if (this._isArithmeticSequence(numberList)) {
+        let valueList = textList[0].match(REG_STRING_NUMBER_PARTS);
+        let secondStructure = structureList[1];
+        let secondStructureLastNumberValue = parseInt(secondStructure['lastNumber'], 10);
+        return this._getTextFillNumberRule(valueList, firstStructure['lastNumber'], firstStructure['lastNumberPosition'], ({ lastNumber, n }) => {
+          let lastNumberValue = parseInt(lastNumber, 10);
+          return (n * (secondStructureLastNumberValue - lastNumberValue) + lastNumberValue) + '';
+        });
+      }
+      return NORMAL_RULE;
+    }
+    return ({ value, n }) => {
+      if (REG_NUMBER_DIGIT.test(value || '')) {
+        let valueList = value.match(REG_STRING_NUMBER_PARTS);
+        let { lastNumberPosition, lastNumber } = this._getTextItemStructureInfo(value);
+        let isStartWith0 = lastNumber.startsWith('0');
+        let lastNumberValue = parseInt(lastNumber, 10);
+        let fillValue = (lastNumberValue + Math.floor(n / textList.length)) + '';
+        if (isStartWith0 && fillValue.length < lastNumber.length) {
+          fillValue = '0'.repeat(lastNumber.length - fillValue.length) + fillValue;
+        }
+        valueList[lastNumberPosition] = fillValue;
+        return valueList.join('');
+      }
+      return value;
+    };
+  }
+
+  _getRatingLeastSquares(numberList, data) {
+    const { rate_max_number = COLUMN_RATE_MAX_NUMBER[4].name } = data || {};
+    let slope;
+    let intercept;
+    let xAverage;
+    let yAverage;
+    let xSum = 0;
+    let ySum = 0;
+    let xSquareSum = 0;
+    let xySum = 0;
+    let validCellsLen = 0;
+    let emptyCellPositions = [];
+    numberList.forEach((v, i) => {
+      if (v !== undefined && v !== null && v !== '') {
+        validCellsLen++;
+        xSum += i;
+        ySum += v;
+        xySum += (v * i);
+        xSquareSum += Math.pow(i, 2);
+      } else {
+        emptyCellPositions.push(i);
+      }
+    });
+    if (validCellsLen < 2) {
+      return NORMAL_RULE;
+    }
+    xAverage = xSum / validCellsLen;
+    yAverage = ySum / validCellsLen;
+    slope = (xySum - validCellsLen * xAverage * yAverage) / (xSquareSum - validCellsLen * Math.pow(xAverage, 2));
+    intercept = yAverage - slope * xAverage;
+    return ({ n }) => {
+      if (emptyCellPositions.length && emptyCellPositions.includes(n % numberList.length)) {
+        return '';
+      }
+      let y = n * slope + intercept;
+      const value = Number(parseFloat(y).toFixed(0));
+      if (value > rate_max_number) return rate_max_number;
+      if (value < 0) return 0;
+      return value;
     };
   }
 
