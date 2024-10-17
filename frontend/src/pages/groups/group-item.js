@@ -129,6 +129,7 @@ class GroupItem extends React.Component {
         {group.repos.length === 0 ?
           emptyTip :
           <SharedRepoListView
+            key={`group-${group.id}`}
             inAllLibs={inAllLibs}
             theadHidden={true}
             isShowRepoOwner={false}

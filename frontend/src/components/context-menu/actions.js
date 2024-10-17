@@ -31,3 +31,27 @@ export function showMenu(opts = {}, target) {
 export function hideMenu(opts = {}, target) {
   dispatchGlobalEvent(MENU_HIDE, assign({}, opts, { type: MENU_HIDE }), target);
 }
+
+export function handleContextClick(event, id, menuList, currentObject = null) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  let x = event.clientX || (event.touches && event.touches[0].pageX);
+  let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+  hideMenu();
+
+  let showMenuConfig = {
+    id: id,
+    position: { x, y },
+    target: event.target,
+    currentObject: currentObject,
+    menuList: menuList,
+  };
+
+  if (menuList.length === 0) {
+    return;
+  }
+
+  showMenu(showMenuConfig);
+}

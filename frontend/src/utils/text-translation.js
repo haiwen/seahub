@@ -135,6 +135,63 @@ const TextTranslation = {
     key: 'Export sdoc',
     value: gettext('Export as zip')
   },
+
+  // repo operations
+  'TRANSFER': {
+    key: 'Transfer',
+    value: gettext('Transfer')
+  },
+  'FOLDER_PERMISSION': {
+    key: 'Folder Permission',
+    value: gettext('Folder Permission')
+  },
+  'SHARE_ADMIN': {
+    key: 'Share Admin',
+    value: gettext('Share Admin')
+  },
+  'CHANGE_PASSWORD': {
+    key: 'Change Password',
+    value: gettext('Change Password')
+  },
+  'RESET_PASSWORD': {
+    key: 'Reset Password',
+    value: gettext('Reset Password')
+  },
+  'UNWATCH_FILE_CHANGES': {
+    key: 'Unwatch File Changes',
+    value: gettext('Unwatch File Changes')
+  },
+  'WATCH_FILE_CHANGES': {
+    key: 'Watch File Changes',
+    value: gettext('Watch File Changes')
+  },
+  'HISTORY_SETTING': {
+    key: 'History Setting',
+    value: gettext('History Setting')
+  },
+  'ADVANCED': {
+    key: 'advanced',
+    value: gettext('Advanced')
+  },
+
+  // advanced operations
+  'API_TOKEN': {
+    key: 'API Token',
+    value: gettext('API Token')
+  },
+  'LABEL_CURRENT_STATE': {
+    key: 'Label Current State',
+    value: gettext('Label Current State')
+  },
+  'OLD_FILES_AUTO_DELETE': {
+    key: 'Old Files Auto Delete',
+    value: gettext('Old Files Auto Delete')
+  },
+
+  'UNSHARE': {
+    key: 'Unshare',
+    value: gettext('Unshare')
+  },
 };
 
 export default TextTranslation;

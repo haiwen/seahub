@@ -138,6 +138,7 @@ class PublicSharedView extends React.Component {
         {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
         {(!this.state.isLoading && this.state.repoList.length > 0) &&
         <SharedRepoListView
+          key='public-shared-view'
           libraryType={this.state.libraryType}
           repoList={this.state.repoList}
           sortBy={this.state.sortBy}
