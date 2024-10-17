@@ -34,11 +34,12 @@ class FileView extends React.Component {
 
   constructor(props) {
     super(props);
+    const storedIsHeaderShown = localStorage.getItem('sf_onlyoffile_file_view_header_shown');
     this.state = {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      isHeaderShown: true,
+      isHeaderShown: (storedIsHeaderShown === null) || (storedIsHeaderShown == 'true'),
       isDetailsPanelOpen: false
     };
   }
@@ -101,6 +102,8 @@ class FileView extends React.Component {
   toggleHeader = () => {
     this.setState({
       isHeaderShown: !this.state.isHeaderShown
+    }, () => {
+      localStorage.setItem('sf_onlyoffile_file_view_header_shown', String(this.state.isHeaderShown));
     });
   };
 
