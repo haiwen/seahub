@@ -89,14 +89,17 @@ const Cell = ({
   }, [column, updateDraggingKey]);
 
   const onDragEnter = useCallback(() => {
+    if (!draggingColumnKey) return;
     updateDragOverKey(column.key);
-  }, [column, updateDragOverKey]);
+  }, [column, updateDragOverKey, draggingColumnKey]);
 
   const onDragLeave = useCallback(() => {
+    if (!draggingColumnKey) return;
     updateDragOverKey(null);
-  }, [updateDragOverKey]);
+  }, [updateDragOverKey, draggingColumnKey]);
 
   const onDragOver = useCallback((event) => {
+    if (!draggingColumnKey) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     updateDragOverKey(column.key);
@@ -115,7 +118,7 @@ const Cell = ({
     } else {
       window.sfMetadataBody.clearHorizontalScroll();
     }
-  }, [column, frozenColumnsWidth, updateDragOverKey]);
+  }, [column, frozenColumnsWidth, updateDragOverKey, draggingColumnKey]);
 
   const onDrop = useCallback((event) => {
     event.stopPropagation();
@@ -131,6 +134,7 @@ const Cell = ({
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
     updateDragOverKey(null);
+    window.sfMetadataBody.clearHorizontalScroll();
   }, [updateDraggingKey, updateDragOverKey]);
 
   const { key, name, type } = column;
