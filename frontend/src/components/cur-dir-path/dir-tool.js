@@ -10,6 +10,7 @@ import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/repos-sort-menu';
 import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { DIRENT_DETAIL_MODE } from '../dir-view-mode/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -97,10 +98,14 @@ class DirTool extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   };
 
+  showDirentDetail = () => {
+    this.props.switchViewMode(DIRENT_DETAIL_MODE);
+  };
+
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, switchViewMode, isCustomPermission } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
 
@@ -114,7 +119,7 @@ class DirTool extends React.Component {
     if (isFileExtended) {
       return (
         <div className="dir-tool">
-          <MetadataViewToolBar viewId={viewId} isCustomPermission={isCustomPermission} switchViewMode={switchViewMode} />
+          <MetadataViewToolBar viewId={viewId} isCustomPermission={isCustomPermission} showDetail={this.showDirentDetail} />
         </div>
       );
     }
@@ -122,10 +127,10 @@ class DirTool extends React.Component {
     return (
       <React.Fragment>
         <div className="dir-tool d-flex">
-          <ViewModes currentViewMode={currentMode} switchViewMode={switchViewMode} />
+          <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
           <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
           {(!isCustomPermission) &&
-            <div className="cur-view-path-btn" onClick={() => switchViewMode('detail')}>
+            <div className="cur-view-path-btn" onClick={this.showDirentDetail}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </div>
           }

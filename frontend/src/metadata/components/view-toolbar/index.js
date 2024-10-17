@@ -1,23 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../constants';
-import { gettext } from '../../../utils/constants';
+import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
+import TableViewToolbar from './table-view-toolbar';
+import GalleryViewToolbar from './gallery-view-toolbar';
 
 import './index.css';
 
-const ViewToolBar = ({ viewId, isCustomPermission, switchViewMode }) => {
+const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
-
-  const viewColumns = useMemo(() => {
-    if (!view) return [];
-    return view.columns;
-  }, [view]);
-
-  const filterColumns = useMemo(() => {
-    return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);
-  }, [viewColumns]);
 
   const onHeaderClick = useCallback(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
@@ -68,73 +59,36 @@ const ViewToolBar = ({ viewId, isCustomPermission, switchViewMode }) => {
   if (!view) return null;
 
   const viewType = view.type;
-  const readOnly = !window.sfMetadataContext.canModifyView(view);
+  const readOnly = window.sfMetadataContext ? !window.sfMetadataContext.canModifyView(view) : true;
 
   return (
     <div
       className="sf-metadata-tool"
       onClick={onHeaderClick}
     >
-      <div className="sf-metadata-tool-left-operations">
-        {viewType === VIEW_TYPE.GALLERY && (
-          <>
-            <GalleryGroupBySetter view={view} />
-            <GallerySliderSetter view={view} />
-          </>
-        )}
-        <FilterSetter
-          isNeedSubmit={true}
-          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
-          filtersClassName="sf-metadata-filters"
-          target="sf-metadata-filter-popover"
+      {viewType === VIEW_TYPE.TABLE && (
+        <TableViewToolbar
           readOnly={readOnly}
-          filterConjunction={view.filter_conjunction}
-          basicFilters={view.basic_filters}
-          filters={view.filters}
-          columns={filterColumns}
-          modifyFilters={modifyFilters}
+          view={view}
           collaborators={collaborators}
-          viewType={viewType}
-        />
-        <SortSetter
-          isNeedSubmit={true}
-          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
-          target="sf-metadata-sort-popover"
-          readOnly={readOnly}
-          sorts={view.sorts}
-          type={viewType}
-          columns={viewColumns}
+          modifyFilters={modifyFilters}
           modifySorts={modifySorts}
+          modifyGroupbys={modifyGroupbys}
+          modifyHiddenColumns={modifyHiddenColumns}
+          modifyColumnOrder={modifyColumnOrder}
         />
-        {viewType === VIEW_TYPE.GALLERY && !isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={() => switchViewMode('detail')}>
-            <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
-          </div>
-        )}
-        {viewType !== VIEW_TYPE.GALLERY && (
-          <GroupbySetter
-            isNeedSubmit={true}
-            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
-            target="sf-metadata-groupby-popover"
-            readOnly={readOnly}
-            columns={viewColumns}
-            groupbys={view.groupbys}
-            modifyGroupbys={modifyGroupbys}
-          />
-        )}
-        {viewType !== VIEW_TYPE.GALLERY && (
-          <HideColumnSetter
-            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
-            target="sf-metadata-hide-column-popover"
-            readOnly={readOnly}
-            columns={viewColumns.slice(1)}
-            hiddenColumns={view.hidden_columns || []}
-            modifyHiddenColumns={modifyHiddenColumns}
-            modifyColumnOrder={modifyColumnOrder}
-          />
-        )}
-      </div>
-      <div className="sf-metadata-tool-right-operations"></div>
+      )}
+      {viewType === VIEW_TYPE.GALLERY && (
+        <GalleryViewToolbar
+          readOnly={readOnly}
+          isCustomPermission={isCustomPermission}
+          view={view}
+          collaborators={collaborators}
+          modifyFilters={modifyFilters}
+          modifySorts={modifySorts}
+          showDetail={showDetail}
+        />
+      )}
     </div>
   );
 };

@@ -124,6 +124,7 @@ export const MetadataViewProvider = ({
         store: storeRef.current,
         deleteFilesCallback: params.deleteFilesCallback,
         renameFileCallback: params.renameFileCallback,
+        updateCurrentDirent: params.updateCurrentDirent,
       }}
     >
       {children}

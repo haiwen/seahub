@@ -1,5 +1,5 @@
 .sf-metadata-gallery-container {
-  height: calc(100vh - 100px);
+  height: 100%;
   padding: 0 16px;
   position: relative;
   display: flex;

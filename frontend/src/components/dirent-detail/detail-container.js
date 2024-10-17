@@ -2,40 +2,53 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
-import GalleryDetail from '../../metadata/components/gallery-details';
+import ViewDetails from '../../metadata/components/view-details';
 import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
-import { METADATA_MODE } from '../dir-view-mode/constants';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
-const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged, mode }) => {
+const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
 
   useEffect(() => {
+    if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) return;
+
     // init context
-    if (!window.sfMetadataContext) {
-      const context = new MetadataContext();
-      window.sfMetadataContext = context;
-      window.sfMetadataContext.init({ repoID, repoInfo: currentRepoInfo });
-    }
-
+    const context = new MetadataContext();
+    window.sfMetadataContext = context;
+    window.sfMetadataContext.init({ repoID, repoInfo: currentRepoInfo });
     return () => {
-      if (window.sfMetadataContext && mode !== METADATA_MODE) {
-        window.sfMetadataContext.destroy();
-        delete window['sfMetadataContext'];
-      }
+      window.sfMetadataContext.destroy();
+      delete window['sfMetadataContext'];
     };
-  }, [repoID, currentRepoInfo, mode]);
+  }, [repoID, currentRepoInfo, path]);
 
-  if (mode === METADATA_MODE) {
-    const viewID = path.split('/').pop();
-    return <GalleryDetail currentRepoInfo={currentRepoInfo} viewID={viewID} onClose={onClose} />;
+  if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+    const viewId = path.split('/').pop();
+    if (!dirent) return (
+      <ViewDetails viewId={viewId} onClose={onClose} />
+    );
+    return (
+      <DirentDetail
+        repoID={repoID}
+        path={dirent.path}
+        dirent={dirent}
+        currentRepoInfo={currentRepoInfo}
+        repoTags={repoTags}
+        fileTags={fileTags}
+        onFileTagChanged={onFileTagChanged}
+        onClose={onClose}
+      />
+    );
   }
 
   if (path === '/' && !dirent) {
     return (
-      <LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />
+      <LibDetail
+        currentRepoInfo={currentRepoInfo}
+        onClose={onClose}
+      />
     );
   }
-
   return (
     <DirentDetail
       repoID={repoID}
@@ -68,7 +81,6 @@ DetailContainer.propTypes = {
   fileTags: PropTypes.array,
   onClose: PropTypes.func,
   onFileTagChanged: PropTypes.func,
-  mode: PropTypes.string,
 };
 
 export default DetailContainer;
