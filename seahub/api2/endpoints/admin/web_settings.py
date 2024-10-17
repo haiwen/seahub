@@ -32,8 +32,7 @@ DIGIT_WEB_SETTINGS = [
     'ENABLE_USER_CLEAN_TRASH', 'SHARE_LINK_TOKEN_LENGTH'
 ]
 
-STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
-                       'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS')
+STRING_WEB_SETTINGS = ('TEXT_PREVIEW_EXT', 'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS')
 
 
 class AdminWebSettings(APIView):
@@ -90,9 +89,6 @@ class AdminWebSettings(APIView):
             if (key in STRING_WEB_SETTINGS and key != 'CUSTOM_CSS') and not value:
                 error_msg = 'value invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if key in ('SERVICE_URL', 'FILE_SERVER_ROOT'):
-                value = value.rstrip('/')
 
             try:
                 setattr(config, key, value)

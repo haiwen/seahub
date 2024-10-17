@@ -984,6 +984,10 @@ SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
 
+if os.environ.get('SEAFILE_SERVER_PROTOCOL', '') and os.environ.get('SEAFILE_SERVER_HOSTNAME', ''):
+    SERVICE_URL = os.environ.get('SEAFILE_SERVER_PROTOCOL', '') + '://' + os.environ.get('SEAFILE_SERVER_HOSTNAME', '')
+FILE_SERVER_ROOT = SERVICE_URL.rstrip('/') + '/seafhttp'
+
 # Remove install_topdir from path
 sys.path.pop(0)
 

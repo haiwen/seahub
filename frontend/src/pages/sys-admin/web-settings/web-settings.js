@@ -99,25 +99,6 @@ class WebSettings extends Component {
               <Fragment>
                 <p className="small text-secondary my-4">{gettext('Note: Settings via web interface are saved in database table (seahub-db/constance_config). They have a higher priority over the settings in config files.')}</p>
 
-                <Section headingText='URL'>
-                  <Fragment>
-                    <InputItem
-                      saveSetting={this.saveSetting}
-                      displayName='SERVICE_URL'
-                      keyText='SERVICE_URL'
-                      value={config_dict['SERVICE_URL']}
-                      helpTip={gettext('The URL of the server, like https://seafile.example.com or http://192.168.1.2:8000')}
-                    />
-                    <InputItem
-                      saveSetting={this.saveSetting}
-                      displayName='FILE_SERVER_ROOT'
-                      keyText='FILE_SERVER_ROOT'
-                      value={config_dict['FILE_SERVER_ROOT']}
-                      helpTip={gettext('The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp .')}
-                    />
-                  </Fragment>
-                </Section>
-
                 <Section headingText={gettext('Branding')}>
                   <Fragment>
                     <InputItem
