@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -17,6 +18,7 @@ import UserLink from '../user-link';
 import UsersFilterBar from './users-filter-bar';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -545,11 +547,11 @@ class Item extends Component {
             </td>
           }
           <td>
-            {`${item.create_time ? moment(item.create_time).format('YYYY-MM-DD HH:mm') : '--'} /`}
+            {`${item.create_time ? dayjs(item.create_time).format('YYYY-MM-DD HH:mm') : '--'} /`}
             <br />
-            {`${item.last_login ? moment(item.last_login).fromNow() : '--'}`}
+            {`${item.last_login ? dayjs(item.last_login).fromNow() : '--'}`}
             <br />
-            {`${item.last_access_time ? moment(item.last_access_time).fromNow() : '--'}`}
+            {`${item.last_access_time ? dayjs(item.last_access_time).fromNow() : '--'}`}
           </td>
           <td>
             {(item.email != username && isOpIconShown) &&

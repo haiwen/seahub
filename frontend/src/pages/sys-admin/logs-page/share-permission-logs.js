@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
@@ -14,6 +15,8 @@ import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -146,7 +149,7 @@ class Item extends Component {
         <td>{Utils.sharePerms(item.permission)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
         <td>{item.folder}</td>
-        <td>{moment(item.date).fromNow()}</td>
+        <td>{dayjs(item.date).fromNow()}</td>
       </tr>
     );
   }

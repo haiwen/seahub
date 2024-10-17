@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -11,6 +12,8 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired
 };
+
+dayjs.extend(relativeTime);
 
 class SearchFileDialog extends React.Component {
 
@@ -143,7 +146,7 @@ class FileItem extends React.PureComponent {
           <a href={url}>{name}</a>
         </td>
         <td>{item.type == 'file' ? Utils.bytesToSize(item.size) : ''}</td>
-        <td>{moment(item.mtime).fromNow()}</td>
+        <td>{dayjs(item.mtime).fromNow()}</td>
       </tr>
     );
   }

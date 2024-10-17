@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, filePath, historyRepoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   item: PropTypes.object.isRequired,
@@ -54,7 +54,7 @@ class HistoryItem extends React.Component {
       <Fragment>
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
           <td>
-            <span>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
+            <span>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
             {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
           </td>
           <td>

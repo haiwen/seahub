@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
@@ -30,6 +31,8 @@ import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 
 import '../../css/lib-content-view.css';
+
+dayjs.extend(relativeTime);
 
 const propTypes = {
   eventBus: PropTypes.object,
@@ -379,7 +382,7 @@ class LibContentView extends React.Component {
             content: res.data,
             filePermission: permission,
             latestContributor: last_modifier_name,
-            lastModified: moment.unix(mtime).fromNow(),
+            lastModified: dayjs.unix(mtime).fromNow(),
             isFileLoading: false,
           });
         });
@@ -515,7 +518,7 @@ class LibContentView extends React.Component {
             content: res.data,
             filePermission: permission,
             latestContributor: last_modifier_name,
-            lastModified: moment.unix(mtime).fromNow(),
+            lastModified: dayjs.unix(mtime).fromNow(),
             isFileLoading: false,
           });
         });
@@ -1643,7 +1646,7 @@ class LibContentView extends React.Component {
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
     if (isExist) {
       const dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
-      const mtime = moment.unix(direntObject.mtime).fromNow();
+      const mtime = dayjs.unix(direntObject.mtime).fromNow();
       dirent && this.updateDirent(dirent, 'mtime', mtime);
     } else {
       // use current dirent parent's permission as it's permission

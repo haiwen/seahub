@@ -1,19 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
-import { Button } from 'reactstrap';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
 import CommitDetails from '../../../components/dialog/commit-details';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -128,7 +131,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td><UserLink email={item.email} name={item.name} /></td>
-          <td>{moment(item.time).fromNow()}</td>
+          <td>{dayjs(item.time).fromNow()}</td>
           <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
           <td>
             {item.file_operation}

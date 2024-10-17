@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, FormText } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
@@ -53,18 +53,18 @@ class SetLinkExpiration extends React.Component {
     }
 
     if (this.isExpireDaysNoLimit) {
-      return current.isBefore(moment(), 'day');
+      return current.isBefore(dayjs(), 'day');
     }
 
     const { minDays, maxDays } = this.props;
-    const startDay = moment().add(minDays, 'days');
-    const endDay = moment().add(maxDays, 'days');
+    const startDay = dayjs().add(minDays, 'days');
+    const endDay = dayjs().add(maxDays, 'days');
     if (minDays !== 0 && maxDays !== 0) {
       return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
     } else if (minDays !== 0 && maxDays === 0) {
       return current.isBefore(startDay, 'day');
     } else if (minDays === 0 && maxDays !== 0) {
-      return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
+      return current.isBefore(dayjs(), 'day') || current.isAfter(endDay, 'day');
     }
   };
 

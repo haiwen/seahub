@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -114,7 +114,7 @@ class Item extends Component {
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><a href={groupUrl}>{item.group_name}</a></td>
           <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
-          <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
             <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>

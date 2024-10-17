@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
@@ -8,7 +9,8 @@ import ModalPortal from '../../components/modal-portal';
 
 import '../../css/files-activities.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
+dayjs.extend(relativeTime);
 
 const activityPropTypes = {
   item: PropTypes.object.isRequired,
@@ -178,14 +180,14 @@ class ActivityItem extends Component {
     let isShowDate = true;
     if (index > 0) {
       let lastEventTime = items[index - 1].time;
-      isShowDate = moment(item.time).isSame(lastEventTime, 'day') ? false : true;
+      isShowDate = dayjs(item.time).isSame(lastEventTime, 'day') ? false : true;
     }
 
     return (
       <Fragment>
         {isShowDate &&
           <tr>
-            <td colSpan={isDesktop ? 5 : 3} className="border-top-0">{moment(item.time).format('YYYY-MM-DD')}</td>
+            <td colSpan={isDesktop ? 5 : 3} className="border-top-0">{dayjs(item.time).format('YYYY-MM-DD')}</td>
           </tr>
         }
         {isDesktop ? (
@@ -203,7 +205,7 @@ class ActivityItem extends Component {
               {moreDetails && smallLibLink}
             </td>
             <td className="text-secondary">
-              <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+              <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
             </td>
           </tr>
         ) : (
@@ -218,7 +220,7 @@ class ActivityItem extends Component {
             </td>
             <td className="text-right align-top">
               <span className="text-secondary mobile-activity-time">
-                <time datetime={item.time} is="relative-time" title={moment(item.time).format('llll')}>{moment(item.time).fromNow()}</time>
+                <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
               </span>
               {moreDetails && <br /> }
               {moreDetails && libLink}

@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+
+dayjs.extend(relativeTime);
 
 class OCMViaWebdav extends Component {
 
@@ -250,7 +253,7 @@ class Item extends Component {
           {item.is_dir ? <a href="#" onClick={this.openFolder}>{item.name}</a> : item.name}
         </td>
         <td>{item.shared_by}</td>
-        <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
+        <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.ctime).fromNow()}</td>
         <td>{item.is_dir ? '' : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
         </td>
         <td>{this.props.path ? '' : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}

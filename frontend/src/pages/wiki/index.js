@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
@@ -17,7 +18,8 @@ import '../../css/toolbar.css';
 import '../../css/search.css';
 import './wiki.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
+dayjs.extend(relativeTime);
 
 class Wiki extends Component {
   constructor(props) {
@@ -149,7 +151,7 @@ class Wiki extends Component {
         isDataLoading: false,
         content: data.content,
         permission: data.permission,
-        lastModified: moment.unix(data.last_modified).fromNow(),
+        lastModified: dayjs.unix(data.last_modified).fromNow(),
         latestContributor: data.latest_contributor,
       });
     });

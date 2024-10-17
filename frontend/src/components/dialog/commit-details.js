@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -48,7 +48,7 @@ class CommitDetails extends React.Component {
       <Modal isOpen={true} centered={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</ModalHeader>
         <ModalBody>
-          <p className="small">{moment(commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+          <p className="small">{dayjs(commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
           <Content data={this.state} />
         </ModalBody>
       </Modal>

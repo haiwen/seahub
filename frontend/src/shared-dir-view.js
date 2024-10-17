@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import ReactDom from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
 import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
@@ -23,7 +24,8 @@ import { GRID_MODE, LIST_MODE } from './components/dir-view-mode/constants';
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
+dayjs.extend(relativeTime);
 
 let loginUser = window.app.pageOptions.name;
 let {
@@ -403,7 +405,7 @@ class SharedDirView extends React.Component {
       file_name: name,
       file_path: Utils.joinPath(relativePath, name),
       is_dir: false,
-      last_modified: moment().format(),
+      last_modified: dayjs().format(),
       size: size
     };
     const folderItems = this.state.items.filter(item => { return item.is_dir; });
@@ -770,7 +772,7 @@ class Item extends React.Component {
           </td>
           <td></td>
           <td></td>
-          <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
+          <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a role="button" className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
@@ -784,7 +786,7 @@ class Item extends React.Component {
           <td>
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
             <br />
-            <span className="item-meta-info">{moment(item.last_modified).fromNow()}</span>
+            <span className="item-meta-info">{dayjs(item.last_modified).fromNow()}</span>
           </td>
           <td>
             {showDownloadIcon &&
@@ -845,7 +847,7 @@ class Item extends React.Component {
             )}
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
+          <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
@@ -864,7 +866,7 @@ class Item extends React.Component {
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
             <br />
             <span className="item-meta-info">{Utils.bytesToSize(item.size)}</span>
-            <span className="item-meta-info">{moment(item.last_modified).fromNow()}</span>
+            <span className="item-meta-info">{dayjs(item.last_modified).fromNow()}</span>
           </td>
           <td>
             {showDownloadIcon &&

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import Picker from './picker';
 
@@ -22,9 +22,9 @@ class StatisticCommonTool extends React.Component {
   }
 
   componentDidMount() {
-    let today = moment().format('YYYY-MM-DD 00:00:00');
+    let today = dayjs().format('YYYY-MM-DD 00:00:00');
     let endTime = today;
-    let startTime = moment().subtract(6, 'd').format('YYYY-MM-DD 00:00:00');
+    let startTime = dayjs().subtract(6, 'd').format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
     this.props.getActiviesFiles(startTime, endTime, group_by);
   }
@@ -34,18 +34,18 @@ class StatisticCommonTool extends React.Component {
     if (statisticType === statisticTypeName) {
       return;
     }
-    let today = moment().format('YYYY-MM-DD 00:00:00');
+    let today = dayjs().format('YYYY-MM-DD 00:00:00');
     let endTime = today;
     let startTime;
     switch (statisticTypeName) {
       case 'oneWeek' :
-        startTime = moment().subtract(6, 'd').format('YYYY-MM-DD 00:00:00');
+        startTime = dayjs().subtract(6, 'd').format('YYYY-MM-DD 00:00:00');
         break;
       case 'oneMonth' :
-        startTime = moment().subtract(29, 'd').format('YYYY-MM-DD 00:00:00');
+        startTime = dayjs().subtract(29, 'd').format('YYYY-MM-DD 00:00:00');
         break;
       case 'oneYear' :
-        startTime = moment().subtract(364, 'd').format('YYYY-MM-DD 00:00:00');
+        startTime = dayjs().subtract(364, 'd').format('YYYY-MM-DD 00:00:00');
         break;
     }
     this.setState({
@@ -59,27 +59,27 @@ class StatisticCommonTool extends React.Component {
     if (!startValue) {
       return false;
     }
-    let today = moment().format();
+    let today = dayjs().format();
 
     const endValue = this.state.endValue;
     if (!endValue) {
-      let startTime = moment(startValue).format();
+      let startTime = dayjs(startValue).format();
       return today < startTime;
     }
-    return endValue.isBefore(startValue) || moment(startValue).format() > today;
+    return endValue.isBefore(startValue) || dayjs(startValue).format() > today;
   };
 
   disabledEndDate = (endValue) => {
     if (!endValue) {
       return false;
     }
-    let today = moment().format();
+    let today = dayjs().format();
     const startValue = this.state.startValue;
     if (!startValue) {
-      let endTime = moment(endValue).format();
+      let endTime = dayjs(endValue).format();
       return today < endTime;
     }
-    return endValue.isBefore(startValue) || moment(endValue).format() > today;
+    return endValue.isBefore(startValue) || dayjs(endValue).format() > today;
   };
 
   onChange = (field, value) => {
@@ -96,8 +96,8 @@ class StatisticCommonTool extends React.Component {
     this.setState({
       statisticType: 'itemButton',
     });
-    let startTime = moment(startValue).format('YYYY-MM-DD 00:00:00');
-    let endTime = moment(endValue).format('YYYY-MM-DD 00:00:00');
+    let startTime = dayjs(startValue).format('YYYY-MM-DD 00:00:00');
+    let endTime = dayjs(endValue).format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
     this.props.getActiviesFiles(startTime, endTime, group_by);
   };

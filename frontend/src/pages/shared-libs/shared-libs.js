@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import cookie from 'react-cookies';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
@@ -17,6 +18,8 @@ import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -330,7 +333,7 @@ class Item extends Component {
                 }
               </td>
               <td>{data.size}</td>
-              <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
+              <td title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</td>
               <td title={data.owner_contact_email}>{data.owner_name}</td>
             </tr>
           ) : (
@@ -409,7 +412,7 @@ class Item extends Component {
               <br />
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
-              <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
+              <span className="item-meta-info" title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</span>
             </td>
             <td>
               <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>

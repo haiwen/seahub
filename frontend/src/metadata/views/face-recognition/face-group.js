@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Input } from 'reactstrap';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -8,6 +9,8 @@ import { gettext, siteRoot } from '../../../utils/constants';
 import metadataAPI from '../../api';
 import isHotkey from 'is-hotkey';
 import { isEnter } from '../../utils/hotkey';
+
+dayjs.extend(relativeTime);
 
 const theadData = [
   { width: '5%', text: '' },
@@ -91,7 +94,7 @@ const FaceGroup = ({ repoID, group, onPhotoClick }) => {
                 <td><a href={`${siteRoot}lib/${repoID}/file${photo.path}`} onClick={(event) => showPhoto(event, photo)}>{photo.file_name}</a></td>
                 <td>{photo.parent_dir}</td>
                 <td>{Utils.bytesToSize(photo.size)}</td>
-                <td title={moment(photo.mtime).fromNow()}>{moment(photo.mtime).fromNow()}</td>
+                <td title={dayjs(photo.mtime).fromNow()}>{dayjs(photo.mtime).fromNow()}</td>
               </tr>
             );
           })}

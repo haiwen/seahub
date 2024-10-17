@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import Loading from '../../../components/loading';
 import { gettext, historyRepoID, PER_PAGE } from '../../../utils/constants';
@@ -12,7 +12,7 @@ import HistoryVersion from './history-version';
 import Switch from '../../../components/common/switch';
 import { getCurrentAndLastVersion, getLastVersion } from './helper';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const { docUuid } = window.fileHistory.pageOptions;
 
@@ -37,7 +37,7 @@ class SidePanel extends Component {
     const newHistoryGroups = oldHistoryGroups.slice(0);
     histories.forEach(history => {
       const { date } = history;
-      const momentDate = moment(date);
+      const momentDate = dayjs(date);
       const month = momentDate.format('YYYY-MM');
       const monthItem = newHistoryGroups.find(item => item.month === month);
       if (monthItem) {
@@ -235,7 +235,7 @@ class SidePanel extends Component {
     let lastVersion;
     if (nextShowChanges) {
       const { date } = currentVersion;
-      const momentDate = moment(date);
+      const momentDate = dayjs(date);
       const month = momentDate.format('YYYY-MM');
       const day = momentDate.format('YYYY-MM-DD');
       const monthIndex = historyGroups.findIndex(item => item.month === month);

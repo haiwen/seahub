@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { siteRoot, gettext, username } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
@@ -10,6 +11,8 @@ import ShareWikiDialog from '../dialog/share-wiki-dialog';
 import PublishWikiDialog from '../dialog/publish-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
+
+dayjs.extend(relativeTime);
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
@@ -248,8 +251,8 @@ class WikiCardItem extends Component {
             {isShowAvatar && (isDepartment ? this.renderDept() : this.renderAvatar())}
           </div>
           <div className="wiki-item-bottom">
-            {moment(wiki.updated_at).fromNow()}
-            {wiki.is_published && <span>{gettext('Published')}</span>}
+            {dayjs(wiki.updated_at).fromNow()}
+            {wiki.is_published && (<span>{gettext('Published')}</span>)}
           </div>
         </div>
         {this.state.isShowDeleteDialog &&

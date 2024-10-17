@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -115,7 +115,7 @@ class LinkCreation extends React.Component {
       let expirationTime = '';
       if (isExpireChecked) {
         if (expType === 'by-days') {
-          expirationTime = moment().add(parseInt(expireDays), 'days').format();
+          expirationTime = dayjs().add(parseInt(expireDays), 'days').format();
         } else {
           expirationTime = expDate.format();
         }

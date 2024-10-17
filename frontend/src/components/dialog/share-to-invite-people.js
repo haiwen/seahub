@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -52,7 +52,7 @@ class UserItem extends React.Component {
             onPermissionChanged={this.onChangeUserPermission}
           />
         </td>
-        <td>{moment(item.expire_time).format('YYYY-MM-DD')}</td>
+        <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
         <td className="name">{item.inviter_name}</td>
         <td>
           <span

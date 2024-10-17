@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, serviceURL } from '../../utils/constants';
@@ -8,6 +9,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ViewLinkDialog from '../../components/dialog/view-link-dialog';
+
+dayjs.extend(relativeTime);
 
 class OrgLinks extends React.Component {
 
@@ -198,7 +201,7 @@ class RepoItem extends React.Component {
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
         <td>{link.name}</td>
         <td><a href={href}>{link.owner_name}</a></td>
-        <td>{moment(link.created_time).fromNow()}</td>
+        <td>{dayjs(link.created_time).fromNow()}</td>
         <td>{link.view_count}</td>
         <td className="cursor-pointer text-center">
           {this.state.showMenu &&

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
 import Selector from '../../../components/single-selector';
 import { gettext, username } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import moment from 'moment';
+
+dayjs.extend(relativeTime);
 
 const OPERATIONS = [
   {
@@ -74,11 +77,11 @@ const UserItem = ({ user, deleteInstUser, updateInstUserStatus }) => {
         {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
       </td>
       <td>
-        {`${user.create_time ? moment(user.create_time).format('YYYY-MM-DD HH:mm') : '--'} /`}
+        {`${user.create_time ? dayjs(user.create_time).format('YYYY-MM-DD HH:mm') : '--'} /`}
         <br />
-        {`${user.last_login ? moment(user.last_login).fromNow() : '--'}`}
+        {`${user.last_login ? dayjs(user.last_login).fromNow() : '--'}`}
         <br />
-        {`${user.last_access_time ? moment(user.last_access_time).fromNow() : '--'}`}
+        {`${user.last_access_time ? dayjs(user.last_access_time).fromNow() : '--'}`}
       </td>
       <td>
         {isOpIconShow && !user.is_institution_admin && !user.is_system_admin && user.email !== username && (
