@@ -9,6 +9,7 @@ import RoleSelector from '../../../components/single-selector';
 import DeleteMemberDialog from '../../../components/dialog/org-delete-member-dialog';
 import { serviceURL, gettext, orgID, lang } from '../../../utils/constants';
 import Department from './department';
+import EmptyTip from '../../../components/empty-tip';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -169,7 +170,7 @@ class OrgDepartmentItem extends React.Component {
         >
           <div className="cur-view-content">
             {(!members || members.length === 0) ?
-              <p className="no-member">{gettext('No members')}</p> :
+              <EmptyTip text={gettext('No members')}/> :
               <table>
                 <thead>
                   <tr>

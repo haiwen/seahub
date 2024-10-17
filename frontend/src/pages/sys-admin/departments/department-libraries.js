@@ -9,6 +9,7 @@ import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmi
 import { gettext, lang } from '../../../utils/constants';
 import RepoItem from './repo-item';
 import Department from './department';
+import EmptyTip from '../../../components/empty-tip';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -95,7 +96,7 @@ class DepartmentDetail extends React.Component {
                 </tbody>
               </table>
             </div>
-            : <p className="no-libraty">{gettext('No libraries')}</p>
+            : <EmptyTip text={gettext('No libraries')} />
           }
         </Department>
         {this.state.showDeleteRepoDialog && (

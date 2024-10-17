@@ -9,6 +9,7 @@ import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysad
 import { gettext, lang } from '../../../utils/constants';
 import MemberItem from './member-item';
 import Department from './department';
+import EmptyTip from '../../../components/empty-tip';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -118,7 +119,7 @@ class DepartmentMembers extends React.Component {
           <div className="cur-view-content">
             {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
               members.length == 0 ?
-                <p className="no-member">{gettext('No members')}</p> :
+                <EmptyTip text={gettext('No members')}/> :
                 <Fragment>
                   <table>
                     <thead>

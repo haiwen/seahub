@@ -6,6 +6,7 @@ import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
 import { gettext, lang } from '../../../utils/constants';
 import GroupItem from './group-item';
+import EmptyTip from '../../../components/empty-tip';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
@@ -84,25 +85,20 @@ class DepartmentList extends React.Component {
 
   render() {
     const groups = this.state.groups;
-    const topbarChildren = (
-      <Fragment>
-        <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
-        </button>
-        {this.state.isShowAddDepartDialog && (
-          <ModalPortal>
-            <AddDepartDialog
-              onAddNewDepartment={this.onAddNewDepartment}
-              groupID={this.state.groupID}
-              toggle={this.toggleAddDepartDialog}
-            />
-          </ModalPortal>
-        )}
-      </Fragment>
-    );
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
-          {topbarChildren}
+          <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={this.toggleAddDepartDialog}>{gettext('New Department')}
+          </button>
+          {this.state.isShowAddDepartDialog && (
+            <ModalPortal>
+              <AddDepartDialog
+                onAddNewDepartment={this.onAddNewDepartment}
+                groupID={this.state.groupID}
+                toggle={this.toggleAddDepartDialog}
+              />
+            </ModalPortal>
+          )}
         </MainPanelTopbar>
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
@@ -111,9 +107,9 @@ class DepartmentList extends React.Component {
                 <h3 className="sf-heading">{gettext('Departments')}</h3>
               </div>
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content pb-8">
               {groups && groups.length > 0 ?
-                <table>
+                <table className='mb-8'>
                   <thead>
                     <tr>
                       <th width="40%">{gettext('Name')}</th>
@@ -141,7 +137,7 @@ class DepartmentList extends React.Component {
                   </tbody>
                 </table>
                 :
-                <p className="no-group">{gettext('No departments')}</p>
+                <EmptyTip text={gettext('No departments')}/>
               }
             </div>
           </div>
