@@ -38,6 +38,10 @@ class ObjectUtils {
     if (!source || !comparison) return false;
     return !this.isObjectChanged(source, comparison);
   }
+
+  static isEmpty = (target) => {
+    return target && target.constructor === Object && Object.keys(target).length === 0;
+  };
 }
 
 export const hasOwnProperty = (obj, propertyKey) => {

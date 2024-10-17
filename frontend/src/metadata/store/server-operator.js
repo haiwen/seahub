@@ -6,6 +6,7 @@ import { getColumnByKey } from '../utils/column';
 import { getRowById } from '../utils/table';
 import { checkIsDir } from '../utils/row';
 import { getFileNameFromRecord } from '../utils/cell';
+import ObjectUtils from '../utils/object-utils';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -35,12 +36,16 @@ class ServerOperator {
         }
         const recordsData = row_ids.map(rowId => {
           return { record_id: rowId, record: id_row_updates[rowId], obj_id: id_obj_id[rowId] };
-        });
-        window.sfMetadataContext.modifyRecords(repo_id, recordsData, is_copy_paste).then(res => {
+        }).filter(recordData => recordData.record && !ObjectUtils.isEmpty(recordData.record));
+        if (recordsData.length === 0) {
           callback({ operation });
-        }).catch(error => {
-          callback({ error: gettext('Failed to modify records') });
-        });
+        } else {
+          window.sfMetadataContext.modifyRecords(repo_id, recordsData, is_copy_paste).then(res => {
+            callback({ operation });
+          }).catch(error => {
+            callback({ error: gettext('Failed to modify records') });
+          });
+        }
         break;
       }
       case OPERATION_TYPE.DELETE_RECORDS: {
