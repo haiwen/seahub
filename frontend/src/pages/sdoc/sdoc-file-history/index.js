@@ -14,7 +14,7 @@ import GoBack from '../../../components/common/go-back';
 import SidePanel from './side-panel';
 import { Utils, isMobile } from '../../../utils/utils';
 import toaster from '../../../components/toast';
-import { getCurrentAndLastVersion } from './helper';
+import { formatHistoryContent, getCurrentAndLastVersion } from './helper';
 
 import '../../../css/layout.css';
 import './index.css';
@@ -70,7 +70,7 @@ class SdocFileHistory extends React.Component {
     if (firstChildren) {
       return {
         version: -1,
-        children: [
+        elements: [
           {
             id: firstChildren.id,
             type: 'title',
@@ -91,7 +91,7 @@ class SdocFileHistory extends React.Component {
     const name = path ? path.split('/')?.pop()?.slice(0, -5) : '';
     return {
       version: -1,
-      children: [
+      elements: [
         {
           id: '1',
           type: 'title',
@@ -112,7 +112,7 @@ class SdocFileHistory extends React.Component {
       return;
     }
     if (lastVersion === 'init') {
-      const lastVersionContent = currentVersionContent ? this.getInitContent(currentVersionContent.children[0]) : this.getInitContentByPath(currentVersion.path);
+      const lastVersionContent = currentVersionContent ? this.getInitContent(currentVersionContent?.elements[0]) : this.getInitContentByPath(currentVersion.path);
       const validCurrentVersionContent = currentVersionContent || this.getInitContentByPath(currentVersion.path);
       this.setContent(validCurrentVersionContent, lastVersionContent);
       return;
@@ -120,8 +120,8 @@ class SdocFileHistory extends React.Component {
     seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
       return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
     }).then(res => {
-      const lastVersionContent = res.data;
-      const firstChildren = currentVersionContent.children[0];
+      const lastVersionContent = formatHistoryContent(res.data);
+      const firstChildren = currentVersionContent?.elements[0];
       const validLastVersionContent = lastVersion && !lastVersionContent ? this.getInitContent(firstChildren) : lastVersionContent;
       this.setContent(currentVersionContent, validLastVersionContent);
     }).catch(error => {
@@ -139,8 +139,9 @@ class SdocFileHistory extends React.Component {
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
-      const currentVersionContent = res.data;
-      this.updateLastVersionContent(currentVersionContent, currentVersion, lastVersion);
+      const currentVersionContent = formatHistoryContent(res.data);
+      const validCurrentVersionContent = currentVersionContent.elements ? currentVersionContent : this.getInitContentByPath(currentVersion.path);
+      this.updateLastVersionContent(validCurrentVersionContent, currentVersion, lastVersion);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);
       toaster.danger(gettext(errorMessage));
