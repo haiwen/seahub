@@ -431,7 +431,7 @@ class GridUtils {
       }
     }
     if (lastNumberPosition !== -1) {
-      valueList[lastNumberPosition] = '-|*|-seaTable-|*|-';
+      valueList[lastNumberPosition] = '-|*|-sf-metadata-|*|-';
     }
 
     return { lastNumberPosition, lastNumber, structure: valueList.join('') };
