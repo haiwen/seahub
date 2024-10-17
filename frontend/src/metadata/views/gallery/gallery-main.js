@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
@@ -12,7 +12,7 @@ const GalleryMain = ({
   size,
   gap,
   mode,
-  selectedImageIDs,
+  selectedImages,
   onImageSelect,
   onImageClick,
   onImageDoubleClick,
@@ -26,6 +26,7 @@ const GalleryMain = ({
   const [selectionStart, setSelectionStart] = useState(null);
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
+  const selectedImageIds = useMemo(() => selectedImages.map(img => img.id), [selectedImages]);
 
   const handleMouseDown = useCallback((e) => {
     if (e.button !== 0) return;
@@ -80,28 +81,6 @@ const GalleryMain = ({
     setIsSelecting(false);
   }, []);
 
-  const handleClickOutside = useCallback((e) => {
-    const images = containerRef.current.querySelectorAll('.metadata-gallery-image-item');
-    let isClickInsideImage = false;
-
-    images.forEach(img => {
-      if (img.contains(e.target)) {
-        isClickInsideImage = true;
-      }
-    });
-
-    if (!isClickInsideImage && containerRef.current.contains(e.target)) {
-      onImageSelect([]);
-    }
-  }, [onImageSelect]);
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [handleClickOutside]);
-
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
     const { name, children, height, top, paddingTop } = group;
@@ -138,6 +117,7 @@ const GalleryMain = ({
           <div className="metadata-gallery-date-tag">{name || gettext('Empty')}</div>
         )}
         <div
+          ref={imageRef}
           className="metadata-gallery-image-list"
           style={{
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -147,10 +127,9 @@ const GalleryMain = ({
         >
           {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
             return row.children.map((img) => {
-              const isSelected = selectedImageIDs.includes(img.id);
+              const isSelected = selectedImageIds.includes(img.id);
               return (
                 <div
-                  ref={imageRef}
                   key={img.src}
                   id={img.id}
                   tabIndex={1}
@@ -170,7 +149,7 @@ const GalleryMain = ({
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight, mode, selectedImageIDs, onImageClick, onImageDoubleClick, onImageRightClick]);
+  }, [overScan, columns, size, imageHeight, mode, selectedImageIds, onImageClick, onImageDoubleClick, onImageRightClick]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -213,7 +192,7 @@ GalleryMain.propTypes = {
   size: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
   mode: PropTypes.string,
-  selectedImageIDs: PropTypes.array.isRequired,
+  selectedImages: PropTypes.array.isRequired,
   onImageSelect: PropTypes.func.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,

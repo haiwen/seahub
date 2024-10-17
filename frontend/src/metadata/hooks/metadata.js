@@ -137,11 +137,11 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
         name: isFaceRecognitionView ? gettext('Photos - classfied by people') : gettext('File extended properties'),
         type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
-        viewType: view.type,
       },
       parentNode: {},
       key: repoID,
       view_id: view._id,
+      view_type: view.type,
     };
     selectMetadataView(node);
   // eslint-disable-next-line react-hooks/exhaustive-deps
