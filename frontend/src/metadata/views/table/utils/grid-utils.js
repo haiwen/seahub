@@ -437,6 +437,18 @@ class GridUtils {
     return { lastNumberPosition, lastNumber, structure: valueList.join('') };
   }
 
+  _getTextFillNumberRule(valueList, lastNumber, lastNumberPosition, fillFunc) {
+    let isStartWith0 = lastNumber.startsWith('0');
+    return ({ n }) => {
+      let fillValue = fillFunc ? fillFunc({ lastNumber, n }) : '';
+      if (isStartWith0 && fillValue.length < lastNumber.length) {
+        fillValue = '0'.repeat(lastNumber.length - fillValue.length) + fillValue;
+      }
+      valueList[lastNumberPosition] = fillValue;
+      return valueList.join('');
+    };
+  }
+
   _getTextRule(textList) {
     let isAllNotIncludeNumber = textList.every(item => !REG_NUMBER_DIGIT.test(item || ''));
     if (isAllNotIncludeNumber) {
