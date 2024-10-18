@@ -28,3 +28,8 @@ export const getCurrentAndLastVersion = (path, historyGroups, isShowChanges) => 
   const lastVersion = getLastVersion(path, isShowChanges, historyGroups);
   return [currentVersion, lastVersion];
 };
+
+export const formatHistoryContent = (content) => {
+  // patch new sdoc data struct
+  return { ...content, elements: content.elements || content.children };
+};
