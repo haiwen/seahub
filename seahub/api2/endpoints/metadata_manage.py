@@ -1075,7 +1075,7 @@ class MetadataExtractFileDetails(APIView):
 
     def post(self, request, repo_id):
         obj_ids = request.data.get('obj_ids')
-        if not obj_ids or not isinstance(obj_ids, list):
+        if not obj_ids or not isinstance(obj_ids, list) or len(obj_ids) > 50:
             error_msg = 'obj_ids is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

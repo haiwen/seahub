@@ -246,6 +246,11 @@ const ContextMenu = (props) => {
 
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
+    if (recordObjIds.length > 50) {
+      toaster.danger(gettext('Select up to 50 files'));
+      return;
+    }
+
     const recordIds = records.map(record => geRecordIdFromRecord(record));
     window.sfMetadataContext.extractFileDetails(recordObjIds).then(res => {
       const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
