@@ -22,12 +22,13 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE, DIRENT_DETAIL_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import DetailContainer from '../../components/dirent-detail/detail-container';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
+import { VIEW_TYPE } from '../../metadata/constants';
 
 import '../../css/lib-content-view.css';
 
@@ -83,7 +84,6 @@ class LibContentView extends React.Component {
       dirID: '', // for update dir list
       errorMsg: '',
       isDirentDetailShow: false,
-      direntDetailPanelTab: '',
       itemsShowLength: 100,
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
@@ -107,7 +107,11 @@ class LibContentView extends React.Component {
     this.unsubscribeEventBus = null;
   }
 
-  updateCurrentDirent = (deletedDirent) => {
+  updateCurrentDirent = (dirent = null) => {
+    this.setState({ currentDirent: dirent });
+  };
+
+  updateCurrentNotExistDirent = (deletedDirent) => {
     let { currentDirent } = this.state;
     if (currentDirent && deletedDirent.name === currentDirent.name) {
       this.setState({ currentDirent: null });
@@ -124,31 +128,16 @@ class LibContentView extends React.Component {
     }
   };
 
-  showDirentDetail = (direntDetailPanelTab) => {
-    if (direntDetailPanelTab) {
-      this.setState({ direntDetailPanelTab: direntDetailPanelTab }, () => {
-        this.setState({ isDirentDetailShow: true });
-      });
-    } else {
-      this.setState({
-        direntDetailPanelTab: '',
-        isDirentDetailShow: true
-      });
-    }
+  showDirentDetail = () => {
+    this.setState({ isDirentDetailShow: true });
   };
 
   toggleDirentDetail = () => {
-    this.setState({
-      direntDetailPanelTab: '',
-      isDirentDetailShow: !this.state.isDirentDetailShow
-    });
+    this.setState({ isDirentDetailShow: !this.state.isDirentDetailShow });
   };
 
   closeDirentDetail = () => {
-    this.setState({
-      isDirentDetailShow: false,
-      direntDetailPanelTab: '',
-    });
+    this.setState({ isDirentDetailShow: false });
   };
 
   componentDidMount() {
@@ -538,14 +527,14 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId) => {
+  showFileMetadata = (filePath, viewId, viewType) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
     this.setState({
       currentMode: METADATA_MODE,
       path: filePath,
       viewId: viewId,
-      isDirentDetailShow: false
+      isDirentDetailShow: viewType === VIEW_TYPE.GALLERY ? this.state.isDirentDetailShow : false,
     }, () => {
       setTimeout(() => {
         this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
@@ -1020,7 +1009,7 @@ class LibContentView extends React.Component {
     if (mode === this.state.currentMode) {
       return;
     }
-    if (mode === 'detail') {
+    if (mode === DIRENT_DETAIL_MODE) {
       this.toggleDirentDetail();
       return;
     }
@@ -1134,7 +1123,7 @@ class LibContentView extends React.Component {
   };
 
   onMainPanelItemDelete = (dirent) => {
-    this.updateCurrentDirent(dirent);
+    this.updateCurrentNotExistDirent(dirent);
     let path = Utils.joinPath(this.state.path, dirent.name);
     this.deleteItem(path, dirent.isDir());
   };
@@ -1261,7 +1250,7 @@ class LibContentView extends React.Component {
 
   // list operations
   onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath) => {
-    this.updateCurrentDirent(dirent);
+    this.updateCurrentNotExistDirent(dirent);
     let repoID = this.props.repoID;
     // just for view list state
     let dirName = dirent.name;
@@ -1897,7 +1886,7 @@ class LibContentView extends React.Component {
         }
       } else if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000');
+          this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || VIEW_TYPE.TABLE);
         }
       } else if (Utils.isFaceRecognition(node?.object?.type)) {
         if (node.path !== this.state.path) {
@@ -2428,6 +2417,7 @@ class LibContentView extends React.Component {
                     getMarkDownFilePath={this.getMarkDownFilePath}
                     getMarkDownFileName={this.getMarkDownFileName}
                     openMarkdownFile={this.openMarkdownFile}
+                    updateCurrentDirent={this.updateCurrentDirent}
                   />
                   :
                   <div className="message err-tip">{gettext('Folder does not exist.')}</div>

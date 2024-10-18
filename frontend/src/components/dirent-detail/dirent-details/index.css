@@ -42,3 +42,8 @@
 .detail-body .sf-metadata-property-detail-tags.tags-empty {
   padding: 6.5px 6px;;
 }
+
+.detail-body .detail-content.detail-content-empty {
+  width: 100%;
+  height: 100%;
+}

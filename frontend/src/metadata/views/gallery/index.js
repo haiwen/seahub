@@ -9,10 +9,13 @@ import ImageDialog from '../../../components/dialog/image-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
+import { useCollaborators } from '../../hooks';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
+import { getRowById } from '../../utils/table';
+import { getEventClassName } from '../../utils/common';
 
 import './index.css';
 
@@ -31,8 +34,14 @@ const Gallery = () => {
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
 
-  const { metadata, store } = useMetadataView();
+  const { metadata, store, updateCurrentDirent } = useMetadataView();
+  const { getCollaborator } = useCollaborators();
   const repoID = window.sfMetadataContext.getSetting('repoID');
+
+  useEffect(() => {
+    updateCurrentDirent();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Number of images per row
   const columns = useMemo(() => {
@@ -206,21 +215,48 @@ const Gallery = () => {
     return groups.flatMap(group => group.children.flatMap(row => row.children));
   }, [groups]);
 
+  const updateSelectedImage = useCallback((image = null) => {
+    const imageInfo = image ? getRowById(metadata, image.id) : null;
+    if (!imageInfo) {
+      updateCurrentDirent();
+      return;
+    }
+    const size = imageInfo[PRIVATE_COLUMN_KEY.SIZE];
+    const lastModifierEmail = imageInfo[PRIVATE_COLUMN_KEY.FILE_MODIFIER];
+    const lastModifier = getCollaborator(lastModifierEmail);
+    const lastModified = imageInfo[PRIVATE_COLUMN_KEY.FILE_MTIME];
+    updateCurrentDirent({
+      type: 'file',
+      name: image.name,
+      path: image.path,
+      size: (typeof size === 'number') ? Utils.bytesToSize(size) : size,
+      last_modified: lastModified || '',
+      last_modifier_name: lastModifier.name || '',
+      last_modifier_email: lastModifier.email || '',
+      last_modifier_avatar: lastModified.avatar_url || '',
+      modifier_contact_email: lastModifier || '',
+      file_tags: []
+    });
+  }, [metadata, getCollaborator, updateCurrentDirent]);
+
   const handleClick = useCallback((event, image) => {
     if (event.metaKey || event.ctrlKey) {
       setSelectedImages(prev =>
         prev.includes(image) ? prev.filter(img => img !== image) : [...prev, image]
       );
+      updateSelectedImage(image);
     } else if (event.shiftKey && selectedImages.length > 0) {
       const lastSelected = selectedImages[selectedImages.length - 1];
       const start = imageItems.indexOf(lastSelected);
       const end = imageItems.indexOf(image);
       const range = imageItems.slice(Math.min(start, end), Math.max(start, end) + 1);
       setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
+      updateSelectedImage(null);
     } else {
       setSelectedImages([image]);
+      updateSelectedImage(image);
     }
-  }, [imageItems, selectedImages]);
+  }, [imageItems, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
     const index = imageItems.findIndex(item => item.id === image.id);
@@ -245,6 +281,10 @@ const Gallery = () => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
+
+  const handleImageSelection = useCallback((selectedImages) => {
+    setSelectedImages(selectedImages);
+  }, []);
 
   const closeImagePopup = () => {
     setIsImagePopupOpen(false);
@@ -308,8 +348,18 @@ const Gallery = () => {
     setIsZipDialogOpen(false);
   };
 
+  const handleClickOutside = useCallback((event) => {
+    const className = getEventClassName(event);
+    const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
+
+    if (!isClickInsideImage && containerRef.current.contains(event.target)) {
+      handleImageSelection([]);
+      updateSelectedImage();
+    }
+  }, [handleImageSelection, updateSelectedImage]);
+
   return (
-    <div className="sf-metadata-container">
+    <div className="sf-metadata-container" onMouseDown={handleClickOutside}>
       <div className={`sf-metadata-gallery-container sf-metadata-gallery-container-${mode}`} ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
@@ -321,7 +371,7 @@ const Gallery = () => {
               gap={GALLERY_IMAGE_GAP}
               mode={mode}
               selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
+              onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onImageRightClick={handleRightClick}

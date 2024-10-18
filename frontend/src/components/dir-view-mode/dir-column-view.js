@@ -80,6 +80,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   onItemsScroll: PropTypes.func.isRequired,
   eventBus: PropTypes.object,
+  updateCurrentDirent: PropTypes.func.isRequired,
 };
 
 class DirColumnView extends React.Component {
@@ -202,6 +203,7 @@ class DirColumnView extends React.Component {
               viewID={this.props.viewId}
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
+              updateCurrentDirent={this.props.updateCurrentDirent}
             />
           }
           {currentMode === FACE_RECOGNITION_MODE &&
