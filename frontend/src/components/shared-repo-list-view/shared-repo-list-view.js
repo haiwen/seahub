@@ -131,6 +131,7 @@ class SharedRepoListView extends React.Component {
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
+              onTransferRepo={this.props.onTransferRepo}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}

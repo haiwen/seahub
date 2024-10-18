@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.utils.translation import gettext as _
 
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api, ccnet_api, seafserv_threaded_rpc
 
 from constance import config
 
@@ -25,11 +25,12 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.organizations.views import org_user_exists
 from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
-        send_perm_audit_msg, is_valid_org_id
+        send_perm_audit_msg, is_valid_org_id, is_valid_email
 from seahub.utils.repo import (
     get_library_storages, get_repo_owner, get_available_repo_perms
 )
@@ -1406,3 +1407,137 @@ class GroupOwnedLibraryUserShareInLibrary(APIView):
                             repo_id, '/', permission)
 
         return Response({'success': True})
+
+
+class GroupOwnedLibraryTransferLibrary(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    @api_check_group
+    @add_org_context
+    def put(self, request, group_id, repo_id, org_id):
+        """ Transfer a library.
+
+        Permission checking:
+        1. is group admin;
+        """
+        # argument check
+        new_owner = request.data.get('email', None)
+        if not new_owner:
+            error_msg = 'Email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if '@seafile_group' not in new_owner:
+            error_msg = 'Email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if org_id:
+            org_id = int(org_id)
+            if not ccnet_api.get_org_by_id(org_id):
+                error_msg = 'Organization %s not found.' % org_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+        cur_group_id = int(group_id)
+        username = request.user.username
+        if not is_group_admin(cur_group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)        
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # preparation before transfer repo
+        pub_repos = []
+        if org_id:
+            # get repo shared to user/group list
+            shared_users = seafile_api.list_org_repo_shared_to(org_id,
+                                                               repo_owner,
+                                                               repo_id)
+            shared_groups = seafile_api.list_org_repo_shared_group(org_id,
+                                                                   repo_owner,
+                                                                   repo_id)
+
+            # get all org pub repos
+            pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
+                    org_id, repo_owner)
+        else:
+            # get repo shared to user/group list
+            shared_users = seafile_api.list_repo_shared_to(
+                    repo_owner, repo_id)
+            shared_groups = seafile_api.list_repo_shared_group_by_user(
+                    repo_owner, repo_id)
+
+            # get all pub repos
+            if not request.cloud_mode:
+                pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
+        # transfer repo
+        try:
+            if org_id:
+                group_id = int(new_owner.split('@')[0])
+                seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
+            else:
+                if ccnet_api.get_orgs_by_user(new_owner):
+                    # can not transfer library to organization user %s.
+                    error_msg = 'Email %s invalid.' % new_owner
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                else:
+                    group_id = int(new_owner.split('@')[0])
+                    seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # reshare repo to user
+        for shared_user in shared_users:
+            shared_username = shared_user.user
+
+            if new_owner == shared_username:
+                continue
+            if org_id:
+                seafserv_threaded_rpc.org_add_share(org_id, repo_id,
+                                                            new_owner, shared_username, shared_user.perm)
+            else:
+                seafile_api.share_repo(repo_id, new_owner,
+                                       shared_username, shared_user.perm)
+
+        # reshare repo to group
+        for shared_group in shared_groups:
+            shared_group_id = shared_group.group_id
+            if shared_group_id == cur_group_id:
+                continue
+
+            if org_id:
+                seafile_api.add_org_group_repo(repo_id, org_id,
+                                               shared_group_id, new_owner, shared_group.perm)
+            else:
+                seafile_api.set_group_repo(repo_id, shared_group_id,
+                                           new_owner, shared_group.perm)
+
+        # check if current repo is pub-repo
+        # if YES, reshare current repo to public
+        for pub_repo in pub_repos:
+            if repo_id != pub_repo.id:
+                continue
+
+            if org_id:
+                seafile_api.set_org_inner_pub_repo(org_id, repo_id,
+                        pub_repo.permission)
+            else:
+                seafserv_threaded_rpc.set_inner_pub_repo(
+                        repo_id, pub_repo.permission)
+
+            break
+
+        return Response({'success': True})
+    
