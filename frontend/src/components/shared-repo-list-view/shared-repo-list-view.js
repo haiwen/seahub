@@ -7,6 +7,8 @@ import toaster from '../toast';
 import LibsMobileThead from '../libs-mobile-thead';
 import Loading from '../loading';
 import { LIST_MODE } from '../dir-view-mode/constants';
+import ContextMenu from '../context-menu/context-menu';
+import { hideMenu, handleContextClick } from '../context-menu/actions';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -33,6 +35,7 @@ class SharedRepoListView extends React.Component {
     this.state = {
       isItemFreezed: false,
     };
+    this.repoItems = [];
   }
 
   sortByName = (e) => {
@@ -86,13 +89,41 @@ class SharedRepoListView extends React.Component {
     this.props.onItemRename(repo, newName);
   };
 
+  setRepoItemRef = (index) => item => {
+    this.repoItems[index] = item;
+  };
+
+  getRepoIndex = (repo) => {
+    return this.props.repoList.findIndex(item => {
+      return item.repo_id === repo.repo_id;
+    });
+  };
+
+  onMenuItemClick = (operation, currentObject, event) => {
+    const index = this.getRepoIndex(currentObject);
+    if (this.repoItems[index]) {
+      this.repoItems[index].onMenuItemClick(event);
+    }
+    hideMenu();
+  };
+
+  onContextMenu = (event, repo) => {
+    event.preventDefault();
+    const { libraryType, currentGroup } = this.props;
+    const isPublic = libraryType === 'public';
+    const id = isPublic ? 'shared-repo-item-menu' : `shared-repo-item-menu-${currentGroup.id}`;
+    const menuList = Utils.getSharedRepoOperationList(repo, currentGroup, isPublic);
+    handleContextClick(event, id, menuList, repo);
+  };
+
   renderRepoListView = () => {
     const { currentViewMode = LIST_MODE } = this.props;
     return (
       <Fragment>
-        {this.props.repoList.map(repo => {
+        {this.props.repoList.map((repo, index) => {
           return (
             <SharedRepoListItem
+              ref={this.setRepoItemRef(index)}
               key={repo.repo_id}
               repo={repo}
               libraryType={this.props.libraryType}
@@ -105,6 +136,7 @@ class SharedRepoListView extends React.Component {
               onItemRename={this.props.onItemRename}
               onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={currentViewMode}
+              onContextMenu={this.onContextMenu}
             />
           );
         })}
@@ -113,30 +145,42 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { theadHidden = false, currentViewMode = LIST_MODE } = this.props;
+    const { theadHidden = false, currentViewMode = LIST_MODE, currentGroup, libraryType } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
-    return currentViewMode == LIST_MODE ? (
-      <table className={theadHidden ? 'table-thead-hidden' : ''}>
-        <thead>
-          <tr>
-            <th width="4%"></th>
-            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="17%">{gettext('Owner')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderRepoListView()}
-        </tbody>
-      </table>
+    const content = currentViewMode == LIST_MODE ? (
+      <>
+        <table className={theadHidden ? 'table-thead-hidden' : ''}>
+          <thead>
+            <tr>
+              <th width="4%"></th>
+              <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+              <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+              <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+              <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+              <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+              <th width="17%">{gettext('Owner')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderRepoListView()}
+          </tbody>
+        </table>
+      </>
     ) : (
       <div className="d-flex justify-content-between flex-wrap">
         {this.renderRepoListView()}
       </div>
+    );
+
+    return (
+      <>
+        {content}
+        <ContextMenu
+          id={`${libraryType === 'public' ? 'shared-repo-item-menu' : `shared-repo-item-menu-${currentGroup.id}`}`}
+          onMenuItemClick={this.onMenuItemClick}
+        />;
+      </>
     );
   };
 
