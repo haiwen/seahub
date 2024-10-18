@@ -28,7 +28,7 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 27
+        assert len(json_resp) == 25
 
     @override_settings(ENABLE_SETTINGS_VIA_WEB=False)
     def test_get_with_enable_settings(self):
@@ -44,7 +44,6 @@ class AdminWebSettingsTest(BaseTestCase):
             "SHARE_LINK_PASSWORD_MIN_LENGTH": 8,
             "ENABLE_BRANDING_CSS": False,
             "ENABLE_REPO_HISTORY_SETTING": 0,
-            "SERVICE_URL": "http://127.0.0.1:8000",
             "ACTIVATE_AFTER_REGISTRATION": True,
             "ENABLE_ENCRYPTED_LIBRARY": True,
             "CUSTOM_CSS": "test_style",
@@ -60,7 +59,6 @@ class AdminWebSettingsTest(BaseTestCase):
             "ENABLE_TWO_FACTOR_AUTH": False,
             "TEXT_PREVIEW_EXT": "ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go, yml",
             "ENABLE_SIGNUP": False,
-            "FILE_SERVER_ROOT": "http://127.0.0.1:8082",
             "LOGIN_ATTEMPT_LIMIT": 5
         }
         for key, value in data.items():
