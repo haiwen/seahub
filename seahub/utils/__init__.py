@@ -196,7 +196,7 @@ def get_fileserver_root():
     Returns:
     	Constructed fileserver root.
     """
-    return config.FILE_SERVER_ROOT
+    return seahub.settings.FILE_SERVER_ROOT
 
 def get_inner_fileserver_root():
     """Construct inner seafile fileserver address and port.
@@ -915,7 +915,7 @@ def calc_file_path_hash(path, bits=12):
 def get_service_url():
     """Get service url from seaserv.
     """
-    return config.SERVICE_URL
+    return seahub.settings.SERVICE_URL
 
 def get_webdav_url():
     """Get webdav url.
