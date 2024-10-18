@@ -149,6 +149,31 @@ class Libraries extends Component {
     this.setState({ repoList: repoList });
   };
 
+  onGroupTransferRepo = (repoID, oldGroupID, newOwner) => {
+    let newGroupID = parseInt(newOwner.split('@')[0]);
+    let repoToMove = null;
+    const updatedGroups = this.state.groupList.map(group => {
+      if (group.id === oldGroupID) {
+        group.repos = group.repos.filter(repo => {
+          if (repo.repo_id === repoID) {
+            repoToMove = repo;
+            return false;
+          }
+          return true;
+        });
+      }
+      return group;
+    });
+    if (repoToMove) {
+      updatedGroups.forEach(group => {
+        if (group.id === newGroupID) {
+          group.repos.push(repoToMove);
+        }
+      });
+    }
+    this.setState({ groupList: updatedGroups });
+  };
+
   onRenameRepo = (repo, newName) => {
     let repoList = this.state.repoList.map(item => {
       if (item.repo_id === repo.repo_id) {
@@ -326,6 +351,7 @@ class Libraries extends Component {
                           inAllLibs={true}
                           group={group}
                           updateGroup={this.updateGroup}
+                          onTransferRepo={this.onGroupTransferRepo}
                           currentViewMode={currentViewMode}
                         />
                       );
