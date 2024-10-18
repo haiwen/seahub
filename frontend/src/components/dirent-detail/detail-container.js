@@ -24,21 +24,8 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
 
   if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
     const viewId = path.split('/').pop();
-    if (!dirent) return (
-      <ViewDetails viewId={viewId} onClose={onClose} />
-    );
-    return (
-      <DirentDetail
-        repoID={repoID}
-        path={dirent.path}
-        dirent={dirent}
-        currentRepoInfo={currentRepoInfo}
-        repoTags={repoTags}
-        fileTags={fileTags}
-        onFileTagChanged={onFileTagChanged}
-        onClose={onClose}
-      />
-    );
+    if (!dirent) return (<ViewDetails viewId={viewId} onClose={onClose} />);
+    path = dirent.path;
   }
 
   if (path === '/' && !dirent) {
