@@ -2172,14 +2172,15 @@ class SeadocPublishRevision(APIView):
                 str(origin_file_uuid.uuid), repo_id, username)
             dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
             obj_names = [e.obj_name for e in dirents]
-            seafile_api.move_file(
-                repo_id, revision_image_parent_path,
-                json.dumps(obj_names),
-                repo_id, origin_image_parent_path,
-                json.dumps(obj_names),
-                replace=1, username=username,
-                need_progress=0, synchronous=1,
-            )
+            if obj_names:
+                seafile_api.move_file(
+                    repo_id, revision_image_parent_path,
+                    json.dumps(obj_names),
+                    repo_id, origin_image_parent_path,
+                    json.dumps(obj_names),
+                    replace=1, username=username,
+                    need_progress=0, synchronous=1,
+                )
             seafile_api.del_file(
                 repo_id, SDOC_IMAGES_DIR, json.dumps([str(revision_file_uuid.uuid)]), username)
 
