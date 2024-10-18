@@ -24,7 +24,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, THUMBNAIL_DEFAULT_SIZE, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
+    FILE_SERVER_ROOT
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -74,7 +75,7 @@ def base(request):
     repo_id_patt = r".*/([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})/.*"
     m = re.match(repo_id_patt, request.get_full_path())
     search_repo_id = m.group(1) if m is not None else None
-    file_server_root = config.FILE_SERVER_ROOT
+    file_server_root = FILE_SERVER_ROOT
     if not file_server_root.endswith('/'):
         file_server_root += '/'
 

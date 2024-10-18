@@ -17,6 +17,7 @@ from seahub.api2.utils import api_error
 
 from seaserv import seafile_api
 
+from seahub.settings import SERVICE_URL
 from seahub.utils.repo import get_available_repo_perms, get_repo_owner
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
@@ -84,7 +85,7 @@ class OCMProtocolView(APIView):
         result = {
             'enabled': True,
             'apiVersion': OCM_API_VERSION,
-            'endPoint': config.SERVICE_URL + '/' + OCM_ENDPOINT,
+            'endPoint': SERVICE_URL + '/' + OCM_ENDPOINT,
             'resourceTypes': {
                 'name': OCM_RESOURCE_TYPE_LIBRARY,
                 'shareTypes': OCM_SHARE_TYPES,
@@ -384,7 +385,7 @@ class OCMSharesPrepareView(APIView):
                     'sharedSecret': shared_secret,
                     'permissions': SEAFILE_PERMISSION2OCM_PERMISSION[permission],
                     'repoId': repo_id,
-                    'seafileServiceURL': check_url_slash(config.SERVICE_URL),
+                    'seafileServiceURL': check_url_slash(SERVICE_URL),
                 },
             },
         }

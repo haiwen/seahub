@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
+from seahub.settings import SERVICE_URL
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -129,7 +130,7 @@ class OCMProviderView(APIView):
             result = {
                 'enabled': True,
                 'apiVersion': OCM_API_VERSION,
-                'endPoint': config.SERVICE_URL + '/' + OCM_ENDPOINT,
+                'endPoint': SERVICE_URL + '/' + OCM_ENDPOINT,
                 'resourceTypes': {
                     'name': OCM_RESOURCE_TYPE_LIBRARY,
                     'shareTypes': OCM_SHARE_TYPES,
@@ -144,7 +145,7 @@ class OCMProviderView(APIView):
             result = {
                 'apiVersion': '1.0-proposal1',
                 'enabled': True,
-                'endPoint': urljoin(config.SERVICE_URL, OCM_VIA_WEBDAV_OCM_ENDPOINT),
+                'endPoint': urljoin(SERVICE_URL, OCM_VIA_WEBDAV_OCM_ENDPOINT),
                 'resourceTypes': {
                     'name': 'file',
                     'protocols': {'webdav': 'TODO'},

@@ -33,6 +33,10 @@ cd "$SEAHUB_SRCDIR"
 set +x
 
 function init() {
+
+    # fix FILE_SERVER_ROOT in test
+    sed -i 's/^FILE_SERVER_ROOT = SERVICE_URL/# FILE_SERVER_ROOT = SERVICE_URL/' seahub/settings.py
+
     ###############################
     # create database and two new users: an admin, and a normal user
     ###############################
