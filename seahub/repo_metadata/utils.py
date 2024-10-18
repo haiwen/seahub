@@ -56,12 +56,11 @@ def get_metadata_by_faces(faces, metadata_server_api):
     return query_result
 
 
-
-def init_file_details(params):
+def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/init-file-details')
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/extract-file-details')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
 

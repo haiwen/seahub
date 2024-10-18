@@ -13,7 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, get_metadata_by_faces, init_file_details
+    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, get_metadata_by_faces, extract_file_details
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -1068,7 +1068,7 @@ class FaceRecognitionManage(APIView):
         return Response({'task_id': task_id})
 
 
-class MetadataInitFileDetails(APIView):
+class MetadataExtractFileDetails(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -1099,7 +1099,7 @@ class MetadataInitFileDetails(APIView):
             'repo_id': repo_id
         }
         try:
-            resp = init_file_details(params=params)
+            resp = extract_file_details(params=params)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')

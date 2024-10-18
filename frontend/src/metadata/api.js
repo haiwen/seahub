@@ -222,8 +222,8 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
-  initFileDetails = (repoID, objIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/init-file-details/';
+  extractFileDetails = (repoID, objIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
     const params = {
       obj_ids: objIds,
     };

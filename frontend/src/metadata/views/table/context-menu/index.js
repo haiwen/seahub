@@ -83,7 +83,7 @@ const ContextMenu = (props) => {
         return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
       });
       if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Generate file details'), records: imageOrVideoRecords });
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
       }
       return list;
     }
@@ -108,7 +108,7 @@ const ContextMenu = (props) => {
         return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
       });
       if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Generate file details'), records: imageOrVideoRecords });
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
       }
       return list;
     }
@@ -136,7 +136,7 @@ const ContextMenu = (props) => {
     }
 
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
-      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Generate file detail'), record: record });
+      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
     }
 
     // handle delete folder/file
@@ -247,7 +247,7 @@ const ContextMenu = (props) => {
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
     const recordIds = records.map(record => geRecordIdFromRecord(record));
-    window.sfMetadataContext.initFileDetails(recordObjIds).then(res => {
+    window.sfMetadataContext.extractFileDetails(recordObjIds).then(res => {
       const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
 
       if (captureColumn) {
@@ -268,7 +268,7 @@ const ContextMenu = (props) => {
         updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
       }
     }).catch(error => {
-      const errorMessage = gettext('Failed to generate file details');
+      const errorMessage = gettext('Failed to extract file details');
       toaster.danger(errorMessage);
     });
   }, [metadata, updateRecords]);

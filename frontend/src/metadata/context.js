@@ -219,9 +219,9 @@ class Context {
     return this.metadataAPI.imageCaption(repoID, filePath, lang);
   };
 
-  initFileDetails = (objIds) => {
+  extractFileDetails = (objIds) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.initFileDetails(repoID, objIds);
+    return this.metadataAPI.extractFileDetails(repoID, objIds);
   };
 }
 
