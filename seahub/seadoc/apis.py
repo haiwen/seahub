@@ -1791,13 +1791,14 @@ class SeadocStartRevise(APIView):
                 revision_file_uuid, repo_id, username)
             dirents = seafile_api.list_dir_by_path(repo_id, origin_image_parent_path)
             obj_name_list = [item.obj_name for item in dirents]
-            seafile_api.copy_file(
-                repo_id, origin_image_parent_path,
-                json.dumps(obj_name_list),
-                repo_id, revision_image_parent_path,
-                json.dumps(obj_name_list),
-                username=username, need_progress=0, synchronous=1
-            )
+            if obj_name_list:
+                seafile_api.copy_file(
+                    repo_id, origin_image_parent_path,
+                    json.dumps(obj_name_list),
+                    repo_id, revision_image_parent_path,
+                    json.dumps(obj_name_list),
+                    username=username, need_progress=0, synchronous=1
+                )
         return Response(revision.to_dict())
 
 
