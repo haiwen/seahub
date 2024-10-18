@@ -15,9 +15,9 @@ import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } f
 import { siteRoot, fileServerRoot, useGoFileserver, gettext, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
+import { getEventClassName } from '../../utils/common';
 
 import './index.css';
-import { getEventClassName } from '../../utils/common';
 
 const Gallery = () => {
   const [isFirstLoading, setFirstLoading] = useState(true);
