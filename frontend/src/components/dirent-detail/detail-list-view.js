@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { v4 as uuidv4 } from 'uuid';
 import Icon from '../icon';
 import { gettext, enableFileTags } from '../../utils/constants';
@@ -20,6 +21,8 @@ const propTypes = {
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
+
+dayjs.extend(relativeTime);
 
 class DetailListView extends React.Component {
 
@@ -78,7 +81,7 @@ class DetailListView extends React.Component {
           </thead>
           <tbody>
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
-            <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
+            <tr><th>{gettext('Last Update')}</th><td>{dayjs(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
             {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
               <Fragment>
                 <tr className="file-extra-attributes">
@@ -102,7 +105,7 @@ class DetailListView extends React.Component {
         <tbody>
           <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
           <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
-          <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
+          <tr><th>{gettext('Last Update')}</th><td>{dayjs(direntDetail.last_modified).fromNow()}</td></tr>
           <tr className="file-tag-container">
             <th>{gettext('Tags')}</th>
             <td>

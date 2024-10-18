@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -18,6 +19,8 @@ import UserLink from '../user-link';
 import ReposNav from './repos-nav';
 
 const { trashReposExpireDays } = window.sysadmin.pageOptions;
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -235,7 +238,7 @@ class Item extends Component {
               <UserLink email={repo.owner} name={repo.owner_name} /> :
               repo.group_name}
           </td>
-          <td>{moment(repo.delete_time).fromNow()}</td>
+          <td>{dayjs(repo.delete_time).fromNow()}</td>
           <td>
             {isOpIconShown && (
               <OpMenu

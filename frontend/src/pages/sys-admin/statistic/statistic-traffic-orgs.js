@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import TrafficTable from './traffic-table';
 import TrafficTableBody from './traffic-table-body';
@@ -19,14 +19,14 @@ class OrgsTraffic extends React.Component {
       perPage: 100,
       currentPage: 1,
       hasNextPage: false,
-      month: moment().format('YYYYMM'),
+      month: dayjs().format('YYYYMM'),
       isLoading: false,
       errorMessage: '',
       sortBy: 'link_file_download',
       sortOrder: 'desc'
     };
     this.initPage = 1;
-    this.initMonth = moment().format('YYYYMM');
+    this.initMonth = dayjs().format('YYYYMM');
   }
 
   componentDidMount() {
@@ -119,7 +119,7 @@ class OrgsTraffic extends React.Component {
           <span className="statistic-reports-tip">{gettext('Month:')}</span>
           <Input
             className="statistic-reports-input"
-            defaultValue={moment().format('YYYYMM')}
+            defaultValue={dayjs().format('YYYYMM')}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
           />

@@ -1,14 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import SysAdminUnlinkDevice from '../../../components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -144,7 +147,7 @@ class Item extends Component {
           <td>{item.device_name}</td>
           <td>{item.last_login_ip}</td>
           <td>
-            <span title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
+            <span title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_accessed).fromNow()}</span>
           </td>
           <td>
             <a href="#" className={`sf3-font-delete1 sf3-font action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>

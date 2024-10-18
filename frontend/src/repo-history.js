@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -292,7 +292,7 @@ class Item extends React.Component {
             <a href="#" className="details" onClick={this.showCommitDetails} role="button">{gettext('Details')}</a>
             }
           </td>
-          <td title={moment(item.time).format('LLLL')}>{moment(item.time).format('YYYY-MM-DD')}</td>
+          <td title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).format('YYYY-MM-DD')}</td>
           <td>{name}</td>
           <td>
             {item.client_version ? `${item.device_name} / ${item.client_version}` : 'API / --'}

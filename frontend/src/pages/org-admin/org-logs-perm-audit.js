@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
@@ -9,7 +9,7 @@ import toaster from '../../components/toast';
 import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
 import '../../css/org-logs.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgLogsFileUpdate extends Component {
 
@@ -233,7 +233,7 @@ class PermAuditItem extends React.Component {
           <td>{Utils.sharePerms(permEvent.permission)}</td>
           <td>{this.renderRepo(permEvent)}</td>
           <td>{this.renderFolder(permEvent.folder_name)}</td>
-          <td>{moment(permEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(permEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
         </tr>
       );
     }

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { processor } from '@seafile/seafile-editor';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -10,6 +11,8 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from '../../../components/dialog/op-menu';
+
+dayjs.extend(relativeTime);
 
 class Item extends Component {
 
@@ -131,8 +134,8 @@ class Item extends Component {
           <td className="ellipsis">
             <a href='#' onClick={this.toggleTermsContentDialog}>{previewContent.previewText}</a>
           </td>
-          <td>{moment(item.ctime).fromNow()}</td>
-          <td>{item.activate_time ? moment(item.activate_time).fromNow() : '--'}</td>
+          <td>{dayjs(item.ctime).fromNow()}</td>
+          <td>{item.activate_time ? dayjs(item.activate_time).fromNow() : '--'}</td>
           <td>
             {this.state.isOpIconShown &&
               <OpMenu

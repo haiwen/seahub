@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -884,7 +884,7 @@ class DirentListItem extends React.Component {
             </td>
             <td className="operation">{this.renderItemOperation()}</td>
             <td className="file-size">{dirent.size || ''}</td>
-            <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
+            <td className="last-update" title={dayjs.unix(dirent.mtime).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dirent.mtime_relative}</td>
           </tr>
           :
           <tr>

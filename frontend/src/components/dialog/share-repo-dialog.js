@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
@@ -12,6 +13,8 @@ const shareRepoListItemProps = {
   onRepoSelect: PropTypes.func.isRequired,
   onPermissionChange: PropTypes.func.isRequired,
 };
+
+dayjs.extend(relativeTime);
 
 class ShareRepoListItem extends React.Component {
 
@@ -34,7 +37,7 @@ class ShareRepoListItem extends React.Component {
         <td className="text-center"><input type="checkbox" className="vam" name="repo" onChange={this.onRepoSelect} /></td>
         <td className="text-center"><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
         <td className="name">{repo.repo_name}</td>
-        <td>{moment(repo.last_modified).fromNow()}</td>
+        <td>{dayjs(repo.last_modified).fromNow()}</td>
         <td>
           <Input style={{ height: '1.5rem', padding: 0 }} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>
             <option value='rw'>{gettext('Read-Write')}</option>

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -8,6 +9,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -103,7 +106,7 @@ class Item extends Component {
         <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
         <td>{item.from_user}</td>
         <td>{item.from_server_url}</td>
-        <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
+        <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.ctime).fromNow()}</td>
         <td>
           <a href="#" role="button" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
         </td>

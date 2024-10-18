@@ -1,7 +1,7 @@
 import { lang } from '../utils/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgGroupInfo {
   constructor(object) {
@@ -10,7 +10,7 @@ class OrgGroupInfo {
     this.creatorName = object.creator_name;
     this.creatorEmail = object.creator_email;
     this.creatorContactEmail = object.creator_contact_email;
-    this.ctime = moment(object.ctime).format('YYYY-MM-DD HH:mm:ss');
+    this.ctime = dayjs(object.ctime).format('YYYY-MM-DD HH:mm:ss');
   }
 }
 

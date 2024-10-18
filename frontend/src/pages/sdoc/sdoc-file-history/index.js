@@ -5,7 +5,7 @@ import i18n from '../../../_i18n/i18n-sdoc-editor';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { seafileAPI } from '../../../utils/seafile-api';
 import SDocServerApi from '../../../utils/sdoc-server-api';
 import { PER_PAGE, gettext, historyRepoID } from '../../../utils/constants';
@@ -331,7 +331,7 @@ class SdocFileHistory extends React.Component {
     const newHistoryGroups = oldHistoryGroups.slice(0);
     histories.forEach(history => {
       const { date } = history;
-      const momentDate = moment(date);
+      const momentDate = dayjs(date);
       const month = momentDate.format('YYYY-MM');
       const monthItem = newHistoryGroups.find(item => item.month === month);
       if (monthItem) {

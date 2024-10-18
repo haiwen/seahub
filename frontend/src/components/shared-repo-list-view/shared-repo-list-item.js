@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
@@ -20,6 +21,8 @@ import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../dir-view-mode/constants';
+
+dayjs.extend(relativeTime);
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -656,7 +659,7 @@ class SharedRepoListItem extends React.Component {
         </td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
-        <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
+        <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</td>
         <td title={repo.owner_contact_email}>{repo.owner_name}</td>
       </tr>
     ) : (
@@ -719,7 +722,7 @@ class SharedRepoListItem extends React.Component {
             <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
             <span className="item-meta-info">{repo.size}</span>
-            <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
+            <span className="item-meta-info" title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</span>
           </td>
           <td>{this.generatorMobileMenu()}</td>
         </tr>

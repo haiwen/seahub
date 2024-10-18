@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import { translateCalendar } from '../../../utils/date-format-utils';
@@ -18,7 +18,7 @@ class Picker extends React.Component {
 
   componentDidMount() {
     let lang = window.app.config.lang;
-    this.defaultCalendarValue = moment().locale(lang).clone();
+    this.defaultCalendarValue = dayjs().locale(lang).clone();
   }
 
   render() {

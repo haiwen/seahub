@@ -23,6 +23,7 @@ const modules = require('./modules');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const webpackBundleTracker = require('webpack-bundle-tracker');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
@@ -89,6 +90,23 @@ const hasJsxRuntime = (() => {
     return false;
   }
 })();
+
+// Load third-party packages on demand
+const excludedChunkNames = [
+  'sharedFileViewAudio',
+  'sharedFileViewVideo',
+  'fileView',
+  'viewFileSdoc',
+  'sharedFileViewSdoc',
+  'sdocPublishedRevision',
+  'sdocFileHistory',
+  'wiki2',
+  'sharedFileViewText',
+  'viewFileText',
+  'sharedFileViewMarkdown',
+  'markdownEditor',
+  'plainMarkdownEditor',
+];
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -298,7 +316,9 @@ module.exports = function (webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
+        chunks(chunk) {
+          return !excludedChunkNames.includes(chunk.name);
+        },
         automaticNameDelimiter: '-',
         cacheGroups: {
           default: false,
@@ -309,7 +329,7 @@ module.exports = function (webpackEnv) {
             priority: 30000,
             reuseExistingChunk: true,
           },
-        }
+        },
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
@@ -317,6 +337,7 @@ module.exports = function (webpackEnv) {
       runtimeChunk: {
         name: 'runtime',
       },
+      // concatenateModules: false,
     },
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
@@ -807,6 +828,7 @@ module.exports = function (webpackEnv) {
         filename: isEnvProduction ? './webpack-stats.pro.json' : './webpack-stats.dev.json',
         publicPath: isEnvProduction ? '' : paths.publicUrlOrPath
       }),
+      // new BundleAnalyzerPlugin(),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

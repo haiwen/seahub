@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -12,6 +13,8 @@ import Paginator from '../../../components/paginator';
 import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -207,18 +210,18 @@ class Item extends Component {
           </td>
           <td>{this.getInviteTypeText()}</td>
           <td>
-            <span title={moment(item.invite_time).format('llll')}>{moment(item.invite_time).fromNow()}</span>
+            <span title={dayjs(item.invite_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.invite_time).fromNow()}</span>
           </td>
           <td>
             {item.accept_time ?
-              <span title={moment(item.accept_time).format('llll')}>{moment(item.accept_time).fromNow()}</span> :
+              <span title={dayjs(item.accept_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.accept_time).fromNow()}</span> :
               '--'
             }
           </td>
           <td>
             {item.is_expired ?
-              <span className="text-red">{moment(item.expire_time).format('YYYY-MM-DD HH:mm')}</span> :
-              moment(item.expire_time).format('YYYY-MM-DD HH:mm')
+              <span className="text-red">{dayjs(item.expire_time).format('YYYY-MM-DD HH:mm')}</span> :
+              dayjs(item.expire_time).format('YYYY-MM-DD HH:mm')
             }
           </td>
           <td>

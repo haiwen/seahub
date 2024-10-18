@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
@@ -199,7 +199,7 @@ class Item extends Component {
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
-          <td>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
             <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
