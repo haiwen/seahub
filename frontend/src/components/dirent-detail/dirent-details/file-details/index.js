@@ -124,7 +124,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
   );
 
   let component = dom;
-  if (Utils.imageCheck(dirent.name)) {
+  if (Utils.imageCheck(dirent.name) || Utils.videoCheck(dirent.name)) {
     const fileDetails = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DETAILS });
     const fileDetailsJson = JSON.parse(fileDetails?.slice(9, -7) || '{}');
     const fileLocation = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.LOCATION });

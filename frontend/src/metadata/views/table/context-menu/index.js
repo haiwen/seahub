@@ -135,14 +135,11 @@ const ContextMenu = (props) => {
       }
     }
 
-<<<<<<< HEAD
-=======
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Generate file detail'), record: record });
     }
 
     // handle delete folder/file
->>>>>>> 5ad5bbf14 (add video details and extract button)
     if (canDeleteRow) {
       list.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
     }

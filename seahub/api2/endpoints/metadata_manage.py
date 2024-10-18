@@ -260,6 +260,8 @@ class MetadataRecords(APIView):
         parameters = []
         for record_data in records_data:
             record = record_data.get('record', {})
+            if not record:
+                continue
             record_id = record_data.get('record_id', '')
             if not record_id:
                 error_msg = 'record_id invalid.'
@@ -271,6 +273,9 @@ class MetadataRecords(APIView):
 
         sql = sql.rstrip('OR ')
         sql += ';'
+
+        if not parameters:
+            return Response({'success': True})
 
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)
