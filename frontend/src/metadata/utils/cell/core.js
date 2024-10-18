@@ -31,3 +31,11 @@ export const getParentDirFromRecord = (record) => {
 export const getFileNameFromRecord = (record) => {
   return record ? record[PRIVATE_COLUMN_KEY.FILE_NAME] : '';
 };
+
+export const geRecordIdFromRecord = record => {
+  return record ? record[PRIVATE_COLUMN_KEY.ID] : '';
+};
+
+export const getFileObjIdFromRecord = record => {
+  return record ? record[PRIVATE_COLUMN_KEY.OBJ_ID] : '';
+};

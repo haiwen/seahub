@@ -3,6 +3,8 @@ export {
   getCellValueByColumn,
   getParentDirFromRecord,
   getFileNameFromRecord,
+  geRecordIdFromRecord,
+  getFileObjIdFromRecord,
 } from './core';
 
 export {

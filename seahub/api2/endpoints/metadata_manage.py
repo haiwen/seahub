@@ -13,7 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, get_metadata_by_faces
+    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, get_metadata_by_faces, extract_file_details
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -260,6 +260,8 @@ class MetadataRecords(APIView):
         parameters = []
         for record_data in records_data:
             record = record_data.get('record', {})
+            if not record:
+                continue
             record_id = record_data.get('record_id', '')
             if not record_id:
                 error_msg = 'record_id invalid.'
@@ -271,6 +273,9 @@ class MetadataRecords(APIView):
 
         sql = sql.rstrip('OR ')
         sql += ';'
+
+        if not parameters:
+            return Response({'success': True})
 
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)
@@ -1061,3 +1066,42 @@ class FaceRecognitionManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'task_id': task_id})
+
+
+class MetadataExtractFileDetails(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        obj_ids = request.data.get('obj_ids')
+        if not obj_ids or not isinstance(obj_ids, list) or len(obj_ids) > 50:
+            error_msg = 'obj_ids is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        params = {
+            'obj_ids': obj_ids,
+            'repo_id': repo_id
+        }
+        try:
+            resp = extract_file_details(params=params)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'details': resp})

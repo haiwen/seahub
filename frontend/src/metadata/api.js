@@ -222,6 +222,14 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  extractFileDetails = (repoID, objIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
+    const params = {
+      obj_ids: objIds,
+    };
+    return this.req.post(url, params);
+  };
+
   zipDownload(repoID, parent_dir, dirents) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
     const form = new FormData();

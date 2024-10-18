@@ -218,6 +218,11 @@ class Context {
     const lang = this.settings['lang'];
     return this.metadataAPI.imageCaption(repoID, filePath, lang);
   };
+
+  extractFileDetails = (objIds) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.extractFileDetails(repoID, objIds);
+  };
 }
 
 export default Context;

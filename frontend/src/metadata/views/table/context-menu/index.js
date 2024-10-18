@@ -7,7 +7,9 @@ import { useMetadataView } from '../../../hooks/metadata-view';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
+  geRecordIdFromRecord,
+} from '../../../utils/cell';
 
 import './index.css';
 
@@ -21,6 +23,8 @@ const OPERATION = {
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
   RENAME_FILE: 'rename-file',
+  FILE_DETAIL: 'file-detail',
+  FILE_DETAILS: 'file-details',
 };
 
 const ContextMenu = (props) => {
@@ -74,6 +78,13 @@ const ContextMenu = (props) => {
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
       }
 
+      const imageOrVideoRecords = records.filter(record => {
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+      });
+      if (imageOrVideoRecords.length > 0) {
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+      }
       return list;
     }
 
@@ -92,6 +103,13 @@ const ContextMenu = (props) => {
       if (ableDeleteRecords.length > 0) {
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
       }
+      const imageOrVideoRecords = records.filter(record => {
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+      });
+      if (imageOrVideoRecords.length > 0) {
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+      }
       return list;
     }
 
@@ -107,15 +125,21 @@ const ContextMenu = (props) => {
     const isFolder = checkIsDir(record);
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab'), record });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
+    const fileName = getFileNameFromRecord(record);
 
     if (descriptionColumn) {
       if (checkIsDescribableDoc(record)) {
         list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
-      } else if (canModifyRow && Utils.imageCheck(getFileNameFromRecord(record))) {
+      } else if (canModifyRow && Utils.imageCheck(fileName)) {
         list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description'), record });
       }
     }
 
+    if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
+      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+    }
+
+    // handle delete folder/file
     if (canDeleteRow) {
       list.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
     }
@@ -220,6 +244,40 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
+  const updateFileDetails = useCallback((records) => {
+    const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
+    if (recordObjIds.length > 50) {
+      toaster.danger(gettext('Select up to 50 files'));
+      return;
+    }
+
+    const recordIds = records.map(record => geRecordIdFromRecord(record));
+    window.sfMetadataContext.extractFileDetails(recordObjIds).then(res => {
+      const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+
+      if (captureColumn) {
+        let idOldRecordData = {};
+        let idOriginalOldRecordData = {};
+        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
+        records.forEach(record => {
+          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
+          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
+        });
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        res.data.details.forEach(detail => {
+          const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
+          idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+          idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+        });
+        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      }
+    }).catch(error => {
+      const errorMessage = gettext('Failed to extract file details');
+      toaster.danger(errorMessage);
+    });
+  }, [metadata, updateRecords]);
+
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
     switch (option.value) {
@@ -283,12 +341,22 @@ const ContextMenu = (props) => {
         window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR);
         break;
       }
+      case OPERATION.FILE_DETAILS: {
+        const { records } = option;
+        updateFileDetails(records);
+        break;
+      }
+      case OPERATION.FILE_DETAIL: {
+        const { record } = option;
+        updateFileDetails([record]);
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog, updateFileDetails]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
