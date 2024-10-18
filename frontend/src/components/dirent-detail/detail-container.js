@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
+import ViewDetails from '../../metadata/components/view-details';
 import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
 
   useEffect(() => {
+    if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) return;
+
     // init context
     const context = new MetadataContext();
     window.sfMetadataContext = context;
@@ -16,7 +20,13 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
       window.sfMetadataContext.destroy();
       delete window['sfMetadataContext'];
     };
-  }, [repoID, currentRepoInfo]);
+  }, [repoID, currentRepoInfo, path]);
+
+  if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+    const viewId = path.split('/').pop();
+    if (!dirent) return (<ViewDetails viewId={viewId} onClose={onClose} />);
+    path = dirent.path;
+  }
 
   if (path === '/' && !dirent) {
     return (
