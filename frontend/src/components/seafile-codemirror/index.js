@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from '@uiw/react-codemirror';
 import { getLanguageExtensions } from './languages';
-import { githubLight } from '@uiw/codemirror-theme-github';
-
-import './style.css';
+import { myTheme } from './theme';
 
 const DEFAULT_CODEMIRROR_OPTIONS = {
   lineNumbers: true,
@@ -41,7 +39,7 @@ class SeafileCodeMirror extends React.Component {
         <CodeMirror
           value={value}
           basicSetup={DEFAULT_CODEMIRROR_OPTIONS}
-          theme={githubLight}
+          theme={myTheme}
           readOnly={readOnly}
           extensions={[...getLanguageExtensions(fileExt)]}
           onChange={this.onChange}
