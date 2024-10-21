@@ -44,7 +44,7 @@ class Search extends Component {
       highlightIndex: 0,
       page: 0,
       isLoading: false,
-      hasMore: true,
+      hasMore: false,
       isMaskShow: false,
       showRecent: true,
       isResultGetted: false,
