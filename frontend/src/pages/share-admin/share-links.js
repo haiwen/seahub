@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -221,8 +221,8 @@ class Item extends Component {
     if (!item.expire_date) {
       return '--';
     }
-    const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
-    const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
+    const expire_date = dayjs(item.expire_date).format('YYYY-MM-DD');
+    const expire_time = dayjs(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
   };
 

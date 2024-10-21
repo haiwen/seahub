@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
@@ -20,7 +20,7 @@ import '../../css/toolbar.css';
 import '../../css/search.css';
 import './wiki.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class Wiki extends Component {
   constructor(props) {

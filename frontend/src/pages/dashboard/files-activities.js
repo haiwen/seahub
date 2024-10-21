@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
@@ -12,7 +12,7 @@ import UserSelector from './user-selector';
 
 import '../../css/files-activities.css';
 
-moment.locale(window.app.config.lang);
+dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   onlyMine: PropTypes.bool

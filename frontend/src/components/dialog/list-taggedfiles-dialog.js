@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -169,7 +169,7 @@ class TaggedFile extends React.Component {
           <Fragment>
             <td><a href={href} target='_blank' className="d-inline-block w-100 ellipsis" title={taggedFile.filename} rel="noreferrer">{taggedFile.filename}</a></td>
             <td>{Utils.bytesToSize(taggedFile.size)}</td>
-            <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+            <td>{dayjs.unix(taggedFile.mtime).fromNow()}</td>
           </Fragment>
         }
         <td>

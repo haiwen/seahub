@@ -1,6 +1,9 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../utils/utils';
 import FileTag from './file-tag';
+
+dayjs.extend(relativeTime);
 
 class Dirent {
   constructor(json) {
@@ -8,10 +11,10 @@ class Dirent {
     this.name = json.name;
     this.type = json.type;
     this.mtime = json.mtime;
-    if (json.mtime == 0) {
+    if (!json.mtime) {
       this.mtime_relative = '';
     } else {
-      this.mtime_relative = moment.unix(json.mtime).fromNow();
+      this.mtime_relative = dayjs.unix(json.mtime).fromNow();
     }
     this.permission = json.permission || 'rw';
     this.isSelected = false; // is check or not

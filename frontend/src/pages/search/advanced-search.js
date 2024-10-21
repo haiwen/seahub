@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Button, Col, Collapse, CustomInput, FormGroup, Input, Label, Row, InputGroupAddon, InputGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import DateTimePicker from '../../components/date-and-time-picker';
@@ -30,7 +30,7 @@ class AdvancedSearch extends React.Component {
       return false;
     }
 
-    const isAfterToday = startValue.isAfter(moment(), 'day');
+    const isAfterToday = startValue.isAfter(dayjs(), 'day');
     const { time_to } = this.props.stateAndValues;
     const endValue = time_to;
     if (!endValue) {
@@ -44,7 +44,7 @@ class AdvancedSearch extends React.Component {
       return false;
     }
 
-    const isAfterToday = endValue.isAfter(moment(), 'day');
+    const isAfterToday = endValue.isAfter(dayjs(), 'day');
     const { time_from } = this.props.stateAndValues;
     const startValue = time_from;
     if (!startValue) {

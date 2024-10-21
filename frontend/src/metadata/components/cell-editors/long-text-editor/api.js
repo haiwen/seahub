@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
@@ -25,7 +25,7 @@ class LongtextAPI {
   }
 
   uploadLocalImage = (imageFile) => {
-    const month = moment().format('YYYY-MM');
+    const month = dayjs().format('YYYY-MM');
     const parentPath = `images/${this.relativePath}/${month}`;
     return (
       seafileAPI.getFileServerUploadLink(this.repoID, '/').then((res) => {

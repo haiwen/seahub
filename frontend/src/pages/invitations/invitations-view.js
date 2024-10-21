@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -82,8 +82,8 @@ class Item extends React.Component {
         {this.props.isDesktop ?
           <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter} tabIndex="0">
             <td>{item.accepter}</td>
-            <td>{moment(item.invite_time).format('YYYY-MM-DD')}</td>
-            <td>{moment(item.expire_time).format('YYYY-MM-DD')}</td>
+            <td>{dayjs(item.invite_time).format('YYYY-MM-DD')}</td>
+            <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
             <td>{item.accept_time && <i className="sf2-icon-tick invite-accept-icon"></i>}</td>
             <td>
               {isOpIconShown && (
@@ -111,8 +111,8 @@ class Item extends React.Component {
           <tr>
             <td>
               {item.accepter}<br />
-              <span className="item-meta-info">{moment(item.invite_time).format('YYYY-MM-DD')}<span className="small">({gettext('Invite Time')})</span></span>
-              <span className="item-meta-info">{moment(item.expire_time).format('YYYY-MM-DD')}<span className="small">({gettext('Expiration')})</span></span>
+              <span className="item-meta-info">{dayjs(item.invite_time).format('YYYY-MM-DD')}<span className="small">({gettext('Invite Time')})</span></span>
+              <span className="item-meta-info">{dayjs(item.expire_time).format('YYYY-MM-DD')}<span className="small">({gettext('Expiration')})</span></span>
               <span className="item-meta-info">{item.accept_time && gettext('Accepted')}</span>
             </td>
             <td>

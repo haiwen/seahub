@@ -1,7 +1,7 @@
 import { lang } from '../utils/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-moment.locale(lang);
+dayjs.locale(lang);
 
 class OrgLogsFileAuditEvent {
   constructor(object) {
@@ -15,7 +15,7 @@ class OrgLogsFileAuditEvent {
     this.user_name = object.user_name;
     this.user_email = object.user_email;
     this.user_contact_email = object.user_contact_email;
-    this.time = moment(object.time).format('YYYY-MM-DD HH:mm:ss');
+    this.time = dayjs(object.time).format('YYYY-MM-DD HH:mm:ss');
   }
 }
 

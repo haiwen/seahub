@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import ModalPortal from '../../../components/modal-portal';
@@ -11,7 +12,8 @@ import OpMenu from '../../../components/dialog/op-menu';
 import { siteRoot, gettext, orgID, lang } from '../../../utils/constants';
 import '../../../css/org-department-item.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
+dayjs.extend(relativeTime);
 
 class GroupItem extends React.Component {
 
@@ -107,7 +109,7 @@ class GroupItem extends React.Component {
       <Fragment>
         <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td><Link to={newHref}>{group.name}</Link></td>
-          <td>{moment(group.created_at).fromNow()}</td>
+          <td>{dayjs(group.created_at).fromNow()}</td>
           <td>
             {Utils.bytesToSize(group.quota)}{' '}
             <span onClick={this.toggleSetQuotaDialog} title={gettext('Edit Quota')} className={`sf3-font sf3-font-rename attr-action-icon ${highlight ? '' : 'vh'}`}></span>

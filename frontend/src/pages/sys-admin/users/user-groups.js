@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -137,7 +137,7 @@ class Item extends Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><Link to={url}>{item.name}</Link></td>
           <td>{this.getRoleText()}</td>
-          <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm')}</td>
+          <td>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm')}</td>
         </tr>
       </Fragment>
     );

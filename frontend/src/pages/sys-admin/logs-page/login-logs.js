@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { Button } from 'reactstrap';
 import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import LogsNav from './logs-nav';
@@ -14,6 +15,7 @@ import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 
+dayjs.extend(relativeTime);
 
 class Content extends Component {
 
@@ -114,7 +116,7 @@ class Item extends Component {
         <td><UserLink email={item.email} name={item.name} /></td>
         <td>{item.login_ip}</td>
         <td>{item.log_success ? gettext('Success') : gettext('Failed')}</td>
-        <td>{moment(item.login_time).fromNow()}</td>
+        <td>{dayjs(item.login_time).fromNow()}</td>
       </tr>
     );
   }

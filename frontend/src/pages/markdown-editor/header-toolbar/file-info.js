@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import InternalLinkOperation from '../../../components/operations/internal-link-operation';
 
@@ -12,7 +12,7 @@ class FileInfo extends React.PureComponent {
     const { fileInfo, isPro, isLocked, mediaUrl } = this.props;
     const starTitle = fileInfo.starred ? gettext('starred') : gettext('unstarred');
     const starIconClass = `iconfont ${fileInfo.starred ? 'icon-star1 star' : 'icon-star2'}`;
-    const modifyTime = moment(fileInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
+    const modifyTime = dayjs(fileInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
 
     const lockedText = gettext('locked');
     return (

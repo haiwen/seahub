@@ -14,7 +14,7 @@ const { repoID } = window.app.pageOptions;
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <EnableMetadataProvider repoID={repoID} >
+      <EnableMetadataProvider repoID={repoID}>
         <CollaboratorsProvider repoID={repoID}>
           <MarkdownEditor />
         </CollaboratorsProvider>

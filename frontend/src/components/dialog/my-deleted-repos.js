@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, lang, trashReposExpireDays } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -11,7 +12,8 @@ import EmptyTip from '../../components/empty-tip';
 
 import '../../css/my-deleted-repos.css';
 
-moment.locale(lang);
+dayjs.locale(lang);
+dayjs.extend(relativeTime);
 
 class MyLibsDeleted extends Component {
 
@@ -128,8 +130,8 @@ class DeletedRepoItem extends Component {
   };
 
   render() {
-    let localTime = moment.utc(this.props.repo.del_time).toDate();
-    localTime = moment(localTime).fromNow();
+    let localTime = dayjs.utc(this.props.repo.del_time).toDate();
+    localTime = dayjs(localTime).fromNow();
     let iconUrl = Utils.getLibIconUrl(this.props.repo);
 
     return (

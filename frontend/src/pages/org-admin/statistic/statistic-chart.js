@@ -1,7 +1,28 @@
 import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
+import Loading from '../../../components/loading';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const propTypes = {
   labels: PropTypes.array.isRequired,
@@ -19,7 +40,7 @@ class StatisticChart extends React.Component {
     super(props);
     this.state = {
       data: {},
-      opations: {}
+      options: {}
     };
   }
 
@@ -65,10 +86,10 @@ class StatisticChart extends React.Component {
         }
       },
       scales: {
-        yAxes: [{
+        y: [{
+          beginAtZero: true,
+          suggestedMax: suggestedMaxNumbers,
           ticks: {
-            beginAtZero: true,
-            suggestedMax: suggestedMaxNumbers,
             callback: function (value, index, values) {
               if (isTicksCallback) {
                 return _this.ticksCallback(value, index, values);
@@ -77,7 +98,7 @@ class StatisticChart extends React.Component {
             }
           }
         }],
-        xAxes: [{
+        x: [{
           ticks: {
             maxTicksLimit: 20
           }
@@ -107,13 +128,14 @@ class StatisticChart extends React.Component {
   };
 
   render() {
-
     let { data, options } = this.state;
+    if (Object.keys(data).length === 0 && Object.keys(options).length === 0) {
+      return <Loading />;
+    }
     return (
-      <Line
-        data={data}
-        options={options}
-      />
+      <>
+        <Line data={data} options={options} />
+      </>
     );
   }
 }

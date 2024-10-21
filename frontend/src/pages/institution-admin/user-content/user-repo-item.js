@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
 import { enableSysAdminViewRepo, gettext, isPro, siteRoot } from '../../../utils/constants';
+
+dayjs.extend(relativeTime);
 
 const UserRepoItem = ({ repo }) => {
 
@@ -37,7 +40,7 @@ const UserRepoItem = ({ repo }) => {
       <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
       <td>{renderRepoName(repo)}</td>
       <td>{Utils.bytesToSize(repo.size)}</td>
-      <td>{moment(repo.last_modified).fromNow()}</td>
+      <td>{dayjs(repo.last_modified).fromNow()}</td>
       <td data-id={repo.id} data-name={repo.name}></td>
     </tr>
   );

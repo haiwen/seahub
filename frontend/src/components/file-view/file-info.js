@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { isPro, gettext, mediaUrl, siteRoot } from '../../utils/constants';
 import InternalLinkOperation from '../operations/internal-link-operation';
 
@@ -54,7 +54,7 @@ class FileInfo extends React.PureComponent {
         {!isOnlyofficeFile && (
           <div className="meta-info">
             <a href={`${siteRoot}profile/${encodeURIComponent(latestContributor)}/`}>{latestContributorName}</a>
-            <span className="ml-2">{moment(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
+            <span className="ml-2">{dayjs(lastModificationTime * 1000).format('YYYY-MM-DD HH:mm')}</span>
           </div>
         )}
       </div>

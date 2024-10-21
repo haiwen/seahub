@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
@@ -29,7 +29,7 @@ class StatisticUsers extends React.Component {
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
-          labels.push(moment(item.datetime).format('YYYY-MM-DD'));
+          labels.push(dayjs(item.datetime).format('YYYY-MM-DD'));
           count.push(item.count);
         });
         let userCount = {

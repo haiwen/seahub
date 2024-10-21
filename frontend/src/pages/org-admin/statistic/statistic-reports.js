@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import MainPanelTopbar from '../main-panel-topbar';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import StatisticNav from './statistic-nav';
 import { Button, Input } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../../utils/constants';
@@ -10,7 +10,7 @@ class OrgStatisticReports extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      month: moment().format('YYYYMM'),
+      month: dayjs().format('YYYYMM'),
       errorMessage: ''
     };
   }
@@ -69,7 +69,7 @@ class OrgStatisticReports extends React.Component {
               <div className="statistic-reports-title">{gettext('Monthly User Traffic')}</div>
               <div className="d-flex align-items-center mt-4">
                 <span className="statistic-reports-tip">{gettext('Month:')}</span>
-                <Input className="statistic-reports-input" defaultValue={moment().format('YYYYMM')} onChange={this.handleChange} />
+                <Input className="statistic-reports-input" defaultValue={dayjs().format('YYYYMM')} onChange={this.handleChange} />
                 <Button className="statistic-reports-submit operation-item" onClick={this.onGenerateReports.bind(this, 'month')}>{gettext('Create Report')}</Button>
               </div>
               {errorMessage && <div className="error">{errorMessage}</div>}
