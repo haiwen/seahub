@@ -56,4 +56,7 @@ export const EVENT_BUS_TYPE = {
 
   // face recognition
   TOGGLE_VIEW_TOOLBAR: 'toggle_view_toolbar',
+
+  // kanban
+  TOGGLE_KANBAN_SETTING: 'toggle_kanban_setting',
 };

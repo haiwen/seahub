@@ -8,6 +8,7 @@ export const VIEW_TYPE = {
   TABLE: 'table',
   GALLERY: 'gallery',
   FACE_RECOGNITION: 'face_recognition',
+  KANBAN: 'kanban',
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
@@ -16,6 +17,7 @@ export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.TABLE]: 'table',
   [VIEW_TYPE.GALLERY]: 'image',
   [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition-view',
+  [VIEW_TYPE.KANBAN]: 'kanban',
   'image': 'image'
 };
 
@@ -39,11 +41,13 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
     }
   ],
   [VIEW_TYPE.FACE_RECOGNITION]: [],
+  [VIEW_TYPE.KANBAN]: [],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {
   [VIEW_TYPE.TABLE]: [],
   [VIEW_TYPE.GALLERY]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
+  [VIEW_TYPE.KANBAN]: [],
 };
 
 export const VIEW_SORT_COLUMN_RULES = {
@@ -54,4 +58,5 @@ export const VIEW_SORT_COLUMN_RULES = {
 export const VIEW_FIRST_SORT_COLUMN_RULES = {
   [VIEW_TYPE.TABLE]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
+  [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
 };

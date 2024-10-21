@@ -6,6 +6,7 @@ import FaceRecognition from '../views/face-recognition';
 import { useMetadataView } from '../hooks/metadata-view';
 import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
+import Kanban from '../views/kanban';
 
 const View = () => {
   const { isLoading, metadata, errorMsg } = useMetadataView();
@@ -22,6 +23,9 @@ const View = () => {
       }
       case VIEW_TYPE.FACE_RECOGNITION: {
         return (<FaceRecognition />);
+      }
+      case VIEW_TYPE.KANBAN: {
+        return <Kanban />;
       }
       default:
         return null;
