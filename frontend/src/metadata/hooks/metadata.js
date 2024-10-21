@@ -4,6 +4,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { FACE_RECOGNITION_VIEW_ID } from '../constants';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
@@ -82,8 +83,8 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
             viewsMap.current[view._id] = view;
           });
         }
-        viewsMap.current['_face_recognition'] = {
-          _id: '_face_recognition',
+        viewsMap.current[FACE_RECOGNITION_VIEW_ID] = {
+          _id: FACE_RECOGNITION_VIEW_ID,
           name: gettext('Photos - classfied by people'),
           type: PRIVATE_FILE_TYPE.FACE_RECOGNITION,
         };
@@ -119,7 +120,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       setStaticView([]);
       return;
     }
-    setStaticView([{ _id: '_face_recognition', type: 'view' }]);
+    setStaticView([{ _id: FACE_RECOGNITION_VIEW_ID, type: 'view' }]);
   }, [enableFaceRecognition]);
 
   const selectView = useCallback((view, isSelected) => {
