@@ -523,7 +523,9 @@ class FilterItem extends React.Component {
     }
     return (
       <div className="ml-2">
-        <IconBtn ref={this.invalidFilterTip} iconName="exclamation-triangle" />
+        <div ref={this.invalidFilterTip}>
+          <IconBtn iconName="exclamation-triangle" />
+        </div>
         <UncontrolledTooltip
           target={this.invalidFilterTip}
           placement='bottom'
