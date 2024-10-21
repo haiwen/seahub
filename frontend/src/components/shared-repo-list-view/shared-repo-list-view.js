@@ -179,7 +179,7 @@ class SharedRepoListView extends React.Component {
         <ContextMenu
           id={`${libraryType === 'public' ? 'shared-repo-item-menu' : `shared-repo-item-menu-${currentGroup.id}`}`}
           onMenuItemClick={this.onMenuItemClick}
-        />;
+        />
       </>
     );
   };
