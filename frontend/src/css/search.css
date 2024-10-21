@@ -385,3 +385,18 @@
   font-weight: normal;
   margin: 7px 0 10px;
 }
+
+.search-result-container .more-search-result {
+  margin-top: -4px;
+  height: 40px;
+}
+
+.search-result-container .more-search-result-icon {
+  width: 1rem;
+  color: #ec8000;
+  margin: 0 10px;
+}
+
+.search-result-container .more-search-result-text {
+  font-size: .875rem;
+}
