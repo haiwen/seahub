@@ -36,6 +36,8 @@ logger = logging.getLogger(__name__)
 SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
 SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', {})
 CACHE_KEY_GROUPS = "all_groups_cache"
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
 
 
 class Saml2Backend(ModelBackend):
@@ -58,6 +60,8 @@ class Saml2Backend(ModelBackend):
         name_id = name_id.text
 
         saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
+        if not saml_user and SSO_LDAP_USE_SAME_UID:
+            saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
         if saml_user:
             user = self.get_user(saml_user.username)
             if not user:

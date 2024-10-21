@@ -13,6 +13,7 @@ import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import Icon from '../icon';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -23,7 +24,7 @@ const propTypes = {
   isViewFile: PropTypes.bool,
 };
 
-const PER_PAGE = 10;
+const PER_PAGE = 20;
 const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
 
 const isEnter = isHotkey('enter');
@@ -478,20 +479,6 @@ class Search extends Component {
     });
   };
 
-  onResultListScroll = (e) => {
-    // Load less than 100 results
-    if (!this.state.hasMore || this.state.isLoading || this.state.resultItems.length > 100) {
-      return;
-    }
-    const listPadding = 20;
-    if (e.target.scrollTop + e.target.clientHeight + listPadding > this.searchResultListRef.current.clientHeight - 10) {
-      this.setState({isLoading: true}, () => {
-        this.source = seafileAPI.getSource();
-        this.sendRequest(this.queryData, this.source.token, this.state.page);
-      });
-    }
-  };
-
   updateSearchPageURL(queryData) {
     let params = '';
     for (let key in queryData) {
@@ -683,7 +670,8 @@ class Search extends Component {
   };
 
   renderResults = (resultItems, isVisited) => {
-    const { highlightIndex } = this.state;
+    const { highlightIndex, hasMore, searchPageUrl } = this.state;
+
     const results = (
       <>
       {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
@@ -701,6 +689,12 @@ class Search extends Component {
           );
         })}
       </ul>
+      {(!this.props.isPublic && hasMore) &&
+        <div className="more-search-result mb-1 pl-2 d-flex align-items-center">
+          <Icon symbol="more-level" className="more-search-result-icon" />
+          <a href={searchPageUrl} className="more-search-result-text ml-1">{gettext('More')}</a>
+        </div>
+      }
       </>
     );
 
@@ -754,7 +748,6 @@ class Search extends Component {
               </div>
               <div
                 className="search-result-container dropdown-search-result-container"
-                onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
                 {this.renderSearchResult()}
@@ -787,7 +780,7 @@ class Search extends Component {
                     <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
                 </div>
-                <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
+                <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}
                 </div>
               </div>

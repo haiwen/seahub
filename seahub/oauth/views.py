@@ -20,6 +20,9 @@ import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
 
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
+
 try:
     current_path = os.path.dirname(os.path.abspath(__file__))
     seafile_conf_dir = os.path.join(current_path, '../../../../conf')
@@ -176,6 +179,8 @@ def oauth_callback(request):
     old_email = oauth_user_info.get('email', '')
 
     oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
+    if not oauth_user and SSO_LDAP_USE_SAME_UID:
+        oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
     if oauth_user:
         email = oauth_user.username
         is_new_user = False

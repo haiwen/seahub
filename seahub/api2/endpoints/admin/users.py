@@ -737,6 +737,9 @@ class AdminUsers(APIView):
                 users = all_ldap_users[start: start + per_page]
 
         data = []
+        email_list = [user.email for user in users]
+        social_auth_user_queryset = SocialAuthUser.objects.filter(username__in=email_list)
+
         for user in users:
             profile = Profile.objects.get_profile_by_user(user.email)
 
@@ -784,6 +787,9 @@ class AdminUsers(APIView):
                     info['institution'] = profile.institution
                 else:
                     info['institution'] = ''
+
+            social_auth_user = social_auth_user_queryset.filter(username=user.email)
+            info['social_auth'] = [{'provider': item.provider, 'uid': item.uid} for item in social_auth_user]
 
             data.append(info)
 
@@ -1429,7 +1435,7 @@ class AdminUser(APIView):
                 try:
                     send_html_email(_(u'Your account on %s is activated') % get_site_name(),
                                     'sysadmin/user_activation_email.html',
-                                    {'username': user_obj.email},
+                                    {'username': email2contact_email(user_obj.email)},
                                     None,
                                     [email2contact_email(user_obj.email)])
                     update_status_tip = _('Edit succeeded, an email has been sent.')
