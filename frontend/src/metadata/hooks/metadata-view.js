@@ -100,7 +100,9 @@ export const MetadataViewProvider = ({
     const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
 
     return () => {
-      window.sfMetadataContext.destroy();
+      if (window.sfMetadataContext) {
+        window.sfMetadataContext.destroy();
+      }
       window.sfMetadataStore.destroy();
       unsubscribeServerTableChanged();
       unsubscribeTableChanged();

@@ -27,8 +27,10 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
     });
 
     return () => {
-      window.sfMetadataContext.destroy();
-      delete window['sfMetadataContext'];
+      if (window.sfMetadataContext) {
+        window.sfMetadataContext.destroy();
+        delete window['sfMetadataContext'];
+      }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
