@@ -46,11 +46,9 @@ class ReposSortMenu extends React.Component {
         <DropdownMenu right={true} className="mt-1">
           {sortOptions.map((item, index) => {
             return (
-              <DropdownItem key={index} onClick={this.props.onSelectSortOption.bind(this, item)}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span className="mr-8">{item.text}</span>
-                  <span>{item.isSelected && <i className="sf2-icon-tick"></i>}</span>
-                </div>
+              <DropdownItem key={index} onClick={this.props.onSelectSortOption.bind(this, item)} className="pl-5 position-relative">
+                {item.isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                {item.text}
               </DropdownItem>
             );
           })}
