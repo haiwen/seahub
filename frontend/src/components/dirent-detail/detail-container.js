@@ -17,8 +17,10 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
     window.sfMetadataContext = context;
     window.sfMetadataContext.init({ repoID, repoInfo: currentRepoInfo });
     return () => {
-      window.sfMetadataContext.destroy();
-      delete window['sfMetadataContext'];
+      if (window.sfMetadataContext) {
+        window.sfMetadataContext.destroy();
+        delete window['sfMetadataContext'];
+      }
     };
   }, [repoID, currentRepoInfo, path]);
 
