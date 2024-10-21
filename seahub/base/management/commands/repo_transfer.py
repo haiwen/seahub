@@ -97,8 +97,11 @@ class Command(BaseCommand):
             seafile_db_api.set_repo_owner(repo_id, new_owner, org_id)
             
         # 3. update the share relations
-        seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
-        seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
+        try:
+            seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
+            seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
 
-        UploadLinkShare.objects.filter(repo_id=repo_id).update(username=new_owner)
-        FileShare.objects.filter(repo_id=repo_id).update(username=new_owner)
+            UploadLinkShare.objects.filter(repo_id=repo_id).update(username=new_owner)
+            FileShare.objects.filter(repo_id=repo_id).update(username=new_owner)
+        except Exception as error_msg:
+            self._pring_msg(error_msg, 'error')
