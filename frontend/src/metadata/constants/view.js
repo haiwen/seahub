@@ -9,6 +9,8 @@ export const VIEW_TYPE = {
   GALLERY: 'gallery',
 };
 
+export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
+
 export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.TABLE]: 'table',
   [VIEW_TYPE.GALLERY]: 'image',
