@@ -94,21 +94,33 @@ class App extends Component {
     // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
     this.navigateClientUrlToLib();
 
-    let currentTab;
+    this.initCurrentTabByLocation();
+  }
+
+  initCurrentTabByLocation = () => {
     // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
     if (location.pathname == siteRoot) {
-      currentTab = 'libraries';
+      this.setState({ currentTab: 'libraries' });
+      return;
+    }
+
+    // get path part start with siteRoot. e.g. '/' or '/xxx/'
+    let pathPart = window.location.pathname.split(siteRoot)[1];
+    pathPart = pathPart && pathPart.split('/')[0];
+
+    let currentTab = '';
+    if (pathPart) {
+      currentTab = pathPart;
+    }
+
     // when visit a 'dir view' page(http://127.0.0.1:8000/library/1137c0c3-5a5d-4da1-8fd0-69e227a9a23e/My%20Library/) directly via URL,
     // emulate visiting it from 'Files' page(get the `currentTab` & `pathPrefix`)
-    } else if (location.pathname.split('/')[1] == 'library') {
-      this.tabItemClick('libraries');
-      return;
-    } else {
-      let href = window.location.href.split('/');
-      currentTab = href[href.length - 2];
+    if (currentTab === 'library') {
+      currentTab = 'libraries';
     }
-    this.setState({ currentTab: currentTab });
-  }
+
+    this.setState({ currentTab });
+  };
 
   resetTitle = () => {
     const favicon = document.getElementById('favicon');
