@@ -1288,7 +1288,7 @@ class WikiSearch(APIView):
 
     def post(self, request):
         query = request.data.get('query')
-        search_wiki = request.data.get('search_wiki', 'all')
+        search_wiki = request.data.get('search_wiki')
 
         try:
             count = int(request.data.get('count'))
@@ -1298,25 +1298,13 @@ class WikiSearch(APIView):
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki search query invalid')
 
-        if not is_valid_repo_id_format(search_wiki) and search_wiki != 'all':
+        if not is_valid_repo_id_format(search_wiki):
             error_msg = 'search_wiki invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if search_wiki == 'all':
-            org_id = request.user.org.org_id if is_org_context(request) else None
-
-            username = request.user.username
-            key = normalize_cache_key(username, RELATED_WIKIS_PREFIX)
-
-            wikis = cache.get(key, [])
-            if not wikis:
-                wikis = get_search_wiki_ids(username, org_id)[:SEARCH_WIKIS_LIMIT]
-                cache.set(key, wikis, RELATED_WIKIS_CACHE_TIMEOUT)
-        else:
-            wikis = search_wiki
         params = {
             'query': query,
-            'wikis': wikis,
+            'wiki': search_wiki,
             'count': count,
         }
 
