@@ -133,13 +133,12 @@ class GroupView extends React.Component {
           <EmptyTip
             title={gettext('No libraries shared with this group')}
             text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}
-            className="m-0 pt-0 pb-8"
           />
         );
       } else {
         if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
           return (
-            <EmptyTip title={gettext('No libraries')} className="m-0 pt-0 pb-8" />
+            <EmptyTip title={gettext('No libraries')} />
           );
         } else {
           return (
