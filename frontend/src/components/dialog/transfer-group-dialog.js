@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import UserSelect from '../user-select';
 import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 import '../../css/transfer-group-dialog.css';
 
@@ -34,10 +35,15 @@ class TransferGroupDialog extends React.Component {
   };
 
   transferGroup = () => {
-    const email = this.state.selectedOption && this.state.selectedOption.email;
+    let selectedOption = this.state.selectedOption;
+    let email;
+    if (selectedOption && selectedOption[0]) {
+      email = selectedOption[0].email;
+    }
     if (email) {
       seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
         this.props.toggleTransferGroupDialog();
+        toaster.success(gettext('Group has been transfered'));
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         this.setState({ errMessage: errMessage });

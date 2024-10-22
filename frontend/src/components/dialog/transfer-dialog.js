@@ -49,8 +49,11 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    let user = this.state.selectedOption;
-    this.props.submit(user);
+    let selectedOption = this.state.selectedOption;
+    if (selectedOption && selectedOption[0]) {
+      let user = selectedOption[0];
+      this.props.submit(user);
+    }
   };
 
   componentDidMount() {
