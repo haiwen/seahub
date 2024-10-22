@@ -27,7 +27,7 @@ from seahub.base.accounts import User
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.organizations.views import org_user_exists
 from seahub.signals import repo_created
-from seahub.group.utils import is_group_admin
+from seahub.group.utils import is_group_admin, is_group_member
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
         send_perm_audit_msg, is_valid_org_id, is_valid_email
@@ -1417,7 +1417,6 @@ class GroupOwnedLibraryTransferView(APIView):
     permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
-    @api_check_group
     @add_org_context
     def put(self, request, group_id, repo_id, org_id):
         """ Transfer a library.
@@ -1434,7 +1433,27 @@ class GroupOwnedLibraryTransferView(APIView):
         if '@seafile_group' not in new_owner:
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            group = ccnet_api.get_group(int(group_id))
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not group:
+            error_msg = 'Group %d not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        if group.creator_name != 'system admin':
+            error_msg = 'Group %d invalid' % group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        username = request.user.username
+        if not is_group_member(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            
         if org_id:
             org_id = int(org_id)
             if not ccnet_api.get_org_by_id(org_id):
@@ -1447,7 +1466,7 @@ class GroupOwnedLibraryTransferView(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
         cur_group_id = int(group_id)
-        username = request.user.username
+        
         if not is_group_admin(cur_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)        
