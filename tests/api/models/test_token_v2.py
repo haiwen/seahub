@@ -1,5 +1,6 @@
 from seahub.test_utils import BaseTestCase
-from seahub.api2.models import TokenV2, TokenV2Manager
+from seahub.api2.models import TokenV2
+
 
 class TokenV2ManagerTest(BaseTestCase):
     def setUp(self):
@@ -37,7 +38,7 @@ class TokenV2ManagerTest(BaseTestCase):
             self.admin.username, self.token.platform, self.token.device_id,
             self.token.device_name, '1.1.1', '0.1.1', self.ip_v6)
         assert len(TokenV2.objects.all()) == 2
-        assert TokenV2.objects.all()[1].user == self.admin.username
+        assert self.admin.username in [item.user for item in TokenV2.objects.all()]
 
     def test_delete_device_token(self):
         TokenV2.objects.delete_device_token(
