@@ -1417,6 +1417,7 @@ class GroupOwnedLibraryTransferView(APIView):
     permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
+    @api_check_group
     @add_org_context
     def put(self, request, group_id, repo_id, org_id):
         """ Transfer a library.
@@ -1434,23 +1435,28 @@ class GroupOwnedLibraryTransferView(APIView):
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        new_group_id = int(new_owner.split('@')[0])
+        if new_group_id == int(group_id):
+            error_msg = 'Cannot transfer to its owner'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         try:
-            group = ccnet_api.get_group(int(group_id))
+            new_group = ccnet_api.get_group(new_group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if not group:
+        if not new_group:
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        if group.creator_name != 'system admin':
+        if new_group.creator_name != 'system admin':
             error_msg = 'Group %d invalid' % group_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         username = request.user.username
-        if not is_group_member(int(new_owner.split('@')[0]), username):
+        if not is_group_member(new_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             
