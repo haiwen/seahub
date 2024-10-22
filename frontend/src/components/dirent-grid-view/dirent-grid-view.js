@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -355,7 +355,15 @@ class DirentGridView extends React.Component {
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
 
-    const src = `${siteRoot}repo/${repoID}/raw${path}`;
+    const useThumbnail = !this.props.currentRepoInfo.encrypted;
+    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+    const isGIF = fileExt == 'gif';
+    let src = '';
+    if (useThumbnail && !isGIF) {
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+    } else {
+      src = `${siteRoot}repo/${repoID}/raw${path}`;
+    }
 
     return {
       'name': name,
