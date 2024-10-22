@@ -26,6 +26,7 @@ const propTypes = {
   onMonitorRepo: PropTypes.func,
   theadHidden: PropTypes.bool,
   inAllLibs: PropTypes.bool,
+  onTransferRepo: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
