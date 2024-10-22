@@ -245,14 +245,8 @@ class SharedRepoListItem extends React.Component {
   onTransferRepo = (user) => {
     let repoID = this.props.repo.repo_id;
     let groupID = this.props.currentGroup.id;
-    let email = null;
-    if (Array.isArray(user)) {
-      email = user[0].email;
-    } else {
-      email = user.email;
-    }
-    userAPI.depAdminTransferRepo(repoID, groupID, email).then(res => {
-      this.props.onTransferRepo(repoID, groupID, email);
+    userAPI.depAdminTransferRepo(repoID, groupID, user.email).then(res => {
+      this.props.onTransferRepo(repoID, groupID, user.email);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
     }).catch(error => {

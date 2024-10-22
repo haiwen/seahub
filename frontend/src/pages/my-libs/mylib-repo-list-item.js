@@ -269,13 +269,7 @@ class MylibRepoListItem extends React.Component {
 
   onTransferRepo = (user) => {
     let repoID = this.props.repo.repo_id;
-    let email = null;
-    if (Array.isArray(user)) {
-      email = user[0].email;
-    } else {
-      email = user.email;
-    }
-    seafileAPI.transferRepo(repoID, email).then(res => {
+    seafileAPI.transferRepo(repoID, user.email).then(res => {
       this.props.onTransferRepo(repoID);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
