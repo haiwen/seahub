@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from '@uiw/react-codemirror';
-import { EditorView } from '@codemirror/view';
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { Utils } from '../../utils/utils';
-
-import './style.css';
+import { getLanguageExtensions } from './languages';
+import { myTheme } from './theme';
 
 const DEFAULT_CODEMIRROR_OPTIONS = {
   lineNumbers: true,
@@ -31,41 +28,21 @@ class SeafileCodeMirror extends React.Component {
     this.options = null;
   }
 
-  getOptions = () => {
-    if (this.options) return this.options;
-
-    const { fileExt, readOnly } = this.props;
-    const mode = Utils.chooseLanguage(fileExt);
-    const extensions = loadLanguage(mode);
-    if (extensions) {
-      return {
-        theme: 'light',
-        readOnly: readOnly,
-        extensions: extensions,
-      };
-    }
-    return {
-      theme: 'light',
-      readOnly: readOnly,
-    };
-  };
-
   onChange = (value) => {
     this.props.onChange && this.props.onChange(value);
   };
 
   render() {
-    const { value } = this.props;
-    const options = this.getOptions();
+    const { value, readOnly, fileExt } = this.props;
     return (
       <div className='seafile-code-mirror-container'>
         <CodeMirror
-          ref="code-mirror-editor"
           value={value}
-          {...options}
-          onChange={this.onChange}
           basicSetup={DEFAULT_CODEMIRROR_OPTIONS}
-          extensions={[EditorView.lineWrapping]}
+          theme={myTheme}
+          readOnly={readOnly}
+          extensions={[...getLanguageExtensions(fileExt)]}
+          onChange={this.onChange}
         />
       </div>
     );
