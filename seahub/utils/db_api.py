@@ -374,13 +374,15 @@ class SeafileDB:
     
     def set_repo_owner(self, repo_id, new_owner, org_id=None):
         # transfert repo to user
+        repo_ids = self.get_repo_ids_in_repo(repo_id)
+        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id="{repo_id}"
+            UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id IN ({repo_ids_str})
             """
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id="{repo_id}"
+            UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
             """
         with connection.cursor() as cursor:
             cursor.execute(sql)
@@ -430,3 +432,11 @@ class SeafileDB:
             """
         with connection.cursor() as cursor:
             cursor.execute(sql)
+            
+    def delete_repo_user_token(self, repo_id, owner):
+        sql = f"""
+        DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+        

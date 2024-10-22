@@ -100,6 +100,7 @@ class Command(BaseCommand):
         try:
             seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
             seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
+            seafile_db_api.delete_repo_user_token(repo_id, repo_owner)
 
             UploadLinkShare.objects.filter(repo_id=repo_id).update(username=new_owner)
             FileShare.objects.filter(repo_id=repo_id).update(username=new_owner)
