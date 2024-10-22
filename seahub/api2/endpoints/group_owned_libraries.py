@@ -41,6 +41,8 @@ from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_use
         check_user_share_out_permission, update_group_dir_permission, \
         check_group_share_out_permission, check_user_share_in_permission, \
         normalize_custom_permission_name
+from seahub.share.models import FileShare, UploadLinkShare
+
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
 from seahub.views import check_folder_permission
@@ -1409,7 +1411,7 @@ class GroupOwnedLibraryUserShareInLibrary(APIView):
         return Response({'success': True})
 
 
-class GroupOwnedLibraryTransferLibrary(APIView):
+class GroupOwnedLibraryTransferView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsProVersion)
@@ -1523,6 +1525,15 @@ class GroupOwnedLibraryTransferLibrary(APIView):
             else:
                 seafile_api.set_group_repo(repo_id, shared_group_id,
                                            new_owner, shared_group.perm)
+
+        # reshare repo to links
+        try:
+            UploadLinkShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+            FileShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # check if current repo is pub-repo
         # if YES, reshare current repo to public
