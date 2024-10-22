@@ -1450,7 +1450,7 @@ class GroupOwnedLibraryTransferView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         username = request.user.username
-        if not is_group_member(group_id, username):
+        if not is_group_member(int(new_owner.split('@')[0]), username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             
