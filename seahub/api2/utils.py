@@ -313,24 +313,6 @@ def get_search_repos(username, org_id):
 
     return repos
 
-def get_search_wiki_ids(username, org_id):
-    owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
-    repo_list = owned_repos + shared_repos + group_repos
-
-    wiki_id_set = set()
-    for repo in repo_list:
-        if not is_wiki_repo(repo):
-            continue
-        repo_id = repo.id
-        if repo.origin_repo_id:
-            repo_id = repo.origin_repo_id
-
-        if repo_id in wiki_id_set:
-            continue
-        wiki_id_set.add(repo_id)
-
-    return list(wiki_id_set)
-
 def send_share_link_emails(emails, fs, shared_from):
     subject = _("A share link for you")
     for email in emails:
