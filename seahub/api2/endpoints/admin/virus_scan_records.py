@@ -84,6 +84,7 @@ class AdminVirusFilesView(APIView):
                 record["has_deleted"] = virus_file.has_deleted
                 record["has_ignored"] = virus_file.has_ignored
                 record["virus_id"] = virus_file.vid
+                record['timestamp'] = virus_file.timestamp
                 virus_file_list.append(record)
 
         return Response({"virus_file_list": virus_file_list, "has_next_page": has_next_page}, status=status.HTTP_200_OK)
