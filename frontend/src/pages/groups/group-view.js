@@ -201,6 +201,14 @@ class GroupView extends React.Component {
     this.loadGroup(this.props.groupID);
   };
 
+  onItemTransfer = (repoId, groupID, owner) => {
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repoId;
+    });
+    this.setState({ repoList: repoList });
+    this.loadGroup(this.props.groupID);
+  };
+
   addRepoItem = (repo) => {
     let newRepoList = this.state.repoList.map(item => {return item;});
     newRepoList.unshift(repo);
@@ -445,6 +453,7 @@ class GroupView extends React.Component {
                   onItemDelete={this.onItemDelete}
                   onItemRename={this.onItemRename}
                   onMonitorRepo={this.onMonitorRepo}
+                  onTransferRepo={this.onItemTransfer}
                 />
               }
             </div>

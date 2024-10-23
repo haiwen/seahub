@@ -26,6 +26,7 @@ const propTypes = {
   onMonitorRepo: PropTypes.func,
   theadHidden: PropTypes.bool,
   inAllLibs: PropTypes.bool,
+  onTransferRepo: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
@@ -131,6 +132,7 @@ class SharedRepoListView extends React.Component {
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
+              onTransferRepo={this.props.onTransferRepo}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}
