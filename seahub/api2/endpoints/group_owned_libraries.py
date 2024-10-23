@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.utils.translation import gettext as _
 
-from seaserv import seafile_api, ccnet_api, seafserv_threaded_rpc
+from seaserv import seafile_api, ccnet_api
 
 from constance import config
 
@@ -1532,8 +1532,8 @@ class GroupOwnedLibraryTransferView(APIView):
             if new_owner == shared_username:
                 continue
             if org_id:
-                seafserv_threaded_rpc.org_add_share(org_id, repo_id,
-                                                            new_owner, shared_username, shared_user.perm)
+                seafile_api.org_share_repo(org_id, repo_id,
+                                                    new_owner, shared_username, shared_user.perm)
             else:
                 seafile_api.share_repo(repo_id, new_owner,
                                        shared_username, shared_user.perm)
@@ -1570,7 +1570,7 @@ class GroupOwnedLibraryTransferView(APIView):
                 seafile_api.set_org_inner_pub_repo(org_id, repo_id,
                         pub_repo.permission)
             else:
-                seafserv_threaded_rpc.set_inner_pub_repo(
+                seafile_api.add_inner_pub_repo(
                         repo_id, pub_repo.permission)
 
             break
