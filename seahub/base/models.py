@@ -349,3 +349,4 @@ class RepoSecretKey(models.Model):
     secret_key = models.CharField(max_length=44)
 
     objects = RepoSecretKeyManager()
+  

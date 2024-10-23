@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
+from seahub.pingan.internal_api import InternalUploadLinkLogs
 from seahub.pingan.share_link_auth import ShareLinkUserAuthView
 from seahub.views import *
 from seahub.views.sysadmin import *
@@ -14,7 +15,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
-    view_shared_upload_link, view_lib_as_wiki
+    view_shared_upload_link, view_lib_as_wiki, view_external_shared_upload_link
 
 from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
         dingtalk_connect, dingtalk_connect_callback, dingtalk_disconnect
@@ -201,6 +202,7 @@ urlpatterns = [
     url(r'^api/pingan/pacas-refresh-valid-code/', api_pingan_pacas_refresh_valid_code, name='api_pingan_pacas_refresh_valid_code'),
     url(r'^api/pingan/pacas-valid-login-account/', api_pingan_pacas_valid_login_account, name='api_pingan_pacas_valid_login_account'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/user-auth/$', ShareLinkUserAuthView.as_view(), name='api-v2.1-share-link-user-auth'),
+    url(r'^api/v2.1/internal/ex-upload-link/logs/$', InternalUploadLinkLogs.as_view(), name='api-v2.1-ex-upload-links-log'),
 
 
 
@@ -248,6 +250,7 @@ urlpatterns = [
     url(r'^d/(?P<token>[a-f0-9]+)/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     url(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
+    url(r'^u/sharefile/(?P<token>[a-f0-9]+)/$', view_external_shared_upload_link, name='view_external_shared_upload_link_ex'),
     url(r'^view-image-via-share-link/$', view_media_file_via_share_link, name='view_media_file_via_share_link'),
 
 
@@ -277,10 +280,13 @@ urlpatterns = [
     url(r'^shared-libs/$', react_fake_view, name="shared_libs"),
     url(r'^shared-with-ocm/$', react_fake_view, name="shared_with_ocm"),
     url(r'^my-libs/$', react_fake_view, name="my_libs"),
+    url(r'^ex-libs/$', react_fake_view, name="ex_libs"),
     url(r'^groups/$', react_fake_view, name="groups"),
     url(r'^group/(?P<group_id>\d+)/$', react_fake_view, name="group"),
     url(r'^library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
+    url(r'^ex-library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
     url(r'^library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="lib_view"),
+    url(r'^ex-library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="ex_lib_view"),
     url(r'^remote-library/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="remote_lib_view"),
     url(r'^my-libs/deleted/$', react_fake_view, name="my_libs_deleted"),
     url(r'^org/$', react_fake_view, name="org"),

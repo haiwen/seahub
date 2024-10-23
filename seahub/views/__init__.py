@@ -33,7 +33,7 @@ from seahub.base.accounts import User
 from seahub.base.decorators import require_POST
 from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, ExUser
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.revision_tag.models import RevisionTags
 from seahub.utils import render_permission_error, render_error, \
@@ -1120,8 +1120,8 @@ def choose_register(request):
 def react_fake_view(request, **kwargs):
 
     username = request.user.username
-
-    if resolve(request.path).url_name == 'lib_view':
+    url_name = resolve(request.path).url_name
+    if url_name in ['lib_view', 'ex_lib_view']:
 
         repo_id = kwargs.get('repo_id', '')
         path = kwargs.get('path', '')
@@ -1152,7 +1152,7 @@ def react_fake_view(request, **kwargs):
                 error_msg = 'Permission denied.'
                 return render_error(request, error_msg)
 
-            next_url = reverse('lib_view', args=[converted_repo_id,
+            next_url = reverse(url_name, args=[converted_repo_id,
                                                  converted_repo.repo_name,
                                                  converted_path.strip('/')])
             return HttpResponseRedirect(next_url)
@@ -1175,6 +1175,11 @@ def react_fake_view(request, **kwargs):
 
     user_role = get_user_role(request.user)
     is_guest = user_role == 'guest'
+    
+    can_use_ex_repos = False
+    if ExUser.objects.filter(email=username).exists():
+        can_use_ex_repos = True # 后面需要判断
+    
 
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
@@ -1213,5 +1218,6 @@ def react_fake_view(request, **kwargs):
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
-        'is_guest': is_guest
+        'is_guest': is_guest,
+        'can_use_ex_repos': can_use_ex_repos
     })

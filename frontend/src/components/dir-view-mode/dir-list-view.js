@@ -40,6 +40,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   loadDirentList: PropTypes.func.isRequired,
+  isExternal: PropTypes.bool,
 };
 
 class DirListView extends React.Component {
@@ -101,6 +102,7 @@ class DirListView extends React.Component {
           onFileTagChanged={this.props.onFileTagChanged}
           showDirentDetail={this.props.showDirentDetail}
           loadDirentList={this.props.loadDirentList}
+          isExternal={this.props.isExternal}
         />
       </Fragment>
     );

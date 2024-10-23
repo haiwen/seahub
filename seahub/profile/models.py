@@ -214,6 +214,13 @@ class DetailedProfile(models.Model):
     department = models.CharField(max_length=512)
     telephone = models.CharField(max_length=100)
     objects = DetailedProfileManager()
+    
+
+class ExUser(models.Model):
+    email = models.CharField(unique=True, max_length=255, db_index=True)
+    
+    class Meta:
+        db_table = 'ex_repo_user'
 
 
 ########## signal handlers

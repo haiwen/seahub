@@ -97,10 +97,39 @@ class CustomAPI {
         return this.req.put(url, form);
     }
 
+    listExRepos() {
+        let url = this.server + '/api/v2.1/repos/?type=external';
+        return this.req.get(url);
+    }
+
+    createRepo(repo, is_external=false) {
+        let url = this.server + '/api2/repos/?from=web';
+        if (is_external) {
+            url = url + '&is_external=true'
+        }
+        return this.req.post(url, repo);
+    }
+
+    sendUploadLink(token, email, extraMsg, isExternal) {
+        let url;
+        if (isExternal) {
+            url = this.server + '/api2/send-ex-upload-link/'
+        } else {
+            url = this.server + '/api2/send-upload-link/';
+        }
+
+        let form = new FormData();
+        form.append('token', token);
+        form.append('email', email);
+        if (extraMsg) {
+          form.append('extra_msg', extraMsg);
+        }
+        return this._sendPostRequest(url, form);
+  }
 
 }
 
 let customAPI = new CustomAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
 customAPI.initForSeahubUsage({siteRoot, xcsrfHeaders});
-export {customAPI};
+export { customAPI };

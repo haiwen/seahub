@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Badge } from 'reactstrap';
-import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM, enableOCMViaWebdav } from '../utils/constants';
+import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM, enableOCMViaWebdav, canUseExRepos } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -232,6 +232,14 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
+            {canUseExRepos && (
+              <li className="nav-item">
+                <Link to={ siteRoot + 'ex-libs/' } className={`nav-link ellipsis ${this.getActiveClass('ex-libs') || this.getActiveClass('deleted') }`} title={'外部资料库'} onClick={(e) => this.tabItemClick(e, 'ex-libs')}>
+                  <span className="sf2-icon-user" aria-hidden="true"></span>
+                  <span className="nav-text">{'外部资料库'}</span>
+                </Link>
+              </li>
+            )}
           </ul>
 
 

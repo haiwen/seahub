@@ -53,6 +53,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
+  isExternal: PropTypes.bool,
 };
 
 class DirentListItem extends React.Component {
@@ -1125,6 +1126,7 @@ class DirentListItem extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
+              isExternal={this.props.isExternal}
             />
           </ModalPortal>
         }

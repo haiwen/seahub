@@ -35,6 +35,7 @@ from django.views.static import serve as django_static_serve
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
+from seahub.pingan.settings import PINGAN_DMZ_DOMAIN
 from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
 try:
@@ -928,6 +929,7 @@ def get_service_url():
     """
     return config.SERVICE_URL
 
+
 def get_server_id():
     """Get server id from seaserv.
     """
@@ -979,6 +981,27 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
     msg.send()
+    
+######################### Start PingAn Group related ########################
+from seahub.pingan.email_api import PAFileEmailApi
+def send_pafile_html_email_with_dj_template(recipients, subject, dj_template,
+                                            context={}, sender=None,
+                                            template=None, message=''):
+    base_context = {
+        'url_base': get_site_scheme_and_netloc(),
+        'site_name': get_site_name(),
+        'media_url': MEDIA_URL,
+        'logo_path': LOGO_PATH,
+    }
+    context.update(base_context)
+    t = loader.get_template(dj_template)
+    html_message = t.render(context)
+
+    email_api = PAFileEmailApi()
+    for r in recipients:
+        request_id = email_api.send_email(r, subject, html_message)
+        return request_id
+######################### End PingAn Group related ##########################
 
 def gen_dir_share_link(token):
     """Generate directory share link.
@@ -1000,7 +1023,15 @@ def gen_shared_link(token, s_type):
     else:
         return '%s/d/%s/' % (service_url, token)
 
-def gen_shared_upload_link(token):
+def gen_shared_upload_link(token, is_external=False):
+    if is_external:
+        service_url = get_service_url()
+        assert service_url is not None
+
+        service_url = PINGAN_DMZ_DOMAIN
+        service_url = service_url.rstrip('/')
+        return '%s/u/sharefile/%s/' % (service_url, token)
+        
     service_url = get_service_url()
     assert service_url is not None
 

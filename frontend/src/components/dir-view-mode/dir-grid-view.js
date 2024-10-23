@@ -81,6 +81,7 @@ class DirGridView extends React.Component {
           onItemRename={this.props.onItemRename}
           onAddFolder={this.props.onAddFolder}
           onFileTagChanged={this.props.onFileTagChanged}
+          isExternal={this.props.isExternal}
         />
       </Fragment>
     );

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
+import { siteRoot, gettext, appAvatarURL, canUseExRepos } from '../../utils/constants';
 import toaster from '../toast';
 
 const propTypes = {
@@ -19,9 +19,12 @@ class Account extends Component {
       contactEmail: '',
       quotaUsage: '',
       quotaTotal: '',
+      exQuotaUsage: '',
+      exQuotaTotal: '',
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
+      exUsageRate: '',
     };
     this.isFirstMounted = true;
   }
@@ -75,8 +78,11 @@ class Account extends Component {
           userName: resp.data.name,
           contactEmail: resp.data.email,
           usageRate: resp.data.space_usage,
+          exUsageRate: resp.data.external_space_usage,
           quotaUsage: Utils.bytesToSize(resp.data.usage),
           quotaTotal: Utils.bytesToSize(resp.data.total),
+          exQuotaUsage: Utils.bytesToSize(resp.data.external_usage),
+          exQuotaTotal: Utils.bytesToSize(resp.data.external_total),
           isStaff: resp.data.is_staff,
           isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
@@ -159,9 +165,15 @@ class Account extends Component {
             </div>
             <div id="space-traffic">
               <div className="item">
-                <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
+                <p>{'平安网盘: '}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
                 <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span></div>
               </div>
+              {canUseExRepos && 
+                <div className="item">
+                  <p>{'文件外传内: '}{' '}{this.state.exQuotaUsage} / {this.state.exQuotaTotal}</p>
+                  <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.exUsageRate}}></span></div>
+                </div>
+              }
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
             {this.renderMenu()}

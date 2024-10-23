@@ -66,6 +66,7 @@ const propTypes = {
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
+  isExternal: PropTypes.bool,
 };
 
 class DirColumnView extends React.Component {
@@ -188,6 +189,7 @@ class DirColumnView extends React.Component {
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}
+              isExternal={this.props.isExternal}
             />
           ) : (
             <DirListView
@@ -226,6 +228,7 @@ class DirColumnView extends React.Component {
               onItemsDelete={this.props.onItemsDelete}
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
+              isExternal={this.props.isExternal}
             />
           )}
         </div>

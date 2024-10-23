@@ -46,6 +46,7 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
+  isExternal: PropTypes.bool,
 };
 
 class DirentGridView extends React.Component{
@@ -428,7 +429,7 @@ class DirentGridView extends React.Component{
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, this.props.isExternal);
   }
 
   render() {
@@ -545,6 +546,7 @@ class DirentGridView extends React.Component{
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
+              isExternal={this.props.isExternal}
             />
           </ModalPortal>
         }

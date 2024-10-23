@@ -17,7 +17,7 @@ from registration import signals
 
 from seahub.auth import login
 from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
-from seahub.profile.models import Profile, DetailedProfile
+from seahub.profile.models import Profile, DetailedProfile, ExUser
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
@@ -151,10 +151,17 @@ class UserPermissions(object):
         return self._get_perm_by_roles('can_add_group')
 
     def can_generate_share_link(self):
-        return self._get_perm_by_roles('can_generate_share_link')
+        can_use_ex_repo = False
+        if ExUser.objects.filter(email=self.user.username).exists():
+            can_use_ex_repo = True
+        
+        return self._get_perm_by_roles('can_generate_share_link') or can_use_ex_repo
 
     def can_generate_upload_link(self):
-        return self._get_perm_by_roles('can_generate_upload_link')
+        can_use_ex_repo = False
+        if ExUser.objects.filter(email=self.user.username).exists():
+            can_use_ex_repo = True
+        return self._get_perm_by_roles('can_generate_upload_link') or can_use_ex_repo
 
     def can_use_global_address_book(self):
         return self._get_perm_by_roles('can_use_global_address_book')

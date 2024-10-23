@@ -58,16 +58,18 @@ class RepoViewToolbar extends React.Component {
               <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
               </button>
-              <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
-                <DropdownToggle className='btn btn-secondary operation-item' onKeyDown={this.onDropdownToggleKeyDown}>
-                  {gettext('More')}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem className="link-dropdown-container" onKeyDown={this.visitDeletedviaKey}>
-                    <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                {this.props.libraryType !== 'external' &&
+                  <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
+                    <DropdownToggle className='btn btn-secondary operation-item' onKeyDown={this.onDropdownToggleKeyDown}>
+                      {gettext('More')}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem className="link-dropdown-container" onKeyDown={this.visitDeletedviaKey}>
+                        <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                }
             </div>
           ) : (
             <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>

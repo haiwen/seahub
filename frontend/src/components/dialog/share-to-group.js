@@ -98,6 +98,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   onAddCustomPermissionToggle: PropTypes.func,
+  isExternal: PropTypes.bool,
 };
 
 const NoOptionsMessage = (props) => {
@@ -114,21 +115,25 @@ class ShareToGroup extends React.Component {
       options: [],
       selectedOption: null,
       errorMsg: [],
-      permission: 'rw',
+      permission: props.isExternal ? 'r' : 'rw',
       sharedItems: []
     };
     this.permissions = [];
-    let { itemType, isRepoOwner } = props;
-    if (itemType === 'library') {
-      this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
-    } else if (itemType === 'dir') {
-      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
-    }
-    if (!isPro) {
-      this.permissions = ['rw', 'r'];
-    }
-    if (this.props.isGroupOwnedRepo) {
-      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    let { itemType, isRepoOwner, isExternal } = props;
+    if (isExternal) {
+      this.permissions = ['r', 'preview']
+    } else {
+        if (itemType === 'library') {
+          this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
+      } else if (this.props.itemType === 'dir') {
+          this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+      }
+      if (!isPro) {
+        this.permissions = ['rw', 'r'];
+      }
+      if (this.props.isGroupOwnedRepo) {
+        this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+      }
     }
   }
 
@@ -338,7 +343,7 @@ class ShareToGroup extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
-                  enableAddCustomPermission={isPro}
+                  enableAddCustomPermission={isPro && !this.props.isExternal}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                   isSearchable={false}
                 />

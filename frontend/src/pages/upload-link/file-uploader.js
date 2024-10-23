@@ -196,7 +196,7 @@ class FileUploader extends React.Component {
       } else {
         this.setUploadFileList(this.resumable.files);
         seafileAPI.sharedUploadLinkGetFileUploadUrl(this.props.token).then(res => {
-          this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
+          this.resumable.opts.target = res.data.upload_link + '?ret-json=1&link_token=' + this.props.token;
           this.resumableUpload(resumableFile);
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
@@ -208,7 +208,7 @@ class FileUploader extends React.Component {
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
         seafileAPI.sharedUploadLinkGetFileUploadUrl(this.props.token).then(res => {
-          this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
+          this.resumable.opts.target = res.data.upload_link + '?ret-json=1&link_token=' + this.props.token;
           this.resumable.upload();
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
@@ -552,7 +552,7 @@ class FileUploader extends React.Component {
 
   onUploadRetry = (resumableFile) => {
     seafileAPI.sharedUploadLinkGetFileUploadUrl(this.props.token).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
+      this.resumable.opts.target = res.data.upload_link + '?ret-json=1&link_token=' + this.props.token;
       let retryFileList = this.state.retryFileList.filter(item => {
         return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
       });

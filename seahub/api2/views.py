@@ -57,7 +57,7 @@ from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
 from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
-from seahub.profile.models import Profile, DetailedProfile
+from seahub.profile.models import Profile, DetailedProfile, ExUser
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import get_file_draft, \
     is_draft_file, has_draft_file
@@ -76,10 +76,10 @@ from seahub.utils.file_types import IMAGE
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
-        get_locked_files_by_dir, get_related_users_by_repo, \
-        is_valid_repo_id_format, can_set_folder_perm_by_user, \
-        add_encrypted_repo_secret_key_to_database, get_available_repo_perms, \
-        parse_repo_perm
+    get_locked_files_by_dir, get_related_users_by_repo, \
+    is_valid_repo_id_format, can_set_folder_perm_by_user, \
+    add_encrypted_repo_secret_key_to_database, get_available_repo_perms, \
+    parse_repo_perm, is_external_repo
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import DOCUMENT, MARKDOWN
@@ -299,7 +299,7 @@ class AccountInfo(APIView):
         email = request.user.username
         p = Profile.objects.get_profile_by_user(email)
         d_p = DetailedProfile.objects.get_detailed_profile_by_user(email)
-
+        
         if is_org_context(request):
             org_id = request.user.org.org_id
             quota_total = seafile_api.get_org_user_quota(org_id, email)
@@ -309,11 +309,19 @@ class AccountInfo(APIView):
         else:
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
+            
+        external_quota_total = seafile_api.get_user_external_quota(email)
+        external_quota_usage = seafile_api.get_user_external_usage(email)
 
         if quota_total > 0:
             info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'
         else:                       # no space quota set in config
             info['space_usage'] = '0%'
+            
+        if external_quota_total > 0:
+            info['external_space_usage'] = str(float(external_quota_usage) / external_quota_total * 100) + '%'
+        else:
+            info['external_space_usage'] = '0%'
 
         url, _, _ = api_avatar_url(email, int(72))
 
@@ -327,6 +335,9 @@ class AccountInfo(APIView):
         info['contact_email'] = p.contact_email if p else ""
         info['institution'] = p.institution if p and p.institution else ""
         info['is_staff'] = request.user.is_staff
+        
+        info['external_total'] = external_quota_total
+        info['external_usage'] = external_quota_usage
 
         if getattr(settings, 'MULTI_INSTITUTION', False):
             from seahub.institutions.models import InstitutionAdmin
@@ -947,11 +958,7 @@ class Repos(APIView):
         return response
 
     def post(self, request, format=None):
-
-        if not request.user.permissions.can_add_repo():
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to create library.')
-
+        
         req_from = request.GET.get('from', "")
         if req_from == 'web':
             gen_sync_token = False  # Do not generate repo sync token
@@ -959,7 +966,18 @@ class Repos(APIView):
             gen_sync_token = True
 
         username = request.user.username
+        can_use_ex_repos = False
+        if ExUser.objects.filter(email=username).exists():
+            can_use_ex_repos = True 
         repo_name = request.data.get("name", None)
+        is_external = request.data.get('is_external', None)
+        if is_external and not can_use_ex_repos:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+        if (not is_external) and (not request.user.permissions.can_add_repo()):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
@@ -979,7 +997,7 @@ class Repos(APIView):
                 # client generates magic and random key
                 repo_id, error = self._create_enc_repo(request, repo_id, repo_name, repo_desc, username, org_id)
             else:
-                repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id)
+                repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id, is_external=is_external)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -1003,15 +1021,20 @@ class Repos(APIView):
             # FIXME: according to the HTTP spec, need to return 201 code and
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
+            resp['is_external'] = is_external
             return resp
 
-    def _create_repo(self, request, repo_name, repo_desc, username, org_id):
+    def _create_repo(self, request, repo_name, repo_desc, username, org_id, is_external=False):
         passwd = request.data.get("passwd", None)
 
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
         if not passwd:
             passwd = None
+            
+        repo_type = None
+        if is_external:
+            repo_type = 'external'
 
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return None, api_error(status.HTTP_403_FORBIDDEN,
@@ -1036,29 +1059,33 @@ class Repos(APIView):
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
                             enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
-                            storage_id=storage_id )
+                            storage_id=storage_id, repo_type=repo_type )
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION, repo_type=repo_type)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd,
-                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION, repo_type=repo_type)
 
         if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
             add_encrypted_repo_secret_key_to_database(repo_id, passwd)
 
         return repo_id, None
 
-    def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+    def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id, is_external=False):
         if not config.ENABLE_ENCRYPTED_LIBRARY:
             return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):
             return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
         magic = request.data.get('magic', '')
         random_key = request.data.get('random_key', '')
+
+        repo_type = None
+        if is_external:
+            repo_type = 'external'
 
         try:
             enc_version = int(request.data.get('enc_version', 0))
@@ -1095,16 +1122,16 @@ class Repos(APIView):
                     logger.error('no library storage found.')
                     repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
                             repo_desc, username, magic, random_key, \
-                            salt, enc_version)
+                            salt, enc_version, repo_type=repo_type)
                 else:
                     repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
                             repo_desc, username, magic, random_key, \
                             salt, enc_version, \
-                            storage_id=storages[0].get('storage_id', None))
+                            storage_id=storages[0].get('storage_id', None), repo_type=repo_type)
             else:
                 repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
                         repo_desc, username, magic, random_key, \
-                        salt, enc_version)
+                        salt, enc_version, repo_type=repo_type)
 
         return repo_id, None
 
@@ -1561,6 +1588,9 @@ class DownloadRepo(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if is_external_repo(repo):
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access external library.')
 
         perm = check_folder_permission(request, repo_id, '/')
         if not perm:

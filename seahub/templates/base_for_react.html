@@ -144,6 +144,7 @@
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
             enableOnlyoffice: {% if enableOnlyoffice %} true {% else %} false {% endif %},
             isGuest: {% if is_guest %} true {% else %} false {% endif %},
+            canUseExRepos: {% if can_use_ex_repos %} true {% else %} false {% endif %},
             onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %}
         }
      };

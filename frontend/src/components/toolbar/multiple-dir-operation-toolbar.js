@@ -383,6 +383,7 @@ class MultipleDirOperationToolbar extends React.Component {
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   toggleDialog={this.toggleCancel}
+                  isExternal={this.props.isExternal}
                 />
               </ModalPortal>
             }

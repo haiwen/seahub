@@ -14,7 +14,7 @@ from .endpoints.file_comments import FileCommentsView
 from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
 from .endpoints.send_share_link_email import SendShareLinkView
-from .endpoints.send_upload_link_email import SendUploadLinkView
+from .endpoints.send_upload_link_email import SendUploadLinkView, SendExUploadLinkView
 
 urlpatterns = [
     url(r'^ping/$', Ping.as_view()),
@@ -78,6 +78,7 @@ urlpatterns = [
     url(r'^default-repo/$', DefaultRepoView.as_view(), name='api2-defaultrepo'),
     url(r'^send-share-link/$', SendShareLinkView.as_view(), name='api2-send-share-link'),
     url(r'^send-upload-link/$', SendUploadLinkView.as_view(), name='api2-send-upload-link'),
+    url(r'^send-ex-upload-link/$', SendExUploadLinkView.as_view(), name='api2-send-ex-upload-link'),
     url(r'^shared-links/$', SharedLinksView.as_view()),
     url(r'^shared-upload-links/$', SharedUploadLinksView.as_view()),
     url(r'^repo-tokens/$', RepoTokensView.as_view(), name='api2-repo-tokens'),

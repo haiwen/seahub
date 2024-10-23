@@ -1,0 +1,34 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+尊敬的收件人，您好：<br />
+
+平安{{name}}共享了文件上传链接给您。
+
+</p>
+
+<p style="font-size:14px;color:#434144;">
+文件的上传路径是: <br />
+<a href="{{ shared_upload_link }}">{{ shared_upload_link }}</a>
+</p>
+
+{% if password %}
+<p>解密密码: {{ password }}</p>
+{% endif %}
+
+<p>
+    请点击该链接打开浏览器，根据页面提示上传文件。
+</p>
+{% if extra_msg %}
+<p>" {{ extra_msg }} "</p>
+{% endif %}
+
+{% endautoescape %}
+{% endblock %}

@@ -26,6 +26,7 @@ import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all/public-shared-view';
 import LibContentView from './pages/lib-content-view/lib-content-view';
+import ExLibContentView from './pages/ex-lib-content-view/ex-lib-content-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
 import InvitationsView from './pages/invitations/invitations-view';
@@ -38,6 +39,7 @@ import toaster from './components/toast';
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';
+import ExLibraries from "./pages/ex-libs/ex-libs";
 
 const FilesActivitiesWrapper = MainContentWrapper(FilesActivities);
 const DraftsViewWrapper = MainContentWrapper(DraftsView);
@@ -65,7 +67,7 @@ class App extends Component {
       pathPrefix: [],
       isReminderOpen: false,
     };
-    this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
+    this.dirViewPanels = ['my-libs', 'shared-libs', 'org', 'ex-libs']; // and group
     window.onpopstate = this.onpopstate;
   }
 
@@ -228,6 +230,9 @@ class App extends Component {
     if (tabName === 'org') {
       return 'Shared with all';
     }
+    if (tabName === 'ex-libs') {
+      return '外部资料库';
+    }
   }
 
   toggleSidePanel = () => {
@@ -296,8 +301,10 @@ class App extends Component {
               <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <OCMViaWebdavWrapper path={siteRoot + 'ocm-via-webdav'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ExLibraries path={siteRoot + 'ex-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
               <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
+              <ExLibContentView path={siteRoot + 'ex-library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
               <OCMRepoDir path={siteRoot + 'remote-library/:providerID/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
               <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <Group
