@@ -23,6 +23,7 @@ const propTypes = {
   isOnlyofficeFile: PropTypes.bool,
   participants: PropTypes.array,
   onParticipantsChange: PropTypes.func,
+  fileType: PropTypes.string,
 };
 
 const { isStarred, isLocked, lockedByMe,
@@ -108,7 +109,7 @@ class FileView extends React.Component {
   };
 
   render() {
-    const { isOnlyofficeFile = false } = this.props;
+    const { isOnlyofficeFile = false, fileType } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
     return (
       <div className="h-100 d-flex flex-column">
@@ -147,7 +148,7 @@ class FileView extends React.Component {
           {this.props.content}
           {isDetailsPanelOpen && (
             <>
-              {isOnlyofficeFile ?
+              {(isOnlyofficeFile || fileType == 'PDF') ?
                 <EnableMetadataProvider repoID={repoID} >
                   <CollaboratorsProvider repoID={repoID}>
                     <EmbeddedFileDetails
