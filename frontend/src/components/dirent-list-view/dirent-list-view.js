@@ -163,11 +163,10 @@ class DirentListView extends React.Component {
     const name = item.name;
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
-    const useThumbnail = !this.props.currentRepoInfo.encrypted;
     const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-    const isGIF = fileExt == 'gif';
+    const isTIFF = fileExt == 'tiff';
     let src = '';
-    if (useThumbnail && !isGIF) {
+    if (isTIFF) {
       src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
     } else {
       src = `${siteRoot}repo/${repoID}/raw${path}`;
