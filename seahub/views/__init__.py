@@ -1108,7 +1108,7 @@ def react_fake_view(request, **kwargs):
     if enable_clean_trash:
         enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
     
-    return render(request, "react_app.html", {
+    return_dict = {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'max_upload_file_size': max_upload_file_size,
@@ -1149,4 +1149,12 @@ def react_fake_view(request, **kwargs):
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS
-    })
+    }
+
+    if settings.ENABLE_METADATA_MANAGEMENT:
+        return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
+        return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
+        return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
+        return_dict['mine_map_key'] = settings.MINE_MAP_KEY
+    
+    return render(request, "react_app.html", return_dict)

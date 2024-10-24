@@ -1,0 +1,12 @@
+.dirent-detail-item-value-map {
+  height: 100px;
+  width: 100%;
+}
+
+.dirent-detail-item-value-map.error-message {
+  word-break: break-word;
+  padding: 8px;
+  margin: auto;
+  height: auto;
+  border-radius: 3px;
+}

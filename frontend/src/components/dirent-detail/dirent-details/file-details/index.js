@@ -5,17 +5,16 @@ import { Formatter } from '@seafile/sf-metadata-ui-component';
 import classnames from 'classnames';
 import { getDirentPath } from '../utils';
 import DetailItem from '../../detail-item';
-import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { gettext } from '../../../../utils/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
+import { gettext, baiduMapKey, googleMapKey, googleMapId, mineMapKey } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
 import { MetadataDetails, useMetadata } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
-import { getCellValueByColumn, getDateDisplayString, getGeolocationDisplayString,
-  decimalToExposureTime,
-} from '../../../../metadata/utils/cell';
+import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
+import Location from './location';
 
 import './index.css';
 
@@ -143,14 +142,13 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
               </div>
             );
           })}
-          {fileLocation && (
-            <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={'location'}>
-              <div className="dirent-detail-item-name">{gettext('Location')}</div>
-              <div className="dirent-detail-item-value" placeholder={gettext('Empty')}>
-                {getGeolocationDisplayString(fileLocation, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}
-              </div>
-            </div>
-          )}
+          <Location
+            position={fileLocation}
+            baiduMapKey={baiduMapKey}
+            googleMapKey={googleMapKey}
+            googleMapId={googleMapId}
+            mineMapKey={mineMapKey}
+          />
         </Collapse>
       </>
     );

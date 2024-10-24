@@ -110,6 +110,12 @@ export const additionalShareDialogNote = window.app.pageOptions.additionalShareD
 export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
 export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
 
+// map settings
+export const baiduMapKey = window.app.pageOptions.baiduMapKey;
+export const googleMapKey = window.app.pageOptions.googleMapKey;
+export const googleMapId = window.app.pageOptions.googleMapId;
+export const mineMapKey = window.app.pageOptions.mineMapKey;
+
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const wikiId = window.wiki ? window.wiki.config.wikiId : '';

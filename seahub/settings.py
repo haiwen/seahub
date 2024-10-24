@@ -925,6 +925,20 @@ del d
 if not os.path.exists(EVENTS_CONFIG_FILE):
     del EVENTS_CONFIG_FILE
 
+#####################
+#   Map settings    #
+#####################
+
+# baidu map
+BAIDU_MAP_KEY = ''
+
+# mine map
+MINE_MAP_KEY = ''
+
+# google map
+GOOGLE_MAP_KEY = ''
+GOOGLE_MAP_ID = ''
+
 
 #####################
 # External settings #
