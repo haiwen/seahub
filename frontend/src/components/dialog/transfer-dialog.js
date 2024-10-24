@@ -28,8 +28,10 @@ const propTypes = {
   canTransferToDept: PropTypes.bool,
   isOrgAdmin: PropTypes.bool,
   isSysAdmin: PropTypes.bool,
-
 };
+
+const TRANS_USER = 'transUser';
+const TRANS_DEPART = 'transDepart';
 
 class TransferDialog extends React.Component {
   constructor(props) {
@@ -39,7 +41,7 @@ class TransferDialog extends React.Component {
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
-      activeTab: 'transUser'
+      activeTab: TRANS_USER
     };
     this.options = [];
   }
@@ -49,10 +51,16 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    let selectedOption = this.state.selectedOption;
-    if (selectedOption && selectedOption[0]) {
-      let user = selectedOption[0];
-      this.props.submit(user);
+    const { activeTab } = this.state;
+    if (activeTab === TRANS_DEPART) {
+      let department = this.state.selectedOption;
+      this.props.submit(department);
+    } else if (activeTab === TRANS_USER) {
+      let selectedOption = this.state.selectedOption;
+      if (selectedOption && selectedOption[0]) {
+        let user = selectedOption[0];
+        this.props.submit(user);
+      }
     }
   };
 
@@ -123,14 +131,24 @@ class TransferDialog extends React.Component {
       <Fragment>
         <div className="transfer-dialog-side">
           <Nav pills>
-            <NavItem role="tab" aria-selected={activeTab === 'transUser'} aria-controls="transfer-user-panel">
-              <NavLink className={activeTab === 'transUser' ? 'active' : ''} onClick={(this.toggle.bind(this, 'transUser'))} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+            <NavItem role="tab" aria-selected={activeTab === TRANS_USER} aria-controls="transfer-user-panel">
+              <NavLink
+                className={activeTab === TRANS_USER ? 'active' : ''}
+                onClick={(this.toggle.bind(this, TRANS_USER))}
+                tabIndex="0"
+                onKeyDown={this.onTabKeyDown}
+              >
                 {gettext('Transfer to user')}
               </NavLink>
             </NavItem>
             {isPro &&
-            <NavItem role="tab" aria-selected={activeTab === 'transDepart'} aria-controls="transfer-depart-panel">
-              <NavLink className={activeTab === 'transDepart' ? 'active' : ''} onClick={this.toggle.bind(this, 'transDepart')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+            <NavItem role="tab" aria-selected={activeTab === TRANS_DEPART} aria-controls="transfer-depart-panel">
+              <NavLink
+                className={activeTab === TRANS_DEPART ? 'active' : ''}
+                onClick={this.toggle.bind(this, TRANS_DEPART)}
+                tabIndex="0"
+                onKeyDown={this.onTabKeyDown}
+              >
                 {gettext('Transfer to department')}
               </NavLink>
             </NavItem>}
