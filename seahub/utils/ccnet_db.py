@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import configparser
+from django.db import connection
 
 
 def get_ccnet_db_name():
@@ -22,11 +23,6 @@ def get_ccnet_db_name():
         error_msg = 'Failed to init ccnet db, only mysql db supported.'
         return None, error_msg
     return db_name, None
-
-
-import os
-import configparser
-from django.db import connection
 
 
 class CcnetGroup(object):
@@ -89,23 +85,29 @@ class CcnetDB:
                 groups.append(group_obj)
         return groups
 
-    def list_eligible_users(self, start, limit, is_active=None, role=None):
+    def list_eligible_users(self, start, limit,
+                            is_active=None, role=None, q=None):
 
         def status(is_active):
-            return 'AND t1.is_active=%s ' % is_active
+            return f'AND t1.is_active={is_active} '
 
         def is_role(role):
             if role == 'default':
-                return 'AND (t2.role is null or t2.role = "default")'
+                return 'AND (t2.role is null or t2.role = "default") '
             else:
-                return 'AND t2.role = "%s"' % role
-            
+                return f'AND t2.role = "{role}" '
+
+        def search(q):
+            return f'AND t1.email LIKE "%{q}%" '
+
         search_clause = ''
         if is_active:
             search_clause += status(is_active)
         if role:
             search_clause += is_role(role)
-            
+        if q:
+            search_clause += search(q)
+
         count_sql = f"""
         SELECT count(1)
         FROM
@@ -130,16 +132,15 @@ class CcnetDB:
         WHERE
             t1.email NOT LIKE '%%@seafile_group' %s
         ORDER BY t1.id
-        LIMIT {limit} OFFSET {start}
+        LIMIT {limit} OFFSET {start};
         """ % search_clause
-        
+
         users = []
-        total = 0
         with connection.cursor() as cursor:
             cursor.execute(count_sql)
             cursor.execute(count_sql)
             total_count = int(cursor.fetchone()[0])
-            
+
             cursor.execute(sql)
             for item in cursor.fetchall():
                 user_id = item[0]
@@ -168,9 +169,9 @@ class CcnetDB:
         group_ids_str = ','.join(str(id) for id in group_ids)
         sql = f"""
         SELECT user_name, group_id
-        FROM 
+        FROM
             `{self.db_name}`.`GroupUser`
-        WHERE 
+        WHERE
             group_id IN ({group_ids_str}) AND is_staff = 1
         """
         with connection.cursor() as cursor:
@@ -210,10 +211,11 @@ class CcnetDB:
         SELECT `email`
         FROM `{self.db_name}`.`EmailUser`
         WHERE
-            email IN ({user_list_str}) AND is_active = 1 AND  email NOT LIKE '%%@seafile_group'
+            email IN ({user_list_str}) AND is_active = 1 AND email NOT LIKE '%%@seafile_group'
         """
         with connection.cursor() as cursor:
             cursor.execute(sql)
             for user in cursor.fetchall():
                 active_users.append(user[0])
+
         return active_users
