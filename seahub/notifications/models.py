@@ -330,12 +330,12 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
     def add_draft_comment_msg(self, to_user, detail):
-        """Notify ``to_user`` that review creator 
+        """Notify ``to_user`` that review creator
         """
         return self._add_user_notification(to_user, MSG_TYPE_DRAFT_COMMENT, detail)
 
     def add_request_reviewer_msg(self, to_user, detail):
-        """Notify ``to_user`` that reviewer 
+        """Notify ``to_user`` that reviewer
         """
         return self._add_user_notification(to_user, MSG_TYPE_DRAFT_REVIEWER, detail)
 
@@ -520,6 +520,8 @@ class UserNotification(models.Model):
             return self.format_add_user_to_group()
         elif self.is_repo_transfer_msg():
             return self.format_repo_transfer_msg()
+        elif self.is_repo_monitor_msg():
+            return self.format_repo_monitor_msg()
         else:
             return ''
 
@@ -876,6 +878,81 @@ class UserNotification(models.Model):
             'repo_name': repo_name,
         }
         return msg
+
+    def format_repo_monitor_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        # {'commit_id': '5a52250eec53f32e771e7e032e5a40fd33143610',
+        #  'repo_id': 'b37d325a-5e72-416b-aa36-10643cee2f42',
+        #  'repo_name': 'lib of lian@seafile.com',
+        #  'op_user': 'lian@lian.com',
+        #  'op_type': 'create',
+        #  'obj_type': 'file',
+        #  'obj_path_list': ['/sdf.md'],
+        #  'old_obj_path_list': []}
+
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return ""
+
+        repo_name = d['repo_name']
+        op_user = d['op_user']
+        op_type = d['op_type']
+
+        obj_type = d['obj_type']
+        obj_path_list = d['obj_path_list']
+        obj_path_count = len(obj_path_list)
+        obj_path_count_minus_one = len(obj_path_list) - 1
+        obj_name = os.path.basename(d['obj_path_list'][0])
+
+        old_obj_path_list = d.get('old_obj_path_list', [])
+        if old_obj_path_list:
+            old_obj_name = os.path.basename(d['old_obj_path_list'][0])
+        else:
+            old_obj_name = ''
+
+        if op_type == 'create':
+
+            if obj_path_count == 1:
+                message = _(f'User {op_user} created {obj_type} {obj_name} in library {repo_name}.')
+            else:
+                message = _(f'User {op_user} created {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_name}.')
+
+        elif op_type == 'delete':
+
+            if obj_path_count == 1:
+                message = _(f'User {op_user} deleted {obj_type} {obj_name} in library {repo_name}.')
+            else:
+                message = _(f'User {op_user} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_name}.')
+
+        elif op_type == 'recover':
+
+            message = _(f'User {op_user} restored {obj_type} {obj_name} in library {repo_name}.')
+
+        elif op_type == 'rename':
+
+            message = _(f'User {op_user} renamed {obj_type} {old_obj_name} to {obj_name} in library {repo_name}.')
+
+        elif op_type == 'move':
+
+            if obj_path_count == 1:
+                message = _(f'User {op_user} moved {obj_type} {obj_name} in library {repo_name}.')
+            else:
+                message = _(f'User {op_user} moved {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_name}.')
+
+        elif op_type == 'edit':
+
+            message = _(f'User {op_user} updated {obj_type} {obj_name} in library {repo_name}.')
+
+        else:
+            message = _(f'User {op_user} {op_type} {obj_type} {obj_name} in library {repo_name}.')
+
+        return message
 
 
 ########## handle signals

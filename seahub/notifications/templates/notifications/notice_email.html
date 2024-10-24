@@ -104,7 +104,7 @@ You've got {{num}} new notices on {{ site_name }}:
                         {% if notice.op_type == 'edit' %}
                             {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> updated file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
                         {% endif %}
-		    {% else %}
+                    {% else %}
                         {% if notice.op_type == 'create' %}
                             {% if notice.obj_path_count == 1 %}
                             {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> created folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
@@ -133,7 +133,7 @@ You've got {{num}} new notices on {{ site_name }}:
                             {% endif %}
                         {% endif %}
                     {% endif %}
-		    </p>
+                    </p>
                 {% endif %}
             </td>
             <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">{{ notice.timestamp|date:"Y-m-d G:i:s"}}</td>
