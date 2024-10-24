@@ -46,7 +46,7 @@ class InnerFileView extends React.Component {
     }
 
     return (
-      <FileView content={content} fileType={fileType} />
+      <FileView content={content} />
     );
   }
 }
