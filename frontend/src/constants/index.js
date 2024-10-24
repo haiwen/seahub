@@ -17,18 +17,9 @@ export const SUB_NAV_ITEM_HEIGHT = 28;
 export const MAP_TYPE = {
   B_MAP: 'b_map', // baidu
   G_MAP: 'g_map', // google
-  M_MAP: 'm_map', // mineMap
 };
 
 // domestic map's format: [lng, lat], foreign map's format: [lat, lng]
-export const DOMESTIC_MAP_TYPE = [MAP_TYPE.B_MAP, MAP_TYPE.M_MAP];
-
-export const MINE_MAP_ONLINE_SERVICE = {
-  DOMAIN_URL: 'https://minemap.minedata.cn',
-  DATA_DOMAIN_URL: 'https://minemap.minedata.cn',
-  SERVER_DOMAIN_URL: 'https://sd-data.minedata.cn',
-  SPRITE_URL: 'https://minemap.minedata.cn/minemapapi/v2.1.1/sprite/sprite',
-  SERVICE_URL: 'https://service.minedata.cn/service'
-};
+export const DOMESTIC_MAP_TYPE = [MAP_TYPE.B_MAP];
 
 export { KeyCodes, zIndexes, TAG_COLORS };

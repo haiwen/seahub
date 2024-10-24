@@ -1155,6 +1155,5 @@ def react_fake_view(request, **kwargs):
         return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
         return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
         return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
-        return_dict['mine_map_key'] = settings.MINE_MAP_KEY
     
     return render(request, "react_app.html", return_dict)

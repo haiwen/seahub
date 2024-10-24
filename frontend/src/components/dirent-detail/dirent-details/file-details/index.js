@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { getDirentPath } from '../utils';
 import DetailItem from '../../detail-item';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { gettext, baiduMapKey, googleMapKey, googleMapId, mineMapKey } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
@@ -142,13 +142,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
               </div>
             );
           })}
-          <Location
-            position={fileLocation}
-            baiduMapKey={baiduMapKey}
-            googleMapKey={googleMapKey}
-            googleMapId={googleMapId}
-            mineMapKey={mineMapKey}
-          />
+          {record && (<Location position={fileLocation} />)}
         </Collapse>
       </>
     );

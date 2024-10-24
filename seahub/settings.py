@@ -932,9 +932,6 @@ if not os.path.exists(EVENTS_CONFIG_FILE):
 # baidu map
 BAIDU_MAP_KEY = ''
 
-# mine map
-MINE_MAP_KEY = ''
-
 # google map
 GOOGLE_MAP_KEY = ''
 GOOGLE_MAP_ID = ''

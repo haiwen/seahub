@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { initMapInfo, loadMapSource, getMineMapUrl } from '../../../../../utils/map-utils';
+import classnames from 'classnames';
+import { initMapInfo, loadMapSource } from '../../../../../utils/map-utils';
 import { MAP_TYPE, DOMESTIC_MAP_TYPE } from '../../../../../constants';
 import Loading from '../../../../loading';
-import { gettext } from '../../../../../utils/constants';
+import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../../utils/constants';
 import { GEOLOCATION_FORMAT } from '../../../../../metadata/constants';
 import { getGeolocationDisplayString } from '../../../../../metadata/utils/cell';
 import { isValidPosition } from '../../../../../metadata/utils/validate';
@@ -16,8 +17,7 @@ class Location extends React.Component {
 
   constructor(props) {
     super(props);
-    const { baiduMapKey, googleMapKey, mineMapKey } = props;
-    const { type, key } = initMapInfo({ baiduMapKey, googleMapKey, mineMapKey });
+    const { type, key } = initMapInfo({ baiduMapKey, googleMapKey });
     this.mapType = type;
     this.mapKey = key;
     this.map = null;
@@ -29,15 +29,7 @@ class Location extends React.Component {
   }
 
   componentDidMount() {
-    const { position: customPosition } = this.props;
-    window.navigator.geolocation.getCurrentPosition((position) => {
-      const lng = position.coords.longitude;
-      const lat = position.coords.latitude;
-      this.currentPosition = { lng, lat };
-      this.initMap(customPosition);
-    }, (e) => {
-      this.initMap(customPosition);
-    }, { timeout: 5000 });
+    this.initMap(this.props.position);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -73,14 +65,6 @@ class Location extends React.Component {
         loadMapSource(this.mapType, this.mapKey);
       } else {
         this.renderGoogleMap(position);
-      }
-      return;
-    }
-    if (this.mapType === MAP_TYPE.M_MAP) {
-      if (!window.minemap) {
-        loadMapSource(this.mapType, this.mapKey, this.loadMineMapCallBack);
-      } else {
-        this.renderMineMap(position);
       }
       return;
     }
@@ -126,17 +110,13 @@ class Location extends React.Component {
   renderBaiduMap = (position = {}) => {
     this.setState({ isLoading: false }, () => {
       if (!window.BMap.Map) return;
-      this.map = new window.BMap.Map('sf-geolocation-map-container', { enableMapClick: false });
-      this.map.enableScrollWheelZoom(true);
       const { lng, lat } = position || {};
-      if (!isValidPosition(lng, lat)) {
-        const point = new window.BMap.Point(this.currentPosition.lng, this.currentPosition.lat);
-        this.map.centerAndZoom(point, 18);
-        return;
-      }
+      if (!isValidPosition(lng, lat)) return;
+      this.map = new window.BMap.Map('sf-geolocation-map-container', { enableMapClick: false });
       this.addMarkerByPosition(lng, lat);
       const point = new window.BMap.Point(lng, lat);
-      this.map.centerAndZoom(point, 18);
+      this.map.centerAndZoom(point, 14);
+      this.map.enableScrollWheelZoom(true);
       const geocoder = new window.BMap.Geocoder();
       geocoder.getLocation(point, (res) => {
         const addressRes = res.addressComponents;
@@ -148,14 +128,15 @@ class Location extends React.Component {
   };
 
   renderGoogleMap = (position) => {
-    const { lng, lat } = position || {};
-    const isValid = isValidPosition(lng, lat);
     this.setState({ isLoading: false }, () => {
-      const initCenter = isValid ? position : this.currentPosition;
+      if (!window.google.maps.Map) return;
+      const { lng, lat } = position || {};
+      const isValid = isValidPosition(lng, lat);
+      if (!isValid) return;
       this.map = new window.google.maps.Map(this.ref, {
         zoom: 14,
-        center: initCenter,
-        mapId: this.props.googleMapId,
+        center: position,
+        mapId: googleMapId,
         zoomControl: false,
         mapTypeControl: false,
         scaleControl: false,
@@ -163,9 +144,6 @@ class Location extends React.Component {
         rotateControl: false,
         fullscreenControl: false
       });
-      const { lng, lat } = position || {};
-      if (!isValid) return;
-
       this.addMarkerByPosition(lng, lat);
       this.map.setCenter(position);
       var geocoder = new window.google.maps.Geocoder();
@@ -180,46 +158,6 @@ class Location extends React.Component {
           }
         }
       });
-    });
-  };
-
-  loadMineMapCallBack = () => {
-    if (!this.timer) {
-      this.timer = setTimeout(() => {
-        const { domainUrl, dataDomainUrl, serverDomainUrl, spriteUrl, serviceUrl } = getMineMapUrl();
-        window.minemap.domainUrl = domainUrl;
-        window.minemap.dataDomainUrl = dataDomainUrl;
-        window.minemap.serverDomainUrl = serverDomainUrl;
-        window.minemap.spriteUrl = spriteUrl;
-        window.minemap.serviceUrl = serviceUrl;
-        window.minemap.key = this.mapKey;
-        window.minemap.solution = 11001;
-        this.renderMineMap();
-        clearTimeout(this.timer);
-        this.timer = null;
-      }, 1000);
-    }
-  };
-
-  renderMineMap = (position) => {
-    this.setState({ isLoading: false }, () => {
-      if (!window.minemap.key) return;
-      this.map = new window.minemap.Map({
-        container: 'sf-geolocation-map-container',
-        style: 'https://service.minedata.cn/map/solu/style/11001',
-        pitch: 0,
-        maxZoom: 17,
-        minZoom: 3,
-        projection: 'MERCATOR'
-      });
-      this.map.setZoom(14);
-      const { lng, lat } = position || {};
-      if (!isValidPosition(lng, lat)) {
-        this.map.setCenter([this.currentPosition.lng, this.currentPosition.lat]);
-        return;
-      }
-      this.addMarkerByPosition(lng, lat);
-      this.map.setCenter([lng, lat]);
     });
   };
 
@@ -249,7 +187,7 @@ class Location extends React.Component {
           <>
             {this.mapType ? (
               <div className="dirent-detail-item-value-map">
-                {!isLoading && (<div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>)}
+                {!isLoading && (<div className={classnames('w-100 h-100', { 'd-none': !isValid })} ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>)}
               </div>
             ) : (
               <div className="dirent-detail-item-value-map alert-danger error-message d-flex justify-content-center">
@@ -266,10 +204,6 @@ class Location extends React.Component {
 
 Location.propTypes = {
   location: PropTypes.object,
-  baiduMapKey: PropTypes.string,
-  googleMapKey: PropTypes.string,
-  googleMapId: PropTypes.string,
-  mineMapKey: PropTypes.string,
 };
 
 export default Location;
