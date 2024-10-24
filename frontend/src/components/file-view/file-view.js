@@ -9,7 +9,6 @@ import IconButton from '../icon-button';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
-import FileDetails from '../dirent-detail/old-file-details';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { CollaboratorsProvider, EnableMetadataProvider } from '../../metadata';
 
@@ -22,12 +21,12 @@ const propTypes = {
   needSave: PropTypes.bool,
   isOnlyofficeFile: PropTypes.bool,
   participants: PropTypes.array,
-  onParticipantsChange: PropTypes.func,
+  onParticipantsChange: PropTypes.func
 };
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, filePerm, enableWatermark, userNickName,
-  repoName, parentDir, fileName
+  fileName
 } = window.app.pageOptions;
 
 class FileView extends React.Component {
@@ -146,29 +145,17 @@ class FileView extends React.Component {
           }
           {this.props.content}
           {isDetailsPanelOpen && (
-            <>
-              {isOnlyofficeFile ?
-                <EnableMetadataProvider repoID={repoID} >
-                  <CollaboratorsProvider repoID={repoID}>
-                    <EmbeddedFileDetails
-                      repoID={repoID}
-                      path={filePath}
-                      dirent={{ 'name': fileName, type: 'file' }}
-                      repoInfo={{ permission: filePerm }}
-                      onClose={this.toggleDetailsPanel}
-                    />
-                  </CollaboratorsProvider>
-                </EnableMetadataProvider>
-                :
-                <FileDetails
+            <EnableMetadataProvider repoID={repoID} >
+              <CollaboratorsProvider repoID={repoID}>
+                <EmbeddedFileDetails
                   repoID={repoID}
-                  repoName={repoName}
-                  path={parentDir}
+                  path={filePath}
                   dirent={{ 'name': fileName, type: 'file' }}
-                  togglePanel={this.toggleDetailsPanel}
+                  repoInfo={{ permission: filePerm }}
+                  onClose={this.toggleDetailsPanel}
                 />
-              }
-            </>
+              </CollaboratorsProvider>
+            </EnableMetadataProvider>
           )}
         </div>
       </div>

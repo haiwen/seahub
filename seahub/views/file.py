@@ -545,6 +545,7 @@ def view_lib_file(request, repo_id, path):
                       THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION)
 
             editor_dict = {}
+            editor_dict['filename'] = filename
             editor_dict['action_url'] = action_url
             editor_dict['access_token'] = access_token
             editor_dict['access_token_ttl'] = int(time.time()) + THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
@@ -730,7 +731,7 @@ def view_lib_file(request, repo_id, path):
             mode = 'viewer'
         if mode == 'plain':
             template = 'plain_' + template
-        
+
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
