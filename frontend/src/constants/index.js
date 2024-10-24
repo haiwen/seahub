@@ -14,4 +14,12 @@ const TAG_COLORS = ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8
 export const SIDE_PANEL_FOLDED_WIDTH = 71;
 export const SUB_NAV_ITEM_HEIGHT = 28;
 
+export const MAP_TYPE = {
+  B_MAP: 'b_map', // baidu
+  G_MAP: 'g_map', // google
+};
+
+// domestic map's format: [lng, lat], foreign map's format: [lat, lng]
+export const DOMESTIC_MAP_TYPE = [MAP_TYPE.B_MAP];
+
 export { KeyCodes, zIndexes, TAG_COLORS };
