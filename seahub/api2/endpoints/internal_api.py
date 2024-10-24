@@ -11,9 +11,11 @@ from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_
 from seahub.base.accounts import User
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
+from seahub.utils.user_permissions import get_user_role
+from seahub.role_permissions.settings import DEFAULT_ENABLED_ROLE_PERMISSIONS
 
 logger = logging.getLogger(__name__)
 
@@ -198,3 +200,32 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'user': rat.app_name})
+
+
+class InternalDownloadRateLimitView(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
+
+    def post(self, request):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        data = request.data
+        traffic_info_list = {}
+        for user_info in data:
+            org_id = user_info['org_id']
+            username = user_info['username']
+            user = User.objects.get(email=username)
+            role = get_user_role(user)
+            if user_info['org_id'] > 0:
+                monthly_rate_limit_per_user = DEFAULT_ENABLED_ROLE_PERMISSIONS[role]['monthly_rate_limit_per_user']
+                org = ccnet_api.get_org_by_id(org_id)
+                org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+                monthly_rate_limit = monthly_rate_limit_per_user * len(org_users)
+            else:
+                monthly_rate_limit = DEFAULT_ENABLED_ROLE_PERMISSIONS[role]['monthly_rate_limit']
+            traffic_info_list[username] = {'org_id': org_id, 'monthly_rate_limit': monthly_rate_limit}
+
+        return Response(traffic_info_list)
+    
