@@ -22,6 +22,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
+  isWiki2: PropTypes.bool,
 };
 
 const PER_PAGE = 20;
@@ -551,6 +552,23 @@ class Search extends Component {
   renderSearchTypes = (inputValue) => {
     const highlightIndex = this.state.highlightSearchTypesIndex;
     const { resultItems } = this.state;
+    if (this.props.isWiki2) {
+      return (
+        <div className="search-types">
+          <div
+            className="search-types-wiki search-types-highlight"
+            onClick={this.searchWiki}
+            tabIndex={0}
+          >
+            <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            {inputValue}
+            <span className="search-types-text">{gettext('in this wiki')}</span>
+            <i className="sf3-font sf3-font-enter"></i>
+          </div>
+        </div>
+      );
+    }
+
     if (!this.props.repoID) {
       return (
         <div className="search-result-list-container" ref={this.searchResultListContainerRef}>
@@ -667,6 +685,69 @@ class Search extends Component {
       search_ftypes: 'all',
     };
     this.getSearchResult(queryData);
+  };
+
+  getWikiSearchResult = (queryData) => {
+    if (this.source) {
+      this.source.cancel('prev request is cancelled');
+    }
+    this.setState({
+      isLoading: true,
+      isResultGetted: false,
+      resultItems: [],
+      highlightIndex: 0,
+    });
+    this.source = seafileAPI.getSource();
+  
+    const query = queryData.q;
+    const search_wiki = this.props.repoID;
+  
+    searchAPI.searchWiki(query, search_wiki, this.source.token).then(res => {
+      this.source = null;
+      if (res.data.total > 0) {
+        this.setState({
+          resultItems: this.formatWikiResultItems(res.data.results),
+          isResultGetted: true,
+          isLoading: false,
+          page: 1,
+          hasMore: res.data.has_more,
+        });
+      } else {
+        this.setState({
+          highlightIndex: 0,
+          resultItems: [],
+          isLoading: false,
+          isResultGetted: true,
+          hasMore: false,
+        });
+      }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.setState({ isLoading: false });
+    });
+  };
+
+  formatWikiResultItems(data) {
+    return data.map((item, index) => ({
+      index: [index],
+      name: item.name,
+      path: item.path,
+      repo_id: item.repo_id,
+      repo_name: item.repo_name,
+      is_dir: false,
+      link_content: item.path,
+      content: item.content_highlight,
+    }));
+  }
+
+  searchWiki = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: this.props.repoID,
+    };
+    this.getWikiSearchResult(queryData);
   };
 
   renderResults = (resultItems, isVisited) => {
