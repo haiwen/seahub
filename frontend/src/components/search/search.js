@@ -721,13 +721,13 @@ class Search extends Component {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { isMaskShow } = this.state;
-    const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k )`}`;
+    const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
           <div className="search">
-            <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
-            <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={{ zIndex: SEARCH_CONTAINER }}>
+            <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={isMaskShow ? { zIndex: SEARCH_MASK } : {}}></div>
+            <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={isMaskShow ? { zIndex: SEARCH_CONTAINER } : {}}>
               <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
                 <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
                 <input

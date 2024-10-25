@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import GroupHeaderLeft from './group-header-left';
-import { zIndexes } from '../../../../../../../constants';
+import { metadataZIndexes } from '../../../../../../constants';
 
 class GroupContainerLeft extends Component {
 
@@ -31,7 +31,7 @@ class GroupContainerLeft extends Component {
       firstColumnFrozen, lastColumnFrozen, firstColumnKey,
     } = this.props;
     let containerStyle = {
-      zIndex: firstColumnFrozen ? zIndexes.GROUP_FROZEN_HEADER : 0,
+      zIndex: firstColumnFrozen ? metadataZIndexes.GROUP_FROZEN_HEADER : 0,
       width: leftPaneWidth,
       height,
     };
