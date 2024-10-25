@@ -13,6 +13,7 @@ import { gettext } from '../../../utils/constants';
 import { CellType, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getColumnOptions, getColumnOriginName } from '../../utils/column';
 import { SYSTEM_FOLDERS } from './constants';
+import Location from './location';
 
 import './index.css';
 
@@ -120,6 +121,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
           </DetailItem>
         );
       })}
+      {isImage && (<Location position={getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.LOCATION })} />)}
     </>
   );
 };

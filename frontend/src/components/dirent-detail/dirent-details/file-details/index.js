@@ -14,7 +14,6 @@ import { MetadataDetails, useMetadata } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
-import Location from './location';
 
 import './index.css';
 
@@ -126,7 +125,6 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
   if (Utils.imageCheck(dirent.name) || Utils.videoCheck(dirent.name)) {
     const fileDetails = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DETAILS });
     const fileDetailsJson = JSON.parse(fileDetails?.slice(9, -7) || '{}');
-    const fileLocation = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.LOCATION });
 
     component = (
       <>
@@ -142,7 +140,6 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
               </div>
             );
           })}
-          {record && (<Location position={fileLocation} />)}
         </Collapse>
       </>
     );
