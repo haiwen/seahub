@@ -48,6 +48,9 @@ class Location extends React.Component {
       this.googleMarker = null;
     }
     this.map = null;
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   initMap = (position) => {
