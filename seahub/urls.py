@@ -37,7 +37,8 @@ from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
         GroupOwnedLibrary, GroupOwnedLibraryUserFolderPermission, \
         GroupOwnedLibraryGroupFolderPermission, GroupOwnedLibraryUserShare, \
-        GroupOwnedLibraryGroupShare, GroupOwnedLibraryUserShareInLibrary
+        GroupOwnedLibraryGroupShare, GroupOwnedLibraryUserShareInLibrary, \
+        GroupOwnedLibraryTransferView
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
@@ -353,6 +354,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupLibrary.as_view(), name='api-v2.1-group-library'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/transfer/$', GroupOwnedLibraryTransferView.as_view(), name='api-v2.1-group-owned-group-library-transfer'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/search-member/$', GroupSearchMember.as_view(), name='api-v2.1-group-search-member'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),

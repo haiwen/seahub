@@ -47,6 +47,13 @@ class UserAPI {
     const url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
     return this.req.get(url);
   }
+
+  depAdminTransferRepo(repo_id, group_id, email) {
+    const url = this.server + '/api/v2.1/groups/' + group_id + '/group-owned-libraries/' + repo_id + '/transfer/';
+    const formData = new FormData();
+    formData.append('email', email);
+    return this.req.put(url, formData);
+  }
 }
 
 let userAPI = new UserAPI();
