@@ -53,7 +53,8 @@ class LogsExportExcelDialog extends React.Component {
     }).catch(err => {
       toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
     });
-    }
+  };
+
   sysExportLogs = (logType) => {
     let { startDateStr, endDateStr } = this.state;
     let task_id = '';
