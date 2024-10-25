@@ -41,6 +41,19 @@ class LogsExportExcelDialog extends React.Component {
     }
   };
 
+  queryIOStatus = (task_id, logType) => {
+    userAPI.queryIOStatus(task_id).then(res => {
+      if (res.data.is_finished === true) {
+        location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
+      } else {
+        setTimeout(() => {
+          this.queryIOStatus(task_id, logType);
+        }, 1000);
+      }
+    }).catch(err => {
+      toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
+    });
+    }
   sysExportLogs = (logType) => {
     let { startDateStr, endDateStr } = this.state;
     let task_id = '';
@@ -55,17 +68,7 @@ class LogsExportExcelDialog extends React.Component {
       if (res.data.is_finished === true) {
         location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
       } else {
-        this.timer = setInterval(() => {
-          userAPI.queryIOStatus(task_id).then(res => {
-            if (res.data.is_finished === true) {
-              clearInterval(this.timer);
-              location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
-            }
-          }).catch(err => {
-            clearInterval(this.timer);
-            toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
-          });
-        }, 1000);
+        this.queryIOStatus(task_id, logType);
       }
     }).catch(error => {
       this.props.toggle();
