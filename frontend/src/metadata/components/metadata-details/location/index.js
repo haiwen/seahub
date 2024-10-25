@@ -121,9 +121,7 @@ class Location extends React.Component {
       this.map.enableScrollWheelZoom(true);
       const geocoder = new window.BMap.Geocoder();
       geocoder.getLocation(point, (res) => {
-        const addressRes = res.addressComponents;
-        const addressArray = [addressRes.province, addressRes.city, addressRes.district, addressRes.street, addressRes.streetNumber];
-        const address = addressArray.filter(item => item).join('');
+        const address = res.address;
         this.setState({ address });
       });
     });
@@ -153,7 +151,7 @@ class Location extends React.Component {
       geocoder.geocode({ 'location': latLng }, (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
-            var address = results[0].formatted_address;
+            var address = results[0].formatted_address.split(' ')[1];
             this.setState({ address });
           } else {
             toaster.warning(gettext('No address found for the given coordinates.'));
