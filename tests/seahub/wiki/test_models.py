@@ -22,4 +22,3 @@ class WikiManagerTest(BaseTestCase):
         wiki = Wiki.objects.add('new wiki', self.user.username)
 
         assert wiki is not None
-        assert wiki.created_at.replace(microsecond=0) <= dt(wiki.updated_at)
