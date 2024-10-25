@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { initMapInfo, loadMapSource } from '../../../../../utils/map-utils';
-import { MAP_TYPE, DOMESTIC_MAP_TYPE } from '../../../../../constants';
-import Loading from '../../../../loading';
-import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../../utils/constants';
-import { GEOLOCATION_FORMAT } from '../../../../../metadata/constants';
-import { getGeolocationDisplayString } from '../../../../../metadata/utils/cell';
-import { isValidPosition } from '../../../../../metadata/utils/validate';
-import toaster from '../../../../toast';
-import ObjectUtils from '../../../../../metadata/utils/object-utils';
+import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
+import { MAP_TYPE, DOMESTIC_MAP_TYPE } from '../../../../constants';
+import Loading from '../../../../components/loading';
+import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
+import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { getGeolocationDisplayString } from '../../../utils/cell';
+import { isValidPosition } from '../../../utils/validate';
+import toaster from '../../../../components/toast';
+import ObjectUtils from '../../../utils/object-utils';
+import DetailItem from '../../../../components/dirent-detail/detail-item';
+import { getColumnDisplayName } from '../../../utils/column';
 
 import './index.css';
 
@@ -119,9 +121,7 @@ class Location extends React.Component {
       this.map.enableScrollWheelZoom(true);
       const geocoder = new window.BMap.Geocoder();
       geocoder.getLocation(point, (res) => {
-        const addressRes = res.addressComponents;
-        const addressArray = [addressRes.province, addressRes.city, addressRes.district, addressRes.street, addressRes.streetNumber];
-        const address = addressArray.filter(item => item).join('');
+        const address = res.address;
         this.setState({ address });
       });
     });
@@ -151,7 +151,7 @@ class Location extends React.Component {
       geocoder.geocode({ 'location': latLng }, (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
-            var address = results[0].formatted_address;
+            var address = results[0].formatted_address.split(' ')[1];
             this.setState({ address });
           } else {
             toaster.warning(gettext('No address found for the given coordinates.'));
@@ -167,34 +167,25 @@ class Location extends React.Component {
     const isValid = isValidPosition(position?.lng, position?.lat);
     return (
       <>
-        <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={'location'}>
-          <div className="dirent-detail-item-name">{gettext('Location')}</div>
-          <div className="dirent-detail-item-value" placeholder={gettext('Empty')}>
-            {isValid && (
-              <>
-                {!isLoading && this.mapType && address && (
-                  <>
-                    <span>{address}</span>
-                    <br />
-                  </>
-                )}
-                <span>{getGeolocationDisplayString(position, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
-              </>
-            )}
+        <DetailItem field={{ key: PRIVATE_COLUMN_KEY.LOCATION, type: CellType.GEOLOCATION, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION) }} readonly={true}>
+          {isValid ? (
+            <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter">
+              {!isLoading && this.mapType && address && (
+                <>
+                  <span>{address}</span>
+                  <br />
+                </>
+              )}
+              <span>{getGeolocationDisplayString(position, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
+            </div>
+          ) : (
+            <div className="sf-metadata-record-cell-empty" placeholder={gettext('Empty')}></div>
+          )}
+        </DetailItem>
+        {isLoading ? (<Loading />) : this.mapType && (
+          <div className={classnames('dirent-detail-item-value-map', { 'd-none': !isValid })}>
+            <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
           </div>
-        </div>
-        {isLoading ? (<Loading />) : (
-          <>
-            {this.mapType ? (
-              <div className="dirent-detail-item-value-map">
-                {!isLoading && (<div className={classnames('w-100 h-100', { 'd-none': !isValid })} ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>)}
-              </div>
-            ) : (
-              <div className="dirent-detail-item-value-map alert-danger error-message d-flex justify-content-center">
-                {gettext('The map plugin is not properly configured. Contact the administrator.')}
-              </div>
-            )}
-          </>
         )}
       </>
     );
