@@ -248,40 +248,10 @@ class Command(BaseCommand):
         return notice
 
     def format_repo_monitor_msg(self, notice):
-
         d = json.loads(notice.detail)
-
         op_user_email = d['op_user']
-        notice.user_url = reverse('user_profile', args=[op_user_email])
-        notice.user_name = email2nickname(op_user_email)
         notice.avatar_src = self.get_avatar_src(op_user_email)
-
-        notice.op_type = d['op_type']
-
-        repo_id = d['repo_id']
-        repo_name = d['repo_name']
-        notice.repo_url = reverse('lib_view', args=[repo_id, repo_name, ''])
-        notice.repo_name = d['repo_name']
-
-        obj_type = d['obj_type']
-        obj_path_list = d['obj_path_list']
-        notice.obj_type = obj_type
-        notice.obj_path_count = len(obj_path_list)
-        notice.obj_path_count_minus_one = len(obj_path_list) - 1
-        notice.obj_name = os.path.basename(d['obj_path_list'][0])
-
-        old_obj_path_list = d.get('old_obj_path_list', [])
-        if old_obj_path_list:
-            notice.old_obj_name = os.path.basename(d['old_obj_path_list'][0])
-        else:
-            notice.old_obj_name = ''
-
-        if obj_type == 'file':
-            notice.obj_url = reverse('view_lib_file', args=[repo_id, obj_path_list[0]])
-        else:
-            notice.obj_url = reverse('lib_view',
-                                     args=[repo_id, repo_name, obj_path_list[0].strip('/')])
-
+        notice.repo_monitor_msg = notice.format_msg()
         return notice
 
     def format_saml_sso_error_msg(self, notice):
