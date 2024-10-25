@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../_i18n/i18n-sdoc-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteName } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -11,6 +13,7 @@ import FileToolbar from './file-toolbar';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { CollaboratorsProvider, EnableMetadataProvider } from '../../metadata';
+import Loading from '../loading';
 
 import '../../css/file-view.css';
 
@@ -110,55 +113,59 @@ class FileView extends React.Component {
     const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
     return (
-      <div className="h-100 d-flex flex-column">
-        <div className={`file-view-header d-flex justify-content-between align-items-center d-print-none ${isOnlyofficeFile ? (isHeaderShown ? 'onlyoffice-file-view-header-shown' : 'onlyoffice-file-view-header-hidden') : ''}`}>
-          <FileInfo
-            isStarred={this.state.isStarred}
-            isLocked={this.state.isLocked}
-            toggleStar={this.toggleStar}
-            isOnlyofficeFile={isOnlyofficeFile}
-          />
-          {isOnlyofficeFile ?
-            <OnlyofficeFileToolbar
-              toggleDetailsPanel={this.toggleDetailsPanel}
-              toggleHeader={this.toggleHeader}
-            /> :
-            <FileToolbar
-              isLocked={this.state.isLocked}
-              lockedByMe={this.state.lockedByMe}
-              onSave={this.props.onSave}
-              isSaving={this.props.isSaving}
-              needSave={this.props.needSave}
-              toggleLockFile={this.toggleLockFile}
-              toggleDetailsPanel={this.toggleDetailsPanel}
-            />
-          }
-        </div>
-        <div className={`file-view-body flex-auto d-flex o-hidden ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
-          {(isOnlyofficeFile && !isHeaderShown) &&
-            <IconButton
-              id="unfold-onlyoffice-file-view-header"
-              icon='double-arrow-down'
-              text={gettext('Unfold')}
-              onClick={this.toggleHeader}
-            />
-          }
-          {this.props.content}
-          {isDetailsPanelOpen && (
-            <EnableMetadataProvider repoID={repoID} >
-              <CollaboratorsProvider repoID={repoID}>
-                <EmbeddedFileDetails
-                  repoID={repoID}
-                  path={filePath}
-                  dirent={{ 'name': fileName, type: 'file' }}
-                  repoInfo={{ permission: filePerm }}
-                  onClose={this.toggleDetailsPanel}
+      <I18nextProvider i18n={ i18n }>
+        <Suspense fallback={<Loading />}>
+          <div className="h-100 d-flex flex-column">
+            <div className={`file-view-header d-flex justify-content-between align-items-center d-print-none ${isOnlyofficeFile ? (isHeaderShown ? 'onlyoffice-file-view-header-shown' : 'onlyoffice-file-view-header-hidden') : ''}`}>
+              <FileInfo
+                isStarred={this.state.isStarred}
+                isLocked={this.state.isLocked}
+                toggleStar={this.toggleStar}
+                isOnlyofficeFile={isOnlyofficeFile}
+              />
+              {isOnlyofficeFile ?
+                <OnlyofficeFileToolbar
+                  toggleDetailsPanel={this.toggleDetailsPanel}
+                  toggleHeader={this.toggleHeader}
+                /> :
+                <FileToolbar
+                  isLocked={this.state.isLocked}
+                  lockedByMe={this.state.lockedByMe}
+                  onSave={this.props.onSave}
+                  isSaving={this.props.isSaving}
+                  needSave={this.props.needSave}
+                  toggleLockFile={this.toggleLockFile}
+                  toggleDetailsPanel={this.toggleDetailsPanel}
                 />
-              </CollaboratorsProvider>
-            </EnableMetadataProvider>
-          )}
-        </div>
-      </div>
+              }
+            </div>
+            <div className={`file-view-body flex-auto d-flex o-hidden ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
+              {(isOnlyofficeFile && !isHeaderShown) &&
+                <IconButton
+                  id="unfold-onlyoffice-file-view-header"
+                  icon='double-arrow-down'
+                  text={gettext('Unfold')}
+                  onClick={this.toggleHeader}
+                />
+              }
+              {this.props.content}
+              {isDetailsPanelOpen && (
+                <EnableMetadataProvider repoID={repoID} >
+                  <CollaboratorsProvider repoID={repoID}>
+                    <EmbeddedFileDetails
+                      repoID={repoID}
+                      path={filePath}
+                      dirent={{ 'name': fileName, type: 'file' }}
+                      repoInfo={{ permission: filePerm }}
+                      onClose={this.toggleDetailsPanel}
+                    />
+                  </CollaboratorsProvider>
+                </EnableMetadataProvider>
+              )}
+            </div>
+          </div>
+        </Suspense>
+      </I18nextProvider>
     );
   }
 }
