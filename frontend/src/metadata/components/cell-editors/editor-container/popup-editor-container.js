@@ -34,6 +34,8 @@ class PopupEditorContainer extends React.Component {
         ...additionalStyles
       }
     };
+    this.isClosed = false;
+    this.changeCanceled = false;
   }
 
   changeCommitted = false;
@@ -197,10 +199,11 @@ class PopupEditorContainer extends React.Component {
   closeEditor = (isEscapeKeydown) => {
     const { column } = this.props;
     if (column.type === CellType.DATE && !isEscapeKeydown) return null;
-    this.onClickOutside(isEscapeKeydown);
+    !this.isClosed && this.onClickOutside(isEscapeKeydown);
   };
 
   onClickOutside = (isEscapeKeydown) => {
+    this.isClosed = true;
     this.commit();
     this.props.onCommitCancel();
     !isEscapeKeydown && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
