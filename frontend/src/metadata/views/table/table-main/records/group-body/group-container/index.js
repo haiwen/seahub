@@ -5,7 +5,8 @@ import GroupContainerLeft from './group-container-left';
 import GroupContainerRight from './group-container-right';
 import { isMobile } from '../../../../../../../utils/utils';
 import { isFrozen } from '../../../../../../utils/column';
-import { GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, metadataZIndexes } from '../../../../../../constants';
+import { GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
+import { zIndexes } from '../../../../../../../constants';
 
 import './index.css';
 
@@ -101,7 +102,7 @@ class GroupContainer extends Component {
     let backDropStyle = {
       height: backdropHeight,
       width: leftPaneWidth + scrollLeft ? GROUP_VIEW_OFFSET : 0,
-      zIndex: metadataZIndexes.GROUP_BACKDROP
+      zIndex: zIndexes.GROUP_BACKDROP
     };
 
     return (

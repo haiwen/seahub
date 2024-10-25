@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { metadataZIndexes } from '../../constants';
+import { zIndexes } from '../../../constants';
 
 const propTypes = {
   onScrollbarScroll: PropTypes.func.isRequired,
@@ -49,7 +49,7 @@ class RightScrollbar extends React.Component {
     const component = window.sfMetadataBody;
     if (component && component.resultContentRef) {
       style.height = component.resultContentRef.clientHeight;
-      style.zIndex = metadataZIndexes.SCROLL_BAR;
+      style.zIndex = zIndexes.SCROLL_BAR;
     }
 
     /* sf-metadata-header have 33px height */

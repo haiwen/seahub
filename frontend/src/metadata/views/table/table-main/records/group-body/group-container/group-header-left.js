@@ -4,7 +4,8 @@ import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import GroupTitle from './group-title';
 import { gettext } from '../../../../../../../utils/constants';
-import { GROUP_HEADER_HEIGHT, metadataZIndexes } from '../../../../../../constants';
+import { zIndexes } from '../../../../../../../constants';
+import { GROUP_HEADER_HEIGHT } from '../../../../../../constants';
 
 class GroupHeaderLeft extends Component {
 
@@ -15,7 +16,7 @@ class GroupHeaderLeft extends Component {
     } = this.props;
     const { column, count, level, cell_value, original_cell_value } = group;
     const groupHeaderLeftStyle = {
-      zIndex: firstColumnFrozen && metadataZIndexes.GROUP_FROZEN_HEADER,
+      zIndex: firstColumnFrozen && zIndexes.GROUP_FROZEN_HEADER,
       height: GROUP_HEADER_HEIGHT,
       width,
     };
