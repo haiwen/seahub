@@ -584,7 +584,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['google_map_key'] = GOOGLE_MAP_KEY
         return_dict['google_map_id'] = GOOGLE_MAP_ID
 
-
     # check whether file is starred
     is_starred = is_file_starred(username, repo_id, path, org_id)
     return_dict['is_starred'] = is_starred

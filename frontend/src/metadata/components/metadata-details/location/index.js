@@ -171,7 +171,7 @@ class Location extends React.Component {
       <>
         <DetailItem field={{ key: PRIVATE_COLUMN_KEY.LOCATION, type: CellType.GEOLOCATION, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION) }} readonly={true}>
           {isValid ? (
-            <div className="sf-metadata-ui cell-formatter-container text-formatter sf-metadata-text-formatter">
+            <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter">
               {!isLoading && this.mapType && address && (
                 <>
                   <span>{address}</span>
@@ -184,14 +184,10 @@ class Location extends React.Component {
             <div className="sf-metadata-record-cell-empty" placeholder={gettext('Empty')}></div>
           )}
         </DetailItem>
-        {isLoading ? (<Loading />) : (
-          <>
-            {this.mapType && (
-              <div className={classnames('dirent-detail-item-value-map', { 'd-none': !isValid })}>
-                <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
-              </div>
-            )}
-          </>
+        {isLoading ? (<Loading />) : this.mapType && (
+          <div className={classnames('dirent-detail-item-value-map', { 'd-none': !isValid })}>
+            <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
+          </div>
         )}
       </>
     );
