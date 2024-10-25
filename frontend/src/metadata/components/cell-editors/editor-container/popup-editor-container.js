@@ -6,7 +6,8 @@ import Editor from '../editor';
 import { Utils } from '../../../../utils/utils';
 import { isCellValueChanged, getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds } from '../../../utils/cell';
 import { canEditCell, getColumnOriginName } from '../../../utils/column';
-import { CellType, EVENT_BUS_TYPE, metadataZIndexes, PRIVATE_COLUMN_KEYS } from '../../../constants';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS } from '../../../constants';
+import { zIndexes } from '../../../../constants';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME,
@@ -27,7 +28,7 @@ class PopupEditorContainer extends React.Component {
       isInvalid: false,
       style: {
         position: 'absolute',
-        zIndex: metadataZIndexes.EDITOR_CONTAINER,
+        zIndex: zIndexes.EDITOR_CONTAINER,
         left,
         top,
         ...additionalStyles

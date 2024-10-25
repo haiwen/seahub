@@ -6,7 +6,8 @@ import InsertColumn from './insert-column';
 import { isMobile } from '../../../../../utils/utils';
 import { isFrozen, recalculateColumnMetricsByResizeColumn, getFrozenColumns } from '../../../../utils/column';
 import { isEmptyObject } from '../../../../utils/common';
-import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT, HEADER_HEIGHT_TYPE, SEQUENCE_COLUMN_WIDTH, metadataZIndexes } from '../../../../constants';
+import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT, HEADER_HEIGHT_TYPE, SEQUENCE_COLUMN_WIDTH } from '../../../../constants';
+import { zIndexes } from '../../../../../constants';
 
 const RecordsHeader = ({
   isGroupView,
@@ -39,7 +40,7 @@ const RecordsHeader = ({
     return {
       width: containerWidth,
       minWidth: '100%',
-      zIndex: metadataZIndexes.GRID_HEADER,
+      zIndex: zIndexes.GRID_HEADER,
       height
     };
   }, [containerWidth, height]);
@@ -55,7 +56,7 @@ const RecordsHeader = ({
       position: (isMobile ? 'absolute' : 'fixed'),
       marginLeft: '0px',
       height,
-      zIndex: metadataZIndexes.SEQUENCE_COLUMN,
+      zIndex: zIndexes.SEQUENCE_COLUMN,
     };
     if ((isGroupView && !isFrozen(columns[0])) || isMobile) {
       value.position = 'absolute';

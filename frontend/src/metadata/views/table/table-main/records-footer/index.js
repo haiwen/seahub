@@ -5,7 +5,8 @@ import toaster from '../../../../../components/toast';
 import LoadAllTip from '../load-all-tip';
 import RecordMetrics from '../../utils/record-metrics';
 import { gettext } from '../../../../../utils/constants';
-import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, metadataZIndexes } from '../../../../constants';
+import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL } from '../../../../constants';
+import { zIndexes } from '../../../../../constants';
 import { addClassName, removeClassName } from '../../utils';
 import { getRecordsFromSelectedRange } from '../../utils/selected-cell-utils';
 
@@ -135,7 +136,7 @@ class RecordsFooter extends React.Component {
     const recordWidth = (isLoadingMore || hasMore ? SEQUENCE_COLUMN_WIDTH + columns[0].width : SEQUENCE_COLUMN_WIDTH) + groupOffsetLeft;
 
     return (
-      <div className="sf-metadata-result-footer" style={{ zIndex: metadataZIndexes.GRID_FOOTER }} ref={ref => this.ref = ref}>
+      <div className="sf-metadata-result-footer" style={{ zIndex: zIndexes.GRID_FOOTER }} ref={ref => this.ref = ref}>
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
           {!isLoadingMore && hasMore &&
