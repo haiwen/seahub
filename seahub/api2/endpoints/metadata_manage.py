@@ -1050,14 +1050,14 @@ class FaceRecognitionManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        init_faces(metadata_server_api)
+
         try:
             RepoMetadata.objects.enable_face_recognition(repo_id)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_faces(metadata_server_api)
 
         params = {
             'repo_id': repo_id,

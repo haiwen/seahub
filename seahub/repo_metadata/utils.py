@@ -60,7 +60,6 @@ def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    raise Exception()
     url = urljoin(SEAFEVENTS_SERVER_URL, '/extract-file-details')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
@@ -194,7 +193,7 @@ def remove_faces_table(metadata_server_api):
             columns = table.get('columns', [])
             for column in columns:
                 if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key]:
-                    metadata_server_api.delete_columns(table['id'], [column['key']])
+                    metadata_server_api.delete_column(table['id'], column['key'])
 
 
 def get_file_download_token(repo_id, file_id, username):
