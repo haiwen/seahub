@@ -112,11 +112,11 @@ class LogsExportExcelDialog extends React.Component {
     if (dayjs(startDateStr, 'YYYY-MM-DD', true).isValid() &&
       dayjs(endDateStr, 'YYYY-MM-DD', true).isValid() &&
       dayjs(startDateStr).isBefore(endDateStr) &&
-      dayjs(endDateStr).diff(dayjs(startDateStr), 'month') <= 6
+      dayjs(endDateStr).diff(dayjs(startDateStr), 'day') <= 180
     ) {
       return true;
     } else {
-      if (dayjs(endDateStr).diff(dayjs(startDateStr), 'month') > 6) {
+      if (dayjs(endDateStr).diff(dayjs(startDateStr), 'day') > 180) {
         this.setState({
           errMsg: gettext('The time span of data export is limited to six months.')
         });
