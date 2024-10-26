@@ -563,7 +563,8 @@
   "the_next_numbers_of_days": "the next numbers of days",
   "the_past_numbers_of_days": "the past numbers of days",
   "Double_click_to_enter_edit_mode_and_adjust_field_width" : "Double click to enter edit mode and adjust field width",
-  "Enter_comment_Enter_for_new_line_shift_enter_to_send": "Enter comment, Enter for new line, Shift + Enter to send",
+  "Enter_comment_Shift_enter_for_new_line_Enter_to_send": "Enter comment, Shift + Enter for new line, Enter to send",
   "Sub_table": "Tableau",
-  "Search_action...": "Search action..."
+  "Search_action...": "Search action...",
+  "Comment_details": "Comment details"
 }
