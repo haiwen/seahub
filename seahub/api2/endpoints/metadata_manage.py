@@ -1071,43 +1071,6 @@ class FaceRecognitionManage(APIView):
 
         return Response({'task_id': task_id})
 
-    def delete(self, request, repo_id):
-        # recource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if not is_repo_admin(request.user.username, repo_id):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # check dose the repo have opened metadata manage
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
-            error_msg = f'The repo {repo_id} has disabledd the metadata manage.'
-            return api_error(status.HTTP_409_CONFLICT, error_msg)
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        try:
-            metadata_server_api.delete_base()
-        except Exception as err:
-            logger.error(err)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            record.enabled = False
-            record.save()
-            RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'success': True})
-
 
 class MetadataExtractFileDetails(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
