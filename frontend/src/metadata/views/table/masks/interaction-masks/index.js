@@ -1074,8 +1074,6 @@ class InteractionMasks extends React.Component {
         onKeyDown={this.onKeyDown}
         onFocus={this.onFocus}
         onScroll={this.onScroll}
-        tabIndex={0}
-        aria-hidden="true"
       >
         {draggedRange && (
           <DragMask
