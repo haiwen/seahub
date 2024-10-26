@@ -26,7 +26,7 @@ class SeahubIODialog extends React.Component {
         <ModalBody>
           <>
             <Loading/>
-            <div className="seahub-io-dialog-parsing-text">{gettext('Exporting log file...')}</div>
+            <div className="seahub-io-dialog-parsing-text">{gettext('Exporting...')}</div>
           </>
         </ModalBody>
       </Modal>
