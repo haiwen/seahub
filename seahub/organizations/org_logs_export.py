@@ -1,6 +1,7 @@
 import os
 import logging
 from shutil import rmtree
+from datetime import datetime
 from django.http import FileResponse
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -17,7 +18,10 @@ from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.decorators import org_staff_required
-
+try:
+    from seahub.settings import ADMIN_LOGS_EXPORT_INTERVAL
+except ImportError:
+    ADMIN_LOGS_EXPORT_INTERVAL = 180
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +38,15 @@ class OrgLogsExport(APIView):
         log_type = request.GET.get('logType', None)
         if not check_time_period_valid(start, end):
             error_msg = 'Failed to export excel, invalid start or end date.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        start_date = datetime.strptime(start, '%Y-%m-%d')
+        end_date = datetime.strptime(end, '%Y-%m-%d')
+        if start_date > end_date:
+            error_msg = 'invalid start or end date'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if (end_date - start_date).days > ADMIN_LOGS_EXPORT_INTERVAL:
+            error_msg = 'Failed to export excel,invalid date interval.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         task_id = export_logs_to_excel(start, end, log_type, org_id)
         res_data = {'task_id': task_id}
