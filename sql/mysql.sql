@@ -1558,7 +1558,7 @@ CREATE TABLE `sdoc_operation_log` (
   KEY `sdoc_idx_operation_log_doc_uuid_op_id` (`doc_uuid`,`op_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS `wiki_wiki2_publish` (
+CREATE TABLE `wiki_wiki2_publish` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
   `publish_url` varchar(40) DEFAULT NULL,
