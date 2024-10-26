@@ -8,8 +8,7 @@ import { getEventClassName } from '../../../utils/common';
 import { isCellValueChanged, getCellValueByColumn } from '../../../utils/cell';
 import { canEditCell } from '../../../utils/column';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../utils/keyboard-utils';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS } from '../../../constants';
-import { zIndexes } from '../../../../constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS, metadataZIndexes } from '../../../constants';
 
 class NormalEditorContainer extends React.Component {
 
@@ -316,7 +315,7 @@ class NormalEditorContainer extends React.Component {
 
   render() {
     const { width, height, left, top } = this.props;
-    const style = { position: 'absolute', height, width, left, top, zIndex: zIndexes.EDITOR_CONTAINER };
+    const style = { position: 'absolute', height, width, left, top, zIndex: metadataZIndexes.EDITOR_CONTAINER };
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
         <div

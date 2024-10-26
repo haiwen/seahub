@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isFrozen } from '../../../../../../utils/column';
-import { GROUP_HEADER_HEIGHT, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
-import { zIndexes } from '../../../../../../../constants';
+import { GROUP_HEADER_HEIGHT, SEQUENCE_COLUMN_WIDTH, metadataZIndexes } from '../../../../../../constants';
 
 class GroupHeaderCell extends React.PureComponent {
 
@@ -33,7 +32,7 @@ class GroupHeaderCell extends React.PureComponent {
       left: offsetLeft
     };
     if (isFrozen(column)) {
-      style.zIndex = zIndexes.GROUP_FROZEN_HEADER;
+      style.zIndex = metadataZIndexes.GROUP_FROZEN_HEADER;
     }
     return style;
   };

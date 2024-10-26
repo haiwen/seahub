@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { zIndexes } from '../../../constants';
+import { metadataZIndexes } from '../../constants';
 
 const propTypes = {
   innerWidth: PropTypes.number,
@@ -35,7 +35,7 @@ class HorizontalScrollbar extends React.Component {
   };
 
   getContainerStyle = () => {
-    return { zIndex: zIndexes.SCROLL_BAR };
+    return { zIndex: metadataZIndexes.SCROLL_BAR };
   };
 
   setScrollbarRef = (ref) => {

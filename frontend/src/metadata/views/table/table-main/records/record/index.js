@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
 import { getFrozenColumns } from '../../../../../utils/column';
-import { zIndexes } from '../../../../../../constants';
+import { metadataZIndexes } from '../../../../../constants';
 
 import './index.css';
 
@@ -191,12 +191,12 @@ class Record extends React.Component {
   getFrozenColumnsStyle = () => {
     const { isGroupView, lastFrozenColumnKey, height } = this.props;
     let style = {
-      zIndex: zIndexes.SEQUENCE_COLUMN,
+      zIndex: metadataZIndexes.SEQUENCE_COLUMN,
       height: height - 1,
     };
     if (isGroupView) {
       style.height = height;
-      style.zIndex = zIndexes.FROZEN_GROUP_CELL;
+      style.zIndex = metadataZIndexes.FROZEN_GROUP_CELL;
       if (!lastFrozenColumnKey) {
         style.marginLeft = '0px';
       }

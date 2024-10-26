@@ -2,8 +2,7 @@ import { Utils } from '../../../../utils/utils';
 import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell';
 import { getGroupByPath } from '../../../utils/view';
 import { getColumnByIndex, canEditCell } from '../../../utils/column';
-import { PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES } from '../../../constants';
-import { zIndexes } from '../../../../constants';
+import { PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 
 const SELECT_DIRECTION = {
@@ -87,7 +86,7 @@ export const getSelectedDimensions = ({
     } else {
       top = getRecordTopFromRecordsBody(rowIdx);
     }
-    const zIndex = frozen ? zIndexes.FROZEN_CELL_MASK : zIndexes.CELL_MASK;
+    const zIndex = frozen ? metadataZIndexes.FROZEN_CELL_MASK : metadataZIndexes.CELL_MASK;
     return { width, left, top, height: rowHeight, zIndex };
   }
   return defaultDimensions;
@@ -123,7 +122,7 @@ export const getSelectedRangeDimensions = ({
 }) => {
   const { topLeft, bottomRight, startCell, cursorCell } = selectedRange;
   if (topLeft.idx < 0) {
-    return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: zIndexes.CELL_MASK };
+    return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: metadataZIndexes.CELL_MASK };
   }
 
   let { totalWidth, anyColFrozen, left } = getColumnRangeProperties(topLeft.idx, bottomRight.idx, columns);
@@ -169,7 +168,7 @@ export const getSelectedRangeDimensions = ({
     top = getRecordTopFromRecordsBody(topLeft.rowIdx);
   }
 
-  const zIndex = anyColFrozen ? zIndexes.FROZEN_CELL_MASK : zIndexes.CELL_MASK;
+  const zIndex = anyColFrozen ? metadataZIndexes.FROZEN_CELL_MASK : metadataZIndexes.CELL_MASK;
   return { width: totalWidth, left, top, height, zIndex };
 };
 
