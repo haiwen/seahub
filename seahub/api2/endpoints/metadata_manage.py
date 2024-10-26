@@ -134,6 +134,7 @@ class MetadataManage(APIView):
 
         try:
             record.enabled = False
+            record.face_recognition_enabled = False
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
@@ -1020,19 +1021,16 @@ class FaceRecognitionManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.utils import FACES_TABLE
-
         try:
-            metadata = metadata_server_api.get_metadata()
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            if record and record.face_recognition_enabled:
+                is_enabled = True
+            else:
+                is_enabled = False
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        is_enabled = True if faces_table_id else False
 
         return Response({'enabled': is_enabled})
 
@@ -1052,12 +1050,18 @@ class FaceRecognitionManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        params = {
-            'repo_id': repo_id,
-        }
+        try:
+            RepoMetadata.objects.enable_face_recognition(repo_id)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         init_faces(metadata_server_api)
+
+        params = {
+            'repo_id': repo_id,
+        }
 
         try:
             task_id = add_init_face_recognition_task(params=params)
@@ -1066,6 +1070,43 @@ class FaceRecognitionManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'task_id': task_id})
+
+    def delete(self, request, repo_id):
+        # recource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check dose the repo have opened metadata manage
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The repo {repo_id} has disabledd the metadata manage.'
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        try:
+            metadata_server_api.delete_base()
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            record.enabled = False
+            record.save()
+            RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 
 class MetadataExtractFileDetails(APIView):

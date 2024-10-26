@@ -1528,12 +1528,14 @@ CREATE TABLE `repo_metadata`  (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `repo_id` VARCHAR(36) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
+  `face_recognition_enabled` TINYINT(1) NULL,
   `modified_time` DATETIME NOT NULL,
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
+  KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

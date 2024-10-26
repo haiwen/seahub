@@ -60,6 +60,7 @@ def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
+    raise Exception()
     url = urljoin(SEAFEVENTS_SERVER_URL, '/extract-file-details')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
@@ -105,6 +106,7 @@ def get_sys_columns():
 def get_link_column(face_table_id):
     from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
     columns = [
+        METADATA_TABLE.columns.face_vectors.to_dict(),
         METADATA_TABLE.columns.face_links.to_dict({
             'link_id': FACES_TABLE.link_id,
             'table_id': METADATA_TABLE.id,
@@ -168,6 +170,7 @@ def init_metadata(metadata_server_api):
 def init_faces(metadata_server_api):
     from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
 
+    remove_faces_table(metadata_server_api)
     resp = metadata_server_api.create_table(FACES_TABLE.name)
 
     # init link column
@@ -177,6 +180,21 @@ def init_faces(metadata_server_api):
     # init face column
     face_columns = get_face_columns(resp['id'])
     metadata_server_api.add_columns(resp['id'], face_columns)
+
+
+def remove_faces_table(metadata_server_api):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    metadata = metadata_server_api.get_metadata()
+
+    tables = metadata.get('tables', [])
+    for table in tables:
+        if table['name'] == FACES_TABLE.name:
+            metadata_server_api.delete_table(table['id'])
+        elif table['name'] == METADATA_TABLE.name:
+            columns = table.get('columns', [])
+            for column in columns:
+                if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key]:
+                    metadata_server_api.delete_columns(table['id'], [column['key']])
 
 
 def get_file_download_token(repo_id, file_id, username):
