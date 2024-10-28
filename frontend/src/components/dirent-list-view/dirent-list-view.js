@@ -184,14 +184,24 @@ class DirentListView extends React.Component {
   prepareImageItem = (item) => {
     const name = item.name;
     const repoID = this.props.repoID;
+    const repoEncrypted = this.props.currentRepoInfo.encrypted;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+    const isGIF = fileExt === 'gif';
+    const src = `${siteRoot}repo/${repoID}/raw${path}`;
+    let thumbnail = '';
+    if (repoEncrypted || isGIF) {
+      thumbnail = src;
+    } else {
+      thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+    }
 
     return {
-      'name': name,
+      name,
+      thumbnail,
+      src,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
-      'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
-      'src': `${siteRoot}repo/${repoID}/raw${path}`,
-      'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
+      'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`
     };
   };
 

@@ -251,27 +251,25 @@ class DirColumnNav extends React.Component {
       return Utils.imageCheck(item.object.name);
     });
 
-    const useThumbnail = !this.props.currentRepoInfo.encrypted;
+    const repoEncrypted = this.props.currentRepoInfo.encrypted;
+    const repoID = this.props.repoID;
     let prepareItem = (item) => {
       const name = item.object.name;
-
       const path = Utils.encodePath(Utils.joinPath(node.parentNode.path, name));
       const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
       const isGIF = fileExt === 'gif';
-
-      const repoID = this.props.repoID;
-      let src = '';
-      if (useThumbnail && !isGIF) {
-        src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      const src = `${siteRoot}repo/${repoID}/raw${path}`;
+      let thumbnail = '';
+      if (repoEncrypted || isGIF) {
+        thumbnail = src;
       } else {
-        src = `${siteRoot}repo/${repoID}/raw${path}`;
+        thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
       }
-
       return {
-        'name': name,
+        name,
+        src,
+        thumbnail,
         'url': `${siteRoot}lib/${repoID}/file${path}`,
-        'src': src,
-        'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
         'node': items.find(item => item.path.split('/').pop() === name),
         'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
       };
