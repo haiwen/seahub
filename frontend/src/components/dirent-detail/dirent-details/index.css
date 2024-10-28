@@ -10,8 +10,6 @@
 }
 
 .detail-body .detail-image-thumbnail .thumbnail {
-  height: 100%;
-  width: 100%;
   border: 0;
   border-radius: 0;
   float: none;
