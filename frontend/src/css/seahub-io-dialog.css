@@ -1,0 +1,12 @@
+
+.seahub-io-dialog .modal-body {
+  height: 142px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.seahub-io-dialog .modal-body .seahub-io-dialog-parsing-text {
+  text-align: center;
+  margin-top: 14px;
+}
