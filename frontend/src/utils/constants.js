@@ -107,7 +107,6 @@ export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
 export const additionalShareDialogNote = window.app.pageOptions.additionalShareDialogNote;
-export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
 export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
 
 // map settings

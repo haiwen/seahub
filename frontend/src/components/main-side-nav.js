@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
-  enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
+  enableTC, sideNavFooterCustomHtml,
   canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -282,18 +282,6 @@ class MainSideNav extends React.Component {
                   </a>
                 </li>
               }
-              {additionalAppBottomLinks && (
-                <>
-                  {Object.keys(additionalAppBottomLinks).map((key, index) => {
-                    return (
-                      <a className="nav-link" href={additionalAppBottomLinks[key]}>
-                        <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
-                        <span className="nav-text">{key}</span>
-                      </a>
-                    );
-                  })}
-                </>
-              )}
               <li className='nav-item'>
                 <a href={siteRoot + 'download_client_program/'} className="nav-link">
                   <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
