@@ -928,7 +928,7 @@ class CustomLDAPBackend(object):
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
-                    contact_email_attr, role_attr):
+                    contact_email_attr, role_attr, no_check_password=False):
         try:
             admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
         except Exception as e:
@@ -964,15 +964,16 @@ class CustomLDAPBackend(object):
         except Exception as e:
             raise Exception('parse ldap result failed: %s' % e)
 
-        try:
-            user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism)
-        except Exception as e:
-            raise Exception(e)
+        if not no_check_password:
+            try:
+                user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism)
+            except Exception as e:
+                raise Exception(e)
 
-        user_bind.unbind_s()
+            user_bind.unbind_s()
         return nickname, contact_email, user_role
 
-    def authenticate(self, ldap_user=None, password=None):
+    def authenticate(self, ldap_user=None, password=None, no_check_password=False):
         if not ENABLE_LDAP:
             return
 
@@ -987,7 +988,7 @@ class CustomLDAPBackend(object):
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
                 SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
-                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR)
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, no_check_password)
             ldap_provider = LDAP_PROVIDER
         except Exception as e:
             if ENABLE_MULTI_LDAP:
@@ -1002,7 +1003,7 @@ class CustomLDAPBackend(object):
                         MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
                         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
                         MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
-                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR)
+                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, no_check_password)
                     ldap_provider = MULTI_LDAP_1_PROVIDER
                 except Exception as e:
                     logger.error(e)
