@@ -1636,3 +1636,34 @@ export const Utils = {
 };
 
 export const isMobile = (typeof (window) !== 'undefined') && (window.innerWidth < 768 || navigator.userAgent.toLowerCase().match(/(ipod|ipad|iphone|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|wince)/i) != null);
+
+export const validateName = (newName) => {
+  let isValid = true;
+  let errMessage = '';
+  if (!newName || !newName.trim()) {
+    isValid = false;
+    errMessage = gettext('Name is required');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('/')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain slash');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('`')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backtick');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('\\')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backslash');
+    return { isValid, errMessage };
+  }
+  if (newName === '..') {
+    isValid = false;
+    errMessage = gettext('Name cannot contain double dots');
+    return { isValid, errMessage };
+  }
+  return { isValid, errMessage };
+};
