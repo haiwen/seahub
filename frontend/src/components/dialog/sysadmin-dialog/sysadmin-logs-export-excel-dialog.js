@@ -116,8 +116,8 @@ class LogsExportExcelDialog extends React.Component {
       return true;
     } else {
       this.setState({
-          errMsg: gettext('Date Invalid.')
-        });
+        errMsg: gettext('Date Invalid.')
+      });
       return false;
     }
   };
