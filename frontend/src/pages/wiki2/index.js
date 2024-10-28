@@ -53,14 +53,16 @@ class Wiki extends Component {
     this.getWikiConfig();
   }
 
-  handlePath = () => {
-    const custom_url = window.location.pathname.substring(1);
-    if (custom_url.includes('wiki/publish')) {
-      return custom_url;
+  getCustomUrl = () => {
+    const siteRootLen = siteRoot.length;
+    const customUrl = window.location.pathname.substring(siteRootLen);
+    if (customUrl.includes('wiki/publish')) {
+      return customUrl;
     }
 
     return isWiki2 ? 'wikis/' : 'published/';
   };
+
   getWikiConfig = () => {
     let wikiAPIConfig;
     if (wikiPermission === 'public') {
@@ -171,11 +173,13 @@ class Wiki extends Component {
 
     const params = new URLSearchParams(window.location.search);
     params.set('page_id', pageId);
-    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
-    if (this.handlePath().includes('wiki/publish')) {
-      fileUrl = `${siteRoot}${this.handlePath()}?${params.toString()}`;
+
+    let customUrl = this.getCustomUrl();
+    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
+    if (customUrl.includes('wiki/publish')) {
+      url = `${siteRoot}${customUrl}?${params.toString()}`;
     }
-    window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
+    window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
   cacheHistoryFiles = (docUuid, name, pageId) => {
