@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '../card';
 import CellFormatter from '../../../components/cell-formatter';
 import ListMoreOperations from './list-more-operations';
@@ -40,19 +41,21 @@ const List = ({
     >
       <div className='list-header'>
         <span>
-          {id === 'ungrouped' ? (
+          {id === 'uncategorized' ? (
             <span>{title}</span>
           ) : (
             <CellFormatter value={title} field={field} readonly={true} />
           )}
         </span>
-        <div className="list-header-more-operation">
-          <ListMoreOperations
-            listId={id}
-            field={field}
-            moreOperationsList={moreOperationsList}
-          />
-        </div>
+        {id !== 'uncategorized' && (
+          <div className="list-header-more-operation">
+            <ListMoreOperations
+              listId={id}
+              field={field}
+              moreOperationsList={moreOperationsList}
+            />
+          </div>
+        )}
       </div>
       <div className='list-body'>
         {cards.map(card => (
@@ -70,6 +73,17 @@ const List = ({
       </div>
     </div>
   );
+};
+
+List.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
+  field: PropTypes.object.isRequired,
+  contentFields: PropTypes.array.isRequired,
+  cards: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired,
+  moreOperationsList: PropTypes.array.isRequired,
+  onCardDrop: PropTypes.func.isRequired,
 };
 
 export default List;

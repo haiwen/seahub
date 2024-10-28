@@ -135,10 +135,10 @@ export const GALLERY_DATE_MODE = {
 };
 
 export const KANBAN_SETTINGS_KEYS = {
-  SELECTED_VIEW_ID: 'selectedViewId',
-  GROUP_BY_COLUMN: 'groupByColumn',
-  TITLE_FIELD: 'titleField',
-  HIDE_EMPTY_VALUES: 'hideEmptyValues',
-  SHOW_FIELD_NAMES: 'showFieldNames',
-  TEXT_WRAP: 'textWrap',
+  SELECTED_VIEW_ID: 'selected_view_id',
+  GROUP_BY_COLUMN_KEY: 'group_by_column_key',
+  TITLE_FIELD_KEY: 'title_field_key',
+  HIDE_EMPTY_VALUES: 'hide_empty_values',
+  SHOW_FIELD_NAMES: 'show_field_names',
+  TEXT_WRAP: 'text_wrap',
 };

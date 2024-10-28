@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
+import { useCollaborators } from '../../hooks';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../store/operations';
 import { gettext } from '../../../utils/constants';
 import { getViewShownColumns } from '../../utils/view';
@@ -24,11 +25,12 @@ const Kanban = () => {
 
   const { viewsMap } = useMetadata();
   const { metadata, store } = useMetadataView();
+  const { collaborators } = useCollaborators();
 
   const {
     selectedViewId,
-    groupByColumn,
-    titleField,
+    groupByColumnKey,
+    titleFieldKey,
     hideEmptyValues,
     showFieldNames,
     textWrap,
@@ -37,9 +39,26 @@ const Kanban = () => {
 
   const shownColumns = useMemo(() => getViewShownColumns(viewsMap[selectedViewId], metadata.columns), [viewsMap, metadata.columns, selectedViewId]);
 
+  const groupByColumn = useMemo(() => {
+    return shownColumns.find(col => col.key === groupByColumnKey);
+  }, [shownColumns, groupByColumnKey]);
+
+  const titleField = useMemo(() => {
+    return shownColumns.find(col => col.key === titleFieldKey);
+  }, [shownColumns, titleFieldKey]);
+
+  const currentSettings = useMemo(() => ({
+    selectedViewId,
+    groupByColumnKey,
+    titleFieldKey,
+    hideEmptyValues,
+    showFieldNames,
+    textWrap,
+  }), [selectedViewId, groupByColumnKey, titleFieldKey, hideEmptyValues, showFieldNames, textWrap]);
+
   const contentFields = useMemo(() => {
-    return shownColumns.filter(col => col.key !== titleField);
-  }, [shownColumns, titleField]);
+    return shownColumns.filter(col => col.key !== titleFieldKey);
+  }, [shownColumns, titleFieldKey]);
 
   const lists = useMemo(() => {
     if (!groupByColumn) return [];
@@ -47,17 +66,24 @@ const Kanban = () => {
     const { rows } = metadata;
     const ungroupedCards = [];
     const groupedCardsMap = {};
+    const isPrivateColumn = PRIVATE_COLUMN_KEYS.includes(groupByColumnKey);
 
-    groupByColumn.data.options.forEach(option => {
-      if (PRIVATE_COLUMN_KEYS.includes(groupByColumn.key)) {
-        groupedCardsMap[option.id] = [];
+    if (groupByColumn.type === CellType.SINGLE_SELECT) {
+      if (isPrivateColumn) {
+        groupByColumn.data.options.forEach(option => groupedCardsMap[option.id] = []);
       } else {
-        groupedCardsMap[option.name] = [];
+        groupByColumn.data.options.forEach(option => groupedCardsMap[option.name] = []);
       }
-    });
+    } else if (groupByColumn.type === CellType.COLLABORATOR) {
+      if (Array.isArray(collaborators)) {
+        collaborators.forEach(collaborator => {
+          groupedCardsMap[collaborator.email] = [];
+        });
+      }
+    }
 
     rows.forEach(row => {
-      const cellValue = getCellValueByColumn(row, groupByColumn);// key: _file_type
+      const cellValue = getCellValueByColumn(row, groupByColumn);
       const card = {
         id: row[PRIVATE_COLUMN_KEY.ID],
         title: {
@@ -67,31 +93,46 @@ const Kanban = () => {
         record: row,
       };
 
-      if (groupedCardsMap[cellValue]) {
-        groupedCardsMap[cellValue].push(card);
+      if (cellValue) {
+        groupedCardsMap[cellValue].push(card); // error here
       } else {
         ungroupedCards.push(card);
       }
     });
 
-    const groupedLists = groupByColumn.data.options.map(option => ({
-      id: option.id,
-      title: option.name,
-      field: groupByColumn,
-      contentFields,
-      cards: PRIVATE_COLUMN_KEYS.includes(groupByColumn.key) ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
-    }));
+    let groupedLists = [];
+    if (groupByColumn.type === CellType.SINGLE_SELECT) {
+      groupedLists = groupByColumn.data.options.map(option => ({
+        id: option.id,
+        title: option.name,
+        field: groupByColumn,
+        contentFields,
+        cards: isPrivateColumn ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
+      }));
+    } else if (groupByColumn.type === CellType.COLLABORATOR) {
+      if (Array.isArray(collaborators)) {
+        groupedLists = collaborators.map(collaborator => ({
+          id: collaborator.email,
+          title: [collaborator.email],
+          field: groupByColumn,
+          contentFields,
+          cards: groupedCardsMap[collaborator.email],
+        }));
+      }
+    }
 
     const ungroupedList = {
-      id: 'ungrouped',
-      title: gettext('Ungrouped'),
+      id: 'uncategorized',
+      title: gettext('Uncategorized'),
       field: groupByColumn,
       contentFields,
       cards: ungroupedCards,
     };
 
-    return [...groupedLists, ungroupedList];
-  }, [metadata, groupByColumn, titleField, contentFields]);
+    groupedLists.push(ungroupedList);
+
+    return groupedLists;
+  }, [metadata, collaborators, groupByColumnKey, groupByColumn, titleField, contentFields]);
 
   const canAddList = useMemo(() => {
     const groupByCol = shownColumns.find(col => col.key === groupByColumn?.key);
@@ -189,19 +230,29 @@ const Kanban = () => {
     });
   }, [store]);
 
+  const getOldRowData = useCallback((originalOldCellValue) => {
+    const { key: columnKey, name: columnName } = groupByColumn;
+    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey)
+      ? { [columnKey]: originalOldCellValue }
+      : { [columnName]: originalOldCellValue };
+    const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
+    return { oldRowData, originalOldRowData };
+  }, [groupByColumn]);
+
   const onCardDrop = useCallback((record, sourceListId, targetListId) => {
     if (sourceListId === targetListId) return;
 
-    const targetList = lists.find(list => list.id === targetListId);
-
     const rowId = record[PRIVATE_COLUMN_KEY.ID];
-    const updates = { [groupByColumn.name]: targetList.title };
-    const originalUpdates = { [groupByColumn.key]: record[groupByColumn.key] };
-    const oldRowData = { [groupByColumn.name]: record[groupByColumn.key] };
-    const originalOldRowData = { [groupByColumn.key]: record[groupByColumn.key] };
+    const targetList = lists.find(list => list.id === targetListId);
+    const originalOldCellValue = getCellValueByColumn(record, groupByColumn);
+    const updates = PRIVATE_COLUMN_KEYS.includes(groupByColumnKey)
+      ? { [groupByColumn.key]: targetList.id }
+      : { [groupByColumn.name]: targetList.title };
+    const originalUpdates = { [groupByColumn.key]: targetList.id };
+    const { oldRowData, originalOldRowData } = getOldRowData(originalOldCellValue);
 
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
-  }, [lists, groupByColumn, modifyRecord]);
+  }, [lists, groupByColumnKey, groupByColumn, modifyRecord, getOldRowData]);
 
   useEffect(() => {
     const unsubscribeKanbanSetting = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING, () => setSettingOpen(!isSettingOpen));
@@ -213,68 +264,55 @@ const Kanban = () => {
 
   return (
     <div className='sf-metadata-view-kanban-container'>
-      <div className='sf-metadata-view-kanban'>
-        {lists && lists.map((list, index) => (
-          <div
-            key={list.id}
-            draggable={list.field.editable}
-            onDragStart={(event) => onListDragStart(event, list.id)}
-            onDragEnter={(event) => onListDragEnter(event, list.id)}
-            onDragLeave={onListDragLeave}
-            onDragOver={onListDragOver}
-            onDrop={(event) => onListDrop(event, index)}
-            className={classNames('kanban-list', {
-              'dragging': draggingListId === list.id,
-              'drag-over': dragOverListId === list.id,
-            })}
-          >
-            <List
-              key={list._id}
-              {...list}
-              settings={{
-                selectedViewId,
-                groupByColumn,
-                titleField,
-                hideEmptyValues,
-                showFieldNames,
-                textWrap,
-              }}
-              moreOperationsList={moreOperationsList}
-              onDeleteList={() => handleDeleteList(list._id)}
-              onCardDrop={onCardDrop}
+      <div className='sf-metadata-view-kanban-wrapper'>
+        <div className='sf-metadata-view-kanban'>
+          {lists && lists.map((list, index) => (
+            <div
+              key={list.id}
+              draggable={list.field.editable}
+              onDragStart={(event) => onListDragStart(event, list.id)}
+              onDragEnter={(event) => onListDragEnter(event, list.id)}
+              onDragLeave={onListDragLeave}
+              onDragOver={onListDragOver}
+              onDrop={(event) => onListDrop(event, index)}
+              className={classNames('kanban-list', {
+                'dragging': draggingListId === list.id,
+                'drag-over': dragOverListId === list.id,
+              })}
+            >
+              <List
+                key={list._id}
+                {...list}
+                settings={currentSettings}
+                moreOperationsList={moreOperationsList}
+                onDeleteList={() => handleDeleteList(list._id)}
+                onCardDrop={onCardDrop}
+              />
+            </div>
+          ))}
+          {canAddList && (
+            <div
+              id="add-list-button"
+              className='add-list-button'
+              onClick={handleAddListButtonClick}
+            >
+              <Icon iconName="add-table" />
+              <span className="btn-text">{gettext('Add a new list')}</span>
+            </div>
+          )}
+          {isShowAddListPopover && (
+            <AddListPopover
+              options={groupByColumn.data.options}
+              onCancel={handleCancelAddList}
+              onSubmit={handleAddNewList}
             />
-          </div>
-        ))}
-        {canAddList && (
-          <div
-            id="add-list-button"
-            className='add-list-button'
-            onClick={handleAddListButtonClick}
-          >
-            <Icon iconName="add-table" />
-            <span className="btn-text">{gettext('Add a new list')}</span>
-          </div>
-
-        )}
-        {isShowAddListPopover && (
-          <AddListPopover
-            options={groupByColumn.data.options}
-            onCancel={handleCancelAddList}
-            onSubmit={handleAddNewList}
-          />
-        )}
+          )}
+        </div>
       </div>
       {isSettingOpen &&
       <SettingPanel
         shownColumns={shownColumns}
-        settings={{
-          selectedViewId,
-          groupByColumn,
-          titleField,
-          hideEmptyValues,
-          showFieldNames,
-          textWrap,
-        }}
+        settings={currentSettings}
         onSettingChange={updateSetting}
         onClose={() => setSettingOpen(false)}
       />}

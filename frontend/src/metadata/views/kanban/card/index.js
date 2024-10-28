@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CellFormatter from '../../../components/cell-formatter';
 import { getCellValueByColumn } from '../../../utils/cell';
@@ -18,6 +19,8 @@ const Card = ({
   };
 
   const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     onDrop(event);
   };
 
@@ -40,13 +43,27 @@ const Card = ({
           return (
             <div key={field.key} className='card-field'>
               {settings.showFieldNames && <label>{field.name}</label>}
-              <CellFormatter value={value} field={field} readonly={true} />
+              {value ? (
+                <CellFormatter value={value} field={field} readonly={true} />
+              ) : (
+                <div className="empty-cell-formatter"></div>
+              )}
             </div>
           );
         })}
       </div>
     </div>
   );
+};
+
+Card.propTypes = {
+  title: PropTypes.object.isRequired,
+  fields: PropTypes.array.isRequired,
+  record: PropTypes.object.isRequired,
+  draggable: PropTypes.bool.isRequired,
+  settings: PropTypes.object.isRequired,
+  onDragStart: PropTypes.func.isRequired,
+  onDrop: PropTypes.func.isRequired,
 };
 
 export default Card;

@@ -9,25 +9,15 @@ const KanbanViewToolBar = () => {
   };
 
   return (
-    <>
-      {/* <IconBtn
-        iconName="kanban"
-        className='sf-metadata-view-tool-operation-btn sf-metadata-view-tool-kanban'
-        size={24}
-        role="button"
-        aria-label="kanban"
-        tabIndex={0}
-      /> */}
-      <IconBtn
-        iconName="set-up"
-        className='sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting'
-        size={24}
-        role="button"
-        aria-label="Setting"
-        tabIndex={0}
-        onClick={onToggleKanbanSetting}
-      />
-    </>
+    <IconBtn
+      iconName="set-up"
+      className='sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting'
+      size={24}
+      role="button"
+      aria-label="Setting"
+      tabIndex={0}
+      onClick={onToggleKanbanSetting}
+    />
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
 import Color from '../options-popover/option/color';
@@ -35,13 +36,13 @@ const AddListPopover = ({ options, onCancel, onSubmit }) => {
 
   return (
     <CustomizePopover
-      target='add-list-button'
-      className='kanban-add-list-popover'
+      target="add-list-button"
+      className="kanban-add-list-popover"
       canHide={false}
       hide={onCancel}
       hideWithEsc={onCancel}
     >
-      <div className='kanban-add-list-popover-inner'>
+      <div className="kanban-add-list-popover-inner">
         <div className="kanban-popover-body">
           <Color
             option={option}
@@ -56,12 +57,18 @@ const AddListPopover = ({ options, onCancel, onSubmit }) => {
           />
         </div>
         <div className="kanban-popover-footer">
-          <Button className='mr-2' onClick={onCancel}>{gettext('Cancel')}</Button>
+          <Button className="mr-2" onClick={onCancel}>{gettext('Cancel')}</Button>
           <Button color="primary" disabled={false} onClick={handleSubmit}>{gettext('Submit')}</Button>
         </div>
       </div>
     </CustomizePopover>
   );
+};
+
+AddListPopover.propTypes = {
+  options: PropTypes.array.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default AddListPopover;

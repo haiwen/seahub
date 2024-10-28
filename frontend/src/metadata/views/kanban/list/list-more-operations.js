@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
 
@@ -31,6 +32,12 @@ const ListMoreOperations = ({ listId, field, moreOperationsList }) => {
       </DropdownMenu>
     </Dropdown>
   );
+};
+
+ListMoreOperations.propTypes = {
+  listId: PropTypes.string.isRequired,
+  field: PropTypes.object.isRequired,
+  moreOperationsList: PropTypes.array.isRequired,
 };
 
 export default ListMoreOperations;

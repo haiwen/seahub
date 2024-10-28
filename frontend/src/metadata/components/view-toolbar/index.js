@@ -91,21 +91,15 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
           showDetail={showDetail}
         />
       )}
-<<<<<<< HEAD
       {viewType === VIEW_TYPE.FACE_RECOGNITION && (
         <FaceRecognitionViewToolbar
           isCustomPermission={isCustomPermission}
           view={view}
           showDetail={showDetail}
-=======
-      {viewType === VIEW_TYPE.KANBAN && (
-        <KanbanViewToolBar
-          // readOnly={readOnly}
-          // isCustomPermission={isCustomPermission}
-          // view={view}
-          // collaborators={collaborators}
->>>>>>> afe2c0ea0 (add kanban view)
         />
+      )}
+      {viewType === VIEW_TYPE.KANBAN && (
+        <KanbanViewToolBar />
       )}
     </div>
   );
