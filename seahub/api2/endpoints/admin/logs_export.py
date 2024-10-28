@@ -17,10 +17,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
-try:
-    from seahub.settings import ADMIN_LOGS_EXPORT_INTERVAL
-except ImportError:
-    ADMIN_LOGS_EXPORT_INTERVAL = 180
+from seahub.settings import ADMIN_LOGS_EXPORT_MAX_DAYS
+
 
 
 class SysLogsExport(APIView):
@@ -42,8 +40,8 @@ class SysLogsExport(APIView):
         if start_date > end_date:
             error_msg = 'invalid start or end date'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        if (end_date - start_date).days > ADMIN_LOGS_EXPORT_INTERVAL:
-            error_msg = 'Failed to export excel,invalid date interval.'
+        if (end_date - start_date).days > ADMIN_LOGS_EXPORT_MAX_DAYS:
+            error_msg = 'Failed to export excel, only can export logs within %s days' % ADMIN_LOGS_EXPORT_MAX_DAYS
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         task_id = export_logs_to_excel(start, end, log_type)
