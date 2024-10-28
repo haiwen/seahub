@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
+import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml,
   isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
@@ -215,17 +215,6 @@ class MainSideNavFolded extends React.Component {
                     </li>
                   </>
                 }
-                {additionalAppBottomLinks && (
-                  <>
-                    {Object.keys(additionalAppBottomLinks).map((key, index) => {
-                      return (
-                        <a className="nav-link" href={additionalAppBottomLinks[key]}>
-                          <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true"></span>
-                        </a>
-                      );
-                    })}
-                  </>
-                )}
                 <li className='nav-item'>
                   <a href={siteRoot + 'download_client_program/'} className="nav-link">
                     <span className="sf3-font-devices sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-clients"></span>

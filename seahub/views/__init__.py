@@ -57,7 +57,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
-    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
+    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
     DTABLE_WEB_SERVER, SEADOC_SERVER_URL
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
@@ -1136,7 +1136,6 @@ def react_fake_view(request, **kwargs):
         'enable_show_contact_email_when_search_user': settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
         'enable_show_login_id_when_search_user': settings.ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER,
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
-        'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
         'enable_ocm_via_webdav': ENABLE_OCM_VIA_WEBDAV,
         'enable_ocm': ENABLE_OCM,
