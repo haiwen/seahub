@@ -23,7 +23,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
 from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, normalize_repo_status_str
-from seahub.utils import is_valid_dirent_name, is_valid_email
+from seahub.utils import is_valid_dirent_name, is_valid_email, transfer_repo
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
@@ -348,6 +348,7 @@ class AdminLibrary(APIView):
                 error_msg = 'owner invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        is_share = request.data.get('reshare', False)
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -398,6 +399,11 @@ class AdminLibrary(APIView):
                     if ccnet_api.get_orgs_by_user(new_owner):
                         error_msg = 'Can not transfer library to organization user %s' % new_owner
                         return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                    if '@seafile_group' in new_owner:
+                        group_id = int(new_owner.split('@')[0])
+                        if seaserv.is_org_group(group_id):
+                            error_msg = 'Can not transfer library to an organization department %s' % new_owner
+                            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -409,46 +415,18 @@ class AdminLibrary(APIView):
                 error_msg = _("Library can not be transferred to owner.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # get repo shared to user/group list
-            shared_users = seafile_api.list_repo_shared_to(
-                    repo_owner, repo_id)
-            shared_groups = seafile_api.list_repo_shared_group_by_user(
-                    repo_owner, repo_id)
-
             # get all pub repos
             pub_repos = []
             if not request.cloud_mode:
                 pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
             # transfer repo
-            if '@seafile_group' in new_owner:
-                group_id = int(new_owner.split('@')[0])
-                if seaserv.is_org_group(group_id):
-                    error_msg = 'Can not transfer library to an organization department %s' % new_owner
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-                seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
-            else:
-                seafile_api.set_repo_owner(repo_id, new_owner)
-
-            # reshare repo to user
-            for shared_user in shared_users:
-                shared_username = shared_user.user
-
-                if new_owner == shared_username:
-                    continue
-
-                seafile_api.share_repo(repo_id, new_owner,
-                        shared_username, shared_user.perm)
-
-            # reshare repo to group
-            for shared_group in shared_groups:
-                shared_group_id = shared_group.group_id
-
-                if not is_group_member(shared_group_id, new_owner):
-                    continue
-
-                seafile_api.set_group_repo(repo_id, shared_group_id,
-                        new_owner, shared_group.perm)
+            try:
+                transfer_repo(repo_id, new_owner, is_share)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             # reshare repo to links
             try:

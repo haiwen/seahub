@@ -17,7 +17,7 @@ from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import group_id_to_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils import is_valid_email
+from seahub.utils import is_valid_email, transfer_repo
 from seahub.signals import repo_deleted
 from seahub.constants import PERMISSION_READ_WRITE
 
@@ -130,6 +130,7 @@ class OrgAdminRepo(APIView):
         """Transfer an organization library
         """
         new_owner = request.data.get('email', None)
+        is_share = request.data.get('reshare', True)
         if not new_owner:
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -160,44 +161,15 @@ class OrgAdminRepo(APIView):
 
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
 
-        # get repo shared to user/group list
-        shared_users = seafile_api.list_org_repo_shared_to(org_id,
-                repo_owner, repo_id)
-        shared_groups = seafile_api.list_org_repo_shared_group(org_id,
-                repo_owner, repo_id)
-
         # get all pub repos
         pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(org_id, repo_owner)
         # transfer repo
-        if '@seafile_group' in new_owner:
-            group_id = int(new_owner.split('@')[0])
-            if seaserv.is_org_group(group_id):
-                group_org_id = ccnet_api.get_org_id_by_group(group_id)
-                if org_id != group_org_id:
-                    error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
-        else:
-            seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
-
-        # reshare repo to user
-        for shared_user in shared_users:
-            shared_username = shared_user.user
-
-            if new_owner == shared_username:
-                continue
-
-            seafile_api.org_share_repo(org_id, repo_id, new_owner, shared_username, shared_user.perm)
-
-        # reshare repo to group
-        for shared_group in shared_groups:
-            shared_group_id = shared_group.group_id
-
-            if not ccnet_api.is_group_user(shared_group_id, new_owner):
-                continue
-
-            seafile_api.add_org_group_repo(repo_id, org_id,
-                    shared_group_id, new_owner, shared_group.perm)
+        try:
+            transfer_repo(repo_id, new_owner, is_share, org_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # check if current repo is pub-repo
         # if YES, reshare current repo to public

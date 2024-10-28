@@ -101,7 +101,7 @@ from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg,
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
         RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos
-from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.utils import HAS_OFFICE_CONVERTER, transfer_repo
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
@@ -1816,6 +1816,7 @@ class RepoOwner(APIView):
 
         # argument check
         new_owner = request.data.get('owner', '').lower()
+        is_share = request.data.get('reshare', False)
         if not new_owner:
             error_msg = 'owner invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1869,80 +1870,21 @@ class RepoOwner(APIView):
         # preparation before transfer repo
         pub_repos = []
         if org_id:
-            # get repo shared to user/group list
-            shared_users = seafile_api.list_org_repo_shared_to(org_id,
-                                                               repo_owner,
-                                                               repo_id)
-            shared_groups = seafile_api.list_org_repo_shared_group(org_id,
-                                                                   repo_owner,
-                                                                   repo_id)
-
             # get all org pub repos
             pub_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(
                     org_id, repo_owner)
         else:
-            # get repo shared to user/group list
-            shared_users = seafile_api.list_repo_shared_to(
-                    repo_owner, repo_id)
-            shared_groups = seafile_api.list_repo_shared_group_by_user(
-                    repo_owner, repo_id)
-
             # get all pub repos
             if not request.cloud_mode:
                 pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
         # transfer repo
         try:
-            if org_id:
-                if '@seafile_group' in new_owner:
-                    group_id = int(new_owner.split('@')[0])
-                    seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
-                else:
-                    seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
-            else:
-                if ccnet_api.get_orgs_by_user(new_owner):
-                    # can not transfer library to organization user %s.
-                    error_msg = 'Email %s invalid.' % new_owner
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                else:
-                    if '@seafile_group' in new_owner:
-                        group_id = int(new_owner.split('@')[0])
-                        seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
-                    else:
-                        seafile_api.set_repo_owner(repo_id, new_owner)
+            transfer_repo(repo_id, new_owner, is_share, org_id)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        # reshare repo to user
-        for shared_user in shared_users:
-            shared_username = shared_user.user
-
-            if new_owner == shared_username:
-                continue
-
-            if org_id:
-                seaserv.seafserv_threaded_rpc.org_add_share(org_id, repo_id,
-                        new_owner, shared_username, shared_user.perm)
-            else:
-                seafile_api.share_repo(repo_id, new_owner,
-                        shared_username, shared_user.perm)
-
-        # reshare repo to group
-        for shared_group in shared_groups:
-            shared_group_id = shared_group.group_id
-
-            if ('@seafile_group' not in new_owner) and\
-                    (not is_group_member(shared_group_id, new_owner)):
-                continue
-
-            if org_id:
-                seafile_api.add_org_group_repo(repo_id, org_id,
-                        shared_group_id, new_owner, shared_group.perm)
-            else:
-                seafile_api.set_group_repo(repo_id, shared_group_id,
-                        new_owner, shared_group.perm)
 
         # reshare repo to links
         try:

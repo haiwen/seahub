@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+  Nav, NavItem, NavLink, TabContent, TabPane, Label, Input } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
@@ -34,6 +34,7 @@ class TransferDialog extends React.Component {
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
+      maintainShare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
     this.options = [];
@@ -44,7 +45,8 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab } = this.state;
+    const { activeTab, maintainShare } = this.state;
+    console.log(maintainShare)
     if (activeTab === TRANS_DEPART) {
       let department = this.state.selectedOption;
       this.props.submit(department);
@@ -114,8 +116,18 @@ class TransferDialog extends React.Component {
     }
   };
 
+  onChangeShareStatus = (type) => {
+    const { maintainShare } = this.state
+    return () => {
+      this.setState({
+        maintainShare: !maintainShare
+      })
+    }
+
+  }
   renderTransContent = () => {
     let activeTab = this.state.activeTab;
+    let maintainShare = this.state.maintainShare;
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
@@ -159,6 +171,10 @@ class TransferDialog extends React.Component {
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}
                 />
+                <Label check>
+                    <Input type="checkbox" onChange={this.onChangeShareStatus(maintainShare)} checked={maintainShare}/>
+                    <span>{gettext('Maintain share')}</span>
+                </Label>
               </TabPane>
               {isPro && canTransferToDept &&
               <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
@@ -172,6 +188,10 @@ class TransferDialog extends React.Component {
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
                 />
+                <Label check>
+                    <Input type="checkbox" onChange={this.onChangeShareStatus(maintainShare)} checked={maintainShare}/>
+                    <span>{gettext('Maintain share')}</span>
+                </Label>
               </TabPane>}
             </Fragment>
           </TabContent>
