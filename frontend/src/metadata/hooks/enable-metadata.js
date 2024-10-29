@@ -2,17 +2,25 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
+import { seafileAPI } from '../../utils/seafile-api';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const EnableMetadataContext = React.createContext(null);
 
 export const EnableMetadataProvider = ({ repoID, children }) => {
-  const enableMetadataManagement = useMemo(() => {
-    return window.app.pageOptions.enableMetadataManagement;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.app.pageOptions.enableMetadataManagement]);
 
+  const [enableMetadataManagement, setEnableMetadataManagement] = useState(false);
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
+
+  useEffect(() => {
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      if (res.data.encrypted) {
+        setEnableMetadataManagement(false);
+      } else {
+        setEnableMetadataManagement(window.app.pageOptions.enableMetadataManagement);
+      }
+    });
+  }, [repoID]);
 
   useEffect(() => {
     if (!enableMetadataManagement) {
