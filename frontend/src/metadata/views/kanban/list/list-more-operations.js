@@ -13,7 +13,7 @@ const ListMoreOperations = ({ listId, field, moreOperationsList }) => {
       <DropdownToggle
         tag={'i'}
         role="button"
-        className='sf3-font sf3-font-more'
+        className="sf3-font sf3-font-more"
         data-toggle="dropdown"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}

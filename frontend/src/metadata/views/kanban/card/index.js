@@ -26,13 +26,13 @@ const Card = ({
 
   return (
     <div
-      className='sf-metadata-view-kanban-card'
+      className="sf-metadata-view-kanban-card"
       draggable={draggable}
       onDragStart={handleDragStart}
       onDrop={handleDrop}
     >
       {title.field && (
-        <div className='kanban-card-header'>
+        <div className="kanban-card-header">
           <CellFormatter value={title.value} field={title.field} readonly={true} />
         </div>
       )}
@@ -41,7 +41,7 @@ const Card = ({
           const value = getCellValueByColumn(record, field);
           if (settings.hideEmptyValues && !value) return null;
           return (
-            <div key={field.key} className='card-field'>
+            <div key={field.key} className="card-field">
               {settings.showFieldNames && <label>{field.name}</label>}
               {value ? (
                 <CellFormatter value={value} field={field} readonly={true} />

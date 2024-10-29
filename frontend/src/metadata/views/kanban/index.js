@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
@@ -10,16 +9,15 @@ import { gettext } from '../../../utils/constants';
 import { getViewShownColumns } from '../../utils/view';
 import toaster from '../../../components/toast';
 import { getCellValueByColumn } from '../../utils/cell';
-import AddListPopover from '../../components/popover/add-list-popover';
 import SettingPanel from './setting-panel';
 import List from './list';
 import useKanbanSettings from './useKanbanSettings';
 
 import './index.css';
+import AddList from './add-list';
 
 const Kanban = () => {
-  const [isSettingOpen, setSettingOpen] = useState(false);
-  const [isShowAddListPopover, setShowAddListPopover] = useState(false);
+  const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
   const [draggingListId, setDraggingListId] = useState(null);
   const [dragOverListId, setDragOverListId] = useState(null);
 
@@ -34,18 +32,19 @@ const Kanban = () => {
     hideEmptyValues,
     showFieldNames,
     textWrap,
+    hiddenColumns,
     updateSetting,
   } = useKanbanSettings(viewsMap);
 
-  const shownColumns = useMemo(() => getViewShownColumns(viewsMap[selectedViewId], metadata.columns), [viewsMap, metadata.columns, selectedViewId]);
+  const shownColumns = useMemo(() => getViewShownColumns(metadata.view, metadata.view.columns), [metadata.view]);
 
   const groupByColumn = useMemo(() => {
-    return shownColumns.find(col => col.key === groupByColumnKey);
-  }, [shownColumns, groupByColumnKey]);
+    return metadata.columns.find(col => col.key === groupByColumnKey);
+  }, [metadata.columns, groupByColumnKey]);
 
   const titleField = useMemo(() => {
-    return shownColumns.find(col => col.key === titleFieldKey);
-  }, [shownColumns, titleFieldKey]);
+    return metadata.columns.find(col => col.key === titleFieldKey);
+  }, [metadata.columns, titleFieldKey]);
 
   const currentSettings = useMemo(() => ({
     selectedViewId,
@@ -54,11 +53,8 @@ const Kanban = () => {
     hideEmptyValues,
     showFieldNames,
     textWrap,
-  }), [selectedViewId, groupByColumnKey, titleFieldKey, hideEmptyValues, showFieldNames, textWrap]);
-
-  const contentFields = useMemo(() => {
-    return shownColumns.filter(col => col.key !== titleFieldKey);
-  }, [shownColumns, titleFieldKey]);
+    hiddenColumns,
+  }), [selectedViewId, groupByColumnKey, titleFieldKey, hideEmptyValues, showFieldNames, textWrap, hiddenColumns]);
 
   const lists = useMemo(() => {
     if (!groupByColumn) return [];
@@ -106,7 +102,7 @@ const Kanban = () => {
         id: option.id,
         title: option.name,
         field: groupByColumn,
-        contentFields,
+        shownColumns,
         cards: isPrivateColumn ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
       }));
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
@@ -115,7 +111,7 @@ const Kanban = () => {
           id: collaborator.email,
           title: [collaborator.email],
           field: groupByColumn,
-          contentFields,
+          shownColumns,
           cards: groupedCardsMap[collaborator.email],
         }));
       }
@@ -125,35 +121,16 @@ const Kanban = () => {
       id: 'uncategorized',
       title: gettext('Uncategorized'),
       field: groupByColumn,
-      contentFields,
+      shownColumns,
       cards: ungroupedCards,
     };
 
     groupedLists.push(ungroupedList);
 
     return groupedLists;
-  }, [metadata, collaborators, groupByColumnKey, groupByColumn, titleField, contentFields]);
+  }, [metadata, collaborators, groupByColumnKey, groupByColumn, titleField, shownColumns]);
 
-  const canAddList = useMemo(() => {
-    const groupByCol = shownColumns.find(col => col.key === groupByColumn?.key);
-    return groupByCol?.editable;
-  }, [shownColumns, groupByColumn]);
-
-  const handleAddListButtonClick = useCallback(() => {
-    setShowAddListPopover(true);
-  }, []);
-
-  const handleAddNewList = useCallback((option) => {
-    const oldData = groupByColumn.data;
-    const options = [...oldData.options, option];
-    const optionModifyType = COLUMN_DATA_OPERATION_TYPE.ADD_OPTION;
-    store.modifyColumnData(groupByColumn.key, { options }, { options: oldData.options }, { optionModifyType });
-    setShowAddListPopover(false);
-  }, [store, groupByColumn]);
-
-  const handleCancelAddList = useCallback(() => {
-    setShowAddListPopover(false);
-  }, []);
+  const canAddList = useMemo(() => groupByColumn && groupByColumn.editable && groupByColumn.type !== CellType.COLLABORATOR, [groupByColumn]);
 
   const handleDeleteList = useCallback((listId) => {
     const oldData = groupByColumn.data;
@@ -255,17 +232,17 @@ const Kanban = () => {
   }, [lists, groupByColumnKey, groupByColumn, modifyRecord, getOldRowData]);
 
   useEffect(() => {
-    const unsubscribeKanbanSetting = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING, () => setSettingOpen(!isSettingOpen));
+    const unsubscribeKanbanSetting = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING, () => setSettingPanelOpen(!isSettingPanelOpen));
 
     return () => {
       unsubscribeKanbanSetting();
     };
-  }, [isSettingOpen, viewsMap]);
+  }, [isSettingPanelOpen, viewsMap]);
 
   return (
-    <div className='sf-metadata-view-kanban-container'>
-      <div className='sf-metadata-view-kanban-wrapper'>
-        <div className='sf-metadata-view-kanban'>
+    <div className="sf-metadata-view-kanban-container">
+      <div className="sf-metadata-view-kanban-wrapper">
+        <div className="sf-metadata-view-kanban">
           {lists && lists.map((list, index) => (
             <div
               key={list.id}
@@ -291,31 +268,18 @@ const Kanban = () => {
             </div>
           ))}
           {canAddList && (
-            <div
-              id="add-list-button"
-              className='add-list-button'
-              onClick={handleAddListButtonClick}
-            >
-              <Icon iconName="add-table" />
-              <span className="btn-text">{gettext('Add a new list')}</span>
-            </div>
-          )}
-          {isShowAddListPopover && (
-            <AddListPopover
-              options={groupByColumn.data.options}
-              onCancel={handleCancelAddList}
-              onSubmit={handleAddNewList}
-            />
+            <AddList groupByColumn={groupByColumn}/>
           )}
         </div>
       </div>
-      {isSettingOpen &&
-      <SettingPanel
-        shownColumns={shownColumns}
-        settings={currentSettings}
-        onSettingChange={updateSetting}
-        onClose={() => setSettingOpen(false)}
-      />}
+      {isSettingPanelOpen && (
+        <SettingPanel
+          columns={metadata.columns}
+          settings={currentSettings}
+          onSettingChange={updateSetting}
+          onClose={() => setSettingPanelOpen(false)}
+        />
+      )}
     </div>
   );
 };

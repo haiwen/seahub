@@ -99,7 +99,14 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
         />
       )}
       {viewType === VIEW_TYPE.KANBAN && (
-        <KanbanViewToolBar />
+        <KanbanViewToolBar
+          readOnly={readOnly}
+          isCustomPermission={isCustomPermission}
+          view={view}
+          collaborators={collaborators}
+          modifyFilters={modifyFilters}
+          modifySorts={modifySorts}
+        />
       )}
     </div>
   );

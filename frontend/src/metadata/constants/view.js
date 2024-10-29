@@ -41,7 +41,17 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
     }
   ],
   [VIEW_TYPE.FACE_RECOGNITION]: [],
-  [VIEW_TYPE.KANBAN]: [],
+  [VIEW_TYPE.KANBAN]: [
+    {
+      column_key: PRIVATE_COLUMN_KEY.IS_DIR,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'file'
+    }, {
+      column_key: PRIVATE_COLUMN_KEY.FILE_TYPE,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS_ANY_OF,
+      filter_term: []
+    },
+  ],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {
@@ -53,6 +63,7 @@ export const VIEW_TYPE_DEFAULT_SORTS = {
 export const VIEW_SORT_COLUMN_RULES = {
   [VIEW_TYPE.TABLE]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
+  [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
 };
 
 export const VIEW_FIRST_SORT_COLUMN_RULES = {

@@ -8,7 +8,7 @@ const List = ({
   id,
   title,
   field,
-  contentFields,
+  shownColumns,
   cards,
   settings,
   moreOperationsList,
@@ -35,11 +35,11 @@ const List = ({
 
   return (
     <div
-      className='sf-metadata-view-kanban-list'
+      className="sf-metadata-view-kanban-list"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <div className='list-header'>
+      <div className="list-header">
         <span>
           {id === 'uncategorized' ? (
             <span>{title}</span>
@@ -57,12 +57,12 @@ const List = ({
           </div>
         )}
       </div>
-      <div className='list-body'>
+      <div className="list-body">
         {cards.map(card => (
           <Card
             key={card.id}
             title={card.title}
-            fields={contentFields}
+            fields={shownColumns}
             record={card.record}
             draggable={field.editable}
             settings={settings}
@@ -79,7 +79,7 @@ List.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   field: PropTypes.object.isRequired,
-  contentFields: PropTypes.array.isRequired,
+  shownColumns: PropTypes.array.isRequired,
   cards: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   moreOperationsList: PropTypes.array.isRequired,

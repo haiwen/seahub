@@ -1,19 +1,20 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import KanbanHiddenColumns from './hidden-columns';
 import { IconBtn, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../utils/constants';
-import { useMetadata } from '../../hooks/metadata';
-import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS, VIEW_TYPE } from '../../constants';
-import Switch from '../../../components/common/switch';
-
-import './index.css';
+import { gettext } from '../../../../utils/constants';
+import { useMetadata } from '../../../hooks/metadata';
+import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS, VIEW_TYPE } from '../../../constants';
+import Switch from '../../../../components/common/switch';
 
 const SettingPanel = ({
-  shownColumns,
+  columns,
   settings,
   onSettingChange,
   onClose
 }) => {
+  const [isHiddenColumnsVisible, setIsHiddenColumnsVisible] = useState(false);
   const { viewsMap } = useMetadata();
 
   const viewOptions = useMemo(() =>
@@ -23,30 +24,30 @@ const SettingPanel = ({
   , [viewsMap]);
 
   const groupByOptions = useMemo(() => {
-    return shownColumns
+    return columns
       .filter(col => col.type === CellType.SINGLE_SELECT || col.type === CellType.COLLABORATOR)
       .map(col => ({
         value: col.key,
         label: (
           <>
             <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[col.type]} /></span>
-            <span className=''>{col.name}</span>
+            <span>{col.name}</span>
           </>
         )
       }));
-  }, [shownColumns]);
+  }, [columns]);
 
   const titleOptions = useMemo(() => {
-    return shownColumns.map(col => ({
+    return columns.map(col => ({
       value: col.key,
       label: (
         <>
           <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[col.type]} /></span>
-          <span className=''>{col.name}</span>
+          <span>{col.name}</span>
         </>
       )
     }));
-  }, [shownColumns]);
+  }, [columns]);
 
   const selectedViewOption = viewOptions.find(option => option.value === settings.selectedViewId);
   const selectedGroupByOption = groupByOptions.find(option => option.value === settings.groupByColumnKey);
@@ -66,6 +67,14 @@ const SettingPanel = ({
 
   const handleToggleChange = useCallback((key, value) => {
     onSettingChange(key, value);
+  }, [onSettingChange]);
+
+  const handleToggleHiddenColumns = useCallback(() => {
+    setIsHiddenColumnsVisible(!isHiddenColumnsVisible);
+  }, [isHiddenColumnsVisible]);
+
+  const handleHiddenColumnsChange = useCallback((value) => {
+    onSettingChange(KANBAN_SETTINGS_KEYS.HIDDEN_COLUMNS, value);
   }, [onSettingChange]);
 
   return (
@@ -132,13 +141,23 @@ const SettingPanel = ({
             onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings.textWrap)}
           />
         </div>
+        <div className="split-line"></div>
+        <div className='toggle-hide-columns-btn' onClick={handleToggleHiddenColumns}>
+          <span className='hide-columns-label'>{gettext('Other fields')}</span>
+          <div className='toggle-hide-columns-btn-icon'>
+            <i className={classNames('sf3-font sf3-font-down', { 'rotate-90': !isHiddenColumnsVisible })}></i>
+          </div>
+        </div>
+        {isHiddenColumnsVisible && (
+          <KanbanHiddenColumns settings={settings} onChange={handleHiddenColumnsChange} />
+        )}
       </div>
     </div>
   );
 };
 
 SettingPanel.propTypes = {
-  shownColumns: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   onSettingChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

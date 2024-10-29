@@ -141,4 +141,5 @@ export const KANBAN_SETTINGS_KEYS = {
   HIDE_EMPTY_VALUES: 'hide_empty_values',
   SHOW_FIELD_NAMES: 'show_field_names',
   TEXT_WRAP: 'text_wrap',
+  HIDDEN_COLUMNS: 'hidden_columns',
 };

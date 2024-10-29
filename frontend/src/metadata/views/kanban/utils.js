@@ -21,5 +21,6 @@ export const loadKanbanSettings = (viewsMap) => {
     hideEmptyValues: settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES] || false,
     showFieldNames: settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] || false,
     textWrap: settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] || false,
+    hiddenColumns: settings[KANBAN_SETTINGS_KEYS.HIDDEN_COLUMNS] || [],
   };
 };

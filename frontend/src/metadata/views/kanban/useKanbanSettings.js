@@ -10,6 +10,7 @@ const useKanbanSettings = (viewsMap) => {
   const [hideEmptyValues, setHideEmptyValues] = useState(false);
   const [showFieldNames, setShowFieldNames] = useState(false);
   const [textWrap, setTextWrap] = useState(false);
+  const [hiddenColumns, setHiddenColumns] = useState([]);
 
   useEffect(() => {
     const loadedSettings = loadKanbanSettings(viewsMap);
@@ -19,6 +20,7 @@ const useKanbanSettings = (viewsMap) => {
     setHideEmptyValues(loadedSettings.hideEmptyValues);
     setShowFieldNames(loadedSettings.showFieldNames);
     setTextWrap(loadedSettings.textWrap);
+    setHiddenColumns(loadedSettings.hiddenColumns);
   }, [viewsMap, selectedViewId]);
 
   const updateSetting = useCallback((key, value) => {
@@ -42,6 +44,9 @@ const useKanbanSettings = (viewsMap) => {
       case KANBAN_SETTINGS_KEYS.TEXT_WRAP:
         setTextWrap(value);
         break;
+      case KANBAN_SETTINGS_KEYS.HIDDEN_COLUMNS:
+        setHiddenColumns(value);
+        break;
       default:
         break;
     }
@@ -54,6 +59,7 @@ const useKanbanSettings = (viewsMap) => {
     hideEmptyValues,
     showFieldNames,
     textWrap,
+    hiddenColumns,
     updateSetting,
   };
 };
