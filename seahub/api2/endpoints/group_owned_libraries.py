@@ -1427,7 +1427,7 @@ class GroupOwnedLibraryTransferView(APIView):
         """
         # argument check
         new_owner = request.data.get('email', None)
-        is_share = request.data.get('reshare', False)
+        is_share = request.data.get('reshare', True)
         if not new_owner:
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

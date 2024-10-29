@@ -374,10 +374,13 @@ class SeafileDB:
                 """
         repo_ids = [repo_id, ]
         with connection.cursor() as cursor:
-            cursor.execute(repo_ids_sql)
-            for item in cursor.fetchall():
-                repo_id = item[0]
-                repo_ids.append(repo_id)
+            try:
+                cursor.execute(repo_ids_sql)
+                for item in cursor.fetchall():
+                    repo_id = item[0]
+                    repo_ids.append(repo_id)
+            except:
+                return repo_ids
 
         return repo_ids
 
@@ -394,7 +397,10 @@ class SeafileDB:
             UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
             """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            try:
+                cursor.execute(sql)
+            except:
+                pass
 
     def set_repo_group_owner(self, repo_id, group_id, org_id=None):
         # transfer repo to department
@@ -421,39 +427,56 @@ class SeafileDB:
             sql = f"""
             UPDATE `{self.db_name}`.`OrgSharedRepo` SET from_email="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
             """
+            sql2 = f"""
+            DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email="{new_owner}" AND org_id={org_id} AND repo_id In ({repo_ids_str})
+            """
         else:
             sql = f"""
             UPDATE `{self.db_name}`.`SharedRepo` SET from_email="{new_owner}" WHERE repo_id IN ({repo_ids_str})
             """
+            sql2 = f"""
+            DELETE FROM `{self.db_name}`.`SharedRepo` WHERE to_email="{new_owner}" AND repo_id In ({repo_ids_str})
+            """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            try:
+                cursor.execute(sql2)
+                cursor.execute(sql)
+            except:
+                pass
 
-    def update_repo_group_shares(self, repo_id, new_owner, repo_owner, org_id=None):
+    def update_repo_group_shares(self, repo_id, new_owner, new_owner_group_ids, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        group_id = int(repo_owner.split('@')[0])
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        new_owner_group_ids_str = ','.join(["'%s'" % str(nid) for nid in new_owner_group_ids])
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+            UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id}
+             AND repo_id IN ({repo_ids_str}) AND group_id IN ({new_owner_group_ids_str})
             """
-            # remove current group
             sql2 = f"""
-                DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE owner="{repo_owner}" AND repo_id = "{repo_id}" AND group_id = {group_id}
-            """
+            DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+            AND group_id NOT IN ({new_owner_group_ids_str})"""
         else:
             sql = f"""
             UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+            AND group_id IN ({new_owner_group_ids_str})
             """
             sql2 = f"""
-                    DELETE FROM `{self.db_name}`.`RepoGroup` WHERE user_name="{repo_owner}" AND repo_id = "{repo_id}" AND group_id = {group_id}
-                """
+                DELETE FROM `{self.db_name}`.`RepoGroup` WHERE repo_id IN ({repo_ids_str})
+                AND group_id NOT IN ({new_owner_group_ids_str})"""
         with connection.cursor() as cursor:
-            cursor.execute(sql2)
-            cursor.execute(sql)
+            try:
+                cursor.execute(sql)
+                cursor.execute(sql2)
+            except:
+                pass
 
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
         DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            try:
+                cursor.execute(sql)
+            except:
+                pass

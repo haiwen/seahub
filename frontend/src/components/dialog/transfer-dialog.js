@@ -172,7 +172,7 @@ class TransferDialog extends React.Component {
                 />
                 <Label check className="main-label">
                   <Input type="checkbox" onChange={this.onChangeShareStatus(reshare)} checked={reshare}/>
-                  <span>{gettext('retain share')}</span>
+                  <span>{gettext('retain sharing')}</span>
                 </Label>
               </TabPane>
               {isPro && canTransferToDept &&
@@ -189,7 +189,7 @@ class TransferDialog extends React.Component {
                 />
                 <Label check className="main-label">
                   <Input type="checkbox" onChange={this.onChangeShareStatus(reshare)} checked={reshare}/>
-                  <span>{gettext('retain share')}</span>
+                  <span>{gettext('retain sharing')}</span>
                 </Label>
               </TabPane>}
             </Fragment>
