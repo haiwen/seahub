@@ -1662,7 +1662,7 @@ export const validateName = (newName) => {
   }
   if (newName === '..') {
     isValid = false;
-    errMessage = gettext('Name cannot contain double dots');
+    errMessage = gettext('Name cannot be double dots');
     return { isValid, errMessage };
   }
   return { isValid, errMessage };
