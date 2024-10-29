@@ -1532,6 +1532,8 @@ CREATE TABLE `repo_metadata`  (
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
+  `face_recognition_enabled` tinyint(1) DEFAULT NULL,
+  `last_face_cluster_time` datetime DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   PRIMARY KEY (`id`)
