@@ -59,7 +59,7 @@ class DingtalkDepartments extends Component {
   };
 
   getDingtalkDepartmentsList = (departmentID) => {
-    seafileAPI.adminListDingtalkDepartments(departmentID).then((res) => {
+    seafileAPI.sysAdminListDingtalkDepartments(departmentID).then((res) => {
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -88,7 +88,7 @@ class DingtalkDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.adminListDingtalkDepartmentMembers(department_id).then((res) => {
+    seafileAPI.sysAdminListDingtalkDepartmentMembers(department_id).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -176,7 +176,7 @@ class DingtalkDepartments extends Component {
       toaster.danger('未选择成员', { duration: 3 });
       return;
     }
-    seafileAPI.adminAddDingtalkUsersBatch(userList).then((res) => {
+    seafileAPI.sysAdminAddDingtalkUsersBatch(userList).then((res) => {
       this.setState({
         newUsersTempObj: {},
         isCheckedAll: false,
@@ -241,7 +241,7 @@ class DingtalkDepartments extends Component {
   onImportDepartmentSubmit = () => {
     let importDepartment = this.state.importDepartment;
     if (!importDepartment) return;
-    seafileAPI.adminImportDingtalkDepartment(importDepartment.id).then((res) => {
+    seafileAPI.sysAdminImportDingtalkDepartment(importDepartment.id).then((res) => {
       this.setState({
         isMembersListLoading: true,
         checkedDepartmentId: importDepartment.id,

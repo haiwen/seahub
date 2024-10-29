@@ -88,7 +88,7 @@ class FileScanRecords extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listFileScanRecords().then((res) => {
+    seafileAPI.sysAdminListFileScanRecords().then((res) => {
       this.setState({
         loading: false,
         records: res.data.record_list,

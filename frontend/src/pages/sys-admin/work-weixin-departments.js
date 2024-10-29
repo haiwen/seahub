@@ -58,7 +58,7 @@ class WorkWeixinDepartments extends Component {
   };
 
   getWorkWeixinDepartmentsList = (departmentID) => {
-    seafileAPI.adminListWorkWeixinDepartments(departmentID).then((res) => {
+    seafileAPI.sysAdminListWorkWeixinDepartments(departmentID).then((res) => {
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -87,7 +87,7 @@ class WorkWeixinDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id, { fetch_child: true }).then((res) => {
+    seafileAPI.sysAdminListWorkWeixinDepartmentMembers(department_id, { fetch_child: true }).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -176,7 +176,7 @@ class WorkWeixinDepartments extends Component {
       toaster.danger('未选择成员', { duration: 3 });
       return;
     }
-    seafileAPI.adminAddWorkWeixinUsersBatch(userList).then((res) => {
+    seafileAPI.sysAdminAddWorkWeixinUsersBatch(userList).then((res) => {
       this.setState({
         newUsersTempObj: {},
         isCheckedAll: false,
@@ -241,7 +241,7 @@ class WorkWeixinDepartments extends Component {
   onImportDepartmentSubmit = () => {
     let importDepartment = this.state.importDepartment;
     if (!importDepartment) return;
-    seafileAPI.adminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
+    seafileAPI.sysAdminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
       this.setState({
         isMembersListLoading: true,
         checkedDepartmentId: importDepartment.id,

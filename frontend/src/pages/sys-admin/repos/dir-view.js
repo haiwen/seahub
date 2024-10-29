@@ -127,7 +127,7 @@ class DirView extends Component {
     const file = this.fileInput.current.files[0];
 
     let { path } = this.state;
-    seafileAPI.sydAdminGetSysRepoItemUploadURL(path).then(res => {
+    seafileAPI.sysAdminGetSysRepoItemUploadURL(path).then(res => {
       let formData = new FormData();
       formData.append('parent_dir', path);
       formData.append('file', file);

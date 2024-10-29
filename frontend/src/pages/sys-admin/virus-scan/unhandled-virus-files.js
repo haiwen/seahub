@@ -260,7 +260,7 @@ class UnhandledVirusFiles extends Component {
   getListByPage = (page) => {
     const { perPage } = this.state;
     const hasHandled = false;
-    seafileAPI.listVirusFiles(page, perPage, hasHandled).then((res) => {
+    seafileAPI.sysAdminListVirusFiles(page, perPage, hasHandled).then((res) => {
       const data = res.data;
       const items = data.virus_file_list.map(item => {
         item.isSelected = false;
@@ -291,13 +291,13 @@ class UnhandledVirusFiles extends Component {
     let request;
     switch (op) {
       case 'delete':
-        request = seafileAPI.deleteVirusFile(virusID);
+        request = seafileAPI.sysAdminDeleteVirusFile(virusID);
         break;
       case 'ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, true);
+        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, true);
         break;
       case 'do-not-ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, false);
+        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, false);
         break;
     }
     request.then((res) => {
@@ -354,7 +354,7 @@ class UnhandledVirusFiles extends Component {
         }
       })
       .map(item => item.virus_id);
-    seafileAPI.batchProcessVirusFiles(virusIDs, op).then((res) => {
+    seafileAPI.sysAdminBatchProcessVirusFiles(virusIDs, op).then((res) => {
       let fileList = this.state.virusFiles;
       res.data.success.forEach(item => {
         let file = fileList.find(file => file.virus_id == item.virus_id);

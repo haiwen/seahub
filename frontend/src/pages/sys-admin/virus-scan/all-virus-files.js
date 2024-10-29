@@ -236,7 +236,7 @@ class AllVirusFiles extends Component {
 
   getListByPage = (page) => {
     const { perPage } = this.state;
-    seafileAPI.listVirusFiles(page, perPage).then((res) => {
+    seafileAPI.sysAdminListVirusFiles(page, perPage).then((res) => {
       const data = res.data;
       this.setState({
         loading: false,
@@ -263,13 +263,13 @@ class AllVirusFiles extends Component {
     let request;
     switch (op) {
       case 'delete':
-        request = seafileAPI.deleteVirusFile(virusID);
+        request = seafileAPI.sysAdminDeleteVirusFile(virusID);
         break;
       case 'ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, true);
+        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, true);
         break;
       case 'do-not-ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, false);
+        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, false);
         break;
     }
     request.then((res) => {

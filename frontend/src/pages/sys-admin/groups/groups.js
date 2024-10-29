@@ -2,14 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './groups-content';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 class Groups extends Component {
 
@@ -41,7 +40,7 @@ class Groups extends Component {
   };
 
   getGroupListByPage = (page) => {
-    seafileAPI.sysAdminListAllGroups(page, this.state.perPage).then((res) => {
+    systemAdminAPI.sysAdminListAllGroups(page, this.state.perPage).then((res) => {
       this.setState({
         loading: false,
         groupList: res.data.groups,
@@ -64,7 +63,7 @@ class Groups extends Component {
   };
 
   createGroup = (groupName, OnwerEmail) => {
-    seafileAPI.sysAdminCreateNewGroup(groupName, OnwerEmail).then(res => {
+    systemAdminAPI.sysAdminCreateNewGroup(groupName, OnwerEmail).then(res => {
       let newGroupList = this.state.groupList;
       newGroupList.unshift(res.data);
       this.setState({
@@ -78,7 +77,7 @@ class Groups extends Component {
   };
 
   deleteGroup = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
+    systemAdminAPI.sysAdminDismissGroupByID(groupID).then(res => {
       let newGroupList = this.state.groupList.filter(item => {
         return item.id != groupID;
       });
@@ -93,7 +92,7 @@ class Groups extends Component {
   };
 
   transferGroup = (groupID, receiverEmail) => {
-    seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
+    systemAdminAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
       let newGroupList = this.state.groupList.map(item => {
         if (item.id == groupID) {
           item = res.data;
@@ -111,7 +110,7 @@ class Groups extends Component {
   };
 
   changeGroup2Department = (groupID) => {
-    systemAdminAPI.adminGroup2Department(groupID).then((res) => {
+    systemAdminAPI.sysAdminGroup2Department(groupID).then((res) => {
       let newGroupList = this.state.groupList.map(item => {
         if (item.id == groupID) {
           item = res.data;

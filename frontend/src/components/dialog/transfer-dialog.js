@@ -1,19 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane
-} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
+  Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { gettext, isPro, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -82,7 +73,7 @@ class TransferDialog extends React.Component {
       });
     }
     else if (this.props.isSysAdmin) {
-      seafileAPI.sysAdminListDepartments().then((res) => {
+      systemAdminAPI.sysAdminListDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
           obj.value = res.data[i].name;
