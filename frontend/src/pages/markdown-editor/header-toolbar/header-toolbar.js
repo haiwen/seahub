@@ -157,12 +157,6 @@ class HeaderToolbar extends React.Component {
                     onMouseDown={this.props.toggleLockFile}
                   />
                 )}
-                <ButtonItem
-                  id="file-info"
-                  text={gettext('Info')}
-                  icon='info'
-                  onMouseDown={this.onArticleInfoToggle}
-                />
                 {canGenerateShareLink && (
                   <ButtonItem
                     id='shareBtn'
@@ -193,6 +187,12 @@ class HeaderToolbar extends React.Component {
                     onClick={this.downloadFile}
                   />
                 )}
+                <ButtonItem
+                  id="file-info"
+                  text={gettext('Info')}
+                  icon='info'
+                  onMouseDown={this.onArticleInfoToggle}
+                />
                 {this.props.fileInfo.permission == 'rw' && (
                   <ButtonItem
                     id="open-via-client"
