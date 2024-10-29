@@ -79,11 +79,16 @@ class DirentDetails extends React.Component {
     if (!dirent) return null;
     const isImg = Utils.imageCheck(dirent.name);
     if (!isImg) return null;
-    const { repoID, path } = this.props;
-    const bigIconUrl = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    const { repoID, path, currentRepoInfo } = this.props;
+    let src = '';
+    if (currentRepoInfo.encrypted) {
+      src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    } else {
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    }
     return (
-      <div className="detail-image-thumbnail">
-        <img src={bigIconUrl} alt="" className="thumbnail" />
+      <div className="detail-image">
+        <img src={src} alt="" />
       </div>
     );
   };
