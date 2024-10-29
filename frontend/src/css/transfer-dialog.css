@@ -52,3 +52,7 @@
 .transfer-dialog-content .transfer-dialog-main .tab-pane {
   height: 100%;
 }
+
+.transfer-dialog-content .transfer-dialog-main .main-label{
+  padding-left: 1.3rem;
+}

@@ -1499,6 +1499,11 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
     group_id = None
     if "seafile_group" in new_owner:
         group_id = int(new_owner.split('@')[0])
+    if type(is_share) is not bool:
+        if is_share == 'false':
+            is_share = False
+        else:
+            is_share = True
     repo_owner = seafile_api.get_org_repo_owner(repo_id) if org_id else seafile_api.get_repo_owner(repo_id)
 
     # transfer repo
@@ -1527,7 +1532,6 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                     error_msg = 'Permission denied.'
                     raise error_msg
                 seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
-            # 判断路由是否是只能转让给部门的那个接口
             else:
                 seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
         else:

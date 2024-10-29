@@ -34,7 +34,7 @@ class TransferDialog extends React.Component {
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
-      maintainShare: false,
+      reshare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
     this.options = [];
@@ -45,16 +45,15 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab, maintainShare } = this.state;
-    console.log(maintainShare)
+    const { activeTab, reshare } = this.state;
     if (activeTab === TRANS_DEPART) {
       let department = this.state.selectedOption;
-      this.props.submit(department);
+      this.props.submit(department, reshare);
     } else if (activeTab === TRANS_USER) {
       let selectedOption = this.state.selectedOption;
       if (selectedOption && selectedOption[0]) {
         let user = selectedOption[0];
-        this.props.submit(user);
+        this.props.submit(user, reshare);
       }
     }
   };
@@ -117,17 +116,17 @@ class TransferDialog extends React.Component {
   };
 
   onChangeShareStatus = (type) => {
-    const { maintainShare } = this.state
+    const { reshare } = this.state;
     return () => {
       this.setState({
-        maintainShare: !maintainShare
-      })
-    }
+        reshare: !reshare
+      });
+    };
 
-  }
+  };
   renderTransContent = () => {
     let activeTab = this.state.activeTab;
-    let maintainShare = this.state.maintainShare;
+    let reshare = this.state.reshare;
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
@@ -171,9 +170,9 @@ class TransferDialog extends React.Component {
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}
                 />
-                <Label check>
-                    <Input type="checkbox" onChange={this.onChangeShareStatus(maintainShare)} checked={maintainShare}/>
-                    <span>{gettext('Maintain share')}</span>
+                <Label check className="main-label">
+                  <Input type="checkbox" onChange={this.onChangeShareStatus(reshare)} checked={reshare}/>
+                  <span>{gettext('retain share')}</span>
                 </Label>
               </TabPane>
               {isPro && canTransferToDept &&
@@ -188,9 +187,9 @@ class TransferDialog extends React.Component {
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
                 />
-                <Label check>
-                    <Input type="checkbox" onChange={this.onChangeShareStatus(maintainShare)} checked={maintainShare}/>
-                    <span>{gettext('Maintain share')}</span>
+                <Label check className="main-label">
+                  <Input type="checkbox" onChange={this.onChangeShareStatus(reshare)} checked={reshare}/>
+                  <span>{gettext('retain share')}</span>
                 </Label>
               </TabPane>}
             </Fragment>

@@ -24,6 +24,7 @@ import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialo
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
+import { userAPI } from '../../utils/user-api';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -267,9 +268,9 @@ class MylibRepoListItem extends React.Component {
     this.setState({ isRenaming: !this.state.isRenaming });
   };
 
-  onTransferRepo = (user) => {
+  onTransferRepo = (user, reshare) => {
     let repoID = this.props.repo.repo_id;
-    seafileAPI.transferRepo(repoID, user.email).then(res => {
+    userAPI.transferRepo(repoID, user.email, reshare).then(res => {
       this.props.onTransferRepo(repoID);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
