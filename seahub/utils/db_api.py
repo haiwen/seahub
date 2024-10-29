@@ -428,18 +428,27 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
 
-    def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
+    def update_repo_group_shares(self, repo_id, new_owner, repo_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
+        group_id = int(repo_owner.split('@')[0])
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
         if org_id:
             sql = f"""
             UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
             """
+            # remove current group
+            sql2 = f"""
+                DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE owner="{repo_owner}" AND repo_id = "{repo_id}" AND group_id = {group_id}
+            """
         else:
             sql = f"""
             UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
             """
+            sql2 = f"""
+                    DELETE FROM `{self.db_name}`.`RepoGroup` WHERE user_name="{repo_owner}" AND repo_id = "{repo_id}" AND group_id = {group_id}
+                """
         with connection.cursor() as cursor:
+            cursor.execute(sql2)
             cursor.execute(sql)
 
     def delete_repo_user_token(self, repo_id, owner):

@@ -1521,8 +1521,9 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
             seafile_db_api.set_repo_owner(repo_id, new_owner, org_id)
 
         # Update shares and delete the old owner's token
+        print(repo_owner)
         seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
-        seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
+        seafile_db_api.update_repo_group_shares(repo_id, new_owner, repo_owner, org_id)
         seafile_db_api.delete_repo_user_token(repo_id, repo_owner)
     else:
         if org_id:
