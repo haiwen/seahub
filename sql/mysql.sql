@@ -1529,6 +1529,7 @@ CREATE TABLE `repo_metadata`  (
   `repo_id` VARCHAR(36) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
   `face_recognition_enabled` TINYINT(1) NULL,
+  `last_face_cluster_time` DATETIME NULL,
   `modified_time` DATETIME NOT NULL,
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
