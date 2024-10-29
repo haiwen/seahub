@@ -138,7 +138,6 @@ class Location extends React.Component {
       });
       this.addMarkerByPosition(lng, lat);
       this.map.setCenter(gcPosition);
-      // console.log('point: ', gcPosition);
       var geocoder = new window.google.maps.Geocoder();
       var latLng = new window.google.maps.LatLng(lat, lng);
       geocoder.geocode({ 'location': latLng }, (results, status) => {
