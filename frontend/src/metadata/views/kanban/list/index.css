@@ -1,0 +1,30 @@
+.sf-metadata-view-kanban-list {
+  width: 300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  cursor: pointer;
+}
+
+.sf-metadata-view-kanban-list .list-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 8px;
+}
+
+.list-header .list-header-more-operation {
+  color:#666;
+  background-color: transparent;
+  border: none !important;
+  border-color: transparent;
+}
+
+.sf-metadata-view-kanban-list .list-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

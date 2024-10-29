@@ -1,0 +1,18 @@
+.kanban-add-list-popover .popover {
+  width: 360px;
+  max-width: none;
+  padding: 1rem 0 0;
+}
+
+.kanban-popover-body {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.kanban-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+}

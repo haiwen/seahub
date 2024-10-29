@@ -1,123 +1,96 @@
 import { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useMetadataView } from '../../../hooks/metadata-view';
 import classNames from 'classnames';
+import { Label } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
-import { COLUMNS_ICON_CONFIG, EVENT_BUS_TYPE } from '../../../constants';
-import { Icon, Switch } from '@seafile/sf-metadata-ui-component';
+import { KANBAN_SETTINGS_KEYS } from '../../../constants';
+import HiddenColumnItem from './hidden-column-item';
 
-const KanbanHiddenColumns = ({ settings, onChange }) => {
+const HiddenColumns = ({ columns, settings, onChange }) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { metadata } = useMetadataView();
 
-  const columns = useMemo(() => {
-    return metadata.view.columns.filter(col => col.key !== settings.groupByColumnKey);
-  }, [metadata.view.columns, settings.groupByColumnKey]);
+  const shownColumnKeys = useMemo(() => settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS] || [], [settings]);
 
   const isEmpty = useMemo(() => {
     if (!Array.isArray(columns) || columns.length === 0) return true;
     return false;
   }, [columns]);
 
-  const onMouseEnter = useCallback((columnIndex) => {
+  const handleChange = useCallback((columnKey) => {
+    const newShownColumns = shownColumnKeys.slice(0);
+    const columnIndex = newShownColumns.indexOf(columnKey);
+    if (columnIndex > -1) {
+      newShownColumns.splice(columnIndex, 1);
+    } else {
+      newShownColumns.push(columnKey);
+    }
+    onChange(newShownColumns);
+  }, [shownColumnKeys, onChange]);
+
+  const hideAll = useCallback(() => {
+    onChange([]);
+  }, [onChange]);
+
+  const showAll = useCallback(() => {
+    onChange(columns.map(column => column.key));
+  }, [columns, onChange]);
+
+  const onToggleFieldsVisibility = useCallback(() => {
+    if (shownColumnKeys.length < columns.length) {
+      showAll();
+    } else {
+      hideAll();
+    }
+  }, [columns, shownColumnKeys, hideAll, showAll]);
+
+  const hasPropertiesHidden = useMemo(() => {
+    return shownColumnKeys.length < columns.length;
+  }, [shownColumnKeys, columns]);
+
+  const handleUpdateCurrentIndex = useCallback((columnIndex) => {
     if (currentIndex === columnIndex) return;
     setCurrentIndex(columnIndex);
   }, [currentIndex]);
 
-  const onMouseLeave = useCallback(() => {
-    setCurrentIndex(-1);
-  }, []);
-
-  const handleChange = useCallback((columnKey) => {
-    const newHiddenColumns = settings.hiddenColumns.slice(0);
-    const columnIndex = newHiddenColumns.indexOf(columnKey);
-    if (columnIndex > -1) {
-      newHiddenColumns.splice(columnIndex, 1);
-    } else {
-      newHiddenColumns.push(columnKey);
-    }
-    onChange(newHiddenColumns);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, newHiddenColumns);
-  }, [settings, onChange]);
-
-  const handleDragStart = useCallback((event, columnIndex) => {
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/hide-column-item', columnIndex);
-  }, []);
-
-  const handleDrop = useCallback((event, targetIndex) => {
-    event.preventDefault();
-    const dragIndex = parseInt(event.dataTransfer.getData('application/hide-column-item'), 10);
-    if (dragIndex !== targetIndex) {
-      const sourceColumnKey = columns[dragIndex].key;
-      const targetColumnKey = columns[targetIndex].key;
-
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, sourceColumnKey, targetColumnKey);
-    }
-  }, [columns]);
-
-  const handleDragOver = useCallback((event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
-
-  const hideAll = useCallback(() => {
-    const hiddenColumns = columns.map(column => column.key);
-    onChange(hiddenColumns);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, hiddenColumns);
-  }, [columns, onChange]);
-
-  const showAll = useCallback(() => {
-    onChange([]);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, []);
-  }, [onChange]);
+  const textProperties = {
+    titleValue: gettext('Properties to display on the card'),
+    bannerValue: gettext('Properties'),
+    hideValue: gettext('Hide all'),
+    showValue: gettext('Show all'),
+  };
 
   return (
     <div className="sf-metadata-kanban-hide-columns">
+      <div className="hide-columns-banner">
+        <Label className="mb-0">{textProperties.bannerValue}</Label>
+        <span className="show-all-button" onClick={onToggleFieldsVisibility}>
+          {hasPropertiesHidden ? textProperties.showValue : textProperties.hideValue}
+        </span>
+      </div>
       <div className={classNames('hide-columns-list', { 'empty-hide-columns-container': isEmpty })}>
         {isEmpty && <div className="empty-hide-columns-list">{gettext('No properties available to be hidden')}</div>}
         {!isEmpty && columns.map((column, columnIndex) => {
           return (
-            <div
+            <HiddenColumnItem
               key={column.key}
-              className="hide-column-item"
-              onMouseEnter={() => onMouseEnter(columnIndex)}
-              onMouseLeave={onMouseLeave}
-              onDragStart={(event) => handleDragStart(event, columnIndex)}
-              onDrop={(event) => handleDrop(event, columnIndex)}
-              onDragOver={handleDragOver}
-            >
-              <div className="drag-hide-column-handle">
-                <Icon iconName="drag" />
-              </div>
-              <Switch
-                checked={!settings.hiddenColumns.includes(column.key)}
-                placeholder={(
-                  <>
-                    <Icon iconName={COLUMNS_ICON_CONFIG[column.type]} />
-                    <span className="text-truncate">{column.name}</span>
-                  </>
-                )}
-                onChange={() => handleChange(column.key)}
-                switchClassName="hide-column-item-switch"
-              />
-            </div>
+              isHidden={!shownColumnKeys.includes(column.key)}
+              column={column}
+              columnIndex={columnIndex}
+              currentIndex={currentIndex}
+              onUpdateCurrentIndex={handleUpdateCurrentIndex}
+              onChange={handleChange}
+            />
           );
         })}
-        {!isEmpty && (
-          <div className="sf-metadata-hide-columns-operations">
-            <div className="sf-metadata-hide-columns-operation px-2" onClick={hideAll} aria-label={gettext('Hide all')}>{gettext('Hide all')}</div>
-            <div className="sf-metadata-hide-columns-operation px-2" onClick={showAll} aria-label={gettext('Show all')}>{gettext('Show all')}</div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-KanbanHiddenColumns.propTypes = {
+HiddenColumns.propTypes = {
+  columns: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default KanbanHiddenColumns;
+export default HiddenColumns;

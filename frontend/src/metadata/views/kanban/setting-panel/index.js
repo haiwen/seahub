@@ -1,27 +1,46 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import KanbanHiddenColumns from './hidden-columns';
 import { IconBtn, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import HiddenColumns from './hidden-columns';
 import { gettext } from '../../../../utils/constants';
-import { useMetadata } from '../../../hooks/metadata';
-import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS, VIEW_TYPE } from '../../../constants';
+import { CellType, COLUMNS_ICON_CONFIG, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS } from '../../../constants';
 import Switch from '../../../../components/common/switch';
+
+import './index.css';
 
 const SettingPanel = ({
   columns,
   settings,
-  onSettingChange,
   onClose
 }) => {
   const [isHiddenColumnsVisible, setIsHiddenColumnsVisible] = useState(false);
-  const { viewsMap } = useMetadata();
 
-  const viewOptions = useMemo(() =>
-    Object.values(viewsMap)
-      .filter(view => view.type === VIEW_TYPE.TABLE)
-      .map(({ _id, name }) => ({ label: name, value: _id }))
-  , [viewsMap]);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    const handleScrollOutsideMenu = (event) => {
+      const menuElement = document.querySelector('.sf-metadata-option-group');
+      const panelElement = panelRef.current;
+
+      if (panelElement && menuElement) {
+        if (panelElement.contains(event.target) && !menuElement.contains(event.target)) {
+          menuElement.style.display = 'none';
+        }
+      }
+    };
+
+    const panelElement = panelRef.current;
+    if (panelElement) {
+      panelElement.addEventListener('scroll', handleScrollOutsideMenu, true);
+    }
+
+    return () => {
+      if (panelElement) {
+        panelElement.removeEventListener('scroll', handleScrollOutsideMenu, true);
+      }
+    };
+  }, []);
 
   const groupByOptions = useMemo(() => {
     return columns
@@ -49,36 +68,31 @@ const SettingPanel = ({
     }));
   }, [columns]);
 
-  const selectedViewOption = viewOptions.find(option => option.value === settings.selectedViewId);
-  const selectedGroupByOption = groupByOptions.find(option => option.value === settings.groupByColumnKey);
-  const selectedTitleFieldOption = titleOptions.find(option => option.value === settings.titleFieldKey);
-
-  const handleViewChange = useCallback((value) => {
-    onSettingChange(KANBAN_SETTINGS_KEYS.SELECTED_VIEW_ID, value);
-  }, [onSettingChange]);
+  const selectedGroupByOption = groupByOptions.find(option => option.value === settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]);
+  const selectedTitleFieldOption = titleOptions.find(option => option.value === settings[KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]);
 
   const handleGroupByChange = useCallback((value) => {
-    onSettingChange(KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY, value);
-  }, [onSettingChange]);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: value });
+  }, [settings]);
 
   const handleTitleFieldChange = useCallback((value) => {
-    onSettingChange(KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY, value);
-  }, [onSettingChange]);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: value });
+  }, [settings]);
 
   const handleToggleChange = useCallback((key, value) => {
-    onSettingChange(key, value);
-  }, [onSettingChange]);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [key]: value });
+  }, [settings]);
+
+  const handleHiddenColumnsChange = useCallback((value) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS]: value });
+  }, [settings]);
 
   const handleToggleHiddenColumns = useCallback(() => {
     setIsHiddenColumnsVisible(!isHiddenColumnsVisible);
   }, [isHiddenColumnsVisible]);
 
-  const handleHiddenColumnsChange = useCallback((value) => {
-    onSettingChange(KANBAN_SETTINGS_KEYS.HIDDEN_COLUMNS, value);
-  }, [onSettingChange]);
-
   return (
-    <div className="sf-metadata-view-kanban-setting-panel">
+    <div className="sf-metadata-view-kanban-setting-panel" ref={panelRef}>
       <div className='setting-panel-header'>
         <h5 className='m-0'>{gettext('Setting')}</h5>
         <IconBtn
@@ -92,14 +106,6 @@ const SettingPanel = ({
         />
       </div>
       <div className='setting-panel-body'>
-        <div className='setting-item'>
-          <span className='setting-item-label'>{gettext('Subtable')}</span>
-          <CustomizeSelect
-            value={selectedViewOption}
-            onSelectOption={handleViewChange}
-            options={viewOptions}
-          />
-        </div>
         <div className='setting-item'>
           <span className='setting-item-label'>{gettext('Group by')}</span>
           <CustomizeSelect
@@ -115,41 +121,42 @@ const SettingPanel = ({
             value={selectedTitleFieldOption}
             onSelectOption={handleTitleFieldChange}
             options={titleOptions}
+            isInModal={true}
           />
         </div>
         <div className="split-line"></div>
         <div className='setting-item'>
           <Switch
             placeholder={gettext('Don\'t show empty values')}
-            checked={settings.hideEmptyValues || false}
-            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES, !settings.hideEmptyValues)}
+            checked={settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES] || false}
+            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES, !settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES])}
           />
         </div>
         <div className="split-line"></div>
         <div className='setting-item'>
           <Switch
             placeholder={gettext('Show field names')}
-            checked={settings.showFieldNames || false}
-            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES, !settings.showFieldNames)}
+            checked={settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] || false}
+            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES, !settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES])}
           />
         </div>
         <div className="split-line"></div>
         <div className='setting-item'>
           <Switch
             placeholder={gettext('Text wraps')}
-            checked={settings.textWrap || false}
-            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings.textWrap)}
+            checked={settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] || false}
+            onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP])}
           />
         </div>
         <div className="split-line"></div>
         <div className='toggle-hide-columns-btn' onClick={handleToggleHiddenColumns}>
-          <span className='hide-columns-label'>{gettext('Other fields')}</span>
+          <span className='hide-columns-label'>{gettext('Other properties')}</span>
           <div className='toggle-hide-columns-btn-icon'>
             <i className={classNames('sf3-font sf3-font-down', { 'rotate-90': !isHiddenColumnsVisible })}></i>
           </div>
         </div>
         {isHiddenColumnsVisible && (
-          <KanbanHiddenColumns settings={settings} onChange={handleHiddenColumnsChange} />
+          <HiddenColumns columns={columns} settings={settings} onChange={handleHiddenColumnsChange} />
         )}
       </div>
     </div>
@@ -159,7 +166,6 @@ const SettingPanel = ({
 SettingPanel.propTypes = {
   columns: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
-  onSettingChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

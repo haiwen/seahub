@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CellFormatter from '../../../components/cell-formatter';
 import { getCellValueByColumn } from '../../../utils/cell';
+import { KANBAN_SETTINGS_KEYS } from '../../../constants';
+
+import './index.css';
 
 const Card = ({
   title,
@@ -36,13 +39,13 @@ const Card = ({
           <CellFormatter value={title.value} field={title.field} readonly={true} />
         </div>
       )}
-      <div className={classNames('kanban-card-body', { 'card-text-wrap': settings.textWrap })}>
+      <div className={classNames('kanban-card-body', { 'card-text-wrap': settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] })}>
         {fields.map(field => {
           const value = getCellValueByColumn(record, field);
-          if (settings.hideEmptyValues && !value) return null;
+          if (settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES] && !value) return null;
           return (
             <div key={field.key} className="card-field">
-              {settings.showFieldNames && <label>{field.name}</label>}
+              {settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] && <label>{field.name}</label>}
               {value ? (
                 <CellFormatter value={value} field={field} readonly={true} />
               ) : (

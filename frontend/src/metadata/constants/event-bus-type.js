@@ -38,6 +38,7 @@ export const EVENT_BUS_TYPE = {
   MODIFY_SORTS: 'modify_sorts',
   MODIFY_GROUPBYS: 'modify_groupbys',
   MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
+  MODIFY_SETTINGS: 'modify_settings',
 
   // change
   VIEW_CHANGED: 'view_changed',

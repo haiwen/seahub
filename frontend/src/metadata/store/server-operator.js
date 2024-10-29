@@ -184,6 +184,16 @@ class ServerOperator {
         });
         break;
       }
+
+      case OPERATION_TYPE.MODIFY_SETTINGS: {
+        const { repo_id, view_id, settings } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { settings }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to modify settings') });
+        });
+        break;
+      }
       default: {
         break;
       }

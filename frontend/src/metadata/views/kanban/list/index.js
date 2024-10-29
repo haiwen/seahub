@@ -4,6 +4,8 @@ import Card from '../card';
 import CellFormatter from '../../../components/cell-formatter';
 import ListMoreOperations from './list-more-operations';
 
+import './index.css';
+
 const List = ({
   id,
   title,

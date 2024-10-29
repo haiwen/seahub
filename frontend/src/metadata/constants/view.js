@@ -71,3 +71,25 @@ export const VIEW_FIRST_SORT_COLUMN_RULES = {
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
 };
+
+export const KANBAN_SETTINGS_KEYS = {
+  GROUP_BY_COLUMN_KEY: 'group_by_column_key',
+  TITLE_FIELD_KEY: 'title_field_key',
+  HIDE_EMPTY_VALUES: 'hide_empty_values',
+  SHOW_FIELD_NAMES: 'show_field_names',
+  TEXT_WRAP: 'text_wrap',
+  SHOWN_COLUMN_KEYS: 'shown_column_keys',
+};
+
+export const VIEW_DEFAULT_SETTINGS = {
+  [VIEW_TYPE.TABLE]: {},
+  [VIEW_TYPE.GALLERY]: {},
+  [VIEW_TYPE.KANBAN]: {
+    [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: '',
+    [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: '',
+    [KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES]: false,
+    [KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES]: false,
+    [KANBAN_SETTINGS_KEYS.TEXT_WRAP]: false,
+    [KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS]: [],
+  }
+};

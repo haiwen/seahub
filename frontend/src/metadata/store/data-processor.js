@@ -274,6 +274,11 @@ class DataProcessor {
         }
         break;
       }
+      case OPERATION_TYPE.MODIFY_SETTINGS: {
+        const { settings } = operation;
+        table.view.settings = settings;
+        break;
+      }
       default: {
         break;
       }

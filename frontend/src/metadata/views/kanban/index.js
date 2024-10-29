@@ -3,18 +3,17 @@ import classNames from 'classnames';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
+import { CellType, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../store/operations';
 import { gettext } from '../../../utils/constants';
-import { getViewShownColumns } from '../../utils/view';
 import toaster from '../../../components/toast';
 import { getCellValueByColumn } from '../../utils/cell';
 import SettingPanel from './setting-panel';
 import List from './list';
-import useKanbanSettings from './useKanbanSettings';
+import AddList from './add-list';
 
 import './index.css';
-import AddList from './add-list';
+import EmptyTip from '../../../components/empty-tip';
 
 const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
@@ -25,41 +24,29 @@ const Kanban = () => {
   const { metadata, store } = useMetadataView();
   const { collaborators } = useCollaborators();
 
-  const {
-    selectedViewId,
-    groupByColumnKey,
-    titleFieldKey,
-    hideEmptyValues,
-    showFieldNames,
-    textWrap,
-    hiddenColumns,
-    updateSetting,
-  } = useKanbanSettings(viewsMap);
+  const shownColumns = useMemo(() => {
+    const shownColumnKeys = metadata.view.settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS];
+    if (!shownColumnKeys) return [];
 
-  const shownColumns = useMemo(() => getViewShownColumns(metadata.view, metadata.view.columns), [metadata.view]);
+    return metadata.view.columns.filter(col => shownColumnKeys.includes(col.key));
+  }, [metadata.view.columns, metadata.view.settings]);
 
   const groupByColumn = useMemo(() => {
+    const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
     return metadata.columns.find(col => col.key === groupByColumnKey);
-  }, [metadata.columns, groupByColumnKey]);
+  }, [metadata.columns, metadata.view.settings]);
 
   const titleField = useMemo(() => {
+    const titleFieldKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY];
     return metadata.columns.find(col => col.key === titleFieldKey);
-  }, [metadata.columns, titleFieldKey]);
-
-  const currentSettings = useMemo(() => ({
-    selectedViewId,
-    groupByColumnKey,
-    titleFieldKey,
-    hideEmptyValues,
-    showFieldNames,
-    textWrap,
-    hiddenColumns,
-  }), [selectedViewId, groupByColumnKey, titleFieldKey, hideEmptyValues, showFieldNames, textWrap, hiddenColumns]);
+  }, [metadata.columns, metadata.view.settings]);
 
   const lists = useMemo(() => {
     if (!groupByColumn) return [];
 
     const { rows } = metadata;
+    const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
+
     const ungroupedCards = [];
     const groupedCardsMap = {};
     const isPrivateColumn = PRIVATE_COLUMN_KEYS.includes(groupByColumnKey);
@@ -128,7 +115,7 @@ const Kanban = () => {
     groupedLists.push(ungroupedList);
 
     return groupedLists;
-  }, [metadata, collaborators, groupByColumnKey, groupByColumn, titleField, shownColumns]);
+  }, [metadata, collaborators, groupByColumn, titleField, shownColumns]);
 
   const canAddList = useMemo(() => groupByColumn && groupByColumn.editable && groupByColumn.type !== CellType.COLLABORATOR, [groupByColumn]);
 
@@ -219,6 +206,7 @@ const Kanban = () => {
   const onCardDrop = useCallback((record, sourceListId, targetListId) => {
     if (sourceListId === targetListId) return;
 
+    const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
     const rowId = record[PRIVATE_COLUMN_KEY.ID];
     const targetList = lists.find(list => list.id === targetListId);
     const originalOldCellValue = getCellValueByColumn(record, groupByColumn);
@@ -229,7 +217,7 @@ const Kanban = () => {
     const { oldRowData, originalOldRowData } = getOldRowData(originalOldCellValue);
 
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
-  }, [lists, groupByColumnKey, groupByColumn, modifyRecord, getOldRowData]);
+  }, [metadata.view.settings, lists, groupByColumn, modifyRecord, getOldRowData]);
 
   useEffect(() => {
     const unsubscribeKanbanSetting = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING, () => setSettingPanelOpen(!isSettingPanelOpen));
@@ -243,43 +231,48 @@ const Kanban = () => {
     <div className="sf-metadata-view-kanban-container">
       <div className="sf-metadata-view-kanban-wrapper">
         <div className="sf-metadata-view-kanban">
-          {lists && lists.map((list, index) => (
-            <div
-              key={list.id}
-              draggable={list.field.editable}
-              onDragStart={(event) => onListDragStart(event, list.id)}
-              onDragEnter={(event) => onListDragEnter(event, list.id)}
-              onDragLeave={onListDragLeave}
-              onDragOver={onListDragOver}
-              onDrop={(event) => onListDrop(event, index)}
-              className={classNames('kanban-list', {
-                'dragging': draggingListId === list.id,
-                'drag-over': dragOverListId === list.id,
-              })}
-            >
-              <List
-                key={list._id}
-                {...list}
-                settings={currentSettings}
-                moreOperationsList={moreOperationsList}
-                onDeleteList={() => handleDeleteList(list._id)}
-                onCardDrop={onCardDrop}
-              />
-            </div>
-          ))}
+          {lists.length === 0 ? (
+            <EmptyTip className="tips-empty-board" text={gettext('There are no categories yet.')} />
+          ) : (
+            lists.map((list, index) => (
+              <div
+                key={list.id}
+                draggable={list.field.editable}
+                onDragStart={(event) => onListDragStart(event, list.id)}
+                onDragEnter={(event) => onListDragEnter(event, list.id)}
+                onDragLeave={onListDragLeave}
+                onDragOver={onListDragOver}
+                onDrop={(event) => onListDrop(event, index)}
+                className={classNames('kanban-list', {
+                  'dragging': draggingListId === list.id,
+                  'drag-over': dragOverListId === list.id,
+                })}
+              >
+                <List
+                  key={list._id}
+                  {...list}
+                  settings={metadata.view.settings}
+                  moreOperationsList={moreOperationsList}
+                  onDeleteList={() => handleDeleteList(list._id)}
+                  onCardDrop={onCardDrop}
+                />
+              </div>
+            ))
+          )}
           {canAddList && (
             <AddList groupByColumn={groupByColumn}/>
           )}
         </div>
       </div>
-      {isSettingPanelOpen && (
-        <SettingPanel
-          columns={metadata.columns}
-          settings={currentSettings}
-          onSettingChange={updateSetting}
-          onClose={() => setSettingPanelOpen(false)}
-        />
-      )}
+      <div className="sf-metadata-view-kanban-setting h-100">
+        {isSettingPanelOpen && (
+          <SettingPanel
+            columns={metadata.view.columns}
+            settings={metadata.view.settings}
+            onClose={() => setSettingPanelOpen(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };

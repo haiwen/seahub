@@ -64,7 +64,6 @@ const KanbanViewToolBar = ({
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
     </>
-
   );
 };
 

@@ -9,6 +9,7 @@ export const OPERATION_TYPE = {
   MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
   LOCK_RECORD_VIA_BUTTON: 'lock_record_via_button',
   MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
+  MODIFY_SETTINGS: 'modify_settings',
 
   // column
   INSERT_COLUMN: 'insert_column',
@@ -51,6 +52,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_COLUMN_ORDER]: ['repo_id', 'view_id', 'new_columns_keys', 'old_columns_keys'],
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
+  [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
 };
 
 export const UNDO_OPERATION_TYPE = [

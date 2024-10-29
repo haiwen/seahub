@@ -3,10 +3,10 @@ import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import Table from '../views/table';
 import Gallery from '../views/gallery';
 import FaceRecognition from '../views/face-recognition';
+import Kanban from '../views/kanban';
 import { useMetadataView } from '../hooks/metadata-view';
 import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
-import Kanban from '../views/kanban';
 
 const View = () => {
   const { isLoading, metadata, errorMsg } = useMetadataView();

@@ -497,13 +497,23 @@ class Store {
     this.applyOperation(operation);
   };
 
-  modifyColumnOrder = (sourceColumnKey, targetColumnKey) => {
+  modifyColumnOrder = (sourceColumnKey, targetColumnKey, switchPositions = false) => {
     const type = OPERATION_TYPE.MODIFY_COLUMN_ORDER;
     const { columns_keys } = this.data.view;
-    const targetColumnIndex = columns_keys.indexOf(targetColumnKey);
     let newColumnsKeys = columns_keys.slice(0);
-    newColumnsKeys = newColumnsKeys.filter(key => key !== sourceColumnKey);
-    newColumnsKeys.splice(targetColumnIndex, 0, sourceColumnKey);
+
+    if (switchPositions) {
+      const sourceIndex = newColumnsKeys.indexOf(sourceColumnKey);
+      const targetIndex = newColumnsKeys.indexOf(targetColumnKey);
+      if (sourceIndex !== -1 && targetIndex !== -1) {
+        [newColumnsKeys[sourceIndex], newColumnsKeys[targetIndex]] = [newColumnsKeys[targetIndex], newColumnsKeys[sourceIndex]];
+      }
+    } else {
+      const targetColumnIndex = columns_keys.indexOf(targetColumnKey);
+      newColumnsKeys = newColumnsKeys.filter(key => key !== sourceColumnKey);
+      newColumnsKeys.splice(targetColumnIndex, 0, sourceColumnKey);
+    }
+
     const operation = this.createOperation({
       type, repo_id: this.repoId, view_id: this.viewId, new_columns_keys: newColumnsKeys, old_columns_keys: columns_keys
     });
@@ -540,6 +550,14 @@ class Store {
     const type = OPERATION_TYPE.DELETE_PEOPLE_PHOTOS;
     const operation = this.createOperation({
       type, repo_id: this.repoId, people_id: peopleId, deleted_photos: deletedPhotos
+    });
+    this.applyOperation(operation);
+  };
+
+  modifySettings = (settings) => {
+    const type = OPERATION_TYPE.MODIFY_SETTINGS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: this.viewId, settings
     });
     this.applyOperation(operation);
   };

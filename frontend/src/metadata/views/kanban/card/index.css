@@ -1,0 +1,58 @@
+.sf-metadata-view-kanban-card {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  overflow: visible;
+}
+
+.sf-metadata-view-kanban-card:hover {
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sf-metadata-view-kanban-card .kanban-card-header {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.sf-metadata-view-kanban-card .kanban-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-card-body.card-text-wrap {
+  white-space: normal;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word;
+}
+
+.sf-metadata-view-kanban-card .kanban-card-body .card-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.sf-metadata-view-kanban-card .kanban-card-body .card-field .cell-formatter-container {
+  justify-content: flex-start;
+}
+
+.sf-metadata-view-kanban-card .kanban-card-body .card-field label {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 4px;
+  cursor: pointer;
+}
+
+.sf-metadata-view-kanban-card .empty-cell-formatter {
+  width: 20px;
+  height: 8px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}

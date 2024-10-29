@@ -133,13 +133,3 @@ export const GALLERY_DATE_MODE = {
   DAY: 'day',
   ALL: 'all',
 };
-
-export const KANBAN_SETTINGS_KEYS = {
-  SELECTED_VIEW_ID: 'selected_view_id',
-  GROUP_BY_COLUMN_KEY: 'group_by_column_key',
-  TITLE_FIELD_KEY: 'title_field_key',
-  HIDE_EMPTY_VALUES: 'hide_empty_values',
-  SHOW_FIELD_NAMES: 'show_field_names',
-  TEXT_WRAP: 'text_wrap',
-  HIDDEN_COLUMNS: 'hidden_columns',
-};

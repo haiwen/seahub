@@ -222,6 +222,11 @@ export default function apply(data, operation) {
       data.recordsCount = updatedRows.length;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_SETTINGS: {
+      const { settings } = operation;
+      data.view.settings = settings;
+      return data;
+    }
     default: {
       return data;
     }

@@ -9,6 +9,8 @@ import { gettext } from '../../../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import toaster from '../../../../components/toast';
 
+import './index.css';
+
 const AddListPopover = ({ options, onCancel, onSubmit }) => {
   const [option, setOption] = useState(generateNewOption(options, ''));
 
@@ -31,8 +33,14 @@ const AddListPopover = ({ options, onCancel, onSubmit }) => {
       return;
     }
 
+    const duplicateNameOption = options.find(o => o.name === option.name && o.id !== option.id);
+    if (duplicateNameOption) {
+      toaster.danger(gettext('There is another option with this name'));
+      return;
+    }
+
     onSubmit(option);
-  }, [option, onSubmit]);
+  }, [options, option, onSubmit]);
 
   return (
     <CustomizePopover
