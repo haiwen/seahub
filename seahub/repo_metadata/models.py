@@ -44,6 +44,13 @@ class RepoMetadataManager(models.Manager):
         metadata.save()
         return metadata
 
+    def enable_face_recognition(self, repo_id):
+        metadata = self.filter(repo_id=repo_id).first()
+        face_recognition_enabled = True
+        metadata.face_recognition_enabled = face_recognition_enabled
+        metadata.save()
+        return metadata
+
 
 class RepoMetadata(models.Model):
 
@@ -51,6 +58,7 @@ class RepoMetadata(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     modified_time = models.DateTimeField(auto_now=True)
     enabled = models.BooleanField(db_index=True)
+    face_recognition_enabled = models.BooleanField(db_index=True)
     from_commit = models.CharField(max_length=40)
     to_commit = models.CharField(max_length=40)
 

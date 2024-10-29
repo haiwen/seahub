@@ -134,6 +134,7 @@ class MetadataManage(APIView):
 
         try:
             record.enabled = False
+            record.face_recognition_enabled = False
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
@@ -1020,19 +1021,16 @@ class FaceRecognitionManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.utils import FACES_TABLE
-
         try:
-            metadata = metadata_server_api.get_metadata()
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            if record and record.face_recognition_enabled:
+                is_enabled = True
+            else:
+                is_enabled = False
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        is_enabled = True if faces_table_id else False
 
         return Response({'enabled': is_enabled})
 
@@ -1052,12 +1050,18 @@ class FaceRecognitionManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        init_faces(metadata_server_api)
+
+        try:
+            RepoMetadata.objects.enable_face_recognition(repo_id)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
         params = {
             'repo_id': repo_id,
         }
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_faces(metadata_server_api)
 
         try:
             task_id = add_init_face_recognition_task(params=params)

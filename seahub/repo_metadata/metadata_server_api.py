@@ -184,3 +184,8 @@ class MetadataServerAPI:
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/metadata'
         response = requests.get(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+    def delete_table(self, table_id):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/tables/{table_id}'
+        response = requests.delete(url, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
