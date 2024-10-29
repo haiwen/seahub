@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -171,7 +171,7 @@ class GroupRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminListGroupRepos(this.props.groupID).then((res) => {
+    systemAdminAPI.sysAdminListGroupRepos(this.props.groupID).then((res) => {
       this.setState({
         loading: false,
         repoList: res.data.libraries,
@@ -186,7 +186,7 @@ class GroupRepos extends Component {
   }
 
   unshareRepo = (repoID, repoName) => {
-    seafileAPI.sysAdminUnshareRepoFromGroup(this.props.groupID, repoID).then(res => {
+    systemAdminAPI.sysAdminUnshareRepoFromGroup(this.props.groupID, repoID).then(res => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.repo_id != repoID;
       });

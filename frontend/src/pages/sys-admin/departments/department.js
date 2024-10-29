@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Link } from '@gatsbyjs/reach-router';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -58,7 +58,7 @@ class Department extends React.Component {
   }
 
   getDepartmentInfo = (groupID) => {
-    seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
+    systemAdminAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
       this.setState({
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,

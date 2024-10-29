@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -277,7 +277,7 @@ class Invitations extends Component {
 
   getItemsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListInvitations(page, perPage).then(res => {
+    systemAdminAPI.sysAdminListInvitations(page, perPage).then(res => {
       this.setState({
         loading: false,
         items: res.data.invitation_list,
@@ -294,7 +294,7 @@ class Invitations extends Component {
 
   deleteItem = (targetItem) => {
     const token = targetItem.token;
-    seafileAPI.sysAdminDeleteInvitation(token).then(res => {
+    systemAdminAPI.sysAdminDeleteInvitation(token).then(res => {
       let items = this.state.items.filter(item => {
         return item.token != token;
       });
@@ -307,7 +307,7 @@ class Invitations extends Component {
   };
 
   deleteItemInBatch = () => {
-    seafileAPI.sysAdminDeleteExpiredInvitations().then(res => {
+    systemAdminAPI.sysAdminDeleteExpiredInvitations().then(res => {
       const prevItems = this.state.items;
       const items = this.state.items.filter(item => !item.is_expired || item.accept_time);
       if (items.length < prevItems.length) {

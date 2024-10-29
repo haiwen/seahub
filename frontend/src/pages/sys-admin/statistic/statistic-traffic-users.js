@@ -3,7 +3,7 @@ import { Input } from 'reactstrap';
 import dayjs from 'dayjs';
 import TrafficTable from './traffic-table';
 import TrafficTableBody from './traffic-table-body';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Paginator from '../../../components/paginator';
 import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
@@ -79,7 +79,7 @@ class UsersTraffic extends React.Component {
       isLoading: true,
       errorMessage: ''
     });
-    seafileAPI.sysAdminListUserTraffic(month, page, perPage, orderBy).then(res => {
+    systemAdminAPI.sysAdminListUserTraffic(month, page, perPage, orderBy).then(res => {
       let userTrafficList = res.data.user_monthly_traffic_list.slice(0);
       this.setState({
         month: month,

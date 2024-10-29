@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -249,13 +249,13 @@ class Links extends Component {
 
   componentDidMount() {
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.sysAdminGetUser(email).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
 
-    seafileAPI.sysAdminListShareLinksByUser(email).then(res => {
+    systemAdminAPI.sysAdminListShareLinksByUser(email).then(res => {
       const items = res.data.share_link_list.map(item => {
         item.type = 'download';
         return item;
@@ -268,7 +268,7 @@ class Links extends Component {
         shareLinkItems: items
       });
     });
-    seafileAPI.sysAdminListUploadLinksByUser(email).then(res => {
+    systemAdminAPI.sysAdminListUploadLinksByUser(email).then(res => {
       const items = res.data.upload_link_list.map(item => {
         item.type = 'upload';
         return item;
@@ -289,7 +289,7 @@ class Links extends Component {
     const type = item.type;
     const token = item.token;
     if (type == 'download') {
-      seafileAPI.sysAdminDeleteShareLink(token).then(res => {
+      systemAdminAPI.sysAdminDeleteShareLink(token).then(res => {
         let items = this.state.shareLinkItems.filter(item => {
           return item.token != token;
         });
@@ -302,7 +302,7 @@ class Links extends Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.sysAdminDeleteUploadLink(token).then(res => {
+      systemAdminAPI.sysAdminDeleteUploadLink(token).then(res => {
         let items = this.state.uploadLinkItems.filter(item => {
           return item.token != token;
         });

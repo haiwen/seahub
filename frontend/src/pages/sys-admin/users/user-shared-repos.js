@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -123,12 +123,12 @@ class Repos extends Component {
 
   componentDidMount() {
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.sysAdminGetUser(email).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListShareInRepos(email).then(res => {
+    systemAdminAPI.sysAdminListShareInRepos(email).then(res => {
       this.setState({
         loading: false,
         repoList: res.data.repo_list

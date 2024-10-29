@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
@@ -236,7 +236,7 @@ class AllVirusFiles extends Component {
 
   getListByPage = (page) => {
     const { perPage } = this.state;
-    seafileAPI.sysAdminListVirusFiles(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListVirusFiles(page, perPage).then((res) => {
       const data = res.data;
       this.setState({
         loading: false,
@@ -263,13 +263,13 @@ class AllVirusFiles extends Component {
     let request;
     switch (op) {
       case 'delete':
-        request = seafileAPI.sysAdminDeleteVirusFile(virusID);
+        request = systemAdminAPI.sysAdminDeleteVirusFile(virusID);
         break;
       case 'ignore':
-        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, true);
+        request = systemAdminAPI.sysAdminToggleIgnoreVirusFile(virusID, true);
         break;
       case 'do-not-ignore':
-        request = seafileAPI.sysAdminToggleIgnoreVirusFile(virusID, false);
+        request = systemAdminAPI.sysAdminToggleIgnoreVirusFile(virusID, false);
         break;
     }
     request.then((res) => {

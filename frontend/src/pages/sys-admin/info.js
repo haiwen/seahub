@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { gettext, isPro, isDefaultAdmin, seafileVersion } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
@@ -22,7 +22,7 @@ class Info extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetSysInfo().then((res) => {
+    systemAdminAPI.sysAdminGetSysInfo().then((res) => {
       this.setState({
         loading: false,
         sysInfo: res.data
@@ -42,7 +42,7 @@ class Info extends Component {
       return;
     }
     const file = this.fileInput.current.files[0];
-    seafileAPI.sysAdminUploadLicense(file).then((res) => {
+    systemAdminAPI.sysAdminUploadLicense(file).then((res) => {
       let info = this.state.sysInfo;
       Object.assign(info, res.data, { with_license: true });
       this.setState({

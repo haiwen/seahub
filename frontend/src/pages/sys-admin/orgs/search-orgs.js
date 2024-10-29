@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -29,7 +29,7 @@ class SearchOrgs extends Component {
   }
 
   getItems = () => {
-    seafileAPI.sysAdminSearchOrgs(this.state.query.trim()).then(res => {
+    systemAdminAPI.sysAdminSearchOrgs(this.state.query.trim()).then(res => {
       this.setState({
         loading: false,
         orgList: res.data.organization_list
@@ -45,7 +45,7 @@ class SearchOrgs extends Component {
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
-    seafileAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
+    systemAdminAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
       let newOrgList = this.state.orgList.map(org => {
         if (org.org_id == orgID) {
           org.role = role;
@@ -61,7 +61,7 @@ class SearchOrgs extends Component {
   };
 
   deleteOrg = (orgID) => {
-    seafileAPI.sysAdminDeleteOrg(orgID).then(res => {
+    systemAdminAPI.sysAdminDeleteOrg(orgID).then(res => {
       let orgList = this.state.orgList.filter(org => {
         return org.org_id != orgID;
       });

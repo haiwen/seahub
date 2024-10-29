@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import ModalPortal from '../../../components/modal-portal';
@@ -41,7 +41,7 @@ class DepartmentDetail extends React.Component {
   }
 
   listGroupRepo = (groupID) => {
-    seafileAPI.sysAdminListGroupRepos(groupID).then(res => {
+    systemAdminAPI.sysAdminListGroupRepos(groupID).then(res => {
       this.setState({ repos: res.data.libraries });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

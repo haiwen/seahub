@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
-import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
@@ -59,7 +59,7 @@ class DingtalkDepartments extends Component {
   };
 
   getDingtalkDepartmentsList = (departmentID) => {
-    seafileAPI.sysAdminListDingtalkDepartments(departmentID).then((res) => {
+    systemAdminAPI.sysAdminListDingtalkDepartments(departmentID).then((res) => {
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -88,7 +88,7 @@ class DingtalkDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.sysAdminListDingtalkDepartmentMembers(department_id).then((res) => {
+    systemAdminAPI.sysAdminListDingtalkDepartmentMembers(department_id).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -176,7 +176,7 @@ class DingtalkDepartments extends Component {
       toaster.danger('未选择成员', { duration: 3 });
       return;
     }
-    seafileAPI.sysAdminAddDingtalkUsersBatch(userList).then((res) => {
+    systemAdminAPI.sysAdminAddDingtalkUsersBatch(userList).then((res) => {
       this.setState({
         newUsersTempObj: {},
         isCheckedAll: false,
@@ -241,7 +241,7 @@ class DingtalkDepartments extends Component {
   onImportDepartmentSubmit = () => {
     let importDepartment = this.state.importDepartment;
     if (!importDepartment) return;
-    seafileAPI.sysAdminImportDingtalkDepartment(importDepartment.id).then((res) => {
+    systemAdminAPI.sysAdminImportDingtalkDepartment(importDepartment.id).then((res) => {
       this.setState({
         isMembersListLoading: true,
         checkedDepartmentId: importDepartment.id,

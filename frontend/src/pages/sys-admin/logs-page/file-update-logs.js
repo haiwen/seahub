@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -194,7 +194,7 @@ class FileUpdateLogs extends Component {
 
   getLogsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListFileUpdateLogs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage).then((res) => {
       this.setState({
         logList: res.data.file_update_log_list,
         loading: false,

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { Button } from 'reactstrap';
@@ -159,7 +159,7 @@ class LoginLogs extends Component {
 
   getLogsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListLoginLogs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListLoginLogs(page, perPage).then((res) => {
       this.setState({
         logList: res.data.login_log_list,
         loading: false,

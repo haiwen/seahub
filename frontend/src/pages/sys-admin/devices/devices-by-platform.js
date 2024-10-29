@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -121,7 +121,7 @@ class Item extends Component {
 
   unlinkDevice = (deleteFiles) => {
     const { platform, device_id, user } = this.props.item;
-    seafileAPI.sysAdminUnlinkDevice(platform, device_id, user, deleteFiles).then((res) => {
+    systemAdminAPI.sysAdminUnlinkDevice(platform, device_id, user, deleteFiles).then((res) => {
       this.setState({ unlinked: true });
       let message = gettext('Successfully unlinked the device.');
       toaster.success(message);
@@ -195,7 +195,7 @@ class DevicesByPlatform extends Component {
   getDevicesListByPage = (page) => {
     let platform = this.props.devicesPlatform;
     let per_page = this.state.perPage;
-    seafileAPI.sysAdminListDevices(platform, page, per_page).then((res) => {
+    systemAdminAPI.sysAdminListDevices(platform, page, per_page).then((res) => {
       this.setState({
         devicesData: res.data.devices,
         pageInfo: res.data.page_info,

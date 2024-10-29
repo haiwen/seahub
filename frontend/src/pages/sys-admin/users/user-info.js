@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
@@ -256,7 +256,7 @@ class User extends Component {
   componentDidMount() {
     // avatar size: 160
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.sysAdminGetUser(email, 160).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email, 160).then((res) => {
       this.setState({
         loading: false,
         userInfo: res.data
@@ -271,7 +271,7 @@ class User extends Component {
 
   updateUser = (key, value) => {
     const email = this.state.userInfo.email;
-    seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
+    systemAdminAPI.sysAdminUpdateUser(email, key, value).then(res => {
       let userInfo = this.state.userInfo;
       userInfo[key] = res.data[key];
       this.setState({
@@ -291,7 +291,7 @@ class User extends Component {
 
   disable2FA = () => {
     const email = this.state.userInfo.email;
-    seafileAPI.sysAdminDeleteTwoFactorAuth(email).then(res => {
+    systemAdminAPI.sysAdminDeleteTwoFactorAuth(email).then(res => {
       let userInfo = this.state.userInfo;
       userInfo.has_default_device = false;
       this.setState({
@@ -306,7 +306,7 @@ class User extends Component {
   toggleForce2fa = (e) => {
     const email = this.state.userInfo.email;
     const checked = e.target.checked;
-    seafileAPI.sysAdminSetForceTwoFactorAuth(email, checked).then(res => {
+    systemAdminAPI.sysAdminSetForceTwoFactorAuth(email, checked).then(res => {
       let userInfo = this.state.userInfo;
       userInfo.is_force_2fa = checked;
       this.setState({

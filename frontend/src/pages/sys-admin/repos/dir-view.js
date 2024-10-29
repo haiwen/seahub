@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import CreateFolderDialog from '../../../components/dialog/create-folder-dialog';
@@ -42,7 +42,7 @@ class DirView extends Component {
 
   createNewFolder = (path) => {
     let folderName = Utils.getFileName(path);
-    seafileAPI.sysAdminCreateSysRepoFolder(this.props.repoID, this.state.path, folderName).then(res => {
+    systemAdminAPI.sysAdminCreateSysRepoFolder(this.props.repoID, this.state.path, folderName).then(res => {
       let new_dirent = new Dirent(res.data);
       let direntList = this.state.direntList;
       direntList.unshift(new_dirent);
@@ -65,7 +65,7 @@ class DirView extends Component {
 
   loadDirentList = (path) => {
     const repoID = this.props.repoID;
-    seafileAPI.sysAdminListRepoDirents(repoID, path).then(res => {
+    systemAdminAPI.sysAdminListRepoDirents(repoID, path).then(res => {
       const { is_system_library: isSystemRepo, repo_name: repoName, dirent_list } = res.data;
       let direntList = [];
       dirent_list.forEach(item => {
@@ -92,7 +92,7 @@ class DirView extends Component {
 
   deleteDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
-    seafileAPI.sysAdminDeleteRepoDirent(this.props.repoID, path).then(res => {
+    systemAdminAPI.sysAdminDeleteRepoDirent(this.props.repoID, path).then(res => {
       toaster.success(gettext('Successfully deleted 1 item.'));
       let direntList = this.state.direntList.filter(item => {
         return item.name != dirent.name;
@@ -108,7 +108,7 @@ class DirView extends Component {
 
   downloadDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
-    seafileAPI.sysAdminGetRepoFileDownloadURL(this.props.repoID, path).then(res => {
+    systemAdminAPI.sysAdminGetRepoFileDownloadURL(this.props.repoID, path).then(res => {
       location.href = res.data.download_url;
     }).catch((err) => {
       let errMessage = Utils.getErrorMsg(err);
@@ -127,7 +127,7 @@ class DirView extends Component {
     const file = this.fileInput.current.files[0];
 
     let { path } = this.state;
-    seafileAPI.sysAdminGetSysRepoItemUploadURL(path).then(res => {
+    systemAdminAPI.sysAdminGetSysRepoItemUploadURL(path).then(res => {
       let formData = new FormData();
       formData.append('parent_dir', path);
       formData.append('file', file);

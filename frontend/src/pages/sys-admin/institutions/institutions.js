@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -185,7 +185,7 @@ class Institutions extends Component {
 
   getInstitutionsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListInstitutions(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListInstitutions(page, perPage).then((res) => {
       this.setState({
         loading: false,
         institutionList: res.data.institution_list,
@@ -211,7 +211,7 @@ class Institutions extends Component {
   };
 
   addInstitution = (name) => {
-    seafileAPI.sysAdminAddInstitution(name).then(res => {
+    systemAdminAPI.sysAdminAddInstitution(name).then(res => {
       let institutionList = this.state.institutionList;
       institutionList.push(res.data);
       this.setState({ institutionList: institutionList });
@@ -222,7 +222,7 @@ class Institutions extends Component {
   };
 
   deleteInstitution = (institutionID) => {
-    seafileAPI.sysAdminDeleteInstitution(institutionID).then(res => {
+    systemAdminAPI.sysAdminDeleteInstitution(institutionID).then(res => {
       let institutionList = this.state.institutionList.filter(inst => {
         return inst.id != institutionID;
       });

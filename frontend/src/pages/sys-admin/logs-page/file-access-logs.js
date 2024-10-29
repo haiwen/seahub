@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -271,7 +271,7 @@ class FileAccessLogs extends Component {
 
   getLogsByPage = (page) => {
     const { perPage, userFilteredBy, repoFilteredBy } = this.state;
-    seafileAPI.sysAdminListFileAccessLogs(page, perPage, userFilteredBy, repoFilteredBy).then((res) => {
+    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, userFilteredBy, repoFilteredBy).then((res) => {
       this.setState({
         logList: res.data.file_access_log_list,
         loading: false,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -41,7 +41,7 @@ class MemberItem extends React.Component {
 
   onChangeUserRole = (roleOption) => {
     let isAdmin = roleOption.value === 'Admin' ? true : false;
-    seafileAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, this.props.member.email, isAdmin).then((res) => {
+    systemAdminAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

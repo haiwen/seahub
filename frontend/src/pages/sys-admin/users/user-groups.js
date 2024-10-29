@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -166,12 +166,12 @@ class Groups extends Component {
 
   componentDidMount() {
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.sysAdminGetUser(email).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListGroupsJoinedByUser(email).then(res => {
+    systemAdminAPI.sysAdminListGroupsJoinedByUser(email).then(res => {
       this.setState({
         loading: false,
         items: res.data.group_list

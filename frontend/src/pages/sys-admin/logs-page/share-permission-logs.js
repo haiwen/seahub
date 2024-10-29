@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
@@ -192,7 +192,7 @@ class SharePermissionLogs extends Component {
 
   getLogsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListSharePermissionLogs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,
         loading: false,

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminCreateRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog';
@@ -44,7 +44,7 @@ class AllRepos extends Component {
 
   getReposByPage = (page) => {
     const { perPage, sortBy } = this.state;
-    seafileAPI.sysAdminListAllRepos(page, perPage, sortBy).then((res) => {
+    systemAdminAPI.sysAdminListAllRepos(page, perPage, sortBy).then((res) => {
       this.setState({
         loading: false,
         repos: res.data.repos,
@@ -83,7 +83,7 @@ class AllRepos extends Component {
   };
 
   createRepo = (repoName, Owner) => {
-    seafileAPI.sysAdminCreateRepo(repoName, Owner).then(res => {
+    systemAdminAPI.sysAdminCreateRepo(repoName, Owner).then(res => {
       this.state.repos.unshift(res.data);
       this.setState({
         repos: this.state.repos

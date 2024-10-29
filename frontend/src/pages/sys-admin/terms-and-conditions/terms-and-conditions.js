@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
 import ModalPortal from '../../../components/modal-portal';
@@ -26,7 +26,7 @@ class TermsAndConditions extends Component {
   };
 
   componentDidMount() {
-    seafileAPI.sysAdminListTermsAndConditions().then((res) => {
+    systemAdminAPI.sysAdminListTermsAndConditions().then((res) => {
       this.setState({
         termList: res.data.term_and_condition_list,
         loading: false,
@@ -40,7 +40,7 @@ class TermsAndConditions extends Component {
   }
 
   addTerm = (name, versionNumber, text, isActive) => {
-    seafileAPI.sysAdminAddTermAndCondition(name, versionNumber, text, isActive).then(res => {
+    systemAdminAPI.sysAdminAddTermAndCondition(name, versionNumber, text, isActive).then(res => {
       // After adding the terms, you need to refresh the page.
       location.reload();
     }).catch((error) => {
@@ -50,7 +50,7 @@ class TermsAndConditions extends Component {
   };
 
   updateTerm = (termID, name, versionNumber, text, isActive) => {
-    seafileAPI.sysAdminUpdateTermAndCondition(termID, name, versionNumber, text, isActive).then(res => {
+    systemAdminAPI.sysAdminUpdateTermAndCondition(termID, name, versionNumber, text, isActive).then(res => {
       let termList = this.state.termList.map(item => {
         if (item.id == termID) {
           return res.data;
@@ -67,7 +67,7 @@ class TermsAndConditions extends Component {
   };
 
   deleteTerm = (termID) => {
-    seafileAPI.sysAdminDeleteTermAndCondition(termID).then(res => {
+    systemAdminAPI.sysAdminDeleteTermAndCondition(termID).then(res => {
       let termList = this.state.termList.filter(item => item.id != termID);
       this.setState({ termList: termList });
       toaster.success(gettext('Successfully deleted 1 item.'));

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -79,7 +79,7 @@ class SystemRepo extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetSystemRepoInfo().then((res) => {
+    systemAdminAPI.sysAdminGetSystemRepoInfo().then((res) => {
       let items = [];
       items.push(res.data);
       this.setState({

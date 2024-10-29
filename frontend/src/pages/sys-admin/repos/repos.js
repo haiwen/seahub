@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -152,7 +152,7 @@ class Item extends Component {
   }
 
   onDeleteRepo = (repo) => {
-    seafileAPI.sysAdminDeleteRepo(repo.id).then((res) => {
+    systemAdminAPI.sysAdminDeleteRepo(repo.id).then((res) => {
       this.props.onDeleteRepo(repo);
       this.setState({
         isDeleteDialogOpen: false,
@@ -169,7 +169,7 @@ class Item extends Component {
   };
 
   onTransferRepo = (owner) => {
-    seafileAPI.sysAdminTransferRepo(this.props.repo.id, owner.email).then((res) => {
+    systemAdminAPI.sysAdminTransferRepo(this.props.repo.id, owner.email).then((res) => {
       this.props.onTransferRepo(res.data);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);

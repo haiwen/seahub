@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import TrafficTable from './traffic-table';
 import TrafficTableBody from './traffic-table-body';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Paginator from '../../../components/paginator';
 import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
@@ -76,7 +76,7 @@ class OrgsTraffic extends React.Component {
     const { perPage, sortBy, sortOrder } = this.state;
     const orderBy = sortOrder == 'asc' ? sortBy : `${sortBy}_${sortOrder}`;
     this.setState({ isLoading: true, errorMessage: '' });
-    seafileAPI.sysAdminListOrgTraffic(month, page, perPage, orderBy).then(res => {
+    systemAdminAPI.sysAdminListOrgTraffic(month, page, perPage, orderBy).then(res => {
       let orgTrafficList = res.data.org_monthly_traffic_list.slice(0);
       this.setState({
         month: month,

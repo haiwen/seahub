@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -155,12 +155,12 @@ class OrgGroups extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       });
     });
-    seafileAPI.sysAdminListOrgGroups(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminListOrgGroups(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         groupList: res.data.group_list
@@ -174,7 +174,7 @@ class OrgGroups extends Component {
   }
 
   deleteGroup = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
+    systemAdminAPI.sysAdminDismissGroupByID(groupID).then(res => {
       let newGroupList = this.state.groupList.filter(item => {
         return item.group_id != groupID;
       });

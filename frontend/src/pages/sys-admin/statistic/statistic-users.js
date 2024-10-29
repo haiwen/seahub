@@ -4,7 +4,7 @@ import { gettext } from '../../../utils/constants';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import StatisticChart from './statistic-chart';
 import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
@@ -23,7 +23,7 @@ class StatisticUsers extends React.Component {
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
     let { filesData } = this.state;
-    seafileAPI.sysAdminStatisticActiveUsers(startTime, endTime, groupBy).then((res) => {
+    systemAdminAPI.sysAdminStatisticActiveUsers(startTime, endTime, groupBy).then((res) => {
       let labels = [];
       let count = [];
       let data = res.data;

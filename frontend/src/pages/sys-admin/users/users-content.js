@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, username, gettext, multiInstitution, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -344,7 +344,7 @@ class Item extends Component {
 
   resetPassword = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    seafileAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
+    systemAdminAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
       toaster.success(res.data.reset_tip);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

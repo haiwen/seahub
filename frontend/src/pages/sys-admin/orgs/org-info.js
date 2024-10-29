@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, serviceURL } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
@@ -166,7 +166,7 @@ class OrgInfo extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         orgInfo: res.data
@@ -181,7 +181,7 @@ class OrgInfo extends Component {
 
   updateQuota = (quota) => {
     const data = { quota: quota };
-    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         quota: res.data.quota
       });
@@ -195,7 +195,7 @@ class OrgInfo extends Component {
 
   updateName = (orgName) => {
     const data = { orgName: orgName };
-    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         org_name: res.data.org_name
       });
@@ -209,7 +209,7 @@ class OrgInfo extends Component {
 
   updateMaxUserNumber = (newValue) => {
     const data = { maxUserNumber: newValue };
-    seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         max_user_number: res.data.max_user_number
       });

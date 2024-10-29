@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -266,7 +266,7 @@ class InstitutionUsers extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
+    systemAdminAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
       this.setState({
         institutionName: res.data.name
       });
@@ -284,7 +284,7 @@ class InstitutionUsers extends Component {
 
   getInstitutionUsersByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListInstitutionUsers(this.props.institutionID, page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListInstitutionUsers(this.props.institutionID, page, perPage).then((res) => {
       this.setState({
         loading: false,
         userList: res.data.user_list,
@@ -300,7 +300,7 @@ class InstitutionUsers extends Component {
   };
 
   setAdmin = (email) => {
-    seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, true).then(res => {
+    systemAdminAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, true).then(res => {
       let userList = this.state.userList.map(user => {
         if (user.email == email) {
           user.is_institution_admin = true;
@@ -326,7 +326,7 @@ class InstitutionUsers extends Component {
   };
 
   addUser = (emails) => {
-    seafileAPI.sysAdminAddInstitutionUserBatch(this.props.institutionID, emails).then(res => {
+    systemAdminAPI.sysAdminAddInstitutionUserBatch(this.props.institutionID, emails).then(res => {
       this.toggleAddUserDialog();
       let successArray = res.data.success;
       let failedArray = res.data.failed;
@@ -344,7 +344,7 @@ class InstitutionUsers extends Component {
   };
 
   deleteUser = (email) => {
-    seafileAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
+    systemAdminAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
       let newUserList = this.state.userList.filter(user => {
         return user.email != email;
       });

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
@@ -36,7 +36,7 @@ class DepartmentList extends React.Component {
   };
 
   listDepartments = () => {
-    seafileAPI.sysAdminListAllDepartments().then(res => {
+    systemAdminAPI.sysAdminListAllDepartments().then(res => {
       this.setState({ groups: res.data.data });
     });
   };

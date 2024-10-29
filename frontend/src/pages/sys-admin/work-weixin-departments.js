@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
-import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -58,7 +58,7 @@ class WorkWeixinDepartments extends Component {
   };
 
   getWorkWeixinDepartmentsList = (departmentID) => {
-    seafileAPI.sysAdminListWorkWeixinDepartments(departmentID).then((res) => {
+    systemAdminAPI.sysAdminListWorkWeixinDepartments(departmentID).then((res) => {
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -87,7 +87,7 @@ class WorkWeixinDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.sysAdminListWorkWeixinDepartmentMembers(department_id, { fetch_child: true }).then((res) => {
+    systemAdminAPI.sysAdminListWorkWeixinDepartmentMembers(department_id, { fetch_child: true }).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -176,7 +176,7 @@ class WorkWeixinDepartments extends Component {
       toaster.danger('未选择成员', { duration: 3 });
       return;
     }
-    seafileAPI.sysAdminAddWorkWeixinUsersBatch(userList).then((res) => {
+    systemAdminAPI.sysAdminAddWorkWeixinUsersBatch(userList).then((res) => {
       this.setState({
         newUsersTempObj: {},
         isCheckedAll: false,
@@ -241,7 +241,7 @@ class WorkWeixinDepartments extends Component {
   onImportDepartmentSubmit = () => {
     let importDepartment = this.state.importDepartment;
     if (!importDepartment) return;
-    seafileAPI.sysAdminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
+    systemAdminAPI.sysAdminImportWorkWeixinDepartment(importDepartment.id).then((res) => {
       this.setState({
         isMembersListLoading: true,
         checkedDepartmentId: importDepartment.id,
