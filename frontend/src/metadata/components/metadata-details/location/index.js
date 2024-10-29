@@ -108,7 +108,7 @@ class Location extends React.Component {
       const { lng, lat } = bdPosition;
       this.map = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
       const point = new window.BMapGL.Point(lng, lat);
-      this.map.centerAndZoom(point, 14);
+      this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
       this.addMarkerByPosition(lng, lat);
       const geocoder = new window.BMapGL.Geocoder();
@@ -126,7 +126,7 @@ class Location extends React.Component {
       const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
       const { lng, lat } = gcPosition || {};
       this.map = new window.google.maps.Map(this.ref, {
-        zoom: 14,
+        zoom: 16,
         center: gcPosition,
         mapId: googleMapId,
         zoomControl: false,
