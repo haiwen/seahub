@@ -1,17 +1,21 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID } from '../constants';
-import { seafileAPI } from '../../utils/seafile-api';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView, children }) => {
-  const [enableMetadataManagement, setEnableMetadataManagement] = useState(false);
+export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, selectMetadataView, children }) => {
+  const enableMetadataManagement = useMemo(() => {
+    if (currentRepoInfo.encrypted) return false;
+    return window.app.pageOptions.enableMetadataManagement;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
+
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
@@ -19,16 +23,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
   const viewsMap = useRef({});
-
-  useEffect(() => {
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      if (res.data.encrypted) {
-        setEnableMetadataManagement(false);
-      } else {
-        setEnableMetadataManagement(window.app.pageOptions.enableMetadataManagement);
-      }
-    });
-  }, [repoID]);
 
   const cancelURLView = useCallback(() => {
     // If attribute extension is turned off, unmark the URL

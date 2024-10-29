@@ -1,14 +1,17 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
 import { MetadataStatusManagementDialog, MetadataFaceRecognitionDialog, MetadataTreeView, useMetadata } from '../../metadata';
 import ExtensionPrompts from './extension-prompts';
-import { seafileAPI } from '../../utils/seafile-api';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
+  const enableMetadataManagement = useMemo(() => {
+    if (currentRepoInfo.encrypted) return false;
+    return window.app.pageOptions.enableMetadataManagement;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
-  const [enableMetadataManagement, setEnableMetadataManagement] = useState(false);
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
   const [showMetadataFaceRecognitionDialog, setShowMetadataFaceRecognitionDialog] = useState(false);
   const { enableMetadata, updateEnableMetadata, enableFaceRecognition, updateEnableFaceRecognition, navigation } = useMetadata();
@@ -22,16 +25,6 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     }
     return operations;
   }, [enableMetadataManagement, enableMetadata, currentRepoInfo]);
-
-  useEffect(() => {
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      if (res.data.encrypted) {
-        setEnableMetadataManagement(false);
-      } else {
-        setEnableMetadataManagement(window.app.pageOptions.enableMetadataManagement);
-      }
-    });
-  }, [repoID]);
 
   const moreOperationClick = useCallback((operationKey) => {
     switch (operationKey) {
