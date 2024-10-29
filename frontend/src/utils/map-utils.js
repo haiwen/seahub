@@ -15,7 +15,7 @@ export const loadMapSource = (type, key, callback) => {
   script.type = 'text/javascript';
   script.id = sourceId;
   if (type === MAP_TYPE.B_MAP) {
-    scriptUrl = `https://api.map.baidu.com/api?v=3.0&ak=${key}&callback=renderBaiduMap`;
+    scriptUrl = `https://api.map.baidu.com/api?type=webgl&v=3.0&ak=${key}&callback=renderBaiduMap`;
   } else if (type === MAP_TYPE.G_MAP) {
     scriptUrl = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=renderGoogleMap&libraries=marker&v=weekly`;
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
+import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform';
 import { MAP_TYPE, DOMESTIC_MAP_TYPE } from '../../../../constants';
 import Loading from '../../../../components/loading';
 import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
@@ -56,7 +57,7 @@ class Location extends React.Component {
   initMap = (position) => {
     this.setState({ isLoading: true });
     if (this.mapType === MAP_TYPE.B_MAP) {
-      if (!window.BMap) {
+      if (!window.BMapGL) {
         window.renderBaiduMap = () => this.renderBaiduMap(position);
         loadMapSource(this.mapType, this.mapKey);
       } else {
@@ -78,10 +79,11 @@ class Location extends React.Component {
 
   addMarkerByPosition = (lng, lat) => {
     if (this.mapType === MAP_TYPE.B_MAP) {
-      let point = new window.BMap.Point(lng, lat);
-      const marker = new window.BMap.Marker(point, { offset: new window.BMap.Size(-2, -5) });
+      const point = new window.BMapGL.Point(lng, lat);
+      const marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
       this.map && this.map.clearOverlays();
       this.map && this.map.addOverlay(marker);
+      this.map && this.map.setCenter(point);
       return;
     }
     if (this.mapType === MAP_TYPE.G_MAP) {
@@ -95,34 +97,21 @@ class Location extends React.Component {
       this.googleMarker.setPosition({ lng, lat });
       return;
     }
-    if (this.mapType === MAP_TYPE.M_MAP) {
-      if (!this.mineMapMarker) {
-        this.mineMapMarker = new window.minemap.Marker({
-          draggable: false,
-          anchor: 'top-left',
-          color: 'red',
-          rotation: 0,
-          pitchAlignment: 'map',
-          rotationAlignment: 'map',
-          scale: 0.8
-        }).setLngLat({ lng, lat }).addTo(this.map);
-        return;
-      }
-      this.mineMapMarker.setLngLat({ lng, lat });
-    }
   };
 
   renderBaiduMap = (position = {}) => {
     this.setState({ isLoading: false }, () => {
-      if (!window.BMap.Map) return;
-      const { lng, lat } = position || {};
-      if (!isValidPosition(lng, lat)) return;
-      this.map = new window.BMap.Map('sf-geolocation-map-container', { enableMapClick: false });
-      this.addMarkerByPosition(lng, lat);
-      const point = new window.BMap.Point(lng, lat);
-      this.map.centerAndZoom(point, 14);
+      if (!window.BMapGL.Map) return;
+      if (!isValidPosition(position?.lng, position?.lat)) return;
+      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
+      const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
+      const { lng, lat } = bdPosition;
+      this.map = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
+      const point = new window.BMapGL.Point(lng, lat);
+      this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
-      const geocoder = new window.BMap.Geocoder();
+      this.addMarkerByPosition(lng, lat);
+      const geocoder = new window.BMapGL.Geocoder();
       geocoder.getLocation(point, (res) => {
         const address = res.address;
         this.setState({ address });
@@ -133,12 +122,12 @@ class Location extends React.Component {
   renderGoogleMap = (position) => {
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
-      const { lng, lat } = position || {};
-      const isValid = isValidPosition(lng, lat);
-      if (!isValid) return;
+      if (!isValidPosition(position?.lng, position?.lat)) return;
+      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
+      const { lng, lat } = gcPosition || {};
       this.map = new window.google.maps.Map(this.ref, {
-        zoom: 14,
-        center: position,
+        zoom: 16,
+        center: gcPosition,
         mapId: googleMapId,
         zoomControl: false,
         mapTypeControl: false,
@@ -148,7 +137,7 @@ class Location extends React.Component {
         fullscreenControl: false
       });
       this.addMarkerByPosition(lng, lat);
-      this.map.setCenter(position);
+      this.map.setCenter(gcPosition);
       var geocoder = new window.google.maps.Geocoder();
       var latLng = new window.google.maps.LatLng(lat, lng);
       geocoder.geocode({ 'location': latLng }, (results, status) => {
