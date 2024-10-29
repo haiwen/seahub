@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 
 const propTypes = {
   fileType: PropTypes.string,
@@ -47,8 +47,13 @@ class CreateForder extends React.Component {
       return;
     }
 
-    let newName = this.state.childName;
     let isDuplicated = this.checkDuplicatedName();
+    let newName = this.state.childName.trim();
+    let { isValid, errMessage } = validateName(newName);
+    if (!isValid) {
+      this.setState({ errMessage });
+      return;
+    }
 
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');

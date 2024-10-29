@@ -1523,3 +1523,34 @@ export const Utils = {
   }
 
 };
+
+export const validateName = (newName) => {
+  let isValid = true;
+  let errMessage = '';
+  if (!newName || !newName.trim()) {
+    isValid = false;
+    errMessage = gettext('Name is required');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('/')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain slash');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('`')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backtick');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('\\')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backslash');
+    return { isValid, errMessage };
+  }
+  if (newName === '..') {
+    isValid = false;
+    errMessage = gettext('Name cannot contain double dots');
+    return { isValid, errMessage };
+  }
+  return { isValid, errMessage };
+};
