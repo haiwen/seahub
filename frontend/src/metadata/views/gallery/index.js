@@ -3,7 +3,7 @@ import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import metadataAPI from '../../api';
 import URLDecorator from '../../../utils/url-decorator';
 import toaster from '../../../components/toast';
-import GalleryMain from './gallery-main';
+import Main from './main';
 import ContextMenu from './context-menu';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
@@ -32,6 +32,7 @@ const Gallery = () => {
 
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
+  const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const { metadata, store, updateCurrentDirent } = useMetadataView();
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -97,6 +98,7 @@ const Gallery = () => {
 
     let _groups = [];
     const imageHeight = imageSize + GALLERY_IMAGE_GAP;
+    const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
     init.forEach((_init, index) => {
       const { children, ...__init } = _init;
       let top = 0;
@@ -108,11 +110,12 @@ const Gallery = () => {
       }
       children.forEach((child, childIndex) => {
         const rowIndex = ~~(childIndex / columns);
-        if (!rows[rowIndex]) rows[rowIndex] = { top: top + rowIndex * imageHeight, children: [] };
+        if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * imageHeight, children: [] };
+        child.groupIndex = index;
+        child.rowIndex = rowIndex;
         rows[rowIndex].children.push(child);
       });
 
-      const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
       const height = rows.length * imageHeight + paddingTop;
       _groups.push({
         ...__init,
@@ -192,6 +195,22 @@ const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!imageSize || imageSize < 0) return;
+    if (imageSize === lastState.current.imageSize) return;
+    const perImageOffset = imageSize - lastState.current.imageSize;
+    const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
+    const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
+      if (currentIndex < groupIndex) {
+        return previousValue + current.children.length;
+      }
+      return previousValue;
+    }, 0) + rowIndex;
+    const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
+    containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
+    lastState.current = { ...lastState.current, imageSize };
+  }, [imageSize, groups, mode]);
+
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -203,11 +222,28 @@ const Gallery = () => {
         const { scrollTop, clientHeight } = containerRef.current;
         const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * 3);
         const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 3;
+        let groupIndex = 0;
+        let rowIndex = 0;
+        let flag = false;
+        for (let i = 0; i < groups.length; i++) {
+          const group = groups[i];
+          for (let j = 0; j < group.children.length; j++) {
+            const row = group.children[j];
+            if (row.top >= scrollTop) {
+              groupIndex = i;
+              rowIndex = j;
+              flag = true;
+            }
+            if (flag) break;
+          }
+          if (flag) break;
+        }
+        lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
         setOverScan({ top: overScanTop, bottom: overScanBottom });
         renderMoreTimer.current = null;
       }, 200);
     }
-  }, [imageSize, loadMore, renderMoreTimer]);
+  }, [imageSize, loadMore, renderMoreTimer, groups]);
 
   const imageItems = useMemo(() => {
     return groups.flatMap(group => group.children.flatMap(row => row.children));
@@ -351,7 +387,7 @@ const Gallery = () => {
       <div className={`sf-metadata-gallery-container sf-metadata-gallery-container-${mode}`} ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            <GalleryMain
+            <Main
               groups={groups}
               size={imageSize}
               columns={columns}

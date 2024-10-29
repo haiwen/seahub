@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 import { GALLERY_DATE_MODE } from '../../constants';
+import Image from './image';
 
 const GalleryMain = ({
   groups,
@@ -129,20 +129,15 @@ const GalleryMain = ({
             return row.children.map((img) => {
               const isSelected = selectedImageIds.includes(img.id);
               return (
-                <div
+                <Image
                   key={img.src}
-                  id={img.id}
-                  tabIndex={1}
-                  className={classnames('metadata-gallery-image-item', {
-                    'metadata-gallery-image-item-selected': isSelected,
-                  })}
-                  style={{ width: size, height: size, background: '#f1f1f1' }}
+                  isSelected={isSelected}
+                  img={img}
+                  size={size}
                   onClick={(e) => onImageClick(e, img)}
                   onDoubleClick={(e) => onImageDoubleClick(e, img)}
                   onContextMenu={(e) => onImageRightClick(e, img)}
-                >
-                  <img className="metadata-gallery-grid-image" src={img.src} alt={img.name} draggable="false" />
-                </div>
+                />
               );
             });
           })}
