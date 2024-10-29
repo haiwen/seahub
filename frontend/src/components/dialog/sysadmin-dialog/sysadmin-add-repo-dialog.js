@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 
 const propTypes = {
@@ -24,7 +24,7 @@ class AddRepoDialog extends React.Component {
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
-      seafileAPI.sysAdminAddRepoInDepartment(this.props.groupID, this.state.repoName.trim()).then((res) => {
+      systemAdminAPI.sysAdminAddRepoInDepartment(this.props.groupID, this.state.repoName.trim()).then((res) => {
         this.props.toggle();
         this.props.onAddNewRepo(res.data);
       }).catch(error => {

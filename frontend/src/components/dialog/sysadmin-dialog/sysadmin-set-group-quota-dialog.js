@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 
@@ -28,7 +28,7 @@ class SetGroupQuotaDialog extends React.Component {
     if ((quota.length && numberReg.test(quota)) || quota == -2) {
       this.setState({ errMessage: '' });
       let newQuota = this.state.quota == -2 ? this.state.quota : this.state.quota * 1000000;
-      seafileAPI.sysAdminUpdateDepartmentQuota(this.props.groupID, newQuota).then((res) => {
+      systemAdminAPI.sysAdminUpdateDepartmentQuota(this.props.groupID, newQuota).then((res) => {
         this.props.toggle();
         this.props.onSetQuota(res.data);
       }).catch(error => {

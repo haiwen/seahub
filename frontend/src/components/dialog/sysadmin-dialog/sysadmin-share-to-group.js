@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { isPro, gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
@@ -154,7 +155,7 @@ class SysAdminShareToGroup extends React.Component {
 
   listSharedGroups = () => {
     let repoID = this.props.repoID;
-    seafileAPI.sysAdminListRepoSharedItems(repoID, 'group').then((res) => {
+    systemAdminAPI.sysAdminListRepoSharedItems(repoID, 'group').then((res) => {
       if (res.data.length !== 0) {
         this.setState({
           sharedItems: res.data
@@ -176,7 +177,7 @@ class SysAdminShareToGroup extends React.Component {
     if (this.state.selectedOption) {
       groups[0] = this.state.selectedOption.id;
     }
-    seafileAPI.sysAdminAddRepoSharedItem(repoID, 'group', groups, this.state.permission).then(res => {
+    systemAdminAPI.sysAdminAddRepoSharedItem(repoID, 'group', groups, this.state.permission).then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -198,7 +199,7 @@ class SysAdminShareToGroup extends React.Component {
 
   deleteShareItem = (groupID) => {
     let repoID = this.props.repoID;
-    seafileAPI.sysAdminDeleteRepoSharedItem(repoID, 'group', groupID).then(() => {
+    systemAdminAPI.sysAdminDeleteRepoSharedItem(repoID, 'group', groupID).then(() => {
       this.setState({
         sharedItems: this.state.sharedItems.filter(item => { return item.group_id !== groupID; })
       });
@@ -211,7 +212,7 @@ class SysAdminShareToGroup extends React.Component {
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
     let groupID = item.group_id;
-    seafileAPI.sysAdminUpdateRepoSharedItemPermission(repoID, 'group', groupID, permission).then(() => {
+    systemAdminAPI.sysAdminUpdateRepoSharedItemPermission(repoID, 'group', groupID, permission).then(() => {
       this.updateSharedItems(item, permission);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

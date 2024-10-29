@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 
@@ -21,7 +21,7 @@ class DeleteMemberDialog extends React.Component {
 
   deleteMember = () => {
     const userEmail = this.props.member.email;
-    seafileAPI.sysAdminDeleteGroupMember(this.props.groupID, userEmail).then((res) => {
+    systemAdminAPI.sysAdminDeleteGroupMember(this.props.groupID, userEmail).then((res) => {
       if (res.data.success) {
         this.props.onMemberChanged();
         this.props.toggle();

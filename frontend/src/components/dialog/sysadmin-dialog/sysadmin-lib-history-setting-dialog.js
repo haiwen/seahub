@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 
@@ -28,7 +28,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetRepoHistorySetting(this.props.repoID).then(res => {
+    systemAdminAPI.sysAdminGetRepoHistorySetting(this.props.repoID).then(res => {
       this.setState({
         keepDays: res.data.keep_days,
         allHistory: res.data.keep_days < 0 ? true : false,
@@ -53,7 +53,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
     let flag = reg.test(days);
     if (flag) {
       let message = gettext('Successfully set library history.');
-      seafileAPI.sysAdminUpdateRepoHistorySetting(repoID, days).then(res => {
+      systemAdminAPI.sysAdminUpdateRepoHistorySetting(repoID, days).then(res => {
         toaster.success(message);
         this.setState({ keepDays: res.data.keep_days });
         this.props.toggleDialog();

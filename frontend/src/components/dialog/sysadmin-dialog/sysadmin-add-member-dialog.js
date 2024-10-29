@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
@@ -32,7 +32,7 @@ class AddMemberDialog extends React.Component {
     const emails = this.state.selectedOption.map(item => item.email);
     this.refs.orgSelect.clearSelect();
     this.setState({ errMessage: [] });
-    seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then((res) => {
+    systemAdminAPI.sysAdminAddGroupMember(this.props.groupID, emails).then((res) => {
       this.setState({ selectedOption: null });
       if (res.data.failed.length > 0) {
         this.setState({ errMessage: res.data.failed[0].error_msg });

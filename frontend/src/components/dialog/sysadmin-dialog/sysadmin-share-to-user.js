@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { isPro, gettext } from '../../../utils/constants';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
@@ -133,7 +133,7 @@ class SysAdminShareToUser extends React.Component {
 
   componentDidMount() {
     let repoID = this.props.repoID;
-    seafileAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
+    systemAdminAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
       if (res.data.length !== 0) {
         this.setState({ sharedItems: res.data });
       }
@@ -155,7 +155,7 @@ class SysAdminShareToUser extends React.Component {
         users[i] = this.state.selectedOption[i].email;
       }
     }
-    seafileAPI.sysAdminAddRepoSharedItem(repoID, 'user', users, this.state.permission).then(res => {
+    systemAdminAPI.sysAdminAddRepoSharedItem(repoID, 'user', users, this.state.permission).then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -185,7 +185,7 @@ class SysAdminShareToUser extends React.Component {
 
   deleteShareItem = (useremail) => {
     let repoID = this.props.repoID;
-    seafileAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', useremail).then(res => {
+    systemAdminAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', useremail).then(res => {
       this.setState({
         sharedItems: this.state.sharedItems.filter(item => { return item.user_email !== useremail; })
       });
@@ -198,7 +198,7 @@ class SysAdminShareToUser extends React.Component {
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
     let userEmail = item.user_email;
-    seafileAPI.sysAdminUpdateRepoSharedItemPermission(repoID, 'user', userEmail, permission).then(() => {
+    systemAdminAPI.sysAdminUpdateRepoSharedItemPermission(repoID, 'user', userEmail, permission).then(() => {
       this.updateSharedItems(item, permission);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
