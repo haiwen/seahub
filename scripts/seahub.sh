@@ -204,6 +204,7 @@ function set_jwt_private_key () {
             echo ""
             exit -1;
         fi
+        export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
     fi
 }
 
