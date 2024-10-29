@@ -1,4 +1,4 @@
-.detail-body .detail-image-thumbnail {
+.detail-body .detail-image {
   height: 144px;
   width: 100%;
   flex-shrink: 0;
@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.detail-body .detail-image-thumbnail .thumbnail {
+.detail-body .detail-image>img {
   border: 0;
   border-radius: 0;
   float: none;
