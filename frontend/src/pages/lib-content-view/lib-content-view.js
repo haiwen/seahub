@@ -26,7 +26,7 @@ import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { LIST_MODE, METADATA_MODE, FACE_RECOGNITION_MODE, DIRENT_DETAIL_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
-import DetailContainer from '../../components/dirent-detail/detail-container';
+import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import { VIEW_TYPE } from '../../metadata/constants';
@@ -2426,7 +2426,7 @@ class LibContentView extends React.Component {
                   <div className="message err-tip">{gettext('Folder does not exist.')}</div>
                 }
                 {this.state.isDirentDetailShow && (
-                  <DetailContainer
+                  <Detail
                     path={this.state.path}
                     repoID={this.props.repoID}
                     currentRepoInfo={this.state.currentRepoInfo}

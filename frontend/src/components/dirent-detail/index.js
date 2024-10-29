@@ -7,7 +7,7 @@ import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 
-const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+const Detail = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
   const isView = useMemo(() => path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [path]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, rep
   return !isChanged;
 });
 
-DetailContainer.propTypes = {
+Detail.propTypes = {
   repoID: PropTypes.string,
   path: PropTypes.string,
   dirent: PropTypes.object,
@@ -72,4 +72,4 @@ DetailContainer.propTypes = {
   onFileTagChanged: PropTypes.func,
 };
 
-export default DetailContainer;
+export default Detail;
