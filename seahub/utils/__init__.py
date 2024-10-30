@@ -1505,14 +1505,9 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
         else:
             is_share = True
     repo_owner = seafile_api.get_org_repo_owner(repo_id) if org_id else seafile_api.get_repo_owner(repo_id)
-    if org_id:
-        new_owner_groups = ccnet_api.get_org_groups_by_user(org_id, new_owner, return_ancestors=True)
-    else:
-        new_owner_groups = ccnet_api.get_groups(new_owner, return_ancestors=True)
-    new_owner_group_ids = []
-    for new_owner_group in new_owner_groups:
-        new_owner_group_ids.append(new_owner_group.id)
-    print(new_owner_group_ids, '---new_owner_group_ids')
+    current_group_id = None
+    if "seafile_group" in repo_owner:
+        current_group_id = int(repo_owner.split('@')[0])
     # transfer repo
     # retain share
     if is_share:
@@ -1522,14 +1517,14 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
             if org_id and org_id != ccnet_api.get_org_id_by_group(group_id):
                 error_msg = 'Permission denied.'
                 raise error_msg
-            seafile_db_api.set_repo_group_owner(repo_id, group_id, org_id)
+            seafile_db_api.set_repo_group_owner(repo_id, group_id, current_group_id, org_id)
         # transfer to user
         else:
             seafile_db_api.set_repo_owner(repo_id, new_owner, org_id)
 
         # Update shares and delete the old owner's token
         seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
-        seafile_db_api.update_repo_group_shares(repo_id, new_owner, new_owner_group_ids, org_id)
+        seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
         seafile_db_api.delete_repo_user_token(repo_id, repo_owner)
     else:
         if org_id:
@@ -1546,5 +1541,4 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
-
 

@@ -390,33 +390,39 @@ class SeafileDB:
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id IN ({repo_ids_str})
-            """
+             UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id IN ({repo_ids_str})
+             """
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-            """
+             UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+             """
         with connection.cursor() as cursor:
-            try:
-                cursor.execute(sql)
-            except Exception as e:
-                print(e,'---------------')
-                # pass
+            cursor.execute(sql)
 
-    def set_repo_group_owner(self, repo_id, group_id, org_id=None):
+    def set_repo_group_owner(self, repo_id, group_id, current_group_id, org_id=None):
         # transfer repo to department
         group_username = "%s@seafile_group" % group_id
+        if current_group_id:
+            current_group_username = "%s@seafile_group" % current_group_id
         if org_id:
+            sql1 = f"""
+            DELETE From `{self.db_name}`.`OrgGroupRepo` where owner="{current_group_username}" AND repo_id="{repo_id}" AND org_id="{org_id}" AND group_id="{current_group_id}"
+            """
             sql = f"""
             INSERT INTO `{self.db_name}`.`OrgGroupRepo` (org_id, repo_id, group_id, owner, permission) VALUES ({org_id}, "{repo_id}", {group_id}, "{group_username}", "rw")
             ON DUPLICATE KEY UPDATE owner="{group_username}"
             """
         else:
+            sql1 = f"""
+            DELETE From `{self.db_name}`.`RepoGroup` where user_name="{current_group_username}" AND repo_id="{repo_id}" AND group_id="{current_group_id}"
+                        """
             sql = f"""
             INSERT INTO `{self.db_name}`.`RepoGroup` (repo_id, group_id, user_name, permission) VALUES ("{repo_id}", {group_id}, "{group_username}", "rw")
             ON DUPLICATE KEY UPDATE user_name="{group_username}"
             """
         with connection.cursor() as cursor:
+            if current_group_id:
+                cursor.execute(sql1)
             cursor.execute(sql)
 
         self.set_repo_owner(repo_id, group_username, org_id)
@@ -426,58 +432,34 @@ class SeafileDB:
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgSharedRepo` SET from_email="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
-            """
-            sql2 = f"""
-            DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email="{new_owner}" AND org_id={org_id} AND repo_id In ({repo_ids_str})
-            """
+              UPDATE `{self.db_name}`.`OrgSharedRepo` SET from_email="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+              """
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`SharedRepo` SET from_email="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-            """
-            sql2 = f"""
-            DELETE FROM `{self.db_name}`.`SharedRepo` WHERE to_email="{new_owner}" AND repo_id In ({repo_ids_str})
-            """
+              UPDATE `{self.db_name}`.`SharedRepo` SET from_email="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+              """
         with connection.cursor() as cursor:
-            try:
-                cursor.execute(sql2)
-                cursor.execute(sql)
-            except:
-                pass
+            cursor.execute(sql)
 
-    def update_repo_group_shares(self, repo_id, new_owner, new_owner_group_ids, org_id=None):
+
+    def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
-        new_owner_group_ids_str = ','.join(["'%s'" % str(nid) for nid in new_owner_group_ids])
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id}
-             AND repo_id IN ({repo_ids_str}) AND group_id IN ({new_owner_group_ids_str})
-            """
-            sql2 = f"""
-            DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
-            AND group_id NOT IN ({new_owner_group_ids_str})"""
+              UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+              """
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-            AND group_id IN ({new_owner_group_ids_str})
-            """
-            sql2 = f"""
-                DELETE FROM `{self.db_name}`.`RepoGroup` WHERE repo_id IN ({repo_ids_str})
-                AND group_id NOT IN ({new_owner_group_ids_str})"""
+              UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+              """
         with connection.cursor() as cursor:
-            try:
-                cursor.execute(sql)
-                cursor.execute(sql2)
-            except:
-                pass
+            cursor.execute(sql)
+
 
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
-        DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
-        """
+          DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
+          """
         with connection.cursor() as cursor:
-            try:
-                cursor.execute(sql)
-            except:
-                pass
+            cursor.execute(sql)
