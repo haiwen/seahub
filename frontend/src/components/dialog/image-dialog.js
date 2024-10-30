@@ -12,6 +12,7 @@ const propTypes = {
   moveToNextImage: PropTypes.func.isRequired,
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
+  enableRotate: PropTypes.bool,
 };
 
 class ImageDialog extends React.Component {
@@ -32,6 +33,12 @@ class ImageDialog extends React.Component {
     const mainImg = imageItems[imageIndex];
     const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
     const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
+    // The backend server does not support rotating HEIC images
+    let enableRotate = this.props.enableRotate;
+    const suffix = mainImg.src.slice(mainImg.src.lastIndexOf('.') + 1, mainImg.src.lastIndexOf('?')).toLowerCase();
+    if (suffix === 'heic') {
+      enableRotate = false;
+    }
     return (
       <Lightbox
         wrapperClassName='custom-image-previewer'
@@ -49,17 +56,21 @@ class ImageDialog extends React.Component {
         closeLabel={gettext('Close (Esc)')}
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
-        enableRotate={true}
+        enableRotate={enableRotate}
         onClickDownload={() => this.downloadImage(imageItems[imageIndex].downloadURL)}
         onClickDelete={onDeleteImage ? () => onDeleteImage(name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}
-        onRotateImage={onRotateImage ? (angle) => onRotateImage(imageIndex, angle) : null}
+        onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       />
     );
   }
 }
 
 ImageDialog.propTypes = propTypes;
+
+ImageDialog.defaultProps = {
+  enableRotate: true,
+};
 
 export default ImageDialog;

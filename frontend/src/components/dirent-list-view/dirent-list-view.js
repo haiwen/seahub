@@ -684,6 +684,7 @@ class DirentListView extends React.Component {
     const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     const isDesktop = Utils.isDesktop();
+    const repoEncrypted = this.props.currentRepoInfo.encrypted;
 
     return (
       <div
@@ -816,6 +817,7 @@ class DirentListView extends React.Component {
                 moveToNextImage={this.moveToNextImage}
                 onDeleteImage={this.deleteImage}
                 onRotateImage={this.rotateImage}
+                enableRotate={!repoEncrypted}
               />
             </ModalPortal>
           )}
@@ -844,7 +846,7 @@ class DirentListView extends React.Component {
             <MoveDirentDialog
               path={this.props.path}
               repoID={this.props.repoID}
-              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              repoEncrypted={repoEncrypted}
               isMultipleOperation={this.state.isMultipleOperation}
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
@@ -855,7 +857,7 @@ class DirentListView extends React.Component {
             <CopyDirentDialog
               path={this.props.path}
               repoID={this.props.repoID}
-              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              repoEncrypted={repoEncrypted}
               selectedDirentList={this.props.selectedDirentList}
               isMultipleOperation={this.state.isMultipleOperation}
               onItemsCopy={this.props.onItemsCopy}

@@ -833,6 +833,7 @@ class DirentGridView extends React.Component {
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
+    const repoEncrypted = this.props.currentRepoInfo.encrypted;
 
     return (
       <Fragment>
@@ -861,7 +862,7 @@ class DirentGridView extends React.Component {
                   onGridItemMouseDown={this.onGridItemMouseDown}
                   onGridItemClick={this.onGridItemClick}
                   selectedDirentList={selectedDirentList}
-                  repoEncrypted={this.props.currentRepoInfo.encrypted}
+                  repoEncrypted={repoEncrypted}
                 />
               );
             })}
@@ -919,7 +920,7 @@ class DirentGridView extends React.Component {
           <MoveDirentDialog
             path={this.props.path}
             repoID={this.props.repoID}
-            repoEncrypted={this.props.currentRepoInfo.encrypted}
+            repoEncrypted={repoEncrypted}
             isMultipleOperation={this.state.isMultipleOperation}
             selectedDirentList={selectedDirentList}
             onItemMove={this.props.onItemMove}
@@ -942,7 +943,7 @@ class DirentGridView extends React.Component {
           <CopyDirentDialog
             path={this.props.path}
             repoID={this.props.repoID}
-            repoEncrypted={this.props.currentRepoInfo.encrypted}
+            repoEncrypted={repoEncrypted}
             isMultipleOperation={this.state.isMultipleOperation}
             selectedDirentList={selectedDirentList}
             onItemsCopy={this.props.onItemsCopy}
@@ -1005,6 +1006,7 @@ class DirentGridView extends React.Component {
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
+              enableRotate={!repoEncrypted}
             />
           </ModalPortal>
         )}

@@ -575,6 +575,7 @@ class SharedDirView extends React.Component {
             closeImagePopup={this.closeImagePopup}
             moveToPrevImage={this.moveToPrevImage}
             moveToNextImage={this.moveToNextImage}
+            enableRotate={false}
           />
         </ModalPortal>
         }
