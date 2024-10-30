@@ -753,7 +753,7 @@ class ItemsSearch(APIView):
         return Response({'results': query_result})
 
 
-########## Repo related
+# Repo related
 def repo_download_info(request, repo_id, gen_sync_token=True):
     repo = get_repo(repo_id)
     if not repo:
@@ -800,17 +800,17 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'permission': seafile_api.check_permission_by_path(repo_id, '/', email)
     }
 
-    if settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO:
-        info_json.update({
-            'pwd_hash': repo.pwd_hash or "",
-            'pwd_hash_algo': repo.pwd_hash_algo or "",
-            'pwd_hash_params': repo.pwd_hash_params or "",
-        })
+    info_json.update({
+        'pwd_hash': repo.pwd_hash or "",
+        'pwd_hash_algo': repo.pwd_hash_algo or "",
+        'pwd_hash_params': repo.pwd_hash_params or "",
+    })
 
     if is_pro_version() and ENABLE_STORAGE_CLASSES:
         info_json['storage_name'] = repo.storage_name
 
     return Response(info_json)
+
 
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -1764,7 +1764,6 @@ class DownloadRepo(APIView):
         if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower():
             # This is to help the desktop client to show error to the user.
             # The actual permission check will be done at the file download time.
-            
             if not is_syncable and forbidden_path == '/':
                 error_msg = 'unsyncable share permission'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
