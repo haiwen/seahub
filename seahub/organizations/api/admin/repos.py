@@ -130,7 +130,7 @@ class OrgAdminRepo(APIView):
         """Transfer an organization library
         """
         new_owner = request.data.get('email', None)
-        is_share = request.data.get('reshare', True)
+        is_share = request.data.get('reshare', False)
         if not new_owner:
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

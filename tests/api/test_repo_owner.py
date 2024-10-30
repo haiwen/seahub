@@ -144,6 +144,7 @@ class RepoOwnerTest(BaseTestCase):
                 self.user_name, 'r')
 
         group_repos = seafile_api.get_repos_by_group(self.group_id)
+        print(group_repos[0].__dict__)
         assert group_repos[0].permission == 'r'
 
         self.login_as(self.user)
@@ -156,6 +157,7 @@ class RepoOwnerTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         group_repos = seafile_api.get_repos_by_group(self.group_id)
+        print(group_repos[0].__dict__)
         assert len(group_repos) == 0
 
     def test_reshare_to_user_group_after_transfer_repo(self):

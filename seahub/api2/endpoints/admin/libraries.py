@@ -348,7 +348,7 @@ class AdminLibrary(APIView):
                 error_msg = 'owner invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_share = request.data.get('reshare', True)
+        is_share = request.data.get('reshare', False)
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -459,7 +459,7 @@ class AdminLibrary(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)
-
+        print(repo_info)
         return Response(repo_info)
 
 

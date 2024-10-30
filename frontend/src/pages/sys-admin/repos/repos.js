@@ -15,7 +15,6 @@ import DeleteRepoDialog from '../../../components/dialog/delete-repo-dialog';
 import SysAdminShareDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-share-dialog';
 import SysAdminLibHistorySettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog';
 import UserLink from '../user-link';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 

@@ -14,7 +14,6 @@ import TransferDialog from '../../../components/dialog/transfer-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);

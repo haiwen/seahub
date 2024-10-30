@@ -399,8 +399,9 @@ class SeafileDB:
         with connection.cursor() as cursor:
             try:
                 cursor.execute(sql)
-            except:
-                pass
+            except Exception as e:
+                print(e,'---------------')
+                # pass
 
     def set_repo_group_owner(self, repo_id, group_id, org_id=None):
         # transfer repo to department

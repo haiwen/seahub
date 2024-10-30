@@ -1512,6 +1512,7 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
     new_owner_group_ids = []
     for new_owner_group in new_owner_groups:
         new_owner_group_ids.append(new_owner_group.id)
+    print(new_owner_group_ids, '---new_owner_group_ids')
     # transfer repo
     # retain share
     if is_share:
@@ -1545,3 +1546,5 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
+
+
