@@ -399,9 +399,10 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
 
-    def set_repo_group_owner(self, repo_id, group_id, current_group_id, org_id=None):
+    def set_repo_group_owner(self, repo_id, group_id, current_group_id=None, org_id=None):
         # transfer repo to department
         group_username = "%s@seafile_group" % group_id
+        current_group_username = None
         if current_group_id:
             current_group_username = "%s@seafile_group" % current_group_id
         if org_id:
@@ -424,7 +425,6 @@ class SeafileDB:
             if current_group_id:
                 cursor.execute(sql1)
             cursor.execute(sql)
-
         self.set_repo_owner(repo_id, group_username, org_id)
 
     def update_repo_user_shares(self, repo_id, new_owner, org_id=None):

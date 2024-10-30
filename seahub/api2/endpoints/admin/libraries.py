@@ -459,7 +459,7 @@ class AdminLibrary(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)
-        print(repo_info)
+
         return Response(repo_info)
 
 

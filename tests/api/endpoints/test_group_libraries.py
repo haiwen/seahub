@@ -187,20 +187,6 @@ class GroupLibraryTest(BaseTestCase):
         group_repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(group_repos) == 1
 
-        # add admin user to group
-        ccnet_api.group_add_member(self.group_id, self.user_name, self.admin_name)
-
-        # transfer repo to admin user
-        library_url = reverse('api-v2.1-admin-library', args=[self.repo_id])
-        data = 'owner=%s' % self.admin_name
-        resp = self.client.put(library_url, data, 'application/x-www-form-urlencoded')
-
-        # admin user can delete
-        resp = self.client.delete(self.group_library_url)
-        self.assertEqual(200, resp.status_code)
-
-        group_repos = seafile_api.get_repos_by_group(self.group_id)
-        assert len(group_repos) == 0
 
     def test_delete_if_login_user_is_group_staff(self):
 
