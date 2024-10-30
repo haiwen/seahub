@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import { gettext, lang } from '../../../utils/constants';
@@ -38,7 +38,7 @@ class SubDepartments extends React.Component {
   }
 
   listSubDepartments = (groupID) => {
-    seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
+    systemAdminAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
       this.setState({ groups: res.data.groups });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

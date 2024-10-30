@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -230,7 +230,7 @@ class GroupMembers extends Component {
 
   getListByPage = (page) => {
     const { perPage } = this.state;
-    seafileAPI.sysAdminListGroupMembers(this.props.groupID, page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListGroupMembers(this.props.groupID, page, perPage).then((res) => {
       this.setState({
         loading: false,
         memberList: res.data.members,
@@ -258,7 +258,7 @@ class GroupMembers extends Component {
   };
 
   addMembers = (emails) => {
-    seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
+    systemAdminAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
       let newMemberList = res.data.success;
       if (newMemberList.length) {
         this.setState({
@@ -283,7 +283,7 @@ class GroupMembers extends Component {
   };
 
   removeMember = (email, name) => {
-    seafileAPI.sysAdminDeleteGroupMember(this.props.groupID, email).then(res => {
+    systemAdminAPI.sysAdminDeleteGroupMember(this.props.groupID, email).then(res => {
       let newRepoList = this.state.memberList.filter(item => {
         return item.email != email;
       });
@@ -299,7 +299,7 @@ class GroupMembers extends Component {
 
   updateMemberRole = (email, role) => {
     let isAdmin = role == 'Admin';
-    seafileAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, email, isAdmin).then(res => {
+    systemAdminAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, email, isAdmin).then(res => {
       let newRepoList = this.state.memberList.map(item => {
         if (item.email == email) {
           item.role = role;

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -30,7 +30,7 @@ class SearchGroups extends Component {
 
   getGroups = () => {
     const { name } = this.state;
-    seafileAPI.sysAdminSearchGroups(name).then((res) => {
+    systemAdminAPI.sysAdminSearchGroups(name).then((res) => {
       this.setState({
         loading: false,
         groupList: res.data.group_list
@@ -44,7 +44,7 @@ class SearchGroups extends Component {
   };
 
   deleteGroup = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
+    systemAdminAPI.sysAdminDismissGroupByID(groupID).then(res => {
       let newGroupList = this.state.groupList.filter(item => {
         return item.id != groupID;
       });
@@ -59,7 +59,7 @@ class SearchGroups extends Component {
   };
 
   transferGroup = (groupID, receiverEmail) => {
-    seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
+    systemAdminAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
       let newGroupList = this.state.groupList.map(item => {
         if (item.id == groupID) {
           item = res.data;

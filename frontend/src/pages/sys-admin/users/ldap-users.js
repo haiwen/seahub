@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -135,7 +135,7 @@ class Users extends Component {
 
   getUsersListByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListLDAPUsers(page, perPage).then(res => {
+    systemAdminAPI.sysAdminListLDAPUsers(page, perPage).then(res => {
       this.setState({
         loading: false,
         userList: res.data.ldap_user_list,

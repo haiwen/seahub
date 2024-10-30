@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
@@ -30,7 +30,7 @@ class RenameDepartmentDialog extends React.Component {
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
-      seafileAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departmentName.trim()).then((res) => {
+      systemAdminAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
         this.props.onDepartmentNameChanged(res.data);
         toaster.success(gettext('Department renamed'));

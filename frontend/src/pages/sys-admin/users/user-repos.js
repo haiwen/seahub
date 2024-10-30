@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -256,12 +256,12 @@ class Repos extends Component {
 
   componentDidMount() {
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.sysAdminGetUser(email).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListReposByOwner(email).then(res => {
+    systemAdminAPI.sysAdminListReposByOwner(email).then(res => {
       this.setState({
         loading: false,
         repoList: res.data.repos
@@ -275,7 +275,7 @@ class Repos extends Component {
   }
 
   deleteRepo = (repoID) => {
-    seafileAPI.sysAdminDeleteRepo(repoID).then(res => {
+    systemAdminAPI.sysAdminDeleteRepo(repoID).then(res => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.id != repoID;
       });
@@ -288,7 +288,7 @@ class Repos extends Component {
   };
 
   transferRepo = (repoID, email) => {
-    seafileAPI.sysAdminTransferRepo(repoID, email).then((res) => {
+    systemAdminAPI.sysAdminTransferRepo(repoID, email).then((res) => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.id != repoID;
       });

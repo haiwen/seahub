@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast';
@@ -114,7 +114,7 @@ class SearchUsers extends Component {
   };
 
   getItems = (page) => {
-    seafileAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
+    systemAdminAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
       this.setState({
         userList: res.data.user_list,
         loading: false,
@@ -137,7 +137,7 @@ class SearchUsers extends Component {
   };
 
   deleteUser = (email, username) => {
-    seafileAPI.sysAdminDeleteUser(email).then(res => {
+    systemAdminAPI.sysAdminDeleteUser(email).then(res => {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
@@ -155,7 +155,7 @@ class SearchUsers extends Component {
     let emails = this.state.selectedUserList.map(user => {
       return user.email;
     });
-    seafileAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
+    systemAdminAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
       let userList = this.state.userList.map(item => {
         res.data.success.forEach(resultUser => {
           if (item.email == resultUser.email) {
@@ -175,7 +175,7 @@ class SearchUsers extends Component {
     let emails = this.state.selectedUserList.map(user => {
       return user.email;
     });
-    seafileAPI.sysAdminDeleteUserInBatch(emails).then(res => {
+    systemAdminAPI.sysAdminDeleteUserInBatch(emails).then(res => {
       if (res.data.success.length) {
         let oldUserList = this.state.userList;
         let newUserList = oldUserList.filter(oldUser => {
@@ -205,7 +205,7 @@ class SearchUsers extends Component {
   };
 
   updateUser = (email, key, value) => {
-    seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
+    systemAdminAPI.sysAdminUpdateUser(email, key, value).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item[key] = res.data[key];
@@ -223,7 +223,7 @@ class SearchUsers extends Component {
   };
 
   updateAdminRole = (email, role) => {
-    seafileAPI.sysAdminUpdateAdminRole(email, role).then(res => {
+    systemAdminAPI.sysAdminUpdateAdminRole(email, role).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.admin_role = res.data.role;
@@ -239,7 +239,7 @@ class SearchUsers extends Component {
   };
 
   revokeAdmin = (email, name) => {
-    seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
+    systemAdminAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
       let userList = this.state.userList.filter(item => {
         return item.email != email;
       });

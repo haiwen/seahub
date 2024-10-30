@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -148,12 +148,12 @@ class OrgRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       });
     });
-    seafileAPI.sysAdminListOrgRepos(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminListOrgRepos(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         repoList: res.data.repo_list
@@ -167,7 +167,7 @@ class OrgRepos extends Component {
   }
 
   deleteRepo = (repoID) => {
-    seafileAPI.sysAdminDeleteRepo(repoID).then(res => {
+    systemAdminAPI.sysAdminDeleteRepo(repoID).then(res => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.repo_id != repoID;
       });

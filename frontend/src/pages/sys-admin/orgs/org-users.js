@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, username } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -182,7 +182,7 @@ class Item extends Component {
   };
 
   resetPassword = () => {
-    seafileAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
+    systemAdminAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
       toaster.success(res.data.reset_tip);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -349,12 +349,12 @@ class OrgUsers extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
       });
     });
-    seafileAPI.sysAdminListOrgUsers(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminListOrgUsers(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         userList: res.data.users
@@ -373,7 +373,7 @@ class OrgUsers extends Component {
 
   addUser = (newUserInfo) => {
     const { email, name, password } = newUserInfo;
-    seafileAPI.sysAdminAddOrgUser(this.props.orgID, email, name, password).then(res => {
+    systemAdminAPI.sysAdminAddOrgUser(this.props.orgID, email, name, password).then(res => {
       let userList = this.state.userList;
       userList.unshift(res.data);
       this.setState({ userList: userList });
@@ -384,7 +384,7 @@ class OrgUsers extends Component {
   };
 
   deleteUser = (orgID, email) => {
-    seafileAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
+    systemAdminAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
@@ -398,7 +398,7 @@ class OrgUsers extends Component {
 
   updateStatus = (email, statusValue) => {
     const isActive = statusValue == 'active';
-    seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive).then(res => {
+    systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.active = res.data.active;
@@ -414,7 +414,7 @@ class OrgUsers extends Component {
 
   updateMembership = (email, membershipValue) => {
     const isOrgStaff = membershipValue == 'Admin';
-    seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
+    systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.is_org_staff = res.data.is_org_staff;

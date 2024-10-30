@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
@@ -39,7 +39,7 @@ class Orgs extends Component {
 
   getItemsByPage = (page) => {
     const { perPage } = this.state;
-    seafileAPI.sysAdminListOrgs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListOrgs(page, perPage).then((res) => {
       this.setState({
         loading: false,
         orgList: res.data.organizations,
@@ -69,7 +69,7 @@ class Orgs extends Component {
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
-    seafileAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
+    systemAdminAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
       let newOrgList = this.state.orgList.map(org => {
         if (org.org_id == orgID) {
           org.role = role;
@@ -86,7 +86,7 @@ class Orgs extends Component {
 
   addOrg = (data) => {
     const { orgName, ownerEmail, password } = data;
-    seafileAPI.sysAdminAddOrg(orgName, ownerEmail, password).then(res => {
+    systemAdminAPI.sysAdminAddOrg(orgName, ownerEmail, password).then(res => {
       let orgList = this.state.orgList;
       orgList.unshift(res.data);
       this.setState({ orgList: orgList });
@@ -97,7 +97,7 @@ class Orgs extends Component {
   };
 
   deleteOrg = (orgID) => {
-    seafileAPI.sysAdminDeleteOrg(orgID).then(res => {
+    systemAdminAPI.sysAdminDeleteOrg(orgID).then(res => {
       let orgList = this.state.orgList.filter(org => {
         return org.org_id != orgID;
       });

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import dayjs from 'dayjs';
 import { gettext, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 
@@ -15,7 +15,7 @@ class AbuseReports extends Component {
   }
 
   listAbuseReports = () => {
-    seafileAPI.sysAdminListAbuseReports().then((res) => {
+    systemAdminAPI.sysAdminListAbuseReports().then((res) => {
       this.setState({
         abuseReportList: res.data.abuse_report_list,
       });
@@ -25,7 +25,7 @@ class AbuseReports extends Component {
   };
 
   updateAbuseReport = (handled, abuseReportId) => {
-    seafileAPI.sysAdminUpdateAbuseReport(handled, abuseReportId).then((res) => {
+    systemAdminAPI.sysAdminUpdateAbuseReport(handled, abuseReportId).then((res) => {
       const abuseReportList = this.state.abuseReportList.map((item, index) => {
         if (item.id === abuseReportId) {
           item.handled = res.data.handled;

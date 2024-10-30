@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
@@ -21,7 +21,7 @@ class DeleteDepartmentDialog extends React.Component {
   deleteDepart = () => {
     this.props.toggle();
     const { group } = this.props;
-    seafileAPI.sysAdminDeleteDepartment(group.id).then((res) => {
+    systemAdminAPI.sysAdminDeleteDepartment(group.id).then((res) => {
       this.props.onDeleteDepartment(group.id);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

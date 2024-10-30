@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
@@ -27,7 +27,7 @@ class WebSettings extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetSysSettingInfo().then((res) => {
+    systemAdminAPI.sysAdminGetSysSettingInfo().then((res) => {
       this.setState({
         loading: false,
         config_dict: res.data
@@ -41,7 +41,7 @@ class WebSettings extends Component {
   }
 
   saveSetting = (key, value) => {
-    seafileAPI.sysAdminSetSysSettingInfo(key, value).then((res) => {
+    systemAdminAPI.sysAdminSetSysSettingInfo(key, value).then((res) => {
       this.setState({
         config_dict: res.data
       });
@@ -55,11 +55,11 @@ class WebSettings extends Component {
   postFile = (file, fileType) => {
     let postFile;
     if (fileType == 'Logo') {
-      postFile = seafileAPI.sysAdminUpdateLogo(file);
+      postFile = systemAdminAPI.sysAdminUpdateLogo(file);
     } else if (fileType == 'Favicon') {
-      postFile = seafileAPI.sysAdminUpdateFavicon(file);
+      postFile = systemAdminAPI.sysAdminUpdateFavicon(file);
     } else if (fileType == 'loginBGImage') {
-      postFile = seafileAPI.sysAdminUpdateLoginBG(file);
+      postFile = systemAdminAPI.sysAdminUpdateLoginBG(file);
     }
     postFile.then((res) => {
       if (fileType == 'Logo') {

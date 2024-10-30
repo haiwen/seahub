@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import StatisticChart from './statistic-chart';
 import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
@@ -23,7 +23,7 @@ class StatisticStorage extends React.Component {
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
     let { filesData } = this.state;
-    seafileAPI.sysAdminStatisticStorages(startTime, endTime, groupBy).then((res) => {
+    systemAdminAPI.sysAdminStatisticStorages(startTime, endTime, groupBy).then((res) => {
       let labels = [];
       let totalStorage = [];
       let data = res.data;

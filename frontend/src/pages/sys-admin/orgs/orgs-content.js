@@ -7,7 +7,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
@@ -130,7 +130,7 @@ class Item extends Component {
     }
     this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen }, () => {
       if (this.state.isDeleteDialogOpen) {
-        seafileAPI.sysAdminGetOrg(this.props.item.org_id).then((res) => {
+        systemAdminAPI.sysAdminGetOrg(this.props.item.org_id).then((res) => {
           let orgName = '<span class="op-target">' + Utils.HTMLescape(res.data.org_name) + '</span>';
           let userCount = '<span class="op-target">' + Utils.HTMLescape(res.data.users_count) + '</span>';
           let repoCount = '<span class="op-target">' + Utils.HTMLescape(res.data.repos_count) + '</span>';

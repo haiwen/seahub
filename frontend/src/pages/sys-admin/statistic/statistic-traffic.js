@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
@@ -32,7 +32,7 @@ class StatisticTraffic extends React.Component {
   };
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
-    seafileAPI.sysAdminStatisticTraffic(startTime, endTime, groupBy).then((res) => {
+    systemAdminAPI.sysAdminStatisticTraffic(startTime, endTime, groupBy).then((res) => {
       let labels = [];
       let total_upload = [];
       let total_download = [];

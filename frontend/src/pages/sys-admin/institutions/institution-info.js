@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
@@ -97,7 +97,7 @@ class InstitutionInfo extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
+    systemAdminAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
       this.setState({
         loading: false,
         institutionInfo: res.data
@@ -111,7 +111,7 @@ class InstitutionInfo extends Component {
   }
 
   updateQuota = (quota) => {
-    seafileAPI.sysAdminUpdateInstitution(this.props.institutionID, quota).then(res => {
+    systemAdminAPI.sysAdminUpdateInstitution(this.props.institutionID, quota).then(res => {
       const newInstitutionInfo = Object.assign(this.state.institutionInfo, {
         quota_total: res.data.quota_total,
       });

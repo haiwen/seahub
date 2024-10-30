@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import Paginator from '../../../components/paginator';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
@@ -54,7 +54,7 @@ class DepartmentMembers extends React.Component {
   }
 
   listMembers = (groupID, page, perPage) => {
-    seafileAPI.sysAdminListGroupMembers(groupID, page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListGroupMembers(groupID, page, perPage).then((res) => {
       this.setState({
         members: res.data.members,
         currentPageInfo: res.data.page_info

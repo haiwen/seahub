@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot, enableSysAdminViewRepo, isPro } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -244,7 +244,7 @@ class AdminOperationLogs extends Component {
 
   getLogsByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListAdminLogs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListAdminLogs(page, perPage).then((res) => {
       this.setState({
         logList: res.data.data,
         loading: false,

@@ -3,7 +3,6 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -149,7 +148,7 @@ class Users extends Component {
 
   getUserList = () => {
   // get admins
-    seafileAPI.sysAdminListAdmins().then(res => {
+    systemAdminAPI.sysAdminListAdmins().then(res => {
       let users = res.data.admin_user_list.map(user => {
         return new SysAdminAdminUser(user);
       });
@@ -236,7 +235,7 @@ class Users extends Component {
   };
 
   deleteUser = (email, username) => {
-    seafileAPI.sysAdminDeleteUser(email).then(res => {
+    systemAdminAPI.sysAdminDeleteUser(email).then(res => {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
@@ -254,7 +253,7 @@ class Users extends Component {
     let emails = this.state.selectedUserList.map(user => {
       return user.email;
     });
-    seafileAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
+    systemAdminAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
       let userList = this.state.userList.map(item => {
         res.data.success.forEach(resultUser => {
           if (item.email == resultUser.email) {
@@ -274,7 +273,7 @@ class Users extends Component {
     let emails = this.state.selectedUserList.map(user => {
       return user.email;
     });
-    seafileAPI.sysAdminDeleteUserInBatch(emails).then(res => {
+    systemAdminAPI.sysAdminDeleteUserInBatch(emails).then(res => {
       if (res.data.success.length) {
         let oldUserList = this.state.userList;
         let newUserList = oldUserList.filter(oldUser => {
@@ -305,7 +304,7 @@ class Users extends Component {
 
   importUserInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    seafileAPI.sysAdminImportUserViaFile(file).then((res) => {
+    systemAdminAPI.sysAdminImportUserViaFile(file).then((res) => {
       if (res.data.success.length) {
         const users = res.data.success.map(item => {
           if (item.institution == undefined) {
@@ -330,7 +329,7 @@ class Users extends Component {
   addUser = (data) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     const { email, name, role, password } = data;
-    seafileAPI.sysAdminAddUser(email, name, role, password).then((res) => {
+    systemAdminAPI.sysAdminAddUser(email, name, role, password).then((res) => {
       let userList = this.state.userList;
       userList.unshift(res.data);
       this.setState({
@@ -352,7 +351,7 @@ class Users extends Component {
   };
 
   updateUser = (email, key, value) => {
-    seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
+    systemAdminAPI.sysAdminUpdateUser(email, key, value).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item[key] = res.data[key];
@@ -370,7 +369,7 @@ class Users extends Component {
   };
 
   updateAdminRole = (email, role) => {
-    seafileAPI.sysAdminUpdateAdminRole(email, role).then(res => {
+    systemAdminAPI.sysAdminUpdateAdminRole(email, role).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.admin_role = res.data.role;
@@ -386,7 +385,7 @@ class Users extends Component {
   };
 
   revokeAdmin = (email, name) => {
-    seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
+    systemAdminAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
       let userList = this.state.userList.filter(item => {
         return item.email != email;
       });
@@ -437,7 +436,7 @@ class Users extends Component {
   };
 
   addAdminInBatch = (emails) => {
-    seafileAPI.sysAdminAddAdminInBatch(emails).then(res => {
+    systemAdminAPI.sysAdminAddAdminInBatch(emails).then(res => {
       let users = res.data.success.map(user => {
         return new SysAdminAdminUser(user);
       });

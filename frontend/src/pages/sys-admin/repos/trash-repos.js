@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -156,7 +156,7 @@ class Item extends Component {
 
   onDeleteRepo = () => {
     const repo = this.props.repo;
-    seafileAPI.sysAdminDeleteTrashRepo(repo.id).then((res) => {
+    systemAdminAPI.sysAdminDeleteTrashRepo(repo.id).then((res) => {
       this.props.onDeleteRepo(repo);
       const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.name);
       toaster.success(msg);
@@ -168,7 +168,7 @@ class Item extends Component {
 
   onRestoreRepo = () => {
     const repo = this.props.repo;
-    seafileAPI.sysAdminRestoreTrashRepo(repo.id).then((res) => {
+    systemAdminAPI.sysAdminRestoreTrashRepo(repo.id).then((res) => {
       this.props.onRestoreRepo(repo);
       let message = gettext('Successfully restored the library.');
       toaster.success(message);
@@ -318,7 +318,7 @@ class TrashRepos extends Component {
 
   getReposByPage = (page) => {
     let perPage = this.state.perPage;
-    seafileAPI.sysAdminListTrashRepos(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListTrashRepos(page, perPage).then((res) => {
       this.setState({
         repos: res.data.repos,
         pageInfo: res.data.page_info,
@@ -359,7 +359,7 @@ class TrashRepos extends Component {
   };
 
   cleanTrash = () => {
-    seafileAPI.sysAdminCleanTrashRepos().then(res => {
+    systemAdminAPI.sysAdminCleanTrashRepos().then(res => {
       this.setState({ repos: [] });
       toaster.success(gettext('Successfully cleared trash.'));
     }).catch(error => {
@@ -376,7 +376,7 @@ class TrashRepos extends Component {
   };
 
   searchRepos = (owner) => {
-    seafileAPI.sysAdminSearchTrashRepos(owner).then((res) => {
+    systemAdminAPI.sysAdminSearchTrashRepos(owner).then((res) => {
       this.setState({
         repos: res.data.repos,
         pageInfo: null,

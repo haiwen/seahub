@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -188,7 +188,7 @@ class UploadLinks extends Component {
 
   getUploadLinksByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.sysAdminListAllUploadLinks(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListAllUploadLinks(page, perPage).then((res) => {
       this.setState({
         uploadLinkList: res.data.upload_link_list,
         loading: false,
@@ -204,7 +204,7 @@ class UploadLinks extends Component {
   };
 
   deleteUploadLink = (linkToken) => {
-    seafileAPI.sysAdminDeleteUploadLink(linkToken).then(res => {
+    systemAdminAPI.sysAdminDeleteUploadLink(linkToken).then(res => {
       let newUploadLinkList = this.state.uploadLinkList.filter(item =>
         item.token != linkToken
       );

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -42,7 +42,7 @@ class SearchRepos extends Component {
       toaster.notify(gettext('Required at least three letters.'));
       return;
     }
-    seafileAPI.sysAdminSearchRepos(name, page, perPage).then((res) => {
+    systemAdminAPI.sysAdminSearchRepos(name, page, perPage).then((res) => {
       this.setState({
         loading: false,
         errorMsg: '',

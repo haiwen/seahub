@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -226,12 +226,12 @@ class InstitutionAdmins extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
+    systemAdminAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
       this.setState({
         institutionName: res.data.name
       });
     });
-    seafileAPI.sysAdminListInstitutionAdmins(this.props.institutionID).then((res) => {
+    systemAdminAPI.sysAdminListInstitutionAdmins(this.props.institutionID).then((res) => {
       this.setState({
         loading: false,
         userList: res.data.user_list,
@@ -247,7 +247,7 @@ class InstitutionAdmins extends Component {
   revokeAdmin = (item) => {
     const email = item.email;
     const name = item.name;
-    seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, false).then(res => {
+    systemAdminAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, false).then(res => {
       let userList = this.state.userList.filter(user => {
         return user.email != email;
       });
@@ -260,7 +260,7 @@ class InstitutionAdmins extends Component {
   };
 
   deleteUser = (email) => {
-    seafileAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
+    systemAdminAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
       let newUserList = this.state.userList.filter(user => {
         return user.email != email;
       });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
@@ -88,7 +88,7 @@ class FileScanRecords extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listFileScanRecords().then((res) => {
+    systemAdminAPI.sysAdminListFileScanRecords().then((res) => {
       this.setState({
         loading: false,
         records: res.data.record_list,

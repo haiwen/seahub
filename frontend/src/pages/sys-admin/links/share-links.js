@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -213,7 +213,7 @@ class ShareLinks extends Component {
 
   getShareLinksByPage = (page) => {
     const { perPage, sortBy, sortOrder } = this.state;
-    seafileAPI.sysAdminListShareLinks(page, perPage, sortBy, sortOrder).then((res) => {
+    systemAdminAPI.sysAdminListShareLinks(page, perPage, sortBy, sortOrder).then((res) => {
       this.setState({
         shareLinkList: res.data.share_link_list,
         loading: false,
@@ -247,7 +247,7 @@ class ShareLinks extends Component {
   };
 
   deleteShareLink = (linkToken) => {
-    seafileAPI.sysAdminDeleteShareLink(linkToken).then(res => {
+    systemAdminAPI.sysAdminDeleteShareLink(linkToken).then(res => {
       let newShareLinkList = this.state.shareLinkList.filter(item =>
         item.token != linkToken
       );

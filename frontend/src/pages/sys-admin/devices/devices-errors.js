@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -155,7 +155,7 @@ class DeviceErrors extends Component {
 
   getDeviceErrorsListByPage = (page) => {
     let per_page = this.state.perPage;
-    seafileAPI.sysAdminListDeviceErrors(page, per_page).then((res) => {
+    systemAdminAPI.sysAdminListDeviceErrors(page, per_page).then((res) => {
       this.setState({
         loading: false,
         devicesErrors: res.data.device_errors,
@@ -171,7 +171,7 @@ class DeviceErrors extends Component {
   };
 
   clean = () => {
-    seafileAPI.sysAdminClearDeviceErrors().then((res) => {
+    systemAdminAPI.sysAdminClearDeviceErrors().then((res) => {
       this.setState({
         devicesErrors: [],
         isCleanBtnShown: false

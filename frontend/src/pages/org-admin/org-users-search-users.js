@@ -121,24 +121,6 @@ class OrgUsersSearchUsers extends Component {
     });
   };
 
-  updateUser = (email, key, value) => {
-    seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
-      let newUserList = this.state.orgUsers.map(item => {
-        if (item.email == email) {
-          item[key] = res.data[key];
-        }
-        return item;
-      });
-      this.setState({ orgUsers: newUserList });
-      const msg = (key == 'is_active' && value) ?
-        res.data.update_status_tip : gettext('Edit succeeded');
-      toaster.success(msg);
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value

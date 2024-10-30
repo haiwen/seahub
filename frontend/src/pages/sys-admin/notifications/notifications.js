@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -236,7 +236,7 @@ class Notifications extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.sysAdminListAllSysNotifications().then((res) => {
+    systemAdminAPI.sysAdminListAllSysNotifications().then((res) => {
       this.setState({
         loading: false,
         notificationList: res.data.notifications
@@ -254,7 +254,7 @@ class Notifications extends Component {
   };
 
   addNotification = (msg) => {
-    seafileAPI.sysAdminAddSysNotification(msg).then(res => {
+    systemAdminAPI.sysAdminAddSysNotification(msg).then(res => {
       let notificationList = this.state.notificationList;
       notificationList.unshift(res.data.notification);
       this.setState({ notificationList: notificationList });
@@ -265,7 +265,7 @@ class Notifications extends Component {
   };
 
   deleteNotification = (id) => {
-    seafileAPI.sysAdminDeleteSysNotification(id).then(res => {
+    systemAdminAPI.sysAdminDeleteSysNotification(id).then(res => {
       let notificationList = this.state.notificationList.filter(item => {
         return item.id != id;
       });
@@ -278,7 +278,7 @@ class Notifications extends Component {
   };
 
   setToCurrent = (id) => {
-    seafileAPI.sysAdminSetSysNotificationToCurrent(id).then(res => {
+    systemAdminAPI.sysAdminSetSysNotificationToCurrent(id).then(res => {
       let notificationList = this.state.notificationList.map(item => {
         if (item.id == id) {
           item.is_current = true;

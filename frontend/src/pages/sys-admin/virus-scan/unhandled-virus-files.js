@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
@@ -260,7 +260,7 @@ class UnhandledVirusFiles extends Component {
   getListByPage = (page) => {
     const { perPage } = this.state;
     const hasHandled = false;
-    seafileAPI.listVirusFiles(page, perPage, hasHandled).then((res) => {
+    systemAdminAPI.sysAdminListVirusFiles(page, perPage, hasHandled).then((res) => {
       const data = res.data;
       const items = data.virus_file_list.map(item => {
         item.isSelected = false;
@@ -291,13 +291,13 @@ class UnhandledVirusFiles extends Component {
     let request;
     switch (op) {
       case 'delete':
-        request = seafileAPI.deleteVirusFile(virusID);
+        request = systemAdminAPI.sysAdminDeleteVirusFile(virusID);
         break;
       case 'ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, true);
+        request = systemAdminAPI.sysAdminToggleIgnoreVirusFile(virusID, true);
         break;
       case 'do-not-ignore':
-        request = seafileAPI.toggleIgnoreVirusFile(virusID, false);
+        request = systemAdminAPI.sysAdminToggleIgnoreVirusFile(virusID, false);
         break;
     }
     request.then((res) => {
@@ -354,7 +354,7 @@ class UnhandledVirusFiles extends Component {
         }
       })
       .map(item => item.virus_id);
-    seafileAPI.batchProcessVirusFiles(virusIDs, op).then((res) => {
+    systemAdminAPI.sysAdminBatchProcessVirusFiles(virusIDs, op).then((res) => {
       let fileList = this.state.virusFiles;
       res.data.success.forEach(item => {
         let file = fileList.find(file => file.virus_id == item.virus_id);
