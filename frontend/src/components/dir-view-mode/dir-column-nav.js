@@ -420,6 +420,7 @@ class DirColumnNav extends React.Component {
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
+    const repoEncrypted = this.props.currentRepoInfo.encrypted;
     return (
       <Fragment>
         <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
@@ -462,7 +463,7 @@ class DirColumnNav extends React.Component {
               repoID={this.props.repoID}
               dirent={this.state.opNode.object}
               onItemCopy={this.props.onItemCopy}
-              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              repoEncrypted={repoEncrypted}
               onCancelCopy={this.onCopyToggle}
               isMultipleOperation={this.state.isMultipleOperation}
             />
@@ -475,7 +476,7 @@ class DirColumnNav extends React.Component {
               repoID={this.props.repoID}
               dirent={this.state.opNode.object}
               onItemMove={this.props.onItemMove}
-              repoEncrypted={this.props.currentRepoInfo.encrypted}
+              repoEncrypted={repoEncrypted}
               onCancelMove={this.onMoveToggle}
               isMultipleOperation={this.state.isMultipleOperation}
             />
@@ -491,6 +492,7 @@ class DirColumnNav extends React.Component {
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
+              enableRotate={!repoEncrypted}
             />
           </ModalPortal>
         )}
