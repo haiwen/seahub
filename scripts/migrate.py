@@ -233,6 +233,10 @@ def main(argv):
     for dtype in dtypes:
         orig_store = orig_obj_factory.get_obj_store(dtype)
         dest_store = dest_obj_factory.get_obj_store(dtype)
+        if orig_store.get_name() == dest_store.get_name() and \
+           orig_store.get_container_name() == dest_store.get_container_name():
+            logging.warning('%s does not support migration between identical storage' % (orig_store.get_name()))
+            sys.exit()
         ObjMigrateWorker(orig_store, dest_store, dtype, decrypt=decrypt).start()
 
 if __name__ == '__main__':
