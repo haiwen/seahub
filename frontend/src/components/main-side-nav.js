@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
@@ -12,6 +13,7 @@ import { Utils } from '../utils/utils';
 import Group from '../models/group';
 import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
+import AboutDialog from './dialog/about-dialog';
 import FilesSubNav from '../components/files-sub-nav';
 import { SUB_NAV_ITEM_HEIGHT } from '../constants';
 
@@ -27,6 +29,7 @@ class MainSideNav extends React.Component {
 
     this.state = {
       filesNavUnfolded: false,
+      isAboutDialogShow: false,
       sharedExtended: false,
       groupItems: [],
       isCreateGroupDialogOpen: false,
@@ -200,10 +203,16 @@ class MainSideNav extends React.Component {
     });
   };
 
+  toggleAboutDialog = (e) => {
+    e.preventDefault();
+    this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
+  }
+
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { filesNavUnfolded, groupItems } = this.state;
     return (
+      <Fragment>
       <div className="side-nav">
         <div className={'side-nav-con d-flex flex-column'}>
           <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
@@ -288,17 +297,27 @@ class MainSideNav extends React.Component {
                   <span className="nav-text">{gettext('Clients')}</span>
                 </a>
               </li>
+              <li className='nav-item'>
+                <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                  <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('About')}</span>
+                </a>
+              </li>
             </ul>
           )
           }
-
           <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
             <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
             <span>{gettext('Fold the sidebar')}</span>
           </div>
-
         </div>
       </div>
+      {this.state.isAboutDialogShow && (
+        <ModalPortal>
+          <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
+        </ModalPortal>
+      )}
+      </Fragment>
     );
   }
 }

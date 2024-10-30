@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml,
   isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
+import AboutDialog from './dialog/about-dialog';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import Group from '../models/group';
@@ -28,7 +30,8 @@ class MainSideNavFolded extends React.Component {
     super(props);
     this.state = {
       groupItems: [],
-      isFilesSubNavShown: false
+      isFilesSubNavShown: false,
+      isAboutDialogShow: false,
     };
   }
 
@@ -92,10 +95,16 @@ class MainSideNavFolded extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
+  toggleAboutDialog = (e) => {
+    e.preventDefault();
+    this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
+  }
+
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { groupItems, isFilesSubNavShown } = this.state;
     return (
+      <Fragment>
       <div className='side-nav-folded-container h-100 position-relative'>
         {/* FOLDED SIDE NAV FILES */}
         <div className="side-nav side-nav-folded position-relative" style={{ zIndex: FOLDED_SIDE_NAV_FILES }}>
@@ -221,6 +230,12 @@ class MainSideNavFolded extends React.Component {
                     <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                   </a>
                 </li>
+                <li className='nav-item'>
+                  <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                    <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
+                    <Tip target="main-side-nav-folded-about" text={gettext('About')} />
+                  </a>
+                </li>
               </ul>
             }
             <div
@@ -232,6 +247,12 @@ class MainSideNavFolded extends React.Component {
           </div>
         </div>
       </div>
+      {this.state.isAboutDialogShow && (
+        <ModalPortal>
+          <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
+        </ModalPortal>
+      )}
+      </Fragment>
     );
   }
 }
