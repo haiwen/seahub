@@ -1,11 +1,14 @@
 @font-face {
-  font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1725848878923'); /* IE9 */
-  src: url('iconfont.eot?t=1725848878923#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1725848878923') format('woff2'),
-       url('iconfont.woff?t=1725848878923') format('woff'),
-       url('iconfont.ttf?t=1725848878923') format('truetype'),
-       url('iconfont.svg?t=1725848878923#sf3-font') format('svg');
+  font-family: "sf3-font";
+  /* Project id 1230969 */
+  src: url('iconfont.eot?t=1730358680866');
+  /* IE9 */
+  src: url('iconfont.eot?t=1730358680866#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */
+    url('iconfont.woff2?t=1730358680866') format('woff2'),
+    url('iconfont.woff?t=1730358680866') format('woff'),
+    url('iconfont.ttf?t=1730358680866') format('truetype'),
+    url('iconfont.svg?t=1730358680866#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +17,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-photos-classfied-by-people:before {
+  content: "\e84d";
+}
+
+.sf3-font-Kanban:before {
+  content: "\e84c";
+}
+
+.sf3-font-about1:before {
+  content: "\e84b";
+}
+
+.sf3-font-unfold:before {
+  content: "\e849";
+}
+
+.sf3-font-fold:before {
+  content: "\e84a";
 }
 
 .sf3-font-import-sdoc:before {
@@ -467,4 +490,3 @@
 .sf3-font-enterprise-wechat:before {
   content: "\e602";
 }
-
