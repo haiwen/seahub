@@ -15,8 +15,7 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   currentPath: PropTypes.string,
-  isBrowsing: PropTypes.bool,
-  browsingPath: PropTypes.string,
+  selectedSearchedRepo: PropTypes.object,
 };
 
 const defaultProps = {
@@ -29,17 +28,20 @@ const defaultProps = {
   fileSuffixes: [],
   selectedItemInfo: null,
   currentPath: '',
-  isBrowsing: false,
-  browsingPath: '',
 };
 
 class RepoListView extends React.Component {
 
   render() {
-    let { currentRepoInfo, currentPath, repoList } = this.props;
+    let { currentRepoInfo, currentPath, repoList, selectedSearchedRepo } = this.props;
     if (currentRepoInfo) {
       repoList = [];
       repoList.push(currentRepoInfo);
+    }
+
+    if (selectedSearchedRepo) {
+      repoList = [];
+      repoList.push(selectedSearchedRepo);
     }
 
     return (
@@ -47,7 +49,7 @@ class RepoListView extends React.Component {
         {repoList.length > 0 && repoList.map((repoItem, index) => {
           return (
             <RepoListItem
-              key={index}
+              key={repoItem.repo_id}
               isCurrentRepo={currentRepoInfo ? true : false}
               currentPath={currentPath}
               repo={repoItem}
@@ -59,8 +61,6 @@ class RepoListView extends React.Component {
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
               selectedItemInfo={this.props.selectedItemInfo}
-              isBrowsing={this.props.isBrowsing}
-              browsingPath={this.props.browsingPath}
             />
           );
         })}

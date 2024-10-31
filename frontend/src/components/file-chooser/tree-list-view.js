@@ -12,16 +12,12 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
-  isBrowsing: PropTypes.bool,
-  browsingPath: PropTypes.string,
 };
 
 class TreeListView extends React.Component {
 
   render() {
     const {
-      isBrowsing,
-      browsingPath,
       treeData,
       selectedPath,
       onNodeCollapse,
@@ -32,10 +28,7 @@ class TreeListView extends React.Component {
       fileSuffixes
     } = this.props;
 
-    const browsingNode = treeHelper.findNodeByPath(treeData, browsingPath);
-    if (isBrowsing && !browsingNode) return null;
-
-    const node = isBrowsing ? browsingNode : treeData.root;
+    const node = treeData.root;
 
     return (
       <div className="list-view-content">

@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
 import toaster from '../toast';
-import Searcher, { SearchStatus } from '../file-chooser/searcher';
 import RepoListWrapper, { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { RepoInfo } from '../../models';
 
-const LibraryOption = ({ mode, label, currentMode, selectedMode }) => {
+const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
   return (
-    <div className={`repo-list-item ${mode === currentMode ? 'active' : ''}`} onClick={() => selectedMode(mode)}>
+    <div className={`repo-list-item ${mode === currentMode ? 'active' : ''}`} onClick={() => onUpdateMode(mode)}>
       <span className='library'>{label}</span>
     </div>
   );
@@ -22,13 +21,9 @@ class SelectDirentBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
       currentRepoInfo: null,
       repoList: [],
-      selectedSearchedItem: null,
       selectedRepo: null,
-      browsingPath: '',
-      searchStatus: SearchStatus.IDLE,
       errMessage: '',
     };
   }
@@ -56,7 +51,14 @@ class SelectDirentBody extends React.Component {
     try {
       const res = await seafileAPI.listRepos();
       const repos = res.data.repos;
-      const repoList = repos.filter((repo) => repo.permission === 'rw' && repo.repo_id !== this.props.repoID);
+      const repoList = [];
+      const uniqueRepoIds = new Set();
+      for (const repo of repos) {
+        if (repo.permission === 'rw' && repo.repo_id !== this.props.repoID && !uniqueRepoIds.has(repo.repo_id)) {
+          uniqueRepoIds.add(repo.repo_id);
+          repoList.push(repo);
+        }
+      }
       const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
       const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
       this.setState({
@@ -69,27 +71,8 @@ class SelectDirentBody extends React.Component {
     }
   };
 
-  onUpdateSearchStatus = (status) => {
-    this.setState({ searchStatus: status });
-  };
-
   onUpdateRepoList = (repoList) => {
     this.setState({ repoList: repoList });
-  };
-
-  selectSearchedItem = (item) => {
-    this.setState({ selectedSearchedItem: item });
-  };
-
-  onSelectSearchedRepo = (repo) => {
-    this.setState({
-      selectedRepo: repo,
-      mode: repo.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
-    });
-  };
-
-  setBrowsingPath = (path) => {
-    this.setState({ browsingPath: path });
   };
 
   handleSubmit = () => {
@@ -118,23 +101,19 @@ class SelectDirentBody extends React.Component {
     this.setState({ selectedRepo: repo });
   };
 
-  selectedMode = (mode) => {
+  onUpdateMode = (mode) => {
     const { repoID, path } = this.props;
 
     // reset selecting status
     this.props.selectRepo({ repo_id: repoID });
     this.props.setSelectedPath(path);
 
-    this.setState({
-      mode,
-      selectedSearchedItem: null,
-      searchStatus: SearchStatus.RESULTS,
-    });
+    this.props.onUpdateMode(mode);
   };
 
   render() {
-    const { path, selectedPath, isSupportOtherLibraries, errMessage } = this.props;
-    const { mode, searchStatus, selectedSearchedItem, selectedRepo, repoList, currentRepoInfo, browsingPath } = this.state;
+    const { mode, path, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
+    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo } = this.state;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -143,61 +122,57 @@ class SelectDirentBody extends React.Component {
     return (
       <Row>
         <Col className='repo-list-col border-right'>
-          {isPro && (
-            <Searcher
-              searchStatus={searchStatus}
-              onUpdateSearchStatus={this.onUpdateSearchStatus}
-              onDirentItemClick={this.onDirentItemClick}
-              selectSearchedItem={this.selectSearchedItem}
-              selectRepo={this.onSelectSearchedRepo}
-              setSelectedPath={this.props.setSelectedPath}
-              setBrowsingPath={this.setBrowsingPath}
-            />
-          )}
           <LibraryOption
             mode={MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY}
             label={gettext('Current Library')}
             currentMode={mode}
-            selectedMode={this.selectedMode}
+            onUpdateMode={this.onUpdateMode}
           />
           {isSupportOtherLibraries && (
             <LibraryOption
               mode={MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES}
               label={gettext('Other Libraries')}
               currentMode={mode}
-              selectedMode={this.selectedMode}
+              onUpdateMode={this.onUpdateMode}
             />
           )}
           <LibraryOption
             mode={MODE_TYPE_MAP.RECENTLY_USED}
             label={gettext('Recently Used')}
             currentMode={mode}
-            selectedMode={this.selectedMode}
+            onUpdateMode={this.onUpdateMode}
           />
         </Col>
         <Col className='file-list-col'>
           <ModalBody>
-            {currentRepoInfo && (
-              <RepoListWrapper
-                key={repoListWrapperKey}
-                mode={mode}
-                currentPath={path}
-                isBrowsing={searchStatus === SearchStatus.BROWSING}
-                browsingPath={browsingPath}
-                selectedItemInfo={selectedSearchedItem}
-                currentRepoInfo={currentRepoInfo}
-                selectedRepo={selectedRepo}
-                selectedPath={selectedPath}
-                repoList={repoList}
-                handleClickRepo={this.onRepoItemClick}
-                handleClickDirent={this.onDirentItemClick}
-              />
-            )}
+            <RepoListWrapper
+              key={repoListWrapperKey}
+              mode={mode}
+              currentPath={path}
+              selectedItemInfo={selectedSearchedItem}
+              currentRepoInfo={currentRepoInfo}
+              selectedRepo={selectedRepo}
+              selectedPath={selectedPath}
+              repoList={repoList}
+              handleClickRepo={this.onRepoItemClick}
+              handleClickDirent={this.onDirentItemClick}
+              searchStatus={searchStatus}
+              searchResults={searchResults}
+              onSearchedItemClick={this.props.onSearchedItemClick}
+              onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
+              selectedSearchedRepo={selectedSearchedRepo}
+            />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={this.onCancel}>{gettext('Cancel')}</Button>
-            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+            <div className='footer-left-btns'>
+              <i className='sf3-font-new sf3-font mr-2'></i>
+              <span>{gettext('New folder')}</span>
+            </div>
+            <div className='footer-right-btns'>
+              <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
+              <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+            </div>
           </ModalFooter>
         </Col>
       </Row>
@@ -215,6 +190,13 @@ SelectDirentBody.propTypes = {
   selectRepo: PropTypes.func,
   setSelectedPath: PropTypes.func,
   setErrMessage: PropTypes.func,
+  mode: PropTypes.string,
+  onUpdateMode: PropTypes.func,
+  searchStatus: PropTypes.string,
+  searchResults: PropTypes.array,
+  onSearchedItemClick: PropTypes.func,
+  onSearchedItemDoubleClick: PropTypes.func,
+  selectedSearchedRepo: PropTypes.object,
 };
 
 SelectDirentBody.defaultProps = {

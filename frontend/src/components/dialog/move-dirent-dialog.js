@@ -1,9 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalHeader } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import SelectDirentBody from './select-dirent-body';
-import { gettext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Searcher from '../file-chooser/searcher';
+import { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
+import { RepoInfo } from '../../models';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -21,11 +27,37 @@ class MoveDirent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
       repo: { repo_id: this.props.repoID },
       selectedPath: this.props.path,
+      selectedSearchedItem: null,
+      selectedSearchedRepo: null,
+      searchStatus: '',
+      searchResults: [],
+      showSearchBar: false,
       errMessage: '',
     };
+    this.lastMode = MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY;
+    this.searcherRef = React.createRef();
   }
+
+  // componentDidMount() {
+  //   if (isPro) {
+  //     document.addEventListener('mousedown', this.handleClickOutside);
+  //   }
+  // }
+
+  // componentWillUnmount() {
+  //   if (isPro) {
+  //     document.removeEventListener('mousedown', this.handleClickOutside);
+  //   }
+  // }
+
+  // handleClickOutside = (event) => {
+  //   if (this.searcherRef.current && !this.searcherRef.current.contains(event.target)) {
+  //     this.setState({ showSearchBar: false });
+  //   }
+  // };
 
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
@@ -138,6 +170,81 @@ class MoveDirent extends React.Component {
     this.setState({ errMessage: message });
   };
 
+  onUpdateMode = (mode) => {
+    if (mode === this.state.mode) return;
+    this.lastMode = this.state.mode;
+    this.setState({
+      mode,
+    });
+  };
+
+  onUpdateSearchStatus = (status) => {
+    this.setState({ searchStatus: status });
+  };
+
+  onUpdateSearchResults = (results) => {
+    this.setState({
+      searchResults: results
+    });
+  };
+
+  onDirentItemClick = (repo, selectedPath) => {
+    this.setState({
+      selectedPath: selectedPath,
+      repo,
+      errMessage: '',
+    });
+  };
+
+  onOpenSearchBar = () => {
+    this.setState({ showSearchBar: true });
+  };
+
+  onCloseSearchBar = () => {
+    const { selectedSearchedRepo } = this.state;
+    const mode = (!selectedSearchedRepo || selectedSearchedRepo.repo_id === this.props.repoID) ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
+
+    this.setState({
+      mode,
+      searchStatus: '',
+      searchResults: [],
+      selectedSearchedRepo: null,
+      showSearchBar: false
+    });
+  };
+
+  onSearchedItemClick = (item) => {
+    item['type'] = item.is_dir ? 'dir' : 'file';
+    let repo = new RepoInfo(item);
+    this.onDirentItemClick(repo, item.path, item);
+  };
+
+  onSearchedItemDoubleClick = (item) => {
+    if (item.type !== 'dir') return;
+
+    const selectedItemInfo = {
+      repoID: item.repo_id,
+      filePath: item.path,
+    };
+
+    this.setState({ selectedSearchedItem: selectedItemInfo });
+
+    seafileAPI.getRepoInfo(item.repo_id).then(res => {
+      const repoInfo = new RepoInfo(res.data);
+      const path = item.path.substring(0, item.path.length - 1);
+      const mode = item.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
+      this.setState({
+        mode,
+        searchResults: [],
+        selectedSearchedRepo: repoInfo,
+        selectedPath: path,
+      });
+    }).catch(err => {
+      const errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
+  };
+
   renderTitle = () => {
     const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Move {placeholder} to');
@@ -151,6 +258,7 @@ class MoveDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path, repoID } = this.props;
+    const { mode, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -159,18 +267,47 @@ class MoveDirent extends React.Component {
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex mw-100'></div>}
+          {isPro && (
+            showSearchBar ? (
+              <div ref={this.searcherRef}>
+                <Searcher
+                  onUpdateMode={this.onUpdateMode}
+                  onUpdateSearchStatus={this.onUpdateSearchStatus}
+                  onUpdateSearchResults={this.onUpdateSearchResults}
+                  onClose={this.onCloseSearchBar}
+                />
+              </div>
+            ) : (
+              <IconBtn
+                iconName="search"
+                size={24}
+                className="search"
+                onClick={this.onOpenSearchBar}
+                role="button"
+                onKeyDown={() => {}}
+                tabIndex={0}
+              />
+            )
+          )}
         </ModalHeader>
         <SelectDirentBody
           path={path}
-          selectedPath={this.state.selectedPath}
+          selectedPath={selectedPath}
           repoID={repoID}
           isSupportOtherLibraries={!isCustomPermission}
-          errMessage={this.state.errMessage}
+          errMessage={errMessage}
           onCancel={this.toggle}
           selectRepo={this.selectRepo}
           setSelectedPath={this.setSelectedPath}
           setErrMessage={this.setErrMessage}
           handleSubmit={this.handleSubmit}
+          mode={mode}
+          onUpdateMode={this.onUpdateMode}
+          searchStatus={searchStatus}
+          searchResults={searchResults}
+          onSearchedItemClick={this.onSearchedItemClick}
+          onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
+          selectedSearchedRepo={selectedSearchedRepo}
         />
       </Modal>
     );
