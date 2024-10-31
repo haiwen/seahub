@@ -3,451 +3,507 @@
   "assets": {
     "static/css/app.chunk.css": {
       "name": "static/css/app.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/app.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/app.chunk.css"
     },
     "static/css/app.chunk.css.map": {
       "name": "static/css/app.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/app.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/app.chunk.css.map"
     },
     "static/css/commons.chunk.css": {
       "name": "static/css/commons.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/commons.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/commons.chunk.css"
     },
     "static/css/commons.chunk.css.map": {
       "name": "static/css/commons.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/commons.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/commons.chunk.css.map"
     },
     "static/css/draft.chunk.css": {
       "name": "static/css/draft.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/draft.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/draft.chunk.css"
     },
     "static/css/draft.chunk.css.map": {
       "name": "static/css/draft.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/draft.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/draft.chunk.css.map"
     },
     "static/css/fileHistory.chunk.css": {
       "name": "static/css/fileHistory.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistory.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistory.chunk.css"
     },
     "static/css/fileHistory.chunk.css.map": {
       "name": "static/css/fileHistory.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistory.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistory.chunk.css.map"
     },
     "static/css/fileHistoryOld.chunk.css": {
       "name": "static/css/fileHistoryOld.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistoryOld.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistoryOld.chunk.css"
     },
     "static/css/fileHistoryOld.chunk.css.map": {
       "name": "static/css/fileHistoryOld.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistoryOld.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistoryOld.chunk.css.map"
     },
     "static/css/historyTrashFileView.chunk.css": {
       "name": "static/css/historyTrashFileView.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/historyTrashFileView.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/historyTrashFileView.chunk.css"
     },
     "static/css/historyTrashFileView.chunk.css.map": {
       "name": "static/css/historyTrashFileView.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/historyTrashFileView.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/historyTrashFileView.chunk.css.map"
     },
     "static/css/markdownEditor.chunk.css": {
       "name": "static/css/markdownEditor.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/markdownEditor.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/markdownEditor.chunk.css"
     },
     "static/css/markdownEditor.chunk.css.map": {
       "name": "static/css/markdownEditor.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/markdownEditor.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/markdownEditor.chunk.css.map"
     },
     "static/css/orgAdmin.chunk.css": {
       "name": "static/css/orgAdmin.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/orgAdmin.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/orgAdmin.chunk.css"
     },
     "static/css/orgAdmin.chunk.css.map": {
       "name": "static/css/orgAdmin.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/orgAdmin.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/orgAdmin.chunk.css.map"
     },
     "static/css/repoFolderTrash.chunk.css": {
       "name": "static/css/repoFolderTrash.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoFolderTrash.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoFolderTrash.chunk.css"
     },
     "static/css/repoFolderTrash.chunk.css.map": {
       "name": "static/css/repoFolderTrash.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoFolderTrash.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoFolderTrash.chunk.css.map"
     },
     "static/css/repoHistory.chunk.css": {
       "name": "static/css/repoHistory.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoHistory.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoHistory.chunk.css"
     },
     "static/css/repoHistory.chunk.css.map": {
       "name": "static/css/repoHistory.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoHistory.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoHistory.chunk.css.map"
     },
     "static/css/repoSnapshot.chunk.css": {
       "name": "static/css/repoSnapshot.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoSnapshot.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoSnapshot.chunk.css"
     },
     "static/css/repoSnapshot.chunk.css.map": {
       "name": "static/css/repoSnapshot.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoSnapshot.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoSnapshot.chunk.css.map"
     },
     "static/css/settings.chunk.css": {
       "name": "static/css/settings.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/settings.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/settings.chunk.css"
     },
     "static/css/settings.chunk.css.map": {
       "name": "static/css/settings.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/settings.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/settings.chunk.css.map"
     },
     "static/css/sharedDirView.chunk.css": {
       "name": "static/css/sharedDirView.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedDirView.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedDirView.chunk.css"
     },
     "static/css/sharedDirView.chunk.css.map": {
       "name": "static/css/sharedDirView.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedDirView.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedDirView.chunk.css.map"
     },
     "static/css/sharedFileViewSpreadsheet.chunk.css": {
       "name": "static/css/sharedFileViewSpreadsheet.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.chunk.css"
     },
     "static/css/sharedFileViewSpreadsheet.chunk.css.map": {
       "name": "static/css/sharedFileViewSpreadsheet.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.chunk.css.map"
     },
     "static/css/sysAdmin.chunk.css": {
       "name": "static/css/sysAdmin.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sysAdmin.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sysAdmin.chunk.css"
     },
     "static/css/sysAdmin.chunk.css.map": {
       "name": "static/css/sysAdmin.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sysAdmin.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sysAdmin.chunk.css.map"
     },
     "static/css/TCAccept.chunk.css": {
       "name": "static/css/TCAccept.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCAccept.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCAccept.chunk.css"
     },
     "static/css/TCAccept.chunk.css.map": {
       "name": "static/css/TCAccept.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCAccept.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCAccept.chunk.css.map"
     },
     "static/css/TCView.chunk.css": {
       "name": "static/css/TCView.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCView.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCView.chunk.css"
     },
     "static/css/TCView.chunk.css.map": {
       "name": "static/css/TCView.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCView.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCView.chunk.css.map"
     },
     "static/css/uploadLink.chunk.css": {
       "name": "static/css/uploadLink.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/uploadLink.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/uploadLink.chunk.css"
     },
     "static/css/uploadLink.chunk.css.map": {
       "name": "static/css/uploadLink.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/uploadLink.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/uploadLink.chunk.css.map"
     },
     "static/css/userNotifications.chunk.css": {
       "name": "static/css/userNotifications.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/userNotifications.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/userNotifications.chunk.css"
     },
     "static/css/userNotifications.chunk.css.map": {
       "name": "static/css/userNotifications.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/userNotifications.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/userNotifications.chunk.css.map"
     },
     "static/css/viewFileSpreadsheet.chunk.css": {
       "name": "static/css/viewFileSpreadsheet.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.chunk.css"
     },
     "static/css/viewFileSpreadsheet.chunk.css.map": {
       "name": "static/css/viewFileSpreadsheet.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.chunk.css.map"
     },
     "static/css/wiki.chunk.css": {
       "name": "static/css/wiki.chunk.css",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/wiki.chunk.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki.chunk.css"
     },
     "static/css/wiki.chunk.css.map": {
       "name": "static/css/wiki.chunk.css.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/wiki.chunk.css.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki.chunk.css.map"
+    },
+    "static/js/2.chunk.js": {
+      "name": "static/js/2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2.chunk.js"
+    },
+    "static/js/2.chunk.js.map": {
+      "name": "static/js/2.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2.chunk.js.map"
+    },
+    "static/js/3.chunk.js": {
+      "name": "static/js/3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3.chunk.js"
+    },
+    "static/js/3.chunk.js.map": {
+      "name": "static/js/3.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3.chunk.js.map"
+    },
+    "static/js/37.chunk.js": {
+      "name": "static/js/37.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/37.chunk.js"
+    },
+    "static/js/37.chunk.js.map": {
+      "name": "static/js/37.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/37.chunk.js.map"
+    },
+    "static/js/38.chunk.js": {
+      "name": "static/js/38.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/38.chunk.js"
+    },
+    "static/js/38.chunk.js.map": {
+      "name": "static/js/38.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/38.chunk.js.map"
+    },
+    "static/js/39.chunk.js": {
+      "name": "static/js/39.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/39.chunk.js"
+    },
+    "static/js/39.chunk.js.map": {
+      "name": "static/js/39.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/39.chunk.js.map"
+    },
+    "static/js/40.chunk.js": {
+      "name": "static/js/40.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/40.chunk.js"
+    },
+    "static/js/40.chunk.js.map": {
+      "name": "static/js/40.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/40.chunk.js.map"
+    },
+    "static/js/41.chunk.js": {
+      "name": "static/js/41.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/41.chunk.js"
+    },
+    "static/js/41.chunk.js.map": {
+      "name": "static/js/41.chunk.js.map",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/41.chunk.js.map"
     },
     "static/js/app.chunk.js": {
       "name": "static/js/app.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/app.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.chunk.js"
     },
     "static/js/app.chunk.js.map": {
       "name": "static/js/app.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/app.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.chunk.js.map"
     },
     "static/js/commons.chunk.js": {
       "name": "static/js/commons.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/commons.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.chunk.js"
     },
     "static/js/commons.chunk.js.map": {
       "name": "static/js/commons.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/commons.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.chunk.js.map"
     },
     "static/js/draft.chunk.js": {
       "name": "static/js/draft.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/draft.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/draft.chunk.js"
     },
     "static/js/draft.chunk.js.map": {
       "name": "static/js/draft.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/draft.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/draft.chunk.js.map"
     },
     "static/js/fileHistory.chunk.js": {
       "name": "static/js/fileHistory.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistory.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistory.chunk.js"
     },
     "static/js/fileHistory.chunk.js.map": {
       "name": "static/js/fileHistory.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistory.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistory.chunk.js.map"
     },
     "static/js/fileHistoryOld.chunk.js": {
       "name": "static/js/fileHistoryOld.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistoryOld.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistoryOld.chunk.js"
     },
     "static/js/fileHistoryOld.chunk.js.map": {
       "name": "static/js/fileHistoryOld.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistoryOld.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistoryOld.chunk.js.map"
     },
     "static/js/fileView.chunk.js": {
       "name": "static/js/fileView.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileView.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.chunk.js"
     },
     "static/js/fileView.chunk.js.map": {
       "name": "static/js/fileView.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileView.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.chunk.js.map"
     },
     "static/js/historyTrashFileView.chunk.js": {
       "name": "static/js/historyTrashFileView.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.chunk.js"
     },
     "static/js/historyTrashFileView.chunk.js.map": {
       "name": "static/js/historyTrashFileView.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.chunk.js.map"
     },
     "static/js/markdownEditor.chunk.js": {
       "name": "static/js/markdownEditor.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.chunk.js"
     },
     "static/js/markdownEditor.chunk.js.map": {
       "name": "static/js/markdownEditor.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.chunk.js.map"
     },
     "static/js/orgAdmin.chunk.js": {
       "name": "static/js/orgAdmin.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/orgAdmin.chunk.js"
     },
     "static/js/orgAdmin.chunk.js.map": {
       "name": "static/js/orgAdmin.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/orgAdmin.chunk.js.map"
     },
     "static/js/repoFolderTrash.chunk.js": {
       "name": "static/js/repoFolderTrash.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoFolderTrash.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoFolderTrash.chunk.js"
     },
     "static/js/repoFolderTrash.chunk.js.map": {
       "name": "static/js/repoFolderTrash.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoFolderTrash.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoFolderTrash.chunk.js.map"
     },
     "static/js/repoHistory.chunk.js": {
       "name": "static/js/repoHistory.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoHistory.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoHistory.chunk.js"
     },
     "static/js/repoHistory.chunk.js.map": {
       "name": "static/js/repoHistory.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoHistory.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoHistory.chunk.js.map"
     },
     "static/js/repoSnapshot.chunk.js": {
       "name": "static/js/repoSnapshot.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoSnapshot.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoSnapshot.chunk.js"
     },
     "static/js/repoSnapshot.chunk.js.map": {
       "name": "static/js/repoSnapshot.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoSnapshot.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoSnapshot.chunk.js.map"
     },
     "static/js/runtime.js": {
       "name": "static/js/runtime.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/runtime.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/runtime.js"
     },
     "static/js/runtime.js.map": {
       "name": "static/js/runtime.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/runtime.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/runtime.js.map"
     },
     "static/js/search.chunk.js": {
       "name": "static/js/search.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/search.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/search.chunk.js"
     },
     "static/js/search.chunk.js.map": {
       "name": "static/js/search.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/search.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/search.chunk.js.map"
     },
     "static/js/settings.chunk.js": {
       "name": "static/js/settings.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/settings.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/settings.chunk.js"
     },
     "static/js/settings.chunk.js.map": {
       "name": "static/js/settings.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/settings.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/settings.chunk.js.map"
     },
     "static/js/sharedDirView.chunk.js": {
       "name": "static/js/sharedDirView.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedDirView.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedDirView.chunk.js"
     },
     "static/js/sharedDirView.chunk.js.map": {
       "name": "static/js/sharedDirView.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedDirView.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedDirView.chunk.js.map"
     },
     "static/js/sharedFileViewAudio.chunk.js": {
       "name": "static/js/sharedFileViewAudio.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.chunk.js"
     },
     "static/js/sharedFileViewAudio.chunk.js.map": {
       "name": "static/js/sharedFileViewAudio.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.chunk.js.map"
     },
     "static/js/sharedFileViewDocument.chunk.js": {
       "name": "static/js/sharedFileViewDocument.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.chunk.js"
     },
     "static/js/sharedFileViewDocument.chunk.js.map": {
       "name": "static/js/sharedFileViewDocument.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.chunk.js.map"
     },
     "static/js/sharedFileViewImage.chunk.js": {
       "name": "static/js/sharedFileViewImage.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewImage.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewImage.chunk.js"
     },
     "static/js/sharedFileViewImage.chunk.js.map": {
       "name": "static/js/sharedFileViewImage.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewImage.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewImage.chunk.js.map"
     },
     "static/js/sharedFileViewMarkdown.chunk.js": {
       "name": "static/js/sharedFileViewMarkdown.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.chunk.js"
     },
     "static/js/sharedFileViewMarkdown.chunk.js.map": {
       "name": "static/js/sharedFileViewMarkdown.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.chunk.js.map"
     },
     "static/js/sharedFileViewPDF.chunk.js": {
       "name": "static/js/sharedFileViewPDF.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.chunk.js"
     },
     "static/js/sharedFileViewPDF.chunk.js.map": {
       "name": "static/js/sharedFileViewPDF.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.chunk.js.map"
     },
     "static/js/sharedFileViewSpreadsheet.chunk.js": {
       "name": "static/js/sharedFileViewSpreadsheet.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.chunk.js"
     },
     "static/js/sharedFileViewSpreadsheet.chunk.js.map": {
       "name": "static/js/sharedFileViewSpreadsheet.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.chunk.js.map"
     },
     "static/js/sharedFileViewSVG.chunk.js": {
       "name": "static/js/sharedFileViewSVG.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.chunk.js"
     },
     "static/js/sharedFileViewSVG.chunk.js.map": {
       "name": "static/js/sharedFileViewSVG.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.chunk.js.map"
     },
     "static/js/sharedFileViewText.chunk.js": {
       "name": "static/js/sharedFileViewText.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.chunk.js"
     },
     "static/js/sharedFileViewText.chunk.js.map": {
       "name": "static/js/sharedFileViewText.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.chunk.js.map"
     },
     "static/js/sharedFileViewUnknown.chunk.js": {
       "name": "static/js/sharedFileViewUnknown.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.chunk.js"
     },
     "static/js/sharedFileViewUnknown.chunk.js.map": {
       "name": "static/js/sharedFileViewUnknown.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.chunk.js.map"
     },
     "static/js/sharedFileViewVideo.chunk.js": {
       "name": "static/js/sharedFileViewVideo.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.chunk.js"
     },
     "static/js/sharedFileViewVideo.chunk.js.map": {
       "name": "static/js/sharedFileViewVideo.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.chunk.js.map"
     },
     "static/js/sysAdmin.chunk.js": {
       "name": "static/js/sysAdmin.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sysAdmin.chunk.js"
     },
     "static/js/sysAdmin.chunk.js.map": {
       "name": "static/js/sysAdmin.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sysAdmin.chunk.js.map"
     },
     "static/js/TCAccept.chunk.js": {
       "name": "static/js/TCAccept.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCAccept.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCAccept.chunk.js"
     },
     "static/js/TCAccept.chunk.js.map": {
       "name": "static/js/TCAccept.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCAccept.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCAccept.chunk.js.map"
     },
     "static/js/TCView.chunk.js": {
       "name": "static/js/TCView.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCView.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCView.chunk.js"
     },
     "static/js/TCView.chunk.js.map": {
       "name": "static/js/TCView.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCView.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCView.chunk.js.map"
     },
     "static/js/uploadLink.chunk.js": {
       "name": "static/js/uploadLink.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/uploadLink.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/uploadLink.chunk.js"
     },
     "static/js/uploadLink.chunk.js.map": {
       "name": "static/js/uploadLink.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/uploadLink.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/uploadLink.chunk.js.map"
     },
     "static/js/userNotifications.chunk.js": {
       "name": "static/js/userNotifications.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/userNotifications.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/userNotifications.chunk.js"
     },
     "static/js/userNotifications.chunk.js.map": {
       "name": "static/js/userNotifications.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/userNotifications.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/userNotifications.chunk.js.map"
     },
     "static/js/viewFileDocument.chunk.js": {
       "name": "static/js/viewFileDocument.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileDocument.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileDocument.chunk.js"
     },
     "static/js/viewFileDocument.chunk.js.map": {
       "name": "static/js/viewFileDocument.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileDocument.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileDocument.chunk.js.map"
     },
     "static/js/viewFileSpreadsheet.chunk.js": {
       "name": "static/js/viewFileSpreadsheet.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.chunk.js"
     },
     "static/js/viewFileSpreadsheet.chunk.js.map": {
       "name": "static/js/viewFileSpreadsheet.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.chunk.js.map"
     },
     "static/js/viewFileText.chunk.js": {
       "name": "static/js/viewFileText.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.chunk.js"
     },
     "static/js/viewFileText.chunk.js.map": {
       "name": "static/js/viewFileText.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.chunk.js.map"
     },
     "static/js/wiki.chunk.js": {
       "name": "static/js/wiki.chunk.js",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/wiki.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.chunk.js"
     },
     "static/js/wiki.chunk.js.map": {
       "name": "static/js/wiki.chunk.js.map",
-      "path": "/Users/shuntian/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/wiki.chunk.js.map"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.chunk.js.map"
     }
   },
   "chunks": {
