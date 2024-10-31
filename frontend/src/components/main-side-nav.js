@@ -205,118 +205,118 @@ class MainSideNav extends React.Component {
 
   toggleAboutDialog = (e) => {
     e.preventDefault();
-    this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
-  }
+    this.setState({ isAboutDialogShow: !this.state.isAboutDialogShow });
+  };
 
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { filesNavUnfolded, groupItems } = this.state;
     return (
       <Fragment>
-      <div className="side-nav">
-        <div className={'side-nav-con d-flex flex-column'}>
-          <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
-          <ul className="nav nav-pills flex-column nav-container">
-            <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
-                <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Files')}</span>
-                <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
-              </Link>
-              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{ height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0 }}>
-                <FilesSubNav
-                  groupItems={groupItems}
-                  tabItemClick={this.tabItemClick}
-                  currentTab={this.props.currentTab}
-                />
-                {this.renderAddGroup()}
-              </ul>
-            </li>
+        <div className="side-nav">
+          <div className={'side-nav-con d-flex flex-column'}>
+            <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
+            <ul className="nav nav-pills flex-column nav-container">
+              <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                  <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Files')}</span>
+                  <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
+                </Link>
+                <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{ height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0 }}>
+                  <FilesSubNav
+                    groupItems={groupItems}
+                    tabItemClick={this.tabItemClick}
+                    currentTab={this.props.currentTab}
+                  />
+                  {this.renderAddGroup()}
+                </ul>
+              </li>
 
-            <li className={`nav-item ${this.getActiveClass('starred')}`}>
-              <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                <span className="sf3-font-starred sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Favorites')}</span>
-              </Link>
-            </li>
-            {showActivity &&
+              <li className={`nav-item ${this.getActiveClass('starred')}`}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
+                  <span className="sf3-font-starred sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Favorites')}</span>
+                </Link>
+              </li>
+              {showActivity &&
               <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
                   <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Activities')}</span>
                 </Link>
               </li>
-            }
-            <li className={`nav-item ${this.getActiveClass('published')}`}>
-              <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
-                <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Wikis')}</span>
-              </Link>
-            </li>
-            {canInvitePeople &&
-            <li className={`nav-item ${this.getActiveClass('invitations')}`}>
-              <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Invite Guest')}</span>
-              </Link>
-            </li>
-            }
-            <li id="share-admin-nav" className='nav-item flex-column'>
-              <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
-                <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Share Admin')}</span>
-                <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`} aria-hidden="true"></span>
-              </a>
-              {this.renderSharedAdmin()}
-            </li>
-            {customNavItems && this.renderCustomNavItems()}
-          </ul>
-
-          <h2 className="mb-2 pt-1 px-2 font-weight-normal heading">{gettext('Help and resources')}</h2>
-          {sideNavFooterCustomHtml ? (
-            <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
-          ) : (
-            <ul className="nav nav-pills flex-column nav-container">
-              <li className='nav-item'>
-                <a className={'nav-link'} href={siteRoot + 'help/'} title={gettext('Help')}>
-                  <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Help')}</span>
-                </a>
+              }
+              <li className={`nav-item ${this.getActiveClass('published')}`}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
+                  <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Wikis')}</span>
+                </Link>
               </li>
-              {enableTC &&
+              {canInvitePeople &&
+              <li className={`nav-item ${this.getActiveClass('invitations')}`}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                  <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Invite Guest')}</span>
+                </Link>
+              </li>
+              }
+              <li id="share-admin-nav" className='nav-item flex-column'>
+                <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
+                  <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Share Admin')}</span>
+                  <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`} aria-hidden="true"></span>
+                </a>
+                {this.renderSharedAdmin()}
+              </li>
+              {customNavItems && this.renderCustomNavItems()}
+            </ul>
+
+            <h2 className="mb-2 pt-1 px-2 font-weight-normal heading">{gettext('Help and resources')}</h2>
+            {sideNavFooterCustomHtml ? (
+              <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
+            ) : (
+              <ul className="nav nav-pills flex-column nav-container">
+                <li className='nav-item'>
+                  <a className={'nav-link'} href={siteRoot + 'help/'} title={gettext('Help')}>
+                    <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('Help')}</span>
+                  </a>
+                </li>
+                {enableTC &&
                 <li className='nav-item'>
                   <a href={`${siteRoot}terms/`} className="nav-link">
                     <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Terms')}</span>
                   </a>
                 </li>
-              }
-              <li className='nav-item'>
-                <a href={siteRoot + 'download_client_program/'} className="nav-link">
-                  <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Clients')}</span>
-                </a>
-              </li>
-              <li className='nav-item'>
-                <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
-                  <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('About')}</span>
-                </a>
-              </li>
-            </ul>
-          )
-          }
-          <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
-            <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
-            <span>{gettext('Fold the sidebar')}</span>
+                }
+                <li className='nav-item'>
+                  <a href={siteRoot + 'download_client_program/'} className="nav-link">
+                    <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('Clients')}</span>
+                  </a>
+                </li>
+                <li className='nav-item'>
+                  <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                    <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('About')}</span>
+                  </a>
+                </li>
+              </ul>
+            )
+            }
+            <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
+              <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
+              <span>{gettext('Fold the sidebar')}</span>
+            </div>
           </div>
         </div>
-      </div>
-      {this.state.isAboutDialogShow && (
-        <ModalPortal>
-          <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
-        </ModalPortal>
-      )}
+        {this.state.isAboutDialogShow && (
+          <ModalPortal>
+            <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }

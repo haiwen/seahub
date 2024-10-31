@@ -97,62 +97,62 @@ class MainSideNavFolded extends React.Component {
 
   toggleAboutDialog = (e) => {
     e.preventDefault();
-    this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
-  }
+    this.setState({ isAboutDialogShow: !this.state.isAboutDialogShow });
+  };
 
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { groupItems, isFilesSubNavShown } = this.state;
     return (
       <Fragment>
-      <div className='side-nav-folded-container h-100 position-relative'>
-        {/* FOLDED SIDE NAV FILES */}
-        <div className="side-nav side-nav-folded position-relative" style={{ zIndex: FOLDED_SIDE_NAV_FILES }}>
-          <div className='side-nav-con p-0'>
-            <div className="nav nav-pills nav-container">
-              <ul
-                id="files-sub-nav"
-                className="sub-nav position-fixed rounded border shadow p-4 o-auto"
-                style={{
-                  'left': isFilesSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
-                  'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2,
-                  'opacity': isFilesSubNavShown ? 1 : 0,
-                }}
-                ref={ref => this.filesSubNav = ref}
-                onMouseLeave={this.closeSubNav}
-              >
-                <FilesSubNav
-                  groupItems={groupItems}
-                  tabItemClick={this.tabItemClick}
-                  currentTab={this.props.currentTab}
-                />
-              </ul>
+        <div className='side-nav-folded-container h-100 position-relative'>
+          {/* FOLDED SIDE NAV FILES */}
+          <div className="side-nav side-nav-folded position-relative" style={{ zIndex: FOLDED_SIDE_NAV_FILES }}>
+            <div className='side-nav-con p-0'>
+              <div className="nav nav-pills nav-container">
+                <ul
+                  id="files-sub-nav"
+                  className="sub-nav position-fixed rounded border shadow p-4 o-auto"
+                  style={{
+                    'left': isFilesSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
+                    'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2,
+                    'opacity': isFilesSubNavShown ? 1 : 0,
+                  }}
+                  ref={ref => this.filesSubNav = ref}
+                  onMouseLeave={this.closeSubNav}
+                >
+                  <FilesSubNav
+                    groupItems={groupItems}
+                    tabItemClick={this.tabItemClick}
+                    currentTab={this.props.currentTab}
+                  />
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        {/* FOLDED SIDE NAVS */}
-        <div className="side-nav side-nav-folded h-100 position-relative" style={{ zIndex: FOLDED_SIDE_NAV }}>
-          <div className='side-nav-con d-flex flex-column'>
-            <ul className="nav nav-pills flex-column nav-container">
-              <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link
-                  to={ siteRoot + 'libraries/' }
-                  className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
-                  onClick={(e) => this.tabItemClick(e, 'libraries')}
-                  onMouseEnter={this.openSubNav}
-                >
-                  <span className="sf3-font-files sf3-font mr-0" aria-hidden="true"></span>
-                </Link>
-              </li>
+          {/* FOLDED SIDE NAVS */}
+          <div className="side-nav side-nav-folded h-100 position-relative" style={{ zIndex: FOLDED_SIDE_NAV }}>
+            <div className='side-nav-con d-flex flex-column'>
+              <ul className="nav nav-pills flex-column nav-container">
+                <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+                  <Link
+                    to={ siteRoot + 'libraries/' }
+                    className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
+                    onClick={(e) => this.tabItemClick(e, 'libraries')}
+                    onMouseEnter={this.openSubNav}
+                  >
+                    <span className="sf3-font-files sf3-font mr-0" aria-hidden="true"></span>
+                  </Link>
+                </li>
 
-              <li className={`nav-item ${this.getActiveClass('starred')}`} onMouseEnter={this.closeSubNav}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                  <span className="sf3-font-starred sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-starred"></span>
-                  <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
-                </Link>
-              </li>
+                <li className={`nav-item ${this.getActiveClass('starred')}`} onMouseEnter={this.closeSubNav}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
+                    <span className="sf3-font-starred sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-starred"></span>
+                    <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
+                  </Link>
+                </li>
 
-              {showActivity &&
+                {showActivity &&
                 <>
                   <li className={`nav-item ${this.getActiveClass('dashboard')}`} onMouseEnter={this.closeSubNav}>
                     <Link
@@ -165,20 +165,20 @@ class MainSideNavFolded extends React.Component {
                     </Link>
                   </li>
                 </>
-              }
+                }
 
-              <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeSubNav}>
-                <Link
-                  className={`nav-link ellipsis ${this.getActiveClass('published')}`}
-                  to={siteRoot + 'published/'}
-                  onClick={(e) => this.tabItemClick(e, 'published')}
-                >
-                  <span className="sf3-font-wiki sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wikis"></span>
-                  <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
-                </Link>
-              </li>
+                <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeSubNav}>
+                  <Link
+                    className={`nav-link ellipsis ${this.getActiveClass('published')}`}
+                    to={siteRoot + 'published/'}
+                    onClick={(e) => this.tabItemClick(e, 'published')}
+                  >
+                    <span className="sf3-font-wiki sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wikis"></span>
+                    <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
+                  </Link>
+                </li>
 
-              {canInvitePeople &&
+                {canInvitePeople &&
                 <li className={`nav-item ${this.getActiveClass('invitations')}`} onMouseEnter={this.closeSubNav}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
@@ -189,9 +189,9 @@ class MainSideNavFolded extends React.Component {
                     <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
                   </Link>
                 </li>
-              }
+                }
 
-              {customNavItems &&
+                {customNavItems &&
                 customNavItems.map((item, idx) => {
                   return (
                     <li key={idx} className='nav-item'>
@@ -201,20 +201,20 @@ class MainSideNavFolded extends React.Component {
                     </li>
                   );
                 })
-              }
-            </ul>
+                }
+              </ul>
 
-            {sideNavFooterCustomHtml ?
-              <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
-              :
-              <ul className="nav nav-pills flex-column nav-container">
-                <li className='nav-item'>
-                  <a className='nav-link' href={siteRoot + 'help/'} title={gettext('Help')}>
-                    <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-help"></span>
-                    <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
-                  </a>
-                </li>
-                {enableTC &&
+              {sideNavFooterCustomHtml ?
+                <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
+                :
+                <ul className="nav nav-pills flex-column nav-container">
+                  <li className='nav-item'>
+                    <a className='nav-link' href={siteRoot + 'help/'} title={gettext('Help')}>
+                      <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-help"></span>
+                      <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
+                    </a>
+                  </li>
+                  {enableTC &&
                   <>
                     <li className='nav-item'>
                       <a href={`${siteRoot}terms/`} className="nav-link">
@@ -223,35 +223,35 @@ class MainSideNavFolded extends React.Component {
                       </a>
                     </li>
                   </>
-                }
-                <li className='nav-item'>
-                  <a href={siteRoot + 'download_client_program/'} className="nav-link">
-                    <span className="sf3-font-devices sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-clients"></span>
-                    <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
-                  </a>
-                </li>
-                <li className='nav-item'>
-                  <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
-                    <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
-                    <Tip target="main-side-nav-folded-about" text={gettext('About')} />
-                  </a>
-                </li>
-              </ul>
-            }
-            <div
-              className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center"
-              onClick={this.props.toggleFoldSideNav}
-            >
-              <img src={`${mediaUrl}img/open-sidebar.svg`} width="20" alt="" title={gettext('Unfold the sidebar')} />
+                  }
+                  <li className='nav-item'>
+                    <a href={siteRoot + 'download_client_program/'} className="nav-link">
+                      <span className="sf3-font-devices sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-clients"></span>
+                      <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
+                    </a>
+                  </li>
+                  <li className='nav-item'>
+                    <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                      <span className="sf3-font-about sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
+                      <Tip target="main-side-nav-folded-about" text={gettext('About')} />
+                    </a>
+                  </li>
+                </ul>
+              }
+              <div
+                className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center"
+                onClick={this.props.toggleFoldSideNav}
+              >
+                <img src={`${mediaUrl}img/open-sidebar.svg`} width="20" alt="" title={gettext('Unfold the sidebar')} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {this.state.isAboutDialogShow && (
-        <ModalPortal>
-          <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
-        </ModalPortal>
-      )}
+        {this.state.isAboutDialogShow && (
+          <ModalPortal>
+            <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }
