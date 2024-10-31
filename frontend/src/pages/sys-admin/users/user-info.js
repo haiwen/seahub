@@ -256,7 +256,7 @@ class User extends Component {
   componentDidMount() {
     // avatar size: 160
     const email = decodeURIComponent(this.props.email);
-    systemAdminAPI.sysAdminGetUser(email, 160).then((res) => {
+    systemAdminAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         loading: false,
         userInfo: res.data

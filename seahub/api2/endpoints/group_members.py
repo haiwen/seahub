@@ -45,12 +45,6 @@ class GroupMembers(APIView):
         """
         Get all group members.
         """
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -81,7 +75,7 @@ class GroupMembers(APIView):
             if is_admin == 'true' and not m.is_staff:
                 continue
 
-            member_info = get_group_member_info(request, group_id, m.user_name, avatar_size)
+            member_info = get_group_member_info(request, group_id, m.user_name)
             group_members.append(member_info)
 
         return Response(group_members)

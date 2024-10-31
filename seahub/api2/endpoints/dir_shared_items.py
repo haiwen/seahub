@@ -80,7 +80,7 @@ class DirSharedItemsEndpoint(APIView):
         admin_users = ExtraSharePermission.objects.get_admin_users_by_repo(repo_id)
         ret = []
         for item in share_items:
-            avatar_url, is_default, date_uploaded = api_avatar_url(item.user, 72)
+            avatar_url, is_default, date_uploaded = api_avatar_url(item.user)
             ret.append({
                 "share_type": "user",
                 "user_info": {

@@ -331,7 +331,7 @@ class AccountInfo(APIView):
         else:                       # no space quota set in config
             info['space_usage'] = '0%'
 
-        url, _, _ = api_avatar_url(email, int(72))
+        url, _, _ = api_avatar_url(email)
 
         info['avatar_url'] = url
         info['email'] = email

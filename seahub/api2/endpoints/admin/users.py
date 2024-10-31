@@ -1244,14 +1244,6 @@ class AdminUser(APIView):
                 request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        avatar_size = request.data.get('avatar_size', 64)
-        try:
-            avatar_size = int(avatar_size)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'avatar_size invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
@@ -1259,7 +1251,7 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         user_info = get_user_info(email)
-        user_info['avatar_url'], _, _ = api_avatar_url(email, avatar_size)
+        user_info['avatar_url'], _, _ = api_avatar_url(email)
         if is_pro_version():
             user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
             user_info['download_rate_limit'] = byte_to_kb(seafile_api.get_user_download_rate_limit(email))

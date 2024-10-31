@@ -33,7 +33,6 @@ class FilesActivities extends Component {
       availableUsers: [],
       targetUsers: []
     };
-    this.avatarSize = 72;
     this.curPathList = [];
     this.oldPathList = [];
     this.availableUserEmails = new Set();
@@ -41,7 +40,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     let { currentPage, availableUsers } = this.state;
-    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
+    seafileAPI.listActivities(currentPage).then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
@@ -140,7 +139,7 @@ class FilesActivities extends Component {
 
   getMore() {
     const { currentPage, availableUsers, targetUsers } = this.state;
-    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
+    seafileAPI.listActivities(currentPage).then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);

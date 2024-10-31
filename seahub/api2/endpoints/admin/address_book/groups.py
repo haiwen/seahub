@@ -129,10 +129,10 @@ class AdminAddressBookGroup(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser, IsProVersion)
 
-    def _get_address_book_group_memeber_info(self, request, group_member_obj, avatar_size):
+    def _get_address_book_group_memeber_info(self, request, group_member_obj):
 
         email = group_member_obj.user_name
-        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+        avatar_url, is_default, date_uploaded = api_avatar_url(email)
 
         group_id = group_member_obj.group_id
         group = ccnet_api.get_group(group_member_obj.group_id)
@@ -167,12 +167,6 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size',
-                                              AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
-        try:
             return_ancestors = to_python_boolean(request.GET.get(
                 'return_ancestors', 'f'))
         except ValueError:
@@ -194,7 +188,7 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for m in members:
-            member_info = self._get_address_book_group_memeber_info(request, m, avatar_size)
+            member_info = self._get_address_book_group_memeber_info(request, m)
             if member_info['role'] == 'Owner':
                 continue
             ret_members.append(member_info)
