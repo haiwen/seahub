@@ -816,7 +816,7 @@ def sys_sudo_mode(request):
         if password:
             user = authenticate(username=username, password=password)
             # After local user authentication process is completed, authenticate LDAP user
-            if user is None and settings.ENABLE_LDAP:
+            if user is None and settings.ENABLE_LDAP and not settings.USE_LDAP_SYNC_ONLY:
                 user = authenticate(ldap_user=username, password=password)
             if user:
                 update_sudo_mode_ts(request)
