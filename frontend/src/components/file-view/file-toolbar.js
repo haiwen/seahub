@@ -117,7 +117,7 @@ class FileToolbar extends React.Component {
     return (
       <Fragment>
         <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
-          {(fileType == 'PDF' && canDownloadFile ) && (
+          {(fileType == 'PDF' && canDownloadFile) && (
             <IconButton
               id="seafile-pdf-print"
               icon="print"
