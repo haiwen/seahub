@@ -71,7 +71,7 @@ class AuthenticationForm(forms.Form):
                 username = Profile.objects.convert_login_str_to_username(username)
                 self.user_cache = authenticate(username=username, password=password)
                 # After local user authentication process is completed, authenticate LDAP user
-                if self.user_cache is None and settings.ENABLE_LDAP:
+                if self.user_cache is None and settings.ENABLE_LDAP and not settings.USE_LDAP_SYNC_ONLY:
                     self.user_cache = authenticate(ldap_user=username, password=password)
 
                 if self.user_cache is None:
