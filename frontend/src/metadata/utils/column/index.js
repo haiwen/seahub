@@ -207,8 +207,6 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('Capture time');
     case PRIVATE_COLUMN_KEY.OWNER:
       return gettext('File owner');
-    case PRIVATE_COLUMN_KEY.FACE_FEATURES:
-      return gettext('Face Features');
     default:
       return name;
   }
