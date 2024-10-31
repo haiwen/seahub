@@ -30,6 +30,7 @@ export const PRIVATE_COLUMN_KEY = {
   FILE_REVIEWER: '_reviewer',
   OWNER: '_owner',
   FACE_LINKS: '_face_links',
+  FACE_VECTORS: '_face_vectors',
 };
 
 export const PRIVATE_COLUMN_KEYS = [
@@ -61,6 +62,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_REVIEWER,
   PRIVATE_COLUMN_KEY.OWNER,
   PRIVATE_COLUMN_KEY.FACE_LINKS,
+  PRIVATE_COLUMN_KEY.FACE_VECTORS,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [
