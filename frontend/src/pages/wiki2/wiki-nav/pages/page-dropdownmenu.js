@@ -108,7 +108,7 @@ export default class PageDropdownMenu extends Component {
               <span className="item-text">{gettext('Delete page')}</span>
             </DropdownItem>
           )}
-          < hr className='divider' />
+          <hr className='divider' />
           <DropdownItem onClick={this.handleOpenInNewTab}>
             <i className='sf3-font sf3-font-open-in-new-tab' />
             <span className="item-text">{gettext('Open in new tab')}</span>
