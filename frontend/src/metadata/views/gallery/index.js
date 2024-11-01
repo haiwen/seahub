@@ -360,7 +360,7 @@ const Gallery = () => {
         toaster.danger(error);
       },
       success_callback: () => {
-        selectedImages([]);
+        setSelectedImages([]);
         deleteFilesCallback(paths, fileNames);
         let msg = fileNames.length > 1
           ? gettext('Successfully deleted {name} and {n} other items')
