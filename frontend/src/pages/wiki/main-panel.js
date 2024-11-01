@@ -126,6 +126,7 @@ class MainPanel extends Component {
                 isWiki={true}
                 path={this.props.path}
                 repoID={repoID}
+                isTOCShow={false}
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
                 lastModified = {this.props.lastModified}
