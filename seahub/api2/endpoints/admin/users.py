@@ -739,6 +739,12 @@ class AdminUsers(APIView):
         data = []
         email_list = [user.email for user in users]
         social_auth_user_queryset = SocialAuthUser.objects.filter(username__in=email_list)
+        social_auth_user_dict = {}
+        for item in social_auth_user_queryset:
+            if item.username in social_auth_user_dict:
+                social_auth_user_dict[item.username].append(item)
+            else:
+                social_auth_user_dict[item.username] = [item]
 
         for user in users:
             profile = Profile.objects.get_profile_by_user(user.email)
@@ -788,7 +794,7 @@ class AdminUsers(APIView):
                 else:
                     info['institution'] = ''
 
-            social_auth_user = social_auth_user_queryset.filter(username=user.email)
+            social_auth_user = social_auth_user_dict.get(user.email, [])
             info['social_auth'] = [{'provider': item.provider, 'uid': item.uid} for item in social_auth_user]
 
             data.append(info)

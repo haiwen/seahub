@@ -341,6 +341,7 @@ LDAP_USER_ROLE_ATTR = ''
 ACTIVATE_USER_WHEN_IMPORT = True
 
 SSO_LDAP_USE_SAME_UID = False
+USE_LDAP_SYNC_ONLY = False
 
 # enable ldap sasl auth
 ENABLE_SASL = False

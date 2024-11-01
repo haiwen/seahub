@@ -1508,7 +1508,8 @@ def view_file_via_shared_dir(request, fileshare):
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
             wopi_dict = get_wopi_dict(username, repo_id, real_path,
-                    language_code=request.LANGUAGE_CODE)
+                                      can_download=can_download,
+                                      language_code=request.LANGUAGE_CODE)
 
             if wopi_dict:
 

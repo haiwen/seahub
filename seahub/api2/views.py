@@ -3115,7 +3115,7 @@ class FileView(APIView):
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
 
-            if not seafile_api.is_valid_filename('fake_repo_id', newname):
+            if not is_valid_dirent_name(newname):
                 error_msg = 'File name invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -3257,7 +3257,7 @@ class FileView(APIView):
 
             new_file_name = os.path.basename(path)
 
-            if not seafile_api.is_valid_filename('fake_repo_id', new_file_name):
+            if not is_valid_dirent_name(new_file_name):
                 error_msg = 'File name invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -3869,7 +3869,7 @@ class DirView(APIView):
         if operation.lower() == 'mkdir':
             new_dir_name = os.path.basename(path)
 
-            if not seafile_api.is_valid_filename('fake_repo_id', new_dir_name):
+            if not is_valid_dirent_name(new_dir_name):
                 error_msg = 'Folder name invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -3939,6 +3939,10 @@ class DirView(APIView):
             if newname == old_dir_name:
                 return Response('success', status=status.HTTP_200_OK)
 
+            if not is_valid_dirent_name(newname):
+                error_msg = 'Folder name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
             try:
                 # rename duplicate name
                 checked_newname = check_filename_with_rename(

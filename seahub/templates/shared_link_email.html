@@ -14,11 +14,11 @@
 </p>
 
 {% if password %}
-<p>{% trans "Password:"%} {{ password }}</p>
+<p>{% trans "Password:"%} {{ password|escape }}</p>
 {% endif %}
 
 {% if extra_msg %}
-<p>" {{ extra_msg }} "</p>
+<p>" {{ extra_msg|escape }} "</p>
 {% endif %}
 
 {% endautoescape %}

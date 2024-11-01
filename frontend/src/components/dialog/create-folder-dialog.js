@@ -46,7 +46,7 @@ class CreateForder extends React.Component {
     if (!this.state.isSubmitBtnActive) {
       return;
     }
-    let newName = this.state.childName;
+    let newName = this.state.childName.trim();
     let { isValid, errMessage } = validateName(newName);
     if (!isValid) {
       this.setState({ errMessage });

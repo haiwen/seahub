@@ -1913,5 +1913,10 @@ export const validateName = (newName) => {
     errMessage = gettext('Name cannot contain backslash');
     return { isValid, errMessage };
   }
+  if (newName === '..') {
+    isValid = false;
+    errMessage = gettext('Name cannot be double dots');
+    return { isValid, errMessage };
+  }
   return { isValid, errMessage };
 };

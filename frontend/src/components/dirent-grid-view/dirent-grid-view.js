@@ -587,13 +587,21 @@ class DirentGridView extends React.Component {
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
     const cacheBuster = new Date().getTime();
     const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-    const isGIF = fileExt === 'gif';
-    const src = `${siteRoot}repo/${repoID}/raw${path}?t=${cacheBuster}`;
+
     let thumbnail = '';
+    const isGIF = fileExt === 'gif';
     if (repoEncrypted || isGIF) {
-      thumbnail = src;
+      thumbnail = `${siteRoot}repo/${repoID}/raw${path}?t=${cacheBuster}`;
     } else {
       thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+    }
+
+    let src = '';
+    const isTIFF = fileExt == 'tiff';
+    if (isTIFF) {
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+    } else {
+      src = `${siteRoot}repo/${repoID}/raw${path}`;
     }
 
     return {
