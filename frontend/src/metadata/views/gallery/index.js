@@ -34,7 +34,7 @@ const Gallery = () => {
   const renderMoreTimer = useRef(null);
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
-  const { metadata, store, updateCurrentDirent } = useMetadataView();
+  const { metadata, store, updateCurrentDirent, deleteFilesCallback } = useMetadataView();
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
   useEffect(() => {
@@ -341,32 +341,36 @@ const Gallery = () => {
     }
   }, [repoID, selectedImages]);
 
-  const handleDelete = () => {
-    if (selectedImages.length) {
-      metadataAPI.batchDeleteFiles(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
-        .then(() => {
-          setSelectedImages([]);
-          let msg = selectedImages.length > 1
-            ? gettext('Successfully deleted {n} images.')
-            : gettext('Successfully deleted {name}');
-          msg = msg.replace('{name}', selectedImages[0].name)
-            .replace('{n}', selectedImages.length);
-          toaster.success(msg, { duration: 3 });
-
-          // filter out related rows according to selected images, then update metadata's rows
-          const selectedIdMap = {};
-          selectedImages.forEach(image => selectedIdMap[image.id] = true);
-          const newMetadata = {
-            ...metadata,
-            rows: metadata.rows.filter(row => !selectedIdMap[row[PRIVATE_COLUMN_KEY.ID]]),
-          };
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, newMetadata);
-        }).catch(error => {
-          const errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-    }
-  };
+  const handleDelete = useCallback(() => {
+    if (!selectedImages.length) return;
+    let recordsIds = [];
+    let paths = [];
+    let fileNames = [];
+    selectedImages.forEach((record) => {
+      const { path: parentDir, name } = record || {};
+      if (parentDir && name) {
+        const path = Utils.joinPath(parentDir, name);
+        recordsIds.push(record.id);
+        paths.push(path);
+        fileNames.push(name);
+      }
+    });
+    store.deleteRecords(recordsIds, {
+      fail_callback: (error) => {
+        toaster.danger(error);
+      },
+      success_callback: () => {
+        selectedImages([]);
+        deleteFilesCallback(paths, fileNames);
+        let msg = fileNames.length > 1
+          ? gettext('Successfully deleted {name} and {n} other items')
+          : gettext('Successfully deleted {name}');
+        msg = msg.replace('{name}', fileNames[0])
+          .replace('{n}', fileNames.length - 1);
+        toaster.success(msg);
+      },
+    });
+  }, [selectedImages, store, deleteFilesCallback]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
