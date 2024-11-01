@@ -4,6 +4,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { java } from '@codemirror/lang-java';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { html } from '@codemirror/lang-html';
+import { StreamLanguage } from '@codemirror/language';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { Utils } from '../../utils/utils';
 
@@ -21,7 +22,7 @@ export const getLanguageExtensions = (fileExt) => {
     case 'java':
       return [java()];
     case 'shell':
-      return [shell()];
+      return [StreamLanguage.define(shell)];
     case 'html':
       return [html()];
     default:
