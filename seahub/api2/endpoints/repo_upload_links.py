@@ -26,7 +26,7 @@ from seahub.utils.timeutils import datetime_to_isoformat_timestr
 logger = logging.getLogger(__name__)
 
 
-def get_upload_link_info(upload_link, avatar_size=AVATAR_DEFAULT_SIZE):
+def get_upload_link_info(upload_link):
 
     data = {}
     token = upload_link.token
@@ -52,7 +52,7 @@ def get_upload_link_info(upload_link, avatar_size=AVATAR_DEFAULT_SIZE):
     data['creator_name'] = email2nickname(creator_email)
     data['creator_contact_email'] = email2contact_email(creator_email)
 
-    url, _, _ = api_avatar_url(creator_email, avatar_size)
+    url, _, _ = api_avatar_url(creator_email)
     data['creator_avatar'] = url
 
     data['path'] = path
@@ -100,16 +100,11 @@ class RepoUploadLinks(APIView):
 
         offset = per_page * (current_page - 1)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         upload_links = UploadLinkShare.objects.filter(repo_id=repo_id)[offset:offset + per_page]
 
         result = []
         for upload_link in upload_links:
-            link_info = get_upload_link_info(upload_link, avatar_size)
+            link_info = get_upload_link_info(upload_link)
             link_info['repo_id'] = repo_id
             link_info['repo_name'] = repo.name
             result.append(link_info)

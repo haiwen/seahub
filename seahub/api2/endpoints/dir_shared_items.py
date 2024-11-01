@@ -414,7 +414,7 @@ class DirSharedItemsEndpoint(APIView):
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
 
-                    avatar_url, is_default, date_uploaded = api_avatar_url(to_user, 72)
+                    avatar_url, is_default, date_uploaded = api_avatar_url(to_user)
                     result['success'].append({
                         "share_type": "user",
                         "user_info": {
