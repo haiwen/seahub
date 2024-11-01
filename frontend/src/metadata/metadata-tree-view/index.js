@@ -15,15 +15,19 @@ import { isEnter } from '../utils/hotkey';
 
 import './index.css';
 
-const updateFavicon = (iconName) => {
+const updateFavicon = (type) => {
   const favicon = document.getElementById('favicon');
   if (favicon) {
-    switch (iconName) {
+    switch (type) {
+      case VIEW_TYPE.GALLERY:
       case 'image':
         favicon.href = `${mediaUrl}favicons/gallery.png`;
         break;
       case VIEW_TYPE.TABLE:
         favicon.href = `${mediaUrl}favicons/table.png`;
+        break;
+      case VIEW_TYPE.FACE_RECOGNITION:
+        favicon.href = `${mediaUrl}favicons/face-recognition-view.png`;
         break;
       default:
         favicon.href = `${mediaUrl}favicons/favicon.png`;
@@ -70,7 +74,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
       if (lastOpenedView) {
         selectView(lastOpenedView);
         document.title = `${lastOpenedView.name} - Seafile`;
-        updateFavicon(VIEW_TYPE_ICON[lastOpenedView.type] || VIEW_TYPE.TABLE);
+        updateFavicon(lastOpenedView.type);
         return;
       }
       const url = `${origin}${pathname}`;
@@ -82,7 +86,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     if (showFirstView && firstView) {
       selectView(firstView);
       document.title = `${firstView.name} - Seafile`;
-      updateFavicon(VIEW_TYPE_ICON[firstView.type] || VIEW_TYPE.TABLE);
+      updateFavicon(firstView.type);
     } else {
       document.title = originalTitle;
       updateFavicon('default');
@@ -95,7 +99,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     const currentView = viewsMap[currentViewId];
     if (currentView) {
       document.title = `${currentView.name} - Seafile`;
-      updateFavicon(VIEW_TYPE_ICON[currentView.type] || VIEW_TYPE.TABLE);
+      updateFavicon(currentView.type);
     } else {
       document.title = originalTitle;
       updateFavicon('default');

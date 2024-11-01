@@ -272,10 +272,10 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  updateFaceName = (repoID, recordID, name) => {
+  renamePeople = (repoID, recordId, name) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-record/';
     const params = {
-      record_id: recordID,
+      record_id: recordId,
       name: name,
     };
     return this.req.put(url, params);

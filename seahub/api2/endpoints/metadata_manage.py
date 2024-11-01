@@ -927,11 +927,19 @@ class FacesRecords(APIView):
 
         id_to_name = {item.get(FACES_TABLE.columns.id.name): item.get(FACES_TABLE.columns.name.name, '') for item in faces}
         classify_result = [{
-            'record_id': key,
-            'name': id_to_name.get(key, ''),
-            'link_photos': value
+            '_id': key,
+            '_name': id_to_name.get(key, ''),
+            '_photos': value
         } for key, value in classify_result.items()]
-        return Response({'results': classify_result})
+        metadata_columns = [
+            { 'key': '_id', 'name': '_id', 'type': 'text' },
+            { 'key': '_name', 'name': 'name', 'type': 'text' },
+            { 'key': '_photos', 'name': 'photos', 'type': 'link' },
+        ]
+        return Response({
+            'metadata': metadata_columns,
+            'results': classify_result,
+        })
 
 
 class FacesRecord(APIView):

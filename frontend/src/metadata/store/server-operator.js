@@ -163,6 +163,17 @@ class ServerOperator {
         });
         break;
       }
+
+      // face table op
+      case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
+        const { record_id, new_name } = operation;
+        window.sfMetadataContext.renamePeople(record_id, new_name).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to modify people name') });
+        });
+        break;
+      }
       default: {
         break;
       }

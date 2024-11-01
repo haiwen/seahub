@@ -184,6 +184,22 @@ export default function apply(data, operation) {
       data.view = new View({ ...data.view, columns_keys: new_columns_keys }, data.columns);
       return data;
     }
+    // face table op
+    case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
+      const { record_id, new_name } = operation;
+      const { rows } = data;
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId } = row;
+        if (rowId === record_id) {
+          const updatedRow = Object.assign({}, row, { _name: new_name });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
+      });
+      data.rows = updatedRows;
+      return data;
+    }
     default: {
       return data;
     }

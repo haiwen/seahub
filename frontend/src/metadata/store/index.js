@@ -528,6 +528,14 @@ class Store {
     return this.data.rows.some((row) => newPath === Utils.joinPath(row._parent_dir, row._name));
   };
 
+  renamePeopleName = (recordId, newName, oldName) => {
+    const type = OPERATION_TYPE.RENAME_PEOPLE_NAME;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, record_id: recordId, new_name: newName, old_name: oldName
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;

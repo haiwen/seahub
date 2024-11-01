@@ -1,0 +1,17 @@
+/* loading more */
+.sf-metadata-face-recognition-container .sf-metadata-face-recognition-loading-more {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sf-metadata-peoples-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: fit-content !important;
+  max-height: 100%;
+}

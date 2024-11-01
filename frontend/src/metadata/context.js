@@ -1,6 +1,8 @@
 import metadataAPI from './api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
+  FACE_RECOGNITION_VIEW_ID,
+  VIEW_TYPE,
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
@@ -71,8 +73,14 @@ class Context {
 
   // metadata
   getMetadata = (params) => {
+    if (!this.metadataAPI) return null;
     const repoID = this.settings['repoID'];
-    return this.metadataAPI ? this.metadataAPI.getMetadata(repoID, params) : null;
+    const { view_id, start, limit } = params;
+    if (view_id === FACE_RECOGNITION_VIEW_ID) {
+      return this.metadataAPI.getFaceData(repoID, start, limit);
+    }
+
+    return this.metadataAPI.getMetadata(repoID, params);
   };
 
   getRecord = (parentDir, fileName) => {
@@ -86,6 +94,17 @@ class Context {
   };
 
   getView = (viewId) => {
+    if (viewId === FACE_RECOGNITION_VIEW_ID) {
+      return {
+        data: {
+          view: {
+            _id: FACE_RECOGNITION_VIEW_ID,
+            type: VIEW_TYPE.FACE_RECOGNITION,
+          }
+        }
+      };
+    }
+
     const repoID = this.settings['repoID'];
     return this.metadataAPI.getView(repoID, viewId);
   };
@@ -222,6 +241,12 @@ class Context {
   extractFileDetails = (objIds) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.extractFileDetails(repoID, objIds);
+  };
+
+  // face api
+  renamePeople = (recordId, name) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.renamePeople(repoID, recordId, name);
   };
 }
 
