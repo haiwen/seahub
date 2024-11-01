@@ -41,8 +41,7 @@ class FileAccessLog extends React.Component {
   listFileAccessLog = (page) => {
     const { repoID, filePath } = this.props;
     const { perPage, items } = this.state;
-    const avatarSize = 24 * 2;
-    fileAccessLogAPI.listFileAccessLog(repoID, filePath, page, perPage, avatarSize).then((res) => {
+    fileAccessLogAPI.listFileAccessLog(repoID, filePath, page, perPage).then((res) => {
       const { data: newItems } = res.data;
       this.setState({
         isLoading: false,

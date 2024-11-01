@@ -3415,7 +3415,7 @@ class FileDetailView(APIView):
         entry["last_modifier_name"] = email2nickname(latest_contributor)
         entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
         if latest_contributor:
-            url, _, _ = api_avatar_url(latest_contributor, int(24))
+            url, _, _ = api_avatar_url(latest_contributor)
             entry["last_modifier_avatar"] = url
 
         try:
