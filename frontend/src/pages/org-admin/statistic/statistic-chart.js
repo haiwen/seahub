@@ -86,7 +86,8 @@ class StatisticChart extends React.Component {
         }
       },
       scales: {
-        y: [{
+        y: {
+          display: true,
           beginAtZero: true,
           suggestedMax: suggestedMaxNumbers,
           ticks: {
@@ -97,12 +98,13 @@ class StatisticChart extends React.Component {
               return value;
             }
           }
-        }],
-        x: [{
+        },
+        x: {
+          display: true,
           ticks: {
             maxTicksLimit: 20
           }
-        }]
+        }
       }
     };
     this.setState({
