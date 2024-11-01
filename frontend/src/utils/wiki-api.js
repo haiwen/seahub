@@ -280,6 +280,16 @@ class WikiAPI {
     return this.req.delete(url);
   }
 
+  convertWiki(oldWikiId, wikiName, owner) {
+    const url = this.server + '/api/v2.1/convert-wiki/';
+    let form = new FormData();
+    form.append('old_wiki_id', oldWikiId);
+    form.append('name', wikiName);
+    if (owner) {
+      form.append('owner', owner);
+    }
+    return this._sendPostRequest(url, form);
+  }
 }
 
 let wikiAPI = new WikiAPI();

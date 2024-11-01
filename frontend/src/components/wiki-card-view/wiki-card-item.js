@@ -11,6 +11,7 @@ import ShareWikiDialog from '../dialog/share-wiki-dialog';
 import PublishWikiDialog from '../dialog/publish-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
+import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 
 dayjs.extend(relativeTime);
 
@@ -20,6 +21,7 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  convertWiki: PropTypes.func.isRequired,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
 };
@@ -33,6 +35,7 @@ class WikiCardItem extends Component {
       isItemMenuShow: false,
       isShowShareDialog: false,
       isShowPublishDialog: false,
+      isShowConvertDialog: false,
       customUrl: '',
     };
   }
@@ -53,6 +56,13 @@ class WikiCardItem extends Component {
     e.preventDefault();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
+    });
+  };
+
+  onConvertToggle = (e) => {
+    e.preventDefault();
+    this.setState({
+      isShowConvertDialog: !this.state.isShowConvertDialog,
     });
   };
 
@@ -176,6 +186,7 @@ class WikiCardItem extends Component {
     let showLeaveShare = false;
     let showDropdownMenu = false;
     let showPublish = false;
+    let showWikiConvert = false;
 
     if (isDepartment) {
       if (isAdmin) {
@@ -184,6 +195,9 @@ class WikiCardItem extends Component {
           showShare = true;
           showRename = true;
           showPublish = true;
+          if (isOldVersion) {
+            showWikiConvert = true;
+          }
         } else {
           showLeaveShare = true;
         }
@@ -194,6 +208,9 @@ class WikiCardItem extends Component {
         showDelete = true;
         showRename = true;
         showPublish = true;
+        if (isOldVersion) {
+          showWikiConvert = true;
+        }
       } else {
         showLeaveShare = true;
       }
@@ -238,6 +255,9 @@ class WikiCardItem extends Component {
                   }
                   {showDelete &&
                     <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                  }
+                  {showWikiConvert &&
+                    <DropdownItem onClick={this.onConvertToggle}>{gettext('Convert to new Wiki')}</DropdownItem>
                   }
                   {showLeaveShare &&
                     <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
@@ -324,6 +344,15 @@ class WikiCardItem extends Component {
               onPublish={this.publishWiki}
               wiki={wiki}
               customUrl={this.state.customUrl}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowConvertDialog &&
+          <ModalPortal>
+            <ConvertWikiDialog
+              toggleCancel={this.onConvertToggle}
+              convertWiki={this.props.convertWiki}
+              wiki={this.props.wiki}
             />
           </ModalPortal>
         }

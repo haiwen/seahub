@@ -8,12 +8,16 @@ import json
 import requests
 import posixpath
 import random
+import jwt
+import time
+from urllib.parse import urljoin
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
 from seahub.wiki2.models import WikiPageTrash
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 
 
 logger = logging.getLogger(__name__)
@@ -271,7 +275,7 @@ def move_nav(navigation, target_id, moved_nav, move_position):
 
 
 def revert_nav(navigation, parent_page_id, subpages):
-    
+
     # connect the subpages to the parent_page
     # if not parent_page_id marked as flag, connect the subpages to the root
     def recurse(navigation, parent_page_id, subpages):
@@ -318,3 +322,12 @@ def get_parent_id_stack(navigation, page_id):
     return_parent_page_id(navigation, page_id, id_list)
 
     return id_list
+
+
+def add_convert_wiki_task(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-convert-wiki-task')
+    resp = requests.get(url, params=params, headers=headers)
+    return json.loads(resp.content)['task_id']

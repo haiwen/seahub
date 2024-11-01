@@ -14,6 +14,7 @@ const propTypes = {
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  convertWiki: PropTypes.func.isRequired,
   toggelAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
@@ -78,6 +79,7 @@ class WikiCardGroup extends Component {
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
+                convertWiki={this.props.convertWiki}
               /> : <WikiCardItem
                 key={index + wiki.id + wiki.name}
                 wiki={wiki}
@@ -86,6 +88,7 @@ class WikiCardGroup extends Component {
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
+                convertWiki={this.props.convertWiki}
               />
             );
           })}

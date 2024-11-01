@@ -25,11 +25,12 @@ from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.api2.endpoints.utils import wiki_search
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
+from seahub.wiki.models import Wiki as OldWiki
 from seahub.wiki2.models import WikiPageTrash, Wiki2Publish
 from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack
+    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name
@@ -37,7 +38,7 @@ from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_vali
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format
+from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
@@ -51,6 +52,7 @@ from seahub.group.utils import group_id_to_name, is_group_admin
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
+from seahub.share.utils import is_repo_admin
 
 HTTP_520_OPERATION_FAILED = 520
 
@@ -59,7 +61,7 @@ logger = logging.getLogger(__name__)
 
 
 def _merge_wiki_in_groups(group_wikis, publish_wiki_ids):
-    
+
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
     for gw in group_wikis:
@@ -81,7 +83,7 @@ def _merge_wiki_in_groups(group_wikis, publish_wiki_ids):
         group_id = gw.group_id
         group_id_wikis_map[group_id].append(wiki_info)
     return group_id_wikis_map
-        
+
 
 
 
@@ -96,7 +98,7 @@ class Wikis2View(APIView):
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
-        
+
         # list user groups
         if is_org_context(request):
             org_id = request.user.org.org_id
@@ -623,7 +625,7 @@ class Wiki2PagesView(APIView):
         if move_position not in valid_move_positions:
             error_msg = 'Invalid move_position value: ' + move_position
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         if (target_page_id not in id_set) or (moved_page_id not in id_set):
             error_msg = 'Page not found'
             logger.error(error_msg)
@@ -1311,3 +1313,136 @@ class WikiSearch(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response(resp_json, resp.status_code)
+
+
+class WikiConvertView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        old_wiki_id = request.data.get('old_wiki_id', None)
+        if not old_wiki_id:
+            error_msg = 'old_wiki_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = OldWiki.objects.get(id=old_wiki_id)
+        except OldWiki.DoesNotExist:
+            error_msg = 'Old Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        old_repo_id = wiki.repo_id
+
+        # check old wiki permission
+        is_owner = is_repo_owner(request, old_repo_id, username)
+        if not is_owner:
+            repo_admin = is_repo_admin(username, old_repo_id)
+            if not repo_admin:
+                is_group_repo_admin = is_group_repo_staff(request, old_repo_id, username)
+
+                if not is_group_repo_admin:
+                    error_msg = _('Permission denied.')
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if wiki.username != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
+
+        wiki_name = request.data.get("name", None)
+        if not wiki_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
+
+        if not is_valid_wiki_name(wiki_name):
+            msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+
+        old_repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(old_repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % old_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_owner = request.data.get('owner', 'me')
+        is_group_owner = False
+        group_id = ''
+        if wiki_owner == 'me':
+            wiki_owner = request.user.username
+        else:
+            try:
+                group_id = int(wiki_owner)
+                wiki_owner = "%s@seafile_group" % group_id
+            except:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'wiki_owner invalid')
+            is_group_owner = True
+
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        permission = PERMISSION_READ_WRITE
+        if is_group_owner:
+            group_id = int(group_id)
+            # only group admin can create wiki
+            if not is_group_admin(group_id, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            group_quota = seafile_api.get_group_quota(group_id)
+            group_quota = int(group_quota)
+            if group_quota <= 0 and group_quota != -2:
+                error_msg = 'No group quota.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # create group owned repo
+            group_id = int(group_id)
+            password = None
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
+                    storage_id = None
+                    repo_id = seafile_api.add_group_owned_repo(group_id,
+                                                               wiki_name,
+                                                               permission,
+                                                               password,
+                                                               enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                               storage_id=storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = SeafileAPI.add_group_owned_repo(
+                        group_id, wiki_name, password, permission, org_id=org_id)
+            else:
+                repo_id = SeafileAPI.add_group_owned_repo(
+                    group_id, wiki_name, password, permission, org_id=org_id)
+        else:
+            if org_id and org_id > 0:
+                repo_id = seafile_api.create_org_repo(wiki_name, '', wiki_owner, org_id)
+            else:
+                repo_id = seafile_api.create_repo(wiki_name, '', wiki_owner)
+
+        try:
+            seafile_db_api = SeafileDB()
+            seafile_db_api.set_repo_type(repo_id, 'wiki')
+        except Exception as e:
+            logger.error(e)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+        params = {
+            'old_repo_id': old_repo_id,
+            'new_repo_id': repo_id,
+            'username': request.user.username,
+        }
+
+        try:
+            task_id = add_convert_wiki_task(params=params)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({"task_id": task_id})
+
