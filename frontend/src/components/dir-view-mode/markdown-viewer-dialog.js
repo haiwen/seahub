@@ -40,7 +40,7 @@ class MarkdownViewerDialog extends React.Component {
             <InternalLinkOperation path={Utils.joinPath(filePath, fileName)} repoID={repoID} />
           </div>
           <div className='seafile-markdown-viewer-modal-header-right-tool'>
-            <span className='sf3-font sf3-font-open' onClick={this.props.openMarkdownFile}></span>
+            <span className='sf3-font sf3-font-new-page' onClick={this.props.openMarkdownFile}></span>
             <span className='sf3-font sf3-font-x-01' onClick={this.props.onCloseMarkdownViewDialog}></span>
           </div>
         </div>
