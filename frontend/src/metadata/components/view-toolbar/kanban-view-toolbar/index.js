@@ -54,7 +54,7 @@ const KanbanViewToolBar = ({
         />
         <IconBtn
           iconName="set-up"
-          className='sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting'
+          className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
           size={24}
           role="button"
           aria-label="Setting"

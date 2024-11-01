@@ -78,7 +78,8 @@ export const KANBAN_SETTINGS_KEYS = {
   HIDE_EMPTY_VALUES: 'hide_empty_values',
   SHOW_FIELD_NAMES: 'show_field_names',
   TEXT_WRAP: 'text_wrap',
-  SHOWN_COLUMN_KEYS: 'shown_column_keys',
+  COLUMNS_KEYS: 'columns_keys', // used to store the order of properties
+  SHOWN_COLUMNS_KEYS: 'shown_columns_keys',
 };
 
 export const VIEW_DEFAULT_SETTINGS = {
@@ -86,10 +87,11 @@ export const VIEW_DEFAULT_SETTINGS = {
   [VIEW_TYPE.GALLERY]: {},
   [VIEW_TYPE.KANBAN]: {
     [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: '',
-    [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: '',
+    [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: PRIVATE_COLUMN_KEY.FILE_NAME,
     [KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES]: false,
     [KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES]: false,
     [KANBAN_SETTINGS_KEYS.TEXT_WRAP]: false,
-    [KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS]: [],
+    [KANBAN_SETTINGS_KEYS.COLUMNS_KEYS]: [],
+    [KANBAN_SETTINGS_KEYS.SHOWN_COLUMNS_KEYS]: [],
   }
 };

@@ -3,7 +3,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid #e4e4e4;
+  border-left: 1px solid #eee;
   background: #fff;
 }
 
@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  border-bottom: 1px solid #e2e2e2;
+  border-bottom: 1px solid #eee;
 }
 
 .sf-metadata-view-kanban-setting-panel .kanban-setting-close-icon {
@@ -41,6 +41,7 @@
 }
 
 .sf-metadata-view-kanban-setting-panel .setting-item .custom-switch-description {
+  color: #212529;
   margin: 0;
 }
 
@@ -79,7 +80,7 @@
   width: 100%;
   height: 1px;
   margin-bottom: 14px;
-  background-color: #e2e2e2;
+  background-color: #eee;
 }
 
 .sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn {
@@ -88,12 +89,22 @@
   align-items: center;
 }
 
+.sf-metadata-view-kanban-setting-panel .hide-columns-label {
+  user-select: none;
+}
+
 .sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn-icon {
   width: 20px;
   height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn-icon:hover {
+  color: #3a2121;
 }
 
 .sf-metadata-view-kanban-setting-panel .sf-metadata-kanban-hide-columns {
@@ -129,27 +140,23 @@
 }
 
 .sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item {
+  width: 100%;
+  height: 30px;
   display: flex;
   align-items: center;
   position: relative;
-  width: 100%;
-  padding: 4px 0;
   clear: both;
   font-weight: 400;
   color: #212529;
   text-align: inherit;
   white-space: nowrap;
   background-color: transparent;
-  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item:hover {
-  background: #f5f5f5;
-}
-
-.sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item:not(.disabled):hover,
-.sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item:not(.disabled):hover * {
-  cursor: pointer;
+  background: #f0f0f0;
 }
 
 .sf-metadata-kanban-hide-columns .hide-column-item .hide-column-item-switch {
@@ -179,6 +186,9 @@
 .sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item .sf-metadata-icon {
   font-size: 16px;
   margin-right: 8px;
+}
+
+.sf-metadata-kanban-hide-columns .hide-columns-list .hide-column-item .hide-column-item-switch .sf-metadata-icon {
   fill: #666;
   transform: scale(0.8);
 }

@@ -12,15 +12,26 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-height: 2rem;
   padding: 0 8px;
 }
 
+.sf-metadata-view-kanban-list .list-header .list-header-title {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .list-header .list-header-more-operation {
+  display: none;
   color:#666;
   background-color: transparent;
   border: none !important;
   border-color: transparent;
+}
+
+.sf-metadata-view-kanban-list:hover .list-header-more-operation {
+  display: block;
 }
 
 .sf-metadata-view-kanban-list .list-body {

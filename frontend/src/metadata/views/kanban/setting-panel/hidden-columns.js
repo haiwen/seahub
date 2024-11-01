@@ -6,10 +6,11 @@ import { gettext } from '../../../../utils/constants';
 import { KANBAN_SETTINGS_KEYS } from '../../../constants';
 import HiddenColumnItem from './hidden-column-item';
 
-const HiddenColumns = ({ columns, settings, onChange }) => {
+const HiddenColumns = ({ columns, settings, onChange, onChangeOrder }) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
 
-  const shownColumnKeys = useMemo(() => settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS] || [], [settings]);
+  const columnsKeys = useMemo(() => columns.map(column => column.key), [columns]);
+  const shownColumnKeys = useMemo(() => settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMNS_KEYS] || [], [settings]);
 
   const isEmpty = useMemo(() => {
     if (!Array.isArray(columns) || columns.length === 0) return true;
@@ -52,6 +53,16 @@ const HiddenColumns = ({ columns, settings, onChange }) => {
     setCurrentIndex(columnIndex);
   }, [currentIndex]);
 
+  const handleSwapColumnsOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    const newColumns = columnsKeys.slice(0);
+    const sourceIndex = newColumns.indexOf(sourceColumnKey);
+    const targetIndex = newColumns.indexOf(targetColumnKey);
+    if (sourceIndex === -1 || targetIndex === -1) return;
+    newColumns.splice(sourceIndex, 1, targetColumnKey);
+    newColumns.splice(targetIndex, 1, sourceColumnKey);
+    onChangeOrder(newColumns);
+  }, [columnsKeys, onChangeOrder]);
+
   const textProperties = {
     titleValue: gettext('Properties to display on the card'),
     bannerValue: gettext('Properties'),
@@ -79,6 +90,7 @@ const HiddenColumns = ({ columns, settings, onChange }) => {
               currentIndex={currentIndex}
               onUpdateCurrentIndex={handleUpdateCurrentIndex}
               onChange={handleChange}
+              onSwapColumnsOrder={handleSwapColumnsOrder}
             />
           );
         })}
@@ -91,6 +103,7 @@ HiddenColumns.propTypes = {
   columns: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  onChangeOrder: PropTypes.func.isRequired,
 };
 
 export default HiddenColumns;

@@ -133,3 +133,5 @@ export const GALLERY_DATE_MODE = {
   DAY: 'day',
   ALL: 'all',
 };
+
+export const UNCATEGORIZED = 'uncategorized';

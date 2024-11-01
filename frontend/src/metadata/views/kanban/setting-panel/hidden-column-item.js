@@ -2,9 +2,9 @@ import React, { useRef, useCallback } from 'react';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
 import Switch from '../../../../components/common/switch';
-import { COLUMNS_ICON_CONFIG, EVENT_BUS_TYPE } from '../../../constants';
+import { COLUMNS_ICON_CONFIG } from '../../../constants';
 
-const HiddenColumnItem = ({ isHidden, column, columnIndex, currentIndex, onUpdateCurrentIndex, onChange }) => {
+const HiddenColumnItem = ({ isHidden, column, columnIndex, currentIndex, onUpdateCurrentIndex, onChange, onSwapColumnsOrder }) => {
   const fieldItemRef = useRef(null);
 
   const handleMouseEnter = useCallback(() => {
@@ -27,8 +27,8 @@ const HiddenColumnItem = ({ isHidden, column, columnIndex, currentIndex, onUpdat
     event.preventDefault();
     const sourceColumnKey = event.dataTransfer.getData('text/plain');
     if (sourceColumnKey === column.key) return;
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, sourceColumnKey, column.key, true);
-  }, [column]);
+    onSwapColumnsOrder(sourceColumnKey, column.key);
+  }, [column.key, onSwapColumnsOrder]);
 
   const handleDragOver = useCallback((event) => {
     event.preventDefault();
@@ -77,6 +77,7 @@ HiddenColumnItem.propTypes = {
   currentIndex: PropTypes.number,
   onUpdateCurrentIndex: PropTypes.func,
   onChange: PropTypes.func,
+  onSwapColumnsOrder: PropTypes.func,
 };
 
 export default HiddenColumnItem;

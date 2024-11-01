@@ -50,7 +50,7 @@ const AddList = ({ groupByColumn }) => {
       <div
         ref={addButtonRef}
         id="add-list-button"
-        className='add-list-button'
+        className="add-list-button"
         onClick={handleAddListButtonClick}
       >
         <Icon iconName="add-table" />

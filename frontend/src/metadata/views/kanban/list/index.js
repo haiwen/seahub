@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Card from '../card';
 import CellFormatter from '../../../components/cell-formatter';
 import ListMoreOperations from './list-more-operations';
+import { UNCATEGORIZED } from '../../../constants';
 
 import './index.css';
 
@@ -14,6 +15,7 @@ const List = ({
   cards,
   settings,
   moreOperationsList,
+  draggable,
   onCardDrop,
 }) => {
   const handleDragStart = (event, record) => {
@@ -42,14 +44,14 @@ const List = ({
       onDrop={handleDrop}
     >
       <div className="list-header">
-        <span>
-          {id === 'uncategorized' ? (
+        <div className="list-header-title">
+          {id === UNCATEGORIZED ? (
             <span>{title}</span>
           ) : (
             <CellFormatter value={title} field={field} readonly={true} />
           )}
-        </span>
-        {id !== 'uncategorized' && (
+        </div>
+        {id !== UNCATEGORIZED && (
           <div className="list-header-more-operation">
             <ListMoreOperations
               listId={id}
@@ -66,7 +68,7 @@ const List = ({
             title={card.title}
             fields={shownColumns}
             record={card.record}
-            draggable={field.editable}
+            draggable={draggable}
             settings={settings}
             onDragStart={handleDragStart}
             onDrop={handleDrop}
@@ -85,6 +87,7 @@ List.propTypes = {
   cards: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   moreOperationsList: PropTypes.array.isRequired,
+  draggable: PropTypes.bool.isRequired,
   onCardDrop: PropTypes.func.isRequired,
 };
 

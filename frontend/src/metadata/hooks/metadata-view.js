@@ -62,8 +62,8 @@ export const MetadataViewProvider = ({
     window.sfMetadataStore.modifyHiddenColumns(hiddenColumns);
   }, []);
 
-  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey, switchPositions) => {
-    window.sfMetadataStore.modifyColumnOrder(sourceColumnKey, targetColumnKey, switchPositions);
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    window.sfMetadataStore.modifyColumnOrder(sourceColumnKey, targetColumnKey);
   }, []);
 
   const modifySettings = useCallback((settings) => {

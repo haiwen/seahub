@@ -45,11 +45,15 @@ const Card = ({
           if (settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES] && !value) return null;
           return (
             <div key={field.key} className="card-field">
-              {settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] && <label>{field.name}</label>}
+              {settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] && (
+                <h5 className='card-property-name'>
+                  {field.name}
+                </h5>
+              )}
               {value ? (
                 <CellFormatter value={value} field={field} readonly={true} />
               ) : (
-                <div className="empty-cell-formatter"></div>
+                <div className="cell-formatter-container empty-cell-formatter"></div>
               )}
             </div>
           );

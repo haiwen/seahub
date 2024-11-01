@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
-import { CellType, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
+import { CellType, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS, UNCATEGORIZED } from '../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../store/operations';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -11,9 +11,9 @@ import { getCellValueByColumn } from '../../utils/cell';
 import SettingPanel from './setting-panel';
 import List from './list';
 import AddList from './add-list';
+import EmptyTip from '../../../components/empty-tip';
 
 import './index.css';
-import EmptyTip from '../../../components/empty-tip';
 
 const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
@@ -24,12 +24,28 @@ const Kanban = () => {
   const { metadata, store } = useMetadataView();
   const { collaborators } = useCollaborators();
 
+  const columns = useMemo(() => {
+    const columnsData = metadata.view.columns;
+    let savedColumnsKeys = metadata.view.settings[KANBAN_SETTINGS_KEYS.COLUMNS_KEYS] || [];
+    const sourceColumnsKeys = columnsData.map(col => col.key);
+    const updatedColumnsKeys = [...savedColumnsKeys];
+
+    sourceColumnsKeys.forEach(key => {
+      if (!savedColumnsKeys.includes(key)) {
+        updatedColumnsKeys.push(key);
+      }
+    });
+
+    const columnsMap = new Map(columnsData.map(col => [col.key, col]));
+    return updatedColumnsKeys.map(key => columnsMap.get(key)).filter(col => col);
+  }, [metadata.view.columns, metadata.view.settings]);
+
   const shownColumns = useMemo(() => {
-    const shownColumnKeys = metadata.view.settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS];
+    const shownColumnKeys = metadata.view.settings[KANBAN_SETTINGS_KEYS.SHOWN_COLUMNS_KEYS];
     if (!shownColumnKeys) return [];
 
-    return metadata.view.columns.filter(col => shownColumnKeys.includes(col.key));
-  }, [metadata.view.columns, metadata.view.settings]);
+    return columns.filter(col => shownColumnKeys.includes(col.key));
+  }, [columns, metadata.view.settings]);
 
   const groupByColumn = useMemo(() => {
     const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
@@ -105,7 +121,7 @@ const Kanban = () => {
     }
 
     const ungroupedList = {
-      id: 'uncategorized',
+      id: UNCATEGORIZED,
       title: gettext('Uncategorized'),
       field: groupByColumn,
       shownColumns,
@@ -118,6 +134,8 @@ const Kanban = () => {
   }, [metadata, collaborators, groupByColumn, titleField, shownColumns]);
 
   const canAddList = useMemo(() => groupByColumn && groupByColumn.editable && groupByColumn.type !== CellType.COLLABORATOR, [groupByColumn]);
+
+  const draggable = useMemo(() => groupByColumn && groupByColumn.editable && groupByColumn.type !== CellType.COLLABORATOR, [groupByColumn]);
 
   const handleDeleteList = useCallback((listId) => {
     const oldData = groupByColumn.data;
@@ -161,7 +179,7 @@ const Kanban = () => {
     const dragData = event.dataTransfer.getData('application/kanban-list');
     if (!dragData) return;
     const { listId: dragListId } = JSON.parse(dragData);
-    const oldData = shownColumns.find(col => col.key === groupByColumn.key).data;
+    const oldData = columns.find(col => col.key === groupByColumn.key).data;
     const dragIndex = oldData.options.findIndex(option => option.id === dragListId);
 
     if (dragIndex === dropIndex) return;
@@ -176,7 +194,7 @@ const Kanban = () => {
 
     setDraggingListId(null);
     setDragOverListId(null);
-  }, [store, shownColumns, groupByColumn]);
+  }, [store, columns, groupByColumn]);
 
   const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];
@@ -219,6 +237,10 @@ const Kanban = () => {
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [metadata.view.settings, lists, groupByColumn, modifyRecord, getOldRowData]);
 
+  const onUpdateSettings = useCallback((newSettings) => {
+    store.modifySettings(newSettings);
+  }, [store]);
+
   useEffect(() => {
     const unsubscribeKanbanSetting = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING, () => setSettingPanelOpen(!isSettingPanelOpen));
 
@@ -232,12 +254,12 @@ const Kanban = () => {
       <div className="sf-metadata-view-kanban-wrapper">
         <div className="sf-metadata-view-kanban">
           {lists.length === 0 ? (
-            <EmptyTip className="tips-empty-board" text={gettext('There are no categories yet.')} />
+            <EmptyTip className="tips-empty-board" text={gettext('No categories')} />
           ) : (
             lists.map((list, index) => (
               <div
                 key={list.id}
-                draggable={list.field.editable}
+                draggable={draggable}
                 onDragStart={(event) => onListDragStart(event, list.id)}
                 onDragEnter={(event) => onListDragEnter(event, list.id)}
                 onDragLeave={onListDragLeave}
@@ -254,6 +276,7 @@ const Kanban = () => {
                   settings={metadata.view.settings}
                   moreOperationsList={moreOperationsList}
                   onDeleteList={() => handleDeleteList(list._id)}
+                  draggable={draggable}
                   onCardDrop={onCardDrop}
                 />
               </div>
@@ -267,8 +290,9 @@ const Kanban = () => {
       <div className="sf-metadata-view-kanban-setting h-100">
         {isSettingPanelOpen && (
           <SettingPanel
-            columns={metadata.view.columns}
+            columns={columns}
             settings={metadata.view.settings}
+            onUpdateSettings={onUpdateSettings}
             onClose={() => setSettingPanelOpen(false)}
           />
         )}

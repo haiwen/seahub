@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { IconBtn, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import HiddenColumns from './hidden-columns';
 import { gettext } from '../../../../utils/constants';
-import { CellType, COLUMNS_ICON_CONFIG, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS } from '../../../constants';
+import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS } from '../../../constants';
 import Switch from '../../../../components/common/switch';
 
 import './index.css';
@@ -12,6 +12,7 @@ import './index.css';
 const SettingPanel = ({
   columns,
   settings,
+  onUpdateSettings,
   onClose
 }) => {
   const [isHiddenColumnsVisible, setIsHiddenColumnsVisible] = useState(false);
@@ -69,23 +70,27 @@ const SettingPanel = ({
   }, [columns]);
 
   const selectedGroupByOption = groupByOptions.find(option => option.value === settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]);
-  const selectedTitleFieldOption = titleOptions.find(option => option.value === settings[KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]);
+  const selectedTitleFieldOption = titleOptions.find(option => option.value === settings[KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]) || titleOptions[0];
 
   const handleGroupByChange = useCallback((value) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: value });
-  }, [settings]);
+    onUpdateSettings({ ...settings, [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: value });
+  }, [settings, onUpdateSettings]);
 
   const handleTitleFieldChange = useCallback((value) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: value });
-  }, [settings]);
+    onUpdateSettings({ ...settings, [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: value });
+  }, [settings, onUpdateSettings]);
 
   const handleToggleChange = useCallback((key, value) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [key]: value });
-  }, [settings]);
+    onUpdateSettings({ ...settings, [key]: value });
+  }, [settings, onUpdateSettings]);
 
   const handleHiddenColumnsChange = useCallback((value) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SETTINGS, { ...settings, [KANBAN_SETTINGS_KEYS.SHOWN_COLUMN_KEYS]: value });
-  }, [settings]);
+    onUpdateSettings({ ...settings, [KANBAN_SETTINGS_KEYS.SHOWN_COLUMNS_KEYS]: value });
+  }, [settings, onUpdateSettings]);
+
+  const handleColumnsOrderChange = useCallback((value) => {
+    onUpdateSettings({ ...settings, [KANBAN_SETTINGS_KEYS.COLUMNS_KEYS]: value });
+  }, [settings, onUpdateSettings]);
 
   const handleToggleHiddenColumns = useCallback(() => {
     setIsHiddenColumnsVisible(!isHiddenColumnsVisible);
@@ -93,8 +98,8 @@ const SettingPanel = ({
 
   return (
     <div className="sf-metadata-view-kanban-setting-panel" ref={panelRef}>
-      <div className='setting-panel-header'>
-        <h5 className='m-0'>{gettext('Setting')}</h5>
+      <div className="setting-panel-header">
+        <h5 className="m-0">{gettext('Settings')}</h5>
         <IconBtn
           className="kanban-setting-close-icon"
           iconName="close"
@@ -105,18 +110,19 @@ const SettingPanel = ({
           onClick={onClose}
         />
       </div>
-      <div className='setting-panel-body'>
-        <div className='setting-item'>
-          <span className='setting-item-label'>{gettext('Group by')}</span>
+      <div className="setting-panel-body">
+        <div className="setting-item">
+          <span className="setting-item-label">{gettext('Group by')}</span>
           <CustomizeSelect
             value={selectedGroupByOption}
             onSelectOption={handleGroupByChange}
             options={groupByOptions}
+            isInModal={true}
           />
         </div>
         <div className="split-line"></div>
-        <div className='setting-item'>
-          <span className='setting-item-label'>{gettext('Title field')}</span>
+        <div className="setting-item">
+          <span className="setting-item-label">{gettext('Title property')}</span>
           <CustomizeSelect
             value={selectedTitleFieldOption}
             onSelectOption={handleTitleFieldChange}
@@ -125,7 +131,7 @@ const SettingPanel = ({
           />
         </div>
         <div className="split-line"></div>
-        <div className='setting-item'>
+        <div className="setting-item">
           <Switch
             placeholder={gettext('Don\'t show empty values')}
             checked={settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES] || false}
@@ -133,15 +139,15 @@ const SettingPanel = ({
           />
         </div>
         <div className="split-line"></div>
-        <div className='setting-item'>
+        <div className="setting-item">
           <Switch
-            placeholder={gettext('Show field names')}
+            placeholder={gettext('Show property names')}
             checked={settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] || false}
             onChange={() => handleToggleChange(KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES, !settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES])}
           />
         </div>
         <div className="split-line"></div>
-        <div className='setting-item'>
+        <div className="setting-item">
           <Switch
             placeholder={gettext('Text wraps')}
             checked={settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] || false}
@@ -149,14 +155,19 @@ const SettingPanel = ({
           />
         </div>
         <div className="split-line"></div>
-        <div className='toggle-hide-columns-btn' onClick={handleToggleHiddenColumns}>
-          <span className='hide-columns-label'>{gettext('Other properties')}</span>
-          <div className='toggle-hide-columns-btn-icon'>
-            <i className={classNames('sf3-font sf3-font-down', { 'rotate-90': !isHiddenColumnsVisible })}></i>
+        <div className="toggle-hide-columns-btn" onClick={handleToggleHiddenColumns}>
+          <span className="hide-columns-label">{gettext('Properties to display on the card')}</span>
+          <div className="toggle-hide-columns-btn-icon">
+            <i className={classNames('sf3-font sf3-font-down', { 'rotate-270': !isHiddenColumnsVisible })}></i>
           </div>
         </div>
         {isHiddenColumnsVisible && (
-          <HiddenColumns columns={columns} settings={settings} onChange={handleHiddenColumnsChange} />
+          <HiddenColumns
+            columns={columns}
+            settings={settings}
+            onChange={handleHiddenColumnsChange}
+            onChangeOrder={handleColumnsOrderChange}
+          />
         )}
       </div>
     </div>
@@ -166,6 +177,7 @@ const SettingPanel = ({
 SettingPanel.propTypes = {
   columns: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
+  onUpdateSettings: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
