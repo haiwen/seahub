@@ -29,6 +29,7 @@ class SelectDirentBody extends React.Component {
       inputValue: '',
     };
     this.inputRef = React.createRef();
+    this.newFolderName = '';
   }
 
   componentDidMount() {
@@ -54,6 +55,20 @@ class SelectDirentBody extends React.Component {
       this.setState({
         currentRepoInfo: repoInfo,
         selectedRepo: repoInfo,
+      });
+    } catch (err) {
+      const errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    }
+  };
+
+  fetchSelectedRepoInfo = async (repoId) => {
+    try {
+      const res = await seafileAPI.getRepoInfo(repoId);
+      const repoInfo = new RepoInfo(res.data);
+      this.setState({
+        selectedRepo: repoInfo,
+        selectedSearchedRepo: repoInfo,
       });
     } catch (err) {
       const errMessage = Utils.getErrorMsg(err);
@@ -121,7 +136,6 @@ class SelectDirentBody extends React.Component {
     if (mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
       this.setState({
         selectedRepo: repoList[0],
-        currentRepoInfo: null,
       });
       this.props.setSelectedPath('/');
     } else {
@@ -144,7 +158,7 @@ class SelectDirentBody extends React.Component {
       this.props.onAddFolder(fullPath, { successCallback: this.fetchRepoInfo });
     } else {
       seafileAPI.createDir(selectedRepoId, fullPath).then(() => {
-        this.fetchRepoList();
+        this.fetchSelectedRepoInfo(selectedRepoId);
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -164,13 +178,14 @@ class SelectDirentBody extends React.Component {
         toaster.danger(errMessage);
         return;
       }
+      this.newFolderName = this.state.inputValue;
       this.onCreateFolder();
     }
   };
 
   render() {
     const { mode, path, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
-    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo } = this.state;
+    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo, showNewFolderInput, inputValue, creatingNewFolder } = this.state;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -218,19 +233,20 @@ class SelectDirentBody extends React.Component {
               onSearchedItemClick={this.props.onSearchedItemClick}
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               selectedSearchedRepo={selectedSearchedRepo}
-              creatingNewFolder={this.state.creatingNewFolder}
+              creatingNewFolder={creatingNewFolder}
+              newFolderName={this.newFolderName}
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
           <ModalFooter>
-            {this.state.showNewFolderInput ? (
+            {showNewFolderInput ? (
               <div>
                 <Input
                   innerRef={this.inputRef}
                   className='new-folder-input'
                   placeholder={gettext('Enter folder name')}
                   type='text'
-                  value={this.state.inputValue}
+                  value={inputValue}
                   onChange={this.onInputChange}
                   onKeyDown={this.onInputKeyDown}
                   autoFocus

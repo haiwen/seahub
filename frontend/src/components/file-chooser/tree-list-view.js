@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TreeListItem from './tree-list-item';
-import treeHelper from '../tree-view/tree-helper';
 
 const propTypes = {
   selectedPath: PropTypes.string,

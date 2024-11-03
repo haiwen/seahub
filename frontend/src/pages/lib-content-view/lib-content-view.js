@@ -2282,6 +2282,7 @@ class LibContentView extends React.Component {
                       currentMode={this.state.currentMode}
                       switchViewMode={this.switchViewMode}
                       onItemConvert={this.onConvertItem}
+                      onAddFolder={this.onAddFolder}
                     />
                     :
                     <CurDirPath
@@ -2314,6 +2315,7 @@ class LibContentView extends React.Component {
                       onItemMove={this.onMoveItem}
                       isDesktop={isDesktop}
                       loadDirentList={this.loadDirentList}
+                      onAddFolderNode={this.onAddFolder}
                     />
                   }
                 </div>

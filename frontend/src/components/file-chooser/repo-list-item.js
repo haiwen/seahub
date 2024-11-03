@@ -21,6 +21,7 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   hideLibraryName: PropTypes.bool,
+  newFolderName: PropTypes.string,
 };
 
 class RepoListItem extends React.Component {
@@ -64,9 +65,21 @@ class RepoListItem extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.repo.last_modified !== this.props.repo.last_modified) {
-      this.setState({ hasLoaded: false, treeData: treeHelper.buildTree() }, () => {
-        this.loadRepoDirentList(this.props.repo);
+    const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
+    if (repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
+      seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
+        if (!this.state.isMounted) return;
+        const direntData = res.data.dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
+        if (direntData) {
+          const object = new Dirent(direntData);
+          const direntNode = new TreeNode({ object });
+          const newTreeData = treeHelper.addNodeToParentByPath(this.state.treeData, direntNode, selectedPath);
+          this.setState({ treeData: newTreeData });
+        }
+      }).catch(error => {
+        if (!this.state.isMounted) return;
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }

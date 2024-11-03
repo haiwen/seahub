@@ -16,6 +16,7 @@ const propTypes = {
   selectedItemInfo: PropTypes.object,
   currentPath: PropTypes.string,
   selectedSearchedRepo: PropTypes.object,
+  newFolderName: PropTypes.string,
 };
 
 const defaultProps = {
@@ -61,6 +62,7 @@ class RepoListView extends React.Component {
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
               selectedItemInfo={this.props.selectedItemInfo}
+              newFolderName={this.props.newFolderName}
             />
           );
         })}

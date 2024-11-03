@@ -153,6 +153,16 @@ class MoveDirent extends React.Component {
 
   onUpdateMode = (mode) => {
     if (mode === this.state.mode) return;
+
+    if (this.state.mode === MODE_TYPE_MAP.SEARCH_RESULTS) {
+      this.setState({
+        selectedSearchedRepo: null,
+        selectedSearchedItem: null,
+        searchResults: [],
+        showSearchBar: false,
+      });
+    }
+
     if (this.state.selectedSearchedRepo) {
       this.setState({
         selectedSearchedRepo: null,
@@ -161,6 +171,7 @@ class MoveDirent extends React.Component {
         showSearchBar: false,
       });
     }
+
     this.setState({
       mode,
     });

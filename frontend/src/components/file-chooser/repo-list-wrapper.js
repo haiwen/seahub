@@ -20,7 +20,7 @@ const RepoListWrapper = (props) => {
   const {
     mode, isShowFile, fileSuffixes, currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
-    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo
+    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName
   } = props;
 
   const renderRecentlyUsed = () => {
@@ -118,6 +118,7 @@ const RepoListWrapper = (props) => {
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
               selectedSearchedRepo={selectedSearchedRepo}
+              newFolderName={newFolderName}
             />
           </div>
         )}
@@ -155,6 +156,7 @@ const RepoListWrapper = (props) => {
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
               selectedSearchedRepo={selectedSearchedRepo}
+              newFolderName={newFolderName}
             />
           </div>
         )}
@@ -190,6 +192,7 @@ RepoListWrapper.propTypes = {
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,
+  newFolderName: PropTypes.string,
 };
 
 RepoListWrapper.defaultProps = {

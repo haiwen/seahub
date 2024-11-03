@@ -40,6 +40,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
 };
 
 class SelectedDirentsToolbar extends React.Component {
