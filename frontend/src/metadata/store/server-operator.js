@@ -174,21 +174,6 @@ class ServerOperator {
         });
         break;
       }
-      case OPERATION_TYPE.DELETE_PEOPLE_PHOTOS: {
-        const { people_id, deleted_photos } = operation;
-        const row = data.id_row_map[people_id];
-        if (!row || row._photo_links.length === 0 || row._photo_links.length === deleted_photos.length) {
-          window.sfMetadataContext.deletePeoplePhotos(people_id).then(res => {
-            callback({ operation });
-          }).catch(error => {
-            callback({ error: gettext('Failed to delete people') });
-          });
-          break;
-        }
-        callback({ operation });
-        break;
-      }
-
       default: {
         break;
       }

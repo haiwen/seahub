@@ -254,11 +254,6 @@ class Context {
     return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
   };
 
-  deletePeoplePhotos = (recordId) => {
-    const repoID = this.settings['repoID'];
-    return this.metadataAPI.deletePeoplePhotos(repoID, recordId);
-  };
-
 }
 
 export default Context;

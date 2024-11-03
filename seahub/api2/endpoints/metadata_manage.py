@@ -1102,49 +1102,6 @@ class PeoplePhotos(APIView):
         
         return Response(someone_photos_result)
 
-    def delete(self, request, repo_id, people_id):
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
-
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        faces_table_id = faces_table_id[0] if faces_table_id else None
-        if not faces_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
-
-        # todo
-        # sql = f'DELETE FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
-
-        # try:
-        #     delete_result = metadata_server_api.query_rows(sql)
-        # except Exception as e:
-        #     logger.error(e)
-        #     error_msg = 'Internal Server Error'
-        #     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        return Response({ 'success': True })
 
 class FaceRecognitionManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
