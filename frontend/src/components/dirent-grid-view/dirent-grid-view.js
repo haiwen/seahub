@@ -935,6 +935,7 @@ class DirentGridView extends React.Component {
             onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
             dirent={this.state.activeDirent}
+            onAddFolder={this.props.onAddFolder}
           />
         }
         {this.state.isZipDialogOpen &&

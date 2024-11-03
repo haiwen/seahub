@@ -20,6 +20,7 @@ const propTypes = {
   onItemMove: PropTypes.func,
   onItemsMove: PropTypes.func,
   onCancelMove: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func,
 };
 
 class MoveDirent extends React.Component {
@@ -37,27 +38,7 @@ class MoveDirent extends React.Component {
       showSearchBar: false,
       errMessage: '',
     };
-    this.lastMode = MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY;
-    this.searcherRef = React.createRef();
   }
-
-  // componentDidMount() {
-  //   if (isPro) {
-  //     document.addEventListener('mousedown', this.handleClickOutside);
-  //   }
-  // }
-
-  // componentWillUnmount() {
-  //   if (isPro) {
-  //     document.removeEventListener('mousedown', this.handleClickOutside);
-  //   }
-  // }
-
-  // handleClickOutside = (event) => {
-  //   if (this.searcherRef.current && !this.searcherRef.current.contains(event.target)) {
-  //     this.setState({ showSearchBar: false });
-  //   }
-  // };
 
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
@@ -172,7 +153,14 @@ class MoveDirent extends React.Component {
 
   onUpdateMode = (mode) => {
     if (mode === this.state.mode) return;
-    this.lastMode = this.state.mode;
+    if (this.state.selectedSearchedRepo) {
+      this.setState({
+        selectedSearchedRepo: null,
+        selectedSearchedItem: null,
+        searchResults: [],
+        showSearchBar: false,
+      });
+    }
     this.setState({
       mode,
     });
@@ -238,6 +226,7 @@ class MoveDirent extends React.Component {
         searchResults: [],
         selectedSearchedRepo: repoInfo,
         selectedPath: path,
+        showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
       });
     }).catch(err => {
       const errMessage = Utils.getErrorMsg(err);
@@ -269,14 +258,12 @@ class MoveDirent extends React.Component {
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex mw-100'></div>}
           {isPro && (
             showSearchBar ? (
-              <div ref={this.searcherRef}>
-                <Searcher
-                  onUpdateMode={this.onUpdateMode}
-                  onUpdateSearchStatus={this.onUpdateSearchStatus}
-                  onUpdateSearchResults={this.onUpdateSearchResults}
-                  onClose={this.onCloseSearchBar}
-                />
-              </div>
+              <Searcher
+                onUpdateMode={this.onUpdateMode}
+                onUpdateSearchStatus={this.onUpdateSearchStatus}
+                onUpdateSearchResults={this.onUpdateSearchResults}
+                onClose={this.onCloseSearchBar}
+              />
             ) : (
               <IconBtn
                 iconName="search"
@@ -308,6 +295,7 @@ class MoveDirent extends React.Component {
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
           selectedSearchedRepo={selectedSearchedRepo}
+          onAddFolder={this.props.onAddFolder}
         />
       </Modal>
     );

@@ -859,6 +859,7 @@ class DirentListView extends React.Component {
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
               onCancelMove={this.onMoveToggle}
+              onAddFolder={this.props.onAddFolder}
             />
           }
           {this.state.isCopyDialogShow &&

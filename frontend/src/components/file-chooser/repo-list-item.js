@@ -63,6 +63,14 @@ class RepoListItem extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.repo.last_modified !== this.props.repo.last_modified) {
+      this.setState({ hasLoaded: false, treeData: treeHelper.buildTree() }, () => {
+        this.loadRepoDirentList(this.props.repo);
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.clearLoadRepoTimer();
     this.setState({ isMounted: false, hasLoaded: false });

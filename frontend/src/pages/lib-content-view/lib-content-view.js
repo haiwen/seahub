@@ -959,7 +959,7 @@ class LibContentView extends React.Component {
     localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
   };
 
-  onAddFolder = (dirPath) => {
+  onAddFolder = (dirPath, { successCallback }) => {
     let repoID = this.props.repoID;
     seafileAPI.createDir(repoID, dirPath).then(() => {
       let name = Utils.getFileName(dirPath);
@@ -972,6 +972,8 @@ class LibContentView extends React.Component {
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'dir');
       }
+
+      successCallback && successCallback();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

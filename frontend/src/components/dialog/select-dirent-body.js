@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
+import { Button, ModalFooter, ModalBody, Alert, Row, Col, Input } from 'reactstrap';
 import toaster from '../toast';
 import RepoListWrapper, { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 import { RepoInfo } from '../../models';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
@@ -25,13 +25,27 @@ class SelectDirentBody extends React.Component {
       repoList: [],
       selectedRepo: null,
       errMessage: '',
+      showNewFolderInput: false,
+      inputValue: '',
     };
+    this.inputRef = React.createRef();
   }
 
   componentDidMount() {
     this.fetchRepoInfo();
     this.fetchRepoList();
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = (event) => {
+    if (this.inputRef.current && !this.inputRef.current.contains(event.target)) {
+      this.setState({ showNewFolderInput: false });
+    }
+  };
 
   fetchRepoInfo = async () => {
     try {
@@ -102,13 +116,56 @@ class SelectDirentBody extends React.Component {
   };
 
   onUpdateMode = (mode) => {
-    const { repoID, path } = this.props;
-
-    // reset selecting status
-    this.props.selectRepo({ repo_id: repoID });
-    this.props.setSelectedPath(path);
+    const { path } = this.props;
+    const { repoList } = this.state;
+    if (mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
+      this.setState({
+        selectedRepo: repoList[0],
+        currentRepoInfo: null,
+      });
+      this.props.setSelectedPath('/');
+    } else {
+      this.setState({ selectedRepo: this.state.currentRepoInfo });
+      this.props.setSelectedPath(path);
+    }
 
     this.props.onUpdateMode(mode);
+  };
+
+  onShowNewFolderInput = () => {
+    this.setState({ showNewFolderInput: true });
+  };
+
+  onCreateFolder = async () => {
+    const selectedRepoId = this.state.selectedRepo.repo_id;
+    const parentPath = this.props.selectedPath;
+    const fullPath = Utils.joinPath(parentPath, this.state.inputValue);
+    if (selectedRepoId === this.props.repoID) {
+      this.props.onAddFolder(fullPath, { successCallback: this.fetchRepoInfo });
+    } else {
+      seafileAPI.createDir(selectedRepoId, fullPath).then(() => {
+        this.fetchRepoList();
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+    this.setState({ showNewFolderInput: false, inputValue: '' });
+  };
+
+  onInputChange = (e) => {
+    this.setState({ inputValue: e.target.value });
+  };
+
+  onInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      const { isValid, errMessage } = validateName(this.state.inputValue);
+      if (!isValid) {
+        toaster.danger(errMessage);
+        return;
+      }
+      this.onCreateFolder();
+    }
   };
 
   render() {
@@ -161,14 +218,31 @@ class SelectDirentBody extends React.Component {
               onSearchedItemClick={this.props.onSearchedItemClick}
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               selectedSearchedRepo={selectedSearchedRepo}
+              creatingNewFolder={this.state.creatingNewFolder}
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
           <ModalFooter>
-            <div className='footer-left-btns'>
-              <i className='sf3-font-new sf3-font mr-2'></i>
-              <span>{gettext('New folder')}</span>
-            </div>
+            {this.state.showNewFolderInput ? (
+              <div>
+                <Input
+                  innerRef={this.inputRef}
+                  className='new-folder-input'
+                  placeholder={gettext('Enter folder name')}
+                  type='text'
+                  value={this.state.inputValue}
+                  onChange={this.onInputChange}
+                  onKeyDown={this.onInputKeyDown}
+                  autoFocus
+                />
+              </div>
+            ) : (
+              <div className='footer-left-btns' onClick={this.onShowNewFolderInput}>
+                <i className='sf3-font-new sf3-font mr-2'></i>
+                <span>{gettext('New folder')}</span>
+              </div>
+            )}
+
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
               <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
@@ -197,6 +271,7 @@ SelectDirentBody.propTypes = {
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,
+  onAddFolder: PropTypes.func,
 };
 
 SelectDirentBody.defaultProps = {
