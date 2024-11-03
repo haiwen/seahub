@@ -55,6 +55,8 @@ const RepoListWrapper = (props) => {
             onSearchedItemDoubleClick={onSearchedItemDoubleClick}
           />
         );
+      default:
+        return null;
     }
   };
 
