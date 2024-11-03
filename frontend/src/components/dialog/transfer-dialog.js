@@ -108,6 +108,7 @@ class TransferDialog extends React.Component {
       this.setState({
         activeTab: tab,
         reshare: false,
+        selectedOption: null,
       });
     }
   };
