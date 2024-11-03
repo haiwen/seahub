@@ -166,14 +166,29 @@ class ServerOperator {
 
       // face table op
       case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
-        const { record_id, new_name } = operation;
-        window.sfMetadataContext.renamePeople(record_id, new_name).then(res => {
+        const { people_id, new_name } = operation;
+        window.sfMetadataContext.renamePeople(people_id, new_name).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify people name') });
         });
         break;
       }
+      case OPERATION_TYPE.DELETE_PEOPLE_PHOTOS: {
+        const { people_id, deleted_photos } = operation;
+        const row = data.id_row_map[people_id];
+        if (!row || row._photo_links.length === 0 || row._photo_links.length === deleted_photos.length) {
+          window.sfMetadataContext.deletePeoplePhotos(people_id).then(res => {
+            callback({ operation });
+          }).catch(error => {
+            callback({ error: gettext('Failed to delete people') });
+          });
+          break;
+        }
+        callback({ operation });
+        break;
+      }
+
       default: {
         break;
       }

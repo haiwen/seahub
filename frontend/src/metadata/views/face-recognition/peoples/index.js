@@ -17,7 +17,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
 
   const containerRef = useRef(null);
 
-  const { metadata, store } = useMetadataView();
+  const { metadata, store, closeDirentDetail } = useMetadataView();
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -42,6 +42,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       loadMore();
     }
+    window.sfMetadataContext.localStorage.setItem('scroll_top', scrollTop);
   }, [loadMore]);
 
   const onFreezed = useCallback(() => {
@@ -54,15 +55,18 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
 
   useEffect(() => {
     const _localStorage = window.sfMetadataContext.localStorage;
-    const scrollTop = _localStorage.getItem('scroll_top') || 0;
     if (!containerRef.current) return;
+    const scrollTop = _localStorage.getItem('scroll_top') || 0;
     if (scrollTop) {
       containerRef.current.scrollTop = Number(scrollTop);
     }
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      _localStorage.setItem('scroll_top', containerRef.current.scrollTop);
-    };
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    closeDirentDetail();
+    return () => {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip text={gettext('No faces')} />);

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
 import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
+import FaceRecognitionViewToolbar from './face-recognition';
 
 import './index.css';
 
@@ -86,6 +87,13 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
+          showDetail={showDetail}
+        />
+      )}
+      {viewType === VIEW_TYPE.FACE_RECOGNITION && (
+        <FaceRecognitionViewToolbar
+          isCustomPermission={isCustomPermission}
+          view={view}
           showDetail={showDetail}
         />
       )}

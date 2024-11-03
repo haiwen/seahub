@@ -1,17 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { siteRoot, gettext, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import Peoples from './peoples';
-import Faces from './faces';
+import PeoplePhotos from './person-photos';
 
 import './index.css';
-
-
-// name: photo.file_name,
-// url: `${siteRoot}lib/${repoID}/file${path}`,
-// default_url: `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`,
-// src: `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`,
-// thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
 
 const FaceRecognition = () => {
   const [showPeopleFaces, setShowPeopleFaces] = useState(false);
@@ -23,6 +15,10 @@ const FaceRecognition = () => {
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
     return metadata.rows;
   }, [metadata]);
+
+  const onDeletePeoplePhotos = useCallback((peopleId, peoplePhotos) => {
+    store.deletePeoplePhotos(peopleId, peoplePhotos);
+  }, [store]);
 
   const openPeople = useCallback((people) => {
     peopleRef.current = people;
@@ -41,7 +37,7 @@ const FaceRecognition = () => {
   return (
     <div className="sf-metadata-container">
       {showPeopleFaces ? (
-        <Faces people={peopleRef.current} onClose={closePeople} />
+        <PeoplePhotos people={peopleRef.current} onClose={closePeople} onDeletePeoplePhotos={onDeletePeoplePhotos} />
       ) : (
         <Peoples peoples={peoples} onRename={onRename} onOpenPeople={openPeople} />
       )}

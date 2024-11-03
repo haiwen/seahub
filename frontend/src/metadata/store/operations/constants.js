@@ -20,6 +20,7 @@ export const OPERATION_TYPE = {
 
   // face table
   RENAME_PEOPLE_NAME: 'rename_people_name',
+  DELETE_PEOPLE_PHOTOS: 'delete_people_photos',
 };
 
 export const COLUMN_DATA_OPERATION_TYPE = {
@@ -47,7 +48,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.DELETE_COLUMN]: ['repo_id', 'column_key', 'column'],
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
   [OPERATION_TYPE.MODIFY_COLUMN_ORDER]: ['repo_id', 'view_id', 'new_columns_keys', 'old_columns_keys'],
-  [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'record_id', 'new_name', 'old_name'],
+  [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
+  [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
 };
 
 export const UNDO_OPERATION_TYPE = [

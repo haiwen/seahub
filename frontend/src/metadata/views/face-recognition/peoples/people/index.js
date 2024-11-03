@@ -6,17 +6,26 @@ import isHotkey from 'is-hotkey';
 import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../../utils/constants';
 import OpMenu from './op-menu';
 import { isEnter } from '../../../../utils/hotkey';
+import { Utils } from '../../../../../utils/utils';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../../utils/cell';
 
 import './index.css';
 
 const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFreezed }) => {
-  const similarUrl = useMemo(() => {
-    const photos = people._photos;
-    const similarImg = photos[0];
-    if (!similarImg) return '';
+
+  const similarPhotoURL = useMemo(() => {
+    const similarPhoto = people._similar_photo;
+    if (!similarPhoto) return '';
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${similarImg.path}`;
-  }, [people._photos]);
+    const fileName = getFileNameFromRecord(similarPhoto);
+    const parentDir = getParentDirFromRecord(similarPhoto);
+    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`;
+  }, [people._similar_photo]);
+
+  const photosCount = useMemo(() => {
+    return Array.isArray(people._photo_links) ? people._photo_links.length : 0;
+  }, [people._photo_links]);
 
   const [name, setName] = useState(people._name || gettext('Person image'));
   const [renaming, setRenaming] = useState(false);
@@ -69,7 +78,6 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
     setActive(false);
   }, [onUnFreezed]);
 
-  const { _photos } = people;
   return (
     <div
       className={classNames('sf-metadata-people-info px-3 d-flex justify-content-between align-items-center', {
@@ -77,10 +85,10 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       })}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onDoubleClick={haveFreezed ? () => {} : onOpenPeople}
+      onDoubleClick={haveFreezed ? () => {} : () => onOpenPeople(people)}
     >
       <div className="sf-metadata-people-info-img mr-2">
-        <img src={similarUrl} alt={name} height={36} width={36} />
+        <img src={similarPhotoURL} alt={name} height={36} width={36} />
       </div>
       <div className="sf-metadata-people-info-name-count">
         <div className="sf-metadata-people-info-name">
@@ -91,10 +99,10 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
           )}
         </div>
         <div className="sf-metadata-people-info-count">
-          {_photos.length + ' ' + gettext('items')}
+          {photosCount + ' ' + gettext('items')}
         </div>
       </div>
-      {!readonly && (
+      {!readonly && people._is_someone && (
         <div className="sf-metadata-people-info-op">
           {active && (
             <OpMenu onRename={setRenamingState} onFreezed={onFreezed} onUnFreezed={_onUnFreezed} />

@@ -1,0 +1,30 @@
+.sf-metadata-people-photos-container {
+  padding: 0 !important;
+  overflow-y: hidden !important;
+}
+
+.sf-metadata-people-photos-container .sf-metadata-people-photos-header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.sf-metadata-people-photos-container .sf-metadata-icon-btn {
+  margin-left: -4px;
+  border-radius: 3px;
+}
+
+.sf-metadata-people-photos-container .sf-metadata-icon-btn:hover {
+  background-color: #EFEFEF;
+  cursor: pointer;
+}
+
+.sf-metadata-people-photos-container .sf-metadata-people-photos-header .sf-metadata-people-name {
+  margin-left: 8px;
+}
+
+.sf-metadata-people-photos-container .sf-metadata-gallery-container {
+  height: calc(100% - 48px);
+}

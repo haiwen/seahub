@@ -13,7 +13,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, get_metadata_by_faces, extract_file_details
+    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, \
+    extract_file_details, get_someone_similar_faces
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -880,7 +881,7 @@ class FacesRecords(APIView):
         if not faces_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
 
-        sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.vector.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -889,56 +890,59 @@ class FacesRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        faces = query_result.get('results')
+        faces_records = query_result.get('results')
+        metadata_columns = query_result.get('metadata', [])
+        metadata_columns.append({
+            'key': '_similar_photo',
+            'type': 'text',
+            'name': '_similar_photo',
+            'data': None,
+        })
+        metadata_columns.append({
+            'key': '_is_someone',
+            'type': 'checkbox',
+            'name': '_is_someone',
+            'data': None,
+        })
 
-        if not faces:
-            error_msg = 'Records not found'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if not faces_records:
+            return Response({
+                'metadata': metadata_columns,
+                'results': [],
+            })
 
         try:
-            query_result = get_metadata_by_faces(faces, metadata_server_api)
+            similar_result = get_someone_similar_faces(faces_records, metadata_server_api)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
         if not query_result:
-            error_msg = 'Records not found'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            return Response({
+                'metadata': metadata_columns,
+                'results': [],
+            })
 
-        classify_result = dict()
-        for row in query_result:
-            link_row_ids = [item['row_id'] for item in row.get(METADATA_TABLE.columns.face_links.name, [])]
+        similar_result_dict = dict()
+        for row in similar_result:
+            similar_result_dict[row['_id']] = row
+
+        for record in faces_records:
+            vector = record.get(FACES_TABLE.columns.vector.name, None)
+            record['_is_someone'] = bool(vector)
+            if FACES_TABLE.columns.vector.name in record:
+                del record[FACES_TABLE.columns.vector.name]
+            link_row_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.photo_links.name, [])]
             if not link_row_ids:
                 continue
-            for link_row_id in link_row_ids:
-                if link_row_id not in classify_result:
-                    classify_result[link_row_id] = []
-                file_name = row.get(METADATA_TABLE.columns.file_name.name, '')
-                parent_dir = row.get(METADATA_TABLE.columns.parent_dir.name, '')
-                size = row.get(METADATA_TABLE.columns.size.name, 0)
-                mtime = row.get('_mtime')
-                classify_result[link_row_id].append({
-                    'path': os.path.join(parent_dir, file_name),
-                    'file_name': file_name,
-                    'parent_dir': parent_dir,
-                    'size': size,
-                    'mtime': mtime
-                })
+            link_row_id = link_row_ids[0]
+            if link_row_id in similar_result_dict:
+                record['_similar_photo'] = similar_result_dict[link_row_id]
 
-        id_to_name = {item.get(FACES_TABLE.columns.id.name): item.get(FACES_TABLE.columns.name.name, '') for item in faces}
-        classify_result = [{
-            '_id': key,
-            '_name': id_to_name.get(key, ''),
-            '_photos': value
-        } for key, value in classify_result.items()]
-        metadata_columns = [
-            { 'key': '_id', 'name': '_id', 'type': 'text' },
-            { 'key': '_name', 'name': 'name', 'type': 'text' },
-            { 'key': '_photos', 'name': 'photos', 'type': 'link' },
-        ]
         return Response({
             'metadata': metadata_columns,
-            'results': classify_result,
+            'results': faces_records,
         })
 
 
@@ -1006,6 +1010,141 @@ class FacesRecord(APIView):
 
         return Response({'success': True})
 
+
+class PeoplePhotos(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id, people_id):
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 100)
+
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        tables = metadata.get('tables', [])
+        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
+        faces_table_id = faces_table_id[0] if faces_table_id else None
+        if not faces_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
+
+        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}" LIMIT {start}, {limit}'
+
+        try:
+            query_result = metadata_server_api.query_rows(sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        faces_records = query_result.get('results')
+
+        if not faces_records:
+            return Response({ 'metadata': [], 'results': [] })
+        
+        faces_record = faces_records[0]
+        someone_photos_result = {}
+
+        try:
+            record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, [])]
+            selected_ids = record_ids[start:limit]
+            selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
+
+            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str})'
+            someone_photos_result = metadata_server_api.query_rows(sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        someone_photos = someone_photos_result.get('results', [])
+        for photo in someone_photos:
+            if METADATA_TABLE.columns.face_vectors.name in photo:
+                del photo[METADATA_TABLE.columns.face_vectors.name]
+        
+        return Response(someone_photos_result)
+
+    def delete(self, request, repo_id, people_id):
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        tables = metadata.get('tables', [])
+        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
+        faces_table_id = faces_table_id[0] if faces_table_id else None
+        if not faces_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
+
+        # todo
+        # sql = f'DELETE FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+
+        # try:
+        #     delete_result = metadata_server_api.query_rows(sql)
+        # except Exception as e:
+        #     logger.error(e)
+        #     error_msg = 'Internal Server Error'
+        #     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({ 'success': True })
 
 class FaceRecognitionManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

@@ -2405,6 +2405,7 @@ class LibContentView extends React.Component {
                     getMarkDownFileName={this.getMarkDownFileName}
                     openMarkdownFile={this.openMarkdownFile}
                     updateCurrentDirent={this.updateCurrentDirent}
+                    closeDirentDetail={this.closeDirentDetail}
                   />
                   :
                   <div className="message err-tip">{gettext('Folder does not exist.')}</div>

@@ -1,197 +1,416 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import EmptyTip from '../../../components/empty-tip';
-import { gettext } from '../../../utils/constants';
-import { GALLERY_DATE_MODE } from '../../constants';
-import Image from './image';
+import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import metadataAPI from '../../api';
+import URLDecorator from '../../../utils/url-decorator';
+import toaster from '../../../components/toast';
+import Content from './content';
+import ContextMenu from './context-menu';
+import ImageDialog from '../../../components/dialog/image-dialog';
+import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
+import ModalPortal from '../../../components/modal-portal';
+import { useMetadataView } from '../../hooks/metadata-view';
+import { Utils } from '../../../utils/utils';
+import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
+import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
+import { getRowById } from '../../utils/table';
+import { getEventClassName } from '../../utils/common';
 
-const GalleryMain = ({
-  groups,
-  overScan,
-  columns,
-  size,
-  gap,
-  mode,
-  selectedImages,
-  onImageSelect,
-  onImageClick,
-  onImageDoubleClick,
-  onImageRightClick
-}) => {
+import './index.css';
+
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
+  const [isFirstLoading, setFirstLoading] = useState(true);
+  const [zoomGear, setZoomGear] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
+  const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [selectedImages, setSelectedImages] = useState([]);
+
   const containerRef = useRef(null);
-  const imageRef = useRef(null);
-  const animationFrameRef = useRef(null);
+  const renderMoreTimer = useRef(null);
+  const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [selectionStart, setSelectionStart] = useState(null);
+  const repoID = window.sfMetadataContext.getSetting('repoID');
+  const { updateCurrentDirent } = useMetadataView();
 
-  const imageHeight = useMemo(() => size + gap, [size, gap]);
-  const selectedImageIds = useMemo(() => selectedImages.map(img => img.id), [selectedImages]);
-
-  const handleMouseDown = useCallback((e) => {
-    if (e.button !== 0) return;
-    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
-
-    setIsSelecting(true);
-    setSelectionStart({ x: e.clientX, y: e.clientY });
+  useEffect(() => {
+    updateCurrentDirent();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleMouseMove = useCallback((e) => {
-    if (!isSelecting) return;
+  // Number of images per row
+  const columns = useMemo(() => {
+    return 8 - zoomGear;
+  }, [zoomGear]);
 
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
+  const imageSize = useMemo(() => {
+    return (containerWidth - (columns - 1) * 2 - 32) / columns;
+  }, [containerWidth, columns]);
+
+  const dateMode = useMemo(() => {
+    switch (mode) {
+      case GALLERY_DATE_MODE.YEAR:
+        return 'YYYY';
+      case GALLERY_DATE_MODE.MONTH:
+        return 'YYYY-MM';
+      case GALLERY_DATE_MODE.DAY:
+        return 'YYYY-MM-DD';
+      default:
+        return 'YYYY-MM-DD';
     }
+  }, [mode]);
 
-    animationFrameRef.current = requestAnimationFrame(() => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const selectionEnd = { x: e.clientX, y: e.clientY };
-      const selected = [];
-
-      groups.forEach(group => {
-        group.children.forEach((row) => {
-          row.children.forEach((img) => {
-            const imgElement = document.getElementById(img.id);
-            if (imgElement) {
-              const rect = imgElement.getBoundingClientRect();
-              if (
-                rect.left < Math.max(selectionStart.x, selectionEnd.x) &&
-                rect.right > Math.min(selectionStart.x, selectionEnd.x) &&
-                rect.top < Math.max(selectionStart.y, selectionEnd.y) &&
-                rect.bottom > Math.min(selectionStart.y, selectionEnd.y)
-              ) {
-                selected.push(img);
-              }
-            }
+  const groups = useMemo(() => {
+    if (isFirstLoading) return [];
+    const firstSort = metadata.view.sorts[0];
+    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
+      .reduce((_init, record) => {
+        const id = record[PRIVATE_COLUMN_KEY.ID];
+        const fileName = getFileNameFromRecord(record);
+        const parentDir = getParentDirFromRecord(record);
+        const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
+        const img = {
+          id,
+          name: fileName,
+          path: parentDir,
+          url: `${siteRoot}lib/${repoID}/file${path}`,
+          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+          downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
+          date: date,
+        };
+        let _group = _init.find(g => g.name === date);
+        if (_group) {
+          _group.children.push(img);
+        } else {
+          _init.push({
+            name: date,
+            children: [img],
           });
-        });
+        }
+        return _init;
+      }, []);
+
+    let _groups = [];
+    const imageHeight = imageSize + GALLERY_IMAGE_GAP;
+    const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+    init.forEach((_init, index) => {
+      const { children, ...__init } = _init;
+      let top = 0;
+      let rows = [];
+      if (index > 0) {
+        const lastGroup = _groups[index - 1];
+        const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
+        top = lastGroupTop + lastGroupHeight;
+      }
+      children.forEach((child, childIndex) => {
+        const rowIndex = ~~(childIndex / columns);
+        if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * imageHeight, children: [] };
+        child.groupIndex = index;
+        child.rowIndex = rowIndex;
+        rows[rowIndex].children.push(child);
       });
 
-      onImageSelect(selected);
+      const height = rows.length * imageHeight + paddingTop;
+      _groups.push({
+        ...__init,
+        top,
+        height,
+        paddingTop,
+        children: rows
+      });
     });
-  }, [groups, isSelecting, selectionStart, onImageSelect]);
+    return _groups;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
 
-  const handleMouseUp = useCallback((e) => {
-    if (e.button !== 0) return;
+  useEffect(() => {
+    const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
+    setZoomGear(gear);
 
-    e.preventDefault();
-    e.stopPropagation();
-    setIsSelecting(false);
+    const mode = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    setMode(mode);
+
+    const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
+      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
+      (mode) => {
+        setMode(mode);
+        window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
+      }
+    );
+
+    const container = containerRef.current;
+    if (container) {
+      const { offsetWidth, clientHeight } = container;
+      setContainerWidth(offsetWidth);
+
+      // Calculate initial overScan information
+      const columns = 8 - gear;
+      const imageSize = (offsetWidth - columns * 2 - 2) / columns;
+      setOverScan({ top: 0, bottom: clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 2 });
+    }
+    setFirstLoading(false);
+
+    // resize
+    const handleResize = () => {
+      if (!container) return;
+      setContainerWidth(container.offsetWidth);
+    };
+    const resizeObserver = new ResizeObserver(handleResize);
+    container && resizeObserver.observe(container);
+
+    // op
+    const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
+      window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
+      setZoomGear(zoomGear);
+    });
+
+    return () => {
+      container && resizeObserver.unobserve(container);
+      modifyGalleryZoomGearSubscribe();
+      switchGalleryModeSubscribe();
+      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
+    };
   }, []);
 
-  const renderDisplayGroup = useCallback((group) => {
-    const { top: overScanTop, bottom: overScanBottom } = overScan;
-    const { name, children, height, top, paddingTop } = group;
+  useEffect(() => {
+    if (!imageSize || imageSize < 0) return;
+    if (imageSize === lastState.current.imageSize) return;
+    const perImageOffset = imageSize - lastState.current.imageSize;
+    const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
+    const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
+      if (currentIndex < groupIndex) {
+        return previousValue + current.children.length;
+      }
+      return previousValue;
+    }, 0) + rowIndex;
+    const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
+    containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
+    lastState.current = { ...lastState.current, imageSize };
+  }, [imageSize, groups, mode]);
 
-    // group not in rendering area, return empty div
-    if (top >= overScanBottom || top + height <= overScanTop) {
-      return (<div key={name} className="w-100" style={{ height, flexShrink: 0 }}></div>);
+  const handleScroll = useCallback(() => {
+    if (!containerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      onLoadMore();
+    } else {
+      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
+      renderMoreTimer.current = setTimeout(() => {
+        const { scrollTop, clientHeight } = containerRef.current;
+        const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * 3);
+        const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 3;
+        let groupIndex = 0;
+        let rowIndex = 0;
+        let flag = false;
+        for (let i = 0; i < groups.length; i++) {
+          const group = groups[i];
+          for (let j = 0; j < group.children.length; j++) {
+            const row = group.children[j];
+            if (row.top >= scrollTop) {
+              groupIndex = i;
+              rowIndex = j;
+              flag = true;
+            }
+            if (flag) break;
+          }
+          if (flag) break;
+        }
+        lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+        setOverScan({ top: overScanTop, bottom: overScanBottom });
+        renderMoreTimer.current = null;
+      }, 200);
     }
+  }, [imageSize, onLoadMore, renderMoreTimer, groups]);
 
-    let childrenStartIndex = children.findIndex(r => r.top >= overScanTop);
-    let childrenEndIndex = children.findIndex(r => r.top >= overScanBottom);
+  const imageItems = useMemo(() => {
+    return groups.flatMap(group => group.children.flatMap(row => row.children));
+  }, [groups]);
 
-    // group in rendering area, but the image not need to render. eg: overScan: { top: 488, bottom: 1100 }, group: { top: 0, height: 521 },
-    // in this time, part of an image is in the rendering area, don't render image
-    if (childrenStartIndex === -1 && childrenEndIndex === -1) {
-      return (<div key={name} className="w-100" style={{ height, flexShrink: 0 }}></div>);
+  const updateSelectedImage = useCallback((image = null) => {
+    const imageInfo = image ? getRowById(metadata, image.id) : null;
+    if (!imageInfo) {
+      updateCurrentDirent();
+      return;
     }
+    updateCurrentDirent({
+      type: 'file',
+      name: image.name,
+      path: image.path,
+      file_tags: []
+    });
+  }, [metadata, updateCurrentDirent]);
 
-    childrenStartIndex = Math.max(childrenStartIndex, 0);
-    if (childrenEndIndex === -1) {
-      childrenEndIndex = children.length;
+  const handleClick = useCallback((event, image) => {
+    if (event.metaKey || event.ctrlKey) {
+      setSelectedImages(prev =>
+        prev.includes(image) ? prev.filter(img => img !== image) : [...prev, image]
+      );
+      updateSelectedImage(image);
+    } else if (event.shiftKey && selectedImages.length > 0) {
+      const lastSelected = selectedImages[selectedImages.length - 1];
+      const start = imageItems.indexOf(lastSelected);
+      const end = imageItems.indexOf(image);
+      const range = imageItems.slice(Math.min(start, end), Math.max(start, end) + 1);
+      setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
+      updateSelectedImage(null);
+    } else {
+      setSelectedImages([image]);
+      updateSelectedImage(image);
     }
-    if (childrenEndIndex > 0) {
-      childrenEndIndex = childrenEndIndex - 1;
+  }, [imageItems, selectedImages, updateSelectedImage]);
+
+  const handleDoubleClick = useCallback((event, image) => {
+    const index = imageItems.findIndex(item => item.id === image.id);
+    setImageIndex(index);
+    setIsImagePopupOpen(true);
+  }, [imageItems]);
+
+  const handleRightClick = useCallback((event, image) => {
+    event.preventDefault();
+    const index = imageItems.findIndex(item => item.id === image.id);
+    if (isNaN(index) || index === -1) return;
+
+    setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
+  }, [imageItems]);
+
+  const moveToPrevImage = () => {
+    const imageItemsLength = imageItems.length;
+    setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
+  };
+
+  const moveToNextImage = () => {
+    const imageItemsLength = imageItems.length;
+    setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
+  };
+
+  const handleImageSelection = useCallback((selectedImages) => {
+    setSelectedImages(selectedImages);
+  }, []);
+
+  const closeImagePopup = () => {
+    setIsImagePopupOpen(false);
+  };
+
+  const handleDownload = useCallback(() => {
+    if (!selectedImages.length) return;
+    if (selectedImages.length === 1) {
+      const image = selectedImages[0];
+      let direntPath = image.path === '/' ? image.name : Utils.joinPath(image.path, image.name);
+      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+      location.href = url;
+      return;
     }
+    if (!useGoFileserver) {
+      setIsZipDialogOpen(true);
+      return;
+    }
+    const dirents = selectedImages.map(image => {
+      const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
+      return value;
+    });
+    metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
+      const zipToken = res.data['zip_token'];
+      location.href = `${fileServerRoot}zip/${zipToken}`;
+    }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }, [repoID, selectedImages]);
 
-    return (
-      <div
-        key={name}
-        className="metadata-gallery-date-group"
-        style={{ height, paddingTop }}
-      >
-        {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
-          <div className="metadata-gallery-date-tag">{name || gettext('Empty')}</div>
-        )}
-        <div
-          ref={imageRef}
-          className="metadata-gallery-image-list"
-          style={{
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            paddingTop: childrenStartIndex * imageHeight,
-            paddingBottom: (children.length - 1 - childrenEndIndex) * imageHeight,
-          }}
-        >
-          {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
-            return row.children.map((img) => {
-              const isSelected = selectedImageIds.includes(img.id);
-              return (
-                <Image
-                  key={img.src}
-                  isSelected={isSelected}
-                  img={img}
-                  size={size}
-                  onClick={(e) => onImageClick(e, img)}
-                  onDoubleClick={(e) => onImageDoubleClick(e, img)}
-                  onContextMenu={(e) => onImageRightClick(e, img)}
-                />
-              );
-            });
-          })}
-        </div>
-      </div>
-    );
-  }, [overScan, columns, size, imageHeight, mode, selectedImageIds, onImageClick, onImageDoubleClick, onImageRightClick]);
+  const handleDelete = useCallback(() => {
+    if (!selectedImages.length) return;
+    onDelete(selectedImages, () => {
+      setSelectedImages([]);
+    });
+  }, [selectedImages, onDelete]);
 
-  if (!Array.isArray(groups) || groups.length === 0) {
-    return <EmptyTip text={gettext('No record')}/>;
-  }
+  const closeZipDialog = () => {
+    setIsZipDialogOpen(false);
+  };
+
+  const handleClickOutside = useCallback((event) => {
+    const className = getEventClassName(event);
+    const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
+
+    if (!isClickInsideImage && containerRef.current.contains(event.target)) {
+      handleImageSelection([]);
+      updateSelectedImage();
+    }
+  }, [handleImageSelection, updateSelectedImage]);
 
   return (
-    <div
-      ref={containerRef}
-      className='metadata-gallery-main'
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
-      {groups.map((group) => {
-        return renderDisplayGroup(group);
-      })}
-    </div>
+    <>
+      <div
+        className={`sf-metadata-gallery-container sf-metadata-gallery-container-${mode}`}
+        ref={containerRef}
+        onScroll={handleScroll}
+        onMouseDown={handleClickOutside}
+      >
+        {!isFirstLoading && (
+          <>
+            <Content
+              groups={groups}
+              size={imageSize}
+              columns={columns}
+              overScan={overScan}
+              gap={GALLERY_IMAGE_GAP}
+              mode={mode}
+              selectedImages={selectedImages}
+              onImageSelect={handleImageSelection}
+              onImageClick={handleClick}
+              onImageDoubleClick={handleDoubleClick}
+              onImageRightClick={handleRightClick}
+            />
+            {isLoadingMore &&
+              <div className="sf-metadata-gallery-loading-more">
+                <CenteredLoading />
+              </div>
+            }
+          </>
+        )}
+      </div>
+      <ContextMenu
+        getContentRect={() => containerRef.current.getBoundingClientRect()}
+        getContainerRect={() => containerRef.current.getBoundingClientRect()}
+        onDownload={handleDownload}
+        onDelete={handleDelete}
+      />
+      {isImagePopupOpen && (
+        <ModalPortal>
+          <ImageDialog
+            imageItems={imageItems}
+            imageIndex={imageIndex}
+            closeImagePopup={closeImagePopup}
+            moveToPrevImage={moveToPrevImage}
+            moveToNextImage={moveToNextImage}
+          />
+        </ModalPortal>
+      )}
+      {isZipDialogOpen && (
+        <ModalPortal>
+          <ZipDownloadDialog
+            repoID={repoID}
+            path={'/'}
+            target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
+            toggleDialog={closeZipDialog}
+          />
+        </ModalPortal>
+      )}
+    </>
   );
 };
 
-GalleryMain.propTypes = {
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    children: PropTypes.arrayOf(PropTypes.shape({
-      top: PropTypes.number.isRequired,
-      children: PropTypes.arrayOf(PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-      })).isRequired,
-    })).isRequired,
-    height: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired,
-    paddingTop: PropTypes.number.isRequired,
-  })),
-  overScan: PropTypes.shape({
-    top: PropTypes.number.isRequired,
-    bottom: PropTypes.number.isRequired,
-  }).isRequired,
-  columns: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
-  gap: PropTypes.number.isRequired,
-  mode: PropTypes.string,
-  selectedImages: PropTypes.array.isRequired,
-  onImageSelect: PropTypes.func.isRequired,
-  onImageClick: PropTypes.func.isRequired,
-  onImageDoubleClick: PropTypes.func.isRequired,
-  onImageRightClick: PropTypes.func.isRequired,
+Main.propTypes = {
+  isLoadingMore: PropTypes.bool,
+  metadata: PropTypes.object,
+  onDelete: PropTypes.func,
+  onLoadMore: PropTypes.func
 };
 
-export default GalleryMain;
+export default Main;

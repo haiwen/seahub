@@ -281,6 +281,16 @@ class MetadataManagerAPI {
     return this.req.put(url, params);
   };
 
+  getPeoplePhotos = (repoID, peopleId, start = 0, limit = 1000) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/?start=' + start + '&limit=' + limit;
+    return this.req.get(url);
+  };
+
+  deletePeoplePhotos = (repoID, peopleId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId;
+    return this.req.delete(url);
+  };
+
 }
 
 const metadataAPI = new MetadataManagerAPI();

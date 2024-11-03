@@ -248,6 +248,17 @@ class Context {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.renamePeople(repoID, recordId, name);
   };
+
+  getPeoplePhotos = (recordId, start, limit) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
+  };
+
+  deletePeoplePhotos = (recordId) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.deletePeoplePhotos(repoID, recordId);
+  };
+
 }
 
 export default Context;

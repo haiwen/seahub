@@ -11,7 +11,6 @@ import ReposSortMenu from '../../components/repos-sort-menu';
 import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { DIRENT_DETAIL_MODE } from '../dir-view-mode/constants';
-import { FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -118,7 +117,6 @@ class DirTool extends React.Component {
     });
 
     if (isFileExtended) {
-      if (viewId === FACE_RECOGNITION_VIEW_ID) return null;
       return (
         <div className="dir-tool">
           <MetadataViewToolBar viewId={viewId} isCustomPermission={isCustomPermission} showDetail={this.showDirentDetail} />
