@@ -95,7 +95,7 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    this.props.onItemsMove(repo, selectedPath);
+    this.props.onItemsMove(repo, selectedPath, true);
     this.toggle();
   };
 
@@ -131,7 +131,7 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    this.props.onItemMove(repo, this.props.dirent, selectedPath, this.props.path);
+    this.props.onItemMove(repo, this.props.dirent, selectedPath, this.props.path, true);
     this.toggle();
   };
 
