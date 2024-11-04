@@ -3,47 +3,44 @@
 import os
 import json
 import logging
-import requests
 import posixpath
-import time
 import datetime
 import uuid
 import re
-import urllib.request, urllib.error, urllib.parse
 from copy import deepcopy
 from constance import config
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api, edit_repo
+from seaserv import seafile_api
 from pysearpc import SearpcError
 from django.utils.translation import gettext as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean, is_wiki_repo
+from seahub.api2.utils import api_error, is_wiki_repo
+from seahub.api2.endpoints.utils import wiki_search
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.models import WikiPageTrash, Wiki2Publish
-from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
-    get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
+from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack
 
-from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
-    normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
+from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
+    get_no_duplicate_obj_name
+
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm, get_repo_owner
+from seahub.utils.file_op import check_file_lock
+from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
-from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
+from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
-from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -54,7 +51,6 @@ from seahub.group.utils import group_id_to_name, is_group_admin
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
-from seahub.signals import clean_up_repo_trash
 
 HTTP_520_OPERATION_FAILED = 520
 
@@ -1275,3 +1271,43 @@ class Wiki2PublishView(APIView):
         if publish_config:
             publish_config.delete()
         return Response({'success': True})
+
+
+class WikiSearch(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        query = request.data.get('query')
+        search_wiki = request.data.get('search_wiki')
+
+        try:
+            count = int(request.data.get('count'))
+        except:
+            count = 20
+
+        if not query:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki search query invalid')
+
+        if not is_valid_repo_id_format(search_wiki):
+            error_msg = 'search_wiki invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        params = {
+            'query': query,
+            'wiki': search_wiki,
+            'count': count,
+        }
+
+        try:
+            resp = wiki_search(params)
+            if resp.status_code == 500:
+                logger.error('search in wiki error status: %s body: %s', resp.status_code, resp.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            resp_json = resp.json()
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(resp_json, resp.status_code)

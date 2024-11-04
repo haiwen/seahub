@@ -49,6 +49,14 @@ class SearchAPI {
     return this.req.get(url, { cancelToken: cancelToken });
   }
 
+  searchWiki(query, search_wiki, cancelToken) {
+    let url = this.server + '/api/v2.1/wiki2/search/';
+    let data = {
+      query: query,
+      search_wiki: search_wiki
+    };
+    return this.req.post(url, data, { cancelToken: cancelToken });
+  }
 }
 
 let searchAPI = new SearchAPI();
