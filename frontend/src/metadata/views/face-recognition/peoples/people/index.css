@@ -56,3 +56,7 @@
   width: 24px;
   flex-shrink: 0;
 }
+
+.sf-metadata-peoples-container .sf-metadata-people-info-op .sf-dropdown-toggle {
+  line-height: 1.5;
+}
