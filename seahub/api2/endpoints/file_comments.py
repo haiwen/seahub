@@ -138,5 +138,5 @@ class FileCommentsView(APIView):
                                          author=username)
 
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(username, request=request))
         return Response(comment, status=201)

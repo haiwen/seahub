@@ -43,14 +43,14 @@ class Command(BaseCommand):
         self.do_action()
         logger.debug('Finish sending user notices.\n')
 
-    def get_avatar(self, username, default_size=32):
-        img_tag = avatar(username, default_size)
+    def get_avatar(self, username):
+        img_tag = avatar(username, 128)
         pattern = r'src="(.*)"'
         repl = r'src="%s\1"' % get_site_scheme_and_netloc()
         return re.sub(pattern, repl, img_tag)
 
-    def get_avatar_src(self, username, default_size=32):
-        avatar_img = self.get_avatar(username, default_size)
+    def get_avatar_src(self, username):
+        avatar_img = self.get_avatar(username)
         m = re.search('<img src="(.*?)".*', avatar_img)
         if m:
             return m.group(1)

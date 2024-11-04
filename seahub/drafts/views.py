@@ -43,7 +43,7 @@ def draft(request, pk):
 
     draft_file_name = os.path.basename(d.draft_file_path)
 
-    author_info = user_to_dict(d.username, avatar_size=32)
+    author_info = user_to_dict(d.username)
 
     return render(request, "draft.html", {
         "draft_id": d.id,

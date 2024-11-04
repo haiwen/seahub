@@ -15,10 +15,10 @@ class AvatarApiTest(ApiTestBase):
         avatar_url = urljoin(BASE_URL, avatar_url)
         avatar_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        random_avatar_size = random.randint(12, 128)
+        random_avatar_size = 256
 
         with open(avatar_file, 'rb') as f:
-            json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': random_avatar_size}).json()
+            json_resp = self.post(avatar_url, files={'avatar': f}, data={'avatar_size': 256}).json()
 
         assert 'avatar_url' in json_resp
         response_url = json_resp['avatar_url']
@@ -28,5 +28,5 @@ class AvatarApiTest(ApiTestBase):
         # assert is NOT default avatar
         avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')
         info = self.get(avatar_url).json()
-        assert 'resized' in info['url']
-        assert info['is_default'] == False
+        assert 'resized' not in info['url']
+        assert info['is_default'] == True

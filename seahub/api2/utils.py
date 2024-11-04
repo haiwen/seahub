@@ -274,8 +274,8 @@ def get_user_common_info(email):
         "avatar_url": avatar_url
     }
 
-def user_to_dict(email, request=None, avatar_size=AVATAR_DEFAULT_SIZE):
-    d = get_user_common_info(email, avatar_size)
+def user_to_dict(email, request=None):
+    d = get_user_common_info(email)
     return {
         'user_name': d['name'],
         'user_email': d['email'],

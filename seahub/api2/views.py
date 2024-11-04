@@ -5058,8 +5058,8 @@ class UserAvatarView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, user, format=None):
-        url, is_default, date_uploaded = api_avatar_url(user)
+    def get(self, request, user, size, format=None):
+        url, is_default, date_uploaded = api_avatar_url(user, int(size))
         ret = {
             "url": url,
             "is_default": is_default,

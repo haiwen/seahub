@@ -866,7 +866,7 @@ class SeadocNotificationsView(APIView):
         for notification in notifications_query:
             data = notification.to_dict()
             data.update(
-                user_to_dict(notification.username, request=request, avatar_size=avatar_size))
+                user_to_dict(notification.username, request=request))
             notifications.append(data)
 
         result = {'notifications': notifications}
@@ -984,7 +984,7 @@ class SeadocCommentsView(APIView):
 
         for file_comment in file_comments:
             comment = file_comment.to_dict(reply_queryset)
-            comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+            comment.update(user_to_dict(file_comment.author, request=request))
             comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
@@ -1017,7 +1017,7 @@ class SeadocCommentsView(APIView):
         file_comment = FileComment.objects.add_by_file_uuid(
             file_uuid, username, comment, detail)
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(username, request=request))
 
         # notification
         to_users = set()
@@ -1034,7 +1034,7 @@ class SeadocCommentsView(APIView):
             'created_at': datetime_to_isoformat_timestr(file_comment.created_at),
             'updated_at': datetime_to_isoformat_timestr(file_comment.updated_at),
         }
-        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        detail.update(user_to_dict(username, request=request))
 
         new_notifications = []
         for to_user in to_users:
@@ -1085,7 +1085,7 @@ class SeadocCommentView(APIView):
 
         comment = file_comment.to_dict()
         comment.update(user_to_dict(
-            file_comment.author, request=request, avatar_size=avatar_size))
+            file_comment.author, request=request))
         return Response(comment)
 
     def delete(self, request, file_uuid, comment_id):
@@ -1154,7 +1154,7 @@ class SeadocCommentView(APIView):
             file_comment.save()
 
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(file_comment.author, request=request))
         return Response(comment)
 
 
@@ -1199,7 +1199,7 @@ class SeadocCommentRepliesView(APIView):
         for reply in reply_queryset:
             data = reply.to_dict()
             data.update(
-                user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+                user_to_dict(reply.author, request=request))
             replies.append(data)
 
         result = {'replies': replies, 'total_count': total_count}
@@ -1243,7 +1243,7 @@ class SeadocCommentRepliesView(APIView):
         )
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
 
         # notification
         to_users = set()
@@ -1261,7 +1261,7 @@ class SeadocCommentRepliesView(APIView):
             'created_at': datetime_to_isoformat_timestr(reply.created_at),
             'updated_at': datetime_to_isoformat_timestr(reply.updated_at),
         }
-        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        detail.update(user_to_dict(username, request=request))
 
         new_notifications = []
         for to_user in to_users:
@@ -1315,7 +1315,7 @@ class SeadocCommentReplyView(APIView):
 
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
         return Response(data)
 
     def delete(self, request, file_uuid, comment_id, reply_id):
@@ -1374,7 +1374,7 @@ class SeadocCommentReplyView(APIView):
 
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
         return Response(data)
 
 

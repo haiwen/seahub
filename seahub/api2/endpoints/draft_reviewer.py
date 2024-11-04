@@ -44,7 +44,7 @@ class DraftReviewerView(APIView):
         # get reviewer list
         reviewers = []
         for x in d.draftreviewer_set.all():
-            reviewer = user_to_dict(x.reviewer, request=request, avatar_size=avatar_size)
+            reviewer = user_to_dict(x.reviewer, request=request)
             reviewers.append(reviewer)
 
         return Response({'reviewers': reviewers})
