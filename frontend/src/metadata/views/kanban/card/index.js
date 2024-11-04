@@ -8,17 +8,26 @@ import { KANBAN_SETTINGS_KEYS } from '../../../constants';
 import './index.css';
 
 const Card = ({
+  id,
   title,
   fields,
   record,
   draggable,
   settings,
   onDragStart,
+  onDragOver,
   onDrop,
+  draggingCardId,
 }) => {
   const handleDragStart = (event) => {
     event.stopPropagation();
     onDragStart(event, record);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    onDragOver(event);
   };
 
   const handleDrop = (event) => {
@@ -29,9 +38,12 @@ const Card = ({
 
   return (
     <div
-      className="sf-metadata-view-kanban-card"
+      className={classNames('sf-metadata-view-kanban-card', {
+        'dragging': draggingCardId === id,
+      })}
       draggable={draggable}
       onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       {title.field && (

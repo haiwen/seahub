@@ -19,6 +19,8 @@ const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
   const [draggingListId, setDraggingListId] = useState(null);
   const [dragOverListId, setDragOverListId] = useState(null);
+  const [dragSourceListId, setDragSourceListId] = useState(null);
+  const [placeholderHeight, setPlaceholderHeight] = useState(null);
 
   const { viewsMap } = useMetadata();
   const { metadata, store } = useMetadataView();
@@ -158,20 +160,29 @@ const Kanban = () => {
     setDraggingListId(listId);
   }, []);
 
-  const onListDragEnter = useCallback((event, listId) => {
-    if (!draggingListId) return;
+  const onListDragOver = useCallback((event, listId) => {
+    if (!draggingListId || !listId) return;
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
     setDragOverListId(listId);
   }, [draggingListId]);
+
+  const onDragSourceListId = useCallback((listId) => {
+    setDragSourceListId(listId);
+  }, []);
+
+  const onDragOverListId = useCallback((listId) => {
+    setDragOverListId(listId);
+  }, []);
+
+  const onSetPlaceholderHeight = useCallback((height) => {
+    setPlaceholderHeight(height);
+  }, []);
 
   const onListDragLeave = useCallback(() => {
     if (!draggingListId) return;
     setDragOverListId(null);
-  }, [draggingListId]);
-
-  const onListDragOver = useCallback((event) => {
-    if (!draggingListId) return;
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
   }, [draggingListId]);
 
   const onListDrop = useCallback((event, dropIndex) => {
@@ -217,7 +228,7 @@ const Kanban = () => {
     const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey)
       ? { [columnKey]: originalOldCellValue }
       : { [columnName]: originalOldCellValue };
-    const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
+    const originalOldRowData = { [columnKey]: originalOldCellValue };
     return { oldRowData, originalOldRowData };
   }, [groupByColumn]);
 
@@ -261,9 +272,8 @@ const Kanban = () => {
                 key={list.id}
                 draggable={draggable}
                 onDragStart={(event) => onListDragStart(event, list.id)}
-                onDragEnter={(event) => onListDragEnter(event, list.id)}
+                onDragOver={(event) => onListDragOver(event, list.id)}
                 onDragLeave={onListDragLeave}
-                onDragOver={onListDragOver}
                 onDrop={(event) => onListDrop(event, index)}
                 className={classNames('kanban-list', {
                   'dragging': draggingListId === list.id,
@@ -278,6 +288,12 @@ const Kanban = () => {
                   onDeleteList={() => handleDeleteList(list._id)}
                   draggable={draggable}
                   onCardDrop={onCardDrop}
+                  dragSourceListId={dragSourceListId}
+                  onDragSourceListId={onDragSourceListId}
+                  dragOverListId={dragOverListId}
+                  onDragOverListId={onDragOverListId}
+                  placeholderHeight={placeholderHeight}
+                  onSetPlaceholderHeight={onSetPlaceholderHeight}
                 />
               </div>
             ))

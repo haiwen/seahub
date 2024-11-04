@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../card';
 import CellFormatter from '../../../components/cell-formatter';
@@ -17,24 +17,42 @@ const List = ({
   moreOperationsList,
   draggable,
   onCardDrop,
+  dragSourceListId,
+  onDragSourceListId,
+  dragOverListId,
+  onDragOverListId,
+  placeholderHeight,
+  onSetPlaceholderHeight,
 }) => {
+  const [draggingCardId, setDraggingCardId] = useState(null);
+
   const handleDragStart = (event, record) => {
+    const height = event.target.offsetHeight;
+    onSetPlaceholderHeight(height);
     const dragData = JSON.stringify({ record, sourceListId: id });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/kanban-card', dragData);
+    setDraggingCardId(record.id);
+    onDragSourceListId(id);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    onDragOverListId(id);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     const dragData = event.dataTransfer.getData('application/kanban-card');
     if (!dragData) return;
+
     const { record, sourceListId } = JSON.parse(dragData);
     onCardDrop(record, sourceListId, id);
-  };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
+    setDraggingCardId(null);
+    onDragSourceListId(null);
+    onDragOverListId(null);
   };
 
   return (
@@ -62,16 +80,25 @@ const List = ({
         )}
       </div>
       <div className="list-body">
-        {cards.map(card => (
+        {dragSourceListId && dragSourceListId !== dragOverListId && dragOverListId === id && (
+          <div
+            className="kanban-card-placeholder"
+            style={{ height: `${placeholderHeight}px` }}
+          />
+        )}
+        {cards.map((card) => (
           <Card
             key={card.id}
+            id={card.id}
             title={card.title}
             fields={shownColumns}
             record={card.record}
             draggable={draggable}
             settings={settings}
             onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
             onDrop={handleDrop}
+            draggingCardId={draggingCardId}
           />
         ))}
       </div>

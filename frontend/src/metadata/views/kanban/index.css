@@ -31,6 +31,15 @@
 
 .sf-metadata-view-kanban .kanban-list {
   height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.kanban-list {
+  transition: transform 0.3s ease;
+}
+
+.kanban-list.dragging {
+  opacity: 0.5;
 }
 
 .sf-metadata-view-kanban .tips-empty-board {
