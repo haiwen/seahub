@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_user_auth_info(username, token):
-    avatar_url, _, _ = api_avatar_url(username, 72)
+    avatar_url, _, _ = api_avatar_url(username)
     name = email2nickname(username)
     contact_email = email2contact_email(username)
     return {

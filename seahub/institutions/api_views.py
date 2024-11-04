@@ -104,7 +104,7 @@ class InstAdminUsers(APIView):
             user_info['name'] = email2nickname(email)
             user_info['contact_email'] = email2contact_email(email)
             user_info['is_institution_admin'] = email in admin_emails
-            user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
+            user_info['avatar_url'], _, _ = api_avatar_url(email)
 
             try:
                 user_obj = User.objects.get(email=email)
@@ -242,7 +242,7 @@ class InstAdminUser(APIView):
         user_info['name'] = email2nickname(email)
         user_info['contact_email'] = email2contact_email(email)
         user_info['is_active'] = user_obj.is_active
-        user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
+        user_info['avatar_url'], _, _ = api_avatar_url(email)
         try:
             user_info['quota_total'] = seafile_api.get_user_quota(email)
             user_info['quota_usage'] = seafile_api.get_user_self_usage(email)
@@ -314,7 +314,7 @@ class InstAdminSearchUser(APIView):
             user_info['name'] = email2nickname(email)
             user_info['contact_email'] = email2contact_email(email)
             user_info['is_institution_admin'] = email in admin_emails
-            user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
+            user_info['avatar_url'], _, _ = api_avatar_url(email)
 
             try:
                 user_obj = User.objects.get(email=email)

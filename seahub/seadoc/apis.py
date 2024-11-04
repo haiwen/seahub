@@ -620,10 +620,10 @@ class SeadocHistory(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+    def _get_new_file_history_info(self, ent, name_dict):
         info = {}
         creator_name = ent.get('op_user')
-        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        url, is_default, date_uploaded = api_avatar_url(creator_name)
         info['creator_avatar_url'] = url
         info['creator_email'] = creator_name
         info['creator_name'] = email2nickname(creator_name)
@@ -665,11 +665,9 @@ class SeadocHistory(APIView):
         commit_id = repo.head_cmmt_id
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
             page = int(request.GET.get('page', 1))
             per_page = int(request.GET.get('per_page', 25))
         except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
             page = 1
             per_page = 25
 
@@ -707,7 +705,7 @@ class SeadocHistory(APIView):
             name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
                 doc_uuid=file_uuid, obj_id_list=obj_id_list)
             name_dict = {item.obj_id: item.name for item in name_queryset}
-        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        data = [self._get_new_file_history_info(ent, name_dict) for ent in file_revisions]
         result = {
             "histories": data
         }
@@ -766,10 +764,10 @@ class SeadocDailyHistoryDetail(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+    def _get_new_file_history_info(self, ent, name_dict):
         info = {}
         creator_name = ent.op_user
-        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        url, is_default, date_uploaded = api_avatar_url(creator_name)
         info['creator_avatar_url'] = url
         info['creator_email'] = creator_name
         info['creator_name'] = email2nickname(creator_name)
@@ -806,11 +804,6 @@ class SeadocDailyHistoryDetail(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         op_date = request.GET.get('op_date', None)
         if not op_date:
             error_msg = 'op_date invalid.'
@@ -840,7 +833,7 @@ class SeadocDailyHistoryDetail(APIView):
             name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
                 doc_uuid=file_uuid, obj_id_list=obj_id_list)
             name_dict = {item.obj_id: item.name for item in name_queryset}
-        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        data = [self._get_new_file_history_info(ent, name_dict) for ent in file_revisions]
         result = {
             "histories": data[1:]
         }

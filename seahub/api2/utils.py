@@ -265,8 +265,8 @@ def to_python_boolean(string):
         return False
     raise ValueError("Invalid boolean value: '%s'" % string)
 
-def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
-    avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+def get_user_common_info(email):
+    avatar_url, is_default, date_uploaded = api_avatar_url(email)
     return {
         "email": email,
         "name": email2nickname(email),
