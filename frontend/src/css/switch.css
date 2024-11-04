@@ -1,3 +1,7 @@
+.seahub-switch .custom-switch {
+  cursor: pointer;
+}
+
 .seahub-switch.small .custom-switch-indicator {
   width: 22px;
   height: 12px;

@@ -221,10 +221,11 @@ class SystemAdminAPI {
     return this.req.delete(url);
   }
 
-  sysAdminTransferRepo(repoID, userEmail) {
+  sysAdminTransferRepo(repoID, userEmail, reshare) {
     const url = this.server + '/api/v2.1/admin/libraries/' + repoID + '/';
     const params = {
-      owner: userEmail
+      owner: userEmail,
+      reshare: reshare,
     };
     return this.req.put(url, params);
   }
@@ -724,6 +725,7 @@ class SystemAdminAPI {
     };
     return this.req.get(url, { params: params });
   }
+
 
   sysAdminListAdminLoginLogs(page, perPage) {
     const url = this.server + '/api/v2.1/admin/admin-login-logs/';

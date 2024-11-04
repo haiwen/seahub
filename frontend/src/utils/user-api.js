@@ -48,11 +48,20 @@ class UserAPI {
     return this.req.get(url);
   }
 
-  depAdminTransferRepo(repo_id, group_id, email) {
+  depAdminTransferRepo(repo_id, group_id, email, reshare) {
     const url = this.server + '/api/v2.1/groups/' + group_id + '/group-owned-libraries/' + repo_id + '/transfer/';
     const formData = new FormData();
     formData.append('email', email);
+    formData.append('reshare', reshare);
     return this.req.put(url, formData);
+  }
+
+  transferRepo(repoID, owner, reshare) {
+    const url = this.server + '/api2/repos/' + repoID + '/owner/';
+    const form = new FormData();
+    form.append('owner', owner);
+    form.append('reshare', reshare);
+    return this.req.put(url, form);
   }
 }
 

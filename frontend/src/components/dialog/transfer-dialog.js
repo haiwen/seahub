@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+  Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import { SeahubSelect } from '../common/select';
+import Switch from '../common/switch';
 import '../../css/transfer-dialog.css';
 
 const propTypes = {
@@ -34,6 +35,7 @@ class TransferDialog extends React.Component {
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
+      reshare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
     this.options = [];
@@ -44,15 +46,15 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab } = this.state;
+    const { activeTab, reshare } = this.state;
     if (activeTab === TRANS_DEPART) {
       let department = this.state.selectedOption;
-      this.props.submit(department);
+      this.props.submit(department, reshare);
     } else if (activeTab === TRANS_USER) {
       let selectedOption = this.state.selectedOption;
       if (selectedOption && selectedOption[0]) {
         let user = selectedOption[0];
-        this.props.submit(user);
+        this.props.submit(user, reshare);
       }
     }
   };
@@ -60,13 +62,7 @@ class TransferDialog extends React.Component {
   componentDidMount() {
     if (this.props.isOrgAdmin) {
       seafileAPI.orgAdminListDepartments(orgID).then((res) => {
-        for (let i = 0; i < res.data.length; i++) {
-          let obj = {};
-          obj.value = res.data[i].name;
-          obj.email = res.data[i].email;
-          obj.label = res.data[i].name;
-          this.options.push(obj);
-        }
+        this.updateOptions(res);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -74,33 +70,32 @@ class TransferDialog extends React.Component {
     }
     else if (this.props.isSysAdmin) {
       systemAdminAPI.sysAdminListDepartments().then((res) => {
-        for (let i = 0; i < res.data.length; i++) {
-          let obj = {};
-          obj.value = res.data[i].name;
-          obj.email = res.data[i].email;
-          obj.label = res.data[i].name;
-          this.options.push(obj);
-        }
+        this.updateOptions(res);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
     }
-    else {
+    else if (isPro) {
       seafileAPI.listDepartments().then((res) => {
-        for (let i = 0; i < res.data.length; i++) {
-          let obj = {};
-          obj.value = res.data[i].name;
-          obj.email = res.data[i].email;
-          obj.label = res.data[i].name;
-          this.options.push(obj);
-        }
+        this.updateOptions(res);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
     }
   }
+
+  updateOptions = (departmentsRes) => {
+    departmentsRes.data.forEach(item => {
+      let option = {
+        value: item.name,
+        email: item.email,
+        label: item.name,
+      };
+      this.options.push(option);
+    });
+  };
 
   onClick = () => {
     this.setState({
@@ -110,12 +105,23 @@ class TransferDialog extends React.Component {
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
-      this.setState({ activeTab: tab });
+      this.setState({
+        activeTab: tab,
+        reshare: false,
+        selectedOption: null,
+      });
     }
+  };
+
+  toggleReshareStatus = () => {
+    this.setState({
+      reshare: !this.state.reshare
+    });
   };
 
   renderTransContent = () => {
     let activeTab = this.state.activeTab;
+    let reshare = this.state.reshare;
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
@@ -153,15 +159,27 @@ class TransferDialog extends React.Component {
           <TabContent activeTab={this.state.activeTab}>
             <Fragment>
               <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
+                <Label className='transfer-repo-label'>{gettext('Users')}</Label>
                 <UserSelect
                   ref="userSelect"
                   isMulti={false}
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}
                 />
+                <Switch
+                  checked={reshare}
+                  disabled={false}
+                  size="large"
+                  textPosition="right"
+                  className='transfer-repo-reshare-switch w-100 mt-3 mb-1'
+                  onChange={this.toggleReshareStatus}
+                  placeholder={gettext('Keep sharing')}
+                />
+                <div className='tip'>{gettext('If the library is shared to another user, the sharing will be ketp.')}</div>
               </TabPane>
               {isPro && canTransferToDept &&
               <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
+                <Label className='transfer-repo-label'>{gettext('Departments')}</Label>
                 <SeahubSelect
                   isClearable
                   maxMenuHeight={200}
@@ -171,7 +189,18 @@ class TransferDialog extends React.Component {
                   options={this.options}
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
+                  className="transfer-repo-select-department"
                 />
+                <Switch
+                  checked={reshare}
+                  disabled={false}
+                  size="large"
+                  textPosition="right"
+                  className='transfer-repo-reshare-switch w-100 mt-3 mb-1'
+                  onChange={this.toggleReshareStatus}
+                  placeholder={gettext('Keep sharing')}
+                />
+                <div className='tip'>{gettext('If the library is shared to another department, the sharing will be ketp.')}</div>
               </TabPane>}
             </Fragment>
           </TabContent>

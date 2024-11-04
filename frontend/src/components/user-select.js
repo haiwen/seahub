@@ -114,4 +114,8 @@ class UserSelect extends React.Component {
 
 UserSelect.propTypes = propTypes;
 
+UserSelect.defaultProps = {
+  className: ''
+};
+
 export default UserSelect;

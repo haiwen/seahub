@@ -14,6 +14,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import OrgAdminRepo from '../../../models/org-admin-repo';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 
 
 class Content extends Component {
@@ -225,9 +226,9 @@ class RepoItem extends React.Component {
     this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
-  onTransferRepo = (user) => {
+  onTransferRepo = (user, reshare) => {
     let repo = this.props.repo;
-    seafileAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, user.email).then(res => {
+    orgAdminAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, user.email, reshare).then(res => {
       this.props.transferRepoItem(repo.repoID, user);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);

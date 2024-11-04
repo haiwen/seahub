@@ -37,6 +37,9 @@ from seahub.api2.models import Token, TokenV2
 import seahub.settings
 from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
+from seahub.constants import PERMISSION_READ_WRITE
+from seahub.utils.db_api import SeafileDB
+
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -1490,3 +1493,52 @@ def get_logo_path_by_user(username):
                     logo_path = "/image-view/" + logo_path
 
     return logo_path
+
+
+def transfer_repo(repo_id, new_owner, is_share, org_id=None):
+    group_id = None
+    if "seafile_group" in new_owner:
+        group_id = int(new_owner.split('@')[0])
+    if type(is_share) is not bool:
+        if is_share == 'false':
+            is_share = False
+        else:
+            is_share = True
+    repo_owner = seafile_api.get_org_repo_owner(repo_id) if org_id else seafile_api.get_repo_owner(repo_id)
+    current_group_id = None
+    if "seafile_group" in repo_owner:
+        current_group_id = int(repo_owner.split('@')[0])
+    # transfer repo
+    # retain share
+    if is_share:
+        seafile_db_api = SeafileDB()
+        # transfer to group
+        if group_id:
+            if org_id and org_id != ccnet_api.get_org_id_by_group(group_id):
+                error_msg = 'Permission denied.'
+                raise error_msg
+            seafile_db_api.set_repo_group_owner(repo_id, group_id, current_group_id, org_id)
+        # transfer to user
+        else:
+            seafile_db_api.set_repo_owner(repo_id, new_owner, org_id)
+
+        # Update shares and delete the old owner's token
+        seafile_db_api.update_repo_user_shares(repo_id, new_owner, org_id)
+        seafile_db_api.update_repo_group_shares(repo_id, new_owner, org_id)
+        seafile_db_api.delete_repo_user_token(repo_id, repo_owner)
+    else:
+        if org_id:
+            if group_id:
+                # org transfer check,only transfer current org repo
+                if org_id != ccnet_api.get_org_id_by_group(group_id):
+                    error_msg = 'Permission denied.'
+                    raise error_msg
+                seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
+            else:
+                seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
+        else:
+            if group_id:
+                seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
+            else:
+                seafile_api.set_repo_owner(repo_id, new_owner)
+

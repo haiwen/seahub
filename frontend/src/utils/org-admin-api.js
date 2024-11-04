@@ -59,6 +59,14 @@ class OrgAdminAPI {
     return this.req.get(url, { params: params });
   }
 
+  orgAdminTransferOrgRepo(orgID, repoID, email, reshare) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/repos/' + repoID + '/';
+    const form = new FormData();
+    form.append('email', email);
+    form.append('reshare', reshare);
+    return this.req.put(url, form);
+  }
+
 }
 
 let orgAdminAPI = new OrgAdminAPI();

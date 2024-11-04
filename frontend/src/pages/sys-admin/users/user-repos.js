@@ -137,8 +137,8 @@ class Item extends Component {
     this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
-  transferRepo = (owner) => {
-    this.props.transferRepo(this.props.item.id, owner.email);
+  transferRepo = (owner, reshare) => {
+    this.props.transferRepo(this.props.item.id, owner.email, reshare);
     this.toggleTransferDialog();
   };
 
@@ -287,8 +287,8 @@ class Repos extends Component {
     });
   };
 
-  transferRepo = (repoID, email) => {
-    systemAdminAPI.sysAdminTransferRepo(repoID, email).then((res) => {
+  transferRepo = (repoID, email, reshare) => {
+    systemAdminAPI.sysAdminTransferRepo(repoID, email, reshare).then((res) => {
       let newRepoList = this.state.repoList.filter(item => {
         return item.id != repoID;
       });

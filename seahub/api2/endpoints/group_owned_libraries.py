@@ -30,7 +30,7 @@ from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin, is_group_member
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
-        send_perm_audit_msg, is_valid_org_id, is_valid_email
+        send_perm_audit_msg, is_valid_org_id, transfer_repo
 from seahub.utils.repo import (
     get_library_storages, get_repo_owner, get_available_repo_perms
 )
@@ -1427,6 +1427,7 @@ class GroupOwnedLibraryTransferView(APIView):
         """
         # argument check
         new_owner = request.data.get('email', None)
+        is_share = request.data.get('reshare', False)
         if not new_owner:
             error_msg = 'Email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1486,70 +1487,20 @@ class GroupOwnedLibraryTransferView(APIView):
         # preparation before transfer repo
         pub_repos = []
         if org_id:
-            # get repo shared to user/group list
-            shared_users = seafile_api.list_org_repo_shared_to(org_id,
-                                                               repo_owner,
-                                                               repo_id)
-            shared_groups = seafile_api.list_org_repo_shared_group(org_id,
-                                                                   repo_owner,
-                                                                   repo_id)
-
             # get all org pub repos
             pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
                     org_id, repo_owner)
         else:
-            # get repo shared to user/group list
-            shared_users = seafile_api.list_repo_shared_to(
-                    repo_owner, repo_id)
-            shared_groups = seafile_api.list_repo_shared_group_by_user(
-                    repo_owner, repo_id)
-
             # get all pub repos
             if not request.cloud_mode:
                 pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
         # transfer repo
         try:
-            if org_id:
-                group_id = int(new_owner.split('@')[0])
-                seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
-            else:
-                if ccnet_api.get_orgs_by_user(new_owner):
-                    # can not transfer library to organization user %s.
-                    error_msg = 'Email %s invalid.' % new_owner
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                else:
-                    group_id = int(new_owner.split('@')[0])
-                    seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
+            transfer_repo(repo_id, new_owner, is_share, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        # reshare repo to user
-        for shared_user in shared_users:
-            shared_username = shared_user.user
-
-            if new_owner == shared_username:
-                continue
-            if org_id:
-                seafile_api.org_share_repo(org_id, repo_id,
-                                                    new_owner, shared_username, shared_user.perm)
-            else:
-                seafile_api.share_repo(repo_id, new_owner,
-                                       shared_username, shared_user.perm)
-
-        # reshare repo to group
-        for shared_group in shared_groups:
-            shared_group_id = shared_group.group_id
-            if shared_group_id == cur_group_id:
-                continue
-
-            if org_id:
-                seafile_api.add_org_group_repo(repo_id, org_id,
-                                               shared_group_id, new_owner, shared_group.perm)
-            else:
-                seafile_api.set_group_repo(repo_id, shared_group_id,
-                                           new_owner, shared_group.perm)
 
         # reshare repo to links
         try:
