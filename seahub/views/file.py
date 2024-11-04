@@ -1452,12 +1452,12 @@ def view_file_via_shared_dir(request, fileshare):
     if request.GET.get('dl', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
-
+        print('download shared file -----')
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
 
         return _download_file_from_share_link(request, fileshare, use_tmp_token=True)
-
+    print('---------')
     # get raw file
     access_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'view', '', use_onetime=False)
@@ -1543,7 +1543,7 @@ def view_file_via_shared_dir(request, fileshare):
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
     if can_preview:
-
+        print(can_preview, 'can_preview----')
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
 

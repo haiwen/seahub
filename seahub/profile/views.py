@@ -89,6 +89,8 @@ def edit_profile(request):
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
     collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else DEFAULT_COLLABORATE_EMAIL_INTERVAL
+    enable_share_link_operated_notice = UserOptions.objects.get_share_link_operated_notice_status(username)
+    enable_share_link_operated_notice = enable_share_link_operated_notice if enable_share_link_operated_notice is not None else 0
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
@@ -159,6 +161,7 @@ def edit_profile(request):
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
+            'enable_share_link_operated_notice': enable_share_link_operated_notice,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
             'social_connected': social_connected,

@@ -63,6 +63,17 @@ class UserAPI {
     form.append('reshare', reshare);
     return this.req.put(url, form);
   }
+
+  updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, shareLinkEmailStatus) {
+      const url = this.server + '/api2/account/info/';
+      const data = {
+        'file_updates_email_interval': fileUpdatesEmailInterval,
+        'collaborate_email_interval': collaborateEmailInterval,
+        'share_link_operated_notice_status': shareLinkEmailStatus
+      };
+      return this.req.put(url, data);
+    }
+    
 }
 
 let userAPI = new UserAPI();
