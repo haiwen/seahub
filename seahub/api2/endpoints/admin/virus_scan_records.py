@@ -85,7 +85,7 @@ class AdminVirusFilesView(APIView):
                 record["has_deleted"] = virus_file.has_deleted
                 record["has_ignored"] = virus_file.has_ignored
                 record["virus_id"] = virus_file.vid
-                record['timestamp'] = utc_datetime_to_isoformat_timestr(virus_file.timestamp)
+                record['timestamp'] = virus_file.timestamp and utc_datetime_to_isoformat_timestr(virus_file.timestamp) or ''
                 virus_file_list.append(record)
 
         return Response({"virus_file_list": virus_file_list, "has_next_page": has_next_page}, status=status.HTTP_200_OK)
@@ -158,6 +158,7 @@ class AdminVirusFileView(APIView):
         res["has_deleted"] = virus_file.has_deleted
         res["has_ignored"] = virus_file.has_ignored
         res["virus_id"] = virus_file.vid
+        res['timestamp'] = virus_file.timestamp and utc_datetime_to_isoformat_timestr(virus_file.timestamp) or ''
 
         return Response({"virus_file": res}, status=status.HTTP_200_OK)
 
