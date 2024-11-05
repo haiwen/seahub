@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import classNames from 'classnames';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
@@ -17,7 +16,6 @@ import './index.css';
 
 const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
-  const [draggingListId, setDraggingListId] = useState(null);
   const [dragOverListId, setDragOverListId] = useState(null);
   const [dragSourceListId, setDragSourceListId] = useState(null);
   const [placeholderHeight, setPlaceholderHeight] = useState(null);
@@ -63,18 +61,13 @@ const Kanban = () => {
     if (!groupByColumn) return [];
 
     const { rows } = metadata;
-    const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
-
     const ungroupedCards = [];
     const groupedCardsMap = {};
-    const isPrivateColumn = PRIVATE_COLUMN_KEYS.includes(groupByColumnKey);
 
     if (groupByColumn.type === CellType.SINGLE_SELECT) {
-      if (isPrivateColumn) {
-        groupByColumn.data.options.forEach(option => groupedCardsMap[option.id] = []);
-      } else {
-        groupByColumn.data.options.forEach(option => groupedCardsMap[option.name] = []);
-      }
+      groupByColumn.data.options.forEach(option => groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE
+        ? groupedCardsMap[option.id] = []
+        : groupedCardsMap[option.name] = []);
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
       if (Array.isArray(collaborators)) {
         collaborators.forEach(collaborator => {
@@ -95,7 +88,7 @@ const Kanban = () => {
       };
 
       if (cellValue) {
-        groupedCardsMap[cellValue].push(card); // error here
+        groupedCardsMap[cellValue].push(card);
       } else {
         ungroupedCards.push(card);
       }
@@ -108,7 +101,7 @@ const Kanban = () => {
         title: option.name,
         field: groupByColumn,
         shownColumns,
-        cards: isPrivateColumn ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
+        cards: groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
       }));
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
       if (Array.isArray(collaborators)) {
@@ -153,21 +146,6 @@ const Kanban = () => {
     }
   ], [handleDeleteList]);
 
-  const onListDragStart = useCallback((event, listId) => {
-    const dragData = JSON.stringify({ type: 'kanban-list', listId });
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/kanban-list', dragData);
-    setDraggingListId(listId);
-  }, []);
-
-  const onListDragOver = useCallback((event, listId) => {
-    if (!draggingListId || !listId) return;
-
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-    setDragOverListId(listId);
-  }, [draggingListId]);
-
   const onDragSourceListId = useCallback((listId) => {
     setDragSourceListId(listId);
   }, []);
@@ -179,33 +157,6 @@ const Kanban = () => {
   const onSetPlaceholderHeight = useCallback((height) => {
     setPlaceholderHeight(height);
   }, []);
-
-  const onListDragLeave = useCallback(() => {
-    if (!draggingListId) return;
-    setDragOverListId(null);
-  }, [draggingListId]);
-
-  const onListDrop = useCallback((event, dropIndex) => {
-    event.preventDefault();
-    const dragData = event.dataTransfer.getData('application/kanban-list');
-    if (!dragData) return;
-    const { listId: dragListId } = JSON.parse(dragData);
-    const oldData = columns.find(col => col.key === groupByColumn.key).data;
-    const dragIndex = oldData.options.findIndex(option => option.id === dragListId);
-
-    if (dragIndex === dropIndex) return;
-
-    const newOptions = [...oldData.options];
-    newOptions.splice(dragIndex, 1);
-    newOptions.splice(dropIndex, 0, oldData.options[dragIndex]);
-
-    const options = newOptions.filter(option => option.name);
-    const optionModifyType = COLUMN_DATA_OPERATION_TYPE.MOVE_OPTION;
-    store.modifyColumnData(groupByColumn.key, { options }, { options: oldData.options }, { optionModifyType });
-
-    setDraggingListId(null);
-    setDragOverListId(null);
-  }, [store, columns, groupByColumn]);
 
   const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];
@@ -237,13 +188,19 @@ const Kanban = () => {
 
     const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
     const rowId = record[PRIVATE_COLUMN_KEY.ID];
-    const targetList = lists.find(list => list.id === targetListId);
     const originalOldCellValue = getCellValueByColumn(record, groupByColumn);
-    const updates = PRIVATE_COLUMN_KEYS.includes(groupByColumnKey)
-      ? { [groupByColumn.key]: targetList.id }
-      : { [groupByColumn.name]: targetList.title };
-    const originalUpdates = { [groupByColumn.key]: targetList.id };
     const { oldRowData, originalOldRowData } = getOldRowData(originalOldCellValue);
+
+    let updates;
+    let originalUpdates;
+    if (targetListId === UNCATEGORIZED) {
+      updates = groupByColumnKey === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: '' } : { [groupByColumn.name]: '' };
+      originalUpdates = { [groupByColumn.key]: '' };
+    } else {
+      const targetList = lists.find(list => list.id === targetListId);
+      updates = groupByColumnKey === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: targetList.title } : { [groupByColumn.name]: targetList.title };
+      originalUpdates = { [groupByColumn.key]: targetList.id };
+    }
 
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [metadata.view.settings, lists, groupByColumn, modifyRecord, getOldRowData]);
@@ -270,15 +227,7 @@ const Kanban = () => {
             lists.map((list, index) => (
               <div
                 key={list.id}
-                draggable={draggable}
-                onDragStart={(event) => onListDragStart(event, list.id)}
-                onDragOver={(event) => onListDragOver(event, list.id)}
-                onDragLeave={onListDragLeave}
-                onDrop={(event) => onListDrop(event, index)}
-                className={classNames('kanban-list', {
-                  'dragging': draggingListId === list.id,
-                  'drag-over': dragOverListId === list.id,
-                })}
+                className="kanban-list"
               >
                 <List
                   key={list._id}

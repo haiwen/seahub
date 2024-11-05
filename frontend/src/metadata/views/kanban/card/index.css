@@ -10,14 +10,15 @@
   box-shadow: 0px 0px 3px #0000001f;
   font-size: 14px;
   overflow: visible;
+  transition: transform 0.3s ease, margin 0.3s ease;
+}
+
+.sf-metadata-view-kanban-card.dragging {
+  cursor: grabbing;
 }
 
 .sf-metadata-view-kanban-card:hover {
   box-shadow: 0px 0px 6px #0000002e;
-}
-
-.sf-metadata-view-kanban-card.dragging {
-  opacity: 0.5;
 }
 
 .sf-metadata-view-kanban-card .kanban-card-header .cell-formatter-container {

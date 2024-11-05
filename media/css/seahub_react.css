@@ -105,7 +105,7 @@
 .sf2-icon-invite:before { content: "\e02b"; }
 
 /* common class and element style*/
-body { overflow-y: auto; }
+body {overflow-y: auto;cursor: grabbing !important;!i;!;}
 ul,ol,li {
   padding:0;
   margin:0;

@@ -27,7 +27,7 @@ const Card = ({
   const handleDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    onDragOver(event);
+    onDragOver(event, id);
   };
 
   const handleDrop = (event) => {
@@ -58,7 +58,7 @@ const Card = ({
           return (
             <div key={field.key} className="card-field">
               {settings[KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES] && (
-                <h5 className='card-property-name'>
+                <h5 className="card-property-name">
                   {field.name}
                 </h5>
               )}
@@ -76,6 +76,7 @@ const Card = ({
 };
 
 Card.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.object.isRequired,
   fields: PropTypes.array.isRequired,
   record: PropTypes.object.isRequired,
@@ -83,6 +84,8 @@ Card.propTypes = {
   settings: PropTypes.object.isRequired,
   onDragStart: PropTypes.func.isRequired,
   onDrop: PropTypes.func.isRequired,
+  onDragOver: PropTypes.func.isRequired,
+  draggingCardId: PropTypes.string,
 };
 
 export default Card;
