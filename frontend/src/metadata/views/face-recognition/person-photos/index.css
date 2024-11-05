@@ -28,7 +28,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: -8px;
+  margin-left: -5px;
   border-radius: 3px;
 }
 
@@ -38,13 +38,17 @@
   cursor: pointer;
 }
 
-.sf-metadata-people-photos-container .sf-metadata-people-photos-header-back .sf3-font-down {
+.sf-metadata-people-photos-container .sf-metadata-people-photos-header-back .sf3-font-arrow {
   color: #666;
-  font-size: 16px !important;
+  font-size: 14px !important;
 }
 
 .sf-metadata-people-photos-container .sf-metadata-people-photos-header .sf-metadata-people-name {
   margin-left: 4px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sf-metadata-people-photos-container .sf-metadata-gallery-container {

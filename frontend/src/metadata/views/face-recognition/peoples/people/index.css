@@ -28,6 +28,19 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 6px 0;
+  overflow: hidden;
+}
+
+.sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-name {
+  width: 100%;
+}
+
+.sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-name-display {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-renaming {
