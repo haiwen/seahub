@@ -75,7 +75,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     const newOption = generateNewOption(options, newOptionName);
     const newOptions = options.slice(0);
     newOptions.push(newOption);
-    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.ADD_OPTION);
+    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION);
     setEditingOptionId(newOptionName ? '' : newOption.id);
   }, [searchValue, options, onChange]);
 
