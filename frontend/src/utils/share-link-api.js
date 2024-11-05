@@ -101,12 +101,13 @@ class ShareLinkAPI {
     return this.req.put(url, form);
   }
 
-  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users) {
+  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users, notif_enable) {
     const url = this.server + '/api/v2.1/multi-share-links/';
     let form = {
       'path': path,
       'repo_id': repoID,
       'user_scope': scope,
+      'notif_enable': notif_enable
     };
     if (permissions) {
       form['permissions'] = permissions;
@@ -120,6 +121,27 @@ class ShareLinkAPI {
     if (users) {
       form['emails'] = users;
     }
+    return this._sendPostRequest(url, form);
+  }
+
+  batchCreateMultiShareLink(repoID, path, shareLinkNum, autoGeneratePassword, expirationTime, permissions, notif_enable) {
+    const url = this.server + '/api/v2.1/multi-share-links/batch/';
+    let form = {
+      'path': path,
+      'repo_id': repoID,
+      'number': shareLinkNum,
+      'auto_generate_password': autoGeneratePassword,
+      'notif_enable': notif_enable
+    };
+
+    if (permissions) {
+      form['permissions'] = permissions;
+    }
+
+    if (expirationTime) {
+      form['expiration_time'] = expirationTime;
+    }
+
     return this._sendPostRequest(url, form);
   }
 }

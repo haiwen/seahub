@@ -23,6 +23,7 @@ const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 const MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change';
 const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
+const MSG_TYPE_SHARE_LINK_DOWNLOAD = 'share_link_download';
 
 dayjs.extend(relativeTime);
 
@@ -358,6 +359,31 @@ class NoticeItem extends React.Component {
       const { error_msg } = detail;
       let notice = gettext(error_msg);
 
+      return { avatar_url: null, notice };
+    }
+
+    if (noticeType === MSG_TYPE_SHARE_LINK_DOWNLOAD) {
+      const {
+        from_user,
+        from_username,
+        repo_id,
+        repo_name,
+        op_type
+      } = detail;
+      console.log(from_username)
+      let username = from_user;
+      if (username === '') {
+        username = from_username;
+      }
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+
+      let notice = gettext('Your {libraryName} shared link has been viewed by the {fromUser}');
+      if (op_type === 'dl') {
+        notice = gettext('Your {libraryName} shared link has been downloaded by the {fromUser}');
+      }
+      notice = notice.replace('{libraryName}', repoLink);
+      notice = notice.replace('{fromUser}', username)
       return { avatar_url: null, notice };
     }
 

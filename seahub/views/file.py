@@ -36,15 +36,17 @@ from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc
 
+
 from seahub.settings import SITE_ROOT
 from seahub.share.utils import check_share_link_user_access
+from seahub.signals import share_link_download_successful
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
-from seahub.base.templatetags.seahub_tags import file_icon_filter
+from seahub.base.templatetags.seahub_tags import file_icon_filter, email2nickname
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -1452,12 +1454,20 @@ def view_file_via_shared_dir(request, fileshare):
     if request.GET.get('dl', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
-        print('download shared file -----')
+
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
-
+        # send notification
+        if fileshare.is_notification_enabled:
+            try:
+                to_user = fileshare.username
+                from_user = request.user.username
+                from_username = 'Anonymous user' if email2nickname(from_user) == '' else email2nickname(from_user)
+                share_link_download_successful.send(sender=None,from_user=from_user, from_username=from_username,
+                                                    to_user=to_user, repo_id=repo_id, repo_name=repo.name, op_type='dl')
+            except Exception as e:
+                logger.error(e)
         return _download_file_from_share_link(request, fileshare, use_tmp_token=True)
-    print('---------')
     # get raw file
     access_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'view', '', use_onetime=False)
@@ -1543,7 +1553,6 @@ def view_file_via_shared_dir(request, fileshare):
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
     if can_preview:
-        print(can_preview, 'can_preview----')
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
 

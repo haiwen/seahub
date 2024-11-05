@@ -71,6 +71,14 @@ You've got {{num}} new notices on {{ site_name }}:
                 {% elif notice.is_saml_sso_error_msg %}
                 <p style="line-height:1.5; margin:.2em 10px .2em 0;">{{notice.error_msg}}</p>
 
+                {% elif notice.is_share_link_download_msg %}
+                <p style="line-height:1.5; margin:.2em 10px .2em 0;">
+                {% if notice.op_type == 'dl' %}
+                    {{ notice.from_user|email2nickname|escape|default:"Anonymous user" }} downloaded the files under the Repo:{{ notice.repo_name }} through your shared link
+                {% else %}
+                    {{ notice.from_user|email2nickname|escape|default:"Anonymous user" }} have viewed your Repo:{{ notice.repo_name }} through a shared link
+                {% endif %}
+                </p>
                 {% elif notice.is_repo_monitor_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">
                     {% if notice.obj_type == 'file' %}

@@ -1,14 +1,12 @@
 import React from 'react';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { userAPI} from '../../utils/user-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 const {
   fileUpdatesEmailInterval,
-  collaborateEmailInterval,
-  shareLinkEmailStatus
+  collaborateEmailInterval
 } = window.app.pageOptions;
 
 class EmailNotice extends React.Component {
@@ -30,16 +28,9 @@ class EmailNotice extends React.Component {
       { interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not been read within one hour, they will be sent to your mailbox.') + ')' }
     ];
 
-    this.shareLinkOptions = [
-      { interval: 0, text: gettext('Don\'t send emails') },
-      { interval: 1, text: gettext('Send information/mail') + ' (' + gettext('If other users view/download a file via a shared link, they will be sent to your mailbox.') + ')'}
-
-    ]
-
     this.state = {
       fileUpdatesEmailInterval: fileUpdatesEmailInterval,
-      collaborateEmailInterval: collaborateEmailInterval,
-      shareLinkEmailStatus: shareLinkEmailStatus
+      collaborateEmailInterval: collaborateEmailInterval
     };
   }
 
@@ -59,18 +50,10 @@ class EmailNotice extends React.Component {
     }
   };
 
-  inputShareLinkEmailStatusChange = (e) => {
-    if (e.target.checked) {
-      this.setState({
-        shareLinkEmailStatus: parseInt(e.target.value)
-      });
-    }
-  }
-
   formSubmit = (e) => {
     e.preventDefault();
-    let { fileUpdatesEmailInterval, collaborateEmailInterval, shareLinkEmailStatus } = this.state;
-    userAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, shareLinkEmailStatus).then((res) => {
+    let { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;
+    seafileAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval).then((res) => {
       toaster.success(gettext('Email notification updated'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -79,7 +62,7 @@ class EmailNotice extends React.Component {
   };
 
   render() {
-    const { fileUpdatesEmailInterval, collaborateEmailInterval, shareLinkEmailStatus } = this.state;
+    const { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;
     return (
       <div className="setting-item" id="email-notice">
         <h3 className="setting-item-heading">{gettext('Email Notification')}</h3>
@@ -102,16 +85,6 @@ class EmailNotice extends React.Component {
               <div className="d-flex align-items-start" key={`collaborate-${index}`}>
                 <input type="radio" name="col-interval" value={item.interval} className="mt-1" id={`collaborate-interval-option-${index + 1}`} checked={collaborateEmailInterval == item.interval} onChange={this.inputCollaborateEmailIntervalChange} />
                 <label className="m-0 ml-2" htmlFor={`collaborate-interval-option-${index + 1}`}>{item.text}</label>
-              </div>
-            );
-          })}
-
-          <h4 className="mt-3 h6">{gettext('Notifications of share link')}</h4>
-          {this.shareLinkOptions.map((item, index) => {
-            return (
-              <div className="d-flex align-items-start" key={`share-link-${index}`}>
-                <input type="radio" name="share-interval" value={item.interval} className="mt-1" id={`share-link-interval-option-${index + 1}`} checked={shareLinkEmailStatus == item.interval} onChange={this.inputShareLinkEmailStatusChange} />
-                <label className="m-0 ml-2" htmlFor={`share-link-interval-option-${index + 1}`}>{item.text}</label>
               </div>
             );
           })}

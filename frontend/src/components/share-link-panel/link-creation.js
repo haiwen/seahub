@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -45,7 +44,7 @@ class LinkCreation extends React.Component {
       passwdnew: '',
       errorInfo: '',
       currentPermission: props.currentPermission,
-
+      notif_enable: false,
       currentScope: 'all_users',
       selectedOption: null,
       inputEmails: ''
@@ -106,7 +105,7 @@ class LinkCreation extends React.Component {
     if (isValid) {
       this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
-      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
+      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, notif_enable } = this.state;
 
       const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
@@ -125,7 +124,7 @@ class LinkCreation extends React.Component {
       let users;
       if (type === 'batch') {
         const autoGeneratePassword = shareLinkForceUsePassword || isShowPasswordInput;
-        request = seafileAPI.batchCreateMultiShareLink(repoID, itemPath, linkAmount, autoGeneratePassword, expirationTime, permissions);
+        request = shareLinkAPI.batchCreateMultiShareLink(repoID, itemPath, linkAmount, autoGeneratePassword, expirationTime, permissions, notif_enable);
       } else {
         const { currentScope, selectedOption, inputEmails } = this.state;
         if (currentScope === 'specific_users' && selectedOption) {
@@ -134,7 +133,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, notif_enable);
       }
 
       request.then((res) => {
@@ -165,6 +164,10 @@ class LinkCreation extends React.Component {
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
     this.setState({ expireDays: day });
+  };
+
+  onNotifChecked = (e) => {
+    this.setState({ notif_enable: e.target.checked });
   };
 
   validateParamsInput = () => {
@@ -279,7 +282,6 @@ class LinkCreation extends React.Component {
   render() {
     const { userPerm, type, permissionOptions } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
-
     return (
       <Fragment>
         <div className="d-flex align-items-center pb-2 border-bottom">
@@ -355,6 +357,12 @@ class LinkCreation extends React.Component {
                 />
               </div>
             }
+          </FormGroup>
+          <FormGroup check>
+            <Label check>
+              <Input type="checkbox" onChange={this.onNotifChecked} checked={this.state.notif_enable}/>
+              <span>{gettext('Receive notification')}</span>
+            </Label>
           </FormGroup>
           {!isCustomPermission && (
             <FormGroup check>

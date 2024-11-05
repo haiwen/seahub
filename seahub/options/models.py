@@ -39,6 +39,7 @@ KEY_FILE_UPDATES_LAST_EMAILED_TIME = "file_updates_last_emailed_time"
 KEY_COLLABORATE_EMAIL_INTERVAL = 'collaborate_email_interval'
 KEY_COLLABORATE_LAST_EMAILED_TIME = 'collaborate_last_emailed_time'
 KEY_SHARE_LINK_OPERATED_EMAILED = 'share_link_operated_notice'
+KEY_SHARE_LINK_OPERATED_EMAILED_TIME = 'share_link_operated_emailed_time'
 
 DEFAULT_COLLABORATE_EMAIL_INTERVAL = 3600
 

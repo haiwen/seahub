@@ -15,11 +15,13 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.share.utils import check_share_link_user_access
+from seahub.signals import share_link_download_successful
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
 
@@ -251,7 +253,6 @@ def view_lib_as_wiki(request, repo_id, path):
 @share_link_audit
 @share_link_login_required
 def view_shared_dir(request, fileshare):
-
     token = fileshare.token
     if not check_share_link_user_access(fileshare, request.user.username):
         if not request.user.username:
@@ -375,7 +376,20 @@ def view_shared_dir(request, fileshare):
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user
         data['logo_path'] = get_logo_path_by_user(fileshare.username)
-
+    from seahub.notifications.management.commands.send_notices import Command
+    print(123)
+    c = Command()
+    c.do_action()
+    print(456)
+    if fileshare.is_notification_enabled:
+        try:
+            to_user = fileshare.username
+            from_user = request.user.username
+            from_username = 'Anonymous user' if email2nickname(from_user) == '' else email2nickname(from_user)
+            share_link_download_successful.send(sender=None, from_user=from_user, from_username=from_username,
+                                                to_user=to_user, repo_id=repo_id, repo_name=repo.name, op_type='view')
+        except Exception as e:
+            logger.error(e)
     return render(request, template, data)
 
 

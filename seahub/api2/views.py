@@ -357,8 +357,6 @@ class AccountInfo(APIView):
         info['file_updates_email_interval'] = 0 if file_updates_email_interval is None else file_updates_email_interval
         collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(email)
         info['collaborate_email_interval'] = 0 if collaborate_email_interval is None else collaborate_email_interval
-        share_link_operated_notice_status = UserOptions.objects.get_share_link_operated_notice_status(email)
-        info['share_link_operated_notice_status'] = 0 if share_link_operated_notice_status is None else share_link_operated_notice_status
         return info
 
     def get(self, request, format=None):
@@ -394,14 +392,6 @@ class AccountInfo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'collaborate_email_interval invalid')
 
-        share_link_operated_notice_status = request.data.get("share_link_operated_notice_status", None)
-        if share_link_operated_notice_status is not None:
-            try:
-                share_link_operated_notice_status = int(share_link_operated_notice_status)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'share_link_operation_notice invalid')
-
         # update user info
 
         if name is not None:
@@ -421,11 +411,6 @@ class AccountInfo(APIView):
         if collaborate_email_interval is not None:
             UserOptions.objects.set_collaborate_email_interval(
                 username, collaborate_email_interval)
-
-        if share_link_operated_notice_status is not None:
-            UserOptions.objects.enable_share_link_operated_notice(
-                username, share_link_operated_notice_status
-            )
 
         return Response(self._get_account_info(request))
 

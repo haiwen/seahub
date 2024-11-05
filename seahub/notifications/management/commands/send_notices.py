@@ -289,6 +289,19 @@ class Command(BaseCommand):
         notice.error_msg = d['error_msg']
         return notice
 
+    def format_share_link_download_msg(self, notice):
+        d = json.loads(notice.detail)
+        repo_id = d['repo_id']
+        repo_name = d['repo_name']
+        from_user = d['from_user']
+        notice.repo_url = reverse('lib_view', args=[repo_id, repo_name, ''])
+        notice.repo_name = repo_name
+        notice.from_user = from_user
+        notice.op_type = d['op_type']
+        notice.avatar_src = self.get_avatar_src(from_user)
+        return notice
+
+
     def format_sdoc_msg(self, sdoc_queryset, sdoc_notice):
         sdoc_obj = sdoc_queryset.filter(uuid=sdoc_notice.doc_uuid).first()
         if not sdoc_obj:
@@ -463,6 +476,9 @@ class Command(BaseCommand):
 
                 elif notice.is_saml_sso_error_msg():
                     notice = self.format_saml_sso_error_msg(notice)
+
+                elif notice.is_share_link_download_msg():
+                    notice = self.format_share_link_download_msg(notice)
 
                 if notice is None:
                     continue
