@@ -9,11 +9,11 @@ import { SeahubSelect, NoOptionsStyle } from '../common/select';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
-  addWiki: PropTypes.func.isRequired,
-  currentDeptID: PropTypes.string,
+  convertWiki: PropTypes.func.isRequired,
+  wiki: PropTypes.object.isRequired,
 };
 
-class AddWikiDialog extends React.Component {
+class ConvertWikiDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -41,10 +41,6 @@ class AddWikiDialog extends React.Component {
         options.push(obj);
       }
       this.setState({ options });
-      if (this.props.currentDeptID) {
-        const selectedOption = options.find(op => op.id == this.props.currentDeptID);
-        this.setState({ selectedOption });
-      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -59,16 +55,16 @@ class AddWikiDialog extends React.Component {
 
   handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      this.handleSubmit();
+      this.handleSubmit(e);
     }
   };
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
     const wikiName = this.state.name.trim();
     const departmentID = this.state.selectedOption ? this.state.selectedOption.id : null;
     if (!wikiName) return;
-    this.props.addWiki(wikiName, departmentID);
-    this.props.toggleCancel();
+    this.props.convertWiki(this.props.wiki, wikiName, departmentID);
+    this.props.toggleCancel(e);
   };
 
   toggle = () => {
@@ -82,7 +78,7 @@ class AddWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add Wiki')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Convert Wiki')}</ModalHeader>
         <ModalBody>
           <Label>{gettext('Name')}</Label>
           <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
@@ -113,6 +109,6 @@ class AddWikiDialog extends React.Component {
   }
 }
 
-AddWikiDialog.propTypes = propTypes;
+ConvertWikiDialog.propTypes = propTypes;
 
-export default AddWikiDialog;
+export default ConvertWikiDialog;

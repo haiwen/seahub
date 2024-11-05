@@ -14,6 +14,7 @@ const propTypes = {
   renameWiki: PropTypes.func.isRequired,
   leaveSharedWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
+  convertWiki: PropTypes.func.isRequired,
   toggelAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
@@ -132,6 +133,7 @@ class WikiCardView extends Component {
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
+        convertWiki={this.props.convertWiki}
         isSidePanelFolded={isSidePanelFolded}
         sidePanelRate={sidePanelRate}
         wikis={v1Wikis}

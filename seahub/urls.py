@@ -210,7 +210,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
-    WikiSearch
+    WikiSearch, WikiConvertView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
@@ -558,7 +558,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/trash/', WikiPageTrashView.as_view(), name='api-v2.1-wiki2-trash'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/$', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
-
+    re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     ## user::drafts
     re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
     re_path(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
@@ -801,7 +801,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/internal/user-list/$', InternalUserListView.as_view(), name="api-v2.1-internal-user-list"),
     re_path(r'^api/v2.1/internal/check-share-link-access/$', InternalCheckShareLinkAccess.as_view(), name="api-v2.1-internal-share-link-info"),
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-access/$', InternalCheckFileOperationAccess.as_view(), name="api-v2.1-internal-check-file-op-access"),
-    
+
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     path('sys/useradmin/export-excel/', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
@@ -956,8 +956,8 @@ if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
     urlpatterns += [
         re_path(r'^krb5-login/', shib_login, name="krb5_login"),
     ]
-    
-    
+
+
 if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
     urlpatterns += [
         re_path(r'^sso-auto-login/', login_simple_check),

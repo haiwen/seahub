@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 const modalRoot = document.getElementById('modal-wrapper');

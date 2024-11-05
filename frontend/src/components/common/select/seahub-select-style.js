@@ -87,4 +87,10 @@ const UserSelectStyle = {
   },
 };
 
-export { MenuSelectStyle, UserSelectStyle };
+const NoOptionsStyle = {
+  margin: '6px 10px',
+  textAlign: 'center',
+  color: 'hsl(0, 0%, 50%)',
+};
+
+export { MenuSelectStyle, UserSelectStyle, NoOptionsStyle };

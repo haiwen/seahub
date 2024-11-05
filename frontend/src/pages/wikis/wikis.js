@@ -249,6 +249,17 @@ class Wikis extends Component {
     }
   };
 
+  convertWiki = (wiki, wikiName, departmentID) => {
+    wikiAPI.convertWiki(wiki.id, wikiName, departmentID).then((res) => {
+      this.getWikis();
+    }).catch((error) => {
+      if (error.response) {
+        let errorMsg = error.response.data.error_msg;
+        toaster.danger(errorMsg);
+      }
+    });
+  };
+
   toggleDropdownMenu = (e) => {
     e.stopPropagation();
     this.setState({
@@ -299,6 +310,7 @@ class Wikis extends Component {
                   leaveSharedWiki={this.leaveSharedWiki}
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
+                  convertWiki={this.convertWiki}
                   toggelAddWikiDialog={this.toggelAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}
                   isSidePanelFolded={this.props.isSidePanelFolded}
