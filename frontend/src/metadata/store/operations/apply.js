@@ -184,6 +184,44 @@ export default function apply(data, operation) {
       data.view = new View({ ...data.view, columns_keys: new_columns_keys }, data.columns);
       return data;
     }
+    // face table op
+    case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
+      const { people_id, new_name } = operation;
+      const { rows } = data;
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId } = row;
+        if (rowId === people_id) {
+          const updatedRow = Object.assign({}, row, { _name: new_name });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
+      });
+      data.rows = updatedRows;
+      return data;
+    }
+    case OPERATION_TYPE.DELETE_PEOPLE_PHOTOS: {
+      const { people_id, deleted_photos } = operation;
+      const { rows } = data;
+      const idNeedDeletedMap = deleted_photos.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId, _photo_links: photoLinks } = row;
+        if (rowId === people_id) {
+          const updatedRow = Object.assign({}, row, { _photo_links: photoLinks.filter(p => !idNeedDeletedMap[p.row_id]) });
+          if (updatedRow._photo_links.length === 0) {
+            updatedRows.splice(index, 1);
+            delete data.id_row_map[rowId];
+          } else {
+            updatedRows[index] = updatedRow;
+            data.id_row_map[rowId] = updatedRow;
+          }
+        }
+      });
+      data.rows = updatedRows;
+      data.recordsCount = updatedRows.length;
+      return data;
+    }
     default: {
       return data;
     }

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import Table from '../views/table';
 import Gallery from '../views/gallery';
+import FaceRecognition from '../views/face-recognition';
 import { useMetadataView } from '../hooks/metadata-view';
 import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
@@ -10,7 +11,7 @@ const View = () => {
   const { isLoading, metadata, errorMsg } = useMetadataView();
 
   const renderView = useCallback((metadata) => {
-    if (!metadata) return false;
+    if (!metadata) return null;
     const viewType = metadata.view.type;
     switch (viewType) {
       case VIEW_TYPE.GALLERY: {
@@ -18,6 +19,9 @@ const View = () => {
       }
       case VIEW_TYPE.TABLE: {
         return <Table />;
+      }
+      case VIEW_TYPE.FACE_RECOGNITION: {
+        return (<FaceRecognition />);
       }
       default:
         return null;

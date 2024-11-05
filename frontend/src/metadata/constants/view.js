@@ -7,6 +7,7 @@ import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_CO
 export const VIEW_TYPE = {
   TABLE: 'table',
   GALLERY: 'gallery',
+  FACE_RECOGNITION: 'face_recognition',
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
@@ -14,6 +15,7 @@ export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
 export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.TABLE]: 'table',
   [VIEW_TYPE.GALLERY]: 'image',
+  [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition-view',
   'image': 'image'
 };
 
@@ -36,6 +38,7 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
       filter_term: 'picture'
     }
   ],
+  [VIEW_TYPE.FACE_RECOGNITION]: [],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {

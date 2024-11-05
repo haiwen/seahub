@@ -214,7 +214,7 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
-    FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails
+    FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 
@@ -1060,6 +1060,7 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-record/$', FacesRecord.as_view(), name='api-v2.1-metadata-face-record'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
     ]

@@ -16,6 +16,7 @@ const ViewDetails = ({ viewId, onClose }) => {
     const type = view.type;
     if (type === VIEW_TYPE.GALLERY) return `${mediaUrl}favicons/gallery.png`;
     if (type === VIEW_TYPE.TABLE) return `${mediaUrl}favicons/table.png`;
+    if (type === VIEW_TYPE.FACE_RECOGNITION) return `${mediaUrl}favicons/face-recognition-view.png`;
     return `${mediaUrl}img/file/256/file.png`;
   }, [view]);
 

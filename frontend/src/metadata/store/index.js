@@ -528,6 +528,22 @@ class Store {
     return this.data.rows.some((row) => newPath === Utils.joinPath(row._parent_dir, row._name));
   };
 
+  renamePeopleName = (peopleId, newName, oldName) => {
+    const type = OPERATION_TYPE.RENAME_PEOPLE_NAME;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, people_id: peopleId, new_name: newName, old_name: oldName
+    });
+    this.applyOperation(operation);
+  };
+
+  deletePeoplePhotos = (peopleId, deletedPhotos) => {
+    const type = OPERATION_TYPE.DELETE_PEOPLE_PHOTOS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, people_id: peopleId, deleted_photos: deletedPhotos
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;
