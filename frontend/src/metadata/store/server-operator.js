@@ -1,12 +1,13 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { OPERATION_TYPE } from './operations';
+import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
 import { getRowById } from '../utils/table';
 import { checkIsDir } from '../utils/row';
-import { getFileNameFromRecord } from '../utils/cell';
+import { checkIsPredefinedOption, getFileNameFromRecord } from '../utils/cell';
 import ObjectUtils from '../utils/object-utils';
+import { CellType } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -110,8 +111,18 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
-        const { repo_id, column_key, new_data } = operation;
-        window.sfMetadataContext.modifyColumnData(repo_id, column_key, new_data).then(res => {
+        const { repo_id, column_key, new_data, option_modify_type } = operation;
+        if (option_modify_type && option_modify_type === COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION) break;
+        const column = getColumnByKey(data.columns, column_key);
+        let origin_data = new_data;
+
+        if (column.type === CellType.SINGLE_SELECT) {
+          origin_data.options = Array.isArray(origin_data.options) ? origin_data.options.map(option => {
+            if (checkIsPredefinedOption(column, option.id)) return { id: option.id, name: option.id };
+            return option;
+          }) : [];
+        }
+        window.sfMetadataContext.modifyColumnData(repo_id, column_key, origin_data).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify property data') });

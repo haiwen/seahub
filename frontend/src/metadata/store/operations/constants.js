@@ -25,6 +25,7 @@ export const COLUMN_DATA_OPERATION_TYPE = {
   RENAME_OPTION: 'rename_option',
   MODIFY_OPTION_COLOR: 'modify_option_color',
   MOVE_OPTION: 'move_option',
+  INIT_NEW_OPTION: 'init_new_option',
 };
 
 export const OPERATION_ATTRIBUTES = {
