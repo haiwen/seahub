@@ -1085,7 +1085,7 @@ class PeoplePhotos(APIView):
             selected_ids = record_ids[start:limit]
             selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
 
-            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str})'
+            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str})'
             someone_photos_result = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)
