@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { CenteredLoading, IconBtn } from '@seafile/sf-metadata-ui-component';
+import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import metadataAPI from '../../../api';
 import Metadata from '../../../model/metadata';
 import { normalizeColumns } from '../../../utils/column';
@@ -134,7 +134,9 @@ const PeoplePhotos = ({ people, onClose, onDeletePeoplePhotos }) => {
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-people-photos-container">
       <div className="sf-metadata-people-photos-header">
-        <IconBtn iconName="left" onClick={onClose} />
+        <div className="sf-metadata-people-photos-header-back" onClick={onClose}>
+          <i className="sf3-font sf3-font-down rotate-90"></i>
+        </div>
         <div className="sf-metadata-people-name">{people._name || gettext('Person image')}</div>
       </div>
       <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} />
