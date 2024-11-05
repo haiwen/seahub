@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
+import { NoOptionsStyle } from './seahub-select-style';
 
 const NoGroupMessage = (props) => {
   return (
-    <div {...props.innerProps} style={{ margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' }}>{gettext('Group not found')}</div>
+    <div {...props.innerProps} style={NoOptionsStyle}>{gettext('Group not found')}</div>
   );
 };
 

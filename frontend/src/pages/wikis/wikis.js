@@ -252,7 +252,6 @@ class Wikis extends Component {
   convertWiki = (wiki, wikiName, departmentID) => {
     wikiAPI.convertWiki(wiki.id, wikiName, departmentID).then((res) => {
       this.getWikis();
-
     }).catch((error) => {
       if (error.response) {
         let errorMsg = error.response.data.error_msg;

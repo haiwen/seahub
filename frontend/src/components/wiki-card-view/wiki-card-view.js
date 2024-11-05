@@ -82,7 +82,6 @@ class WikiCardView extends Component {
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
-        convertWiki={this.props.convertWiki}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
         wikis={myWikis}
@@ -98,7 +97,6 @@ class WikiCardView extends Component {
         deleteWiki={this.props.leaveSharedWiki}
         renameWiki={this.props.renameWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
-        convertWiki={this.props.convertWiki}
         wikis={sharedWikis}
         title={gettext('Shared with me')}
         isDepartment={false}
@@ -117,7 +115,6 @@ class WikiCardView extends Component {
             deleteWiki={this.props.deleteWiki}
             unshareGroupWiki={this.props.unshareGroupWiki}
             renameWiki={this.props.renameWiki}
-            convertWiki={this.props.convertWiki}
             sidePanelRate={sidePanelRate}
             isSidePanelFolded={isSidePanelFolded}
             group={groupWiki}

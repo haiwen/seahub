@@ -21,7 +21,7 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
-  convertWiki: PropTypes.func.isRequired,
+  convertWiki: PropTypes.func,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
 };
@@ -60,7 +60,7 @@ class WikiCardItem extends Component {
   };
 
   onConvertToggle = (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     this.setState({
       isShowConvertDialog: !this.state.isShowConvertDialog,
     });

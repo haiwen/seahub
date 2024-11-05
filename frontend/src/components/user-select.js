@@ -5,7 +5,7 @@ import { seafileAPI } from '../utils/seafile-api';
 import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
-import { UserSelectStyle } from './common/select';
+import { UserSelectStyle, NoOptionsStyle } from './common/select';
 
 import '../css/user-select.css';
 
@@ -86,7 +86,6 @@ class UserSelect extends React.Component {
 
   render() {
     const searchValue = this.state.searchValue;
-    const style = { margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' };
     return (
       <AsyncSelect
         isClearable
@@ -94,7 +93,9 @@ class UserSelect extends React.Component {
         components={{
           NoOptionsMessage: (props) => {
             return (
-              <div {...props.innerProps} style={style}>{searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}</div>
+              <div {...props.innerProps} style={NoOptionsStyle}>
+                {searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}
+              </div>
             );
           }
         }}
