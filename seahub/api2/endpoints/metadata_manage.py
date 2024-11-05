@@ -832,7 +832,7 @@ class FacesRecords(APIView):
 
     def get(self, request, repo_id):
         start = request.GET.get('start', 0)
-        limit = request.GET.get('limit', 100)
+        limit = request.GET.get('limit', 1000)
 
         try:
             start = int(start)
@@ -854,19 +854,18 @@ class FacesRecords(APIView):
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+        from seafevents.repo_metadata.utils import FACES_TABLE
 
         try:
             metadata = metadata_server_api.get_metadata()
@@ -917,7 +916,7 @@ class FacesRecords(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         if not query_result:
             return Response({
                 'metadata': metadata_columns,
@@ -1018,7 +1017,7 @@ class PeoplePhotos(APIView):
 
     def get(self, request, repo_id, people_id):
         start = request.GET.get('start', 0)
-        limit = request.GET.get('limit', 100)
+        limit = request.GET.get('limit', 1000)
 
         try:
             start = int(start)
@@ -1034,21 +1033,20 @@ class PeoplePhotos(APIView):
         if limit < 0:
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
@@ -1078,28 +1076,22 @@ class PeoplePhotos(APIView):
         faces_records = query_result.get('results')
 
         if not faces_records:
-            return Response({ 'metadata': [], 'results': [] })
-        
+            return Response({'metadata': [], 'results': []})
+
         faces_record = faces_records[0]
-        someone_photos_result = {}
 
         try:
             record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, [])]
             selected_ids = record_ids[start:limit]
             selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
 
-            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str})'
+            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str})'
             someone_photos_result = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        someone_photos = someone_photos_result.get('results', [])
-        for photo in someone_photos:
-            if METADATA_TABLE.columns.face_vectors.name in photo:
-                del photo[METADATA_TABLE.columns.face_vectors.name]
-        
+
         return Response(someone_photos_result)
 
 

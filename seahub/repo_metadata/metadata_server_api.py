@@ -47,6 +47,18 @@ def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
     metadata_server_api = MetadataServerAPI(repo_id, user)
     columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
     sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit, user)
+
+    # Remove face-vectors from the query SQL because they are too large
+    query_fields_str = ''
+    for column in columns:
+        column_name = column.get('name')
+        if column_name == METADATA_TABLE.columns.face_vectors.name:
+            continue
+        column_name_str = '`%s`, ' % column_name
+        query_fields_str += column_name_str
+    query_fields_str = query_fields_str.strip(', ')
+    sql = sql.replace('*', query_fields_str)
+
     response_results = metadata_server_api.query_rows(sql, [])
     return response_results
 
@@ -70,7 +82,7 @@ class MetadataServerAPI:
 
     def gen_headers(self):
         payload = {
-            'exp': int(time.time()) + 3600, 
+            'exp': int(time.time()) + 3600,
             'base_id': self.base_id,
             'user': self.user
         }
@@ -88,7 +100,7 @@ class MetadataServerAPI:
         if response.status_code == 404:
             return {'success': True}
         return parse_response(response)
-    
+
     def insert_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
@@ -97,7 +109,7 @@ class MetadataServerAPI:
             }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
-    
+
     def update_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
@@ -153,7 +165,7 @@ class MetadataServerAPI:
         }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
-    
+
     def delete_column(self, table_id, column_key):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {
@@ -162,7 +174,7 @@ class MetadataServerAPI:
         }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
-    
+
     def update_column(self, table_id, column):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {

@@ -28,9 +28,10 @@ def add_init_face_recognition_task(params):
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
+
 def get_someone_similar_faces(faces, metadata_server_api):
     from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
-    sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
+    sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
     parameters = []
     query_result = []
     for face in faces:
@@ -44,7 +45,7 @@ def get_someone_similar_faces(faces, metadata_server_api):
             sql = sql.rstrip(', ') + ');'
             results = metadata_server_api.query_rows(sql, parameters).get('results', [])
             query_result.extend(results)
-            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
+            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
             parameters = []
 
     if parameters:
