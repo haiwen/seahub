@@ -96,11 +96,6 @@ function check_process() {
 }
 
 # start
-function start_notification_server() {
-    notification-server -c ${central_config_dir} -l ${TOPDIR}/logs/notification-server.log &
-    sleep 1
-}
-
 function start_seafevents() {
     check_python_executable;
     $PYTHON -m seafevents.main --config-file ${central_config_dir}/seafevents.conf --logfile ${TOPDIR}/logs/seafevents.log -P ${TOPDIR}/pids/seafevents.pid &
@@ -108,15 +103,6 @@ function start_seafevents() {
 }
 
 # monitor
-function monitor_notification_server() {
-    process_name="notification-server"
-    check_num=$(check_process $process_name)
-    if [ $check_num -eq 0 ]; then
-        log "Start $process_name"
-        start_notification_server
-    fi
-}
-
 function monitor_seafevents() {
     process_name="seafevents.main"
     check_num=$(check_process $process_name)
@@ -140,10 +126,6 @@ while [ 1 ]; do
        :
     else
         monitor_seafevents
-    fi
-
-    if [ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
-        monitor_notification_server
     fi
 
     sleep 30
