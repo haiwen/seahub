@@ -30,7 +30,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import condition
 
-from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
+from seaserv import seafile_api, check_quota, get_org_id_by_repo_id, ccnet_api
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication, CsrfExemptSessionAuthentication
@@ -2748,11 +2748,13 @@ class SdocRelatedUsers(APIView):
             related_user_emails.append(repo_owner)
 
         related_users = []
-        for email in related_user_emails:
-            user_info = get_user_common_info(email)
-            user_name = user_info.get('name', '')
-            user_info['name_pinyin'] = "'".join(lazy_pinyin(user_name)) if user_name else ''
-            related_users.append(user_info)
+        email_list_json = json.dumps(related_user_emails)
+        user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json)
+
+        for user_obj in user_obj_list:
+            if user_obj.is_active and '@seafile_group' not in user_obj.email:
+                user_info = get_user_common_info(user_obj.email)
+                related_users.append(user_info)
 
         return Response({'related_users': related_users})
 
