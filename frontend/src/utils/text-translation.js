@@ -165,10 +165,6 @@ const TextTranslation = {
     key: 'Watch File Changes',
     value: gettext('Watch File Changes')
   },
-  'HISTORY_SETTING': {
-    key: 'History Setting',
-    value: gettext('History Setting')
-  },
   'ADVANCED': {
     key: 'advanced',
     value: gettext('Advanced')
@@ -182,10 +178,6 @@ const TextTranslation = {
   'LABEL_CURRENT_STATE': {
     key: 'Label Current State',
     value: gettext('Label Current State')
-  },
-  'OLD_FILES_AUTO_DELETE': {
-    key: 'Old Files Auto Delete',
-    value: gettext('Old Files Auto Delete')
   },
 
   'UNSHARE': {

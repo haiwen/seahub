@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -103,7 +103,7 @@ class MylibRepoMenu extends React.Component {
       operations.push(monitorOp);
     }
 
-    operations.push('Divider', 'History Setting', 'Advanced');
+    operations.push('Divider', 'Advanced');
     // Remove adjacent excess 'Divider'
     for (let i = 0; i < operations.length; i++) {
       if (operations[i] === 'Divider' && operations[i + 1] === 'Divider') {
@@ -119,9 +119,6 @@ class MylibRepoMenu extends React.Component {
     operations.push('API Token');
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
-    }
-    if (enableRepoAutoDel) {
-      operations.push('Old Files Auto Delete');
     }
     return operations;
   };
@@ -147,9 +144,6 @@ class MylibRepoMenu extends React.Component {
       case 'Transfer':
         translateResult = gettext('Transfer');
         break;
-      case 'History Setting':
-        translateResult = gettext('History Setting');
-        break;
       case 'Change Password':
         translateResult = gettext('Change Password');
         break;
@@ -173,9 +167,6 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Share Admin':
         translateResult = gettext('Share Admin');
-        break;
-      case 'Old Files Auto Delete':
-        translateResult = gettext('Auto Deletion Setting');
         break;
       case 'Advanced':
         translateResult = gettext('Advanced');

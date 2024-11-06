@@ -12,7 +12,6 @@ import ShareDialog from '../../components/dialog/share-dialog';
 import toaster from '../../components/toast';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import TransferDialog from '../../components/dialog/transfer-dialog';
-import LibHistorySettingDialog from '../../components/dialog/lib-history-setting-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import LabelRepoStateDialog from '../../components/dialog/label-repo-state-dialog';
@@ -21,7 +20,6 @@ import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
-import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
 
@@ -51,7 +49,6 @@ class MylibRepoListItem extends React.Component {
       isShareDialogShow: false,
       isDeleteDialogShow: false,
       isTransferDialogShow: false,
-      isHistorySettingDialogShow: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false,
       isLabelRepoStateDialogOpen: false,
@@ -59,7 +56,6 @@ class MylibRepoListItem extends React.Component {
       isAPITokenDialogShow: false,
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
-      isOldFilesAutoDelDialogOpen: false,
     };
   }
 
@@ -107,9 +103,6 @@ class MylibRepoListItem extends React.Component {
       case 'Transfer':
         this.onTransferToggle();
         break;
-      case 'History Setting':
-        this.onHistorySettingToggle();
-        break;
       case 'Change Password':
         this.onChangePasswordToggle();
         break;
@@ -133,9 +126,6 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Share Admin':
         this.toggleRepoShareAdminDialog();
-        break;
-      case 'Old Files Auto Delete':
-        this.toggleOldFilesAutoDelDialog();
         break;
       default:
         break;
@@ -210,10 +200,6 @@ class MylibRepoListItem extends React.Component {
     this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
-  onHistorySettingToggle = () => {
-    this.setState({ isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow });
-  };
-
   onChangePasswordToggle = () => {
     this.setState({ isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow });
   };
@@ -236,10 +222,6 @@ class MylibRepoListItem extends React.Component {
 
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
-  };
-
-  toggleOldFilesAutoDelDialog = () => {
-    this.setState({ isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen });
   };
 
   onUnfreezedItem = () => {
@@ -509,15 +491,6 @@ class MylibRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.isHistorySettingDialogShow && (
-          <ModalPortal>
-            <LibHistorySettingDialog
-              repoID={repo.repo_id}
-              itemName={repo.repo_name}
-              toggleDialog={this.onHistorySettingToggle}
-            />
-          </ModalPortal>
-        )}
         {this.state.isChangePasswordDialogShow && (
           <ModalPortal>
             <ChangeRepoPasswordDialog
@@ -570,14 +543,6 @@ class MylibRepoListItem extends React.Component {
             <RepoShareAdminDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareAdminDialog}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isOldFilesAutoDelDialogOpen && (
-          <ModalPortal>
-            <LibOldFilesAutoDelDialog
-              repoID={repo.repo_id}
-              toggleDialog={this.toggleOldFilesAutoDelDialog}
             />
           </ModalPortal>
         )}

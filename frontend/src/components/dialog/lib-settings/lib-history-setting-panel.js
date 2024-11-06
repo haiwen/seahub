@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { gettext, enableRepoHistorySetting } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
+import { Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { gettext, enableRepoHistorySetting } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../toast';
 
 const propTypes = {
-  itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
 };
@@ -108,14 +107,8 @@ class LibHistorySetting extends React.Component {
   };
 
   render() {
-    const { itemName: repoName } = this.props;
-    let title = gettext('{placeholder} History Setting');
-    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
-      <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>
-          <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+      <>
         <ModalBody>
           <Form>
             {!enableRepoHistorySetting &&
@@ -151,7 +144,7 @@ class LibHistorySetting extends React.Component {
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
         </ModalFooter>
-      </Modal>
+      </>
     );
   }
 }

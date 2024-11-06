@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { ModalBody, ModalFooter, Button } from 'reactstrap';
 import classnames from 'classnames';
 import Switch from '../../../../components/common/switch';
 import { gettext } from '../../../../utils/constants';
@@ -10,7 +10,7 @@ import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
-const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggle, submit }) => {
+const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
 
@@ -36,9 +36,8 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggle, submit
   }, [value]);
 
   return (
-    <Modal className="metadata-face-recognition-dialog" isOpen={true} toggle={onToggle}>
-      <ModalHeader toggle={onToggle}>{gettext('Face recognition management')}</ModalHeader>
-      <ModalBody>
+    <>
+      <ModalBody className="metadata-face-recognition-dialog">
         <Switch
           checked={value}
           disabled={submitting || oldValue}
@@ -48,9 +47,9 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggle, submit
           onChange={onValueChange}
           placeholder={gettext('Face recognition')}
         />
-        <div className="tip">
+        <p className="tip m-0">
           {gettext('Enable face recognition to identify people in your photos.')}
-        </div>
+        </p>
       </ModalBody>
       {!oldValue && (
         <ModalFooter>
@@ -58,14 +57,14 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggle, submit
           <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       )}
-    </Modal>
+    </>
   );
 };
 
 MetadataFaceRecognitionDialog.propTypes = {
   value: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
 
