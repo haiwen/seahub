@@ -251,13 +251,15 @@ class SelectDirentBody extends React.Component {
                 autoFocus
               />
             ) : (
-              <div className='footer-left-btns'
+              <Button
+                className="footer-left-btns"
+                color="secondary"
                 onClick={this.onShowNewFolderInput}
-                style={{ display: mode === MODE_TYPE_MAP.SEARCH_RESULTS ? 'none' : 'block' }}
+                disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
               >
                 <i className='sf3-font-new sf3-font mr-2'></i>
                 <span>{gettext('New folder')}</span>
-              </div>
+              </Button>
             )}
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>

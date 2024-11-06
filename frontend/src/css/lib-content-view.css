@@ -450,10 +450,15 @@
   justify-content: center;
   align-items: center;
   padding: 6px 12px;
+  border: 0;
   cursor: pointer;
 }
 
-.custom-modal .modal-footer .footer-left-btns:hover {
+.custom-modal .modal-footer .footer-left-btns.disabled {
+  cursor: not-allowed;
+}
+
+.custom-modal .modal-footer .footer-left-btns:not(.disabled):hover {
   background-color: #f0f0f0;
   border-radius: 3px;
 }
