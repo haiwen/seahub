@@ -68,6 +68,7 @@ const Kanban = () => {
     const groupedCardsMap = {};
 
     if (groupByColumn.type === CellType.SINGLE_SELECT) {
+      // when get cell value from row below, record use FILE_TYPE column's option.id as key, for other single select type columns, use option.name as key
       groupByColumn.data.options.forEach(option => groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE
         ? groupedCardsMap[option.id] = []
         : groupedCardsMap[option.name] = []);
@@ -277,12 +278,12 @@ const Kanban = () => {
     let updates;
     let originalUpdates;
     if (targetListId === UNCATEGORIZED) {
-      updates = groupByColumnKey === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: '' } : { [groupByColumn.name]: '' };
+      updates = groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: '' } : { [groupByColumn.name]: '' };
       originalUpdates = { [groupByColumn.key]: '' };
     } else {
       const targetList = lists.find(list => list.id === targetListId);
-      updates = groupByColumnKey === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: targetList.title } : { [groupByColumn.name]: targetList.title };
-      originalUpdates = { [groupByColumn.key]: targetList.id };
+      updates = groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: targetList.title } : { [groupByColumn.name]: targetList.title };
+      originalUpdates = { [groupByColumn.key]: targetList.title };
     }
 
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
