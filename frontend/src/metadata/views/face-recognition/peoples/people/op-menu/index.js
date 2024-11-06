@@ -7,27 +7,20 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
 
   const toggle = useCallback((event) => {
-    const dataset = event.target ? event.target.dataset : null;
-    if (dataset && dataset.toggle && dataset.toggle === 'rename') {
-      onRename();
-      setShow(!isShow);
-      return;
-    }
+    event.stopPropagation();
     if (isShow) {
-      onUnFreezed();
+      const isClickToggleBtn = event.target.className?.includes('face-recognition-more-operations-toggle');
+      onUnFreezed(isClickToggleBtn);
     } else {
       onFreezed();
     }
     setShow(!isShow);
-  }, [isShow, onRename, onFreezed, onUnFreezed, setShow]);
+  }, [isShow, onFreezed, onUnFreezed, setShow]);
 
-  const onClick = useCallback((event) => {
-    toggle(event);
-  }, [toggle]);
-
-  const onItemClick = useCallback((event) => {
-    toggle(event);
-  }, [toggle]);
+  const handleRename = useCallback(() => {
+    onRename();
+    setShow(false);
+  }, [onRename, setShow]);
 
   useEffect(() => {
     return () => {
@@ -42,14 +35,13 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
         tag="i"
         role="button"
         tabIndex="0"
-        className="sf-dropdown-toggle sf3-font-more sf3-font"
+        className="sf-dropdown-toggle sf3-font-more sf3-font face-recognition-more-operations-toggle"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}
-        onClick={onClick}
         data-toggle="dropdown"
       />
       <DropdownMenu>
-        <DropdownItem data-toggle="rename" onClick={onItemClick}>{gettext('Rename')}</DropdownItem>
+        <DropdownItem onClick={handleRename}>{gettext('Rename')}</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

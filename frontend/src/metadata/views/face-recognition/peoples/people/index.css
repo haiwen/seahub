@@ -3,6 +3,7 @@
   width: 48%;
   flex-shrink: 0;
   overflow: visible;
+  border-radius: 3px;
 }
 
 .sf-metadata-peoples-container .sf-metadata-people-info:hover {
@@ -28,7 +29,6 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 6px 0;
-  overflow: hidden;
 }
 
 .sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-name {
@@ -43,7 +43,7 @@
   white-space: nowrap;
 }
 
-.sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-renaming {
+.sf-metadata-peoples-container .sf-metadata-people-info .rename-container input {
   box-sizing: border-box;
   padding: 2px 3px;
   width: 20rem;
@@ -56,7 +56,7 @@
   border: 1px solid #ccc;
 }
 
-.sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-renaming:focus {
+.sf-metadata-peoples-container .sf-metadata-people-info .rename-container input {
   border-color: #1991eb;
 }
 

@@ -126,7 +126,6 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
 
   const selectView = useCallback((view, isSelected) => {
     if (isSelected) return;
-    const isFaceRecognitionView = view.type === PRIVATE_FILE_TYPE.FACE_RECOGNITION;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id,
@@ -135,9 +134,8 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
       isPreload: true,
       object: {
         file_tags: [],
-        id: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
-        name: isFaceRecognitionView ? gettext('Photos - classfied by people') : gettext('File extended properties'),
-        type: isFaceRecognitionView ? PRIVATE_FILE_TYPE.FACE_RECOGNITION : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        id: view._id,
+        type: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
       },
       parentNode: {},
