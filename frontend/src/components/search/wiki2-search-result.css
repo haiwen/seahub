@@ -1,0 +1,47 @@
+.wiki2-search-result {
+  width: 100%;
+  padding-top: 8px;
+  border-radius: 3px;
+}
+
+.wiki2-search-result-current {
+  height: 20px;
+  line-height: 20px;
+  color: #757575;
+  background-color: #eaeaea;
+  padding: 0 4px;
+  margin: 0 4px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.wiki2-search-result-top .wiki2-search-result-page-name {
+  font-size: 14px;
+}
+
+.wiki2-search-result-bottom {
+  padding-left: 36px;
+  padding-right: 36px;
+  overflow: hidden;
+}
+
+.wiki2-search-result-bottom mark {
+  padding: 0;
+  background: yellow;
+}
+
+.wiki2-search-result:hover,
+.wiki2-search-result.wiki2-search-result-highlight {
+  cursor: pointer;
+  background-color: #F7F7F5;
+}
+
+.wiki2-search-result-enter.sf3-font-enter {
+  opacity: 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.wiki2-search-result:hover .wiki2-search-result-enter.sf3-font-enter {
+  opacity: 1;
+}

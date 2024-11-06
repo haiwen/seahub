@@ -1,0 +1,205 @@
+import React, { useCallback, useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Modal, ModalBody, Input } from 'reactstrap';
+import isHotkey from 'is-hotkey';
+import searchAPI from '../../utils/search-api';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+import Loading from '../loading';
+import Wiki2SearchResult from './wiki2-search-result';
+import { isModF } from '../../metadata/utils/hotkey';
+
+import './wiki2-search.css';
+
+const isEnter = isHotkey('enter');
+const isUp = isHotkey('up');
+const isDown = isHotkey('down');
+
+function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, setValue] = useState('');
+  const [results, setResults] = useState([]);
+  const [highlightIndex, setHighlightIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isResultGetted, setIsResultGetted] = useState(false);
+  let searchResultListContainerRef = useRef(null);
+  let highlightRef = useRef(null);
+
+  const onDocumentKeyDown = useCallback((e) => {
+    if (!isModalOpen && isModF(e)) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsModalOpen(true);
+      return;
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', onDocumentKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onDocumentKeyDown);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const resetToDefault = useCallback(() => {
+    setValue('');
+    setHighlightIndex(0);
+    setResults([]);
+    setIsResultGetted(false);
+    setIsModalOpen(false);
+  }, []);
+
+  const onKeyDown = useCallback((e) => {
+    if (isHotkey('esc', e)) {
+      resetToDefault();
+      return;
+    }
+    if (isResultGetted) {
+      if (isEnter(e)) {
+        const hightlightResult = results[highlightIndex];
+        if (hightlightResult && hightlightResult.page.id !== currentPageId) {
+          setCurrentPage(hightlightResult.page.id);
+          resetToDefault();
+        }
+      } else if (isUp(e)) {
+        onUp(e, highlightIndex);
+      } else if (isDown(e)) {
+        onDown(e, results, highlightIndex);
+      }
+    } else {
+      if (isEnter(e)) {
+        getWikiSearchResult(value);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isResultGetted, value, results, highlightIndex, currentPageId]);
+
+  const onUp = useCallback((e, highlightIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (highlightIndex > 0) {
+      setHighlightIndex(highlightIndex - 1);
+      setTimeout(() => {
+        if (highlightRef.current) {
+          const { top, height } = highlightRef.current.getBoundingClientRect();
+          if (top - height < 0) {
+            searchResultListContainerRef.current.scrollTop -= height;
+          }
+        }
+      }, 1);
+    }
+  }, []);
+
+  const onDown = useCallback((e, results, highlightIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (highlightIndex < results.length - 1) {
+      setHighlightIndex(highlightIndex + 1);
+      setTimeout(() => {
+        if (highlightRef.current) {
+          const { top, height } = highlightRef.current.getBoundingClientRect();
+          const outerHeight = 300;
+          if (top > outerHeight) {
+            const newScrollTop = searchResultListContainerRef.current.scrollTop + height;
+            searchResultListContainerRef.current.scrollTop = newScrollTop;
+          }
+        }
+      }, 1);
+    }
+  }, []);
+
+  const getWikiSearchResult = useCallback((searchValue) => {
+    if (!searchValue.trim()) return;
+    setIsLoading(true);
+    setHighlightIndex(-1);
+    setIsResultGetted(false);
+    setResults([]);
+    searchAPI.searchWiki(searchValue.trim(), wikiId).then(res => {
+      if (res.data.results) {
+        let newResults = [];
+        res.data.results.forEach(result => {
+          const page = config.pages.find(page => page.docUuid === result.doc_uuid);
+          if (page) {
+            result.page = Object.assign({}, page);
+            newResults.push(result);
+          }
+        });
+        setResults(newResults);
+        setHighlightIndex(0);
+        setIsLoading(false);
+        setIsResultGetted(true);
+      } else {
+        setResults([]);
+        setHighlightIndex(-1);
+        setIsLoading(false);
+        setIsResultGetted(true);
+      }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      setIsLoading(false);
+    });
+  }, [config, wikiId]);
+
+  return (
+    <>
+      <div className="wiki2-search" onClick={() => setIsModalOpen(true)}>
+        <i className="sf3-font sf3-font-search"></i>
+        <span>{gettext('Search')}</span>
+      </div>
+      {isModalOpen &&
+        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
+          <ModalBody>
+            <div className="wiki2-search-input mb-4">
+              <i className="sf3-font sf3-font-search"></i>
+              <Input
+                type="text"
+                className="form-control search-input"
+                name="query"
+                placeholder={gettext('Search')}
+                autoComplete="off"
+                value={value}
+                onChange={(e) => { setValue(e.target.value); setIsResultGetted(false); }}
+                onKeyDown={onKeyDown}
+                autoFocus={true}
+              />
+              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-1" onClick={resetToDefault}></button>
+            </div>
+            <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
+              {isLoading && <Loading />}
+              {(value === '' && !isResultGetted) &&
+                <p className='sf-tip-default d-flex justify-content-center'>{gettext('Type characters to start search')}</p>}
+              {(value !== '' && isResultGetted && results.length === 0) &&
+                <p className='sf-tip-default d-flex justify-content-center'>{gettext('No result')}</p>}
+              {results.map((result, index) => {
+                return (
+                  <Wiki2SearchResult
+                    result={result}
+                    key={result._id}
+                    currentPageId={currentPageId}
+                    setCurrentPage={setCurrentPage}
+                    resetToDefault={resetToDefault}
+                    isHighlight={highlightIndex === index}
+                    setRef={highlightIndex === index ? (ref) => {highlightRef.current = ref;} : () => {}}
+                  />
+                );
+              })}
+            </div>
+          </ModalBody>
+        </Modal>
+      }
+    </>
+  );
+}
+
+Wiki2Search.propTypes = {
+  wikiId: PropTypes.string.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired,
+  currentPageId: PropTypes.string.isRequired,
+};
+
+export default Wiki2Search;
