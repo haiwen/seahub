@@ -240,25 +240,25 @@ class SelectDirentBody extends React.Component {
           </ModalBody>
           <ModalFooter>
             {showNewFolderInput ? (
-              <div>
-                <Input
-                  innerRef={this.inputRef}
-                  className='new-folder-input'
-                  placeholder={gettext('Enter folder name')}
-                  type='text'
-                  value={inputValue}
-                  onChange={this.onInputChange}
-                  onKeyDown={this.onInputKeyDown}
-                  autoFocus
-                />
-              </div>
+              <Input
+                innerRef={this.inputRef}
+                className='new-folder-input'
+                placeholder={gettext('Enter folder name')}
+                type='text'
+                value={inputValue}
+                onChange={this.onInputChange}
+                onKeyDown={this.onInputKeyDown}
+                autoFocus
+              />
             ) : (
-              <div className='footer-left-btns' onClick={this.onShowNewFolderInput}>
+              <div className='footer-left-btns'
+                onClick={this.onShowNewFolderInput}
+                style={{ display: mode === MODE_TYPE_MAP.SEARCH_RESULTS ? 'none' : 'block' }}
+              >
                 <i className='sf3-font-new sf3-font mr-2'></i>
                 <span>{gettext('New folder')}</span>
               </div>
             )}
-
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
               <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

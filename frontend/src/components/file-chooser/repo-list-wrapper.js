@@ -43,17 +43,19 @@ const RepoListWrapper = (props) => {
     switch (searchStatus) {
       case SearchStatus.LOADING:
         return <Loading />;
-      case searchResults.length === 0:
-        return (
-          <div className='search-results-none'>{gettext('No results matching')}</div>
-        );
       case SearchStatus.RESULTS:
         return (
-          <SearchedListView
-            searchResults={searchResults}
-            onItemClick={onSearchedItemClick}
-            onSearchedItemDoubleClick={onSearchedItemDoubleClick}
-          />
+          <>
+            {searchResults.length === 0 ? (
+              <div className='search-results-none text-center'>{gettext('No results matching')}</div>
+            ) : (
+              <SearchedListView
+                searchResults={searchResults}
+                onItemClick={onSearchedItemClick}
+                onSearchedItemDoubleClick={onSearchedItemDoubleClick}
+              />
+            )}
+          </>
         );
       default:
         return null;
