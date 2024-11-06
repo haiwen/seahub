@@ -37,7 +37,9 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, [options, searchValue]);
 
   const onChange = useCallback((options, optionModifyType) => {
-    onSubmit(options.filter(item => item.name), optionModifyType);
+    if (optionModifyType !== COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION) {
+      onSubmit(options.filter(item => item.name), optionModifyType);
+    }
     setOptions(options);
   }, [onSubmit]);
 
@@ -75,7 +77,8 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     const newOption = generateNewOption(options, newOptionName);
     const newOptions = options.slice(0);
     newOptions.push(newOption);
-    onChange(newOptions, COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION);
+    const optionModifyType = newOptionName ? COLUMN_DATA_OPERATION_TYPE.ADD_OPTION : COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION;
+    onChange(newOptions, optionModifyType);
     setEditingOptionId(newOptionName ? '' : newOption.id);
   }, [searchValue, options, onChange]);
 

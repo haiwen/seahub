@@ -1,7 +1,7 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
+import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
 import { getRowById } from '../utils/table';
 import { checkIsDir } from '../utils/row';
@@ -111,8 +111,7 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
-        const { repo_id, column_key, new_data, option_modify_type } = operation;
-        if (option_modify_type && option_modify_type === COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION) break;
+        const { repo_id, column_key, new_data } = operation;
         const column = getColumnByKey(data.columns, column_key);
         let origin_data = new_data;
 
