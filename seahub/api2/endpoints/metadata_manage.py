@@ -1204,7 +1204,6 @@ class FaceRecognitionManage(APIView):
         return Response({'success': True})
 
 
-
 class MetadataExtractFileDetails(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
