@@ -33,6 +33,11 @@
   height: 100%;
 }
 
+.sf-metadata-view-kanban .kanban-list-placeholder {
+  min-width: 300px;
+  height: 100%;
+}
+
 .sf-metadata-view-kanban .tips-empty-board {
   flex: 1 1;
   display: flex;

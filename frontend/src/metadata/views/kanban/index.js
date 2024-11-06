@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, Fragment } from 'react';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
@@ -13,12 +13,15 @@ import AddList from './add-list';
 import EmptyTip from '../../../components/empty-tip';
 
 import './index.css';
+import classNames from 'classnames';
 
 const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
+  const [draggingListId, setDraggingListId] = useState(null);
   const [dragOverListId, setDragOverListId] = useState(null);
   const [dragSourceListId, setDragSourceListId] = useState(null);
   const [placeholderHeight, setPlaceholderHeight] = useState(null);
+  const [placeholderIndex, setPlaceholderIndex] = useState(null);
 
   const { viewsMap } = useMetadata();
   const { metadata, store } = useMetadataView();
@@ -158,6 +161,88 @@ const Kanban = () => {
     setPlaceholderHeight(height);
   }, []);
 
+  const onListDragStart = useCallback((event, listId) => {
+    const dragData = JSON.stringify({ type: 'kanban-list', listId });
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('application/kanban-list', dragData);
+
+    const dragImage = event.target.cloneNode(true);
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-9999px';
+    dragImage.style.left = '-9999px';
+    dragImage.style.width = `${event.target.offsetWidth}px`;
+    dragImage.classList.add('dragging');
+    dragImage.style.cursor = 'grabbing';
+    document.body.appendChild(dragImage);
+
+    const offsetX = event.clientX - event.target.getBoundingClientRect().left;
+    const offsetY = event.clientY - event.target.getBoundingClientRect().top;
+    event.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
+
+    event.target.addEventListener('dragend', () => {
+      if (document.body.contains(dragImage)) {
+        document.body.removeChild(dragImage);
+      }
+      setPlaceholderIndex(null);
+    });
+
+    setDraggingListId(listId);
+  }, []);
+
+  const onListDragOver = useCallback((event, listId) => {
+    if (!draggingListId || !listId) return;
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    setDragOverListId(listId);
+
+    const target = event.target.closest('.kanban-list');
+    if (target) {
+      const targetIndex = lists.findIndex(list => list.id === listId);
+      const targetRect = target.getBoundingClientRect();
+      const offset = event.clientX - targetRect.left;
+      const newPlaceholderIndex = offset < targetRect.width / 2 ? targetIndex : targetIndex + 1;
+
+      if (newPlaceholderIndex > -1 && newPlaceholderIndex !== placeholderIndex) {
+        setPlaceholderIndex(newPlaceholderIndex);
+      }
+    }
+
+    const kanbanWrapper = document.querySelector('.sf-metadata-view-kanban');
+    const viewportWidth = window.innerWidth;
+    const offsetLeft = kanbanWrapper.getBoundingClientRect().left;
+    const scrollThreshold = 100;
+    if (event.clientX - offsetLeft < scrollThreshold) {
+      kanbanWrapper.scrollBy({ left: -20, behavior: 'smooth' });
+    } else if (event.clientY > viewportWidth - scrollThreshold) {
+      kanbanWrapper.scrollBy({ left: 20, behavior: 'smooth' });
+    }
+
+  }, [lists, draggingListId, placeholderIndex]);
+
+  const onListDrop = useCallback((event, dropIndex) => {
+    event.preventDefault();
+    const dragData = event.dataTransfer.getData('application/kanban-list');
+    if (!dragData) return;
+    const { listId: dragListId } = JSON.parse(dragData);
+    const oldData = columns.find(col => col.key === groupByColumn.key).data;
+    const dragIndex = oldData.options.findIndex(option => option.id === dragListId);
+
+    if (dragIndex === dropIndex) return;
+
+    const newOptions = [...oldData.options];
+    newOptions.splice(dragIndex, 1);
+    newOptions.splice(dropIndex, 0, oldData.options[dragIndex]);
+
+    const options = newOptions.filter(option => option.name);
+    const optionModifyType = COLUMN_DATA_OPERATION_TYPE.MOVE_OPTION;
+    store.modifyColumnData(groupByColumn.key, { options }, { options: oldData.options }, { optionModifyType });
+
+    setDraggingListId(null);
+    setDragOverListId(null);
+    setPlaceholderIndex(null);
+  }, [store, columns, groupByColumn]);
+
   const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
@@ -225,26 +310,44 @@ const Kanban = () => {
             <EmptyTip className="tips-empty-board" text={gettext('No categories')} />
           ) : (
             lists.map((list, index) => (
-              <div
-                key={list.id}
-                className="kanban-list"
-              >
-                <List
-                  key={list._id}
-                  {...list}
-                  settings={metadata.view.settings}
-                  moreOperationsList={moreOperationsList}
-                  onDeleteList={() => handleDeleteList(list._id)}
+              <Fragment key={list.id}>
+                {draggingListId && draggingListId !== list.id && placeholderIndex === index && (
+                  <div
+                    className="kanban-list-placeholder"
+                    style={{ width: '300px', height: '100%' }}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => onListDrop(event, index)}
+                  >
+                  </div>
+                )}
+                <div
+                  key={list.id}
                   draggable={draggable}
-                  onCardDrop={onCardDrop}
-                  dragSourceListId={dragSourceListId}
-                  onDragSourceListId={onDragSourceListId}
-                  dragOverListId={dragOverListId}
-                  onDragOverListId={onDragOverListId}
-                  placeholderHeight={placeholderHeight}
-                  onSetPlaceholderHeight={onSetPlaceholderHeight}
-                />
-              </div>
+                  onDragStart={(event) => onListDragStart(event, list.id)}
+                  onDragOver={(event) => onListDragOver(event, list.id)}
+                  onDrop={(event) => onListDrop(event, index)}
+                  className={classNames('kanban-list', {
+                    'dragging': draggingListId === list.id,
+                    'drag-over': dragOverListId === list.id,
+                  })}
+                >
+                  <List
+                    key={list._id}
+                    {...list}
+                    settings={metadata.view.settings}
+                    moreOperationsList={moreOperationsList}
+                    onDeleteList={() => handleDeleteList(list._id)}
+                    draggable={draggable}
+                    onCardDrop={onCardDrop}
+                    dragSourceListId={dragSourceListId}
+                    onDragSourceListId={onDragSourceListId}
+                    dragOverListId={dragOverListId}
+                    onDragOverListId={onDragOverListId}
+                    placeholderHeight={placeholderHeight}
+                    onSetPlaceholderHeight={onSetPlaceholderHeight}
+                  />
+                </div>
+              </Fragment>
             ))
           )}
           {canAddList && (
