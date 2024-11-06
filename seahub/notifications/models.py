@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 
 from seaserv import seafile_api, ccnet_api
 
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
@@ -157,13 +158,14 @@ def saml_sso_error_msg_to_json(error_msg):
     return json.dumps({'error_msg': error_msg})
 
 
-def share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type):
+def share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type, avatar_url):
     return json.dumps({
         'from_user': from_user,
         'from_username': from_username,
         'repo_id': repo_id,
         'repo_name': repo_name,
-        'op_type': op_type
+        'op_type': op_type,
+        'share_link_download_avatar_url': avatar_url
     })
 
 
@@ -1116,5 +1118,6 @@ def share_link_download_cb(sender, **kwargs):
     repo_id = kwargs['repo_id']
     repo_name = kwargs['repo_name']
     op_type = kwargs['op_type']
-    detail = share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type)
+    avatar_url, _, _ = api_avatar_url(from_user, 256)
+    detail = share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type, avatar_url)
     UserNotification.objects.add_share_link_download_msg(to_user, detail)

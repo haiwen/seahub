@@ -36,7 +36,6 @@ from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc
 
-
 from seahub.settings import SITE_ROOT
 from seahub.share.utils import check_share_link_user_access
 from seahub.signals import share_link_download_successful
@@ -1468,6 +1467,7 @@ def view_file_via_shared_dir(request, fileshare):
             except Exception as e:
                 logger.error(e)
         return _download_file_from_share_link(request, fileshare, use_tmp_token=True)
+
     # get raw file
     access_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'view', '', use_onetime=False)

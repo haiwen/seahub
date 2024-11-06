@@ -364,17 +364,12 @@ class NoticeItem extends React.Component {
 
     if (noticeType === MSG_TYPE_SHARE_LINK_DOWNLOAD) {
       const {
-        from_user,
         from_username,
         repo_id,
         repo_name,
-        op_type
+        op_type,
+        share_link_download_avatar_url
       } = detail;
-      console.log(from_username)
-      let username = from_user;
-      if (username === '') {
-        username = from_username;
-      }
       const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
 
@@ -383,8 +378,8 @@ class NoticeItem extends React.Component {
         notice = gettext('Your {libraryName} shared link has been downloaded by the {fromUser}');
       }
       notice = notice.replace('{libraryName}', repoLink);
-      notice = notice.replace('{fromUser}', username)
-      return { avatar_url: null, notice };
+      notice = notice.replace('{fromUser}', from_username);
+      return { avatar_url: share_link_download_avatar_url, notice };
     }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {

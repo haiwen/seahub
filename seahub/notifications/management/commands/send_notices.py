@@ -298,7 +298,7 @@ class Command(BaseCommand):
         notice.repo_name = repo_name
         notice.from_user = from_user
         notice.op_type = d['op_type']
-        notice.avatar_src = self.get_avatar_src(from_user)
+        notice.avatar_src = d['share_link_download_avatar_url']
         return notice
 
 

@@ -38,8 +38,6 @@ KEY_FILE_UPDATES_EMAIL_INTERVAL = "file_updates_email_interval"
 KEY_FILE_UPDATES_LAST_EMAILED_TIME = "file_updates_last_emailed_time"
 KEY_COLLABORATE_EMAIL_INTERVAL = 'collaborate_email_interval'
 KEY_COLLABORATE_LAST_EMAILED_TIME = 'collaborate_last_emailed_time'
-KEY_SHARE_LINK_OPERATED_EMAILED = 'share_link_operated_notice'
-KEY_SHARE_LINK_OPERATED_EMAILED_TIME = 'share_link_operated_emailed_time'
 
 DEFAULT_COLLABORATE_EMAIL_INTERVAL = 3600
 
@@ -348,16 +346,6 @@ class UserOptionsManager(models.Manager):
     def unset_collaborate_last_emailed_time(self, username):
         return self.unset_user_option(username, KEY_COLLABORATE_LAST_EMAILED_TIME)
 
-    def enable_share_link_operated_notice(self, username, status):
-        return self.set_user_option(
-            username, KEY_SHARE_LINK_OPERATED_EMAILED, status
-        )
-
-    def get_share_link_operated_notice_status(self, username):
-        val = self.get_user_option(username, KEY_SHARE_LINK_OPERATED_EMAILED)
-        if not val:
-            return None
-        return val
 
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)

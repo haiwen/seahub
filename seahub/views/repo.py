@@ -253,6 +253,7 @@ def view_lib_as_wiki(request, repo_id, path):
 @share_link_audit
 @share_link_login_required
 def view_shared_dir(request, fileshare):
+
     token = fileshare.token
     if not check_share_link_user_access(fileshare, request.user.username):
         if not request.user.username:
@@ -376,11 +377,7 @@ def view_shared_dir(request, fileshare):
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user
         data['logo_path'] = get_logo_path_by_user(fileshare.username)
-    from seahub.notifications.management.commands.send_notices import Command
-    print(123)
-    c = Command()
-    c.do_action()
-    print(456)
+    # send notification
     if fileshare.is_notification_enabled:
         try:
             to_user = fileshare.username
