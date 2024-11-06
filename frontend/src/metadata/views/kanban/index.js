@@ -7,7 +7,7 @@ import { CellType, EVENT_BUS_TYPE, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, PRI
 import { COLUMN_DATA_OPERATION_TYPE } from '../../store/operations';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import { getCellValueByColumn } from '../../utils/cell';
+import { checkIsPredefinedOption, getCellValueByColumn } from '../../utils/cell';
 import SettingPanel from './setting-panel';
 import List from './list';
 import AddList from './add-list';
@@ -68,8 +68,7 @@ const Kanban = () => {
     const groupedCardsMap = {};
 
     if (groupByColumn.type === CellType.SINGLE_SELECT) {
-      // when get cell value from row below, record use FILE_TYPE column's option.id as key, for other single select type columns, use option.name as key
-      groupByColumn.data.options.forEach(option => groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE
+      groupByColumn.data.options.forEach(option => checkIsPredefinedOption(groupByColumn, option.id)
         ? groupedCardsMap[option.id] = []
         : groupedCardsMap[option.name] = []);
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
@@ -105,7 +104,7 @@ const Kanban = () => {
         title: option.name,
         field: groupByColumn,
         shownColumns,
-        cards: groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
+        cards: checkIsPredefinedOption(groupByColumn, option.id) ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
       }));
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
       groupedLists = collaborators.map(collaborator => ({
@@ -282,8 +281,19 @@ const Kanban = () => {
       originalUpdates = { [groupByColumn.key]: '' };
     } else {
       const targetList = lists.find(list => list.id === targetListId);
-      updates = groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_STATUS ? { [groupByColumnKey]: targetList.title } : { [groupByColumn.name]: targetList.title };
-      originalUpdates = { [groupByColumn.key]: targetList.title };
+      if (PRIVATE_COLUMN_KEYS.includes(groupByColumn.key)) {
+        const isPredefinedOption = checkIsPredefinedOption(groupByColumn, targetListId);
+        updates = isPredefinedOption
+          ? { [groupByColumnKey]: targetList.id }
+          : { [groupByColumnKey]: targetList.title };
+
+        originalUpdates = isPredefinedOption
+          ? { [groupByColumnKey]: targetList.id }
+          : { [groupByColumnKey]: targetList.title };
+      } else {
+        updates = { [groupByColumn.name]: targetList.title };
+        originalUpdates = { [groupByColumn.key]: targetList.title };
+      }
     }
 
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
@@ -321,7 +331,7 @@ const Kanban = () => {
                 )}
                 <div
                   key={list.id}
-                  draggable={draggable}
+                  draggable={draggable && list.id !== UNCATEGORIZED}
                   onDragStart={(event) => onListDragStart(event, list.id)}
                   onDragOver={(event) => onListDragOver(event, list.id)}
                   onDrop={(event) => onListDrop(event, index)}
