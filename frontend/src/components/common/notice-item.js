@@ -372,10 +372,9 @@ class NoticeItem extends React.Component {
       } = detail;
       const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
-
-      let notice = gettext('Your {libraryName} shared link has been viewed by the {fromUser}');
+      let notice = gettext('{fromUser} has viewed the library named {libraryName} that through the sharing link');
       if (op_type === 'dl') {
-        notice = gettext('Your {libraryName} shared link has been downloaded by the {fromUser}');
+        notice = gettext('{fromUser} have downloaded files from a library named {libraryName} through a shared link');
       }
       notice = notice.replace('{libraryName}', repoLink);
       notice = notice.replace('{fromUser}', from_username);
