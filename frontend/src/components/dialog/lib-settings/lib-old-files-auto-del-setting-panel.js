@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
+import { Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../toast';
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
 };
 
-class LibOldFilesAutoDelDialog extends React.Component {
+class LibOldFilesAutoDelSetting extends React.Component {
 
   constructor(props) {
     super(props);
@@ -93,10 +93,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>
-          {gettext('Auto deletion')}
-        </ModalHeader>
+      <>
         <ModalBody>
           <Form>
             <FormGroup check>
@@ -123,11 +120,11 @@ class LibOldFilesAutoDelDialog extends React.Component {
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
         </ModalFooter>
-      </Modal>
+      </>
     );
   }
 }
 
-LibOldFilesAutoDelDialog.propTypes = propTypes;
+LibOldFilesAutoDelSetting.propTypes = propTypes;
 
-export default LibOldFilesAutoDelDialog;
+export default LibOldFilesAutoDelSetting;

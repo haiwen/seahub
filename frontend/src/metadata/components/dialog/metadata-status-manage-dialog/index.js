@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { ModalBody, ModalFooter, Button } from 'reactstrap';
 import Switch from '../../../../components/common/switch';
 import toaster from '../../../../components/toast';
 import TurnOffConfirmDialog from './turn-off-confirm';
@@ -11,7 +11,7 @@ import { gettext } from '../../../../utils/constants';
 
 import './index.css';
 
-const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submit }) => {
+const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
@@ -62,9 +62,8 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submi
   return (
     <>
       {!showTurnOffConfirmDialog && (
-        <Modal className="metadata-status-management-dialog" isOpen={true} toggle={onToggle}>
-          <ModalHeader toggle={onToggle}>{gettext('Extended properties management')}</ModalHeader>
-          <ModalBody>
+        <>
+          <ModalBody className="metadata-status-management-dialog">
             <Switch
               checked={value}
               disabled={submitting}
@@ -74,15 +73,15 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submi
               onChange={onValueChange}
               placeholder={gettext('Enable extended properties')}
             />
-            <div className="tip">
+            <p className="tip m-0">
               {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
-            </div>
+            </p>
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
             <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
-        </Modal>
+        </>
       )}
       {showTurnOffConfirmDialog && (
         <TurnOffConfirmDialog toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit} />
@@ -94,7 +93,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submi
 MetadataStatusManagementDialog.propTypes = {
   value: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
 

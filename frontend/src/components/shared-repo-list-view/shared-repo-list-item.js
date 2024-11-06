@@ -5,18 +5,16 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
-import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
-import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
@@ -55,7 +53,6 @@ class SharedRepoListItem extends React.Component {
       isRenaming: false,
       isStarred: this.props.repo.starred,
       isFolderPermissionDialogOpen: false,
-      isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
       isTransferDialogShow: false,
@@ -63,7 +60,6 @@ class SharedRepoListItem extends React.Component {
       isRepoDeleted: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false,
-      isOldFilesAutoDelDialogOpen: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -182,9 +178,6 @@ class SharedRepoListItem extends React.Component {
       case 'Unshare':
         this.onItemUnshare();
         break;
-      case 'History Setting':
-        this.onHistorySettingToggle();
-        break;
       case 'API Token':
         this.onAPITokenToggle();
         break;
@@ -202,9 +195,6 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'Unwatch File Changes':
         this.unwatchFileChanges();
-        break;
-      case 'Old Files Auto Delete':
-        this.toggleOldFilesAutoDelDialog();
         break;
       // no default
     }
@@ -273,10 +263,6 @@ class SharedRepoListItem extends React.Component {
     this.setState({ isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen });
   };
 
-  onHistorySettingToggle = () => {
-    this.setState({ isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow });
-  };
-
   onItemShare = () => {
     this.setState({ isShowSharedDialog: true });
   };
@@ -328,10 +314,6 @@ class SharedRepoListItem extends React.Component {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
 
-  toggleOldFilesAutoDelDialog = () => {
-    this.setState({ isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen });
-  };
-
   onAPITokenToggle = () => {
     this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
   };
@@ -362,9 +344,6 @@ class SharedRepoListItem extends React.Component {
       case 'Share':
         translateResult = gettext('Share');
         break;
-      case 'History Setting':
-        translateResult = gettext('History Setting');
-        break;
       case 'Share Admin':
         translateResult = gettext('Share Admin');
         break;
@@ -379,9 +358,6 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'Unwatch File Changes':
         translateResult = gettext('Unwatch File Changes');
-        break;
-      case 'Old Files Auto Delete':
-        translateResult = gettext('Auto Deletion Setting');
         break;
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
@@ -401,9 +377,6 @@ class SharedRepoListItem extends React.Component {
   getAdvancedOperations = () => {
     const operations = [];
     operations.push('API Token');
-    if (enableRepoAutoDel) {
-      operations.push('Old Files Auto Delete');
-    }
     return operations;
   };
 
@@ -435,9 +408,8 @@ class SharedRepoListItem extends React.Component {
               const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
               operations.push(monitorOp);
             }
-            operations.push('Divider', 'History Setting');
             if (Utils.isDesktop()) {
-              operations.push('Advanced');
+              operations.push('Divider', 'Advanced');
             }
             return operations;
           } else {
@@ -803,15 +775,6 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isHistorySettingDialogShow && (
-          <ModalPortal>
-            <LibHistorySettingDialog
-              repoID={repo.repo_id}
-              itemName={repo.repo_name}
-              toggleDialog={this.onHistorySettingToggle}
-            />
-          </ModalPortal>
-        )}
         {this.state.isAPITokenDialogShow && (
           <ModalPortal>
             <RepoAPITokenDialog
@@ -842,14 +805,6 @@ class SharedRepoListItem extends React.Component {
             <ResetEncryptedRepoPasswordDialog
               repoID={repo.repo_id}
               toggleDialog={this.onResetPasswordToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isOldFilesAutoDelDialogOpen && (
-          <ModalPortal>
-            <LibOldFilesAutoDelDialog
-              repoID={repo.repo_id}
-              toggleDialog={this.toggleOldFilesAutoDelDialog}
             />
           </ModalPortal>
         )}

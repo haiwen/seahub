@@ -1,4 +1,5 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc, enableFileTags, enableRepoSnapshotLabel, enableRepoAutoDel, enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc, enableFileTags, enableRepoSnapshotLabel,
+  enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -720,7 +721,7 @@ export const Utils = {
     const showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
     const operations = [];
     const DIVIDER = 'Divider';
-    const { SHARE, DELETE, RENAME, TRANSFER, FOLDER_PERMISSION, SHARE_ADMIN, CHANGE_PASSWORD, RESET_PASSWORD, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, HISTORY_SETTING, ADVANCED } = TextTranslation;
+    const { SHARE, DELETE, RENAME, TRANSFER, FOLDER_PERMISSION, SHARE_ADMIN, CHANGE_PASSWORD, RESET_PASSWORD, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, ADVANCED } = TextTranslation;
 
     operations.push(SHARE, DELETE, DIVIDER, RENAME, TRANSFER);
 
@@ -742,7 +743,7 @@ export const Utils = {
       operations.push(monitorOp);
     }
 
-    operations.push(DIVIDER, HISTORY_SETTING);
+    operations.push(DIVIDER);
     const subOpList = Utils.getAdvancedOperations();
     operations.push({ ...ADVANCED, subOpList });
 
@@ -752,16 +753,12 @@ export const Utils = {
 
   getAdvancedOperations: function () {
     const operations = [];
-    const { API_TOKEN, LABEL_CURRENT_STATE, OLD_FILES_AUTO_DELETE } = TextTranslation;
+    const { API_TOKEN, LABEL_CURRENT_STATE } = TextTranslation;
 
     operations.push(API_TOKEN);
 
     if (enableRepoSnapshotLabel) {
       operations.push(LABEL_CURRENT_STATE);
-    }
-
-    if (enableRepoAutoDel) {
-      operations.push(OLD_FILES_AUTO_DELETE);
     }
 
     return operations;
@@ -796,7 +793,7 @@ export const Utils = {
 
   getSharedRepoOperationList: function (repo, currentGroup, isPublic) {
     const operations = [];
-    const { SHARE, UNSHARE, DELETE, RENAME, FOLDER_PERMISSION, SHARE_ADMIN, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, HISTORY_SETTING, ADVANCED, CHANGE_PASSWORD, RESET_PASSWORD } = TextTranslation;
+    const { SHARE, UNSHARE, DELETE, RENAME, FOLDER_PERMISSION, SHARE_ADMIN, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, ADVANCED, CHANGE_PASSWORD, RESET_PASSWORD, API_TOKEN } = TextTranslation;
 
     const isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1;
     const isRepoOwner = repo.owner_email === username;
@@ -830,9 +827,9 @@ export const Utils = {
               const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
               operations.push(monitorOp);
             }
-            operations.push(DIVIDER, HISTORY_SETTING);
             if (Utils.isDesktop()) {
-              const subOpList = Utils.getAdvancedOperations();
+              operations.push(DIVIDER);
+              const subOpList = [API_TOKEN];
               operations.push({ ...ADVANCED, subOpList });
             }
             return operations;
