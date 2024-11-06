@@ -1234,6 +1234,8 @@ class SeadocCommentRepliesView(APIView):
         if not file_comment:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found.')
 
+        if type(reply_content) is bool and reply_content is True:
+            reply_content = '已把评论 "' + file_comment.comment.strip() + '" 标记为已解决'
         reply = SeadocCommentReply.objects.create(
             author=username,
             reply=str(reply_content),
