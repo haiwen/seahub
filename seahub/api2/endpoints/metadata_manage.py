@@ -1181,7 +1181,7 @@ class FaceRecognitionManage(APIView):
 
         # check dose the repo have opened metadata manage
         record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled and record.face_recognition_enabled:
+        if not record or not record.enabled or not record.face_recognition_enabled:
             error_msg = f'The repo {repo_id} has disabled the face recognition manage.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
