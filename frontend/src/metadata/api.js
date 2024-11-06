@@ -267,6 +267,11 @@ class MetadataManagerAPI {
     return this.req.post(url);
   };
 
+  closeFaceRecognition = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-recognition/';
+    return this.req.delete(url);
+  };
+
   getFaceData = (repoID, start = 0, limit = 1000) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-records/?start=' + start + '&limit=' + limit;
     return this.req.get(url);

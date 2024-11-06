@@ -111,7 +111,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   <LibFaceRecognitionSettingPanel
                     repoID={repoID}
                     value={enableFaceRecognition}
-                    submit={(value) => { updateEnableFaceRecognition(true); }}
+                    submit={(value) => { updateEnableFaceRecognition(value); }}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>
