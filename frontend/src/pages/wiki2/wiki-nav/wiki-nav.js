@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
@@ -97,10 +98,8 @@ class WikiNav extends Component {
   // eslint-disable-next-line
   renderStructureBody = React.forwardRef((layerDragProps, ref) => {
     const { navigation, pages } = this.props;
-    let isOnlyOnePage = false;
-    if (pages.length === 1) {
-      isOnlyOnePage = true;
-    }
+    const pagesLen = pages.length;
+    const isOnlyOnePage = pagesLen === 1;
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
     return (
@@ -109,7 +108,7 @@ class WikiNav extends Component {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
         {wikiPermission !== 'public' &&
-          <div className='wiki2-trash' onClick={this.props.toggelTrashDialog}>
+          <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggelTrashDialog}>
             <span className="sf3-font-trash sf3-font mr-2"></span>
             <span>{gettext('Trash')}</span>
           </div>

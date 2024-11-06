@@ -52,13 +52,6 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
     setIsModalOpen(false);
   }, []);
 
-  const onClickClose = useCallback(() => {
-    setValue('');
-    setHighlightIndex(0);
-    setResults([]);
-    setIsResultGetted(false);
-  }, []);
-
   const onKeyDown = useCallback((e) => {
     if (isHotkey('esc', e)) {
       resetToDefault();
@@ -173,7 +166,7 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-1" onClick={onClickClose}></button>
+              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-1" onClick={resetToDefault}></button>
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
