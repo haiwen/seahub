@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback, Fragment } from 'react';
+import classNames from 'classnames';
 import { useMetadata } from '../../hooks/metadata';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks';
@@ -13,7 +14,6 @@ import AddList from './add-list';
 import EmptyTip from '../../../components/empty-tip';
 
 import './index.css';
-import classNames from 'classnames';
 
 const Kanban = () => {
   const [isSettingPanelOpen, setSettingPanelOpen] = useState(false);
@@ -107,15 +107,13 @@ const Kanban = () => {
         cards: groupByColumn.key === PRIVATE_COLUMN_KEY.FILE_TYPE ? groupedCardsMap[option.id] : groupedCardsMap[option.name],
       }));
     } else if (groupByColumn.type === CellType.COLLABORATOR) {
-      if (Array.isArray(collaborators)) {
-        groupedLists = collaborators.map(collaborator => ({
-          id: collaborator.email,
-          title: [collaborator.email],
-          field: groupByColumn,
-          shownColumns,
-          cards: groupedCardsMap[collaborator.email],
-        }));
-      }
+      groupedLists = collaborators.map(collaborator => ({
+        id: collaborator.email,
+        title: [collaborator.email],
+        field: groupByColumn,
+        shownColumns,
+        cards: groupedCardsMap[collaborator.email],
+      }));
     }
 
     const ungroupedList = {
