@@ -14,7 +14,7 @@ import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
 import WikiTrashDialog from './wiki-trash-dialog';
 import { DEFAULT_PAGE_NAME } from './constant';
-import Search from '../../components/search/search';
+import Wiki2Search from '../../components/search/wiki2-search';
 
 import './side-panel.css';
 
@@ -38,6 +38,7 @@ class SidePanel extends Component {
       isShowTrashDialog: false,
     };
   }
+
   confirmDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
     const { pages } = config;
@@ -157,7 +158,7 @@ class SidePanel extends Component {
   };
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, config, currentPageId } = this.props;
     const isDesktop = Utils.isDesktop();
     return (
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
@@ -177,11 +178,11 @@ class SidePanel extends Component {
             </div>
           }
         </div>
-        <Search
-          repoID={wikiId}
-          onSearchedClick={this.onSearchedClick}
-          placeholder={gettext('Search')}
-          isWiki2={true}
+        <Wiki2Search
+          wikiId={wikiId}
+          config={config}
+          currentPageId={currentPageId}
+          setCurrentPage={this.props.setCurrentPage}
         />
         <div className="wiki2-side-nav">
           {isLoading ? <Loading/> : this.renderWikiNav()}

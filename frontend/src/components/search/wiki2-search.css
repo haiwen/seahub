@@ -1,0 +1,50 @@
+.wiki2-search {
+  margin: 10px 8px 10px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+}
+
+.wiki2-search:hover {
+  cursor: pointer;
+  background-color: #EDEDEA;
+}
+
+.wiki2-search .sf3-font-search {
+  margin: 0 8px;
+  color: #666;
+}
+
+.wiki2-search-input {
+  position: relative;
+}
+
+.wiki2-search-input .sf3-font-search {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  color: #9aa0ac;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  pointer-events: none;
+  display: flex;
+}
+
+.wiki2-search-input .form-control {
+  padding-left: 2.5rem;
+  height: 38px;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.wiki2-search-result-container {
+  min-height: 300px;
+  overflow-y: auto;
+  margin-right: -16px;
+  padding-right: 16px;
+}
+
