@@ -211,21 +211,14 @@ class InternalDownloadRateLimitView(APIView):
         if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        data = request.data
+
         traffic_info_list = {}
-        for user_info in data:
-            org_id = user_info['org_id']
-            username = user_info['username']
-            user = User.objects.get(email=username)
-            role = get_user_role(user)
-            if user_info['org_id'] > 0:
-                monthly_rate_limit_per_user = DEFAULT_ENABLED_ROLE_PERMISSIONS[role]['monthly_rate_limit_per_user']
-                org = ccnet_api.get_org_by_id(org_id)
-                org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
-                monthly_rate_limit = monthly_rate_limit_per_user * len(org_users)
-            else:
-                monthly_rate_limit = DEFAULT_ENABLED_ROLE_PERMISSIONS[role]['monthly_rate_limit']
-            traffic_info_list[username] = {'org_id': org_id, 'monthly_rate_limit': monthly_rate_limit}
+        rate_limit = {}
+        for role, v in DEFAULT_ENABLED_ROLE_PERMISSIONS.items():
+            if 'monthly_rate_limit' in v:
+                rate_limit['monthly_rate_limit'] = v['monthly_rate_limit']
+            if 'monthly_rate_limit_per_user' in v:
+                rate_limit['monthly_rate_limit_per_user'] = v['monthly_rate_limit_per_user']
+            traffic_info_list[role] = rate_limit
 
         return Response(traffic_info_list)
-    
