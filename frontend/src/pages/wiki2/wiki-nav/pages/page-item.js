@@ -10,6 +10,7 @@ import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
 import DraggedPageItem from './dragged-page-item';
 import CustomIcon from '../../custom-icon';
+import { eventBus } from '../../../../components/common/event-bus';
 
 class PageItem extends Component {
 
@@ -21,17 +22,29 @@ class PageItem extends Component {
       isShowDeleteDialog: false,
       isShowInsertPage: false,
       pageName: props.page.name || '',
-      isSelected: props.currentPageId === props.page.id,
+      isSelected: props.getCurrentPageId() === props.page.id,
       isMouseEnter: false,
     };
     this.pageItemRef = React.createRef();
   }
 
+  componentDidMount() {
+    this.unsubscribeEvent = eventBus.subscribe('update-wiki-current-page', this.updateSelected);
+  }
+
   componentWillUnmount() {
+    this.unsubscribeEvent();
     this.setState = () => {
       return;
     };
   }
+
+  updateSelected = () => {
+    const isSelected = this.props.getCurrentPageId() === this.props.page.id;
+    if (isSelected !== this.state.isSelected) {
+      this.setState({ isSelected });
+    }
+  };
 
   onMouseEnter = () => {
     this.setState({ isMouseEnter: true });
@@ -130,7 +143,7 @@ class PageItem extends Component {
         updateWikiConfig={this.props.updateWikiConfig}
         pages={pages}
         pathStr={pathStr + '-' + page.id}
-        currentPageId={this.props.currentPageId}
+        getCurrentPageId={this.props.getCurrentPageId}
         addPageInside={this.props.addPageInside}
         getFoldState={this.props.getFoldState}
         toggleExpand={this.props.toggleExpand}
@@ -257,7 +270,7 @@ class PageItem extends Component {
                 {this.state.isShowInsertPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertPage}
-                    currentPageId={this.props.page.id}
+                    getCurrentPageId={this.props.getCurrentPageId}
                     onAddNewPage={this.onAddNewPage}
                     title={gettext('Add page inside')}
                   />
@@ -302,7 +315,7 @@ PageItem.propTypes = {
   onMovePage: PropTypes.func,
   isOnlyOnePage: PropTypes.bool,
   pathStr: PropTypes.string,
-  currentPageId: PropTypes.string,
+  getCurrentPageId: PropTypes.func,
   addPageInside: PropTypes.func,
   getFoldState: PropTypes.func,
   toggleExpand: PropTypes.func,

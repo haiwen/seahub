@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
+import classNames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, isWiki2, wikiId, wikiPermission } from '../../utils/constants';
 import toaster from '../../components/toast';
@@ -21,17 +22,18 @@ import './side-panel.css';
 const { repoName } = window.wiki.config;
 
 const propTypes = {
-  closeSideBar: PropTypes.bool.isRequired,
+  isSidePanelOpen: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   config: PropTypes.object.isRequired,
   updateWikiConfig: PropTypes.func.isRequired,
   getWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
-  currentPageId: PropTypes.string,
+  getCurrentPageId: PropTypes.func.isRequired,
   onUpdatePage: PropTypes.func.isRequired,
 };
 
-class SidePanel extends Component {
+class SidePanel extends PureComponent {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -104,7 +106,7 @@ class SidePanel extends Component {
   };
 
   toggelTrashDialog = () => {
-    this.setState({ 'isShowTrashDialog': !this.state.isShowTrashDialog });
+    this.setState({ isShowTrashDialog: !this.state.isShowTrashDialog });
   };
 
   renderWikiNav = () => {
@@ -124,7 +126,7 @@ class SidePanel extends Component {
             updateWikiConfig={this.props.updateWikiConfig}
             onAddNewPage={this.onAddNewPage}
             duplicatePage={this.duplicatePage}
-            currentPageId={this.props.currentPageId}
+            getCurrentPageId={this.props.getCurrentPageId}
             addPageInside={this.addPageInside}
             toggelTrashDialog={this.toggelTrashDialog}
           />
@@ -158,10 +160,10 @@ class SidePanel extends Component {
   };
 
   render() {
-    const { isLoading, config, currentPageId } = this.props;
+    const { isLoading, config } = this.props;
     const isDesktop = Utils.isDesktop();
     return (
-      <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
+      <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
           {isDesktop && wikiPermission !== 'public' &&
@@ -181,7 +183,7 @@ class SidePanel extends Component {
         <Wiki2Search
           wikiId={wikiId}
           config={config}
-          currentPageId={currentPageId}
+          getCurrentPageId={this.props.getCurrentPageId}
           setCurrentPage={this.props.setCurrentPage}
         />
         <div className="wiki2-side-nav">

@@ -16,7 +16,7 @@ const isEnter = isHotkey('enter');
 const isUp = isHotkey('up');
 const isDown = isHotkey('down');
 
-function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
+function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState('');
@@ -60,7 +60,7 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
     if (isResultGetted) {
       if (isEnter(e)) {
         const hightlightResult = results[highlightIndex];
-        if (hightlightResult && hightlightResult.page.id !== currentPageId) {
+        if (hightlightResult && hightlightResult.page.id !== getCurrentPageId()) {
           setCurrentPage(hightlightResult.page.id);
           resetToDefault();
         }
@@ -75,7 +75,7 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isResultGetted, value, results, highlightIndex, currentPageId]);
+  }, [isResultGetted, value, results, highlightIndex]);
 
   const onUp = useCallback((e, highlightIndex) => {
     e.preventDefault();
@@ -153,7 +153,7 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
           <ModalBody>
-            <div className="wiki2-search-input mb-4">
+            <div className="wiki2-search-input mb-4 position-relative">
               <i className="sf3-font sf3-font-search"></i>
               <Input
                 type="text"
@@ -179,7 +179,7 @@ function Wiki2Search({ setCurrentPage, config, currentPageId, wikiId }) {
                   <Wiki2SearchResult
                     result={result}
                     key={result._id}
-                    currentPageId={currentPageId}
+                    getCurrentPageId={this.props.getCurrentPageId}
                     setCurrentPage={setCurrentPage}
                     resetToDefault={resetToDefault}
                     isHighlight={highlightIndex === index}
@@ -199,7 +199,7 @@ Wiki2Search.propTypes = {
   wikiId: PropTypes.string.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-  currentPageId: PropTypes.string.isRequired,
+  getCurrentPageId: PropTypes.func.isRequired,
 };
 
 export default Wiki2Search;
