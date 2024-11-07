@@ -65,7 +65,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
           <ModalBody className="metadata-face-recognition-dialog">
             <Switch
               checked={value}
-              disabled={submitting || oldValue}
+              disabled={submitting}
               size="large"
               textPosition="right"
               className={classnames('change-face-recognition-status-management w-100', { 'disabled': submitting || oldValue })}
