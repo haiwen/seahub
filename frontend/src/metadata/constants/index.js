@@ -134,4 +134,4 @@ export const GALLERY_DATE_MODE = {
   ALL: 'all',
 };
 
-export const UNCATEGORIZED = 'uncategorized';
+export const UNCATEGORIZED = '_uncategorized';

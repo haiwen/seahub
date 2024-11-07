@@ -1,0 +1,24 @@
+.sf-metadata-view-kanban-boards {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  
+}
+
+.sf-metadata-view-kanban-boards .smooth-dnd-container.horizontal {
+  height: 100%;
+  overflow: auto;
+  white-space: nowrap;
+  display: flex;
+  padding: 16px;
+}
+
+.sf-metadata-view-kanban-boards .smooth-dnd-container {
+  position: relative;
+}
+
+.sf-metadata-view-kanban-boards .smooth-dnd-container * {
+  box-sizing: border-box;
+}
+

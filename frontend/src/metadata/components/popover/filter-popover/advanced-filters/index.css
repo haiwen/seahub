@@ -305,20 +305,23 @@
   display: none;
 }
 
-.sf-metadata-filter-header-icon {
+.sf-metadata-filter-header-icon,
+.sf-metadata-select-icon {
   display: inline-block;
   padding: 0 0.3125rem;
   margin-left: -0.3125rem;
 }
 
-.sf-metadata-filter-header-icon .sf-metadata-icon {
+.sf-metadata-filter-header-icon .sf-metadata-icon,
+.sf-metadata-select-icon .sf-metadata-icon {
   font-size: 14px;
   fill: #aaa;
   cursor: default;
 }
 
 .sf-metadata-option:hover .sf-metadata-filter-header-icon .sf-metadata-icon,
-.sf-metadata-option.sf-metadata-option-active .sf-metadata-filter-header-icon .sf-metadata-icon {
+.sf-metadata-option.sf-metadata-option-active .sf-metadata-filter-header-icon .sf-metadata-icon,
+.sf-metadata-setting-selector__menu .sf-metadata-setting-selector__option--is-selected .sf-metadata-icon {
   fill: #fff;
 }
 

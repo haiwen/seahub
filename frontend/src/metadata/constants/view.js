@@ -74,24 +74,23 @@ export const VIEW_FIRST_SORT_COLUMN_RULES = {
 
 export const KANBAN_SETTINGS_KEYS = {
   GROUP_BY_COLUMN_KEY: 'group_by_column_key',
-  TITLE_FIELD_KEY: 'title_field_key',
-  HIDE_EMPTY_VALUES: 'hide_empty_values',
-  SHOW_FIELD_NAMES: 'show_field_names',
+  TITLE_COLUMN_KEY: 'title_column_key',
+  HIDE_EMPTY_VALUE: 'hide_empty_value',
+  SHOW_COLUMN_NAME: 'show_column_name',
   TEXT_WRAP: 'text_wrap',
-  COLUMNS_KEYS: 'columns_keys', // used to store the order of properties
-  SHOWN_COLUMNS_KEYS: 'shown_columns_keys',
+  COLUMNS: 'columns', // display and order
 };
 
 export const VIEW_DEFAULT_SETTINGS = {
   [VIEW_TYPE.TABLE]: {},
   [VIEW_TYPE.GALLERY]: {},
+  [VIEW_TYPE.FACE_RECOGNITION]: {},
   [VIEW_TYPE.KANBAN]: {
     [KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]: '',
-    [KANBAN_SETTINGS_KEYS.TITLE_FIELD_KEY]: PRIVATE_COLUMN_KEY.FILE_NAME,
-    [KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUES]: false,
-    [KANBAN_SETTINGS_KEYS.SHOW_FIELD_NAMES]: false,
+    [KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY]: PRIVATE_COLUMN_KEY.FILE_NAME,
+    [KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE]: false,
+    [KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME]: false,
     [KANBAN_SETTINGS_KEYS.TEXT_WRAP]: false,
     [KANBAN_SETTINGS_KEYS.COLUMNS_KEYS]: [],
-    [KANBAN_SETTINGS_KEYS.SHOWN_COLUMNS_KEYS]: [],
   }
 };

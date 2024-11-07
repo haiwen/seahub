@@ -22,7 +22,7 @@ const KanbanViewToolBar = ({
   }, [viewColumns]);
 
   const onToggleKanbanSetting = () => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTING);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS);
   };
 
   return (

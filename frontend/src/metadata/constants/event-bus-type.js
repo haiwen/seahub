@@ -59,5 +59,5 @@ export const EVENT_BUS_TYPE = {
   TOGGLE_VIEW_TOOLBAR: 'toggle_view_toolbar',
 
   // kanban
-  TOGGLE_KANBAN_SETTING: 'toggle_kanban_setting',
+  TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
 };

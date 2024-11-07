@@ -1,0 +1,8 @@
+.sf-metadata-view-kanban-board-header {
+  height: 32px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}

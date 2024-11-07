@@ -11,7 +11,7 @@ import toaster from '../../../../components/toast';
 
 import './index.css';
 
-const AddListPopover = ({ options, onCancel, onSubmit }) => {
+const KanbanAddCategoryPopover = ({ target, options, onCancel, onSubmit }) => {
   const [option, setOption] = useState(generateNewOption(options, ''));
 
   const handleOptionChange = useCallback((newOption, type) => {
@@ -44,13 +44,13 @@ const AddListPopover = ({ options, onCancel, onSubmit }) => {
 
   return (
     <CustomizePopover
-      target="add-list-button"
-      className="kanban-add-list-popover"
-      canHide={false}
+      target={target}
+      className="sf-metadata-kanban-add-category-popover"
       hide={onCancel}
       hideWithEsc={onCancel}
+      modifiers={{ preventOverflow: { boundariesElement: document.body } }}
     >
-      <div className="kanban-add-list-popover-inner">
+      <div className="sf-metadata-kanban-add-category-popover-inner">
         <div className="kanban-popover-body">
           <Color
             option={option}
@@ -66,17 +66,18 @@ const AddListPopover = ({ options, onCancel, onSubmit }) => {
         </div>
         <div className="kanban-popover-footer">
           <Button className="mr-2" onClick={onCancel}>{gettext('Cancel')}</Button>
-          <Button color="primary" disabled={false} onClick={handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={handleSubmit}>{gettext('Submit')}</Button>
         </div>
       </div>
     </CustomizePopover>
   );
 };
 
-AddListPopover.propTypes = {
+KanbanAddCategoryPopover.propTypes = {
+  target: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   options: PropTypes.array.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default AddListPopover;
+export default KanbanAddCategoryPopover;

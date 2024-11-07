@@ -4,6 +4,8 @@ import View from './view';
 import { MetadataViewProvider } from '../hooks/metadata-view';
 import Context from '../context';
 
+import './index.css';
+
 const SeafileMetadata = ({ ...params }) => {
   return (
     <MetadataViewProvider { ...params }>

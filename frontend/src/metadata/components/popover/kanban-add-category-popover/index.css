@@ -1,16 +1,16 @@
-.kanban-add-list-popover .popover {
+.sf-metadata-kanban-add-category-popover .popover {
   width: 360px;
   max-width: none;
   padding: 1rem 0 0;
 }
 
-.kanban-popover-body {
+.sf-metadata-kanban-add-category-popover .kanban-popover-body {
   display: flex;
   align-items: center;
   padding: 0 1rem;
 }
 
-.kanban-popover-footer {
+.sf-metadata-kanban-add-category-popover .kanban-popover-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
