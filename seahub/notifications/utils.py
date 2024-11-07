@@ -430,11 +430,20 @@ def format_sdoc_notice(sdoc_queryset, sdoc_notice, include_detail_link=False):
             message = '%s %s' % (message, add_a_element(_('Details'), sdoc_file_url))
 
     if msg_type == 'reply':
+        resolve_comment = detail.get('resolve_comment', None)
+        is_resolved = detail.get('is_resolved', None)
+        
         message = _("%(author)s added a new reply in document %(sdoc_name)s") % {
             'author': escape(email2nickname(author)),
             'sdoc_name': sdoc_name,
         }
         message = '%s "%s"' % (message, detail.get('reply', ''))
+        if is_resolved:
+            message = _('%(author)s marks the comment "%(resolve_comment)s" as resolved in document %(sdoc_name)s\n') % {
+                'author': escape(email2nickname(author)),
+                'resolve_comment': resolve_comment,
+                'sdoc_name': sdoc_name,
+            }
         if include_detail_link:
             sdoc_file_url = gen_sdoc_smart_link(sdoc_notice.doc_uuid)
             message = '%s %s' % (message, add_a_element(_('Details'), sdoc_file_url))
