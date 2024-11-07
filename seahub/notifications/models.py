@@ -902,7 +902,7 @@ class UserNotification(models.Model):
 
         repo_id = d['repo_id']
         repo_name = escape(d['repo_name'])
-        nickname = escape(email2nickname(d['op_user']))
+        name = escape(email2nickname(d['op_user']))
 
         op_type = d['op_type']
 
@@ -945,38 +945,38 @@ class UserNotification(models.Model):
         if op_type == 'create':
 
             if obj_path_count == 1:
-                message = _(f'{nickname} created {obj_type} {obj_link} in library {repo_link}.')
+                message = _(f'{name} created {obj_type} {obj_link} in library {repo_link}.')
             else:
-                message = _(f'{nickname} created {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+                message = _(f'{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
 
         elif op_type == 'delete':
 
             if obj_path_count == 1:
-                message = _(f'{nickname} deleted {obj_type} {obj_name} in library {repo_link}.')
+                message = _(f'{name} deleted {obj_type} {obj_name} in library {repo_link}.')
             else:
-                message = _(f'{nickname} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+                message = _(f'{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
 
         elif op_type == 'recover':
 
-            message = _(f'{nickname} restored {obj_type} {obj_link} in library {repo_link}.')
+            message = _(f'{name} restored {obj_type} {obj_link} in library {repo_link}.')
 
         elif op_type == 'rename':
 
-            message = _(f'{nickname} renamed {obj_type} {old_obj_name} to {obj_link} in library {repo_link}.')
+            message = _(f'{name} renamed {obj_type} {old_obj_name} to {obj_link} in library {repo_link}.')
 
         elif op_type == 'move':
 
             if obj_path_count == 1:
-                message = _(f'{nickname} moved {obj_type} {obj_link} in library {repo_link}.')
+                message = _(f'{name} moved {obj_type} {obj_link} in library {repo_link}.')
             else:
-                message = _(f'{nickname} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+                message = _(f'{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
 
         elif op_type == 'edit':
 
-            message = _(f'{nickname} updated {obj_type} {obj_link} in library {repo_link}.')
+            message = _(f'{name} updated {obj_type} {obj_link} in library {repo_link}.')
 
         else:
-            message = _(f'{nickname} {op_type} {obj_type} {obj_link} in library {repo_link}.')
+            message = _(f'{name} {op_type} {obj_type} {obj_link} in library {repo_link}.')
 
         return message
 
