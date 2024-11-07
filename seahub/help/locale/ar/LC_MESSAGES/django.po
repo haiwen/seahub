@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# malnaim <malnaim@safedecision.com.sa>, 2024
 # Amr Mothana <amrusud@gmail.com>, 2024
+# malnaim <malnaim@safedecision.com.sa>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-16 15:10+0800\n"
+"POT-Creation-Date: 2024-11-07 11:23+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Amr Mothana <amrusud@gmail.com>, 2024\n"
+"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/haiwen/teams/5086/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2217,36 +2217,43 @@ msgstr "يمكنك أيضًا تعيين الأذونات للمشاركة:"
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"القراءة والكتابة: يمكن للمستخدمين قراءة الملفات وكتابتها وتحميلها وتنزيلها "
+"ومزامنتها."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "للقراءة فقط: يمكن للمستخدمين قراءة الملفات وتنزيلها ومزامنتها."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "المسؤول: إلى جانب إذن الكتابة ، يمكن للمستخدمين أيضا مشاركة المكتبة."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"القراءة والكتابة عبر الإنترنت: يمكن للمستخدمين عرض الملفات وتحريرها عبر "
+"الإنترنت عبر متصفح الويب. لا يمكن تنزيل الملفات."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"للقراءة فقط عبر الإنترنت: يمكن للمستخدمين عرض الملفات عبر الإنترنت فقط عبر "
+"متصفح الويب. لا يمكن تنزيل الملفات."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "لمشاركة مكتبة أو مجلد مع مستخدم أو مجموعة:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"مرر مؤشر الفأرة فوق المكتبة أو المجلد وانقر على أيقونة \"مشاركة\" التي تظهر."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -2254,6 +2261,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"ستظهر نافذة منبثقة بها خيارات المشاركة. انقر فوق علامة التبويب \"مشاركة مع "
+"المستخدم\" أو \"مشاركة للمجموعة\" على اللوحة اليمنى. حدد المستخدم أو "
+"المجموعة. ثم انقر فوق \"إرسال\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2262,6 +2272,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"بعد مشاركة مكتبة أو مجلد مع مستخدم ، يمكن للمستخدم رؤيته بالنقر فوق علامة "
+"التبويب \"تمت مشاركتها معي\" على اللوحة اليمنى في تطبيق الويب سيفايل "
+"Seafile. إذا قمت بمشاركتها مع مجموعة، فلن يتمكن أعضاء المجموعة من رؤيتها إلا"
+" من خلال الانتقال إلى المجموعة."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2270,6 +2284,10 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"لمشاركة مكتبة مع المؤسسة بأكملها: في تطبيق الويب سيفايل Seafile ، انقر فوق "
+"علامة التبويب \"مشترك مع الجميع\" على اللوحة اليمنى. ثم انقر فوق الزر "
+"\"إضافة مكتبة\". في القائمة المنسدلة، يمكنك اختيار مشاركة مكتبة موجودة أو "
+"إنشاء مكتبة جديدة ومشاركتها."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2283,6 +2301,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"يمكن فقط للمستخدمين الذين قاموا بتسجيل الدخول والذين لديهم إذن قراءة للملف "
+"أو المجلد الوصول إلى هذا الارتباط. يتم استخدامه لمشاركة الملفات الداخلية. "
+"إنها طريقة ملائمة لمشاركة الملفات بين أعضاء الفريق الذين لديهم حق الوصول إلى"
+" مكتبة مشتركة. يمكنك فقط نسخ الرابط ولصقه في بريد إلكتروني أو برنامج مراسلة "
+"فورية."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2353,6 +2376,12 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"عندما لم تعد ترغب في مزامنة مجلد محلي مع مكتبة، يمكنك إلغاء مزامنته. بعد "
+"إلغاء مزامنة مكتبة، لن يتم تحميل التغييرات التي تم إجراؤها على المجلد المحلي"
+" والملفات، ولن يتم تنزيل التغييرات في المكتبة. إذا كنت تريد مزامنة المكتبة "
+"مع المجلد المحلي مرة أخرى ، فيمكنك استخدام ميزة <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">المزامنة مع المجلد "
+"الموجود</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2373,16 +2402,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"بعد تثبيت عميل محرك الأقراص مع الإرشادات الموجودة على <a "
+"href=\"https://www.seafile.com/en/download/\">صفحة التنزيل </a>، يمكنك بدء "
+"تشغيله بالنقر المزدوج فوق رمز تطبيق سيدرايف \"SeaDrive\" على سطح المكتب."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"سيطلب منك اختيار حرف محرك أقراص لمحرك الأقراص الظاهري. بشكل افتراضي ، سيتم "
+"استخدام الحرف \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "ثم سيطلب منك تسجيل الدخول إلى خادم سيفايل Seafile الخاص بك."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2391,6 +2425,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"بعد تسجيل الدخول إلى الخادم بنجاح، يبدأ برنامج درايف Drive في جلب المكتبة "
+"وقائمة الملفات من الخادم. لا يتم تنزيل محتويات الملف في هذه اللحظة. لذلك لن "
+"يستغرق الأمر وقتا طويلا. يمكنك السماح له بالعمل في الخلفية. سيتم إعلامك عند "
+"الانتهاء من الجلب."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2400,6 +2438,11 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"سيتم فتح مجلد محرك الأقراص الظاهري. ستجد أنه يعمل تماما مثل القرص الصلب "
+"العادي على جهاز الكمبيوتر الخاص بك. مجلدات المستوى الأعلى في محرك الأقراص "
+"الظاهري هي مكتبات على خادم سيفايل Seafile. سيتم تنزيل محتويات الملف عند فتح "
+"ملف. سيتم تخزين الملف الذي تم فتحه مؤخرا مؤقتا في القرص المحلي. سيتم تمييز "
+"جميع الملفات المخزنة مؤقتا بعلامة خضراء."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
@@ -2410,6 +2453,8 @@ msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"تكون الملفات والمجلدات الموجودة في محرك الأقراص الظاهري إما في حالة السحابة "
+"فقط أو متزامنة أو متزامنة جزئيا."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
@@ -2438,6 +2483,10 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"يظهر محتوى السحابة فقط في محرك الأقراص الظاهري، ولكنه لا يستخدم المساحة "
+"الكاملة التي يستخدمها الملف. في مستكشف الملفات، يمكنك رؤية الملف، ولكن لا "
+"يتم تنزيل المحتوى بالكامل حتى تحتاج إليه. ما تم تنزيله هو فقط معلومات حول "
+"الملف ، مثل اسمه وحجمه وتاريخ تحديثه."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
@@ -2448,6 +2497,9 @@ msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"يتم تنزيل المحتوى الذي تمت مزامنته وحفظه على القرص الصلب لجهاز الكمبيوتر "
+"الخاص بك. يمكنك تحرير هذه الملفات مباشرة من التطبيقات الموجودة على جهاز "
+"الكمبيوتر الخاص بك."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
@@ -2458,6 +2510,8 @@ msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"تحتوي المجلدات التي تمت مزامنتها جزئيا على ملفات أو مجلدات تمت مزامنتها "
+"وملفات السحابة فقط."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
@@ -2468,6 +2522,8 @@ msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"بالنسبة للملفات التي تمت مزامنتها بالفعل مع الكمبيوتر المحلي ، قد تكون في 3 "
+"حالات خاصة أخرى ، إلى جانب الحالة العادية \"المتزامنة\". "
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
@@ -2478,6 +2534,8 @@ msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"يتم تأمين الملف من قبل مستخدم آخر على الخادم. يمكنك فقط فتح الملف في وضع "
+"القراءة فقط. لا يمكنك تعديل الملف أو حذفه أو إعادة تسميته أو نقله."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
@@ -2486,7 +2544,7 @@ msgstr "مقفل من قبلي"
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "الملف مؤمن بواسطتك. هذا يمنع الآخرين من تعديل الملف."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
@@ -2497,12 +2555,16 @@ msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"تتم مشاركة مجلد أو مكتبة هذا الملف بإذن للقراءة فقط لك. لا يمكنك تعديل الملف"
+" أو حذفه أو نقله."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"ينظف برنامج درايف Drive بانتظام الملفات المخزنة مؤقتا غير المستخدمة في "
+"الخلفية. يمكنك أيضا تحديد مساحة ذاكرة التخزين المؤقت المحلية."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2510,10 +2572,13 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"يمكنك تسجيل الدخول إلى حسابات متعددة في برنامج درايف Drive. ومع ذلك ، سيتم "
+"عرض الملفات الموجودة على الخادم المحدد الحالي فقط في محرك الأقراص الظاهري. "
+"يمكنك التبديل بين الحسابات."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. لماذا لا يمكنني إنشاء ملفات جديدة أو حذف مجلدات في المجلد اﻷساسي؟"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2524,12 +2589,20 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"يحتوي المجلد الجذر لمحرك الأقراص الظاهري على مجلدات المكتبة فقط. يمكن "
+"لسيفايل Seafile مزامنة الملفات داخل المكتبات فقط. لا يمكن تحميل الملفات "
+"الموجودة في المجلد اﻷساسي إلى خادم سيفايل Seafile. لذلك ليس من المنطقي دعم "
+"إنشاء الملفات في المجلد الجذر. نظرا لأن مجلدات المستوى الأعلى في محرك "
+"الأقراص الظاهري تمثل مكتبات ، فإننا لا نريد أن يحذف المستخدمون مكتباتهم عن "
+"طريق الخطأ. لذلك لا يدعم عميل درايف Drive حذف مجلدات المستوى الأعلى."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"يمكن فتح بعض أنواع الملفات وعرضها مباشرة داخل تطبيق سيفايل Seafile على "
+"الويب. حاليا هم:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
