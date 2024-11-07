@@ -19,7 +19,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
-from seahub.utils import normalize_cache_key
+from seahub.utils import normalize_cache_key, get_site_scheme_and_netloc
 from seahub.constants import HASH_URLS
 from seahub.drafts.models import DraftReviewer
 from seahub.file_participants.utils import list_file_participants
@@ -330,12 +330,12 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
     def add_draft_comment_msg(self, to_user, detail):
-        """Notify ``to_user`` that review creator 
+        """Notify ``to_user`` that review creator
         """
         return self._add_user_notification(to_user, MSG_TYPE_DRAFT_COMMENT, detail)
 
     def add_request_reviewer_msg(self, to_user, detail):
-        """Notify ``to_user`` that reviewer 
+        """Notify ``to_user`` that reviewer
         """
         return self._add_user_notification(to_user, MSG_TYPE_DRAFT_REVIEWER, detail)
 
@@ -520,6 +520,8 @@ class UserNotification(models.Model):
             return self.format_add_user_to_group()
         elif self.is_repo_transfer_msg():
             return self.format_repo_transfer_msg()
+        elif self.is_repo_monitor_msg():
+            return self.format_repo_monitor_msg()
         else:
             return ''
 
@@ -876,6 +878,107 @@ class UserNotification(models.Model):
             'repo_name': repo_name,
         }
         return msg
+
+    def format_repo_monitor_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        # {'commit_id': '5a52250eec53f32e771e7e032e5a40fd33143610',
+        #  'repo_id': 'b37d325a-5e72-416b-aa36-10643cee2f42',
+        #  'repo_name': 'lib of lian@seafile.com',
+        #  'op_user': 'lian@lian.com',
+        #  'op_type': 'create',
+        #  'obj_type': 'file',
+        #  'obj_path_list': ['/sdf.md'],
+        #  'old_obj_path_list': []}
+
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return ""
+
+        repo_id = d['repo_id']
+        repo_name = escape(d['repo_name'])
+        name = escape(email2nickname(d['op_user']))
+
+        op_type = d['op_type']
+
+        obj_type = _('file') if d['obj_type'] == 'file' else _('folder')
+        obj_path_list = d['obj_path_list']
+        obj_path = obj_path_list[0]
+        obj_name = escape(os.path.basename(obj_path))
+
+        obj_path_count = len(obj_path_list)
+        obj_path_count_minus_one = len(obj_path_list) - 1
+
+        old_obj_path_list = d.get('old_obj_path_list', [])
+        if old_obj_path_list:
+            old_obj_name = os.path.basename(d['old_obj_path_list'][0])
+        else:
+            old_obj_name = ''
+
+        def get_repo_url(repo_id, repo_name):
+            p = reverse('lib_view', args=[repo_id, repo_name, ''])
+            return get_site_scheme_and_netloc() + p
+
+        def get_file_url(repo_id, file_path):
+            p = reverse('view_lib_file', args=[repo_id, file_path])
+            return get_site_scheme_and_netloc() + p
+
+        def get_dir_url(repo_id, repo_name, dir_path):
+            p = reverse('lib_view', args=[repo_id, repo_name, dir_path.strip('/')])
+            return get_site_scheme_and_netloc() + p
+
+        repo_url = get_repo_url(repo_id, repo_name)
+        repo_link = f'<a href="{repo_url}">{repo_name}</a>'
+
+        if obj_type == 'file':
+            file_url = get_file_url(repo_id, obj_path)
+            obj_link = f'<a href="{file_url}">{obj_name}</a>'
+        else:
+            folder_url = get_dir_url(repo_id, repo_name, obj_path)
+            obj_link = f'<a href="{folder_url}">{obj_name}</a>'
+
+        if op_type == 'create':
+
+            if obj_path_count == 1:
+                message = _(f'{name} created {obj_type} {obj_link} in library {repo_link}.')
+            else:
+                message = _(f'{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+
+        elif op_type == 'delete':
+
+            if obj_path_count == 1:
+                message = _(f'{name} deleted {obj_type} {obj_name} in library {repo_link}.')
+            else:
+                message = _(f'{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+
+        elif op_type == 'recover':
+
+            message = _(f'{name} restored {obj_type} {obj_link} in library {repo_link}.')
+
+        elif op_type == 'rename':
+
+            message = _(f'{name} renamed {obj_type} {old_obj_name} to {obj_link} in library {repo_link}.')
+
+        elif op_type == 'move':
+
+            if obj_path_count == 1:
+                message = _(f'{name} moved {obj_type} {obj_link} in library {repo_link}.')
+            else:
+                message = _(f'{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other {obj_type}(s) in library {repo_link}.')
+
+        elif op_type == 'edit':
+
+            message = _(f'{name} updated {obj_type} {obj_link} in library {repo_link}.')
+
+        else:
+            message = _(f'{name} {op_type} {obj_type} {obj_link} in library {repo_link}.')
+
+        return message
 
 
 ########## handle signals

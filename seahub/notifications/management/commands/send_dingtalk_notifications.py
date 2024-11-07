@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 # https://ding-doc.dingtalk.com/doc#/serverapi3/wvdxel
 
-########## Utility Functions ##########
+# Utility Functions
 def remove_html_a_element(s):
     """
     Replace <a ..>xx</a> to xx and wrap content with <div></div>.
@@ -167,9 +167,17 @@ class Command(BaseCommand, CommandLogMixin):
 
         # 4. send msg to users
         for username, uid in users:
+
             user_id = user_uid_map[username]
             notices = user_notices.get(username, [])
-            count = len(notices)
+
+            content_list = []
+            for notice in notices:
+                if not notice.format_msg():
+                    continue
+                content_list.append(remove_html_a_element(notice.format_msg()))
+
+            count = len(content_list)
             if count == 0:
                 continue
 
@@ -181,7 +189,7 @@ class Command(BaseCommand, CommandLogMixin):
                 count
             ) % {'num': count, 'site_name': site_name, }
 
-            content = '  \n  '.join([remove_html_a_element(x.format_msg()) for x in notices])
+            content = '  \n  '.join(content_list)
             self.send_dingtalk_msg(user_id, title, content)
 
         # reset language
