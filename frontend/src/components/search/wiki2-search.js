@@ -179,7 +179,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                   <Wiki2SearchResult
                     result={result}
                     key={result._id}
-                    getCurrentPageId={this.props.getCurrentPageId}
+                    getCurrentPageId={getCurrentPageId}
                     setCurrentPage={setCurrentPage}
                     resetToDefault={resetToDefault}
                     isHighlight={highlightIndex === index}
