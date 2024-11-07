@@ -7,8 +7,9 @@ import { gettext } from '../../utils/constants';
 
 import './wiki2-search-result.css';
 
-function Wiki2SearchResult({ result, currentPageId, setCurrentPage, resetToDefault, setRef, isHighlight }) {
+function Wiki2SearchResult({ result, getCurrentPageId, setCurrentPage, resetToDefault, setRef, isHighlight }) {
   const { content, page } = result;
+  const currentPageId = getCurrentPageId();
   const isCurrentPage = currentPageId === page.id;
   return (
     <div
@@ -19,7 +20,7 @@ function Wiki2SearchResult({ result, currentPageId, setCurrentPage, resetToDefau
       <div className='wiki2-search-result-top d-flex align-items-center'>
         {page.icon ? <CustomIcon icon={page.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
         <span className='wiki2-search-result-page-name text-truncate' title={page.name} style={isCurrentPage ? { width: 'auto' } : { width: 700 }}>{page.name}</span>
-        {currentPageId === page.id ?
+        {isCurrentPage ?
           <span className='wiki2-search-result-current'>{gettext('Current page')}</span> :
           <span className='wiki2-search-result-enter sf3-font sf3-font-enter' style={isHighlight ? { opacity: 1 } : {}}></span>
         }
@@ -37,7 +38,7 @@ function Wiki2SearchResult({ result, currentPageId, setCurrentPage, resetToDefau
 
 Wiki2SearchResult.propTypes = {
   result: PropTypes.object.isRequired,
-  currentPageId: PropTypes.string.isRequired,
+  getCurrentPageId: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   resetToDefault: PropTypes.func.isRequired,
   setRef: PropTypes.func.isRequired,

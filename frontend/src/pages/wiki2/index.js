@@ -13,6 +13,7 @@ import MainPanel from './main-panel';
 import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
 import { DEFAULT_PAGE_NAME } from './constant';
+import { eventBus } from '../../components/common/event-bus';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -28,7 +29,7 @@ class Wiki extends Component {
     this.state = {
       path: '',
       pathExist: true,
-      closeSideBar: false,
+      isSidePanelOpen: false,
       isDataLoading: false,
       editorContent: {},
       permission: '',
@@ -45,7 +46,7 @@ class Wiki extends Component {
 
   UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
-      this.setState({ closeSideBar: true });
+      this.setState({ isSidePanelOpen: true });
     }
   }
 
@@ -142,11 +143,19 @@ class Wiki extends Component {
     });
   };
 
-  onCloseSide = () => {
-    this.setState({ closeSideBar: !this.state.closeSideBar });
+  mobileCloseSidePanel = () => {
+    this.setState({ isSidePanelOpen: false });
   };
 
-  showPage = (pageId, filePath) => {
+  mobileOpenSidePanel = () => {
+    this.setState({ isSidePanelOpen: true });
+  };
+
+  getCurrentPageId = () => {
+    return this.state.currentPageId;
+  };
+
+  updateSdocPage = (pageId, filePath) => {
     this.setState({
       isDataLoading: true,
     });
@@ -204,11 +213,11 @@ class Wiki extends Component {
   };
 
   setCurrentPage = (pageId, callback) => {
-    const { currentPageId, config } = this.state;
-    if (pageId === currentPageId) {
+    if (pageId === this.state.currentPageId) {
       callback && callback();
       return;
     }
+    const { config } = this.state;
     const { pages } = config;
     const currentPage = PageUtils.getPageById(pages, pageId);
     if (!currentPage) {
@@ -216,13 +225,18 @@ class Wiki extends Component {
       return;
     }
     const { path, id, name, docUuid } = currentPage;
-    if (path !== this.state.path) this.showPage(pageId, path);
-    this.onCloseSide();
+    if (path !== this.state.path) {
+      this.updateSdocPage(pageId, path);
+    }
+    if (!Utils.isDesktop()) {
+      this.mobileCloseSidePanel();
+    }
     this.setState({
       currentPageId: pageId,
       path: path,
     }, () => {
       callback && callback();
+      eventBus.dispatch('update-wiki-current-page');
     });
     this.cacheHistoryFiles(docUuid, name, id);
     this.updateDocumentTitle(name);
@@ -256,16 +270,16 @@ class Wiki extends Component {
       <div id="main" className="wiki-main">
         <SidePanel
           isLoading={this.state.isConfigLoading}
-          closeSideBar={this.state.closeSideBar}
+          isSidePanelOpen={this.state.isSidePanelOpen}
           config={this.state.config}
           updateWikiConfig={this.updateWikiConfig}
           getWikiConfig={this.getWikiConfig}
           setCurrentPage={this.setCurrentPage}
-          currentPageId={this.state.currentPageId}
+          getCurrentPageId={this.getCurrentPageId}
           onUpdatePage={this.onUpdatePage}
         />
         <MainPanel
-          onCloseSide={this.onCloseSide}
+          mobileOpenSidePanel={this.mobileOpenSidePanel}
           path={this.state.path}
           config={this.state.config}
           currentPageId={this.state.currentPageId}
@@ -280,7 +294,13 @@ class Wiki extends Component {
           isUpdateBySide={this.state.isUpdateBySide}
         />
         <MediaQuery query="(max-width: 767.8px)">
-          <Modal zIndex="1030" isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
+          <Modal
+            zIndex="1030"
+            isOpen={!this.state.isSidePanelOpen}
+            toggle={this.mobileCloseSidePanel}
+            contentClassName="d-none"
+          >
+          </Modal>
         </MediaQuery>
       </div>
     );

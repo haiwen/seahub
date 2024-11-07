@@ -23,7 +23,7 @@ const propTypes = {
   isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
   onAddWikiPage: PropTypes.func,
-  onCloseSide: PropTypes.func.isRequired
+  mobileOpenSidePanel: PropTypes.func.isRequired
 };
 
 class MainPanel extends Component {
@@ -67,7 +67,13 @@ class MainPanel extends Component {
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
             <div className='wiki2-main-panel-north-content'>
-              <i role="button" aria-label={gettext('Side Nav Menu')} onClick={this.props.onCloseSide} className="sf2-icon-menu side-nav-toggle d-md-none"></i>
+              <i
+                role="button"
+                aria-label={gettext('Side Nav Menu')}
+                onClick={this.props.mobileOpenSidePanel}
+                className="sf2-icon-menu side-nav-toggle d-md-none"
+              >
+              </i>
               <WikiTopNav
                 config={config}
                 currentPageId={this.props.currentPageId}
