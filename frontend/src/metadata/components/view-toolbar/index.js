@@ -5,6 +5,7 @@ import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
 import FaceRecognitionViewToolbar from './face-recognition';
 import KanbanViewToolBar from './kanban-view-toolbar';
+import MapViewToolbar from './map-view-toolbar';
 
 import './index.css';
 
@@ -109,6 +110,9 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) =>
           showDetail={showDetail}
           closeDetail={closeDetail}
         />
+      )}
+      {viewType === VIEW_TYPE.MAP && (
+        <MapViewToolbar />
       )}
     </div>
   );

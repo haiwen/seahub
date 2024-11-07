@@ -4,6 +4,7 @@ import Table from '../views/table';
 import Gallery from '../views/gallery';
 import FaceRecognition from '../views/face-recognition';
 import Kanban from '../views/kanban';
+import Map from '../views/map';
 import { useMetadataView } from '../hooks/metadata-view';
 import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
@@ -26,6 +27,9 @@ const View = () => {
       }
       case VIEW_TYPE.KANBAN: {
         return <Kanban />;
+      }
+      case VIEW_TYPE.MAP: {
+        return <Map />;
       }
       default:
         return null;

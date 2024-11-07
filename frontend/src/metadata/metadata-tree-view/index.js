@@ -32,6 +32,9 @@ const updateFavicon = (type) => {
       case VIEW_TYPE.KANBAN:
         favicon.href = `${mediaUrl}favicons/kanban.png`;
         break;
+      case VIEW_TYPE.MAP:
+        favicon.href = `${mediaUrl}favicons/map.png`;
+        break;
       default:
         favicon.href = `${mediaUrl}favicons/favicon.png`;
     }

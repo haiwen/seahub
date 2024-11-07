@@ -9,6 +9,7 @@ export const VIEW_TYPE = {
   GALLERY: 'gallery',
   FACE_RECOGNITION: 'face_recognition',
   KANBAN: 'kanban',
+  MAP: 'map',
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
@@ -18,6 +19,7 @@ export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.GALLERY]: 'image',
   [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition-view',
   [VIEW_TYPE.KANBAN]: 'kanban',
+  [VIEW_TYPE.MAP]: 'map',
   'image': 'image'
 };
 
@@ -52,6 +54,7 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
       filter_term: []
     },
   ],
+  [VIEW_TYPE.MAP]: [],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {

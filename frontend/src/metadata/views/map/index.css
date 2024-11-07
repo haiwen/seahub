@@ -1,0 +1,70 @@
+.sf-metadata-view-map {
+  display: flex;
+}
+
+.sf-metadata-map-container {
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.custom-image-container {
+  padding: 4px;
+  background: #fff;
+  width: 80px;
+  height: 80px;
+  cursor: default;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%);
+  position: relative;
+}
+
+.custom-image-number {
+  position: absolute;
+  right: -15px;
+  top: -8px;
+  padding: 0 12px;
+  background: #20AD7E;
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.custom-image-container .plugin-label-arrow {
+  position: absolute;
+  bottom: 5px;
+  transform: translate( -50%, 100%);
+  left: 50%;
+  color: #fff;
+  display: inline-block;
+  line-height: 16px;
+  height: 16px;
+}
+
+.custom-image-container .image-overlay-arrow {
+  bottom: 5px;
+  color: #fff;
+  display: inline-block;
+  height: 16px;
+  left: 50%;
+  line-height: 16px;
+  position: absolute;
+  transform: translate(-50%, 100%);
+}
+
+.custom-image-container::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #fff;
+}
