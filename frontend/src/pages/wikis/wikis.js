@@ -10,6 +10,8 @@ import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
 import { seafileAPI } from '../../utils/seafile-api';
+import { userAPI } from '../../utils/user-api';
+import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
 
 
 const propTypes = {
@@ -29,6 +31,7 @@ class Wikis extends Component {
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
       isDropdownMenuShown: false,
+      isShowConvertStatusDialog: false,
     };
   }
 
@@ -250,11 +253,56 @@ class Wikis extends Component {
   };
 
   convertWiki = (wiki, wikiName, departmentID) => {
+    let task_id = '';
+    this.setState({
+      isShowConvertStatusDialog: true,
+    });
     wikiAPI.convertWiki(wiki.id, wikiName, departmentID).then((res) => {
-      this.getWikis();
+      task_id = res.data.task_id;
+      return userAPI.queryIOStatus(task_id);
+    }).then(res => {
+      if (res.data.is_finished === true) {
+        this.setState({
+          isShowConvertStatusDialog: false,
+        });
+      } else {
+        this.queryConvertStatus(task_id);
+      }
     }).catch((error) => {
+      this.setState({
+        isShowConvertStatusDialog: false
+      });
       if (error.response) {
         let errorMsg = error.response.data.error_msg;
+        toaster.danger(errorMsg);
+      }
+    });
+    this.getWikis();
+  };
+
+  onConvertStatusToggle = () => {
+    this.setState({
+      isShowConvertDialog: !this.state.isShowConvertStatusDialog,
+    });
+  };
+
+  queryConvertStatus = (task_id) => {
+    userAPI.queryIOStatus(task_id).then(res => {
+      if (res.data.is_finished === true) {
+        this.setState({
+          isShowConvertStatusDialog: false
+        });
+      } else {
+        setTimeout(() => {
+          this.queryConvertStatus(task_id);
+        }, 1000);
+      }
+    }).catch(err => {
+      this.setState({
+        isShowConvertStatusDialog: false
+      });
+      if (err.response) {
+        let errorMsg = err.response.data.error_msg;
         toaster.danger(errorMsg);
       }
     });
@@ -270,6 +318,11 @@ class Wikis extends Component {
   render() {
     return (
       <Fragment>
+        {this.state.isShowConvertStatusDialog &&
+          <WikiConvertStatusDialog
+            toggle={this.onConvertStatusToggle}
+          />
+        }
         {this.state.isShowAddDialog &&
           <ModalPortal>
             <AddWikiDialog
