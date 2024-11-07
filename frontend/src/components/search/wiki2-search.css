@@ -1,8 +1,9 @@
 .wiki2-search {
-  margin: 10px 8px 10px;
+  margin: 10px 8px;
   height: 32px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   border-radius: 3px;
 }
 
@@ -14,10 +15,6 @@
 .wiki2-search .sf3-font-search {
   margin: 0 8px;
   color: #666;
-}
-
-.wiki2-search-input {
-  position: relative;
 }
 
 .wiki2-search-input .sf3-font-search {
