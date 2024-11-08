@@ -43,13 +43,15 @@ const Settings = ({
 
   const displayColumns = useMemo(() => {
     const displayColumnsConfig = settings[KANBAN_SETTINGS_KEYS.COLUMNS];
-    if (!displayColumnsConfig) return columns.map(column => ({ ...column, shown: false }));
+    const titleColumnKey = settings[KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY];
+    const validColumns = columns.filter(item => item.key !== titleColumnKey);
+    if (!displayColumnsConfig) return validColumns.map(column => ({ ...column, shown: false }));
     const validDisplayColumnsConfig = displayColumnsConfig.map(columnConfig => {
       const column = columnsMap[columnConfig.key];
       if (column) return { ...column, shown: columnConfig.shown };
       return null;
-    }).filter(column => column);
-    const addedColumns = columns
+    }).filter(column => column && column.key !== titleColumnKey);
+    const addedColumns = validColumns
       .filter(column => !getColumnByKey(validDisplayColumnsConfig, column.key))
       .map(column => ({ ...column, shown: false }));
     return [...validDisplayColumnsConfig, ...addedColumns];
