@@ -75,27 +75,3 @@
 .sf-metadata-view-kanban-setting-panel .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
   left: 12px;
 }
-
-.sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sf-metadata-view-kanban-setting-panel .hide-columns-label {
-  user-select: none;
-}
-
-.sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn-icon {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ccc;
-  cursor: pointer;
-}
-
-.sf-metadata-view-kanban-setting-panel .toggle-hide-columns-btn-icon:hover {
-  color: #3a2121;
-}

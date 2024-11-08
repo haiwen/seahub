@@ -1,4 +1,4 @@
-.sf-metadata-view-kanban .sf-metadata-kanban-add-category-button {
+.sf-metadata-view-kanban .sf-metadata-kanban-add-board-button {
   min-width: 300px;
   height: 2rem;
   padding: 0 8px;
@@ -12,16 +12,16 @@
   overflow: hidden;
 }
 
-.sf-metadata-view-kanban .sf-metadata-kanban-add-category-button:hover {
+.sf-metadata-view-kanban .sf-metadata-kanban-add-board-button:hover {
   background-color: #efefef;
   border-radius: 4px;
 }
 
-.sf-metadata-view-kanban .sf-metadata-kanban-add-category-button .sf-metadata-icon-add-table {
+.sf-metadata-view-kanban .sf-metadata-kanban-add-board-button .sf-metadata-icon-add-table {
   flex-shrink: 0;
 }
 
-.sf-metadata-view-kanban .sf-metadata-kanban-add-category-button .sf-metadata-kanban-add-category-title {
+.sf-metadata-view-kanban .sf-metadata-kanban-add-board-button .sf-metadata-kanban-add-board-title {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;

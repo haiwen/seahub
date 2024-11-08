@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import Header from './header';
 import Card from './card';
 import { useMetadataView } from '../../../../hooks/metadata-view';
@@ -8,8 +9,21 @@ import Draggable from '../../dnd/draggable';
 
 import './index.css';
 
-const Board = ({ board, index: boardIndex, readonly, displayEmptyValue, displayColumnName, groupByColumn, titleColumn, displayColumns, onMove, deleteOption }) => {
-
+const Board = ({
+  board,
+  index: boardIndex,
+  readonly,
+  haveFreezed,
+  displayEmptyValue,
+  displayColumnName,
+  groupByColumn,
+  titleColumn,
+  displayColumns,
+  onMove,
+  deleteOption,
+  onFreezed,
+  onUnFreezed,
+}) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
 
@@ -35,7 +49,15 @@ const Board = ({ board, index: boardIndex, readonly, displayEmptyValue, displayC
 
   return (
     <section draggable={false} className="sf-metadata-view-kanban-board">
-      <Header readonly={readonly} value={board.value} groupByColumn={groupByColumn} deleteOption={deleteOption} />
+      <Header
+        readonly={readonly}
+        value={board.value}
+        groupByColumn={groupByColumn}
+        haveFreezed={haveFreezed}
+        onDelete={() => deleteOption(board.key)}
+        onFreezed={onFreezed}
+        onUnFreezed={onUnFreezed}
+      />
       <Container
         orientation="vertical"
         groupName={boardName}
@@ -48,18 +70,15 @@ const Board = ({ board, index: boardIndex, readonly, displayEmptyValue, displayC
         shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
       >
-        {board.children.map((cardKey, index) => {
-          const card = { boardIndex: boardIndex, cardIndex: index, cardKey };
+        {board.children.map((cardKey) => {
           const record = getRowById(metadata, cardKey);
           if (!record) return null;
           const CardElement = (
             <Card
               key={cardKey}
-              index={index}
-              boardIndex={boardIndex}
+              readonly={readonly}
               displayEmptyValue={displayEmptyValue}
               displayColumnName={displayColumnName}
-              card={card}
               record={record}
               titleColumn={titleColumn}
               displayColumns={displayColumns}
@@ -75,6 +94,22 @@ const Board = ({ board, index: boardIndex, readonly, displayEmptyValue, displayC
       </Container>
     </section>
   );
+};
+
+Board.propTypes = {
+  board: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  readonly: PropTypes.bool,
+  haveFreezed: PropTypes.bool,
+  displayEmptyValue: PropTypes.bool,
+  displayColumnName: PropTypes.bool,
+  groupByColumn: PropTypes.object,
+  titleColumn: PropTypes.object,
+  displayColumns: PropTypes.array,
+  onMove: PropTypes.func,
+  deleteOption: PropTypes.func,
+  onFreezed: PropTypes.func,
+  onUnFreezed: PropTypes.func,
 };
 
 export default Board;

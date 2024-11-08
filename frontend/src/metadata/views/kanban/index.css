@@ -1,4 +1,4 @@
-.sf-metadata-view-kanban-container {
+.sf-metadata-view-kanban {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -6,7 +6,7 @@
   flex-direction: row;
 }
 
-.sf-metadata-view-kanban .tips-empty-board {
+.sf-metadata-view-kanban .tips-empty-boards {
   flex: 1 1;
   display: flex;
   align-items: center;

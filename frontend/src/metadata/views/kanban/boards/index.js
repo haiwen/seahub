@@ -1,19 +1,22 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
 import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { gettext } from '../../../../utils/constants';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord } from '../../../utils/cell';
-import AddCategory from '../add-category';
-import EmptyTip from '../../../../components/empty-tip';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
+import AddBoard from '../add-board';
+import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 
 import './index.css';
 
 const Boards = ({ modifyRecord, modifyColumnData }) => {
+  const [haveFreezed, setHaveFreezed] = useState(false);
+
   const { metadata, store } = useMetadataView();
   const { collaborators } = useCollaborators();
 
@@ -35,16 +38,18 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
 
   const displayEmptyValue = useMemo(() => !metadata.view.settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE], [metadata.view.settings]);
   const displayColumnName = useMemo(() => metadata.view.settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME], [metadata.view.settings]);
+  const textWrap = useMemo(() => metadata.view.settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP], [metadata.view.settings]);
 
   /**
    [
       {
         key: '',
-        id: '',
+        value: '',
         children: [ rowId ]
       }, {
         key: '',
-        children: []
+        value: '',
+        children: [ rowId ]
       },
     ]
   */
@@ -53,7 +58,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
     const groupByColumnType = groupByColumn.type;
 
     const { rows } = metadata;
-    let ungroupedCard = { key: UNCATEGORIZED, value: '', children: [] };
+    let ungroupedCard = { key: UNCATEGORIZED, value: null, children: [] };
     let boardsMap = {};
 
     if (groupByColumnType === CellType.SINGLE_SELECT) {
@@ -76,12 +81,20 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
       if (isValidCellValue(cellValue)) {
         switch (groupByColumnType) {
           case CellType.SINGLE_SELECT: {
-            boardsMap[cellValue].push(recordId);
+            if (boardsMap[cellValue]) {
+              boardsMap[cellValue].push(recordId);
+            } else {
+              ungroupedCard.children.push(recordId);
+            }
             break;
           }
           case CellType.COLLABORATOR: {
             Array.isArray(cellValue) && cellValue.forEach(email => {
-              boardsMap[email].push(recordId);
+              if (boardsMap[email]) {
+                boardsMap[email].push(recordId);
+              } else {
+                ungroupedCard.children.push(recordId);
+              }
             });
             break;
           }
@@ -109,7 +122,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
       }));
     }
     if (ungroupedCard.children.length > 0) {
-      _boards.push(ungroupedCard);
+      _boards.unshift(ungroupedCard);
     }
     return _boards;
   }, [metadata, collaborators, groupByColumn]);
@@ -122,10 +135,10 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
     return true;
   }, [groupByColumn, store]);
 
-  const deleteOption = useCallback((cardId) => {
+  const deleteOption = useCallback((optionId) => {
     const oldData = groupByColumn.data;
     const oldOptions = getColumnOptions(groupByColumn);
-    const newOptions = checkIsPredefinedOption(groupByColumn, cardId) ? oldOptions.filter(o => o.id !== cardId) : oldOptions.filter(o => o.name !== cardId);
+    const newOptions = oldOptions.filter(o => o.id !== optionId);
     const optionModifyType = COLUMN_DATA_OPERATION_TYPE.DELETE_OPTION;
     modifyColumnData(groupByColumn.key, { options: newOptions }, { options: oldData.options }, { optionModifyType });
   }, [groupByColumn, modifyColumnData]);
@@ -142,10 +155,22 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
     modifyRecord(sourceCard, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [boards, groupByColumn, modifyRecord]);
 
+  const onFreezed = useCallback(() => {
+    setHaveFreezed(true);
+  }, []);
+
+  const onUnFreezed = useCallback(() => {
+    setHaveFreezed(false);
+  }, []);
+
   const isEmpty = boards.length === 0;
 
   return (
-    <div className="sf-metadata-view-kanban-boards">
+    <div className={classnames('sf-metadata-view-kanban-boards', {
+      'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+      'readonly': readonly,
+    })}
+    >
       <div className="smooth-dnd-container horizontal">
         {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
         {!isEmpty && (
@@ -159,17 +184,20 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
                   readonly={readonly}
                   displayEmptyValue={displayEmptyValue}
                   displayColumnName={displayColumnName}
+                  haveFreezed={haveFreezed}
                   groupByColumn={groupByColumn}
                   titleColumn={titleColumn}
                   displayColumns={displayColumns}
                   onMove={onMove}
                   deleteOption={deleteOption}
+                  onFreezed={onFreezed}
+                  onUnFreezed={onUnFreezed}
                 />
               );
             })}
           </>
         )}
-        {!readonly && (<AddCategory groupByColumn={groupByColumn}/>)}
+        {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
     </div>
   );

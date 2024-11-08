@@ -8,12 +8,12 @@ import { useMetadataView } from '../../../hooks/metadata-view';
 
 import './index.css';
 
-const AddList = ({ groupByColumn }) => {
+const AddBoard = ({ groupByColumn }) => {
   const [isShowPopover, setShowPopover] = useState(false);
   const { store } = useMetadataView();
 
   const options = useMemo(() => groupByColumn.data.options, [groupByColumn]);
-  const id = useMemo(() => 'sf-metadata-kanban-add-list-button', []);
+  const id = useMemo(() => 'sf-metadata-kanban-add-board-button', []);
 
   const handleButtonClick = useCallback((event) => {
     event.stopPropagation();
@@ -35,9 +35,9 @@ const AddList = ({ groupByColumn }) => {
 
   return (
     <>
-      <div id={id} className="sf-metadata-kanban-add-category-button" onClick={handleButtonClick} title={gettext('Add a new category')}>
+      <div id={id} className="sf-metadata-kanban-add-board-button" onClick={handleButtonClick} title={gettext('Add a new category')}>
         <Icon iconName="add-table" />
-        <span className="sf-metadata-kanban-add-category-title">{gettext('Add a new category')}</span>
+        <span className="sf-metadata-kanban-add-board-title">{gettext('Add a new category')}</span>
       </div>
       {isShowPopover && (
         <AddCategoryPopover target={id} options={options} onCancel={onToggle} onSubmit={handleAddNewOption} />
@@ -46,8 +46,8 @@ const AddList = ({ groupByColumn }) => {
   );
 };
 
-AddList.propTypes = {
+AddBoard.propTypes = {
   groupByColumn: PropTypes.object.isRequired,
 };
 
-export default AddList;
+export default AddBoard;

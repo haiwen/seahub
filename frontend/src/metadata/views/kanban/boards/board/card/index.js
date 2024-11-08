@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import CellFormatter from '../../../../../components/cell-formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 
 import './index.css';
 
 const Card = ({
-  index,
-  boardIndex,
+  readonly,
   displayEmptyValue,
   displayColumnName,
   record,
@@ -18,7 +18,7 @@ const Card = ({
   const titleValue = getCellValueByColumn(record, titleColumn);
 
   return (
-    <article data-id={record._id} className="sf-metadata-kanban-card">
+    <article data-id={record._id} className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}>
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">
           <CellFormatter value={titleValue} field={titleColumn}/>
@@ -30,7 +30,7 @@ const Card = ({
           if (!displayEmptyValue && !isValidCellValue(value)) {
             if (displayColumnName) {
               return (
-                <div className="sf-metadata-kanban-card-record">
+                <div className="sf-metadata-kanban-card-record" key={column.key}>
                   <div className="sf-metadata-kanban-card-record-name">{column.name}</div>
                 </div>
               );
@@ -40,14 +40,14 @@ const Card = ({
 
           if (!displayColumnName) {
             return (
-              <div className="sf-metadata-kanban-card-record">
+              <div className="sf-metadata-kanban-card-record" key={column.key}>
                 <CellFormatter value={value} field={column}/>
               </div>
             );
           }
 
           return (
-            <div className="sf-metadata-kanban-card-record">
+            <div className="sf-metadata-kanban-card-record" key={column.key}>
               <div className="sf-metadata-kanban-card-record-name">{column.name}</div>
               <CellFormatter value={value} field={column}/>
             </div>
@@ -59,6 +59,7 @@ const Card = ({
 };
 
 Card.propTypes = {
+  readonly: PropTypes.bool,
   displayEmptyValue: PropTypes.bool,
   displayColumnName: PropTypes.bool,
   record: PropTypes.object,
