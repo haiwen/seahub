@@ -1,25 +1,23 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../../utils/constants';
+import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize } from '../../../../../utils/constants';
 import OpMenu from './op-menu';
-import { Utils } from '../../../../../utils/utils';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../../../utils/cell';
 import Rename from '../../../../../components/rename';
 
 import './index.css';
 
 const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFreezed }) => {
+  const [defaultURL, setDefaultURL] = useState('');
 
   const similarPhotoURL = useMemo(() => {
-    const similarPhoto = people._similar_photo;
-    if (!similarPhoto) return '';
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    const fileName = getFileNameFromRecord(similarPhoto);
-    const parentDir = getParentDirFromRecord(similarPhoto);
-    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`;
-  }, [people._similar_photo]);
+    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg`;
+  }, [people]);
+
+  const onImgLoadError = useCallback(() => {
+    setDefaultURL(`${mediaUrl}avatars/default.png`);
+  }, []);
 
   const photosCount = useMemo(() => {
     return Array.isArray(people._photo_links) ? people._photo_links.length : 0;
@@ -79,7 +77,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       onClick={handelClick}
     >
       <div className="sf-metadata-people-info-img mr-2">
-        <img src={similarPhotoURL} alt={name} height={36} width={36} />
+        <img src={defaultURL || similarPhotoURL} alt={name} onError={onImgLoadError} height={36} width={36} />
       </div>
       <div className={classNames('sf-metadata-people-info-name-count', { 'o-hidden': !renaming })}>
         <div className="sf-metadata-people-info-name">

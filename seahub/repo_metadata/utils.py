@@ -10,6 +10,8 @@ from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
 
+FACES_SAVE_PATH = '_Internal/Faces'
+
 
 def add_init_metadata_task(params):
     payload = {'exp': int(time.time()) + 300, }
