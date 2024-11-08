@@ -38,6 +38,7 @@ export const EVENT_BUS_TYPE = {
   MODIFY_SORTS: 'modify_sorts',
   MODIFY_GROUPBYS: 'modify_groupbys',
   MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
+  MODIFY_SETTINGS: 'modify_settings',
 
   // change
   VIEW_CHANGED: 'view_changed',
@@ -56,4 +57,7 @@ export const EVENT_BUS_TYPE = {
 
   // face recognition
   TOGGLE_VIEW_TOOLBAR: 'toggle_view_toolbar',
+
+  // kanban
+  TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
 };

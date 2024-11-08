@@ -122,6 +122,7 @@ export default function apply(data, operation) {
       const newColumn = new Column(column);
       data.columns.push(newColumn);
       data.view = new View(data.view, data.columns);
+      data.key_column_map[newColumn.key] = newColumn;
       return data;
     }
     case OPERATION_TYPE.DELETE_COLUMN: {
@@ -144,6 +145,7 @@ export default function apply(data, operation) {
           id_row_map[row[PRIVATE_COLUMN_KEY.ID]] = row;
         });
         data.id_row_map = id_row_map;
+        delete data.key_column_map[column_key];
       }
       return data;
     }
@@ -153,6 +155,7 @@ export default function apply(data, operation) {
       if (columnIndex !== -1) {
         const newColumn = new Column({ ...data.columns[columnIndex], name: new_name });
         data.columns[columnIndex] = newColumn;
+        data.key_column_map[column_key] = newColumn;
       }
       data.view = new View(data.view, data.columns);
       return data;
@@ -164,6 +167,7 @@ export default function apply(data, operation) {
         const oldColumn = data.columns[columnIndex];
         const newColumn = new Column({ ...oldColumn, data: { ...oldColumn.data, ...new_data } });
         data.columns[columnIndex] = newColumn;
+        data.key_column_map[column_key] = newColumn;
       }
       data.view = new View(data.view, data.columns);
       return data;
@@ -220,6 +224,11 @@ export default function apply(data, operation) {
       });
       data.rows = updatedRows;
       data.recordsCount = updatedRows.length;
+      return data;
+    }
+    case OPERATION_TYPE.MODIFY_SETTINGS: {
+      const { settings } = operation;
+      data.view.settings = settings;
       return data;
     }
     default: {

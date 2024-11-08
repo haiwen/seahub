@@ -29,6 +29,9 @@ const updateFavicon = (type) => {
       case VIEW_TYPE.FACE_RECOGNITION:
         favicon.href = `${mediaUrl}favicons/face-recognition-view.png`;
         break;
+      case VIEW_TYPE.KANBAN:
+        favicon.href = `${mediaUrl}favicons/kanban.png`;
+        break;
       default:
         favicon.href = `${mediaUrl}favicons/favicon.png`;
     }

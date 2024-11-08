@@ -4,6 +4,7 @@ import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
 import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
 import FaceRecognitionViewToolbar from './face-recognition';
+import KanbanViewToolBar from './kanban-view-toolbar';
 
 import './index.css';
 
@@ -95,6 +96,15 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
           isCustomPermission={isCustomPermission}
           view={view}
           showDetail={showDetail}
+        />
+      )}
+      {viewType === VIEW_TYPE.KANBAN && (
+        <KanbanViewToolBar
+          readOnly={readOnly}
+          view={view}
+          collaborators={collaborators}
+          modifyFilters={modifyFilters}
+          modifySorts={modifySorts}
         />
       )}
     </div>

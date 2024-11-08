@@ -1,0 +1,116 @@
+.sf-metadata-kanban-card {
+  padding: 10px;
+  box-shadow: 0 0 3px #0000001f;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background-color: #fff;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease, margin 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sf-metadata-kanban-card:hover {
+  cursor: pointer;
+  box-shadow: 0 0 6px #0000002e;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-header {
+  font-weight: 500;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-body .sf-metadata-kanban-card-record:first-child {
+  margin-top: 10px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record {
+  margin-bottom: 10px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record:last-child {
+  margin-bottom: 0;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-kanban-card-record-name {
+  margin-bottom: 4px;
+  color: #666;
+  font-size: 12px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-record-cell-empty {
+  display: inline-block;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  height: 8px;
+  width: 20px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-ui {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  font-size: 14px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-date-formatter,
+.sf-metadata-kanban-card .sf-metadata-number-formatter {
+  text-align: left;
+}
+
+.sf-metadata-kanban-card .sf-metadata-text-formatter {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-metadata-kanban-card .file-name-formatter {
+  margin-left: -4px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-special-file-name-formatter {
+  margin-left: -2px;
+}
+
+.sf-metadata-kanban-card .file-name-formatter .sf-metadata-file-icon {
+  transform: translateY(-1px);
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .collaborators-formatter {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .collaborators-formatter .collaborator-item {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-checkbox-formatter {
+  justify-content: flex-start;
+  padding-left: 2px;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-multiple-select-formatter {
+  flex-wrap: wrap;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-multiple-select-formatter .sf-metadata-ui-select-option {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.sf-metadata-view-kanban-boards-text-wrap .sf-metadata-kanban-card-record .text-formatter {
+  white-space: normal;
+  max-height: 68px;
+}
+
+.sf-metadata-view-kanban-boards-text-wrap .sf-metadata-kanban-card-record .long-text-formatter {
+  display: block;
+  height: auto;
+  max-height: 68px;
+  white-space: normal;
+}

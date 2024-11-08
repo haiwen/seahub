@@ -1,0 +1,13 @@
+.sf-metadata-view-kanban-board {
+  width: 278px;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.sf-metadata-view-kanban-board .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+  overflow: visible;
+}
+
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-view-kanban-board:last-child {
+  margin-right: 0;
+}

@@ -1,5 +1,5 @@
 import { getColumnByKey } from '../../utils/column';
-import { VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS } from '../../constants';
+import { VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS, VIEW_DEFAULT_SETTINGS } from '../../constants';
 
 class View {
 
@@ -53,6 +53,9 @@ class View {
       this.columns_keys = columns.map(c => c.key);
       this.columns = columns;
     }
+
+    // settings
+    this.settings = object.settings || VIEW_DEFAULT_SETTINGS[this.type];
   }
 
 }

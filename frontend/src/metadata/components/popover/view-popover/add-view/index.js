@@ -15,6 +15,10 @@ const VIEW_OPTIONS = [
   {
     key: 'gallery',
     type: VIEW_TYPE.GALLERY,
+  },
+  {
+    key: 'kanban',
+    type: VIEW_TYPE.KANBAN,
   }
 ];
 
@@ -43,6 +47,8 @@ const AddView = ({ target, toggle, onOptionClick }) => {
         return gettext('Table');
       case VIEW_TYPE.GALLERY:
         return gettext('Gallery');
+      case VIEW_TYPE.KANBAN:
+        return gettext('Kanban');
       default:
         return type;
     }

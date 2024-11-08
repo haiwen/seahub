@@ -544,6 +544,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  modifySettings = (settings) => {
+    const type = OPERATION_TYPE.MODIFY_SETTINGS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: this.viewId, settings
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;

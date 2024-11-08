@@ -66,6 +66,10 @@ export const MetadataViewProvider = ({
     window.sfMetadataStore.modifyColumnOrder(sourceColumnKey, targetColumnKey);
   }, []);
 
+  const modifySettings = useCallback((settings) => {
+    window.sfMetadataStore.modifySettings(settings);
+  }, []);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -98,6 +102,7 @@ export const MetadataViewProvider = ({
     const unsubscribeModifyGroupbys = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
     const unsubscribeModifyHiddenColumns = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
     const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
+    const unsubscribeModifySettings = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SETTINGS, modifySettings);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -114,6 +119,7 @@ export const MetadataViewProvider = ({
       unsubscribeModifyGroupbys();
       unsubscribeModifyHiddenColumns();
       unsubscribeModifyColumnOrder();
+      unsubscribeModifySettings();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);
