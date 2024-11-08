@@ -959,7 +959,8 @@ class LibContentView extends React.Component {
     localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
   };
 
-  onAddFolder = (dirPath) => {
+  onAddFolder = (dirPath, options = {}) => {
+    const { successCallback = () => {} } = options;
     let repoID = this.props.repoID;
     seafileAPI.createDir(repoID, dirPath).then(() => {
       let name = Utils.getFileName(dirPath);
@@ -972,6 +973,8 @@ class LibContentView extends React.Component {
       if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'dir');
       }
+
+      successCallback();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -2280,6 +2283,7 @@ class LibContentView extends React.Component {
                       currentMode={this.state.currentMode}
                       switchViewMode={this.switchViewMode}
                       onItemConvert={this.onConvertItem}
+                      onAddFolder={this.onAddFolder}
                     />
                     :
                     <CurDirPath
@@ -2312,6 +2316,7 @@ class LibContentView extends React.Component {
                       onItemMove={this.onMoveItem}
                       isDesktop={isDesktop}
                       loadDirentList={this.loadDirentList}
+                      onAddFolderNode={this.onAddFolder}
                     />
                   }
                 </div>

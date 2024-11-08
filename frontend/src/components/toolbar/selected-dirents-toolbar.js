@@ -40,6 +40,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
 };
 
 class SelectedDirentsToolbar extends React.Component {
@@ -417,6 +418,7 @@ class SelectedDirentsToolbar extends React.Component {
             selectedDirentList={this.props.selectedDirentList}
             onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
+            onAddFolder={this.props.onAddFolder}
           />
         }
         {this.state.isCopyDialogShow &&

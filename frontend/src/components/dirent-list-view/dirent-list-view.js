@@ -779,6 +779,7 @@ class DirentListView extends React.Component {
                   onItemsMove={this.props.onItemsMove}
                   onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
                   loadDirentList={this.props.loadDirentList}
+                  onAddFolder={this.props.onAddFolder}
                 />
               );
             })}
@@ -859,6 +860,7 @@ class DirentListView extends React.Component {
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
               onCancelMove={this.onMoveToggle}
+              onAddFolder={this.props.onAddFolder}
             />
           }
           {this.state.isCopyDialogShow &&

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import RecentlyUsedListView from './recently-used-list-view';
 import { gettext } from '../../utils/constants';
+import SearchedListView from './searched-list-view';
+import { SearchStatus } from './searcher';
+import Loading from '../loading';
 
 export const MODE_TYPE_MAP = {
   CURRENT_AND_OTHER_REPOS: 'current_repo_and_other_repos',
@@ -10,12 +13,14 @@ export const MODE_TYPE_MAP = {
   ONLY_ALL_REPOS: 'only_all_repos',
   ONLY_OTHER_LIBRARIES: 'only_other_libraries',
   RECENTLY_USED: 'recently_used',
+  SEARCH_RESULTS: 'search_results',
 };
 
 const RepoListWrapper = (props) => {
   const {
-    mode, isShowFile, fileSuffixes, currentPath, isBrowsing, browsingPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
+    mode, isShowFile, fileSuffixes, currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
+    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName
   } = props;
 
   const renderRecentlyUsed = () => {
@@ -32,6 +37,29 @@ const RepoListWrapper = (props) => {
 
   const onScroll = (event) => {
     event.stopPropagation();
+  };
+
+  const renderSearchResults = () => {
+    switch (searchStatus) {
+      case SearchStatus.LOADING:
+        return <Loading />;
+      case SearchStatus.RESULTS:
+        return (
+          <>
+            {searchResults.length === 0 ? (
+              <div className='search-results-none text-center'>{gettext('No results matching')}</div>
+            ) : (
+              <SearchedListView
+                searchResults={searchResults}
+                onItemClick={onSearchedItemClick}
+                onSearchedItemDoubleClick={onSearchedItemDoubleClick}
+              />
+            )}
+          </>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -91,10 +119,10 @@ const RepoListWrapper = (props) => {
               isShowFile={isShowFile}
               fileSuffixes={fileSuffixes}
               selectedItemInfo={selectedItemInfo}
-              isBrowsing={isBrowsing}
-              browsingPath={browsingPath}
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
+              selectedSearchedRepo={selectedSearchedRepo}
+              newFolderName={newFolderName}
             />
           </div>
         )}
@@ -129,14 +157,19 @@ const RepoListWrapper = (props) => {
               isShowFile={isShowFile}
               fileSuffixes={fileSuffixes}
               selectedItemInfo={selectedItemInfo}
-              isBrowsing={isBrowsing}
-              browsingPath={browsingPath}
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
+              selectedSearchedRepo={selectedSearchedRepo}
+              newFolderName={newFolderName}
             />
           </div>
         )}
         {mode === MODE_TYPE_MAP.RECENTLY_USED && renderRecentlyUsed()}
+        {mode === MODE_TYPE_MAP.SEARCH_RESULTS && (
+          <div className="list-view">
+            {renderSearchResults()}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -147,8 +180,6 @@ RepoListWrapper.propTypes = {
   currentPath: PropTypes.string,
   isShowFile: PropTypes.bool,
   fileSuffixes: PropTypes.array,
-  isBrowsing: PropTypes.bool,
-  browsingPath: PropTypes.string,
   selectedItemInfo: PropTypes.object,
   currentRepoInfo: PropTypes.object,
   selectedRepo: PropTypes.object,
@@ -160,6 +191,12 @@ RepoListWrapper.propTypes = {
   onOtherRepoToggle: PropTypes.func,
   handleClickRepo: PropTypes.func,
   handleClickDirent: PropTypes.func,
+  searchStatus: PropTypes.string,
+  searchResults: PropTypes.array,
+  onSearchedItemClick: PropTypes.func,
+  onSearchedItemDoubleClick: PropTypes.func,
+  selectedSearchedRepo: PropTypes.object,
+  newFolderName: PropTypes.string,
 };
 
 RepoListWrapper.defaultProps = {

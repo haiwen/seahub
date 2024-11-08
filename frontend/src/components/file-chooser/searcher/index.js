@@ -1,51 +1,65 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Input, UncontrolledPopover } from 'reactstrap';
-import Loading from '../../loading';
-import toaster from '../../toast';
-import RepoInfo from '../../../models/repo-info';
-import SearchedListView from '../searched-list-view';
+import { Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
+import { MODE_TYPE_MAP } from '../repo-list-wrapper';
 
 import './index.css';
 
 export const SearchStatus = {
-  IDLE: 'idle',
   LOADING: 'loading',
   RESULTS: 'results',
-  NO_RESULTS: 'no_results',
-  BROWSING: 'browsing',
 };
 
-const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selectSearchedItem, selectRepo, setSelectedPath, setBrowsingPath }) => {
+const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, onClose }) => {
   const [inputValue, setInputValue] = useState('');
-  const [isResultsPopoverOpen, setIsResultsPopoverOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
 
   const inputRef = useRef(null);
 
   const searchTimer = useRef(null);
   const source = useRef(null);
 
-  const onPopoverToggle = useCallback((show) => {
-    setIsResultsPopoverOpen(show);
-  }, []);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target) && inputValue === '') {
+        onClose();
+      }
+    };
 
-  const handleSearchInputChange = (e) => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [inputValue, onClose]);
+
+  const getSearchResult = useCallback((queryData) => {
+    if (source.current) {
+      source.current.cancel('prev request is cancelled');
+    }
+
+    source.current = seafileAPI.getSource();
+    seafileAPI.searchFiles(queryData, source.current.token).then(res => {
+      onUpdateSearchStatus(SearchStatus.RESULTS);
+      onUpdateSearchResults(res.data.total ? formatResultItems(res.data.results) : []);
+      source.current = null;
+    }).catch(err => {
+      source.current = null;
+    });
+  }, [onUpdateSearchStatus, onUpdateSearchResults]);
+
+  const handleSearchInputChange = useCallback((e) => {
     const newValue = e.target.value.trim();
     setInputValue(newValue);
 
     if (newValue.length === 0) {
-      onUpdateSearchStatus(SearchStatus.IDLE);
-      setSearchResults([]);
+      onUpdateSearchResults([]);
       return;
     }
 
     onUpdateSearchStatus(SearchStatus.LOADING);
-    onPopoverToggle(true);
 
     const queryData = {
       q: newValue,
@@ -61,23 +75,7 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
     searchTimer.current = setTimeout(() => {
       getSearchResult(queryData);
     }, 500);
-  };
-
-  const getSearchResult = useCallback((queryData) => {
-    if (source.current) {
-      source.current.cancel('prev request is cancelled');
-    }
-
-    source.current = seafileAPI.getSource();
-    seafileAPI.searchFiles(queryData, source.current.token).then(res => {
-      setSearchResults(res.data.total ? formatResultItems(res.data.results) : []);
-      onUpdateSearchStatus(res.data.results.length > 0 ? SearchStatus.RESULTS : SearchStatus.NO_RESULTS);
-      source.current = null;
-    }).catch(err => {
-      onUpdateSearchStatus(SearchStatus.NO_RESULTS);
-      source.current = null;
-    });
-  }, [onUpdateSearchStatus]);
+  }, [onUpdateSearchStatus, onUpdateSearchResults, getSearchResult]);
 
   const formatResultItems = (data) => {
     let items = [];
@@ -96,66 +94,18 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
     return items;
   };
 
+  const handleKeyDown = useCallback((e) => {
+    e.stopPropagation();
+
+    if (e.key === 'Enter' && inputValue.trim().length > 0) {
+      onUpdateMode(MODE_TYPE_MAP.SEARCH_RESULTS);
+    }
+  }, [inputValue, onUpdateMode]);
+
   const onCloseSearching = useCallback(() => {
     setInputValue('');
-    setSearchResults([]);
-    onUpdateSearchStatus(SearchStatus.IDLE);
-    onPopoverToggle(false);
-    selectSearchedItem(null);
-  }, [onUpdateSearchStatus, selectSearchedItem, onPopoverToggle]);
-
-  const onSearchedItemClick = (item) => {
-    item['type'] = item.is_dir ? 'dir' : 'file';
-    let repo = new RepoInfo(item);
-    onDirentItemClick(repo, item.path, item);
-  };
-
-  const onSearchedItemDoubleClick = (item) => {
-    if (item.type !== 'dir') return;
-
-    const selectedItemInfo = {
-      repoID: item.repo_id,
-      filePath: item.path,
-    };
-
-    selectSearchedItem(selectedItemInfo);
-    onPopoverToggle(false);
-
-    seafileAPI.getRepoInfo(item.repo_id).then(res => {
-      const repoInfo = new RepoInfo(res.data);
-      const path = item.path.substring(0, item.path.length - 1);
-      selectRepo(repoInfo);
-      setSelectedPath(path);
-      setBrowsingPath(item.path.substring(0, item.path.length - 1));
-    }).catch(err => {
-      const errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    });
-
-    onUpdateSearchStatus(SearchStatus.BROWSING);
-  };
-
-  const renderSearchResults = () => {
-    switch (searchStatus) {
-      case SearchStatus.IDLE:
-        return null;
-      case SearchStatus.LOADING:
-        return <Loading />;
-      case SearchStatus.NO_RESULTS:
-        return (
-          <div className='search-results-none'>{gettext('No results matching')}</div>
-        );
-      case SearchStatus.BROWSING:
-      case SearchStatus.RESULTS:
-        return (
-          <SearchedListView
-            searchResults={searchResults}
-            onItemClick={onSearchedItemClick}
-            onSearchedItemDoubleClick={onSearchedItemDoubleClick}
-          />
-        );
-    }
-  };
+    onClose();
+  }, [onClose]);
 
   return (
     <div className='search-container file-chooser-searcher' style={{ zIndex: SEARCH_CONTAINER }}>
@@ -168,39 +118,22 @@ const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selec
           type='text'
           value={inputValue}
           onChange={handleSearchInputChange}
+          onKeyDown={handleKeyDown}
+          autoFocus
         />
         {inputValue.length !== 0 && (
           <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={onCloseSearching}></span>
         )}
       </div>
-      {searchStatus !== SearchStatus.IDLE &&
-        <UncontrolledPopover
-          className='file-chooser-search-results-popover'
-          isOpen={isResultsPopoverOpen}
-          toggle={() => onPopoverToggle(!isResultsPopoverOpen)}
-          target={inputRef.current}
-          placement='bottom-start'
-          hideArrow={true}
-          fade={false}
-          trigger="legacy"
-        >
-          <div className='search-results-popover-body'>
-            {renderSearchResults()}
-          </div>
-        </UncontrolledPopover>
-      }
     </div>
   );
 };
 
 Searcher.propTypes = {
-  searchStatus: PropTypes.string,
+  onUpdateMode: PropTypes.func,
   onUpdateSearchStatus: PropTypes.func,
-  onDirentItemClick: PropTypes.func,
-  selectSearchedItem: PropTypes.func,
-  selectRepo: PropTypes.func,
-  setSelectedPath: PropTypes.func,
-  setBrowsingPath: PropTypes.func,
+  onUpdateSearchResults: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 export default Searcher;

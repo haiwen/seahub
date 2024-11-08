@@ -21,8 +21,7 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   hideLibraryName: PropTypes.bool,
-  isBrowsing: PropTypes.bool,
-  browsingPath: PropTypes.string,
+  newFolderName: PropTypes.string,
 };
 
 class RepoListItem extends React.Component {
@@ -62,6 +61,26 @@ class RepoListItem extends React.Component {
           this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
         }
       }, 0);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
+    if (repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
+      seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
+        if (!this.state.isMounted) return;
+        const direntData = res.data.dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
+        if (direntData) {
+          const object = new Dirent(direntData);
+          const direntNode = new TreeNode({ object });
+          const newTreeData = treeHelper.addNodeToParentByPath(this.state.treeData, direntNode, selectedPath);
+          this.setState({ treeData: newTreeData });
+        }
+      }).catch(error => {
+        if (!this.state.isMounted) return;
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
   }
 
@@ -213,7 +232,7 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        {!this.props.hideLibraryName && !this.props.isBrowsing &&
+        {!this.props.hideLibraryName &&
           <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
             <div className="item-left-icon">
               <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
@@ -236,8 +255,6 @@ class RepoListItem extends React.Component {
             treeData={this.state.treeData}
             onNodeCollapse={this.onNodeCollapse}
             onNodeExpanded={this.onNodeExpanded}
-            isBrowsing={this.props.isBrowsing}
-            browsingPath={this.props.browsingPath}
           />
         )}
       </li>

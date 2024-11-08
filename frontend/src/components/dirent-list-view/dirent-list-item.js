@@ -968,6 +968,7 @@ class DirentListItem extends React.Component {
               onItemMove={this.props.onItemMove}
               onCancelMove={this.onItemMoveToggle}
               repoEncrypted={this.props.repoEncrypted}
+              onAddFolder={this.props.onAddFolder}
             />
           </ModalPortal>
         }

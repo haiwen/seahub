@@ -301,6 +301,57 @@
   margin: 0;
 }
 
+.custom-modal .modal-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e5e5;
+  position: relative;
+  font-size: 1rem;
+}
+
+.custom-modal .modal-header .modal-title {
+  max-width: calc(100% - 260px);
+}
+
+.custom-modal .modal-header .search {
+  position: absolute;
+  top: 16px;
+  right: 48px;
+  color: #666;
+}
+
+.custom-modal .modal-header .close {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  line-height: 12px;
+  color: #666 !important;
+  opacity: 1;
+}
+
+.custom-modal .modal-header .search:hover,
+.custom-modal .modal-header .close:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  color: #666 !important;
+  opacity: 1;
+}
+
+.custom-modal .modal-header .close span{
+  width: 16px;
+  height: 16px;
+}
+
 .custom-modal .modal-content {
   min-height: 534px;
   border: 0;
@@ -310,8 +361,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 0;
+  justify-content: flex-start;
+  padding: 0;
   position: relative;
 }
 
@@ -378,9 +429,41 @@
   flex-direction: column;
 }
 
-.custom-modal .file-list-col .file-chooser-container,
+.custom-modal .file-list-col .file-chooser-container {
+  padding: 1rem;
+}
+
 .custom-modal .file-list-col .file-chooser-search-input {
-  padding: 0 1rem;
+  padding: 1rem 1rem 0 1rem;
+}
+
+.custom-modal .modal-footer {
+  position: relative;
+  justify-content: flex-end;
+}
+
+.custom-modal .move-dirent-dialog-footer {
+  justify-content: space-between;
+}
+
+.custom-modal .modal-footer .footer-left-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  border: 0;
+  cursor: pointer;
+  box-shadow: none;
+  background-color: #fff;
+}
+
+.custom-modal .modal-footer .footer-left-btn.disabled {
+  cursor: default;
+}
+
+.custom-modal .modal-footer .footer-left-btn:not(.disabled):hover {
+  background-color: #f0f0f0;
+  border-radius: 3px;
 }
 
 .cur-view-container .cur-view-path {
