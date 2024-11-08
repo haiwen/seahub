@@ -439,6 +439,10 @@
 
 .custom-modal .modal-footer {
   position: relative;
+  justify-content: flex-end;
+}
+
+.custom-modal .move-dirent-dialog-footer {
   justify-content: space-between;
 }
 

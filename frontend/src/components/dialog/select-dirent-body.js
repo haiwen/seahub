@@ -224,7 +224,7 @@ class SelectDirentBody extends React.Component {
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter className='move-dirent-dialog-footer'>
             <Button
               className="footer-left-btn"
               color="secondary"
