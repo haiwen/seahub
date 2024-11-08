@@ -86,6 +86,7 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
 
         try:
             username = request.META[self.header]
+            logger.error(f'username: {username}')
         except KeyError:
             if settings.DEBUG:
                 assert False

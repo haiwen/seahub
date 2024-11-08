@@ -798,9 +798,20 @@ class User(object):
 class AuthBackend(object):
 
     def get_user_with_import(self, username):
+        logger.error(f'username: {username}')
         emailuser = ccnet_api.get_emailuser_with_import(username)
+        logger.error(f'emailuser: {emailuser}')
         if not emailuser:
-            raise User.DoesNotExist('User matching query does not exits.')
+            profile = Profile.objects.get_profile_by_contact_email(username)
+            if not profile:
+                logger.error('no profile')
+                raise User.DoesNotExist('User matching query does not exits.')
+            else:
+                logger.error(f'profile.user: {profile.user}')
+                emailuser = ccnet_api.get_emailuser_with_import(profile.user)
+                logger.error(f'emailuser: {emailuser}')
+                if not emailuser:
+                    raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
