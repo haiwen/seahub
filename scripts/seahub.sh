@@ -126,9 +126,9 @@ else
 fi
 
 function warning_if_seafile_not_running () {
-    if ! pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null 1>&2; then
+    if ! pgrep -f "seafile-monitor.sh" 2>/dev/null 1>&2; then
         echo
-        echo "Warning: seafile-controller not running. Have you run \"./seafile.sh start\" ?"
+        echo "Warning: seafile server not running. Have you run \"./seafile.sh start\" ?"
         echo
         exit 1
     fi
@@ -205,6 +205,11 @@ function set_jwt_private_key () {
             exit -1;
         fi
         export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT}
+        export ENABLE_SEADOC=${ENABLE_SEADOC}
+        export SEADOC_SERVER_URL=${SEADOC_SERVER_URL}
     fi
 }
 

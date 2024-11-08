@@ -47,13 +47,13 @@ function check_component_running() {
 }
 
 function validate_already_running () {
-    if pid=$(pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null); then
+    if pid=$(pgrep -f "seafile-monitor.sh" 2>/dev/null); then
         echo "seafile server is still running, stop it by \"seafile.sh stop\""
         echo
         exit 1;
     fi
 
-    check_component_running "seaf-server" "seaf-server -c ${default_ccnet_conf_dir}"
+    check_component_running "seaf-server" "seaf-server"
     check_component_running "seafdav" "wsgidav.server.server_cli"
 }
 

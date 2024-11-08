@@ -18,14 +18,17 @@ TOPDIR=$(dirname "${INSTALLPATH}")
 default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
-seaf_controller="${INSTALLPATH}/seafile/bin/seafile-controller"
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
+seafile_rpc_pipe_path=${INSTALLPATH}/runtime
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
+export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
+export CCNET_CONF_DIR=${default_ccnet_conf_dir}
+export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 
 script_name=$0
 function usage () {
@@ -76,6 +79,11 @@ function set_jwt_private_key () {
             exit -1;
         fi
         export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT}
+        export ENABLE_FILESERVER=${ENABLE_FILESERVER}
+        export ENABLE_SEAFDAV=${ENABLE_SEAFDAV}
     fi
 }
 
@@ -97,12 +105,6 @@ function validate_seafile_data_dir () {
     fi
 }
 
-function test_config() {	
-    if ! LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} -t -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" -F "${central_config_dir}" ; then	
-        exit 1;	
-    fi	
-}
-
 function check_component_running() {
     name=$1
     cmd=$2
@@ -118,14 +120,14 @@ function check_component_running() {
 }
 
 function validate_already_running () {
-    if pid=$(pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null); then
-        echo "Seafile controller is already running, pid $pid"
+    if pid=$(pgrep -f "seafile-monitor.sh" 2>/dev/null); then
+        echo "Seafile monitor is already running, pid $pid"
         echo
         exit 1;
     fi
 
-    check_component_running "seaf-server" "seaf-server -c ${default_ccnet_conf_dir}"
-    check_component_running "fileserver" "fileserver -c ${default_ccnet_conf_dir}"
+    check_component_running "seaf-server" "seaf-server"
+    check_component_running "fileserver" "fileserver"
     check_component_running "seafdav" "wsgidav.server.server_cli"
     check_component_running "seafevents" "seafevents.main --config-file ${central_config_dir}"
 }
@@ -137,38 +139,28 @@ function start_seafile_server () {
     validate_seafile_data_dir;
     validate_running_user;
 
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
-        test_config;
-    fi
-
     echo "Starting seafile server, please wait ..."
 
     mkdir -p $TOPDIR/logs
 
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
-        if ! LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" -F "${central_config_dir}"; then
-            controller_log="$default_seafile_data_dir/controller.log"
-            echo
-            echo "Failed to start seafile server. See $controller_log for more details."
-            echo
-            exit 1
-        fi
-    else
-        LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} \
-                    -c "${default_ccnet_conf_dir}" \
-                    -d "${default_seafile_data_dir}" \
-                    -F "${central_config_dir}"
-    fi
+    LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
+        -F ${SEAFILE_CENTRAL_CONF_DIR} \
+        -c ${CCNET_CONF_DIR} \
+        -d ${SEAFILE_CONF_DIR} \
+        -l ${TOPDIR}/logs/seafile.log \
+        -P ${TOPDIR}/pids/seaf-server.pid \
+        -p ${SEAFILE_RPC_PIPE_PATH} \
+        -f -L ${TOPDIR} &
 
     sleep 3
 
     # check if seafile server started successfully
-    if ! pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null 1>&2; then
+    if ! pgrep -f "seaf-server" 2>/dev/null 1>&2; then
         echo "Failed to start seafile server"
         exit 1;
     fi
 
-    # seafevents, notification-sever
+    # seafile-monitor
     ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
 
     echo "Seafile server started"
@@ -176,23 +168,21 @@ function start_seafile_server () {
 }
 
 function kill_all () {
-    pkill -f "seaf-server -c ${default_ccnet_conf_dir}"
-    pkill -f "fileserver -c ${default_ccnet_conf_dir}"
+    pkill -f "seaf-server"
+    pkill -f "fileserver"
     pkill -f "seafevents.main"
-    pkill -f  "wsgidav.server.server_cli"
-    pkill -f  "notification-server -c ${central_config_dir}"
-    pkill -f  "seafile-monitor.sh"
+    pkill -f "wsgidav.server.server_cli"
+    pkill -f "seafile-monitor.sh"
 }
 
 function stop_seafile_server () {
-    if ! pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null 1>&2; then
+    if ! pgrep -f "seaf-monitor.sh" 2>/dev/null 1>&2; then
         echo "seafile server not running yet"
         kill_all
         return 1
     fi
 
     echo "Stopping seafile server ..."
-    pkill -SIGTERM -f "seafile-controller -c ${default_ccnet_conf_dir}"
     kill_all
 
     return 0
