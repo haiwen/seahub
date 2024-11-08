@@ -312,7 +312,7 @@
   font-size: 1rem;
 }
 
-.custom-modal .modal-header .title-content {
+.custom-modal .modal-header .modal-title {
   max-width: calc(100% - 260px);
 }
 
