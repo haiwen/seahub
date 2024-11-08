@@ -185,12 +185,7 @@ class GroupMember(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
-        member_info = get_group_member_info(request, group_id, email, avatar_size)
+        member_info = get_group_member_info(request, group_id, email)
 
         return Response(member_info)
 

@@ -874,13 +874,9 @@ class SystemAdminAPI {
     return this.req.delete(url);
   }
 
-  sysAdminGetUser(email, avatarSize) {
+  sysAdminGetUser(email) {
     const url = this.server + '/api/v2.1/admin/users/' + encodeURIComponent(email) + '/';
-    let params = {};
-    if (avatarSize) {
-      params.avatar_size = avatarSize;
-    }
-    return this.req.get(url, { params: params });
+    return this.req.get(url);
   }
 
   sysAdminResetUserPassword(email) {
