@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalFooter, ModalBody, Alert, Row, Col, Input } from 'reactstrap';
+import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
 import toaster from '../toast';
 import RepoListWrapper, { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import { Utils, validateName } from '../../utils/utils';
+import { Utils } from '../../utils/utils';
 import { RepoInfo } from '../../models';
+import { ModalPortal } from '@seafile/sf-metadata-ui-component';
+import CreateFolder from '../dialog/create-folder-dialog';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
   return (
@@ -25,28 +27,15 @@ class SelectDirentBody extends React.Component {
       repoList: [],
       selectedRepo: null,
       errMessage: '',
-      showNewFolderInput: false,
-      inputValue: '',
+      showCreateFolderDialog: false,
     };
-    this.inputRef = React.createRef();
     this.newFolderName = '';
   }
 
   componentDidMount() {
     this.fetchRepoInfo();
     this.fetchRepoList();
-    document.addEventListener('mousedown', this.handleClickOutside);
   }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  handleClickOutside = (event) => {
-    if (this.inputRef.current && !this.inputRef.current.contains(event.target)) {
-      this.setState({ showNewFolderInput: false });
-    }
-  };
 
   fetchRepoInfo = async () => {
     try {
@@ -146,14 +135,19 @@ class SelectDirentBody extends React.Component {
     this.props.onUpdateMode(mode);
   };
 
-  onShowNewFolderInput = () => {
-    this.setState({ showNewFolderInput: true });
+  loadRepoDirentList = (repo) => {
+    try {
+      const { data } = seafileAPI.listDir(repo.repo_id, '/');
+      return data.dirent_list.filter(item => item.type === 'dir');
+    } catch (error) {
+      return [];
+    }
   };
 
-  onCreateFolder = async () => {
+  createFolder = (fullPath) => {
+    this.newFolderName = fullPath.split('/').pop();
     const selectedRepoId = this.state.selectedRepo.repo_id;
-    const parentPath = this.props.selectedPath;
-    const fullPath = Utils.joinPath(parentPath, this.state.inputValue);
+
     if (selectedRepoId === this.props.repoID) {
       this.props.onAddFolder(fullPath, { successCallback: this.fetchRepoInfo });
     } else {
@@ -164,50 +158,21 @@ class SelectDirentBody extends React.Component {
         this.props.setErrMessage(errMessage);
       });
     }
-    this.setState({ showNewFolderInput: false, inputValue: '' });
+    this.setState({ showCreateFolderDialog: false });
   };
 
-  onInputChange = (e) => {
-    this.setState({ inputValue: e.target.value });
+  onToggleCreateFolder = () => {
+    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog });
   };
 
-  loadRepoDirentList = async (repo) => {
-    try {
-      const { data } = await seafileAPI.listDir(repo.repo_id, '/');
-      return data.dirent_list.filter(item => item.type === 'dir');
-    } catch (error) {
-      toaster.danger(Utils.getErrorMsg(error));
-      return [];
-    }
-  };
-
-  onInputKeyDown = async (e) => {
-    if (e.key === 'Enter') {
-      const { inputValue, selectedRepo } = this.state;
-      let { isValid, errMessage } = validateName(inputValue);
-
-      if (isValid) {
-        const folderList = await this.loadRepoDirentList(selectedRepo);
-        const isDuplicated = folderList.some(folder => folder.name === inputValue);
-        if (isDuplicated) {
-          let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-          errMessage = errMessage.replace('{name}', Utils.HTMLescape(inputValue));
-          this.props.setErrMessage(errMessage);
-          return;
-        }
-      } else {
-        this.props.setErrMessage(errMessage);
-        return;
-      }
-
-      this.newFolderName = inputValue;
-      this.onCreateFolder();
-    }
+  checkDuplicatedName = (newName) => {
+    const folderList = this.loadRepoDirentList(this.state.selectedRepo);
+    return folderList.some(folder => folder.name === newName);
   };
 
   render() {
     const { mode, path, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
-    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo, showNewFolderInput, inputValue, creatingNewFolder } = this.state;
+    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo } = this.state;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -255,42 +220,36 @@ class SelectDirentBody extends React.Component {
               onSearchedItemClick={this.props.onSearchedItemClick}
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               selectedSearchedRepo={selectedSearchedRepo}
-              creatingNewFolder={creatingNewFolder}
               newFolderName={this.newFolderName}
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
           <ModalFooter>
-            <div className="footer-left-wrapper">
-              {showNewFolderInput ? (
-                <Input
-                  innerRef={this.inputRef}
-                  className='new-folder-input'
-                  placeholder={gettext('Enter folder name')}
-                  type='text'
-                  value={inputValue}
-                  onChange={this.onInputChange}
-                  onKeyDown={this.onInputKeyDown}
-                  autoFocus
-                />
-              ) : (
-                <Button
-                  className="footer-left-btn"
-                  color="secondary"
-                  onClick={this.onShowNewFolderInput}
-                  disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
-                >
-                  <i className='sf3-font-new sf3-font mr-2'></i>
-                  <span>{gettext('New folder')}</span>
-                </Button>
-              )}
-            </div>
+            <Button
+              className="footer-left-btn"
+              color="secondary"
+              onClick={this.onToggleCreateFolder}
+              disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
+            >
+              <i className='sf3-font-new sf3-font mr-2'></i>
+              <span>{gettext('New folder')}</span>
+            </Button>
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
               <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
             </div>
           </ModalFooter>
         </Col>
+        {this.state.showCreateFolderDialog && (
+          <ModalPortal>
+            <CreateFolder
+              parentPath={this.props.selectedPath}
+              onAddFolder={this.createFolder}
+              checkDuplicatedName={this.checkDuplicatedName}
+              addFolderCancel={this.onToggleCreateFolder}
+            />
+          </ModalPortal>
+        )}
       </Row>
     );
   }

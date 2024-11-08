@@ -449,13 +449,15 @@
   padding: 6px 12px;
   border: 0;
   cursor: pointer;
+  box-shadow: none;
+  background-color: #fff;
 }
 
-.custom-modal .modal-footer .footer-left-btns.disabled {
-  cursor: not-allowed;
+.custom-modal .modal-footer .footer-left-btn.disabled {
+  cursor: default;
 }
 
-.custom-modal .modal-footer .footer-left-btns:not(.disabled):hover {
+.custom-modal .modal-footer .footer-left-btn:not(.disabled):hover {
   background-color: #f0f0f0;
   border-radius: 3px;
 }
