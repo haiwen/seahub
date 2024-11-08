@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import CellFormatter from '../../../../../components/cell-formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
+import Formatter from '../formatter';
 
 import './index.css';
 
@@ -21,7 +21,7 @@ const Card = ({
     <article data-id={record._id} className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}>
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">
-          <CellFormatter value={titleValue} field={titleColumn}/>
+          <Formatter value={titleValue} column={titleColumn}/>
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
@@ -38,18 +38,10 @@ const Card = ({
             return null;
           }
 
-          if (!displayColumnName) {
-            return (
-              <div className="sf-metadata-kanban-card-record" key={column.key}>
-                <CellFormatter value={value} field={column}/>
-              </div>
-            );
-          }
-
           return (
             <div className="sf-metadata-kanban-card-record" key={column.key}>
-              <div className="sf-metadata-kanban-card-record-name">{column.name}</div>
-              <CellFormatter value={value} field={column}/>
+              {displayColumnName && (<div className="sf-metadata-kanban-card-record-name">{column.name}</div>)}
+              <Formatter value={value} column={column}/>
             </div>
           );
         })}

@@ -40,7 +40,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, onDelete, onFreez
           <span>{gettext('Uncategorized')}</span>
         )}
       </div>
-      {!readonly && active && (
+      {value && !readonly && active && (
         <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
       )}
     </div>

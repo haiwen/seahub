@@ -438,6 +438,13 @@ export const Utils = {
     return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${sharedOut ? '-shared-out' : ''}-${size}.png`;
   },
 
+  getFileIconName: function (fileName) {
+    if (fileName.lastIndexOf('.') == -1) return Utils.FILEEXT_ICON_MAP['default'];
+    const file_ext = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+    if (Utils.FILEEXT_ICON_MAP[file_ext]) return Utils.FILEEXT_ICON_MAP[file_ext];
+    return Utils.FILEEXT_ICON_MAP['default'];
+  },
+
   getFileIconUrl: function (filename) {
     let file_ext = '';
     if (filename.lastIndexOf('.') == -1) {
