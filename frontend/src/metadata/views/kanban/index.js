@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { EVENT_BUS_TYPE } from '../../constants';
 import toaster from '../../../components/toast';
-import Board from './boards';
+import Boards from './boards';
 import Settings from './settings';
 
 import './index.css';
@@ -52,7 +52,7 @@ const Kanban = () => {
 
   return (
     <div className="sf-metadata-view-kanban">
-      <Board columns={columns} modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} />
+      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} />
       <div className="sf-metadata-view-setting-panel sf-metadata-view-kanban-setting h-100">
         {isShowSettings && (
           <Settings
