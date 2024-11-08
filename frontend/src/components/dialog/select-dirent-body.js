@@ -161,7 +161,7 @@ class SelectDirentBody extends React.Component {
         this.fetchSelectedRepoInfo(selectedRepoId);
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
+        this.props.setErrMessage(errMessage);
       });
     }
     this.setState({ showNewFolderInput: false, inputValue: '' });
@@ -171,14 +171,36 @@ class SelectDirentBody extends React.Component {
     this.setState({ inputValue: e.target.value });
   };
 
-  onInputKeyDown = (e) => {
+  loadRepoDirentList = async (repo) => {
+    try {
+      const { data } = await seafileAPI.listDir(repo.repo_id, '/');
+      return data.dirent_list.filter(item => item.type === 'dir');
+    } catch (error) {
+      toaster.danger(Utils.getErrorMsg(error));
+      return [];
+    }
+  };
+
+  onInputKeyDown = async (e) => {
     if (e.key === 'Enter') {
-      const { isValid, errMessage } = validateName(this.state.inputValue);
-      if (!isValid) {
-        toaster.danger(errMessage);
+      const { inputValue, selectedRepo } = this.state;
+      let { isValid, errMessage } = validateName(inputValue);
+
+      if (isValid) {
+        const folderList = await this.loadRepoDirentList(selectedRepo);
+        const isDuplicated = folderList.some(folder => folder.name === inputValue);
+        if (isDuplicated) {
+          let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+          errMessage = errMessage.replace('{name}', Utils.HTMLescape(inputValue));
+          this.props.setErrMessage(errMessage);
+          return;
+        }
+      } else {
+        this.props.setErrMessage(errMessage);
         return;
       }
-      this.newFolderName = this.state.inputValue;
+
+      this.newFolderName = inputValue;
       this.onCreateFolder();
     }
   };
@@ -239,28 +261,30 @@ class SelectDirentBody extends React.Component {
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
           <ModalFooter>
-            {showNewFolderInput ? (
-              <Input
-                innerRef={this.inputRef}
-                className='new-folder-input'
-                placeholder={gettext('Enter folder name')}
-                type='text'
-                value={inputValue}
-                onChange={this.onInputChange}
-                onKeyDown={this.onInputKeyDown}
-                autoFocus
-              />
-            ) : (
-              <Button
-                className="footer-left-btns"
-                color="secondary"
-                onClick={this.onShowNewFolderInput}
-                disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
-              >
-                <i className='sf3-font-new sf3-font mr-2'></i>
-                <span>{gettext('New folder')}</span>
-              </Button>
-            )}
+            <div className="footer-left-wrapper">
+              {showNewFolderInput ? (
+                <Input
+                  innerRef={this.inputRef}
+                  className='new-folder-input'
+                  placeholder={gettext('Enter folder name')}
+                  type='text'
+                  value={inputValue}
+                  onChange={this.onInputChange}
+                  onKeyDown={this.onInputKeyDown}
+                  autoFocus
+                />
+              ) : (
+                <Button
+                  className="footer-left-btn"
+                  color="secondary"
+                  onClick={this.onShowNewFolderInput}
+                  disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
+                >
+                  <i className='sf3-font-new sf3-font mr-2'></i>
+                  <span>{gettext('New folder')}</span>
+                </Button>
+              )}
+            </div>
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
               <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>

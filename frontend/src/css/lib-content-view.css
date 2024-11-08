@@ -321,7 +321,6 @@
   top: 16px;
   right: 48px;
   color: #666;
-  fill: #666;
 }
 
 .custom-modal .modal-header .close {
@@ -345,6 +344,7 @@
   background-color: #f0f0f0;
   border-radius: 3px;
   color: #666 !important;
+  opacity: 1;
 }
 
 .custom-modal .modal-header .close span{
@@ -439,13 +439,10 @@
 
 .custom-modal .modal-footer {
   position: relative;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.custom-modal .modal-footer .footer-left-btns {
-  position: absolute;
-  top: 16px;
-  left: 16px;
+.custom-modal .modal-footer .footer-left-btn {
   display: flex;
   justify-content: center;
   align-items: center;
