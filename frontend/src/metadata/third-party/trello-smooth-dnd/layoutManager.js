@@ -32,7 +32,7 @@ const verticalMap = {
   scale: 'scaleY',
   setSize: 'height',
   setters: {
-    'translate': (val) => `translate3d(0,${val}px, 0)`
+    'translate': (val) => `translate3d(0,${val + 8}px, 0)`
   }
 };
 
