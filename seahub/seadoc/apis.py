@@ -32,6 +32,7 @@ from django.views.decorators.http import condition
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id, ccnet_api
 
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication, CsrfExemptSessionAuthentication
 from seahub.api2.permissions import IsProVersion
@@ -51,7 +52,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
 from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -2737,24 +2738,17 @@ class SdocRelatedUsers(APIView):
 
         repo_id = uuid_map.repo_id
         org_id = get_org_id_by_repo_id(repo_id)
-        if org_id and org_id > 0:
-            related_user_emails = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            related_user_emails = seafile_api.get_shared_users_by_repo(repo_id)
-            repo_owner = seafile_api.get_repo_owner(repo_id)
-
-        if repo_owner not in related_user_emails:
-            related_user_emails.append(repo_owner)
-
         related_users = []
-        email_list_json = json.dumps(related_user_emails)
-        user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json)
-
-        for user_obj in user_obj_list:
-            if user_obj.is_active and '@seafile_group' not in user_obj.email:
-                user_info = get_user_common_info(user_obj.email)
+        try:
+            related_user_list = get_related_users_by_repo(repo_id, org_id)
+            db_api = CcnetDB()
+            user_obj_list = db_api.get_active_users_by_user_list(related_user_list)
+            for username in user_obj_list:
+                user_info = get_user_common_info(username)
                 related_users.append(user_info)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'related_users': related_users})
 

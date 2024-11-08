@@ -261,7 +261,7 @@ def get_sub_folder_permission_by_dir(request, repo_id, parent_dir):
     return folder_permission_dict
 
 def get_shared_groups_by_repo(repo_id, org_id=None):
-    if not org_id:
+    if not org_id or org_id < 0:
         group_ids = seafile_api.get_shared_group_ids_by_repo(
                 repo_id)
     else:
