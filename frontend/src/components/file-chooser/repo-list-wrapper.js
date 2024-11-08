@@ -19,7 +19,8 @@ const RepoListWrapper = (props) => {
   } = props;
 
   const renderRecentlyUsed = () => {
-    const recentlyUsedList = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    let recentlyUsedList = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    recentlyUsedList = recentlyUsedList.filter(item => !!item);
     return (
       <div className="list-view">
         <RecentlyUsedListView

@@ -1,7 +1,11 @@
 import React from 'react';
+import { Utils } from '../../utils/utils';
 
 const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
-  const title = item.path === '/' ? item.path : item.path.split('/').pop();
+  if (!item || typeof item.path !== 'string') {
+    return '';
+  }
+  const title = Utils.getFileName(item.path);
 
   const handleItemClick = () => {
     onItemClick(item.repo, item.path);
