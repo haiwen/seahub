@@ -11,7 +11,7 @@ from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_
 from seahub.base.accounts import User
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
 from seahub.utils.user_permissions import get_user_role
@@ -212,13 +212,13 @@ class InternalDownloadRateLimitView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        traffic_info_list = {}
-        rate_limit = {}
+        traffic_info_dict = {}
         for role, v in DEFAULT_ENABLED_ROLE_PERMISSIONS.items():
+            rate_limit = {}
             if 'monthly_rate_limit' in v:
                 rate_limit['monthly_rate_limit'] = v['monthly_rate_limit']
             if 'monthly_rate_limit_per_user' in v:
                 rate_limit['monthly_rate_limit_per_user'] = v['monthly_rate_limit_per_user']
-            traffic_info_list[role] = rate_limit
+            traffic_info_dict[role] = rate_limit
 
-        return Response(traffic_info_list)
+        return Response(traffic_info_dict)
