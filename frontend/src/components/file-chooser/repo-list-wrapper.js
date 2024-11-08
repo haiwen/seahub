@@ -69,7 +69,7 @@ const RepoListWrapper = (props) => {
           <>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={onCurrentRepoToggle}></span>
+                <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onCurrentRepoToggle}></span>
                 <span className="library">{gettext('Current Library')}</span>
               </div>
               {(isCurrentRepoShow && currentRepoInfo) &&
@@ -82,14 +82,14 @@ const RepoListWrapper = (props) => {
                   isShowFile={isShowFile}
                   fileSuffixes={fileSuffixes}
                   selectedItemInfo={selectedItemInfo}
-                  onRepoItemClick={handleClickRepo}
-                  onDirentItemClick={handleClickDirent}
+                  onRepoItemClick={props.handleClickRepo}
+                  onDirentItemClick={props.handleClickDirent}
                 />
               }
             </div>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={onOtherRepoToggle}></span>
+                <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onOtherRepoToggle}></span>
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
               {isOtherRepoShow &&
@@ -101,8 +101,8 @@ const RepoListWrapper = (props) => {
                   isShowFile={isShowFile}
                   fileSuffixes={fileSuffixes}
                   selectedItemInfo={selectedItemInfo}
-                  onRepoItemClick={handleClickRepo}
-                  onDirentItemClick={handleClickDirent}
+                  onRepoItemClick={props.handleClickRepo}
+                  onDirentItemClick={props.handleClickDirent}
                 />
               }
             </div>
@@ -141,8 +141,8 @@ const RepoListWrapper = (props) => {
                 isShowFile={isShowFile}
                 fileSuffixes={fileSuffixes}
                 selectedItemInfo={selectedItemInfo}
-                onRepoItemClick={handleClickRepo}
-                onDirentItemClick={handleClickDirent}
+                onRepoItemClick={props.handleClickRepo}
+                onDirentItemClick={props.handleClickDirent}
               />
             </div>
           </div>
