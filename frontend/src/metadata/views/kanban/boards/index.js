@@ -41,7 +41,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
   const textWrap = useMemo(() => metadata.view.settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP], [metadata.view.settings]);
 
   /**
-   [
+    [
       {
         key: '',
         value: '',
