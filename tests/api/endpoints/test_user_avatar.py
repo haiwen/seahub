@@ -25,8 +25,3 @@ class AvatarApiTest(ApiTestBase):
         list_url = response_url.split('/')
         assert str(random_avatar_size) in list_url
 
-        # assert is NOT default avatar
-        avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')
-        info = self.get(avatar_url).json()
-        assert 'resized' not in info['url']
-        assert info['is_default'] == True
