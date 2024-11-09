@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime
@@ -14,7 +15,7 @@ from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, \
-    extract_file_details, get_someone_similar_faces, remove_faces_table
+    extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -892,12 +893,6 @@ class FacesRecords(APIView):
         faces_records = query_result.get('results')
         metadata_columns = query_result.get('metadata', [])
         metadata_columns.append({
-            'key': '_similar_photo',
-            'type': 'text',
-            'name': '_similar_photo',
-            'data': None,
-        })
-        metadata_columns.append({
             'key': '_is_someone',
             'type': 'checkbox',
             'name': '_is_someone',
@@ -910,34 +905,17 @@ class FacesRecords(APIView):
                 'results': [],
             })
 
-        try:
-            similar_result = get_someone_similar_faces(faces_records, metadata_server_api)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         if not query_result:
             return Response({
                 'metadata': metadata_columns,
                 'results': [],
             })
 
-        similar_result_dict = dict()
-        for row in similar_result:
-            similar_result_dict[row['_id']] = row
-
         for record in faces_records:
             vector = record.get(FACES_TABLE.columns.vector.name, None)
             record['_is_someone'] = bool(vector)
             if FACES_TABLE.columns.vector.name in record:
                 del record[FACES_TABLE.columns.vector.name]
-            link_row_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.photo_links.name, [])]
-            if not link_row_ids:
-                continue
-            link_row_id = link_row_ids[0]
-            if link_row_id in similar_result_dict:
-                record['_similar_photo'] = similar_result_dict[link_row_id]
 
         return Response({
             'metadata': metadata_columns,
@@ -1149,6 +1127,10 @@ class FaceRecognitionManage(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         init_faces(metadata_server_api)
 
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, FACES_SAVE_PATH)
+        if not dir_id:
+            seafile_api.mkdir_with_parents(repo_id, '/', FACES_SAVE_PATH, request.user.username)
+
         try:
             RepoMetadata.objects.enable_face_recognition(repo_id)
         except Exception as e:
@@ -1192,6 +1174,11 @@ class FaceRecognitionManage(APIView):
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        parent_dir = os.path.dirname(FACES_SAVE_PATH)
+        file_name = os.path.basename(FACES_SAVE_PATH)
+        username = request.user.username
+        seafile_api.del_file(repo_id, parent_dir, json.dumps([file_name]), username)
 
         try:
             record.face_recognition_enabled = False
