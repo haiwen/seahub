@@ -835,7 +835,7 @@ def view_lib_file(request, repo_id, path):
 
             if wopi_dict:
                 send_file_access_msg(request, repo, path, 'web')
-                return render(request, 'view_file_wopi.html', wopi_dict)
+                return render(request, 'wopi_file_view_react.html', {**return_dict, **wopi_dict})
             else:
                 return_dict['err'] = _('Error when prepare Office Online file preview page.')
 
