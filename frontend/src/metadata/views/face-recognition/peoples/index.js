@@ -69,7 +69,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip text={gettext('No faces')} />);
+  if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip text={gettext('Identifying portraits...')} />);
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-peoples-container" ref={containerRef} onScroll={handleScroll}>
