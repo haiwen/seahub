@@ -547,7 +547,7 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
-  hideFileMetadata = () => {
+  hideMetadataView = () => {
     this.setState({
       currentMode: LIST_MODE,
       path: '',
@@ -1084,7 +1084,7 @@ class LibContentView extends React.Component {
 
   onMainNavBarClick = (nodePath) => {
     // just for dir
-    this.resetSelected();
+    this.resetSelected(nodePath);
     if (this.state.isTreePanelShown) {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(nodePath);
@@ -1485,7 +1485,7 @@ class LibContentView extends React.Component {
   };
 
   onItemClick = (dirent) => {
-    this.resetSelected();
+    this.resetSelected(dirent);
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (dirent.isDir()) { // is dir
@@ -1829,7 +1829,7 @@ class LibContentView extends React.Component {
   };
 
   onTreeNodeClick = (node) => {
-    this.resetSelected();
+    this.resetSelected(node);
     let repoID = this.props.repoID;
 
     if (!this.state.pathExist) {
@@ -2013,14 +2013,16 @@ class LibContentView extends React.Component {
     return this.state.selectedDirentList.map(selectedDirent => selectedDirent.name);
   };
 
-  resetSelected = () => {
+  resetSelected = (node) => {
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
     if (this.state.currentMode === METADATA_MODE) {
+      const path = node.path || '';
+      const isMetadataView = path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
       this.setState({
-        currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
+        currentMode: cookie.load('seafile_view_mode') || (isMetadataView ? METADATA_MODE : LIST_MODE),
       });
       this.markdownFileName = '';
       this.markdownFileParentDir = '';
@@ -2179,12 +2181,17 @@ class LibContentView extends React.Component {
   };
 
   render() {
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen,
-      path, usedRepoTags } = this.state;
+    const { repoID } = this.props;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
+      path, usedRepoTags, isDirentSelected } = this.state;
+
     if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
-          <LibDecryptDialog repoID={this.props.repoID} onLibDecryptDialog={this.onLibDecryptDialog} />
+          <LibDecryptDialog
+            repoID={repoID}
+            onLibDecryptDialog={this.onLibDecryptDialog}
+          />
         </ModalPortal>
       );
     }
@@ -2198,15 +2205,15 @@ class LibContentView extends React.Component {
         </ModalPortal>
       );
     }
-    if (this.state.errorMsg) {
+    if (errorMsg) {
       return (
         <>
-          <p className="error mt-6 text-center">{this.state.errorMsg}</p>
+          <p className="error mt-6 text-center">{errorMsg}</p>
           <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Leave Share')}</button>
         </>
       );
     }
-    if (!this.state.currentRepoInfo) {
+    if (!currentRepoInfo) {
       return '';
     }
 
@@ -2239,12 +2246,12 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataProvider
-        repoID={this.props.repoID}
+        repoID={repoID}
         currentRepoInfo={currentRepoInfo}
         selectMetadataView={this.onTreeNodeClick}
-        hideMetadataView={this.hideFileMetadata}
+        hideMetadataView={this.hideMetadataView}
       >
-        <CollaboratorsProvider repoID={this.props.repoID}>
+        <CollaboratorsProvider repoID={repoID}>
           <div className="main-panel-center flex-row">
             <div className="cur-view-container">
               {this.state.currentRepoInfo.status === 'read-only' &&
@@ -2256,9 +2263,9 @@ class LibContentView extends React.Component {
                 <div className={classnames(
                   'cur-view-path-left', {
                     'w-100': !isDesktop,
-                    'animation-children': this.state.isDirentSelected
+                    'animation-children': isDirentSelected
                   })}>
-                  {this.state.isDirentSelected ?
+                  {isDirentSelected ?
                     <SelectedDirentsToolbar
                       repoID={this.props.repoID}
                       path={this.state.path}
