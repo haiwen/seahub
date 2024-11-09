@@ -130,7 +130,7 @@ const Content = ({
               const isSelected = selectedImageIds.includes(img.id);
               return (
                 <Image
-                  key={img.src}
+                  key={img.id}
                   isSelected={isSelected}
                   img={img}
                   size={size}

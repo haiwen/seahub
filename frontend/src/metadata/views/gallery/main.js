@@ -19,6 +19,8 @@ import { getEventClassName } from '../../utils/common';
 
 import './index.css';
 
+const OVER_SCAN_ROWS = 20;
+
 const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
@@ -31,7 +33,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const [selectedImages, setSelectedImages] = useState([]);
 
   const containerRef = useRef(null);
-  const renderMoreTimer = useRef(null);
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -152,7 +153,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       // Calculate initial overScan information
       const columns = 8 - gear;
       const imageSize = (offsetWidth - columns * 2 - 2) / columns;
-      setOverScan({ top: 0, bottom: clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 2 });
+      setOverScan({ top: 0, bottom: clientHeight + (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS });
     }
     setFirstLoading(false);
 
@@ -174,7 +175,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
-      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
   }, []);
 
@@ -200,33 +200,29 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       onLoadMore();
     } else {
-      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
-      renderMoreTimer.current = setTimeout(() => {
-        const { scrollTop, clientHeight } = containerRef.current;
-        const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * 3);
-        const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * 3;
-        let groupIndex = 0;
-        let rowIndex = 0;
-        let flag = false;
-        for (let i = 0; i < groups.length; i++) {
-          const group = groups[i];
-          for (let j = 0; j < group.children.length; j++) {
-            const row = group.children[j];
-            if (row.top >= scrollTop) {
-              groupIndex = i;
-              rowIndex = j;
-              flag = true;
-            }
-            if (flag) break;
+      const { scrollTop, clientHeight } = containerRef.current;
+      const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS);
+      const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS;
+      let groupIndex = 0;
+      let rowIndex = 0;
+      let flag = false;
+      for (let i = 0; i < groups.length; i++) {
+        const group = groups[i];
+        for (let j = 0; j < group.children.length; j++) {
+          const row = group.children[j];
+          if (row.top >= scrollTop) {
+            groupIndex = i;
+            rowIndex = j;
+            flag = true;
           }
           if (flag) break;
         }
-        lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
-        setOverScan({ top: overScanTop, bottom: overScanBottom });
-        renderMoreTimer.current = null;
-      }, 200);
+        if (flag) break;
+      }
+      lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+      setOverScan({ top: overScanTop, bottom: overScanBottom });
     }
-  }, [imageSize, onLoadMore, renderMoreTimer, groups]);
+  }, [imageSize, onLoadMore, groups]);
 
   const imageItems = useMemo(() => {
     return groups.flatMap(group => group.children.flatMap(row => row.children));
