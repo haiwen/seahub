@@ -32,13 +32,13 @@ class RepoListItem extends React.Component {
       isShowChildren: this.props.initToShowChildren,
       treeData: treeHelper.buildTree(),
       hasLoaded: false,
-      isMounted: false,
     };
     this.loadRepoTimer = null;
+    this.isComponentMounted = false;
   }
 
   componentDidMount() {
-    this.setState({ isMounted: true });
+    this.isComponentMounted = true;
     const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
 
     // render search result
@@ -46,13 +46,15 @@ class RepoListItem extends React.Component {
     if (repoID && repoID === repo.repo_id) {
       this.loadRepoDirentList(repo);
       this.loadRepoTimer = setTimeout(() => {
-        this.setState({ isShowChildren: true });
-        this.loadNodeAndParentsByPath(repoID, filePath);
+        if (this.isComponentMounted) {
+          this.setState({ isShowChildren: true });
+          this.loadNodeAndParentsByPath(repoID, filePath);
+        }
       }, 0);
       return;
     }
 
-    if (repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
+    if (repo && repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
       this.loadRepoDirentList(repo);
       this.loadRepoTimer = setTimeout(() => {
         const repoID = repo.repo_id;
@@ -68,7 +70,7 @@ class RepoListItem extends React.Component {
     const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
     if (repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
       seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
-        if (!this.state.isMounted) return;
+        if (!this.isComponentMounted) return;
         const direntData = res.data.dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
         if (direntData) {
           const object = new Dirent(direntData);
@@ -77,7 +79,7 @@ class RepoListItem extends React.Component {
           this.setState({ treeData: newTreeData });
         }
       }).catch(error => {
-        if (!this.state.isMounted) return;
+        if (!this.isComponentMounted) return;
         const errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
@@ -85,8 +87,9 @@ class RepoListItem extends React.Component {
   }
 
   componentWillUnmount() {
+    this.isComponentMounted = false;
     this.clearLoadRepoTimer();
-    this.setState({ isMounted: false, hasLoaded: false });
+    this.setState({ hasLoaded: false });
   }
 
   clearLoadRepoTimer = () => {
@@ -102,7 +105,7 @@ class RepoListItem extends React.Component {
 
     try {
       const res = await seafileAPI.listDir(repoID, '/');
-      if (!this.state.isMounted) return;
+      if (!this.isComponentMounted) return;
 
       let tree = this.state.treeData.clone();
       let direntList = this.props.isShowFile ? res.data.dirent_list : res.data.dirent_list.filter(item => item.type === 'dir');
@@ -110,7 +113,7 @@ class RepoListItem extends React.Component {
       this.addResponseListToNode(direntList, tree.root);
       this.setState({ treeData: tree, hasLoaded: true });
     } catch (error) {
-      if (!this.state.isMounted) return;
+      if (!this.isComponentMounted) return;
 
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

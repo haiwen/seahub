@@ -6,10 +6,18 @@ import SelectDirentBody from './select-dirent-body';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Searcher from '../file-chooser/searcher';
-import { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
 import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+
+export const MODE_TYPE_MAP = {
+  CURRENT_AND_OTHER_REPOS: 'current_repo_and_other_repos',
+  ONLY_CURRENT_LIBRARY: 'only_current_library',
+  ONLY_ALL_REPOS: 'only_all_repos',
+  ONLY_OTHER_LIBRARIES: 'only_other_libraries',
+  RECENTLY_USED: 'recently_used',
+  SEARCH_RESULTS: 'search_results',
+};
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -29,16 +37,51 @@ class MoveDirent extends React.Component {
     super(props);
     this.state = {
       mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
-      repo: { repo_id: this.props.repoID },
+      currentRepo: { repo_id: this.props.repoID },
+      selectedRepo: { repo_id: this.props.repoID },
+      repoList: [],
       selectedPath: this.props.path,
-      selectedSearchedItem: null,
       selectedSearchedRepo: null,
       searchStatus: '',
       searchResults: [],
       showSearchBar: false,
       errMessage: '',
+      initToShowChildren: false,
     };
+    this.lastMode = MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY;
   }
+
+  componentDidMount() {
+    seafileAPI.getRepoInfo(this.props.repoID).then(res => {
+      const repo = new RepoInfo(res.data);
+      this.setState({ currentRepo: repo });
+      this.fetchRepoList();
+    });
+  }
+
+  fetchRepoList = async () => {
+    try {
+      const res = await seafileAPI.listRepos();
+      const repos = res.data.repos;
+      const repoList = [];
+      const uniqueRepoIds = new Set();
+      for (const repo of repos) {
+        if (repo.permission === 'rw' && repo.repo_id !== this.props.repoID && !uniqueRepoIds.has(repo.repo_id)) {
+          uniqueRepoIds.add(repo.repo_id);
+          repoList.push(repo);
+        }
+      }
+      const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+      const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
+      this.setState({
+        repoList: sortedRepoList,
+        repo: selectedRepo,
+      });
+    } catch (error) {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    }
+  };
 
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
@@ -140,7 +183,11 @@ class MoveDirent extends React.Component {
   };
 
   selectRepo = (repo) => {
-    this.setState({ repo });
+    this.setState({ selectedRepo: repo });
+  };
+
+  selectSearchedRepo = (repo) => {
+    this.setState({ selectedSearchedRepo: repo });
   };
 
   setSelectedPath = (selectedPath) => {
@@ -151,30 +198,34 @@ class MoveDirent extends React.Component {
     this.setState({ errMessage: message });
   };
 
-  onUpdateMode = (mode) => {
+  updateMode = (mode) => {
     if (mode === this.state.mode) return;
+
+    if (mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
+      this.lastMode = mode;
+    }
+
+    const isShowChildren = mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY || mode === MODE_TYPE_MAP.SEARCH_RESULTS;
+    this.setState({
+      mode,
+      initToShowChildren: isShowChildren,
+    });
 
     if (this.state.mode === MODE_TYPE_MAP.SEARCH_RESULTS) {
       this.setState({
         selectedSearchedRepo: null,
-        selectedSearchedItem: null,
         searchResults: [],
         showSearchBar: false,
       });
     }
 
-    if (this.state.selectedSearchedRepo) {
+    if (this.state.selectedSearchedRepo && mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
       this.setState({
         selectedSearchedRepo: null,
-        selectedSearchedItem: null,
         searchResults: [],
         showSearchBar: false,
       });
     }
-
-    this.setState({
-      mode,
-    });
   };
 
   onUpdateSearchStatus = (status) => {
@@ -200,15 +251,14 @@ class MoveDirent extends React.Component {
   };
 
   onCloseSearchBar = () => {
-    const { selectedSearchedRepo } = this.state;
-    const mode = (!selectedSearchedRepo || selectedSearchedRepo.repo_id === this.props.repoID) ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
-
+    const mode = this.lastMode;
     this.setState({
       mode,
       searchStatus: '',
       searchResults: [],
       selectedSearchedRepo: null,
-      showSearchBar: false
+      showSearchBar: false,
+      initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
   };
 
@@ -221,23 +271,18 @@ class MoveDirent extends React.Component {
   onSearchedItemDoubleClick = (item) => {
     if (item.type !== 'dir') return;
 
-    const selectedItemInfo = {
-      repoID: item.repo_id,
-      filePath: item.path,
-    };
-
-    this.setState({ selectedSearchedItem: selectedItemInfo });
-
     seafileAPI.getRepoInfo(item.repo_id).then(res => {
       const repoInfo = new RepoInfo(res.data);
       const path = item.path.substring(0, item.path.length - 1);
       const mode = item.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
+      this.lastMode = mode;
       this.setState({
         mode,
-        searchResults: [],
+        selectedRepo: repoInfo,
         selectedSearchedRepo: repoInfo,
         selectedPath: path,
         showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
+        initToShowChildren: true,
       });
     }).catch(err => {
       const errMessage = Utils.getErrorMsg(err);
@@ -257,8 +302,8 @@ class MoveDirent extends React.Component {
   };
 
   render() {
-    const { dirent, selectedDirentList, isMultipleOperation, path, repoID } = this.props;
-    const { mode, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
+    const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -270,7 +315,7 @@ class MoveDirent extends React.Component {
           {isPro && (
             showSearchBar ? (
               <Searcher
-                onUpdateMode={this.onUpdateMode}
+                onUpdateMode={this.updateMode}
                 onUpdateSearchStatus={this.onUpdateSearchStatus}
                 onUpdateSearchResults={this.onUpdateSearchResults}
                 onClose={this.onCloseSearchBar}
@@ -289,24 +334,28 @@ class MoveDirent extends React.Component {
           )}
         </ModalHeader>
         <SelectDirentBody
-          path={path}
+          mode={mode}
+          currentRepo={currentRepo}
+          selectedRepo={selectedRepo}
+          currentPath={path}
+          repoList={this.state.repoList}
           selectedPath={selectedPath}
-          repoID={repoID}
           isSupportOtherLibraries={!isCustomPermission}
-          errMessage={errMessage}
           onCancel={this.toggle}
           selectRepo={this.selectRepo}
           setSelectedPath={this.setSelectedPath}
           setErrMessage={this.setErrMessage}
           handleSubmit={this.handleSubmit}
-          mode={mode}
-          onUpdateMode={this.onUpdateMode}
+          onUpdateMode={this.updateMode}
           searchStatus={searchStatus}
           searchResults={searchResults}
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
           selectedSearchedRepo={selectedSearchedRepo}
+          onSelectSearchedRepo={this.selectSearchedRepo}
           onAddFolder={this.props.onAddFolder}
+          initToShowChildren={this.state.initToShowChildren}
+          fetchRepoInfo={this.fetchRepoInfo}
         />
       </Modal>
     );

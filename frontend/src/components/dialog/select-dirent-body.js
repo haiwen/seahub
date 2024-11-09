@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
-import toaster from '../toast';
-import RepoListWrapper, { MODE_TYPE_MAP } from '../file-chooser/repo-list-wrapper';
+import RepoListWrapper from '../file-chooser/repo-list-wrapper';
+import { MODE_TYPE_MAP } from '../dialog/move-dirent-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { RepoInfo } from '../../models';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import CreateFolder from '../dialog/create-folder-dialog';
@@ -23,74 +22,19 @@ class SelectDirentBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentRepoInfo: null,
-      repoList: [],
-      selectedRepo: null,
       errMessage: '',
       showCreateFolderDialog: false,
+      folderListOfSelectedRepo: [],
     };
     this.newFolderName = '';
   }
 
-  componentDidMount() {
-    this.fetchRepoInfo();
-    this.fetchRepoList();
-  }
-
-  fetchRepoInfo = async () => {
-    try {
-      const res = await seafileAPI.getRepoInfo(this.props.repoID);
+  fetchSelectedRepoInfo = (repoId) => {
+    seafileAPI.getRepoInfo(repoId).then((res) => {
       const repoInfo = new RepoInfo(res.data);
-      this.setState({
-        currentRepoInfo: repoInfo,
-        selectedRepo: repoInfo,
-      });
-    } catch (err) {
-      const errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    }
-  };
-
-  fetchSelectedRepoInfo = async (repoId) => {
-    try {
-      const res = await seafileAPI.getRepoInfo(repoId);
-      const repoInfo = new RepoInfo(res.data);
-      this.setState({
-        selectedRepo: repoInfo,
-        selectedSearchedRepo: repoInfo,
-      });
-    } catch (err) {
-      const errMessage = Utils.getErrorMsg(err);
-      toaster.danger(errMessage);
-    }
-  };
-
-  fetchRepoList = async () => {
-    try {
-      const res = await seafileAPI.listRepos();
-      const repos = res.data.repos;
-      const repoList = [];
-      const uniqueRepoIds = new Set();
-      for (const repo of repos) {
-        if (repo.permission === 'rw' && repo.repo_id !== this.props.repoID && !uniqueRepoIds.has(repo.repo_id)) {
-          uniqueRepoIds.add(repo.repo_id);
-          repoList.push(repo);
-        }
-      }
-      const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
-      const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
-      this.setState({
-        repoList: sortedRepoList,
-        selectedRepo: selectedRepo || this.state.selectedRepo,
-      });
-    } catch (error) {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    }
-  };
-
-  onUpdateRepoList = (repoList) => {
-    this.setState({ repoList: repoList });
+      this.props.selectRepo(repoInfo);
+      this.props.onSelectSearchedRepo(repoInfo);
+    });
   };
 
   handleSubmit = () => {
@@ -109,35 +53,17 @@ class SelectDirentBody extends React.Component {
     this.props.selectRepo(repo);
     this.props.setSelectedPath(selectedPath);
     this.props.setErrMessage('');
-    this.setState({ selectedRepo: repo });
   };
 
   onRepoItemClick = (repo) => {
     this.props.selectRepo(repo);
     this.props.setSelectedPath('/');
     this.props.setErrMessage('');
-    this.setState({ selectedRepo: repo });
   };
 
-  onUpdateMode = (mode) => {
-    const { path } = this.props;
-    const { repoList } = this.state;
-    if (mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
-      this.setState({
-        selectedRepo: repoList[0],
-      });
-      this.props.setSelectedPath('/');
-    } else {
-      this.setState({ selectedRepo: this.state.currentRepoInfo });
-      this.props.setSelectedPath(path);
-    }
-
-    this.props.onUpdateMode(mode);
-  };
-
-  loadRepoDirentList = (repo) => {
+  loadRepoDirentList = async (repo, path) => {
     try {
-      const { data } = seafileAPI.listDir(repo.repo_id, '/');
+      const { data } = await seafileAPI.listDir(repo.repo_id, path);
       return data.dirent_list.filter(item => item.type === 'dir');
     } catch (error) {
       return [];
@@ -145,34 +71,58 @@ class SelectDirentBody extends React.Component {
   };
 
   createFolder = (fullPath) => {
+    if (!this.props.selectedRepo) {
+      this.setState({ errMessage: gettext('Please select a library or folder first.') });
+      return;
+    }
     this.newFolderName = fullPath.split('/').pop();
-    const selectedRepoId = this.state.selectedRepo.repo_id;
+    const selectedRepoId = this.props.selectedRepo.repo_id;
 
-    if (selectedRepoId === this.props.repoID) {
-      this.props.onAddFolder(fullPath, { successCallback: this.fetchRepoInfo });
+    if (selectedRepoId === this.props.currentRepo.repo_id) {
+      this.props.onAddFolder(fullPath, { successCallback: () => {
+        seafileAPI.getRepoInfo(selectedRepoId).then((res) => {
+          const repoInfo = new RepoInfo(res.data);
+          this.props.selectRepo(repoInfo);
+          this.props.setSelectedPath(fullPath);
+        });
+      } });
     } else {
       seafileAPI.createDir(selectedRepoId, fullPath).then(() => {
         this.fetchSelectedRepoInfo(selectedRepoId);
-      }).catch((error) => {
-        let errMessage = Utils.getErrorMsg(error);
-        this.props.setErrMessage(errMessage);
       });
     }
     this.setState({ showCreateFolderDialog: false });
   };
 
-  onToggleCreateFolder = () => {
-    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog });
+  onToggleCreateFolder = async () => {
+    if (!this.state.showCreateFolderDialog) {
+      const folderList = await this.loadRepoDirentList(this.props.selectedRepo, this.props.selectedPath);
+      this.setState({ folderListOfSelectedRepo: folderList });
+    } else {
+      this.setState({ folderListOfSelectedRepo: [] });
+    }
+    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog, errMessage: '' });
   };
 
   checkDuplicatedName = (newName) => {
-    const folderList = this.loadRepoDirentList(this.state.selectedRepo);
-    return folderList.some(folder => folder.name === newName);
+    return this.state.folderListOfSelectedRepo.some(folder => folder.name === newName);
+  };
+
+  selectMode = (mode) => {
+    this.props.onUpdateMode(mode);
+    if (mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY) {
+      this.props.selectRepo(this.props.currentRepo);
+    } else if (mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
+      this.props.selectRepo(this.props.repoList[0]);
+    } else if (mode === MODE_TYPE_MAP.RECENTLY_USED) {
+      this.props.selectRepo(null);
+    }
+    this.props.setSelectedPath('/');
   };
 
   render() {
-    const { mode, path, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
-    const { selectedSearchedItem, selectedRepo, repoList, currentRepoInfo } = this.state;
+    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
+    const { selectedSearchedItem } = this.state;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -185,21 +135,21 @@ class SelectDirentBody extends React.Component {
             mode={MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY}
             label={gettext('Current Library')}
             currentMode={mode}
-            onUpdateMode={this.onUpdateMode}
+            onUpdateMode={this.selectMode}
           />
           {isSupportOtherLibraries && (
             <LibraryOption
               mode={MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES}
               label={gettext('Other Libraries')}
               currentMode={mode}
-              onUpdateMode={this.onUpdateMode}
+              onUpdateMode={this.selectMode}
             />
           )}
           <LibraryOption
             mode={MODE_TYPE_MAP.RECENTLY_USED}
             label={gettext('Recently Used')}
             currentMode={mode}
-            onUpdateMode={this.onUpdateMode}
+            onUpdateMode={this.selectMode}
           />
         </Col>
         <Col className='file-list-col'>
@@ -207,9 +157,9 @@ class SelectDirentBody extends React.Component {
             <RepoListWrapper
               key={repoListWrapperKey}
               mode={mode}
-              currentPath={path}
+              currentPath={currentPath}
               selectedItemInfo={selectedSearchedItem}
-              currentRepoInfo={currentRepoInfo}
+              currentRepoInfo={currentRepo}
               selectedRepo={selectedRepo}
               selectedPath={selectedPath}
               repoList={repoList}
@@ -221,6 +171,7 @@ class SelectDirentBody extends React.Component {
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               selectedSearchedRepo={selectedSearchedRepo}
               newFolderName={this.newFolderName}
+              initToShowChildren={this.props.initToShowChildren}
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
@@ -229,7 +180,7 @@ class SelectDirentBody extends React.Component {
               className="footer-left-btn"
               color="secondary"
               onClick={this.onToggleCreateFolder}
-              disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS}
+              disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS || mode === MODE_TYPE_MAP.RECENTLY_USED}
             >
               <i className='sf3-font-new sf3-font mr-2'></i>
               <span>{gettext('New folder')}</span>
@@ -256,13 +207,15 @@ class SelectDirentBody extends React.Component {
 }
 
 SelectDirentBody.propTypes = {
-  path: PropTypes.string,
-  selectedPath: PropTypes.string,
-  repoID: PropTypes.string,
+  repoList: PropTypes.array.isRequired,
+  currentRepo: PropTypes.object.isRequired,
+  selectedRepo: PropTypes.object,
+  currentPath: PropTypes.string.isRequired,
+  selectedPath: PropTypes.string.isRequired,
   isSupportOtherLibraries: PropTypes.bool,
   onCancel: PropTypes.func,
   handleSubmit: PropTypes.func,
-  selectRepo: PropTypes.func,
+  selectRepo: PropTypes.func.isRequired,
   setSelectedPath: PropTypes.func,
   setErrMessage: PropTypes.func,
   mode: PropTypes.string,
@@ -272,7 +225,10 @@ SelectDirentBody.propTypes = {
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,
+  onSelectSearchedRepo: PropTypes.func,
   onAddFolder: PropTypes.func,
+  initToShowChildren: PropTypes.bool,
+  fetchRepoInfo: PropTypes.func,
 };
 
 SelectDirentBody.defaultProps = {

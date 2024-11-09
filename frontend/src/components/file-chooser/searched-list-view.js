@@ -73,6 +73,7 @@ class SearchedListView extends React.Component {
                 currentItem={this.state.currentItem}
                 onItemClick={() => this.onItemClick(item, index)}
                 onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
+                initToShowChildren={false}
               />
             );
           })}
