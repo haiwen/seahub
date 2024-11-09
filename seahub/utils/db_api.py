@@ -220,12 +220,12 @@ class SeafileDB:
         if start == -1 and limit == -1:
             sql = f"""
             SELECT
-                u.repo_id, o.owner_id, u.email, e.token, 
+                u.repo_id, o.owner_id, u.email, e.token,
                 p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
             FROM
-                `{self.db_name}`.`RepoSyncError` e 
-            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token 
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id 
+                `{self.db_name}`.`RepoSyncError` e
+            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id
             LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
             CROSS JOIN `{self.db_name}`.`RepoOwner` o
             WHERE
@@ -234,14 +234,14 @@ class SeafileDB:
                 e.error_time DESC
             """
         else:
-            sql =f"""
+            sql = f"""
             SELECT
-                u.repo_id, o.owner_id, u.email, e.token, 
+                u.repo_id, o.owner_id, u.email, e.token,
                 p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
             FROM
-                `{self.db_name}`.`RepoSyncError` e 
-            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token 
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id 
+                `{self.db_name}`.`RepoSyncError` e
+            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id
             LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
             CROSS JOIN `{self.db_name}`.`RepoOwner` o
             WHERE
@@ -273,7 +273,7 @@ class SeafileDB:
     def get_org_trash_repo_list(self, org_id, start, limit):
 
         sql = f"""
-        SELECT repo_id, repo_name, head_id, owner_id, `size`, del_time 
+        SELECT repo_id, repo_name, head_id, owner_id, `size`, del_time
         FROM `{self.db_name}`.`RepoTrash`
         WHERE org_id = {org_id}
         ORDER BY del_time DESC
@@ -306,15 +306,15 @@ class SeafileDB:
         """
         empty org repo trash
         """
-        def del_repo_trash(cursor,repo_ids):
+        def del_repo_trash(cursor, repo_ids):
             del_file_count_sql = """
             DELETE FROM
                 `%s`.`RepoFileCount`
-            WHERE  
+            WHERE
                 repo_id in %%s;
             """ % self.db_name
             cursor.execute(del_file_count_sql, (repo_ids, ))
-            
+
             del_repo_info_sql = """
             DELETE FROM
                 `%s`.`RepoInfo`
@@ -322,7 +322,7 @@ class SeafileDB:
                 repo_id in %%s;
             """ % self.db_name
             cursor.execute(del_repo_info_sql, (repo_ids, ))
-            
+
             del_trash_sql = """
             DELETE FROM
                 `%s`.`RepoTrash`
@@ -330,14 +330,13 @@ class SeafileDB:
                 repo_id in %%s;
             """ % self.db_name
             cursor.execute(del_trash_sql, (repo_ids,))
-            
 
         sql_list_repo_id = f"""
-        SELECT 
+        SELECT
             t.repo_id
         FROM
             `{self.db_name}`.`RepoTrash` t
-        WHERE  
+        WHERE
             org_id={org_id};
         """
         with connection.cursor() as cursor:
@@ -348,7 +347,7 @@ class SeafileDB:
                 repo_ids.append(repo_id)
             del_repo_trash(cursor, repo_ids)
             cursor.close()
-    
+
     def add_repos_to_org_user(self, org_id, username, repo_ids):
         for repo_id in repo_ids:
             sql = f"""
@@ -364,7 +363,7 @@ class SeafileDB:
             SET `type`= '%s'
             WHERE  `repo_id`='%s'
         """ % (repo_type, repo_id)
-    
+
         with connection.cursor() as cursor:
             cursor.execute(sql)
 

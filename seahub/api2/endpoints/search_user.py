@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import sys
-import json
 import logging
 
 from django.db.models import Q
@@ -18,12 +17,13 @@ from seaserv import ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
 from seahub.utils import is_valid_email, is_org_context
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile
-from seahub.contacts.models import Contact
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
@@ -38,12 +38,11 @@ except ImportError:
 
 try:
     current_path = os.path.dirname(os.path.abspath(__file__))
-    seafile_conf_dir = os.path.join(current_path, \
-            '../../../../../conf')
+    seafile_conf_dir = os.path.join(current_path, '../../../../../conf')
     sys.path.append(seafile_conf_dir)
     from seahub_custom_functions import custom_search_user
     CUSTOM_SEARCH_USER = True
-except ImportError as e:
+except ImportError:
     CUSTOM_SEARCH_USER = False
 
 
@@ -84,6 +83,10 @@ class SearchUser(APIView):
 
                     limited_emails = []
                     for org_user in all_org_users:
+
+                        if not org_user.is_active:
+                            continue
+
                         # prepare limited emails for search from profile
                         limited_emails.append(org_user.email)
 
@@ -121,18 +124,7 @@ class SearchUser(APIView):
 
         # remove duplicate emails
         # get_emailusers_in_list can only accept 20 users at most
-        email_list = list({}.fromkeys(email_list).keys())[:20]
-
-        email_result = []
-
-        # remove nonexistent or inactive user
-        email_list_json = json.dumps(email_list)
-        user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json) + \
-                        ccnet_api.get_emailusers_in_list('LDAP', email_list_json)
-
-        for user_obj in user_obj_list:
-            if user_obj.is_active:
-                email_result.append(user_obj.email)
+        email_result = list({}.fromkeys(email_list).keys())[:20]
 
         # specific search `q`
         user_q_obj = ccnet_api.get_emailuser(q)
@@ -177,7 +169,7 @@ def format_searched_user_result(request, users, size):
     results = []
     if ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER:
         profile_queryset = Profile.objects.filter(user__in=users)
-        profile_dict = { p.user: p.login_id for p in profile_queryset if p.login_id }
+        profile_dict = {p.user: p.login_id for p in profile_queryset if p.login_id}
 
     for email in users:
         url, is_default, date_uploaded = api_avatar_url(email, size)
@@ -194,21 +186,16 @@ def format_searched_user_result(request, users, size):
     return results
 
 
-def search_user_from_ccnet(q):
+def search_user_from_ccnet(q, offset=0, limit=10):
     """ Return 10 items at most.
     """
 
     users = []
 
-    db_users = ccnet_api.search_emailusers('DB', q, 0, 10)
-    users.extend(db_users)
+    ccnet_db = CcnetDB()
+    users, count = ccnet_db.list_eligible_users(offset, limit,
+                                                is_active=True, q=q)
 
-    count = len(users)
-    if count < 10:
-        ldap_imported_users = ccnet_api.search_emailusers('LDAP', q, 0, 10 - count)
-        users.extend(ldap_imported_users)
-
-    count = len(users)
     if count < 10 and ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
         all_ldap_users = ccnet_api.search_ldapusers(q, 0, 10 - count)
         users.extend(all_ldap_users)
@@ -221,29 +208,44 @@ def search_user_from_ccnet(q):
     return email_list
 
 
-def search_user_from_profile(q):
-    """ Return 10 items at most.
+def search_user_from_profile(q, offset=0, limit=10, max_attempts=10):
+    """Return a list of email addresses, with a length of at least 10.
+
+    If not enough results are found, continue searching up to max_attempts times.
     """
-    # 'nickname__icontains' for search by nickname
-    # 'contact_email__icontains' for search by contact email
-    users = Profile.objects.filter(Q(nickname__icontains=q) | \
-                                   Q(contact_email__icontains=q) | \
-                                   Q(login_id__icontains=q)).values('user')[:10]
-
     email_list = []
-    for user in users:
-        email_list.append(user['user'])
+    attempts = 0
 
-    return email_list
+    ccnet_db = CcnetDB()
+
+    while len(email_list) < 10 and attempts < max_attempts:
+
+        # Search by nickname, contact email, or login ID
+        users = Profile.objects.filter(
+            Q(nickname__icontains=q) |
+            Q(contact_email__icontains=q) |
+            Q(login_id__icontains=q)
+        ).values('user')[offset:offset + limit]
+
+        new_emails = ccnet_db.get_active_users_by_user_list([user['user'] for user in users])
+        email_list.extend([email for email in new_emails if email not in email_list])
+        offset += limit
+        attempts += 1
+
+    return email_list[:10]
 
 
 def search_user_from_profile_with_limits(q, limited_emails):
     """ Return 10 items at most.
     """
     # search within limited_emails
-    users = Profile.objects.filter(Q(user__in=limited_emails) & (Q(nickname__icontains=q) | \
-                                                                 Q(contact_email__icontains=q) | \
-                                                                 Q(login_id__icontains=q))).values('user')[:10]
+    users = Profile.objects.filter(
+        Q(user__in=limited_emails) & (
+            Q(nickname__icontains=q) |
+            Q(contact_email__icontains=q) |
+            Q(login_id__icontains=q)
+        )
+    ).values('user')[:10]
 
     email_list = []
     for user in users:
@@ -259,23 +261,6 @@ def search_user_when_global_address_book_disabled(request, q):
 
     email_list = []
     username = request.user.username
-
-    # search from contact
-    # get user's contact list
-    contacts = Contact.objects.get_contacts_by_user(username)
-    for contact in contacts:
-
-        # search user from contact list
-        if q in contact.contact_email:
-            email_list.append(contact.contact_email)
-
-    # search from profile, limit search range in user's contacts
-    limited_emails = []
-    for contact in contacts:
-        limited_emails.append(contact.contact_email)
-
-    email_list += search_user_from_profile_with_limits(q, limited_emails)
-
     current_user = User.objects.get(email=username)
     if current_user.role.lower() != 'guest':
 
