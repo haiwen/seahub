@@ -54,7 +54,16 @@ function check_python_executable() {
     fi
 }
 
-function set_jwt_private_key () {
+function set_file_config () {
+    if [ -z "${ENABLE_FILESERVER}" ]; then
+        export ENABLE_FILESERVER=`awk -F '=' '/\[fileserver\]/{a=1}a==1&&$1~/^use_go_fileserver/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+    fi
+    if [ -z "${ENABLE_SEAFDAV}" ]; then
+        export ENABLE_SEAFDAV=`awk -F '=' '/\[WEBDAV\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafdav.conf`
+    fi
+}
+
+function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
         if [ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/.env" ]; then
             echo "Error: .env file not found."
@@ -192,14 +201,9 @@ function monitor_seafdav() {
 
 
 # check enabled
-if [ -z "${ENABLE_FILESERVER}" ]; then
-    export ENABLE_FILESERVER=`awk -F '=' '/\[fileserver\]/{a=1}a==1&&$1~/^use_go_fileserver/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
-fi
-if [ -z "${ENABLE_SEAFDAV}" ]; then
-    export ENABLE_SEAFDAV=`awk -F '=' '/\[WEBDAV\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafdav.conf`
-fi
+set_file_config
 
-set_jwt_private_key;
+set_env_config;
 
 log "Start Monitor"
 

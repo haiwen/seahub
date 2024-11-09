@@ -186,7 +186,7 @@ function start_seahub () {
     echo
 }
 
-function set_jwt_private_key () {
+function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
         if [ ! -e "${central_config_dir}/.env" ]; then
             echo "Error: .env file not found."
@@ -214,7 +214,7 @@ function set_jwt_private_key () {
 }
 
 function prepare_env() {
-    set_jwt_private_key;
+    set_env_config;
     check_python_executable;
     validate_seafile_data_dir;
 

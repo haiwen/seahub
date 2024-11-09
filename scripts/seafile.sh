@@ -60,7 +60,7 @@ if [[ -d ${INSTALLPATH}/pro ]]; then
     export SEAFES_DIR=$seafesdir
 fi
 
-function set_jwt_private_key () {
+function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
         if [ ! -e "${central_config_dir}/.env" ]; then
             echo "Error: .env file not found."
@@ -133,7 +133,7 @@ function validate_already_running () {
 }
 
 function start_seafile_server () {
-    set_jwt_private_key;
+    set_env_config;
     validate_already_running;
     validate_central_conf_dir;
     validate_seafile_data_dir;
@@ -143,6 +143,7 @@ function start_seafile_server () {
 
     mkdir -p $TOPDIR/logs
 
+    # seaf-server
     LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
         -F ${SEAFILE_CENTRAL_CONF_DIR} \
         -c ${CCNET_CONF_DIR} \
@@ -152,16 +153,19 @@ function start_seafile_server () {
         -p ${SEAFILE_RPC_PIPE_PATH} \
         -f -L ${TOPDIR} &
 
-    sleep 3
+    sleep 2
+
+    # seafile-monitor
+    ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+
+    sleep 1
 
     # check if seafile server started successfully
     if ! pgrep -f "seaf-server" 2>/dev/null 1>&2; then
         echo "Failed to start seafile server"
+        kill_all
         exit 1;
     fi
-
-    # seafile-monitor
-    ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
 
     echo "Seafile server started"
     echo
@@ -176,7 +180,7 @@ function kill_all () {
 }
 
 function stop_seafile_server () {
-    if ! pgrep -f "seaf-monitor.sh" 2>/dev/null 1>&2; then
+    if ! pgrep -f "seafile-monitor.sh" 2>/dev/null 1>&2; then
         echo "seafile server not running yet"
         kill_all
         return 1
