@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import RecentlyUsedListItem from './recently-used-list-item';
 
 const RecentlyUsedListView = ({ currentRepoInfo, repoList, onDirentItemClick }) => {
@@ -6,7 +7,8 @@ const RecentlyUsedListView = ({ currentRepoInfo, repoList, onDirentItemClick }) 
 
   const recentlyUsedList = useMemo(() => {
     const list = JSON.parse(localStorage.getItem('recently-used-list')) || [];
-    const allRepos = [currentRepoInfo, ...repoList];
+    const allRepos = [...repoList, currentRepoInfo];
+
     // list: [{repo_id: 'xxx', path: 'xxx'}, ...], replace repo_id with repo object
     return list
       .map(item => {
@@ -38,6 +40,12 @@ const RecentlyUsedListView = ({ currentRepoInfo, repoList, onDirentItemClick }) 
       })}
     </ul>
   );
+};
+
+RecentlyUsedListView.propTypes = {
+  currentRepoInfo: PropTypes.object.isRequired,
+  repoList: PropTypes.array.isRequired,
+  onDirentItemClick: PropTypes.func.isRequired,
 };
 
 export default RecentlyUsedListView;
