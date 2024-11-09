@@ -1,0 +1,17 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags avatar_tags i18n static %}
+
+{% block extra_style %}
+{% render_bundle 'viewFileCollaboraOnline' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+actionURL: '{{action_url}}',
+accessToken: '{{access_token}}',
+accessTokenTtl: '{{access_token_ttl}}',
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'viewFileCollaboraOnline' 'js' %}
+{% endblock %}
