@@ -567,5 +567,8 @@
   "Sub_table": "Tableau",
   "Search_action...": "Search action...",
   "Comment_details": "Comment details",
-  "Full_width_mode": "Full width mode"
+  "Two_column": "2 columns",
+  "Three_column": "3 columns",
+  "Four_column": "4 columns",
+  "Five_column": "5 columns"
 }
