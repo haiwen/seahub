@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-11-09 18:35+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2024\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -446,12 +446,12 @@ msgstr "바이러스 파일이 없습니다."
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:435 seahub/api2/endpoints/wiki2.py:463
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4040
-#: seahub/notifications/models.py:536 seahub/notifications/models.py:577
-#: seahub/notifications/models.py:619 seahub/notifications/models.py:670
-#: seahub/notifications/models.py:726 seahub/notifications/models.py:756
-#: seahub/notifications/models.py:778 seahub/notifications/models.py:804
-#: seahub/notifications/models.py:821 seahub/notifications/models.py:838
-#: seahub/notifications/models.py:867 seahub/seadoc/apis.py:2664
+#: seahub/notifications/models.py:538 seahub/notifications/models.py:579
+#: seahub/notifications/models.py:621 seahub/notifications/models.py:672
+#: seahub/notifications/models.py:728 seahub/notifications/models.py:758
+#: seahub/notifications/models.py:780 seahub/notifications/models.py:806
+#: seahub/notifications/models.py:823 seahub/notifications/models.py:840
+#: seahub/notifications/models.py:869 seahub/seadoc/apis.py:2665
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
 #: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
@@ -478,8 +478,8 @@ msgstr "부적절한 대상 경로입니다"
 #: seahub/api2/views.py:1989 seahub/api2/views.py:2051
 #: seahub/api2/views.py:2095 seahub/api2/views.py:2141
 #: seahub/api2/views.py:2190 seahub/api2/views.py:2603
-#: seahub/api2/views.py:2711 seahub/seadoc/apis.py:379
-#: seahub/seadoc/apis.py:488 seahub/seadoc/apis.py:3004
+#: seahub/api2/views.py:2711 seahub/seadoc/apis.py:380
+#: seahub/seadoc/apis.py:489 seahub/seadoc/apis.py:2998
 msgid "Out of quota."
 msgstr "제한 용량을 넘었습니다."
 
@@ -527,7 +527,7 @@ msgstr "%s 사용자가 없습니다."
 #: seahub/api2/endpoints/wiki2.py:1346 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
 #: seahub/profile/forms.py:24 seahub/profile/views.py:261
-#: seahub/seadoc/apis.py:2648 seahub/seadoc/views.py:31
+#: seahub/seadoc/apis.py:2649 seahub/seadoc/views.py:31
 #: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
 #: seahub/search/views.py:174 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -540,7 +540,7 @@ msgstr "권한이 거부되었습니다."
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:866
 #: seahub/api2/endpoints/wiki2.py:549 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3011
+#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3005
 msgid "The number of files in library exceeds the limit"
 msgstr "라이브러리의 한계 파일 갯수를 넘었습니다"
 
@@ -553,7 +553,7 @@ msgstr "파일을 잠그지 않았습니다."
 msgid "You can not refresh this file's lock."
 msgstr "잠근 파일을 새로 고칠 수 없습니다."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2655
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2656
 msgid "The participant already exists."
 msgstr "이미 참여자가 있습니다"
 
@@ -712,7 +712,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "경과 시간은 %s 이전이어야 합니다."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:541
+#: seahub/seadoc/apis.py:542
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -771,6 +771,7 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr "%s 폴더를 삭제할 수 없습니다. 권한을 확인하세요."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
+#: seahub/notifications/models.py:909
 msgid "file"
 msgstr "파일"
 
@@ -780,6 +781,7 @@ msgid "A file is shared to you on %s"
 msgstr "%s에서 파일을 공유했습니다"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
+#: seahub/notifications/models.py:909
 msgid "folder"
 msgstr "폴더"
 
@@ -1627,7 +1629,7 @@ msgstr "필요합니다."
 msgid "Virus detected on %s"
 msgstr "%s에 바이러스가 있습니다"
 
-#: seahub/notifications/management/commands/send_dingtalk_notifications.py:177
+#: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
 #: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
 msgid ""
@@ -1700,7 +1702,7 @@ msgstr "폴더를 복원했습니다"
 msgid "New file updates on %s"
 msgstr "%s에 새 파일 업데이트함"
 
-#: seahub/notifications/management/commands/send_notices.py:492
+#: seahub/notifications/management/commands/send_notices.py:462
 #, python-format
 msgid "New notice on %s"
 msgstr "%s에 새 공지가 있습니다"
@@ -1710,31 +1712,31 @@ msgstr "%s에 새 공지가 있습니다"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr "%(site_name)s사이트에 새 알림 %(num)s건이 있습니다:\n"
 
-#: seahub/notifications/models.py:554
+#: seahub/notifications/models.py:556
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "<a href='%(file_link)s'>%(file_name)s</a> 파일을 <a href='%(link)s'>%(name)s</a>에 업로드했습니다"
 
-#: seahub/notifications/models.py:561
+#: seahub/notifications/models.py:563
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
 msgstr "<strong>%(file_name)s</strong> 파일을 업로드했습니다"
 
-#: seahub/notifications/models.py:596
+#: seahub/notifications/models.py:598
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
 msgstr "<a href='%(folder_link)s'>%(folder_name)s</a> 폴더를 <a href='%(link)s'>%(name)s</a>에 업로드했습니다"
 
-#: seahub/notifications/models.py:603
+#: seahub/notifications/models.py:605
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
 msgstr "<strong>%(folder_name)s</strong> 폴더를 업로드했습니다"
 
-#: seahub/notifications/models.py:737
+#: seahub/notifications/models.py:739
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -1742,35 +1744,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "<a href='%(user_profile)s'>%(username)s</a> 사용자가 <a href='%(href)s'>%(group_name)s</a> 그룹 참여를 요청했습니다, 확인 메시지: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:766
+#: seahub/notifications/models.py:768
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "<a href='%(user_profile)s'>%(group_staff)s</a> 그룹 관리자가 <a href='%(href)s'>%(group_name)s</a> 그룹에 귀하를 추가했습니다"
 
-#: seahub/notifications/models.py:792
+#: seahub/notifications/models.py:794
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "%(author)s 사용자가 <a href='%(file_url)s'>%(file_name)s</a> 파일에 새 댓글을 달았습니다"
 
-#: seahub/notifications/models.py:809
+#: seahub/notifications/models.py:811
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "%(author)s 사용자가 <a href='%(file_url)s'>%(draft_id)s번 초안</a>에 댓글을 추가했습니다"
 
-#: seahub/notifications/models.py:826
+#: seahub/notifications/models.py:828
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s 사용자가 <a href='%(file_url)s'>%(draft_id)s번 초안</a>에 대한 요청을 보냈습니다"
 
-#: seahub/notifications/models.py:849
+#: seahub/notifications/models.py:851
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
@@ -1778,12 +1780,70 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "%(user)s 손님 사용자가 %(time)s에 <a href=\"%(url_base)s%(inv_url)s\">초대</a> 를 수락했습니다."
 
-#: seahub/notifications/models.py:873
+#: seahub/notifications/models.py:875
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 msgstr "%(user)s 사용자가 <a href=\"%(repo_url)s\">%(repo_name)s</a> 라이브러리를 보냈습니다."
+
+#: seahub/notifications/models.py:948
+#, python-brace-format
+msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:950
+#, python-brace-format
+msgid ""
+"{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:955
+#, python-brace-format
+msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:957
+#, python-brace-format
+msgid ""
+"{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:961
+#, python-brace-format
+msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:965
+#, python-brace-format
+msgid ""
+"{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
+"{repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:970
+#, python-brace-format
+msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:972
+#, python-brace-format
+msgid ""
+"{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:976
+#, python-brace-format
+msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:979
+#, python-brace-format
+msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -1871,147 +1931,7 @@ msgid ""
 "recently."
 msgstr "<a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 대량의 파일을 최근 삭제했습니다."
 
-#: seahub/notifications/templates/notifications/notice_email.html:79
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
-" href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a>님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리에 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일을 만들었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:81
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
-" href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other file(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a>님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리에 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일 및 기타 파일 %(obj_path_count_minus_one)s개를 만들었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:86
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
-"%(obj_name)s in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a>님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(obj_name)s 파일을 삭제했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:88
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
-"%(obj_name)s and %(obj_path_count_minus_one)s other file(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(obj_name)s 파일 및 기타 파일 %(obj_path_count_minus_one)s개를 삭제했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:92
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일을 복원했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:95
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
-"%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
-"library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(old_obj_name)s 파일 이름을 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a>(으)로 바꾸었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:99
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일을 이동했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:101
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other file(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일과 기타 파일 %(obj_path_count_minus_one)s개를 이동했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:105
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
-" href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 파일을 업데이트했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:110
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리에 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 폴더를 만들었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:112
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other folder(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리에 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 폴더 및 기타 폴더 %(obj_path_count_minus_one)s개를 만들었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:117
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
-"%(obj_name)s in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(obj_name)s 폴더를 삭제했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:119
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
-"%(obj_name)s and %(obj_path_count_minus_one)s other folder(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(obj_name)s 폴더 및 기타 폴더 %(obj_path_count_minus_one)s개를 삭제했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:123
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
-" <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 폴더를 복원했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:126
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
-"%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
-"library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 %(old_obj_name)s 폴더 이름을 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a>(으)로 바꾸었습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:130
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
-" href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 폴더를 이동했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:132
-#, python-format
-msgid ""
-" User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
-" href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other folder(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
-msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 님께서 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 라이브러리의 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 폴더 및 기타 폴더 %(obj_path_count_minus_one)s개를 이동했습니다."
-
-#: seahub/notifications/templates/notifications/notice_email.html:145
+#: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
 msgstr "다음 페이지에서 확인하세요:"
 
@@ -3359,3 +3279,164 @@ msgstr "선택"
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
 msgstr "위키를 볼 수 없습니다"
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
+#~ " <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
+#~ " <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
