@@ -740,7 +740,7 @@ class LibContentView extends React.Component {
 
   updateRecentlyUsedRepos = (repo, destPath) => {
     const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
-    const updatedRecentlyUsed = [{ repo: repo, path: destPath }, ...recentlyUsed.filter(item => item.path !== destPath)];
+    const updatedRecentlyUsed = [{ repo_id: repo.repo_id, path: destPath }, ...recentlyUsed.filter(item => item.path !== destPath)];
 
     const seen = new Set();
     const filteredRecentlyUsed = updatedRecentlyUsed.filter(item => {
@@ -760,7 +760,7 @@ class LibContentView extends React.Component {
   };
 
   // toolbar operations
-  onMoveItems = (destRepo, destDirentPath) => {
+  onMoveItems = (destRepo, destDirentPath, moveByDialog = false) => {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
 
@@ -798,7 +798,9 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(destRepo, destDirentPath);
+      if (moveByDialog) {
+        this.updateRecentlyUsedRepos(destRepo, destDirentPath);
+      }
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1242,7 +1244,7 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, moveByDialog = false) => {
     this.updateCurrentNotExistDirent(dirent);
     let repoID = this.props.repoID;
     // just for view list state
@@ -1287,7 +1289,9 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(destRepo, moveToDirentPath);
+      if (moveByDialog) {
+        this.updateRecentlyUsedRepos(destRepo, moveToDirentPath);
+      }
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {

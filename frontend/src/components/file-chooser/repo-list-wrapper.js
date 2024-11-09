@@ -23,18 +23,6 @@ const RepoListWrapper = (props) => {
     searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName
   } = props;
 
-  const renderRecentlyUsed = () => {
-    const recentlyUsedList = JSON.parse(localStorage.getItem('recently-used-list')) || [];
-    return (
-      <div className="list-view">
-        <RecentlyUsedListView
-          recentlyUsedList={recentlyUsedList}
-          onDirentItemClick={props.handleClickDirent}
-        />
-      </div>
-    );
-  };
-
   const onScroll = (event) => {
     event.stopPropagation();
   };
@@ -164,7 +152,15 @@ const RepoListWrapper = (props) => {
             />
           </div>
         )}
-        {mode === MODE_TYPE_MAP.RECENTLY_USED && renderRecentlyUsed()}
+        {mode === MODE_TYPE_MAP.RECENTLY_USED && (
+          <div className="list-view">
+            <RecentlyUsedListView
+              currentRepoInfo={currentRepoInfo}
+              repoList={repoList}
+              onDirentItemClick={props.handleClickDirent}
+            />
+          </div>
+        )}
         {mode === MODE_TYPE_MAP.SEARCH_RESULTS && (
           <div className="list-view">
             {renderSearchResults()}
