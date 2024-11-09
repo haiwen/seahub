@@ -43,14 +43,15 @@ CREATE TABLE IF NOT EXISTS `repo_metadata`  (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `repo_id` VARCHAR(36) NOT NULL,
   `enabled` TINYINT(1) NOT NULL,
+  `face_recognition_enabled` TINYINT(1) NULL,
+  `last_face_cluster_time` DATETIME NULL,
   `modified_time` DATETIME NOT NULL,
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
-  `face_recognition_enabled` tinyint(1) DEFAULT NULL,
-  `last_face_cluster_time` datetime DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
+  KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -90,5 +91,7 @@ CREATE TABLE IF NOT EXISTS `wiki_wiki2_publish` (
 
 ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `user_scope` varchar(225) DEFAULT 'all_users';
 ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `authed_details` LONGTEXT DEFAULT NULL;
+ALTER TABLE share_fileshare ADD INDEX IF NOT EXISTS `idx_ctime` (`ctime`);
+ALTER TABLE share_fileshare ADD INDEX IF NOT EXISTS `idx_view_cnt` (`view_cnt`);
 
 ALTER TABLE profile_profile ADD COLUMN IF NOT EXISTS `is_manually_set_contact_email` tinyint(1) DEFAULT 0;

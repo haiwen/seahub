@@ -955,7 +955,9 @@ CREATE TABLE `share_fileshare` (
   KEY `share_fileshare_username_5cb6de75` (`username`),
   KEY `share_fileshare_repo_id_9b5ae27a` (`repo_id`),
   KEY `share_fileshare_s_type_724eb6c1` (`s_type`),
-  KEY `share_fileshare_permission_d12c353f` (`permission`)
+  KEY `share_fileshare_permission_d12c353f` (`permission`),
+  KEY `idx_ctime` (`ctime`),
+  KEY `idx_view_cnt` (`view_cnt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1534,8 +1536,6 @@ CREATE TABLE `repo_metadata`  (
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
-  `face_recognition_enabled` tinyint(1) DEFAULT NULL,
-  `last_face_cluster_time` datetime DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
