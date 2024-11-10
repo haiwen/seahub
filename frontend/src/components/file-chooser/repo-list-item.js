@@ -68,6 +68,7 @@ class RepoListItem extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
+    // create new folder in selected repo or folder
     if (repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
       seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
         if (!this.isComponentMounted) return;

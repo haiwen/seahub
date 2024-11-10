@@ -79,13 +79,15 @@ class SelectDirentBody extends React.Component {
     const selectedRepoId = this.props.selectedRepo.repo_id;
 
     if (selectedRepoId === this.props.currentRepo.repo_id) {
-      this.props.onAddFolder(fullPath, { successCallback: () => {
-        seafileAPI.getRepoInfo(selectedRepoId).then((res) => {
-          const repoInfo = new RepoInfo(res.data);
-          this.props.selectRepo(repoInfo);
-          this.props.setSelectedPath(fullPath);
-        });
-      } });
+      this.props.onAddFolder(fullPath, {
+        successCallback: () => {
+          seafileAPI.getRepoInfo(selectedRepoId).then((res) => {
+            const repoInfo = new RepoInfo(res.data);
+            this.props.selectRepo(repoInfo);
+            this.props.setSelectedPath(fullPath);
+          });
+        }
+      });
     } else {
       seafileAPI.createDir(selectedRepoId, fullPath).then(() => {
         this.fetchSelectedRepoInfo(selectedRepoId);
@@ -121,8 +123,7 @@ class SelectDirentBody extends React.Component {
   };
 
   render() {
-    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo } = this.props;
-    const { selectedSearchedItem } = this.state;
+    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo, selectedSearchedItem } = this.props;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -229,6 +230,7 @@ SelectDirentBody.propTypes = {
   onAddFolder: PropTypes.func,
   initToShowChildren: PropTypes.bool,
   fetchRepoInfo: PropTypes.func,
+  selectedSearchedItem: PropTypes.object,
 };
 
 SelectDirentBody.defaultProps = {

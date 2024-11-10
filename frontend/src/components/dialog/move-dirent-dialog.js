@@ -42,6 +42,7 @@ class MoveDirent extends React.Component {
       repoList: [],
       selectedPath: this.props.path,
       selectedSearchedRepo: null,
+      selectedSearchedItem: { repoID: '', filePath: '' },
       searchStatus: '',
       searchResults: [],
       showSearchBar: false,
@@ -226,6 +227,8 @@ class MoveDirent extends React.Component {
         showSearchBar: false,
       });
     }
+
+    this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
   };
 
   onUpdateSearchStatus = (status) => {
@@ -281,6 +284,7 @@ class MoveDirent extends React.Component {
         selectedRepo: repoInfo,
         selectedSearchedRepo: repoInfo,
         selectedPath: path,
+        selectedSearchedItem: { repoID: item.repo_id, filePath: path },
         showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
         initToShowChildren: true,
       });
@@ -288,6 +292,10 @@ class MoveDirent extends React.Component {
       const errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
+  };
+
+  selectSearchedItem = (item) => {
+    this.setState({ selectedSearchedItem: item });
   };
 
   renderTitle = () => {
@@ -349,6 +357,8 @@ class MoveDirent extends React.Component {
           onUpdateMode={this.updateMode}
           searchStatus={searchStatus}
           searchResults={searchResults}
+          selectedSearchedItem={this.state.selectedSearchedItem}
+          onSelectedSearchedItem={this.selectSearchedItem}
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
           selectedSearchedRepo={selectedSearchedRepo}
