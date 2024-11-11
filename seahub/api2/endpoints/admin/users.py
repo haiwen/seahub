@@ -113,10 +113,7 @@ class UserObj(object):
 
 
 def get_user_objs_from_ccnet(email_list):
-    db_name, error_msg = get_ccnet_db_name()
-    if error_msg:
-        logger.error(error_msg)
-        return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+    db_name = get_ccnet_db_name()
 
     if not email_list:
         return list(), None
