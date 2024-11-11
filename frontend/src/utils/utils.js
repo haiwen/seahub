@@ -1068,8 +1068,22 @@ export const Utils = {
     }
   },
 
+  isPptxFile: function (filePath) {
+    let index = filePath.lastIndexOf('.');
+    if (index === -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type === '.pptx') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+
   isDescriptionSupportedFile: function (filePath) {
-    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath) || Utils.pdfCheck(filePath) || Utils.isDocxFile(filePath);
+    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath) || Utils.pdfCheck(filePath) || Utils.isDocxFile(filePath) || Utils.isPptxFile(filePath);
   },
 
   isFileMetadata: function (type) {
