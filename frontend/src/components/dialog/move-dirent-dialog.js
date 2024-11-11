@@ -265,7 +265,11 @@ class MoveDirent extends React.Component {
 
     return (
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle} close={
+          <div className="header-close-list">
+            <span aria-hidden="true" className="sf3-font sf3-font-x-01 comment-close-icon" onClick={this.toggle}></span>
+          </div>
+        }>
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex'></div>}
           {isPro && (
             showSearchBar ? (
