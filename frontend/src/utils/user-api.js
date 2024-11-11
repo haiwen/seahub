@@ -4,7 +4,7 @@ import { siteRoot } from './constants';
 
 class UserAPI {
 
-  init({ server, username, password, token }) {
+  init({server, username, password, token}) {
     this.server = server;
     this.username = username;
     this.password = password;
@@ -12,13 +12,13 @@ class UserAPI {
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
-        headers: { 'Authorization': 'Token ' + this.token },
+        headers: {'Authorization': 'Token ' + this.token},
       });
     }
     return this;
   }
 
-  initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
+  initForSeahubUsage({siteRoot, xcsrfHeaders}) {
     if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
       var server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
@@ -62,6 +62,7 @@ class UserAPI {
     form.append('owner', owner);
     form.append('reshare', reshare);
     return this.req.put(url, form);
+  }
 
   getNotificationToken(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/repo-notification-jwt-token/'
