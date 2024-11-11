@@ -155,7 +155,7 @@ class OrgDevicesErrors extends Component {
         loading: false,
         devicesErrors: res.data.device_errors,
         pageInfo: res.data.page_info,
-        isCleanBtnShown: res.data.length > 0
+        isCleanBtnShown: res.data.device_errors.length > 0
       });
     }).catch((error) => {
       this.setState({
@@ -166,7 +166,7 @@ class OrgDevicesErrors extends Component {
   };
 
   clean = () => {
-    seafileAPI.sysAdminClearDeviceErrors().then((res) => {
+    seafileAPI.orgAdminClearDeviceErrors(orgID).then((res) => {
       this.setState({
         devicesErrors: [],
         isCleanBtnShown: false

@@ -211,7 +211,7 @@ class OrgAdminDevicesErrors(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            seafile_api.clear_repo_sync_errors()
+            seafile_api.clear_org_repo_sync_errors(org_id)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
