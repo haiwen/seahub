@@ -894,7 +894,6 @@ class SeafileConfigurator(AbstractConfigurator):
             fp.write('[fileserver]\nport=%d\n' % self.fileserver_port)
 
         self.generate_db_conf()
-        self.generate_notification_conf()
 
         ## use default seafile-data path: seafile_data_dir=${TOPDIR}/seafile-data
 
@@ -919,24 +918,6 @@ class SeafileConfigurator(AbstractConfigurator):
         config.set(db_section, 'password', db_config.seafile_mysql_password)
         config.set(db_section, 'db_name', db_config.seafile_db_name)
         config.set(db_section, 'connection_charset', 'utf8')
-
-        Utils.write_config(config, self.seafile_conf)
-
-    def generate_notification_conf(self):
-        config = Utils.read_config(self.seafile_conf)
-        # [notification]
-        # enabled=
-        # host=
-        # port=
-        # log_level=
-
-        db_section = 'notification'
-        if not config.has_section(db_section):
-            config.add_section(db_section)
-        config.set(db_section, 'enabled', 'false')
-        config.set(db_section, 'host', '127.0.0.1')
-        config.set(db_section, 'port', '8083')
-        config.set(db_section, 'log_level', 'info')
 
         Utils.write_config(config, self.seafile_conf)
 
@@ -1562,7 +1543,7 @@ def main():
 
     # Part 2: generate configuration
     db_config.generate()
-    ccnet_config.generate()
+    # ccnet_config.generate()  # do not create ccnet.conf
     seafile_config.generate()
     seafdav_config.generate()
     gunicorn_config.generate()

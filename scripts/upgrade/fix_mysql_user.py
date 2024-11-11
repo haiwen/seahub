@@ -50,30 +50,30 @@ class Utils(object):
         return cp
 
 def get_ccnet_mysql_info():
-    ccnet_conf = os.path.join(env_mgr.ccnet_dir, 'ccnet.conf')
+    seafile_conf = os.path.join(env_mgr.ccnet_dir, 'seafile.conf')
     defaults = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 
-    config = Utils.read_config(ccnet_conf, defaults)
-    db_section = 'Database'
+    config = Utils.read_config(seafile_conf, defaults)
+    db_section = 'database'
 
     if not config.has_section(db_section):
         return None
 
-    type = config.get(db_section, 'ENGINE')
+    type = config.get(db_section, 'type')
     if type != 'mysql':
         return None
 
     try:
-        host = config.get(db_section, 'HOST')
-        port = config.getint(db_section, 'PORT')
-        username = config.get(db_section, 'USER')
-        password = config.get(db_section, 'PASSWD')
-        db = config.get(db_section, 'DB')
+        host = config.get(db_section, 'host')
+        port = config.getint(db_section, 'port')
+        username = config.get(db_section, 'user')
+        password = config.get(db_section, 'password')
+        db = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
     except configparser.NoOptionError as e:
-        Utils.error('Database config in ccnet.conf is invalid: %s' % e)
+        Utils.error('Database config in seafile.conf is invalid: %s' % e)
 
     info = MySQLDBInfo(host, port, username, password, db)
     return info
