@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
+import { MenuSelectStyle } from '../common/select/seahub-select-style';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -58,7 +59,7 @@ class CleanTrash extends React.Component {
   render() {
     const { formErrorMsg } = this.state;
     return (
-      <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{gettext('Clean')}</ModalHeader>
         <ModalBody>
           <React.Fragment>
@@ -69,12 +70,14 @@ class CleanTrash extends React.Component {
               autoFocus={false}
               onChange={this.handleInputChange}
               placeholder=''
+              styles={MenuSelectStyle}
             />
             {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}
           </React.Fragment>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" disabled={this.state.submitBtnDisabled} onClick={this.formSubmit}>{gettext('Submit')}</button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" disabled={this.state.submitBtnDisabled} onClick={this.formSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
