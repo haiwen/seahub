@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CellFormatter from '../../../../components/cell-formatter';
 import { CellType } from '../../../../constants';
 import { Utils } from '../../../../../utils/utils';
@@ -13,7 +14,7 @@ const SPECIAL_FILE_ICON = [
   'word.png',
 ];
 
-const Formatter = ({ value, column }) => {
+const Formatter = ({ value, column, record }) => {
   let className = '';
 
   if (column.type === CellType.FILE_NAME && value) {
@@ -23,7 +24,13 @@ const Formatter = ({ value, column }) => {
     }
   }
 
-  return (<CellFormatter className={className} value={value} field={column}/>);
+  return (<CellFormatter readonly={true} className={className} value={value} field={column} record={record} />);
+};
+
+Formatter.propTypes = {
+  value: PropTypes.any,
+  column: PropTypes.object,
+  record: PropTypes.object,
 };
 
 export default Formatter;
