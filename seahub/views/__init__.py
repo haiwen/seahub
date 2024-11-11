@@ -1147,7 +1147,9 @@ def react_fake_view(request, **kwargs):
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
-        'enable_file_tags': settings.ENABLE_FILE_TAGS
+        'enable_file_tags': settings.ENABLE_FILE_TAGS,
+        'enable_show_about': getattr(settings, 'ENABLE_SHOW_ABOUT', False)
+
     }
 
     if settings.ENABLE_METADATA_MANAGEMENT:
