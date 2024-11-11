@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 
 from seaserv import seafile_api, ccnet_api
 
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
@@ -80,6 +81,7 @@ MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
 MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
+MSG_TYPE_SHARE_LINK_DOWNLOAD = 'share_link_download'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -154,6 +156,17 @@ def repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name):
 
 def saml_sso_error_msg_to_json(error_msg):
     return json.dumps({'error_msg': error_msg})
+
+
+def share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type, avatar_url):
+    return json.dumps({
+        'from_user': from_user,
+        'from_username': from_username,
+        'repo_id': repo_id,
+        'repo_name': repo_name,
+        'op_type': op_type,
+        'share_link_download_avatar_url': avatar_url
+    })
 
 
 def get_cache_key_of_unseen_notifications(username):
@@ -356,6 +369,12 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_SAML_SSO_FAILED, detail)
 
+    def add_share_link_download_msg(self, to_user, detail):
+        """
+        Notify ``to_user`` that a file/folder has been view or download
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_SHARE_LINK_DOWNLOAD, detail)
+
 
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
@@ -474,6 +493,9 @@ class UserNotification(models.Model):
 
     def is_saml_sso_error_msg(self):
         return self.msg_type == MSG_TYPE_SAML_SSO_FAILED
+
+    def is_share_link_download_msg(self):
+        return self.msg_type == MSG_TYPE_SHARE_LINK_DOWNLOAD
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
@@ -984,8 +1006,8 @@ class UserNotification(models.Model):
 ########## handle signals
 from django.dispatch import receiver
 
-from seahub.signals import upload_file_successful, upload_folder_successful,\
-        comment_file_successful, repo_transfer
+from seahub.signals import upload_file_successful, upload_folder_successful, \
+    comment_file_successful, repo_transfer, share_link_download_successful
 from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful, change_repo_perm_successful, delete_repo_perm_successful
@@ -1186,3 +1208,19 @@ def saml_sso_failed_cb(sender, **kwargs):
 
     detail = saml_sso_error_msg_to_json(error_msg)
     UserNotification.objects.add_saml_sso_error_msg(to_user, detail)
+
+
+@receiver(share_link_download_successful)
+def share_link_download_cb(sender, **kwargs):
+    """
+    Send when others view or download files through shared links
+    """
+    to_user = kwargs['to_user']
+    from_user = kwargs['from_user']
+    from_username = kwargs['from_username']
+    repo_id = kwargs['repo_id']
+    repo_name = kwargs['repo_name']
+    op_type = kwargs['op_type']
+    avatar_url, _, _ = api_avatar_url(from_user, 256)
+    detail = share_link_download_msg_to_json(from_user, from_username, repo_id, repo_name, op_type, avatar_url)
+    UserNotification.objects.add_share_link_download_msg(to_user, detail)

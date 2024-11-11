@@ -100,6 +100,7 @@ class MultiShareLinks(APIView):
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        notif_enable = request.data.get('notif_enable', False)
         password = request.data.get('password', None)
         if config.SHARE_LINK_FORCE_USE_PASSWORD and not password:
             error_msg = _('Password is required.')
@@ -251,12 +252,14 @@ class MultiShareLinks(APIView):
         if s_type == 'f':
             fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                     password, expire_date,
-                                                    permission=perm, org_id=org_id)
+                                                    permission=perm, org_id=org_id,
+                                                    notif_enable=notif_enable)
 
         else:
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                    password, expire_date,
-                                                   permission=perm, org_id=org_id)
+                                                   permission=perm, org_id=org_id,
+                                                   notif_enable=notif_enable)
 
         user_scope = request.data.get('user_scope', '')
         emails_list = []
@@ -337,17 +340,11 @@ class MultiShareLinksBatch(APIView):
             error_msg = 'number invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        notif_enable = request.data.get('notif_enable', False)
         auto_generate_password = request.data.get('auto_generate_password')
-        if not auto_generate_password:
+        if auto_generate_password is None:
             error_msg = 'auto_generate_password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        auto_generate_password = auto_generate_password.lower()
-        if auto_generate_password not in ('true', 'false'):
-            error_msg = 'auto_generate_password invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        auto_generate_password = auto_generate_password == 'true'
 
         if config.SHARE_LINK_FORCE_USE_PASSWORD and not auto_generate_password:
             error_msg = _('Password is required.')
@@ -499,12 +496,14 @@ class MultiShareLinksBatch(APIView):
             if s_type == 'f':
                 fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                         password, expire_date,
-                                                        permission=perm, org_id=org_id)
+                                                        permission=perm, org_id=org_id,
+                                                        notif_enable=notif_enable)
 
             elif s_type == 'd':
                 fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                        password, expire_date,
-                                                       permission=perm, org_id=org_id)
+                                                       permission=perm, org_id=org_id,
+                                                       notif_enable=notif_enable)
 
             created_share_links.append(fs)
 

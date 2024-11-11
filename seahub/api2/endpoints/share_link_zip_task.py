@@ -12,13 +12,16 @@ from django.conf import settings
 
 from seahub.api2.throttling import ShareLinkZipTaskThrottle
 from seahub.api2.utils import api_error
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.views.file import send_file_access_msg
 from seahub.share.models import FileShare, check_share_link_access, check_share_link_access_by_scope
 from seahub.utils import is_windows_operating_system, is_pro_version, \
-        normalize_dir_path
+    normalize_dir_path
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_LOGIN_REQUIRED
+from seahub.signals import share_link_download_successful
+
 
 from seaserv import seafile_api
 
@@ -116,6 +119,16 @@ class ShareLinkZipTaskView(APIView):
             request.user.username = request.session.get('anonymous_email')
 
         send_file_access_msg(request, repo, real_path, 'share-link')
+        # send a signal when successfully download folder
+        if fileshare.is_notification_enabled:
+            try:
+                to_user = fileshare.username
+                from_user = request.user.username
+                from_username = 'Anonymous user' if email2nickname(from_user) == '' else email2nickname(from_user)
+                share_link_download_successful.send(sender=None,from_user=from_user, from_username=from_username,
+                                                    to_user=to_user, repo_id=repo_id, repo_name=repo.name, op_type='dl')
+            except Exception as e:
+                logger.error(e)
 
         return Response({'zip_token': zip_token})
 
