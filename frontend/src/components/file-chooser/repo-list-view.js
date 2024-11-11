@@ -8,7 +8,7 @@ const propTypes = {
   repo: PropTypes.object,
   repoList: PropTypes.array,
   selectedRepo: PropTypes.object,
-  initToShowChildren: PropTypes.bool.isRequired,
+  initToShowChildren: PropTypes.bool,
   selectedPath: PropTypes.string,
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
@@ -34,7 +34,7 @@ const defaultProps = {
 class RepoListView extends React.Component {
 
   render() {
-    let { currentRepoInfo, currentPath, repoList, selectedSearchedRepo } = this.props;
+    let { currentRepoInfo, currentPath, repoList, selectedSearchedRepo, initToShowChildren } = this.props;
     if (currentRepoInfo) {
       repoList = [];
       repoList.push(currentRepoInfo);
@@ -54,7 +54,7 @@ class RepoListView extends React.Component {
               isCurrentRepo={currentRepoInfo ? true : false}
               currentPath={currentPath}
               repo={repoItem}
-              initToShowChildren={this.props.initToShowChildren}
+              initToShowChildren={initToShowChildren}
               selectedRepo={this.props.selectedRepo}
               selectedPath={this.props.selectedPath}
               onRepoItemClick={this.props.onRepoItemClick}

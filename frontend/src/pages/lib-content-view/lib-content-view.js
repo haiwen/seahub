@@ -956,7 +956,7 @@ class LibContentView extends React.Component {
   removeFromRecentlyUsed = (repoID, path) => {
     const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
     const updatedRecentlyUsed = recentlyUsed.filter(item =>
-      !(item.repo.repo_id === repoID && item.path === path)
+      !(item.repo_id === repoID && item.path === path)
     );
     localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
   };

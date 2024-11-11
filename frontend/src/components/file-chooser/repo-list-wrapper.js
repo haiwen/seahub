@@ -5,22 +5,14 @@ import RecentlyUsedListView from './recently-used-list-view';
 import { gettext } from '../../utils/constants';
 import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
+import { MODE_TYPE_MAP } from '../dialog/move-dirent-dialog';
 import Loading from '../loading';
-
-export const MODE_TYPE_MAP = {
-  CURRENT_AND_OTHER_REPOS: 'current_repo_and_other_repos',
-  ONLY_CURRENT_LIBRARY: 'only_current_library',
-  ONLY_ALL_REPOS: 'only_all_repos',
-  ONLY_OTHER_LIBRARIES: 'only_other_libraries',
-  RECENTLY_USED: 'recently_used',
-  SEARCH_RESULTS: 'search_results',
-};
 
 const RepoListWrapper = (props) => {
   const {
     mode, isShowFile, fileSuffixes, currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
-    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName
+    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName, initToShowChildren
   } = props;
 
   const onScroll = (event) => {
@@ -99,7 +91,7 @@ const RepoListWrapper = (props) => {
         {mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY && (
           <div className="list-view">
             <RepoListView
-              initToShowChildren
+              initToShowChildren={true}
               currentRepoInfo={currentRepoInfo}
               currentPath={currentPath}
               selectedRepo={selectedRepo}
@@ -138,7 +130,7 @@ const RepoListWrapper = (props) => {
         {mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES && (
           <div className="list-view">
             <RepoListView
-              initToShowChildren={false}
+              initToShowChildren={initToShowChildren}
               repoList={repoList}
               selectedRepo={selectedRepo}
               selectedPath={selectedPath}
@@ -193,6 +185,7 @@ RepoListWrapper.propTypes = {
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,
   newFolderName: PropTypes.string,
+  initToShowChildren: PropTypes.bool,
 };
 
 RepoListWrapper.defaultProps = {
