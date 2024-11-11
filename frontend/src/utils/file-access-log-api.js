@@ -32,13 +32,12 @@ class FileAccessLogAPI {
     return this;
   }
 
-  listFileAccessLog(repoID, filePath, page, perPage, avatarSize) {
+  listFileAccessLog(repoID, filePath, page, perPage) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/file/access-log/';
     const params = {
       path: filePath,
       page: page || 1,
-      per_page: perPage || 100,
-      avatar_size: avatarSize || 64
+      per_page: perPage || 100
     };
     return this.req.get(url, { params: params });
   }

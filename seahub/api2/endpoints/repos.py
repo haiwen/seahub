@@ -123,7 +123,7 @@ class ReposView(APIView):
 
                 if is_wiki_repo(r):
                     continue
-                url, _, _ = api_avatar_url(email, int(24))
+                url, _, _ = api_avatar_url(email)
 
                 repo_info = {
                     "type": "mine",
@@ -197,7 +197,7 @@ class ReposView(APIView):
 
                 owner_name = group_name if is_group_owned_repo else nickname_dict.get(owner_email, '')
                 owner_contact_email = '' if is_group_owned_repo else contact_email_dict.get(owner_email, '')
-                url, _, _ = api_avatar_url(owner_email, int(24))
+                url, _, _ = api_avatar_url(owner_email)
 
                 repo_info = {
                     "type": "shared",
@@ -309,7 +309,7 @@ class ReposView(APIView):
                     continue
 
                 repo_owner = repo_id_owner_dict[r.repo_id]
-                url, _, _ = api_avatar_url(repo_owner, int(24))
+                url, _, _ = api_avatar_url(repo_owner)
                 repo_info = {
                     "type": "public",
                     "repo_id": r.repo_id,
@@ -376,7 +376,7 @@ class RepoView(APIView):
             lib_need_decrypt = True
 
         repo_owner = get_repo_owner(request, repo_id)
-        url, _, _ = api_avatar_url(repo_owner, int(24))
+        url, _, _ = api_avatar_url(repo_owner)
 
         try:
             has_been_shared_out = repo_has_been_shared_out(request, repo_id)

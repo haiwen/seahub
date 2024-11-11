@@ -45,11 +45,6 @@ class AdminGroupMembers(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
-        try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
         except ValueError:
@@ -74,7 +69,7 @@ class AdminGroupMembers(APIView):
 
         group_members_info = []
         for m in members:
-            member_info = get_group_member_info(request, group_id, m.user_name, avatar_size)
+            member_info = get_group_member_info(request, group_id, m.user_name)
             group_members_info.append(member_info)
 
         group_members = {

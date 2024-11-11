@@ -142,7 +142,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
     callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-    avatar_url, _, _ = api_avatar_url(username, 72)
+    avatar_url, _, _ = api_avatar_url(username)
     import jwt
 
     http_user_agent = request.headers.get('user-agent', '')

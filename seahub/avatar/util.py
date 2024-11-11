@@ -6,9 +6,8 @@ from urllib.parse import quote
 
 from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,\
-    AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE, \
-    AVATAR_DEFAULT_NON_REGISTERED_URL, AUTO_GENERATE_GROUP_AVATAR_SIZES, \
-    AVATAR_FILE_STORAGE
+    AVATAR_DEFAULT_SIZE, AVATAR_DEFAULT_NON_REGISTERED_URL, \
+    AUTO_GENERATE_GROUP_AVATAR_SIZES, AVATAR_FILE_STORAGE
 
 cached_funcs = set()
 
@@ -35,7 +34,7 @@ def cache_result(func):
         cache.set(key, value, AVATAR_CACHE_TIMEOUT)
         return value
 
-    def cached_func(user, size):
+    def cached_func(user, size=AVATAR_DEFAULT_SIZE):
         prefix = func.__name__
         cached_funcs.add(prefix)
         key = get_cache_key(user, size, prefix=prefix)
@@ -46,7 +45,7 @@ def invalidate_cache(user, size=None):
     """
     Function to be called when saving or changing an user's avatars.
     """
-    sizes = set(AUTO_GENERATE_AVATAR_SIZES)
+    sizes = {AVATAR_DEFAULT_SIZE}
     if size is not None:
         sizes.add(size)
     for prefix in cached_funcs:

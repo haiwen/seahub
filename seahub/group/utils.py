@@ -88,14 +88,14 @@ def is_group_admin_or_owner(group_id, email):
     else:
         return False
 
-def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_SIZE):
+def get_group_member_info(request, group_id, email):
     p = Profile.objects.get_profile_by_user(email)
     if p:
         login_id = p.login_id if p.login_id else ''
     else:
         login_id = ''
 
-    avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+    avatar_url, is_default, date_uploaded = api_avatar_url(email)
 
     role = 'Member'
     group = ccnet_api.get_group(int(group_id))

@@ -113,7 +113,7 @@ def base(request):
         if os.path.exists(custom_login_bg_file):
             login_bg_path = CUSTOM_LOGIN_BG_PATH
 
-        avatar_url, is_default, date_uploaded = api_avatar_url(username, 72)
+        avatar_url, is_default, date_uploaded = api_avatar_url(username)
 
     result = {
         'seafile_version': SEAFILE_VERSION,

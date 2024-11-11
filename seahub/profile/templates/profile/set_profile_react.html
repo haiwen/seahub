@@ -13,7 +13,7 @@
 // overwrite the one in base_for_react.html
 window.app.pageOptions = {
   username: "{{request.user.username|escapejs}}",
-  avatarURL: '{% avatar_url request.user 160 %}',
+  avatarURL: '{% avatar_url request.user %}',
   csrfToken: '{{ csrf_token }}',
 
   enableUpdateUserInfo: {% if ENABLE_UPDATE_USER_INFO %} true {% else %} false {% endif %},

@@ -322,9 +322,6 @@ class OrgAdminUser(APIView):
         """Get org user info
 
         """
-        # argument check
-        avatar_size = request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE)
-
         # resource check
         org_id = int(org_id)
         if not ccnet_api.get_org_by_id(org_id):
@@ -344,7 +341,7 @@ class OrgAdminUser(APIView):
 
         # get user info
         user_info = get_user_info(email, org_id)
-        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+        avatar_url, is_default, date_uploaded = api_avatar_url(email)
         user_info['avatar_url'] = avatar_url
 
         return Response(user_info)

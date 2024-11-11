@@ -29,7 +29,7 @@ from seahub.avatar.util import invalidate_cache, get_avatar_file_storage
 from seahub.avatar.settings import (AVATAR_STORAGE_DIR, AVATAR_RESIZE_METHOD,
                              AVATAR_MAX_AVATARS_PER_USER, AVATAR_THUMB_FORMAT,
                              AVATAR_HASH_USERDIRNAMES, AVATAR_HASH_FILENAMES,
-                             AVATAR_THUMB_QUALITY, AUTO_GENERATE_AVATAR_SIZES,
+                             AVATAR_THUMB_QUALITY, AVATAR_DEFAULT_SIZE,
                              GROUP_AVATAR_STORAGE_DIR)
 
 # Get an instance of a logger
@@ -176,8 +176,7 @@ class GroupAvatar(models.Model, AvatarBase):
 
 def create_default_thumbnails(instance=None, created=False, **kwargs):
     if created:
-        for size in AUTO_GENERATE_AVATAR_SIZES:
-            instance.create_thumbnail(size)
+        instance.create_thumbnail(AVATAR_DEFAULT_SIZE)
 
 signals.post_save.connect(create_default_thumbnails, sender=Avatar, dispatch_uid="create_default_thumbnails")
 

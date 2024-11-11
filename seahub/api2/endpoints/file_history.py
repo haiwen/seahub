@@ -23,12 +23,12 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 
 logger = logging.getLogger(__name__)
 
-def get_new_file_history_info(ent, avatar_size):
+def get_new_file_history_info(ent):
 
     info = {}
 
     creator_name = ent.op_user
-    url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+    url, is_default, date_uploaded = api_avatar_url(creator_name)
 
     info['creator_avatar_url'] = url
     info['creator_email'] = creator_name
@@ -44,14 +44,14 @@ def get_new_file_history_info(ent, avatar_size):
 
     return info
 
-def get_file_history_info(commit, avatar_size):
+def get_file_history_info(commit):
 
     info = {}
 
     creator_name = getattr(commit, 'creator_name', '')
     if creator_name is None:
         creator_name = ''
-    url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+    url, is_default, date_uploaded = api_avatar_url(creator_name)
 
     info['creator_avatar_url'] = url
     info['creator_email'] = creator_name
@@ -91,11 +91,6 @@ class FileHistoryView(APIView):
         commit_id = request.GET.get('commit_id', '')
         if not commit_id:
             commit_id = repo.head_cmmt_id
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
-        except ValueError:
-            avatar_size = 32
 
         # Don't use seafile_api.get_file_id_by_path()
         # if path parameter is `rev_renamed_old_path`.
@@ -141,7 +136,7 @@ class FileHistoryView(APIView):
             if (keep_days != -1) and ((present_time - history_time).days > keep_days):
                 next_start_commit = False
                 break
-            info = get_file_history_info(commit, avatar_size)
+            info = get_file_history_info(commit)
             info['path'] = path
             result.append(info)
 
@@ -176,11 +171,9 @@ class NewFileHistoryView(APIView):
         commit_id = repo.head_cmmt_id
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
-            avatar_size = 32
             page = 1
             per_page = 25
 
@@ -216,7 +209,7 @@ class NewFileHistoryView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        data = [get_new_file_history_info(ent, avatar_size) for ent in file_revisions]
+        data = [get_new_file_history_info(ent) for ent in file_revisions]
         result = {
             "data": data,
             "page": page,

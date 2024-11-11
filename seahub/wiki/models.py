@@ -99,7 +99,7 @@ class Wiki(models.Model):
             return True
 
     def to_dict(self):
-        avatar_url, is_default, date_uploaded = api_avatar_url(self.username, int(32))
+        avatar_url, is_default, date_uploaded = api_avatar_url(self.username)
         return {
             'id': self.pk,
             'owner': self.username,

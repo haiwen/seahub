@@ -29,7 +29,7 @@ from seahub.share.models import FileShare
 logger = logging.getLogger(__name__)
 
 
-def get_share_link_info(fileshare, avatar_size=AVATAR_DEFAULT_SIZE):
+def get_share_link_info(fileshare):
 
     data = {}
     token = fileshare.token
@@ -55,7 +55,7 @@ def get_share_link_info(fileshare, avatar_size=AVATAR_DEFAULT_SIZE):
     data['creator_name'] = email2nickname(creator_email)
     data['creator_contact_email'] = email2contact_email(creator_email)
 
-    url, _, _ = api_avatar_url(creator_email, avatar_size)
+    url, _, _ = api_avatar_url(creator_email)
     data['creator_avatar'] = url
 
     data['path'] = path
@@ -105,16 +105,11 @@ class RepoShareLinks(APIView):
 
         offset = per_page * (current_page - 1)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         result = []
         fileshares = FileShare.objects.filter(repo_id=repo_id)[offset:offset + per_page]
 
         for fileshare in fileshares:
-            link_info = get_share_link_info(fileshare, avatar_size)
+            link_info = get_share_link_info(fileshare)
             link_info['repo_id'] = repo_id
             link_info['repo_name'] = repo.name
             result.append(link_info)

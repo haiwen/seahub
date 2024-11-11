@@ -61,11 +61,6 @@ class FileAccessLogView(APIView):
 
         # get access log
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
-        except ValueError:
-            avatar_size = 32
-
-        try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
@@ -87,8 +82,7 @@ class FileAccessLogView(APIView):
             info = {}
 
             username = event.user
-            url, is_default, date_uploaded = api_avatar_url(username,
-                                                            avatar_size)
+            url, is_default, date_uploaded = api_avatar_url(username)
             info['avatar_url'] = url
             info['email'] = username
             info['name'] = email2nickname(username)

@@ -7,7 +7,6 @@ from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 
 from seahub.avatar.models import Avatar
-from seahub.avatar.settings import AUTO_GENERATE_AVATAR_SIZES
 from seahub.utils.timeutils import value_to_db_datetime
 
 

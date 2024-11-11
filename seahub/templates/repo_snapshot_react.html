@@ -22,7 +22,7 @@ window.app.pageOptions = {
 
   {% if current_commit.props.creator_name %}
   showAuthor: true,
-  authorAvatarURL: "{% avatar_url current_commit.props.creator_name 40 %}",
+  authorAvatarURL: "{% avatar_url current_commit.props.creator_name %}",
   authorName: '{{ current_commit.props.creator_name|escapejs }}',
   authorNickName: '{{ current_commit.props.creator_name|email2nickname|escapejs }}',
   {% endif %}

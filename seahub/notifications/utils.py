@@ -52,7 +52,7 @@ def update_notice_detail(request, notices):
                 else:
                     d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
-                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email)
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
                     d['share_from_user_name'] = email2nickname(share_from_user_email)
@@ -95,7 +95,7 @@ def update_notice_detail(request, notices):
                 else:
                     d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
-                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email)
 
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
@@ -131,7 +131,7 @@ def update_notice_detail(request, notices):
                 else:
                     d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
-                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email)
 
                     d['repo_name'] = repo.name
                     d['repo_id'] = repo.id
@@ -168,7 +168,7 @@ def update_notice_detail(request, notices):
                 else:
                     d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
-                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email)
                     d['share_from_user_name'] = email2nickname(share_from_user_email)
                     d['share_from_user_email'] = share_from_user_email
                     d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)
@@ -190,7 +190,7 @@ def update_notice_detail(request, notices):
                     notice.detail = None
                 else:
                     group_staff_email = d.pop('group_staff')
-                    url, is_default, date_uploaded = api_avatar_url(group_staff_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(group_staff_email)
                     d['group_staff_name'] = email2nickname(group_staff_email)
                     d['group_staff_email'] = group_staff_email
                     d['group_staff_contact_email'] = email2contact_email(group_staff_email)
@@ -205,7 +205,7 @@ def update_notice_detail(request, notices):
             try:
                 d = json.loads(notice.detail)
                 author_email = d.pop('author')
-                url, is_default, date_uploaded = api_avatar_url(author_email, 32)
+                url, is_default, date_uploaded = api_avatar_url(author_email)
                 d['author_name'] = email2nickname(author_email)
                 d['author_email'] = author_email
                 d['author_context_email'] = email2contact_email(author_email)
@@ -228,7 +228,7 @@ def update_notice_detail(request, notices):
                     d['transfer_from_user_name'] = email2nickname(repo_owner_email)
                     d['transfer_from_user_email'] = repo_owner_email
                     d['transfer_from_user_contact_email'] = email2contact_email(repo_owner_email)
-                    url, is_default, date_uploaded = api_avatar_url(repo_owner_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(repo_owner_email)
                     d['transfer_from_user_avatar_url'] = url
                     notice.detail = d
 
@@ -240,7 +240,7 @@ def update_notice_detail(request, notices):
                 d = json.loads(notice.detail)
                 d.pop('to_user', None)
                 request_user_email = d.pop('from_user')
-                url, is_default, date_uploaded = api_avatar_url(request_user_email, 32)
+                url, is_default, date_uploaded = api_avatar_url(request_user_email)
                 d['request_user_name'] = email2nickname(request_user_email)
                 d['request_user_email'] = request_user_email
                 d['request_user_contact_email'] = email2contact_email(request_user_email)
@@ -275,7 +275,7 @@ def update_notice_detail(request, notices):
                     d['folder_path'] = d.pop('uploaded_to')
                     d['folder_name'] = name
                     d['file_path'] = file_path
-                    url, is_default, date_uploaded = api_avatar_url('', 32)
+                    url, is_default, date_uploaded = api_avatar_url('')
                     d['uploaded_user_avatar_url'] = url
                     notice.detail = d
                 else:
@@ -310,7 +310,7 @@ def update_notice_detail(request, notices):
                     d['parent_dir_path'] = d.pop('uploaded_to')
                     d['parent_dir_name'] = name
                     d['folder_path'] = folder_path
-                    url, is_default, date_uploaded = api_avatar_url('', 32)
+                    url, is_default, date_uploaded = api_avatar_url('')
                     d['uploaded_user_avatar_url'] = url
                     notice.detail = d
                 else:
@@ -337,7 +337,7 @@ def update_notice_detail(request, notices):
                 else:
                     author_email = d.pop('author')
                     file_name = os.path.basename(file_path)
-                    url, is_default, date_uploaded = api_avatar_url(author_email, 32)
+                    url, is_default, date_uploaded = api_avatar_url(author_email)
                     d['author_avatar_url'] = url
                     d['author_name'] = email2nickname(author_email)
                     d['author_email'] = author_email
@@ -359,7 +359,7 @@ def update_notice_detail(request, notices):
                     repo_dict[repo_id] = repo
 
                 op_user_email = d.pop('op_user')
-                url, is_default, date_uploaded = api_avatar_url(op_user_email, 32)
+                url, is_default, date_uploaded = api_avatar_url(op_user_email)
                 d['op_user_avatar_url'] = url
                 d['op_user_email'] = op_user_email
                 d['op_user_name'] = email2nickname(op_user_email)

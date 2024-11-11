@@ -153,26 +153,21 @@ class SearchUser(APIView):
         if CUSTOM_SEARCH_USER:
             email_result = custom_search_user(request, email_result)
 
-        # format user result
-        try:
-            size = int(request.GET.get('avatar_size', 32))
-        except ValueError:
-            size = 32
 
         formated_result = format_searched_user_result(
-                request, email_result[:10], size)
+                request, email_result[:10])
 
         return Response({"users": formated_result})
 
 
-def format_searched_user_result(request, users, size):
+def format_searched_user_result(request, users):
     results = []
     if ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER:
         profile_queryset = Profile.objects.filter(user__in=users)
         profile_dict = {p.user: p.login_id for p in profile_queryset if p.login_id}
 
     for email in users:
-        url, is_default, date_uploaded = api_avatar_url(email, size)
+        url, is_default, date_uploaded = api_avatar_url(email)
         user_info = {
             "email": email,
             "avatar_url": url,

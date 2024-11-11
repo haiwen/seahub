@@ -31,17 +31,9 @@ class UserAvatarView(APIView):
     def post(self, request):
 
         image_file = request.FILES.get('avatar', None)
-        avatar_size = request.data.get('avatar_size', 64)
 
         if not image_file:
             error_msg = 'avatar invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        try:
-            avatar_size = int(avatar_size)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'avatar_size invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         (root, ext) = os.path.splitext(image_file.name.lower())
@@ -67,7 +59,8 @@ class UserAvatarView(APIView):
             avatar.avatar.save(image_file.name, image_file)
             avatar.save()
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
-            avatar_url, is_default, date_uploaded = api_avatar_url(username, int(avatar_size))
+            avatar_url, is_default, date_uploaded = api_avatar_url(username)
+
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

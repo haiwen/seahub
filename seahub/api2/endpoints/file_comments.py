@@ -49,12 +49,9 @@ class FileCommentsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
-            avatar_size = int(request.GET.get('avatar_size',
-                                              AVATAR_DEFAULT_SIZE))
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
             page = 1
             per_page = 25
 
@@ -72,7 +69,7 @@ class FileCommentsView(APIView):
 
         for file_comment in file_comments:
             comment = file_comment.to_dict()
-            comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+            comment.update(user_to_dict(file_comment.author, request=request))
             comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
@@ -141,5 +138,5 @@ class FileCommentsView(APIView):
                                          author=username)
 
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(username, request=request))
         return Response(comment, status=201)

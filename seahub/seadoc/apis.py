@@ -620,10 +620,10 @@ class SeadocHistory(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+    def _get_new_file_history_info(self, ent, name_dict):
         info = {}
         creator_name = ent.get('op_user')
-        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        url, is_default, date_uploaded = api_avatar_url(creator_name)
         info['creator_avatar_url'] = url
         info['creator_email'] = creator_name
         info['creator_name'] = email2nickname(creator_name)
@@ -665,11 +665,9 @@ class SeadocHistory(APIView):
         commit_id = repo.head_cmmt_id
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
             page = int(request.GET.get('page', 1))
             per_page = int(request.GET.get('per_page', 25))
         except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
             page = 1
             per_page = 25
 
@@ -707,7 +705,7 @@ class SeadocHistory(APIView):
             name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
                 doc_uuid=file_uuid, obj_id_list=obj_id_list)
             name_dict = {item.obj_id: item.name for item in name_queryset}
-        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        data = [self._get_new_file_history_info(ent, name_dict) for ent in file_revisions]
         result = {
             "histories": data
         }
@@ -766,10 +764,10 @@ class SeadocDailyHistoryDetail(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+    def _get_new_file_history_info(self, ent, name_dict):
         info = {}
         creator_name = ent.op_user
-        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        url, is_default, date_uploaded = api_avatar_url(creator_name)
         info['creator_avatar_url'] = url
         info['creator_email'] = creator_name
         info['creator_name'] = email2nickname(creator_name)
@@ -806,11 +804,6 @@ class SeadocDailyHistoryDetail(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         op_date = request.GET.get('op_date', None)
         if not op_date:
             error_msg = 'op_date invalid.'
@@ -840,7 +833,7 @@ class SeadocDailyHistoryDetail(APIView):
             name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
                 doc_uuid=file_uuid, obj_id_list=obj_id_list)
             name_dict = {item.obj_id: item.name for item in name_queryset}
-        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        data = [self._get_new_file_history_info(ent, name_dict) for ent in file_revisions]
         result = {
             "histories": data[1:]
         }
@@ -873,7 +866,7 @@ class SeadocNotificationsView(APIView):
         for notification in notifications_query:
             data = notification.to_dict()
             data.update(
-                user_to_dict(notification.username, request=request, avatar_size=avatar_size))
+                user_to_dict(notification.username, request=request))
             notifications.append(data)
 
         result = {'notifications': notifications}
@@ -991,7 +984,7 @@ class SeadocCommentsView(APIView):
 
         for file_comment in file_comments:
             comment = file_comment.to_dict(reply_queryset)
-            comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+            comment.update(user_to_dict(file_comment.author, request=request))
             comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
@@ -1024,7 +1017,7 @@ class SeadocCommentsView(APIView):
         file_comment = FileComment.objects.add_by_file_uuid(
             file_uuid, username, comment, detail)
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(username, request=request))
 
         # notification
         to_users = set()
@@ -1041,7 +1034,7 @@ class SeadocCommentsView(APIView):
             'created_at': datetime_to_isoformat_timestr(file_comment.created_at),
             'updated_at': datetime_to_isoformat_timestr(file_comment.updated_at),
         }
-        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        detail.update(user_to_dict(username, request=request))
 
         new_notifications = []
         for to_user in to_users:
@@ -1092,7 +1085,7 @@ class SeadocCommentView(APIView):
 
         comment = file_comment.to_dict()
         comment.update(user_to_dict(
-            file_comment.author, request=request, avatar_size=avatar_size))
+            file_comment.author, request=request))
         return Response(comment)
 
     def delete(self, request, file_uuid, comment_id):
@@ -1161,7 +1154,7 @@ class SeadocCommentView(APIView):
             file_comment.save()
 
         comment = file_comment.to_dict()
-        comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+        comment.update(user_to_dict(file_comment.author, request=request))
         return Response(comment)
 
 
@@ -1206,7 +1199,7 @@ class SeadocCommentRepliesView(APIView):
         for reply in reply_queryset:
             data = reply.to_dict()
             data.update(
-                user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+                user_to_dict(reply.author, request=request))
             replies.append(data)
 
         result = {'replies': replies, 'total_count': total_count}
@@ -1250,7 +1243,7 @@ class SeadocCommentRepliesView(APIView):
         )
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
 
         # notification
         to_users = set()
@@ -1268,7 +1261,7 @@ class SeadocCommentRepliesView(APIView):
             'created_at': datetime_to_isoformat_timestr(reply.created_at),
             'updated_at': datetime_to_isoformat_timestr(reply.updated_at),
         }
-        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        detail.update(user_to_dict(username, request=request))
 
         new_notifications = []
         for to_user in to_users:
@@ -1322,7 +1315,7 @@ class SeadocCommentReplyView(APIView):
 
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
         return Response(data)
 
     def delete(self, request, file_uuid, comment_id, reply_id):
@@ -1381,7 +1374,7 @@ class SeadocCommentReplyView(APIView):
 
         data = reply.to_dict()
         data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            user_to_dict(reply.author, request=request))
         return Response(data)
 
 

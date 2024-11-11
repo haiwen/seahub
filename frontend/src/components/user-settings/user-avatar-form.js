@@ -52,7 +52,7 @@ class UserAvatarForm extends React.Component {
       return false;
     }
 
-    seafileAPI.updateUserAvatar(file, 160).then((res) => {
+    seafileAPI.updateUserAvatar(file).then((res) => {
       this.setState({
         avatarSrc: res.data.avatar_url
       });

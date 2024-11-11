@@ -262,7 +262,7 @@ class WOPIFilesView(APIView):
         result['UserCanWrite'] = True if can_edit else False
         result['ReadOnly'] = True if not can_edit else False
 
-        avatar_url, _, _ = api_avatar_url(request_user, int(72))
+        avatar_url, _, _ = api_avatar_url(request_user)
         result['UserExtraInfo'] = {'avatar': avatar_url, 'mail': request_user}
 
         # new file creation feature is not implemented on wopi host(seahub)
