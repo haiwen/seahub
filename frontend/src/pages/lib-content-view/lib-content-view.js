@@ -32,7 +32,6 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import { VIEW_TYPE } from '../../metadata/constants';
-import { userAPI } from '../../utils/user-api';
 import WebSocketService from '../../utils/listen-notification';
 import '../../css/lib-content-view.css';
 
@@ -56,33 +55,30 @@ class LibContentView extends React.Component {
         const parsedUrl = new URL(currentUrl);
         const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
         const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
-        let notiUrlIndex = ''
-        if (data.content.path.includes('/')){
-          notiUrlIndex = data.content.path.lastIndexOf('/')
+        let notiUrlIndex = '';
+        if (data.content.path.includes('/')) {
+          notiUrlIndex = data.content.path.lastIndexOf('/');
         }
-        const notiRouter = data.content.path.slice(0, notiUrlIndex)
-        if(dirRouter === notiRouter){
-          const dirent = { name: data.content.path.split('/').pop() }
-          if (data.content.change_event == 'locked'){
-            if (dirent.name.endsWith('.sdoc')){
+        const notifRouter = data.content.path.slice(0, notiUrlIndex);
+        if (dirRouter === notifRouter) {
+          const dirent = { name: data.content.path.split('/').pop() };
+          if (data.content.change_event === 'locked') {
+            if (dirent.name.endsWith('.sdoc')) {
               this.updateDirent(dirent, 'is_freezed', true);
             }
             this.updateDirent(dirent, 'is_locked', true);
             this.updateDirent(dirent, 'locked_by_me', true);
             this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
           }
-          else if (data.content.change_event == 'unlocked'){
+          else if (data.content.change_event === 'unlocked') {
             this.updateDirent(dirent, 'is_locked', false);
             this.updateDirent(dirent, 'locked_by_me', false);
             this.updateDirent(dirent, 'lock_owner_name', '');
           }
         }
-      } else {
-        console.log('Custom handling other message:', data);
       }
     };
-    const url = 'ws://localhost:8083';// WebSocket address
-    this.socket = new WebSocketService("ws://localhost:8083", onMessageCallback, this.props.repoID);
+    this.socket = new WebSocketService(onMessageCallback, this.props.repoID);
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
     if (storedTreePanelState != undefined) {
