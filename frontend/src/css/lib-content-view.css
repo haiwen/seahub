@@ -320,7 +320,8 @@
   position: absolute;
   top: 16px;
   right: 48px;
-  color: #666;
+  color: #000;
+  opacity: 0.5;
 }
 
 .custom-modal .modal-header .close {
@@ -341,13 +342,11 @@
 .custom-modal .modal-header .search:hover,
 .custom-modal .modal-header .close:hover {
   cursor: pointer;
-  background-color: #f0f0f0;
   border-radius: 3px;
-  color: #666 !important;
-  opacity: 1;
+  opacity: 0.75;
 }
 
-.custom-modal .modal-header .close span{
+.custom-modal .modal-header .close span {
   width: 16px;
   height: 16px;
 }
@@ -483,4 +482,21 @@
 .cur-view-container .cur-view-path .cur-view-path-right {
   flex-shrink: 0;
   margin-left: 10px;
+}
+
+.comment-close-icon {
+  height: 24px;
+  width: 24px;
+  text-align: center;
+}
+
+.comment-close-icon {
+  cursor: pointer;
+  color: #000;
+  opacity: 0.5;
+  font-weight: 700;
+}
+
+.comment-close-icon:hover {
+  opacity: 0.75;
 }

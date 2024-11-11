@@ -42,15 +42,3 @@
   flex-direction: column;
   gap: 0.5rem;
 }
-
-.file-chooser-search-results-popover .search-results-popover-body .searched-list-item.searched-dir td {
-  padding: 0;
-}
-
-.file-chooser-search-results-popover .search-results-popover-body .searched-item-icon {
-  border-radius: 3px 0 0 3px;
-}
-
-.file-chooser-search-results-popover .search-results-popover-body  .searched-item-link {
-  border-radius: 0 3px 3px 0;
-}
