@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import CellFormatter from '../../../../../components/cell-formatter';
 import { gettext } from '../../../../../../utils/constants';
 import OpMenu from './op-menu';
+import { CellType } from '../../../../../constants';
 
 import './index.css';
-import { CellType } from '../../../../../constants';
 
 const Header = ({ readonly, haveFreezed, value, groupByColumn, onDelete, onFreezed, onUnFreezed }) => {
   const [active, setActive] = useState(false);

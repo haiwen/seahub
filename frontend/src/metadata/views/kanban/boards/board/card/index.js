@@ -21,7 +21,7 @@ const Card = ({
     <article data-id={record._id} className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}>
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">
-          <Formatter value={titleValue} column={titleColumn}/>
+          <Formatter value={titleValue} column={titleColumn} record={record}/>
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
@@ -41,7 +41,7 @@ const Card = ({
           return (
             <div className="sf-metadata-kanban-card-record" key={column.key}>
               {displayColumnName && (<div className="sf-metadata-kanban-card-record-name">{column.name}</div>)}
-              <Formatter value={value} column={column}/>
+              <Formatter value={value} column={column} record={record}/>
             </div>
           );
         })}

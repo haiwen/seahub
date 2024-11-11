@@ -4,3 +4,10 @@
   margin-bottom: 14px;
   background-color: #eee;
 }
+
+.sf-metadata-ui.file-name-formatter.sf-metadata-image-file-formatter .sf-metadata-file-icon {
+  transform: translateY(0);
+  max-width: 24px;
+  max-height: 24px;
+  height: unset;
+}
