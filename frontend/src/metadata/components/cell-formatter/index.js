@@ -1,23 +1,31 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
 import { useCollaborators } from '../../hooks';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
+import { getParentDirFromRecord } from '../../utils/cell';
+import { CellType } from '../../constants';
+import classNames from 'classnames';
 
-const CellFormatter = ({ readonly, value, field, record, ...params }) => {
+const CellFormatter = ({ readonly, value, field, className: propsClassName, record, ...params }) => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
+  const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
+  const className = useMemo(() => {
+    if (field.type !== CellType.FILE_NAME) return propsClassName;
+    if (!Utils.imageCheck(value)) return propsClassName;
+    return classNames(propsClassName, 'sf-metadata-image-file-formatter');
+  }, [propsClassName, field, value]);
 
-  const getFileIconUrl = useMemo((filename) => {
+  const getFileIconUrl = useCallback((filename) => {
     if (Utils.imageCheck(filename)) {
-      const path = Utils.encodePath(Utils.joinPath(record._parent_dir, filename));
+      const path = Utils.encodePath(Utils.joinPath(parentDir, filename));
       const repoID = window.sfMetadataStore.repoId;
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`;
       return thumbnail;
-    } else {
-      return Utils.getFileIconUrl(filename);
     }
-  }, [record]);
+    return Utils.getFileIconUrl(filename);
+  }, [parentDir]);
 
   const props = useMemo(() => {
     return {
@@ -27,11 +35,12 @@ const CellFormatter = ({ readonly, value, field, record, ...params }) => {
       readonly,
       value,
       field,
+      className,
       queryUserAPI: queryUser,
       getFileIconUrl,
       getFolderIconUrl: Utils.getFolderIconUrl,
     };
-  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser, getFileIconUrl]);
+  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, className, queryUser, getFileIconUrl]);
 
   return (
     <Formatter { ...props } { ...params } />
@@ -42,7 +51,8 @@ CellFormatter.propTypes = {
   readonly: PropTypes.bool,
   value: PropTypes.any,
   field: PropTypes.object.isRequired,
-  record: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  record: PropTypes.object,
 };
 
 export default CellFormatter;
