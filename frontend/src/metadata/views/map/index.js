@@ -16,7 +16,8 @@ import './index.css';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 5;
-const DEFAULT_USER_ZOOM = 15;
+const DEFAULT_USER_ZOOM = 5;
+const BATCH_SIZE = 500;
 
 const Map = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,7 @@ const Map = () => {
   const mapRef = useRef(null);
   const googleMarkerRef = useRef(null);
   const clusterRef = useRef(null);
+  const batchIndexRef = useRef(0);
 
   const { metadata } = useMetadataView();
 
@@ -85,25 +87,39 @@ const Map = () => {
 
   const addMapController = useCallback(() => {
     var navigation = new window.BMap.NavigationControl();
-    const GeolocationControl = createBMapGeolocationControl(window.BMap, (err, point) => !err && mapRef.current.setCenter({ lng: point.lng, lat: point.lat }));
+    const GeolocationControl = createBMapGeolocationControl(window.BMap, (err, point) => {
+      if (!err && point) {
+        setPosition({ lng: point.lng, lat: point.lat });
+        setZoom(DEFAULT_USER_ZOOM);
+        addMarkerByPosition(point.lng, point.lat);
+      }
+    });
     let geolocationControl = new GeolocationControl();
     mapRef.current.addControl(geolocationControl);
     mapRef.current.addControl(navigation);
-  }, []);
+  }, [addMarkerByPosition]);
 
-  const renderMarkers = useCallback(() => {
+  const renderMarkersBatch = useCallback(() => {
     if (!validImages.length || !clusterRef.current) return;
 
-    const customMarkers = [];
-    validImages.forEach(image => {
+    const startIndex = batchIndexRef.current * BATCH_SIZE;
+    const endIndex = Math.min(startIndex + BATCH_SIZE, validImages.length);
+    const batchMarkers = [];
+
+    for (let i = startIndex; i < endIndex; i++) {
+      const image = validImages[i];
       const { lng, lat } = image;
       const point = new window.BMap.Point(lng, lat);
       const marker = buildImageOverlay(point, image.src);
-      customMarkers.push(marker);
-    });
+      batchMarkers.push(marker);
+    }
 
-    clusterRef.current.clearMarkers();
-    clusterRef.current.addMarkers(customMarkers);
+    clusterRef.current.addMarkers(batchMarkers);
+
+    if (endIndex < validImages.length) {
+      batchIndexRef.current += 1;
+      setTimeout(renderMarkersBatch, 20); // Schedule the next batch
+    }
   }, [validImages]);
 
   const initializeClusterer = useCallback(() => {
@@ -123,63 +139,36 @@ const Map = () => {
     const point = new window.BMap.Point(lng, lat);
     mapRef.current.centerAndZoom(point, zoom);
     mapRef.current.enableScrollWheelZoom(true);
-
+    // mapRef.current.setMaxZoom(16);
+    console.log('zoom level:', mapRef.current.getZoom());
     addMapController();
-    addMarkerByPosition(lng, lat);
+    // addMarkerByPosition(lng, lat);
 
     initializeClusterer();
 
-    renderMarkers();
-  }, [position, zoom, addMarkerByPosition, addMapController, initializeClusterer, renderMarkers]);
+    batchIndexRef.current = 0; // Reset batch index
+    renderMarkersBatch();
+  }, [position, zoom, addMapController, initializeClusterer, renderMarkersBatch]);
 
-  // const renderGoogleMap = useCallback((position) => {
-  //   setIsLoading(false);
-  //   if (!window.google.maps.Map) return;
-  //   if (!isValidPosition(position?.lng, position?.lat)) return;
-  //   const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
-  //   const { lng, lat } = gcPosition || {};
-  //   mapRef.current = new window.google.maps.Map(mapRef.current, {
-  //     zoom: 16,
-  //     center: gcPosition,
-  //     mapId: googleMapId,
-  //     zoomControl: false,
-  //     mapTypeControl: false,
-  //     scaleControl: false,
-  //     streetViewControl: false,
-  //     rotateControl: false,
-  //     fullscreenControl: false
-  //   });
-  //   addMarkerByPosition(lng, lat);
-  //   mapRef.current.setCenter(gcPosition);
-  //   // var geocoder = new window.google.maps.Geocoder();
-  //   // var latLng = new window.google.maps.LatLng(lat, lng);
-  //   // geocoder.geocode({ 'location': latLng }, (results, status) => {
-  //   //   if (status === 'OK') {
-  //   //     if (results[0]) {
-  //   //       var address = results[0].formatted_address.split(' ')[1];
-  //   //       setAddress(address);
-  //   //     } else {
-  //   //       toaster.warning(gettext('No address found for the given coordinates.'));
-  //   //     }
-  //   //   }
-  //   // });
-  // }, [addMarkerByPosition]);
 
   // get user location
   useEffect(() => {
-    if (mapInfo) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setPosition({ lng: longitude, lat: latitude });
-        setZoom(DEFAULT_USER_ZOOM);
-      },
-      () => {
-        setPosition(DEFAULT_POSITION);
-        setZoom(DEFAULT_ZOOM);
-      }
-      );
+    if (mapInfo.type === MAP_TYPE.B_MAP) {
+      loadBMap(mapInfo.key).then(() => {
+        const geolocation = new window.BMap.Geolocation();
+        geolocation.getCurrentPosition((result) => {
+          if (result) {
+            const point = result.point;
+            setPosition({ lng: point.lng, lat: point.lat });
+            setZoom(DEFAULT_USER_ZOOM);
+          } else {
+            setPosition(DEFAULT_POSITION);
+            setZoom(DEFAULT_ZOOM);
+          }
+        });
+      });
     }
-  }, [mapInfo]);
+  }, [mapInfo, renderBaiduMap]);
 
   // init map
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { mediaUrl } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
 export function createBMapGeolocationControl(BMap, callback) {
@@ -12,21 +13,25 @@ export function createBMapGeolocationControl(BMap, callback) {
   GeolocationControl.prototype = new window.BMap.Control();
   GeolocationControl.prototype.initialize = (map) => {
     let div = document.createElement('div');
-    div.className = 'plugin-BMap-geolocation-control';
-    let icon = document.createElement('i');
-    icon.className = 'dtable-font dtable-icon-current-location';
+    div.className = 'sf-BMap-geolocation-control';
+    div.style = 'display: flex; justify-content: center; align-items: center;';
+
+    let icon = document.createElement('img');
+    icon.className = 'sf-BMap-icon-current-location';
+    icon.src = `${mediaUrl}/img/current-location.svg`;
+    icon.style = 'width: 16px; height: 16px; display: block;';
     div.appendChild(icon);
     if (!Utils.isDesktop) {
       setNodeStyle(div, 'height: 35px; width: 35px; line-height: 35px; opacity: 0.75');
-      setNodeStyle(icon, 'font-size: 20px');
     } else {
       setNodeStyle(div, 'height: 30px; width: 30px; line-height: 30px');
     }
     div.onclick = (e) => {
+      e.preventDefault();
       const geolocation = new BMap.Geolocation();
-      div.className = 'plugin-BMap-geolocation-control plugin-BMap-geolocation-control-loading';
+      div.className = 'sf-BMap-geolocation-control sf-BMap-geolocation-control-loading';
       geolocation.getCurrentPosition((result) => {
-        div.className = 'plugin-BMap-geolocation-control';
+        div.className = 'sf-BMap-geolocation-control';
         if (result) {
           const point = result.point;
           map.setCenter(point);
