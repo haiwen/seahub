@@ -159,10 +159,6 @@ export const Utils = {
     }
   },
 
-  isFaceRecognition: function (type) {
-    return type === PRIVATE_FILE_TYPE.FACE_RECOGNITION;
-  },
-
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview, custom-*
@@ -1088,6 +1084,10 @@ export const Utils = {
 
   isFileMetadata: function (type) {
     return type === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
+  },
+
+  isTags: function (type) {
+    return type === PRIVATE_FILE_TYPE.TAGS_PROPERTIES;
   },
 
   isInternalFileLink: function (url, repoID) {

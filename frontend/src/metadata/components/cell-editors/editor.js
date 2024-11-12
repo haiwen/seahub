@@ -8,6 +8,7 @@ import SingleSelectEditor from './single-select-editor';
 import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 import LongTextEditor from './long-text-editor';
+import TagsEditor from './tags-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
 
@@ -38,6 +39,12 @@ const Editor = React.forwardRef((props, ref) => {
     }
     case CellType.LONG_TEXT: {
       return (<LongTextEditor ref={ref} { ...props } lang={lang} />);
+    }
+    case CellType.TAGS: {
+      return (<TagsEditor ref={ref} { ...props } />);
+    }
+    case CellType.LINK: {
+      return null;
     }
     default: {
       return null;

@@ -1,5 +1,5 @@
-import { getColumnDisplayName, normalizeColumnData } from '../../utils/column';
-import { PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
+import { getColumnDisplayName, normalizeColumnData } from '../utils/column';
+import { PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../constants';
 
 class Column {
   constructor(object) {

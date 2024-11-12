@@ -1,25 +1,26 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import TreeView from '../../components/tree-view/tree-view';
-import Loading from '../../components/loading';
-import ModalPortal from '../../components/modal-portal';
-import Rename from '../../components/dialog/rename-dialog';
-import Copy from '../../components/dialog/copy-dirent-dialog';
-import Move from '../../components/dialog/move-dirent-dialog';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import ImageDialog from '../../components/dialog/image-dialog';
-import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import TextTranslation from '../../utils/text-translation';
-import TreeSection from '../../components/tree-section';
-import DirViews from './dir-views';
-import DirOthers from './dir-others';
-import imageAPI from '../../utils/image-api';
-import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../toast';
+import TreeView from '../../tree-view/tree-view';
+import Loading from '../../loading';
+import ModalPortal from '../../modal-portal';
+import Rename from '../../dialog/rename-dialog';
+import Copy from '../../dialog/copy-dirent-dialog';
+import Move from '../../dialog/move-dirent-dialog';
+import CreateFolder from '../../dialog/create-folder-dialog';
+import CreateFile from '../../dialog/create-file-dialog';
+import ImageDialog from '../../dialog/image-dialog';
+import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import TextTranslation from '../../../utils/text-translation';
+import TreeSection from '../../tree-section';
+import DirViews from '../dir-views';
+import DirTags from '../dir-tags';
+import DirOthers from '../dir-others';
+import imageAPI from '../../../utils/image-api';
+import { seafileAPI } from '../../../utils/seafile-api';
+import toaster from '../../toast';
 
-import './dir-column-nav.css';
+import './index.css';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -406,6 +407,7 @@ class DirColumnNav extends React.Component {
               />
             </TreeSection>
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirOthers
               repoID={repoID}
               userPerm={userPerm}
@@ -422,7 +424,7 @@ class DirColumnNav extends React.Component {
     const select = this.props.inResizing ? 'none' : '';
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
     return (
-      <Fragment>
+      <>
         <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
           {this.renderContent()}
         </div>
@@ -496,7 +498,7 @@ class DirColumnNav extends React.Component {
             />
           </ModalPortal>
         )}
-      </Fragment>
+      </>
     );
   }
 }

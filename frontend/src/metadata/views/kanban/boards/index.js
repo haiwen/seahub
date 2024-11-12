@@ -6,7 +6,7 @@ import { useCollaborators } from '../../../hooks';
 import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { gettext } from '../../../../utils/constants';
-import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord,
+import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
@@ -89,7 +89,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
 
     rows.forEach(row => {
       const cellValue = getCellValueByColumn(row, groupByColumn);
-      const recordId = geRecordIdFromRecord(row);
+      const recordId = getRecordIdFromRecord(row);
       if (isValidCellValue(cellValue)) {
         switch (groupByColumnType) {
           case CellType.SINGLE_SELECT: {
@@ -188,7 +188,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   }, []);
 
   const onSelectCard = useCallback((record) => {
-    const recordId = geRecordIdFromRecord(record);
+    const recordId = getRecordIdFromRecord(record);
     if (selectedCard === recordId) return;
     const name = getFileNameFromRecord(record);
     const path = getParentDirFromRecord(record);

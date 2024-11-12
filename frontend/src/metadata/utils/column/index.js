@@ -209,6 +209,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File owner');
     case PRIVATE_COLUMN_KEY.FILE_RATE:
       return gettext('File rate');
+    case PRIVATE_COLUMN_KEY.TAGS:
+      return gettext('Tags');
     default:
       return name;
   }
@@ -259,6 +261,8 @@ export const getNormalizedColumnType = (key, type) => {
       return CellType.GEOLOCATION;
     case PRIVATE_COLUMN_KEY.OWNER:
       return CellType.COLLABORATOR;
+    case PRIVATE_COLUMN_KEY.TAGS:
+      return CellType.TAGS;
     default:
       return type;
   }

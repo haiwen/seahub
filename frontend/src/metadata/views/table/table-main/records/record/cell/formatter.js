@@ -5,8 +5,9 @@ import CheckboxEditor from '../../../../../../components/cell-editors/checkbox-e
 import RateEditor from '../../../../../../components/cell-editors/rate-editor';
 import { canEditCell } from '../../../../../../utils/column';
 import { CellType } from '../../../../../../constants';
+import FileTagsFormatter from '../../../../../../components/cell-formatter/file-tags-formatter';
 
-const Formatter = ({ isCellSelected, isDir, field, value, onChange, record }) => {
+const Formatter = ({ isCellSelected, field, value, onChange, record }) => {
   const { type } = field;
   const cellEditAble = canEditCell(field, record, true);
   if (type === CellType.CHECKBOX && cellEditAble) {
@@ -15,12 +16,16 @@ const Formatter = ({ isCellSelected, isDir, field, value, onChange, record }) =>
   if (type === CellType.RATE && cellEditAble) {
     return (<RateEditor isCellSelected={isCellSelected} value={value} field={field} onChange={onChange} />);
   }
-  return (<CellFormatter readonly={true} value={value} field={field} record={record} />);
+
+  if (field.type === CellType.TAGS) {
+    return (<FileTagsFormatter isCellSelected={isCellSelected} field={field} readonly={!cellEditAble} value={value} record={record} />);
+  }
+
+  return (<CellFormatter readonly={true} isCellSelected={isCellSelected} value={value} field={field} record={record} />);
 };
 
 Formatter.propTypes = {
   isCellSelected: PropTypes.bool,
-  isDir: PropTypes.bool,
   field: PropTypes.object,
   value: PropTypes.any,
   record: PropTypes.object,

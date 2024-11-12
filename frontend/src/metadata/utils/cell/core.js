@@ -32,7 +32,7 @@ export const getFileNameFromRecord = (record) => {
   return record ? record[PRIVATE_COLUMN_KEY.FILE_NAME] : '';
 };
 
-export const geRecordIdFromRecord = record => {
+export const getRecordIdFromRecord = record => {
   return record ? record[PRIVATE_COLUMN_KEY.ID] : '';
 };
 
@@ -46,4 +46,16 @@ export const getImageLocationFromRecord = (record) => {
 
 export const getFileTypeFromRecord = (record) => {
   return record ? record[PRIVATE_COLUMN_KEY.FILE_TYPE] : null;
+};
+
+export const getFileSizedFromRecord = record => {
+  return record ? record[PRIVATE_COLUMN_KEY.SIZE] : '';
+};
+
+export const getFileMTimeFromRecord = record => {
+  return record ? record[PRIVATE_COLUMN_KEY.FILE_MTIME] : '';
+};
+
+export const getTagsFromRecord = record => {
+  return record ? record[PRIVATE_COLUMN_KEY.TAGS] : '';
 };

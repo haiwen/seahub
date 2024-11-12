@@ -12,7 +12,8 @@ import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
-import { CollaboratorsProvider, EnableMetadataProvider } from '../../metadata';
+import { EnableMetadataProvider } from '../../hooks';
+import { CollaboratorsProvider } from '../../metadata';
 import Loading from '../loading';
 
 import '../../css/file-view.css';

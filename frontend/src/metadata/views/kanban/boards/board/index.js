@@ -6,7 +6,7 @@ import { useMetadataView } from '../../../../hooks/metadata-view';
 import { getRowById } from '../../../../utils/table';
 import Container from '../../dnd/container';
 import Draggable from '../../dnd/draggable';
-import { geRecordIdFromRecord } from '../../../../utils/cell';
+import { getRecordIdFromRecord } from '../../../../utils/cell';
 
 import './index.css';
 
@@ -80,7 +80,7 @@ const Board = ({
         {board.children.map((cardKey) => {
           const record = getRowById(metadata, cardKey);
           if (!record) return null;
-          const isSelected = selectedCard === geRecordIdFromRecord(record);
+          const isSelected = selectedCard === getRecordIdFromRecord(record);
           const CardElement = (
             <Card
               key={cardKey}

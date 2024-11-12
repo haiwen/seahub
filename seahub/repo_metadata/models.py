@@ -98,7 +98,7 @@ class RepoMetadataViewsManager(models.Manager):
     def add_view(self, repo_id, view_name, view_type='table', view_data={}):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
-            from seafevents.repo_metadata.utils import METADATA_TABLE
+            from seafevents.repo_metadata.constants import METADATA_TABLE
 
             # init view data
             new_view = RepoView(view_name, view_type, {

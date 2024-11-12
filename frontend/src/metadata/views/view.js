@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { CenteredLoading, Loading } from '@seafile/sf-metadata-ui-component';
-import Table from '../views/table';
-import Gallery from '../views/gallery';
-import FaceRecognition from '../views/face-recognition';
-import Kanban from '../views/kanban';
-import Map from '../views/map';
+import Table from './table';
+import Gallery from './gallery';
+import FaceRecognition from './face-recognition';
+import Kanban from './kanban';
+import Map from './map';
 import { useMetadataView } from '../hooks/metadata-view';
-import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
+import { gettext } from '../../utils/constants';
 
 const View = () => {
-  const { isLoading, showFirstView, metadata, errorMsg } = useMetadataView();
+  const { isLoading, showFirstView, metadata, errorMessage } = useMetadataView();
 
   const renderView = useCallback((metadata) => {
     if (!metadata) return null;
@@ -48,7 +48,7 @@ const View = () => {
   return (
     <div className="sf-metadata-wrapper">
       <div className="sf-metadata-main">
-        {errorMsg ? <div className="d-center-middle error">{gettext(errorMsg)}</div> : renderView(metadata)}
+        {errorMessage ? <div className="d-center-middle error">{errorMessage}</div> : renderView(metadata)}
       </div>
     </div>
   );

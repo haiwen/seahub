@@ -1,0 +1,8 @@
+.tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter {
+  height: 16px;
+  width: 16px;
+}
+
+.tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter:last-child {
+  margin-right: 0;
+}

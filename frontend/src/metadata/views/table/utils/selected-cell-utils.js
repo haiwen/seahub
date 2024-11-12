@@ -2,8 +2,9 @@ import { Utils } from '../../../../utils/utils';
 import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell';
 import { getGroupByPath } from '../../../utils/view';
 import { getColumnByIndex, canEditCell } from '../../../utils/column';
-import { PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
+import { CellType, PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
+import { checkIsDir } from '../../../utils/row';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',
@@ -51,6 +52,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
   isCellEditable = isCellEditable && canEditCell(column, row, enableCellSelect);
   if (imageRow) return isCellEditable;
   if (column?.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) return false;
+  if (column?.type === CellType.TAGS && checkIsDir(row)) return false;
   return isCellEditable;
 };
 

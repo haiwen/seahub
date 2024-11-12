@@ -9,6 +9,7 @@ import {
   MetadataFaceRecognitionDialog as LibFaceRecognitionSettingPanel,
   useMetadata
 } from '../../metadata';
+import { useEnableMetadata } from '../../hooks';
 
 import '../../css/lib-settings.css';
 
@@ -33,7 +34,8 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
 
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
-  const { enableMetadata, updateEnableMetadata, enableFaceRecognition, updateEnableFaceRecognition } = useMetadata();
+  const { enableFaceRecognition, updateEnableFaceRecognition } = useMetadata();
+  const { enableMetadata, updateEnableMetadata } = useEnableMetadata();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;

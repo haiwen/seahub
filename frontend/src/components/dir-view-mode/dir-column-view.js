@@ -7,8 +7,9 @@ import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { SeafileMetadata } from '../../metadata';
+import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE } from './constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE } from './constants';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -39,6 +40,7 @@ const propTypes = {
   filePermission: PropTypes.string,
   content: PropTypes.string,
   viewId: PropTypes.string,
+  tagId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -206,6 +208,18 @@ class DirColumnView extends React.Component {
               updateCurrentDirent={this.props.updateCurrentDirent}
               closeDirentDetail={this.props.closeDirentDetail}
               showDirentDetail={this.props.showDirentDetail}
+            />
+          )}
+          {currentMode === TAGS_MODE && (
+            <TagsView
+              mediaUrl={mediaUrl}
+              repoID={this.props.repoID}
+              repoInfo={this.props.currentRepoInfo}
+              tagID={this.props.tagId}
+              deleteFilesCallback={this.props.deleteFilesCallback}
+              renameFileCallback={this.props.renameFileCallback}
+              updateCurrentDirent={this.props.updateCurrentDirent}
+              closeDirentDetail={this.props.closeDirentDetail}
             />
           )}
           {currentMode === LIST_MODE &&

@@ -1,0 +1,33 @@
+.sf-metadata-tags-edit-dialog {
+  width: 446px;
+}
+
+.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.sf-metadata-tags-edit-dialog .col-auto {
+  padding-left: 3px;
+}
+
+.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-container {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 40, 100, .12);
+  color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+}
+
+.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-container::before {
+  display: none;
+}
+
+.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-container:not(.selected) .sf-metadata-icon-check-mark {
+  display: none;
+}

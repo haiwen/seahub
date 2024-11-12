@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
+import TagViewName from '../../tag/components/tag-view-name';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
@@ -134,11 +135,29 @@ class DirPath extends React.Component {
         );
       }
 
+      if (index === pathList.length - 2 && item === PRIVATE_FILE_TYPE.TAGS_PROPERTIES) {
+        return (
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-item">{gettext('Tags')}</span>
+          </Fragment>
+        );
+      }
+
       if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
             <span className="path-item"><MetadataViewName id={item} /></span>
+          </Fragment>
+        );
+      }
+
+      if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.TAGS_PROPERTIES) {
+        return (
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-item"><TagViewName id={item} /></span>
           </Fragment>
         );
       }

@@ -11,12 +11,10 @@ const VIEW_OPTIONS = [
   {
     key: 'table',
     type: VIEW_TYPE.TABLE,
-  },
-  {
+  }, {
     key: 'gallery',
     type: VIEW_TYPE.GALLERY,
-  },
-  {
+  }, {
     key: 'kanban',
     type: VIEW_TYPE.KANBAN,
   },

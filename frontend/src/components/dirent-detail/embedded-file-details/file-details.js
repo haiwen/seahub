@@ -5,7 +5,8 @@ import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { MetadataDetails, useEnableMetadata } from '../../../metadata';
+import { MetadataDetails } from '../../../metadata';
+import { useEnableMetadata } from '../../../hooks';
 
 const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
   const { enableMetadata } = useEnableMetadata();

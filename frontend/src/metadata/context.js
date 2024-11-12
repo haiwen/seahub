@@ -254,6 +254,17 @@ class Context {
     return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
   };
 
+  // file tag
+  addFileTags = (recordId, tagIds) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.addFileTags(repoID, recordId, tagIds);
+  };
+
+  updateFileTags = (recordId, tagIds) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.updateFileTags(repoID, recordId, tagIds);
+  };
+
 }
 
 export default Context;

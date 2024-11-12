@@ -1,0 +1,63 @@
+.sf-metadata-tags-table {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-header {
+  height: 37px !important;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #fff;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row {
+  height: 41px;
+  width: 100%;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row:not(.sf-metadata-tags-table-header):hover {
+  background-color: #f8f8f8;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:first-child {
+  width: calc((100% - 64px) * 0.7);
+  height: 100%;
+  padding-left: 10px;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:nth-child(2) {
+  width: calc((100% - 64px) * 0.3);
+  height: 100%;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:last-child {
+  width: 64px;
+  height: 100%;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell {
+  font-size: 14px;
+  height: 100%;
+  line-height: 39px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 8px;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-header .sf-metadata-tags-table-cell {
+  color: #999;
+  font-size: 13px;
+  line-height: 16px;
+  padding: 10px 8px;
+}

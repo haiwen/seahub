@@ -203,7 +203,7 @@ const ViewItem = ({
     <>
       <div
         className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-drop': isDropShow })}
-        title={gettext('File extended properties')}
+        title={view.name}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}

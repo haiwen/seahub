@@ -26,6 +26,7 @@ const RecordsHeader = ({
   selectAllRecords,
   modifyColumnWidth: modifyColumnWidthAPI,
   modifyColumnOrder: modifyColumnOrderAPI,
+  insertColumn,
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
@@ -161,7 +162,15 @@ const RecordsHeader = ({
             />
           );
         })}
-        <InsertColumn lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]} groupOffsetLeft={groupOffsetLeft} height={height} />
+        {insertColumn && (
+          <InsertColumn
+            lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]}
+            groupOffsetLeft={groupOffsetLeft}
+            height={height}
+            metadata={table}
+            insertColumn={insertColumn}
+          />
+        )}
       </div>
     </div>
   );
@@ -181,6 +190,7 @@ RecordsHeader.propTypes = {
   onRef: PropTypes.func,
   selectNoneRecords: PropTypes.func,
   selectAllRecords: PropTypes.func,
+  insertColumn: PropTypes.func,
 };
 
 export default RecordsHeader;

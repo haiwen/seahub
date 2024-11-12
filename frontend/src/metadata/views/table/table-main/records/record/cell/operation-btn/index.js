@@ -1,47 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../../../../../../utils/constants';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../constants';
-import { openFile } from '../../../../../../../utils/open-file';
+import { CellType } from '../../../../../../../constants';
+import FileNameOperationBtn from './file-name-operation-btn';
+import LinkOperationBtn from './link-operation-btn';
 
-import './index.css';
-
-const CellOperationBtn = ({ isDir, column, record, cellValue, ...props }) => {
-
-  const handelClick = (event) => {
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-    openFile(record, window.sfMetadataContext.eventBus, () => {
-      window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-    });
-  };
-
-  if (!cellValue) return null;
-
-  return (
-    <>
-      <IconBtn id={'sf-metadata-cell-open-file-btn'} className="sf-metadata-cell-operation-btn" size={20} iconName="open-file" onClick={handelClick} />
-      <UncontrolledTooltip
-        hideArrow
-        target={'sf-metadata-cell-open-file-btn'}
-        placement="bottom"
-        fade={false}
-        delay={{ show: 0, hide: 0 }}
-        modifiers={{ preventOverflow: { boundariesElement: document.body } }}
-        className="sf-metadata-tooltip"
-      >
-        {isDir ? gettext('Open folder') : gettext('Open file')}
-      </UncontrolledTooltip>
-    </>
-  );
+const CellOperationBtn = ({ column, record }) => {
+  switch (column.type) {
+    case CellType.FILE_NAME: {
+      return (<FileNameOperationBtn column={column} record={record} />);
+    }
+    case CellType.LINK: {
+      return (<LinkOperationBtn column={column} record={record} />);
+    }
+    default: {
+      return null;
+    }
+  }
 };
 
 CellOperationBtn.propTypes = {
-  isDir: PropTypes.bool,
-  column: PropTypes.object,
-  value: PropTypes.any,
+  column: PropTypes.object.isRequired,
+  record: PropTypes.object.isRequired,
 };
 
 export default CellOperationBtn;

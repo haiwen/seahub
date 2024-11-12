@@ -9,7 +9,7 @@ import { username } from '../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
 import { CellType } from '../constants';
 import { getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
-  getColumnOptionNamesByIds, geRecordIdFromRecord,
+  getColumnOptionNamesByIds, getRecordIdFromRecord,
 } from '../utils/cell';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
@@ -181,7 +181,7 @@ class DataProcessor {
           const newOptionNames = getColumnOptionNamesByIds(newColumn, oldOptionIds);
           row[columnOriginalName] = newOptionNames ? newOptionNames : null;
         }
-        const id = geRecordIdFromRecord(row);
+        const id = getRecordIdFromRecord(row);
         table.id_row_map[id] = row;
       }
     }

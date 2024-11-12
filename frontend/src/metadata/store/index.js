@@ -73,6 +73,7 @@ class Store {
   async reload(limit = PER_LOAD_NUMBER) {
     this.startIndex = 0;
     await this.loadMetadata(this.data.view, limit);
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }
 
   async loadMore(limit) {
@@ -471,6 +472,14 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifySettings = (settings) => {
+    const type = OPERATION_TYPE.MODIFY_SETTINGS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: this.viewId, settings
+    });
+    this.applyOperation(operation);
+  };
+
   // column
   insertColumn = (name, columnType, { key, data }) => {
     const operationType = OPERATION_TYPE.INSERT_COLUMN;
@@ -560,10 +569,19 @@ class Store {
     this.applyOperation(operation);
   };
 
-  modifySettings = (settings) => {
-    const type = OPERATION_TYPE.MODIFY_SETTINGS;
+  // tag
+  addFileTags = (recordId, tagIds) => {
+    const type = OPERATION_TYPE.ADD_FILE_TAGS;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, view_id: this.viewId, settings
+      type, repo_id: this.repoId, record_id: recordId, tag_ids: tagIds
+    });
+    this.applyOperation(operation);
+  };
+
+  updateFileTags = (recordId, tagIds) => {
+    const type = OPERATION_TYPE.UPDATE_FILE_TAGS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, record_id: recordId, tag_ids: tagIds
     });
     this.applyOperation(operation);
   };

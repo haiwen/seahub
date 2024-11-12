@@ -5,7 +5,8 @@ import i18n from './_i18n/i18n-sdoc-editor';
 import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import SdocEditor from './pages/sdoc/sdoc-editor';
-import { CollaboratorsProvider, EnableMetadataProvider } from './metadata';
+import { EnableMetadataProvider } from './hooks';
+import { CollaboratorsProvider } from './metadata';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
 const { username, name } = window.app.userInfo;

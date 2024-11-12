@@ -26,24 +26,25 @@ const Cell = React.memo(({
   frozen,
   height,
 }) => {
+  const canEditable = useMemo(() => {
+    const { type } = column;
+    if (!window.sfMetadataContext.canModifyColumn(column)) return false;
+    if (!TABLE_SUPPORT_EDIT_TYPE_MAP[type]) return false;
+    if (type === CellType.TAGS) return !checkIsDir(record);
+    return true;
+  }, [column, record]);
+
   const className = useMemo(() => {
     const { type } = column;
-    const canEditable = window.sfMetadataContext.canModifyColumn(column);
     return classnames('sf-metadata-result-table-cell', `sf-metadata-result-table-${type}-cell`, highlightClassName, {
-      'table-cell-uneditable': !canEditable || !TABLE_SUPPORT_EDIT_TYPE_MAP[type],
+      'table-cell-uneditable': !canEditable,
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
       // 'dragging-file-to-cell': ,
       // 'row-comment-cell': ,
     });
-  }, [column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected]);
-  const isFileNameColumn = useMemo(() => {
-    return column.type === CellType.FILE_NAME;
-  }, [column]);
-  const isDir = useMemo(() => {
-    return checkIsDir(record);
-  }, [record]);
+  }, [canEditable, column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected]);
   const style = useMemo(() => {
     const { left, width } = column;
     let value = {
@@ -158,15 +159,8 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
-      <Formatter isCellSelected={isCellSelected} isDir={isDir} value={cellValue} field={column} onChange={modifyRecord} record={record} />
-      {(isCellSelected && isFileNameColumn) && (
-        <CellOperationBtn
-          record={record}
-          cellValue={cellValue}
-          column={column}
-          isDir={isDir}
-        />
-      )}
+      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} />
+      {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
     </div>
   );
 }, (props, nextProps) => {

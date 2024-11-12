@@ -1,0 +1,37 @@
+.sf-metadata-tags-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sf-metadata-tags-wrapper .sf-metadata-tags-main {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sf-metadata-tags-management-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.sf-metadata-tags-management-container .sf-metadata-container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  padding-top: 2px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.sf-metadata-tags-management-container .sf-metadata-container-header .sf-metadata-container-header-add-tag {
+  font-size: 12px;
+  font-weight: 400;
+  height: 26px;
+  padding-bottom: 0;
+  padding-top: 0;
+}

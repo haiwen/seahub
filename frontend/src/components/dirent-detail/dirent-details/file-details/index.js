@@ -10,10 +10,11 @@ import { gettext } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
-import { MetadataDetails, useMetadata } from '../../../../metadata';
+import { MetadataDetails } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
+import { useEnableMetadata } from '../../../../hooks';
 
 import './index.css';
 
@@ -58,7 +59,7 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadata } = useMetadata();
+  const { enableMetadata } = useEnableMetadata();
   const [record, setRecord] = useState(null);
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);

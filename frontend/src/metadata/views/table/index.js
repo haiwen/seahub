@@ -184,6 +184,18 @@ const Table = () => {
     store.modifyColumnOrder(sourceColumnKey, targetColumnKey);
   }, [store]);
 
+  const addFileTags = useCallback((recordId, tagIds) => {
+    store.addFileTags(recordId, tagIds);
+  }, [store]);
+
+  const updateFileTags = useCallback((recordId, tagIds) => {
+    store.updateFileTags(recordId, tagIds);
+  }, [store]);
+
+  const insertColumn = useCallback((name, type, { key, data }) => {
+    store.insertColumn(name, type, { key, data });
+  }, [store]);
+
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
   }, [metadata]);
@@ -232,11 +244,14 @@ const Table = () => {
         getTableContentRect={getTableContentRect}
         getAdjacentRowsIds={getAdjacentRowsIds}
         loadAll={loadAll}
+        insertColumn={insertColumn}
         renameColumn={renameColumn}
         deleteColumn={deleteColumn}
         modifyColumnData={modifyColumnData}
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
+        addFileTags={addFileTags}
+        updateFileTags={updateFileTags}
       />
     </div>
   );

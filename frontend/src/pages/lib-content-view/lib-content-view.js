@@ -22,8 +22,10 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { EnableMetadataProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, DIRENT_DETAIL_MODE } from '../../components/dir-view-mode/constants';
+import { TagsProvider } from '../../tag/hooks';
+import { LIST_MODE, METADATA_MODE, DIRENT_DETAIL_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -96,6 +98,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
+      tagId: '',
       currentDirent: null,
     };
 
@@ -529,6 +532,19 @@ class LibContentView extends React.Component {
     }, () => {
       this.showDir('/');
     });
+  };
+
+  showTagsView = (filePath, tagId) => {
+    const repoID = this.props.repoID;
+    const repoInfo = this.state.currentRepoInfo;
+    this.setState({
+      currentMode: TAGS_MODE,
+      path: filePath,
+      tagId: tagId,
+      isDirentDetailShow: false
+    });
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagId)}`;
+    window.history.pushState({ url: url, path: '' }, '', url);
   };
 
   loadDirentList = (path) => {
@@ -1856,6 +1872,10 @@ class LibContentView extends React.Component {
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || VIEW_TYPE.TABLE);
         }
+      } else if (Utils.isTags(node?.object?.type)) {
+        if (node.path !== this.state.path) {
+          this.showTagsView(node.path, node.tag_id);
+        }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         let dirent = node.object;
@@ -1972,11 +1992,16 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
+    const path = node.path || '';
     if (this.state.currentMode === METADATA_MODE) {
-      const path = node.path || '';
       const isMetadataView = path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
       this.setState({
         currentMode: cookie.load('seafile_view_mode') || (isMetadataView ? METADATA_MODE : LIST_MODE),
+      });
+    } else if (this.state.currentMode === TAGS_MODE) {
+      const isTagsView = path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES);
+      this.setState({
+        currentMode: cookie.load('seafile_view_mode') || (isTagsView ? TAGS_MODE : LIST_MODE),
       });
     }
   };
@@ -2180,228 +2205,228 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <MetadataProvider
-        repoID={repoID}
-        currentRepoInfo={currentRepoInfo}
-        selectMetadataView={this.onTreeNodeClick}
-        hideMetadataView={this.hideMetadataView}
-      >
-        <CollaboratorsProvider repoID={repoID}>
-          <div className="main-panel-center flex-row">
-            <div className="cur-view-container">
-              {this.state.currentRepoInfo.status === 'read-only' &&
-                <div className="readonly-tip-message">
-                  {gettext('This library has been set to read-only by admin and cannot be updated.')}
-                </div>
-              }
-              <div className="cur-view-path lib-cur-view-path">
-                <div className={classnames(
-                  'cur-view-path-left', {
-                    'w-100': !isDesktop,
-                    'animation-children': isDirentSelected
-                  })}>
-                  {isDirentSelected ?
-                    <SelectedDirentsToolbar
-                      repoID={this.props.repoID}
-                      path={this.state.path}
-                      userPerm={userPerm}
-                      repoEncrypted={this.state.repoEncrypted}
-                      repoTags={this.state.repoTags}
-                      selectedDirentList={this.state.selectedDirentList}
-                      direntList={direntItemsList}
-                      onItemsMove={this.onMoveItems}
-                      onItemsCopy={this.onCopyItems}
-                      onItemsDelete={this.onDeleteItems}
-                      onItemRename={this.onMainPanelItemRename}
-                      isRepoOwner={isRepoOwner}
-                      currentRepoInfo={this.state.currentRepoInfo}
-                      enableDirPrivateShare={enableDirPrivateShare}
-                      updateDirent={this.updateDirent}
-                      unSelectDirent={this.unSelectDirent}
-                      onFilesTagChanged={this.onFileTagChanged}
-                      showShareBtn={showShareBtn}
-                      isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                      showDirentDetail={this.showDirentDetail}
-                      currentMode={this.state.currentMode}
-                      switchViewMode={this.switchViewMode}
-                      onItemConvert={this.onConvertItem}
-                      onAddFolder={this.onAddFolder}
-                    />
-                    :
-                    <CurDirPath
-                      currentRepoInfo={this.state.currentRepoInfo}
-                      repoID={this.props.repoID}
-                      repoName={this.state.currentRepoInfo.repo_name}
-                      repoEncrypted={this.state.repoEncrypted}
-                      isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                      pathPrefix={this.props.pathPrefix}
-                      currentPath={this.state.path}
-                      userPerm={userPerm}
-                      onTabNavClick={this.props.onTabNavClick}
-                      onPathClick={this.onMainNavBarClick}
-                      fileTags={this.state.fileTags}
-                      direntList={direntItemsList}
-                      sortBy={this.state.sortBy}
-                      sortOrder={this.state.sortOrder}
-                      sortItems={this.sortItems}
-                      toggleTreePanel={this.toggleTreePanel}
-                      enableDirPrivateShare={enableDirPrivateShare}
-                      showShareBtn={showShareBtn}
-                      onAddFolder={this.onAddFolder}
-                      onAddFile={this.onAddFile}
-                      onUploadFile={this.onUploadFile}
-                      onUploadFolder={this.onUploadFolder}
-                      fullDirentList={this.state.direntList}
-                      filePermission={this.state.filePermission}
-                      onFileTagChanged={this.onToolbarFileTagChanged}
-                      repoTags={this.state.repoTags}
-                      onItemMove={this.onMoveItem}
-                      isDesktop={isDesktop}
-                      loadDirentList={this.loadDirentList}
-                      onAddFolderNode={this.onAddFolder}
-                    />
+      <EnableMetadataProvider repoID={repoID} currentRepoInfo={currentRepoInfo} >
+        <TagsProvider repoID={repoID} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+          <MetadataProvider repoID={repoID} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
+            <CollaboratorsProvider repoID={repoID}>
+              <div className="main-panel-center flex-row">
+                <div className="cur-view-container">
+                  {this.state.currentRepoInfo.status === 'read-only' &&
+                    <div className="readonly-tip-message">
+                      {gettext('This library has been set to read-only by admin and cannot be updated.')}
+                    </div>
                   }
-                </div>
-                {isDesktop &&
-                  <div className="cur-view-path-right py-1">
-                    <DirTool
-                      repoID={this.props.repoID}
-                      repoName={this.state.currentRepoInfo.repo_name}
-                      userPerm={userPerm}
-                      currentPath={path}
-                      updateUsedRepoTags={this.updateUsedRepoTags}
-                      onDeleteRepoTag={this.onDeleteRepoTag}
-                      currentMode={this.state.currentMode}
-                      switchViewMode={this.switchViewMode}
-                      isCustomPermission={isCustomPermission}
-                      sortBy={this.state.sortBy}
-                      sortOrder={this.state.sortOrder}
-                      sortItems={this.sortItems}
-                      viewId={this.state.viewId}
-                      viewType={this.props.viewType}
-                      onCloseDetail={this.closeDirentDetail}
-                    />
+                  <div className="cur-view-path lib-cur-view-path">
+                    <div className={classnames(
+                      'cur-view-path-left', {
+                        'w-100': !isDesktop,
+                        'animation-children': isDirentSelected
+                      })}>
+                      {isDirentSelected ?
+                        <SelectedDirentsToolbar
+                          repoID={this.props.repoID}
+                          path={this.state.path}
+                          userPerm={userPerm}
+                          repoEncrypted={this.state.repoEncrypted}
+                          repoTags={this.state.repoTags}
+                          selectedDirentList={this.state.selectedDirentList}
+                          direntList={direntItemsList}
+                          onItemsMove={this.onMoveItems}
+                          onItemsCopy={this.onCopyItems}
+                          onItemsDelete={this.onDeleteItems}
+                          onItemRename={this.onMainPanelItemRename}
+                          isRepoOwner={isRepoOwner}
+                          currentRepoInfo={this.state.currentRepoInfo}
+                          enableDirPrivateShare={enableDirPrivateShare}
+                          updateDirent={this.updateDirent}
+                          unSelectDirent={this.unSelectDirent}
+                          onFilesTagChanged={this.onFileTagChanged}
+                          showShareBtn={showShareBtn}
+                          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                          showDirentDetail={this.showDirentDetail}
+                          currentMode={this.state.currentMode}
+                          switchViewMode={this.switchViewMode}
+                          onItemConvert={this.onConvertItem}
+                          onAddFolder={this.onAddFolder}
+                        />
+                        :
+                        <CurDirPath
+                          currentRepoInfo={this.state.currentRepoInfo}
+                          repoID={this.props.repoID}
+                          repoName={this.state.currentRepoInfo.repo_name}
+                          repoEncrypted={this.state.repoEncrypted}
+                          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                          pathPrefix={this.props.pathPrefix}
+                          currentPath={this.state.path}
+                          userPerm={userPerm}
+                          onTabNavClick={this.props.onTabNavClick}
+                          onPathClick={this.onMainNavBarClick}
+                          fileTags={this.state.fileTags}
+                          direntList={direntItemsList}
+                          sortBy={this.state.sortBy}
+                          sortOrder={this.state.sortOrder}
+                          sortItems={this.sortItems}
+                          toggleTreePanel={this.toggleTreePanel}
+                          enableDirPrivateShare={enableDirPrivateShare}
+                          showShareBtn={showShareBtn}
+                          onAddFolder={this.onAddFolder}
+                          onAddFile={this.onAddFile}
+                          onUploadFile={this.onUploadFile}
+                          onUploadFolder={this.onUploadFolder}
+                          fullDirentList={this.state.direntList}
+                          filePermission={this.state.filePermission}
+                          onFileTagChanged={this.onToolbarFileTagChanged}
+                          repoTags={this.state.repoTags}
+                          onItemMove={this.onMoveItem}
+                          isDesktop={isDesktop}
+                          loadDirentList={this.loadDirentList}
+                          onAddFolderNode={this.onAddFolder}
+                        />
+                      }
+                    </div>
+                    {isDesktop &&
+                      <div className="cur-view-path-right py-1">
+                        <DirTool
+                          repoID={this.props.repoID}
+                          repoName={this.state.currentRepoInfo.repo_name}
+                          userPerm={userPerm}
+                          currentPath={path}
+                          updateUsedRepoTags={this.updateUsedRepoTags}
+                          onDeleteRepoTag={this.onDeleteRepoTag}
+                          currentMode={this.state.currentMode}
+                          switchViewMode={this.switchViewMode}
+                          isCustomPermission={isCustomPermission}
+                          sortBy={this.state.sortBy}
+                          sortOrder={this.state.sortOrder}
+                          sortItems={this.sortItems}
+                          viewId={this.state.viewId}
+                          viewType={this.props.viewType}
+                          onCloseDetail={this.closeDirentDetail}
+                        />
+                      </div>
+                    }
                   </div>
-                }
-              </div>
-              <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
-                {this.state.pathExist ?
-                  <DirColumnView
-                    isSidePanelFolded={this.props.isSidePanelFolded}
-                    isTreePanelShown={this.state.isTreePanelShown}
-                    isDirentDetailShow={this.state.isDirentDetailShow}
-                    currentMode={this.state.currentMode}
+                  <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
+                    {this.state.pathExist ?
+                      <DirColumnView
+                        isSidePanelFolded={this.props.isSidePanelFolded}
+                        isTreePanelShown={this.state.isTreePanelShown}
+                        isDirentDetailShow={this.state.isDirentDetailShow}
+                        currentMode={this.state.currentMode}
+                        path={this.state.path}
+                        repoID={this.props.repoID}
+                        currentRepoInfo={this.state.currentRepoInfo}
+                        isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                        userPerm={userPerm}
+                        enableDirPrivateShare={enableDirPrivateShare}
+                        isTreeDataLoading={this.state.isTreeDataLoading}
+                        treeData={this.state.treeData}
+                        currentNode={this.state.currentNode}
+                        onNodeClick={this.onTreeNodeClick}
+                        onNodeCollapse={this.onTreeNodeCollapse}
+                        onNodeExpanded={this.onTreeNodeExpanded}
+                        onAddFolderNode={this.onAddFolder}
+                        onAddFileNode={this.onAddFile}
+                        onRenameNode={this.onRenameTreeNode}
+                        onDeleteNode={this.onDeleteTreeNode}
+                        isViewFile={this.state.isViewFile}
+                        isFileLoading={this.state.isFileLoading}
+                        filePermission={this.state.filePermission}
+                        content={this.state.content}
+                        viewId={this.state.viewId}
+                        tagId={this.state.tagId}
+                        lastModified={this.state.lastModified}
+                        latestContributor={this.state.latestContributor}
+                        onLinkClick={this.onLinkClick}
+                        isRepoInfoBarShow={isRepoInfoBarShow}
+                        repoTags={this.state.repoTags}
+                        usedRepoTags={this.state.usedRepoTags}
+                        updateUsedRepoTags={this.updateUsedRepoTags}
+                        isDirentListLoading={this.state.isDirentListLoading}
+                        direntList={direntItemsList}
+                        fullDirentList={this.state.direntList}
+                        sortBy={this.state.sortBy}
+                        sortOrder={this.state.sortOrder}
+                        sortItems={this.sortItems}
+                        onAddFolder={this.onAddFolder}
+                        onAddFile={this.onAddFile}
+                        onItemClick={this.onItemClick}
+                        onItemSelected={this.onDirentSelected}
+                        onItemDelete={this.onMainPanelItemDelete}
+                        onItemRename={this.onMainPanelItemRename}
+                        deleteFilesCallback={this.deleteItemsAjaxCallback}
+                        renameFileCallback={this.renameItemAjaxCallback}
+                        onItemMove={this.onMoveItem}
+                        onItemCopy={this.onCopyItem}
+                        onItemConvert={this.onConvertItem}
+                        onDirentClick={this.onDirentClick}
+                        updateDirent={this.updateDirent}
+                        isAllItemSelected={this.state.isAllDirentSelected}
+                        onAllItemSelected={this.onAllDirentSelected}
+                        selectedDirentList={this.state.selectedDirentList}
+                        onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
+                        onItemsMove={this.onMoveItems}
+                        onItemsCopy={this.onCopyItems}
+                        onItemsDelete={this.onDeleteItems}
+                        onFileTagChanged={this.onFileTagChanged}
+                        showDirentDetail={this.showDirentDetail}
+                        onItemsScroll={this.onItemsScroll}
+                        eventBus={this.props.eventBus}
+                        updateCurrentDirent={this.updateCurrentDirent}
+                        closeDirentDetail={this.closeDirentDetail}
+                      />
+                      :
+                      <div className="message err-tip">{gettext('Folder does not exist.')}</div>
+                    }
+                    {this.state.isDirentDetailShow && (
+                      <Detail
+                        path={this.state.path}
+                        repoID={this.props.repoID}
+                        currentRepoInfo={this.state.currentRepoInfo}
+                        dirent={this.state.currentDirent}
+                        repoTags={this.state.repoTags}
+                        fileTags={this.state.isViewFile ? this.state.fileTags : []}
+                        onFileTagChanged={this.onFileTagChanged}
+                        onClose={this.closeDirentDetail}
+                      />
+                    )}
+                  </div>
+                </div>
+                {canUpload && this.state.pathExist && !this.state.isViewFile && this.state.currentMode !== METADATA_MODE && (
+                  <FileUploader
+                    ref={uploader => this.uploader = uploader}
+                    dragAndDrop={true}
                     path={this.state.path}
                     repoID={this.props.repoID}
-                    currentRepoInfo={this.state.currentRepoInfo}
-                    isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                    userPerm={userPerm}
-                    enableDirPrivateShare={enableDirPrivateShare}
-                    isTreeDataLoading={this.state.isTreeDataLoading}
-                    treeData={this.state.treeData}
-                    currentNode={this.state.currentNode}
-                    onNodeClick={this.onTreeNodeClick}
-                    onNodeCollapse={this.onTreeNodeCollapse}
-                    onNodeExpanded={this.onTreeNodeExpanded}
-                    onAddFolderNode={this.onAddFolder}
-                    onAddFileNode={this.onAddFile}
-                    onRenameNode={this.onRenameTreeNode}
-                    onDeleteNode={this.onDeleteTreeNode}
-                    isViewFile={this.state.isViewFile}
-                    isFileLoading={this.state.isFileLoading}
-                    filePermission={this.state.filePermission}
-                    content={this.state.content}
-                    viewId={this.state.viewId}
-                    lastModified={this.state.lastModified}
-                    latestContributor={this.state.latestContributor}
-                    onLinkClick={this.onLinkClick}
-                    isRepoInfoBarShow={isRepoInfoBarShow}
-                    repoTags={this.state.repoTags}
-                    usedRepoTags={this.state.usedRepoTags}
-                    updateUsedRepoTags={this.updateUsedRepoTags}
-                    isDirentListLoading={this.state.isDirentListLoading}
-                    direntList={direntItemsList}
-                    fullDirentList={this.state.direntList}
-                    sortBy={this.state.sortBy}
-                    sortOrder={this.state.sortOrder}
-                    sortItems={this.sortItems}
-                    onAddFolder={this.onAddFolder}
-                    onAddFile={this.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemSelected={this.onDirentSelected}
-                    onItemDelete={this.onMainPanelItemDelete}
-                    onItemRename={this.onMainPanelItemRename}
-                    deleteFilesCallback={this.deleteItemsAjaxCallback}
-                    renameFileCallback={this.renameItemAjaxCallback}
-                    onItemMove={this.onMoveItem}
-                    onItemCopy={this.onCopyItem}
-                    onItemConvert={this.onConvertItem}
-                    onDirentClick={this.onDirentClick}
-                    updateDirent={this.updateDirent}
-                    isAllItemSelected={this.state.isAllDirentSelected}
-                    onAllItemSelected={this.onAllDirentSelected}
-                    selectedDirentList={this.state.selectedDirentList}
-                    onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
-                    onItemsMove={this.onMoveItems}
-                    onItemsCopy={this.onCopyItems}
-                    onItemsDelete={this.onDeleteItems}
-                    onFileTagChanged={this.onFileTagChanged}
-                    showDirentDetail={this.showDirentDetail}
-                    onItemsScroll={this.onItemsScroll}
-                    eventBus={this.props.eventBus}
-                    updateCurrentDirent={this.updateCurrentDirent}
-                    closeDirentDetail={this.closeDirentDetail}
-                  />
-                  :
-                  <div className="message err-tip">{gettext('Folder does not exist.')}</div>
-                }
-                {this.state.isDirentDetailShow && (
-                  <Detail
-                    path={this.state.path}
-                    repoID={this.props.repoID}
-                    currentRepoInfo={this.state.currentRepoInfo}
-                    dirent={this.state.currentDirent}
-                    repoTags={this.state.repoTags}
-                    fileTags={this.state.isViewFile ? this.state.fileTags : []}
-                    onFileTagChanged={this.onFileTagChanged}
-                    onClose={this.closeDirentDetail}
+                    direntList={this.state.direntList}
+                    onFileUploadSuccess={this.onFileUploadSuccess}
+                    isCustomPermission={isCustomPermission}
                   />
                 )}
               </div>
-            </div>
-            {canUpload && this.state.pathExist && !this.state.isViewFile && this.state.currentMode !== METADATA_MODE && (
-              <FileUploader
-                ref={uploader => this.uploader = uploader}
-                dragAndDrop={true}
-                path={this.state.path}
-                repoID={this.props.repoID}
-                direntList={this.state.direntList}
-                onFileUploadSuccess={this.onFileUploadSuccess}
-                isCustomPermission={isCustomPermission}
-              />
-            )}
-          </div>
-          {isCopyMoveProgressDialogShow && (
-            <CopyMoveDirentProgressDialog
-              type={this.state.asyncOperationType}
-              asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
-              asyncOperationProgress={this.state.asyncOperationProgress}
-              toggleDialog={this.onMoveProgressDialogToggle}
-            />
-          )}
-          {isDeleteFolderDialogOpen && (
-            <DeleteFolderDialog
-              repoID={this.props.repoID}
-              path={this.state.folderToDelete}
-              deleteFolder={this.deleteFolder}
-              toggleDialog={this.toggleDeleteFolderDialog}
-            />
-          )}
-          <MediaQuery query="(max-width: 767.8px)">
-            <Modal zIndex="1030" isOpen={!isDesktop && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
-          </MediaQuery>
-        </CollaboratorsProvider>
-      </MetadataProvider>
+              {isCopyMoveProgressDialogShow && (
+                <CopyMoveDirentProgressDialog
+                  type={this.state.asyncOperationType}
+                  asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
+                  asyncOperationProgress={this.state.asyncOperationProgress}
+                  toggleDialog={this.onMoveProgressDialogToggle}
+                />
+              )}
+              {isDeleteFolderDialogOpen && (
+                <DeleteFolderDialog
+                  repoID={this.props.repoID}
+                  path={this.state.folderToDelete}
+                  deleteFolder={this.deleteFolder}
+                  toggleDialog={this.toggleDeleteFolderDialog}
+                />
+              )}
+              <MediaQuery query="(max-width: 767.8px)">
+                <Modal zIndex="1030" isOpen={!isDesktop && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
+              </MediaQuery>
+            </CollaboratorsProvider>
+          </MetadataProvider>
+        </TagsProvider>
+      </EnableMetadataProvider>
     );
   }
 }
