@@ -4,19 +4,15 @@ import { Utils } from '../../../utils/utils';
 export function createBMapGeolocationControl(BMap, callback) {
   function GeolocationControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    if (!Utils.isDesktop) {
-      this.defaultOffset = new BMap.Size(10, 90);
-    } else {
-      this.defaultOffset = new BMap.Size(10, 20);
-    }
+    this.defaultOffset = new BMap.Size(10, Utils.isDesktop ? 20 : 90);
   }
   GeolocationControl.prototype = new window.BMap.Control();
-  GeolocationControl.prototype.initialize = (map) => {
-    let div = document.createElement('div');
+  GeolocationControl.prototype.initialize = function (map) {
+    const div = document.createElement('div');
     div.className = 'sf-BMap-geolocation-control';
     div.style = 'display: flex; justify-content: center; align-items: center;';
 
-    let icon = document.createElement('img');
+    const icon = document.createElement('img');
     icon.className = 'sf-BMap-icon-current-location';
     icon.src = `${mediaUrl}/img/current-location.svg`;
     icon.style = 'width: 16px; height: 16px; display: block;';

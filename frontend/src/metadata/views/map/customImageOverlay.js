@@ -1,6 +1,6 @@
 import { Utils } from '../../../utils/utils';
 
-const buildImageOverlay = (center, imageUrl) => {
+const customImageOverlay = (center, imageUrl) => {
   function ImageOverlay() {
     this._center = center;
     this._imgUrl = imageUrl;
@@ -63,4 +63,4 @@ const buildImageOverlay = (center, imageUrl) => {
   return new ImageOverlay(center);
 };
 
-export default buildImageOverlay;
+export default customImageOverlay;

@@ -4,42 +4,36 @@ import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
 import { MAP_TYPE } from '../../../constants';
 import Loading from '../../../components/loading';
 import { isValidPosition } from '../../utils/validate';
-import { baiduMapKey, googleMapKey, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { appAvatarURL, baiduMapKey, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { Utils } from '../../../utils/utils';
-import buildImageOverlay from './buildImageOverlay';
+import customImageOverlay from './customImageOverlay';
+import customAvatarOverlay from './customAvatarOverlay';
 import { createBMapGeolocationControl } from './geolocation-control';
 
 import './index.css';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
-const DEFAULT_ZOOM = 5;
-const DEFAULT_USER_ZOOM = 5;
+const DEFAULT_ZOOM = 4;
 const BATCH_SIZE = 500;
 
 const Map = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [position, setPosition] = useState(DEFAULT_POSITION);
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
 
   const mapRef = useRef(null);
-  const googleMarkerRef = useRef(null);
   const clusterRef = useRef(null);
   const batchIndexRef = useRef(0);
 
   const { metadata } = useMetadataView();
 
-  const mapInfo = useMemo(() => {
-    const { type, key } = initMapInfo({ baiduMapKey, googleMapKey });
-    return { type, key };
-  }, []);
+  const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
 
   const validImages = useMemo(() => {
-    // filter rows who has PRIVATE_COLUMN_KEY.LOCATION key
-    const images = metadata.rows.filter(row => row[PRIVATE_COLUMN_KEY.FILE_TYPE] === PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE && row[PRIVATE_COLUMN_KEY.LOCATION])
-      .reduce((acc, row) => {
+    return metadata.rows
+      .filter(row => row[PRIVATE_COLUMN_KEY.FILE_TYPE] === PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE && row[PRIVATE_COLUMN_KEY.LOCATION])
+      .map(row => {
         const id = row[PRIVATE_COLUMN_KEY.ID];
         const repoID = window.sfMetadataContext.getSetting('repoID');
         const fileName = getFileNameFromRecord(row);
@@ -47,57 +41,22 @@ const Map = () => {
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`;
         const { lng, lat } = row[PRIVATE_COLUMN_KEY.LOCATION];
-        if (isValidPosition(lng, lat)) {
-          acc.push({
-            id,
-            src,
-            lng,
-            lat
-          });
-        }
-        return acc;
-      }
-      , []);
-    return images;
+        return isValidPosition(lng, lat) ? { id, src, lng, lat } : null;
+      })
+      .filter(Boolean);
   }, [metadata]);
-
-  const addMarkerByPosition = useCallback((lng, lat) => {
-    if (mapInfo.type === MAP_TYPE.B_MAP) {
-      const point = new window.BMap.Point(lng, lat);
-      const marker = new window.BMap.Marker(point, { offset: new window.BMap.Size(-2, -5) });
-      if (mapRef.current) {
-        mapRef.current.clearOverlays();
-        mapRef.current.addOverlay(marker);
-        mapRef.current.setCenter(point);
-      }
-      return;
-    }
-    if (mapInfo.type === MAP_TYPE.G_MAP) {
-      if (!googleMarkerRef.current) {
-        googleMarkerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-          position: { lng, lat },
-          map: mapRef.current,
-        });
-        return;
-      }
-      googleMarkerRef.current.setPosition({ lng, lat });
-      return;
-    }
-  }, [mapInfo]);
 
   const addMapController = useCallback(() => {
     var navigation = new window.BMap.NavigationControl();
     const GeolocationControl = createBMapGeolocationControl(window.BMap, (err, point) => {
       if (!err && point) {
-        setPosition({ lng: point.lng, lat: point.lat });
-        setZoom(DEFAULT_USER_ZOOM);
-        addMarkerByPosition(point.lng, point.lat);
+        mapRef.current.setCenter({ lng: point.lng, lat: point.lat });
       }
     });
     let geolocationControl = new GeolocationControl();
     mapRef.current.addControl(geolocationControl);
     mapRef.current.addControl(navigation);
-  }, [addMarkerByPosition]);
+  }, []);
 
   const renderMarkersBatch = useCallback(() => {
     if (!validImages.length || !clusterRef.current) return;
@@ -110,7 +69,7 @@ const Map = () => {
       const image = validImages[i];
       const { lng, lat } = image;
       const point = new window.BMap.Point(lng, lat);
-      const marker = buildImageOverlay(point, image.src);
+      const marker = customImageOverlay(point, image.src);
       batchMarkers.push(marker);
     }
 
@@ -128,52 +87,55 @@ const Map = () => {
     }
   }, []);
 
+  const initializeUserMarker = useCallback(() => {
+    if (window.BMap) {
+      const imageUrl = `${mediaUrl}/img/marker.png`;
+      let { lng, lat } = DEFAULT_POSITION;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lng = position.coords.longitude;
+          lat = position.coords.latitude;
+        });
+      }
+      const point = new window.BMap.Point(lng, lat);
+      const avatarMarker = customAvatarOverlay(point, appAvatarURL, imageUrl);
+      mapRef.current.addOverlay(avatarMarker);
+    }
+  }, []);
+
   const renderBaiduMap = useCallback(() => {
     setIsLoading(false);
     if (!window.BMap.Map) return;
-    if (!isValidPosition(position?.lng, position?.lat)) return;
-    const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
+    let mapCenter = window.sfMetadataContext.localStorage.getItem('map-center') || DEFAULT_POSITION;
+    // ask for user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((userInfo) => {
+        mapCenter = { lng: userInfo.coords.longitude, lat: userInfo.coords.latitude };
+        window.sfMetadataContext.localStorage.setItem('map-center', mapCenter);
+      });
+    }
+    if (!isValidPosition(mapCenter?.lng, mapCenter?.lat)) return;
+    const gcPosition = wgs84_to_gcj02(mapCenter.lng, mapCenter.lat);
     const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
     const { lng, lat } = bdPosition;
     mapRef.current = new window.BMap.Map('sf-metadata-map-container', { enableMapClick: false });
     const point = new window.BMap.Point(lng, lat);
-    mapRef.current.centerAndZoom(point, zoom);
+    mapRef.current.centerAndZoom(point, DEFAULT_ZOOM);
     mapRef.current.enableScrollWheelZoom(true);
-    // mapRef.current.setMaxZoom(16);
-    console.log('zoom level:', mapRef.current.getZoom());
     addMapController();
-    // addMarkerByPosition(lng, lat);
 
+    initializeUserMarker();
     initializeClusterer();
 
     batchIndexRef.current = 0; // Reset batch index
     renderMarkersBatch();
-  }, [position, zoom, addMapController, initializeClusterer, renderMarkersBatch]);
-
-
-  // get user location
-  useEffect(() => {
-    if (mapInfo.type === MAP_TYPE.B_MAP) {
-      loadBMap(mapInfo.key).then(() => {
-        const geolocation = new window.BMap.Geolocation();
-        geolocation.getCurrentPosition((result) => {
-          if (result) {
-            const point = result.point;
-            setPosition({ lng: point.lng, lat: point.lat });
-            setZoom(DEFAULT_USER_ZOOM);
-          } else {
-            setPosition(DEFAULT_POSITION);
-            setZoom(DEFAULT_ZOOM);
-          }
-        });
-      });
-    }
-  }, [mapInfo, renderBaiduMap]);
+  }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch]);
 
   // init map
   useEffect(() => {
     if (mapInfo) {
       if (mapInfo.type === MAP_TYPE.B_MAP) {
+        window.renderMap = renderBaiduMap;
         loadBMap(mapInfo.key).then(() => renderBaiduMap());
         return;
       }
@@ -181,15 +143,16 @@ const Map = () => {
 
     return () => {
       if (mapInfo.type === MAP_TYPE.B_MAP) {
-        window.renderBaiduMap = null;
+        window.renderMap = null;
       }
     };
   }, [mapInfo, renderBaiduMap]);
 
   return (
     <div className='w-100 h-100 sf-metadata-view-map'>
-      {isLoading && (<Loading />)}
-      <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
+      {isLoading ? (<Loading />) : (
+        <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
+      )}
     </div>
   );
 };
