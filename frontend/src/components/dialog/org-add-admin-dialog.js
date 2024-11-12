@@ -5,7 +5,7 @@ import { gettext, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
 
 const propTypes = {
@@ -34,7 +34,7 @@ class AddOrgAdminDialog extends React.Component {
   addOrgAdmin = () => {
     if (!this.state.selectedOption) return;
     const userEmail = this.state.selectedOption.email;
-    seafileAPI.orgAdminSetOrgAdmin(orgID, userEmail, true).then(res => {
+    orgAdminAPI.orgAdminSetOrgAdmin(orgID, userEmail, true).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.props.onAddedOrgAdmin(userInfo);
     }).catch(error => {

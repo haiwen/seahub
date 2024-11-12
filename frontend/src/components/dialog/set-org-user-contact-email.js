@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -37,7 +37,7 @@ class SetOrgUserContactEmail extends React.Component {
       submitBtnDisabled: true
     });
 
-    seafileAPI.orgAdminSetOrgUserContactEmail(orgID, email, contactEmail).then((res) => {
+    orgAdminAPI.orgAdminSetOrgUserContactEmail(orgID, email, contactEmail).then((res) => {
       const newContactEmail = contactEmail ? res.data.contact_email : '';
       this.props.updateContactEmail(newContactEmail);
       this.props.toggleDialog();

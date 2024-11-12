@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, siteRoot, mediaUrl, orgID } from '../../../utils/constants';
 import toaster from '../../../components/toast/index';
 import EmptyTip from '../../../components/empty-tip';
@@ -14,7 +14,6 @@ import { navigate } from '@gatsbyjs/reach-router';
 import OrgAdminRepo from '../../../models/org-admin-repo';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 
 
 class Content extends Component {
@@ -315,7 +314,7 @@ class OrgAllRepos extends Component {
 
   getReposByPage = (page) => {
     let { perPage } = this.state;
-    seafileAPI.orgAdminListOrgRepos(orgID, page, perPage, this.state.sortBy).then((res) => {
+    orgAdminAPI.orgAdminListOrgRepos(orgID, page, perPage, this.state.sortBy).then((res) => {
       let orgRepos = res.data.repo_list.map(item => {
         return new OrgAdminRepo(item);
       });
@@ -369,7 +368,7 @@ class OrgAllRepos extends Component {
 
 
   deleteRepoItem = (repo) => {
-    seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repoID).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgRepo(orgID, repo.repoID).then(res => {
       this.setState({
         repos: this.state.repos.filter(item => item.repoID !== repo.repoID)
       });

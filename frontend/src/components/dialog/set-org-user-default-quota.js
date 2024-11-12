@@ -1,9 +1,8 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -45,7 +44,7 @@ class SetOrgUserDefaultQuota extends React.Component {
       submitBtnDisabled: true
     });
 
-    seafileAPI.orgAdminSetOrgUserDefaultQuota(orgID, quota).then((res) => {
+    orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, quota).then((res) => {
       this.props.updateQuota(res.data.user_default_quota);
       this.props.toggleDialog();
     }).catch((error) => {

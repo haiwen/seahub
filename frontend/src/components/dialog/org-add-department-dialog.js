@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 
 const propTypes = {
   groupID: PropTypes.string,
@@ -28,7 +28,7 @@ class AddDepartmentDialog extends React.Component {
       if (this.props.parentGroupID) {
         parentGroup = this.props.parentGroupID;
       }
-      seafileAPI.orgAdminAddDepartGroup(orgID, parentGroup, this.state.departmentName.trim()).then((res) => {
+      orgAdminAPI.orgAdminAddDepartGroup(orgID, parentGroup, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
         this.props.onAddNewDepartment(res.data);
       }).catch(error => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -28,7 +28,7 @@ class FileUpdateDetailDialog extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetFileUpdateDetail(this.props.repoID, this.props.commitID).then(res => {
+    orgAdminAPI.orgAdminGetFileUpdateDetail(this.props.repoID, this.props.commitID).then(res => {
       this.setState({
         time: res.data.date_time,
         renamed: this.state.renamed.concat(res.data.renamed),

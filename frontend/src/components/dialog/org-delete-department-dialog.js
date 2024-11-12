@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 
@@ -22,7 +22,7 @@ class DeleteDepartDialog extends React.Component {
   deleteDepart = () => {
     const { groupID } = this.props;
     this.props.toggle();
-    seafileAPI.orgAdminDeleteDepartGroup(orgID, groupID).then((res) => {
+    orgAdminAPI.orgAdminDeleteDepartGroup(orgID, groupID).then((res) => {
       this.props.onDeleteDepartment(groupID);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
