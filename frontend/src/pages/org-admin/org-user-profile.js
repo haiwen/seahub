@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -26,7 +26,7 @@ class OrgUserProfile extends Component {
 
   componentDidMount() {
     const email = decodeURIComponent(this.props.email);
-    seafileAPI.orgAdminGetOrgUserInfo(orgID, email).then((res) => {
+    orgAdminAPI.orgAdminGetOrgUserInfo(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));

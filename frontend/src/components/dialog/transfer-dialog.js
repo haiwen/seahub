@@ -5,6 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, isPro, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -61,7 +62,7 @@ class TransferDialog extends React.Component {
 
   componentDidMount() {
     if (this.props.isOrgAdmin) {
-      seafileAPI.orgAdminListDepartments(orgID).then((res) => {
+      orgAdminAPI.orgAdminListDepartments(orgID).then((res) => {
         this.updateOptions(res);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);

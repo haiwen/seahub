@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import { gettext, orgID, lang } from '../../../utils/constants';
@@ -41,7 +41,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   listOrgMembers = (groupID) => {
-    seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
+    orgAdminAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
       this.setState({
         members: res.data.members,
         groups: res.data.groups,
@@ -55,7 +55,7 @@ class OrgDepartmentItem extends React.Component {
   };
 
   listSubDepartGroups = (groupID) => {
-    seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
+    orgAdminAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
       this.setState({ groups: res.data.groups });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

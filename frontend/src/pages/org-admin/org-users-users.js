@@ -10,7 +10,7 @@ import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
 import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
 import InviteUserViaWeiXinDialog from '../../components/dialog/org-admin-invite-user-via-weixin-dialog';
 import toaster from '../../components/toast';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
 import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -138,7 +138,7 @@ class OrgUsers extends Component {
 
   initOrgUsersData = (page) => {
     const { sortBy, sortOrder } = this.state;
-    seafileAPI.orgAdminListOrgUsers(orgID, '', page, sortBy, sortOrder).then(res => {
+    orgAdminAPI.orgAdminListOrgUsers(orgID, '', page, sortBy, sortOrder).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
@@ -155,7 +155,7 @@ class OrgUsers extends Component {
 
   importOrgUsers = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    seafileAPI.orgAdminImportUsersViaFile(orgID, file).then((res) => {
+    orgAdminAPI.orgAdminImportUsersViaFile(orgID, file).then((res) => {
       if (res.data.success.length) {
         const users = res.data.success.map(item => {
           if (item.institution == undefined) {
@@ -178,7 +178,7 @@ class OrgUsers extends Component {
   };
 
   addOrgUser = (email, name, password) => {
-    seafileAPI.orgAdminAddOrgUser(orgID, email, name, password).then(res => {
+    orgAdminAPI.orgAdminAddOrgUser(orgID, email, name, password).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.state.orgUsers.unshift(userInfo);
       this.setState({
@@ -196,7 +196,7 @@ class OrgUsers extends Component {
   };
 
   toggleOrgUsersDelete = (email, username) => {
-    seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
       this.setState({ orgUsers: users });
       let msg = gettext('Deleted user %s');
@@ -209,7 +209,7 @@ class OrgUsers extends Component {
   };
 
   inviteOrgUser = (emails) => {
-    seafileAPI.orgAdminInviteOrgUsers(orgID, emails.split(',')).then(res => {
+    orgAdminAPI.orgAdminInviteOrgUsers(orgID, emails.split(',')).then(res => {
       this.toggleInviteUserDialog();
       let users = res.data.success.map(user => {
         return new OrgUserInfo(user);
@@ -236,7 +236,7 @@ class OrgUsers extends Component {
   };
 
   changeStatus = (email, isActive) => {
-    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+    orgAdminAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgUsers.map(item => {
         if (item.email == email) {
           item['is_active'] = res.data['is_active'];

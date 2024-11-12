@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
 import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
-import { orgAdminAPI } from '../../utils/org-admin-api';
 
 class Search extends React.Component {
 
@@ -83,7 +82,7 @@ class OrgGroups extends Component {
   }
 
   initData = (page) => {
-    seafileAPI.orgAdminListOrgGroups(orgID, page).then(res => {
+    orgAdminAPI.orgAdminListOrgGroups(orgID, page).then(res => {
       let orgGroups = res.data.groups.map(item => {
         return new OrgGroupInfo(item);
       });
@@ -121,7 +120,7 @@ class OrgGroups extends Component {
   };
 
   deleteGroupItem = (group) => {
-    seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
       this.setState({
         orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
       });

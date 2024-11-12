@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -39,7 +39,7 @@ class SetOrgUserName extends React.Component {
 
     // when name is '', api returns the previous name
     // but newName needs to be ''
-    seafileAPI.orgAdminSetOrgUserName(orgID, email, name).then((res) => {
+    orgAdminAPI.orgAdminSetOrgUserName(orgID, email, name).then((res) => {
       const newName = name ? res.data.name : '';
       this.props.updateName(newName);
       this.props.toggleDialog();

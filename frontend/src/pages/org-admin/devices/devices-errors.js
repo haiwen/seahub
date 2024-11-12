@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from '@gatsbyjs/reach-router';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { siteRoot, gettext, orgID } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -150,7 +150,7 @@ class OrgDevicesErrors extends Component {
 
   getDeviceErrorsListByPage = (page) => {
     let per_page = this.state.perPage;
-    seafileAPI.orgAdminListDevicesErrors(orgID, page, per_page).then((res) => {
+    orgAdminAPI.orgAdminListDevicesErrors(orgID, page, per_page).then((res) => {
       this.setState({
         loading: false,
         devicesErrors: res.data.device_errors,
@@ -166,7 +166,7 @@ class OrgDevicesErrors extends Component {
   };
 
   clean = () => {
-    seafileAPI.orgAdminClearDeviceErrors(orgID).then((res) => {
+    orgAdminAPI.orgAdminClearDeviceErrors(orgID).then((res) => {
       this.setState({
         devicesErrors: [],
         isCleanBtnShown: false

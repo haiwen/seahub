@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
@@ -14,7 +14,7 @@ class DeleteRepoDialog extends React.Component {
 
   deleteRepo = () => {
     const { repo } = this.props;
-    seafileAPI.orgAdminDeleteDepartmentRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
+    orgAdminAPI.orgAdminDeleteDepartmentRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
       if (res.data.success) {
         this.props.onDeleteRepo(repo.repo_id);
         this.props.toggle();

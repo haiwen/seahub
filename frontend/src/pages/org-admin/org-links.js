@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { siteRoot, gettext, serviceURL } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -27,7 +27,7 @@ class OrgLinks extends React.Component {
   }
 
   listOrgLinks = (page) => {
-    seafileAPI.orgAdminListOrgLinks(page).then(res => {
+    orgAdminAPI.orgAdminListOrgLinks(page).then(res => {
       const data = res.data;
       this.setState({
         linkList: data.link_list,
@@ -57,7 +57,7 @@ class OrgLinks extends React.Component {
   };
 
   deleteOrgLink = (token) => {
-    seafileAPI.orgAdminDeleteOrgLink(token).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgLink(token).then(res => {
       if (res.data.success === true) {
         this.listOrgLinks(this.state.page);
       }

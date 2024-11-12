@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -38,7 +38,7 @@ class OrgLogsFileUpdate extends Component {
   }
 
   initData = (email, repoID, page) => {
-    seafileAPI.orgAdminListFileUpdate(email, repoID, page).then(res => {
+    orgAdminAPI.orgAdminListFileUpdate(email, repoID, page).then(res => {
       let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileUpdateEvent(item);
       });

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import { gettext, orgID } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
@@ -31,7 +31,7 @@ class OrgStatisticTraffic extends React.Component {
   };
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
-    seafileAPI.orgAdminStatisticSystemTraffic(orgID, startTime, endTime, groupBy).then((res) => {
+    orgAdminAPI.orgAdminStatisticSystemTraffic(orgID, startTime, endTime, groupBy).then((res) => {
       let labels = [];
       let total_upload = [];
       let total_download = [];

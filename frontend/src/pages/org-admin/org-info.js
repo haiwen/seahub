@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { mediaUrl, gettext, orgMemberQuotaEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
@@ -25,7 +25,7 @@ class OrgInfo extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgInfo().then(res => {
+    orgAdminAPI.orgAdminGetOrgInfo().then(res => {
       const {
         org_id, org_name,
         member_quota, member_usage, active_members,

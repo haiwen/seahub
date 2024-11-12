@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -25,7 +25,7 @@ class OrgGroupRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminListGroupRepos(orgID, this.props.groupID).then((res) => {
+    orgAdminAPI.orgAdminListGroupRepos(orgID, this.props.groupID).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));
@@ -138,7 +138,7 @@ class Item extends Component {
 
   deleteRepo = () => {
     const repo = this.props.data;
-    seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repo_id).then((res) => {
+    orgAdminAPI.orgAdminDeleteOrgRepo(orgID, repo.repo_id).then((res) => {
       this.setState({
         deleted: true,
         isRepoDeleted: true,

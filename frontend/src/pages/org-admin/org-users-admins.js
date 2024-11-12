@@ -5,7 +5,7 @@ import MainPanelTopbar from './main-panel-topbar';
 import AddOrgAdminDialog from '../../components/dialog/org-add-admin-dialog';
 import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
 import { gettext, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -25,7 +25,7 @@ class OrgUsers extends Component {
   };
 
   initOrgAdmin = () => {
-    seafileAPI.orgAdminListOrgUsers(orgID, true).then(res => {
+    orgAdminAPI.orgAdminListOrgUsers(orgID, true).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
@@ -37,7 +37,7 @@ class OrgUsers extends Component {
   };
 
   toggleOrgAdminDelete = (email, username) => {
-    seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
@@ -51,7 +51,7 @@ class OrgUsers extends Component {
   };
 
   toggleRevokeAdmin = (email) => {
-    seafileAPI.orgAdminSetOrgAdmin(orgID, email, false).then(res => {
+    orgAdminAPI.orgAdminSetOrgAdmin(orgID, email, false).then(res => {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
@@ -76,7 +76,7 @@ class OrgUsers extends Component {
   };
 
   changeStatus = (email, isActive) => {
-    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+    orgAdminAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgAdminUsers.map(item => {
         if (item.email == email) {
           item['is_active'] = res.data['is_active'];
