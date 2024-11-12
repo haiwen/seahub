@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
@@ -205,7 +205,7 @@ class OrgGroupsSearchGroups extends Component {
   }
 
   getItems = () => {
-    seafileAPI.orgAdminSearchGroup(orgID, this.state.query.trim()).then(res => {
+    orgAdminAPI.orgAdminSearchGroup(orgID, this.state.query.trim()).then(res => {
       let groupList = res.data.group_list.map(item => {
         return new OrgGroupInfo(item);
       });
@@ -222,7 +222,7 @@ class OrgGroupsSearchGroups extends Component {
   };
 
   deleteGroupItem = (group) => {
-    seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
       this.setState({
         orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
       });

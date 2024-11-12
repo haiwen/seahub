@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -23,7 +23,7 @@ class OrgGroupInfo extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetGroup(orgID, this.props.groupID).then((res) => {
+    orgAdminAPI.orgAdminGetGroup(orgID, this.props.groupID).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));

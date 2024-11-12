@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Selector from '../../components/single-selector';
@@ -58,7 +58,7 @@ class UserItem extends React.Component {
   toggleResetPW = () => {
     const { email } = this.props.user;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
-    seafileAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
+    orgAdminAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
       toaster.success(res.data.reset_tip);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

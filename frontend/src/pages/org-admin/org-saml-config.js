@@ -5,7 +5,7 @@ import MainPanelTopbar from './main-panel-topbar';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import { gettext, orgID, serviceURL } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import Section from './section';
 import OrgSamlConfigInput from './input-item';
@@ -27,7 +27,7 @@ class OrgSAMLConfig extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetSamlConfig(orgID).then((res) => {
+    orgAdminAPI.orgAdminGetSamlConfig(orgID).then((res) => {
       this.setState({
         loading: false,
         samlConfigID: res.data.saml_config.id,
@@ -53,7 +53,7 @@ class OrgSAMLConfig extends Component {
     if (changeType === 'domain') domain = value;
     if (changeType === 'idpCertificate') idpCertificate = value;
 
-    seafileAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl, domain, idpCertificate).then((res) => {
+    orgAdminAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl, domain, idpCertificate).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
         metadataUrl: res.data.saml_config.metadata_url,
@@ -71,7 +71,7 @@ class OrgSAMLConfig extends Component {
 
   verifyDomain = () => {
     const { domain } = this.state;
-    seafileAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
+    orgAdminAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
       this.setState({ domainVerified: res.data.domain_verified });
       toaster.success(gettext('Domain verified'));
     }).catch((error) => {

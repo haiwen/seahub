@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, orgID } from '../../utils/constants';
 import toaster from '../../components/toast';
 import UserItem from './org-user-item';
@@ -90,7 +90,7 @@ class OrgUsersSearchUsers extends Component {
   }
 
   getItems = () => {
-    seafileAPI.orgAdminSearchUser(orgID, this.state.query.trim()).then(res => {
+    orgAdminAPI.orgAdminSearchUser(orgID, this.state.query.trim()).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
@@ -107,7 +107,7 @@ class OrgUsersSearchUsers extends Component {
   };
 
   deleteUser = (email, username) => {
-    seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
+    orgAdminAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let newUserList = this.state.orgUsers.filter(item => {
         return item.email != email;
       });
@@ -144,7 +144,7 @@ class OrgUsersSearchUsers extends Component {
   };
 
   changeStatus = (email, isActive) => {
-    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+    orgAdminAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgUsers.map(item => {
         if (item.email == email) {
           item['is_active'] = res.data['is_active'];

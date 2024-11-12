@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import ModalPortal from '../../../components/modal-portal';
@@ -34,7 +34,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   listOrgGroupRepo = (groupID) => {
-    seafileAPI.orgAdminListGroupRepos(orgID, groupID).then(res => {
+    orgAdminAPI.orgAdminListGroupRepos(orgID, groupID).then(res => {
       this.setState({ repos: res.data.libraries });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

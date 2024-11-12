@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
@@ -32,7 +32,7 @@ class OrgWebSettings extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgInfo().then((res) => {
+    orgAdminAPI.orgAdminGetOrgInfo().then((res) => {
       this.setState({
         loading: false,
         config_dict: res.data,
@@ -50,7 +50,7 @@ class OrgWebSettings extends Component {
   }
 
   updateName = (key, newOrgName) => {
-    seafileAPI.orgAdminUpdateName(orgID, newOrgName).then((res) => {
+    orgAdminAPI.orgAdminUpdateName(orgID, newOrgName).then((res) => {
       this.setState({
         config_dict: res.data
       });
@@ -62,7 +62,7 @@ class OrgWebSettings extends Component {
   };
 
   updateLogo = (file) => {
-    seafileAPI.orgAdminUpdateLogo(orgID, file).then((res) => {
+    orgAdminAPI.orgAdminUpdateLogo(orgID, file).then((res) => {
       this.setState({
         logoPath: res.data.logo_path
       });
@@ -74,7 +74,7 @@ class OrgWebSettings extends Component {
   };
 
   orgSaveSetting = (key, value) => {
-    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+    orgAdminAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       toaster.success(gettext('System settings updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

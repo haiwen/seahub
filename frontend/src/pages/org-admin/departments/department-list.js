@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/org-add-department-dialog';
@@ -30,7 +30,7 @@ class OrgDepartmentsList extends React.Component {
   }
 
   listDepartGroups = () => {
-    seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
+    orgAdminAPI.orgAdminListDepartGroups(orgID).then(res => {
       this.setState({ groups: res.data.data });
     });
   };

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Link } from '@gatsbyjs/reach-router';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -57,7 +57,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   listOrgMembers = (groupID) => {
-    seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
+    orgAdminAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
       this.setState({
         members: res.data.members,
         groups: res.data.groups,
