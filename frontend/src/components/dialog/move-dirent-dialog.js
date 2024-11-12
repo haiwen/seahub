@@ -94,10 +94,10 @@ class MoveDirent extends React.Component {
 
   moveItems = () => {
     let { repoID } = this.props;
-    let { repo, selectedPath } = this.state;
+    let { selectedRepo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
 
-    if (!repo || selectedPath === '') {
+    if (!selectedRepo || selectedPath === '') {
       this.setErrMessage(message);
       return;
     }
@@ -116,7 +116,7 @@ class MoveDirent extends React.Component {
     }
 
     // move dirents to current path
-    if (selectedPath && selectedPath === this.props.path && (repo.repo_id === repoID)) {
+    if (selectedPath && selectedPath === this.props.path && (selectedRepo.repo_id === repoID)) {
       this.setErrMessage(message);
       return;
     }
@@ -139,17 +139,17 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    this.props.onItemsMove(repo, selectedPath, true);
+    this.props.onItemsMove(selectedRepo, selectedPath, true);
     this.toggle();
   };
 
   moveItem = () => {
     let { repoID } = this.props;
-    let { repo, selectedPath } = this.state;
+    let { selectedRepo, selectedPath } = this.state;
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
-    if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
+    if (!selectedRepo || (selectedRepo.repo_id === repoID && selectedPath === '')) {
       this.setErrMessage(message);
       return;
     }
@@ -161,7 +161,7 @@ class MoveDirent extends React.Component {
     }
 
     // copy the dirent to current path
-    if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
+    if (selectedPath && this.props.path === selectedPath && selectedRepo.repo_id === repoID) {
       this.setErrMessage(message);
       return;
     }
@@ -175,7 +175,7 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    this.props.onItemMove(repo, this.props.dirent, selectedPath, this.props.path, true);
+    this.props.onItemMove(selectedRepo, this.props.dirent, selectedPath, this.props.path, true);
     this.toggle();
   };
 
