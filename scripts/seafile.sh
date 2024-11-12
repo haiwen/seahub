@@ -142,6 +142,7 @@ function start_seafile_server () {
     echo "Starting seafile server, please wait ..."
 
     mkdir -p $TOPDIR/logs
+    mkdir -p $TOPDIR/pids
 
     # seaf-server
     LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
