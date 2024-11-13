@@ -53,7 +53,7 @@ const Map = () => {
         mapRef.current.setCenter({ lng: point.lng, lat: point.lat });
       }
     });
-    let geolocationControl = new GeolocationControl();
+    const geolocationControl = new GeolocationControl();
     mapRef.current.addControl(geolocationControl);
     mapRef.current.addControl(navigation);
   }, []);
@@ -98,11 +98,10 @@ const Map = () => {
     };
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        addMarker(position.coords.longitude, position.coords.latitude);
-      }, () => {
-        addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
-      });
+      navigator.geolocation.getCurrentPosition(
+        position => addMarker(position.coords.longitude, position.coords.latitude), 
+        () => addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat)
+      );
     } else {
       addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
     }
@@ -120,15 +119,17 @@ const Map = () => {
       });
     }
     if (!isValidPosition(mapCenter?.lng, mapCenter?.lat)) return;
+
     const gcPosition = wgs84_to_gcj02(mapCenter.lng, mapCenter.lat);
     const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
     const { lng, lat } = bdPosition;
+
     mapRef.current = new window.BMap.Map('sf-metadata-map-container', { enableMapClick: false });
     const point = new window.BMap.Point(lng, lat);
     mapRef.current.centerAndZoom(point, DEFAULT_ZOOM);
     mapRef.current.enableScrollWheelZoom(true);
-    addMapController();
 
+    addMapController();
     initializeUserMarker();
     initializeClusterer();
 
@@ -136,7 +137,6 @@ const Map = () => {
     renderMarkersBatch();
   }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch]);
 
-  // init map
   useEffect(() => {
     if (mapInfo) {
       if (mapInfo.type === MAP_TYPE.B_MAP) {
@@ -154,8 +154,8 @@ const Map = () => {
   }, [mapInfo, renderBaiduMap]);
 
   return (
-    <div className='w-100 h-100 sf-metadata-view-map'>
-      {isLoading ? (<Loading />) : (
+    <div className="w-100 h-100 sf-metadata-view-map">
+      {isLoading ? <Loading /> : (
         <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
       )}
     </div>
