@@ -5,7 +5,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
-  enableTC, sideNavFooterCustomHtml,
+  enableTC, sideNavFooterCustomHtml, enableShowAbout,
   canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -297,12 +297,14 @@ class MainSideNav extends React.Component {
                     <span className="nav-text">{gettext('Clients')}</span>
                   </a>
                 </li>
+                {enableShowAbout &&
                 <li className='nav-item'>
                   <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
                     <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('About')}</span>
                   </a>
                 </li>
+                }
               </ul>
             )
             }

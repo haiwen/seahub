@@ -1107,7 +1107,7 @@ def react_fake_view(request, **kwargs):
         enable_encryped_lib = int(not org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY])
     if enable_clean_trash:
         enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
-    
+
     return_dict = {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1147,7 +1147,9 @@ def react_fake_view(request, **kwargs):
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
-        'enable_file_tags': settings.ENABLE_FILE_TAGS
+        'enable_file_tags': settings.ENABLE_FILE_TAGS,
+        'enable_show_about': settings.ENABLE_SHOW_ABOUT
+
     }
 
     if settings.ENABLE_METADATA_MANAGEMENT:
