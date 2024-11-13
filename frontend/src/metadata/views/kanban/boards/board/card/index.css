@@ -34,6 +34,10 @@
   margin-bottom: 0;
 }
 
+.sf-metadata-kanban-card .sf-metadata-kanban-card-record .file-name-formatter-wrapper {
+  width: fit-content;
+}
+
 .sf-metadata-kanban-card .sf-metadata-kanban-card-record .sf-metadata-kanban-card-record-name {
   margin-bottom: 4px;
   color: #666;
@@ -68,7 +72,7 @@
 }
 
 .sf-metadata-kanban-card .file-name-formatter:not(.sf-metadata-image-file-formatter) {
-  margin-left: -4px;
+  transform: translateX(-4px);
 }
 
 .sf-metadata-kanban-card .sf-metadata-special-file-name-formatter:not(.sf-metadata-image-file-formatter) {
@@ -77,6 +81,16 @@
 
 .sf-metadata-kanban-card .file-name-formatter .sf-metadata-file-icon {
   transform: translateY(-1px);
+}
+
+.sf-metadata-kanban-card .sf-metadata-ui.file-name-formatter .sf-metadata-file-name {
+  text-decoration: none;
+  flex: none;
+}
+
+.sf-metadata-kanban-card .sf-metadata-ui.file-name-formatter .sf-metadata-file-name:hover {
+  text-decoration: underline;
+  text-decoration-color: #212529;
 }
 
 .sf-metadata-kanban-card .sf-metadata-kanban-card-record .collaborators-formatter {

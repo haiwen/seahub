@@ -23,6 +23,7 @@ const Board = ({
   deleteOption,
   onFreezed,
   onUnFreezed,
+  onCloseSettings,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
@@ -82,6 +83,7 @@ const Board = ({
               record={record}
               titleColumn={titleColumn}
               displayColumns={displayColumns}
+              onCloseSettings={onCloseSettings}
             />
           );
           if (readonly) return CardElement;
@@ -110,6 +112,7 @@ Board.propTypes = {
   deleteOption: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,
+  onCloseSettings: PropTypes.func.isRequired,
 };
 
 export default Board;

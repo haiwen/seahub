@@ -2348,6 +2348,7 @@ class LibContentView extends React.Component {
                       sortItems={this.sortItems}
                       viewId={this.state.viewId}
                       viewType={this.props.viewType}
+                      onCloseDetail={this.closeDirentDetail}
                     />
                   </div>
                 }

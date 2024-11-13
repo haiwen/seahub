@@ -9,7 +9,8 @@ const KanbanViewToolBar = ({
   view,
   collaborators,
   modifyFilters,
-  modifySorts
+  modifySorts,
+  closeDetail,
 }) => {
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
@@ -22,6 +23,7 @@ const KanbanViewToolBar = ({
   }, [viewColumns]);
 
   const onToggleKanbanSetting = () => {
+    closeDetail();
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS);
   };
 

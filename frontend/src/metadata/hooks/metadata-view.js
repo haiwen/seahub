@@ -134,6 +134,7 @@ export const MetadataViewProvider = ({
         renameFileCallback: params.renameFileCallback,
         updateCurrentDirent: params.updateCurrentDirent,
         closeDirentDetail: params.closeDirentDetail,
+        showDirentDetail: params.showDirentDetail,
       }}
     >
       {children}

@@ -52,7 +52,7 @@ const Kanban = () => {
 
   return (
     <div className="sf-metadata-view-kanban">
-      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} />
+      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} onCloseSettings={closeSettings} />
       <div className="sf-metadata-view-setting-panel sf-metadata-view-kanban-setting h-100">
         {isShowSettings && (
           <Settings

@@ -14,7 +14,7 @@ import Board from './board';
 
 import './index.css';
 
-const Boards = ({ modifyRecord, modifyColumnData }) => {
+const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
 
   const { metadata, store } = useMetadataView();
@@ -193,6 +193,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
                   deleteOption={deleteOption}
                   onFreezed={onFreezed}
                   onUnFreezed={onUnFreezed}
+                  onCloseSettings={onCloseSettings}
                 />
               );
             })}
@@ -207,6 +208,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
 Boards.propTypes = {
   modifyRecord: PropTypes.func.isRequired,
   modifyColumnData: PropTypes.func.isRequired,
+  onCloseSettings: PropTypes.func.isRequired,
 };
 
 export default Boards;
