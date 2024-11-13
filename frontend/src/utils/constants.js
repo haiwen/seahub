@@ -103,7 +103,7 @@ export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeCo
 
 export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 
-export const enableShowAbout = window.app.pageOptions.enableShowAbout || false;
+export const enableShowAbout = window.app.pageOptions.enableShowAbout;
 
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
