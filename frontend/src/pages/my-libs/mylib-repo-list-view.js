@@ -8,7 +8,6 @@ import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ContextMenu from '../../components/context-menu/context-menu';
 import { Utils } from '../../utils/utils';
 import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
-import NewLibrary from './new-library';
 
 const propTypes = {
   sortBy: PropTypes.string.isRequired,
@@ -117,41 +116,22 @@ class MylibRepoListView extends React.Component {
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     return currentViewMode == LIST_MODE ? (
-      <>
-        <table className={inAllLibs ? 'table-thead-hidden' : ''}>
-          <thead>
-            <tr>
-              <th width="4%"></th>
-              <th width="3%">
-                <span className="sr-only">{gettext('Library Type')}</span>
-              </th>
-              <th width={showStorageBackend ? '36%' : '35%'}>
-                <a className="d-block table-sort-op" href="#" onClick={this.sortByName}>
-                  {gettext('Name')} {this.props.sortBy === 'name' && sortIcon}
-                </a>
-              </th>
-              <th width="10%">
-                <span className="sr-only">{gettext('Actions')}</span>
-              </th>
-              <th width={showStorageBackend ? '15%' : '14%'}>
-                <a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>
-                  {gettext('Size')} {this.props.sortBy === 'size' && sortIcon}
-                </a>
-              </th>
-              {showStorageBackend ? <th width="17%">{gettext('Storage Backend')}</th> : null}
-              <th width={showStorageBackend ? '15%' : '34%'}>
-                <a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>
-                  {gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}
-                </a>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderRepoListView()}
-          </tbody>
-        </table>
-        {!inAllLibs && <NewLibrary onClick={this.props.toggleCreateRepoDialog} />}
-      </>
+      <table className={inAllLibs ? 'table-thead-hidden' : ''}>
+        <thead>
+          <tr>
+            <th width="4%"></th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width={showStorageBackend ? '36%' : '35%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width={showStorageBackend ? '15%' : '14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
+            {showStorageBackend ? <th width="17%">{gettext('Storage Backend')}</th> : null}
+            <th width={showStorageBackend ? '15%' : '34%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderRepoListView()}
+        </tbody>
+      </table>
     ) : (
       <div className="d-flex justify-content-between flex-wrap">
         {this.renderRepoListView()}
