@@ -145,8 +145,7 @@ class GroupView extends React.Component {
           return (
             <EmptyTip
               title={gettext('No libraries')}
-              text={gettext('You can create libraries by clicking the "New Library" button above.')}
-              className="m-0 pt-0 pb-8"
+              text={gettext('You can create libraries by clicking the "New Library" button in the menu bar.')}
             />
           );
         }
