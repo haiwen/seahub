@@ -143,13 +143,11 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     });
   }, [config, wikiId]);
 
-  const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
-
   return (
     <>
       <div className="wiki2-search" onClick={() => setIsModalOpen(true)}>
         <i className="sf3-font sf3-font-search"></i>
-        <span>{`${gettext('Search')} (${controlKey} + k)`}</span>
+        <span>{gettext('Search')}</span>
       </div>
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
