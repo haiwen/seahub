@@ -88,18 +88,23 @@ const Map = () => {
   }, []);
 
   const initializeUserMarker = useCallback(() => {
-    if (window.BMap) {
-      const imageUrl = `${mediaUrl}/img/marker.png`;
-      let { lng, lat } = DEFAULT_POSITION;
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          lng = position.coords.longitude;
-          lat = position.coords.latitude;
-        });
-      }
+    if (!window.BMap) return;
+
+    const imageUrl = `${mediaUrl}/img/marker.png`;
+    const addMarker = (lng, lat) => {
       const point = new window.BMap.Point(lng, lat);
       const avatarMarker = customAvatarOverlay(point, appAvatarURL, imageUrl);
       mapRef.current.addOverlay(avatarMarker);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        addMarker(position.coords.longitude, position.coords.latitude);
+      }, () => {
+        addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
+      });
+    } else {
+      addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
     }
   }, []);
 
