@@ -6,7 +6,7 @@ const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
     return '';
   }
 
-  const title = Utils.getFileName(item.path);
+  const title = Utils.getFileName(item.path) || item.repo.repo_name;
 
   const handleItemClick = () => {
     onItemClick(item.repo, item.path);
