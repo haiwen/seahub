@@ -439,7 +439,7 @@ def format_sdoc_notice(sdoc_queryset, sdoc_notice, include_detail_link=False):
         }
         message = '%s "%s"' % (message, detail.get('reply', ''))
         if is_resolved:
-            message = _('%(author)s marks the comment "%(resolve_comment)s" as resolved in document %(sdoc_name)s\n') % {
+            message = _('%(author)s has marked the comment "%(resolve_comment)s" as resolved in document %(sdoc_name)s\n') % {
                 'author': escape(email2nickname(author)),
                 'resolve_comment': resolve_comment,
                 'sdoc_name': sdoc_name,
