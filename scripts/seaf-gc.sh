@@ -16,6 +16,7 @@ IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafe
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
+export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
 
 script_name=$0
 function usage () {
@@ -50,6 +51,34 @@ function check_python_executable() {
             echo
             exit 1
         fi
+    fi
+}
+
+function set_env_config () {
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        if [ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/.env" ]; then
+            echo "Error: .env file not found."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+
+        # load the .env file
+        source "${SEAFILE_CENTRAL_CONF_DIR}/.env"
+
+        if [ -z "${JWT_PRIVATE_KEY}" ]; then
+            echo "Error: JWT_PRIVATE_KEY not found in .env file."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+        export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_MYSQL_DB_CCNET_DB_NAME=${SEAFILE_MYSQL_DB_CCNET_DB_NAME}
+        export SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_MYSQL_DB_SEAFILE_DB_NAME}
+        export SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT}
     fi
 }
 
@@ -102,6 +131,7 @@ function run_seaf_gc () {
     fi
 
     validate_seafile_data_dir;
+    set_env_config;
 
     echo "Starting seafserv-gc, please wait ..."
 
