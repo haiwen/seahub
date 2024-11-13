@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import Wiki2SearchResult from './wiki2-search-result';
-import { isModF } from '../../metadata/utils/hotkey';
 
 import './wiki2-search.css';
 
@@ -28,7 +27,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   let highlightRef = useRef(null);
 
   const onDocumentKeyDown = useCallback((e) => {
-    if (!isModalOpen && isModF(e)) {
+    if (!isModalOpen && isHotkey('mod+k')(e)) {
       e.preventDefault();
       e.stopPropagation();
       setIsModalOpen(true);
