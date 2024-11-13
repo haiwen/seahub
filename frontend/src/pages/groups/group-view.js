@@ -20,7 +20,6 @@ import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
-import NewLibrary from '../my-libs/new-library';
 
 import '../../css/group-view.css';
 
@@ -388,7 +387,7 @@ class GroupView extends React.Component {
   };
 
   render() {
-    const { errMessage, emptyTip, currentGroup, isDepartmentGroup, isMembersDialogOpen, isStaff } = this.state;
+    const { errMessage, emptyTip, currentGroup, isDepartmentGroup, isMembersDialogOpen } = this.state;
 
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
@@ -442,24 +441,19 @@ class GroupView extends React.Component {
               {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <>
-                  <SharedRepoListView
-                    repoList={this.state.repoList}
-                    hasNextPage={this.state.hasNextPage}
-                    currentGroup={this.state.currentGroup}
-                    sortBy={this.state.sortBy}
-                    sortOrder={this.state.sortOrder}
-                    sortItems={this.sortItems}
-                    onItemUnshare={this.onItemUnshare}
-                    onItemDelete={this.onItemDelete}
-                    onItemRename={this.onItemRename}
-                    onMonitorRepo={this.onMonitorRepo}
-                    onTransferRepo={this.onItemTransfer}
-                  />
-                  {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) &&
-                    <NewLibrary onClick={this.onCreateRepoToggle} />
-                  }
-                </>
+                <SharedRepoListView
+                  repoList={this.state.repoList}
+                  hasNextPage={this.state.hasNextPage}
+                  currentGroup={this.state.currentGroup}
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  sortItems={this.sortItems}
+                  onItemUnshare={this.onItemUnshare}
+                  onItemDelete={this.onItemDelete}
+                  onItemRename={this.onItemRename}
+                  onMonitorRepo={this.onMonitorRepo}
+                  onTransferRepo={this.onItemTransfer}
+                />
               }
             </div>
           </div>

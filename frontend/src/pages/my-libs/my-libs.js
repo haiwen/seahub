@@ -168,7 +168,6 @@ class MyLibraries extends Component {
                   onTransferRepo={this.onTransferRepo}
                   onMonitorRepo={this.onMonitorRepo}
                   sortRepoList={this.sortRepoList}
-                  toggleCreateRepoDialog={this.toggleCreateRepoDialog}
                 />
               }
             </div>
