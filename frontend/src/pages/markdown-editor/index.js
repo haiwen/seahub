@@ -211,13 +211,9 @@ class MarkdownEditor extends React.Component {
     const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);
     const { mtime, size, starred, permission, last_modifier_name, id } = fileInfoRes.data;
     const lastModifier = last_modifier_name;
-
-    // get file download url
-    const fileDownloadUrlRes = await seafileAPI.getFileDownloadLink(repoID, filePath);
-    const downloadUrl = fileDownloadUrlRes.data;
-
+    const { rawPath } = window.app.pageOptions;    
     // get file content
-    const fileContentRes = await seafileAPI.getFileContent(downloadUrl);
+    const fileContentRes = await seafileAPI.getFileContent(rawPath);
     const markdownContent = fileContentRes.data;
 
     // init permission

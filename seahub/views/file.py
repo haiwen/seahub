@@ -643,9 +643,10 @@ def view_lib_file(request, repo_id, path):
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
 
+    if filetype in [VIDEO, PDF, MARKDOWN]:
+        raw_path = gen_file_get_url_new(repo_id, path)
+
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
-        if filetype == VIDEO:
-            raw_path = gen_file_get_url_new(repo_id, path)
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
@@ -746,6 +747,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
+        return_dict['raw_path'] = raw_path
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
@@ -1231,8 +1233,8 @@ def view_shared_file(request, fileshare):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
 
-    if filetype == VIDEO:
-        raw_path = gen_file_get_url_new(repo_id, path)
+    if filetype in [VIDEO, PDF, MARKDOWN]:
+        raw_path = gen_file_get_url_by_sharelink(fileshare.token)
 
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, path)
