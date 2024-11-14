@@ -168,6 +168,10 @@
   position: relative;
 }
 
+.repos-container {
+  margin-bottom: 10rem;
+}
+
 .table-drop-active::before {
   border: 1px solid rgba(69, 170, 242);
   content: '';

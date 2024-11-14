@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { gettext, storages } from '../../utils/constants';
 import MylibRepoListItem from './mylib-repo-list-item';
@@ -116,7 +117,7 @@ class MylibRepoListView extends React.Component {
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     return currentViewMode == LIST_MODE ? (
-      <table className={inAllLibs ? 'table-thead-hidden' : ''}>
+      <table className={classNames({ 'table-thead-hidden': inAllLibs }, { 'repos-container': !inAllLibs })}>
         <thead>
           <tr>
             <th width="4%"></th>

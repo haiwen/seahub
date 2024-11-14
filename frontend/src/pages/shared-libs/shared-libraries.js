@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import cookie from 'react-cookies';
 import { Link, navigate } from '@gatsbyjs/reach-router';
@@ -140,7 +141,7 @@ class Content extends Component {
       );
       const content = currentViewMode == LIST_MODE ? (
         <>
-          <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
+          <table className={classNames({ 'repos-container': !inAllLibs }, { 'table-thead-hidden': !(isDesktop && !theadHidden) })}>
             {isDesktop ? desktopThead : <LibsMobileThead inAllLibs={inAllLibs} />}
             <tbody>
               {itemsContent}
