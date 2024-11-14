@@ -24,15 +24,15 @@ import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
-import SharedLibraries from './pages/shared-libs/shared-libs';
+import SharedLibraries from './pages/shared-libs/shared-libraries';
 import ShareWithOCM from './pages/share-with-ocm/shared-with-ocm';
 import OCMViaWebdav from './pages/ocm-via-webdav/ocm-via-webdav';
 import OCMRepoDir from './pages/share-with-ocm/remote-dir-view';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
-import PublicSharedView from './pages/shared-with-all';
+import SharedWithAll from './pages/shared-with-all';
 import LibContentView from './pages/lib-content-view/lib-content-view';
-import Group from './pages/groups/group-view';
+import GroupView from './pages/groups/group-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
@@ -333,7 +333,7 @@ class App extends Component {
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
               <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
               <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
-              <PublicSharedView path={siteRoot + 'org/'} />
+              <SharedWithAll path={siteRoot + 'org/'} />
               <Wikis
                 path={siteRoot + 'published'}
                 sidePanelRate={sidePanelRate}
@@ -343,7 +343,7 @@ class App extends Component {
               <InvitationsView path={siteRoot + 'invitations/'} />
               <FilesActivities path={siteRoot + 'dashboard'} />
               <MyFileActivities path={siteRoot + 'my-activities'} />
-              <Group path={siteRoot + 'group/:groupID'} onGroupChanged={this.onGroupChanged} />
+              <GroupView path={siteRoot + 'group/:groupID'} onGroupChanged={this.onGroupChanged} />
               <LinkedDevices path={siteRoot + 'linked-devices'} />
               <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
               <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />

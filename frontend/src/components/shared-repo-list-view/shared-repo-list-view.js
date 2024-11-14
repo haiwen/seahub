@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SharedRepoListItem from './shared-repo-list-item';
@@ -147,12 +148,12 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { theadHidden = false, currentViewMode = LIST_MODE, currentGroup, libraryType } = this.props;
+    const { theadHidden = false, currentViewMode = LIST_MODE, currentGroup, libraryType, inAllLibs } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     const content = currentViewMode == LIST_MODE ? (
       <>
-        <table className={theadHidden ? 'table-thead-hidden' : ''}>
+        <table className={classNames({ 'table-thead-hidden': theadHidden }, { 'repos-container': !inAllLibs })}>
           <thead>
             <tr>
               <th width="4%"></th>

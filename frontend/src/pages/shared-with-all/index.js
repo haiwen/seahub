@@ -22,7 +22,7 @@ const propTypes = {
   repoList: PropTypes.array,
 };
 
-class PublicSharedView extends React.Component {
+class SharedWithAll extends React.Component {
 
   constructor(props) {
     super(props);
@@ -274,6 +274,6 @@ class PublicSharedView extends React.Component {
   }
 }
 
-PublicSharedView.propTypes = propTypes;
+SharedWithAll.propTypes = propTypes;
 
-export default PublicSharedView;
+export default SharedWithAll;

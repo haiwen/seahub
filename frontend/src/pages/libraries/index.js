@@ -14,7 +14,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
-import SharedLibs from '../../pages/shared-libs/shared-libs';
+import SharedLibraries from '../shared-libs/shared-libraries';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
@@ -247,7 +247,7 @@ class Libraries extends Component {
   };
 
   render() {
-    const { isLoading, currentViewMode, sortBy, sortOrder } = this.state;
+    const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
 
     const sortOptions = this.sortOptions.map(item => {
@@ -327,7 +327,7 @@ class Libraries extends Component {
                   </div>
                 )}
                 <div className="pb-3">
-                  <SharedLibs
+                  <SharedLibraries
                     repoList={this.state.sharedRepoList}
                     inAllLibs={true}
                     currentViewMode={currentViewMode}
@@ -342,21 +342,19 @@ class Libraries extends Component {
                     />
                   </div>
                 }
-                <div className="group-list-panel">
-                  {this.state.groupList.length > 0 && (
-                    this.state.groupList.map((group, index) => {
-                      return (
-                        <GroupItem
-                          key={index}
-                          inAllLibs={true}
-                          group={group}
-                          updateGroup={this.updateGroup}
-                          onTransferRepo={this.onGroupTransferRepo}
-                          currentViewMode={currentViewMode}
-                        />
-                      );
-                    })
-                  )}
+                <div className="repos-container">
+                  {groupList.length > 0 && groupList.map((group) => {
+                    return (
+                      <GroupItem
+                        key={group.id}
+                        inAllLibs={true}
+                        group={group}
+                        updateGroup={this.updateGroup}
+                        onTransferRepo={this.onGroupTransferRepo}
+                        currentViewMode={currentViewMode}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             }
