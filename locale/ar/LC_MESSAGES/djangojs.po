@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 19:01+0800\n"
+"POT-Creation-Date: 2024-11-14 17:09+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2023-2024\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -253,8 +253,8 @@ msgstr "طرق العرض"
 #: frontend/src/components/main-side-nav.js:221
 #: frontend/src/components/main-side-nav.js:223
 #: frontend/src/pages/libraries/index.js:264
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:78
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:81
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:77
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:161
 #: frontend/src/pages/sys-admin/info.js:118
 #: frontend/src/pages/sys-admin/repos/repos.js:80
@@ -331,12 +331,12 @@ msgstr "حسب الزمن تنازلياً"
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:198
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:251
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:252
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:258
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:259
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:260
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:107
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:108
+#: frontend/src/pages/org-admin/org-groups.js:331
 #: frontend/src/pages/org-admin/org-groups.js:332
-#: frontend/src/pages/org-admin/org-groups.js:333
 #: frontend/src/pages/org-admin/org-links.js:212
 #: frontend/src/pages/org-admin/org-links.js:213
 #: frontend/src/pages/org-admin/org-user-item.js:181
@@ -355,11 +355,11 @@ msgstr "حسب الزمن تنازلياً"
 #: frontend/src/pages/share-admin/share-links.js:348
 #: frontend/src/pages/share-admin/upload-links.js:176
 #: frontend/src/pages/share-admin/upload-links.js:177
-#: frontend/src/pages/shared-libs/shared-libs.js:386
-#: frontend/src/pages/shared-libs/shared-libs.js:387
-#: frontend/src/pages/shared-libs/shared-libs.js:437
-#: frontend/src/pages/shared-libs/shared-libs.js:438
-#: frontend/src/pages/shared-libs/shared-libs.js:485
+#: frontend/src/pages/shared-libs/shared-libraries.js:387
+#: frontend/src/pages/shared-libs/shared-libraries.js:388
+#: frontend/src/pages/shared-libs/shared-libraries.js:438
+#: frontend/src/pages/shared-libs/shared-libraries.js:439
+#: frontend/src/pages/shared-libs/shared-libraries.js:486
 #: frontend/src/pages/starred/starred.js:212
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:120
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:121
@@ -390,7 +390,7 @@ msgstr "معلومات الاتصال مطلوبة."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:37
 msgid "Abuse report added"
-msgstr ""
+msgstr "تمت إضافة تقرير إساءة الاستخدام"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:68
 #: frontend/src/components/shared-file-view/shared-file-view.js:137
@@ -435,6 +435,7 @@ msgstr "الوصف"
 #: frontend/src/components/dialog/add-wiki-dialog.js:108
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:74
 #: frontend/src/components/dialog/change-group-dialog.js:39
+#: frontend/src/components/dialog/clean-trash.js:79
 #: frontend/src/components/dialog/common-operation-confirmation-dialog.js:34
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:35
@@ -486,9 +487,9 @@ msgstr "الوصف"
 #: frontend/src/components/dialog/reset-webdav-password.js:89
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:66
 #: frontend/src/components/dialog/save-shared-file-dialog.js:74
-#: frontend/src/components/dialog/select-dirent-body.js:238
+#: frontend/src/components/dialog/select-dirent-body.js:190
 #: frontend/src/components/dialog/set-org-user-contact-email.js:65
-#: frontend/src/components/dialog/set-org-user-default-quota.js:78
+#: frontend/src/components/dialog/set-org-user-default-quota.js:77
 #: frontend/src/components/dialog/set-org-user-name.js:67
 #: frontend/src/components/dialog/set-org-user-quota.js:79
 #: frontend/src/components/dialog/set-webdav-password.js:89
@@ -519,11 +520,12 @@ msgstr "الوصف"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:47
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:60
-#: frontend/src/components/dialog/transfer-dialog.js:225
+#: frontend/src/components/dialog/transfer-dialog.js:226
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:73
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:85
 #: frontend/src/components/dialog/view-link-dialog.js:37
+#: frontend/src/components/dialog/wiki-clean-trash.js:79
 #: frontend/src/components/file-uploader/upload-list-item.js:144
 #: frontend/src/components/send-link.js:112
 #: frontend/src/components/share-link-panel/link-details.js:232
@@ -557,7 +559,7 @@ msgstr "إلغاء"
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:75
 #: frontend/src/components/dialog/change-group-dialog.js:40
 #: frontend/src/components/dialog/change-repo-password-dialog.js:139
-#: frontend/src/components/dialog/clean-trash.js:77
+#: frontend/src/components/dialog/clean-trash.js:80
 #: frontend/src/components/dialog/convert-wiki-dialog.js:105
 #: frontend/src/components/dialog/create-department-repo-dialog.js:95
 #: frontend/src/components/dialog/create-file-dialog.js:109
@@ -600,9 +602,9 @@ msgstr "إلغاء"
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:70
 #: frontend/src/components/dialog/save-shared-file-dialog.js:76
 #: frontend/src/components/dialog/save-shared-file-dialog.js:78
-#: frontend/src/components/dialog/select-dirent-body.js:239
+#: frontend/src/components/dialog/select-dirent-body.js:191
 #: frontend/src/components/dialog/set-org-user-contact-email.js:66
-#: frontend/src/components/dialog/set-org-user-default-quota.js:79
+#: frontend/src/components/dialog/set-org-user-default-quota.js:78
 #: frontend/src/components/dialog/set-org-user-name.js:68
 #: frontend/src/components/dialog/set-org-user-quota.js:80
 #: frontend/src/components/dialog/set-webdav-password.js:90
@@ -637,11 +639,11 @@ msgstr "إلغاء"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:271
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:256
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
-#: frontend/src/components/dialog/transfer-dialog.js:226
+#: frontend/src/components/dialog/transfer-dialog.js:227
 #: frontend/src/components/dialog/transfer-group-dialog.js:74
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:74
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:86
-#: frontend/src/components/dialog/wiki-clean-trash.js:77
+#: frontend/src/components/dialog/wiki-clean-trash.js:80
 #: frontend/src/components/list-and-add-group-members.js:180
 #: frontend/src/components/list-and-add-group-members.js:181
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:199
@@ -712,7 +714,7 @@ msgstr "إضافة موقع ويكي"
 #: frontend/src/components/dialog/trash-dialog.js:252
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:726
 #: frontend/src/components/group-members.js:30
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:160
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:161
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:23
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:77
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:37
@@ -722,20 +724,20 @@ msgstr "إضافة موقع ويكي"
 #: frontend/src/pages/institution-admin/user-list/index.js:108
 #: frontend/src/pages/libraries/index.js:284
 #: frontend/src/pages/my-libs/my-libs-deleted.js:91
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:130
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:125
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:164
 #: frontend/src/pages/org-admin/departments/department-libraries.js:69
 #: frontend/src/pages/org-admin/departments/department-list.js:119
 #: frontend/src/pages/org-admin/departments/department-members.js:178
 #: frontend/src/pages/org-admin/departments/sub-departments.js:128
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:74
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:73
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:64
 #: frontend/src/pages/org-admin/org-admin-list.js:50
 #: frontend/src/pages/org-admin/org-group-info.js:73
 #: frontend/src/pages/org-admin/org-group-members.js:81
 #: frontend/src/pages/org-admin/org-group-repos.js:83
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:156
-#: frontend/src/pages/org-admin/org-groups.js:180
+#: frontend/src/pages/org-admin/org-groups.js:179
 #: frontend/src/pages/org-admin/org-links.js:103
 #: frontend/src/pages/org-admin/org-user-profile.js:136
 #: frontend/src/pages/org-admin/org-user-repos.js:79
@@ -748,7 +750,7 @@ msgstr "إضافة موقع ويكي"
 #: frontend/src/pages/share-admin/upload-links.js:51
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:100
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:38
-#: frontend/src/pages/shared-libs/shared-libs.js:114
+#: frontend/src/pages/shared-libs/shared-libraries.js:115
 #: frontend/src/pages/starred/starred.js:41
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:47
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
@@ -799,7 +801,7 @@ msgstr "خياري"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:96
 #: frontend/src/components/dialog/convert-wiki-dialog.js:92
-#: frontend/src/components/dialog/transfer-dialog.js:188
+#: frontend/src/components/dialog/transfer-dialog.js:189
 msgid "Select a department"
 msgstr "حدد القسم"
 
@@ -876,34 +878,34 @@ msgstr "(على الأقل {placeholder} حرفًا)"
 msgid "New Password Again"
 msgstr "إعادة كلمة المرور الجديدة"
 
-#: frontend/src/components/dialog/clean-trash.js:20
-#: frontend/src/components/dialog/wiki-clean-trash.js:20
+#: frontend/src/components/dialog/clean-trash.js:21
+#: frontend/src/components/dialog/wiki-clean-trash.js:21
 msgid "3 days ago"
 msgstr "قبل 3 أيام"
 
-#: frontend/src/components/dialog/clean-trash.js:21
-#: frontend/src/components/dialog/wiki-clean-trash.js:21
+#: frontend/src/components/dialog/clean-trash.js:22
+#: frontend/src/components/dialog/wiki-clean-trash.js:22
 msgid "1 week ago"
 msgstr "قبل أسبوع"
 
-#: frontend/src/components/dialog/clean-trash.js:22
-#: frontend/src/components/dialog/wiki-clean-trash.js:22
+#: frontend/src/components/dialog/clean-trash.js:23
+#: frontend/src/components/dialog/wiki-clean-trash.js:23
 msgid "1 month ago"
 msgstr "قبل شهر"
 
-#: frontend/src/components/dialog/clean-trash.js:23
-#: frontend/src/components/dialog/wiki-clean-trash.js:23
+#: frontend/src/components/dialog/clean-trash.js:24
+#: frontend/src/components/dialog/wiki-clean-trash.js:24
 msgid "all"
 msgstr "الكل"
 
-#: frontend/src/components/dialog/clean-trash.js:46
-#: frontend/src/components/dialog/wiki-clean-trash.js:46
+#: frontend/src/components/dialog/clean-trash.js:47
+#: frontend/src/components/dialog/wiki-clean-trash.js:47
 msgid "Clean succeeded."
 msgstr "نجح التنظيف."
 
-#: frontend/src/components/dialog/clean-trash.js:62
+#: frontend/src/components/dialog/clean-trash.js:63
 #: frontend/src/components/dialog/trash-dialog.js:197
-#: frontend/src/components/dialog/wiki-clean-trash.js:62
+#: frontend/src/components/dialog/wiki-clean-trash.js:63
 #: frontend/src/pages/org-admin/devices/devices-errors.js:194
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:375
 #: frontend/src/pages/share-admin/share-links.js:604
@@ -915,8 +917,8 @@ msgstr "نجح التنظيف."
 msgid "Clean"
 msgstr "تنظيف"
 
-#: frontend/src/components/dialog/clean-trash.js:65
-#: frontend/src/components/dialog/wiki-clean-trash.js:65
+#: frontend/src/components/dialog/clean-trash.js:66
+#: frontend/src/components/dialog/wiki-clean-trash.js:66
 msgid "Clear files in trash and history："
 msgstr "مسح الملفات في سلة النفايات و السجل التاريخي："
 
@@ -1051,12 +1053,12 @@ msgstr "هل حقا تريد حذف حسابك؟"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:394
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:139
 #: frontend/src/pages/org-admin/departments/group-item.js:55
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:266
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:265
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:198
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:256
 #: frontend/src/pages/org-admin/org-group-repos.js:174
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:114
-#: frontend/src/pages/org-admin/org-groups.js:339
+#: frontend/src/pages/org-admin/org-groups.js:338
 #: frontend/src/pages/org-admin/org-links.js:219
 #: frontend/src/pages/org-admin/org-user-item.js:188
 #: frontend/src/pages/org-admin/org-user-repos.js:170
@@ -1176,18 +1178,18 @@ msgstr "فصل"
 
 #: frontend/src/components/dialog/convert-wiki-dialog.js:81
 msgid "Convert Wiki"
-msgstr ""
+msgstr "تحويل إلى صيغة ويكي Wiki"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:43
 #: frontend/src/components/dialog/copy-dirent-dialog.js:88
-#: frontend/src/components/dialog/move-dirent-dialog.js:54
-#: frontend/src/components/dialog/move-dirent-dialog.js:106
+#: frontend/src/components/dialog/move-dirent-dialog.js:98
+#: frontend/src/components/dialog/move-dirent-dialog.js:150
 msgid "Invalid destination path"
 msgstr "مسار وجهة غير صحيح"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:74
-#: frontend/src/components/dialog/move-dirent-dialog.js:91
-#: frontend/src/components/dialog/move-dirent-dialog.js:127
+#: frontend/src/components/dialog/move-dirent-dialog.js:135
+#: frontend/src/components/dialog/move-dirent-dialog.js:171
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات المتفرعة منه %(des)s"
 
@@ -1204,8 +1206,8 @@ msgid "Copy selected item(s) to:"
 msgstr "نسخ العنصر(العناصر) المحدد(ة) إلى:"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:171
-#: frontend/src/components/dialog/select-dirent-body.js:193
-#: frontend/src/components/file-chooser/repo-list-wrapper.js:81
+#: frontend/src/components/dialog/select-dirent-body.js:144
+#: frontend/src/components/file-chooser/repo-list-wrapper.js:73
 #| msgid "Owned Libraries"
 msgid "Other Libraries"
 msgstr "مكتبات أخرى"
@@ -1232,7 +1234,7 @@ msgstr "نسخ {num} عناصر "
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:32
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:25
 #: frontend/src/metadata/utils/validate/view.js:9
-#: frontend/src/utils/utils.js:1902
+#: frontend/src/utils/utils.js:1916
 msgid "Name is required"
 msgstr "الاسم مطلوب"
 
@@ -1252,7 +1254,7 @@ msgstr "مكتبة القسم الجديد"
 #: frontend/src/components/dialog/rename-dialog.js:58
 #: frontend/src/components/dialog/rename-dirent.js:58
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:140
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:85
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:86
 #: frontend/src/metadata/views/table/index.js:92
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr "الاسم \"{name}\" مستخدم بالفعل. الرجاء اختيار اسم مختلف."
@@ -1311,10 +1313,9 @@ msgstr "كلمات المرور غير متطابقة"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:59
 #: frontend/src/pages/groups/group-item.js:126
-#: frontend/src/pages/groups/group-view.js:366
+#: frontend/src/pages/groups/group-view.js:364
 #: frontend/src/pages/libraries/index.js:301
 #: frontend/src/pages/my-libs/my-libs.js:148
-#: frontend/src/pages/my-libs/new-library.js:12
 #: frontend/src/pages/org-admin/departments/department.js:99
 #: frontend/src/pages/shared-with-all/index.js:235
 #: frontend/src/pages/sys-admin/departments/department.js:106
@@ -1327,7 +1328,7 @@ msgid "Template"
 msgstr "قالب"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:212
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:141
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:128
 msgid "Storage Backend"
 msgstr "مكان التخزين"
 
@@ -1699,11 +1700,11 @@ msgstr "تم تحرير العلامات بنجاح."
 msgid "Edit labels"
 msgstr "تعديل العلامات"
 
-#: frontend/src/components/dialog/file-access-log.js:87
+#: frontend/src/components/dialog/file-access-log.js:86
 msgid "{placeholder} Access Log"
 msgstr "{placeholder} سجل الدخول"
 
-#: frontend/src/components/dialog/file-access-log.js:103
+#: frontend/src/components/dialog/file-access-log.js:102
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:262
 #: frontend/src/components/dialog/share-to-user.js:349
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:229
@@ -1722,7 +1723,7 @@ msgstr "{placeholder} سجل الدخول"
 msgid "User"
 msgstr "مستخدم"
 
-#: frontend/src/components/dialog/file-access-log.js:104
+#: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/metadata/components/popover/column-popover/type/index.js:192
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:100
 #: frontend/src/pages/sys-admin/invitations/invitations.js:63
@@ -1731,7 +1732,7 @@ msgstr "مستخدم"
 msgid "Type"
 msgstr "نوع"
 
-#: frontend/src/components/dialog/file-access-log.js:105
+#: frontend/src/components/dialog/file-access-log.js:104
 #: frontend/src/components/user-settings/linked-devices.js:33
 #: frontend/src/pages/linked-devices/linked-devices.js:37
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:48
@@ -1745,7 +1746,7 @@ msgstr "نوع"
 msgid "IP"
 msgstr "عنوان شبكة"
 
-#: frontend/src/components/dialog/file-access-log.js:105
+#: frontend/src/components/dialog/file-access-log.js:104
 #: frontend/src/components/user-settings/linked-devices.js:32
 #: frontend/src/pages/linked-devices/linked-devices.js:36
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:47
@@ -1753,7 +1754,7 @@ msgstr "عنوان شبكة"
 msgid "Device Name"
 msgstr "اسم الجهاز"
 
-#: frontend/src/components/dialog/file-access-log.js:106
+#: frontend/src/components/dialog/file-access-log.js:105
 #: frontend/src/metadata/components/popover/column-popover/type/index.js:128
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:102
 #: frontend/src/pages/org-admin/org-logs-file-update.js:116
@@ -1764,7 +1765,7 @@ msgstr "اسم الجهاز"
 msgid "Date"
 msgstr "تاريخ"
 
-#: frontend/src/components/dialog/file-access-log.js:115
+#: frontend/src/components/dialog/file-access-log.js:114
 #: frontend/src/components/shared-file-view/shared-file-view.js:173
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:179
 #: frontend/src/pages/org-admin/org-logs-file-update.js:205
@@ -1772,7 +1773,7 @@ msgstr "تاريخ"
 msgid "Anonymous User"
 msgstr "مستخدم مجهول"
 
-#: frontend/src/components/dialog/file-access-log.js:130
+#: frontend/src/components/dialog/file-access-log.js:129
 msgid "This file has (apparently) not been accessed yet"
 msgstr "لم يتم الوصول (ظاهريا) لهذا الملف حتى الان"
 
@@ -2010,7 +2011,7 @@ msgstr "إلغاء الوصول"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:49
 #: frontend/src/components/dialog/label-repo-state-dialog.js:55
-#: frontend/src/components/dialog/set-org-user-default-quota.js:39
+#: frontend/src/components/dialog/set-org-user-default-quota.js:38
 #: frontend/src/components/dialog/set-org-user-quota.js:40
 #: frontend/src/components/dialog/share-to-invite-people.js:176
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:29
@@ -2119,7 +2120,7 @@ msgstr "الاعدادات الموسعة"
 #: frontend/src/components/dialog/lib-settings.js:76
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:73
 msgid "Face recognition"
-msgstr ""
+msgstr "التعرف على الوجه"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:55
@@ -2209,7 +2210,7 @@ msgstr "مجلد"
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
-msgstr ""
+msgstr "لا يصبح إذن المجلد ساري المفعول إلا بعد مشاركة المكتبة مع المستخدمين أو المجموعات. ويُستخدم لضبط أذونات المجلدات الفرعية."
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:302
 #| msgid "Delete group"
@@ -2268,24 +2269,24 @@ msgstr "الملفات المُوسومة"
 #: frontend/src/components/dirent-detail/embedded-file-details/file-details.js:13
 #: frontend/src/components/dirent-detail/lib-details.js:19
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:729
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:162
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:163
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
 #: frontend/src/metadata/utils/column/index.js:203
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:39
 #: frontend/src/pages/libraries/index.js:286
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:77
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:138
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:127
 #: frontend/src/pages/org-admin/departments/department-libraries.js:70
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:79
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:81
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:78
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
 #: frontend/src/pages/org-admin/org-group-repos.js:84
 #: frontend/src/pages/org-admin/org-user-repos.js:80
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:78
 #: frontend/src/pages/search/advanced-search.js:78
 #: frontend/src/pages/search/advanced-search.js:226
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:102
-#: frontend/src/pages/shared-libs/shared-libs.js:116
+#: frontend/src/pages/shared-libs/shared-libraries.js:117
 #: frontend/src/pages/sys-admin/departments/department-libraries.js:86
 #: frontend/src/pages/sys-admin/groups/group-repos.js:40
 #: frontend/src/pages/sys-admin/repos/dir-content.js:107
@@ -2306,18 +2307,18 @@ msgstr "الحجم"
 #: frontend/src/components/dirent-detail/detail-list-view.js:84
 #: frontend/src/components/dirent-detail/detail-list-view.js:108
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:730
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:163
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:164
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:40
 #: frontend/src/pages/libraries/index.js:287
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:79
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:144
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:129
 #: frontend/src/pages/org-admin/org-user-repos.js:81
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
 #: frontend/src/pages/search/advanced-search.js:75
 #: frontend/src/pages/search/advanced-search.js:198
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:103
-#: frontend/src/pages/shared-libs/shared-libs.js:117
+#: frontend/src/pages/shared-libs/shared-libraries.js:118
 #: frontend/src/pages/starred/starred.js:43
 #: frontend/src/pages/sys-admin/repos/dir-content.js:108
 #: frontend/src/pages/sys-admin/users/user-repos.js:57
@@ -2335,11 +2336,11 @@ msgstr "محذوف"
 msgid "Manage group members"
 msgstr "إدارة أعضاء المجموعة"
 
-#: frontend/src/components/dialog/move-dirent-dialog.js:250
+#: frontend/src/components/dialog/move-dirent-dialog.js:303
 msgid "Move {placeholder} to"
 msgstr "نقل {placeholder} إلى:"
 
-#: frontend/src/components/dialog/move-dirent-dialog.js:253
+#: frontend/src/components/dialog/move-dirent-dialog.js:306
 msgid "Move selected item(s) to:"
 msgstr "نقل العنصر(العناصر) المحدد(ة) إلى:"
 
@@ -2521,7 +2522,7 @@ msgstr "استيراد المستخدمين من ملف إكسل .xlsx"
 #: frontend/src/components/dialog/org-rename-department-dialog.js:41
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:57
 msgid "Name updated"
-msgstr ""
+msgstr "تم تحديث الاسم"
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:80
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:75
@@ -2554,7 +2555,7 @@ msgstr "نصيحة: -2 يعني غير محدود."
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:64
 msgid "Wiki custom URL deleted"
-msgstr ""
+msgstr "تم حذف عنوان الرابط المخصص لـويكي Wiki"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:89
 msgid "URL is required"
@@ -2635,7 +2636,7 @@ msgstr "تمت نسخ رمز واجهة برمجة التطبيقات API إلى
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
 #: frontend/src/components/dialog/trash-dialog.js:127
 #: frontend/src/pages/lib-content-view/lib-content-view.js:225
-#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1402
+#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1416
 msgid "Permission denied"
 msgstr "الترخيص مرفوض"
 
@@ -2665,14 +2666,14 @@ msgstr "الترخيص مرفوض"
 #: frontend/src/pages/search/main-panel.js:75
 #: frontend/src/pages/search/main-panel.js:162
 #: frontend/src/pages/search/main-panel.js:174
-#: frontend/src/pages/shared-libs/shared-libs.js:249
+#: frontend/src/pages/shared-libs/shared-libraries.js:250
 #: frontend/src/pages/shared-with-all/index.js:76
 #: frontend/src/pages/sys-admin/abuse-reports.js:45
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:54
 #: frontend/src/pages/upload-link/file-uploader.js:432
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:232
 #: frontend/src/repo-folder-trash.js:137 frontend/src/repo-folder-trash.js:334
-#: frontend/src/utils/utils.js:1409
+#: frontend/src/utils/utils.js:1423
 msgid "Error"
 msgstr "خطأ"
 
@@ -2686,7 +2687,7 @@ msgstr "خطأ"
 #: frontend/src/repo-folder-trash.js:143 frontend/src/repo-folder-trash.js:336
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1412 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1426 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "الرجاء التحقق من الشبكة"
@@ -2781,7 +2782,7 @@ msgstr "تم حذف {number_placeholder} رابط (روابط)  التحميل �
 #: frontend/src/metadata/utils/column/index.js:174
 #: frontend/src/pages/org-admin/org-group-info.js:76
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:157
-#: frontend/src/pages/org-admin/org-groups.js:181
+#: frontend/src/pages/org-admin/org-groups.js:180
 #: frontend/src/pages/sys-admin/orgs/org-groups.js:38
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:56
 msgid "Creator"
@@ -2847,18 +2848,18 @@ msgstr "حفظ في:"
 
 #: frontend/src/components/dialog/seahub-io-dialog.js:24
 msgid "Exporting"
-msgstr ""
+msgstr "تصدير"
 
 #: frontend/src/components/dialog/seahub-io-dialog.js:29
 msgid "Exporting..."
-msgstr ""
+msgstr "جاري التصدير..."
 
 #: frontend/src/components/dialog/search-file-dialog.js:80
 #: frontend/src/components/dialog/search-file-dialog.js:84
 #: frontend/src/components/file-chooser/index.js:469
 #: frontend/src/components/file-chooser/searcher/index.js:117
-#: frontend/src/components/search/wiki2-search.js:151
-#: frontend/src/components/search/wiki2-search.js:162
+#: frontend/src/components/search/wiki2-search.js:150
+#: frontend/src/components/search/wiki2-search.js:161
 msgid "Search"
 msgstr "يبحث"
 
@@ -2868,36 +2869,41 @@ msgid "Search files in this library"
 msgstr "بحث عن ملفات في هذه المكتبة"
 
 #: frontend/src/components/dialog/search-file-dialog.js:91
-#: frontend/src/components/search/wiki2-search.js:176
+#: frontend/src/components/search/wiki2-search.js:175
 #: frontend/src/pages/search/search-results.js:73
 msgid "No result"
 msgstr "لا توجد نتيجة"
 
-#: frontend/src/components/dialog/select-dirent-body.js:186
-#: frontend/src/components/file-chooser/repo-list-wrapper.js:61
+#: frontend/src/components/dialog/select-dirent-body.js:75
+#| msgid "Please select a library to share."
+msgid "Please select a library or folder first."
+msgstr ""
+
+#: frontend/src/components/dialog/select-dirent-body.js:137
+#: frontend/src/components/file-chooser/repo-list-wrapper.js:53
 #| msgid "Create Library"
 msgid "Current Library"
 msgstr "المكتبة الحالية"
 
-#: frontend/src/components/dialog/select-dirent-body.js:200
+#: frontend/src/components/dialog/select-dirent-body.js:151
 #| msgid "Space Used"
 msgid "Recently Used"
 msgstr "المستخدمة مؤخرا"
 
-#: frontend/src/components/dialog/select-dirent-body.js:235
+#: frontend/src/components/dialog/select-dirent-body.js:187
 #| msgid "New Folder"
 msgid "New folder"
-msgstr ""
+msgstr "مجلد جديد"
 
 #: frontend/src/components/dialog/set-org-user-contact-email.js:57
 msgid "Set user contact email"
 msgstr "تعيين بريد إلكتروني للاتصال بالمستخدم"
 
-#: frontend/src/components/dialog/set-org-user-default-quota.js:64
+#: frontend/src/components/dialog/set-org-user-default-quota.js:63
 msgid "Set user default quota"
 msgstr "تعيين حصة المستخدم الافتراضية"
 
-#: frontend/src/components/dialog/set-org-user-default-quota.js:73
+#: frontend/src/components/dialog/set-org-user-default-quota.js:72
 #: frontend/src/components/dialog/set-org-user-quota.js:74
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:68
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:69
@@ -2963,9 +2969,9 @@ msgstr "المشاركة مع خادم آخر"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:338
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:393
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:136
-#: frontend/src/pages/shared-libs/shared-libs.js:376
-#: frontend/src/pages/shared-libs/shared-libs.js:427
-#: frontend/src/pages/shared-libs/shared-libs.js:493
+#: frontend/src/pages/shared-libs/shared-libraries.js:377
+#: frontend/src/pages/shared-libs/shared-libraries.js:428
+#: frontend/src/pages/shared-libs/shared-libraries.js:494
 #: frontend/src/pages/sys-admin/repos/repos.js:261
 #: frontend/src/utils/text-translation.js:36
 msgid "Share"
@@ -3011,7 +3017,7 @@ msgid "User Email"
 msgstr "البريد الإلكتروني للمستخدم"
 
 #: frontend/src/components/dialog/share-to-other-server.js:193
-#: frontend/src/pages/groups/group-view.js:286
+#: frontend/src/pages/groups/group-view.js:284
 #: frontend/src/pages/org-admin/org-user-item.js:77
 #: frontend/src/pages/org-admin/org-users-users.js:157
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:167
@@ -3139,16 +3145,16 @@ msgstr "إضافة منظمة"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:74
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:74
 #: frontend/src/components/group-members.js:125
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:164
-#: frontend/src/pages/groups/group-view.js:329
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:165
+#: frontend/src/pages/groups/group-view.js:327
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:27
 #: frontend/src/pages/libraries/index.js:288
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:85
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:84
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:65
 #: frontend/src/pages/org-admin/org-group-members.js:109
 #: frontend/src/pages/org-admin/org-links.js:104
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:77
-#: frontend/src/pages/shared-libs/shared-libs.js:118
+#: frontend/src/pages/shared-libs/shared-libraries.js:119
 #: frontend/src/pages/sys-admin/groups/group-members.js:165
 #: frontend/src/pages/sys-admin/groups/groups-content.js:61
 #: frontend/src/pages/sys-admin/links/share-links.js:68
@@ -3210,7 +3216,7 @@ msgstr "(إذا ترك فارغاً، يكون المالك هو المشرف)"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:79
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:80
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:50
-#: frontend/src/components/dialog/transfer-dialog.js:166
+#: frontend/src/components/dialog/transfer-dialog.js:167
 msgid "Select a user"
 msgstr "حدد المستخدم"
 
@@ -3224,10 +3230,10 @@ msgstr "إعدادات سجل {placeholder} التاريخي"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:36
 msgid "Department renamed"
-msgstr ""
+msgstr "تم تغيير اسم الإدارة"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
-#: frontend/src/components/dialog/transfer-dialog.js:214
+#: frontend/src/components/dialog/transfer-dialog.js:215
 msgid "Transfer Library {library_name}"
 msgstr "نقل المكتبة  {library_name}"
 
@@ -3248,15 +3254,15 @@ msgstr "اسم المجموعة"
 msgid "Terms"
 msgstr "الشروط"
 
-#: frontend/src/components/dialog/transfer-dialog.js:141
+#: frontend/src/components/dialog/transfer-dialog.js:142
 msgid "Transfer to user"
 msgstr "نقل إلى المستخدم"
 
-#: frontend/src/components/dialog/transfer-dialog.js:153
+#: frontend/src/components/dialog/transfer-dialog.js:154
 msgid "Transfer to department"
 msgstr "نقل إلى القسم"
 
-#: frontend/src/components/dialog/transfer-dialog.js:162
+#: frontend/src/components/dialog/transfer-dialog.js:163
 #: frontend/src/pages/institution-admin/side-panel.js:28
 #: frontend/src/pages/institution-admin/users-nav/index.js:12
 #: frontend/src/pages/org-admin/org-users-search-users.js:170
@@ -3273,16 +3279,16 @@ msgstr "نقل إلى القسم"
 msgid "Users"
 msgstr "المستخدمين"
 
-#: frontend/src/components/dialog/transfer-dialog.js:176
-#: frontend/src/components/dialog/transfer-dialog.js:201
+#: frontend/src/components/dialog/transfer-dialog.js:177
+#: frontend/src/components/dialog/transfer-dialog.js:202
 msgid "Keep sharing"
-msgstr ""
+msgstr "استمر في المشاركة"
 
-#: frontend/src/components/dialog/transfer-dialog.js:178
+#: frontend/src/components/dialog/transfer-dialog.js:179
 msgid "If the library is shared to another user, the sharing will be ketp."
-msgstr ""
+msgstr "إذا تمت مشاركة المكتبة مع مستخدم آخر، فسيتم الاحتفاظ بالمشاركة."
 
-#: frontend/src/components/dialog/transfer-dialog.js:182
+#: frontend/src/components/dialog/transfer-dialog.js:183
 #: frontend/src/pages/org-admin/departments/department-list.js:112
 #: frontend/src/pages/org-admin/departments/department.js:143
 #: frontend/src/pages/org-admin/departments/department.js:144
@@ -3294,14 +3300,14 @@ msgstr ""
 msgid "Departments"
 msgstr "الاقسام"
 
-#: frontend/src/components/dialog/transfer-dialog.js:203
+#: frontend/src/components/dialog/transfer-dialog.js:204
 msgid ""
 "If the library is shared to another department, the sharing will be ketp."
-msgstr ""
+msgstr "إذا تمت مشاركة المكتبة مع قسم آخر، سيتم الاحتفاظ بالمشاركة."
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:46
 msgid "Group has been transfered"
-msgstr ""
+msgstr "تم نقل المجموعة"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:61
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
@@ -3411,7 +3417,7 @@ msgstr "قوة كلمة المرور غير كافية"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:41
 msgid "Password set"
-msgstr ""
+msgstr "تم تعيين كلمة المرور"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:53
 msgid "Set password"
@@ -3433,7 +3439,7 @@ msgstr "لا يمكن أن تكون كلمة المرور الجديدة هي ن
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:48
 #: frontend/src/components/user-settings/webdav-password.js:37
 msgid "Password updated"
-msgstr ""
+msgstr "تم تحديث كلمة المرور"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:59
 msgid "Update password"
@@ -3454,12 +3460,12 @@ msgstr "تم نسخ الرابط إلى الحافظة"
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:24
 #| msgid "Convert Wiki"
 msgid "Converting"
-msgstr ""
+msgstr "تحويل"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:29
 #| msgid "Exporting..."
 msgid "Converting..."
-msgstr ""
+msgstr "جاري التحويل..."
 
 #: frontend/src/components/dialog/zip-download-dialog.js:70
 msgid "Failed to download. The total size of the files exceeded the limit."
@@ -3641,11 +3647,11 @@ msgstr "حدد هذا العنصر"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:377
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:378
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:133
-#: frontend/src/pages/shared-libs/shared-libs.js:360
-#: frontend/src/pages/shared-libs/shared-libs.js:361
-#: frontend/src/pages/shared-libs/shared-libs.js:415
-#: frontend/src/pages/shared-libs/shared-libs.js:416
-#: frontend/src/pages/shared-libs/shared-libs.js:492
+#: frontend/src/pages/shared-libs/shared-libraries.js:361
+#: frontend/src/pages/shared-libs/shared-libraries.js:362
+#: frontend/src/pages/shared-libs/shared-libraries.js:416
+#: frontend/src/pages/shared-libs/shared-libraries.js:417
+#: frontend/src/pages/shared-libs/shared-libraries.js:493
 #: frontend/src/pages/starred/starred.js:219
 #: frontend/src/pages/starred/starred.js:259
 #: frontend/src/pages/starred/starred.js:260
@@ -3660,9 +3666,9 @@ msgstr "إلغاء تأشير"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:309
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:310
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:130
-#: frontend/src/pages/shared-libs/shared-libs.js:360
-#: frontend/src/pages/shared-libs/shared-libs.js:361
-#: frontend/src/pages/shared-libs/shared-libs.js:492
+#: frontend/src/pages/shared-libs/shared-libraries.js:361
+#: frontend/src/pages/shared-libs/shared-libraries.js:362
+#: frontend/src/pages/shared-libs/shared-libraries.js:493
 msgid "Star"
 msgstr "أشر بمهم"
 
@@ -3687,12 +3693,12 @@ msgid "You can create files quickly"
 msgstr "يمكنك إنشاء الملفات بسرعة"
 
 #: frontend/src/components/file-chooser/index.js:325
-#: frontend/src/components/file-chooser/repo-list-wrapper.js:38
+#: frontend/src/components/file-chooser/repo-list-wrapper.js:30
 #: frontend/src/components/search/wiki-search.js:194
 msgid "No results matching"
 msgstr "لا توجد نتائج مطابقة"
 
-#: frontend/src/components/file-chooser/repo-list-wrapper.js:122
+#: frontend/src/components/file-chooser/repo-list-wrapper.js:114
 #: frontend/src/components/main-side-nav.js:160
 #: frontend/src/components/main-side-nav.js:162
 #: frontend/src/components/org-admin-group-nav.js:23
@@ -3941,8 +3947,8 @@ msgstr "مكتباتي"
 #: frontend/src/components/files-sub-nav.js:62
 #: frontend/src/components/files-sub-nav.js:64
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:101
-#: frontend/src/pages/shared-libs/shared-libs.js:631
-#: frontend/src/pages/shared-libs/shared-libs.js:641
+#: frontend/src/pages/shared-libs/shared-libraries.js:632
+#: frontend/src/pages/shared-libs/shared-libraries.js:642
 msgid "Shared with me"
 msgstr "مشاركة معي"
 
@@ -3956,7 +3962,7 @@ msgstr "مشاركة مع الكل"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
-#: frontend/src/pages/groups/group-view.js:323
+#: frontend/src/pages/groups/group-view.js:321
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:22
 #: frontend/src/pages/org-admin/departments/department-members.js:226
 #: frontend/src/pages/org-admin/org-group-members.js:111
@@ -3974,7 +3980,7 @@ msgstr "مدير"
 
 #: frontend/src/components/group-members.js:75
 #: frontend/src/components/group-members.js:122
-#: frontend/src/pages/groups/group-view.js:326
+#: frontend/src/pages/groups/group-view.js:324
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:31
 #: frontend/src/pages/org-admin/departments/department-members.js:227
 #: frontend/src/pages/org-admin/org-group-members.js:113
@@ -4003,19 +4009,19 @@ msgid "Current Path: "
 msgstr "المسار الحالي: "
 
 #: frontend/src/components/libs-mobile-thead.js:17
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:159
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:160
 #: frontend/src/pages/libraries/index.js:283
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:126
-#: frontend/src/pages/shared-libs/shared-libs.js:113
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:124
+#: frontend/src/pages/shared-libs/shared-libraries.js:114
 msgid "Library Type"
 msgstr "نوع المكتبة"
 
 #: frontend/src/components/libs-mobile-thead.js:19
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:161
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:162
 #: frontend/src/pages/libraries/index.js:285
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:134
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:126
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:82
-#: frontend/src/pages/shared-libs/shared-libs.js:115
+#: frontend/src/pages/shared-libs/shared-libraries.js:116
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:49
 msgid "Actions"
 msgstr "أحداث"
@@ -4065,7 +4071,7 @@ msgid "Clients"
 msgstr "عملاء"
 
 #: frontend/src/components/main-side-nav-folded.js:236
-#: frontend/src/components/main-side-nav.js:303
+#: frontend/src/components/main-side-nav.js:304
 #| msgid "About Us"
 msgid "About"
 msgstr "حول"
@@ -4108,7 +4114,7 @@ msgstr "مدير المشاركة"
 msgid "Help and resources"
 msgstr "المساعدة والموارد"
 
-#: frontend/src/components/main-side-nav.js:311
+#: frontend/src/components/main-side-nav.js:313
 msgid "Fold the sidebar"
 msgstr "اطوِ الشريط الجانبي"
 
@@ -4117,7 +4123,7 @@ msgid "show more"
 msgstr "اظهر المزيد"
 
 #: frontend/src/components/org-admin-group-nav.js:26
-#: frontend/src/pages/groups/group-view.js:368
+#: frontend/src/pages/groups/group-view.js:366
 #: frontend/src/pages/org-admin/departments/department.js:43
 #: frontend/src/pages/sys-admin/departments/department.js:44
 #: frontend/src/pages/sys-admin/groups/group-nav.js:18
@@ -4215,7 +4221,7 @@ msgid "Last modified by"
 msgstr "آخر تعديل بواسطة"
 
 #: frontend/src/components/search/search.js:538
-#: frontend/src/components/search/wiki2-search.js:174
+#: frontend/src/components/search/wiki2-search.js:173
 msgid "Type characters to start search"
 msgstr "اكتب أحرف لبدء البحث"
 
@@ -4242,7 +4248,7 @@ msgstr "نتائج البحث التي تمت زيارتها مؤخرًا"
 
 #: frontend/src/components/search/wiki2-search-result.js:24
 msgid "Current page"
-msgstr ""
+msgstr "الصفحة الحالية"
 
 #: frontend/src/components/select-editor/select-editor.js:62
 #: frontend/src/components/select-editor/select-editor.js:67
@@ -4454,7 +4460,7 @@ msgstr "منتهي"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:240
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:257
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:233
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:232
 #: frontend/src/pages/sys-admin/repos/repos.js:174
 #: frontend/src/pages/sys-admin/users/user-repos.js:296
 msgid "Successfully transferred the library."
@@ -4475,7 +4481,7 @@ msgstr "فشل حذف {name}."
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/metadata/metadata-tree-view/view-item/index.js:53
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:44
-#: frontend/src/pages/groups/group-view.js:374
+#: frontend/src/pages/groups/group-view.js:372
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:142
 #: frontend/src/pages/org-admin/departments/group-item.js:52
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:152
@@ -4486,9 +4492,9 @@ msgid "Rename"
 msgstr "تعديل اسم"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:336
-#: frontend/src/pages/groups/group-view.js:376
+#: frontend/src/pages/groups/group-view.js:374
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:145
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:267
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:266
 #: frontend/src/pages/sys-admin/groups/groups-content.js:206
 #: frontend/src/pages/sys-admin/repos/repos.js:267
 #: frontend/src/pages/sys-admin/users/user-repos.js:167
@@ -4533,18 +4539,18 @@ msgstr "إعادة تعيين كلمة المرور"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:357
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:154
-#: frontend/src/pages/shared-libs/shared-libs.js:392
-#: frontend/src/pages/shared-libs/shared-libs.js:443
-#: frontend/src/pages/shared-libs/shared-libs.js:495
+#: frontend/src/pages/shared-libs/shared-libraries.js:393
+#: frontend/src/pages/shared-libs/shared-libraries.js:444
+#: frontend/src/pages/shared-libs/shared-libraries.js:496
 #: frontend/src/utils/text-translation.js:166
 msgid "Watch File Changes"
 msgstr "مشاهدة تغييرات الملف"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:360
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:157
-#: frontend/src/pages/shared-libs/shared-libs.js:392
-#: frontend/src/pages/shared-libs/shared-libs.js:443
-#: frontend/src/pages/shared-libs/shared-libs.js:495
+#: frontend/src/pages/shared-libs/shared-libraries.js:393
+#: frontend/src/pages/shared-libs/shared-libraries.js:444
+#: frontend/src/pages/shared-libs/shared-libraries.js:496
 #: frontend/src/utils/text-translation.js:162
 msgid "Unwatch File Changes"
 msgstr "إلغاء مراقبة تغييرات الملفات"
@@ -4563,13 +4569,13 @@ msgstr "التكامل مع سيتيبل SeaTable"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:606
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:147
-#: frontend/src/pages/shared-libs/shared-libs.js:266
+#: frontend/src/pages/shared-libs/shared-libraries.js:267
 msgid "Successfully unstarred {library_name_placeholder}."
 msgstr "تم إلغاء تأشير المكتبة {library_name_placeholder} ينجاح"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:616
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:157
-#: frontend/src/pages/shared-libs/shared-libs.js:276
+#: frontend/src/pages/shared-libs/shared-libraries.js:277
 msgid "Successfully starred {library_name_placeholder}."
 msgstr "تم تأشير المكتبة  {library_name_placeholder} ينجاح"
 
@@ -4688,7 +4694,7 @@ msgstr "إذا لم يتم قراءة الإشعارات خلال ساعة وا�
 
 #: frontend/src/components/user-settings/email-notice.js:57
 msgid "Email notification updated"
-msgstr ""
+msgstr "تم تحديث إشعار البريد الإلكتروني"
 
 #: frontend/src/components/user-settings/email-notice.js:68
 #: frontend/src/settings.js:60
@@ -4838,7 +4844,7 @@ msgstr "الملف كبير جدا. الحد الأقصى المسموح به ل
 
 #: frontend/src/components/user-settings/user-avatar-form.js:59
 msgid "Avatar updated"
-msgstr ""
+msgstr "تم تحديث الصورة الرمزية لحسابك"
 
 #: frontend/src/components/user-settings/user-avatar-form.js:92
 #| msgid "Avatar"
@@ -4863,11 +4869,11 @@ msgstr "سيتم إرسال إشعاراتك إلى هذا البريد."
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:38
 msgid "Auth Token created"
-msgstr ""
+msgstr "تم إنشاء رمز المصادقة"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:51
 msgid "Auth Token deleted"
-msgstr ""
+msgstr "تم حذف رمز المصادقة"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:75
 #: frontend/src/settings.js:56
@@ -4880,11 +4886,11 @@ msgstr "الرمز"
 
 #: frontend/src/components/user-settings/webdav-password.js:54
 msgid "Password reset"
-msgstr ""
+msgstr "إعادة تعيين كلمة المرور"
 
 #: frontend/src/components/user-settings/webdav-password.js:74
 msgid "Password removed"
-msgstr ""
+msgstr "تمت إزالة كلمة المرور"
 
 #: frontend/src/components/user-settings/webdav-password.js:93
 msgid "WebDAV Access"
@@ -4926,7 +4932,7 @@ msgstr "تبديل طريقة العرض"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:108
 msgid "Wiki published"
-msgstr ""
+msgstr "صفحة الويكي نُشرت"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:249
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -4942,7 +4948,7 @@ msgstr "إلغاء النشر"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:260
 #| msgid "Convert Wiki"
 msgid "Convert to new Wiki"
-msgstr ""
+msgstr "تحويل إلى صفحة ويكي جديدة"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:275
 #| msgid "Publish"
@@ -5159,12 +5165,12 @@ msgstr "هل أنت متأكد من حذف "
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:76
 msgid "Enable face recognition to identify people in your photos."
-msgstr ""
+msgstr "قم بتمكين ميزة التعرف على الوجه لتحديد الأشخاص في صورك."
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/turn-off-confirm.js:9
 #| msgid "Face recognition"
 msgid "Turn off face recognition"
-msgstr ""
+msgstr "إيقاف تشغيل التعرف على الوجه"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/turn-off-confirm.js:11
 #| msgid ""
@@ -5173,7 +5179,7 @@ msgstr ""
 msgid ""
 "Do you really want to turn off face recognition? Existing results will all "
 "be deleted."
-msgstr ""
+msgstr "هل تريد حقًا إيقاف تشغيل ميزة التعرف على الوجه؟ سيتم حذف جميع النتائج الموجودة."
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/turn-off-confirm.js:15
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/turn-off-confirm.js:15
@@ -5203,7 +5209,7 @@ msgstr "هل تريد حقا إيقاف تشغيل الاعدادات الموس
 
 #: frontend/src/metadata/components/metadata-details/location/index.js:149
 msgid "No address found for the given coordinates."
-msgstr ""
+msgstr "لم يتم العثور على عنوان للإحداثيات المحددة."
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:33
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/index.js:124
@@ -5295,7 +5301,7 @@ msgid "Name cannot contain dots"
 msgstr "يجب أن لا يحتوي الاسم على نقاط"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:17
-#: frontend/src/utils/utils.js:1912
+#: frontend/src/utils/utils.js:1926
 msgid "Name cannot contain backtick"
 msgstr "يجب أن لا يحتوي الاسم على فاصلة عليا مائلة -`-"
 
@@ -5537,7 +5543,7 @@ msgstr "معرض"
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:51
 msgid "Kanban"
-msgstr ""
+msgstr "كانبان"
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:69
 msgid "New view"
@@ -5545,7 +5551,7 @@ msgstr "طريقة عرض جديدة"
 
 #: frontend/src/metadata/components/view-details/index.js:28
 msgid "There is no information to display."
-msgstr ""
+msgstr "لا يوجد معلومات لعرضها."
 
 #: frontend/src/metadata/components/view-toolbar/face-recognition/index.js:31
 #: frontend/src/metadata/components/view-toolbar/gallery-view-toolbar/index.js:52
@@ -5734,11 +5740,11 @@ msgstr "يتم إنشاء البيانات الوصفية للملفات. قد �
 
 #: frontend/src/metadata/hooks/metadata.js:73
 msgid "Recognizing portraits. Please refresh the page later."
-msgstr ""
+msgstr "التعرف على الصور الشخصية. يرجى تحديث الصفحة لاحقًا."
 
 #: frontend/src/metadata/hooks/metadata.js:89
 msgid "Photos - classfied by people"
-msgstr ""
+msgstr "الصور - مصنفة حسب الأشخاص"
 
 #: frontend/src/metadata/metadata-tree-view/index.js:130
 #: frontend/src/metadata/metadata-tree-view/index.js:134
@@ -5757,14 +5763,14 @@ msgstr "يجب أن يكون الاسم حروف فقط"
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:28
 #: frontend/src/metadata/utils/validate/view.js:12
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:55
-#: frontend/src/utils/utils.js:1907
+#: frontend/src/utils/utils.js:1921
 msgid "Name cannot contain slash"
 msgstr "يجب أن لا يحتوي الاسم على شرطة مائلة -/-"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:31
 #: frontend/src/metadata/utils/validate/view.js:15
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:59
-#: frontend/src/utils/utils.js:1917
+#: frontend/src/utils/utils.js:1931
 msgid "Name cannot contain backslash"
 msgstr "يجب أن لا يحتوي الاسم على شرطة مائلة عكسية -\\-"
 
@@ -5828,12 +5834,12 @@ msgstr "فشل تعديل الخصائص المخفية"
 
 #: frontend/src/metadata/store/server-operator.js:183
 msgid "Failed to modify people name"
-msgstr ""
+msgstr "فشل في تعديل اسم الشخص"
 
 #: frontend/src/metadata/store/server-operator.js:193
 #| msgid "Failed to modify sort"
 msgid "Failed to modify settings"
-msgstr ""
+msgstr "فشل في تعديل الإعدادات"
 
 #: frontend/src/metadata/store/server-operator.js:380
 #: frontend/src/metadata/store/server-operator.js:398
@@ -5937,16 +5943,16 @@ msgstr "الاسم موجود بالفعل"
 
 #: frontend/src/metadata/views/face-recognition/peoples/index.js:72
 msgid "Identifying portraits..."
-msgstr ""
+msgstr "تحديد الصور الشخصية..."
 
 #: frontend/src/metadata/views/face-recognition/peoples/people/index.js:26
 #: frontend/src/metadata/views/face-recognition/person-photos/index.js:140
 msgid "Person image"
-msgstr ""
+msgstr "صورة الشخص"
 
 #: frontend/src/metadata/views/face-recognition/peoples/people/index.js:91
 msgid "items"
-msgstr ""
+msgstr "العناصر"
 
 #: frontend/src/metadata/views/face-recognition/person-photos/index.js:95
 #: frontend/src/metadata/views/gallery/index.js:55
@@ -5959,9 +5965,9 @@ msgstr "تم حذف {name} و {n} عناصر أخرى بنجاح"
 #: frontend/src/metadata/views/table/index.js:130
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1183
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1211
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:376
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:375
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:229
-#: frontend/src/pages/org-admin/org-groups.js:128
+#: frontend/src/pages/org-admin/org-groups.js:127
 msgid "Successfully deleted {name}"
 msgstr "تم حذف {name} بنجاح"
 
@@ -5974,21 +5980,21 @@ msgstr "لا يوجد سجل"
 #: frontend/src/metadata/views/kanban/add-board/index.js:40
 #| msgid "New Tag"
 msgid "New category"
-msgstr ""
+msgstr "فئة جديدة"
 
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:40
 msgid "Uncategorized"
-msgstr ""
+msgstr "غير مصنف"
 
 #: frontend/src/metadata/views/kanban/boards/index.js:176
 #| msgid "No changes"
 msgid "No categories"
-msgstr ""
+msgstr "لا يوجد مصنفات"
 
 #: frontend/src/metadata/views/kanban/settings/index.js:116
 #| msgid "Delete property"
 msgid "Title property"
-msgstr ""
+msgstr "عنوان الميزة"
 
 #: frontend/src/metadata/views/kanban/settings/index.js:127
 #| msgid "Don't send emails"
@@ -6322,12 +6328,12 @@ msgstr "مجلد تم نقله"
 msgid "No more activities"
 msgstr "لا يوجد المزيد من الأنشطة"
 
-#: frontend/src/pages/dashboard/files-activities.js:247
+#: frontend/src/pages/dashboard/files-activities.js:246
 #| msgid "All Notifications"
 msgid "All Activities"
 msgstr "جميع الأنشطة"
 
-#: frontend/src/pages/dashboard/files-activities.js:250
+#: frontend/src/pages/dashboard/files-activities.js:249
 #| msgid "No more activities"
 msgid "My Activities"
 msgstr "أنشطتي"
@@ -6368,8 +6374,8 @@ msgid "Successfully restored."
 msgstr "تمت استعادته بنجاح."
 
 #: frontend/src/pages/groups/group-item.js:115
-#: frontend/src/pages/groups/group-view.js:142
-#: frontend/src/pages/groups/group-view.js:147
+#: frontend/src/pages/groups/group-view.js:141
+#: frontend/src/pages/groups/group-view.js:146
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:29
 #: frontend/src/pages/libraries/index.js:310
 #: frontend/src/pages/my-libs/my-libs.js:33
@@ -6379,11 +6385,11 @@ msgstr "تمت استعادته بنجاح."
 msgid "No libraries"
 msgstr "لا مكتبات"
 
-#: frontend/src/pages/groups/group-view.js:135
+#: frontend/src/pages/groups/group-view.js:134
 msgid "No libraries shared with this group"
 msgstr "لا توجد مكتبات مشتركة مع هذه المجموعة"
 
-#: frontend/src/pages/groups/group-view.js:136
+#: frontend/src/pages/groups/group-view.js:135
 msgid ""
 "No libraries have been shared with this group yet. A library shared with a "
 "group can be accessed by all group members. You can share a library with a "
@@ -6391,27 +6397,30 @@ msgid ""
 "with this group by clicking the \"New Library\" button in the menu bar."
 msgstr "لم تتم مشاركة أي مكتبات مع هذه المجموعة حتى الآن. يمكن لجميع أعضاء المجموعة الوصول إلى المكتبة المشتركة مع مجموعة. يمكنك مشاركة مكتبة مع مجموعة في \"مكتباتي\". يمكنك أيضا إنشاء مكتبة جديدة لمشاركتها مع هذه المجموعة بالنقر فوق الزر \"مكتبة جديدة\" في شريط القائمة."
 
-#: frontend/src/pages/groups/group-view.js:148
-msgid "You can create libraries by clicking the \"New Library\" button above."
-msgstr "يمكنك إنشاء مكتبات بالنقر فوق الزر \"مكتبة جديدة\" أعلاه."
+#: frontend/src/pages/groups/group-view.js:147
+#| msgid "n create libraries by clicking the \"New Library\" button above."
+msgid ""
+"You can create libraries by clicking the \"New Library\" button in the menu "
+"bar."
+msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:371
+#: frontend/src/pages/groups/group-view.js:369
 msgid "Import members"
 msgstr "استيراد الأعضاء"
 
-#: frontend/src/pages/groups/group-view.js:372
+#: frontend/src/pages/groups/group-view.js:370
 msgid "Manage members"
 msgstr "إدارة الأعضاء"
 
-#: frontend/src/pages/groups/group-view.js:379
+#: frontend/src/pages/groups/group-view.js:377
 msgid "Delete group"
 msgstr "حذف المجموعة"
 
-#: frontend/src/pages/groups/group-view.js:384
+#: frontend/src/pages/groups/group-view.js:382
 msgid "Leave group"
 msgstr "ترك المجموعة"
 
-#: frontend/src/pages/groups/group-view.js:409
+#: frontend/src/pages/groups/group-view.js:407
 msgid "This is a special group representing a department."
 msgstr "هذه مجموعة خاصة تمثل قسماً."
 
@@ -6456,7 +6465,7 @@ msgstr "انشاء على"
 #: frontend/src/pages/institution-admin/user-list-search/index.js:71
 #: frontend/src/pages/institution-admin/user-list/index.js:112
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:159
-#: frontend/src/pages/org-admin/org-groups.js:183
+#: frontend/src/pages/org-admin/org-groups.js:182
 msgid "Operations"
 msgstr "العمليات"
 
@@ -6647,7 +6656,7 @@ msgstr "فشل نقل  {name}."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1348
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:127
-#: frontend/src/utils/utils.js:1505
+#: frontend/src/utils/utils.js:1519
 msgid "Successfully copied %(name)s."
 msgstr "تم نسخ %(name)s بنجاح."
 
@@ -6670,9 +6679,9 @@ msgstr "فشل تحويل {name}."
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2216
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:259
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:111
-#: frontend/src/pages/shared-libs/shared-libs.js:378
-#: frontend/src/pages/shared-libs/shared-libs.js:429
-#: frontend/src/pages/shared-libs/shared-libs.js:494
+#: frontend/src/pages/shared-libs/shared-libraries.js:379
+#: frontend/src/pages/shared-libs/shared-libraries.js:430
+#: frontend/src/pages/shared-libs/shared-libraries.js:495
 msgid "Leave Share"
 msgstr "ترك المشاركة"
 
@@ -6750,7 +6759,7 @@ msgstr "متضررة (الرجاء الاتصال بالمسؤول لإصلاح 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:54
 #: frontend/src/pages/share-admin/folders.js:149
 #: frontend/src/pages/share-admin/libraries.js:179
-#: frontend/src/pages/shared-libs/shared-libs.js:245
+#: frontend/src/pages/shared-libs/shared-libraries.js:246
 #: frontend/src/pages/shared-with-all/index.js:72
 msgid "Successfully unshared {name}"
 msgstr "تم إلغاء مشاركة  {name} بنجاح"
@@ -6775,7 +6784,7 @@ msgstr "مشارك بواسطة"
 #: frontend/src/pages/org-admin/departments/sub-departments.js:129
 #: frontend/src/pages/org-admin/org-admin-list.js:53
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:158
-#: frontend/src/pages/org-admin/org-groups.js:182
+#: frontend/src/pages/org-admin/org-groups.js:181
 #: frontend/src/pages/org-admin/org-links.js:105
 #: frontend/src/pages/org-admin/org-users-list.js:77
 #: frontend/src/pages/org-admin/org-users-search-users.js:40
@@ -6904,12 +6913,12 @@ msgid ""
 "follows:"
 msgstr "انسخ شهادة موفر الهوية والصقها هنا. تنسيق الشهادة كما يلي:"
 
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:207
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:206
 #: frontend/src/utils/utils.js:467
 msgid "Encrypted library"
 msgstr "مكتبة مشفرة"
 
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:210
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:209
 #: frontend/src/utils/utils.js:473
 msgid "Read-Write library"
 msgstr "مكتبة قراءة-كتابة"
@@ -6963,21 +6972,21 @@ msgstr "بحث عن مجموعات"
 msgid "Result"
 msgstr "النتيجة"
 
-#: frontend/src/pages/org-admin/org-groups.js:148
+#: frontend/src/pages/org-admin/org-groups.js:147
 #: frontend/src/pages/sys-admin/groups/groups.js:123
 msgid "Successfully change the group"
 msgstr "تم تغيير المجموعة بنجاح"
 
-#: frontend/src/pages/org-admin/org-groups.js:161
+#: frontend/src/pages/org-admin/org-groups.js:160
 #: frontend/src/pages/sys-admin/groups/groups.js:132
 msgid "Search groups by name"
 msgstr "البحث في المجموعات حسب الاسم"
 
-#: frontend/src/pages/org-admin/org-groups.js:174
+#: frontend/src/pages/org-admin/org-groups.js:173
 msgid "All Groups"
 msgstr "كل المجموعات"
 
-#: frontend/src/pages/org-admin/org-groups.js:203
+#: frontend/src/pages/org-admin/org-groups.js:202
 #: frontend/src/pages/org-admin/org-links.js:128
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:124
 #: frontend/src/pages/org-admin/org-logs-file-update.js:139
@@ -6987,7 +6996,7 @@ msgstr "كل المجموعات"
 msgid "Previous"
 msgstr "السابق"
 
-#: frontend/src/pages/org-admin/org-groups.js:205
+#: frontend/src/pages/org-admin/org-groups.js:204
 #: frontend/src/pages/org-admin/org-links.js:130
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:126
 #: frontend/src/pages/org-admin/org-logs-file-update.js:141
@@ -6997,7 +7006,7 @@ msgstr "السابق"
 msgid "Next"
 msgstr "التالي"
 
-#: frontend/src/pages/org-admin/org-groups.js:340
+#: frontend/src/pages/org-admin/org-groups.js:339
 #: frontend/src/pages/sys-admin/groups/groups-content.js:209
 msgid "Change to department"
 msgstr "تغيير إلى قسم"
@@ -7682,12 +7691,12 @@ msgstr "هل أنت متأكد من أنك تريد تنظيف روابط الت
 msgid "At server"
 msgstr "في الخادم"
 
-#: frontend/src/pages/shared-libs/shared-libs.js:91
+#: frontend/src/pages/shared-libs/shared-libraries.js:92
 #| msgid "Shared Libraries"
 msgid "No shared libraries"
 msgstr "لا توجد مكتبات مشتركة"
 
-#: frontend/src/pages/shared-libs/shared-libs.js:250
+#: frontend/src/pages/shared-libs/shared-libraries.js:251
 #: frontend/src/pages/shared-with-all/index.js:77
 msgid "Failed to unshare {name}"
 msgstr "فشل إلغاء مشاركة {name}"
@@ -8930,47 +8939,47 @@ msgstr "التحرير في المتصفح والتنزيل"
 msgid "Edit on cloud only"
 msgstr "التحرير في المتصفح فقط"
 
-#: frontend/src/utils/utils.js:1404
+#: frontend/src/utils/utils.js:1418
 msgid "Too many requests"
 msgstr "عدد كبير جدا من الطلبات"
 
-#: frontend/src/utils/utils.js:1507
+#: frontend/src/utils/utils.js:1521
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "تم نسخ %(name)s و عنصر آخر بنجاح."
 
-#: frontend/src/utils/utils.js:1509
+#: frontend/src/utils/utils.js:1523
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "تم نسخ %(name)s و %(amount)s عناصر أخرى بنجاح."
 
-#: frontend/src/utils/utils.js:1520
+#: frontend/src/utils/utils.js:1534
 msgid "Successfully moved %(name)s."
 msgstr "تم نقل %(name)s بنجاح."
 
-#: frontend/src/utils/utils.js:1522
+#: frontend/src/utils/utils.js:1536
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "تم نقل %(name)s و عنصر آخر بنجاح."
 
-#: frontend/src/utils/utils.js:1524
+#: frontend/src/utils/utils.js:1538
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "تم نقل %(name)s و %(amount)s عناصر أخرى بنجاح."
 
-#: frontend/src/utils/utils.js:1536
+#: frontend/src/utils/utils.js:1550
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "فشل نسخ %(name)s و %(amount)s عنصر(عناصر) اخرى."
 
-#: frontend/src/utils/utils.js:1539
+#: frontend/src/utils/utils.js:1553
 msgid "Failed to copy %(name)s."
 msgstr "فشل نسخ %(name)s."
 
-#: frontend/src/utils/utils.js:1549
+#: frontend/src/utils/utils.js:1563
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "فشل في نقل %(name)s و%(amount)s عنصر(عناصر) اخرى."
 
-#: frontend/src/utils/utils.js:1552
+#: frontend/src/utils/utils.js:1566
 msgid "Failed to move %(name)s."
 msgstr "فشل نقل %(name)s ."
 
-#: frontend/src/utils/utils.js:1922
+#: frontend/src/utils/utils.js:1936
 msgid "Name cannot be double dots"
 msgstr ""
 

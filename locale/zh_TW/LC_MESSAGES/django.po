@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:35+0800\n"
+"POT-Creation-Date: 2024-11-14 17:08+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: david082321 <david082321@gmail.com>, 2018\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/haiwen/seahub/language/zh_TW/)\n"
@@ -100,8 +100,8 @@ msgid "Login id can't be empty"
 msgstr "登入ID不能為空"
 
 #: seahub/api2/endpoints/admin/account.py:227
-#: seahub/api2/endpoints/admin/users.py:896
-#: seahub/api2/endpoints/admin/users.py:1331
+#: seahub/api2/endpoints/admin/users.py:893
+#: seahub/api2/endpoints/admin/users.py:1320
 #, python-format
 msgid "Login id %s already exists."
 msgstr "登入ID%s已存在"
@@ -115,10 +115,10 @@ msgid "Space quota can't be empty"
 msgstr "儲存空間配額不能為空"
 
 #: seahub/api2/endpoints/admin/account.py:256
-#: seahub/api2/endpoints/admin/users.py:1379
-#: seahub/api2/endpoints/admin/users.py:1383
-#: seahub/api2/endpoints/admin/users.py:1396
-#: seahub/api2/endpoints/admin/users.py:1400
+#: seahub/api2/endpoints/admin/users.py:1368
+#: seahub/api2/endpoints/admin/users.py:1372
+#: seahub/api2/endpoints/admin/users.py:1385
+#: seahub/api2/endpoints/admin/users.py:1389
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "必須是大于或等于 0 的整數。"
@@ -140,11 +140,11 @@ msgstr ""
 msgid "There is already a group with that name."
 msgstr "已有同名群組"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:241
+#: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are libraries in this department."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:245
+#: seahub/api2/endpoints/admin/address_book/groups.py:239
 msgid "There are sub-departments in this department."
 msgstr ""
 
@@ -188,7 +188,7 @@ msgid "Library can not be transferred to owner."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
-#: seahub/api2/endpoints/repo_share_links.py:160
+#: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:573
 #: seahub/api2/endpoints/share_links.py:795
 msgid "There is an associated published library."
@@ -271,7 +271,7 @@ msgid "Link Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:541
+#: seahub/api2/endpoints/group_members.py:530
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -324,101 +324,101 @@ msgstr "已用空間"
 msgid "Space Quota"
 msgstr "容量"
 
-#: seahub/api2/endpoints/admin/users.py:674
-#: seahub/api2/endpoints/admin/users.py:711
+#: seahub/api2/endpoints/admin/users.py:671
+#: seahub/api2/endpoints/admin/users.py:708
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:811
-#: seahub/api2/endpoints/admin/users.py:1303 seahub/base/accounts.py:1253
+#: seahub/api2/endpoints/admin/users.py:808
+#: seahub/api2/endpoints/admin/users.py:1292 seahub/base/accounts.py:1253
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
 msgstr "用戶數量超過限制。"
 
-#: seahub/api2/endpoints/admin/users.py:910
+#: seahub/api2/endpoints/admin/users.py:907
 #, python-format
 msgid "Successfully added user %(user)s."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:914
+#: seahub/api2/endpoints/admin/users.py:911
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:542
 #, python-format
 msgid "You are invited to join %s"
 msgstr "你被邀請加入 %s"
 
-#: seahub/api2/endpoints/admin/users.py:918
+#: seahub/api2/endpoints/admin/users.py:915
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:921
+#: seahub/api2/endpoints/admin/users.py:918
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1439
+#: seahub/api2/endpoints/admin/users.py:1428
 msgid "Edit succeeded"
 msgstr "權限修改成功"
 
-#: seahub/api2/endpoints/admin/users.py:1442 seahub/views/sysadmin.py:445
+#: seahub/api2/endpoints/admin/users.py:1431 seahub/views/sysadmin.py:445
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "你的 %s 帳戶已開通。"
 
-#: seahub/api2/endpoints/admin/users.py:1447
+#: seahub/api2/endpoints/admin/users.py:1436
 msgid "Edit succeeded, an email has been sent."
 msgstr "編輯成功，一封郵件已發送。"
 
-#: seahub/api2/endpoints/admin/users.py:1450
+#: seahub/api2/endpoints/admin/users.py:1439
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "編輯成功, 但發送郵件失敗，請檢查你的郵件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1518 seahub/auth/views.py:371
+#: seahub/api2/endpoints/admin/users.py:1507 seahub/auth/views.py:371
 msgid "Unable to reset password."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1544 seahub/auth/forms.py:201
+#: seahub/api2/endpoints/admin/users.py:1533 seahub/auth/forms.py:201
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
 msgstr "%s 密碼重置"
 
-#: seahub/api2/endpoints/admin/users.py:1548
+#: seahub/api2/endpoints/admin/users.py:1537
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1566 seahub/views/sysadmin.py:486
+#: seahub/api2/endpoints/admin/users.py:1555 seahub/views/sysadmin.py:486
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "密碼已重置為: %s"
 
-#: seahub/api2/endpoints/admin/users.py:1568
+#: seahub/api2/endpoints/admin/users.py:1557
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1572 seahub/views/sysadmin.py:516
+#: seahub/api2/endpoints/admin/users.py:1561 seahub/views/sysadmin.py:516
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "成功將用戶密碼重置為 %(passwd)s, 但發送通知郵件到 %(user)s 失敗，請檢查你的郵件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1575
+#: seahub/api2/endpoints/admin/users.py:1564
 #: seahub/organizations/api/admin/user_set_password.py:88
 #: seahub/views/sysadmin.py:520
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功將用戶 %(user)s 的密碼重置為 %(passwd)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1578 seahub/views/sysadmin.py:523
+#: seahub/api2/endpoints/admin/users.py:1567 seahub/views/sysadmin.py:523
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -455,7 +455,7 @@ msgstr ""
 #: seahub/notifications/models.py:728 seahub/notifications/models.py:758
 #: seahub/notifications/models.py:780 seahub/notifications/models.py:806
 #: seahub/notifications/models.py:823 seahub/notifications/models.py:840
-#: seahub/notifications/models.py:869 seahub/seadoc/apis.py:2665
+#: seahub/notifications/models.py:869 seahub/seadoc/apis.py:2660
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
 #: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
@@ -483,7 +483,7 @@ msgstr "目標路徑無效"
 #: seahub/api2/views.py:2095 seahub/api2/views.py:2141
 #: seahub/api2/views.py:2190 seahub/api2/views.py:2603
 #: seahub/api2/views.py:2711 seahub/seadoc/apis.py:380
-#: seahub/seadoc/apis.py:489 seahub/seadoc/apis.py:2998
+#: seahub/seadoc/apis.py:489 seahub/seadoc/apis.py:2993
 msgid "Out of quota."
 msgstr "超過空間上限"
 
@@ -531,7 +531,7 @@ msgstr "找不到使用者%s "
 #: seahub/api2/endpoints/wiki2.py:1346 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
 #: seahub/profile/forms.py:24 seahub/profile/views.py:261
-#: seahub/seadoc/apis.py:2649 seahub/seadoc/views.py:31
+#: seahub/seadoc/apis.py:2644 seahub/seadoc/views.py:31
 #: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
 #: seahub/search/views.py:174 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -544,7 +544,7 @@ msgstr "沒有權限"
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:866
 #: seahub/api2/endpoints/wiki2.py:549 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3005
+#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3000
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "You can not refresh this file's lock."
 msgstr ""
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2656
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2651
 msgid "The participant already exists."
 msgstr ""
 
@@ -568,36 +568,36 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:110
-#: seahub/api2/endpoints/group_members.py:343
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:104
+#: seahub/api2/endpoints/group_members.py:332
+#: seahub/api2/endpoints/group_members.py:480
 #, python-format
 msgid "User %s is already a group member."
 msgstr "用戶 %s 已經是群組的成員"
 
-#: seahub/api2/endpoints/group_members.py:116
-#: seahub/api2/endpoints/group_members.py:352
-#: seahub/api2/endpoints/group_members.py:500 seahub/api2/views.py:1857
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:341
+#: seahub/api2/endpoints/group_members.py:489 seahub/api2/views.py:1857
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:342
+#: seahub/organizations/api/admin/users.py:339
 #, python-format
 msgid "User %s not found in organization."
 msgstr "組織內無用戶 %s 。"
 
-#: seahub/api2/endpoints/group_members.py:119
-#: seahub/api2/endpoints/group_members.py:360
-#: seahub/api2/endpoints/group_members.py:508
+#: seahub/api2/endpoints/group_members.py:113
+#: seahub/api2/endpoints/group_members.py:349
+#: seahub/api2/endpoints/group_members.py:497
 #, python-format
 msgid "User %s is an organization user."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:456
 msgid "Group does not exist"
 msgstr "群組不存在。"
 
-#: seahub/api2/endpoints/group_members.py:548 seahub/views/sysadmin.py:163
+#: seahub/api2/endpoints/group_members.py:537 seahub/views/sysadmin.py:163
 #: seahub/views/sysadmin.py:271 seahub/views/sysadmin.py:640
 #: seahub/views/sysadmin.py:652 seahub/views/sysadmin.py:793
 msgid "Failed to export Excel"
@@ -638,7 +638,7 @@ msgstr "用戶 %s 已存在。"
 #: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:34
 #: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:165
-#: seahub/organizations/api/admin/users.py:790
+#: seahub/organizations/api/admin/users.py:787
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
@@ -729,7 +729,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:89 seahub/api2/endpoints/user.py:96
 #: seahub/api2/endpoints/user.py:112
-#: seahub/organizations/api/admin/users.py:786
+#: seahub/organizations/api/admin/users.py:783
 msgid "Feature disabled."
 msgstr ""
 
@@ -845,7 +845,7 @@ msgstr ""
 msgid "telephone is too long (maximum is 100 characters)."
 msgstr ""
 
-#: seahub/api2/endpoints/user_avatar.py:49
+#: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
 #, python-format
 msgid ""
@@ -853,7 +853,7 @@ msgid ""
 "%(valid_exts_list)s"
 msgstr "%(ext)s 是個無效的檔案副檔名。允許的副檔名爲：%(valid_exts_list)s"
 
-#: seahub/api2/endpoints/user_avatar.py:53
+#: seahub/api2/endpoints/user_avatar.py:45
 #: seahub/organizations/api/admin/logo.py:64 seahub/utils/error_msg.py:13
 #, python-format
 msgid ""
@@ -861,7 +861,7 @@ msgid ""
 "%(max_valid_size)s"
 msgstr "你的檔案太大 (%(size)s)，最大允許大小爲%(max_valid_size)s"
 
-#: seahub/api2/endpoints/user_avatar.py:59 seahub/avatar/forms.py:43
+#: seahub/api2/endpoints/user_avatar.py:51 seahub/avatar/forms.py:43
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
@@ -1985,13 +1985,21 @@ msgstr ""
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgstr ""
 
-#: seahub/notifications/utils.py:430 seahub/notifications/utils.py:440
+#: seahub/notifications/utils.py:430 seahub/notifications/utils.py:450
 msgid "Details"
 msgstr "詳情"
 
-#: seahub/notifications/utils.py:433
+#: seahub/notifications/utils.py:436
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
+msgstr ""
+
+#: seahub/notifications/utils.py:442
+#, python-format
+#| msgid "%(author)s added a new comment in document %(sdoc_name)s"
+msgid ""
+"%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
+"document %(sdoc_name)s\n"
 msgstr ""
 
 #: seahub/oauth/views.py:212
@@ -2027,16 +2035,16 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "提示：後一種更安全，但並不是被所有瀏覽器所支援。我們建議使用最新的Chrome或Firefox。"
 
-#: seahub/organizations/api/admin/users.py:813
+#: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
 msgstr ""
 
-#: seahub/organizations/api/admin/users.py:817
+#: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
 msgstr ""
 
-#: seahub/organizations/api/admin/users.py:835
+#: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
 msgstr ""
