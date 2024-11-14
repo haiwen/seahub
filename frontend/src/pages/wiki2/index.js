@@ -52,7 +52,21 @@ class Wiki extends Component {
 
   componentDidMount() {
     this.getWikiConfig();
+    window.addEventListener('popstate', this.onPopstate);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+  }
+
+  onPopstate = (e) => {
+    setTimeout(() => {
+      if (e.state) {
+        const { pageId } = e.state;
+        this.setCurrentPage(pageId);
+      }
+    }, 0);
+  };
 
   getCustomUrl = () => {
     const siteRootLen = siteRoot.length;
@@ -125,7 +139,7 @@ class Wiki extends Component {
     return firstPage.id;
   };
 
-  getSdocFileContent = (docUuid, accessToken) => {
+  getSdocFileContent = (docUuid, accessToken, pageId, filePath) => {
     const config = {
       docUuid,
       sdocServer: seadocServerUrl,
@@ -136,11 +150,25 @@ class Wiki extends Component {
       this.setState({
         isDataLoading: false,
         editorContent: res.data,
+      }, () => {
+        this.afterGetFileContent(pageId, filePath);
       });
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
+  };
+
+  afterGetFileContent = (pageId, filePath) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('page_id', pageId);
+
+    let customUrl = this.getCustomUrl();
+    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
+    if (customUrl.includes('wiki/publish')) {
+      url = `${siteRoot}${customUrl}?${params.toString()}`;
+    }
+    window.history.pushState({ url: url, path: filePath, pageId: pageId }, filePath, url);
   };
 
   mobileCloseSidePanel = () => {
@@ -174,21 +202,11 @@ class Wiki extends Component {
         path: filePath,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
-      this.getSdocFileContent(docUuid, seadoc_access_token);
+      this.getSdocFileContent(docUuid, seadoc_access_token, pageId, filePath);
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-
-    const params = new URLSearchParams(window.location.search);
-    params.set('page_id', pageId);
-
-    let customUrl = this.getCustomUrl();
-    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
-    if (customUrl.includes('wiki/publish')) {
-      url = `${siteRoot}${customUrl}?${params.toString()}`;
-    }
-    window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
   cacheHistoryFiles = (docUuid, name, pageId) => {
