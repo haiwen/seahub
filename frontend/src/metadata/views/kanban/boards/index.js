@@ -3,19 +3,25 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
-import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
+import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED, FILE_TYPE } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
-import { gettext } from '../../../../utils/constants';
+import { gettext, siteRoot } from '../../../../utils/constants';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord } from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
+import { Utils } from '../../../../utils/utils';
+import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
+import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 
 import './index.css';
+import { getRowById } from '../../../utils/table';
 
 const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
+  const [isShowImagePreviewer, setIsShowImagePreviewer] = useState(false);
+  const [record, setRecord] = useState(null);
 
   const { metadata, store } = useMetadataView();
   const { collaborators } = useCollaborators();
@@ -166,6 +172,61 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
 
   const isEmpty = boards.length === 0;
 
+  const generateUrl = (fileName, parentDir) => {
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+    return `${siteRoot}lib/${repoID}/file${path}`;
+  };
+
+  const openMarkdown = (name, parentDir) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, name);
+  };
+
+  const openByNewWindow = (fileType, fileName, parentDir) => {
+    if (!fileType) {
+      const url = generateUrl(fileName, parentDir);
+      window.open(url);
+    } else {
+      let pathname = window.location.pathname;
+      if (pathname.endsWith('/')) {
+        pathname = pathname.slice(0, -1);
+      }
+      window.open(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
+    }
+  };
+
+  const openSdoc = (fileName, parentDir) => {
+    const url = generateUrl(fileName, parentDir);
+    window.open(url);
+  };
+
+  const openFile = (type, fileName, parentDir, recordId = null) => {
+    switch (type) {
+      case FILE_TYPE.MARKDOWN: {
+        openMarkdown(fileName, parentDir);
+        break;
+      }
+      case FILE_TYPE.SDOC: {
+        openSdoc(fileName, parentDir);
+        break;
+      }
+      case FILE_TYPE.IMAGE: {
+        const record = getRowById(metadata, recordId);
+        setRecord(record);
+        setIsShowImagePreviewer(true);
+        break;
+      }
+      default: {
+        openByNewWindow(type, fileName, parentDir);
+        break;
+      }
+    }
+  };
+
+  const closeImagePreviewer = () => {
+    setIsShowImagePreviewer(false);
+  };
+
   return (
     <div className={classnames('sf-metadata-view-kanban-boards', {
       'sf-metadata-view-kanban-boards-text-wrap': textWrap,
@@ -194,6 +255,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
                   onFreezed={onFreezed}
                   onUnFreezed={onUnFreezed}
                   onCloseSettings={onCloseSettings}
+                  onOpenFile={openFile}
                 />
               );
             })}
@@ -201,6 +263,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         )}
         {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
+      {isShowImagePreviewer && (<ImagePreviewer record={record} table={metadata} closeImagePopup={closeImagePreviewer} />)}
     </div>
   );
 };

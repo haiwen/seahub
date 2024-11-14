@@ -24,6 +24,7 @@ const Board = ({
   onFreezed,
   onUnFreezed,
   onCloseSettings,
+  onOpenFile,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
@@ -84,6 +85,7 @@ const Board = ({
               titleColumn={titleColumn}
               displayColumns={displayColumns}
               onCloseSettings={onCloseSettings}
+              onOpenFile={onOpenFile}
             />
           );
           if (readonly) return CardElement;
@@ -113,6 +115,7 @@ Board.propTypes = {
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,
   onCloseSettings: PropTypes.func.isRequired,
+  onOpenFile: PropTypes.func.isRequired,
 };
 
 export default Board;
