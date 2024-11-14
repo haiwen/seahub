@@ -1,66 +1,68 @@
 import { Utils } from '../../../utils/utils';
 
 const customImageOverlay = (center, imageUrl) => {
-  function ImageOverlay() {
-    this._center = center;
-    this._imgUrl = imageUrl;
-  }
+  class ImageOverlay extends window.BMap.Overlay {
+    constructor(center, imageUrl) {
+      super();
+      this._center = center;
+      this._imageUrl = imageUrl;
+    }
 
-  ImageOverlay.prototype = new window.BMap.Overlay();
+    initialize(map) {
+      this._map = map;
+      const div = document.createElement('div');
+      div.style.position = 'absolute';
+      div.style.width = '80px';
+      div.style.height = '80px';
+      div.style.zIndex = 2000;
+      map.getPanes().markerPane.appendChild(div);
+      this._div = div;
 
-  ImageOverlay.prototype.initialize = function (map) {
-    this._map = map;
-    let div = document.createElement('div');
-    div.style.position = 'absolute';
-    div.style.width = '80px';
-    div.style.height = '80px';
-    div.style.zIndex = 2000;
-    map.getPanes().markerPane.appendChild(div);
-    this._div = div;
-
-    const imageElement = `<img src=${imageUrl} width="72" height="72" />`;
-    const htmlString = `
+      const imageElement = `<img src=${this._imageUrl} width="72" height="72" />`;
+      const htmlString = `
       <div class="custom-image-container">
-        ${imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
+        ${this._imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
         <i class='sf3-font image-overlay-arrow'></i>
       </div>
     `;
-    const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
-    const label = labelDocument.body.firstElementChild;
-    this._div.append(label);
-    if (Utils.isDesktop) {
-      this._div.addEventListener('click', (event) => {
+      const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
+      const label = labelDocument.body.firstElementChild;
+      this._div.append(label);
+
+      const eventHandler = (event) => {
         event.stopPropagation();
         event.preventDefault();
-      });
-    } else {
-      this._div.addEventListener('touchend', (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-      });
+      };
+
+      if (Utils.isDesktop) {
+        this._div.addEventListener('click', eventHandler);
+      } else {
+        this._div.addEventListener('touchend', eventHandler);
+      }
+
+      return div;
     }
-    return div;
-  };
 
-  ImageOverlay.prototype.draw = function () {
-    const position = this._map.pointToOverlayPixel(this._center);
-    this._div.style.left = position.x - 40 + 'px'; // 40 is 1/2 container height
-    this._div.style.top = position.y - 88 + 'px'; // 80 is container height and 8 is icon height
-  };
+    draw() {
+      const position = this._map.pointToOverlayPixel(this._center);
+      this._div.style.left = position.x - 40 + 'px'; // 40 is 1/2 container height
+      this._div.style.top = position.y - 88 + 'px'; // 80 is container height and 8 is icon height
+    }
 
-  ImageOverlay.prototype.getImageUrl = function () {
-    return imageUrl || '';
-  };
+    getImageUrl() {
+      return imageUrl || '';
+    }
 
-  ImageOverlay.prototype.getPosition = function () {
-    return center;
-  };
+    getPosition() {
+      return center;
+    }
 
-  ImageOverlay.prototype.getMap = function () {
-    return this._map || null;
-  };
+    getMap() {
+      return this._map || null;
+    }
+  }
 
-  return new ImageOverlay(center);
+  return new ImageOverlay(center, imageUrl);
 };
 
 export default customImageOverlay;
