@@ -25,7 +25,7 @@ const Card = ({
 
   const titleValue = getCellValueByColumn(record, titleColumn);
 
-  const handleClick = useCallback((e) => {
+  const handleClickCard = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     const name = getFileNameFromRecord(record);
@@ -84,7 +84,7 @@ const Card = ({
       ref={cardRef}
       data-id={record._id}
       className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}
-      onClick={handleClick}
+      onClick={handleClickCard}
     >
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">

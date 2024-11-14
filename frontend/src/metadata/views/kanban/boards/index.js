@@ -14,13 +14,13 @@ import Board from './board';
 import { Utils } from '../../../../utils/utils';
 import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
+import { getRowById } from '../../../utils/table';
 
 import './index.css';
-import { getRowById } from '../../../utils/table';
 
 const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
-  const [isShowImagePreviewer, setIsShowImagePreviewer] = useState(false);
+  const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [record, setRecord] = useState(null);
 
   const { metadata, store } = useMetadataView();
@@ -178,11 +178,11 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     return `${siteRoot}lib/${repoID}/file${path}`;
   };
 
-  const openMarkdown = (name, parentDir) => {
+  const openMarkdown = useCallback((name, parentDir) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, name);
-  };
+  }, []);
 
-  const openByNewWindow = (fileType, fileName, parentDir) => {
+  const openByNewWindow = useCallback((fileType, fileName, parentDir) => {
     if (!fileType) {
       const url = generateUrl(fileName, parentDir);
       window.open(url);
@@ -193,14 +193,14 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
       }
       window.open(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
     }
-  };
+  }, []);
 
-  const openSdoc = (fileName, parentDir) => {
+  const openSdoc = useCallback((fileName, parentDir) => {
     const url = generateUrl(fileName, parentDir);
     window.open(url);
-  };
+  }, []);
 
-  const openFile = (type, fileName, parentDir, recordId = null) => {
+  const openFile = useCallback((type, fileName, parentDir, recordId = null) => {
     switch (type) {
       case FILE_TYPE.MARKDOWN: {
         openMarkdown(fileName, parentDir);
@@ -213,7 +213,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
       case FILE_TYPE.IMAGE: {
         const record = getRowById(metadata, recordId);
         setRecord(record);
-        setIsShowImagePreviewer(true);
+        setImagePreviewerVisible(true);
         break;
       }
       default: {
@@ -221,11 +221,11 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         break;
       }
     }
-  };
+  }, [openMarkdown, openSdoc, openByNewWindow, metadata]);
 
-  const closeImagePreviewer = () => {
-    setIsShowImagePreviewer(false);
-  };
+  const closeImagePreviewer = useCallback(() => {
+    setImagePreviewerVisible(false);
+  }, []);
 
   return (
     <div className={classnames('sf-metadata-view-kanban-boards', {
@@ -263,7 +263,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         )}
         {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
-      {isShowImagePreviewer && (<ImagePreviewer record={record} table={metadata} closeImagePopup={closeImagePreviewer} />)}
+      {isImagePreviewerVisible && (<ImagePreviewer record={record} table={metadata} closeImagePopup={closeImagePreviewer} />)}
     </div>
   );
 };

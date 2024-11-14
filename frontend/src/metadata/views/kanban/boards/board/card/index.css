@@ -73,11 +73,11 @@
 }
 
 .sf-metadata-kanban-card .file-name-formatter:not(.sf-metadata-image-file-formatter) {
-  transform: translateX(-4px);
+  margin-left: -4px;
 }
 
 .sf-metadata-kanban-card .sf-metadata-special-file-name-formatter:not(.sf-metadata-image-file-formatter) {
-  transform: translateX(-2px)
+  margin-left: -2px;
 }
 
 .sf-metadata-kanban-card .file-name-formatter .sf-metadata-file-icon {
