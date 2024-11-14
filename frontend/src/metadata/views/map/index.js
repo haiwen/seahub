@@ -4,7 +4,7 @@ import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
 import { MAP_TYPE } from '../../../constants';
 import Loading from '../../../components/loading';
 import { isValidPosition } from '../../utils/validate';
-import { appAvatarURL, baiduMapKey, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { appAvatarURL, baiduMapKey, gettext, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
@@ -14,6 +14,7 @@ import customAvatarOverlay from './customAvatarOverlay';
 import { createBMapGeolocationControl } from './geolocation-control';
 
 import './index.css';
+import toaster from '../../../components/toast';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -99,8 +100,11 @@ const Map = () => {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        position => addMarker(position.coords.longitude, position.coords.latitude), 
-        () => addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat)
+        position => addMarker(position.coords.longitude, position.coords.latitude),
+        () => {
+          addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
+          toaster.danger(gettext('Failed to get user location'));
+        }
       );
     } else {
       addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
