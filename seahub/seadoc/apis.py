@@ -1256,10 +1256,12 @@ class SeadocCommentRepliesView(APIView):
             'author': username,
             'comment_id': int(comment_id),
             'reply_id': reply.pk,
-            'reply' : str(reply_content),
+            'reply': str(reply_content),
             'msg_type': 'reply',
             'created_at': datetime_to_isoformat_timestr(reply.created_at),
             'updated_at': datetime_to_isoformat_timestr(reply.updated_at),
+            'is_resolved': type(reply_content) is bool and reply_content is True,
+            'resolve_comment': file_comment.comment.strip()
         }
         detail.update(user_to_dict(username, request=request))
 
