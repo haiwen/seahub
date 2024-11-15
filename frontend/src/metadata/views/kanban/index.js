@@ -45,8 +45,10 @@ const Kanban = () => {
   useEffect(() => {
     const eventBus = window.sfMetadataContext.eventBus;
     const unsubscribeKanbanSetting = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS, () => setShowSettings(!isShowSettings));
+    const unsubscribeCloseKanbanSetting = eventBus.subscribe(EVENT_BUS_TYPE.CLOSE_KANBAN_SETTINGS, () => setShowSettings(false));
     return () => {
       unsubscribeKanbanSetting();
+      unsubscribeCloseKanbanSetting();
     };
   }, [isShowSettings]);
 

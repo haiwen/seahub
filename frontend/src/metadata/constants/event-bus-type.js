@@ -60,4 +60,6 @@ export const EVENT_BUS_TYPE = {
 
   // kanban
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
+  OPEN_KANBAN_SETTINGS: 'open_kanban_settings',
+  CLOSE_KANBAN_SETTINGS: 'close_kanban_settings',
 };

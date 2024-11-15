@@ -135,9 +135,3 @@ export const GALLERY_DATE_MODE = {
 };
 
 export const UNCATEGORIZED = '_uncategorized';
-
-export const FILE_TYPE = {
-  MARKDOWN: 'markdown',
-  SDOC: 'sdoc',
-  IMAGE: 'image',
-};

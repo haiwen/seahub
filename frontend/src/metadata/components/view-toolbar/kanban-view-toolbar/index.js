@@ -1,15 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { FilterSetter, SortSetter } from '../../data-process-setter';
+import { gettext } from '../../../../utils/constants';
 
 const KanbanViewToolBar = ({
+  isCustomPermission,
   readOnly,
   view,
   collaborators,
   modifyFilters,
   modifySorts,
+  showDetail,
   closeDetail,
 }) => {
   const viewType = useMemo(() => view.type, [view]);
@@ -26,6 +29,11 @@ const KanbanViewToolBar = ({
     closeDetail();
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS);
   };
+
+  const toggleDetails = useCallback(() => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_KANBAN_SETTINGS);
+    showDetail();
+  }, [showDetail]);
 
   return (
     <>
@@ -63,6 +71,11 @@ const KanbanViewToolBar = ({
           tabIndex={0}
           onClick={onToggleKanbanSetting}
         />
+        {!isCustomPermission && (
+          <div className="cur-view-path-btn ml-2" onClick={toggleDetails}>
+            <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
+          </div>
+        )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
     </>

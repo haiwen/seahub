@@ -130,6 +130,7 @@ export const MetadataViewProvider = ({
         isLoading,
         metadata,
         store: storeRef.current,
+        isDirentDetailShow: params.isDirentDetailShow,
         deleteFilesCallback: params.deleteFilesCallback,
         renameFileCallback: params.renameFileCallback,
         updateCurrentDirent: params.updateCurrentDirent,

@@ -14,6 +14,7 @@ import { GRID_MODE, LIST_MODE, METADATA_MODE } from './constants';
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
   isTreePanelShown: PropTypes.bool.isRequired,
+  isDirentDetailShow: PropTypes.bool,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -198,6 +199,7 @@ class DirColumnView extends React.Component {
           {currentMode === METADATA_MODE && (
             <SeafileMetadata
               mediaUrl={mediaUrl}
+              isDirentDetailShow={this.props.isDirentDetailShow}
               repoID={this.props.repoID}
               repoInfo={this.props.currentRepoInfo}
               viewID={this.props.viewId}

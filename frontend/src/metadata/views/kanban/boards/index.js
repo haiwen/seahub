@@ -1,29 +1,33 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
-import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED, FILE_TYPE } from '../../../constants';
+import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
-import { gettext, siteRoot } from '../../../../utils/constants';
-import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord } from '../../../utils/cell';
+import { gettext } from '../../../../utils/constants';
+import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord,
+  getFileNameFromRecord, getParentDirFromRecord
+} from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
-import { Utils } from '../../../../utils/utils';
-import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
-import { getRowById } from '../../../utils/table';
+import { openFile } from '../../../utils/open-file';
+import { checkIsDir } from '../../../utils/row';
 
 import './index.css';
 
 const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
-  const [record, setRecord] = useState(null);
+  const [selectedCard, setSelectedCard] = useState('');
 
-  const { metadata, store } = useMetadataView();
+  const currentImageRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const groupByColumn = useMemo(() => {
@@ -170,68 +174,57 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setHaveFreezed(false);
   }, []);
 
-  const isEmpty = boards.length === 0;
-
-  const generateUrl = (fileName, parentDir) => {
-    const repoID = window.sfMetadataContext.getSetting('repoID');
-    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-    return `${siteRoot}lib/${repoID}/file${path}`;
-  };
-
-  const openMarkdown = useCallback((name, parentDir) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, name);
+  const onOpenFile = useCallback((record) => {
+    openFile(record, window.sfMetadataContext.eventBus, () => {
+      currentImageRef.current = record;
+      setImagePreviewerVisible(true);
+    });
   }, []);
-
-  const openByNewWindow = useCallback((fileType, fileName, parentDir) => {
-    if (!fileType) {
-      const url = generateUrl(fileName, parentDir);
-      window.open(url);
-    } else {
-      let pathname = window.location.pathname;
-      if (pathname.endsWith('/')) {
-        pathname = pathname.slice(0, -1);
-      }
-      window.open(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
-    }
-  }, []);
-
-  const openSdoc = useCallback((fileName, parentDir) => {
-    const url = generateUrl(fileName, parentDir);
-    window.open(url);
-  }, []);
-
-  const openFile = useCallback((type, fileName, parentDir, recordId = null) => {
-    switch (type) {
-      case FILE_TYPE.MARKDOWN: {
-        openMarkdown(fileName, parentDir);
-        break;
-      }
-      case FILE_TYPE.SDOC: {
-        openSdoc(fileName, parentDir);
-        break;
-      }
-      case FILE_TYPE.IMAGE: {
-        const record = getRowById(metadata, recordId);
-        setRecord(record);
-        setImagePreviewerVisible(true);
-        break;
-      }
-      default: {
-        openByNewWindow(type, fileName, parentDir);
-        break;
-      }
-    }
-  }, [openMarkdown, openSdoc, openByNewWindow, metadata]);
 
   const closeImagePreviewer = useCallback(() => {
+    currentImageRef.current = null;
     setImagePreviewerVisible(false);
   }, []);
 
+  const onSelectCard = useCallback((record) => {
+    const recordId = geRecordIdFromRecord(record);
+    const name = getFileNameFromRecord(record);
+    const path = getParentDirFromRecord(record);
+    const isDir = checkIsDir(record);
+    updateCurrentDirent({
+      type: isDir ? 'dir' : 'file',
+      mtime: '',
+      name,
+      path,
+      file_tags: []
+    });
+    setSelectedCard(recordId);
+    onCloseSettings();
+    showDirentDetail();
+  }, [onCloseSettings, showDirentDetail, updateCurrentDirent]);
+
+  const handleClickOutside = useCallback((event) => {
+    if (!containerRef.current.contains(event.target)) return;
+    setSelectedCard(null);
+    updateCurrentDirent();
+  }, [updateCurrentDirent]);
+
+  useEffect(() => {
+    if (!isDirentDetailShow) {
+      setSelectedCard(null);
+    }
+  }, [isDirentDetailShow]);
+
+  const isEmpty = boards.length === 0;
+
   return (
-    <div className={classnames('sf-metadata-view-kanban-boards', {
-      'sf-metadata-view-kanban-boards-text-wrap': textWrap,
-      'readonly': readonly,
-    })}
+    <div
+      ref={containerRef}
+      className={classnames('sf-metadata-view-kanban-boards', {
+        'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+        'readonly': readonly,
+      })}
+      onClick={handleClickOutside}
     >
       <div className="smooth-dnd-container horizontal">
         {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
@@ -250,12 +243,13 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
                   groupByColumn={groupByColumn}
                   titleColumn={titleColumn}
                   displayColumns={displayColumns}
+                  selectedCard={selectedCard}
                   onMove={onMove}
                   deleteOption={deleteOption}
                   onFreezed={onFreezed}
                   onUnFreezed={onUnFreezed}
-                  onCloseSettings={onCloseSettings}
-                  onOpenFile={openFile}
+                  onOpenFile={onOpenFile}
+                  onSelectCard={onSelectCard}
                 />
               );
             })}
@@ -263,7 +257,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         )}
         {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
-      {isImagePreviewerVisible && (<ImagePreviewer record={record} table={metadata} closeImagePopup={closeImagePreviewer} />)}
+      {isImagePreviewerVisible && (<ImagePreviewer record={currentImageRef.current} table={metadata} closeImagePopup={closeImagePreviewer} />)}
     </div>
   );
 };

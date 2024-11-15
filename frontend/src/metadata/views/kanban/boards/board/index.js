@@ -6,6 +6,7 @@ import { useMetadataView } from '../../../../hooks/metadata-view';
 import { getRowById } from '../../../../utils/table';
 import Container from '../../dnd/container';
 import Draggable from '../../dnd/draggable';
+import { geRecordIdFromRecord } from '../../../../utils/cell';
 
 import './index.css';
 
@@ -19,12 +20,13 @@ const Board = ({
   groupByColumn,
   titleColumn,
   displayColumns,
+  selectedCard,
   onMove,
   deleteOption,
   onFreezed,
   onUnFreezed,
-  onCloseSettings,
   onOpenFile,
+  onSelectCard,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
@@ -75,17 +77,18 @@ const Board = ({
         {board.children.map((cardKey) => {
           const record = getRowById(metadata, cardKey);
           if (!record) return null;
+          const isSelected = selectedCard === geRecordIdFromRecord(record);
           const CardElement = (
             <Card
               key={cardKey}
-              readonly={readonly}
+              isSelected={isSelected}
               displayEmptyValue={displayEmptyValue}
               displayColumnName={displayColumnName}
               record={record}
               titleColumn={titleColumn}
               displayColumns={displayColumns}
-              onCloseSettings={onCloseSettings}
               onOpenFile={onOpenFile}
+              onSelectCard={onSelectCard}
             />
           );
           if (readonly) return CardElement;
@@ -110,12 +113,13 @@ Board.propTypes = {
   groupByColumn: PropTypes.object,
   titleColumn: PropTypes.object,
   displayColumns: PropTypes.array,
+  selectedCard: PropTypes.string,
   onMove: PropTypes.func,
   deleteOption: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,
-  onCloseSettings: PropTypes.func.isRequired,
   onOpenFile: PropTypes.func.isRequired,
+  onSelectCard: PropTypes.func.isRequired,
 };
 
 export default Board;

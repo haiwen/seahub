@@ -1,98 +1,49 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from '../formatter';
-import { FILE_TYPE } from '../../../../../constants';
-import { useMetadataView } from '../../../../../hooks/metadata-view';
-import { Utils } from '../../../../../../utils/utils';
-import { geRecordIdFromRecord, getCellValueByColumn, getFileNameFromRecord, getParentDirFromRecord, isValidCellValue } from '../../../../../utils/cell';
+import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 
 import './index.css';
 
 const Card = ({
-  readonly,
+  isSelected,
   displayEmptyValue,
   displayColumnName,
   record,
   titleColumn,
   displayColumns,
-  onCloseSettings,
   onOpenFile,
+  onSelectCard,
 }) => {
-  const cardRef = useRef(null);
-
-  const { updateCurrentDirent, showDirentDetail } = useMetadataView();
-
   const titleValue = getCellValueByColumn(record, titleColumn);
 
-  const handleClickCard = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const name = getFileNameFromRecord(record);
-    const path = getParentDirFromRecord(record);
-    updateCurrentDirent({
-      type: 'file',
-      name,
-      path,
-      file_tags: []
-    });
-    onCloseSettings();
-    showDirentDetail();
-  }, [record, updateCurrentDirent, showDirentDetail, onCloseSettings]);
+  const handleClickCard = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    onSelectCard(record);
+  }, [record, onSelectCard]);
 
-  const getFileType = useCallback((fileName) => {
-    if (!fileName) return '';
-    const index = fileName.lastIndexOf('.');
-    if (index === -1) return '';
-    const suffix = fileName.slice(index).toLowerCase();
-    if (suffix.indexOf(' ') > -1) return '';
-    if (Utils.imageCheck(fileName)) return FILE_TYPE.IMAGE;
-    if (Utils.isMarkdownFile(fileName)) return FILE_TYPE.MARKDOWN;
-    if (Utils.isSdocFile(fileName)) return FILE_TYPE.SDOC;
-    return '';
-  }, []);
-
-  const handleClickFilename = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const fileName = getFileNameFromRecord(record);
-    const fileType = getFileType(fileName);
-    const parentDir = getParentDirFromRecord(record);
-    const recordId = geRecordIdFromRecord(record);
-    onOpenFile(fileType, fileName, parentDir, recordId);
-  }, [record, getFileType, onOpenFile]);
-
-  useEffect(() => {
-    const cardElement = cardRef.current;
-    if (!cardElement) return;
-
-    const filenameElement = cardElement.querySelector('.file-name-formatter .sf-metadata-file-name');
-    if (filenameElement) {
-      filenameElement.addEventListener('click', handleClickFilename);
-    }
-
-    return () => {
-      if (filenameElement) {
-        filenameElement.removeEventListener('click', handleClickFilename);
-      }
-    };
-  }, [handleClickFilename]);
+  const handleClickFilename = useCallback((event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    onOpenFile(record);
+  }, [record, onOpenFile]);
 
   return (
     <article
-      ref={cardRef}
       data-id={record._id}
-      className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}
+      className={classnames('sf-metadata-kanban-card', { 'selected': isSelected })}
       onClick={handleClickCard}
     >
       {titleColumn && (
-        <div className="sf-metadata-kanban-card-header">
+        <div className="sf-metadata-kanban-card-header" onClick={handleClickFilename}>
           <Formatter value={titleValue} column={titleColumn} record={record}/>
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
-        {displayColumns.map((column, index) => {
+        {displayColumns.map((column) => {
           const value = getCellValueByColumn(record, column);
           if (!displayEmptyValue && !isValidCellValue(value)) {
             if (displayColumnName) {
@@ -118,14 +69,14 @@ const Card = ({
 };
 
 Card.propTypes = {
-  readonly: PropTypes.bool,
+  isSelected: PropTypes.bool,
   displayEmptyValue: PropTypes.bool,
   displayColumnName: PropTypes.bool,
   record: PropTypes.object,
   titleColumn: PropTypes.object,
   displayColumns: PropTypes.array,
-  onCloseSettings: PropTypes.func.isRequired,
   onOpenFile: PropTypes.func.isRequired,
+  onSelectCard: PropTypes.func.isRequired,
 };
 
 export default Card;
