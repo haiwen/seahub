@@ -125,7 +125,7 @@ function start_seaf_server() {
 }
 
 function start_fileserver() {
-    ${INSTALLPATH}/seafile/bin/fileserver \
+    LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/fileserver \
         -F ${SEAFILE_CENTRAL_CONF_DIR} \
         -d ${SEAFILE_CONF_DIR} \
         -l ${TOPDIR}/logs/fileserver.log \
