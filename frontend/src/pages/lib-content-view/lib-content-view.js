@@ -2348,6 +2348,7 @@ class LibContentView extends React.Component {
                       sortItems={this.sortItems}
                       viewId={this.state.viewId}
                       viewType={this.props.viewType}
+                      onCloseDetail={this.closeDirentDetail}
                     />
                   </div>
                 }
@@ -2357,6 +2358,7 @@ class LibContentView extends React.Component {
                   <DirColumnView
                     isSidePanelFolded={this.props.isSidePanelFolded}
                     isTreePanelShown={this.state.isTreePanelShown}
+                    isDirentDetailShow={this.state.isDirentDetailShow}
                     currentMode={this.state.currentMode}
                     path={this.state.path}
                     repoID={this.props.repoID}

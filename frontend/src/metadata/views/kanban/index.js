@@ -45,14 +45,16 @@ const Kanban = () => {
   useEffect(() => {
     const eventBus = window.sfMetadataContext.eventBus;
     const unsubscribeKanbanSetting = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS, () => setShowSettings(!isShowSettings));
+    const unsubscribeCloseKanbanSetting = eventBus.subscribe(EVENT_BUS_TYPE.CLOSE_KANBAN_SETTINGS, () => setShowSettings(false));
     return () => {
       unsubscribeKanbanSetting();
+      unsubscribeCloseKanbanSetting();
     };
   }, [isShowSettings]);
 
   return (
     <div className="sf-metadata-view-kanban">
-      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} />
+      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} onCloseSettings={closeSettings} />
       <div className="sf-metadata-view-setting-panel sf-metadata-view-kanban-setting h-100">
         {isShowSettings && (
           <Settings

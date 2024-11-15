@@ -17,6 +17,7 @@ const ViewDetails = ({ viewId, onClose }) => {
     if (type === VIEW_TYPE.GALLERY) return `${mediaUrl}favicons/gallery.png`;
     if (type === VIEW_TYPE.TABLE) return `${mediaUrl}favicons/table.png`;
     if (type === VIEW_TYPE.FACE_RECOGNITION) return `${mediaUrl}favicons/face-recognition-view.png`;
+    if (type === VIEW_TYPE.KANBAN) return `${mediaUrl}favicons/kanban.png`;
     return `${mediaUrl}img/file/256/file.png`;
   }, [view]);
 

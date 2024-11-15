@@ -25,6 +25,7 @@ const propTypes = {
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
   viewId: PropTypes.string,
+  onCloseDetail: PropTypes.func,
 };
 
 class DirTool extends React.Component {
@@ -119,7 +120,12 @@ class DirTool extends React.Component {
     if (isFileExtended) {
       return (
         <div className="dir-tool">
-          <MetadataViewToolBar viewId={viewId} isCustomPermission={isCustomPermission} showDetail={this.showDirentDetail} />
+          <MetadataViewToolBar
+            viewId={viewId}
+            isCustomPermission={isCustomPermission}
+            showDetail={this.showDirentDetail}
+            closeDetail={this.props.onCloseDetail}
+          />
         </div>
       );
     }

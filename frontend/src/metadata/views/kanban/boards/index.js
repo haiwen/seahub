@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
@@ -6,18 +6,28 @@ import { useCollaborators } from '../../../hooks';
 import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { gettext } from '../../../../utils/constants';
-import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord } from '../../../utils/cell';
+import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, geRecordIdFromRecord,
+  getFileNameFromRecord, getParentDirFromRecord
+} from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
+import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
+import { openFile } from '../../../utils/open-file';
+import { checkIsDir } from '../../../utils/row';
 
 import './index.css';
 
-const Boards = ({ modifyRecord, modifyColumnData }) => {
+const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
+  const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
+  const [selectedCard, setSelectedCard] = useState('');
 
-  const { metadata, store } = useMetadataView();
+  const currentImageRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const groupByColumn = useMemo(() => {
@@ -164,13 +174,57 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
     setHaveFreezed(false);
   }, []);
 
+  const onOpenFile = useCallback((record) => {
+    openFile(record, window.sfMetadataContext.eventBus, () => {
+      currentImageRef.current = record;
+      setImagePreviewerVisible(true);
+    });
+  }, []);
+
+  const closeImagePreviewer = useCallback(() => {
+    currentImageRef.current = null;
+    setImagePreviewerVisible(false);
+  }, []);
+
+  const onSelectCard = useCallback((record) => {
+    const recordId = geRecordIdFromRecord(record);
+    const name = getFileNameFromRecord(record);
+    const path = getParentDirFromRecord(record);
+    const isDir = checkIsDir(record);
+    updateCurrentDirent({
+      type: isDir ? 'dir' : 'file',
+      mtime: '',
+      name,
+      path,
+      file_tags: []
+    });
+    setSelectedCard(recordId);
+    onCloseSettings();
+    showDirentDetail();
+  }, [onCloseSettings, showDirentDetail, updateCurrentDirent]);
+
+  const handleClickOutside = useCallback((event) => {
+    if (!containerRef.current.contains(event.target)) return;
+    setSelectedCard(null);
+    updateCurrentDirent();
+  }, [updateCurrentDirent]);
+
+  useEffect(() => {
+    if (!isDirentDetailShow) {
+      setSelectedCard(null);
+    }
+  }, [isDirentDetailShow]);
+
   const isEmpty = boards.length === 0;
 
   return (
-    <div className={classnames('sf-metadata-view-kanban-boards', {
-      'sf-metadata-view-kanban-boards-text-wrap': textWrap,
-      'readonly': readonly,
-    })}
+    <div
+      ref={containerRef}
+      className={classnames('sf-metadata-view-kanban-boards', {
+        'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+        'readonly': readonly,
+      })}
+      onClick={handleClickOutside}
     >
       <div className="smooth-dnd-container horizontal">
         {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
@@ -189,10 +243,13 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
                   groupByColumn={groupByColumn}
                   titleColumn={titleColumn}
                   displayColumns={displayColumns}
+                  selectedCard={selectedCard}
                   onMove={onMove}
                   deleteOption={deleteOption}
                   onFreezed={onFreezed}
                   onUnFreezed={onUnFreezed}
+                  onOpenFile={onOpenFile}
+                  onSelectCard={onSelectCard}
                 />
               );
             })}
@@ -200,6 +257,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
         )}
         {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
+      {isImagePreviewerVisible && (<ImagePreviewer record={currentImageRef.current} table={metadata} closeImagePopup={closeImagePreviewer} />)}
     </div>
   );
 };
@@ -207,6 +265,7 @@ const Boards = ({ modifyRecord, modifyColumnData }) => {
 Boards.propTypes = {
   modifyRecord: PropTypes.func.isRequired,
   modifyColumnData: PropTypes.func.isRequired,
+  onCloseSettings: PropTypes.func.isRequired,
 };
 
 export default Boards;

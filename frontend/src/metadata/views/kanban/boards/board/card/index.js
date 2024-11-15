@@ -1,31 +1,54 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 import Formatter from '../formatter';
+import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
+import { CellType } from '../../../../../constants';
+import { getEventClassName } from '../../../../../utils/common';
 
 import './index.css';
 
 const Card = ({
-  readonly,
+  isSelected,
   displayEmptyValue,
   displayColumnName,
   record,
   titleColumn,
   displayColumns,
+  onOpenFile,
+  onSelectCard,
 }) => {
-
   const titleValue = getCellValueByColumn(record, titleColumn);
 
+  const handleClickCard = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    onSelectCard(record);
+  }, [record, onSelectCard]);
+
+  const handleClickFilename = useCallback((event) => {
+    if (titleColumn?.type !== CellType.FILE_NAME) return;
+    const eventName = getEventClassName(event);
+    if (eventName !== 'sf-metadata-file-name') return;
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    onOpenFile(record);
+  }, [titleColumn, record, onOpenFile]);
+
   return (
-    <article data-id={record._id} className={classnames('sf-metadata-kanban-card', { 'readonly': readonly })}>
+    <article
+      data-id={record._id}
+      className={classnames('sf-metadata-kanban-card', { 'selected': isSelected })}
+      onClick={handleClickCard}
+    >
       {titleColumn && (
-        <div className="sf-metadata-kanban-card-header">
+        <div className="sf-metadata-kanban-card-header" onClick={handleClickFilename}>
           <Formatter value={titleValue} column={titleColumn} record={record}/>
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
-        {displayColumns.map((column, index) => {
+        {displayColumns.map((column) => {
           const value = getCellValueByColumn(record, column);
           if (!displayEmptyValue && !isValidCellValue(value)) {
             if (displayColumnName) {
@@ -51,12 +74,14 @@ const Card = ({
 };
 
 Card.propTypes = {
-  readonly: PropTypes.bool,
+  isSelected: PropTypes.bool,
   displayEmptyValue: PropTypes.bool,
   displayColumnName: PropTypes.bool,
   record: PropTypes.object,
   titleColumn: PropTypes.object,
   displayColumns: PropTypes.array,
+  onOpenFile: PropTypes.func.isRequired,
+  onSelectCard: PropTypes.func.isRequired,
 };
 
 export default Card;

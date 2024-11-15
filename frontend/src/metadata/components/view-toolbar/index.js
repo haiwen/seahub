@@ -8,7 +8,7 @@ import KanbanViewToolBar from './kanban-view-toolbar';
 
 import './index.css';
 
-const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
+const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -100,11 +100,14 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
       )}
       {viewType === VIEW_TYPE.KANBAN && (
         <KanbanViewToolBar
+          isCustomPermission={isCustomPermission}
           readOnly={readOnly}
           view={view}
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
+          showDetail={showDetail}
+          closeDetail={closeDetail}
         />
       )}
     </div>
@@ -114,7 +117,8 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail }) => {
 ViewToolBar.propTypes = {
   viewId: PropTypes.string,
   isCustomPermission: PropTypes.bool,
-  switchViewMode: PropTypes.func,
+  showDetail: PropTypes.func,
+  closeDetail: PropTypes.func,
 };
 
 export default ViewToolBar;

@@ -9,6 +9,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  user-select: none;
+}
+
+.sf-metadata-kanban-card.selected {
+  border-color: #FF8000;
 }
 
 .sf-metadata-kanban-card:hover {
@@ -20,6 +25,16 @@
   font-weight: 500;
   width: 100%;
   overflow: hidden;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-header .sf-metadata-file-name {
+  text-decoration: none;
+}
+
+.sf-metadata-kanban-card .sf-metadata-kanban-card-header .sf-metadata-file-name:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #212529;
 }
 
 .sf-metadata-kanban-card .sf-metadata-kanban-card-body .sf-metadata-kanban-card-record:first-child {
