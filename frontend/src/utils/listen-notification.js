@@ -8,11 +8,11 @@ class WebSocketService {
     this.repoId = repoId;
     this.socket = null;
     this.heartbeatInterval = null;
+    this.shouldReconnect = true;
     this.onMessageCallback = onMessageCallback;
     this.connect();
   }
 
-  // init WebSocket connect
   async connect() {
     this.socket = new WebSocket(this.url);
 
@@ -24,18 +24,19 @@ class WebSocketService {
     // listen message from WebSocket server
     this.socket.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
-      this.handleMessage(parsedData); // default handle message
+      this.handleMessage(parsedData);
     };
 
-    // handle WebSocket error
     this.socket.onerror = (error) => {
       throw error;
     };
 
     // reconnect WebSocket
     this.socket.onclose = () => {
-      this.cleanup();
-      this.reconnect();
+      if (this.shouldReconnect) {
+        this.cleanup();
+        this.reconnect();
+      }
     };
   }
 
@@ -80,6 +81,14 @@ class WebSocketService {
 
   cleanup() {
     clearInterval(this.heartbeatInterval);
+  }
+
+  close() {
+    this.shouldReconnect = false;
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.close();
+    }
+    this.cleanup();
   }
 
   reconnect() {

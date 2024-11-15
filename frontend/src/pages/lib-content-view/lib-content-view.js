@@ -49,41 +49,12 @@ class LibContentView extends React.Component {
 
   constructor(props) {
     super(props);
-    const onMessageCallback = (data) => {
-      if (data.type === 'file-lock-changed') {
-        const currentUrl = window.location.href;
-        const parsedUrl = new URL(currentUrl);
-        const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
-        const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
-        let notiUrlIndex = '';
-        if (data.content.path.includes('/')) {
-          notiUrlIndex = data.content.path.lastIndexOf('/');
-        }
-        const notifRouter = data.content.path.slice(0, notiUrlIndex);
-        if (dirRouter === notifRouter) {
-          const dirent = { name: data.content.path.split('/').pop() };
-          if (data.content.change_event === 'locked') {
-            if (dirent.name.endsWith('.sdoc')) {
-              this.updateDirent(dirent, 'is_freezed', true);
-            }
-            this.updateDirent(dirent, 'is_locked', true);
-            this.updateDirent(dirent, 'locked_by_me', true);
-            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
-          }
-          else if (data.content.change_event === 'unlocked') {
-            this.updateDirent(dirent, 'is_locked', false);
-            this.updateDirent(dirent, 'locked_by_me', false);
-            this.updateDirent(dirent, 'lock_owner_name', '');
-          }
-        }
-      }
-    };
-    this.socket = new WebSocketService(onMessageCallback, this.props.repoID);
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
     if (storedTreePanelState != undefined) {
       isTreePanelShown = storedTreePanelState == 'true';
     }
+    this.onMessageCallback = this.onMessageCallback.bind(this);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
@@ -176,7 +147,39 @@ class LibContentView extends React.Component {
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.calculatePara(this.props);
+    this.socket = new WebSocketService(this.onMessageCallback, this.props.repoID);
+
   }
+
+  onMessageCallback = (data) => {
+    if (data.type === 'file-lock-changed') {
+      const currentUrl = window.location.href;
+      const parsedUrl = new URL(currentUrl);
+      const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
+      const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
+      let notiUrlIndex = '';
+      if (data.content.path.includes('/')) {
+        notiUrlIndex = data.content.path.lastIndexOf('/');
+      }
+      const notifRouter = data.content.path.slice(0, notiUrlIndex);
+      if (dirRouter === notifRouter) {
+        const dirent = { name: data.content.path.split('/').pop() };
+        if (data.content.change_event === 'locked') {
+          if (dirent.name.endsWith('.sdoc')) {
+            this.updateDirent(dirent, 'is_freezed', true);
+          }
+          this.updateDirent(dirent, 'is_locked', true);
+          this.updateDirent(dirent, 'locked_by_me', true);
+          this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
+        }
+        else if (data.content.change_event === 'unlocked') {
+          this.updateDirent(dirent, 'is_locked', false);
+          this.updateDirent(dirent, 'locked_by_me', false);
+          this.updateDirent(dirent, 'lock_owner_name', '');
+        }
+      }
+    }
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.repoID !== this.props.repoID) {
@@ -284,6 +287,7 @@ class LibContentView extends React.Component {
       isLibView: false,
       currentRepoInfo: null,
     });
+    this.socket.close();
   }
 
   componentDidUpdate(prevProps, prevState) {
