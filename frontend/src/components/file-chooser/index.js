@@ -9,9 +9,9 @@ import RepoInfo from '../../models/repo-info';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import { MODE_TYPE_MAP } from '../../constants';
 
 import '../../css/file-chooser.css';
-import { MODE_TYPE_MAP } from '../../constants';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
