@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from '../formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
+import { CellType } from '../../../../../constants';
+import { getEventClassName } from '../../../../../utils/common';
 
 import './index.css';
 
@@ -26,10 +28,13 @@ const Card = ({
   }, [record, onSelectCard]);
 
   const handleClickFilename = useCallback((event) => {
+    if (titleColumn?.type !== CellType.FILE_NAME) return;
+    const eventName = getEventClassName(event);
+    if (eventName !== 'sf-metadata-file-name') return;
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     onOpenFile(record);
-  }, [record, onOpenFile]);
+  }, [titleColumn, record, onOpenFile]);
 
   return (
     <article
