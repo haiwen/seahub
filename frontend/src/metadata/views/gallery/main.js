@@ -21,7 +21,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
+const Main = ({ isLoadingMore, onDelete, onLoadMore }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -36,7 +36,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
-  const { updateCurrentDirent } = useMetadataView();
+  const { metadata, updateCurrentDirent } = useMetadataView();
 
   useEffect(() => {
     updateCurrentDirent();
@@ -68,7 +68,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
+    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)) || Utils.videoCheck(getFileNameFromRecord(row)))
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
         const fileName = getFileNameFromRecord(record);
@@ -262,10 +262,17 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   }, [imageItems, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
-    const index = imageItems.findIndex(item => item.id === image.id);
-    setImageIndex(index);
-    setIsImagePopupOpen(true);
-  }, [imageItems]);
+    const isImageFile = Utils.imageCheck(image.name);
+    if (isImageFile) {
+      const index = imageItems.findIndex(item => item.id === image.id);
+      setImageIndex(index);
+      setIsImagePopupOpen(true);
+    } else {
+      const direntPath = Utils.joinPath(image.path, image.name);
+      const url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(direntPath)}`;
+      window.open(url);
+    }
+  }, [imageItems, repoID]);
 
   const handleRightClick = useCallback((event, image) => {
     event.preventDefault();
