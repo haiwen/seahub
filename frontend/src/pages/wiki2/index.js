@@ -63,7 +63,8 @@ class Wiki extends Component {
     setTimeout(() => {
       if (e.state) {
         const { pageId } = e.state;
-        this.setCurrentPage(pageId);
+        const viaPopstate = true;
+        this.setCurrentPage(pageId, undefined, viaPopstate);
       }
     }, 0);
   };
@@ -139,7 +140,7 @@ class Wiki extends Component {
     return firstPage.id;
   };
 
-  getSdocFileContent = (docUuid, accessToken, pageId, filePath) => {
+  getSdocFileContent = (docUuid, accessToken) => {
     const config = {
       docUuid,
       sdocServer: seadocServerUrl,
@@ -150,25 +151,11 @@ class Wiki extends Component {
       this.setState({
         isDataLoading: false,
         editorContent: res.data,
-      }, () => {
-        this.afterGetFileContent(pageId, filePath);
       });
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  };
-
-  afterGetFileContent = (pageId, filePath) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('page_id', pageId);
-
-    let customUrl = this.getCustomUrl();
-    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
-    if (customUrl.includes('wiki/publish')) {
-      url = `${siteRoot}${customUrl}?${params.toString()}`;
-    }
-    window.history.pushState({ url: url, path: filePath, pageId: pageId }, filePath, url);
   };
 
   mobileCloseSidePanel = () => {
@@ -202,7 +189,7 @@ class Wiki extends Component {
         path: filePath,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
-      this.getSdocFileContent(docUuid, seadoc_access_token, pageId, filePath);
+      this.getSdocFileContent(docUuid, seadoc_access_token);
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -230,7 +217,7 @@ class Wiki extends Component {
     LocalStorage.setItem('wiki-recent-files', arr);
   };
 
-  setCurrentPage = (pageId, callback) => {
+  setCurrentPage = (pageId, callback, viaPopstate) => {
     if (pageId === this.state.currentPageId) {
       callback && callback();
       return;
@@ -258,6 +245,18 @@ class Wiki extends Component {
     });
     this.cacheHistoryFiles(docUuid, name, id);
     this.updateDocumentTitle(name);
+
+    if (viaPopstate) {
+      return false;
+    }
+    const params = new URLSearchParams(window.location.search);
+    params.set('page_id', pageId);
+    let customUrl = this.getCustomUrl();
+    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
+    if (customUrl.includes('wiki/publish')) {
+      url = `${siteRoot}${customUrl}?${params.toString()}`;
+    }
+    window.history.pushState({ url: url, path: path, pageId: pageId }, '', url);
   };
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
