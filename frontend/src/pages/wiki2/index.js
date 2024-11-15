@@ -52,7 +52,22 @@ class Wiki extends Component {
 
   componentDidMount() {
     this.getWikiConfig();
+    window.addEventListener('popstate', this.onPopstate);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+  }
+
+  onPopstate = (e) => {
+    setTimeout(() => {
+      if (e.state) {
+        const { pageId } = e.state;
+        const viaPopstate = true;
+        this.setCurrentPage(pageId, undefined, viaPopstate);
+      }
+    }, 0);
+  };
 
   getCustomUrl = () => {
     const siteRootLen = siteRoot.length;
@@ -179,16 +194,6 @@ class Wiki extends Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-
-    const params = new URLSearchParams(window.location.search);
-    params.set('page_id', pageId);
-
-    let customUrl = this.getCustomUrl();
-    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
-    if (customUrl.includes('wiki/publish')) {
-      url = `${siteRoot}${customUrl}?${params.toString()}`;
-    }
-    window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
   cacheHistoryFiles = (docUuid, name, pageId) => {
@@ -212,7 +217,7 @@ class Wiki extends Component {
     LocalStorage.setItem('wiki-recent-files', arr);
   };
 
-  setCurrentPage = (pageId, callback) => {
+  setCurrentPage = (pageId, callback, viaPopstate) => {
     if (pageId === this.state.currentPageId) {
       callback && callback();
       return;
@@ -240,6 +245,18 @@ class Wiki extends Component {
     });
     this.cacheHistoryFiles(docUuid, name, id);
     this.updateDocumentTitle(name);
+
+    if (viaPopstate) {
+      return false;
+    }
+    const params = new URLSearchParams(window.location.search);
+    params.set('page_id', pageId);
+    let customUrl = this.getCustomUrl();
+    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
+    if (customUrl.includes('wiki/publish')) {
+      url = `${siteRoot}${customUrl}?${params.toString()}`;
+    }
+    window.history.pushState({ url: url, path: path, pageId: pageId }, '', url);
   };
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
