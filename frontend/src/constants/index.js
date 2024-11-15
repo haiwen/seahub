@@ -23,3 +23,12 @@ export const MAP_TYPE = {
 export const DOMESTIC_MAP_TYPE = [MAP_TYPE.B_MAP];
 
 export { KeyCodes, zIndexes, TAG_COLORS };
+
+export const MODE_TYPE_MAP = {
+  CURRENT_AND_OTHER_REPOS: 'current_repo_and_other_repos',
+  ONLY_CURRENT_LIBRARY: 'only_current_library',
+  ONLY_ALL_REPOS: 'only_all_repos',
+  ONLY_OTHER_LIBRARIES: 'only_other_libraries',
+  RECENTLY_USED: 'recently_used',
+  SEARCH_RESULTS: 'search_results',
+};

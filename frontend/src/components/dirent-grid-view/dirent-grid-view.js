@@ -957,6 +957,7 @@ class DirentGridView extends React.Component {
             selectedDirentList={selectedDirentList}
             onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
+            onAddFolder={this.props.onAddFolder}
           />
         }
         {this.state.isEditFileTagShow &&

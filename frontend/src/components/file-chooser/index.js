@@ -11,6 +11,7 @@ import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 import '../../css/file-chooser.css';
+import { MODE_TYPE_MAP } from '../../constants';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
@@ -18,13 +19,7 @@ const propTypes = {
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
-  mode: PropTypes.oneOf([
-    'current_repo_and_other_repos',
-    'only_all_repos',
-    'only_current_library',
-    'only_other_libraries',
-    'recently_used'
-  ]).isRequired,
+  mode: PropTypes.isRequired,
   fileSuffixes: PropTypes.arrayOf(PropTypes.string),
   currentPath: PropTypes.string,
   searchResults: PropTypes.array,
@@ -128,7 +123,7 @@ class FileChooser extends React.Component {
         searchInfo: '',
         searchResults: [],
       });
-      if (this.props.mode === 'only_other_libraries') {
+      if (this.props.mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
         this.onOtherRepoToggle();
       }
     }

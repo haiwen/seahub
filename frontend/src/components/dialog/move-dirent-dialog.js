@@ -9,15 +9,7 @@ import Searcher from '../file-chooser/searcher';
 import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
-
-export const MODE_TYPE_MAP = {
-  CURRENT_AND_OTHER_REPOS: 'current_repo_and_other_repos',
-  ONLY_CURRENT_LIBRARY: 'only_current_library',
-  ONLY_ALL_REPOS: 'only_all_repos',
-  ONLY_OTHER_LIBRARIES: 'only_other_libraries',
-  RECENTLY_USED: 'recently_used',
-  SEARCH_RESULTS: 'search_results',
-};
+import { MODE_TYPE_MAP } from '../../constants';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -53,12 +45,20 @@ class MoveDirent extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.getRepoInfo(this.props.repoID).then(res => {
+    this.initialize();
+  }
+
+  initialize = async () => {
+    try {
+      const res = await seafileAPI.getRepoInfo(this.props.repoID);
       const repo = new RepoInfo(res.data);
       this.setState({ currentRepo: repo });
-      this.fetchRepoList();
-    });
-  }
+      await this.fetchRepoList();
+    } catch (error) {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    }
+  };
 
   fetchRepoList = async () => {
     try {
