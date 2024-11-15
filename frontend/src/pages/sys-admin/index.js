@@ -45,11 +45,7 @@ import SearchGroups from './groups/search-groups';
 import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
-import Departments from './departments/departments';
-import DepartmentList from './departments/department-list';
-import SubDepartments from './departments/sub-departments';
-import DepartmentMembers from './departments/department-members';
-import DepartmentLibraries from './departments/department-libraries';
+import DepartmentsV2 from './departments-v2/departments-v2';
 
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
@@ -89,6 +85,7 @@ import AbuseReports from './abuse-reports';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
+import '../../css/admin-common.css';
 
 class SysAdmin extends React.Component {
   constructor(props) {
@@ -209,7 +206,7 @@ class SysAdmin extends React.Component {
     };
 
     return (
-      <div id="main">
+      <div id="main" className="sys-admin">
         <SidePanel
           isSidePanelClosed={isSidePanelClosed}
           onCloseSidePanel={this.onCloseSidePanel}
@@ -238,12 +235,7 @@ class SysAdmin extends React.Component {
             <SearchGroups path={siteRoot + 'sys/search-groups'} {...commonProps} />
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
-            <Departments path={siteRoot + 'sys/departments'}>
-              <DepartmentList path='/' {...commonProps} />
-              <SubDepartments path='/:groupID' {...commonProps} />
-              <DepartmentMembers path='/:groupID/members' {...commonProps} />
-              <DepartmentLibraries path='/:groupID/libraries' {...commonProps} />
-            </Departments>
+            <DepartmentsV2 path={siteRoot + 'sys/departments/'} onCloseSidePanel={this.onCloseSidePanel} />
             <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />

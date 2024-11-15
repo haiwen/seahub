@@ -1,0 +1,131 @@
+.cur-view-content {
+  position: relative;
+}
+
+.departments-tree-panel {
+  width: 25%;
+  padding: 8px;
+  border-right: 1px solid #eee;
+  height: 100%;
+  overflow: auto;
+}
+
+.departments-tree-panel .departments-v2-hight-light {
+  color: #fff;
+  border-radius: 4px;
+  background-color: #ED7109 !important;
+}
+
+.departments-tree-panel .departments-v2-hight-light i {
+  color: #fff;
+}
+
+.top-department-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.departments-v2-tree-item {
+  position: relative;
+  display: flex;
+  height: 24px;
+}
+
+.departments-v2-tree-item:hover {
+  background-color: #ffefb2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.departments-v2-tree-item .departments-v2-tree-icon {
+  width: 24px;
+  text-align: center;
+  color: #b0b0b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.departments-v2-tree-item .departments-v2-tree-node-text {
+  flex: 1;
+  padding-right: 4px;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+.departments-v2-tree-item .department-dropdown-menu {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b0b0b0;
+}
+
+.departments-v2-tree-item .department-action-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+}
+
+.departments-v2-tree-item .department-action-icon:hover {
+  color: #212529;
+}
+
+.departments-tree-panel .department-children {
+  padding-left: 1rem;
+  position: relative;
+}
+
+.department-content-main {
+  flex: 1;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.department-content-main:hover {
+  overflow-y: auto;
+}
+
+.department-content-main table td {
+  line-height: 2rem;
+}
+
+.department-content-main .department-content-main-name {
+  height: 40px;
+  padding: 0 16px;
+  background: #f9f9f9;
+  font-size: 1rem;
+  line-height: 40px;
+  margin: 0;
+  border-bottom: 1px solid #eee;
+}
+
+.department-content-main .create-group-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.department-content-main .cur-view-content .table {
+  margin-bottom: 6rem;
+}
+
+.department-content-main .cur-view-content .sort-dirent {
+  transform: scale(0.8);
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.department-content-main table .dtable-icon-check-mark {
+  color: #21bc2e;
+}
+
+/* 顶部的样式：背景色和边界去掉，和 seatable 保持一致 */

@@ -44,6 +44,7 @@ import OrgSubscription from './org-subscription';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
+import '../../css/admin-common.css';
 
 class Org extends React.Component {
   constructor(props) {
@@ -94,7 +95,7 @@ class Org extends React.Component {
   render() {
     let { isSidePanelClosed, currentTab } = this.state;
     return (
-      <div id="main">
+      <div id="main" className="org-admin">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
         <div className="main-panel">
           <Router className="reach-router">

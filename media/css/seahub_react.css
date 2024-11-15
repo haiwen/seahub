@@ -1092,6 +1092,7 @@ a.table-sort-op:hover {
 .dropdown-item {
   height: 32px;
   padding: 0.25rem 1rem;
+  line-height: 1.5;
   cursor: pointer;
   color: #212529;
   font-size: 14px;
@@ -1490,15 +1491,15 @@ a.table-sort-op:hover {
 }
 
 .rotate-90 {
-  transform: rotate(90deg);
+  transform: rotate(90deg) !important;
 }
 
 .rotate-180 {
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
 
 .rotate-270 {
-  transform: rotate(270deg);
+  transform: rotate(270deg) !important;
 }
 
 /* All triangle icon use 12px */
