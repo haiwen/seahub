@@ -982,6 +982,7 @@ class DirentListItem extends React.Component {
               onItemCopy={this.props.onItemCopy}
               onCancelCopy={this.onItemCopyToggle}
               repoEncrypted={this.props.repoEncrypted}
+              onAddFolder={this.props.onAddFolder}
             />
           </ModalPortal>
         }

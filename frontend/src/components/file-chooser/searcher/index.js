@@ -4,7 +4,7 @@ import { Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
-import { MODE_TYPE_MAP } from '../../dialog/move-dirent-dialog';
+import { MODE_TYPE_MAP } from '../../../constants';
 
 import './index.css';
 

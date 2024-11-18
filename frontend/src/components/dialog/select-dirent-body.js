@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
 import RepoListWrapper from '../file-chooser/repo-list-wrapper';
-import { MODE_TYPE_MAP } from '../dialog/move-dirent-dialog';
+import { MODE_TYPE_MAP } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { RepoInfo } from '../../models';

@@ -872,6 +872,7 @@ class DirentListView extends React.Component {
               isMultipleOperation={this.state.isMultipleOperation}
               onItemsCopy={this.props.onItemsCopy}
               onCancelCopy={this.onCopyToggle}
+              onAddFolder={this.props.onAddFolder}
             />
           }
           {this.state.isProgressDialogShow &&

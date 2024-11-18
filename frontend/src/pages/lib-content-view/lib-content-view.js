@@ -733,7 +733,7 @@ class LibContentView extends React.Component {
   };
 
   // toolbar operations
-  onMoveItems = (destRepo, destDirentPath, moveByDialog = false) => {
+  onMoveItems = (destRepo, destDirentPath, byDialog = false) => {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
 
@@ -771,7 +771,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      if (moveByDialog) {
+      if (byDialog) {
         this.updateRecentlyUsedRepos(destRepo, destDirentPath);
       }
 
@@ -792,7 +792,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  onCopyItems = (destRepo, destDirentPath) => {
+  onCopyItems = (destRepo, destDirentPath, byDialog = false) => {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
 
@@ -822,6 +822,10 @@ class LibContentView extends React.Component {
         // show tip message if copy to current repo
         let message = Utils.getCopySuccessfulMessage(dirNames);
         toaster.success(message);
+
+        if (byDialog) {
+          this.updateRecentlyUsedRepos(destRepo, destDirentPath);
+        }
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1217,7 +1221,7 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, moveByDialog = false) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
     this.updateCurrentNotExistDirent(dirent);
     let repoID = this.props.repoID;
     // just for view list state
@@ -1262,7 +1266,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      if (moveByDialog) {
+      if (byDialog) {
         this.updateRecentlyUsedRepos(destRepo, moveToDirentPath);
       }
 
@@ -1287,7 +1291,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath) => {
+  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false) => {
     let repoID = this.props.repoID;
     // just for view list state
     let dirName = dirent.name;
@@ -1321,6 +1325,10 @@ class LibContentView extends React.Component {
         let message = gettext('Successfully copied %(name)s.');
         message = message.replace('%(name)s', dirName);
         toaster.success(message);
+
+        if (byDialog) {
+          this.updateRecentlyUsedRepos(destRepo, copyToDirentPath);
+        }
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {

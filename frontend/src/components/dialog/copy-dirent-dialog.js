@@ -1,9 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
-import FileChooser from '../file-chooser';
-import { gettext } from '../../utils/constants';
+import { Modal, ModalHeader } from 'reactstrap';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import Searcher from '../file-chooser/searcher';
+import SelectDirentBody from './select-dirent-body';
+import { MODE_TYPE_MAP } from '../../constants';
 import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, isPro } from '../../utils/constants';
+import { RepoInfo } from '../../models';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -15,20 +21,69 @@ const propTypes = {
   onItemsCopy: PropTypes.func,
   onCancelCopy: PropTypes.func.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
+  onAddFolder: PropTypes.func,
 };
 
-// need dirent file Path；
 class CopyDirent extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      repo: { repo_id: this.props.repoID },
+      mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
+      currentRepo: { repo_id: this.props.repoID },
+      selectedRepo: { repo_id: this.props.repoID },
+      repoList: [],
       selectedPath: this.props.path,
+      selectedSearchedRepo: null,
+      selectedSearchedItem: { repoID: '', filePath: '' },
+      searchStatus: '',
+      searchResults: [],
+      showSearchBar: false,
       errMessage: '',
-      mode: 'only_current_library',
+      initToShowChildren: false,
     };
+    this.lastMode = MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY;
   }
+
+  componentDidMount() {
+    this.initialize();
+  }
+
+  initialize = async () => {
+    try {
+      const res = await seafileAPI.getRepoInfo(this.props.repoID);
+      const repo = new RepoInfo(res.data);
+      this.setState({ currentRepo: repo });
+      await this.fetchRepoList();
+    } catch (error) {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    }
+  };
+
+  fetchRepoList = async () => {
+    try {
+      const res = await seafileAPI.listRepos();
+      const repos = res.data.repos;
+      const repoList = [];
+      const uniqueRepoIds = new Set();
+      for (const repo of repos) {
+        if (repo.permission === 'rw' && repo.repo_id !== this.props.repoID && !uniqueRepoIds.has(repo.repo_id)) {
+          uniqueRepoIds.add(repo.repo_id);
+          repoList.push(repo);
+        }
+      }
+      const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+      const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
+      this.setState({
+        repoList: sortedRepoList,
+        repo: selectedRepo,
+      });
+    } catch (error) {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    }
+  };
 
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
@@ -39,10 +94,10 @@ class CopyDirent extends React.Component {
   };
 
   copyItems = () => {
-    let { repo, selectedPath } = this.state;
+    let { selectedRepo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
 
-    if (!repo || selectedPath === '') {
+    if (!selectedRepo || selectedPath === '') {
       this.setState({ errMessage: message });
       return;
     }
@@ -78,16 +133,16 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    this.props.onItemsCopy(repo, selectedPath);
+    this.props.onItemsCopy(selectedRepo, selectedPath, true);
     this.toggle();
   };
 
   copyItem = () => {
-    let { repo, repoID, selectedPath } = this.state;
+    let { repoID, selectedRepo, selectedPath } = this.state;
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
-    if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
+    if (!selectedRepo || (selectedRepo.repo_id === repoID && selectedPath === '')) {
       this.setState({ errMessage: message });
       return;
     }
@@ -107,12 +162,119 @@ class CopyDirent extends React.Component {
       return;
     }
 
-    this.props.onItemCopy(repo, this.props.dirent, selectedPath, this.props.path);
+    this.props.onItemCopy(selectedRepo, this.props.dirent, selectedPath, this.props.path, true);
     this.toggle();
   };
 
   toggle = () => {
     this.props.onCancelCopy();
+  };
+
+  selectRepo = (repo) => {
+    this.setState({ selectedRepo: repo });
+  };
+
+  selectSearchedRepo = (repo) => {
+    this.setState({ selectedSearchedRepo: repo });
+  };
+
+  setSelectedPath = (selectedPath) => {
+    this.setState({ selectedPath });
+  };
+
+  setErrMessage = (message) => {
+    this.setState({ errMessage: message });
+  };
+
+  updateMode = (mode) => {
+    if (mode === this.state.mode) return;
+
+    if (mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
+      this.lastMode = mode;
+    }
+
+    const isShowChildren = mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY || mode === MODE_TYPE_MAP.SEARCH_RESULTS;
+    this.setState({
+      mode,
+      initToShowChildren: isShowChildren,
+    });
+
+    if (this.state.mode === MODE_TYPE_MAP.SEARCH_RESULTS) {
+      this.setState({
+        selectedSearchedRepo: null,
+        searchResults: [],
+        showSearchBar: false,
+      });
+    }
+
+    if (this.state.selectedSearchedRepo && mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
+      this.setState({
+        selectedSearchedRepo: null,
+        searchResults: [],
+        showSearchBar: false,
+      });
+    }
+
+    this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+  };
+
+  onUpdateSearchStatus = (status) => {
+    this.setState({ searchStatus: status });
+  };
+
+  onUpdateSearchResults = (results) => {
+    this.setState({
+      searchResults: results
+    });
+  };
+
+  onOpenSearchBar = () => {
+    this.setState({ showSearchBar: true });
+  };
+
+  onCloseSearchBar = () => {
+    const mode = this.lastMode;
+    this.setState({
+      mode,
+      searchStatus: '',
+      searchResults: [],
+      selectedSearchedRepo: null,
+      showSearchBar: false,
+      initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
+    });
+  };
+
+  onSearchedItemClick = (item) => {
+    item['type'] = item.is_dir ? 'dir' : 'file';
+    let repo = new RepoInfo(item);
+    this.onDirentItemClick(repo, item.path, item);
+  };
+
+  onSearchedItemDoubleClick = (item) => {
+    if (item.type !== 'dir') return;
+
+    seafileAPI.getRepoInfo(item.repo_id).then(res => {
+      const repoInfo = new RepoInfo(res.data);
+      const path = item.path.substring(0, item.path.length - 1);
+      const mode = item.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
+      this.lastMode = mode;
+      this.setState({
+        mode,
+        selectedRepo: repoInfo,
+        selectedSearchedRepo: repoInfo,
+        selectedPath: path,
+        selectedSearchedItem: { repoID: item.repo_id, filePath: path },
+        showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
+        initToShowChildren: true,
+      });
+    }).catch(err => {
+      const errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
+  };
+
+  selectSearchedItem = (item) => {
+    this.setState({ selectedSearchedItem: item });
   };
 
   onDirentItemClick = (repo, selectedPath) => {
@@ -131,10 +293,6 @@ class CopyDirent extends React.Component {
     });
   };
 
-  onSelectedMode = (mode) => {
-    this.setState({ mode: mode });
-  };
-
   renderTitle = () => {
     const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Copy {placeholder} to');
@@ -147,48 +305,68 @@ class CopyDirent extends React.Component {
   };
 
   render() {
-    const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
-    const { mode, errMessage } = this.state;
+    const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
 
     const copiedDirent = dirent || selectedDirentList[0];
     const { permission } = copiedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
 
-    const LibraryOption = ({ mode, label }) => (
-      <div className={`repo-list-item ${this.state.mode === mode ? 'active' : ''}`} onClick={() => this.onSelectedMode(mode)}>
-        <span className='library'>{label}</span>
-      </div>
-    );
-
     return (
-      <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>
-          {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex mw-100"></div>}
-        </ModalHeader>
-        <Row>
-          <Col className='repo-list-col border-right'>
-            <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
-            {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
-            <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
-          </Col>
-          <Col className='file-list-col'>
-            <ModalBody>
-              <FileChooser
-                repoID={repoID}
-                currentPath={path}
-                onDirentItemClick={this.onDirentItemClick}
-                onRepoItemClick={this.onRepoItemClick}
-                mode={mode}
-                hideLibraryName={false}
+      <Modal className="custom-modal" isOpen={true} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle} close={
+          <div className="header-close-list">
+            <span aria-hidden="true" className="sf3-font sf3-font-x-01 comment-close-icon" onClick={this.toggle}></span>
+          </div>
+        }>
+          {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex"></div>}
+          {isPro && (
+            showSearchBar ? (
+              <Searcher
+                onUpdateMode={this.updateMode}
+                onUpdateSearchStatus={this.onUpdateSearchStatus}
+                onUpdateSearchResults={this.onUpdateSearchResults}
+                onClose={this.onCloseSearchBar}
               />
-              {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-              <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-            </ModalFooter>
-          </Col>
-        </Row>
+            ) : (
+              <IconBtn
+                iconName="search"
+                size={24}
+                className="search"
+                onClick={this.onOpenSearchBar}
+                role="button"
+                onKeyDown={() => {}}
+                tabIndex={0}
+              />
+            )
+          )}
+        </ModalHeader>
+        <SelectDirentBody
+          mode={mode}
+          currentRepo={currentRepo}
+          selectedRepo={selectedRepo}
+          currentPath={path}
+          repoList={this.state.repoList}
+          selectedPath={selectedPath}
+          isSupportOtherLibraries={!isCustomPermission}
+          onCancel={this.toggle}
+          selectRepo={this.selectRepo}
+          setSelectedPath={this.setSelectedPath}
+          setErrMessage={this.setErrMessage}
+          handleSubmit={this.handleSubmit}
+          onUpdateMode={this.updateMode}
+          searchStatus={searchStatus}
+          searchResults={searchResults}
+          selectedSearchedItem={this.state.selectedSearchedItem}
+          onSelectedSearchedItem={this.selectSearchedItem}
+          onSearchedItemClick={this.onSearchedItemClick}
+          onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
+          selectedSearchedRepo={selectedSearchedRepo}
+          onSelectSearchedRepo={this.selectSearchedRepo}
+          onAddFolder={this.props.onAddFolder}
+          initToShowChildren={this.state.initToShowChildren}
+          fetchRepoInfo={this.fetchRepoInfo}
+        />
       </Modal>
     );
   }

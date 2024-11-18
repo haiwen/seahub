@@ -5,7 +5,7 @@ import RecentlyUsedListView from './recently-used-list-view';
 import { gettext } from '../../utils/constants';
 import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
-import { MODE_TYPE_MAP } from '../dialog/move-dirent-dialog';
+import { MODE_TYPE_MAP } from '../../constants';
 import Loading from '../loading';
 
 const RepoListWrapper = (props) => {
