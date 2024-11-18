@@ -30,3 +30,9 @@ export const RATE_TYPES = [
   'praise',
   'flag'
 ];
+
+export const DEFAULT_RATE_DATA = {
+  color: RATE_COLORS[0],
+  max: 5,
+  type: RATE_TYPES[0],
+};
