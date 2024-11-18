@@ -43,7 +43,7 @@ const _openUrl = (url) => {
 };
 
 const _openMarkdown = (fileName, parentDir, eventBus) => {
-  eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, fileName);
+  eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN, parentDir, fileName);
 };
 
 const _openByNewWindow = (fileName, parentDir, fileType) => {

@@ -4,5 +4,5 @@ export const EVENT_BUS_TYPE = {
   SEARCH_LIBRARY_CONTENT: 'search_library_content',
 
   RESTORE_IMAGE: 'restore_image',
-  OPEN_MARKDOWN_DIALOG: 'open_markdown_dialog',
+  OPEN_MARKDOWN: 'open_markdown',
 };
