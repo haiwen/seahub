@@ -4,7 +4,7 @@ import {
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
 import { isNumber } from '../../../utils/number';
 import { formatTextToDate } from '../../../utils/date';
-import { CellType, DEFAULT_DATE_FORMAT, PREDEFINED_COLUMN_KEYS } from '../../../constants';
+import { CellType, DEFAULT_DATE_FORMAT, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY, PREDEFINED_FILE_STATUS_OPTION_KEYS } from '../../../constants';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
@@ -125,7 +125,9 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
 
   const currentOptions = getColumnOptions(targetColumn);
   const newOption = generatorCellOption(currentOptions, fromOptionName);
-  return PREDEFINED_COLUMN_KEYS.includes(targetColumn.key) ? newOption.id : newOption.name;
+  if (!PREDEFINED_COLUMN_KEYS.includes(targetColumn.key)) return newOption.name;
+  if (PRIVATE_COLUMN_KEY.FILE_STATUS === targetColumn.key) return PREDEFINED_FILE_STATUS_OPTION_KEYS.includes(newOption.id) ? newOption.id : newOption.name;
+  return newOption.id;
 }
 
 function convert2LongText(cellValue, oldCellValue, fromColumn) {
