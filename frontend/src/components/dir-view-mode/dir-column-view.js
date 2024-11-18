@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
-import MarkdownViewerDialog from './markdown-viewer-dialog';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
@@ -43,7 +42,6 @@ const propTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
-  onCloseMarkdownViewDialog: PropTypes.func,
   // repo content
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
@@ -286,20 +284,6 @@ class DirColumnView extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
-            />
-          }
-          {this.props.isViewFile &&
-            <MarkdownViewerDialog
-              repoID={this.props.repoID}
-              filePath={this.props.getMarkDownFilePath()}
-              fileName={this.props.getMarkDownFileName()}
-              openMarkdownFile={this.props.openMarkdownFile}
-              isFileLoading={this.props.isFileLoading}
-              content={this.props.content}
-              lastModified={this.props.lastModified}
-              latestContributor={this.props.latestContributor}
-              onLinkClick={this.props.onLinkClick}
-              onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
             />
           }
         </div>

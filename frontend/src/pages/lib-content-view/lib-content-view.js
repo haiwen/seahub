@@ -105,8 +105,6 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
-    this.markdownFileName = '';
-    this.markdownFileParentDir = '';
     this.unsubscribeEventBus = null;
   }
 
@@ -282,12 +280,6 @@ class LibContentView extends React.Component {
       }
     } else if (event.state && event.state.path) { // file path
       let path = event.state.path;
-      if (this.state.isTreePanelShown) {
-        if (Utils.isMarkdownFile(path)) { // Judging not strict
-          this.showFile(path);
-          return;
-        }
-      }
       this.loadDirentList(path);
       this.setState({
         path: path,
@@ -393,26 +385,6 @@ class LibContentView extends React.Component {
     // list used FileTags
     this.updateUsedRepoTags();
 
-    if (Utils.isMarkdownFile(path)) {
-      this.handleMarkdownFile(path);
-    } else {
-      this.handleNonMarkdownFile(path);
-    }
-  };
-
-  handleMarkdownFile = (path) => {
-    seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
-      this.loadSidePanel(path);
-      this.showFile(path);
-    }).catch(() => {
-      if (this.state.isTreePanelShown) {
-        this.loadSidePanel(path);
-      }
-      this.showDir(path);
-    });
-  };
-
-  handleNonMarkdownFile = (path) => {
     if (this.state.isTreePanelShown) {
       this.loadSidePanel(path);
     }
@@ -469,11 +441,12 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: path }, path, url);
   };
 
-  openMarkDownDialog = (parentDir, fileName) => {
-    this.markdownFileParentDir = parentDir;
-    this.markdownFileName = fileName;
-    const markdownFilePath = Utils.joinPath(parentDir, fileName);
-    this.showFile(markdownFilePath, true);
+  openMarkDown = (parentDir, fileName) => {
+    let filePath = Utils.joinPath(parentDir, fileName);
+    let repoID = this.props.repoID;
+    const w = window.open('about:blank');
+    const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
+    w.location.href = url;
   };
 
   showFile = (filePath, noRedirection) => {
@@ -540,7 +513,7 @@ class LibContentView extends React.Component {
       isDirentDetailShow: viewType === VIEW_TYPE.GALLERY ? this.state.isDirentDetailShow : false,
     }, () => {
       setTimeout(() => {
-        this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
+        this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN, this.openMarkDown);
       }, 1);
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
@@ -1498,21 +1471,15 @@ class LibContentView extends React.Component {
       }
       this.showDir(direntPath);
     } else { // is file
-      if (this.state.isTreePanelShown && Utils.isMarkdownFile(direntPath)) {
-        this.setState({ currentDirent: dirent });
-        this.showColumnMarkdownFile(direntPath);
+      let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+      if (dirent.is_sdoc_revision && dirent.revision_id) {
+        url = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+      }
+      let isWeChat = Utils.isWeChat();
+      if (!isWeChat) {
+        window.open(url);
       } else {
-        let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
-        if (dirent.is_sdoc_revision && dirent.revision_id) {
-          url = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
-        }
-
-        let isWeChat = Utils.isWeChat();
-        if (!isWeChat) {
-          window.open(url);
-        } else {
-          location.href = url;
-        }
+        location.href = url;
       }
     }
   };
@@ -1877,11 +1844,7 @@ class LibContentView extends React.Component {
       }
       this.showDir(node.path);
     } else {
-      if (Utils.isMarkdownFile(node.path)) {
-        if (node.path !== this.state.path) {
-          this.showColumnMarkdownFile(node.path);
-        }
-      } else if (Utils.isFileMetadata(node?.object?.type)) {
+      if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || VIEW_TYPE.TABLE);
         }
@@ -1894,27 +1857,6 @@ class LibContentView extends React.Component {
         window.open(url);
       }
     }
-  };
-
-  showColumnMarkdownFile = (filePath) => {
-    let repoID = this.props.repoID;
-    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      if (res.data.size === 0) {
-        // loading of asynchronously obtained data may be blocked
-        const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
-        w.location.href = url;
-      } else {
-        this.showFile(filePath, true);
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onCloseMarkdownViewDialog = () => {
-    this.setState({ isViewFile: false });
   };
 
   onTreeNodeCollapse = (node) => {
@@ -2028,26 +1970,7 @@ class LibContentView extends React.Component {
       this.setState({
         currentMode: cookie.load('seafile_view_mode') || (isMetadataView ? METADATA_MODE : LIST_MODE),
       });
-      this.markdownFileName = '';
-      this.markdownFileParentDir = '';
     }
-  };
-
-  getMarkDownFilePath = () => {
-    return this.markdownFileParentDir || this.state.path || '';
-  };
-
-  getMarkDownFileName = () => {
-    const { currentDirent } = this.state;
-    return this.markdownFileName || (currentDirent && currentDirent.name) || '';
-  };
-
-  openMarkdownFile = () => {
-    let { repoID } = this.props;
-    let path = this.getMarkDownFilePath();
-    let name = this.getMarkDownFileName();
-    let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + (path.endsWith('/') ? '' : '/') + name;
-    window.open(newUrl, '_blank');
   };
 
   recalculateSelectedDirents = (unSelectNames, newDirentList) => {
@@ -2418,10 +2341,6 @@ class LibContentView extends React.Component {
                     showDirentDetail={this.showDirentDetail}
                     onItemsScroll={this.onItemsScroll}
                     eventBus={this.props.eventBus}
-                    onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
-                    getMarkDownFilePath={this.getMarkDownFilePath}
-                    getMarkDownFileName={this.getMarkDownFileName}
-                    openMarkdownFile={this.openMarkdownFile}
                     updateCurrentDirent={this.updateCurrentDirent}
                     closeDirentDetail={this.closeDirentDetail}
                   />
