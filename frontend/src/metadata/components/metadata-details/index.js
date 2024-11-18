@@ -62,6 +62,17 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
     metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id).then(res => {
       const newMetadata = { ...metadata, record: { ...record, ...update } };
       setMetadata(newMetadata);
+      if (window.sfMetadataStore && window.sfMetadataStore.data) {
+        const store = window.sfMetadataStore;
+        store.modifyRecords([record._id], { [record._id]: update }, { [record._id]: update }, { [record._id]: record }, { [record._id]: record }, false, false, {
+          fail_callback: (error) => {
+            error && toaster.danger(error);
+          },
+          success_callback: () => {
+            // do nothing
+          },
+        });
+      }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
