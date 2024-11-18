@@ -16,12 +16,13 @@ import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbn
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
+import { openFile } from '../../utils/open-file';
 
 import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, onDelete, onLoadMore }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -36,7 +37,7 @@ const Main = ({ isLoadingMore, onDelete, onLoadMore }) => {
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
-  const { metadata, updateCurrentDirent } = useMetadataView();
+  const { updateCurrentDirent } = useMetadataView();
 
   useEffect(() => {
     updateCurrentDirent();
@@ -262,17 +263,13 @@ const Main = ({ isLoadingMore, onDelete, onLoadMore }) => {
   }, [imageItems, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
-    const isImageFile = Utils.imageCheck(image.name);
-    if (isImageFile) {
+    const record = getRowById(metadata, image.id);
+    openFile(record, window.sfMetadataContext.eventBus, () => {
       const index = imageItems.findIndex(item => item.id === image.id);
       setImageIndex(index);
       setIsImagePopupOpen(true);
-    } else {
-      const direntPath = Utils.joinPath(image.path, image.name);
-      const url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(direntPath)}`;
-      window.open(url);
-    }
-  }, [imageItems, repoID]);
+    });
+  }, [imageItems, metadata]);
 
   const handleRightClick = useCallback((event, image) => {
     event.preventDefault();
