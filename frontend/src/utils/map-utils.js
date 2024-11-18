@@ -1,4 +1,5 @@
 import { MAP_TYPE } from '../constants';
+import { mediaUrl } from './constants';
 
 export const initMapInfo = ({ baiduMapKey, googleMapKey, mineMapKey }) => {
   if (baiduMapKey) return { type: MAP_TYPE.B_MAP, key: baiduMapKey };
@@ -25,3 +26,41 @@ export const loadMapSource = (type, key, callback) => {
   }
   callback && callback();
 };
+
+export default function loadBMap(ak) {
+  return new Promise((resolve, reject) => {
+    asyncLoadBaiduJs(ak)
+      .then(() => asyncLoadJs(`${mediaUrl}/js/map/text-icon-overlay.js`))
+      .then(() => asyncLoadJs(`${mediaUrl}/js/map/marker-clusterer.js`))
+      .then(() => resolve(true))
+      .catch((err) => reject(err));
+  });
+}
+
+export function asyncLoadBaiduJs(ak) {
+  return new Promise((resolve, reject) => {
+    if (typeof window.BMap !== 'undefined') {
+      resolve(window.BMap);
+      return;
+    }
+    window.renderMap = function () {
+      resolve(window.BMap);
+    };
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `https://api.map.baidu.com/api?v=3.0&ak=${ak}&callback=renderMap`;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+export function asyncLoadJs(url) {
+  return new Promise((resolve, reject) => {
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    document.body.appendChild(script);
+    script.onload = resolve;
+    script.onerror = reject;
+  });
+}

@@ -19,6 +19,10 @@ const VIEW_OPTIONS = [
   {
     key: 'kanban',
     type: VIEW_TYPE.KANBAN,
+  },
+  {
+    key: 'map',
+    type: VIEW_TYPE.MAP,
   }
 ];
 
@@ -49,6 +53,8 @@ const AddView = ({ target, toggle, onOptionClick }) => {
         return gettext('Gallery');
       case VIEW_TYPE.KANBAN:
         return gettext('Kanban');
+      case VIEW_TYPE.MAP:
+        return gettext('Map');
       default:
         return type;
     }
