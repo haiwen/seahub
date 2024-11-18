@@ -9,8 +9,7 @@ import { username } from '../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
 import { CellType } from '../constants';
 import { getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
-  getColumnOptionNamesByIds,
-  geRecordIdFromRecord
+  getColumnOptionNamesByIds, geRecordIdFromRecord,
 } from '../utils/cell';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {

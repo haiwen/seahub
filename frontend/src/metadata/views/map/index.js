@@ -11,8 +11,8 @@ import { geRecordIdFromRecord, getFileNameFromRecord, getImageLocationFromRecord
   getFileTypeFromRecord
 } from '../../utils/cell';
 import { Utils } from '../../../utils/utils';
-import customImageOverlay from './customImageOverlay';
-import customAvatarOverlay from './customAvatarOverlay';
+import customImageOverlay from './custom-image-overlay';
+import customAvatarOverlay from './custom-avatar-overlay';
 import { createBMapGeolocationControl } from './geolocation-control';
 import toaster from '../../../components/toast';
 

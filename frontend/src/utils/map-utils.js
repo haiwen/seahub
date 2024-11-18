@@ -30,8 +30,8 @@ export const loadMapSource = (type, key, callback) => {
 export default function loadBMap(ak) {
   return new Promise((resolve, reject) => {
     asyncLoadBaiduJs(ak)
-      .then(() => asyncLoadJs(`${mediaUrl}/js/TextIconOverlay.js`))
-      .then(() => asyncLoadJs(`${mediaUrl}/js/MarkerClusterer.js`))
+      .then(() => asyncLoadJs(`${mediaUrl}/js/map/text-icon-overlay.js`))
+      .then(() => asyncLoadJs(`${mediaUrl}/js/map/marker-clusterer.js`))
       .then(() => resolve(true))
       .catch((err) => reject(err));
   });
