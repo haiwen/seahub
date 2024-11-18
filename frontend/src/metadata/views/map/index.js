@@ -47,7 +47,10 @@ const Map = () => {
         const location = getImageLocationFromRecord(record);
         if (!location) return null;
         const { lng, lat } = location;
-        return isValidPosition(lng, lat) ? { id, src, lng, lat } : null;
+        if (!isValidPosition(lng, lat)) return null;
+        const gcPosition = wgs84_to_gcj02(lng, lat);
+        const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
+        return { id, src, lng: bdPosition.lng, lat: bdPosition.lat };
       })
       .filter(Boolean);
   }, [repoID, metadata]);
