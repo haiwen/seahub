@@ -103,8 +103,7 @@ const Map = () => {
     const addMarker = (lng, lat) => {
       const gcPosition = wgs84_to_gcj02(lng, lat);
       const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
-      const { lng: bdPositionLng, lat: bdPositionLat } = bdPosition;
-      const point = new window.BMap.Point(bdPositionLng, bdPositionLat);
+      const point = new window.BMap.Point(bdPosition.lng, bdPosition.lat);
       const avatarMarker = customAvatarOverlay(point, appAvatarURL, imageUrl);
       mapRef.current.addOverlay(avatarMarker);
     };
