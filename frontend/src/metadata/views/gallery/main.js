@@ -69,20 +69,23 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)) || Utils.videoCheck(getFileNameFromRecord(row)))
+    let init = metadata.rows
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
         const fileName = getFileNameFromRecord(record);
+        const isVideo = Utils.videoCheck(fileName);
+        if (!Utils.imageCheck(fileName) && !isVideo) return _init;
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
+        const iconUrl = Utils.getFileIconUrl(fileName);
         const img = {
           id,
           name: fileName,
           path: parentDir,
+          src: isVideo ? iconUrl : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          thumbnail: isVideo ? iconUrl : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           date: date,
         };
