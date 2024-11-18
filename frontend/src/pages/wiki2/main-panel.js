@@ -57,6 +57,15 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
+  handleClickHistory = (event) => {
+    // console.log('getSettings', window.seafile,);
+    // if (docPerm !== 'rw' || !historyURL) return;
+    // if (isSdocRevision) return;
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    // window.location.href = historyURL;
+  };
+
   render() {
     const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide } = this.props;
     const { currentPageConfig = {} } = this.state;
@@ -83,7 +92,14 @@ class MainPanel extends Component {
               <DocInfo initContext={true}/>
             </div>
           </div>
-          {username && wikiPermission !== 'public' && <Account />}
+          {username && wikiPermission !== 'public' && (
+            <div className='d-flex align-items-center'>
+              <div className='wiki2-file-history' onClick={this.handleClickHistory}>
+                <i className='sf3-font sf3-font-history'/>
+              </div>
+              <Account />
+            </div>
+          )}
         </div>
         <div className="main-panel-center">
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
