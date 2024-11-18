@@ -7,9 +7,10 @@ import { getRowsByIds } from '../utils/table';
 import { isGroupView } from '../utils/view';
 import { username } from '../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
-import { CellType, PRIVATE_COLUMN_KEY } from '../constants';
+import { CellType } from '../constants';
 import { getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
-  getColumnOptionNamesByIds
+  getColumnOptionNamesByIds,
+  geRecordIdFromRecord
 } from '../utils/cell';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
@@ -181,7 +182,8 @@ class DataProcessor {
           const newOptionNames = getColumnOptionNamesByIds(newColumn, oldOptionIds);
           row[columnOriginalName] = newOptionNames ? newOptionNames : null;
         }
-        table.id_row_map[row[PRIVATE_COLUMN_KEY.ID]] = row;
+        const id = geRecordIdFromRecord(row);
+        table.id_row_map[id] = row;
       }
     }
   }

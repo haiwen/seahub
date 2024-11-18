@@ -19,12 +19,13 @@ const customImageOverlay = (center, imageUrl) => {
       this._div = div;
 
       const imageElement = `<img src=${this._imageUrl} width="72" height="72" />`;
-      const htmlString = `
-      <div class="custom-image-container">
-        ${this._imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
-        <i class='sf3-font image-overlay-arrow'></i>
-      </div>
-    `;
+      const htmlString =
+        `
+          <div class="custom-image-container">
+            ${this._imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
+            <i class='sf3-font image-overlay-arrow'></i>
+          </div>
+        `;
       const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
       const label = labelDocument.body.firstElementChild;
       this._div.append(label);
@@ -34,7 +35,7 @@ const customImageOverlay = (center, imageUrl) => {
         event.preventDefault();
       };
 
-      if (Utils.isDesktop) {
+      if (Utils.isDesktop()) {
         this._div.addEventListener('click', eventHandler);
       } else {
         this._div.addEventListener('touchend', eventHandler);

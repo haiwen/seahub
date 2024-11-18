@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../../constants';
+import { UTC_FORMAT_DEFAULT } from '../../constants';
 import { OPERATION_TYPE } from './constants';
 import Column from '../../model/metadata/column';
 import View from '../../model/metadata/view';
 import { getColumnOriginName } from '../../utils/column';
+import { geRecordIdFromRecord } from '../../utils/cell';
 
 dayjs.extend(utc);
 
@@ -141,8 +142,9 @@ export default function apply(data, operation) {
         let id_row_map = {};
         data.rows.forEach(row => {
           delete row[columnOriginName];
+          const id = geRecordIdFromRecord(row);
           rows.push(row);
-          id_row_map[row[PRIVATE_COLUMN_KEY.ID]] = row;
+          id_row_map[id] = row;
         });
         data.id_row_map = id_row_map;
         delete data.key_column_map[column_key];

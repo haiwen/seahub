@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import loadBMap, { initMapInfo } from '../../../utils/map-utils';
 import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
 import { MAP_TYPE } from '../../../constants';
-import Loading from '../../../components/loading';
 import { isValidPosition } from '../../utils/validate';
 import { appAvatarURL, baiduMapKey, gettext, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
-import { PREDEFINED_FILE_TYPE_OPTION_KEY, PRIVATE_COLUMN_KEY } from '../../constants';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
+import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
+import { geRecordIdFromRecord, getFileNameFromRecord, getImageLocationFromRecord, getParentDirFromRecord,
+  getFileTypeFromRecord
+} from '../../utils/cell';
 import { Utils } from '../../../utils/utils';
 import customImageOverlay from './customImageOverlay';
 import customAvatarOverlay from './customAvatarOverlay';
 import { createBMapGeolocationControl } from './geolocation-control';
+import toaster from '../../../components/toast';
 
 import './index.css';
-import toaster from '../../../components/toast';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -30,22 +32,25 @@ const Map = () => {
   const { metadata } = useMetadataView();
 
   const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
+  const repoID = window.sfMetadataContext.getSetting('repoID');
 
   const validImages = useMemo(() => {
     return metadata.rows
-      .filter(row => row[PRIVATE_COLUMN_KEY.FILE_TYPE] === PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE && row[PRIVATE_COLUMN_KEY.LOCATION])
-      .map(row => {
-        const id = row[PRIVATE_COLUMN_KEY.ID];
-        const repoID = window.sfMetadataContext.getSetting('repoID');
-        const fileName = getFileNameFromRecord(row);
-        const parentDir = getParentDirFromRecord(row);
+      .map(record => {
+        const recordType = getFileTypeFromRecord(record);
+        if (recordType !== PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE) return null;
+        const id = geRecordIdFromRecord(record);
+        const fileName = getFileNameFromRecord(record);
+        const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`;
-        const { lng, lat } = row[PRIVATE_COLUMN_KEY.LOCATION];
+        const location = getImageLocationFromRecord(record);
+        if (!location) return null;
+        const { lng, lat } = location;
         return isValidPosition(lng, lat) ? { id, src, lng, lat } : null;
       })
       .filter(Boolean);
-  }, [metadata]);
+  }, [repoID, metadata]);
 
   const addMapController = useCallback(() => {
     var navigation = new window.BMap.NavigationControl();
@@ -98,17 +103,17 @@ const Map = () => {
       mapRef.current.addOverlay(avatarMarker);
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => addMarker(position.coords.longitude, position.coords.latitude),
-        () => {
-          addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
-          toaster.danger(gettext('Failed to get user location'));
-        }
-      );
-    } else {
+    if (!navigator.geolocation) {
       addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
+      return;
     }
+    navigator.geolocation.getCurrentPosition(
+      position => addMarker(position.coords.longitude, position.coords.latitude),
+      () => {
+        addMarker(DEFAULT_POSITION.lng, DEFAULT_POSITION.lat);
+        toaster.danger(gettext('Failed to get user location'));
+      }
+    );
   }, []);
 
   const renderBaiduMap = useCallback(() => {
@@ -142,24 +147,21 @@ const Map = () => {
   }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch]);
 
   useEffect(() => {
-    if (mapInfo) {
-      if (mapInfo.type === MAP_TYPE.B_MAP) {
-        window.renderMap = renderBaiduMap;
-        loadBMap(mapInfo.key).then(() => renderBaiduMap());
-        return;
-      }
-    }
-
-    return () => {
-      if (mapInfo.type === MAP_TYPE.B_MAP) {
+    if (mapInfo.type === MAP_TYPE.B_MAP) {
+      window.renderMap = renderBaiduMap;
+      loadBMap(mapInfo.key).then(() => renderBaiduMap());
+      return () => {
         window.renderMap = null;
-      }
-    };
+      };
+    }
+    return;
   }, [mapInfo, renderBaiduMap]);
 
   return (
     <div className="w-100 h-100 sf-metadata-view-map">
-      {isLoading ? <Loading /> : (
+      {isLoading ? (
+        <CenteredLoading />
+      ) : (
         <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
       )}
     </div>

@@ -39,3 +39,11 @@ export const geRecordIdFromRecord = record => {
 export const getFileObjIdFromRecord = record => {
   return record ? record[PRIVATE_COLUMN_KEY.OBJ_ID] : '';
 };
+
+export const getImageLocationFromRecord = (record) => {
+  return record ? record[PRIVATE_COLUMN_KEY.LOCATION] : null;
+};
+
+export const getFileTypeFromRecord = (record) => {
+  return record ? record[PRIVATE_COLUMN_KEY.FILE_TYPE] : null;
+};
