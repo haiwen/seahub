@@ -8,7 +8,6 @@ import logging
 import subprocess
 from io import BytesIO
 import zipfile
-from fitz import open as fitz_open
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -25,6 +24,7 @@ from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
 try:
+    import pdfplumber
     from pillow_heif import register_heif_opener
     register_heif_opener()
 except ImportError:
@@ -206,12 +206,10 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     pdf_file = urllib.request.urlopen(inner_path)
     pdf_stream = BytesIO(pdf_file.read())
     try:
-        pdf_doc = fitz_open(stream=pdf_stream)
+        with pdfplumber.open(pdf_stream) as pdf:
+            img = pdf.pages[0].to_image()
+            img.save(tmp_path, quantize=False)
         pdf_stream.close()
-        page = pdf_doc[0]
-        pix = page.get_pixmap()
-        pix.save(tmp_path)
-        pdf_doc.close()
     except Exception as e:
         logger.error(e)
         return (False, 500)
