@@ -136,6 +136,7 @@ class ViewLibFileTest(BaseTestCase):
         # token for doc file is one time only
         raw_path = resp.context['raw_path']
         r = requests.get(raw_path)
+        print('test')
         self.assertEqual(200, r.status_code)
         r = requests.get(raw_path)
         self.assertEqual(403, r.status_code)
