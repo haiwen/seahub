@@ -22,33 +22,6 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
 
-  useEffect(() => {
-    setLoading(true);
-    if (SYSTEM_FOLDERS.find(folderPath => filePath.startsWith(folderPath))) {
-      setLoading(false);
-      return;
-    }
-
-    const dirName = Utils.getDirName(filePath);
-    const fileName = Utils.getFileName(filePath);
-    let parentDir = direntType === 'file' ? dirName : dirName.slice(0, dirName.length - fileName.length - 1);
-    if (!parentDir.startsWith('/')) {
-      parentDir = '/' + parentDir;
-    }
-    metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
-      const { results, metadata } = res.data;
-      const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      const fields = normalizeFields(metadata).map(field => new Column(field));
-      updateRecord && updateRecord(record);
-      setMetadata({ record, fields });
-      setLoading(false);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-      setLoading(false);
-    });
-  }, [repoID, filePath, direntType, updateRecord]);
-
   const onChange = useCallback((fieldKey, newValue) => {
     const { record, fields } = metadata;
     const field = fields.find(f => f.key === fieldKey);
@@ -102,6 +75,48 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
       toaster.danger(errorMsg);
     });
   }, [repoID, metadata]);
+
+  const localRecordChanged = useCallback((recordId, updates) => {
+    if (geRecordIdFromRecord(metadata?.record) !== recordId) return;
+    const newMetadata = { ...metadata, record: { ...metadata.record, ...updates } };
+    setMetadata(newMetadata);
+  }, [metadata]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (SYSTEM_FOLDERS.find(folderPath => filePath.startsWith(folderPath))) {
+      setLoading(false);
+      return;
+    }
+
+    const dirName = Utils.getDirName(filePath);
+    const fileName = Utils.getFileName(filePath);
+    let parentDir = direntType === 'file' ? dirName : dirName.slice(0, dirName.length - fileName.length - 1);
+    if (!parentDir.startsWith('/')) {
+      parentDir = '/' + parentDir;
+    }
+    metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
+      const { results, metadata } = res.data;
+      const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
+      const fields = normalizeFields(metadata).map(field => new Column(field));
+      updateRecord && updateRecord(record);
+      setMetadata({ record, fields });
+      setLoading(false);
+    }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      setLoading(false);
+    });
+  }, [repoID, filePath, direntType, updateRecord]);
+
+  useEffect(() => {
+    const eventBus = window?.sfMetadataContext?.eventBus;
+    if (!eventBus) return;
+    const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, localRecordChanged);
+    return () => {
+      unsubscribeLocalRecordChanged();
+    };
+  }, [localRecordChanged]);
 
   if (isLoading) return null;
   const { fields, record } = metadata;

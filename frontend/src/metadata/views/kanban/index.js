@@ -25,7 +25,8 @@ const Kanban = () => {
         error && toaster.danger(error);
       },
       success_callback: () => {
-        // do nothing
+        const eventBus = window.sfMetadataContext.eventBus;
+        eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, rowId, updates);
       },
     });
   }, [store]);

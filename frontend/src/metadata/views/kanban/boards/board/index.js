@@ -27,6 +27,7 @@ const Board = ({
   onUnFreezed,
   onOpenFile,
   onSelectCard,
+  updateDragging,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
@@ -34,8 +35,9 @@ const Board = ({
   const { metadata } = useMetadataView();
 
   const onDragStart = useCallback(({ payload }) => {
+    updateDragging(true);
     return payload;
-  }, []);
+  }, [updateDragging]);
 
   const onDragEnd = useCallback((targetBoardIndex, result) => {
     if (isDraggingOver) {
@@ -44,12 +46,11 @@ const Board = ({
 
     const { addedIndex, payload } = result;
     const { boardIndex: sourceBoardIndex, cardIndex: sourceCardIndex } = payload;
-    if (sourceBoardIndex === targetBoardIndex) return;
-    if (sourceCardIndex !== null && addedIndex !== null) {
+    if (sourceBoardIndex !== targetBoardIndex && sourceCardIndex !== null && addedIndex !== null) {
       onMove(targetBoardIndex, sourceBoardIndex, sourceCardIndex);
     }
-
-  }, [isDraggingOver, onMove]);
+    setTimeout(() => updateDragging(false), 0);
+  }, [isDraggingOver, onMove, updateDragging]);
 
   return (
     <section draggable={false} className="sf-metadata-view-kanban-board">
