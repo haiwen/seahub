@@ -159,7 +159,7 @@ class DepartmentsV2TreeNode extends Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               >
-                <i className="sf3-font sf3-font-more"></i>
+                <i className="sf3-font sf3-font-more mr-1"></i>
               </DropdownToggle>
               <DropdownMenu
                 className="dtable-dropdown-menu dropdown-menu drop-list"
