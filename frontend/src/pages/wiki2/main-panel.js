@@ -57,13 +57,14 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
-  handleClickHistory = (event) => {
-    // console.log('getSettings', window.seafile,);
-    // if (docPerm !== 'rw' || !historyURL) return;
-    // if (isSdocRevision) return;
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-    // window.location.href = historyURL;
+  handleClickHistory = () => {
+    const { wikiId, permission } = window.wiki.config;
+    if (permission !== 'rw') return;
+
+    const { siteRoot } = window.app.config;
+    const { currentPageConfig } = this.state;
+    const historyUrl = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${currentPageConfig.id}`;
+    window.location.href = historyUrl;
   };
 
   render() {

@@ -2,6 +2,7 @@
 import os
 import logging
 import posixpath
+import json
 from datetime import datetime
 
 from constance import config
@@ -19,6 +20,7 @@ from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
 from seahub.utils.repo import get_repo_owner, is_repo_admin, is_repo_owner, is_group_repo_staff
 from seahub.settings import SEADOC_SERVER_URL
+from seahub.seadoc.utils import gen_seadoc_access_token
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -144,4 +146,61 @@ def wiki_publish_view(request, publish_url):
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": 'public'
+    })
+
+def wiki_history_view(request, wiki_id):
+    """ view wiki history page. for wiki2
+    """
+    # get wiki object or 404
+    wiki = Wiki.objects.get(wiki_id=wiki_id)
+    if not wiki:
+        raise Http404
+    
+    username = request.user.username
+    repo_owner = get_repo_owner(request, wiki_id)
+    wiki.owner = repo_owner
+    
+    page_id = request.GET.get('page_id')
+    file_path = ''
+
+    if page_id:
+        wiki_config = get_wiki_config(wiki.repo_id, username)
+        pages = wiki_config.get('pages', [])
+        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+        file_path = page_info.get('path', '')
+
+    is_page = False
+    if file_path:
+        is_page = True
+
+    # perm check
+    permission = check_wiki_permission(wiki, username)
+    if not check_wiki_permission(wiki, username):
+        return render_permission_error(request, 'Permission denied.')
+
+    
+    latest_contributor = ''
+    last_modified = 0
+    file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
+    repo_id = wiki.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if is_page and file_type == SEADOC:
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except Exception as e:
+            logger.warning(e)
+
+    last_modified = datetime.fromtimestamp(last_modified)
+    file_uuid = page_info['docUuid']
+    file_name = page_info['name']
+    wiki_config = json.dumps(page_info)
+
+    return render(request, "wiki/wiki_file_revisions.html", {
+        'repo': repo,
+        "wiki_config": wiki_config,
+        'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
+        "seadoc_access_token": gen_seadoc_access_token(file_uuid, file_name, username, permission='rw'),
+        "seadoc_server_url": SEADOC_SERVER_URL
     })

@@ -1,0 +1,25 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
+{% render_bundle 'WikiFileHistory' 'css'%}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+    window.app.config.lang = '{{LANGUAGE_CODE}}';
+    window.fileHistory = {
+        pageOptions: {
+            isWiki2: true,
+            wikiConfig: '{{ wiki_config|safe }}',
+            repoID: '{{ repo.id }}',
+            repoName: '{{ repo.name }}',
+            assetsUrl: '{{ assets_url }}',
+            seadocAccessToken: '{{ seadoc_access_token }}',
+            seadocServerUrl: '{{ seadoc_server_url }}',
+        }
+    }
+    </script>
+    {% render_bundle 'WikiFileHistory' 'js'%}
+{% endblock %}

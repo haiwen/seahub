@@ -101,6 +101,7 @@ const excludedChunkNames = [
   'sdocPublishedRevision',
   'sdocFileHistory',
   'wiki2',
+  'WikiFileHistory',
   'sharedFileViewText',
   'viewFileText',
   'sharedFileViewMarkdown',
@@ -598,7 +599,7 @@ module.exports = function (webpackEnv) {
                   loader: 'svg-sprite-loader', options: {}
                 },
                 { loader: 'svgo-loader', options: {
-                  plugins:[
+                  plugins: [
                     'removeTitle',
                     'removeStyleElement',
                     'cleanupIDs',
