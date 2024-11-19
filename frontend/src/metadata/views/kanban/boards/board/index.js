@@ -121,6 +121,7 @@ Board.propTypes = {
   onUnFreezed: PropTypes.func,
   onOpenFile: PropTypes.func.isRequired,
   onSelectCard: PropTypes.func.isRequired,
+  updateDragging: PropTypes.func.isRequired,
 };
 
 export default Board;
