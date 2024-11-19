@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'reactstrap';
+import { Table, Dropdown, DropdownToggle } from 'reactstrap';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
@@ -8,6 +8,7 @@ import DepartmentsV2MembersItem from './departments-v2-members-item';
 import RepoItem from '../departments/repo-item';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
+import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -32,6 +33,7 @@ class DepartmentsV2MembersList extends React.Component {
       repos: [],
       deletedRepo: {},
       showDeleteRepoDialog: false,
+      dropdownOpen: false,
     };
   }
 
@@ -75,20 +77,20 @@ class DepartmentsV2MembersList extends React.Component {
     this.setState({ isItemFreezed: !this.state.isItemFreezed });
   };
 
-  getDepartmentName = () => {
+  getCurrentDepartment = () => {
     const { rootNodes, checkedDepartmentId } = this.props;
-    if (!rootNodes) return '';
-    let name = '';
+    if (!rootNodes) return {};
+    let currentDepartment = {};
     let arr = [...rootNodes];
-    while (!name && arr.length > 0) {
+    while (!currentDepartment.id && arr.length > 0) {
       let curr = arr.shift();
       if (curr.id === checkedDepartmentId) {
-        name = curr.name;
+        currentDepartment = curr;
       } else if (curr.children && curr.children.length > 0) {
         arr.push(...curr.children);
       }
     }
-    return name;
+    return currentDepartment;
   };
 
   sortByName = (e) => {
@@ -117,16 +119,47 @@ class DepartmentsV2MembersList extends React.Component {
     });
   };
 
+  dropdownToggle = (e) => {
+    e.stopPropagation();
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
   render() {
     const { activeNav, repos } = this.state;
     const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
     const sortByName = sortBy === 'name';
     const sortByRole = sortBy === 'role';
     const sortIcon = <span className={`sort-dirent sf3-font sf3-font-down ${sortOrder === 'asc' ? 'rotate-180' : ''}`}></span>;
+    const currentDepartment = this.getCurrentDepartment();
 
     return (
       <div className="department-content-main">
-        <div className="department-content-main-name">{this.getDepartmentName()}</div>
+        <div className="department-content-main-name">
+          {currentDepartment.name}
+          <Dropdown
+            isOpen={this.state.dropdownOpen}
+            toggle={(e) => this.dropdownToggle(e)}
+            direction="down"
+            className="department-dropdown-menu"
+          >
+            <DropdownToggle
+              tag='span'
+              role="button"
+              className='sf3-font-down sf3-font ml-1 sf-dropdown-toggle'
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              data-toggle="dropdown"
+            />
+            <DepartmentNodeMenu
+              node={currentDepartment}
+              toggleAddDepartment={this.props.toggleAddDepartment}
+              toggleAddLibrary={this.props.toggleAddLibrary}
+              toggleAddMembers={this.props.toggleAddMembers}
+              toggleRename={this.props.toggleRename}
+              toggleDelete={this.props.toggleDelete}
+            />
+          </Dropdown>
+        </div>
 
         <div className="cur-view-path tab-nav-container">
           <ul className="nav">

@@ -336,6 +336,11 @@ class DepartmentsV2 extends React.Component {
                     getRepos={this.getRepos}
                     deleteGroup={this.deleteGroup}
                     createGroup={this.createGroup}
+                    toggleAddDepartment={this.toggleAddDepartment}
+                    toggleAddLibrary={this.toggleAddLibrary}
+                    toggleAddMembers={this.toggleAddMembers}
+                    toggleRename={this.toggleRename}
+                    toggleDelete={this.toggleDelete}
                   />
                 </>
               }
