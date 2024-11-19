@@ -162,7 +162,6 @@ class DepartmentsV2TreeNode extends Component {
                 <i className="sf3-font sf3-font-more mr-1"></i>
               </DropdownToggle>
               <DropdownMenu
-                className="dtable-dropdown-menu dropdown-menu drop-list"
                 right={true}
                 modifiers={{ preventOverflow: { boundariesElement: document.body } }}
                 positionFixed={true}
