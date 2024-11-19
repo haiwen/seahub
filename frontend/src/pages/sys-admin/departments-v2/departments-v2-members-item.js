@@ -78,7 +78,7 @@ class DepartmentsV2MembersItem extends React.Component {
     const option = options.find(item => item.value === currentRole) || {};
 
     return (
-      <tr key={member.email} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className="departments-members-item" key={member.email} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img className="avatar" src={member.avatar_url} alt=""></img></td>
         <td className='text-truncate'>
           <Link to={`${siteRoot}sys/users/${encodeURIComponent(member.email)}/`}>{member.name}</Link>
