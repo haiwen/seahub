@@ -29,6 +29,7 @@
 
 .sf-metadata-kanban-card .sf-metadata-kanban-card-header .sf-metadata-file-name {
   text-decoration: none;
+  flex: unset;
 }
 
 .sf-metadata-kanban-card .sf-metadata-kanban-card-header .sf-metadata-file-name:hover {

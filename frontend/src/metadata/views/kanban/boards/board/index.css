@@ -4,6 +4,14 @@
   margin-right: 16px;
 }
 
+.sf-metadata-view-kanban-board .smooth-dnd-container.vertical {
+  height: calc(100% - 32px);
+}
+
+.sf-metadata-view-kanban-board .smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper:last-child .sf-metadata-kanban-card {
+  margin-bottom: 0;
+}
+
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
   overflow: visible;
 }

@@ -70,6 +70,10 @@ export const MetadataViewProvider = ({
     window.sfMetadataStore.modifySettings(settings);
   }, []);
 
+  const updateLocalRecord = useCallback((recordId, update) => {
+    window.sfMetadataStore.modifyLocalRecord(recordId, update);
+  }, []);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -103,6 +107,7 @@ export const MetadataViewProvider = ({
     const unsubscribeModifyHiddenColumns = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
     const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
     const unsubscribeModifySettings = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SETTINGS, modifySettings);
+    const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, updateLocalRecord);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -120,6 +125,7 @@ export const MetadataViewProvider = ({
       unsubscribeModifyHiddenColumns();
       unsubscribeModifyColumnOrder();
       unsubscribeModifySettings();
+      unsubscribeLocalRecordChanged();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);

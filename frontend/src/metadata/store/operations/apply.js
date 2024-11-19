@@ -96,6 +96,27 @@ export default function apply(data, operation) {
       data.id_row_map[row_id] = updatedRow;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_LOCAL_RECORD: {
+      const { row_id, updates } = operation;
+      const { rows } = data;
+      const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
+      const modifier = window.sfMetadataContext.getUsername();
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId } = row;
+        if (rowId === row_id && updates) {
+          const updatedRow = Object.assign({}, row, updates, {
+            '_mtime': modifyTime,
+            '_last_modifier': modifier,
+          });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
+      });
+
+      data.rows = updatedRows;
+      return data;
+    }
     case OPERATION_TYPE.MODIFY_FILTERS: {
       const { filter_conjunction, filters, basic_filters } = operation;
       data.view.filter_conjunction = filter_conjunction;

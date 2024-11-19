@@ -2,12 +2,10 @@
   flex: 1;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .sf-metadata-view-kanban-boards .smooth-dnd-container.horizontal {
-  height: 100%;
-  overflow: auto;
   white-space: nowrap;
   display: flex;
   padding: 16px;

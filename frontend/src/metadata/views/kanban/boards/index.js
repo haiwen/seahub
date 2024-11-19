@@ -23,6 +23,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
+  const [isDragging, setDragging] = useState(false);
 
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
@@ -188,6 +189,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
 
   const onSelectCard = useCallback((record) => {
     const recordId = geRecordIdFromRecord(record);
+    if (selectedCard === recordId) return;
     const name = getFileNameFromRecord(record);
     const path = getParentDirFromRecord(record);
     const isDir = checkIsDir(record);
@@ -201,13 +203,17 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setSelectedCard(recordId);
     onCloseSettings();
     showDirentDetail();
-  }, [onCloseSettings, showDirentDetail, updateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, showDirentDetail, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
-    if (!containerRef.current.contains(event.target)) return;
+    if (isDragging) return;
     setSelectedCard(null);
     updateCurrentDirent();
-  }, [updateCurrentDirent]);
+  }, [isDragging, updateCurrentDirent]);
+
+  const updateDragging = useCallback((isDragging) => {
+    setDragging(isDragging);
+  }, []);
 
   useEffect(() => {
     if (!isDirentDetailShow) {
@@ -250,6 +256,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
                   onUnFreezed={onUnFreezed}
                   onOpenFile={onOpenFile}
                   onSelectCard={onSelectCard}
+                  updateDragging={updateDragging}
                 />
               );
             })}
