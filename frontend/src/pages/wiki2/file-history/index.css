@@ -100,6 +100,10 @@
   height: calc(100vh - 50px);
 }
 
+.wiki-file-history .sdoc-file-history-content .loading-tip {
+  margin: auto;
+}
+
 .wiki-file-history .sdoc-file-history-container .sdoc-file-history-content .sdoc-editor-content {
   position: absolute;
   padding: 20px 40px;
