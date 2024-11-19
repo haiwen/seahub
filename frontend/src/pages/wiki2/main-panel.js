@@ -95,7 +95,7 @@ class MainPanel extends Component {
           </div>
           {username && wikiPermission !== 'public' && (
             <div className='d-flex align-items-center'>
-              <div className='wiki2-file-history' onClick={this.handleClickHistory}>
+              <div className='wiki2-file-history-button' onClick={this.handleClickHistory}>
                 <i className='sf3-font sf3-font-history'/>
               </div>
               <Account />
