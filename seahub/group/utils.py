@@ -88,7 +88,7 @@ def is_group_admin_or_owner(group_id, email):
     else:
         return False
 
-def get_group_member_info(request, group_id, email, username_as_email=True):
+def get_group_member_info(request, group_id, email):
     p = Profile.objects.get_profile_by_user(email)
     if p:
         login_id = p.login_id if p.login_id else ''
@@ -109,7 +109,7 @@ def get_group_member_info(request, group_id, email, username_as_email=True):
         'group_id': group_id,
         "name": email2nickname(email),
         'email': email,
-        "contact_email": Profile.objects.get_contact_email_by_user(email, username_as_email),
+        "contact_email": Profile.objects.get_contact_email_by_user(email),
         "login_id": login_id,
         "avatar_url": avatar_url,
         "is_admin": is_admin,
@@ -117,6 +117,42 @@ def get_group_member_info(request, group_id, email, username_as_email=True):
     }
 
     return member_info
+
+def get_group_members_info(group_id, emails):
+    member_profiles = Profile.objects.filter(user__in=emails)
+    username_profile_map = {p.user : p for p in member_profiles}
+    members_info_list = []
+    for email in emails:
+        p = username_profile_map.get(email) or None
+        if p:
+            login_id = p.login_id if p.login_id else ''
+            contact_email = p.contact_email
+        else:
+            login_id = ''
+            contact_email = ''
+
+        avatar_url, _, _ = api_avatar_url(email)
+
+        role = 'Member'
+        group = ccnet_api.get_group(int(group_id))
+        is_admin = bool(ccnet_api.check_group_staff(int(group_id), email))
+        if email == group.creator_name:
+            role = 'Owner'
+        elif is_admin:
+            role = 'Admin'
+
+        member_info = {
+            'group_id': group_id,
+            "name": email2nickname(email),
+            'email': email,
+            "contact_email": contact_email,
+            "login_id": login_id,
+            "avatar_url": avatar_url,
+            "is_admin": is_admin,
+            "role": role,
+        }
+        members_info_list.append(member_info)
+    return members_info_list
 
 GROUP_ID_CACHE_PREFIX = "GROUP_ID_"
 GROUP_ID_CACHE_TIMEOUT = 24 * 60 * 60
