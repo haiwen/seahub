@@ -54,9 +54,11 @@
   padding: .5rem 0;
   font-size: 12px;
   line-height: 13px;
+  cursor: pointer;
+  color: #212529;
 }
 
-.permission-editor-btn-add-custom-permission .fa {
+.permission-editor-btn-add-custom-permission .sf3-font {
   font-size: 12px;
   line-height: 13px;
   margin-right: .25rem;
