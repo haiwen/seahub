@@ -88,7 +88,7 @@ def is_group_admin_or_owner(group_id, email):
     else:
         return False
 
-def get_group_member_info(request, group_id, email):
+def get_group_member_info(request, group_id, email, username_as_email=True):
     p = Profile.objects.get_profile_by_user(email)
     if p:
         login_id = p.login_id if p.login_id else ''
@@ -109,7 +109,7 @@ def get_group_member_info(request, group_id, email):
         'group_id': group_id,
         "name": email2nickname(email),
         'email': email,
-        "contact_email": Profile.objects.get_contact_email_by_user(email),
+        "contact_email": Profile.objects.get_contact_email_by_user(email, username_as_email),
         "login_id": login_id,
         "avatar_url": avatar_url,
         "is_admin": is_admin,

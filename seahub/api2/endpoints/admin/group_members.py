@@ -68,8 +68,9 @@ class AdminGroupMembers(APIView):
             has_next_page = False
 
         group_members_info = []
+        
         for m in members:
-            member_info = get_group_member_info(request, group_id, m.user_name)
+            member_info = get_group_member_info(request, group_id, m.user_name, username_as_email=False)
             group_members_info.append(member_info)
 
         group_members = {
