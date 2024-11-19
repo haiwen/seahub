@@ -32,7 +32,6 @@ export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 export SEAHUB_DIR=$seahubdir
 export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
-export SEAFES_INDEX_LOGFILE=${TOPDIR}/pro-data/index.log
 
 script_name=$0
 function usage () {

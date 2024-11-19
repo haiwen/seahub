@@ -23,7 +23,6 @@ export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
 export SEAFES_DIR=$seafesdir
 export SEAHUB_DIR=$seahubdir
 export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
-export SEAFES_INDEX_LOGFILE=${TOPDIR}/pro-data/index.log
 
 function check_python_executable() {
     if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
