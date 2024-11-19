@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import className from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
 import { gettext } from '../utils/constants';
+import { DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 
 import '../css/pagination.css';
 
@@ -14,10 +16,18 @@ const propTypes = {
   curPerPage: PropTypes.number.isRequired
 };
 
+const PAGES = [25, 50, 100];
+
 class Paginator extends Component {
 
-  resetPerPage = (e) => {
-    const perPage = parseInt(e.target.value);
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMenuShow: false
+    };
+  }
+
+  resetPerPage = (perPage) => {
     this.updateURL(1, perPage);
     this.props.resetPerPage(perPage);
   };
@@ -47,6 +57,24 @@ class Paginator extends Component {
     return gettext('{number_placeholder} / Page').replace('{number_placeholder}', perPage);
   };
 
+  toggleOperationMenu = (e) => {
+    e.stopPropagation();
+    this.setState({ isMenuShow: !this.state.isMenuShow });
+  };
+
+  renderDropdownItem = (curPerPage, perPage) => {
+    return (
+      <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage}>
+        <span className='paginator-dropdown-tick'>
+          {curPerPage === perPage && <i className="sf2-icon-tick"></i>}
+        </span>
+        <span>
+          {this.getPerPageText(perPage)}
+        </span>
+      </DropdownItem>
+    );
+  };
+
   render() {
     const { curPerPage, currentPage } = this.props;
     return (
@@ -67,15 +95,22 @@ class Paginator extends Component {
           <span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
         </button>
 
-        <select
-          className="form-control d-inline-block w-auto ml-6"
-          value={curPerPage}
-          onChange={this.resetPerPage}
-        >
-          <option value="25">{this.getPerPageText(25)}</option>
-          <option value="50">{this.getPerPageText(50)}</option>
-          <option value="100">{this.getPerPageText(100)}</option>
-        </select>
+        <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown">
+          <DropdownToggle
+            className="ml-6"
+            data-toggle="dropdown"
+            aria-expanded={this.state.isMenuShow}
+            onClick={this.toggleOperationMenu}
+          >
+            <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
+            <span className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
+          </DropdownToggle>
+          <DropdownMenu>
+            {PAGES.map(perPage => {
+              return this.renderDropdownItem(curPerPage, perPage);
+            })}
+          </DropdownMenu>
+        </Dropdown>
       </div>
     );
   }
