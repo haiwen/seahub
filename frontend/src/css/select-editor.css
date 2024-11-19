@@ -55,6 +55,7 @@
   font-size: 12px;
   line-height: 13px;
   cursor: pointer;
+  color: #212529;
 }
 
 .permission-editor-btn-add-custom-permission .sf3-font {
