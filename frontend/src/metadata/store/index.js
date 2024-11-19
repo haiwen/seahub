@@ -408,6 +408,17 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifyLocalRecord(row_id, updates) {
+    const type = OPERATION_TYPE.MODIFY_LOCAL_RECORD;
+    const operation = this.createOperation({
+      type,
+      row_id,
+      repo_id: this.repoId,
+      updates
+    });
+    this.applyOperation(operation);
+  }
+
   modifyFilters(filterConjunction, filters, basicFilters = []) {
     const type = OPERATION_TYPE.MODIFY_FILTERS;
     const operation = this.createOperation({

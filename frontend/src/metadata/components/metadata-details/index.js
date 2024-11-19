@@ -7,10 +7,10 @@ import DetailItem from '../../../components/dirent-detail/detail-item';
 import { Utils } from '../../../utils/utils';
 import metadataAPI from '../../api';
 import Column from '../../model/metadata/column';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getFileNameFromRecord } from '../../utils/cell';
+import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getFileNameFromRecord, geRecordIdFromRecord, getFileObjIdFromRecord } from '../../utils/cell';
 import { normalizeFields } from './utils';
 import { gettext } from '../../../utils/constants';
-import { CellType, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
+import { CellType, EVENT_BUS_TYPE, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getColumnOptions, getColumnOriginName } from '../../utils/column';
 import { SYSTEM_FOLDERS } from './constants';
 import Location from './location';
@@ -53,25 +53,19 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
     const { record, fields } = metadata;
     const field = fields.find(f => f.key === fieldKey);
     const fileName = getColumnOriginName(field);
+    const recordId = geRecordIdFromRecord(record);
+    const fileObjId = getFileObjIdFromRecord(record);
     let update = { [fileName]: newValue };
     if (field.type === CellType.SINGLE_SELECT) {
       update = { [fileName]: getColumnOptionNameById(field, newValue) };
     } else if (field.type === CellType.MULTIPLE_SELECT) {
       update = { [fileName]: newValue ? getColumnOptionNamesByIds(field, newValue) : [] };
     }
-    metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id).then(res => {
+    metadataAPI.modifyRecord(repoID, recordId, update, fileObjId).then(res => {
       const newMetadata = { ...metadata, record: { ...record, ...update } };
       setMetadata(newMetadata);
-      if (window.sfMetadataStore && window.sfMetadataStore.data) {
-        const store = window.sfMetadataStore;
-        store.modifyRecords([record._id], { [record._id]: update }, { [record._id]: update }, { [record._id]: record }, { [record._id]: record }, false, false, {
-          fail_callback: (error) => {
-            error && toaster.danger(error);
-          },
-          success_callback: () => {
-            // do nothing
-          },
-        });
+      if (window?.sfMetadataContext?.eventBus) {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, recordId, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

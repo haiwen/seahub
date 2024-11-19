@@ -10,6 +10,7 @@ export const OPERATION_TYPE = {
   LOCK_RECORD_VIA_BUTTON: 'lock_record_via_button',
   MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
   MODIFY_SETTINGS: 'modify_settings',
+  MODIFY_LOCAL_RECORD: 'modify_local_record',
 
   // column
   INSERT_COLUMN: 'insert_column',
@@ -53,6 +54,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
+  [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
 };
 
 export const UNDO_OPERATION_TYPE = [
@@ -64,6 +66,7 @@ export const UNDO_OPERATION_TYPE = [
 // only apply operation on the local
 export const LOCAL_APPLY_OPERATION_TYPE = [
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
+  OPERATION_TYPE.MODIFY_LOCAL_RECORD,
 ];
 
 // apply operation after exec operation on the server
