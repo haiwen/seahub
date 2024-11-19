@@ -22,6 +22,7 @@ export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH
 export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
 export SEAFES_DIR=$seafesdir
 export SEAHUB_DIR=$seahubdir
+export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
 
 function check_python_executable() {
     if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
