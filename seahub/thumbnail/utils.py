@@ -193,6 +193,33 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         return (False, 500)
 
 
+def pdf_bytes_to_images(pdf_bytes, prefix_path):
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmpfile:
+        tmpfile.write(pdf_bytes)
+        tmp_path = tmpfile.name
+    command = [
+        'pdftoppm',
+        '-png',
+        '-f', '1',
+        '-l', '1',
+        '-singlefile',
+        tmp_path,
+        '-o',
+        prefix_path
+    ]
+    try:
+        subprocess.check_output(command)
+        new_file_path = prefix_path + '.png'
+        if not os.path.exists(new_file_path):
+            ole_file_path = prefix_path + '-01.png'
+            os.rename(ole_file_path, new_file_path)
+    except Exception as e:
+        logger.error(e)
+        os.remove(tmp_path)
+        return (False, 500)
+    os.remove(tmp_path)
+
+
 def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     t1 = timeit.default_timer()
     token = seafile_api.get_fileserver_access_token(repo.id,
@@ -202,13 +229,12 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
-    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
+    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s' % file_id[:8]))
     pdf_file = urllib.request.urlopen(inner_path)
     pdf_stream = BytesIO(pdf_file.read())
     try:
-        with pdfplumber.open(pdf_stream) as pdf:
-            img = pdf.pages[0].to_image()
-            img.save(tmp_path, quantize=False)
+        pdf_bytes_to_images(pdf_stream.getvalue(), tmp_path)
+        tmp_path = tmp_path + '.png'
         pdf_stream.close()
     except Exception as e:
         logger.error(e)
