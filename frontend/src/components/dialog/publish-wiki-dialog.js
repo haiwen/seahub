@@ -127,7 +127,9 @@ class PublishWikiDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.deleteCustomUrl} disabled={this.props.customUrl === ''}>{gettext('Delete')}</Button>
+          {this.props.customUrl !== '' &&
+            <Button color="secondary" onClick={this.deleteCustomUrl}>{gettext('Unpublish')}</Button>
+          }
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
