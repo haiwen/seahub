@@ -161,38 +161,18 @@ def wiki_history_view(request, wiki_id):
     wiki.owner = repo_owner
     
     page_id = request.GET.get('page_id')
-    file_path = ''
 
     if page_id:
         wiki_config = get_wiki_config(wiki.repo_id, username)
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
-        file_path = page_info.get('path', '')
-
-    is_page = False
-    if file_path:
-        is_page = True
 
     # perm check
-    permission = check_wiki_permission(wiki, username)
     if not check_wiki_permission(wiki, username):
         return render_permission_error(request, 'Permission denied.')
 
-    
-    latest_contributor = ''
-    last_modified = 0
-    file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     repo_id = wiki.repo_id
     repo = seafile_api.get_repo(repo_id)
-    if is_page and file_type == SEADOC:
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
-            if dirent:
-                latest_contributor, last_modified = dirent.modifier, dirent.mtime
-        except Exception as e:
-            logger.warning(e)
-
-    last_modified = datetime.fromtimestamp(last_modified)
     file_uuid = page_info['docUuid']
     file_name = page_info['name']
     wiki_config = json.dumps(page_info)
