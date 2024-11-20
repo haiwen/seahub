@@ -166,11 +166,12 @@ class MetadataServerAPI:
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def delete_column(self, table_id, column_key):
+    def delete_column(self, table_id, column_key, permanently=False):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {
             'table_id': table_id,
-            'column_key': column_key
+            'column_key': column_key,
+            'permanently': permanently
         }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
@@ -197,7 +198,10 @@ class MetadataServerAPI:
         response = requests.get(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def delete_table(self, table_id):
+    def delete_table(self, table_id, permanently=False):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/tables/{table_id}'
-        response = requests.delete(url, headers=self.headers, timeout=self.timeout)
+        data = {
+            'permanently': permanently
+        }
+        response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
