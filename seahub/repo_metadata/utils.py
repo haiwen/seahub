@@ -190,12 +190,12 @@ def remove_faces_table(metadata_server_api):
     tables = metadata.get('tables', [])
     for table in tables:
         if table['name'] == FACES_TABLE.name:
-            metadata_server_api.delete_table(table['id'])
+            metadata_server_api.delete_table(table['id'], True)
         elif table['name'] == METADATA_TABLE.name:
             columns = table.get('columns', [])
             for column in columns:
                 if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key]:
-                    metadata_server_api.delete_column(table['id'], column['key'])
+                    metadata_server_api.delete_column(table['id'], column['key'], True)
 
 
 def get_file_download_token(repo_id, file_id, username):
