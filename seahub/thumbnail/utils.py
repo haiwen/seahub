@@ -24,7 +24,6 @@ from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
 try:
-    import pdfplumber
     from pillow_heif import register_heif_opener
     register_heif_opener()
 except ImportError:
@@ -210,7 +209,6 @@ def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=200):
             subprocess.check_output(command)
         except Exception as e:
             logger.error(e)
-            os.remove(tmp_file)
             return (False, 500)
 
 
