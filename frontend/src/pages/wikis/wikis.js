@@ -377,7 +377,7 @@ class Wikis extends Component {
                   text={
                     <>
                       <p>{gettext('You do not have any Wikis yet.')}</p>
-                      <p>{gettext('You can add a Wiki by clicking the "Add Wiki" item in the menu.')}</p>
+                      <p>{gettext('You can add a Wiki by clicking the "Add Wiki" item in the dropdown menu.')}</p>
                     </>
                   }
                 />

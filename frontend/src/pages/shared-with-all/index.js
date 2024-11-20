@@ -127,7 +127,7 @@ class SharedWithAll extends React.Component {
       <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p> : (
         <EmptyTip
           title={gettext('No public libraries')}
-          text={gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}
+          text={gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" item in the dropdown menu.')}
         >
         </EmptyTip>
       );
