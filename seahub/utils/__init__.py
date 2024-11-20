@@ -418,7 +418,7 @@ def get_conf_text_ext():
 
 def get_file_type_and_ext(filename):
     """
-    Return file type and extension if the file can be previewd online,
+    Return file type and extension if the file can be previewed online,
     otherwise, return unknown type.
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
