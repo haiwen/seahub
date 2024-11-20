@@ -31,7 +31,7 @@ class MyLibraries extends Component {
     this.emptyTip = (
       <EmptyTip
         title={gettext('No libraries')}
-        text={gettext('You have not created any libraries yet. A library is a container to organize your files and folders. A library can also be shared with others and synced to your connected devices. You can create a library by clicking the "New Library" button in the menu bar.')}
+        text={gettext('You have not created any libraries yet. A library is a container to organize your files and folders. A library can also be shared with others and synced to your connected devices. You can create a library by clicking the "New Library" item in the dropdown menu.')}
       >
       </EmptyTip>
     );

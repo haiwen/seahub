@@ -132,7 +132,7 @@ class GroupView extends React.Component {
         return (
           <EmptyTip
             title={gettext('No libraries shared with this group')}
-            text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}
+            text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" item in the dropdown menu.')}
           />
         );
       } else {
@@ -144,7 +144,7 @@ class GroupView extends React.Component {
           return (
             <EmptyTip
               title={gettext('No libraries')}
-              text={gettext('You can create libraries by clicking the "New Library" button in the menu bar.')}
+              text={gettext('You can create libraries by clicking the "New Library" item in the dropdown menu.')}
             />
           );
         }
