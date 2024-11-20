@@ -174,7 +174,7 @@ class SysAdmin extends React.Component {
     for (let i = 0, len = pageList.length; i < len; i++) {
       urlPartList = pageList[i].urlPartList;
       tab = pageList[i].tab;
-      for (let j = 0, jlen = urlPartList.length; j < jlen; j++) {
+      for (let j = 0, len = urlPartList.length; j < len; j++) {
         if (location.href.indexOf(`${urlBase}${urlPartList[j]}`) != -1) {
           return tab;
         }

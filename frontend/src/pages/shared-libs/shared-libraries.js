@@ -14,7 +14,7 @@ import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import LibsMobileThead from '../../components/libs-mobile-thead';
-import ModalPotal from '../../components/modal-portal';
+import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
@@ -338,8 +338,8 @@ class Item extends Component {
 
     const { isStarred } = this.state;
     const { data, currentViewMode = LIST_MODE } = this.props;
-    const useBigLibaryIcon = currentViewMode == GRID_MODE;
-    data.icon_url = Utils.getLibIconUrl(data, useBigLibaryIcon);
+    const useBigLibraryIcon = currentViewMode == GRID_MODE;
+    data.icon_url = Utils.getLibIconUrl(data, useBigLibraryIcon);
     data.icon_title = Utils.getLibIconTitle(data);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
@@ -449,7 +449,7 @@ class Item extends Component {
             </div>
           )}
           {this.state.isShowSharedDialog && (
-            <ModalPotal>
+            <ModalPortal>
               <ShareDialog
                 itemType={'library'}
                 itemName={data.repo_name}
@@ -461,7 +461,7 @@ class Item extends Component {
                 isAdmin={true}
                 toggleDialog={this.toggleShareDialog}
               />
-            </ModalPotal>
+            </ModalPortal>
           )}
         </Fragment>
       );
@@ -500,7 +500,7 @@ class Item extends Component {
             </td>
           </tr>
           {this.state.isShowSharedDialog && (
-            <ModalPotal>
+            <ModalPortal>
               <ShareDialog
                 itemType={'library'}
                 itemName={data.repo_name}
@@ -512,7 +512,7 @@ class Item extends Component {
                 isAdmin={true}
                 toggleDialog={this.toggleShareDialog}
               />
-            </ModalPotal>
+            </ModalPortal>
           )}
         </Fragment>
       );

@@ -29,7 +29,7 @@ class Search extends Component {
       total: 0,
       isMaskShow: false,
       isResultShow: false,
-      isResultGetted: false,
+      isResultGotten: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
     };
@@ -66,7 +66,7 @@ class Search extends Component {
     if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         isResultShow: false,
-        isResultGetted: false
+        isResultGotten: false
       });
       return false;
     }
@@ -91,7 +91,7 @@ class Search extends Component {
     }
     this.setState({
       isResultShow: true,
-      isResultGetted: false
+      isResultGotten: false
     });
 
     this.source = seafileAPI.getSource();
@@ -104,7 +104,7 @@ class Search extends Component {
       if (!res.data.total) {
         _this.setState({
           resultItems: [],
-          isResultGetted: true
+          isResultGotten: true
         });
         _this.source = null;
         return;
@@ -114,7 +114,7 @@ class Search extends Component {
       _this.setState({
         total: res.data.total,
         resultItems: page == 1 ? items : this.state.resultItems.concat(items),
-        isResultGetted: true
+        isResultGotten: true
       });
       _this.source = null;
     }).catch(error => {
@@ -161,7 +161,7 @@ class Search extends Component {
       isMaskShow: false,
       isCloseShow: false,
       isResultShow: false,
-      isResultGetted: false,
+      isResultGotten: false,
       resultItems: [],
       isSearchInputShow: false,
     });
@@ -184,7 +184,7 @@ class Search extends Component {
     if (!this.state.isResultShow) {
       return;
     }
-    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGotten || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );

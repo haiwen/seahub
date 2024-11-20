@@ -195,12 +195,12 @@ class FileHistory extends React.Component {
     editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true });
-        this.refershFileList();
+        this.refreshFileList();
       }
     });
   };
 
-  refershFileList() {
+  refreshFileList() {
     if (useNewAPI) {
       editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
         this.initNewRecords(res.data);

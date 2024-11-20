@@ -104,8 +104,8 @@ class Users extends Component {
         hasUserSelected = true;
         selectedUserList.push(user);
       } else {
-        selectedUserList = selectedUserList.filter(thisuser => {
-          return thisuser.email != user.email;
+        selectedUserList = selectedUserList.filter(thisUser => {
+          return thisUser.email != user.email;
         });
       }
       return user;

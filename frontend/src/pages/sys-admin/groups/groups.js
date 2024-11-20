@@ -62,8 +62,8 @@ class Groups extends Component {
     });
   };
 
-  createGroup = (groupName, OnwerEmail) => {
-    systemAdminAPI.sysAdminCreateNewGroup(groupName, OnwerEmail).then(res => {
+  createGroup = (groupName, ownerEmail) => {
+    systemAdminAPI.sysAdminCreateNewGroup(groupName, ownerEmail).then(res => {
       let newGroupList = this.state.groupList;
       newGroupList.unshift(res.data);
       this.setState({

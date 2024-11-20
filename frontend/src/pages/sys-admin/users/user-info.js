@@ -71,7 +71,7 @@ class Content extends Component {
     this.toggleDialog('login_id', gettext('Set Login ID'));
   };
 
-  toggleSetUserComtactEmailDialog = () => {
+  toggleSetUserContactEmailDialog = () => {
     this.toggleDialog('contact_email', gettext('Set Contact Email'));
   };
 
@@ -140,7 +140,7 @@ class Content extends Component {
             <dt className="info-item-heading">{gettext('Contact Email')}</dt>
             <dd className="info-item-content">
               {user.contact_email || '--'}
-              {this.showEditIcon(this.toggleSetUserComtactEmailDialog)}
+              {this.showEditIcon(this.toggleSetUserContactEmailDialog)}
             </dd>
 
             <dt className="info-item-heading">{gettext('Role')}</dt>

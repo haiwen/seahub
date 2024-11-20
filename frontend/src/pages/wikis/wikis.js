@@ -87,7 +87,7 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggelAddWikiDialog = (currentDeptID) => {
+  toggleAddWikiDialog = (currentDeptID) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
@@ -326,7 +326,7 @@ class Wikis extends Component {
         {this.state.isShowAddDialog &&
           <ModalPortal>
             <AddWikiDialog
-              toggleCancel={this.toggelAddWikiDialog}
+              toggleCancel={this.toggleAddWikiDialog}
               addWiki={this.addWiki}
               currentDeptID={this.state.currentDeptID}
             />
@@ -349,7 +349,7 @@ class Wikis extends Component {
                       <span className="sf3-font sf3-font-down" aria-hidden="true"></span>
                     </DropdownToggle>
                     <DropdownMenu positionFixed={true}>
-                      <DropdownItem onClick={() => {this.toggelAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
+                      <DropdownItem onClick={() => {this.toggleAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 }
@@ -364,7 +364,7 @@ class Wikis extends Component {
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
                   convertWiki={this.convertWiki}
-                  toggelAddWikiDialog={this.toggelAddWikiDialog}
+                  toggleAddWikiDialog={this.toggleAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}
                   isSidePanelFolded={this.props.isSidePanelFolded}
                 />

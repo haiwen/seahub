@@ -253,7 +253,7 @@ class GroupMembers extends Component {
     });
   };
 
-  toggleAddMemgerDialog = () => {
+  toggleAddMemberDialog = () => {
     this.setState({ isAddMemberDialogOpen: !this.state.isAddMemberDialogOpen });
   };
 
@@ -320,7 +320,7 @@ class GroupMembers extends Component {
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddMemgerDialog}>{gettext('Add Member')}</Button>
+          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -347,7 +347,7 @@ class GroupMembers extends Component {
         {isAddMemberDialogOpen &&
           <SysAdminGroupAddMemberDialog
             addMembers={this.addMembers}
-            toggle={this.toggleAddMemgerDialog}
+            toggle={this.toggleAddMemberDialog}
           />
         }
       </Fragment>

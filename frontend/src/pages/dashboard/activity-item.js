@@ -19,6 +19,8 @@ const activityPropTypes = {
   isDesktop: PropTypes.bool.isRequired,
 };
 
+const RIGHT_ARROW = '=>';
+
 class ActivityItem extends Component {
 
   constructor(props) {
@@ -66,7 +68,7 @@ class ActivityItem extends Component {
           break;
         case 'rename':
           op = gettext('Renamed library');
-          details = <span>{item.old_repo_name} => {libLink}</span>;
+          details = <span>{item.old_repo_name} {RIGHT_ARROW} {libLink}</span>;
           break;
         case 'delete':
           op = gettext('Deleted library');
@@ -127,14 +129,14 @@ class ActivityItem extends Component {
           break;
         case 'rename':
           op = gettext('Renamed file');
-          details = <span>{item.old_name} => {fileLink}</span>;
+          details = <span>{item.old_name} {RIGHT_ARROW} {fileLink}</span>;
           moreDetails = true;
           break;
         case 'move':
           // eslint-disable-next-line
           const filePathLink = <a href={fileURL}>{item.path}</a>;
           op = gettext('Moved file');
-          details = <span>{item.old_path} => {filePathLink}</span>;
+          details = <span>{item.old_path} {RIGHT_ARROW} {filePathLink}</span>;
           moreDetails = true;
           break;
         case 'edit': // update
@@ -164,14 +166,14 @@ class ActivityItem extends Component {
           break;
         case 'rename':
           op = gettext('Renamed folder');
-          details = <span>{item.old_name} => {dirLink}</span>;
+          details = <span>{item.old_name} {RIGHT_ARROW} {dirLink}</span>;
           moreDetails = true;
           break;
         case 'move':
           // eslint-disable-next-line
           const dirPathLink = <a href={dirURL}>{item.path}</a>;
           op = gettext('Moved folder');
-          details = <span>{item.old_path} => {dirPathLink}</span>;
+          details = <span>{item.old_path} {RIGHT_ARROW} {dirPathLink}</span>;
           moreDetails = true;
           break;
       }

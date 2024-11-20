@@ -22,7 +22,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   const [results, setResults] = useState([]);
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const [isResultGetted, setIsResultGetted] = useState(false);
+  const [isResultGotten, setIsResultGotten] = useState(false);
   let searchResultListContainerRef = useRef(null);
   let highlightRef = useRef(null);
 
@@ -47,7 +47,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     setValue('');
     setHighlightIndex(0);
     setResults([]);
-    setIsResultGetted(false);
+    setIsResultGotten(false);
     setIsModalOpen(false);
   }, []);
 
@@ -56,11 +56,11 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
       resetToDefault();
       return;
     }
-    if (isResultGetted) {
+    if (isResultGotten) {
       if (isEnter(e)) {
-        const hightlightResult = results[highlightIndex];
-        if (hightlightResult && hightlightResult.page.id !== getCurrentPageId()) {
-          setCurrentPage(hightlightResult.page.id);
+        const highlightResult = results[highlightIndex];
+        if (highlightResult && highlightResult.page.id !== getCurrentPageId()) {
+          setCurrentPage(highlightResult.page.id);
           resetToDefault();
         }
       } else if (isUp(e)) {
@@ -74,7 +74,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isResultGetted, value, results, highlightIndex]);
+  }, [isResultGotten, value, results, highlightIndex]);
 
   const onUp = useCallback((e, highlightIndex) => {
     e.preventDefault();
@@ -114,7 +114,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     if (!searchValue.trim()) return;
     setIsLoading(true);
     setHighlightIndex(-1);
-    setIsResultGetted(false);
+    setIsResultGotten(false);
     setResults([]);
     searchAPI.searchWiki(searchValue.trim(), wikiId).then(res => {
       if (res.data.results) {
@@ -129,12 +129,12 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
         setResults(newResults);
         setHighlightIndex(0);
         setIsLoading(false);
-        setIsResultGetted(true);
+        setIsResultGotten(true);
       } else {
         setResults([]);
         setHighlightIndex(-1);
         setIsLoading(false);
-        setIsResultGetted(true);
+        setIsResultGotten(true);
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -161,7 +161,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 placeholder={gettext('Search')}
                 autoComplete="off"
                 value={value}
-                onChange={(e) => { setValue(e.target.value); setIsResultGetted(false); }}
+                onChange={(e) => { setValue(e.target.value); setIsResultGotten(false); }}
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
@@ -169,9 +169,9 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
-              {(value === '' && !isResultGetted) &&
+              {(value === '' && !isResultGotten) &&
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('Type characters to start search')}</p>}
-              {(value !== '' && isResultGetted && results.length === 0) &&
+              {(value !== '' && isResultGotten && results.length === 0) &&
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('No result')}</p>}
               {results.map((result, index) => {
                 return (

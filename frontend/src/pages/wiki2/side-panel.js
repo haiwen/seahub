@@ -105,7 +105,7 @@ class SidePanel extends PureComponent {
     this.props.updateWikiConfig(config);
   };
 
-  toggelTrashDialog = () => {
+  toggleTrashDialog = () => {
     this.setState({ isShowTrashDialog: !this.state.isShowTrashDialog });
   };
 
@@ -128,7 +128,7 @@ class SidePanel extends PureComponent {
             duplicatePage={this.duplicatePage}
             getCurrentPageId={this.props.getCurrentPageId}
             addPageInside={this.addPageInside}
-            toggelTrashDialog={this.toggelTrashDialog}
+            toggleTrashDialog={this.toggleTrashDialog}
           />
         }
       </div>
@@ -193,7 +193,7 @@ class SidePanel extends PureComponent {
         {this.state.isShowTrashDialog && (
           <WikiTrashDialog
             showTrashDialog={this.state.isShowTrashDialog}
-            toggleTrashDialog={this.toggelTrashDialog}
+            toggleTrashDialog={this.toggleTrashDialog}
             getWikiConfig={this.props.getWikiConfig}
           />
         )}
