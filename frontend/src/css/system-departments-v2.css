@@ -128,4 +128,6 @@
   color: #21bc2e;
 }
 
-/* 顶部的样式：背景色和边界去掉，和 seatable 保持一致 */
+.departments-members-item {
+  height: 58px;
+}

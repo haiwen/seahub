@@ -9,7 +9,7 @@ from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 
-from seahub.group.utils import get_group_member_info, is_group_member
+from seahub.group.utils import get_group_member_info, is_group_member, get_group_members_info
 from seahub.group.signals import add_user_to_group
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
@@ -67,15 +67,13 @@ class AdminGroupMembers(APIView):
         else:
             has_next_page = False
 
-        group_members_info = []
-        for m in members:
-            member_info = get_group_member_info(request, group_id, m.user_name)
-            group_members_info.append(member_info)
-
+        
+        member_usernames = [m.user_name for m in members]
+        members_info = get_group_members_info(group_id, member_usernames)
         group_members = {
             'group_id': group_id,
             'group_name': group.group_name,
-            'members': group_members_info,
+            'members': members_info,
             'page_info': {
                 'has_next_page': has_next_page,
                 'current_page': page

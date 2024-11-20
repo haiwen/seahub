@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
 const departmentsV2TreeNodePropTypes = {
   node: PropTypes.object,
@@ -105,22 +106,6 @@ class DepartmentsV2TreeNode extends Component {
     }
   };
 
-  toggleAddDepartment = (node) => {
-    this.props.toggleAddDepartment(node);
-  };
-
-  toggleAddMembers = (node) => {
-    this.props.toggleAddMembers(node);
-  };
-
-  toggleRename = (node) => {
-    this.props.toggleRename(node);
-  };
-
-  toggleDelete = (node) => {
-    this.props.toggleDelete(node);
-  };
-
   render() {
     const { node, checkedDepartmentId } = this.props;
     const { isChildrenShow, dropdownOpen, active } = this.state;
@@ -144,7 +129,7 @@ class DepartmentsV2TreeNode extends Component {
             <span style={{ width: 24 }}></span>
           }
           <span className="departments-v2-tree-node-text text-truncate">{node.name}</span>
-          {active && node.id !== 'other_users' &&
+          {active &&
             <Dropdown
               isOpen={dropdownOpen}
               toggle={(e) => this.dropdownToggle(e)}
@@ -159,55 +144,16 @@ class DepartmentsV2TreeNode extends Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               >
-                <i className="sf3-font sf3-font-more"></i>
+                <i className="sf3-font sf3-font-more mr-1"></i>
               </DropdownToggle>
-              <DropdownMenu
-                className="dtable-dropdown-menu dropdown-menu drop-list"
-                right={true}
-                modifiers={{ preventOverflow: { boundariesElement: document.body } }}
-                positionFixed={true}
-              >
-                <DropdownItem
-                  key={`${node.id}-add-department`}
-                  onClick={this.toggleAddDepartment.bind(this, node)}
-                >
-                  {gettext('Add sub-department')}
-                </DropdownItem>
-                <DropdownItem
-                  key={`${node.id}-add-repo`}
-                  onClick={this.props.toggleAddLibrary.bind(this, node)}
-                >
-                  {gettext('Add Library')}
-                </DropdownItem>
-                {node.id !== -1 && (
-                  <Fragment>
-                    <DropdownItem
-                      key={`${node.id}-add-members`}
-                      onClick={this.toggleAddMembers.bind(this, node)}
-                    >
-                      {gettext('Add members')}
-                    </DropdownItem>
-                    <DropdownItem
-                      key={`${node.id}-rename`}
-                      onClick={this.toggleRename.bind(this, node)}
-                    >
-                      {gettext('Rename')}
-                    </DropdownItem>
-                    <DropdownItem
-                      key={`${node.id}-delete`}
-                      onClick={this.toggleDelete.bind(this, node)}
-                    >
-                      {gettext('Delete')}
-                    </DropdownItem>
-                    <DropdownItem
-                      key={`${node.id}-id`}
-                      disabled={true}
-                    >
-                      {`${gettext('Department ID')} : ${node.id}`}
-                    </DropdownItem>
-                  </Fragment>
-                )}
-              </DropdownMenu>
+              <DepartmentNodeMenu
+                node={node}
+                toggleAddDepartment={this.props.toggleAddDepartment}
+                toggleAddLibrary={this.props.toggleAddLibrary}
+                toggleAddMembers={this.props.toggleAddMembers}
+                toggleRename={this.props.toggleRename}
+                toggleDelete={this.props.toggleDelete}
+              />
             </Dropdown>
           }
         </div>
