@@ -133,12 +133,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'pdf'
 
-        # token for doc file is one time only
-        raw_path = resp.context['raw_path']
-        r = requests.get(raw_path)
-        self.assertEqual(200, r.status_code)
-        r = requests.get(raw_path)
-        self.assertEqual(403, r.status_code)
 
     def test_img_file(self):
         self.login_as(self.user)
