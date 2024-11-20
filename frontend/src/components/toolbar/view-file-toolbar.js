@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import ModalPotal from '../modal-portal';
+import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
@@ -205,7 +205,7 @@ class ViewFileToolbar extends React.Component {
         </Dropdown>
         }
         {this.state.isShareDialogShow && (
-          <ModalPotal>
+          <ModalPortal>
             <ShareDialog
               itemType={'file'}
               itemName={Utils.getFileName(this.props.path)}
@@ -217,10 +217,10 @@ class ViewFileToolbar extends React.Component {
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareToggle}
             />
-          </ModalPotal>
+          </ModalPortal>
         )}
         {this.state.isEditTagDialogShow && (
-          <ModalPotal>
+          <ModalPortal>
             <EditFileTagDialog
               filePath={this.props.path}
               repoID={this.props.repoID}
@@ -229,7 +229,7 @@ class ViewFileToolbar extends React.Component {
               toggleCancel={this.onEditFileTagToggle}
               onFileTagChanged={this.props.onFileTagChanged}
             />
-          </ModalPotal>
+          </ModalPortal>
         )}
       </Fragment>
     );

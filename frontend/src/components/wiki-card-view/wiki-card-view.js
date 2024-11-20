@@ -15,7 +15,7 @@ const propTypes = {
   leaveSharedWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func.isRequired,
-  toggelAddWikiDialog: PropTypes.func,
+  toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
 };
@@ -66,7 +66,7 @@ class WikiCardView extends Component {
 
   render() {
     let { loading, errorMsg, wikis, groupWikis } = this.props.data;
-    const { toggelAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
+    const { toggleAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -88,7 +88,7 @@ class WikiCardView extends Component {
         title={gettext('My Wikis')}
         isDepartment={false}
         isShowAvatar={false}
-        toggelAddWikiDialog={canPublishRepo ? toggelAddWikiDialog.bind(this, null) : null}
+        toggleAddWikiDialog={canPublishRepo ? toggleAddWikiDialog.bind(this, null) : null}
       />
     );
     wikiCardGroups.push(
@@ -103,7 +103,7 @@ class WikiCardView extends Component {
         isShowAvatar={false}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
-        toggelAddWikiDialog={null}
+        toggleAddWikiDialog={null}
       />
     );
     for (let i = 0; i < groupWikis.length; i++) {
@@ -122,7 +122,7 @@ class WikiCardView extends Component {
             title={groupWiki.group_name}
             isDepartment={true}
             isShowAvatar={false}
-            toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWiki.group_id]) ? toggelAddWikiDialog.bind(this, groupWiki.group_id) : null}
+            toggleAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id) : null}
           />
         );
       }

@@ -6,7 +6,7 @@ function WikiCardItemAdd(props) {
   return (
     <div
       className={'wiki-card-item wiki-card-item-add d-flex flex-column align-items-center justify-content-center'}
-      onClick={props.toggelAddWikiDialog}
+      onClick={props.toggleAddWikiDialog}
     >
       <span>+</span>
       <span>{gettext('Add Wiki')}</span>
@@ -15,7 +15,7 @@ function WikiCardItemAdd(props) {
 }
 
 WikiCardItemAdd.propTypes = {
-  toggelAddWikiDialog: PropTypes.func.isRequired,
+  toggleAddWikiDialog: PropTypes.func.isRequired,
 };
 
 export default WikiCardItemAdd;

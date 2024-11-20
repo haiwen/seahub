@@ -42,7 +42,7 @@ class LinkCreation extends React.Component {
       expireDays: this.defaultExpireDays,
       expDate: null,
       password: '',
-      passwdnew: '',
+      newPassword: '',
       errorInfo: '',
       currentPermission: props.currentPermission,
 
@@ -68,7 +68,7 @@ class LinkCreation extends React.Component {
     this.setState({
       isShowPasswordInput: !this.state.isShowPasswordInput,
       password: '',
-      passwdnew: '',
+      newPassword: '',
       errorInfo: ''
     });
   };
@@ -83,7 +83,7 @@ class LinkCreation extends React.Component {
     let val = Utils.generatePassword(shareLinkPasswordMinLength);
     this.setState({
       password: val,
-      passwdnew: val
+      newPassword: val
     });
   };
 
@@ -94,7 +94,7 @@ class LinkCreation extends React.Component {
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({ passwdnew: passwd });
+    this.setState({ newPassword: passwd });
   };
 
   setPermission = (e) => {
@@ -169,7 +169,7 @@ class LinkCreation extends React.Component {
 
   validateParamsInput = () => {
     const { type } = this.props;
-    let { linkAmount, isShowPasswordInput, password, passwdnew, isExpireChecked, expType, expireDays, expDate } = this.state;
+    let { linkAmount, isShowPasswordInput, password, newPassword, isExpireChecked, expType, expireDays, expDate } = this.state;
 
     if (type === 'batch') {
       if (!Number.isInteger(parseInt(linkAmount)) || parseInt(linkAmount) <= 1) {
@@ -191,7 +191,7 @@ class LinkCreation extends React.Component {
         this.setState({ errorInfo: gettext('The password is too short.') });
         return false;
       }
-      if (password !== passwdnew) {
+      if (password !== newPassword) {
         this.setState({ errorInfo: gettext('Passwords don\'t match') });
         return false;
       }
@@ -326,7 +326,7 @@ class LinkCreation extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <Label for="passwd-again">{gettext('Password again')}</Label>
-                  <Input id="passwd-again" style={{ width: inputWidth }} type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+                  <Input id="passwd-again" style={{ width: inputWidth }} type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.newPassword || ''} onChange={this.inputPasswordNew} />
                 </FormGroup>
               </div>
             }

@@ -297,8 +297,8 @@ class MylibRepoListItem extends React.Component {
   renderPCUI = () => {
     const { isStarred } = this.state;
     const { repo, currentViewMode = LIST_MODE } = this.props;
-    let useBigLibaryIcon = currentViewMode == GRID_MODE;
-    let iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
+    let useBigLibraryIcon = currentViewMode == GRID_MODE;
+    let iconUrl = Utils.getLibIconUrl(repo, useBigLibraryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return currentViewMode == LIST_MODE ? (

@@ -86,7 +86,7 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
         }
         viewsMap.current[FACE_RECOGNITION_VIEW_ID] = {
           _id: FACE_RECOGNITION_VIEW_ID,
-          name: gettext('Photos - classfied by people'),
+          name: gettext('Photos - classified by people'),
           type: VIEW_TYPE.FACE_RECOGNITION,
         };
         setNavigation(navigation);

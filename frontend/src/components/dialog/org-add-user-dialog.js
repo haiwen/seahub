@@ -17,7 +17,7 @@ class AddOrgUserDialog extends React.Component {
       email: '',
       name: '',
       password: '',
-      passwdnew: '',
+      newPassword: '',
       errMessage: '',
       isAddingUser: false,
     };
@@ -50,7 +50,7 @@ class AddOrgUserDialog extends React.Component {
     let val = Math.random().toString(36).substr(5);
     this.setState({
       password: val,
-      passwdnew: val,
+      newPassword: val,
       isPasswordVisible: false
     }, () => {
       this.passwdInput.type = 'text';
@@ -80,7 +80,7 @@ class AddOrgUserDialog extends React.Component {
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({ passwdnew: passwd }, () => {
+    this.setState({ newPassword: passwd }, () => {
       if (this.state.isPasswordVisible) {
         this.passwdInput.type = 'password';
         this.passwdNewInput.type = 'password';
@@ -108,7 +108,7 @@ class AddOrgUserDialog extends React.Component {
     }
 
     let password1 = this.state.password;
-    let password2 = this.state.passwdnew;
+    let password2 = this.state.newPassword;
     if (!password1.length) {
       errMessage = gettext('Please enter password');
       this.setState({ errMessage: errMessage });
@@ -157,7 +157,7 @@ class AddOrgUserDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label for="userPwdNew">{gettext('Confirm Password')}</Label>
-              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}} className="passwd" value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}} className="passwd" value={this.state.newPassword || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           </Form>
           {this.state.errMessage && <Label className="err-message">{this.state.errMessage}</Label>}

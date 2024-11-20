@@ -47,7 +47,7 @@ class Search extends Component {
       hasMore: false,
       isMaskShow: false,
       showRecent: true,
-      isResultGetted: false,
+      isResultGotten: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
@@ -134,7 +134,7 @@ class Search extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { highlightIndex, resultItems, isResultGetted } = this.state;
+    const { highlightIndex, resultItems, isResultGotten } = this.state;
 
     // 01 init search, display and highlight recent search results
     if (this.state.showRecent) {
@@ -152,7 +152,7 @@ class Search extends Component {
     }
 
     // 02 global search, display and highlight searched repos
-    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGotten) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
         highlightSearchTypesIndex = resultItems.length;
@@ -169,7 +169,7 @@ class Search extends Component {
     }
 
     // 03 Internal repo search, highlight search types
-    if (!isResultGetted) {
+    if (!isResultGotten) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
         highlightSearchTypesIndex = this.state.searchTypesMax;
@@ -178,7 +178,7 @@ class Search extends Component {
       return;
     }
 
-    // 04 When there are search results, highlighte searched items
+    // 04 When there are search results, highlight searched items
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
         if (this.highlightRef) {
@@ -194,7 +194,7 @@ class Search extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { highlightIndex, resultItems, isResultGetted } = this.state;
+    const { highlightIndex, resultItems, isResultGotten } = this.state;
 
     // 01 init search, display and highlight recent search results
     if (this.state.showRecent) {
@@ -215,7 +215,7 @@ class Search extends Component {
     }
 
     // 02 global search, display and highlight searched repos
-    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGotten) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > resultItems.length) {
         highlightSearchTypesIndex = 0;
@@ -234,7 +234,7 @@ class Search extends Component {
     }
 
     // 03 Internal repo search, highlight search types
-    if (!this.state.isResultGetted) {
+    if (!this.state.isResultGotten) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > this.state.searchTypesMax) {
         highlightSearchTypesIndex = 0;
@@ -243,7 +243,7 @@ class Search extends Component {
       return;
     }
 
-    // 04 When there are search results, highlighte searched items
+    // 04 When there are search results, highlight searched items
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
         if (this.highlightRef) {
@@ -272,8 +272,8 @@ class Search extends Component {
       return;
     }
     // global searching, searched repos needs to support enter
-    const { highlightSearchTypesIndex, resultItems, isResultGetted } = this.state;
-    if (!this.props.repoID && resultItems.length > 0 && !isResultGetted) {
+    const { highlightSearchTypesIndex, resultItems, isResultGotten } = this.state;
+    if (!this.props.repoID && resultItems.length > 0 && !isResultGotten) {
       if (highlightSearchTypesIndex === 0) {
         this.searchAllRepos();
       } else {
@@ -286,7 +286,7 @@ class Search extends Component {
         }
       }
     }
-    if (!this.state.isResultGetted) {
+    if (!this.state.isResultGotten) {
       let highlightDom = document.querySelector('.search-types-highlight');
       if (highlightDom) {
         if (highlightDom.classList.contains('search-types-folder')) {
@@ -368,7 +368,7 @@ class Search extends Component {
           isLoading: false,
           highlightIndex: 0,
           // resultItems: [],
-          isResultGetted: false,
+          isResultGotten: false,
         }, () => {
           if (!isInRepo && trimmedValue !== '') {
             this.getRepoSearchResult(newValue);
@@ -407,7 +407,7 @@ class Search extends Component {
     }
     this.setState({
       isLoading: true,
-      isResultGetted: false,
+      isResultGotten: false,
       resultItems: [],
       highlightIndex: 0,
     });
@@ -425,7 +425,7 @@ class Search extends Component {
         if (res.data.total > 0) {
           this.setState({
             resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
+            isResultGotten: true,
             page: page + 1,
             isLoading: false,
             hasMore: res.data.has_more,
@@ -435,7 +435,7 @@ class Search extends Component {
             highlightIndex: 0,
             resultItems: [],
             isLoading: false,
-            isResultGetted: true,
+            isResultGotten: true,
             hasMore: res.data.has_more,
           });
         }
@@ -458,7 +458,7 @@ class Search extends Component {
       if (res.data.total > 0) {
         this.setState({
           resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-          isResultGetted: true,
+          isResultGotten: true,
           isLoading: false,
           page: page + 1,
           hasMore: res.data.has_more,
@@ -469,7 +469,7 @@ class Search extends Component {
         highlightIndex: 0,
         resultItems: [],
         isLoading: false,
-        isResultGetted: true,
+        isResultGotten: true,
         hasMore: res.data.has_more,
       });
     }).catch(error => {
@@ -512,7 +512,7 @@ class Search extends Component {
       inputValue: '',
       isMaskShow: false,
       isCloseShow: false,
-      isResultGetted: false,
+      isResultGotten: false,
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
@@ -521,7 +521,7 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, width, showRecent, isResultGetted, isLoading } = this.state;
+    const { resultItems, width, showRecent, isResultGotten, isLoading } = this.state;
     if (!width || width === 'default') return null;
 
     if (showRecent) {
@@ -537,7 +537,7 @@ class Search extends Component {
     else if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
-    else if (!isResultGetted) {
+    else if (!isResultGotten) {
       return this.renderSearchTypes(this.state.inputValue.trim());
     }
     else if (resultItems.length > 0) {

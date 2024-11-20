@@ -67,7 +67,7 @@ class TrashDialog extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, { repalce: true });
+      navigate(url, { replace: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');

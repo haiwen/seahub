@@ -15,7 +15,7 @@ const propTypes = {
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func,
-  toggelAddWikiDialog: PropTypes.func,
+  toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
 };
@@ -51,7 +51,7 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment, toggelAddWikiDialog, group } = this.props;
+    const { wikis, title, isDepartment, toggleAddWikiDialog, group } = this.props;
     const containerWidth = this.getContainerWidth();
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
@@ -94,8 +94,8 @@ class WikiCardGroup extends Component {
               />
             );
           })}
-          {toggelAddWikiDialog &&
-            <WikiCardItemAdd toggelAddWikiDialog={toggelAddWikiDialog}/>
+          {toggleAddWikiDialog &&
+            <WikiCardItemAdd toggleAddWikiDialog={toggleAddWikiDialog}/>
           }
         </div>
       </div>

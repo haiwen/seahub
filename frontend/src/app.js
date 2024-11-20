@@ -85,7 +85,7 @@ class App extends Component {
       let splitUrlArray = window.location.hash.split('/');
       let repoID = splitUrlArray[splitUrlArray.length - 2];
       let url = siteRoot + 'library/' + repoID + '/';
-      navigate(url, { repalce: true });
+      navigate(url, { replace: true });
     }
   };
 
@@ -144,7 +144,7 @@ class App extends Component {
     if (selectedItem.is_dir === true) {
       this.setState({ currentTab: '', pathPrefix: [] });
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, { repalce: true });
+      navigate(url, { replace: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let isWeChat = Utils.isWeChat();

@@ -36,7 +36,7 @@ class SidePanel extends React.Component {
     });
   }
 
-  refershFileList() {
+  refreshFileList() {
     editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
     });
@@ -87,7 +87,7 @@ class SidePanel extends React.Component {
     editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true });
-        this.refershFileList();
+        this.refreshFileList();
       }
       let message = gettext('Successfully restored.');
       toaster.success(message);

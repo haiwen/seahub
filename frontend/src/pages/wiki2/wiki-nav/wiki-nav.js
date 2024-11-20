@@ -22,7 +22,7 @@ class WikiNav extends Component {
     getCurrentPageId: PropTypes.func,
     addPageInside: PropTypes.func,
     updateWikiConfig: PropTypes.func.isRequired,
-    toggelTrashDialog: PropTypes.func.isRequired,
+    toggleTrashDialog: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -108,7 +108,7 @@ class WikiNav extends Component {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
         {wikiPermission !== 'public' &&
-          <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggelTrashDialog}>
+          <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
             <span className="sf3-font-trash sf3-font mr-2"></span>
             <span>{gettext('Trash')}</span>
           </div>
