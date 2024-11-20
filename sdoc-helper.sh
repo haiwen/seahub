@@ -16,6 +16,8 @@ cp -r frontend/node_modules/@seafile/sdoc-editor/public/media/sdoc-editor-font.c
 echo 'update sdoc-editor translation content'
 tx pull -s -t -f seahub.sdoc-editor
 cp -r media/sdoc-editor/locales/zh_CN/sdoc-editor.json media/sdoc-editor/locales/zh-CN/sdoc-editor.json
+cp -r media/sdoc-editor/locales/es_AR/sdoc-editor.json media/sdoc-editor/locales/es-AR/sdoc-editor.json
+cp -r media/sdoc-editor/locales/es_MX/sdoc-editor.json media/sdoc-editor/locales/es-MX/sdoc-editor.json
 
 echo 'Please check the updated content and see if it needs to be submitted.'
 read -p "Do you want to continue submitting code? y/n: " Y
