@@ -22,6 +22,7 @@ pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
 seahubdir=${INSTALLPATH}/seahub
 seafile_rpc_pipe_path=${INSTALLPATH}/runtime
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
@@ -151,14 +152,25 @@ function start_seafile_server () {
     mkdir -p $TOPDIR/pids
 
     # seaf-server
-    LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
-        -F ${SEAFILE_CENTRAL_CONF_DIR} \
-        -c ${CCNET_CONF_DIR} \
-        -d ${SEAFILE_CONF_DIR} \
-        -l ${TOPDIR}/logs/seafile.log \
-        -P ${TOPDIR}/pids/seaf-server.pid \
-        -p ${SEAFILE_RPC_PIPE_PATH} \
-        -f -L ${TOPDIR} &
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+        LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
+            -F ${SEAFILE_CENTRAL_CONF_DIR} \
+            -c ${CCNET_CONF_DIR} \
+            -d ${SEAFILE_CONF_DIR} \
+            -l ${TOPDIR}/logs/seafile.log \
+            -P ${TOPDIR}/pids/seaf-server.pid \
+            -p ${SEAFILE_RPC_PIPE_PATH} \
+            -f -L ${TOPDIR} &
+    else
+        LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
+            -F ${SEAFILE_CENTRAL_CONF_DIR} \
+            -c ${CCNET_CONF_DIR} \
+            -d ${SEAFILE_CONF_DIR} \
+            -l ${TOPDIR}/logs/seafile.log \
+            -P ${TOPDIR}/pids/seaf-server.pid \
+            -p ${SEAFILE_RPC_PIPE_PATH} \
+            -f &
+    fi
 
     sleep 2
 
