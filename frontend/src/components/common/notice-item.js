@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import { processor } from '@seafile/seafile-editor';
 
 const propTypes = {
   noticeItem: PropTypes.object.isRequired,
@@ -35,7 +36,7 @@ class NoticeItem extends React.Component {
     let noticeItem = this.props.noticeItem;
     let noticeType = noticeItem.type;
     let detail = noticeItem.detail;
-    console.log(detail, noticeItem, noticeType)
+
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
 
       let avatar_url = detail.group_staff_avatar_url;
@@ -378,19 +379,23 @@ class NoticeItem extends React.Component {
     }
 
     if (noticeType === MSG_TYPE_SEADOC_COMMENT) {
-      let avatar_url = detail.share_from_user_avatar_url;
-      let notice = '';
-      console.log(111)
-      notice = Utils.HTMLescape(notice);
-      return { avatar_url, notice };
+      let avatar_url = detail.avatar_url;
+      let notice = detail.comment;
+      let username = detail.user_name;
+      processor.process(notice, (error, vfile) => {
+        notice = String(vfile);
+      });
+      return { avatar_url, username, notice };
     }
 
     if (noticeType === MSG_TYPE_SEADOC_REPLY) {
-      let avatar_url = detail.share_from_user_avatar_url;
+      let avatar_url = detail.avatar_url;
       let notice = detail.reply;
-      notice = Utils.HTMLescape(notice);
-      console.log(notice)
-      return { avatar_url, notice };
+      let username = detail.user_name;
+      processor.process(notice, (error, vfile) => {
+        notice = String(vfile);
+      });
+      return { avatar_url, username, notice };
     }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
@@ -410,8 +415,7 @@ class NoticeItem extends React.Component {
 
   render() {
     let noticeItem = this.props.noticeItem;
-    let { avatar_url, notice } = this.generatorNoticeInfo();
-
+    let { avatar_url, username, notice } = this.generatorNoticeInfo();
     if (!avatar_url && !notice) {
       return '';
     }
@@ -432,8 +436,13 @@ class NoticeItem extends React.Component {
       <li onClick={this.onNoticeItemClick} className={noticeItem.seen ? 'read' : 'unread'}>
         <div className="notice-item">
           <div className="main-info">
-            <img src={avatar_url} width="32" height="32" className="avatar" alt=""/>
-            <p className="brief" dangerouslySetInnerHTML={{ __html: notice }}></p>
+            <div className="auther-info">
+              <img src={avatar_url} width="32" height="32" className="avatar" alt=""/>
+              <p>{username}</p>
+            </div>
+            <div>
+              <p className="brief" dangerouslySetInnerHTML={{ __html: notice }}></p>
+            </div>
           </div>
           <p className="time">{dayjs(noticeItem.time).fromNow()}</p>
         </div>

@@ -1475,6 +1475,11 @@ class SeafileAPI {
     return this.req.put(url);
   }
 
+  updateSdocNotifications() {
+    const url = this.server + '/api/v2.1/sdoc-notifications/';
+    return this.req.put(url);
+  }
+
   deleteNotifications() {
     const url = this.server + '/api/v2.1/notifications/';
     return this.req.delete(url);
@@ -1487,6 +1492,13 @@ class SeafileAPI {
 
   markNoticeAsRead(noticeId) {
     const url = this.server + '/api/v2.1/notification/';
+    let from = new FormData();
+    from.append('notice_id', noticeId);
+    return this.req.put(url, from);
+  }
+
+  markSdocNoticeAsRead(noticeId) {
+    const url = this.server + '/api/v2.1/sdoc-notification/';
     let from = new FormData();
     from.append('notice_id', noticeId);
     return this.req.put(url, from);

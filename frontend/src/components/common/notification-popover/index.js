@@ -72,39 +72,38 @@ export default class NotificationPopover extends React.Component {
             <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.props.onNotificationListToggle}></span>
           </div>
           <div className="notification-body">
-          <div className="mark-notifications">
-            <ul className="nav">
-              <li className="nav-item" onClick={() => this.tabItemClick('general')}>
-                <span className={`nav-link ${currentTab === 'general' ? 'active' : ''}`}>
-                  {gettext('General')}
-                </span>
-              </li>
-              <li className="nav-item" onClick={() => this.tabItemClick('discussion')}>
-                <span className={`nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
-                  {gettext('Discussion')}
-                  
-                </span>
-              </li>
-            </ul>
-            <span className="mark-all-read" onClick={this.onMarkAllNotifications}>
-              {gettext('Mark all as read')}
-            </span>
-          </div>
-          {currentTab === 'general' &&
+            <div className="mark-notifications">
+              <ul className="nav">
+                <li className="nav-item" onClick={() => this.tabItemClick('general')}>
+                  <span className={`nav-link ${currentTab === 'general' ? 'active' : ''}`}>
+                    {gettext('General')}
+                  </span>
+                </li>
+                <li className="nav-item" onClick={() => this.tabItemClick('discussion')}>
+                  <span className={`nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
+                    {gettext('Discussion')}
+                  </span>
+                </li>
+              </ul>
+              <span className="mark-all-read" onClick={this.props.onMarkAllNotifications}>
+                {bodyText}
+              </span>
+            </div>
+            {currentTab === 'general' &&
             <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
               <div ref={ref => this.notificationsWrapperRef = ref}>
                 {this.props.children}
               </div>
             </div>
-          }
-          {currentTab === 'discussion' &&
+            }
+            {currentTab === 'discussion' &&
             <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
               <div ref={ref => this.notificationsWrapperRef = ref}>
                 {this.props.children}
               </div>
             </div>
-          }
-         
+            }
+
             {/* <div className="mark-notifications" onClick={this.props.onMarkAllNotifications}>
               <ul className="nav dtable-external-links-tab">
                 <li className="nav-item">
