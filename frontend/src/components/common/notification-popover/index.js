@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
+
 import './index.css';
 
 export default class NotificationPopover extends React.Component {
@@ -13,7 +15,9 @@ export default class NotificationPopover extends React.Component {
     onNotificationDialogToggle: PropTypes.func,
     listNotifications: PropTypes.func,
     onMarkAllNotifications: PropTypes.func,
+    tabItemClick: PropTypes.func,
     children: PropTypes.any,
+    currentTab: PropTypes.string,
   };
 
   static defaultProps = {
@@ -47,8 +51,12 @@ export default class NotificationPopover extends React.Component {
     }
   };
 
+  tabItemClick = (tab) => {
+    this.props.tabItemClick(tab);
+  };
+
   render() {
-    const { headerText, bodyText, footerText } = this.props;
+    const { headerText, bodyText, footerText, currentTab } = this.props;
     return (
       <Popover
         className="notification-wrapper"
@@ -64,12 +72,55 @@ export default class NotificationPopover extends React.Component {
             <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.props.onNotificationListToggle}></span>
           </div>
           <div className="notification-body">
-            <div className="mark-notifications" onClick={this.props.onMarkAllNotifications}>{bodyText}</div>
+          <div className="mark-notifications">
+            <ul className="nav">
+              <li className="nav-item" onClick={() => this.tabItemClick('general')}>
+                <span className={`nav-link ${currentTab === 'general' ? 'active' : ''}`}>
+                  {gettext('General')}
+                </span>
+              </li>
+              <li className="nav-item" onClick={() => this.tabItemClick('discussion')}>
+                <span className={`nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
+                  {gettext('Discussion')}
+                  
+                </span>
+              </li>
+            </ul>
+            <span className="mark-all-read" onClick={this.onMarkAllNotifications}>
+              {gettext('Mark all as read')}
+            </span>
+          </div>
+          {currentTab === 'general' &&
             <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
               <div ref={ref => this.notificationsWrapperRef = ref}>
                 {this.props.children}
               </div>
             </div>
+          }
+          {currentTab === 'discussion' &&
+            <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
+              <div ref={ref => this.notificationsWrapperRef = ref}>
+                {this.props.children}
+              </div>
+            </div>
+          }
+         
+            {/* <div className="mark-notifications" onClick={this.props.onMarkAllNotifications}>
+              <ul className="nav dtable-external-links-tab">
+                <li className="nav-item">
+                  <span className="nav-link">General</span>
+                </li>
+                <li className="nav-item">
+                  <span className="nav-link">Discussion</span>
+                </li>
+              </ul>
+                <span className="mark-all-read">{bodyText}</span>
+            </div>
+            <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
+              <div ref={ref => this.notificationsWrapperRef = ref}>
+                {this.props.children}
+              </div>
+            </div> */}
             <div className="notification-footer" onClick={this.onNotificationDialogToggle}>{footerText}</div>
           </div>
         </div>

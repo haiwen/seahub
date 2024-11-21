@@ -247,6 +247,11 @@ class SeadocCommentReply(models.Model):
         }
 
 
+
+### sdoc notification
+MSG_TYPE_REPLY = 'reply'
+MSG_TYPE_COMMENT = 'comment'
+
 class SeadocNotificationManager(models.Manager):
     def total_count(self, doc_uuid, username):
         return self.filter(doc_uuid=doc_uuid, username=username).count()
@@ -259,6 +264,9 @@ class SeadocNotificationManager(models.Manager):
     
     def delete_by_ids(self, doc_uuid, username, ids):
         return self.filter(doc_uuid=doc_uuid, username=username, id__in=ids).delete()
+    
+    def list_all_by_user(self, username, start, end):
+        return self.filter(username=username).order_by('-created_at')[start: end]
 
 
 class SeadocNotification(models.Model):
@@ -285,3 +293,9 @@ class SeadocNotification(models.Model):
             'detail': json.loads(self.detail),
             'seen': self.seen,
         }
+
+    def is_comment(self):
+        return self.msg_type == MSG_TYPE_COMMENT
+
+    def is_reply(self):
+        return self.msg_type == MSG_TYPE_REPLY

@@ -14,6 +14,7 @@ class Notification extends React.Component {
       showNotice: false,
       unseenCount: 0,
       noticeList: [],
+      currentTab: 'general',
       isShowNotificationDialog: this.getInitDialogState(),
     };
   }
@@ -37,14 +38,35 @@ class Notification extends React.Component {
       this.setState({ showNotice: true });
     }
   };
+  
+  tabItemClick = (tab) => {
+    const { currentTab } = this.state;
+    if (currentTab === tab) return;
+    this.setState({ 
+      showNotice: true,
+      currentTab: tab
+     }, () => {
+      this.loadNotices();
+     });
+  };
 
   loadNotices = () => {
     let page = 1;
     let perPage = 5;
-    seafileAPI.listNotifications(page, perPage).then(res => {
-      let noticeList = res.data.notification_list;
-      this.setState({ noticeList: noticeList });
-    });
+    if (this.state.currentTab === 'general') {
+      seafileAPI.listNotifications(page, perPage).then(res => {
+        let noticeList = res.data.notification_list;
+        this.setState({ noticeList: noticeList });
+      });
+    }
+    if (this.state.currentTab === 'discussion') {
+      seafileAPI.listSdocNotifications(page, perPage).then(res => {
+        let noticeList = res.data.notification_list;
+        console.log(noticeList)
+        this.setState({ noticeList: noticeList });
+      });
+    }
+
   };
 
   onNoticeItemClick = (noticeItem) => {
@@ -91,7 +113,7 @@ class Notification extends React.Component {
   };
 
   render() {
-    const { unseenCount } = this.state;
+    const { unseenCount, currentTab } = this.state;
     return (
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
@@ -103,9 +125,11 @@ class Notification extends React.Component {
             headerText={gettext('Notification')}
             bodyText={gettext('Mark all as read')}
             footerText={gettext('View all notifications')}
+            currentTab={currentTab}
             onNotificationListToggle={this.onNotificationListToggle}
             onNotificationDialogToggle={this.onNotificationDialogToggle}
             onMarkAllNotifications={this.onMarkAllNotifications}
+            tabItemClick={this.tabItemClick}
           >
             <ul className="notice-list list-unstyled" id="notice-popover">
               {this.state.noticeList.map(item => {
