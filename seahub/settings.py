@@ -837,6 +837,9 @@ SEADOC_PRIVATE_KEY = ''
 SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
+# Settings for notification
+NOTIFICATION_SERVER_URL = ''
+
 
 ############################
 # Settings for Seahub Priv #

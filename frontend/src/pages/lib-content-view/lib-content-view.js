@@ -32,7 +32,7 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import { VIEW_TYPE } from '../../metadata/constants';
-import WebSocketService from '../../utils/listen-notification';
+import WebSocketService from '../../utils/websocket-service';
 import '../../css/lib-content-view.css';
 
 dayjs.extend(relativeTime);
@@ -54,6 +54,7 @@ class LibContentView extends React.Component {
     if (storedTreePanelState != undefined) {
       isTreePanelShown = storedTreePanelState == 'true';
     }
+    this.socket = new WebSocketService(this.onMessageCallback, this.props.repoID);
     this.onMessageCallback = this.onMessageCallback.bind(this);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
@@ -147,8 +148,6 @@ class LibContentView extends React.Component {
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.calculatePara(this.props);
-    this.socket = new WebSocketService(this.onMessageCallback, this.props.repoID);
-
   }
 
   onMessageCallback = (data) => {

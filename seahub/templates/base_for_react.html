@@ -55,7 +55,8 @@
             useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
-            avatarURL: '{{ avatar_url }}'
+            avatarURL: '{{ avatar_url }}',
+            notificationServerUrl: '{{ notification_server_url }}'
         },
         pageOptions: {
             csrfToken: "{{ csrf_token }}",

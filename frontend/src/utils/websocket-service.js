@@ -1,13 +1,13 @@
-import { userAPI } from '../utils/user-api';
+import { userAPI } from './user-api';
+import { notificationServerUrl } from './constants';
 
 
 class WebSocketService {
   constructor(onMessageCallback, repoId) {
 
-    this.url = 'ws://localhost:8083'; // WebSocket address;
+    this.url = notificationServerUrl; // WebSocket address;
     this.repoId = repoId;
     this.socket = null;
-    this.heartbeatInterval = null;
     this.shouldReconnect = true;
     this.onMessageCallback = onMessageCallback;
     this.connect();
@@ -24,7 +24,7 @@ class WebSocketService {
     // listen message from WebSocket server
     this.socket.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
-      this.handleMessage(parsedData);
+      this.onMessageCallback(parsedData);
     };
 
     this.socket.onerror = (error) => {
@@ -34,7 +34,6 @@ class WebSocketService {
     // reconnect WebSocket
     this.socket.onclose = () => {
       if (this.shouldReconnect) {
-        this.cleanup();
         this.reconnect();
       }
     };
@@ -65,30 +64,27 @@ class WebSocketService {
     return jsonData;
   }
 
-  handleMessage(data) {
-    switch (data.type) {
-      case 'file-lock-changed':
-        this.onMessageCallback(data); // Callback function to process message
-        break;
-      case 'folder-perm-changed':
-        // Handle folder permission changed message
-        break;
-      case 'repo-update':
-        // Handle repository update message
-        break;
-    }
-  }
-
-  cleanup() {
-    clearInterval(this.heartbeatInterval);
+  formatUnSubscriptionMsg() {
+    const jsonData = {
+      type: 'unsubscribe',
+      content: {
+        repos: [
+          {
+            id: this.repoId
+          },
+        ],
+      },
+    };
+    return jsonData;
   }
 
   close() {
     this.shouldReconnect = false;
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      const msg = this.formatUnSubscriptionMsg();
+      this.socket.send(JSON.stringify(msg));
       this.socket.close();
     }
-    this.cleanup();
   }
 
   reconnect() {
