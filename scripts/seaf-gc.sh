@@ -119,14 +119,10 @@ function validate_already_running () {
 
 function run_seaf_gc () {
 
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
-        seafile_conf=${default_conf_dir}/seafile.conf
-        db_type=$($PYTHON $check_db_py $seafile_conf)
+    seafile_conf=${default_conf_dir}/seafile.conf
+    db_type=$($PYTHON $check_db_py $seafile_conf)
 
-        if [ $db_type = "sqlite" ]; then
-            validate_already_running;
-        fi
-    else
+    if [ $db_type = "sqlite" ]; then
         validate_already_running;
     fi
 
