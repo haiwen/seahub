@@ -12,7 +12,7 @@ import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
-import { EnableMetadataProvider } from '../../hooks';
+import { MetadataStatusProvider } from '../../hooks';
 import { CollaboratorsProvider } from '../../metadata';
 import Loading from '../loading';
 
@@ -151,7 +151,7 @@ class FileView extends React.Component {
               }
               {this.props.content}
               {isDetailsPanelOpen && (
-                <EnableMetadataProvider repoID={repoID} >
+                <MetadataStatusProvider repoID={repoID} >
                   <CollaboratorsProvider repoID={repoID}>
                     <EmbeddedFileDetails
                       repoID={repoID}
@@ -161,7 +161,7 @@ class FileView extends React.Component {
                       onClose={this.toggleDetailsPanel}
                     />
                   </CollaboratorsProvider>
-                </EnableMetadataProvider>
+                </MetadataStatusProvider>
               )}
             </div>
           </div>

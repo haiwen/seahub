@@ -5,7 +5,7 @@ import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../constants';
-import { useEnableMetadata } from '../../hooks';
+import { useMetadataStatus } from '../../hooks';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
@@ -20,7 +20,7 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
 
   const isEmptyRepo = useMemo(() => currentRepoInfo.file_count === 0, [currentRepoInfo]);
 
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata } = useMetadataStatus();
 
   const updateEnableFaceRecognition = useCallback((newValue) => {
     if (newValue === enableFaceRecognition) return;

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import { useEnableMetadata } from '../../hooks';
+import { useMetadataStatus } from '../../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { getTagColor, getTagId, getTagName, getCellValueByColumn } from '../utils/cell/core';
 import Context from '../context';
@@ -23,7 +23,7 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
   const storeRef = useRef(null);
   const contextRef = useRef(null);
 
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata, enableTags } = useMetadataStatus();
 
   const tagsChanged = useCallback(() => {
     setTagsData(storeRef.current.data);
@@ -50,7 +50,7 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
   }, []);
 
   useEffect(() => {
-    if (enableMetadata) {
+    if (enableMetadata && enableTags) {
       setLoading(true);
       // init context
       contextRef.current = new Context();
@@ -85,8 +85,9 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
       };
     }
     setTagsData(null);
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadata]);
+  }, [repoID, enableMetadata, enableTags]);
 
   const handelSelectTag = useCallback((tag, isSelected) => {
     if (isSelected) return;

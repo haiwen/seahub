@@ -6,11 +6,11 @@ import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { MetadataDetails } from '../../../metadata';
-import { useEnableMetadata } from '../../../hooks';
+import { useMetadataStatus } from '../../../hooks';
 
 const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail }) => {
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata } = useMetadataStatus();
   const lastModifiedTimeField = useMemo(() => {
     return { type: CellType.MTIME, name: gettext('Last modified time') };
   }, []);

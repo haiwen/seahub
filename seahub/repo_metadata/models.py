@@ -61,6 +61,7 @@ class RepoMetadata(models.Model):
     face_recognition_enabled = models.BooleanField(db_index=True)
     from_commit = models.CharField(max_length=40)
     to_commit = models.CharField(max_length=40)
+    tags_enabled = models.BooleanField(db_index=True)
 
     objects = RepoMetadataManager()
 

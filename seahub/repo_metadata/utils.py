@@ -145,9 +145,6 @@ def init_metadata(metadata_server_api):
     sys_columns = METADATA_TABLE_SYS_COLUMNS
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
 
-    # init tags
-    init_tags(metadata_server_api)
-
 
 def init_faces(metadata_server_api):
     from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE

@@ -22,7 +22,7 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { EnableMetadataProvider } from '../../hooks';
+import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
 import { LIST_MODE, METADATA_MODE, DIRENT_DETAIL_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
@@ -2205,7 +2205,7 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <EnableMetadataProvider repoID={repoID} currentRepoInfo={currentRepoInfo} >
+      <MetadataStatusProvider repoID={repoID} currentRepoInfo={currentRepoInfo} >
         <TagsProvider repoID={repoID} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
           <MetadataProvider repoID={repoID} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
             <CollaboratorsProvider repoID={repoID}>
@@ -2426,7 +2426,7 @@ class LibContentView extends React.Component {
             </CollaboratorsProvider>
           </MetadataProvider>
         </TagsProvider>
-      </EnableMetadataProvider>
+      </MetadataStatusProvider>
     );
   }
 }

@@ -2,9 +2,8 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import TreeSection from '../../tree-section';
-import { useEnableMetadata } from '../../../hooks';
+import { useMetadataStatus } from '../../../hooks';
 import { TagsTreeView } from '../../../tag';
-import { useTags } from '../../../tag/hooks';
 
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
 
@@ -14,15 +13,14 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
-  const { enableMetadata } = useEnableMetadata();
-  const { tagsData } = useTags();
+  const { enableMetadata, enableTags } = useMetadataStatus();
 
   if (!enableMetadataManagement) return null;
-  if (!enableMetadata) return null;
+  if (!enableMetadata || !enableTags) return null;
 
   return (
     <TreeSection title={gettext('Tags')}>
-      {tagsData && (<TagsTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} />)}
+      <TagsTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} />
     </TreeSection>
   );
 };

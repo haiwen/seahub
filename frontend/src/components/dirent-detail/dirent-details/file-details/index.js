@@ -14,7 +14,7 @@ import { MetadataDetails } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
-import { useEnableMetadata } from '../../../../hooks';
+import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 
@@ -59,7 +59,7 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata } = useMetadataStatus();
   const [record, setRecord] = useState(null);
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);

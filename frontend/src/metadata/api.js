@@ -291,25 +291,6 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  // file tag
-  addFileTags = (repoID, recordId, tagIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
-    const params = {
-      record_id: recordId,
-      tags: tagIds,
-    };
-    return this.req.post(url, params);
-  };
-
-  updateFileTags = (repoID, recordId, tagIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
-    const params = {
-      record_id: recordId,
-      tags: tagIds,
-    };
-    return this.req.put(url, params);
-  };
-
 }
 
 const metadataAPI = new MetadataManagerAPI();

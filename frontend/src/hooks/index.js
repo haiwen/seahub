@@ -1,1 +1,1 @@
-export { EnableMetadataProvider, useEnableMetadata } from './enable-metadata';
+export { MetadataStatusProvider, useMetadataStatus } from './metadata-status';

@@ -4,6 +4,21 @@ import { MetadataManagerAPI } from '../metadata';
 
 class TagsManagerAPI extends MetadataManagerAPI {
 
+  getTagsStatus = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-status/';
+    return this.req.get(url);
+  };
+
+  openTags = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-status/';
+    return this.req.post(url);
+  };
+
+  closeTags = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-status/';
+    return this.req.delete(url);
+  };
+
   getTags = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags/';
     return this.req.get(url);
@@ -38,16 +53,23 @@ class TagsManagerAPI extends MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  addLink = (repoID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-link/';
+  // file tag
+  addFileTags = (repoID, recordId, tagIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
     const params = {
-      // tags_data: tags
+      record_id: recordId,
+      tags: tagIds,
     };
     return this.req.post(url, params);
   };
 
-  updateLink = () => {
-
+  updateFileTags = (repoID, recordId, tagIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
+    const params = {
+      record_id: recordId,
+      tags: tagIds,
+    };
+    return this.req.put(url, params);
   };
 
 }

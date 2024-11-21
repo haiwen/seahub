@@ -5,7 +5,7 @@ import TreeSection from '../tree-section';
 import { MetadataTreeView, useMetadata } from '../../metadata';
 import ExtensionPrompts from './extension-prompts';
 import LibSettingsDialog from '../dialog/lib-settings';
-import { useEnableMetadata } from '../../hooks';
+import { useMetadataStatus } from '../../hooks';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -15,7 +15,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
   const { navigation } = useMetadata();
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata } = useMetadataStatus();
 
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const toggleSettingsDialog = () => {

@@ -6,10 +6,10 @@ import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { MetadataDetails } from '../../../metadata';
-import { useEnableMetadata } from '../../../hooks';
+import { useMetadataStatus } from '../../../hooks';
 
 const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
-  const { enableMetadata } = useEnableMetadata();
+  const { enableMetadata } = useMetadataStatus();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
