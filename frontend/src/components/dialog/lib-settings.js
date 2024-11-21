@@ -44,7 +44,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { enableFaceRecognition, updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, enableTags, updateEnableTags } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -119,7 +119,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   <LibExtendedPropertiesSettingPanel
                     repoID={repoID}
                     value={enableMetadata}
-                    submit={(value) => { updateEnableMetadata(value); }}
+                    submit={updateEnableMetadata}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>
@@ -129,7 +129,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   <LibFaceRecognitionSettingPanel
                     repoID={repoID}
                     value={enableFaceRecognition}
-                    submit={(value) => { updateEnableFaceRecognition(value); }}
+                    submit={updateEnableFaceRecognition}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>
@@ -138,8 +138,8 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                 <TabPane tabId={TAB.TAGS_SETTINGS} role="tabpanel" id="face-recognition-setting-panel">
                   <LibMetadataTagsStatusSettingsPanel
                     repoID={repoID}
-                    value={enableFaceRecognition}
-                    submit={(value) => { updateEnableFaceRecognition(value); }}
+                    value={enableTags}
+                    submit={updateEnableTags}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>

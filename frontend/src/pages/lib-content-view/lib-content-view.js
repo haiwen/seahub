@@ -2205,7 +2205,7 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <MetadataStatusProvider repoID={repoID} currentRepoInfo={currentRepoInfo} >
+      <MetadataStatusProvider repoID={repoID} currentRepoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
         <TagsProvider repoID={repoID} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
           <MetadataProvider repoID={repoID} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
             <CollaboratorsProvider repoID={repoID}>

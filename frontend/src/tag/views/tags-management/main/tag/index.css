@@ -22,6 +22,8 @@
   width: 12px;
   border-radius: 50%;
   margin-right: 8px;
+  position: relative;
+  top: 1px;
 }
 
 .sf-metadata-tags-table-row:hover .sf-metadata-tags-table-cell .sf-metadata-tags-table-cell-action {

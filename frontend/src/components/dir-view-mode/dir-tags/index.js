@@ -4,6 +4,7 @@ import { gettext } from '../../../utils/constants';
 import TreeSection from '../../tree-section';
 import { useMetadataStatus } from '../../../hooks';
 import { TagsTreeView } from '../../../tag';
+import { useTags } from '../../../tag/hooks';
 
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
 
@@ -14,13 +15,14 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
   const { enableMetadata, enableTags } = useMetadataStatus();
+  const { isLoading } = useTags();
 
   if (!enableMetadataManagement) return null;
   if (!enableMetadata || !enableTags) return null;
 
   return (
     <TreeSection title={gettext('Tags')}>
-      <TagsTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} />
+      {!isLoading && (<TagsTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} />)}
     </TreeSection>
   );
 };

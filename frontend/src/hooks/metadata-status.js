@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo } from 'react';
 import metadataAPI from '../metadata/api';
-import tagsAPI from '../tag/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const EnableMetadataContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, currentRepoInfo, children }) => {
+export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataView, children }) => {
   const enableMetadataManagement = useMemo(() => {
     if (currentRepoInfo?.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -36,10 +35,11 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, children }) =>
       return;
     }
     metadataAPI.getMetadataStatus(repoID).then(res => {
-      const enableMetadata = res.data.enabled;
+      const { enabled: enableMetadata, tags_enabled: enableTags } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
       }
+      setEnableTags(enableTags);
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -50,18 +50,6 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, children }) =>
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadataManagement]);
-
-  useEffect(() => {
-    if (!enableMetadata) return;
-    tagsAPI.getTagsStatus(repoID).then(res => {
-      const enableTags = res.data.enabled;
-      setEnableTags(enableTags);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error, true);
-      toaster.danger(errorMsg);
-      setEnableTags(false);
-    });
-  }, [enableMetadata, repoID]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;
@@ -76,9 +64,10 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, children }) =>
     if (newValue === enableTags) return;
     if (!newValue) {
       cancelMetadataURL();
+      hideMetadataView && hideMetadataView();
     }
     setEnableTags(newValue);
-  }, [enableTags, cancelMetadataURL]);
+  }, [enableTags, cancelMetadataURL, hideMetadataView]);
 
   return (
     <EnableMetadataContext.Provider

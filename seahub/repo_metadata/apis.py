@@ -35,7 +35,7 @@ class MetadataManage(APIView):
         """
             check the repo has enabled the metadata manage or not
         """
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -46,18 +46,22 @@ class MetadataManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        is_enabled = False
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 is_enabled = True
-            else:
-                is_enabled = False
+            if record and record.tags_enabled:
+                is_tags_enabled = True
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'enabled': is_enabled})
+        return Response({
+            'enabled': is_enabled,
+            'tags_enabled': is_tags_enabled,
+        })
 
     def put(self, request, repo_id):
         """
@@ -138,6 +142,7 @@ class MetadataManage(APIView):
         try:
             record.enabled = False
             record.face_recognition_enabled = False
+            record.tags_enabled = False
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
@@ -1237,42 +1242,7 @@ class MetadataTagsStatusManage(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get(self, request, repo_id):
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if not can_read_metadata(request, repo_id):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-            if record and record.tags_enabled:
-                is_enabled = True
-            else:
-                is_enabled = False
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'enabled': is_enabled})
-
-    def post(self, request, repo_id):
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+    def put(self, request, repo_id):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -1283,15 +1253,14 @@ class MetadataTagsStatusManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        # check dose the repo have opened metadata manage
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled or not record.tags_enabled:
-            error_msg = f'The repo {repo_id} has disabled the tags manage.'
-            return api_error(status.HTTP_409_CONFLICT, error_msg)
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-           record.tags_enabled = True
-           record.save()
+           metadata.tags_enabled = True
+           metadata.save()
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')

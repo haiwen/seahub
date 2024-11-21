@@ -76,7 +76,7 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
         if (window.sfTagsDataContext) {
           window.sfTagsDataContext.destroy();
         }
-        window.sfMetadataStore.destroy();
+        storeRef.current.destroy();
         unsubscribeServerTagsChanged();
         unsubscribeTagsChanged();
         unsubscribeHandleTableError();

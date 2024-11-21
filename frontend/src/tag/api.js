@@ -11,7 +11,7 @@ class TagsManagerAPI extends MetadataManagerAPI {
 
   openTags = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-status/';
-    return this.req.post(url);
+    return this.req.put(url);
   };
 
   closeTags = (repoID) => {

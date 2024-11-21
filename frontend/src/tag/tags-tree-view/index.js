@@ -19,6 +19,7 @@ const updateFavicon = () => {
 const TagsTreeView = ({ userPerm, currentPath }) => {
   const originalTitle = useRef('');
 
+  // const {} = { }
   const { tagsData, selectTag, deleteTags, duplicateTag, updateTag } = useTags();
 
   const tags = useMemo(() => {
