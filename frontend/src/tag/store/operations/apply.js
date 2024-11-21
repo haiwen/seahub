@@ -23,7 +23,8 @@ export default function apply(data, operation) {
       data.rows = updatedRows;
       return data;
     }
-    case OPERATION_TYPE.MODIFY_RECORDS: {
+    case OPERATION_TYPE.MODIFY_RECORDS:
+    case OPERATION_TYPE.MODIFY_LOCAL_RECORDS: {
       const { id_original_row_updates, id_row_updates } = operation;
       const { rows } = data;
       const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);

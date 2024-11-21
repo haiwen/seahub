@@ -277,6 +277,37 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifyLocalTags(row_ids, id_row_updates, id_original_row_updates, id_old_row_data, id_original_old_row_data, { fail_callback, success_callback }) {
+    const originalRows = getRowsByIds(this.data, row_ids);
+    let valid_row_ids = [];
+    let valid_id_row_updates = {};
+    let valid_id_original_row_updates = {};
+    let valid_id_old_row_data = {};
+    let valid_id_original_old_row_data = {};
+    originalRows.forEach(row => {
+      const rowId = row._id;
+      valid_row_ids.push(rowId);
+      valid_id_row_updates[rowId] = id_row_updates[rowId];
+      valid_id_original_row_updates[rowId] = id_original_row_updates[rowId];
+      valid_id_old_row_data[rowId] = id_old_row_data[rowId];
+      valid_id_original_old_row_data[rowId] = id_original_old_row_data[rowId];
+    });
+
+    const type = OPERATION_TYPE.MODIFY_LOCAL_RECORDS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_ids: valid_row_ids,
+      id_row_updates: valid_id_row_updates,
+      id_original_row_updates: valid_id_original_row_updates,
+      id_old_row_data: valid_id_old_row_data,
+      id_original_old_row_data: valid_id_original_old_row_data,
+      fail_callback,
+      success_callback,
+    });
+    this.applyOperation(operation);
+  }
+
   deleteTags(tag_ids, { fail_callback, success_callback } = {}) {
     const type = OPERATION_TYPE.DELETE_RECORDS;
     if (!Array.isArray(tag_ids) || tag_ids.length === 0) return;

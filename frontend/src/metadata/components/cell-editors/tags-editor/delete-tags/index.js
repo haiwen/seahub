@@ -15,7 +15,7 @@ const DeleteTag = ({ value, tags, onDelete }) => {
         const tagName = getTagName(tag);
         const tagColor = getTagColor(tag);
         return (
-          <div className="sf-metadata-delete-select-tag">
+          <div className="sf-metadata-delete-select-tag" key={tagId}>
             <div className="sf-metadata-delete-select-tag-color" style={{ backgroundColor: tagColor }}></div>
             <div className="sf-metadata-delete-select-tag-name">{tagName}</div>
             <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(tagId, event)} iconName="x-01" />

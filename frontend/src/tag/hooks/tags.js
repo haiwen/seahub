@@ -119,6 +119,10 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
     storeRef.current.modifyTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
   }, [storeRef]);
 
+  const modifyLocalTags = useCallback((tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback }) => {
+    storeRef.current.modifyLocalTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
+  }, [storeRef]);
+
   const deleteTags = useCallback((tagIds) => {
     storeRef.current.deleteTags(tagIds);
   }, [storeRef]);
@@ -156,6 +160,24 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
     modifyTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyTags]);
 
+  const updateLocalTag = useCallback((tagId, update, { success_callback, fail_callback } = { }) => {
+    const tag = getRowById(tagsData, tagId);
+    const tagIds = [tagId];
+    const idTagUpdates = { [tagId]: update };
+    let originalRowUpdates = {};
+    let oldRowData = {};
+    let originalOldRowData = {};
+    Object.keys(update).forEach(key => {
+      const column = tagsData.key_column_map[key];
+      const columnName = getColumnOriginName(column);
+      originalRowUpdates[key] = update[key];
+      oldRowData[key] = getCellValueByColumn(tag, column);
+      originalOldRowData[columnName] = getCellValueByColumn(tag, column);
+    });
+
+    modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
+  }, [tagsData, modifyLocalTags]);
+
   return (
     <TagsContext.Provider value={{
       isLoading,
@@ -171,6 +193,7 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
       deleteTags,
       duplicateTag,
       updateTag,
+      updateLocalTag,
       selectTag: handelSelectTag,
     }}>
       {children}
