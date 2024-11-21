@@ -8,7 +8,6 @@ TOPDIR=$(dirname "${INSTALLPATH}")
 default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
-check_db_py=${INSTALLPATH}/check-db-type.py
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
 seaf_gc_opts=""
 pro_pylibs_dir=${INSTALLPATH}/pro/python
@@ -118,17 +117,6 @@ function validate_already_running () {
 }
 
 function run_seaf_gc () {
-
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
-        seafile_conf=${default_conf_dir}/seafile.conf
-        db_type=$($PYTHON $check_db_py $seafile_conf)
-
-        if [ $db_type = "sqlite" ]; then
-            validate_already_running;
-        fi
-    else
-        validate_already_running;
-    fi
 
     validate_seafile_data_dir;
     set_env_config;

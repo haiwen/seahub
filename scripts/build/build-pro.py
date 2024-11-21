@@ -784,7 +784,6 @@ def copy_scripts_and_libs():
     must_copy(
         os.path.join(scripts_srcdir, 'seafile-background-tasks.sh'), serverdir)
     must_copy(os.path.join(scripts_srcdir, 'check_init_admin.py'), serverdir)
-    must_copy(os.path.join(scripts_srcdir, 'check-db-type.py'), serverdir)
 
     # Command line for real-time backup server
     must_copy(os.path.join(scripts_srcdir, 'seaf-backup-cmd.py'), serverdir)
