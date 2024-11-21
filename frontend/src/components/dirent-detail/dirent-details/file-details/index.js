@@ -131,16 +131,18 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
         <Collapse title={gettext('General information')}>
           {dom}
         </Collapse>
-        <Collapse title={gettext('Capture information')}>
-          {Object.entries(fileDetailsJson).map(item => {
-            return (
-              <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={item[0]}>
-                <div className="dirent-detail-item-name">{getImageInfoName(item[0])}</div>
-                <div className="dirent-detail-item-value" placeholder={gettext('Empty')}>{getImageInfoValue(item[0], item[1])}</div>
-              </div>
-            );
-          })}
-        </Collapse>
+        {Object.keys(fileDetailsJson).length > 0 && (
+          <Collapse title={gettext('Capture information')}>
+            {Object.entries(fileDetailsJson).map(item => {
+              return (
+                <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={item[0]}>
+                  <div className="dirent-detail-item-name">{getImageInfoName(item[0])}</div>
+                  <div className="dirent-detail-item-value" placeholder={gettext('Empty')}>{getImageInfoValue(item[0], item[1])}</div>
+                </div>
+              );
+            })}
+          </Collapse>
+        )}
       </>
     );
   }
