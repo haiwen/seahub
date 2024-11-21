@@ -4,7 +4,7 @@ import { useTags } from '../hooks';
 import Tag from './tag';
 import { getTagId, getTagName } from '../utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { mediaUrl } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { getRowById } from '../../metadata/utils/table';
 import TagsManagement from './tags-management';
 import { PRIVATE_COLUMN_KEY, TAG_MANAGEMENT_ID } from '../constants';
@@ -75,6 +75,11 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
   useEffect(() => {
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
     const currentTagId = currentPath.split('/').pop();
+    if (currentTagId === TAG_MANAGEMENT_ID) {
+      if (!canUpdate) return;
+      document.title = `${gettext('Tags management')} - Seafile`;
+      return;
+    }
     const currentTag = getRowById(tagsData, currentTagId);
     if (currentTag) {
       const tagName = getTagName(currentTag);
@@ -84,6 +89,7 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
     }
     document.title = originalTitle;
     updateFavicon('default');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath, tagsData]);
 
   return (

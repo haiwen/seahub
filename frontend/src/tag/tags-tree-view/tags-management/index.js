@@ -25,7 +25,7 @@ const TagsManagement = ({ currentPath }) => {
       className={classnames('tree-node-inner text-nowrap tag-management-tree-node-inner', { 'tree-node-hight-light': isSelected })}
       onClick={selectTagManagement}
     >
-      <div className="tree-node-text">{gettext('Tag management')}</div>
+      <div className="tree-node-text">{gettext('Tags management')}</div>
       <div className="left-icon">
         <div className="tree-node-icon">
           <i className="sf3-font sf3-font-tag"></i>

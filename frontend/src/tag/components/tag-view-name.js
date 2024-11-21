@@ -9,7 +9,7 @@ import { gettext } from '../../utils/constants';
 const TagViewName = ({ id }) => {
   const { tagsData } = useTags();
   if (!id) return null;
-  if (id === TAG_MANAGEMENT_ID) return gettext('Tag management');
+  if (id === TAG_MANAGEMENT_ID) return gettext('Tags management');
   const tag = getRowById(tagsData, id);
   if (!tag) return null;
   return (<>{getTagName(tag)}</>);
