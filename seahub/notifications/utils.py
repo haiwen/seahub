@@ -402,6 +402,24 @@ def update_notice_detail(request, notices):
     return notices
 
 
+def update_sdoc_notice_detail(request, notices):
+    repo_dict = {}
+    for notice in notices:
+        if notice.is_comment():
+            try:
+                d = json.loads(notice.detail)
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
+        elif notice.is_reply():
+            try:
+                d = json.loads(notice.detail)
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
+    return notices
+
+
 def gen_sdoc_smart_link(doc_uuid, with_service_url=True):
     service_url = get_service_url()
     service_url = service_url.rstrip('/')

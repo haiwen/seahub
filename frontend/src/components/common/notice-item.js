@@ -24,6 +24,8 @@ const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 const MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change';
 const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
 const MSG_TYPE_FACE_CLUSTER = 'face_cluster';
+const MSG_TYPE_SEADOC_REPLY = 'reply';
+const MSG_TYPE_SEADOC_COMMENT = 'comment';
 
 dayjs.extend(relativeTime);
 
@@ -33,7 +35,7 @@ class NoticeItem extends React.Component {
     let noticeItem = this.props.noticeItem;
     let noticeType = noticeItem.type;
     let detail = noticeItem.detail;
-
+    console.log(detail, noticeItem, noticeType)
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
 
       let avatar_url = detail.group_staff_avatar_url;
@@ -373,6 +375,22 @@ class NoticeItem extends React.Component {
       let notice = gettext(error_msg);
 
       return { avatar_url: null, notice };
+    }
+
+    if (noticeType === MSG_TYPE_SEADOC_COMMENT) {
+      let avatar_url = detail.share_from_user_avatar_url;
+      let notice = '';
+      console.log(111)
+      notice = Utils.HTMLescape(notice);
+      return { avatar_url, notice };
+    }
+
+    if (noticeType === MSG_TYPE_SEADOC_REPLY) {
+      let avatar_url = detail.share_from_user_avatar_url;
+      let notice = detail.reply;
+      notice = Utils.HTMLescape(notice);
+      console.log(notice)
+      return { avatar_url, notice };
     }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {

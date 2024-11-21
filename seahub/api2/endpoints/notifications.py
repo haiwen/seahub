@@ -14,12 +14,15 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
-from seahub.notifications.utils import update_notice_detail
+from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
+from seahub.seadoc.models import SeadocCommentReply, SeadocNotification
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+NOTIF_TYPE = ['general', 'discussion']
 
 
 class NotificationsView(APIView):
@@ -161,3 +164,61 @@ class NotificationView(APIView):
         cache.delete(cache_key)
 
         return Response({'success': True})
+
+
+class SdocNotificationView(APIView):
+    def get(self, request):
+        """ used for get sdoc notifications
+
+        Permission checking:
+        1. login user.
+        """
+        notice_type = request.GET.get('type', 'general')
+        if notice_type not in NOTIF_TYPE:
+            error_msg = 'notice_type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+
+        username = request.user.username
+
+        try:
+            per_page = int(request.GET.get('per_page', ''))
+            page = int(request.GET.get('page', ''))
+        except ValueError:
+            per_page = 25
+            page = 1
+
+        start = (page - 1) * per_page
+        end = page * per_page
+
+        notice_list = SeadocNotification.objects.list_all_by_user(username, start, end)
+        result_notices = update_sdoc_notice_detail(request, notice_list)
+        notification_list = []
+        for i in result_notices:
+            if i.detail is not None:
+                notice = {}
+                notice['id'] = i.id
+                notice['type'] = i.msg_type
+                notice['detail'] = i.detail
+                notice['time'] = datetime_to_isoformat_timestr(i.created_at)
+                notice['seen'] = i.seen
+
+                notification_list.append(notice)
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        unseen_count_from_cache = cache.get(cache_key, None)
+
+        # for case of count value is `0`
+        if unseen_count_from_cache is not None:
+            result['unseen_count'] = unseen_count_from_cache
+        else:
+            unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
+            result['unseen_count'] = unseen_count
+            cache.set(cache_key, unseen_count)
+
+        total_count = SeadocNotification.objects.filter(username=username).count()
+
+        result['notification_list'] = notification_list
+        result['count'] = total_count
+
+        return Response(result)
