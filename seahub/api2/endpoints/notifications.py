@@ -13,6 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
+from seahub.seadoc.models import get_cache_key_of_unseen_sdoc_notifications
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
@@ -166,18 +167,13 @@ class NotificationView(APIView):
         return Response({'success': True})
 
 
-class SdocNotificationView(APIView):
+class SdocNotificationsView(APIView):
     def get(self, request):
         """ used for get sdoc notifications
 
         Permission checking:
         1. login user.
         """
-        notice_type = request.GET.get('type', 'general')
-        if notice_type not in NOTIF_TYPE:
-            error_msg = 'notice_type invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         result = {}
 
         username = request.user.username
@@ -205,7 +201,7 @@ class SdocNotificationView(APIView):
                 notice['seen'] = i.seen
 
                 notification_list.append(notice)
-        cache_key = get_cache_key_of_unseen_notifications(username)
+        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
         unseen_count_from_cache = cache.get(cache_key, None)
 
         # for case of count value is `0`
@@ -222,3 +218,69 @@ class SdocNotificationView(APIView):
         result['count'] = total_count
 
         return Response(result)
+    
+    def put(self, request):
+        """ currently only used for mark all notifications seen
+
+        Permission checking:
+        1. login user.
+        """
+
+        username = request.user.username
+        unseen_notices = SeadocNotification.objects.filter(username, seen=False)
+        for notice in unseen_notices:
+            notice.seen = True
+            notice.save()
+
+        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+        cache.delete(cache_key)
+
+        return Response({'success': True})
+
+
+
+class SdocNotificationView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request):
+        """ currently only used for mark a sdoc notification seen
+
+        Permission checking:
+        1. login user.
+        """
+
+        notice_id = request.data.get('notice_id')
+
+        # argument check
+        try:
+            int(notice_id)
+        except Exception as e:
+            error_msg = 'notice_id invalid.'
+            logger.error(e)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        try:
+            notice = SeadocNotification.objects.get(id=notice_id)
+        except SeadocNotification.DoesNotExist as e:
+            logger.error(e)
+            error_msg = 'Notification %s not found.' % notice_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if notice.username != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not notice.seen:
+            notice.seen = True
+            notice.save()
+
+        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+        cache.delete(cache_key)
+
+        return Response({'success': True})

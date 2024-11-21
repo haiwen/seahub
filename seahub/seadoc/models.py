@@ -7,7 +7,7 @@ from django.db import models
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR
-
+from seahub.utils import normalize_cache_key
 
 class SeadocHistoryNameManager(models.Manager):
     def update_name(self, doc_uuid, obj_id, name):
@@ -251,6 +251,11 @@ class SeadocCommentReply(models.Model):
 ### sdoc notification
 MSG_TYPE_REPLY = 'reply'
 MSG_TYPE_COMMENT = 'comment'
+SDOC_NOTIFICATION_COUNT_CACHE_PREFIX = 'SDOC_NOTIFICATION_COUNT_'
+
+def get_cache_key_of_unseen_sdoc_notifications(username):
+    return normalize_cache_key(username,
+            SDOC_NOTIFICATION_COUNT_CACHE_PREFIX)
 
 class SeadocNotificationManager(models.Manager):
     def total_count(self, doc_uuid, username):

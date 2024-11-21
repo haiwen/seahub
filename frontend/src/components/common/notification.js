@@ -38,16 +38,16 @@ class Notification extends React.Component {
       this.setState({ showNotice: true });
     }
   };
-  
+
   tabItemClick = (tab) => {
     const { currentTab } = this.state;
     if (currentTab === tab) return;
-    this.setState({ 
+    this.setState({
       showNotice: true,
       currentTab: tab
-     }, () => {
+    }, () => {
       this.loadNotices();
-     });
+    });
   };
 
   loadNotices = () => {
@@ -62,7 +62,6 @@ class Notification extends React.Component {
     if (this.state.currentTab === 'discussion') {
       seafileAPI.listSdocNotifications(page, perPage).then(res => {
         let noticeList = res.data.notification_list;
-        console.log(noticeList)
         this.setState({ noticeList: noticeList });
       });
     }
@@ -76,7 +75,14 @@ class Notification extends React.Component {
       }
       return item;
     });
-    seafileAPI.markNoticeAsRead(noticeItem.id);
+
+    if (this.state.currentTab === 'general') {
+      seafileAPI.markNoticeAsRead(noticeItem.id);
+    }
+    if (this.state.currentTab === 'discussion') {
+      seafileAPI.markSdocNoticeAsRead(noticeItem.id);
+    }
+
     let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
     this.setState({
       noticeList: noticeList,
