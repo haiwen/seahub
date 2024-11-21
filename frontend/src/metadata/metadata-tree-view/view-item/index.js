@@ -103,12 +103,14 @@ const ViewItem = ({
   const renameView = useCallback((name, failCallback) => {
     onUpdate({ name }, () => {
       setRenaming(false);
+      if (!isSelected) return;
       document.title = `${name} - Seafile`;
     }, (error) => {
       failCallback(error);
+      if (!isSelected) return;
       document.title = `${view.name} - Seafile`;
     });
-  }, [onUpdate, view.name]);
+  }, [isSelected, onUpdate, view.name]);
 
   const onDragStart = useCallback((event) => {
     if (!canDrop) return false;
