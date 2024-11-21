@@ -229,7 +229,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item.item-active .history-info .name {
-  color: #ff8000;
+  color: #ff9800;
 }
 
 /* mobile options modal */
@@ -265,7 +265,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item.item-active .history-info .time {
-  color: #ff8000;
+  color: #ff9800;
 }
 
 .history-info .owner {

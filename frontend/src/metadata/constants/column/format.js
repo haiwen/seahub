@@ -91,7 +91,7 @@ const GEOLOCATION_FORMAT = {
 // rate
 const DEFAULT_RATE_DATA = {
   max: 5,
-  color: '#FF8000',
+  color: '#ff9800',
   type: 'rate'
 };
 
