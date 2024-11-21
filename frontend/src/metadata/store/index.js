@@ -73,7 +73,6 @@ class Store {
   async reload(limit = PER_LOAD_NUMBER) {
     this.startIndex = 0;
     await this.loadMetadata(this.data.view, limit);
-    this.context.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }
 
   async loadMore(limit) {
