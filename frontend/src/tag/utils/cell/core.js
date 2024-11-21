@@ -1,5 +1,4 @@
-import { gettext } from '../../../utils/constants';
-import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY, PREDEFINED_TAG_NAME } from '../../constants';
+import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
 
 /**
  * @param {object} record eg: { [column_key]: value, [column_name]: value }
@@ -14,33 +13,7 @@ export const getCellValueByColumn = (record, column) => {
 };
 
 export const getTagName = (tag) => {
-  const name = tag ? tag[PRIVATE_COLUMN_KEY.TAG_NAME] : '';
-  switch (name) {
-    case PREDEFINED_TAG_NAME.RED: {
-      return gettext('Red');
-    }
-    case PREDEFINED_TAG_NAME.ORANGE: {
-      return gettext('Orange');
-    }
-    case PREDEFINED_TAG_NAME.YELLOW: {
-      return gettext('Yellow');
-    }
-    case PREDEFINED_TAG_NAME.GREEN: {
-      return gettext('Green');
-    }
-    case PREDEFINED_TAG_NAME.BLUE: {
-      return gettext('Blue');
-    }
-    case PREDEFINED_TAG_NAME.INDIGO: {
-      return gettext('Indigo');
-    }
-    case PREDEFINED_TAG_NAME.PURPLE: {
-      return gettext('Purple');
-    }
-    default: {
-      return name;
-    }
-  }
+  return tag ? tag[PRIVATE_COLUMN_KEY.TAG_NAME] : '';
 };
 
 export const getTagColor = (tag) => {

@@ -72,6 +72,20 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
+    const currentTagId = currentPath.split('/').pop();
+    const currentTag = getRowById(tagsData, currentTagId);
+    if (currentTag) {
+      const tagName = getTagName(currentTag);
+      document.title = `${tagName} - Seafile`;
+      updateFavicon('default');
+      return;
+    }
+    document.title = originalTitle;
+    updateFavicon('default');
+  }, [currentPath, tagsData]);
+
   return (
     <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
