@@ -101,15 +101,16 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   }, []);
 
   useEffect(() => {
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return null;
     const currentViewId = currentPath.split('/').pop();
     const currentView = viewsMap[currentViewId];
     if (currentView) {
       document.title = `${currentView.name} - Seafile`;
       updateFavicon(currentView.type);
-    } else {
-      document.title = originalTitle;
-      updateFavicon('default');
+      return;
     }
+    document.title = originalTitle;
+    updateFavicon('default');
   }, [currentPath, viewsMap, originalTitle]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
