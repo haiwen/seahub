@@ -31,6 +31,7 @@ const Board = ({
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
+  const cardsQuantity = useMemo(() => board.children.length, [board.children]);
 
   const { metadata } = useMetadataView();
 
@@ -59,6 +60,7 @@ const Board = ({
         value={board.value}
         groupByColumn={groupByColumn}
         haveFreezed={haveFreezed}
+        cardsQuantity={cardsQuantity}
         onDelete={() => deleteOption(board.key)}
         onFreezed={onFreezed}
         onUnFreezed={onUnFreezed}

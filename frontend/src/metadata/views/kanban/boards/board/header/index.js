@@ -7,7 +7,7 @@ import { CellType } from '../../../../../constants';
 
 import './index.css';
 
-const Header = ({ readonly, haveFreezed, value, groupByColumn, onDelete, onFreezed, onUnFreezed }) => {
+const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed }) => {
   const [active, setActive] = useState(false);
 
   const onMouseEnter = useCallback(() => {
@@ -39,6 +39,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, onDelete, onFreez
         ) : (
           <span>{gettext('Uncategorized')}</span>
         )}
+        <span className="cards-quantity">{cardsQuantity}</span>
       </div>
       {value && !readonly && active && (
         <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
@@ -51,6 +52,8 @@ Header.propTypes = {
   readonly: PropTypes.bool,
   value: PropTypes.any,
   groupByColumn: PropTypes.object,
+  haveFreezed: PropTypes.bool,
+  cardsQuantity: PropTypes.number,
   onDelete: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,

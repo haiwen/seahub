@@ -9,5 +9,16 @@
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title {
   flex: 1;
+  display: flex;
   overflow: hidden;
+}
+
+.sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title .sf-metadata-ui.cell-formatter-container {
+  width: auto;
+}
+
+.sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title .cards-quantity {
+  font-size: 14px;
+  color: #666666;
+  margin-left: 12px;
 }
