@@ -8,7 +8,6 @@ import logging
 import subprocess
 from io import BytesIO
 import zipfile
-from fitz import open as fitz_open
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -193,6 +192,26 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         return (False, 500)
 
 
+def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=200):
+    with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmpfile:
+        tmpfile.write(pdf_bytes)
+        tmp_file = tmpfile.name
+        command = [
+            'pdftoppm',
+            '-png',
+            '-r', str(dpi),
+            '-f', '1',
+            '-l', '1',
+            '-singlefile', tmp_file,
+            '-o', prefix_path
+        ]
+        try:
+            subprocess.check_output(command)
+        except Exception as e:
+            logger.error(e)
+            return (False, 500)
+
+
 def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     t1 = timeit.default_timer()
     token = seafile_api.get_fileserver_access_token(repo.id,
@@ -202,22 +221,16 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
-    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
+    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s' % file_id[:8]))
     pdf_file = urllib.request.urlopen(inner_path)
-    pdf_stream = BytesIO(pdf_file.read())
     try:
-        pdf_doc = fitz_open(stream=pdf_stream)
-        pdf_stream.close()
-        page = pdf_doc[0]
-        pix = page.get_pixmap()
-        pix.save(tmp_path)
-        pdf_doc.close()
+        pdf_bytes_to_images(pdf_file.read(), tmp_path)
+        tmp_path = tmp_path + '.png'
     except Exception as e:
         logger.error(e)
         return (False, 500)
     t2 = timeit.default_timer()
     logger.debug('Create PDF thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
-
     try:
         ret = _create_thumbnail_common(tmp_path, thumbnail_file, size)
         os.unlink(tmp_path)
