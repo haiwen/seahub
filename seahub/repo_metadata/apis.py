@@ -47,6 +47,7 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         is_enabled = False
+        is_tags_enabled = False
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
