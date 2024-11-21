@@ -135,6 +135,12 @@ from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXP
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+FILE_TYPE_FOR_NEW_FILE_LINK = [
+    PDF,
+    VIDEO,
+    MARKDOWN
+]
+
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
@@ -643,7 +649,7 @@ def view_lib_file(request, repo_id, path):
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
 
-    if filetype in [VIDEO, PDF, MARKDOWN]:
+    if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_new(repo_id, path)
 
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
@@ -760,11 +766,12 @@ def view_lib_file(request, repo_id, path):
 
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
         return_dict['raw_path'] = raw_path
-        send_file_access_msg(request, repo, path, 'web')
         if filetype == VIDEO:
             return_dict['enable_video_thumbnail'] = settings.ENABLE_VIDEO_THUMBNAIL
         if filetype == PDF:
             return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
+        if filetype not in FILE_TYPE_FOR_NEW_FILE_LINK:
+            send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     elif filetype == XMIND:
@@ -1196,6 +1203,8 @@ def view_shared_file(request, fileshare):
     can_copy_content = fileshare.get_permissions()['can_copy_content']
     can_download = fileshare.get_permissions()['can_download']
     can_edit = fileshare.get_permissions()['can_edit'] and (not is_locked or locked_by_online_office)
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1203,7 +1212,8 @@ def view_shared_file(request, fileshare):
             raise Http404
 
         # send file audit message
-        send_file_access_msg(request, repo, path, 'share-link')
+        if filetype not in FILE_TYPE_FOR_NEW_FILE_LINK:
+            send_file_access_msg(request, repo, path, 'share-link')
 
         return _download_file_from_share_link(request, fileshare)
 
@@ -1214,7 +1224,7 @@ def view_shared_file(request, fileshare):
     if not access_token:
         return render_error(request, _('Unable to view file'))
 
-    filename = os.path.basename(path)
+    
     raw_path = gen_file_get_url(access_token, filename)
 
     if request.GET.get('raw', '') == '1':
@@ -1229,11 +1239,11 @@ def view_shared_file(request, fileshare):
         return HttpResponseRedirect(raw_path)
 
     # preview file
-    filetype, fileext = get_file_type_and_ext(filename)
+    
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
 
-    if filetype in [VIDEO, PDF, MARKDOWN]:
+    if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_by_sharelink(fileshare.token)
 
     if filetype == SEADOC:
@@ -1310,7 +1320,8 @@ def view_shared_file(request, fileshare):
     if can_preview:
 
         # send file audit message
-        send_file_access_msg(request, repo, path, 'share-link')
+        if filetype not in FILE_TYPE_FOR_NEW_FILE_LINK:
+            send_file_access_msg(request, repo, path, 'share-link')
 
         """Choose different approach when dealing with different type of file."""
         inner_path = gen_inner_file_get_url(access_token, filename)
@@ -1675,7 +1686,7 @@ def view_raw_file(request, repo_id, file_path):
     send_file_access_msg(request, repo, file_path, 'web')
     return HttpResponseRedirect(raw_path)
 
-def send_file_access_msg(request, repo, path, access_from):
+def send_file_access_msg(request, repo, path, access_from, custom_ip=None, custom_agent=None):
     """Send file downlaod msg for audit.
 
     Arguments:
@@ -1690,9 +1701,8 @@ def send_file_access_msg(request, repo, path, access_from):
         return
 
     username = request.user.username
-
-    ip = get_remote_ip(request)
-    user_agent = request.headers.get("user-agent")
+    ip = custom_ip or get_remote_ip(request)
+    user_agent = custom_agent or request.headers.get("user-agent")
 
     msg = {
         'msg_type': 'file-download-' + access_from,

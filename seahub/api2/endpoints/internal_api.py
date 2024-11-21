@@ -13,6 +13,7 @@ from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
+from seahub.views.file import send_file_access_msg
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,8 @@ class InternalCheckShareLinkAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         link_token = request.GET.get('token')
+        ip_addr = request.data.get('ip_addr')
+        user_agent = request.data.get('user_agent')
 
         share_obj = UploadLinkShare.objects.filter(token=link_token).first()
         if share_obj:
@@ -98,6 +101,10 @@ class InternalCheckShareLinkAccess(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = share_obj.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Repo not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         file_path, parent_dir = '', ''
         share_path = share_obj.path
         share_type = share_obj.s_type
@@ -112,6 +119,7 @@ class InternalCheckShareLinkAccess(APIView):
             'parent_dir': parent_dir,
             'share_type': share_type
         }
+        send_file_access_msg(request, repo, file_path, 'share-link', custom_ip=ip_addr, custom_agent=user_agent)
         return Response(resp_json)
 
 
@@ -151,7 +159,10 @@ class InternalCheckFileOperationAccess(APIView):
         if not file_id:
             error_msg = 'File not found'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         token = request.data.get('token') # account token or repo token
+        ip_addr = request.data.get('ip_addr')
+        user_agent = request.data.get('user_agent')
         op = request.data.get('op')
         if op not in AVAILABLE_OPS:
             error_msg = 'operation is invalid.'
@@ -173,6 +184,7 @@ class InternalCheckFileOperationAccess(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
+            send_file_access_msg(request, repo, file_path, 'web', custom_ip=ip_addr, custom_agent=user_agent)
             return Response({'user': username})
         
         # if there is no username, take token as repo api token
