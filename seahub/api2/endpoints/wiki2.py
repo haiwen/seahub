@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.api2.endpoints.utils import wiki_search
+from seahub.api2.endpoints.utils import ai_search_wikis, search_wikis
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -33,7 +33,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -1301,18 +1301,25 @@ class WikiSearch(APIView):
             'wiki': search_wiki,
             'count': count,
         }
-
-        try:
-            resp = wiki_search(params)
-            if resp.status_code == 500:
-                logger.error('search in wiki error status: %s body: %s', resp.status_code, resp.text)
+        if HAS_FILE_SEARCH:
+            try:
+                results = search_wikis(search_wiki, query, count)
+            except Exception as e:
+                logger.error(e)
+                results = []
+            finally:
+                return Response({"results": results})
+        elif HAS_FILE_SEASEARCH:
+            try:
+                resp = ai_search_wikis(params)
+                if resp.status_code == 500:
+                    logger.error('search in wiki error status: %s body: %s', resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+                resp_json = resp.json()
+            except Exception as e:
+                logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-            resp_json = resp.json()
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-        return Response(resp_json, resp.status_code)
+            return Response(resp_json, resp.status_code)
 
 
 class WikiConvertView(APIView):

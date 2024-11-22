@@ -5,6 +5,7 @@ import time
 import logging
 import requests
 import json
+import os
 import datetime
 import urllib.request
 import urllib.parse
@@ -20,7 +21,10 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
 from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
-                            SEAFEVENTS_SERVER_URL
+                            SEAFEVENTS_SERVER_URL, EVENTS_CONFIG_FILE
+
+os.environ['EVENTS_CONFIG_FILE'] = EVENTS_CONFIG_FILE
+from seafes import es_wiki_search
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -321,10 +325,13 @@ def event_export_status(task_id):
     return resp
 
 
-def wiki_search(params):
+def ai_search_wikis(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/wiki-search')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
+def search_wikis(wiki_id, keyword, count):
+    return es_wiki_search(wiki_id, keyword, count)
