@@ -12,11 +12,12 @@
 
 .dirent-detail-item .dirent-detail-item-name {
   width: 160px;
-  padding: 6.5px 6px;
+  padding: 6.5px 0px;
   min-height: 34px;
   height: fit-content;
   color: #666;
   font-size: 14px;
+  cursor: default;
 }
 
 .dirent-detail-item .dirent-detail-item-name .sf-metadata-icon {
@@ -33,7 +34,6 @@
   min-height: 34px;
 }
 
-.dirent-detail-item .dirent-detail-item-name:hover,
 .dirent-detail-item .dirent-detail-item-value:hover {
   background-color: #F5F5F5;
   border-radius: 3px;
