@@ -10,7 +10,7 @@ import { useMetadataStatus } from '../../hooks';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, selectMetadataView, children }) => {
+export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMetadataView, children }) => {
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
@@ -18,7 +18,7 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
   const [, setCount] = useState(0);
   const viewsMap = useRef({});
 
-  const isEmptyRepo = useMemo(() => currentRepoInfo.file_count === 0, [currentRepoInfo]);
+  const isEmptyRepo = useMemo(() => repoInfo.file_count === 0, [repoInfo]);
 
   const { enableMetadata } = useMetadataStatus();
 
