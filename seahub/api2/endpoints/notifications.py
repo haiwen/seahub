@@ -168,6 +168,11 @@ class NotificationView(APIView):
 
 
 class SdocNotificationsView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
     def get(self, request):
         """ used for get sdoc notifications
 
@@ -175,7 +180,6 @@ class SdocNotificationsView(APIView):
         1. login user.
         """
         result = {}
-
         username = request.user.username
 
         try:
@@ -185,10 +189,14 @@ class SdocNotificationsView(APIView):
             per_page = 25
             page = 1
 
+        if page < 1:
+            error_msg = 'page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         start = (page - 1) * per_page
         end = page * per_page
 
-        notice_list = SeadocNotification.objects.list_all_by_user(username, start, end)
+        notice_list = SeadocNotification.objects.list_all_by_user(username)[start:end]
         result_notices = update_sdoc_notice_detail(request, notice_list)
         notification_list = []
         for i in result_notices:
@@ -220,12 +228,6 @@ class SdocNotificationsView(APIView):
         return Response(result)
     
     def put(self, request):
-        """ currently only used for mark all notifications seen
-
-        Permission checking:
-        1. login user.
-        """
-
         username = request.user.username
         unseen_notices = SeadocNotification.objects.filter(username=username, seen=False)
         for notice in unseen_notices:
@@ -328,19 +330,22 @@ class AllNotificationsView(APIView):
             per_page = 25
             page = 1
 
+        if page < 1:
+            error_msg = 'page invalid'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         start = (page - 1) * per_page
         end = page * per_page
 
-        notice_list = UserNotification.objects.get_user_notifications(username)[start:end]
-        sdoc_notice_list = SeadocNotification.objects.list_all_by_user(username, start, end)
+        general_notice_list = UserNotification.objects.get_user_notifications(username)[start:end]
+        sdoc_notice_list = SeadocNotification.objects.list_all_by_user(username)[start:end]
 
-        result_notices = update_notice_detail(request, notice_list)
+        general_result_notices = update_notice_detail(request, general_notice_list)
         sdoc_result_notices = update_sdoc_notice_detail(request, sdoc_notice_list)
 
         notification_list = []
         sdoc_notification_list = []
-
-        for i in result_notices:
+        for i in general_result_notices:
             if i.detail is not None:
                 notice = {}
                 notice['id'] = i.id

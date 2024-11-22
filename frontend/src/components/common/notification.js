@@ -158,10 +158,7 @@ class Notification extends React.Component {
           </NotificationPopover>
         }
         {this.state.isShowNotificationDialog &&
-          <UserNotificationsDialog
-            onNotificationDialogToggle={this.onNotificationDialogToggle}
-            tabItemClick={this.tabItemClick}
-          />
+          <UserNotificationsDialog onNotificationDialogToggle={this.onNotificationDialogToggle} />
         }
       </div>
     );
