@@ -688,7 +688,7 @@ class Records extends Component {
   render() {
     const {
       recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn, modifyColumnOrder,
+      deleteColumn, modifyColumnOrder, insertColumn,
     } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
@@ -726,6 +726,7 @@ class Records extends Component {
               selectAllRecords={this.selectAllRecords}
               renameColumn={renameColumn}
               deleteColumn={deleteColumn}
+              insertColumn={insertColumn}
               modifyColumnData={modifyColumnData}
               modifyColumnOrder={modifyColumnOrder}
             />
@@ -791,6 +792,7 @@ Records.propTypes = {
   loadAll: PropTypes.func,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
+  insertColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
   modifyColumnWidth: PropTypes.func,
   modifyColumnOrder: PropTypes.func,
