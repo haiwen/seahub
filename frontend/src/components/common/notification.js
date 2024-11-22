@@ -13,15 +13,17 @@ class Notification extends React.Component {
     this.state = {
       showNotice: false,
       unseenCount: 0,
-      noticeList: [],
+      generalNoticeList: [],
+      discussionNoticeList: [],
       currentTab: 'general',
       isShowNotificationDialog: this.getInitDialogState(),
     };
   }
 
   componentDidMount() {
-    seafileAPI.getUnseenNotificationCount().then(res => {
-      this.setState({ unseenCount: res.data.unseen_count });
+    seafileAPI.listAllNotifications().then(res => {
+      let unseen_count = res.data.general_notification.unseen_count + res.data.discussion_notification.unseen_count;
+      this.setState({ unseenCount: unseen_count });
     });
   }
 
@@ -45,49 +47,51 @@ class Notification extends React.Component {
     this.setState({
       showNotice: true,
       currentTab: tab
-    }, () => {
-      this.loadNotices();
     });
   };
 
   loadNotices = () => {
     let page = 1;
     let perPage = 5;
-    if (this.state.currentTab === 'general') {
-      seafileAPI.listNotifications(page, perPage).then(res => {
-        let noticeList = res.data.notification_list;
-        this.setState({ noticeList: noticeList });
+    seafileAPI.listAllNotifications(page, perPage).then(res => {
+      let generalNoticeList = res.data.general_notification.notification_list;
+      let discussionNoticeList = res.data.discussion_notification.notification_list;
+      this.setState({
+        generalNoticeList: generalNoticeList,
+        discussionNoticeList: discussionNoticeList
       });
-    }
-    if (this.state.currentTab === 'discussion') {
-      seafileAPI.listSdocNotifications(page, perPage).then(res => {
-        let noticeList = res.data.notification_list;
-        this.setState({ noticeList: noticeList });
-      });
-    }
-
+    });
   };
 
   onNoticeItemClick = (noticeItem) => {
-    let noticeList = this.state.noticeList.map(item => {
-      if (item.id === noticeItem.id) {
-        item.seen = true;
-      }
-      return item;
-    });
-
     if (this.state.currentTab === 'general') {
+      let noticeList = this.state.generalNoticeList.map(item => {
+        if (item.id === noticeItem.id) {
+          item.seen = true;
+        }
+        return item;
+      });
+      let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
+      this.setState({
+        generalNoticeList: noticeList,
+        unseenCount: unseenCount,
+      });
       seafileAPI.markNoticeAsRead(noticeItem.id);
     }
     if (this.state.currentTab === 'discussion') {
+      let noticeList = this.state.discussionNoticeList.map(item => {
+        if (item.id === noticeItem.id) {
+          item.seen = true;
+        }
+        return item;
+      });
+      let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
+      this.setState({
+        discussionNoticeList: noticeList,
+        unseenCount: unseenCount,
+      });
       seafileAPI.markSdocNoticeAsRead(noticeItem.id);
     }
-
-    let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
-    this.setState({
-      noticeList: noticeList,
-      unseenCount: unseenCount,
-    });
 
   };
 
@@ -137,15 +141,27 @@ class Notification extends React.Component {
             onMarkAllNotifications={this.onMarkAllNotifications}
             tabItemClick={this.tabItemClick}
           >
-            <ul className="notice-list list-unstyled" id="notice-popover">
-              {this.state.noticeList.map(item => {
-                return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
-              })}
-            </ul>
+            {this.state.currentTab === 'general' &&
+              <ul className="notice-list list-unstyled" id="notice-popover">
+                {this.state.generalNoticeList.map(item => {
+                  return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
+                })}
+              </ul>
+            }
+            {this.state.currentTab === 'discussion' &&
+              <ul className="notice-list list-unstyled" id="notice-popover">
+                {this.state.discussionNoticeList.map(item => {
+                  return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
+                })}
+              </ul>
+            }
           </NotificationPopover>
         }
         {this.state.isShowNotificationDialog &&
-          <UserNotificationsDialog onNotificationDialogToggle={this.onNotificationDialogToggle} />
+          <UserNotificationsDialog
+            onNotificationDialogToggle={this.onNotificationDialogToggle}
+            tabItemClick={this.tabItemClick}
+          />
         }
       </div>
     );

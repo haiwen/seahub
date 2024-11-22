@@ -1451,6 +1451,15 @@ class SeafileAPI {
   }
 
   // ---- Notification API
+  listAllNotifications(page, perPage) {
+    const url = this.server + '/api/v2.1/all-notifications/';
+    let params = {
+      page: page,
+      per_page: perPage
+    };
+    return this.req.get(url, { params: params });
+  }
+
   listNotifications(page, perPage) {
     const url = this.server + '/api/v2.1/notifications/';
     let params = {
@@ -1482,6 +1491,11 @@ class SeafileAPI {
 
   deleteNotifications() {
     const url = this.server + '/api/v2.1/notifications/';
+    return this.req.delete(url);
+  }
+
+  deleteSdocNotifications() {
+    const url = this.server + '/api/v2.1/sdoc-notifications/';
     return this.req.delete(url);
   }
 

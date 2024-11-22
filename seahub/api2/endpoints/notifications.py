@@ -227,10 +227,25 @@ class SdocNotificationsView(APIView):
         """
 
         username = request.user.username
-        unseen_notices = SeadocNotification.objects.filter(username, seen=False)
+        unseen_notices = SeadocNotification.objects.filter(username=username, seen=False)
         for notice in unseen_notices:
             notice.seen = True
             notice.save()
+
+        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+        cache.delete(cache_key)
+
+        return Response({'success': True})
+    
+    def delete(self, request):
+        """ delete a sdoc notification by username
+
+        Permission checking:
+        1. login user.
+        """
+        username = request.user.username
+
+        SeadocNotification.objects.remove_user_notifications(username)
 
         cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
         cache.delete(cache_key)
@@ -284,3 +299,96 @@ class SdocNotificationView(APIView):
         cache.delete(cache_key)
 
         return Response({'success': True})
+    
+
+class AllNotificationsView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ used for get all notifications
+        general and discussion
+
+        Permission checking:
+        1. login user.
+        """
+        result = {
+            'general_notification': {},
+            'discussion_notification': {}
+        }
+
+        username = request.user.username
+
+        try:
+            per_page = int(request.GET.get('per_page', ''))
+            page = int(request.GET.get('page', ''))
+        except ValueError:
+            per_page = 25
+            page = 1
+
+        start = (page - 1) * per_page
+        end = page * per_page
+
+        notice_list = UserNotification.objects.get_user_notifications(username)[start:end]
+        sdoc_notice_list = SeadocNotification.objects.list_all_by_user(username, start, end)
+
+        result_notices = update_notice_detail(request, notice_list)
+        sdoc_result_notices = update_sdoc_notice_detail(request, sdoc_notice_list)
+
+        notification_list = []
+        sdoc_notification_list = []
+
+        for i in result_notices:
+            if i.detail is not None:
+                notice = {}
+                notice['id'] = i.id
+                notice['type'] = i.msg_type
+                notice['detail'] = i.detail
+                notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
+                notice['seen'] = i.seen
+
+                notification_list.append(notice)
+        
+        for i in sdoc_result_notices:
+            if i.detail is not None:
+                notice = {}
+                notice['id'] = i.id
+                notice['type'] = i.msg_type
+                notice['detail'] = i.detail
+                notice['time'] = datetime_to_isoformat_timestr(i.created_at)
+                notice['seen'] = i.seen
+
+                sdoc_notification_list.append(notice)
+
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        unseen_count_from_cache = cache.get(cache_key, None)
+
+        sdoc_cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+        sdoc_unseen_count_from_cache = cache.get(sdoc_cache_key, None)
+
+        # for case of count value is `0`
+        if unseen_count_from_cache is not None:
+            result['general_notification']['unseen_count'] = unseen_count_from_cache
+        else:
+            unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
+            result['general_notification']['unseen_count'] = unseen_count
+            cache.set(cache_key, unseen_count)
+
+        if sdoc_unseen_count_from_cache is not None:
+            result['discussion_notification']['unseen_count'] = sdoc_unseen_count_from_cache
+        else:
+            sdoc_unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
+            result['discussion_notification']['unseen_count'] = sdoc_unseen_count
+            cache.set(sdoc_cache_key, sdoc_unseen_count)
+
+        total_count = UserNotification.objects.filter(to_user=username).count()
+        sdoc_total_count = SeadocNotification.objects.filter(username=username).count()
+
+        result['general_notification']['notification_list'] = notification_list
+        result['discussion_notification']['notification_list'] = sdoc_notification_list
+        result['general_notification']['count'] = total_count
+        result['discussion_notification']['count'] = sdoc_total_count
+
+        return Response(result)

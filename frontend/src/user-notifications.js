@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  TabPane,
+  Nav, NavItem, NavLink, TabContent
+} from 'reactstrap';
 import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -24,6 +34,7 @@ class UserNotificationsDialog extends React.Component {
       hasNextPage: false,
       items: [],
       isItemMenuShow: false,
+      activeTab: 'general',
     };
   }
 
@@ -37,54 +48,130 @@ class UserNotificationsDialog extends React.Component {
     });
   }
 
-  getItems = (page) => {
+  getItems = (page, is_scroll = false) => {
     this.setState({ isLoading: true });
-    seafileAPI.listNotifications(page, PER_PAGE).then((res) => {
-      this.setState({
-        isLoading: false,
-        items: [...this.state.items, ...res.data.notification_list],
-        currentPage: page,
-        hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
+    if (this.state.activeTab === 'general') {
+      seafileAPI.listNotifications(page, PER_PAGE).then((res) => {
+        if (is_scroll) {
+          this.setState({
+            isLoading: false,
+            items: [...this.state.items, ...res.data.notification_list],
+            currentPage: page,
+            hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            items: [...res.data.notification_list],
+            currentPage: page,
+            hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
+          });
+        }
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+    } else if (this.state.activeTab === 'discussion') {
+      seafileAPI.listSdocNotifications(page, PER_PAGE).then((res) => {
+        if (is_scroll) {
+          this.setState({
+            isLoading: false,
+            items: [...this.state.items, ...res.data.notification_list],
+            currentPage: page,
+            hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            items: [...res.data.notification_list],
+            currentPage: page,
+            hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
+          });
+        }
+
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    });
+    }
+
   };
 
   markAllRead = () => {
-    seafileAPI.updateNotifications().then((res) => {
-      this.setState({
-        items: this.state.items.map(item => {
-          item.seen = true;
-          return item;
-        })
+    if (this.state.activeTab === 'general') {
+      seafileAPI.updateNotifications().then((res) => {
+        this.setState({
+          items: this.state.items.map(item => {
+            item.seen = true;
+            return item;
+          })
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+    } else if (this.state.activeTab === 'discussion') {
+      seafileAPI.updateSdocNotifications().then((res) => {
+        this.setState({
+          items: this.state.items.map(item => {
+            item.seen = true;
+            return item;
+          })
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    });
+    }
+
   };
 
   clearAll = () => {
-    seafileAPI.deleteNotifications().then((res) => {
-      this.setState({
-        items: []
+    if (this.state.activeTab === 'general') {
+      seafileAPI.deleteNotifications().then((res) => {
+        this.setState({
+          items: []
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+    } else if (this.state.activeTab === 'discussion') {
+      seafileAPI.deleteSdocNotifications().then((res) => {
+        this.setState({
+          items: []
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
       });
-    });
+    }
   };
 
   toggle = () => {
     this.props.onNotificationDialogToggle();
+  };
+
+  tabItemClick = (e) => {
+    let tab = e.target.getAttribute('value');
+    this.setState({
+      activeTab: tab,
+      currentPage: 1
+    }, () => {
+      this.getItems(this.state.currentPage);
+    });
   };
 
   toggleDropDownMenu = () => {
@@ -96,7 +183,7 @@ class UserNotificationsDialog extends React.Component {
       return;
     }
     if (this.notificationTableRef.offsetHeight + this.notificationTableRef.scrollTop + 1 >= this.tableRef.offsetHeight) {
-      this.getItems(this.state.currentPage + 1);
+      this.getItems(this.state.currentPage + 1, true);
     }
   };
 
@@ -127,6 +214,49 @@ class UserNotificationsDialog extends React.Component {
           </span>
         </button>
       </div>
+    );
+  };
+
+
+  renderNoticeContent = (content) => {
+    let activeTab = this.state.activeTab;
+    return (
+      <Fragment>
+        <div className="notice-dialog-side">
+          <Nav pills>
+            <NavItem role="tab" aria-selected={activeTab === 'general'} aria-controls="general-notice-panel">
+              <NavLink className={activeTab === 'general' ? 'active' : ''} onClick={this.tabItemClick} tabIndex="0" value="general">
+                {gettext('General')}
+              </NavLink>
+            </NavItem>
+            <NavItem role="tab" aria-selected={activeTab === 'discussion'} aria-controls="discussion-notice-panel">
+              <NavLink className={activeTab === 'discussion' ? 'active' : ''} onClick={this.tabItemClick} tabIndex="1" value="discussion">
+                {gettext('Discussion')}
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        <div className="notice-dialog-main">
+          <TabContent activeTab={this.state.activeTab}>
+            {activeTab === 'general' &&
+              <TabPane tabId="general" role="tabpanel" id="general-notice-panel">
+                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref}
+                  onScroll={this.onHandleScroll}>
+                  {content}
+                </div>
+              </TabPane>
+            }
+            {activeTab === 'discussion' &&
+              <TabPane tabId="discussion" role="tabpanel" id="discussion-notice-panel">
+                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref}
+                  onScroll={this.onHandleScroll}>
+                  {content}
+                </div>
+              </TabPane>
+            }
+          </TabContent>
+        </div>
+      </Fragment>
     );
   };
 
@@ -173,9 +303,7 @@ class UserNotificationsDialog extends React.Component {
         zIndex={1046}>
         <ModalHeader close={this.renderHeaderRowBtn()} toggle={this.toggle}>{gettext('Notifications')}</ModalHeader>
         <ModalBody className="notification-modal-body">
-          <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref} onScroll={this.onHandleScroll}>
-            {content}
-          </div>
+          {this.renderNoticeContent(content)}
         </ModalBody>
       </Modal>
     );
@@ -184,6 +312,7 @@ class UserNotificationsDialog extends React.Component {
 
 UserNotificationsDialog.propTypes = {
   onNotificationDialogToggle: PropTypes.func.isRequired,
+  tabItemClick: PropTypes.func.isRequired,
 };
 
 export default UserNotificationsDialog;
