@@ -1,16 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  TabPane,
-  Nav, NavItem, NavLink, TabContent
-} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, TabPane, Nav, NavItem, NavLink, TabContent } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -311,8 +301,7 @@ class UserNotificationsDialog extends React.Component {
 }
 
 UserNotificationsDialog.propTypes = {
-  onNotificationDialogToggle: PropTypes.func.isRequired,
-  tabItemClick: PropTypes.func.isRequired,
+  onNotificationDialogToggle: PropTypes.func.isRequired
 };
 
 export default UserNotificationsDialog;

@@ -270,8 +270,8 @@ class SeadocNotificationManager(models.Manager):
     def delete_by_ids(self, doc_uuid, username, ids):
         return self.filter(doc_uuid=doc_uuid, username=username, id__in=ids).delete()
     
-    def list_all_by_user(self, username, start, end):
-        return self.filter(username=username).order_by('-created_at')[start: end]
+    def list_all_by_user(self, username):
+        return self.filter(username=username).order_by('-created_at')
     
     def remove_user_notifications(self, username):
         """"Remove all user notifications."""
