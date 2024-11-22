@@ -3,8 +3,17 @@ import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
+import { generateOptionID, getColumnOptions } from '../../../utils/column';
 
 import './options-footer.css';
+
+const OPTION_KEY = {
+  'borderColor': true,
+  'color': true,
+  'id': true,
+  'name': true,
+  'textColor': true
+};
 
 export default class OptionFooter extends React.Component {
 
@@ -16,17 +25,28 @@ export default class OptionFooter extends React.Component {
 
   getValidOptions = (importedOptions) => {
     const { column } = this.props;
-    const options = column?.data?.options || [];
-    let validOptions = [];
+    const options = getColumnOptions(column);
+    let validOptions = [...options];
     let optionIdMap = {};
-    options.forEach(option => optionIdMap[option.id] = true);
+    let optionNameMap = {};
+    options.forEach(option => {
+      optionIdMap[option.id] = true;
+      optionNameMap[option.name] = true;
+    });
     for (let i = 0; i < importedOptions.length; i++) {
-      if (!importedOptions[i] || typeof importedOptions[i] !== 'object') {
-        continue;
-      }
-      if (importedOptions[i].name && importedOptions[i].color && importedOptions[i].id && !optionIdMap[importedOptions[i].id]) {
-        validOptions.push(importedOptions[i]);
-        optionIdMap[importedOptions[i].id] = true;
+      let importedOption = importedOptions[i];
+      if (!importedOption || typeof importedOption !== 'object') continue;
+      if (importedOption.name && importedOption.color && importedOption.id) {
+        if (optionNameMap[importedOption.name]) continue;
+        if (optionIdMap[importedOption.id]) {
+          importedOption.id = generateOptionID(validOptions);
+        }
+        optionIdMap[importedOption.id] = true;
+        optionNameMap[importedOption.name] = true;
+        Object.keys(importedOption).forEach(key => {
+          if (!OPTION_KEY[key]) delete importedOption[key];
+        });
+        validOptions.push(importedOption);
       }
     }
     return validOptions;
@@ -60,14 +80,13 @@ export default class OptionFooter extends React.Component {
       toaster.danger(gettext('The imported options are invalid'));
       return;
     }
-    let validOptions = this.getValidOptions(options);
-    if (validOptions.length === 0) {
-      toaster.warning(gettext('The imported option already exists'));
+    const { column } = this.props;
+    const oldOptions = getColumnOptions(column);
+    const validOptions = this.getValidOptions(options);
+    if (validOptions.length === oldOptions.length) {
+      toaster.warning(gettext('The imported options already exists'));
       return;
     }
-    const { column } = this.props;
-    const oldOptions = column?.data?.options || [];
-    validOptions = [...oldOptions, ...validOptions];
     this.props.onImportOptions(validOptions);
     this.importOptionsInput.value = null;
     toaster.success(gettext('Options imported'));

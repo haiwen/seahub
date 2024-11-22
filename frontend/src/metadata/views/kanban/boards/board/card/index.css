@@ -12,6 +12,10 @@
   user-select: none;
 }
 
+.smooth-dnd-container.vertical .sf-metadata-kanban-card:last-child {
+  margin-bottom: 0;
+}
+
 .sf-metadata-kanban-card.selected {
   border-color: #ff9800;
 }

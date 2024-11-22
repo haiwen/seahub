@@ -11,26 +11,26 @@ function getEventTransfer(event) {
 
   // paste sf-metadata
   if (dtableFragment) {
-    return { [TRANSFER_TYPES.DTABLE_FRAGMENT]: JSON.parse(dtableFragment), type: TRANSFER_TYPES.DTABLE_FRAGMENT };
+    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: JSON.parse(dtableFragment), type: TRANSFER_TYPES.METADATA_FRAGMENT };
   }
 
   // paste html
   if (html) {
     let copiedTableNode = (new DOMParser()).parseFromString(html, HTML).querySelector('table');
     if (copiedTableNode) {
-      return { [TRANSFER_TYPES.DTABLE_FRAGMENT]: html2TableFragment(copiedTableNode), html, text, type: 'html' };
+      return { [TRANSFER_TYPES.METADATA_FRAGMENT]: html2TableFragment(copiedTableNode), html, text, type: 'html' };
     }
-    return { [TRANSFER_TYPES.DTABLE_FRAGMENT]: text2TableFragment(text), html, text, type: 'html' };
+    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: text2TableFragment(text), html, text, type: 'html' };
   }
 
   // paste local picture or other files here
   if (files && files.length) {
-    return { [TRANSFER_TYPES.DTABLE_FRAGMENT]: text2TableFragment(text), 'files': files, type: 'files' };
+    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: text2TableFragment(text), 'files': files, type: 'files' };
   }
 
   // paste text
   if (text) {
-    return { [TRANSFER_TYPES.DTABLE_FRAGMENT]: text2TableFragment(text), text, type: 'text' };
+    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: text2TableFragment(text), text, type: 'text' };
   }
 }
 

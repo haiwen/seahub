@@ -18,4 +18,5 @@
 
 .sf-metadata-view-kanban-boards.readonly .sf-metadata-view-kanban-board:last-child {
   margin-right: 0;
+  padding-right: 16px;
 }

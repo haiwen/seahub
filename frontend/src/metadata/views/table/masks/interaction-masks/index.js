@@ -602,10 +602,10 @@ class InteractionMasks extends React.Component {
     }
 
     const cliperDataType = cliperData.type;
-    const copied = cliperData[TRANSFER_TYPES.DTABLE_FRAGMENT];
+    const copied = cliperData[TRANSFER_TYPES.METADATA_FRAGMENT];
     let copiedRecordsCount = 0;
     let copiedColumnsCount = 0;
-    if (cliperDataType === TRANSFER_TYPES.DTABLE_FRAGMENT) {
+    if (cliperDataType === TRANSFER_TYPES.METADATA_FRAGMENT) {
       const { selectedRecordIds, copiedRange } = copied;
       if (Array.isArray(selectedRecordIds) && selectedRecordIds.length > 0) {
         // copy from selected records
@@ -652,7 +652,7 @@ class InteractionMasks extends React.Component {
     toaster.success(
       copiedRowsCount > 1 ? gettext('xxx rows are copied.').replace('xxx', copiedRowsCount) : gettext('1 row is copied.')
     );
-    const type = TRANSFER_TYPES.DTABLE_FRAGMENT;
+    const type = TRANSFER_TYPES.METADATA_FRAGMENT;
     const copied = { selectedRecordIds };
     const { copiedRecords, copiedColumns } = getCopiedRecordsAndColumnsFromRange({ type, copied, isGroupView });
     const { _id: copiedTableId } = table;
@@ -679,7 +679,7 @@ class InteractionMasks extends React.Component {
       return; // can not copy when no cell select
     }
     const { topLeft, bottomRight } = selectedRange;
-    const type = TRANSFER_TYPES.DTABLE_FRAGMENT;
+    const type = TRANSFER_TYPES.METADATA_FRAGMENT;
     const copiedCellsCount = (bottomRight.rowIdx - topLeft.rowIdx + 1) * (bottomRight.idx - topLeft.idx + 1);
     toaster.success(
       copiedCellsCount > 1 ? gettext('xxx cells copied').replace('xxx', copiedCellsCount) : gettext('1 cell copied')

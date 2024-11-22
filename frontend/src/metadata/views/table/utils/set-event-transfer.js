@@ -10,7 +10,7 @@ function setEventTransfer({
   recordGetterById, isGroupView, recordGetterByIndex, event = {},
 }) {
   const transfer = event.dataTransfer || event.clipboardData;
-  if (type === TRANSFER_TYPES.DTABLE_FRAGMENT) {
+  if (type === TRANSFER_TYPES.METADATA_FRAGMENT) {
     const copiedText = Array.isArray(selectedRecordIds) && selectedRecordIds.length > 0 ?
       getCopiedTextFormSelectedRecordIds(selectedRecordIds, tableData, recordGetterById) :
       getCopiedTextFromSelectedCells(copiedRange, tableData, isGroupView, recordGetterByIndex);

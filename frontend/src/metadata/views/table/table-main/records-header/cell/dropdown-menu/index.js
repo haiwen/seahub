@@ -1,4 +1,4 @@
-import React, { createRef, useState, useCallback, useMemo } from 'react';
+import React, { createRef, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem as DefaultDropdownItem } from 'reactstrap';
 import classnames from 'classnames';
@@ -13,7 +13,7 @@ import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_
 
 import './index.css';
 
-const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, deleteColumn }) => {
+const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColumnData, deleteColumn }, ref) => {
   const menuRef = createRef();
   const dropdownDomRef = createRef();
   const [isMenuShow, setMenuShow] = useState(false);
@@ -185,6 +185,12 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
     eventBus.dispatch(EVENT_BUS_TYPE.DISPLAY_SORTS);
   }, [view, column]);
 
+  useImperativeHandle(ref, () => ({
+    isPopoverShow: () => {
+      return isRenamePopoverShow || isOptionPopoverShow;
+    },
+  }), [isRenamePopoverShow, isOptionPopoverShow]);
+
   const renderDropdownMenu = useCallback(() => {
     const { type } = column;
     const canModifyColumnData = window.sfMetadataContext.canModifyColumnData(column);
@@ -328,7 +334,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
       )}
     </>
   );
-};
+});
 
 HeaderDropdownMenu.propTypes = {
   column: PropTypes.object,

@@ -1,14 +1,16 @@
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
+  getOption, checkIsPredefinedOption, getColumnOptionNameById,
 } from '../../../utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
 import { isNumber } from '../../../utils/number';
 import { formatTextToDate } from '../../../utils/date';
-import { CellType, DEFAULT_DATE_FORMAT, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY, PREDEFINED_FILE_STATUS_OPTION_KEYS } from '../../../constants';
+import { CellType, DEFAULT_DATE_FORMAT } from '../../../constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
-  [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER],
+  [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER, CellType.RATE],
 };
 
 const reg_chinese_date_format = /(\d{4})年(\d{1,2})月(\d{1,2})日$/;
@@ -37,15 +39,9 @@ function convert2Checkbox(cellValue, oldCellValue, fromColumnType) {
 }
 
 function convert2Number(cellValue, oldCellValue, fromColumnType, targetColumnData) {
-  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.NUMBER].includes(fromColumnType)) {
-    return oldCellValue;
-  }
-  if (cellValue === 0) {
-    return cellValue;
-  }
-  if (!cellValue) {
-    return null;
-  }
+  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.NUMBER].includes(fromColumnType)) return oldCellValue;
+  if (cellValue === 0) return cellValue;
+  if (!cellValue) return null;
 
   switch (fromColumnType) {
     case CellType.NUMBER:
@@ -93,11 +89,12 @@ function convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, t
   }
 }
 
-function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn) {
-  if (!cellValue) {
-    return oldCellValue;
-  }
-  const { type: fromColumnType } = fromColumn;
+function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api) {
+  if (!cellValue) return null;
+  const { type: fromColumnType, key: fromColumnKey } = fromColumn;
+  const { key: targetColumnKey } = targetColumn;
+  if (fromColumnKey === targetColumnKey) return cellValue;
+
   let fromOptionName;
   switch (fromColumnType) {
     case CellType.SINGLE_SELECT: {
@@ -119,15 +116,17 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
       break;
     }
   }
-  if (!fromOptionName) {
-    return oldCellValue;
-  }
-
+  if (!fromOptionName) return oldCellValue;
   const currentOptions = getColumnOptions(targetColumn);
+  const option = getOption(currentOptions, fromOptionName);
+  if (option) {
+    if (checkIsPredefinedOption(option)) return option.id;
+    return option.name;
+  }
   const newOption = generatorCellOption(currentOptions, fromOptionName);
-  if (!PREDEFINED_COLUMN_KEYS.includes(targetColumn.key)) return newOption.name;
-  if (PRIVATE_COLUMN_KEY.FILE_STATUS === targetColumn.key) return PREDEFINED_FILE_STATUS_OPTION_KEYS.includes(newOption.id) ? newOption.id : newOption.name;
-  return newOption.id;
+  api.modifyColumnData(targetColumnKey, { options: [...currentOptions, newOption] }, targetColumn.data, { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION });
+  if (checkIsPredefinedOption(newOption)) return newOption.id;
+  return newOption.name;
 }
 
 function convert2LongText(cellValue, oldCellValue, fromColumn) {
@@ -274,13 +273,11 @@ const convert2Rate = (cellValue, oldCellValue, fromColumn, targetColumn) => {
 };
 
 const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn) => {
-  const { type: copiedColumnType } = copiedColumn;
-  if (!copiedCellVal ||
-    (Array.isArray(copiedCellVal) && copiedCellVal.length === 0) ||
-    !SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)
-  ) {
-    return { selectedOptionIds: pasteCellVal };
-  }
+  const { type: copiedColumnType, key: copiedColumnKey } = copiedColumn;
+  const { key: pasteColumnKey } = pasteColumn;
+  if (!copiedCellVal || (Array.isArray(copiedCellVal) && copiedCellVal.length === 0)) return { selectedOptionIds: [] };
+  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)) return { selectedOptionIds: pasteCellVal };
+  if (pasteColumnKey === copiedColumnKey) return { selectedOptionIds: copiedCellVal };
   let copiedOptionNames = [];
   if (copiedColumnType === CellType.MULTIPLE_SELECT) {
     const copiedOptions = getColumnOptions(copiedColumn);
@@ -299,10 +296,10 @@ const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, past
     copiedOptionNames = copiedOptionNames.map(name => name.trim())
       .filter(name => name !== '');
   } else if (copiedColumnType === CellType.SINGLE_SELECT) {
-    const copiedOptions = getColumnOptions(copiedColumn);
-    copiedOptionNames = copiedOptions.filter((option) => option.id === copiedCellVal)
-      .map((option) => option.name);
+    const copiedOptionName = getColumnOptionNameById(copiedColumn, copiedCellVal);
+    copiedOptionNames = copiedOptionName ? [copiedOptionName] : [];
   }
+
   if (copiedOptionNames.length === 0) {
     return { selectedOptionIds: pasteCellVal };
   }
@@ -317,14 +314,14 @@ const convert2MultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, paste
   let newColumn = pasteColumn;
 
   // the target column have no options with the same name
-  if (newCellOptions) {
+  if (newCellOptions && newCellOptions.length > 0) {
     if (!window.sfMetadataContext.canModifyColumnData(pasteColumn)) return null;
     const updatedPasteOptions = [...pasteOptions, ...newCellOptions];
     if (!newColumn.data) {
       newColumn.data = {};
     }
     newColumn.data.options = updatedPasteOptions;
-    api.modifyColumnData(pasteColumn.key, { options: updatedPasteOptions }, pasteColumn.data);
+    api.modifyColumnData(pasteColumn.key, { options: updatedPasteOptions }, pasteColumn.data, { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION });
   }
   return getColumnOptionNamesByIds(newColumn, selectedOptionIds);
 };
@@ -343,7 +340,7 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
       return convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, targetColumnData);
     }
     case CellType.SINGLE_SELECT: {
-      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn);
+      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api);
     }
     case CellType.MULTIPLE_SELECT: {
       return convert2MultipleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api);
