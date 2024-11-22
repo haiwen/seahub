@@ -1,6 +1,6 @@
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
-  getOption, checkIsPredefinedOption,
+  getOption, checkIsPredefinedOption, getColumnOptionNameById,
 } from '../../../utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
 import { isNumber } from '../../../utils/number';
@@ -10,7 +10,7 @@ import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
-  [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER],
+  [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER, CellType.RATE],
 };
 
 const reg_chinese_date_format = /(\d{4})年(\d{1,2})月(\d{1,2})日$/;
@@ -39,15 +39,9 @@ function convert2Checkbox(cellValue, oldCellValue, fromColumnType) {
 }
 
 function convert2Number(cellValue, oldCellValue, fromColumnType, targetColumnData) {
-  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.NUMBER].includes(fromColumnType)) {
-    return oldCellValue;
-  }
-  if (cellValue === 0) {
-    return cellValue;
-  }
-  if (!cellValue) {
-    return null;
-  }
+  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.NUMBER].includes(fromColumnType)) return oldCellValue;
+  if (cellValue === 0) return cellValue;
+  if (!cellValue) return null;
 
   switch (fromColumnType) {
     case CellType.NUMBER:
@@ -279,13 +273,11 @@ const convert2Rate = (cellValue, oldCellValue, fromColumn, targetColumn) => {
 };
 
 const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn) => {
-  const { type: copiedColumnType } = copiedColumn;
-  if (!copiedCellVal ||
-    (Array.isArray(copiedCellVal) && copiedCellVal.length === 0) ||
-    !SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)
-  ) {
-    return { selectedOptionIds: pasteCellVal };
-  }
+  const { type: copiedColumnType, key: copiedColumnKey } = copiedColumn;
+  const { key: pasteColumnKey } = pasteColumn;
+  if (!copiedCellVal || (Array.isArray(copiedCellVal) && copiedCellVal.length === 0)) return { selectedOptionIds: [] };
+  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)) return { selectedOptionIds: pasteCellVal };
+  if (pasteColumnKey === copiedColumnKey) return { selectedOptionIds: copiedCellVal };
   let copiedOptionNames = [];
   if (copiedColumnType === CellType.MULTIPLE_SELECT) {
     const copiedOptions = getColumnOptions(copiedColumn);
@@ -304,10 +296,10 @@ const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, past
     copiedOptionNames = copiedOptionNames.map(name => name.trim())
       .filter(name => name !== '');
   } else if (copiedColumnType === CellType.SINGLE_SELECT) {
-    const copiedOptions = getColumnOptions(copiedColumn);
-    copiedOptionNames = copiedOptions.filter((option) => option.id === copiedCellVal)
-      .map((option) => option.name);
+    const copiedOptionName = getColumnOptionNameById(copiedColumn, copiedCellVal);
+    copiedOptionNames = copiedOptionName ? [copiedOptionName] : [];
   }
+
   if (copiedOptionNames.length === 0) {
     return { selectedOptionIds: pasteCellVal };
   }
@@ -322,14 +314,14 @@ const convert2MultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, paste
   let newColumn = pasteColumn;
 
   // the target column have no options with the same name
-  if (newCellOptions) {
+  if (newCellOptions && newCellOptions.length > 0) {
     if (!window.sfMetadataContext.canModifyColumnData(pasteColumn)) return null;
     const updatedPasteOptions = [...pasteOptions, ...newCellOptions];
     if (!newColumn.data) {
       newColumn.data = {};
     }
     newColumn.data.options = updatedPasteOptions;
-    api.modifyColumnData(pasteColumn.key, { options: updatedPasteOptions }, pasteColumn.data);
+    api.modifyColumnData(pasteColumn.key, { options: updatedPasteOptions }, pasteColumn.data, { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION });
   }
   return getColumnOptionNamesByIds(newColumn, selectedOptionIds);
 };
