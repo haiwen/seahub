@@ -10,15 +10,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px;
   height: 28px;
   width: 100%;
   border-radius: 3px;
-  border: 1px solid rgba(69, 170, 242, 0);
-}
-
-.file-details-collapse .file-details-collapse-header:hover {
-  background-color: #F0F0F0;
 }
 
 .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title {
@@ -48,8 +42,4 @@
 
 .file-details-collapse .file-details-collapse-header .sf3-font-down {
   color: #666666;
-}
-
-.file-details-collapse .file-details-collapse-body {
-  padding: 0 4px;
 }
