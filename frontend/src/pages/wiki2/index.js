@@ -14,6 +14,7 @@ import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
 import { DEFAULT_PAGE_NAME } from './constant';
 import { eventBus } from '../../components/common/event-bus';
+import { throttle } from './utils';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -117,21 +118,28 @@ class Wiki extends Component {
     this.setState({ config: new WikiConfig(wikiConfig || {}) });
   };
 
-  saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
+  updatePageNameToServer = throttle((wikiConfig) => {
     wikiAPI.updateWiki2Config(wikiId, JSON.stringify(wikiConfig)).then(res => {
-      this.setState({
-        config: new WikiConfig(wikiConfig),
-        isUpdateBySide,
-      });
-      if (isUpdateBySide) {
-        setTimeout(() => {
-          this.setState({ isUpdateBySide: false });
-        }, 300);
-      }
+      // nothing todo
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
+  }, 1000);
+
+  saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
+    this.setState({
+      config: new WikiConfig(wikiConfig),
+      isUpdateBySide,
+    }, () => {
+      this.updatePageNameToServer(wikiConfig);
+    });
+
+    if (isUpdateBySide) {
+      setTimeout(() => {
+        this.setState({ isUpdateBySide: false });
+      }, 300);
+    }
   };
 
   getFirstPageId = (config) => {
