@@ -1,10 +1,12 @@
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
+  getOption, checkIsPredefinedOption,
 } from '../../../utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
 import { isNumber } from '../../../utils/number';
 import { formatTextToDate } from '../../../utils/date';
-import { CellType, DEFAULT_DATE_FORMAT, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY, PREDEFINED_FILE_STATUS_OPTION_KEYS } from '../../../constants';
+import { CellType, DEFAULT_DATE_FORMAT } from '../../../constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
@@ -93,11 +95,12 @@ function convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, t
   }
 }
 
-function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn) {
-  if (!cellValue) {
-    return oldCellValue;
-  }
-  const { type: fromColumnType } = fromColumn;
+function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api) {
+  if (!cellValue) return null;
+  const { type: fromColumnType, key: fromColumnKey } = fromColumn;
+  const { key: targetColumnKey } = targetColumn;
+  if (fromColumnKey === targetColumnKey) return cellValue;
+
   let fromOptionName;
   switch (fromColumnType) {
     case CellType.SINGLE_SELECT: {
@@ -119,15 +122,17 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
       break;
     }
   }
-  if (!fromOptionName) {
-    return oldCellValue;
-  }
-
+  if (!fromOptionName) return oldCellValue;
   const currentOptions = getColumnOptions(targetColumn);
+  const option = getOption(currentOptions, fromOptionName);
+  if (option) {
+    if (checkIsPredefinedOption(option)) return option.id;
+    return option.name;
+  }
   const newOption = generatorCellOption(currentOptions, fromOptionName);
-  if (!PREDEFINED_COLUMN_KEYS.includes(targetColumn.key)) return newOption.name;
-  if (PRIVATE_COLUMN_KEY.FILE_STATUS === targetColumn.key) return PREDEFINED_FILE_STATUS_OPTION_KEYS.includes(newOption.id) ? newOption.id : newOption.name;
-  return newOption.id;
+  api.modifyColumnData(targetColumnKey, { options: [...currentOptions, newOption] }, targetColumn.data, { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION });
+  if (checkIsPredefinedOption(newOption)) return newOption.id;
+  return newOption.name;
 }
 
 function convert2LongText(cellValue, oldCellValue, fromColumn) {
@@ -343,7 +348,7 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
       return convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, targetColumnData);
     }
     case CellType.SINGLE_SELECT: {
-      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn);
+      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api);
     }
     case CellType.MULTIPLE_SELECT: {
       return convert2MultipleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api);

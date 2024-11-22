@@ -23,7 +23,7 @@ class GridUtils {
 
   getCopiedContent({ type, copied, isGroupView, columns }) {
     // copy from internal grid
-    if (type === TRANSFER_TYPES.DTABLE_FRAGMENT) {
+    if (type === TRANSFER_TYPES.METADATA_FRAGMENT) {
       const { selectedRecordIds, copiedRange } = copied;
 
       // copy from selected rows

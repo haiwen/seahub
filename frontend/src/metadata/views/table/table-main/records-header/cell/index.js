@@ -34,6 +34,7 @@ const Cell = ({
   updateDragOverKey,
 }) => {
   const headerCellRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const canEditColumnInfo = useMemo(() => {
     if (isHideTriangle) return false;
@@ -82,11 +83,12 @@ const Cell = ({
   }, []);
 
   const onDragStart = useCallback((event) => {
+    if (dropdownRef.current && dropdownRef.current.isPopoverShow()) return false;
     const dragData = JSON.stringify({ type: 'sf-metadata-view-header-order', column_key: column.key, column });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/drag-sf-metadata-view-header-order', dragData);
     updateDraggingKey(column.key);
-  }, [column, updateDraggingKey]);
+  }, [column, dropdownRef, updateDraggingKey]);
 
   const onDragEnter = useCallback(() => {
     if (!draggingColumnKey) return;
@@ -121,13 +123,15 @@ const Cell = ({
   }, [column, frozenColumnsWidth, updateDragOverKey, draggingColumnKey]);
 
   const onDrop = useCallback((event) => {
-    event.stopPropagation();
-    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view-header-order');
-    if (!dragData) return false;
-    dragData = JSON.parse(dragData);
-    if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
-    if (dragData.column_key !== column.key && dragData.column.frozen === column.frozen) {
-      onMove && onMove({ key: dragData.column_key }, { key: column.key });
+    if (!dropdownRef.current || !dropdownRef.current.isPopoverShow()) {
+      event.stopPropagation();
+      let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view-header-order');
+      if (!dragData) return false;
+      dragData = JSON.parse(dragData);
+      if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
+      if (dragData.column_key !== column.key && dragData.column.frozen === column.frozen) {
+        onMove && onMove({ key: dragData.column_key }, { key: column.key });
+      }
     }
   }, [column, onMove]);
 
@@ -163,6 +167,7 @@ const Cell = ({
       </div>
       {canEditColumnInfo && (
         <DropdownMenu
+          ref={dropdownRef}
           column={column}
           view={view}
           renameColumn={renameColumn}

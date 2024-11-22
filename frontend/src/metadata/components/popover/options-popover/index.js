@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../../components/toast';
 import ConfirmDeletePopover from './confirm-delete-popover';
@@ -35,6 +36,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       return lowercaseName.includes(validSearchValue);
     });
   }, [options, searchValue]);
+
+  const createOptionEnabled = useMemo(() => {
+    if (!searchValue) return true;
+    return displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
+  }, [displayOptions, searchValue]);
 
   const onChange = useCallback((options, optionModifyType) => {
     if (optionModifyType !== COLUMN_DATA_OPERATION_TYPE.INIT_NEW_OPTION) {
@@ -205,12 +211,14 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             viewingOptionId={viewingOptionId}
             inputRef={ref}
           />
-          <CustomizeAddTool
-            className="sf-metadata-add-option"
-            callBack={onAdd}
-            footerName={gettext('Add option')}
-            addIconClassName="sf-metadata-add-option-icon"
-          />
+          {createOptionEnabled && (
+            <CustomizeAddTool
+              className="sf-metadata-add-option"
+              callBack={onAdd}
+              footerName={gettext('Add option')}
+              addIconClassName="sf-metadata-add-option-icon"
+            />
+          )}
           <OptionFooter column={column} onToggle={onToggle} onImportOptions={onImportOptions}/>
         </div>
       </CustomizePopover>
@@ -224,6 +232,13 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       )}
     </>
   );
+};
+
+OptionsPopover.propTypes = {
+  target: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  column: PropTypes.object.isRequired,
+  onToggle: PropTypes.func,
+  onSubmit: PropTypes.func
 };
 
 export default OptionsPopover;
