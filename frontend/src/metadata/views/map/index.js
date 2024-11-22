@@ -7,7 +7,7 @@ import { isValidPosition } from '../../utils/validate';
 import { appAvatarURL, baiduMapKey, gettext, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
-import { geRecordIdFromRecord, getFileNameFromRecord, getImageLocationFromRecord, getParentDirFromRecord,
+import { getRecordIdFromRecord, getFileNameFromRecord, getImageLocationFromRecord, getParentDirFromRecord,
   getFileTypeFromRecord
 } from '../../utils/cell';
 import { Utils } from '../../../utils/utils';
@@ -39,7 +39,7 @@ const Map = () => {
       .map(record => {
         const recordType = getFileTypeFromRecord(record);
         if (recordType !== PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE) return null;
-        const id = geRecordIdFromRecord(record);
+        const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));

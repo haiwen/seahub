@@ -8,7 +8,7 @@ import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
-  geRecordIdFromRecord,
+  getRecordIdFromRecord,
 } from '../../../utils/cell';
 
 import './index.css';
@@ -251,7 +251,7 @@ const ContextMenu = (props) => {
       return;
     }
 
-    const recordIds = records.map(record => geRecordIdFromRecord(record));
+    const recordIds = records.map(record => getRecordIdFromRecord(record));
     window.sfMetadataContext.extractFileDetails(recordObjIds).then(res => {
       const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
 

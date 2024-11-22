@@ -1,23 +1,16 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from 'react';
 import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../constants';
+import { useMetadataStatus } from '../../hooks';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, selectMetadataView, children }) => {
-  const enableMetadataManagement = useMemo(() => {
-    if (currentRepoInfo.encrypted) return false;
-    return window.app.pageOptions.enableMetadataManagement;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
-  const isEmptyRepo = useMemo(() => currentRepoInfo.file_count === 0, [currentRepoInfo]);
-
-  const [enableMetadata, setEnableExtendedProperties] = useState(false);
+export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMetadataView, children }) => {
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
@@ -25,47 +18,9 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
   const [, setCount] = useState(0);
   const viewsMap = useRef({});
 
-  const cancelURLView = useCallback(() => {
-    // If attribute extension is turned off, unmark the URL
-    const { origin, pathname, search } = window.location;
-    const urlParams = new URLSearchParams(search);
-    const viewID = urlParams.get('view');
-    if (viewID) {
-      const url = `${origin}${pathname}`;
-      window.history.pushState({ url: url, path: '' }, '', url);
-    }
-  }, []);
+  const isEmptyRepo = useMemo(() => repoInfo.file_count === 0, [repoInfo]);
 
-  useEffect(() => {
-    if (!enableMetadataManagement) {
-      cancelURLView();
-      return;
-    }
-    metadataAPI.getMetadataStatus(repoID).then(res => {
-      const enableMetadata = res.data.enabled;
-      if (!enableMetadata) {
-        cancelURLView();
-      }
-      setEnableExtendedProperties(enableMetadata);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error, true);
-      toaster.danger(errorMsg);
-      setEnableExtendedProperties(false);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadataManagement]);
-
-  const updateEnableMetadata = useCallback((newValue) => {
-    if (newValue === enableMetadata) return;
-    if (!newValue) {
-      hideMetadataView && hideMetadataView();
-      cancelURLView();
-      setEnableFaceRecognition(false);
-    } else {
-      setShowFirstView(true);
-    }
-    setEnableExtendedProperties(newValue);
-  }, [enableMetadata, hideMetadataView, cancelURLView]);
+  const { enableMetadata } = useMetadataStatus();
 
   const updateEnableFaceRecognition = useCallback((newValue) => {
     if (newValue === enableFaceRecognition) return;
@@ -97,11 +52,13 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
       });
       return;
     }
-
+    hideMetadataView && hideMetadataView();
+    setEnableFaceRecognition(false);
     viewsMap.current = {};
+    setStaticView([]);
     setNavigation([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadata]);
+  }, [repoID, enableMetadata, hideMetadataView]);
 
   useEffect(() => {
     if (!enableMetadata) {
@@ -217,8 +174,6 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
   return (
     <MetadataContext.Provider value={{
       isEmptyRepo,
-      enableMetadata,
-      updateEnableMetadata,
       enableFaceRecognition,
       updateEnableFaceRecognition,
       showFirstView,

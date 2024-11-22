@@ -16,7 +16,9 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
     return moreOperations.filter(operation => operation.key && operation.value);
   }, [moreOperations]);
 
-  const toggleShowChildren = useCallback(() => {
+  const toggleShowChildren = useCallback((event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
     setShowChildren(!showChildren);
   }, [showChildren]);
 

@@ -212,9 +212,6 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
     WikiSearch, WikiConvertView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
-from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
-    MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
-    FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 
@@ -1048,21 +1045,9 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
     ]
 
-if settings.ENABLE_METADATA_MANAGEMENT:
+if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
     urlpatterns += [
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/record/$', MetadataRecordInfo.as_view(), name='api-v2.1-metadata-record-info'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/columns/$', MetadataColumns.as_view(), name='api-v2.1-metadata-columns'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/$', MetadataViews.as_view(), name='api-v2.1-metadata-views'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/(?P<view_id>[-0-9a-zA-Z]{4})/$', MetadataViewsDetailView.as_view(), name='api-v2.1-metadata-views-detail'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-record/$', FacesRecord.as_view(), name='api-v2.1-metadata-face-record'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/', include('seahub.repo_metadata.urls')),
     ]
 
 # ai API

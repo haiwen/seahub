@@ -173,6 +173,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_SETTINGS: {
+        const { repo_id, view_id, settings } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { settings }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to modify settings') });
+        });
+        break;
+      }
 
       // face table op
       case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
@@ -185,15 +194,27 @@ class ServerOperator {
         break;
       }
 
-      case OPERATION_TYPE.MODIFY_SETTINGS: {
-        const { repo_id, view_id, settings } = operation;
-        window.sfMetadataContext.modifyView(repo_id, view_id, { settings }).then(res => {
+      // tags
+      case OPERATION_TYPE.ADD_FILE_TAGS: {
+        const { record_id, tag_ids } = operation;
+        window.sfMetadataContext.addFileTags(record_id, tag_ids).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: gettext('Failed to modify settings') });
+          callback({ error: gettext('Failed to modify people name') });
         });
         break;
       }
+      case OPERATION_TYPE.UPDATE_FILE_TAGS: {
+        const { record_id, tag_ids } = operation;
+        window.sfMetadataContext.updateFileTags(record_id, tag_ids).then(res => {
+          callback({ operation });
+
+        }).catch(error => {
+          callback({ error: gettext('Failed to modify people name') });
+        });
+        break;
+      }
+
       default: {
         break;
       }

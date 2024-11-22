@@ -7,7 +7,7 @@ import { GROUP_VIEW_OFFSET } from '../../../constants';
 
 import './index.css';
 
-const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, modifyColumnData, ...props }) => {
+const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, insertColumn, modifyColumnData, ...props }) => {
 
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData });
@@ -39,6 +39,10 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
     modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste);
   }, [modifyRecords]);
 
+  const handelInsertColumn = useCallback((name, type, { key, data }) => {
+    insertColumn && insertColumn(name, type, { key, data });
+  }, [insertColumn]);
+
   const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView }) => {
     gridUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns });
   }, [gridUtils, columns]);
@@ -65,6 +69,7 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         modifyColumnData={modifyColumnData}
+        insertColumn={handelInsertColumn}
         {...props}
       />
     </div>

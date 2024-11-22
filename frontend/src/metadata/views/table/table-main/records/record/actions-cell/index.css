@@ -33,13 +33,3 @@
 .sf-metadata-result-table-row.row-selected .sf-metadata-result-column-content.row-index {
   display: none !important;
 }
-
-.sf-metadata-result-table-row .rdg-row-expand-icon:hover {
-  background: #c2f5e9;
-}
-
-.sf-metadata-result-table-row .rdg-row-expand-icon .sf-metadata-icon-open-record {
-  color: #467fcf !important;
-  fill: #467fcf !important;
-  transform: scale(0.8);
-}

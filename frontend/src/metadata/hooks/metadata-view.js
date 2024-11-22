@@ -18,6 +18,7 @@ export const MetadataViewProvider = ({
 }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
+  const [errorMessage, setErrorMessage] = useState(null);
   const storeRef = useRef(null);
   const { collaborators } = useCollaborators();
   const { isEmptyRepo, showFirstView, setShowFirstView } = useMetadata();
@@ -41,7 +42,8 @@ export const MetadataViewProvider = ({
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
+      setErrorMessage(errorMsg);
+      setLoading(false);
     });
   }, []);
 
@@ -131,6 +133,7 @@ export const MetadataViewProvider = ({
       value={{
         isLoading,
         showFirstView,
+        errorMessage,
         metadata,
         store: storeRef.current,
         isDirentDetailShow: params.isDirentDetailShow,

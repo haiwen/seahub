@@ -1,0 +1,24 @@
+.tag-tree-node .tag-tree-node-color {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  transform: translateY(2px);
+}
+
+.tag-tree-node .tag-tree-node-text {
+  display: flex;
+  align-items: center;
+}
+
+.tag-tree-node .tag-tree-node-text .tag-tree-node-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag-tree-node .tag-tree-node-text .tag-tree-node-count {
+  color: #666;
+  font-size: 14px;
+  margin-left: 8px;
+  margin-right: 8px;
+}

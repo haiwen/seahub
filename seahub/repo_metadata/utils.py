@@ -32,7 +32,7 @@ def add_init_face_recognition_task(params):
 
 
 def get_someone_similar_faces(faces, metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
     parameters = []
     query_result = []
@@ -82,30 +82,8 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 
-def get_sys_columns():
-    from seafevents.repo_metadata.utils import METADATA_TABLE
-    columns = [
-        METADATA_TABLE.columns.file_creator.to_dict(),
-        METADATA_TABLE.columns.file_ctime.to_dict(),
-        METADATA_TABLE.columns.file_modifier.to_dict(),
-        METADATA_TABLE.columns.file_mtime.to_dict(),
-        METADATA_TABLE.columns.parent_dir.to_dict(),
-        METADATA_TABLE.columns.file_name.to_dict(),
-        METADATA_TABLE.columns.is_dir.to_dict(),
-        METADATA_TABLE.columns.file_type.to_dict(),
-        METADATA_TABLE.columns.location.to_dict(),
-        METADATA_TABLE.columns.obj_id.to_dict(),
-        METADATA_TABLE.columns.size.to_dict(),
-        METADATA_TABLE.columns.suffix.to_dict(),
-        METADATA_TABLE.columns.file_details.to_dict(),
-        METADATA_TABLE.columns.description.to_dict(),
-    ]
-
-    return columns
-
-
-def get_link_column(face_table_id):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+def get_face_link_column(face_table_id):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     columns = [
         METADATA_TABLE.columns.face_vectors.to_dict(),
         METADATA_TABLE.columns.face_links.to_dict({
@@ -120,7 +98,7 @@ def get_link_column(face_table_id):
 
 
 def get_face_columns(face_table_id):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     columns = [
         FACES_TABLE.columns.photo_links.to_dict({
             'link_id': FACES_TABLE.link_id,
@@ -136,7 +114,7 @@ def get_face_columns(face_table_id):
 
 
 def get_unmodifiable_columns():
-    from seafevents.repo_metadata.utils import METADATA_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE
     columns = [
         METADATA_TABLE.columns.file_creator.to_dict(),
         METADATA_TABLE.columns.file_ctime.to_dict(),
@@ -157,25 +135,25 @@ def get_unmodifiable_columns():
 
 
 def init_metadata(metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, METADATA_TABLE_SYS_COLUMNS
 
     # delete base to prevent dirty data caused by last failure
     metadata_server_api.delete_base()
     metadata_server_api.create_base()
 
     # init sys column
-    sys_columns = get_sys_columns()
+    sys_columns = METADATA_TABLE_SYS_COLUMNS
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
 
 
 def init_faces(metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
     remove_faces_table(metadata_server_api)
     resp = metadata_server_api.create_table(FACES_TABLE.name)
 
     # init link column
-    link_column = get_link_column(resp['id'])
+    link_column = get_face_link_column(resp['id'])
     metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
 
     # init face column
@@ -184,7 +162,7 @@ def init_faces(metadata_server_api):
 
 
 def remove_faces_table(metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     metadata = metadata_server_api.get_metadata()
 
     tables = metadata.get('tables', [])
@@ -196,6 +174,69 @@ def remove_faces_table(metadata_server_api):
             for column in columns:
                 if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key]:
                     metadata_server_api.delete_column(table['id'], column['key'], True)
+
+
+def get_tag_link_column(table_id):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    columns = [
+        METADATA_TABLE.columns.tags.to_dict({
+            'link_id': TAGS_TABLE.link_id,
+            'table_id': METADATA_TABLE.id,
+            'other_table_id': table_id,
+            'display_column_key': TAGS_TABLE.columns.name.key,
+        }),
+    ]
+
+    return columns
+
+
+def get_tag_columns(table_id):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    columns = [
+        TAGS_TABLE.columns.name.to_dict(),
+        TAGS_TABLE.columns.color.to_dict(),
+        TAGS_TABLE.columns.file_links.to_dict({
+            'link_id': TAGS_TABLE.link_id,
+            'table_id': METADATA_TABLE.id,
+            'other_table_id': table_id,
+            'display_column_key': METADATA_TABLE.columns.id.key,
+        }),
+    ]
+
+    return columns
+
+
+def init_tags(metadata_server_api):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+
+    remove_tags_table(metadata_server_api)
+    resp = metadata_server_api.create_table(TAGS_TABLE.name)
+
+    table_id = resp['id']
+
+    # init link column
+    link_column = get_tag_link_column(table_id)
+    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
+
+    # init columns
+    tag_columns = get_tag_columns(table_id)
+    metadata_server_api.add_columns(table_id, tag_columns)
+
+
+
+def remove_tags_table(metadata_server_api):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    metadata = metadata_server_api.get_metadata()
+
+    tables = metadata.get('tables', [])
+    for table in tables:
+        if table['name'] == TAGS_TABLE.name:
+            metadata_server_api.delete_table(table['id'])
+        elif table['name'] == METADATA_TABLE.name:
+            columns = table.get('columns', [])
+            for column in columns:
+                if column['key'] in [METADATA_TABLE.columns.tags.key]:
+                    metadata_server_api.delete_column(table['id'], column['key'])
 
 
 def get_file_download_token(repo_id, file_id, username):

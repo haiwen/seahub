@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { UTC_FORMAT_DEFAULT } from '../../constants';
+import { UTC_FORMAT_DEFAULT, PRIVATE_COLUMN_KEY } from '../../constants';
 import { OPERATION_TYPE } from './constants';
-import Column from '../../model/metadata/column';
+import Column from '../../model/column';
 import View from '../../model/metadata/view';
 import { getColumnOriginName } from '../../utils/column';
-import { geRecordIdFromRecord } from '../../utils/cell';
+import { getRecordIdFromRecord } from '../../utils/cell';
 
 dayjs.extend(utc);
 
@@ -163,7 +163,7 @@ export default function apply(data, operation) {
         let id_row_map = {};
         data.rows.forEach(row => {
           delete row[columnOriginName];
-          const id = geRecordIdFromRecord(row);
+          const id = getRecordIdFromRecord(row);
           rows.push(row);
           id_row_map[id] = row;
         });
@@ -211,6 +211,12 @@ export default function apply(data, operation) {
       data.view = new View({ ...data.view, columns_keys: new_columns_keys }, data.columns);
       return data;
     }
+    case OPERATION_TYPE.MODIFY_SETTINGS: {
+      const { settings } = operation;
+      data.view.settings = settings;
+      return data;
+    }
+
     // face table op
     case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
       const { people_id, new_name } = operation;
@@ -249,11 +255,25 @@ export default function apply(data, operation) {
       data.recordsCount = updatedRows.length;
       return data;
     }
-    case OPERATION_TYPE.MODIFY_SETTINGS: {
-      const { settings } = operation;
-      data.view.settings = settings;
+
+    // tags
+    case OPERATION_TYPE.ADD_FILE_TAGS:
+    case OPERATION_TYPE.UPDATE_FILE_TAGS: {
+      const { record_id, tag_ids } = operation;
+      const { rows } = data;
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId } = row;
+        if (rowId === record_id) {
+          const updatedRow = Object.assign({}, row, { [PRIVATE_COLUMN_KEY.TAGS]: tag_ids ? tag_ids.map(item => ({ row_id: item })) : [] });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
+      });
+      data.rows = updatedRows;
       return data;
     }
+
     default: {
       return data;
     }

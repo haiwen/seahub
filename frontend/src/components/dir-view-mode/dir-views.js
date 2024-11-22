@@ -5,6 +5,7 @@ import TreeSection from '../tree-section';
 import { MetadataTreeView, useMetadata } from '../../metadata';
 import ExtensionPrompts from './extension-prompts';
 import LibSettingsDialog from '../dialog/lib-settings';
+import { useMetadataStatus } from '../../hooks';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -13,12 +14,14 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
-  const { enableMetadata, navigation } = useMetadata();
+  const { navigation } = useMetadata();
+  const { enableMetadata } = useMetadataStatus();
 
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const toggleSettingsDialog = () => {
     setSettingsDialogOpen(!isSettingsDialogOpen);
   };
+
   const onExtendedProperties = useCallback(() => {
     setSettingsDialogOpen(true);
   }, []);
@@ -27,9 +30,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
 
   return (
     <>
-      <TreeSection
-        title={gettext('Views')}
-      >
+      <TreeSection title={gettext('Views')}>
         {!enableMetadata ? (
           <ExtensionPrompts onExtendedProperties={onExtendedProperties} />
         ) : Array.isArray(navigation) && navigation.length > 0 ? (

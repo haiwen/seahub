@@ -11,6 +11,8 @@ const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.SINGLE_SELECT,
   CellType.MULTIPLE_SELECT,
   CellType.LONG_TEXT,
+  CellType.LINK,
+  CellType.TAGS,
 ];
 
 const PREVIEW_EDITOR_COLUMN_TYPES = [

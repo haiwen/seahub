@@ -109,6 +109,7 @@ class DirTool extends React.Component {
     const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
+    const isTagView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
 
     const sortOptions = this.sortOptions.map(item => {
       return {
@@ -126,6 +127,13 @@ class DirTool extends React.Component {
             showDetail={this.showDirentDetail}
             closeDetail={this.props.onCloseDetail}
           />
+        </div>
+      );
+    }
+
+    if (isTagView) {
+      return (
+        <div className="dir-tool">
         </div>
       );
     }

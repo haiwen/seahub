@@ -8,7 +8,7 @@ import { getEventClassName } from '../../../utils/common';
 import { isCellValueChanged, getCellValueByColumn } from '../../../utils/cell';
 import { canEditCell } from '../../../utils/column';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../utils/keyboard-utils';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS, metadataZIndexes } from '../../../constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS, metadataZIndexes, CellType } from '../../../constants';
 
 class NormalEditorContainer extends React.Component {
 
@@ -219,6 +219,7 @@ class NormalEditorContainer extends React.Component {
   commit = (args) => {
     const { record, column } = this.props;
     const { key: columnKey, type: columnType } = column;
+    if (columnType === CellType.TAGS) return;
     const originalOldCellValue = getCellValueByColumn(record, column);
     const updated = this.getEditor().getValue();
     if (!isCellValueChanged(originalOldCellValue, updated[columnKey], columnType)) {

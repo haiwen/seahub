@@ -1099,6 +1099,8 @@ class InteractionMasks extends React.Component {
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
+              addFileTags={this.props.addFileTags}
+              updateFileTags={this.props.updateFileTags}
               editorPosition={editorPosition}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),

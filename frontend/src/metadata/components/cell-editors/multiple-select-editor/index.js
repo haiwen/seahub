@@ -120,8 +120,7 @@ const MultipleSelectEditor = forwardRef(({
       option = displayOptions[highlightIndex];
     }
     if (option) {
-      let newOptionId = option.id;
-      if (value === option.id) newOptionId = null;
+      const newOptionId = option.id;
       onSelectOption(newOptionId);
       return;
     }
@@ -129,9 +128,9 @@ const MultipleSelectEditor = forwardRef(({
     if (searchValue) {
       isShowCreateBtn = canEditData && displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
     }
-    if (!isShowCreateBtn || displayOptions.length === 0) return;
+    if (!isShowCreateBtn || displayOptions.length > 0) return;
     createOption();
-  }, [canEditData, displayOptions, highlightIndex, value, searchValue, onSelectOption, createOption]);
+  }, [canEditData, displayOptions, highlightIndex, searchValue, onSelectOption, createOption]);
 
   const onUpArrow = useCallback((event) => {
     event.preventDefault();

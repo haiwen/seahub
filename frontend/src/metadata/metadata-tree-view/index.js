@@ -101,7 +101,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   }, []);
 
   useEffect(() => {
-    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return null;
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
     const currentViewId = currentPath.split('/').pop();
     const currentView = viewsMap[currentViewId];
     if (currentView) {

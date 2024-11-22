@@ -23,6 +23,10 @@ export const OPERATION_TYPE = {
   // face table
   RENAME_PEOPLE_NAME: 'rename_people_name',
   DELETE_PEOPLE_PHOTOS: 'delete_people_photos',
+
+  // tag
+  ADD_FILE_TAGS: 'add_file_tags',
+  UPDATE_FILE_TAGS: 'update_file_tags',
 };
 
 export const COLUMN_DATA_OPERATION_TYPE = {
@@ -55,6 +59,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
+  [OPERATION_TYPE.ADD_FILE_TAGS]: ['repo_id', 'record_id', 'tag_ids'],
+  [OPERATION_TYPE.UPDATE_FILE_TAGS]: ['repo_id', 'record_id', 'tag_ids'],
 };
 
 export const UNDO_OPERATION_TYPE = [

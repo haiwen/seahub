@@ -298,3 +298,4 @@ const xcsrfHeaders = cookie.load('sfcsrftoken');
 metadataAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default metadataAPI;
+export { MetadataManagerAPI };

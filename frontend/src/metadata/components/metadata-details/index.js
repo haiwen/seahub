@@ -6,8 +6,8 @@ import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
 import { Utils } from '../../../utils/utils';
 import metadataAPI from '../../api';
-import Column from '../../model/metadata/column';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getFileNameFromRecord, geRecordIdFromRecord, getFileObjIdFromRecord } from '../../utils/cell';
+import Column from '../../model/column';
+import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getFileNameFromRecord, getRecordIdFromRecord, getFileObjIdFromRecord } from '../../utils/cell';
 import { normalizeFields } from './utils';
 import { gettext } from '../../../utils/constants';
 import { CellType, EVENT_BUS_TYPE, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
@@ -26,7 +26,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
     const { record, fields } = metadata;
     const field = fields.find(f => f.key === fieldKey);
     const fileName = getColumnOriginName(field);
-    const recordId = geRecordIdFromRecord(record);
+    const recordId = getRecordIdFromRecord(record);
     const fileObjId = getFileObjIdFromRecord(record);
     let update = { [fileName]: newValue };
     if (field.type === CellType.SINGLE_SELECT) {
@@ -77,7 +77,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
   }, [repoID, metadata]);
 
   const localRecordChanged = useCallback((recordId, updates) => {
-    if (geRecordIdFromRecord(metadata?.record) !== recordId) return;
+    if (getRecordIdFromRecord(metadata?.record) !== recordId) return;
     const newMetadata = { ...metadata, record: { ...metadata.record, ...updates } };
     setMetadata(newMetadata);
   }, [metadata]);
