@@ -88,6 +88,15 @@ const COLUMNS = [
     data: { format: DEFAULT_SHOOTING_TIME_FORMAT },
     groupby: 'predefined'
   }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.RATE],
+    type: CellType.RATE,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_RATE),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.FILE_RATE,
+    canChangeName: false,
+    data: DEFAULT_RATE_DATA,
+    groupby: 'predefined'
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: gettext('Text'),
