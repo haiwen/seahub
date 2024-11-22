@@ -530,7 +530,7 @@
   "has_all_of": "has all of",
   "has_none_of": "has none of",
   "is_exactly": "is exactly",
-  "is_current_user_ID": "is current user's ID",
+  "is_current_user_ID": "ist die aktuelle Benutzer-ID",
   "Current_date": "Current date",
   "Specific_date": "Specific date",
   "x_days_before_current_date": "x days before current date",
