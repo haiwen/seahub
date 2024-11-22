@@ -11,3 +11,18 @@
   max-height: 24px;
   height: unset;
 }
+
+.sf-metadata-loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.sf-metadata-loading-tip {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}

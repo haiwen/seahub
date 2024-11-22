@@ -5,7 +5,7 @@ import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
   VIEW_OPERATION, COLUMN_OPERATION
 } from './operations';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import LocalOperator from './local-operator';
@@ -46,9 +46,13 @@ class Store {
     this.startIndex = 0;
   };
 
-  async loadMetadata(view, limit) {
+  async loadMetadata(view, limit, retries = DEFAULT_RETRY_TIMES, delay = DEFAULT_RETRY_INTERVAL) {
     const res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
     const rows = res?.data?.results || [];
+    if (rows.length === 0 && retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return this.loadMetadata(view, limit, retries - 1, delay);
+    }
     const columns = normalizeColumns(res?.data?.metadata);
     let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
@@ -59,10 +63,11 @@ class Store {
     DataProcessor.run(this.data, { collaborators: this.collaborators });
   }
 
-  async load(limit = PER_LOAD_NUMBER) {
+  async load(limit = PER_LOAD_NUMBER, isEmptyRepo = false) {
     const viewRes = await this.context.getView(this.viewId);
     const view = viewRes?.data?.view || {};
-    await this.loadMetadata(view, limit);
+    const retries = isEmptyRepo ? 0 : DEFAULT_RETRY_TIMES;
+    await this.loadMetadata(view, limit, retries);
   }
 
   async reload(limit = PER_LOAD_NUMBER) {
