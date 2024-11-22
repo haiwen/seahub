@@ -38,14 +38,6 @@
   color: #666;
 }
 
-.sf-metadata-edit-column-options-container .sf-metadata-add-option.disabled {
-  opacity: .75;
-}
-
-.sf-metadata-edit-column-options-container .sf-metadata-add-option.disabled:hover {
-  cursor: default;
-}
-
 .sf-metadata-edit-column-options-container .sf-metadata-add-option .sf-metadata-add-option-icon {
   fill: #666;
   font-weight: 600;
