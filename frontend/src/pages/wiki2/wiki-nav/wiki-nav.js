@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
-import { repoID, gettext, wikiPermission } from '../../../utils/constants';
+import { gettext, wikiPermission } from '../../../utils/constants';
 
 import '../css/wiki-nav.css';
 
@@ -30,32 +30,26 @@ class WikiNav extends Component {
     this.folderClassNameCache = '';
     this.lastScrollTop = 0;
     this.wikiNavBodyRef = React.createRef();
-    this.idFoldedStatusMap = this.getFoldedFromLocal();
+    // set init pages are all folded
+    this.idFoldedStatusMap = {};
+    props.pages.forEach((page) => {
+      this.idFoldedStatusMap[page.id] = true;
+    });
   }
-
-  getFoldedFromLocal = () => {
-    const items = window.localStorage.getItem(`wiki-folded-${repoID}`);
-    return items ? JSON.parse(items) : {};
-  };
-
-  saveFoldedToLocal = (items) => {
-    window.localStorage.setItem(`wiki-folded-${repoID}`, JSON.stringify(items));
-  };
 
   getFoldState = (pageId) => {
     return this.idFoldedStatusMap[pageId];
   };
 
   toggleExpand = (pageId) => {
-    const idFoldedStatusMap = this.getFoldedFromLocal();
+    const idFoldedStatusMap = this.idFoldedStatusMap;
     if (idFoldedStatusMap[pageId]) {
       delete idFoldedStatusMap[pageId];
     } else {
       idFoldedStatusMap[pageId] = true;
     }
-    this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.navigation !== this.props.navigation) {
