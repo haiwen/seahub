@@ -73,7 +73,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, repoID, toggleDialog: toggl
               placeholder={gettext('Tags')}
             />
             <p className="tip m-0">
-              {gettext('Enable tags to describe, categorize and mark files.')}
+              {gettext('Enable tags to add tags to files and search files by tags.')}
             </p>
           </ModalBody>
           <ModalFooter>

@@ -1,4 +1,5 @@
 import metadataAPI from './api';
+import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
   FACE_RECOGNITION_VIEW_ID,
@@ -13,6 +14,7 @@ class Context {
   constructor() {
     this.settings = { lang };
     this.metadataAPI = null;
+    this.tagsAPI = null;
     this.localStorage = null;
     this.eventBus = null;
     this.hasInit = false;
@@ -26,9 +28,10 @@ class Context {
     // init settings
     this.settings = { ...this.settings, ...settings };
 
-    // init metadataAPI
+    // init API
     const { repoInfo } = this.settings;
     this.metadataAPI = metadataAPI;
+    this.tagsAPI = tagsAPI;
 
     // init localStorage
     const { repoID, viewID } = this.settings;
@@ -46,6 +49,7 @@ class Context {
   destroy = () => {
     this.settings = {};
     this.metadataAPI = null;
+    this.tagsAPI = null;
     this.localStorage = null;
     this.eventBus = null;
     this.hasInit = false;
@@ -257,12 +261,12 @@ class Context {
   // file tag
   addFileTags = (recordId, tagIds) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.addFileTags(repoID, recordId, tagIds);
+    return this.tagsAPI.addFileTags(repoID, recordId, tagIds);
   };
 
   updateFileTags = (recordId, tagIds) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.updateFileTags(repoID, recordId, tagIds);
+    return this.tagsAPI.updateFileTags(repoID, recordId, tagIds);
   };
 
 }
