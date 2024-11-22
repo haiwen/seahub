@@ -168,6 +168,11 @@ class PageItem extends Component {
   };
 
   onAddNewPage = (newPage) => {
+    const { page } = this.props;
+    const folded = this.props.getFoldState(page.id);
+    if (folded) {
+      this.props.toggleExpand(page.id);
+    }
     this.props.addPageInside(Object.assign({ parentPageId: this.props.page.id }, newPage));
   };
 

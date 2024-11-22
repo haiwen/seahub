@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
-import { repoID, gettext, wikiPermission } from '../../../utils/constants';
+import { gettext, wikiPermission } from '../../../utils/constants';
 
 import '../css/wiki-nav.css';
 
@@ -28,31 +28,37 @@ class WikiNav extends Component {
   constructor(props) {
     super(props);
     this.folderClassNameCache = '';
-    this.idFoldedStatusMap = this.getFoldedFromLocal();
+    this.lastScrollTop = 0;
+    this.wikiNavBodyRef = React.createRef();
+    // set init pages are all folded
+    this.idFoldedStatusMap = {};
+    props.pages.forEach((page) => {
+      this.idFoldedStatusMap[page.id] = true;
+    });
   }
-
-  getFoldedFromLocal = () => {
-    const items = window.localStorage.getItem(`wiki-folded-${repoID}`);
-    return items ? JSON.parse(items) : {};
-  };
-
-  saveFoldedToLocal = (items) => {
-    window.localStorage.setItem(`wiki-folded-${repoID}`, JSON.stringify(items));
-  };
 
   getFoldState = (pageId) => {
     return this.idFoldedStatusMap[pageId];
   };
 
   toggleExpand = (pageId) => {
-    const idFoldedStatusMap = this.getFoldedFromLocal();
+    const idFoldedStatusMap = this.idFoldedStatusMap;
     if (idFoldedStatusMap[pageId]) {
       delete idFoldedStatusMap[pageId];
     } else {
       idFoldedStatusMap[pageId] = true;
     }
-    this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
+  };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.navigation !== this.props.navigation) {
+      this.wikiNavBodyRef.current.scrollTop = this.lastScrollTop;
+    }
+  }
+
+  onWikiNavBodyScroll = (e) => {
+    this.lastScrollTop = e.target.scrollTop;
   };
 
   setClassName = (name) => {
@@ -103,7 +109,7 @@ class WikiNav extends Component {
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
     return (
-      <div className='wiki-nav-body'>
+      <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
         {navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
