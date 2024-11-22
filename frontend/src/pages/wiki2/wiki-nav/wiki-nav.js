@@ -28,6 +28,8 @@ class WikiNav extends Component {
   constructor(props) {
     super(props);
     this.folderClassNameCache = '';
+    this.lastScrollTop = 0;
+    this.wikiNavBodyRef = React.createRef();
     this.idFoldedStatusMap = this.getFoldedFromLocal();
   }
 
@@ -53,6 +55,16 @@ class WikiNav extends Component {
     }
     this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.navigation !== this.props.navigation) {
+      this.wikiNavBodyRef.current.scrollTop = this.lastScrollTop;
+    }
+  }
+
+  onWikiNavBodyScroll = (e) => {
+    this.lastScrollTop = e.target.scrollTop;
   };
 
   setClassName = (name) => {
@@ -103,7 +115,7 @@ class WikiNav extends Component {
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
     return (
-      <div className='wiki-nav-body'>
+      <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
         {navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
