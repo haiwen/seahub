@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import { CenteredLoading, Loading } from '@seafile/sf-metadata-ui-component';
 import Table from '../views/table';
 import Gallery from '../views/gallery';
 import FaceRecognition from '../views/face-recognition';
@@ -10,7 +10,7 @@ import { gettext } from '../../utils/constants';
 import { VIEW_TYPE } from '../constants';
 
 const View = () => {
-  const { isLoading, metadata, errorMsg } = useMetadataView();
+  const { isLoading, showFirstView, metadata, errorMsg } = useMetadataView();
 
   const renderView = useCallback((metadata) => {
     if (!metadata) return null;
@@ -36,7 +36,14 @@ const View = () => {
     }
   }, []);
 
-  if (isLoading) return (<CenteredLoading />);
+  if (isLoading) {
+    return showFirstView ? (
+      <div className="sf-metadata-loading-wrapper">
+        <Loading />
+        <span className="sf-metadata-loading-tip">{gettext('Extended properties are being built.')}</span>
+      </div>
+    ) : <CenteredLoading />;
+  }
 
   return (
     <div className="sf-metadata-wrapper">

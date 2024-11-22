@@ -15,6 +15,7 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
     return window.app.pageOptions.enableMetadataManagement;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
+  const isEmptyRepo = useMemo(() => currentRepoInfo.file_count === 0, [currentRepoInfo]);
 
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
@@ -215,6 +216,7 @@ export const MetadataProvider = ({ repoID, currentRepoInfo, hideMetadataView, se
 
   return (
     <MetadataContext.Provider value={{
+      isEmptyRepo,
       enableMetadata,
       updateEnableMetadata,
       enableFaceRecognition,

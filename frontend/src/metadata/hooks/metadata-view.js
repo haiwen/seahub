@@ -7,7 +7,6 @@ import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import { Utils } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
-import { gettext } from '../../utils/constants';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -21,7 +20,7 @@ export const MetadataViewProvider = ({
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const storeRef = useRef(null);
   const { collaborators } = useCollaborators();
-  const { showFirstView, setShowFirstView } = useMetadata();
+  const { isEmptyRepo, showFirstView, setShowFirstView } = useMetadata();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -84,10 +83,7 @@ export const MetadataViewProvider = ({
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID, collaborators });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
-    storeRef.current.load(PER_LOAD_NUMBER).then(() => {
-      if (showFirstView && storeRef.current.data.rows.length === 0) {
-        toaster.success(gettext('The files\' metadata is being created. This may take a minute or so. Please refresh the page later.'));
-      }
+    storeRef.current.load(PER_LOAD_NUMBER, isEmptyRepo).then(() => {
       setMetadata(storeRef.current.data);
       setShowFirstView(false);
       setLoading(false);
@@ -134,6 +130,7 @@ export const MetadataViewProvider = ({
     <MetadataViewContext.Provider
       value={{
         isLoading,
+        showFirstView,
         metadata,
         store: storeRef.current,
         isDirentDetailShow: params.isDirentDetailShow,

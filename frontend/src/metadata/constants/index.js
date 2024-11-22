@@ -105,6 +105,10 @@ export const SUPPORT_BATCH_DOWNLOAD_TYPES = [];
 
 export const PER_LOAD_NUMBER = 1000;
 
+export const DEFAULT_RETRY_TIMES = 4;
+
+export const DEFAULT_RETRY_INTERVAL = 1000;
+
 // dtable-db limit loads up to 10,000 rows at a time
 export const MAX_LOAD_NUMBER = 10000;
 
