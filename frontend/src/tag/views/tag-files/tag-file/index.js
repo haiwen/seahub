@@ -1,20 +1,22 @@
 import React, { useCallback, useMemo, useState } from 'react';
-
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import { getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, getFileSizedFromRecord,
-  getFileMTimeFromRecord, getTagsFromRecord,
+  getFileMTimeFromRecord, getTagsFromRecord, getFilePathByRecord,
 } from '../../../../metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
 import FileTagsFormatter from '../../../../metadata/components/cell-formatter/file-tags-formatter';
+import { openFile } from '../../../../metadata/utils/open-file';
 
 import './index.css';
+import { eventBus } from '../../../../components/common/event-bus';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, onSelectFile }) => {
+const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
 
@@ -34,6 +36,7 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile }) => {
 
   const mtimeTip = useMemo(() => mtime ? dayjs(mtime).format('dddd, MMMM D, YYYY h:mm:ss A') : '', [mtime]);
   const mtimeRelative = useMemo(() => mtime ? dayjs(mtime).fromNow() : '', [mtime]);
+  const path = useMemo(() => getFilePathByRecord(repoID, file), [repoID, file]);
 
   const displayIcons = useMemo(() => {
     const defaultIconUrl = Utils.getFileIconUrl(name);
@@ -67,6 +70,13 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile }) => {
     setIconLoadError(true);
   }, []);
 
+  const handelClickFileName = useCallback((event) => {
+    event.preventDefault();
+    openFile(repoID, file, eventBus, () => {
+      openImagePreview(file);
+    });
+  }, [repoID, file, openImagePreview]);
+
   return (
     <tr
       className={classnames({
@@ -91,18 +101,26 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile }) => {
           <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" />
         </div>
       </td>
-      <td className="name">
-        {name}
+      <td className="name" onClick={handelClickFileName}>
+        <a href={path}>{name}</a>
       </td>
-      <td className="operation"></td>
       <td className="tag-list-title">
         <FileTagsFormatter value={tags} />
       </td>
+      <td className="operation"></td>
       <td className="file-size">{size || ''}</td>
       <td className="last-update" title={mtimeTip}>{mtimeRelative}</td>
     </tr>
   );
 
+};
+
+TagFile.propTypes = {
+  isSelected: PropTypes.bool,
+  repoID: PropTypes.string,
+  file: PropTypes.object,
+  onSelectFile: PropTypes.func,
+  openImagePreview: PropTypes.func,
 };
 
 export default TagFile;

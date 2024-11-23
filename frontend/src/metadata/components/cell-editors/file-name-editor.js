@@ -37,9 +37,12 @@ const FileNameEditor = React.forwardRef((props, ref) => {
 
   if (mode === EDITOR_TYPE.PREVIEWER) {
     const fileType = getFileType();
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
+
     if (fileType === 'image') {
       return (
-        <ImagePreviewer {...props} closeImagePopup={props.onCommitCancel} />
+        <ImagePreviewer {...props} repoID={repoID} repoInfo={repoInfo} closeImagePopup={props.onCommitCancel} />
       );
     }
 

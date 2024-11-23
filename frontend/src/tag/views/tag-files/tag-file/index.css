@@ -6,3 +6,7 @@
 .tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter:last-child {
   margin-right: 0;
 }
+
+.sf-metadata-tags-main .table-container td.name a {
+  word-break: break-word;
+}

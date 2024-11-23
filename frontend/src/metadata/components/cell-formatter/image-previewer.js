@@ -9,14 +9,11 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
-const ImagePreviewer = (props) => {
-  const { record, table, closeImagePopup } = props;
+const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
 
   useEffect(() => {
-    const repoID = window.sfMetadataContext.getSetting('repoID');
-    const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
     const newImageItems = table.rows
       .filter((row) => Utils.imageCheck(getFileNameFromRecord(row)))
       .map((row) => {
@@ -40,7 +37,7 @@ const ImagePreviewer = (props) => {
         };
       });
     setImageItems(newImageItems);
-  }, [table]);
+  }, [table, repoID, repoInfo]);
 
   useEffect(() => {
     if (imageItems.length > 0) {
@@ -98,9 +95,10 @@ const ImagePreviewer = (props) => {
 };
 
 ImagePreviewer.propTypes = {
-  table: PropTypes.object,
-  column: PropTypes.object,
   record: PropTypes.object,
+  table: PropTypes.object,
+  repoID: PropTypes.string,
+  repoInfo: PropTypes.object,
   closeImagePopup: PropTypes.func,
 };
 

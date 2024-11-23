@@ -1,4 +1,6 @@
 import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
+import { siteRoot } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 /**
  * @param {any} value
@@ -58,4 +60,19 @@ export const getFileMTimeFromRecord = record => {
 
 export const getTagsFromRecord = record => {
   return record ? record[PRIVATE_COLUMN_KEY.TAGS] : '';
+};
+
+const _getParentDir = (record) => {
+  const parentDir = getParentDirFromRecord(record);
+  if (parentDir === '/') {
+    return '';
+  }
+  return parentDir;
+};
+
+export const getFilePathByRecord = (repoID, record) => {
+  const parentDir = _getParentDir(record);
+  const fileName = getFileNameFromRecord(record);
+  const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+  return siteRoot + 'lib/' + repoID + '/file' + path;
 };

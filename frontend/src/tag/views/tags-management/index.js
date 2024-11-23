@@ -48,7 +48,7 @@ const TagsManagement = () => {
               <div className="sf-metadata-container-header-actions">
                 {context.canAddTag() && (
                   <Button color="primary" className="sf-metadata-container-header-add-tag" onClick={openAddTag}>
-                    {gettext('Add Tag')}
+                    {gettext('New Tag')}
                   </Button>
                 )}
               </div>

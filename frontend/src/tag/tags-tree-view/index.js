@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTags } from '../hooks';
 import Tag from './tag';
@@ -19,8 +19,7 @@ const updateFavicon = () => {
 const TagsTreeView = ({ userPerm, currentPath }) => {
   const originalTitle = useRef('');
 
-  // const {} = { }
-  const { tagsData, selectTag, deleteTags, duplicateTag, updateTag } = useTags();
+  const { tagsData, selectTag } = useTags();
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
@@ -31,16 +30,6 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
     return true;
   }, [userPerm]);
-
-  const deleteTag = useCallback((tagId, isSelected) => {
-    if (isSelected) {
-      const currentTagIndex = tagsData.row_ids.indexOf(tagId);
-      const lastTagId = tagsData.row_ids[currentTagIndex - 1];
-      const lastTag = getRowById(tagsData, lastTagId);
-      selectTag(lastTag);
-    }
-    deleteTags([tagId]);
-  }, [tagsData, deleteTags, selectTag]);
 
   useEffect(() => {
     originalTitle.current = document.title;
@@ -105,13 +94,8 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
               <Tag
                 key={id}
                 tag={tag}
-                tags={tags}
-                userPerm={userPerm}
                 isSelected={isSelected}
                 onClick={(tag) => selectTag(tag, isSelected)}
-                onDelete={() => deleteTag(id, isSelected)}
-                onCopy={() => duplicateTag(id)}
-                onUpdateTag={updateTag}
               />
             );
           })}

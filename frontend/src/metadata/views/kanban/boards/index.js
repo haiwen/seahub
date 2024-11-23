@@ -176,7 +176,8 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   }, []);
 
   const onOpenFile = useCallback((record) => {
-    openFile(record, window.sfMetadataContext.eventBus, () => {
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    openFile(repoID, record, window.sfMetadataContext.eventBus, () => {
       currentImageRef.current = record;
       setImagePreviewerVisible(true);
     });
@@ -222,6 +223,8 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   }, [isDirentDetailShow]);
 
   const isEmpty = boards.length === 0;
+  const repoID = window.sfMetadataContext.getSetting('repoID');
+  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   return (
     <div
@@ -264,7 +267,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         )}
         {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
-      {isImagePreviewerVisible && (<ImagePreviewer record={currentImageRef.current} table={metadata} closeImagePopup={closeImagePreviewer} />)}
+      {isImagePreviewerVisible && (<ImagePreviewer repoID={repoID} repoInfo={repoInfo} record={currentImageRef.current} table={metadata} closeImagePopup={closeImagePreviewer} />)}
     </div>
   );
 };
