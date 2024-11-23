@@ -10,7 +10,9 @@ class WebSocketClient {
     this.socket = null;
     this.shouldReconnect = true;
     this.onMessageCallback = onMessageCallback;
-    this.connect();
+    if (notificationServerUrl !== '') {
+      this.connect();
+    }
   }
 
   async connect() {

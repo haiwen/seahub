@@ -166,15 +166,12 @@ class LibContentView extends React.Component {
         if (data.content.change_event === 'locked') {
           if (data.content.expire === -1) {
             this.updateDirent(dirent, 'is_freezed', true);
-            this.updateDirent(dirent, 'is_locked', true);
-            this.updateDirent(dirent, 'locked_by_me', true);
-            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
           } else {
             this.updateDirent(dirent, 'is_freezed', false);
-            this.updateDirent(dirent, 'is_locked', true);
-            this.updateDirent(dirent, 'locked_by_me', false);
-            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
           }
+          this.updateDirent(dirent, 'is_locked', true);
+          this.updateDirent(dirent, 'locked_by_me', true);
+          this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
         } else if (data.content.change_event === 'unlocked') {
           this.updateDirent(dirent, 'is_locked', false);
           this.updateDirent(dirent, 'locked_by_me', false);
