@@ -7,7 +7,7 @@ import imageAPI from '../../../utils/image-api';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
 const ImagePreviewer = (props) => {
   const { record, table, closeImagePopup } = props;
@@ -20,6 +20,7 @@ const ImagePreviewer = (props) => {
     const newImageItems = table.rows
       .filter((row) => Utils.imageCheck(getFileNameFromRecord(row)))
       .map((row) => {
+        const id = getRecordIdFromRecord(row);
         const fileName = getFileNameFromRecord(row);
         const parentDir = getParentDirFromRecord(row);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
@@ -29,6 +30,7 @@ const ImagePreviewer = (props) => {
         const basePath = `${siteRoot}${useThumbnail && !isGIF ? 'thumbnail' : 'repo'}/${repoID}`;
         const src = `${basePath}/${useThumbnail && !isGIF ? thumbnailSizeForOriginal : 'raw'}${path}`;
         return {
+          id,
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
@@ -42,7 +44,7 @@ const ImagePreviewer = (props) => {
 
   useEffect(() => {
     if (imageItems.length > 0) {
-      const index = imageItems.findIndex(item => item.name === getFileNameFromRecord(record));
+      const index = imageItems.findIndex(item => item.id === getRecordIdFromRecord(record));
       if (index > -1) setImageIndex(index);
     }
   }, [imageItems, record]);
