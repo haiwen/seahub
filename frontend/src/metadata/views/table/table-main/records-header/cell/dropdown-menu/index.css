@@ -1,7 +1,7 @@
 .sf-metadata-column-dropdown-menu .dropdown-item .sf-metadata-icon {
   margin-right: 10px;
   font-size: 14px;
-  fill: #8c8c8c;
+  fill: #666;
 }
 
 .sf-metadata-column-dropdown-menu .dropdown-item:hover .sf-metadata-icon {
@@ -14,7 +14,7 @@
 }
 
 .sf-metadata-column-dropdown-menu .dropdown-toggle::after {
-  color: #8c8c8c;
+  color: #666;
 }
 
 .sf-metadata-column-dropdown-menu .dropdown-toggle:hover::after {
