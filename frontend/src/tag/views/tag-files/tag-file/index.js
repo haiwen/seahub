@@ -85,17 +85,18 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) =
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <td className="pl10">
+      <td className="pl10 pr-2">
         <input
           type="checkbox"
           className="vam"
+          style={{ position: 'relative', top: -1 }}
           onClick={handleSelected}
           onChange={() => {}}
           checked={isSelected}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
         />
       </td>
-      <td className="pl10">
+      <td className="pl-2 pr-2">
         <div className="dir-icon">
           <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" />
         </div>

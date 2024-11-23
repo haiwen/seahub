@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useTagView } from '../../hooks';
 import { gettext } from '../../../utils/constants';
 import TagFile from './tag-file';
@@ -12,8 +12,10 @@ const TagFiles = () => {
   const { tagFiles, repoID, repoInfo } = useTagView();
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   const currentImageRef = useRef(null);
+  const containerRef = useRef(null);
 
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
@@ -59,6 +61,21 @@ const TagFiles = () => {
     setImagePreviewerVisible(false);
   }, []);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    const handleResize = () => {
+      if (!container) return;
+      // 32: container padding left + container padding right
+      setContainerWidth(container.offsetWidth - 32);
+    };
+    const resizeObserver = new ResizeObserver(handleResize);
+    container && resizeObserver.observe(container);
+
+    return () => {
+      container && resizeObserver.unobserve(container);
+    };
+  }, []);
+
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
   }
@@ -67,11 +84,11 @@ const TagFiles = () => {
 
   return (
     <>
-      <div className="table-container">
+      <div className="table-container" ref={containerRef}>
         <table className="table-hover">
           <thead onMouseDown={onThreadMouseDown} onContextMenu={onThreadContextMenu}>
             <tr>
-              <th width="3%" className="pl10">
+              <th style={{ width: 31 }} className="pl10 pr-2">
                 <input
                   type="checkbox"
                   className="vam"
@@ -81,12 +98,12 @@ const TagFiles = () => {
                   disabled={tagFiles.rows.length === 0}
                 />
               </th>
-              <th width="5%" className="pl10">{/* icon */}</th>
-              <th width="42%"><a className="d-block table-sort-op" href="#">{gettext('Name')}</a></th>
-              <th width="6%">{/* tag */}</th>
-              <th width="18%">{/* operation */}</th>
-              <th width="11%"><a className="d-block table-sort-op" href="#">{gettext('Size')}</a></th>
-              <th width="15%"><a className="d-block table-sort-op" href="#">{gettext('Last Update')}</a></th>
+              <th style={{ width: 40 }} className="pl-2 pr-2">{/* icon */}</th>
+              <th style={{ width: (containerWidth - 71) * 0.5 }}><a className="d-block table-sort-op" href="#">{gettext('Name')}</a></th>
+              <th style={{ width: (containerWidth - 71) * 0.06 }}>{/* tag */}</th>
+              <th style={{ width: (containerWidth - 71) * 0.18 }}>{/* operation */}</th>
+              <th style={{ width: (containerWidth - 71) * 0.11 }}><a className="d-block table-sort-op" href="#">{gettext('Size')}</a></th>
+              <th style={{ width: (containerWidth - 71) * 0.15 }}><a className="d-block table-sort-op" href="#">{gettext('Last Update')}</a></th>
             </tr>
           </thead>
           <tbody>
