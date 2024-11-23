@@ -24,7 +24,7 @@ import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
-import SharedLibraries from './pages/shared-libs/shared-libraries';
+import SharedLibraries from './pages/shared-libs';
 import ShareWithOCM from './pages/share-with-ocm/shared-with-ocm';
 import OCMViaWebdav from './pages/ocm-via-webdav/ocm-via-webdav';
 import OCMRepoDir from './pages/share-with-ocm/remote-dir-view';

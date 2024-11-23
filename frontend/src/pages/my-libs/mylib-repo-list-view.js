@@ -117,7 +117,7 @@ class MylibRepoListView extends React.Component {
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     return currentViewMode == LIST_MODE ? (
-      <table className={classNames({ 'table-thead-hidden': inAllLibs }, { 'repos-container': !inAllLibs })}>
+      <table className={classNames({ 'table-thead-hidden': inAllLibs })}>
         <thead>
           <tr>
             <th width="4%"></th>

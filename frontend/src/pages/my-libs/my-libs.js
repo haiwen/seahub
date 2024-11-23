@@ -1,18 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import cookie from 'react-cookies';
+import classnames from 'classnames';
+import Repo from '../../models/repo';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import MylibRepoListView from './mylib-repo-list-view';
-import SortOptionsDialog from '../../components/dialog/sort-options';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ModalPortal from '../../components/modal-portal';
+import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/sort-menu';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import MylibRepoListView from './mylib-repo-list-view';
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -24,6 +28,7 @@ class MyLibraries extends Component {
       isDeletedReposDialogOpen: false,
       isCreateRepoDialogOpen: false,
       isSortOptionsDialogOpen: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -135,7 +140,24 @@ class MyLibraries extends Component {
     });
   };
 
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({ sortBy, sortOrder }, () => {
+      this.sortRepoList(sortBy, sortOrder);
+    });
+  };
+
   render() {
+    const { isLoading, errorMsg, currentViewMode, sortBy, sortOrder, repoList } = this.state;
+    const isDesktop = Utils.isDesktop();
     return (
       <Fragment>
         <div className="main-panel-center flex-row">
@@ -150,33 +172,49 @@ class MyLibraries extends Component {
                   ]}
                 />
               </h3>
-              <div>
-                {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
-              </div>
+              {isDesktop ? (
+                <div className="d-flex align-items-center">
+                  <div className="mr-2">
+                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                  </div>
+                  <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                </div>
+              ) : (
+                <>
+                  {repoList.length > 0 &&
+                    <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                  }
+                </>
+              )}
             </div>
-            <div className="cur-view-content">
-              {this.state.isLoading && <Loading />}
-              {!this.state.isLoading && this.state.errorMsg && <p className="error text-center mt-8">{this.state.errorMsg}</p>}
-              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyTip}
-              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length > 0 &&
-                <MylibRepoListView
-                  sortBy={this.state.sortBy}
-                  sortOrder={this.state.sortOrder}
-                  repoList={this.state.repoList}
-                  onRenameRepo={this.onRenameRepo}
-                  onDeleteRepo={this.onDeleteRepo}
-                  onTransferRepo={this.onTransferRepo}
-                  onMonitorRepo={this.onMonitorRepo}
-                  sortRepoList={this.sortRepoList}
-                />
+            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+              {isLoading
+                ? <Loading />
+                : errorMsg
+                  ? <p className="error text-center mt-8">{errorMsg}</p>
+                  : repoList.length == 0
+                    ? this.emptyTip
+                    : (
+                      <MylibRepoListView
+                        sortBy={sortBy}
+                        sortOrder={sortOrder}
+                        repoList={this.state.repoList}
+                        onRenameRepo={this.onRenameRepo}
+                        onDeleteRepo={this.onDeleteRepo}
+                        onTransferRepo={this.onTransferRepo}
+                        onMonitorRepo={this.onMonitorRepo}
+                        sortRepoList={this.sortRepoList}
+                        currentViewMode={currentViewMode}
+                      />
+                    )
               }
             </div>
           </div>
           {this.state.isSortOptionsDialogOpen &&
             <SortOptionsDialog
               toggleDialog={this.toggleSortOptionsDialog}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
               sortItems={this.sortRepoList}
             />
           }

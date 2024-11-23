@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
+import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canAddPublicRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -15,6 +16,8 @@ import ModalPortal from '../../components/modal-portal';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/sort-menu';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -32,6 +35,7 @@ class SharedWithAll extends React.Component {
       repoList: [],
       isCreateRepoDialogOpen: false,
       isSelectRepoDialogOpen: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false,
@@ -120,11 +124,12 @@ class SharedWithAll extends React.Component {
     });
   };
 
-  renderContent = () => {
-    const { inAllLibs = false, currentViewMode = LIST_MODE } = this.props; // inAllLibs: in 'All Libs'('Files') page
-    const { errMessage } = this.state;
-    const emptyTip = inAllLibs ?
-      <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p> : (
+  renderContent = (currentViewMode) => {
+    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { isLoading, errMessage, repoList } = this.state;
+    const emptyTip = inAllLibs
+      ? <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p>
+      : (
         <EmptyTip
           title={gettext('No public libraries')}
           text={gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" item in the dropdown menu.')}
@@ -133,24 +138,26 @@ class SharedWithAll extends React.Component {
       );
     return (
       <>
-        {this.state.isLoading && <Loading />}
-        {(!this.state.isLoading && errMessage) && errMessage}
-        {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
-        {(!this.state.isLoading && this.state.repoList.length > 0) &&
-        <SharedRepoListView
-          key='public-shared-view'
-          libraryType={this.state.libraryType}
-          repoList={this.state.repoList}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortItems={this.sortItems}
-          onItemUnshare={this.onItemUnshare}
-          onItemDelete={this.onItemDelete}
-          theadHidden={inAllLibs}
-          currentViewMode={currentViewMode}
-          inAllLibs={inAllLibs}
-        />
-        }
+        {isLoading
+          ? <Loading />
+          : errMessage
+            ? <p className="error text-center">{errMessage}</p>
+            : repoList.length == 0
+              ? emptyTip
+              : (
+                <SharedRepoListView
+                  key='public-shared-view'
+                  libraryType={this.state.libraryType}
+                  repoList={this.state.repoList}
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  sortItems={this.sortItems}
+                  onItemUnshare={this.onItemUnshare}
+                  onItemDelete={this.onItemDelete}
+                  currentViewMode={currentViewMode}
+                  inAllLibs={inAllLibs}
+                />
+              )}
       </>
     );
   };
@@ -203,8 +210,25 @@ class SharedWithAll extends React.Component {
     });
   };
 
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({ sortBy, sortOrder }, () => {
+      this.sortItems(sortBy, sortOrder);
+    });
+  };
+
   render() {
-    const { inAllLibs = false, currentViewMode = LIST_MODE } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
+    const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
 
     if (inAllLibs) {
       return (
@@ -216,7 +240,7 @@ class SharedWithAll extends React.Component {
             </h4>
             {this.renderSortIconInMobile()}
           </div>
-          {this.renderContent()}
+          {this.renderContent(currentViewMode)}
         </>
       );
     }
@@ -237,10 +261,18 @@ class SharedWithAll extends React.Component {
                 />
                 }
               </h3>
+              {Utils.isDesktop() && (
+                <div className="d-flex align-items-center">
+                  <div className="mr-2">
+                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                  </div>
+                  <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
+                </div>
+              )}
               {this.renderSortIconInMobile()}
             </div>
-            <div className="cur-view-content">
-              {this.renderContent()}
+            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+              {this.renderContent(currentViewMode)}
             </div>
           </div>
         </div>

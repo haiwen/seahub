@@ -25,7 +25,6 @@ const propTypes = {
   onItemRename: PropTypes.func,
   hasNextPage: PropTypes.bool,
   onMonitorRepo: PropTypes.func,
-  theadHidden: PropTypes.bool,
   inAllLibs: PropTypes.bool,
   onTransferRepo: PropTypes.func,
 };
@@ -119,7 +118,7 @@ class SharedRepoListView extends React.Component {
   };
 
   renderRepoListView = () => {
-    const { currentViewMode = LIST_MODE } = this.props;
+    const { currentViewMode } = this.props;
     return (
       <Fragment>
         {this.props.repoList.map((repo, index) => {
@@ -148,28 +147,26 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { theadHidden = false, currentViewMode = LIST_MODE, currentGroup, libraryType, inAllLibs } = this.props;
+    const { currentViewMode, currentGroup, libraryType, inAllLibs } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     const content = currentViewMode == LIST_MODE ? (
-      <>
-        <table className={classNames({ 'table-thead-hidden': theadHidden }, { 'repos-container': !inAllLibs })}>
-          <thead>
-            <tr>
-              <th width="4%"></th>
-              <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-              <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-              <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-              <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-              <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-              <th width="17%">{gettext('Owner')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderRepoListView()}
-          </tbody>
-        </table>
-      </>
+      <table className={classNames({ 'table-thead-hidden': inAllLibs })}>
+        <thead>
+          <tr>
+            <th width="4%"></th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            <th width="17%">{gettext('Owner')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderRepoListView()}
+        </tbody>
+      </table>
     ) : (
       <div className="d-flex justify-content-between flex-wrap">
         {this.renderRepoListView()}
