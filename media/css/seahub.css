@@ -1011,7 +1011,7 @@ textarea:-moz-placeholder {
 .path-split {
   display: inline-block;
   padding: 0 5px;
-  color: #818a91;
+  color: #666;
 }
 
 /**** paginator ****/
