@@ -98,6 +98,7 @@
   font-weight: bold;
   padding: 0 50px 0 0;
   color: #212529;
+  margin-bottom: .4em;
 }
 
 .main-panel-center .cur-view-content .wiki-sdoc-title:focus {
