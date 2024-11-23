@@ -1988,22 +1988,26 @@ class LibContentView extends React.Component {
   };
 
   resetSelected = (node) => {
+    const path = node.path || '';
+    const { currentMode } = this.state;
+
+    let newMode = cookie.load('seafile_view_mode') || LIST_MODE;
+
+    if (currentMode === METADATA_MODE) {
+      if (path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+        newMode = METADATA_MODE;
+      }
+    } else if (currentMode === TAGS_MODE) {
+      if (path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
+        newMode = TAGS_MODE;
+      }
+    }
+
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
+      currentMode: newMode,
     });
-    const path = node.path || '';
-    if (this.state.currentMode === METADATA_MODE) {
-      const isMetadataView = path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
-      this.setState({
-        currentMode: cookie.load('seafile_view_mode') || (isMetadataView ? METADATA_MODE : LIST_MODE),
-      });
-    } else if (this.state.currentMode === TAGS_MODE) {
-      const isTagsView = path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES);
-      this.setState({
-        currentMode: cookie.load('seafile_view_mode') || (isTagsView ? TAGS_MODE : LIST_MODE),
-      });
-    }
   };
 
   recalculateSelectedDirents = (unSelectNames, newDirentList) => {
