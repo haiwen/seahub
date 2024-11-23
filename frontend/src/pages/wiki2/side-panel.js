@@ -54,10 +54,9 @@ class SidePanel extends PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    if (config.pages.length > 0) {
-      this.props.setCurrentPage(config.pages[0].id);
-    } else {
-      this.props.setCurrentPage('');
+    if (this.props.getCurrentPageId() === pageId) {
+      const newPageId = config.pages.length > 0 ? config.pages[0].id : '';
+      this.props.setCurrentPage(newPageId);
     }
   };
 
