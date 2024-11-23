@@ -2,7 +2,6 @@ import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
@@ -38,11 +37,17 @@ const _generateUrl = (repoID, fileName, parentDir) => {
 };
 
 const _openUrl = (url) => {
+  const isWeChat = Utils.isWeChat();
+  if (isWeChat) {
+    location.href = url;
+    return;
+  }
   window.open(url);
 };
 
-const _openMarkdown = (fileName, parentDir, eventBus) => {
-  eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN, parentDir, fileName);
+const _openMarkdown = (repoID, fileName, parentDir) => {
+  const url = _generateUrl(repoID, fileName, parentDir);
+  _openUrl(url);
 };
 
 const _openByNewWindow = (repoID, fileName, parentDir, fileType) => {
@@ -67,7 +72,7 @@ const _openOthers = (repoID, fileName, parentDir, fileType) => {
   _openByNewWindow(repoID, fileName, parentDir, fileType);
 };
 
-export const openFile = (repoID, record, eventBus, _openImage = () => {}) => {
+export const openFile = (repoID, record, _openImage = () => {}) => {
   if (!record) return;
   const fileName = getFileNameFromRecord(record);
   const isDir = checkIsDir(record);
@@ -76,7 +81,7 @@ export const openFile = (repoID, record, eventBus, _openImage = () => {}) => {
 
   switch (fileType) {
     case FILE_TYPE.MARKDOWN: {
-      _openMarkdown(fileName, parentDir, eventBus);
+      _openMarkdown(repoID, fileName, parentDir);
       break;
     }
     case FILE_TYPE.SDOC: {

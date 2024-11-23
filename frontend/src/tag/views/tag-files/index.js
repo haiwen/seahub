@@ -105,7 +105,15 @@ const TagFiles = () => {
           </tbody>
         </table>
       </div>
-      {isImagePreviewerVisible && (<ImagePreviewer repoID={repoID} repoInfo={repoInfo} record={currentImageRef.current} table={tagFiles} closeImagePopup={closeImagePreviewer} />)}
+      {isImagePreviewerVisible && (
+        <ImagePreviewer
+          repoID={repoID}
+          repoInfo={repoInfo}
+          record={currentImageRef.current}
+          table={tagFiles}
+          closeImagePopup={closeImagePreviewer}
+        />
+      )}
     </>
   );
 };

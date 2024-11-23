@@ -12,7 +12,6 @@ import FileTagsFormatter from '../../../../metadata/components/cell-formatter/fi
 import { openFile } from '../../../../metadata/utils/open-file';
 
 import './index.css';
-import { eventBus } from '../../../../components/common/event-bus';
 
 dayjs.extend(relativeTime);
 
@@ -72,7 +71,7 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) =
 
   const handelClickFileName = useCallback((event) => {
     event.preventDefault();
-    openFile(repoID, file, eventBus, () => {
+    openFile(repoID, file, () => {
       openImagePreview(file);
     });
   }, [repoID, file, openImagePreview]);

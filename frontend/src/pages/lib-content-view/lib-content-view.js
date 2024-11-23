@@ -447,14 +447,6 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: path }, path, url);
   };
 
-  openMarkDown = (parentDir, fileName) => {
-    let filePath = Utils.joinPath(parentDir, fileName);
-    let repoID = this.props.repoID;
-    const w = window.open('about:blank');
-    const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
-    w.location.href = url;
-  };
-
   showFile = (filePath, noRedirection) => {
     let repoID = this.props.repoID;
 
@@ -517,10 +509,6 @@ class LibContentView extends React.Component {
       path: filePath,
       viewId: viewId,
       isDirentDetailShow: viewType === VIEW_TYPE.GALLERY ? this.state.isDirentDetailShow : false,
-    }, () => {
-      setTimeout(() => {
-        this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN, this.openMarkDown);
-      }, 1);
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);

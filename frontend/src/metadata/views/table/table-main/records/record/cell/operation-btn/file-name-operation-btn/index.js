@@ -22,7 +22,7 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    openFile(repoID, record, window.sfMetadataContext.eventBus, () => {
+    openFile(repoID, record, () => {
       window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });
   };
