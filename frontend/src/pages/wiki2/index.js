@@ -56,6 +56,14 @@ class Wiki extends Component {
     window.addEventListener('popstate', this.onPopstate);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentPageId !== '' && prevState.currentPageId !== this.state.currentPageId) {
+      if (!Utils.isDesktop()) {
+        this.mobileCloseSidePanel();
+      }
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
   }
@@ -241,9 +249,6 @@ class Wiki extends Component {
     if (path !== this.state.path) {
       this.updateSdocPage(pageId, path);
     }
-    if (!Utils.isDesktop()) {
-      this.mobileCloseSidePanel();
-    }
     this.setState({
       currentPageId: pageId,
       path: path,
@@ -321,7 +326,7 @@ class Wiki extends Component {
         <MediaQuery query="(max-width: 767.8px)">
           <Modal
             zIndex="1030"
-            isOpen={!this.state.isSidePanelOpen}
+            isOpen={this.state.isSidePanelOpen}
             toggle={this.mobileCloseSidePanel}
             contentClassName="d-none"
           >
