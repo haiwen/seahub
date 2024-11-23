@@ -119,7 +119,7 @@ class DirPath extends React.Component {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     let pathList = path.split('/');
     let nodePath = '';
-    if (pathList.length === 2 && !pathList[0] && pathList[1] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+    if (pathList.length === 2 && !pathList[0] && [PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES, PRIVATE_FILE_TYPE.TAGS_PROPERTIES].includes(pathList[1])) {
       return null;
     }
     let pathElem = pathList.map((item, index) => {

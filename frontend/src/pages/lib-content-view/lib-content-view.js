@@ -197,6 +197,9 @@ class LibContentView extends React.Component {
     const viewID = urlParams.get('view');
     if (viewID) return `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`;
 
+    const tagID = urlParams.get('tag');
+    if (tagID) return `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`;
+
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
     let path = location.slice(location.indexOf(repoID) + repoID.length + 1);
@@ -392,14 +395,14 @@ class LibContentView extends React.Component {
       this.loadSidePanel(path);
     }
 
-    if (!path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+    if (!(path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES))) {
       this.showDir(path);
     }
   };
 
   loadSidePanel = (path) => {
     let repoID = this.props.repoID;
-    if (path === '/' || path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+    if (path === '/' || path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
       seafileAPI.listDir(repoID, '/').then(res => {
         const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
@@ -1863,7 +1866,8 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) { // isDir
-      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) ||
+        this.state.path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
         this.isNeedUpdateHistoryState = true;
       }
       this.showDir(node.path);
@@ -1988,22 +1992,21 @@ class LibContentView extends React.Component {
   };
 
   resetSelected = (node) => {
+    const currentModel = this.state.currentMode;
+    const path = node.path || '';
+    let nextModel = cookie.load('seafile_view_mode') || LIST_MODE;
+    if (currentModel === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
+      nextModel = METADATA_MODE;
+    }
+    if (currentModel === TAGS_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) {
+      nextModel = TAGS_MODE;
+    }
+
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
+      currentMode: nextModel,
     });
-    const path = node.path || '';
-    if (this.state.currentMode === METADATA_MODE) {
-      const isMetadataView = path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
-      this.setState({
-        currentMode: cookie.load('seafile_view_mode') || (isMetadataView ? METADATA_MODE : LIST_MODE),
-      });
-    } else if (this.state.currentMode === TAGS_MODE) {
-      const isTagsView = path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES);
-      this.setState({
-        currentMode: cookie.load('seafile_view_mode') || (isTagsView ? TAGS_MODE : LIST_MODE),
-      });
-    }
   };
 
   recalculateSelectedDirents = (unSelectNames, newDirentList) => {
@@ -2392,7 +2395,7 @@ class LibContentView extends React.Component {
                     )}
                   </div>
                 </div>
-                {canUpload && this.state.pathExist && !this.state.isViewFile && this.state.currentMode !== METADATA_MODE && (
+                {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE].includes(this.state.currentMode) && (
                   <FileUploader
                     ref={uploader => this.uploader = uploader}
                     dragAndDrop={true}
