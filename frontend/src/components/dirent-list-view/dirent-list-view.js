@@ -27,7 +27,6 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
-  isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
@@ -114,7 +113,7 @@ class DirentListView extends React.Component {
   }
 
   handleResize = () => {
-    this.setState({ containerWidth: this.containerRef.offsetWidth });
+    this.setState({ containerWidth: this.containerRef.offsetWidth - 32 });
   };
 
   recalculateImageItems = () => {
@@ -691,10 +690,7 @@ class DirentListView extends React.Component {
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
     const { containerWidth } = this.state;
-
-    if (this.props.isDirentListLoading) {
-      return (<Loading />);
-    }
+    // console.log(containerWidth);
 
     // sort
     const sortByName = sortBy == 'name';
