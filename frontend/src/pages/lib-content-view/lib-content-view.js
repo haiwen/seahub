@@ -32,7 +32,7 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import { VIEW_TYPE } from '../../metadata/constants';
-import WebSocketService from '../../utils/websocket-service';
+import WebSocketClient from '../../utils/websocket-service';
 import '../../css/lib-content-view.css';
 
 dayjs.extend(relativeTime);
@@ -54,7 +54,7 @@ class LibContentView extends React.Component {
     if (storedTreePanelState != undefined) {
       isTreePanelShown = storedTreePanelState == 'true';
     }
-    this.socket = new WebSocketService(this.onMessageCallback, this.props.repoID);
+    this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
     this.onMessageCallback = this.onMessageCallback.bind(this);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
@@ -164,14 +164,18 @@ class LibContentView extends React.Component {
       if (dirRouter === notifRouter) {
         const dirent = { name: data.content.path.split('/').pop() };
         if (data.content.change_event === 'locked') {
-          if (dirent.name.endsWith('.sdoc')) {
+          if (data.content.expire === -1) {
             this.updateDirent(dirent, 'is_freezed', true);
+            this.updateDirent(dirent, 'is_locked', true);
+            this.updateDirent(dirent, 'locked_by_me', true);
+            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
+          } else {
+            this.updateDirent(dirent, 'is_freezed', false);
+            this.updateDirent(dirent, 'is_locked', true);
+            this.updateDirent(dirent, 'locked_by_me', false);
+            this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
           }
-          this.updateDirent(dirent, 'is_locked', true);
-          this.updateDirent(dirent, 'locked_by_me', true);
-          this.updateDirent(dirent, 'lock_owner_name', data.content.lock_user[0]);
-        }
-        else if (data.content.change_event === 'unlocked') {
+        } else if (data.content.change_event === 'unlocked') {
           this.updateDirent(dirent, 'is_locked', false);
           this.updateDirent(dirent, 'locked_by_me', false);
           this.updateDirent(dirent, 'lock_owner_name', '');

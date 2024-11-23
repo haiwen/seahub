@@ -2,7 +2,7 @@ import { userAPI } from './user-api';
 import { notificationServerUrl } from './constants';
 
 
-class WebSocketService {
+class WebSocketClient {
   constructor(onMessageCallback, repoId) {
 
     this.url = notificationServerUrl; // WebSocket address;
@@ -24,7 +24,13 @@ class WebSocketService {
     // listen message from WebSocket server
     this.socket.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
-      this.onMessageCallback(parsedData);
+      // jwt-expire reconnect
+      if (parsedData.type === 'jwt-expired') {
+        const msg = this.formatSubscriptionMsg();
+        this.socket.send(JSON.stringify(msg));
+      } else {
+        this.onMessageCallback(parsedData);
+      }
     };
 
     this.socket.onerror = (error) => {
@@ -94,4 +100,4 @@ class WebSocketService {
   }
 }
 
-export default WebSocketService;
+export default WebSocketClient;
