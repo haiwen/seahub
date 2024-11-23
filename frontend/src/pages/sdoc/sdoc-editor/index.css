@@ -1,5 +1,6 @@
 .sdoc-content-right-panel .cur-view-detail {
   border-left: none;
+  height: calc(100vh - 93px); /* 100vh - toolbar height*/
 }
 
 .sdoc-content-right-panel .cur-view-detail .detail-header {
