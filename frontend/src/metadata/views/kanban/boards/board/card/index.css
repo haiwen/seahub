@@ -12,7 +12,7 @@
   user-select: none;
 }
 
-.smooth-dnd-container.vertical .sf-metadata-kanban-card:last-child {
+.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper:last-child .sf-metadata-kanban-card {
   margin-bottom: 0;
 }
 
