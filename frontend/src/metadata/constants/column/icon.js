@@ -39,6 +39,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.GEOLOCATION]: 'Geolocation',
   [CellType.RATE]: 'Rate',
   [CellType.LINK]: 'Link',
+  [CellType.TAGS]: 'Tag',
 };
 
 export {
