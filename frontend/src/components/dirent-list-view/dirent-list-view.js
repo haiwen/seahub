@@ -4,7 +4,6 @@ import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, th
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
-import Loading from '../loading';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../dialog/create-file-dialog';
@@ -690,7 +689,6 @@ class DirentListView extends React.Component {
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
     const { containerWidth } = this.state;
-    // console.log(containerWidth);
 
     // sort
     const sortByName = sortBy == 'name';
