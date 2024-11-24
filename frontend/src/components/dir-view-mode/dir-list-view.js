@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
 import RepoInfoBar from '../../components/repo-info-bar';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
+import Loading from '../loading';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -71,43 +72,46 @@ class DirListView extends React.Component {
             onFileTagChanged={this.props.onFileTagChanged}
           />
         )}
-        <DirentListView
-          path={this.props.path}
-          currentRepoInfo={this.props.currentRepoInfo}
-          repoID={this.props.repoID}
-          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-          userPerm={this.props.userPerm}
-          enableDirPrivateShare={this.props.enableDirPrivateShare}
-          direntList={this.props.direntList}
-          fullDirentList={this.props.fullDirentList}
-          sortBy={this.props.sortBy}
-          sortOrder={this.props.sortOrder}
-          sortItems={this.props.sortItems}
-          onItemClick={this.props.onItemClick}
-          onItemSelected={this.props.onItemSelected}
-          onItemDelete={this.props.onItemDelete}
-          onItemRename={this.props.onItemRename}
-          onItemMove={this.props.onItemMove}
-          onItemCopy={this.props.onItemCopy}
-          onDirentClick={this.props.onDirentClick}
-          isDirentListLoading={this.props.isDirentListLoading}
-          updateDirent={this.props.updateDirent}
-          isAllItemSelected={this.props.isAllItemSelected}
-          onAllItemSelected={this.props.onAllItemSelected}
-          selectedDirentList={this.props.selectedDirentList}
-          onItemsMove={this.props.onItemsMove}
-          onItemsCopy={this.props.onItemsCopy}
-          onItemConvert={this.props.onItemConvert}
-          onItemsDelete={this.props.onItemsDelete}
-          onAddFile={this.props.onAddFile}
-          onAddFolder={this.props.onAddFolder}
-          repoTags={this.props.repoTags}
-          onFileTagChanged={this.props.onFileTagChanged}
-          showDirentDetail={this.props.showDirentDetail}
-          loadDirentList={this.props.loadDirentList}
-          getMenuContainerSize={this.props.getMenuContainerSize}
-          eventBus={this.props.eventBus}
-        />
+        {this.props.isDirentListLoading ? (
+          <Loading />
+        ) : (
+          <DirentListView
+            path={this.props.path}
+            currentRepoInfo={this.props.currentRepoInfo}
+            repoID={this.props.repoID}
+            isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+            userPerm={this.props.userPerm}
+            enableDirPrivateShare={this.props.enableDirPrivateShare}
+            direntList={this.props.direntList}
+            fullDirentList={this.props.fullDirentList}
+            sortBy={this.props.sortBy}
+            sortOrder={this.props.sortOrder}
+            sortItems={this.props.sortItems}
+            onItemClick={this.props.onItemClick}
+            onItemSelected={this.props.onItemSelected}
+            onItemDelete={this.props.onItemDelete}
+            onItemRename={this.props.onItemRename}
+            onItemMove={this.props.onItemMove}
+            onItemCopy={this.props.onItemCopy}
+            onDirentClick={this.props.onDirentClick}
+            updateDirent={this.props.updateDirent}
+            isAllItemSelected={this.props.isAllItemSelected}
+            onAllItemSelected={this.props.onAllItemSelected}
+            selectedDirentList={this.props.selectedDirentList}
+            onItemsMove={this.props.onItemsMove}
+            onItemsCopy={this.props.onItemsCopy}
+            onItemConvert={this.props.onItemConvert}
+            onItemsDelete={this.props.onItemsDelete}
+            onAddFile={this.props.onAddFile}
+            onAddFolder={this.props.onAddFolder}
+            repoTags={this.props.repoTags}
+            onFileTagChanged={this.props.onFileTagChanged}
+            showDirentDetail={this.props.showDirentDetail}
+            loadDirentList={this.props.loadDirentList}
+            getMenuContainerSize={this.props.getMenuContainerSize}
+            eventBus={this.props.eventBus}
+          />
+        )}
       </Fragment>
     );
   }

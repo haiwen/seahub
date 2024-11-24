@@ -40,7 +40,7 @@ const TagsManagement = () => {
   if (isLoading) return (<CenteredLoading />);
   return (
     <>
-      <div className="ssf-metadata-tags-wrapper">
+      <div className="sf-metadata-tags-wrapper sf-metadata-tags-management-wrapper">
         <div className="sf-metadata-tags-main">
           <div className="sf-metadata-tags-management-container">
             <div className="sf-metadata-container-header">
@@ -48,7 +48,7 @@ const TagsManagement = () => {
               <div className="sf-metadata-container-header-actions">
                 {context.canAddTag() && (
                   <Button color="primary" className="sf-metadata-container-header-add-tag" onClick={openAddTag}>
-                    {gettext('Add Tag')}
+                    {gettext('New Tag')}
                   </Button>
                 )}
               </div>

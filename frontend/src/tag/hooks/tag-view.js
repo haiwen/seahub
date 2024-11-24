@@ -45,6 +45,7 @@ export const TagViewProvider = ({ repoID, tagID, children, ...params }) => {
       tagFiles,
       repoID,
       tagID,
+      repoInfo: params.repoInfo,
       deleteFilesCallback: params.deleteFilesCallback,
       renameFileCallback: params.renameFileCallback,
       updateCurrentDirent: params.updateCurrentDirent,

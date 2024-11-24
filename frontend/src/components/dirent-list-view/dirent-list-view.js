@@ -4,7 +4,6 @@ import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, th
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
-import Loading from '../loading';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../dialog/create-file-dialog';
@@ -27,7 +26,6 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
-  isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
@@ -82,6 +80,7 @@ class DirentListView extends React.Component {
       activeDirent: null,
       isListDropTipShow: false,
       isShowDirentsDraggablePreview: false,
+      containerWidth: 0,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -102,11 +101,19 @@ class DirentListView extends React.Component {
       const { modify } = customPermission.permission;
       this.canDrop = modify;
     }
+
+    this.containerRef = null;
   }
 
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_IMAGE, this.recalculateImageItems);
+    this.resizeObserver = new ResizeObserver(this.handleResize);
+    this.containerRef && this.resizeObserver.observe(this.containerRef);
   }
+
+  handleResize = () => {
+    this.setState({ containerWidth: this.containerRef.offsetWidth - 32 });
+  };
 
   recalculateImageItems = () => {
     if (!this.state.isImagePopupOpen) return;
@@ -122,6 +129,7 @@ class DirentListView extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribeEvent();
+    this.containerRef && this.resizeObserver.unobserve(this.containerRef);
   }
 
   freezeItem = () => {
@@ -680,10 +688,7 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
-
-    if (this.props.isDirentListLoading) {
-      return (<Loading />);
-    }
+    const { containerWidth } = this.state;
 
     // sort
     const sortByName = sortBy == 'name';
@@ -704,13 +709,14 @@ class DirentListView extends React.Component {
         onDragOver={this.onTableDragOver}
         onDragLeave={this.onTableDragLeave}
         onDrop={this.tableDrop}
+        ref={ref => this.containerRef = ref}
       >
         {direntList.length > 0 &&
         <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? (
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
               <tr>
-                <th width="3%" className="pl10">
+                <th style={{ width: 31 }} className="pl10 pr-2">
                   <input
                     type="checkbox"
                     className="vam"
@@ -721,13 +727,13 @@ class DirentListView extends React.Component {
                     disabled={direntList.length === 0}
                   />
                 </th>
-                <th width="3%" className="pl10">{/* icon */}</th>
-                <th width="5%" className="pl10">{/* star */}</th>
-                <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="6%">{/* tag */}</th>
-                <th width="18%">{/* operation */}</th>
-                <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-                <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+                <th style={{ width: 32 }} className="pl-2 pr-2">{/* star */}</th>
+                <th style={{ width: 40 }} className="pl-2 pr-2">{/* icon */}</th>
+                <th style={{ width: (containerWidth - 103) * 0.5 }}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th style={{ width: (containerWidth - 103) * 0.06 }}>{/* tag */}</th>
+                <th style={{ width: (containerWidth - 103) * 0.18 }}>{/* operation */}</th>
+                <th style={{ width: (containerWidth - 103) * 0.11 }}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+                <th style={{ width: (containerWidth - 103) * 0.15 }}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
               </tr>
             </thead>
           ) : (

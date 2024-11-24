@@ -819,17 +819,18 @@ class DirentListItem extends React.Component {
             onMouseDown={this.onItemMouseDown}
             onContextMenu={this.onItemContextMenu}
           >
-            <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
+            <td className={`pl10 pr-2 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
               <input
                 type="checkbox"
                 className="vam"
                 onClick={this.onItemSelected}
+                style={{ position: 'relative', top: -1 }}
                 onChange={() => {}}
                 checked={isSelected}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />
             </td>
-            <td className="pl10">
+            <td className="pl-2 pr-2">
               {dirent.starred !== undefined &&
                 <i
                   role="button"
@@ -840,7 +841,7 @@ class DirentListItem extends React.Component {
                 </i>
               }
             </td>
-            <td className="pl10">
+            <td className="pl-2 pr-2">
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
                   <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :

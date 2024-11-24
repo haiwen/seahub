@@ -2,7 +2,6 @@ import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
@@ -32,23 +31,28 @@ const _getParentDir = (record) => {
   return parentDir;
 };
 
-const _generateUrl = (fileName, parentDir) => {
-  const repoID = window.sfMetadataContext.getSetting('repoID');
+const _generateUrl = (repoID, fileName, parentDir) => {
   const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
   return `${siteRoot}lib/${repoID}/file${path}`;
 };
 
 const _openUrl = (url) => {
+  const isWeChat = Utils.isWeChat();
+  if (isWeChat) {
+    location.href = url;
+    return;
+  }
   window.open(url);
 };
 
-const _openMarkdown = (fileName, parentDir, eventBus) => {
-  eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN, parentDir, fileName);
+const _openMarkdown = (repoID, fileName, parentDir) => {
+  const url = _generateUrl(repoID, fileName, parentDir);
+  _openUrl(url);
 };
 
-const _openByNewWindow = (fileName, parentDir, fileType) => {
+const _openByNewWindow = (repoID, fileName, parentDir, fileType) => {
   if (!fileType) {
-    const url = _generateUrl(fileName, parentDir);
+    const url = _generateUrl(repoID, fileName, parentDir);
     _openUrl(url);
     return;
   }
@@ -59,16 +63,16 @@ const _openByNewWindow = (fileName, parentDir, fileType) => {
   _openUrl(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
 };
 
-const _openSdoc = (fileName, parentDir) => {
-  const url = _generateUrl(fileName, parentDir);
+const _openSdoc = (repoID, fileName, parentDir) => {
+  const url = _generateUrl(repoID, fileName, parentDir);
   _openUrl(url);
 };
 
-const _openOthers = (fileName, parentDir, fileType) => {
-  _openByNewWindow(fileName, parentDir, fileType);
+const _openOthers = (repoID, fileName, parentDir, fileType) => {
+  _openByNewWindow(repoID, fileName, parentDir, fileType);
 };
 
-export const openFile = (record, eventBus, _openImage = () => {}) => {
+export const openFile = (repoID, record, _openImage = () => {}) => {
   if (!record) return;
   const fileName = getFileNameFromRecord(record);
   const isDir = checkIsDir(record);
@@ -77,11 +81,11 @@ export const openFile = (record, eventBus, _openImage = () => {}) => {
 
   switch (fileType) {
     case FILE_TYPE.MARKDOWN: {
-      _openMarkdown(fileName, parentDir, eventBus);
+      _openMarkdown(repoID, fileName, parentDir);
       break;
     }
     case FILE_TYPE.SDOC: {
-      _openSdoc(fileName, parentDir);
+      _openSdoc(repoID, fileName, parentDir);
       break;
     }
     case FILE_TYPE.IMAGE: {
@@ -89,7 +93,7 @@ export const openFile = (record, eventBus, _openImage = () => {}) => {
       break;
     }
     default: {
-      _openOthers(fileName, parentDir, fileType);
+      _openOthers(repoID, fileName, parentDir, fileType);
       break;
     }
   }

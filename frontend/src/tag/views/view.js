@@ -13,7 +13,7 @@ const View = () => {
 
   if (isLoading) return (<CenteredLoading />);
   return (
-    <div className="sf-metadata-tags-wrapper">
+    <div className="sf-metadata-tags-wrapper sf-metadata-tag-files-wrapper">
       <div className="sf-metadata-tags-main">
         {errorMessage ? <div className="d-center-middle error">{errorMessage}</div> : renderTagView()}
       </div>
