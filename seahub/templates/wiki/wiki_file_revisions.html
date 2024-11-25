@@ -3,7 +3,7 @@
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
-{% render_bundle 'WikiFileHistory' 'css'%}
+{% render_bundle 'sdocFileHistory' 'css'%}
 {% endblock %}
 
 {% block extra_script %}
@@ -15,11 +15,14 @@
             wikiConfig: '{{ wiki_config|safe }}',
             repoID: '{{ repo.id }}',
             repoName: '{{ repo.name }}',
+            fileName: '{{ file_name }}',
+            filePath: '{{ filePath }}',
+            docUuid: '{{ file_uuid }}',
             assetsUrl: '{{ assets_url }}',
             seadocAccessToken: '{{ seadoc_access_token }}',
             seadocServerUrl: '{{ seadoc_server_url }}',
         }
     }
     </script>
-    {% render_bundle 'WikiFileHistory' 'js'%}
+    {% render_bundle 'sdocFileHistory' 'js'%}
 {% endblock %}

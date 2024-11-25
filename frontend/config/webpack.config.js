@@ -101,7 +101,6 @@ const excludedChunkNames = [
   'sdocPublishedRevision',
   'sdocFileHistory',
   'wiki2',
-  'WikiFileHistory',
   'sharedFileViewText',
   'viewFileText',
   'sharedFileViewMarkdown',

@@ -175,11 +175,15 @@ def wiki_history_view(request, wiki_id):
     repo = seafile_api.get_repo(repo_id)
     file_uuid = page_info['docUuid']
     file_name = page_info['name']
+    filePath = page_info['path']
     wiki_config = json.dumps(page_info)
 
     return render(request, "wiki/wiki_file_revisions.html", {
         'repo': repo,
         "wiki_config": wiki_config,
+        "file_uuid": file_uuid,
+        "file_name": file_name,
+        "filePath": filePath,
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
         "seadoc_access_token": gen_seadoc_access_token(file_uuid, file_name, username, permission='rw'),
         "seadoc_server_url": SEADOC_SERVER_URL
