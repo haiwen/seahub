@@ -6,17 +6,21 @@ import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../constants';
 import { useMetadataStatus } from '../../hooks';
+import { updateFavicon } from '../utils/favicon';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMetadataView, children }) => {
+export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataView, selectMetadataView, children }) => {
+  const [isLoading, setLoading] = useState(true);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
+
   const viewsMap = useRef({});
+  const originalTitleRef = useRef(document.title);
 
   const isEmptyRepo = useMemo(() => repoInfo.file_count === 0, [repoInfo]);
 
@@ -32,6 +36,7 @@ export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMet
 
   // views
   useEffect(() => {
+    setLoading(true);
     if (enableMetadata) {
       metadataAPI.listViews(repoID).then(res => {
         const { navigation, views } = res.data;
@@ -46,9 +51,11 @@ export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMet
           type: VIEW_TYPE.FACE_RECOGNITION,
         };
         setNavigation(navigation);
+        setLoading(false);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
         toaster.danger(errorMsg);
+        setLoading(false);
       });
       return;
     }
@@ -57,8 +64,9 @@ export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMet
     viewsMap.current = {};
     setStaticView([]);
     setNavigation([]);
+    setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadata, hideMetadataView]);
+  }, [repoID, enableMetadata]);
 
   useEffect(() => {
     if (!enableMetadata) {
@@ -170,6 +178,43 @@ export const MetadataProvider = ({ repoID, repoInfo, hideMetadataView, selectMet
       toaster.danger(errorMsg);
     });
   }, [repoID]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const { origin, pathname, search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    if (!urlParams.has('view')) return;
+    const viewID = urlParams.get('view');
+    if (viewID) {
+      const lastOpenedView = viewsMap.current[viewID] || '';
+      if (lastOpenedView) {
+        selectView(lastOpenedView);
+        return;
+      }
+      const url = `${origin}${pathname}`;
+      window.history.pushState({ url: url, path: '' }, '', url);
+    }
+
+    const firstViewObject = navigation.find(item => item.type === 'view');
+    const firstView = firstViewObject ? viewsMap.current[firstViewObject._id] : '';
+    if (firstView) {
+      selectView(firstView);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
+    const currentViewId = currentPath.split('/').pop();
+    const currentView = viewsMap.current[currentViewId];
+    if (currentView) {
+      document.title = `${currentView.name} - Seafile`;
+      updateFavicon(currentView.type);
+      return;
+    }
+    document.title = originalTitleRef.current;
+    updateFavicon('default');
+  }, [currentPath, viewsMap]);
 
   return (
     <MetadataContext.Provider value={{

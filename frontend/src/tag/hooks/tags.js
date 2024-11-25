@@ -3,25 +3,26 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import { useMetadataStatus } from '../../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { getTagColor, getTagId, getTagName, getCellValueByColumn } from '../utils/cell/core';
+import { getTagColor, getTagId, getTagName, getCellValueByColumn, updateFavicon } from '../utils';
 import Context from '../context';
 import Store from '../store';
 import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
 import { getRowById } from '../../metadata/utils/table';
 import { gettext } from '../../utils/constants';
-import { PRIVATE_COLUMN_KEY } from '../constants';
+import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagsContext = React.createContext(null);
 
-export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) => {
+export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ...params }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [tagsData, setTagsData] = useState(null);
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
+  const originalTitleRef = useRef(document.title);
 
   const { enableMetadata, enableTags } = useMetadataStatus();
 
@@ -178,6 +179,48 @@ export const TagsProvider = ({ repoID, selectTagsView, children, ...params }) =>
 
     modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyLocalTags]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const { search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    if (!urlParams.has('tag')) return;
+    const tagId = urlParams.get('tag');
+    if (tagId) {
+      if (tagId === ALL_TAGS_ID) {
+        handelSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
+        return;
+      }
+
+      const lastOpenedTag = getRowById(tagsData, tagId);
+      if (lastOpenedTag) {
+        handelSelectTag(lastOpenedTag);
+        return;
+      }
+
+      handelSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
+    const currentTagId = currentPath.split('/').pop();
+    if (currentTagId === ALL_TAGS_ID) {
+      document.title = `${gettext('All tags')} - Seafile`;
+      return;
+    }
+    const currentTag = getRowById(tagsData, currentTagId);
+    if (currentTag) {
+      const tagName = getTagName(currentTag);
+      document.title = `${tagName} - Seafile`;
+      updateFavicon('default');
+      return;
+    }
+    document.title = originalTitleRef.current;
+    updateFavicon('default');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPath, tagsData]);
 
   return (
     <TagsContext.Provider value={{
