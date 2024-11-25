@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
+import classnames from 'classnames';
 import { gettext, username, canAddRepo } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -20,6 +21,9 @@ import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/sort-menu';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 import '../../css/group-view.css';
 
@@ -41,6 +45,7 @@ class GroupView extends React.Component {
       currentRepo: null,
       isStaff: false,
       isOwner: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false,
@@ -386,8 +391,27 @@ class GroupView extends React.Component {
     return opList;
   };
 
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({ sortBy, sortOrder }, () => {
+      this.sortItems(sortBy, sortOrder);
+    });
+  };
+
   render() {
-    const { errMessage, emptyTip, currentGroup, isDepartmentGroup, isMembersDialogOpen } = this.state;
+    const {
+      isLoading, repoList, errMessage, emptyTip,
+      currentGroup, isDepartmentGroup, isMembersDialogOpen,
+      currentViewMode, sortBy, sortOrder
+    } = this.state;
 
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
@@ -409,11 +433,11 @@ class GroupView extends React.Component {
                     <span>{currentGroup.name}</span>
                     <SingleDropdownToolbar opList={opList} />
                   </div>
-                  <div className="path-tool">
+                  <div className="path-tool d-flex align-items-center">
                     {isDepartmentGroup && (
                       <>
                         {currentGroup.group_quota > 0 &&
-                          <div className="department-usage-container">
+                          <div className="department-usage-container mr-3">
                             <div className="department-usage">
                               <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{ width: useRate }}></span></span>
                               <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
@@ -422,38 +446,54 @@ class GroupView extends React.Component {
                         }
                       </>
                     )}
+                    {Utils.isDesktop() && (
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">
+                          <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                        </div>
+                        <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
+                      </div>
+                    )}
                     {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
                       <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
-                      toggleDialog={this.toggleSortOptionsDialog}
-                      sortBy={this.state.sortBy}
-                      sortOrder={this.state.sortOrder}
+                      sortBy={sortBy}
+                      sortOrder={sortOrder}
                       sortItems={this.sortItems}
+                      toggleDialog={this.toggleSortOptionsDialog}
                     />
                     }
                   </div>
                 </Fragment>
               )}
             </div>
-            <div className="cur-view-content d-block" onScroll={this.handleScroll}>
-              {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
-              {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
-              {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <SharedRepoListView
-                  repoList={this.state.repoList}
-                  hasNextPage={this.state.hasNextPage}
-                  currentGroup={this.state.currentGroup}
-                  sortBy={this.state.sortBy}
-                  sortOrder={this.state.sortOrder}
-                  sortItems={this.sortItems}
-                  onItemUnshare={this.onItemUnshare}
-                  onItemDelete={this.onItemDelete}
-                  onItemRename={this.onItemRename}
-                  onMonitorRepo={this.onMonitorRepo}
-                  onTransferRepo={this.onItemTransfer}
-                />
+            <div
+              className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}
+              onScroll={this.handleScroll}
+            >
+              {isLoading
+                ? <Loading />
+                : errMessage
+                  ? <p className="error text-center mt-2">{errMessage}</p>
+                  : repoList.length == 0
+                    ? emptyTip
+                    : (
+                      <SharedRepoListView
+                        repoList={this.state.repoList}
+                        hasNextPage={this.state.hasNextPage}
+                        currentGroup={this.state.currentGroup}
+                        sortBy={this.state.sortBy}
+                        sortOrder={this.state.sortOrder}
+                        sortItems={this.sortItems}
+                        onItemUnshare={this.onItemUnshare}
+                        onItemDelete={this.onItemDelete}
+                        onItemRename={this.onItemRename}
+                        onMonitorRepo={this.onMonitorRepo}
+                        onTransferRepo={this.onItemTransfer}
+                        currentViewMode={currentViewMode}
+                      />
+                    )
               }
             </div>
           </div>

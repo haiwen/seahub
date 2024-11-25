@@ -4,14 +4,21 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext } from '../utils/constants';
 
 const propTypes = {
-  sortOptions: PropTypes.array,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
   onSelectSortOption: PropTypes.func.isRequired
 };
 
-class ReposSortMenu extends React.Component {
+class SortMenu extends React.Component {
 
   constructor(props) {
     super(props);
+    this.sortOptions = [
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'time-asc', text: gettext('By time ascending') },
+      { value: 'time-desc', text: gettext('By time descending') }
+    ];
     this.state = {
       isDropdownMenuOpen: false
     };
@@ -25,7 +32,13 @@ class ReposSortMenu extends React.Component {
 
   render() {
     const { isDropdownMenuOpen } = this.state;
-    const { sortOptions } = this.props;
+    const { sortBy, sortOrder } = this.props;
+    const sortOptions = this.sortOptions.map(item => {
+      return {
+        ...item,
+        isSelected: item.value == `${sortBy}-${sortOrder}`
+      };
+    });
     return (
       <Dropdown
         isOpen={isDropdownMenuOpen}
@@ -59,6 +72,6 @@ class ReposSortMenu extends React.Component {
 
 }
 
-ReposSortMenu.propTypes = propTypes;
+SortMenu.propTypes = propTypes;
 
-export default ReposSortMenu;
+export default SortMenu;

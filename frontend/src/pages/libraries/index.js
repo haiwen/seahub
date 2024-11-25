@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import cookie from 'react-cookies';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
+import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
-import ReposSortMenu from '../../components/repos-sort-menu';
+import ReposSortMenu from '../../components/sort-menu';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
-import SharedLibraries from '../shared-libs/shared-libraries';
+import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
@@ -24,13 +24,6 @@ import '../../css/files.css';
 class Libraries extends Component {
   constructor(props) {
     super(props);
-    this.sortOptions = [
-      { value: 'name-asc', text: gettext('By name ascending') },
-      { value: 'name-desc', text: gettext('By name descending') },
-      { value: 'time-asc', text: gettext('By time ascending') },
-      { value: 'time-desc', text: gettext('By time descending') }
-    ];
-
     this.state = {
       // for 'my libs'
       errorMsg: '',
@@ -250,12 +243,6 @@ class Libraries extends Component {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
 
-    const sortOptions = this.sortOptions.map(item => {
-      return {
-        ...item,
-        isSelected: item.value == `${sortBy}-${sortOrder}`
-      };
-    });
     return (
       <>
         <div className="main-panel-center flex-row">
@@ -267,73 +254,75 @@ class Libraries extends Component {
                 <div className="mr-2">
                   <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
                 </div>
-                <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
+                <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
               </div>
               }
             </div>
-            {isLoading ?
-              <Loading /> :
-              <div className="cur-view-content" id="files-content-container">
+            <div className="cur-view-content repos-container" id="files-content-container">
+              {isLoading ? <Loading /> : (
+                <>
+                  {(Utils.isDesktop() && currentViewMode == LIST_MODE) && (
+                    <table aria-hidden={true} className="my-3">
+                      <thead>
+                        <tr>
+                          <th width="4%"></th>
+                          <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                          <th width="35%">{gettext('Name')}</th>
+                          <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                          <th width="14%">{gettext('Size')}</th>
+                          <th width="17%">{gettext('Last Update')}</th>
+                          <th width="17%">{gettext('Owner')}</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  )}
 
-                {(Utils.isDesktop() && currentViewMode == LIST_MODE) && (
-                  <table aria-hidden={true} className="my-3">
-                    <thead>
-                      <tr>
-                        <th width="4%"></th>
-                        <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                        <th width="35%">{gettext('Name')}</th>
-                        <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                        <th width="14%">{gettext('Size')}</th>
-                        <th width="17%">{gettext('Last Update')}</th>
-                        <th width="17%">{gettext('Owner')}</th>
-                      </tr>
-                    </thead>
-                  </table>
-                )}
-
-                {canAddRepo && (
-                  <div className="pb-3">
-                    <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-                      <h4 className="sf-heading m-0 d-flex align-items-center">
-                        <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
-                        {gettext('My Libraries')}
-                        <SingleDropdownToolbar
-                          opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
-                        />
-                      </h4>
-                      {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
-                        <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                  {canAddRepo && (
+                    <div className="pb-3">
+                      <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
+                        <h4 className="sf-heading m-0 d-flex align-items-center">
+                          <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+                          {gettext('My Libraries')}
+                          <SingleDropdownToolbar
+                            opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
+                          />
+                        </h4>
+                        {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
+                          <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                        }
+                      </div>
+                      {this.state.errorMsg
+                        ? <p className="error text-center mt-8">{this.state.errorMsg}</p>
+                        : this.state.repoList.length == 0
+                          ? <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>
+                          : (
+                            <MylibRepoListView
+                              sortBy={this.state.sortBy}
+                              sortOrder={this.state.sortOrder}
+                              repoList={this.state.repoList}
+                              onRenameRepo={this.onRenameRepo}
+                              onDeleteRepo={this.onDeleteRepo}
+                              onTransferRepo={this.onTransferRepo}
+                              onMonitorRepo={this.onMonitorRepo}
+                              onRepoClick={this.onRepoClick}
+                              sortRepoList={this.sortRepoList}
+                              inAllLibs={true}
+                              currentViewMode={currentViewMode}
+                            />
+                          )
                       }
                     </div>
-                    {this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
-                      this.state.repoList.length === 0 ? (
-                        <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>
-                      ) : (
-                        <MylibRepoListView
-                          sortBy={this.state.sortBy}
-                          sortOrder={this.state.sortOrder}
-                          repoList={this.state.repoList}
-                          onRenameRepo={this.onRenameRepo}
-                          onDeleteRepo={this.onDeleteRepo}
-                          onTransferRepo={this.onTransferRepo}
-                          onMonitorRepo={this.onMonitorRepo}
-                          onRepoClick={this.onRepoClick}
-                          sortRepoList={this.sortRepoList}
-                          inAllLibs={true}
-                          currentViewMode={currentViewMode}
-                        />
-                      ))
-                    }
+                  )}
+
+                  <div className="pb-3">
+                    <SharedLibraries
+                      repoList={this.state.sharedRepoList}
+                      inAllLibs={true}
+                      currentViewMode={currentViewMode}
+                    />
                   </div>
-                )}
-                <div className="pb-3">
-                  <SharedLibraries
-                    repoList={this.state.sharedRepoList}
-                    inAllLibs={true}
-                    currentViewMode={currentViewMode}
-                  />
-                </div>
-                {canViewOrg &&
+
+                  {canViewOrg &&
                   <div className="pb-3">
                     <SharedWithAll
                       repoList={this.state.publicRepoList}
@@ -341,8 +330,8 @@ class Libraries extends Component {
                       currentViewMode={currentViewMode}
                     />
                   </div>
-                }
-                <div className="repos-container">
+                  }
+
                   {groupList.length > 0 && groupList.map((group) => {
                     return (
                       <GroupItem
@@ -355,9 +344,9 @@ class Libraries extends Component {
                       />
                     );
                   })}
-                </div>
-              </div>
-            }
+                </>
+              )}
+            </div>
           </div>
           {!isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
             <GuideForNewDialog
