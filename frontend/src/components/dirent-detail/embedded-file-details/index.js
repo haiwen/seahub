@@ -35,9 +35,6 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const direntName = dirent?.name || '';
-  const smallIconUrl = Utils.getDirentIcon(dirent);
-
   return (
     <div
       className={classnames('cur-view-detail', className, {
@@ -46,7 +43,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       })}
       style={{ width }}
     >
-      <Header title={direntName} icon={smallIconUrl} onClose={onClose} component={headerComponent} />
+      <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} />
       <Body>
         {dirent && direntDetail && (
           <div className="detail-content">

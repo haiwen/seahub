@@ -14,7 +14,7 @@ import { CellType } from '../../metadata/constants';
 const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   const [isLoading, setLoading] = useState(true);
   const [repo, setRepo] = useState({});
-  const smallIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo), [currentRepoInfo]);
+  const libIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo, true), [currentRepoInfo]);
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const creatorField = useMemo(() => ({ type: CellType.CREATOR, name: gettext('Creator') }), []);
@@ -34,7 +34,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
 
   return (
     <Detail>
-      <Header title={currentRepoInfo.repo_name} icon={smallIconUrl} onClose={onClose} />
+      <Header title={currentRepoInfo.repo_name} icon={libIconUrl} onClose={onClose} />
       <Body>
         {isLoading ?
           <div className="w-100 h-100 d-flex algin-items-center justify-content-center"><Loading /></div>
