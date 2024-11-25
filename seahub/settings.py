@@ -501,6 +501,9 @@ ADMIN_LOGS_EXPORT_MAX_DAYS = 180
 # Enable show about module
 ENABLE_SHOW_ABOUT = True
 
+# enable show wechat support
+SHOW_WECHAT_SUPPORT_GROUP = False
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']

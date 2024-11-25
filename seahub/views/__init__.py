@@ -53,12 +53,12 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
-    SHARE_LINK_EXPIRE_DAYS_MIN, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER, SEADOC_SERVER_URL
+    DTABLE_WEB_SERVER, SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
@@ -1140,19 +1140,20 @@ def react_fake_view(request, **kwargs):
         'enable_ocm_via_webdav': ENABLE_OCM_VIA_WEBDAV,
         'enable_ocm': ENABLE_OCM,
         'ocm_remote_servers': OCM_REMOTE_SERVERS,
+        'show_wechat_support_group': SHOW_WECHAT_SUPPORT_GROUP,
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
         'enable_pdf_thumbnail': settings.ENABLE_PDF_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
-        'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
+        'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
         'enable_show_about': settings.ENABLE_SHOW_ABOUT
 
     }
 
-    if settings.ENABLE_METADATA_MANAGEMENT:
+    if ENABLE_METADATA_MANAGEMENT:
         return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
         return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
         return_dict['google_map_id'] = settings.GOOGLE_MAP_ID

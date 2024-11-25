@@ -5,7 +5,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
-  enableTC, sideNavFooterCustomHtml, enableShowAbout,
+  enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -24,8 +24,6 @@ const propTypes = {
   tabItemClick: PropTypes.func.isRequired,
   toggleFoldSideNav: PropTypes.func
 };
-
-const showWechatSupportGroup = true;
 
 class MainSideNav extends React.Component {
   constructor(props) {

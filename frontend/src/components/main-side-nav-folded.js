@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml,
+import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
   isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
@@ -18,8 +18,6 @@ import WechatDialog from './wechat/wechat-dialog';
 
 
 import '../css/main-side-nav-folded.css';
-
-const showWechatSupportGroup = true;
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
