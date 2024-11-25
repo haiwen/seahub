@@ -96,12 +96,9 @@ class DirentDetails extends React.Component {
   render() {
     const { dirent, direntDetail } = this.state;
     const { repoID, path, fileTags } = this.props;
-    const direntName = dirent?.name || '';
-    const smallIconUrl = Utils.getDirentIcon(dirent);
-
     return (
       <Detail>
-        <Header title={direntName} icon={smallIconUrl} onClose={this.props.onClose} />
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} />
         <Body>
           {this.renderImage()}
           {dirent && direntDetail && (
