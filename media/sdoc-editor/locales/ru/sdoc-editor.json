@@ -571,5 +571,8 @@
   "Three_column": "3 столбца",
   "Four_column": "4 столбца",
   "Five_column": "5 столбцов",
-  "Full_width_mode": "Режим полной ширины"
+  "Full_width_mode": "Режим полной ширины",
+  "Video": "Видео",
+  "Upload_local_video": "Upload_local_video",
+  "The_current_version_does_not_support_>5MB_video_file": "The_current_version_does_not_support_>5MB_video_file"
 }

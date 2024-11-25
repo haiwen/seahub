@@ -571,5 +571,8 @@
   "Three_column": "3 columns",
   "Four_column": "4 columns",
   "Five_column": "5 columns",
-  "Full_width_mode": "Full width mode"
+  "Full_width_mode": "Full width mode",
+  "Video": "Video",
+  "Upload_local_video": "Upload_local_video",
+  "The_current_version_does_not_support_>5MB_video_file": "The_current_version_does_not_support_>5MB_video_file"
 }
