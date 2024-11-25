@@ -193,6 +193,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('Document keywords');
     case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION:
       return gettext('Description');
+    case PRIVATE_COLUMN_KEY.OCR_RESULT:
+      return gettext('OCR result');
     case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
       return gettext('Is expired');
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
@@ -258,6 +260,8 @@ export const getNormalizedColumnType = (key, type) => {
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
       return CellType.TEXT;
     case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION:
+      return CellType.LONG_TEXT;
+    case PRIVATE_COLUMN_KEY.OCR_RESULT:
       return CellType.LONG_TEXT;
     case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
       return CellType.CHECKBOX;

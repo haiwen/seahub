@@ -2,7 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags
+from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess
@@ -1048,4 +1048,5 @@ urlpatterns += [
     re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
     re_path(r'^api/v2.1/ai/generate-file-tags/$', GenerateFileTags.as_view(), name='api-v2.1-generate-file-tags'),
     re_path(r'^api/v2.1/ai/generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),
+    re_path(r'^api/v2.1/ai/ocr/$', OCR.as_view(), name='api-v2.1-ocr'),
 ]

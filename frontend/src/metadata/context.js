@@ -235,6 +235,11 @@ class Context {
     return this.metadataAPI.generateFileTags(repoID, filePath);
   };
 
+  ocr = (filePath) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.ocr(repoID, filePath);
+  };
+
   extractFileDetails = (objIds) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.extractFileDetails(repoID, objIds);

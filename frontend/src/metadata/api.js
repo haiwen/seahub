@@ -237,6 +237,15 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  ocr = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/ocr/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+    };
+    return this.req.post(url, params);
+  };
+
   extractFileDetails = (repoID, objIds) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
     const params = {

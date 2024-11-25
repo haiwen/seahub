@@ -97,6 +97,14 @@ const COLUMNS = [
     data: DEFAULT_RATE_DATA,
     groupby: 'predefined'
   }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
+    type: CellType.LONG_TEXT,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.OCR_RESULT),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.OCR_RESULT,
+    canChangeName: false,
+    groupby: 'predefined'
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: gettext('Text'),
