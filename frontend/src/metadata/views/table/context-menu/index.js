@@ -19,6 +19,7 @@ const OPERATION = {
   OPEN_PARENT_FOLDER: 'open-parent-folder',
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
+  OCR: 'ocr',
   IMAGE_CAPTION: 'image-caption',
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
@@ -57,6 +58,7 @@ const ContextMenu = (props) => {
     const isReadonly = permission === 'r';
     const { columns } = metadata;
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
+    const ocrResultColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.OCR_RESULT);
     let list = [];
 
     // handle selected multiple cells
@@ -132,6 +134,12 @@ const ContextMenu = (props) => {
         list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
       } else if (canModifyRow && Utils.imageCheck(fileName)) {
         list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description'), record });
+      }
+    }
+
+    if (ocrResultColumn) {
+      if (canModifyRow && Utils.imageCheck(fileName)) {
+        list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
       }
     }
 
@@ -244,6 +252,34 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
+  const ocr = useCallback((record) => {
+    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR_RESULT;
+    let path = '';
+    let idOldRecordData = {};
+    let idOriginalOldRecordData = {};
+    const fileName = getFileNameFromRecord(record);
+    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
+      const parentDir = getParentDirFromRecord(record);
+      path = Utils.joinPath(parentDir, fileName);
+      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
+      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
+    }
+    if (path === '') return;
+    window.sfMetadataContext.ocr(path).then(res => {
+      const ocrResult = res.data.ocr_result;
+      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+      const recordIds = [updateRecordId];
+      let idRecordUpdates = {};
+      let idOriginalRecordUpdates = {};
+      idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: `\n\n\`\`\`json\n${JSON.stringify(ocrResult)}\n\`\`\`\n\n\n` };
+      idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: `\n\n\`\`\`json\n${JSON.stringify(ocrResult)}\n\`\`\`\n\n\n` };
+      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+    }).catch(error => {
+      const errorMessage = gettext('OCR failed');
+      toaster.danger(errorMessage);
+    });
+  }, [updateRecords]);
+
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
     if (recordObjIds.length > 50) {
@@ -313,6 +349,12 @@ const ContextMenu = (props) => {
         imageCaption(record);
         break;
       }
+      case OPERATION.OCR: {
+        const { record } = option;
+        if (!record) break;
+        ocr(record);
+        break;
+      }
       case OPERATION.DELETE_RECORD: {
         const { record } = option;
         if (!record || !record._id || !deleteRecords) break;
@@ -356,7 +398,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog, updateFileDetails]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
