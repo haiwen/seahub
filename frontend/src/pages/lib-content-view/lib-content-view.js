@@ -2197,8 +2197,8 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataStatusProvider repoID={repoID} currentRepoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
-        <TagsProvider repoID={repoID} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
-          <MetadataProvider repoID={repoID} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+          <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
                 <div className="cur-view-container">

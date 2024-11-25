@@ -6,7 +6,7 @@ import toaster from '../../components/toast';
 import Icon from '../../components/icon';
 import ViewItem from './view-item';
 import { AddView } from '../components/popover/view-popover';
-import { gettext, mediaUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
@@ -14,32 +14,6 @@ import { isValidViewName } from '../utils/validate';
 import { isEnter } from '../utils/hotkey';
 
 import './index.css';
-
-const updateFavicon = (type) => {
-  const favicon = document.getElementById('favicon');
-  if (favicon) {
-    switch (type) {
-      case VIEW_TYPE.GALLERY:
-      case 'image':
-        favicon.href = `${mediaUrl}favicons/gallery.png`;
-        break;
-      case VIEW_TYPE.TABLE:
-        favicon.href = `${mediaUrl}favicons/table.png`;
-        break;
-      case VIEW_TYPE.FACE_RECOGNITION:
-        favicon.href = `${mediaUrl}favicons/face-recognition-view.png`;
-        break;
-      case VIEW_TYPE.KANBAN:
-        favicon.href = `${mediaUrl}favicons/kanban.png`;
-        break;
-      case VIEW_TYPE.MAP:
-        favicon.href = `${mediaUrl}favicons/map.png`;
-        break;
-      default:
-        favicon.href = `${mediaUrl}favicons/favicon.png`;
-    }
-  }
-};
 
 const MetadataTreeView = ({ userPerm, currentPath }) => {
   const canAdd = useMemo(() => {
@@ -49,7 +23,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   const [, setState] = useState(0);
   const {
     enableFaceRecognition,
-    showFirstView,
     navigation,
     staticView,
     viewsMap,
@@ -64,54 +37,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [originalTitle, setOriginalTitle] = useState('');
+
   const inputRef = useRef(null);
-
-  useEffect(() => {
-    setOriginalTitle(document.title);
-  }, []);
-
-  useEffect(() => {
-    const { origin, pathname, search } = window.location;
-    const urlParams = new URLSearchParams(search);
-    const viewID = urlParams.get('view');
-    if (viewID) {
-      const lastOpenedView = viewsMap[viewID] || '';
-      if (lastOpenedView) {
-        selectView(lastOpenedView);
-        document.title = `${lastOpenedView.name} - Seafile`;
-        updateFavicon(lastOpenedView.type);
-        return;
-      }
-      const url = `${origin}${pathname}`;
-      window.history.pushState({ url: url, path: '' }, '', url);
-    }
-
-    const firstViewObject = navigation.find(item => item.type === 'view');
-    const firstView = firstViewObject ? viewsMap[firstViewObject._id] : '';
-    if (showFirstView && firstView) {
-      selectView(firstView);
-      document.title = `${firstView.name} - Seafile`;
-      updateFavicon(firstView.type);
-    } else {
-      document.title = originalTitle;
-      updateFavicon('default');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
-    const currentViewId = currentPath.split('/').pop();
-    const currentView = viewsMap[currentViewId];
-    if (currentView) {
-      document.title = `${currentView.name} - Seafile`;
-      updateFavicon(currentView.type);
-      return;
-    }
-    document.title = originalTitle;
-    updateFavicon('default');
-  }, [currentPath, viewsMap, originalTitle]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     updateView(viewId, update, () => {

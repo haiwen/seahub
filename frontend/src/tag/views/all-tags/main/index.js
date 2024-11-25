@@ -19,7 +19,7 @@ const Main = ({ context, tags }) => {
   return (
     <div className="sf-metadata-tags-table">
       <div className="sf-metadata-tags-table-header sf-metadata-tags-table-row">
-        <div className="sf-metadata-tags-table-cell">{gettext('tag')}</div>
+        <div className="sf-metadata-tags-table-cell">{gettext('Tag')}</div>
         <div className="sf-metadata-tags-table-cell">{gettext('File count')}</div>
         <div className="sf-metadata-tags-table-cell"></div>
       </div>
