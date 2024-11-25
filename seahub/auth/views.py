@@ -197,6 +197,7 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
+                 getattr(settings, 'ENABLE_CUSTOM_OAUTH', False) or \
                  getattr(settings, 'ENABLE_CAS', False) or \
                  getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
 
@@ -296,7 +297,7 @@ def logout(request, next_page=None,
     # Local logout for ouath user.
     via_oauth = request.COOKIES.get('via_oauth', '')
     oauth_logout_url = getattr(settings, 'OAUTH_LOGOUT_URL', '')
-    if getattr(settings, 'ENABLE_OAUTH', False) and via_oauth and oauth_logout_url:
+    if (getattr(settings, 'ENABLE_OAUTH', False) or getattr(settings, 'ENABLE_CUSTOM_OAUTH', False)) and via_oauth and oauth_logout_url:
         response = HttpResponseRedirect(oauth_logout_url)
         response.delete_cookie('via_oauth')
         response.delete_cookie('seahub_auth')

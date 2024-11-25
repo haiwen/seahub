@@ -58,6 +58,17 @@ if ENABLE_OAUTH:
         OAUTH_PROVIDER = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
     OAUTH_ATTRIBUTE_MAP = getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {})
 
+ENABLE_CUSTOM_OAUTH = getattr(settings, 'ENABLE_CUSTOM_OAUTH', False)
+if ENABLE_CUSTOM_OAUTH:
+    try:
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        conf_dir = os.path.join(current_path, '../../../../conf')
+        sys.path.append(conf_dir)
+        from seahub_custom_functions import custom_oauth_login, custom_oauth_callback
+        ENABLE_CUSTOM_OAUTH = True
+    except ImportError:
+        ENABLE_CUSTOM_OAUTH = False
+
 
 def oauth_check(func):
     """ Decorator for check if OAuth valid.
@@ -258,3 +269,22 @@ def oauth_callback(request):
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
     response.set_cookie('via_oauth', 'true')
     return response
+
+
+def custom_oauth_login_view(request):
+    if not ENABLE_CUSTOM_OAUTH:
+        return render_error(request, _('Feature is not enabled.'))
+
+    if request.user.is_authenticated:
+        # already authenticated
+        redirect_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
+        return HttpResponseRedirect(redirect_url)
+
+    return custom_oauth_login(request)
+
+
+def custom_oauth_callback_view(request):
+    if not ENABLE_CUSTOM_OAUTH:
+        return render_error(request, _('Feature is not enabled.'))
+
+    return custom_oauth_callback(request)
