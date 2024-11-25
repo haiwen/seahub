@@ -117,20 +117,29 @@ class DirentListItem extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.dirent && this.state.dirent && nextProps.dirent.name !== this.state.dirent.name) {
-      this.setState({
-        dirent: nextProps.dirent,
-      }, () => {
-        if (this.checkGenerateThumbnail(nextProps.dirent)) {
-          const { repoID, path } = nextProps;
-          this.isGeneratingThumbnail = true;
-          this.thumbnailCenter.createThumbnail({
-            repoID,
-            path: [path, nextProps.dirent.name].join('/'),
-            callback: this.updateDirentThumbnail,
-          });
-        }
-      });
+    if (nextProps.dirent && this.state.dirent) {
+      if (nextProps.dirent.name !== this.state.dirent.name) {
+        this.setState({
+          dirent: nextProps.dirent,
+        }, () => {
+          if (this.checkGenerateThumbnail(nextProps.dirent)) {
+            const { repoID, path } = nextProps;
+            this.isGeneratingThumbnail = true;
+            this.thumbnailCenter.createThumbnail({
+              repoID,
+              path: [path, nextProps.dirent.name].join('/'),
+              callback: this.updateDirentThumbnail,
+            });
+          }
+        });
+      }
+
+      if (
+        nextProps.dirent.is_locked !== this.state.dirent.is_locked ||
+        nextProps.dirent.starred !== this.state.dirent.starred
+      ) {
+        this.setState({ dirent: nextProps.dirent });
+      }
     }
   }
 
