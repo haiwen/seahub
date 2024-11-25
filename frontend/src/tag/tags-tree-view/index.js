@@ -6,8 +6,8 @@ import { getTagId, getTagName } from '../utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { gettext, mediaUrl } from '../../utils/constants';
 import { getRowById } from '../../metadata/utils/table';
-import TagsManagement from './tags-management';
-import { PRIVATE_COLUMN_KEY, TAG_MANAGEMENT_ID } from '../constants';
+import AllTags from './all-tags';
+import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 
 const updateFavicon = () => {
   const favicon = document.getElementById('favicon');
@@ -40,9 +40,9 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
     const urlParams = new URLSearchParams(search);
     const tagId = urlParams.get('tag');
     if (tagId) {
-      if (tagId === TAG_MANAGEMENT_ID) {
+      if (tagId === ALL_TAGS_ID) {
         if (!canUpdate) return;
-        selectTag({ [PRIVATE_COLUMN_KEY.ID]: TAG_MANAGEMENT_ID });
+        selectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
         return;
       }
 
@@ -65,9 +65,9 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
   useEffect(() => {
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
     const currentTagId = currentPath.split('/').pop();
-    if (currentTagId === TAG_MANAGEMENT_ID) {
+    if (currentTagId === ALL_TAGS_ID) {
       if (!canUpdate) return;
-      document.title = `${gettext('Tags management')} - Seafile`;
+      document.title = `${gettext('All tags')} - Seafile`;
       return;
     }
     const currentTag = getRowById(tagsData, currentTagId);
@@ -86,7 +86,7 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
     <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
         <div className="children">
-          {tags.map(tag => {
+          {tags.slice(0, 20).map(tag => {
             const id = getTagId(tag);
             const tagPath = '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + id;
             const isSelected = currentPath === tagPath;
@@ -99,7 +99,7 @@ const TagsTreeView = ({ userPerm, currentPath }) => {
               />
             );
           })}
-          {canUpdate && (<TagsManagement currentPath={currentPath} />)}
+          <AllTags currentPath={currentPath} />
         </div>
       </div>
     </div>

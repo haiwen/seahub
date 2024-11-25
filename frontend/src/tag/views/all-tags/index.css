@@ -1,0 +1,19 @@
+.sf-metadata-tags-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sf-metadata-tags-wrapper .sf-metadata-tags-main {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sf-metadata-all-tags-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}

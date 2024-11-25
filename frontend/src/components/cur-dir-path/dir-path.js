@@ -157,7 +157,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-item"><TagViewName id={item} /></span>
+            <TagViewName id={item} />
           </Fragment>
         );
       }

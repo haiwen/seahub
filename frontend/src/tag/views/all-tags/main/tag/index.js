@@ -65,7 +65,7 @@ const Tag = ({ tags, tag, context }) => {
         </div>
       </div>
       {isShowEditTagDialog && (
-        <EditTagDialog tags={tags} title={gettext('Add tag')} tag={tag} onToggle={closeEditTagDialog} onSubmit={handelEditTag} />
+        <EditTagDialog tags={tags} title={gettext('Edit tag')} tag={tag} onToggle={closeEditTagDialog} onSubmit={handelEditTag} />
       )}
       {isShowDeleteDialog && (
         <DeleteConfirmDialog title={gettext('Delete tag')} content={tagName} onToggle={closeDeleteConfirmDialog} onSubmit={handelDelete} />

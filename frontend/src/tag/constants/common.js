@@ -1,1 +1,1 @@
-export const TAG_MANAGEMENT_ID = '__tag_management';
+export const ALL_TAGS_ID = '__all_tags';
