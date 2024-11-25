@@ -316,7 +316,7 @@ class MainSideNav extends React.Component {
                 {showWechatSupportGroup &&
                 <li className='nav-item'>
                   <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
-                    <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
+                    <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">
                       {`加入 Seafile ${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
                     </span>

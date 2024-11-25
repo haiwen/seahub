@@ -1,14 +1,11 @@
 @font-face {
-  font-family: "sf3-font";
-  /* Project id 1230969 */
-  src: url('iconfont.eot?t=1730358680866');
-  /* IE9 */
-  src: url('iconfont.eot?t=1730358680866#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */
-    url('iconfont.woff2?t=1730358680866') format('woff2'),
-    url('iconfont.woff?t=1730358680866') format('woff'),
-    url('iconfont.ttf?t=1730358680866') format('truetype'),
-    url('iconfont.svg?t=1730358680866#sf3-font') format('svg');
+  font-family: "sf3-font"; /* Project id 1230969 */
+  src: url('iconfont.eot?t=1732504469237'); /* IE9 */
+  src: url('iconfont.eot?t=1732504469237#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1732504469237') format('woff2'),
+       url('iconfont.woff?t=1732504469237') format('woff'),
+       url('iconfont.ttf?t=1732504469237') format('truetype'),
+       url('iconfont.svg?t=1732504469237#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -17,6 +14,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-hi:before {
+  content: "\e603";
+}
+
+.sf3-font-refresh:before {
+  content: "\e851";
+}
+
+.sf3-font-current-location:before {
+  content: "\e850";
+}
+
+.sf3-font-ai_generated:before {
+  content: "\e84f";
+}
+
+.sf3-font-map:before {
+  content: "\e84e";
 }
 
 .sf3-font-photos-classfied-by-people:before {
@@ -490,3 +507,4 @@
 .sf3-font-enterprise-wechat:before {
   content: "\e602";
 }
+

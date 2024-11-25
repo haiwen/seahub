@@ -248,7 +248,7 @@ class MainSideNavFolded extends React.Component {
                   {showWechatSupportGroup &&
                   <li className='nav-item'>
                     <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
-                      <span className="sf3-font-about sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wechat"></span>
+                      <span className="sf3-font-hi sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wechat"></span>
                       <Tip target="main-side-nav-folded-wechat" text={`加入 Seafile ${this.isWorkWeixin ? '企业' : ''}微信咨询群`} />
                     </a>
                   </li>
