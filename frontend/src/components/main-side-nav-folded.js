@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml,
+import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
   isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
@@ -13,6 +13,8 @@ import { Utils } from '../utils/utils';
 import Group from '../models/group';
 import toaster from './toast';
 import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../constants/zIndexes';
+import { isWorkWeixin } from './wechat/weixin-utils';
+import WechatDialog from './wechat/wechat-dialog';
 
 
 import '../css/main-side-nav-folded.css';
@@ -32,7 +34,9 @@ class MainSideNavFolded extends React.Component {
       groupItems: [],
       isFilesSubNavShown: false,
       isAboutDialogShow: false,
+      isShowWechatDialog: false,
     };
+    this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
 
   componentDidMount() {
@@ -52,6 +56,11 @@ class MainSideNavFolded extends React.Component {
     document.removeEventListener('click', this.handleOutsideClick);
     this.unsubscribeHeaderEvent();
   }
+
+  toggleWechatDialog = () => {
+    this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
+  };
+
 
   handleOutsideClick = (e) => {
     const { isFilesSubNavShown } = this.state;
@@ -236,6 +245,14 @@ class MainSideNavFolded extends React.Component {
                       <Tip target="main-side-nav-folded-about" text={gettext('About')} />
                     </a>
                   </li>
+                  {showWechatSupportGroup &&
+                  <li className='nav-item'>
+                    <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
+                      <span className="sf3-font-hi sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wechat"></span>
+                      <Tip target="main-side-nav-folded-wechat" text={`加入 Seafile ${this.isWorkWeixin ? '企业' : ''}微信咨询群`} />
+                    </a>
+                  </li>
+                  }
                 </ul>
               }
               <div
@@ -252,6 +269,11 @@ class MainSideNavFolded extends React.Component {
             <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
           </ModalPortal>
         )}
+        {this.state.isShowWechatDialog &&
+          <ModalPortal>
+            <WechatDialog toggleWechatDialog={this.toggleWechatDialog}/>
+          </ModalPortal>
+        }
       </Fragment>
     );
   }

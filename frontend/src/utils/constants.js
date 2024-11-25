@@ -105,6 +105,8 @@ export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 
 export const enableShowAbout = window.app.pageOptions.enableShowAbout || false;
 
+export const showWechatSupportGroup = window.app.pageOptions.showWechatSupportGroup || false;
+
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;

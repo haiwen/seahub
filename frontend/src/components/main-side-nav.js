@@ -5,7 +5,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
-  enableTC, sideNavFooterCustomHtml, enableShowAbout,
+  enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -16,6 +16,8 @@ import CreateGroupDialog from '../components/dialog/create-group-dialog';
 import AboutDialog from './dialog/about-dialog';
 import FilesSubNav from '../components/files-sub-nav';
 import { SUB_NAV_ITEM_HEIGHT } from '../constants';
+import { isWorkWeixin } from './wechat/weixin-utils';
+import WechatDialog from './wechat/wechat-dialog';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -33,10 +35,16 @@ class MainSideNav extends React.Component {
       sharedExtended: false,
       groupItems: [],
       isCreateGroupDialogOpen: false,
+      isShowWechatDialog: false,
     };
     this.adminHeight = 0;
     this.filesNavHeight = 0;
+    this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
+
+  toggleWechatDialog = () => {
+    this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
+  };
 
   shExtend = () => {
     this.setState({
@@ -305,6 +313,16 @@ class MainSideNav extends React.Component {
                   </a>
                 </li>
                 }
+                {showWechatSupportGroup &&
+                <li className='nav-item'>
+                  <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
+                    <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">
+                      {`加入 Seafile ${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
+                    </span>
+                  </a>
+                </li>
+                }
               </ul>
             )
             }
@@ -319,6 +337,11 @@ class MainSideNav extends React.Component {
             <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
           </ModalPortal>
         )}
+        {this.state.isShowWechatDialog &&
+          <ModalPortal>
+            <WechatDialog toggleWechatDialog={this.toggleWechatDialog}/>
+          </ModalPortal>
+        }
       </Fragment>
     );
   }
