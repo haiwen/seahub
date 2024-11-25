@@ -58,7 +58,7 @@ class InternalCheckShareLinkAccess(APIView):
     authentication_classes = (SessionCRSFCheckFreeAuthentication, )
     throttle_classes = (UserRateThrottle, )
     
-    def get(self, request):
+    def post(self, request):
         
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         is_valid = is_valid_internal_jwt(auth)
@@ -66,7 +66,7 @@ class InternalCheckShareLinkAccess(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        link_token = request.GET.get('token')
+        link_token = request.data.get('token')
         ip_addr = request.data.get('ip_addr')
         user_agent = request.data.get('user_agent')
 
@@ -150,7 +150,7 @@ class InternalCheckFileOperationAccess(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        file_path = request.GET.get('path', '/')
+        file_path = request.data.get('path', '/')
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
