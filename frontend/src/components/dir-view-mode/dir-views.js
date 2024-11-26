@@ -26,7 +26,9 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     setSettingsDialogOpen(true);
   }, []);
 
-  if (!enableMetadataManagement) return null;
+  if (!enableMetadataManagement || (!enableMetadata && !currentRepoInfo.is_admin)) {
+    return null;
+  }
 
   return (
     <>
