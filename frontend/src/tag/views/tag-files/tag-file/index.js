@@ -15,7 +15,7 @@ import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) => {
+const TagFile = ({ isSelected, repoID, file, onSelectFile, reSelectFiles, openImagePreview }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
 
@@ -76,12 +76,19 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) =
     });
   }, [repoID, file, openImagePreview]);
 
+  const handelClick = useCallback((event) => {
+    if (event.target.tagName == 'TD') {
+      reSelectFiles(fileId);
+    }
+  }, [fileId, reSelectFiles]);
+
   return (
     <tr
       className={classnames({
         'tr-highlight': highlight,
         'tr-active': isSelected
       })}
+      onClick={handelClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -101,8 +108,8 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, openImagePreview }) =
           <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" />
         </div>
       </td>
-      <td className="name" onClick={handelClickFileName}>
-        <a href={path}>{name}</a>
+      <td className="name">
+        <a href={path} onClick={handelClickFileName}>{name}</a>
       </td>
       <td className="tag-list-title">
         <FileTagsFormatter value={tags} />
@@ -121,6 +128,7 @@ TagFile.propTypes = {
   file: PropTypes.object,
   onSelectFile: PropTypes.func,
   openImagePreview: PropTypes.func,
+  reSelectFiles: PropTypes.func,
 };
 
 export default TagFile;

@@ -21,7 +21,7 @@ export const MetadataViewProvider = ({
   const [errorMessage, setErrorMessage] = useState(null);
   const storeRef = useRef(null);
   const { collaborators } = useCollaborators();
-  const { isEmptyRepo, showFirstView, setShowFirstView } = useMetadata();
+  const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -85,9 +85,9 @@ export const MetadataViewProvider = ({
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID, collaborators });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
-    storeRef.current.load(PER_LOAD_NUMBER, isEmptyRepo).then(() => {
+    storeRef.current.load(PER_LOAD_NUMBER, isBeingBuilt).then(() => {
       setMetadata(storeRef.current.data);
-      setShowFirstView(false);
+      setIsBeingBuilt(false);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -132,7 +132,7 @@ export const MetadataViewProvider = ({
     <MetadataViewContext.Provider
       value={{
         isLoading,
-        showFirstView,
+        isBeingBuilt,
         errorMessage,
         metadata,
         store: storeRef.current,

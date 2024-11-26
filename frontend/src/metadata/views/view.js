@@ -10,7 +10,7 @@ import { VIEW_TYPE } from '../constants';
 import { gettext } from '../../utils/constants';
 
 const View = () => {
-  const { isLoading, showFirstView, metadata, errorMessage } = useMetadataView();
+  const { isLoading, isBeingBuilt, metadata, errorMessage } = useMetadataView();
 
   const renderView = useCallback((metadata) => {
     if (!metadata) return null;
@@ -37,12 +37,15 @@ const View = () => {
   }, []);
 
   if (isLoading) {
-    return showFirstView ? (
-      <div className="sf-metadata-loading-wrapper">
-        <Loading />
-        <span className="sf-metadata-loading-tip">{gettext('Extended properties are being built.')}</span>
-      </div>
-    ) : <CenteredLoading />;
+    if (isBeingBuilt) {
+      return (
+        <div className="sf-metadata-loading-wrapper">
+          <Loading />
+          <span className="sf-metadata-loading-tip">{gettext('Extended properties are being built.')}</span>
+        </div>
+      );
+    }
+    return (<CenteredLoading />);
   }
 
   return (
