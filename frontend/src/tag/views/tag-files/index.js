@@ -51,6 +51,10 @@ const TagFiles = () => {
     }
   }, [selectedFiles]);
 
+  const reSelectFiles = useCallback((fileId) => {
+    setSelectedFiles([fileId]);
+  }, []);
+
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
     setImagePreviewerVisible(true);
@@ -116,6 +120,7 @@ const TagFiles = () => {
                   isSelected={selectedFiles && selectedFiles.includes(fileId)}
                   file={file}
                   onSelectFile={onSelectFile}
+                  reSelectFiles={reSelectFiles}
                   openImagePreview={openImagePreview}
                 />);
             })}

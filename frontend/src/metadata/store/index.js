@@ -63,16 +63,16 @@ class Store {
     DataProcessor.run(this.data, { collaborators: this.collaborators });
   }
 
-  async load(limit = PER_LOAD_NUMBER, isEmptyRepo = false) {
+  async load(limit = PER_LOAD_NUMBER, isBeingBuilt = false) {
     const viewRes = await this.context.getView(this.viewId);
     const view = viewRes?.data?.view || {};
-    const retries = isEmptyRepo ? 0 : DEFAULT_RETRY_TIMES;
+    const retries = isBeingBuilt ? DEFAULT_RETRY_TIMES : 0;
     await this.loadMetadata(view, limit, retries);
   }
 
   async reload(limit = PER_LOAD_NUMBER) {
     this.startIndex = 0;
-    await this.loadMetadata(this.data.view, limit);
+    await this.loadMetadata(this.data.view, limit, 0);
   }
 
   async loadMore(limit) {

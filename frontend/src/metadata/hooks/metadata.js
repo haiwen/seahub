@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -14,7 +14,6 @@ const MetadataContext = React.createContext(null);
 export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataView, selectMetadataView, children }) => {
   const [isLoading, setLoading] = useState(true);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
-  const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
   const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
@@ -22,9 +21,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
   const viewsMap = useRef({});
   const originalTitleRef = useRef(document.title);
 
-  const isEmptyRepo = useMemo(() => repoInfo.file_count === 0, [repoInfo]);
-
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, isBeingBuilt, setIsBeingBuilt } = useMetadataStatus();
 
   const updateEnableFaceRecognition = useCallback((newValue) => {
     if (newValue === enableFaceRecognition) return;
@@ -181,6 +178,14 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
 
   useEffect(() => {
     if (isLoading) return;
+    if (isBeingBuilt) {
+      const firstViewObject = navigation.find(item => item.type === 'view');
+      const firstView = firstViewObject ? viewsMap.current[firstViewObject._id] : '';
+      if (firstView) {
+        selectView(firstView);
+      }
+      return;
+    }
     const { origin, pathname, search } = window.location;
     const urlParams = new URLSearchParams(search);
     if (!urlParams.has('view')) return;
@@ -201,7 +206,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       selectView(firstView);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading, isBeingBuilt]);
 
   useEffect(() => {
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
@@ -218,11 +223,10 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
 
   return (
     <MetadataContext.Provider value={{
-      isEmptyRepo,
       enableFaceRecognition,
       updateEnableFaceRecognition,
-      showFirstView,
-      setShowFirstView,
+      isBeingBuilt,
+      setIsBeingBuilt,
       navigation,
       staticView,
       viewsMap: viewsMap.current,

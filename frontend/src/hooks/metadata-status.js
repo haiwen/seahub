@@ -16,6 +16,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   const [isLoading, setLoading] = useState(true);
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
+  const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
   const cancelMetadataURL = useCallback(() => {
     // If attribute extension is turned off, unmark the URL
@@ -57,6 +58,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       cancelMetadataURL();
       setEnableTags(false);
     }
+    setIsBeingBuilt(newValue);
     setEnableMetadata(newValue);
   }, [enableMetadata, cancelMetadataURL]);
 
@@ -74,7 +76,9 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       value={{
         enableMetadataManagement,
         enableMetadata,
+        isBeingBuilt,
         updateEnableMetadata,
+        setIsBeingBuilt,
         enableTags,
         updateEnableTags,
       }}
