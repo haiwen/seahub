@@ -105,7 +105,7 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, reSelectFiles, openIm
       </td>
       <td className="pl-2 pr-2">
         <div className="dir-icon">
-          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" />
+          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handelClickFileName} />
         </div>
       </td>
       <td className="name">

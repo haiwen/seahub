@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { UncontrolledTooltip } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
@@ -7,6 +8,8 @@ import TagViewName from '../../tag/components/tag-view-name';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { debounce } from '../../metadata/utils/common';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -115,6 +118,10 @@ class DirPath extends React.Component {
     });
   };
 
+  handelRefresh = debounce(() => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+  }, 200);
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     let pathList = path.split('/');
@@ -149,6 +156,12 @@ class DirPath extends React.Component {
           <Fragment key={index}>
             <span className="path-split">/</span>
             <span className="path-item"><MetadataViewName id={item} /></span>
+            <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handelRefresh}>
+              <i className="sf3-font sf3-font-refresh"></i>
+              <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
+                {gettext('Refresh')}
+              </UncontrolledTooltip>
+            </div>
           </Fragment>
         );
       }
