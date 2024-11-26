@@ -420,9 +420,6 @@ Please choose a way to initialize seafile databases:
                                   validate=validate)
 
     def validate_mysql_host(self, host):
-        if not re.match(r'^[a-zA-Z0-9_\-\.]+$', host):
-            raise InvalidAnswer('%s is not a valid host' % Utils.highlight(host))
-
         if host == 'localhost':
             host = '127.0.0.1'
         return host
@@ -437,9 +434,6 @@ Please choose a way to initialize seafile databases:
                                              validate=self.validate_mysql_host)
 
     def validate_mysql_user_host(self, host):
-        MYSQL_HOST_RE = re.compile(r'^(%|[^.].+\..+[^.])$')
-        if not MYSQL_HOST_RE.match(host):
-            raise InvalidAnswer('invalid mysql user host: {}'.format(host))
         return host
 
     def ask_mysql_user_host(self):
