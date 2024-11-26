@@ -7,7 +7,7 @@ import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-settin
 import {
   MetadataStatusManagementDialog as LibExtendedPropertiesSettingPanel,
   MetadataFaceRecognitionDialog as LibFaceRecognitionSettingPanel,
-  MetadataTagsStatusDialog as LibMetadataTagsStatusSettingsPanel,
+  MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
   useMetadata
 } from '../../metadata';
 import { useMetadataStatus } from '../../hooks';
@@ -15,11 +15,11 @@ import { useMetadataStatus } from '../../hooks';
 import '../../css/lib-settings.css';
 
 const TAB = {
-  HISTORY_SETTINGS: 'history_settings',
-  AUTO_DELETE_SETTINGS: 'auto_delete_settings',
-  EXTENDED_PROPERTIES_SETTINGS: 'extended_properties_settings',
-  FACE_RECOGNITION_SETTINGS: 'face_recognition_settings',
-  TAGS_SETTINGS: 'tags_settings',
+  HISTORY_SETTING: 'history_setting',
+  AUTO_DEL_SETTING: 'auto_delete_setting',
+  EXTENDED_PROPERTIES_SETTING: 'extended_properties_setting',
+  FACE_RECOGNITION_SETTING: 'face_recognition_setting',
+  TAGS_SETTING: 'tags_setting'
 };
 
 const propTypes = {
@@ -29,7 +29,7 @@ const propTypes = {
 };
 
 const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
-  const [activeTab, setActiveTab] = useState(tab || TAB.HISTORY_SETTINGS);
+  const [activeTab, setActiveTab] = useState(tab || TAB.HISTORY_SETTING);
 
   const toggleTab = useCallback((tab) => {
     setActiveTab(tab);
@@ -61,36 +61,36 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
             <div className="lib-setting-nav p-4">
               <Nav pills className="flex-column">
                 {enableHistorySetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.HISTORY_SETTINGS} aria-controls="history-setting-panel">
-                    <NavLink className={activeTab === TAB.HISTORY_SETTINGS ? 'active' : ''} onClick={(toggleTab.bind(this, TAB.HISTORY_SETTINGS))} tabIndex="0" onKeyDown={onTabKeyDown}>
+                  <NavItem role="tab" aria-selected={activeTab === TAB.HISTORY_SETTING} aria-controls="history-setting-panel">
+                    <NavLink className={activeTab === TAB.HISTORY_SETTING ? 'active' : ''} onClick={(toggleTab.bind(this, TAB.HISTORY_SETTING))} tabIndex="0" onKeyDown={onTabKeyDown}>
                       {gettext('History')}
                     </NavLink>
                   </NavItem>
                 )}
                 {enableAutoDelSetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.AUTO_DELETE_SETTINGS} aria-controls="auto-del-setting-panel">
-                    <NavLink className={activeTab === TAB.AUTO_DELETE_SETTINGS ? 'active' : ''} onClick={toggleTab.bind(this, TAB.AUTO_DELETE_SETTINGS)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                  <NavItem role="tab" aria-selected={activeTab === TAB.AUTO_DEL_SETTING} aria-controls="auto-del-setting-panel">
+                    <NavLink className={activeTab === TAB.AUTO_DEL_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.AUTO_DEL_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
                       {gettext('Auto deletion')}
                     </NavLink>
                   </NavItem>
                 )}
                 {enableExtendedPropertiesSetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.EXTENDED_PROPERTIES_SETTINGS} aria-controls="extended-properties-setting-panel">
-                    <NavLink className={activeTab === TAB.EXTENDED_PROPERTIES_SETTINGS ? 'active' : ''} onClick={toggleTab.bind(this, TAB.EXTENDED_PROPERTIES_SETTINGS)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                  <NavItem role="tab" aria-selected={activeTab === TAB.EXTENDED_PROPERTIES_SETTING} aria-controls="extended-properties-setting-panel">
+                    <NavLink className={activeTab === TAB.EXTENDED_PROPERTIES_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.EXTENDED_PROPERTIES_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
                       {gettext('Extended properties')}
                     </NavLink>
                   </NavItem>
                 )}
                 {enableMetadataOtherSettings && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTINGS} aria-controls="face-recognition-setting-panel">
-                    <NavLink className={activeTab === TAB.FACE_RECOGNITION_SETTINGS ? 'active' : ''} onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTINGS)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                  <NavItem role="tab" aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING} aria-controls="face-recognition-setting-panel">
+                    <NavLink className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
                       {gettext('Face recognition')}
                     </NavLink>
                   </NavItem>
                 )}
                 {enableMetadataOtherSettings && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.TAGS_SETTINGS} aria-controls="face-recognition-setting-panel">
-                    <NavLink className={activeTab === TAB.TAGS_SETTINGS ? 'active' : ''} onClick={toggleTab.bind(this, TAB.TAGS_SETTINGS)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                  <NavItem role="tab" aria-selected={activeTab === TAB.TAGS_SETTING} aria-controls="tags-setting-panel">
+                    <NavLink className={activeTab === TAB.TAGS_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.TAGS_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
                       {gettext('Tags')}
                     </NavLink>
                   </NavItem>
@@ -98,24 +98,24 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
               </Nav>
             </div>
             <TabContent activeTab={activeTab} className="flex-fill">
-              {(enableHistorySetting && activeTab === TAB.HISTORY_SETTINGS) && (
-                <TabPane tabId={TAB.HISTORY_SETTINGS} role="tabpanel" id="history-setting-panel">
+              {(enableHistorySetting && activeTab === TAB.HISTORY_SETTING) && (
+                <TabPane tabId={TAB.HISTORY_SETTING} role="tabpanel" id="history-setting-panel">
                   <LibHistorySettingPanel
                     repoID={repoID}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>
               )}
-              {(enableAutoDelSetting && activeTab === TAB.AUTO_DELETE_SETTINGS) && (
-                <TabPane tabId={TAB.AUTO_DELETE_SETTINGS} role="tabpanel" id="auto-del-setting-panel">
+              {(enableAutoDelSetting && activeTab === TAB.AUTO_DEL_SETTING) && (
+                <TabPane tabId={TAB.AUTO_DEL_SETTING} role="tabpanel" id="auto-del-setting-panel">
                   <LibAutoDelSettingPanel
                     repoID={repoID}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>
               )}
-              {(enableExtendedPropertiesSetting && activeTab === TAB.EXTENDED_PROPERTIES_SETTINGS) && (
-                <TabPane tabId={TAB.EXTENDED_PROPERTIES_SETTINGS} role="tabpanel" id="extended-properties-setting-panel">
+              {(enableExtendedPropertiesSetting && activeTab === TAB.EXTENDED_PROPERTIES_SETTING) && (
+                <TabPane tabId={TAB.EXTENDED_PROPERTIES_SETTING} role="tabpanel" id="extended-properties-setting-panel">
                   <LibExtendedPropertiesSettingPanel
                     repoID={repoID}
                     value={enableMetadata}
@@ -124,8 +124,8 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   />
                 </TabPane>
               )}
-              {(enableMetadataOtherSettings && activeTab === TAB.FACE_RECOGNITION_SETTINGS) && (
-                <TabPane tabId={TAB.FACE_RECOGNITION_SETTINGS} role="tabpanel" id="face-recognition-setting-panel">
+              {(enableMetadataOtherSettings && activeTab === TAB.FACE_RECOGNITION_SETTING) && (
+                <TabPane tabId={TAB.FACE_RECOGNITION_SETTING} role="tabpanel" id="face-recognition-setting-panel">
                   <LibFaceRecognitionSettingPanel
                     repoID={repoID}
                     value={enableFaceRecognition}
@@ -134,9 +134,9 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   />
                 </TabPane>
               )}
-              {(enableMetadataOtherSettings && activeTab === TAB.TAGS_SETTINGS) && (
-                <TabPane tabId={TAB.TAGS_SETTINGS} role="tabpanel" id="face-recognition-setting-panel">
-                  <LibMetadataTagsStatusSettingsPanel
+              {(enableMetadataOtherSettings && activeTab === TAB.TAGS_SETTING) && (
+                <TabPane tabId={TAB.TAGS_SETTING} role="tabpanel" id="tags-setting-panel">
+                  <LibMetadataTagsStatusSettingPanel
                     repoID={repoID}
                     value={enableTags}
                     submit={updateEnableTags}
