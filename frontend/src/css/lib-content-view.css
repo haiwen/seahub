@@ -280,7 +280,7 @@
   align-items: center;
   justify-content: center;
   margin-left: 2px;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .dir-view-path .path-item-refresh:hover {
