@@ -58,7 +58,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
-  [OPERATION_TYPE.UPDATE_FILES_TAGS]: ['repo_id', 'files_tags_data'],
+  [OPERATION_TYPE.UPDATE_FILES_TAGS]: ['repo_id', 'file_tags_data'],
 };
 
 export const UNDO_OPERATION_TYPE = [

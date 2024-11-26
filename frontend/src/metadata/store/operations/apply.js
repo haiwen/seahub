@@ -258,7 +258,7 @@ export default function apply(data, operation) {
 
     // tags
     case OPERATION_TYPE.UPDATE_FILES_TAGS: {
-      const { files_tags_data: filesTagsData } = operation;
+      const { file_tags_data: filesTagsData } = operation;
       const { rows } = data;
       let updateMap = {};
       Array.isArray(filesTagsData) && filesTagsData.forEach(fileTags => {

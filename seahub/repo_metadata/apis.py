@@ -1551,15 +1551,15 @@ class MetadataTags(APIView):
         return Response({'success': True})
 
 
-class MetadataFilesTags(APIView):
+class MetadataFileTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def put(self, request, repo_id):
-        files_tags_data = request.data.get('files_tags_data')
-        if not files_tags_data:
-            error_msg = 'files_tags_data invalid.'
+        file_tags_data = request.data.get('file_tags_data')
+        if not file_tags_data:
+            error_msg = 'file_tags_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         tags = request.data.get('tags', [])
@@ -1594,20 +1594,20 @@ class MetadataFilesTags(APIView):
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
         
-        files_record_ids = []
+        file_record_ids = []
         file_tags_map = {}
-        for file_tags in files_tags_data:
+        for file_tags in file_tags_data:
             record_id = file_tags.get('record_id', '')
             tags = file_tags.get('tags', [])
             if record_id:
-                files_record_ids.append(record_id)
+                file_record_ids.append(record_id)
                 file_tags_map[record_id] = tags
 
-        if not files_record_ids:
+        if not file_record_ids:
             return Response({'success': [], 'fail': []})
 
-        files_record_ids_str = ', '.join(["'%s'" % id for id in files_record_ids])
-        current_result_sql = f'SELECT `{METADATA_TABLE.columns.tags.key}`, `{METADATA_TABLE.columns.id.key}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.key}` IN ({files_record_ids_str})'
+        file_record_ids_str = ', '.join(["'%s'" % id for id in file_record_ids])
+        current_result_sql = f'SELECT `{METADATA_TABLE.columns.tags.key}`, `{METADATA_TABLE.columns.id.key}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.key}` IN ({file_record_ids_str})'
         try:
             current_result_query = metadata_server_api.query_rows(current_result_sql)
         except Exception as e:

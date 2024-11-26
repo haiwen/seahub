@@ -196,9 +196,9 @@ class ServerOperator {
 
       // tags
       case OPERATION_TYPE.UPDATE_FILES_TAGS: {
-        const { files_tags_data } = operation;
+        const { file_tags_data } = operation;
         let valid_files_tags_data = [];
-        files_tags_data.forEach(item => {
+        file_tags_data.forEach(item => {
           const { record_id, tags } = item;
           valid_files_tags_data.push({ record_id, tags });
         });

@@ -572,7 +572,7 @@ class Store {
   updateFilesTags = (data) => {
     const type = OPERATION_TYPE.UPDATE_FILES_TAGS;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, files_tags_data: data
+      type, repo_id: this.repoId, file_tags_data: data
     });
     this.applyOperation(operation);
   };
