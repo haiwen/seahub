@@ -209,12 +209,6 @@
   background-color: transparent;
 }
 
-.wiki-nav-footer .add-wiki-page-btn .dtable-icon-add-table {
-  margin-left: 1px;
-  margin-right: 0.5rem;
-  transform: unset;
-}
-
 .wiki-sidebar .wiki-nav-footer .add-wiki-page-btn {
   border-top: none;
 }
