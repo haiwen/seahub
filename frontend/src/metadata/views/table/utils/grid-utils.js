@@ -75,6 +75,7 @@ class GridUtils {
 
     if ((copiedRecordsLen > startExpandRecordIndex)) return;
 
+    let updateTags = [];
     let updateRecordIds = [];
     let idRecordUpdates = {};
     let idOriginalRecordUpdates = {};
@@ -115,7 +116,9 @@ class GridUtils {
         const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnName) ? getCellValueByColumn(pasteRecord, pasteColumn) : null;
         const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnName) ? getCellValueByColumn(copiedRecord, copiedColumn) : null;
         const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn, this.api);
-        if (update === pasteCellValue) {
+        if (!isCellValueChanged(pasteCellValue, update, pasteColumn.type)) continue;
+        if (pasteColumn.type === CellType.TAGS) {
+          updateTags.push({ record_id: updateRecordId, tags: Array.isArray(update) ? update.map(i => i.row_id) : [], old_tags: pasteCellValue });
           continue;
         }
         originalUpdate[pasteColumnName] = update;
@@ -131,6 +134,10 @@ class GridUtils {
         idOldRecordData[updateRecordId] = originalOldRecordData;
         idOriginalOldRecordData[updateRecordId] = originalKeyOldRecordData;
       }
+    }
+
+    if (updateTags.length > 0) {
+      this.api.updateFilesTags(updateTags);
     }
 
     if (updateRecordIds.length === 0) return;
@@ -170,6 +177,7 @@ class GridUtils {
   }
 
   getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics) {
+    let tagsUpdate = [];
     let rowIds = [];
     let updatedOriginalRows = {};
     let oldOriginalRows = {};
@@ -211,21 +219,36 @@ class GridUtils {
           const value = draggedRangeMatrix[j - startColumnIdx][idx];
           const rule = rules[cellKey];
           const fillingValue = rule({ n: fillingIndex - 1, value });
-          if (isCellValueChanged(fillingValue, dragRow[columnName], type)) {
-            updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
-            oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: dragRow[columnName] });
-            const update = updatedOriginalRows[dragRowId];
-            const oldUpdate = oldOriginalRows[dragRowId];
+          const oldValue = dragRow[columnName];
+          if (isCellValueChanged(fillingValue, oldValue, type)) {
+            if (type === CellType.TAGS) {
+              tagsUpdate.push({ record_id: dragRowId, tags: fillingValue || [], old_tags: oldValue });
+            } else {
+              updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
+              oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: oldValue });
+              const update = updatedOriginalRows[dragRowId];
+              const oldUpdate = oldOriginalRows[dragRowId];
 
-            updatedRows[dragRowId] = Object.assign({}, updatedRows[dragRowId], update);
-            oldRows[dragRowId] = Object.assign({}, oldRows[dragRowId], oldUpdate);
+              updatedRows[dragRowId] = Object.assign({}, updatedRows[dragRowId], update);
+              oldRows[dragRowId] = Object.assign({}, oldRows[dragRowId], oldUpdate);
+            }
           }
         }
       }
       currentGroupRowIndex++;
     }
 
-    return { recordIds: rowIds, idOriginalRecordUpdates: updatedOriginalRows, idRecordUpdates: updatedRows, idOriginalOldRecordData: oldOriginalRows, idOldRecordData: oldRows };
+    if (tagsUpdate.length > 0) {
+      this.api.updateFilesTags(tagsUpdate);
+    }
+
+    return {
+      recordIds: rowIds,
+      idOriginalRecordUpdates: updatedOriginalRows,
+      idRecordUpdates: updatedRows,
+      idOriginalOldRecordData: oldOriginalRows,
+      idOldRecordData: oldRows
+    };
   }
 
   getDraggedRangeMatrix(columns, draggedRange, rows, groupMetrics, idRowMap) {
@@ -297,6 +320,14 @@ class GridUtils {
           }
           case CellType.RATE: {
             ruleMatrixItem = this._getRatingLeastSquares(valueList, data);
+            break;
+          }
+          case CellType.TAGS: {
+            ruleMatrixItem = ({ value }) => {
+              if (!value) return [];
+              if (!Array.isArray(value) || value.length === 0) return [];
+              return value.map(item => item.row_id);
+            };
             break;
           }
           default: {

@@ -1,6 +1,7 @@
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
   getOption, checkIsPredefinedOption, getColumnOptionNameById,
+  getTagsDisplayString,
 } from '../../../utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
 import { isNumber } from '../../../utils/number';
@@ -198,6 +199,11 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
       const collaborators = window.sfMetadata.getCollaborators();
       return getCollaboratorsName(collaborators, [cellValue]);
     }
+    case CellType.TAGS: {
+      if (!Array.isArray(cellValue) || cellValue.length === 0) return null;
+      const tagsData = window?.sfTagsDataStore?.data || {};
+      return getTagsDisplayString(tagsData, cellValue);
+    }
     default: {
       return oldCellValue;
     }
@@ -326,6 +332,13 @@ const convert2MultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, paste
   return getColumnOptionNamesByIds(newColumn, selectedOptionIds);
 };
 
+const convert2Tags = (cellValue, oldCellValue, fromColumn, targetColumn, api) => {
+  const { key: copiedColumnKey } = fromColumn;
+  const { key: pasteColumnKey } = targetColumn;
+  if (copiedColumnKey === pasteColumnKey) return cellValue;
+  return;
+};
+
 function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;
   const { type: targetColumnType, data: targetColumnData } = targetColumn;
@@ -356,6 +369,9 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
     }
     case CellType.RATE: {
       return convert2Rate(cellValue, oldCellValue, fromColumn, targetColumn);
+    }
+    case CellType.TAGS: {
+      return convert2Tags(cellValue, oldCellValue, fromColumn, targetColumn, api);
     }
     default: {
       return oldCellValue;

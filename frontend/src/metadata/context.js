@@ -259,14 +259,9 @@ class Context {
   };
 
   // file tag
-  addFileTags = (recordId, tagIds) => {
+  updateFilesTags = (data) => {
     const repoID = this.settings['repoID'];
-    return this.tagsAPI.addFileTags(repoID, recordId, tagIds);
-  };
-
-  updateFileTags = (recordId, tagIds) => {
-    const repoID = this.settings['repoID'];
-    return this.tagsAPI.updateFileTags(repoID, recordId, tagIds);
+    return this.tagsAPI.updateFilesTags(repoID, data);
   };
 
 }

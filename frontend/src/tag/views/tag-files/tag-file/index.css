@@ -1,6 +1,7 @@
 .tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter {
   height: 16px;
   width: 16px;
+  top: 0;
 }
 
 .tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter:last-child {
@@ -9,4 +10,9 @@
 
 .sf-metadata-tags-main .table-container td.name a {
   word-break: break-word;
+}
+
+.sf-metadata-tags-main .tag-list-title .sf-metadata-tags-formatter {
+  width: fit-content;
+  max-width: 100%;
 }

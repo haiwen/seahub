@@ -569,18 +569,10 @@ class Store {
   };
 
   // tag
-  addFileTags = (recordId, tagIds) => {
-    const type = OPERATION_TYPE.ADD_FILE_TAGS;
+  updateFilesTags = (data) => {
+    const type = OPERATION_TYPE.UPDATE_FILES_TAGS;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, record_id: recordId, tag_ids: tagIds
-    });
-    this.applyOperation(operation);
-  };
-
-  updateFileTags = (recordId, tagIds) => {
-    const type = OPERATION_TYPE.UPDATE_FILE_TAGS;
-    const operation = this.createOperation({
-      type, repo_id: this.repoId, record_id: recordId, tag_ids: tagIds
+      type, repo_id: this.repoId, files_tags_data: data
     });
     this.applyOperation(operation);
   };

@@ -94,20 +94,10 @@ class TagsManagerAPI {
   };
 
   // file tag
-  addFileTags = (repoID, recordId, tagIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
+  updateFilesTags = (repoID, data) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/files-tags/';
     const params = {
-      record_id: recordId,
-      tags: tagIds,
-    };
-    return this.req.post(url, params);
-  };
-
-  updateFileTags = (repoID, recordId, tagIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
-    const params = {
-      record_id: recordId,
-      tags: tagIds,
+      files_tags_data: data,
     };
     return this.req.put(url, params);
   };

@@ -1551,66 +1551,15 @@ class MetadataTags(APIView):
         return Response({'success': True})
 
 
-class MetadataFileTags(APIView):
+class MetadataFilesTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def post(self, request, repo_id):
-        record_id = request.data.get('record_id')
-        if not record_id:
-            error_msg = 'record_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        tags = request.data.get('tags', [])
-        if not tags:
-            error_msg = 'tags invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_read_metadata(request, repo_id):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
-        try:
-            metadata_server_api.insert_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
-        
-        except Exception as e:
-            logger.exception(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        return Response({'success': True})
-
     def put(self, request, repo_id):
-        record_id = request.data.get('record_id')
-        if not record_id:
-            error_msg = 'record_id invalid.'
+        files_tags_data = request.data.get('files_tags_data')
+        if not files_tags_data:
+            error_msg = 'files_tags_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         tags = request.data.get('tags', [])
@@ -1645,15 +1594,48 @@ class MetadataFileTags(APIView):
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
         
+        files_record_ids = []
+        file_tags_map = {}
+        for file_tags in files_tags_data:
+            record_id = file_tags.get('record_id', '')
+            tags = file_tags.get('tags', [])
+            if record_id:
+                files_record_ids.append(record_id)
+                file_tags_map[record_id] = tags
+
+        if not files_record_ids:
+            return Response({'success': [], 'fail': []})
+
+        files_record_ids_str = ', '.join(["'%s'" % id for id in files_record_ids])
+        current_result_sql = f'SELECT `{METADATA_TABLE.columns.tags.key}`, `{METADATA_TABLE.columns.id.key}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.key}` IN ({files_record_ids_str})'
         try:
-            metadata_server_api.update_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
-        
+            current_result_query = metadata_server_api.query_rows(current_result_sql)
         except Exception as e:
-            logger.exception(e)
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        return Response({'success': True})
+        success_records = []
+        failed_records = []
+        files_records = current_result_query.get('results', [])
+        if not files_records:
+            return api_error(status.HTTP_404_NOT_FOUND, 'files not found')
+        
+        for file_record in files_records:
+            current_tags = file_record.get(METADATA_TABLE.columns.tags.key, [])
+            record_id = file_record.get(METADATA_TABLE.columns.id.key)
+            tags = file_tags_map[record_id]
+
+            try:
+                if not current_tags:
+                    metadata_server_api.insert_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
+                else:
+                    metadata_server_api.update_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
+                success_records.append(record_id)
+            except Exception as e:
+                failed_records.append(record_id)
+            
+        return Response({'success': success_records, 'fail': failed_records})
 
 
 class MetadataTagFiles(APIView):

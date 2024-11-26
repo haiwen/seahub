@@ -28,3 +28,6 @@ export {
   getGeolocationDisplayString,
   getGeolocationByGranularity,
 } from './geolocation';
+export {
+  getTagsDisplayString,
+} from './tag';
