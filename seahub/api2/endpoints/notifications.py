@@ -17,7 +17,7 @@ from seahub.seadoc.models import get_cache_key_of_unseen_sdoc_notifications
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
-from seahub.seadoc.models import SeadocCommentReply, SeadocNotification
+from seahub.seadoc.models import SeadocNotification
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -228,12 +228,15 @@ class SdocNotificationsView(APIView):
         return Response(result)
     
     def put(self, request):
+        """mark all sdoc notifications seen"""
         username = request.user.username
-        unseen_notices = SeadocNotification.objects.filter(username=username, seen=False)
-        for notice in unseen_notices:
-            notice.seen = True
-            notice.save()
-
+        try:
+            SeadocNotification.objects.filter(username=username, seen=False).update(seen=True)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
         cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
         cache.delete(cache_key)
 
@@ -327,7 +330,7 @@ class AllNotificationsView(APIView):
             per_page = int(request.GET.get('per_page', ''))
             page = int(request.GET.get('page', ''))
         except ValueError:
-            per_page = 25
+            per_page = 5
             page = 1
 
         if page < 1:

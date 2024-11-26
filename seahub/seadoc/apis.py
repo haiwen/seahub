@@ -29,6 +29,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import condition
+from django.core.cache import cache
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id, ccnet_api
 
@@ -54,7 +55,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
-from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
+from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification, get_cache_key_of_unseen_sdoc_notifications
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -1102,11 +1103,6 @@ class SeadocCommentsView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         comment = request.data.get('comment', '')
         detail = request.data.get('detail', '')
         author = request.data.get('author', '')
@@ -1149,6 +1145,9 @@ class SeadocCommentsView(APIView):
             ))
         try:
             SeadocNotification.objects.bulk_create(new_notifications)
+            # delete sdoc notification count cache
+            sdoc_cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+            cache.delete(sdoc_cache_key)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -1171,11 +1170,6 @@ class SeadocCommentView(APIView):
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         try:
@@ -1378,6 +1372,8 @@ class SeadocCommentRepliesView(APIView):
             ))
         try:
             SeadocNotification.objects.bulk_create(new_notifications)
+            sdoc_cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
+            cache.delete(sdoc_cache_key)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

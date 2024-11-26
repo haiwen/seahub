@@ -405,30 +405,37 @@ def update_notice_detail(request, notices):
 
 
 def update_sdoc_notice_detail(request, notices):
+    doc_uuid_set = set()
     for notice in notices:
+        doc_uuid_set.add(notice.doc_uuid)
+    doc_uuid_map = {}
+    uuids = FileUUIDMap.objects.get_fileuuidmap_in_uuids(doc_uuid_set)
+    for uuid in uuids:
+        if uuid not in doc_uuid_map:
+            origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
+            doc_uuid_map[str(uuid.uuid)] = (origin_file_path, uuid.filename, uuid.repo_id)
+    
+    for notice in notices:
+        uuid = doc_uuid_map[notice.doc_uuid]
         if notice.is_comment():
             try:
                 d = json.loads(notice.detail)
-                uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(notice.doc_uuid)
-                origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
                 url, _, _ = api_avatar_url(d['author'])
                 d['avatar_url'] = url
-                d['sdoc_path'] = origin_file_path
-                d['sdoc_name'] = uuid.filename
-                d['repo_id'] = uuid.repo_id
+                d['sdoc_path'] = uuid[0]
+                d['sdoc_name'] = uuid[1]
+                d['repo_id'] = uuid[2]
                 notice.detail = d
             except Exception as e:
                 logger.error(e)
         elif notice.is_reply():
             try:
                 d = json.loads(notice.detail)
-                uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(notice.doc_uuid)
-                origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
                 url, _, _ = api_avatar_url(d['author'])
                 d['avatar_url'] = url
-                d['sdoc_path'] = origin_file_path
-                d['sdoc_name'] = uuid.filename
-                d['repo_id'] = uuid.repo_id
+                d['sdoc_path'] = uuid[0]
+                d['sdoc_name'] = uuid[1]
+                d['repo_id'] = uuid[2]
                 notice.detail = d
             except Exception as e:
                 logger.error(e)
