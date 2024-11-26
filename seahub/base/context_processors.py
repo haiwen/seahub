@@ -173,7 +173,8 @@ def base(request):
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
-        'enable_seadoc': ENABLE_SEADOC
+        'enable_seadoc': ENABLE_SEADOC,
+        'notification_server_url': dj_settings.NOTIFICATION_SERVER_URL,
     }
 
     if request.user.is_staff:

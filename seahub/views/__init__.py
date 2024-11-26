@@ -56,9 +56,9 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
-    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
+    ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER, SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP
+    SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
@@ -1112,7 +1112,6 @@ def react_fake_view(request, **kwargs):
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'max_upload_file_size': max_upload_file_size,
-        'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
         'library_templates': list(LIBRARY_TEMPLATES.keys()),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,

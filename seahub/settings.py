@@ -813,22 +813,6 @@ SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system 
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
 ##########################
-# Settings for Extra App #
-##########################
-
-##########################
-# Settings for frontend  #
-##########################
-
-SEAFILE_COLLAB_SERVER = ''
-
-##########################
-# Settings for dtable web  #
-##########################
-
-DTABLE_WEB_SERVER = ''
-
-##########################
 # Settings for seadoc    #
 ##########################
 
@@ -837,6 +821,11 @@ SEADOC_PRIVATE_KEY = ''
 SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
+######################################
+# Settings for notification server   #
+######################################
+
+NOTIFICATION_SERVER_URL = ''
 
 ############################
 # Settings for Seahub Priv #

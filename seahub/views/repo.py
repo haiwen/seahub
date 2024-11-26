@@ -31,7 +31,7 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_VIDEO_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER, \
+    SHARE_LINK_EXPIRE_DAYS_MAX, \
     ENABLE_SHARE_LINK_REPORT_ABUSE, ENABLE_PDF_THUMBNAIL
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
@@ -235,7 +235,6 @@ def view_lib_as_wiki(request, repo_id, path):
         user_can_write = False
 
     return render(request, 'view_lib_as_wiki.html', {
-        'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'repo_id': repo_id,
         'service_url': get_service_url().rstrip('/'),
         'initial_path': path,

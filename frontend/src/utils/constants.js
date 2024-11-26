@@ -25,6 +25,7 @@ export const fileServerRoot = window.app.config.fileServerRoot;
 export const useGoFileserver = window.app.config.useGoFileserver;
 export const seafileVersion = window.app.config.seafileVersion;
 export const serviceURL = window.app.config.serviceURL;
+export const notificationServerUrl = window.app.config.notificationServerUrl;
 export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
@@ -32,7 +33,6 @@ export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
 
 // pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
-export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
 export const contactEmail = window.app.pageOptions.contactEmail;
 export const username = window.app.pageOptions.username;
