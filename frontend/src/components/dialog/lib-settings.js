@@ -155,3 +155,5 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
 LibSettingsDialog.propTypes = propTypes;
 
 export default LibSettingsDialog;
+
+export { TAB };
