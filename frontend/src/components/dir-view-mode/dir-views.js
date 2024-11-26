@@ -43,7 +43,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
         <LibSettingsDialog
           repoID={repoID}
           currentRepoInfo={currentRepoInfo}
-          tab={TAB.EXTENDED_PROPERTIES_SETTINGS}
+          tab={TAB.EXTENDED_PROPERTIES_SETTING}
           toggleDialog={toggleSettingsDialog}
         />
       )}
