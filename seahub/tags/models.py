@@ -21,6 +21,12 @@ class FileUUIDMapManager(models.Manager):
             return super(FileUUIDMapManager, self).get(uuid=uuid)
         except self.model.DoesNotExist:
             return None
+    
+    def get_fileuuidmap_in_uuids(self, uuids):
+        try:
+            return super(FileUUIDMapManager, self).filter(uuid__in=uuids)
+        except self.model.DoesNotExist:
+            return None
 
     def get_or_create_fileuuidmap(self, repo_id, parent_path, filename, is_dir):
         """ create filemap by repo_id、 parent_path、filename、id_dir
