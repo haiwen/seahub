@@ -81,6 +81,8 @@ def get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_
     def get_repo_type_map(repo_list, repo_type):
         repo_type_map = {}
         for repo in repo_list:
+            if repo.repo_type == REPO_TYPE_WIKI:
+                continue
             repo_type_map[repo.id] = repo_type
 
         return repo_type_map
