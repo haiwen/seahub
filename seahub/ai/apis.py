@@ -146,7 +146,7 @@ class OCR(APIView):
 
     def post(self, request):
         if not verify_ai_config():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'OCR server not configured')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
