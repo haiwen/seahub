@@ -11,7 +11,7 @@ import { gettext } from '../../../../../utils/constants';
 import { KeyCodes } from '../../../../../constants';
 import { Utils } from '../../../../../utils/utils';
 import { isEmptyObject } from '../../../../utils/common';
-import { getCellValueByColumn } from '../../../../utils/cell';
+import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../../../utils/cell';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import { getFormatRecordData } from '../../../../utils/cell/cell-format-utils';
 import {
@@ -508,27 +508,28 @@ class InteractionMasks extends React.Component {
     let idOriginalRecordUpdates = {}; // row's id to modified original records data: { [row_id]: { [column.key: null] } }
     let idOldRecordData = {}; // row's id to old records data: { [row_id]: { [column.name: xxx] } }
     let idOriginalOldRecordData = {}; // row's id to old original records data: { [row_id]: { [column.key: xxx] } }
-    let idRowLinkItems = {}; // row's id to modified links: { [row_id]: { [column.key]: null } }
-    let idOldRowLinkItems = {}; // row's id to old links: { [row_id]: { [column.key]: [{ row_id: xxx, display_value: 'xxx' }] } }
+    let tagsUpdate = [];
     editableRecords.forEach(record => {
       const { _id } = record;
       let originalUpdate = {};
       let originalOldRecordData = {};
-      let linkItem = {};
-      let oldLinkItem = {};
+      let hasTagsColumn = false;
       editableColumns.forEach(column => {
-        const { key } = column;
+        const { key, type } = column;
         const cellVal = getCellValueByColumn(record, column);
-        if (cellVal || cellVal === 0 || (Array.isArray(cellVal) && cellVal.length > 0)) {
-          originalOldRecordData[key] = cellVal;
-          originalUpdate[key] = null;
+        if (isValidCellValue(cellVal)) {
+          if (type === CellType.TAGS) {
+            hasTagsColumn = true;
+          } else {
+            originalOldRecordData[key] = cellVal;
+            originalUpdate[key] = null;
+          }
         }
       });
 
-      // links data
-      if (Object.keys(linkItem).length > 0) {
-        idRowLinkItems[_id] = linkItem;
-        idOldRowLinkItems[_id] = oldLinkItem;
+      // tags
+      if (hasTagsColumn) {
+        tagsUpdate.push({ record_id: _id, tags: [], old_tags: getTagsFromRecord(record) });
       }
 
       if (Object.keys(originalUpdate).length > 0) {
@@ -541,6 +542,10 @@ class InteractionMasks extends React.Component {
         idOriginalOldRecordData[_id] = originalOldRecordData;
       }
     });
+
+    if (tagsUpdate.length > 0) {
+      this.props.updateFileTags(tagsUpdate);
+    }
 
     if (updateRecordIds.length > 0) {
       const isCopyPaste = true;
@@ -1099,7 +1104,6 @@ class InteractionMasks extends React.Component {
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
-              addFileTags={this.props.addFileTags}
               updateFileTags={this.props.updateFileTags}
               editorPosition={editorPosition}
               {...{

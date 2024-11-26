@@ -195,22 +195,18 @@ class ServerOperator {
       }
 
       // tags
-      case OPERATION_TYPE.ADD_FILE_TAGS: {
-        const { record_id, tag_ids } = operation;
-        window.sfMetadataContext.addFileTags(record_id, tag_ids).then(res => {
-          callback({ operation });
-        }).catch(error => {
-          callback({ error: gettext('Failed to modify people name') });
-        });
-        break;
-      }
       case OPERATION_TYPE.UPDATE_FILE_TAGS: {
-        const { record_id, tag_ids } = operation;
-        window.sfMetadataContext.updateFileTags(record_id, tag_ids).then(res => {
-          callback({ operation });
-
+        const { file_tags_data } = operation;
+        let valid_files_tags_data = [];
+        file_tags_data.forEach(item => {
+          const { record_id, tags } = item;
+          valid_files_tags_data.push({ record_id, tags });
+        });
+        window.sfMetadataContext.updateFileTags(valid_files_tags_data).then(res => {
+          const { success: success_record_ids, fail: fail_record_ids } = res.data;
+          callback({ operation, success_record_ids, fail_record_ids });
         }).catch(error => {
-          callback({ error: gettext('Failed to modify people name') });
+          callback({ error: gettext('Failed to modify tags') });
         });
         break;
       }

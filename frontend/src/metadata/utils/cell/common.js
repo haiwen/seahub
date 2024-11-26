@@ -4,10 +4,10 @@ import { getCellValueByColumn } from './core';
 import { getColumnOptions } from '../column';
 import {
   getDateDisplayString, getNumberDisplayString, getLongtextDisplayString, getOptionName, getCollaboratorsName, getColumnOptionNamesByIds,
-  getGeolocationDisplayString, getColumnOptionIdsByNames,
+  getGeolocationDisplayString, getColumnOptionIdsByNames, getTagsDisplayString,
 } from './column';
 
-export const getCellValueDisplayString = (row, column, { collaborators = [] } = {}) => {
+export const getCellValueDisplayString = (row, column, { collaborators = [], tagsData } = {}) => {
   if (!row) return '';
   const { type, data } = column;
   const cellValue = getCellValueByColumn(row, column);
@@ -46,6 +46,9 @@ export const getCellValueDisplayString = (row, column, { collaborators = [] } = 
     }
     case CellType.GEOLOCATION: {
       return getGeolocationDisplayString(cellValue, data, { isBaiduMap: true, hyphen: ' ' });
+    }
+    case CellType.TAGS: {
+      return getTagsDisplayString(tagsData, cellValue);
     }
     default: {
       if (cellValue || typeof cellValue === 'boolean') {

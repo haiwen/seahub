@@ -65,12 +65,13 @@ function getCopiedTextFromSelectedCells(copiedRange, tableData, isGroupView, rec
 
 function getCopiedText(records, columns) {
   const collaborators = window.sfMetadata.getCollaborators();
+  const tagsData = window?.sfTagsDataStore?.data || {};
   const lastRecordIndex = records.length - 1;
   const lastColumnIndex = columns.length - 1;
   let copiedText = '';
   records.forEach((record, recordIndex) => {
     columns.forEach((column, columnIndex) => {
-      copiedText += (record && getClientCellValueDisplayString(record, column, { collaborators })) || '';
+      copiedText += (record && getClientCellValueDisplayString(record, column, { collaborators, tagsData })) || '';
       if (columnIndex < lastColumnIndex) {
         copiedText += '\t';
       }

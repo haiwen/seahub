@@ -257,15 +257,20 @@ export default function apply(data, operation) {
     }
 
     // tags
-    case OPERATION_TYPE.ADD_FILE_TAGS:
     case OPERATION_TYPE.UPDATE_FILE_TAGS: {
-      const { record_id, tag_ids } = operation;
+      const { file_tags_data: filesTagsData } = operation;
       const { rows } = data;
+      let updateMap = {};
+      Array.isArray(filesTagsData) && filesTagsData.forEach(fileTags => {
+        const { record_id, tags } = fileTags;
+        const value = tags ? tags.map(tagId => ({ row_id: tagId })) : [];
+        updateMap[record_id] = value;
+      });
       let updatedRows = [...rows];
       rows.forEach((row, index) => {
         const { _id: rowId } = row;
-        if (rowId === record_id) {
-          const updatedRow = Object.assign({}, row, { [PRIVATE_COLUMN_KEY.TAGS]: tag_ids ? tag_ids.map(item => ({ row_id: item })) : [] });
+        if (updateMap[rowId]) {
+          const updatedRow = Object.assign({}, row, { [PRIVATE_COLUMN_KEY.TAGS]: updateMap[rowId] });
           updatedRows[index] = updatedRow;
           data.id_row_map[rowId] = updatedRow;
         }

@@ -47,13 +47,13 @@ function convertedToRecordData(originRecordData, keyColumnMap, excludesColumnTyp
   return recordData;
 }
 
-export const getClientCellValueDisplayString = (record, column, { collaborators = [] } = {}) => {
+export const getClientCellValueDisplayString = (record, column, { collaborators = [], tagsData = {} } = {}) => {
   const cellValue = getCellValueByColumn(record, column);
   const { type } = column;
   if (type === CellType.CTIME || type === CellType.MTIME) {
     return getAutoTimeDisplayString(cellValue);
   }
-  return getCellValueDisplayString(record, column, { collaborators });
+  return getCellValueDisplayString(record, column, { collaborators, tagsData });
 };
 
 export const getFormatRecordData = (columns, recordData) => {

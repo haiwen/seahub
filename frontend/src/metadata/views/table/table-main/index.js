@@ -7,11 +7,22 @@ import { GROUP_VIEW_OFFSET } from '../../../constants';
 
 import './index.css';
 
-const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, insertColumn, modifyColumnData, ...props }) => {
+const TableMain = ({
+  metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, insertColumn,
+  modifyColumnData, updateFileTags,
+  ...props
+}) => {
 
   const gridUtils = useMemo(() => {
-    return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData });
-  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData]);
+    return new GridUtils(metadata, {
+      modifyRecord,
+      modifyRecords,
+      recordGetterByIndex,
+      recordGetterById,
+      modifyColumnData,
+      updateFileTags,
+    });
+  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags]);
 
   const groupbysCount = useMemo(() => {
     const groupbys = metadata?.view?.groupbys || [];
@@ -70,6 +81,7 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         recordGetterByIndex={recordGetterByIndex}
         modifyColumnData={modifyColumnData}
         insertColumn={handelInsertColumn}
+        updateFileTags={updateFileTags}
         {...props}
       />
     </div>
