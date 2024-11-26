@@ -22,7 +22,6 @@ const propTypes = {
 };
 
 const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
-const { seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 
 const initOptions = {
@@ -41,7 +40,6 @@ const initOptions = {
     id: '',
   },
   editorMode: 'plain',
-  collabServer: seafileCollabServer ? seafileCollabServer : null,
   showMarkdownEditorDialog: false,
   showShareLinkDialog: false,
   showInsertFileDialog: false,

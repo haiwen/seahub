@@ -10,7 +10,6 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import collabServer from '../../utils/collab-server';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
 import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
@@ -276,7 +275,6 @@ class LibContentView extends React.Component {
 
   componentWillUnmount() {
     window.onpopstate = this.oldonpopstate;
-    collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
     this.unsubscribeEvent();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
@@ -416,11 +414,7 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
-    let repoID = this.props.repoID;
-
     // listen current repo
-    collabServer.watchRepo(repoID, this.onRepoUpdateEvent);
-
     // list used FileTags
     this.updateUsedRepoTags();
 
