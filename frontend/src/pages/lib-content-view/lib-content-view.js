@@ -55,7 +55,6 @@ class LibContentView extends React.Component {
       isTreePanelShown = storedTreePanelState == 'true';
     }
     this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
-    this.onMessageCallback = this.onMessageCallback.bind(this);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
