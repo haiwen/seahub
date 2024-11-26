@@ -574,5 +574,6 @@
   "Full_width_mode": "全宽模式",
   "Video": "视频",
   "Upload_local_video": "上传本地视频",
-  "The_current_version_does_not_support_>5MB_video_file": "当前版本不支持大于 5MB 的视频文件"
+  "The_current_version_does_not_support_>5MB_video_file": "当前版本不支持大于 5MB 的视频文件",
+  "Token_expired_Please_refresh_the_page": "Token已过期。请刷新页面。"
 }
