@@ -973,6 +973,27 @@ ENABLE_METADATA_MANAGEMENT = False
 METADATA_SERVER_URL = ''
 METADATA_SERVER_SECRET_KEY = ''
 
+#############################
+# multi office suite support
+#############################
+ENABLE_MULTIPLE_OFFICE_SUITE = False
+OFFICE_SUITES = [
+    { 
+        "id": "onlyoffice",
+        "name": "OnlyOffice",
+        "is_default": True,
+    },
+    {
+        "id": "collabora",
+        "name": "CollaboraOnline",
+        "is_default": False,
+    }
+]
+ROLES_CAN_CHOOSE_OFFICE_SUITE = []
+ROLES_DEFAULT_OFFCICE_SUITE = {}
+OFFICE_SUITE_ENABLED_FILE_TYPES = []
+OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES = []
+
 # file tags
 ENABLE_FILE_TAGS = True
 
