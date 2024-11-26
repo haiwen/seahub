@@ -184,8 +184,8 @@ const Table = () => {
     store.modifyColumnOrder(sourceColumnKey, targetColumnKey);
   }, [store]);
 
-  const updateFilesTags = useCallback((data) => {
-    store.updateFilesTags(data);
+  const updateFileTags = useCallback((data) => {
+    store.updateFileTags(data);
   }, [store]);
 
   const insertColumn = useCallback((name, type, { key, data }) => {
@@ -246,7 +246,7 @@ const Table = () => {
         modifyColumnData={modifyColumnData}
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
-        updateFilesTags={updateFilesTags}
+        updateFileTags={updateFileTags}
       />
     </div>
   );

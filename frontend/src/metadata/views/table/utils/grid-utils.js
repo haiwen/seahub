@@ -137,7 +137,7 @@ class GridUtils {
     }
 
     if (updateTags.length > 0) {
-      this.api.updateFilesTags(updateTags);
+      this.api.updateFileTags(updateTags);
     }
 
     if (updateRecordIds.length === 0) return;
@@ -239,7 +239,7 @@ class GridUtils {
     }
 
     if (tagsUpdate.length > 0) {
-      this.api.updateFilesTags(tagsUpdate);
+      this.api.updateFileTags(tagsUpdate);
     }
 
     return {

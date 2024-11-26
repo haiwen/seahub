@@ -25,7 +25,7 @@ export const OPERATION_TYPE = {
   DELETE_PEOPLE_PHOTOS: 'delete_people_photos',
 
   // tag
-  UPDATE_FILES_TAGS: 'update_files_tags',
+  UPDATE_FILE_TAGS: 'update_file_tags',
 };
 
 export const COLUMN_DATA_OPERATION_TYPE = {
@@ -58,7 +58,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
-  [OPERATION_TYPE.UPDATE_FILES_TAGS]: ['repo_id', 'file_tags_data'],
+  [OPERATION_TYPE.UPDATE_FILE_TAGS]: ['repo_id', 'file_tags_data'],
 };
 
 export const UNDO_OPERATION_TYPE = [

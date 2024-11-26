@@ -508,7 +508,7 @@ class InteractionMasks extends React.Component {
     let idOriginalRecordUpdates = {}; // row's id to modified original records data: { [row_id]: { [column.key: null] } }
     let idOldRecordData = {}; // row's id to old records data: { [row_id]: { [column.name: xxx] } }
     let idOriginalOldRecordData = {}; // row's id to old original records data: { [row_id]: { [column.key: xxx] } }
-    let tagsUpdate = []; // row's id to modified tags: { [row_id]: { [column.key]: null } }
+    let tagsUpdate = [];
     editableRecords.forEach(record => {
       const { _id } = record;
       let originalUpdate = {};
@@ -527,7 +527,7 @@ class InteractionMasks extends React.Component {
         }
       });
 
-      // tags data
+      // tags
       if (hasTagsColumn) {
         tagsUpdate.push({ record_id: _id, tags: [], old_tags: getTagsFromRecord(record) });
       }
@@ -544,7 +544,7 @@ class InteractionMasks extends React.Component {
     });
 
     if (tagsUpdate.length > 0) {
-      this.props.updateFilesTags(tagsUpdate);
+      this.props.updateFileTags(tagsUpdate);
     }
 
     if (updateRecordIds.length > 0) {
@@ -1104,7 +1104,7 @@ class InteractionMasks extends React.Component {
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
-              updateFilesTags={this.props.updateFilesTags}
+              updateFileTags={this.props.updateFileTags}
               editorPosition={editorPosition}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),

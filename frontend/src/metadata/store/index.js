@@ -569,8 +569,8 @@ class Store {
   };
 
   // tag
-  updateFilesTags = (data) => {
-    const type = OPERATION_TYPE.UPDATE_FILES_TAGS;
+  updateFileTags = (data) => {
+    const type = OPERATION_TYPE.UPDATE_FILE_TAGS;
     const operation = this.createOperation({
       type, repo_id: this.repoId, file_tags_data: data
     });

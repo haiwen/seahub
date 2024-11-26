@@ -22,7 +22,7 @@ const TagsEditor = forwardRef(({
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
   onPressTab,
-  updateFilesTags,
+  updateFileTags,
 }, ref) => {
   const { tagsData, addTag } = useTags();
 
@@ -67,8 +67,8 @@ const TagsEditor = forwardRef(({
     }
     setValue(newValue);
     const recordId = getRecordIdFromRecord(record);
-    updateFilesTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
-  }, [value, record, updateFilesTags]);
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+  }, [value, record, updateFileTags]);
 
   const onDeleteTag = useCallback((tagId) => {
     const newValue = value.slice(0);
@@ -78,8 +78,8 @@ const TagsEditor = forwardRef(({
     }
     setValue(newValue);
     const recordId = getRecordIdFromRecord(record);
-    updateFilesTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
-  }, [value, record, updateFilesTags]);
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+  }, [value, record, updateFileTags]);
 
   const onMenuMouseEnter = useCallback((highlightIndex) => {
     setHighlightIndex(highlightIndex);
@@ -98,20 +98,15 @@ const TagsEditor = forwardRef(({
       success_callback: (operation) => {
         const tags = operation.tags?.map(tag => getTagId(tag));
         const recordId = getRecordIdFromRecord(record);
-        let newValue = [];
-        if (value.length === 0) {
-          newValue = tags;
-        } else {
-          newValue = [...value, ...tags];
-        }
-        updateFilesTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+        const newValue = [...value, ...tags];
+        updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
       },
       fail_callback: () => {
 
       },
     });
-  }, [value, searchValue, record, addTag, updateFilesTags]);
+  }, [value, searchValue, record, addTag, updateFileTags]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -271,7 +266,7 @@ TagsEditor.propTypes = {
   value: PropTypes.array,
   editorPosition: PropTypes.object,
   onPressTab: PropTypes.func,
-  updateFilesTags: PropTypes.func,
+  updateFileTags: PropTypes.func,
 };
 
 export default TagsEditor;

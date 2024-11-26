@@ -259,9 +259,9 @@ class Context {
   };
 
   // file tag
-  updateFilesTags = (data) => {
+  updateFileTags = (data) => {
     const repoID = this.settings['repoID'];
-    return this.tagsAPI.updateFilesTags(repoID, data);
+    return this.tagsAPI.updateFileTags(repoID, data);
   };
 
 }

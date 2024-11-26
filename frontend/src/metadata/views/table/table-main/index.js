@@ -9,7 +9,7 @@ import './index.css';
 
 const TableMain = ({
   metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, insertColumn,
-  modifyColumnData, updateFilesTags,
+  modifyColumnData, updateFileTags,
   ...props
 }) => {
 
@@ -20,9 +20,9 @@ const TableMain = ({
       recordGetterByIndex,
       recordGetterById,
       modifyColumnData,
-      updateFilesTags,
+      updateFileTags,
     });
-  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFilesTags]);
+  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags]);
 
   const groupbysCount = useMemo(() => {
     const groupbys = metadata?.view?.groupbys || [];
@@ -81,7 +81,7 @@ const TableMain = ({
         recordGetterByIndex={recordGetterByIndex}
         modifyColumnData={modifyColumnData}
         insertColumn={handelInsertColumn}
-        updateFilesTags={updateFilesTags}
+        updateFileTags={updateFileTags}
         {...props}
       />
     </div>

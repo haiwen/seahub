@@ -94,7 +94,7 @@ class TagsManagerAPI {
   };
 
   // file tags
-  updateFilesTags = (repoID, data) => {
+  updateFileTags = (repoID, data) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
     const params = {
       file_tags_data: data,
