@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
 import { MetadataTreeView, useMetadata } from '../../metadata';
 import ExtensionPrompts from './extension-prompts';
-import LibSettingsDialog from '../dialog/lib-settings';
+import LibSettingsDialog, { TAB } from '../dialog/lib-settings';
 import { useMetadataStatus } from '../../hooks';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
@@ -41,7 +41,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
         <LibSettingsDialog
           repoID={repoID}
           currentRepoInfo={currentRepoInfo}
-          tab="extendedPropertiesSetting"
+          tab={TAB.EXTENDED_PROPERTIES_SETTINGS}
           toggleDialog={toggleSettingsDialog}
         />
       )}
