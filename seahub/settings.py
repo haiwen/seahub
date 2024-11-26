@@ -917,13 +917,6 @@ METADATA_FILE_TYPES = {
 SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
 
-##############################
-#         ocr         #
-##############################
-
-OCR_SERVER_URL = ''
-OCR_SECRET_KEY = ''
-
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
