@@ -855,7 +855,7 @@ table img {
 .op-icon {
   font-size: 20px;
   line-height: 1;
-  color: #888;
+  color: #666;
   cursor: pointer;
   margin-right: 3px;
   vertical-align: middle;
@@ -887,7 +887,7 @@ a.op-icon:focus {
 
 .op-icon:hover {
   /** for <a> **/
-  color: #888;
+  color: #666;
   text-decoration: none;
 }
 
@@ -2219,7 +2219,7 @@ a.sf-popover-item {
 
 #usage-details {
   font-size: 12px;
-  color: #888;
+  color: #666;
 }
 
 #traffic-stat {
@@ -2725,7 +2725,7 @@ a.sf-popover-item {
 }
 
 .search-results-item .parent-dir-link {
-  color: #888;
+  color: #666;
 }
 
 .search-results-item .time {

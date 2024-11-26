@@ -253,7 +253,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation a.fas {
-  color: #888;
+  color: #666;
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover a.fas {
@@ -332,7 +332,7 @@
 
 .sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle {
   font-size: 18px;
-  color: #888;
+  color: #666;
   transform: rotate(-90deg);
   transition: all .1s;
 }

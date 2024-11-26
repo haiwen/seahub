@@ -390,7 +390,7 @@ a, a:hover { color: #ec8000; }
 
 .action-icon,
 .attr-action-icon {
-  color:#888 !important;
+  color:#666 !important;
 }
 
 .action-icon:focus,
@@ -1051,7 +1051,7 @@ table td {
 
 .list-show-more .more-message {
   font-size: 0.875rem;
-  color: #888;
+  color: #666;
   text-decoration: underline;
 }
 
