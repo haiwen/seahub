@@ -410,12 +410,6 @@ class AllNotificationsView(APIView):
         """
 
         username = request.user.username
-        # unseen_notices = UserNotification.objects.get_user_notifications(username,
-        #                                                                  seen=False)
-        # for notice in unseen_notices:
-        #     notice.seen = True
-        #     notice.save()
-        
         try:
             UserNotification.objects.get_user_notifications(username, seen=False).update(seen=True)
             SeadocNotification.objects.filter(username=username, seen=False).update(seen=True)
