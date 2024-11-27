@@ -18,6 +18,7 @@ const TagsContext = React.createContext(null);
 export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ...params }) => {
 
   const [isLoading, setLoading] = useState(true);
+  const [isReloading, setReloading] = useState(false);
   const [tagsData, setTagsData] = useState(null);
 
   const storeRef = useRef(null);
@@ -39,14 +40,14 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   }, []);
 
   const reloadTags = useCallback(() => {
-    setLoading(true);
+    setReloading(true);
     storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
       setTagsData(storeRef.current.data);
-      setLoading(false);
+      setReloading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      setLoading(false);
+      setReloading(false);
     });
   }, []);
 
@@ -93,6 +94,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   const handelSelectTag = useCallback((tag, isSelected) => {
     if (isSelected) return;
     const id = getTagId(tag);
+    setReloading(id === ALL_TAGS_ID);
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + id,
@@ -225,6 +227,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   return (
     <TagsContext.Provider value={{
       isLoading,
+      isReloading,
       tagsData,
       store: storeRef.current,
       context: contextRef.current,

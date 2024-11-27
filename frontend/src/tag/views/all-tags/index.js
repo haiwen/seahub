@@ -10,7 +10,7 @@ import './index.css';
 const AllTags = ({ ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
 
-  const { isLoading, tagsData, context } = useTags();
+  const { isLoading, isReloading, tagsData, context } = useTags();
 
   useEffect(() => {
     const eventBus = context.eventBus;
@@ -28,7 +28,7 @@ const AllTags = ({ ...params }) => {
     setDisplayTag(tagID);
   }, [displayTag]);
 
-  if (isLoading) return (<CenteredLoading />);
+  if (isLoading || isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
     return (<TagFiles { ...params } tagID={displayTag} onChangeDisplayTag={onChangeDisplayTag} />);
