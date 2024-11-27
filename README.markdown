@@ -52,5 +52,13 @@ Then open your browser, and input `http://localhost:8000/`, there should be a Lo
 Internationalization (I18n)
 ==========
 
-Please refer to https://github.com/haiwen/seafile/wiki/Seahub-Translation
+Please submit translations via Transifex: [https://explore.transifex.com/haiwen/seahub/](https://explore.transifex.com/haiwen/seahub/)
+
+Steps:
+
+1. Create a free account on Transifex ([https://www.transifex.com/](https://www.transifex.com/)).
+
+2. Send a request to join the language translation.
+
+3. After accepted by the project maintainer, then you can upload your file or translate online.
 
