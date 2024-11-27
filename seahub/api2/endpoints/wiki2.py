@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.api2.endpoints.utils import ai_search_wikis, search_wikis
+from seahub.search.utils import search_wikis, ai_search_wikis
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -1281,6 +1281,10 @@ class WikiSearch(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
+        if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
+            error_msg = 'Search not supported.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         query = request.data.get('query')
         search_wiki = request.data.get('search_wiki')
 
