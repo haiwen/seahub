@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { GRID_MODE, LIST_MODE } from './dir-view-mode/constants';
 
@@ -28,11 +29,13 @@ class ViewModes extends React.Component {
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
-  onKeyDown = (event) => {
-    if (event.shiftKey && event.keyCode === 49) {
-      this.props.switchViewMode(LIST_MODE);
-    } else if (event.shiftKey && event.keyCode === 50) {
-      this.props.switchViewMode(GRID_MODE);
+  onKeyDown = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey) {
+      if (e.keyCode === 49) {
+        this.props.switchViewMode(LIST_MODE);
+      } else if (e.keyCode === 50) {
+        this.props.switchViewMode(GRID_MODE);
+      }
     }
   };
 
@@ -45,9 +48,10 @@ class ViewModes extends React.Component {
   render() {
     const { isDropdownMenuOpen } = this.state;
     const { currentViewMode } = this.props;
+    const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
     const options = [
-      { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': 'Shift 1' },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': 'Shift 2' }
+      { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': `${shortcutMain} 1` },
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': `${shortcutMain} 2` }
     ];
     return (
       <Dropdown
@@ -79,9 +83,7 @@ class ViewModes extends React.Component {
                     <span className={`sf3-font-${item.icon} sf3-font mr-2`}></span>
                     <span>{item.text}</span>
                   </span>
-                  <span className="view-modes-dropdown-shortcut">
-                    <span>{item.shortcut}</span>
-                  </span>
+                  <span className="view-modes-dropdown-shortcut ml-4">{item.shortcut}</span>
                 </div>
               </DropdownItem>
             );
