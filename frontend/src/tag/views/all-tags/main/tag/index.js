@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getTagName, getTagColor, getTagFilesCount, getTagId } from '../../../../utils/cell/core';
 import { gettext } from '../../../../../utils/constants';
 import EditTagDialog from '../../../../components/dialog/edit-tag-dialog';
@@ -7,7 +8,7 @@ import { useTags } from '../../../../hooks';
 
 import './index.css';
 
-const Tag = ({ tags, tag, context }) => {
+const Tag = ({ tags, tag, context, onChangeDisplayTag }) => {
   const tagId = getTagId(tag);
   const tagName = getTagName(tag);
   const tagColor = getTagColor(tag);
@@ -41,10 +42,16 @@ const Tag = ({ tags, tag, context }) => {
     deleteTags([tagId]);
   }, [tagId, deleteTags]);
 
+  const handleDisplayTag = useCallback((event) => {
+    if (event.target.tagName == 'SPAN') {
+      onChangeDisplayTag(tagId);
+    }
+  }, [tagId, onChangeDisplayTag]);
+
   return (
     <>
       <div className="sf-metadata-tags-table-row">
-        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-tag">
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-tag" onClick={handleDisplayTag}>
           <span className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }}></span>
           <span className="sf-metadata-tag-name">{tagName}</span>
         </div>
@@ -72,6 +79,13 @@ const Tag = ({ tags, tag, context }) => {
       )}
     </>
   );
+};
+
+Tag.propTypes = {
+  tags: PropTypes.array,
+  tag: PropTypes.object,
+  context: PropTypes.object,
+  onChangeDisplayTag: PropTypes.func,
 };
 
 export default Tag;

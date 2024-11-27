@@ -8,6 +8,13 @@
   margin-right: 0;
 }
 
+.sf-metadata-tag-files-wrapper .sf-metadata-tags-main .table-container thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+}
+
 .sf-metadata-tags-main .table-container td.name a {
   word-break: break-word;
 }
