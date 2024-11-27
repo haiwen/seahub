@@ -4,7 +4,7 @@ import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
-import LibSettingsDialog, { TAB } from '../../dialog/lib-settings';
+import LibSettingsDialog from '../../dialog/lib-settings';
 
 import './index.css';
 
@@ -58,7 +58,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
           repoID={repoID}
           currentRepoInfo={currentRepoInfo}
           toggleDialog={toggleSettingsDialog}
-          tab={TAB.HISTORY_SETTINGS}
         />
       )}
     </TreeSection>
