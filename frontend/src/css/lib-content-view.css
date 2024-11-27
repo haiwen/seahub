@@ -273,6 +273,28 @@
   background: #efefef;
 }
 
+.dir-view-path .path-item-refresh {
+  height: 24px;
+  width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  border-radius: 3px;
+}
+
+.dir-view-path .path-item-refresh:hover {
+  background: #efefef;
+}
+
+.dir-view-path .sf3-font-refresh {
+  transform: rotateY(180deg);
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-block;
+}
+
 .dir-view-path .path-item-dropdown-toggle {
   color: #666;
 }

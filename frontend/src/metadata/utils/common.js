@@ -59,11 +59,20 @@ export const isEmptyObject = (obj) => {
   return true;
 };
 
-export const debounce = (fn, wait) => {
-  let timeout = null;
-  return function () {
-    if (timeout !== null) clearTimeout(timeout);
-    timeout = setTimeout(fn, wait);
+export const debounce = (fn, delay, immediate) => {
+  let timer = null;
+  return (...params) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate && !timer) {
+      fn.call(this, ...params);
+    } else {
+      timer = setTimeout(() => {
+        timer = null;
+        fn.call(this, ...params);
+      }, delay);
+    }
   };
 };
 

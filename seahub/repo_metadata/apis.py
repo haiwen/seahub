@@ -1691,8 +1691,6 @@ class MetadataTagFiles(APIView):
 
         if not tag_files_record_ids:
             return Response({ 'metadata': [], 'results': [] })
-        
-        print(tag_files_record_ids)
 
         tag_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
                                                                                     METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
