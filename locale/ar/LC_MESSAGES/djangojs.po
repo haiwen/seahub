@@ -2140,7 +2140,7 @@ msgstr "تم اعداد سجل المكتبة التاريخي بنجاح"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:116
 msgid "Setting library history is disabled by Admin."
-msgstr "تم تعطيل إعداد تاريخ سجل المكتبة من المسؤول."
+msgstr "تم تعطيل إعداد تاريخ سجل المكتبة من المدير."
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:121
@@ -2725,7 +2725,7 @@ msgstr "رمز  -API- واجهة برمجة التطبيقات {placeholder}"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:54
 msgid "{placeholder} Share Admin"
-msgstr "{placeholder} شارك المشرف"
+msgstr "{placeholder} شارك المدير"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:69
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:292
@@ -3100,17 +3100,17 @@ msgstr "حسب الحجم تنازلياً"
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:67
 #| msgid "No department"
 msgid "Add department at"
-msgstr ""
+msgstr "أضف القسم إلى"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:69
 #| msgid "Change to department"
 msgid "Create top department"
-msgstr ""
+msgstr "إنشاء القسم الأعلى"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:18
 #| msgid "Delete Department"
 msgid "Delete department"
-msgstr ""
+msgstr "حذف القسم"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:21
 #| msgid "Are you sure to delete "
@@ -3149,7 +3149,7 @@ msgstr "تعيين حد معدل التنزيل"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:51
 #| msgid "Add Member"
 msgid "Add member"
-msgstr ""
+msgstr "إضافة عضو"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:41
 msgid "Add institution"
@@ -3239,7 +3239,7 @@ msgstr "مالك"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:101
 msgid "Owner can use admin panel in an organization, must be a new account."
-msgstr "يمكن للمالك استخدام لوحة الإدارة في منظمة، ويجب أن يكون حساب جديد."
+msgstr "يمكن للمدير استخدام لوحة الإدارة في المنظمة، ويجب أن يكون حساب جديد."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog.js:41
 #: frontend/src/pages/sys-admin/notifications/notifications.js:302
@@ -3275,12 +3275,12 @@ msgstr "يمكنك أيضا إضافة مستخدم كضيف، و الذي لن 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog.js:40
 #: frontend/src/pages/sys-admin/users/users.js:406
 msgid "Add Admin"
-msgstr "إضافة مسؤول"
+msgstr "إضافة مدير"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:75
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:75
 msgid "(If left blank, owner will be admin)"
-msgstr "(إذا ترك فارغاً، يكون المالك هو المشرف)"
+msgstr "(إذا تُرك فارغاً، يكون المالك هو المدير)"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:79
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:80
@@ -5605,7 +5605,7 @@ msgstr "كانبان"
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:57
 #| msgid "Max"
 msgid "Map"
-msgstr ""
+msgstr "الخريطة"
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:75
 msgid "New view"
@@ -6081,7 +6081,7 @@ msgstr "الخصائص التي سيتم عرضها على البطاقة"
 #: frontend/src/metadata/views/map/index.js:119
 #| msgid "Failed to generate description"
 msgid "Failed to get user location"
-msgstr ""
+msgstr "فشل في الحصول على موقع المستخدم"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:64
 msgid "Clear selected"
@@ -6756,7 +6756,7 @@ msgstr "ترك المشاركة"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2194
 msgid "This library has been set to read-only by admin and cannot be updated."
-msgstr "تم تعيين هذه المكتبة للقراءة فقط من قبل المسؤول ولا يمكن تحديثها."
+msgstr "تم تعيين هذه المكتبة للقراءة فقط من قبل المدير ولا يمكن تحديثها."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2356
 #: frontend/src/pages/wiki/main-panel.js:82
@@ -6823,7 +6823,7 @@ msgstr "لم تقم بإنشاء أي مكتبات حتى الآن. المكتب
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:388
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:432
 msgid "Broken (please contact your administrator to fix this library)"
-msgstr "متضررة (الرجاء الاتصال بالمسؤول لإصلاح هذه المكتبة)"
+msgstr "متضررة (الرجاء الاتصال بالمدير لإصلاح هذه المكتبة)"
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:54
 #: frontend/src/pages/share-admin/folders.js:149
@@ -7300,7 +7300,7 @@ msgstr "%s مستخدم محذوف"
 #: frontend/src/pages/org-admin/org-users-admins.js:58
 #, javascript-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr "تم إلغاء صلاحية المشرف %s بنجاح"
+msgstr "تم إلغاء صلاحية المدير %s بنجاح"
 
 #: frontend/src/pages/org-admin/org-users-admins.js:72
 #, javascript-format
@@ -7801,11 +7801,11 @@ msgstr "نجاح"
 
 #: frontend/src/pages/sys-admin/admin-logs/logs-nav.js:15
 msgid "Admin Operation Logs"
-msgstr "سجلات عمليات المسؤول"
+msgstr "سجلات عمليات المدير"
 
 #: frontend/src/pages/sys-admin/admin-logs/logs-nav.js:16
 msgid "Admin Login Logs"
-msgstr "سجلات تسجيل دخول المسؤول"
+msgstr "سجلات تسجيل دخول المدير"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:48
 msgid "Operation"
@@ -7870,7 +7870,7 @@ msgstr "ترحيل المستخدم من {user_from} إلى {user_to}"
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:14
 #| msgid "No sub-departments"
 msgid "Add sub-department"
-msgstr ""
+msgstr "إضافة قسم فرعي"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:17
 #| msgid "Library"
@@ -7880,32 +7880,32 @@ msgstr "إضافة مكتبة"
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:20
 #| msgid "Add Member"
 msgid "Add members"
-msgstr ""
+msgstr "إضافة أعضاء"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:29
 #| msgid "Departments"
 msgid "Department ID"
-msgstr ""
+msgstr "معرف القسم"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2-members-item.js:69
 #| msgid "Delete Member"
 msgid "Default member"
-msgstr ""
+msgstr "عضو افتراضي"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2-members-list.js:187
 #| msgid "Contact Email"
 msgid "Contact email"
-msgstr ""
+msgstr "البريد الإلكتروني للتواصل"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2.js:350
 #| msgid "Rename Department"
 msgid "Enable departments feature"
-msgstr ""
+msgstr "تمكين ميزة الأقسام"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:27
 #| msgid "Set Admin"
 msgid "Default admin"
-msgstr ""
+msgstr "المدير الافتراضي"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:29
 #| msgid "System Admin"
@@ -7915,12 +7915,12 @@ msgstr "مدير النظام"
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:31
 #| msgid "Share Admin"
 msgid "Daily admin"
-msgstr ""
+msgstr "المدير اليومي"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:33
 #| msgid "Add Admin"
 msgid "Audit admin"
-msgstr ""
+msgstr "مدير التدقيق"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
@@ -8071,7 +8071,7 @@ msgstr "الغاء"
 #: frontend/src/pages/sys-admin/users/search-users.js:249
 #: frontend/src/pages/sys-admin/users/users.js:395
 msgid "Successfully revoked the admin permission of {placeholder}."
-msgstr "تم إبطال إذن المسؤول بنجاح {placeholder}."
+msgstr "تم إبطال إذن المدير بنجاح {placeholder}."
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:268
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:352
@@ -8098,12 +8098,12 @@ msgstr "تحديد مدير"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:201
 msgid "Are you sure you want to set {placeholder} as Admin?"
-msgstr "هل أنت متأكد من أنك تريد تعيين {placeholder} كمسؤول؟"
+msgstr "هل أنت متأكد من أنك تريد تعيين {placeholder} كمدير؟"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
 #| msgid "Name updated"
 msgid "Admin updated"
-msgstr "تم تحديث المسؤول"
+msgstr "تم تحديث المدير"
 
 #: frontend/src/pages/sys-admin/institutions/institutions.js:142
 #| msgid "Delete Notification"
@@ -8280,7 +8280,7 @@ msgstr "الشروط و المسميات"
 #: frontend/src/pages/sys-admin/side-panel.js:246
 #| msgid "Admin Login Logs"
 msgid "Admin Logs"
-msgstr "سجلات المسؤول"
+msgstr "سجلات المدير"
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:52
 msgid "Created"
@@ -8340,17 +8340,17 @@ msgstr "لا يوجد مستخدمون"
 #: frontend/src/pages/sys-admin/users/users-content.js:311
 #| msgid "Set Admin"
 msgid "Default Admin"
-msgstr "المسؤول الافتراضي"
+msgstr "المدير الافتراضي"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:315
 #| msgid "Share Admin"
 msgid "Daily Admin"
-msgstr "المسؤول اليومي"
+msgstr "المدير اليومي"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:317
 #| msgid "Add Admin"
 msgid "Audit Admin"
-msgstr "مسؤول التدقيق"
+msgstr "مدير التدقيق"
 
 #: frontend/src/pages/sys-admin/users/users-nav.js:15
 msgid "Database"
@@ -8448,7 +8448,7 @@ msgstr "التفعيل بعد التسجيل"
 msgid ""
 "Activate user immediately after registration. If unchecked, a user need to "
 "be activated by administrator or via activation email"
-msgstr "تنشيط المستخدم مباشرة بعد التسجيل. إذا لم يتم تحديده ، فيجب تنشيط المستخدم بواسطة المسؤول أو عبر البريد الإلكتروني"
+msgstr "تنشيط المستخدم مباشرة بعد التسجيل. إذا لم يتم تحديده ، فيجب تنشيط المستخدم بواسطة المدير أو عبر البريد الإلكتروني"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:181
 msgid "send activation email"
@@ -8485,7 +8485,7 @@ msgstr "إجبار المستخدم على استخدام كلمة مرور قو
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:234
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr "إجبار المستخدم على تغيير كلمة المرور عند إضافة الحساب حديثا أو إعادة تعيينه بواسطة المسؤول"
+msgstr "إجبار المستخدم على تغيير كلمة المرور عند إضافة الحساب حديثا أو إعادة تعيينه بواسطة المدير"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:241
 msgid "Enable two factor authentication"
@@ -8568,7 +8568,7 @@ msgstr "في حالة التشغيل، لن يتمكن عملاء سطح الم�
 msgid ""
 "Enable system admin to add Terms and Conditions, and all users will have to "
 "accept the terms."
-msgstr "قم بتمكين مسؤول النظام من إضافة الشروط والأحكام ، وسيتعين على جميع المستخدمين قبول الشروط."
+msgstr "تمكين مدير النظام من إضافة الشروط والأحكام ، وسيتعين على جميع المستخدمين قبول الشروط."
 
 #: frontend/src/pages/upload-link/file-uploader.js:434
 msgid "Failed to upload {file_name}."
@@ -8852,11 +8852,11 @@ msgstr "لا توجد مجلدات مشتركة"
 
 #: frontend/src/translate.js:21
 msgid "No Admin login logs"
-msgstr "لا توجد سجلات تسجيل دخول المسؤول"
+msgstr "لا توجد سجلات تسجيل دخول المدير"
 
 #: frontend/src/translate.js:22
 msgid "No Admin operation logs"
-msgstr "لا توجد سجلات عمليات المسؤول"
+msgstr "لا توجد سجلات عمليات المدير"
 
 #: frontend/src/translate.js:23
 msgid "No permission logs"
@@ -8976,7 +8976,7 @@ msgstr "رمز واجهة برمجة التطبيقات -API-"
 
 #: frontend/src/utils/utils.js:469
 msgid "Admin access"
-msgstr "وصول المسؤول"
+msgstr "وصول المدير"
 
 #: frontend/src/utils/utils.js:476
 msgid "Read-Only library"

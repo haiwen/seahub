@@ -5796,7 +5796,7 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
-msgstr ""
+msgstr "ist die aktuelle Benutzer-ID"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:54
 msgid "include the current user"

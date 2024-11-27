@@ -5996,7 +5996,7 @@ msgstr "代码"
 
 #: frontend/src/metadata/utils/column/index.js:272
 msgid "Compressed"
-msgstr "已压缩"
+msgstr "压缩文件"
 
 #: frontend/src/metadata/utils/column/index.js:299
 msgid "In progress"
