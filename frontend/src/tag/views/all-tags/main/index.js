@@ -7,7 +7,7 @@ import { getTagId } from '../../../utils/cell/core';
 
 import './index.css';
 
-const Main = ({ context, tags }) => {
+const Main = ({ context, tags, onChangeDisplayTag }) => {
   if (tags.length === 0) {
     return (
       <div className="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -25,7 +25,7 @@ const Main = ({ context, tags }) => {
       </div>
       {tags.map(tag => {
         const id = getTagId(tag);
-        return (<Tag tag={tag} context={context} tags={tags} key={id} />);
+        return (<Tag tag={tag} context={context} tags={tags} key={id} onChangeDisplayTag={onChangeDisplayTag} />);
       })}
     </div>
   );
@@ -34,6 +34,7 @@ const Main = ({ context, tags }) => {
 Main.propTypes = {
   context: PropTypes.object,
   tags: PropTypes.array,
+  onChangeDisplayTag: PropTypes.func,
 };
 
 export default Main;

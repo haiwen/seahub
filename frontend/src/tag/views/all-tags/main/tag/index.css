@@ -16,6 +16,10 @@
   white-space: nowrap;
 }
 
+.sf-metadata-tags-table-cell-tag span:hover {
+  cursor: pointer;
+}
+
 .sf-metadata-tags-table-cell-tag .sf-metadata-tag-color {
   display: inline-block;
   height: 10px;
