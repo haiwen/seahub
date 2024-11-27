@@ -11,6 +11,7 @@ import Icon from '../../../../components/icon';
 import DraggedPageItem from './dragged-page-item';
 import CustomIcon from '../../custom-icon';
 import { eventBus } from '../../../../components/common/event-bus';
+import { INSERT_POSITION } from '../constants';
 
 class PageItem extends Component {
 
@@ -21,6 +22,8 @@ class PageItem extends Component {
       isShowOperationDropdown: false,
       isShowDeleteDialog: false,
       isShowInsertPage: false,
+      isShowAddSiblingPage: false,
+      insertPosition: '',
       pageName: props.page.name || '',
       isSelected: props.getCurrentPageId() === props.page.id,
       isMouseEnter: false,
@@ -71,6 +74,17 @@ class PageItem extends Component {
 
   toggleInsertPage = () => {
     this.setState({ isShowInsertPage: !this.state.isShowInsertPage });
+  };
+
+  toggleInsertSiblingPage = (position) => {
+    let insertPosition = null;
+    if (position === INSERT_POSITION.BELOW || position === INSERT_POSITION.ABOVE) {
+      insertPosition = position;
+    }
+    this.setState({
+      insertPosition,
+      isShowAddSiblingPage: !this.state.isShowAddSiblingPage,
+    });
   };
 
   savePageProperties = () => {
@@ -134,6 +148,7 @@ class PageItem extends Component {
         isOnlyOnePage={isOnlyOnePage}
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pageIndex={index}
+        parentPageId={this.props.page.id}
         isEditMode={isEditMode}
         duplicatePage={this.props.duplicatePage}
         setCurrentPage={this.props.setCurrentPage}
@@ -150,6 +165,7 @@ class PageItem extends Component {
         setClassName={this.props.setClassName}
         getClassName={this.props.getClassName}
         layerDragProps={this.props.layerDragProps}
+        addSiblingPage={this.props.addSiblingPage}
       />
     );
   };
@@ -174,6 +190,12 @@ class PageItem extends Component {
       this.props.toggleExpand(page.id);
     }
     this.props.addPageInside(Object.assign({ parentPageId: this.props.page.id }, newPage));
+  };
+
+  onAddSiblingPage = (newPage) => {
+    const { page, parentPageId } = this.props;
+    const sibling_page_id = page.id;
+    this.props.addSiblingPage(newPage, parentPageId, this.state.insertPosition, sibling_page_id, this.toggleInsertSiblingPage);
   };
 
   getPageClassName = () => {
@@ -257,6 +279,7 @@ class PageItem extends Component {
                             toggleNameEditor={this.toggleNameEditor}
                             duplicatePage={this.props.duplicatePage}
                             onDeletePage={this.openDeleteDialog}
+                            toggleInsertSiblingPage={this.toggleInsertSiblingPage}
                           />
                         }
                       </div>
@@ -278,6 +301,16 @@ class PageItem extends Component {
                     getCurrentPageId={this.props.getCurrentPageId}
                     onAddNewPage={this.onAddNewPage}
                     title={gettext('Add page inside')}
+                  />
+                }
+                {this.state.isShowAddSiblingPage &&
+                  <AddNewPageDialog
+                    toggle={this.toggleInsertSiblingPage}
+                    getCurrentPageId={this.props.getCurrentPageId}
+                    onAddNewPage={this.onAddSiblingPage}
+                    title={gettext('Add page')}
+                    insertPosition={this.state.insertPosition}
+                    page={this.props.page}
                   />
                 }
               </div>

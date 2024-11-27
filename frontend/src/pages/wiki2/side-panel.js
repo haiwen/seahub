@@ -83,16 +83,16 @@ class SidePanel extends PureComponent {
     });
   };
 
-  addPage = (page, parentId, successCallback, errorCallback, jumpToNewPage = true) => {
+  addPage = (page, parent_id, successCallback, errorCallback, jumpToNewPage = true) => {
     const { config } = this.props;
     const navigation = config.navigation;
-    const pageId = page.id;
+    const page_id = page.id;
     config.pages.push(page);
-    PageUtils.addPage(navigation, pageId, parentId);
+    PageUtils.addPage({ navigation, page_id, parent_id });
     config.navigation = navigation;
     JSON.stringify(config);
     this.props.updateWikiConfig(config);
-    jumpToNewPage && this.props.setCurrentPage(pageId, successCallback);
+    jumpToNewPage && this.props.setCurrentPage(page_id, successCallback);
     successCallback && successCallback();
   };
 
@@ -102,6 +102,19 @@ class SidePanel extends PureComponent {
     config.navigation = PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
     JSON.stringify(config);
     this.props.updateWikiConfig(config);
+  };
+
+  addSiblingPage = (page, parent_id, insert_position, sibling_page_id, successCallback) => {
+    const { config } = this.props;
+    const navigation = config.navigation;
+    const page_id = page.page_id;
+    config.pages.push(page);
+    PageUtils.addPage({ navigation, page_id, parent_id, insert_position, sibling_page_id });
+    config.navigation = navigation;
+    JSON.stringify(config);
+    this.props.updateWikiConfig(config);
+    this.props.setCurrentPage(page_id, successCallback);
+    successCallback && successCallback();
   };
 
   toggleTrashDialog = () => {
@@ -128,6 +141,7 @@ class SidePanel extends PureComponent {
             getCurrentPageId={this.props.getCurrentPageId}
             addPageInside={this.addPageInside}
             toggleTrashDialog={this.toggleTrashDialog}
+            addSiblingPage={this.addSiblingPage}
           />
         }
       </div>

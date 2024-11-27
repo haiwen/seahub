@@ -71,9 +71,12 @@ class AddNewPageDialog extends React.Component {
   };
 
   createPage = (pageName) => {
-    wikiAPI.createWiki2Page(wikiId, pageName, this.props.getCurrentPageId()).then(res => {
+    const { insertPosition, page } = this.props;
+    const currentPageId = this.props.getCurrentPageId();
+    wikiAPI.createWiki2Page(wikiId, pageName, currentPageId, insertPosition, page.id).then(res => {
       const { page_id, obj_name, doc_uuid, parent_dir } = res.data.file_info;
       this.props.onAddNewPage({
+        id: page_id,
         page_id: page_id,
         name: pageName,
         icon: '',
