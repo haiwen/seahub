@@ -390,7 +390,7 @@ a, a:hover { color: #ec8000; }
 
 .action-icon,
 .attr-action-icon {
-  color:#888 !important;
+  color:#666 !important;
 }
 
 .action-icon:focus,
@@ -941,7 +941,7 @@ a.sf-popover-item:hover {
 .path-split {
   display: inline-block;
   padding: 0 5px;
-  color: #818a91;
+  color: #666;
 }
 
 .path-link {
@@ -1051,7 +1051,7 @@ table td {
 
 .list-show-more .more-message {
   font-size: 0.875rem;
-  color: #888;
+  color: #666;
   text-decoration: underline;
 }
 
@@ -1099,7 +1099,7 @@ a.table-sort-op:hover {
 }
 
 .dropdown-item .sf3-font {
-  color: #8c8c8c;
+  color: #666;
 }
 
 .dropdown-item .sf2-icon-tick {

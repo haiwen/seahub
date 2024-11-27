@@ -113,7 +113,6 @@ export const DEFAULT_RETRY_TIMES = 4;
 
 export const DEFAULT_RETRY_INTERVAL = 1000;
 
-// dtable-db limit loads up to 10,000 rows at a time
 export const MAX_LOAD_NUMBER = 10000;
 
 export const EDITOR_TYPE = {

@@ -20,16 +20,6 @@
   border-right: 1px solid #eee;
 }
 
-.department-dialog-content .department-dialog-group .tr-highlight .dtable-icon-groups {
-  padding-right: 10px;
-  color: #ffffff;
-}
-
-.department-dialog-content .department-dialog-group .dtable-icon-groups {
-  padding-right: 10px;
-  color: #999;
-}
-
 .department-dialog-content .department-dialog-member {
   display: flex;
   flex: 0 0 35%;
@@ -46,11 +36,6 @@
 
 .department-dialog-content .department-dialog-member-selected .modal-footer {
   border-top: none;
-}
-
-.department-dialog-content .department-dialog-member-selected .dtable-icon-cancel {
-  cursor: pointer;
-  color: #959595;
 }
 
 .department-dialog-content .department-dialog-group .group-item {
@@ -125,14 +110,6 @@
 
 .department-dialog-member-table tr td:first-child {
   padding-bottom: 2px;
-}
-
-.department-dialog-member-table tr td .dtable-icon-use-help {
-  color: #bdbdbd;
-}
-
-.department-dialog-member-table tr td .dtable-icon-use-help:hover {
-  color: #888;
 }
 
 .tooltip-inner {

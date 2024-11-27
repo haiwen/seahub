@@ -134,7 +134,6 @@ function convert2LongText(cellValue, oldCellValue, fromColumn) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;
   switch (fromColumnType) {
     case CellType.LONG_TEXT: {
-      // cell value is a string value from dtable-db
       const value = { text: cellValue };
       if (isLongTextValueExceedLimit(value)) {
         const newValue = getValidLongTextValue(value);
