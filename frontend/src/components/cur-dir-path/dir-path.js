@@ -159,7 +159,7 @@ class DirPath extends React.Component {
             <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handelRefresh}>
               <i className="sf3-font sf3-font-refresh"></i>
               <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
-                {gettext('Refresh the page')}
+                {gettext('Refresh the view')}
               </UncontrolledTooltip>
             </div>
           </Fragment>
