@@ -1454,6 +1454,11 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
+  updateAllNotifications() {
+    const url = this.server + '/api/v2.1/all-notifications/';
+    return this.req.put(url);
+  }
+
   listNotifications(page, perPage) {
     const url = this.server + '/api/v2.1/notifications/';
     let params = {
