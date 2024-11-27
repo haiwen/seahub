@@ -3100,17 +3100,17 @@ msgstr "По размеру в порядке убывания"
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:67
 #| msgid "No department"
 msgid "Add department at"
-msgstr ""
+msgstr "Добавить отдел в"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:69
 #| msgid "Change to department"
 msgid "Create top department"
-msgstr ""
+msgstr "Создать верхний отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:18
 #| msgid "Delete Department"
 msgid "Delete department"
-msgstr ""
+msgstr "Удалить отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:21
 #| msgid "Are you sure to delete "
@@ -3149,7 +3149,7 @@ msgstr "Установить ограничение скорости скачи�
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:51
 #| msgid "Add Member"
 msgid "Add member"
-msgstr ""
+msgstr "Добавить участника"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:41
 msgid "Add institution"
@@ -5605,7 +5605,7 @@ msgstr "Канбан"
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:57
 #| msgid "Max"
 msgid "Map"
-msgstr ""
+msgstr "Карта"
 
 #: frontend/src/metadata/components/popover/view-popover/add-view/index.js:75
 msgid "New view"
@@ -6081,7 +6081,7 @@ msgstr "Свойства для отображения на карточке"
 #: frontend/src/metadata/views/map/index.js:119
 #| msgid "Failed to generate description"
 msgid "Failed to get user location"
-msgstr ""
+msgstr "Не удалось получить местоположение пользователя"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:64
 msgid "Clear selected"
@@ -7870,7 +7870,7 @@ msgstr "Миграция пользователя из {user_from} в {user_to}"
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:14
 #| msgid "No sub-departments"
 msgid "Add sub-department"
-msgstr ""
+msgstr "Добавить подразделение"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:17
 #| msgid "Library"
@@ -7885,27 +7885,27 @@ msgstr "Добавить пользователей"
 #: frontend/src/pages/sys-admin/departments-v2/departments-node-dropdown-menu.js:29
 #| msgid "Departments"
 msgid "Department ID"
-msgstr ""
+msgstr "ID отдела"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2-members-item.js:69
 #| msgid "Delete Member"
 msgid "Default member"
-msgstr ""
+msgstr "Участник по умолчанию"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2-members-list.js:187
 #| msgid "Contact Email"
 msgid "Contact email"
-msgstr ""
+msgstr "Контактный адрес электронной почты"
 
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2.js:350
 #| msgid "Rename Department"
 msgid "Enable departments feature"
-msgstr ""
+msgstr "Включить функцию отделов"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:27
 #| msgid "Set Admin"
 msgid "Default admin"
-msgstr ""
+msgstr "Администратор по умолчанию"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:29
 #| msgid "System Admin"
@@ -7915,12 +7915,12 @@ msgstr "Системный администратор"
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:31
 #| msgid "Share Admin"
 msgid "Daily admin"
-msgstr ""
+msgstr "Ежедневный администратор"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:33
 #| msgid "Add Admin"
 msgid "Audit admin"
-msgstr ""
+msgstr "Администратор аудита"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"

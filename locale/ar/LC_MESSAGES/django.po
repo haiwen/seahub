@@ -33,21 +33,21 @@ msgstr "إعدادات تسجيل الدخول ADFS/SAML غير صالحة."
 #: seahub/adfs_auth/views.py:490 seahub/adfs_auth/views.py:494
 #: seahub/adfs_auth/views.py:558 seahub/adfs_auth/views.py:562
 msgid "Internal server error. Please contact system administrator."
-msgstr "خطأ داخلي في الخادم. يرجى الاتصال بمسؤول النظام."
+msgstr "خطأ داخلي في الخادم. يرجى الاتصال بمدير النظام."
 
 #: seahub/adfs_auth/views.py:156 seahub/adfs_auth/views.py:226
 #: seahub/adfs_auth/views.py:410 seahub/adfs_auth/views.py:461
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr "فشل تسجيل الدخول: خطأ في خدمة ADFS/SAML. يُرجى إبلاغ مسؤول مؤسستك (شركتك)."
+msgstr "فشل تسجيل الدخول: خطأ في خدمة ADFS/SAML. يُرجى إبلاغ مدير مؤسستك (شركتك)."
 
 #: seahub/adfs_auth/views.py:209 seahub/adfs_auth/views.py:253
 #: seahub/adfs_auth/views.py:267
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr "فشل تسجيل الدخول: استجابة سيئة من خدمة ADFS/SAML. يرجى الإبلاغ إلى مسؤول مؤسستك (شركتك)."
+msgstr "فشل تسجيل الدخول: استجابة سيئة من خدمة ADFS/SAML. يرجى الإبلاغ إلى مدير مؤسستك (شركتك)."
 
 #: seahub/adfs_auth/views.py:280
 msgid "Failed to bind SAML, please login first."
@@ -57,19 +57,19 @@ msgstr "فشل ربط SAML، يرجى تسجيل الدخول أولاً."
 msgid ""
 "Failed to create new user: the number of users exceeds the organization "
 "quota. Please report to your organization (company) administrator."
-msgstr "فشل إنشاء مستخدم جديد: عدد المستخدمين يتجاوز حصة المؤسسة. يرجى الإبلاغ إلى مسؤول مؤسستك (شركتك)."
+msgstr "فشل إنشاء مستخدم جديد: عدد المستخدمين يتجاوز حصة المؤسسة. يرجى الإبلاغ إلى مدير مؤسستك (شركتك)."
 
 #: seahub/adfs_auth/views.py:356
 msgid ""
 "Login failed: failed to create user. Please report to your organization "
 "(company) administrator."
-msgstr "فشل تسجيل الدخول: فشل في إنشاء المستخدم. يرجى الإبلاغ إلى مسؤول مؤسستك (شركتك)."
+msgstr "فشل تسجيل الدخول: فشل في إنشاء المستخدم. يرجى الإبلاغ إلى مدير مؤسستك (شركتك)."
 
 #: seahub/adfs_auth/views.py:371
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr "فشل تسجيل الدخول: تم إلغاء تنشيط المستخدم. يرجى الإبلاغ إلى مسؤول مؤسستك (شركتك)."
+msgstr "فشل تسجيل الدخول: تم إلغاء تنشيط المستخدم. يرجى الإبلاغ إلى مدير مؤسستك (شركتك)."
 
 #: seahub/adfs_auth/views.py:498
 msgid "Failed to unbind SAML, please set a password first."
@@ -637,7 +637,7 @@ msgstr "المستخدم %s موجود مسبقا."
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
-msgstr "فشل ارسال البريد، خدمة البريد الالكتروني غير مهيئة بشكل صحيح، الرجاء مراجعة المسئول."
+msgstr "فشل ارسال البريد، خدمة البريد الالكتروني غير مهيئة بشكل صحيح، الرجاء مراجعة المدير."
 
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
@@ -944,7 +944,7 @@ msgstr "عنوان البريد غير مرتبط بحساب مستخدم، هل
 #: seahub/auth/forms.py:136 seahub/auth/forms.py:137
 #: seahub/templates/registration/login.html:61
 msgid "Please use Single Sign-On to login."
-msgstr "يرجى استخدام تسجيل الدخول الأحادي SSO لتسجيل الدخول."
+msgstr "يرجى استخدام تسجيل الدخول الموحد SSO لتسجيل الدخول."
 
 #: seahub/auth/forms.py:142
 msgid ""
@@ -1001,7 +1001,7 @@ msgstr "تم تسجيل الخروج"
 
 #: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
-msgstr "فشل ارسال البريد، اتصل بالمسئول."
+msgstr "فشل ارسال البريد، اتصل بالمدير."
 
 #: seahub/auth/views.py:466
 msgid "Unable to change password."
@@ -1376,7 +1376,7 @@ msgstr "عنوان البريد مطلوب"
 #: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
 #: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
 msgid "Error, please contact administrator."
-msgstr "خطأ يرجى التواصل مع مسؤول النظام ."
+msgstr "خطأ يرجى التواصل مع مدير النظام ."
 
 #: seahub/dingtalk/views.py:125 seahub/dingtalk/views.py:368
 #: seahub/weixin/views.py:99
@@ -1562,7 +1562,7 @@ msgstr "فشل في الحذف: المستخدم غير موجود"
 
 #: seahub/institutions/views.py:223
 msgid "Failed to delete: the user is system administrator"
-msgstr "فشل الحذف: المستخدم هو مسؤول النظام"
+msgstr "فشل الحذف: المستخدم هو مدير النظام"
 
 #: seahub/institutions/views.py:227 seahub/views/sysadmin.py:355
 #, python-format
@@ -2030,14 +2030,14 @@ msgstr "تمت إضافة تعليق من قبل %(author)s على المستن�
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s وضع علامة على التعليق \"%(resolve_comment)s\" تم حلها في الوثيقة %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:212
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:110
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr "خطأ ، تسجيل مستخدم جديد غير مسموح به ، يرجى الاتصال بالمسؤول."
+msgstr "خطأ ، تسجيل مستخدم جديد غير مسموح به ، يرجى الاتصال بالمدير."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2105,11 +2105,11 @@ msgstr "اسم المنظمة"
 
 #: seahub/organizations/templates/organizations/org_register.html:32
 msgid "Admin Name"
-msgstr "اسم المسؤول"
+msgstr "اسم المدير"
 
 #: seahub/organizations/templates/organizations/org_register.html:37
 msgid "Admin Email"
-msgstr "البريد الإلكتروني للمسؤول"
+msgstr "البريد الإلكتروني للمدير"
 
 #: seahub/organizations/templates/organizations/org_register.html:45
 #: seahub/templates/registration/password_change_form.html:22
@@ -2605,7 +2605,7 @@ msgstr "تذكرني لمدة %(remember_days)s يوم "
 #: seahub/templates/registration/login.html:78
 #: seahub/templates/registration/login.html:82
 msgid "Single Sign-On"
-msgstr "تسجيل الدخول الأحادي SSO"
+msgstr "تسجيل الدخول الموحد SSO"
 
 #: seahub/templates/registration/login.html:89
 msgid "Login with"
@@ -2717,7 +2717,7 @@ msgstr "بريدك الإلكتروني المستخدم في تسجيل الد�
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr "أنت تتلقى هذا البريد الإلكتروني لأنك مسؤول %(site_name)s، و إنظم مستخدم جديد بإسم %(reg_email)s."
+msgstr "أنت تتلقى هذا البريد الإلكتروني لأنك مدير %(site_name)s، و إنظم مستخدم جديد بإسم %(reg_email)s."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
@@ -2766,7 +2766,7 @@ msgstr "ملاحظة"
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr "يتم إنشاء الحساب الخاص بك بنجاح، الرجاء الانتظار لمدير البرنامج لتنشيط الحساب الخاص بك."
+msgstr "يتم إنشاء الحساب الخاص بك بنجاح، يرجى الانتظار لحين أن يقوم المدير بتنشيط الحساب الخاص بك."
 
 #: seahub/templates/repo_folder_trash_react.html:5
 msgid "Trash"
@@ -2854,7 +2854,7 @@ msgstr "كلمة المرور للمكتبة %(repo_name)s هي %(password)s. ي
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr "يقوم المسؤول على %(site_name)s بإعادة تعيين كلمة المرور الخاصة بك للحساب %(account)s ، الرجاء النقر فوق الرابط التالي للمتابعة: "
+msgstr "قام المدير على %(site_name)s بإعادة تعيين كلمة المرور الخاصة بك للحساب %(account)s ، الرجاء النقر فوق الرابط التالي للمتابعة: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Confirm password to continue"
@@ -3245,11 +3245,11 @@ msgstr "فشل الحذف: المستخدم مؤسس منظمة"
 #: seahub/views/sysadmin.py:396
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr "تم إلغاء صلاحية المشرف %s بنجاح"
+msgstr "تم إلغاء صلاحية المدير %s بنجاح"
 
 #: seahub/views/sysadmin.py:398
 msgid "Failed to revoke admin: the user does not exist"
-msgstr "فشل إلغاء صلاحية المشرف: المستخدم غير موجود"
+msgstr "فشل إلغاء صلاحية المدير: المستخدم غير موجود"
 
 #: seahub/views/sysadmin.py:511
 #, python-format
@@ -3315,7 +3315,7 @@ msgstr "تم تعيين %s كمدير بنجاح."
 #: seahub/views/sysadmin.py:752
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
-msgstr "فشل تعيين %s كمشرف: المستخدم غير موجود."
+msgstr "فشل تعيين %s كمدير: المستخدم غير موجود."
 
 #: seahub/views/sysadmin.py:767 seahub/views/sysadmin.py:768
 #: seahub/views/sysadmin.py:769 seahub/views/sysadmin.py:782
