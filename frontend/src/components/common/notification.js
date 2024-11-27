@@ -22,7 +22,7 @@ class Notification extends React.Component {
 
   componentDidMount() {
     seafileAPI.listAllNotifications().then(res => {
-      let unseen_count = res.data.general_notification.unseen_count + res.data.discussion_notification.unseen_count;
+      let unseen_count = res.data.general.unseen_count + res.data.discussion.unseen_count;
       this.setState({ unseenCount: unseen_count });
     });
   }
@@ -54,8 +54,8 @@ class Notification extends React.Component {
     let page = 1;
     let perPage = 5;
     seafileAPI.listAllNotifications(page, perPage).then(res => {
-      let generalNoticeList = res.data.general_notification.notification_list;
-      let discussionNoticeList = res.data.discussion_notification.notification_list;
+      let generalNoticeList = res.data.general.notification_list;
+      let discussionNoticeList = res.data.discussion.notification_list;
       this.setState({
         generalNoticeList: generalNoticeList,
         discussionNoticeList: discussionNoticeList
@@ -111,7 +111,7 @@ class Notification extends React.Component {
   };
 
   onMarkAllNotifications = () => {
-    seafileAPI.updateNotifications().then(() => {
+    seafileAPI.updateAllNotifications().then(() => {
       this.setState({
         unseenCount: 0,
       });
