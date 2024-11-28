@@ -197,7 +197,7 @@ class SdocNotificationsView(APIView):
         end = page * per_page
 
         notice_list = SeadocNotification.objects.list_all_by_user(username)[start:end]
-        result_notices = update_sdoc_notice_detail(request, notice_list)
+        result_notices = update_sdoc_notice_detail(notice_list)
         notification_list = []
         for i in result_notices:
             if i.detail is not None:
