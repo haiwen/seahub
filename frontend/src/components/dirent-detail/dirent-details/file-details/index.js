@@ -59,7 +59,7 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, enableTags } = useMetadataStatus();
   const [record, setRecord] = useState(null);
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
@@ -117,7 +117,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
         </DetailItem>
       )}
       {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} repoInfo={repoInfo} direntType="file" updateRecord={updateRecord} />
+        <MetadataDetails repoID={repoID} enableTags={enableTags} filePath={direntPath} repoInfo={repoInfo} direntType="file" updateRecord={updateRecord} />
       )}
     </>
   );

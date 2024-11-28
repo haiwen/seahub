@@ -3,3 +3,7 @@
   width: 100%;
   line-height: 1;
 }
+
+.sf-metadata-rate-property-detail-editor .sf-metadata-rate-editor {
+  flex-wrap: wrap;
+}

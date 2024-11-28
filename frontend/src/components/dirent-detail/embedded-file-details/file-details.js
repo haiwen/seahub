@@ -9,7 +9,7 @@ import { MetadataDetails } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 
 const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, enableTags } = useMetadataStatus();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
@@ -35,8 +35,8 @@ const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
-      {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
-        <MetadataDetails repoID={repoID} filePath={path} repoInfo={repoInfo} direntType="file" />
+      {enableMetadata && (
+        <MetadataDetails repoID={repoID} enableTags={enableTags} filePath={path} repoInfo={repoInfo} direntType="file" />
       )}
     </>
   );

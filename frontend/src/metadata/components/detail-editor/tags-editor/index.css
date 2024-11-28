@@ -1,0 +1,46 @@
+.sf-metadata-tags-property-detail-editor {
+  padding: 0 6px;
+  min-height: 34px;
+  width: 100%;
+  height: auto;
+}
+
+.sf-metadata-tags-property-detail-editor:empty {
+  line-height: 34px;
+}
+
+.sf-metadata-tags-property-detail-editor .sf-metadata-delete-select-tags {
+  min-height: 34px;
+  border-bottom: none;
+  background-color: inherit;
+  border-radius: 0;
+  border-radius: initial;
+  padding: 2px 0px;
+  max-height: fit-content;
+}
+
+.sf-metadata-tags-property-detail-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.sf-metadata-tags-property-editor-popover .sf-metadata-delete-select-tags {
+  display: none;
+}
+
+.sf-metadata-tags-property-editor-popover .popover {
+  max-width: unset;
+}
+
+.sf-metadata-tags-property-editor-popover .sf-metadata-tags-editor {
+  position: unset;
+  min-width: 200px;
+  padding: 0;
+  overflow: hidden;
+  opacity: 1;
+  background-color: #ffffff;
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+}

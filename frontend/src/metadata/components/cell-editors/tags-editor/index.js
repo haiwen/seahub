@@ -5,7 +5,6 @@ import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-com
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
-import { useTags } from '../../../../tag/hooks';
 import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell/core';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../utils/table';
@@ -21,10 +20,11 @@ const TagsEditor = forwardRef(({
   record,
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
+  tagsData,
   onPressTab,
+  addTag,
   updateFileTags,
 }, ref) => {
-  const { tagsData, addTag } = useTags();
 
   const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
@@ -44,9 +44,10 @@ const TagsEditor = forwardRef(({
   const displayTags = useMemo(() => getTagsByNameOrColor(tags, searchValue), [searchValue, tags]);
 
   const isShowCreateBtn = useMemo(() => {
+    if (!Utils.isFunction(addTag)) return false;
     if (!canEditData || !searchValue) return false;
     return !getTagByNameOrColor(displayTags, searchValue);
-  }, [canEditData, displayTags, searchValue]);
+  }, [canEditData, displayTags, searchValue, addTag]);
 
   const style = useMemo(() => {
     return { width: column.width };
