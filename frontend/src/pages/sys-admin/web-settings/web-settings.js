@@ -103,21 +103,21 @@ class WebSettings extends Component {
                   <Fragment>
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName='SITE_TITLE'
+                      displayName={gettext('Site title')}
                       keyText='SITE_TITLE'
                       value={config_dict['SITE_TITLE']}
                       helpTip={gettext('Site title shown in a browser tab')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName='SITE_NAME'
+                      displayName={gettext('Site name')}
                       keyText='SITE_NAME'
                       value={config_dict['SITE_NAME']}
                       helpTip={gettext('Site name used in email sending')}
                     />
                     <FileItem
                       postFile={this.postFile}
-                      displayName='Logo'
+                      displayName={gettext('Logo')}
                       keyText='Logo'
                       filePath={logoPath}
                       fileWidth={256}
@@ -126,7 +126,7 @@ class WebSettings extends Component {
                     />
                     <FileItem
                       postFile={this.postFile}
-                      displayName='Favicon'
+                      displayName={gettext('Favicon')}
                       keyText='Favicon'
                       filePath={faviconPath}
                       fileWidth={32}
@@ -135,7 +135,7 @@ class WebSettings extends Component {
                     />
                     <FileItem
                       postFile={this.postFile}
-                      displayName={gettext('Login Background Image')}
+                      displayName={gettext('Login background image')}
                       keyText='loginBGImage'
                       filePath={loginBGPath}
                       fileWidth={240}
@@ -144,7 +144,7 @@ class WebSettings extends Component {
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='ENABLE_BRANDING_CSS'
+                      displayName={gettext('Enable branding CSS')}
                       keyText='ENABLE_BRANDING_CSS'
                       value={config_dict['ENABLE_BRANDING_CSS']}
                       helpTip={gettext('Use custom CSS')}
@@ -164,42 +164,42 @@ class WebSettings extends Component {
                   <Fragment>
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('allow new registrations')}
+                      displayName={gettext('Allow new registrations')}
                       keyText='ENABLE_SIGNUP'
                       value={config_dict['ENABLE_SIGNUP']}
                       helpTip={gettext('Allow new user registrations. Uncheck this to prevent anyone from creating a new account.')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('activate after registration')}
+                      displayName={gettext('Activate after registration')}
                       keyText='ACTIVATE_AFTER_REGISTRATION'
                       value={config_dict['ACTIVATE_AFTER_REGISTRATION']}
                       helpTip={gettext('Activate user immediately after registration. If unchecked, a user need to be activated by administrator or via activation email')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('send activation email')}
+                      displayName={gettext('Send activation email')}
                       keyText='REGISTRATION_SEND_MAIL'
                       value={config_dict['REGISTRATION_SEND_MAIL']}
                       helpTip={gettext('Send activation Email after user registration.')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('keep sign in')}
+                      displayName={gettext('Keep sign in')}
                       keyText='LOGIN_REMEMBER_DAYS'
                       value={config_dict['LOGIN_REMEMBER_DAYS']}
                       helpTip={gettext('Number of days that keep user sign in.')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName='LOGIN_ATTEMPT_LIMIT'
+                      displayName={gettext('Login attempt limit')}
                       keyText='LOGIN_ATTEMPT_LIMIT'
                       value={config_dict['LOGIN_ATTEMPT_LIMIT']}
                       helpTip={gettext('The maximum number of failed login attempts before showing CAPTCHA.')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='FREEZE_USER_ON_LOGIN_FAILED'
+                      displayName={gettext('Freeze user on login failed')}
                       keyText='FREEZE_USER_ON_LOGIN_FAILED'
                       value={config_dict['FREEZE_USER_ON_LOGIN_FAILED']}
                       helpTip={gettext('Freeze user account when failed login attempts exceed limit.')}
@@ -210,7 +210,7 @@ class WebSettings extends Component {
                 <Section headingText={gettext('Groups')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
-                    displayName='ENABLE_SHARE_TO_ALL_GROUPS'
+                    displayName={gettext('Enable sharing to all groups')}
                     keyText='ENABLE_SHARE_TO_ALL_GROUPS'
                     value={config_dict['ENABLE_SHARE_TO_ALL_GROUPS']}
                     helpTip={gettext('Enable users to share libraries to any groups in the system.')}
@@ -221,21 +221,21 @@ class WebSettings extends Component {
                   <Fragment>
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='strong password'
+                      displayName={gettext('Strong password')}
                       keyText='USER_STRONG_PASSWORD_REQUIRED'
                       value={config_dict['USER_STRONG_PASSWORD_REQUIRED']}
                       helpTip={gettext('Force user to use a strong password when sign up or change password.')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='force password change'
+                      displayName={gettext('Force password change')}
                       keyText='FORCE_PASSWORD_CHANGE'
                       value={config_dict['FORCE_PASSWORD_CHANGE']}
                       helpTip={gettext('Force user to change password when account is newly added or reset by admin')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='enable two factor authentication'
+                      displayName={gettext('Enable two factor authentication')}
                       keyText='ENABLE_TWO_FACTOR_AUTH'
                       value={config_dict['ENABLE_TWO_FACTOR_AUTH']}
                       helpTip={gettext('Enable two factor authentication')}
@@ -247,52 +247,52 @@ class WebSettings extends Component {
                   <Fragment>
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='library history'
+                      displayName={gettext('Library history')}
                       keyText='ENABLE_REPO_HISTORY_SETTING'
                       value={config_dict['ENABLE_REPO_HISTORY_SETTING']}
-                      helpTip={gettext('Allow user to change library history settings')}
+                      helpTip={gettext('Allow users to change library history settings')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='encrypted library'
+                      displayName={gettext('Encrypted library')}
                       keyText='ENABLE_ENCRYPTED_LIBRARY'
                       value={config_dict['ENABLE_ENCRYPTED_LIBRARY']}
-                      helpTip={gettext('Allow user to create encrypted libraries')}
+                      helpTip={gettext('Allow users to create encrypted libraries')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('library password minimum length')}
+                      displayName={gettext('Library password minimum length')}
                       keyText='REPO_PASSWORD_MIN_LENGTH'
                       value={config_dict['REPO_PASSWORD_MIN_LENGTH']}
                       helpTip={gettext('The least number of characters an encrypted library password should include.')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('share/upload link force password')}
+                      displayName={gettext('Share/upload link force password')}
                       keyText='SHARE_LINK_FORCE_USE_PASSWORD'
                       value={config_dict['SHARE_LINK_FORCE_USE_PASSWORD']}
-                      helpTip={gettext('Force user use password when generating share/upload link.')}
+                      helpTip={gettext('Force users to use password when generating share/upload link.')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('share/upload link password minimum length')}
+                      displayName={gettext('Share/upload link password minimum length')}
                       keyText='SHARE_LINK_PASSWORD_MIN_LENGTH'
                       value={config_dict['SHARE_LINK_PASSWORD_MIN_LENGTH']}
                       helpTip={gettext('The least number of characters a share/upload link password should include.')}
                     />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('share/upload link password strength level')}
+                      displayName={gettext('Share/upload link password strength level')}
                       keyText='SHARE_LINK_PASSWORD_STRENGTH_LEVEL'
                       value={config_dict['SHARE_LINK_PASSWORD_STRENGTH_LEVEL']}
                       helpTip={gettext('The level(1-4) of a share/upload link password\'s strength. For example, \'3\' means password must have at least 3 of the following: num, upper letter, lower letter and other symbols')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='ENABLE_USER_CLEAN_TRASH'
+                      displayName={gettext('Enable users to clean trash')}
                       keyText='ENABLE_USER_CLEAN_TRASH'
                       value={config_dict['ENABLE_USER_CLEAN_TRASH']}
-                      helpTip={gettext('Allow user to clean library trash')}
+                      helpTip={gettext('Allow users to clean library trash')}
                     />
                   </Fragment>
                 </Section>
@@ -301,7 +301,7 @@ class WebSettings extends Component {
                   <InputItem
                     inputType="textarea"
                     saveSetting={this.saveSetting}
-                    displayName={gettext('text file extensions')}
+                    displayName={gettext('Text file extensions')}
                     keyText='TEXT_PREVIEW_EXT'
                     value={config_dict['TEXT_PREVIEW_EXT']}
                     helpTip={gettext('Extensions of text files that can be online previewed, each suffix is separated by a comma.')}
@@ -311,7 +311,7 @@ class WebSettings extends Component {
                 <Section headingText={gettext('Sync')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
-                    displayName='DISABLE_SYNC_WITH_ANY_FOLDER'
+                    displayName={gettext('Disable sync with any folder')}
                     keyText='DISABLE_SYNC_WITH_ANY_FOLDER'
                     value={config_dict['DISABLE_SYNC_WITH_ANY_FOLDER']}
                     helpTip={gettext('If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder.')}
@@ -322,7 +322,7 @@ class WebSettings extends Component {
                 <Section headingText={gettext('Terms')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
-                    displayName='ENABLE_TERMS_AND_CONDITIONS'
+                    displayName={gettext('Enable terms and conditions')}
                     keyText='ENABLE_TERMS_AND_CONDITIONS'
                     value={config_dict['ENABLE_TERMS_AND_CONDITIONS']}
                     helpTip={gettext('Enable system admin to add Terms and Conditions, and all users will have to accept the terms.')}
