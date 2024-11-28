@@ -5,7 +5,7 @@
   flex-direction: column;
   overflow-y: scroll;
   width: 100%;
-  padding: 0 16px 16px;
+  padding: 0 1rem 10rem;
 }
 
 .sf-metadata-tags-table .sf-metadata-tags-table-header {
