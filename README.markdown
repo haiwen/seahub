@@ -52,13 +52,16 @@ Then open your browser, and input `http://localhost:8000/`, there should be a Lo
 Internationalization (I18n)
 ==========
 
-Please submit translations via Transifex: [https://explore.transifex.com/haiwen/seahub/](https://explore.transifex.com/haiwen/seahub/)
+Please submit translations via Transifex:
 
 Steps:
 
-1. Create a free account on Transifex ([https://www.transifex.com/](https://www.transifex.com/)).
+1. Visit the webpage of Transifex ([https://explore.transifex.com/haiwen/seahub/](https://explore.transifex.com/haiwen/seahub/)).
 
-2. Send a request to join the language translation.
+2. Click the "Join this project" button in the bottom right corner.
 
-3. After accepted by the project maintainer, then you can upload your file or translate online.
+3. Use an email or GitHub account(recommended) to create an account.
 
+4. Select a language and click 'Join project' to join the language translation.
+
+5. After accepted by the project maintainer, then you can upload your file or translate online.
