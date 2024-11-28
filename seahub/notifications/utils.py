@@ -404,27 +404,29 @@ def update_notice_detail(request, notices):
     return notices
 
 
-def update_sdoc_notice_detail(request, notices):
+def update_sdoc_notice_detail(notices):
     doc_uuid_set = set()
     for notice in notices:
         doc_uuid_set.add(notice.doc_uuid)
-    doc_uuid_map = {}
+    uuid_doc_map = {}
     uuids = FileUUIDMap.objects.get_fileuuidmap_in_uuids(doc_uuid_set)
     for uuid in uuids:
-        if uuid not in doc_uuid_map:
+        if uuid not in uuid_doc_map:
             origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
-            doc_uuid_map[str(uuid.uuid)] = (origin_file_path, uuid.filename, uuid.repo_id)
+            uuid_doc_map[str(uuid.uuid)] = (origin_file_path, uuid.filename, uuid.repo_id)
     
     for notice in notices:
-        uuid = doc_uuid_map[notice.doc_uuid]
+        doc = uuid_doc_map.get(notice.doc_uuid) or None
+        if not doc:
+            continue
         if notice.is_comment():
             try:
                 d = json.loads(notice.detail)
                 url, _, _ = api_avatar_url(d['author'])
                 d['avatar_url'] = url
-                d['sdoc_path'] = uuid[0]
-                d['sdoc_name'] = uuid[1]
-                d['repo_id'] = uuid[2]
+                d['sdoc_path'] = doc[0]
+                d['sdoc_name'] = doc[1]
+                d['repo_id'] = doc[2]
                 notice.detail = d
             except Exception as e:
                 logger.error(e)
@@ -433,9 +435,9 @@ def update_sdoc_notice_detail(request, notices):
                 d = json.loads(notice.detail)
                 url, _, _ = api_avatar_url(d['author'])
                 d['avatar_url'] = url
-                d['sdoc_path'] = uuid[0]
-                d['sdoc_name'] = uuid[1]
-                d['repo_id'] = uuid[2]
+                d['sdoc_path'] = doc[0]
+                d['sdoc_name'] = doc[1]
+                d['repo_id'] = doc[2]
                 notice.detail = d
             except Exception as e:
                 logger.error(e)

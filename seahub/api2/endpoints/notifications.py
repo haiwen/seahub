@@ -344,7 +344,7 @@ class AllNotificationsView(APIView):
         sdoc_notice_list = SeadocNotification.objects.list_all_by_user(username)[start:end]
 
         general_result_notices = update_notice_detail(request, general_notice_list)
-        sdoc_result_notices = update_sdoc_notice_detail(request, sdoc_notice_list)
+        sdoc_result_notices = update_sdoc_notice_detail(sdoc_notice_list)
 
         notification_list = []
         sdoc_notification_list = []
