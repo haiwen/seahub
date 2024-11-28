@@ -16,9 +16,8 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
   const ref = useRef(null);
 
   const [showEditor, setShowEditor] = useState(false);
-  const { tagsData, addTag, context } = useTags();
 
-  const canAddTag = context.canAddTag();
+  const { tagsData } = useTags();
 
   const validValue = useMemo(() => {
     if (!Array.isArray(value) || value.length === 0) return [];
@@ -88,13 +87,11 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
           value={value}
           column={{ ...field, width: Math.max(width - 2, 200) }}
           record={record}
-          tagsData={tagsData}
           updateFileTags={updateFileTags}
-          addTag={canAddTag ? addTag : null}
         />
       </Popover>
     );
-  }, [showEditor, tagsData, field, record, value, canAddTag, updateFileTags, addTag]);
+  }, [showEditor, field, record, value, updateFileTags]);
 
   return (
     <div

@@ -11,11 +11,9 @@ import LongTextEditor from './long-text-editor';
 import TagsEditor from './tags-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
-import { useTags } from '../../../tag/hooks';
 
 // eslint-disable-next-line react/display-name
 const Editor = React.forwardRef((props, ref) => {
-  const { tagsData, addTag } = useTags();
 
   switch (props.column.type) {
     case CellType.FILE_NAME: {
@@ -43,7 +41,7 @@ const Editor = React.forwardRef((props, ref) => {
       return (<LongTextEditor ref={ref} { ...props } lang={lang} />);
     }
     case CellType.TAGS: {
-      return (<TagsEditor ref={ref} { ...props } tagsData={tagsData} addTag={addTag} />);
+      return (<TagsEditor ref={ref} { ...props } />);
     }
     case CellType.LINK: {
       return null;

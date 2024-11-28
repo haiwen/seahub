@@ -35,7 +35,6 @@ CellFormatter.propTypes = {
   value: PropTypes.any,
   field: PropTypes.object.isRequired,
   record: PropTypes.object,
-  tagsData: PropTypes.object,
 };
 
 export default CellFormatter;
