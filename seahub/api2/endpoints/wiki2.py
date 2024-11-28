@@ -522,8 +522,8 @@ class Wiki2PagesView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         current_id = request.data.get('current_id', None)
-        current_id = request.data.get('insert_position', None)
-        current_id = request.data.get('sibling_id', None)
+        insert_position = request.data.get('insert_position', None)
+        sibling_id = request.data.get('sibling_id', None)
         # TODO:
         # if not insert_position or not sibling_id:
         #     insert new page inner current_id(old logic)
