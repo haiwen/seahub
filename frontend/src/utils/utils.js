@@ -137,26 +137,17 @@ export const Utils = {
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
-    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'jfif', 'heic', 'webp'];
-    if (image_exts.indexOf(file_ext) != -1) {
-      return true;
-    } else {
-      return false;
-    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    const image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'jfif', 'heic', 'webp'];
+    return image_exts.includes(file_ext);
   },
 
   pdfCheck: function (filename) {
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
-    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['pdf'];
-    if (image_exts.indexOf(file_ext) != -1) {
-      return true;
-    } else {
-      return false;
-    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    return file_ext === 'pdf';
   },
 
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
@@ -216,13 +207,8 @@ export const Utils = {
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
-    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var exts = ['docx', 'pptx', 'xlsx'];
-    if (exts.indexOf(file_ext) != -1) {
-      return true;
-    } else {
-      return false;
-    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    return ['docx', 'pptx', 'xlsx'].includes(file_ext);
   },
 
   // check if a file is a video
@@ -231,13 +217,8 @@ export const Utils = {
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
-    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var exts = ['mp4', 'ogv', 'webm', 'mov'];
-    if (exts.indexOf(file_ext) != -1) {
-      return true;
-    } else {
-      return false;
-    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    return ['mp4', 'ogv', 'webm', 'mov'].includes(file_ext);
   },
 
   checkDuplicatedNameInList: function (list, targetName) {
