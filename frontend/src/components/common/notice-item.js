@@ -382,9 +382,20 @@ class NoticeItem extends React.Component {
       let avatar_url = detail.avatar_url;
       let notice = detail.comment;
       let username = detail.user_name;
+      let is_resolved = detail.is_resolved;
+      let sdoc_name = detail.sdoc_name;
+      const repo_id = detail.repo_id;
+      const sdoc_path = detail.sdoc_path;
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
+      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
+      if (is_resolved) {
+        notice = 'Marked "' + detail.resolve_comment + '" as resolved in document ' + sdoc_link;
+      } else {
+        notice = 'Added a new comment in document ' + sdoc_link + ':' + notice;
+      }
       return { avatar_url, username, notice };
     }
 
@@ -392,9 +403,20 @@ class NoticeItem extends React.Component {
       let avatar_url = detail.avatar_url;
       let notice = detail.reply;
       let username = detail.user_name;
+      let is_resolved = detail.is_resolved;
+      let sdoc_name = detail.sdoc_name;
+      const repo_id = detail.repo_id;
+      const sdoc_path = detail.sdoc_path;
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
+      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
+      if (is_resolved) {
+        notice = 'Marked "' + detail.resolve_comment + '" as resolved in document ' + sdoc_link;
+      } else {
+        notice = 'Added a new reply in document ' + sdoc_link + ':' + notice;
+      }
       return { avatar_url, username, notice };
     }
 
