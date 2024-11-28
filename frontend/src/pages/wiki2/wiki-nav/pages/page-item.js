@@ -193,9 +193,8 @@ class PageItem extends Component {
   };
 
   onAddSiblingPage = (newPage) => {
-    const { page, parentPageId } = this.props;
-    const sibling_page_id = page.id;
-    this.props.addSiblingPage(newPage, parentPageId, this.state.insertPosition, sibling_page_id, this.toggleInsertSiblingPage);
+    const { page } = this.props;
+    this.props.addSiblingPage(newPage, this.props.parentPageId, this.state.insertPosition, page.id, this.toggleInsertSiblingPage);
   };
 
   getPageClassName = () => {
@@ -298,15 +297,14 @@ class PageItem extends Component {
                 {this.state.isShowInsertPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertPage}
-                    getCurrentPageId={this.props.getCurrentPageId}
                     onAddNewPage={this.onAddNewPage}
                     title={gettext('Add page inside')}
+                    page={this.props.page}
                   />
                 }
                 {this.state.isShowAddSiblingPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertSiblingPage}
-                    getCurrentPageId={this.props.getCurrentPageId}
                     onAddNewPage={this.onAddSiblingPage}
                     title={gettext('Add page')}
                     insertPosition={this.state.insertPosition}

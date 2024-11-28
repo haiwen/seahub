@@ -523,12 +523,12 @@ class Wiki2PagesView(APIView):
 
         current_id = request.data.get('current_id', None)
         insert_position = request.data.get('insert_position', None)
-        sibling_id = request.data.get('sibling_id', None)
         # TODO:
-        # if not insert_position or not sibling_id:
-        #     insert new page inner current_id(old logic)
+        # insert_position is one of ['inner', 'above', 'below']
+        # if insert_position == 'inner':
+        #     insert new page inner
         # else:
-        #     insert_position is oneof ['below', 'above'], then insert new page after or before sibling_id
+        #     insert_position is oneof ['below', 'above'], then insert new page after or before
         
         wiki_config = get_wiki_config(repo_id, request.user.username)
         navigation = wiki_config.get('navigation', [])
