@@ -500,6 +500,12 @@ class Wiki2PagesView(APIView):
             error_msg = 'page_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        current_id = request.data.get('current_id', None)
+        insert_position = request.data.get('insert_position', None)
+        positions = ['above', 'below', 'inner']
+        if insert_position and insert_position not in positions:
+            error_msg = 'insert_position invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
@@ -514,24 +520,15 @@ class Wiki2PagesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = wiki.repo_id
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        current_id = request.data.get('current_id', None)
-        insert_position = request.data.get('insert_position', None)
-        # TODO:
-        # insert_position is one of ['inner', 'above', 'below']
-        # if insert_position == 'inner':
-        #     insert new page inner
-        # else:
-        #     insert_position is oneof ['below', 'above'], then insert new page after or before
         
         wiki_config = get_wiki_config(repo_id, request.user.username)
         navigation = wiki_config.get('navigation', [])
+        # side panel create Untitled page
         if not current_id:
             page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
         else:
@@ -573,7 +570,7 @@ class Wiki2PagesView(APIView):
             id_set = get_all_wiki_ids(navigation)
             new_page_id = gen_unique_id(id_set)
             file_info['page_id'] = new_page_id
-            gen_new_page_nav_by_id(navigation, new_page_id, current_id)
+            gen_new_page_nav_by_id(navigation, new_page_id, current_id, insert_position)
             new_page = {
                 'id': new_page_id,
                 'name': page_name,
