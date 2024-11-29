@@ -14,7 +14,7 @@ import { CellType } from '../../metadata/constants';
 const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   const [isLoading, setLoading] = useState(true);
   const [repo, setRepo] = useState({});
-  const libIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo, true), [currentRepoInfo]);
+  const libIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo), [currentRepoInfo]);
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const creatorField = useMemo(() => ({ type: CellType.CREATOR, name: gettext('Creator') }), []);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { gettext, siteRoot, mediaUrl, orgID } from '../../../utils/constants';
+import { gettext, siteRoot, orgID } from '../../../utils/constants';
 import toaster from '../../../components/toast/index';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -198,19 +198,6 @@ class RepoItem extends React.Component {
     this.props.onDeleteRepo(this.props.repo);
   };
 
-  renderLibIcon = (repo) => {
-    let href;
-    let iconTitle;
-    if (repo.encrypted) {
-      href = mediaUrl + 'img/lib/48/lib-encrypted.png';
-      iconTitle = gettext('Encrypted library');
-    } else {
-      href = mediaUrl + 'img/lib/48/lib.png';
-      iconTitle = gettext('Read-Write library');
-    }
-    return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
-  };
-
   renderRepoOwnerHref = (repo) => {
     let href;
     if (repo.isDepartmentRepo) {
@@ -241,10 +228,13 @@ class RepoItem extends React.Component {
   render() {
     let { repo } = this.props;
     let isOperationMenuShow = this.state.showMenu;
+    let iconTitle = repo.encrypted ? gettext('Encrypted library') : gettext('Read-Write library');
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td>{this.renderLibIcon(repo)}</td>
+          <td>
+            <img src={Utils.getLibIconUrl(repo)} title={iconTitle} alt={iconTitle} width="24" />
+          </td>
           <td>{repo.repoName}</td>
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.repoID}</td>

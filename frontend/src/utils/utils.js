@@ -348,17 +348,12 @@ export const Utils = {
     return isIE || isIE11;
   },
 
-  getDefaultLibIconUrl: function (isBig) {
-    let size = Utils.isHiDPI() ? 48 : 24;
-    size = isBig ? 256 : size;
-    let icon_name = 'lib.png';
-    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
+  getDefaultLibIconUrl: function () {
+    return mediaUrl + 'img/lib/256/lib.png';
   },
 
-  getLibIconUrl: function (repo, isBig) {
+  getLibIconUrl: function (repo) {
     let permission = repo.permission || repo.share_permission; // Compatible with regular repo and repo shared
-    let size = Utils.isHiDPI() ? 48 : 24;
-    size = isBig ? 256 : size;
 
     let icon_name = 'lib.png';
     if (repo.encrypted) {
@@ -381,7 +376,7 @@ export const Utils = {
       icon_name = 'lib-readonly.png';
     }
 
-    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
+    return mediaUrl + 'img/lib/256/' + icon_name;
   },
 
   getDirentIcon: function (dirent, isBig) {

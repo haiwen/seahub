@@ -21,7 +21,7 @@ import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
-import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 
 const propTypes = {
@@ -297,8 +297,7 @@ class MylibRepoListItem extends React.Component {
   renderPCUI = () => {
     const { isStarred } = this.state;
     const { repo, currentViewMode = LIST_MODE } = this.props;
-    let useBigLibraryIcon = currentViewMode == GRID_MODE;
-    let iconUrl = Utils.getLibIconUrl(repo, useBigLibraryIcon);
+    let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return currentViewMode == LIST_MODE ? (

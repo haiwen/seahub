@@ -27,7 +27,7 @@ class ResultsItem extends React.Component {
   render() {
     let item = this.props.item;
     let linkContent = decodeURI(item.fullpath).substring(1);
-    let folderIconUrl = linkContent ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
+    let folderIconUrl = linkContent ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl();
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
 
     if (item.thumbnail_url !== '') {
