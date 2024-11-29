@@ -6,12 +6,16 @@ import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
-import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, SELECT_OPTION_COLORS } from '../../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
+  getTagsFromRecord,
 } from '../../../utils/cell';
+import { useTags } from '../../../../tag/hooks';
 
 import './index.css';
+import { getTagByName, getTagId } from '../../../../tag/utils';
+import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -20,6 +24,7 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
+  IMAGE_TAGS: 'image-tags',
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
   RENAME_FILE: 'rename-file',
@@ -30,13 +35,14 @@ const OPERATION = {
 const ContextMenu = (props) => {
   const {
     isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
-    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone,
+    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileTags,
   } = props;
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const { metadata } = useMetadataView();
+  const { tagsData, addTags } = useTags();
 
   const checkCanModifyRow = (row) => {
     return window.sfMetadataContext.canModifyRow(row);
@@ -57,6 +63,7 @@ const ContextMenu = (props) => {
     const isReadonly = permission === 'r';
     const { columns } = metadata;
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
+    const tagsColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.TAGS);
     let list = [];
 
     // handle selected multiple cells
@@ -137,6 +144,10 @@ const ContextMenu = (props) => {
 
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+    }
+
+    if (tagsColumn && canModifyRow && Utils.imageCheck(fileName)) {
+      list.push({ value: OPERATION.IMAGE_TAGS, label: gettext('Generate image tags'), record: record });
     }
 
     // handle delete folder/file
@@ -244,6 +255,68 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
+  const imageTags = useCallback((record) => {
+    let path = '';
+    const fileName = getFileNameFromRecord(record);
+    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
+      const parentDir = getParentDirFromRecord(record);
+      path = Utils.joinPath(parentDir, fileName);
+    }
+    if (path === '') return;
+    window.sfMetadataContext.imageTags(path).then(res => {
+      const tags = res.data.tags;
+      let { newTags, exitTagIds } = tags.reduce((cur, pre) => {
+        const tag = getTagByName(tagsData, pre);
+        if (tag) {
+          cur.exitTagIds.push(getTagId(tag));
+        } else {
+          cur.newTags.push(pre);
+        }
+        return cur;
+      }, { newTags: [], exitTagIds: [] });
+
+      newTags = newTags.map(tagName => {
+        const defaultOptions = SELECT_OPTION_COLORS.slice(0, 24);
+        const defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
+        return { [TAGS_PRIVATE_COLUMN_KEY.TAG_NAME]: tagName, [TAGS_PRIVATE_COLUMN_KEY.TAG_COLOR]: defaultOption.COLOR };
+      });
+      const recordId = getRecordIdFromRecord(record);
+      let value = getTagsFromRecord(record);
+      value = value ? value.map(item => item.row_id) : [];
+
+      if (newTags.length > 0) {
+        addTags(newTags, {
+          success_callback: (operation) => {
+            const newTagIds = operation.tags?.map(tag => getTagId(tag));
+            let newValue = [...value, ...newTagIds];
+            exitTagIds.forEach(id => {
+              if (!newValue.includes(id)) {
+                newValue.push(id);
+              }
+            });
+            updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+          },
+          fail_callback: (error) => {
+          },
+        });
+      } else {
+        let newValue = [...value];
+        exitTagIds.forEach(id => {
+          if (!newValue.includes(id)) {
+            newValue.push(id);
+          }
+        });
+        if (newValue.length !== value.length) {
+          updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+        }
+      }
+
+    }).catch(error => {
+      const errorMessage = gettext('Failed to generate image tags');
+      toaster.danger(errorMessage);
+    });
+  }, [tagsData, addTags, updateFileTags]);
+
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
     if (recordObjIds.length > 50) {
@@ -313,6 +386,12 @@ const ContextMenu = (props) => {
         imageCaption(record);
         break;
       }
+      case OPERATION.IMAGE_TAGS: {
+        const { record } = option;
+        if (!record) break;
+        imageTags(record);
+        break;
+      }
       case OPERATION.DELETE_RECORD: {
         const { record } = option;
         if (!record || !record._id || !deleteRecords) break;
@@ -356,7 +435,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog, updateFileDetails]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, imageTags, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
