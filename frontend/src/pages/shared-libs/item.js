@@ -11,7 +11,7 @@ import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
-import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 dayjs.extend(relativeTime);
 
@@ -173,8 +173,7 @@ class Item extends Component {
 
     const { isStarred } = this.state;
     const { data, currentViewMode = LIST_MODE } = this.props;
-    const useBigLibraryIcon = currentViewMode == GRID_MODE;
-    data.icon_url = Utils.getLibIconUrl(data, useBigLibraryIcon);
+    data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';

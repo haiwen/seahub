@@ -270,7 +270,7 @@ class Item extends Component {
   render() {
     const { data: item } = this.props;
     if (item.path === '/') {
-      item.item_icon_url = Utils.getDefaultLibIconUrl(false);
+      item.item_icon_url = Utils.getDefaultLibIconUrl();
     } else {
       item.item_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
     }

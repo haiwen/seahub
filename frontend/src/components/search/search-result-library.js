@@ -11,7 +11,7 @@ function SearchResultLibrary(props) {
       onClick={() => onClick(item)}
       ref={ref => props.setRef(ref)}
     >
-      <img className='lib-item-img' src={Utils.getDefaultLibIconUrl(true)} alt="" />
+      <img className='lib-item-img' src={Utils.getDefaultLibIconUrl()} alt="" />
       <div className="item-content d-flex justify-content-between align-items-center ellipsis">{item.name}</div>
     </li>
   );

@@ -165,7 +165,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td>
-            <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
+            <img src={Utils.getLibIconUrl(repo)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
           </td>
           <td>{repo.name}</td>
           <td>{Utils.bytesToSize(repo.size)}</td>

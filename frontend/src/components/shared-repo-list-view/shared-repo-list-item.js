@@ -19,7 +19,7 @@ import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
-import { GRID_MODE, LIST_MODE } from '../dir-view-mode/constants';
+import { LIST_MODE } from '../dir-view-mode/constants';
 import TransferDialog from '../dialog/transfer-dialog';
 
 dayjs.extend(relativeTime);
@@ -144,10 +144,8 @@ class SharedRepoListItem extends React.Component {
   };
 
   getRepoComputeParams = () => {
-    const { repo, currentViewMode } = this.props;
-
-    const useBigLibraryIcon = currentViewMode == GRID_MODE;
-    const iconUrl = Utils.getLibIconUrl(repo, useBigLibraryIcon);
+    const { repo } = this.props;
+    const iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 

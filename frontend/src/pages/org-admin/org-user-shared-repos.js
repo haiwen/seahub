@@ -99,7 +99,7 @@ class Item extends Component {
     return (
       <tr>
         <td>
-          <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
+          <img src={Utils.getLibIconUrl(repo)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
         </td>
         <td>{repo.repo_name}</td>
         <td>{repo.owner_name}</td>
