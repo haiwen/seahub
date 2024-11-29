@@ -333,6 +333,7 @@ def can_preview_file(file_name, file_size, repo):
     """
 
     filetype, fileext = get_file_type_and_ext(file_name)
+    print(ONLYOFFICE_FILE_EXTENSION, '555555')
 
     # Seafile defines 10 kinds of filetype:
     # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
