@@ -103,7 +103,7 @@ class HistoryVersion extends React.Component {
           <div className="daily-history-detail-toggle-container">
             {count > 1 && (
               <div className={classnames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })} onClick={this.showDailyHistory}>
-                <i className="dropdown-toggle"></i>
+                <i className="direction-icon sf3-font sf3-font-down"></i>
               </div>
             )}
           </div>
