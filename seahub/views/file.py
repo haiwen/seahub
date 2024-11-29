@@ -401,9 +401,7 @@ def can_preview_file(file_name, file_size, repo):
 
         elif ENABLE_ONLYOFFICE:
             if fileext not in ONLYOFFICE_FILE_EXTENSION:
-
                 error_msg = "File preview unsupported"
-                print(ONLYOFFICE_FILE_EXTENSION, '5555555555')
                 return False, error_msg
 
         else:
@@ -420,7 +418,6 @@ def can_preview_file(file_name, file_size, repo):
         # NOT depends on Seafile settings
         if filetype not in list(PREVIEW_FILEEXT.keys()):
             error_msg = "File preview unsupported"
-            print('888888888')
             return False, error_msg
 
     return True, ''
