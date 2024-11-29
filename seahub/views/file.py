@@ -142,15 +142,10 @@ FILE_TYPE_FOR_NEW_FILE_LINK = [
 ]
 
 def get_office_feature_by_repo(repo):
-    return_dict = {
-        'ENABLE_ONLYOFFICE': False,
-        'ENABLE_OFFICE_WEB_APP': False,
-    }
+    enable_onlyoffice, enable_office_app = False, False
     if not ENABLE_MULTIPLE_OFFICE_SUITE:
-        return_dict =  {
-            'ENABLE_ONLYOFFICE': ENABLE_ONLYOFFICE,
-            'ENABLE_OFFICE_WEB_APP': ENABLE_OFFICE_WEB_APP,
-        }
+        return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
+
     # repo_feature = _check_feature(repo_id)
     owner = repo.repo_owner
     repo_feature = None
@@ -162,17 +157,16 @@ def get_office_feature_by_repo(repo):
                 break
 
         if default_suite.get('id') == 'onlyoffice':
-            return_dict['ENABLE_ONLYOFFICE'] = True
+            enable_onlyoffice = True
         if default_suite.get('id') == 'collabora':
-            return_dict['ENABLE_OFFICE_WEB_APP'] = True
-    
+            enable_office_app = True
     else:
         if repo_feature == 'onlyoffice':
-            return_dict['ENABLE_ONLYOFFICE'] = True
+            enable_onlyoffice = True
         if repo_feature == 'collabora':
-            return_dict['ENABLE_OFFICE_WEB_APP'] = True
+            enable_office_app = True
 
-    return return_dict.get('ENABLE_ONLYOFFICE'),  return_dict.get('ENABLE_OFFICE_WEB_APP')
+    return enable_onlyoffice,  enable_office_app
 
 
 

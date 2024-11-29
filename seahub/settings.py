@@ -981,7 +981,7 @@ OFFICE_SUITES = [
     { 
         "id": "onlyoffice",
         "name": "OnlyOffice",
-        "is_default": False,
+        "is_default": True,
     },
     {
         "id": "collabora",
