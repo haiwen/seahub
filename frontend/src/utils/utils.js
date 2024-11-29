@@ -22,7 +22,7 @@ export const Utils = {
     if (typeof(bytes) == 'undefined') return ' ';
 
     if (bytes < 0) return '--';
-    const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
     if (bytes === 0) return bytes + ' ' + sizes[0];
 
