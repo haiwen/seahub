@@ -377,18 +377,21 @@ def can_preview_file(file_name, file_size, repo):
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            print('1111111')
             return False, error_msg
 
     elif filetype in (DOCUMENT, SPREADSHEET):
 
         if repo.encrypted:
             error_msg = _('The library is encrypted, can not open file online.')
+            print('222222222')
             return False, error_msg
 
         if not HAS_OFFICE_CONVERTER and \
                 not ENABLE_OFFICE_WEB_APP and \
                 not ENABLE_ONLYOFFICE:
             error_msg = "File preview unsupported"
+            print('3333333')
             return False, error_msg
 
         # priority of view office file is:
@@ -396,27 +399,32 @@ def can_preview_file(file_name, file_size, repo):
         if ENABLE_OFFICE_WEB_APP:
             if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
+                print('44444444')
                 return False, error_msg
 
         elif ENABLE_ONLYOFFICE:
             if fileext not in ONLYOFFICE_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
+                print('5555555555')
                 return False, error_msg
 
         else:
             if not HAS_OFFICE_CONVERTER:
                 error_msg = "File preview unsupported"
+                print('6666666666')
                 return False, error_msg
 
             # HAS_OFFICE_CONVERTER
             if file_size > OFFICE_PREVIEW_MAX_SIZE:
                 error_msg = _('File size surpasses %s, can not be opened online.') % \
                         filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+                print('7777777777')
                 return False, error_msg
     else:
         # NOT depends on Seafile settings
         if filetype not in list(PREVIEW_FILEEXT.keys()):
             error_msg = "File preview unsupported"
+            print('888888888')
             return False, error_msg
 
     return True, ''
