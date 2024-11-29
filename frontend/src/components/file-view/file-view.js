@@ -14,6 +14,7 @@ import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { MetadataStatusProvider } from '../../hooks';
 import { CollaboratorsProvider } from '../../metadata';
+import { TagsProvider } from '../../tag/hooks';
 import Loading from '../loading';
 
 import '../../css/file-view.css';
@@ -153,13 +154,15 @@ class FileView extends React.Component {
               {isDetailsPanelOpen && (
                 <MetadataStatusProvider repoID={repoID} >
                   <CollaboratorsProvider repoID={repoID}>
-                    <EmbeddedFileDetails
-                      repoID={repoID}
-                      path={filePath}
-                      dirent={{ 'name': fileName, type: 'file' }}
-                      repoInfo={{ permission: filePerm }}
-                      onClose={this.toggleDetailsPanel}
-                    />
+                    <TagsProvider repoID={repoID} repoInfo={{ permission: filePerm }}>
+                      <EmbeddedFileDetails
+                        repoID={repoID}
+                        path={filePath}
+                        dirent={{ 'name': fileName, type: 'file' }}
+                        repoInfo={{ permission: filePerm }}
+                        onClose={this.toggleDetailsPanel}
+                      />
+                    </TagsProvider>
                   </CollaboratorsProvider>
                 </MetadataStatusProvider>
               )}

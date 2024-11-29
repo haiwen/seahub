@@ -9,6 +9,7 @@ import CollaboratorEditor from './collaborator-editor';
 import DateEditor from './date-editor';
 import LongTextEditor from './long-text-editor';
 import RateEditor from './rate-editor';
+import TagsEditor from './tags-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
 
@@ -46,6 +47,9 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
     }
     case CellType.RATE: {
       return (<RateEditor { ...props } field={field} onChange={onChange} />);
+    }
+    case CellType.TAGS: {
+      return (<TagsEditor { ...props } field={field} />);
     }
     default: {
       return null;

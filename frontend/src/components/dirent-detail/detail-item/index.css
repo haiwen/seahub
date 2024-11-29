@@ -27,6 +27,11 @@
   flex-shrink: 0;
 }
 
+.dirent-detail-item .dirent-detail-item-name .sf-metadata-icon-tag {
+  position: relative;
+  top: 1px;
+}
+
 .dirent-detail-item .dirent-detail-item-value {
   width: 200px;
   display: flex;

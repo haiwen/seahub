@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { FileTagsFormatter } from '@seafile/sf-metadata-ui-component';
 import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import { getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, getFileSizedFromRecord,
   getFileMTimeFromRecord, getTagsFromRecord, getFilePathByRecord,
 } from '../../../../metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
-import FileTagsFormatter from '../../../../metadata/components/cell-formatter/file-tags-formatter';
 import { openFile } from '../../../../metadata/utils/open-file';
 
 import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, onSelectFile, reSelectFiles, openImagePreview }) => {
+const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFiles, openImagePreview }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
 
@@ -112,7 +112,7 @@ const TagFile = ({ isSelected, repoID, file, onSelectFile, reSelectFiles, openIm
         <a href={path} onClick={handelClickFileName}>{name}</a>
       </td>
       <td className="tag-list-title">
-        <FileTagsFormatter value={tags} />
+        <FileTagsFormatter value={tags} tagsData={tagsData} className="sf-metadata-tags-formatter" />
       </td>
       <td className="operation"></td>
       <td className="file-size">{size || ''}</td>

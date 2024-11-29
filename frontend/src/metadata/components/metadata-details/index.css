@@ -74,3 +74,17 @@
 .dirent-detail-item-value:not(.editable) .sf-metadata-rate-formatter .sf-metadata-rate-item {
   cursor: default;
 }
+
+.dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter {
+  padding: 8px 6px;
+}
+
+.dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
+  top: 0;
+  cursor: default;
+}

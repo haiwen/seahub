@@ -24,7 +24,9 @@ const TagsEditor = forwardRef(({
   onPressTab,
   updateFileTags,
 }, ref) => {
-  const { tagsData, addTag } = useTags();
+  const { tagsData, addTag, context } = useTags();
+
+  const canAddTag = context.canAddTag();
 
   const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
@@ -44,9 +46,10 @@ const TagsEditor = forwardRef(({
   const displayTags = useMemo(() => getTagsByNameOrColor(tags, searchValue), [searchValue, tags]);
 
   const isShowCreateBtn = useMemo(() => {
+    if (!canAddTag) return false;
     if (!canEditData || !searchValue) return false;
     return !getTagByNameOrColor(displayTags, searchValue);
-  }, [canEditData, displayTags, searchValue]);
+  }, [canEditData, displayTags, searchValue, canAddTag]);
 
   const style = useMemo(() => {
     return { width: column.width };

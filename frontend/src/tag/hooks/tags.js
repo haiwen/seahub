@@ -183,6 +183,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   }, [tagsData, modifyLocalTags]);
 
   useEffect(() => {
+    if (!handelSelectTag) return;
     if (isLoading) return;
     const { search } = window.location;
     const urlParams = new URLSearchParams(search);
@@ -206,6 +207,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   }, [isLoading]);
 
   useEffect(() => {
+    if (!currentPath) return;
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
     const currentTagId = currentPath.split('/').pop();
     if (currentTagId === ALL_TAGS_ID) {

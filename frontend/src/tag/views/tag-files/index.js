@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import { useTagView } from '../../hooks';
+import { useTagView, useTags } from '../../hooks';
 import { gettext } from '../../../utils/constants';
 import TagFile from './tag-file';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
@@ -10,6 +10,7 @@ import './index.css';
 
 const TagFiles = () => {
   const { tagFiles, repoID, repoInfo } = useTagView();
+  const { tagsData } = useTags();
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -119,6 +120,7 @@ const TagFiles = () => {
                   repoID={repoID}
                   isSelected={selectedFiles && selectedFiles.includes(fileId)}
                   file={file}
+                  tagsData={tagsData}
                   onSelectFile={onSelectFile}
                   reSelectFiles={reSelectFiles}
                   openImagePreview={openImagePreview}

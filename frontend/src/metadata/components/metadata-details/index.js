@@ -11,9 +11,11 @@ import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColu
 import { normalizeFields } from './utils';
 import { gettext } from '../../../utils/constants';
 import { CellType, EVENT_BUS_TYPE, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
-import { getColumnOptions, getColumnOriginName } from '../../utils/column';
+import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../../utils/column';
 import { SYSTEM_FOLDERS } from './constants';
 import Location from './location';
+import { checkIsDir } from '../../utils/row';
+import tagsAPI from '../../../tag/api';
 
 import './index.css';
 
@@ -24,7 +26,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
 
   const onChange = useCallback((fieldKey, newValue) => {
     const { record, fields } = metadata;
-    const field = fields.find(f => f.key === fieldKey);
+    const field = getColumnByKey(fields, fieldKey);
     const fileName = getColumnOriginName(field);
     const recordId = getRecordIdFromRecord(record);
     const fileObjId = getFileObjIdFromRecord(record);
@@ -82,6 +84,24 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
     setMetadata(newMetadata);
   }, [metadata]);
 
+  const updateFileTags = useCallback((updateRecords) => {
+    const { record } = metadata;
+    const { record_id, tags } = updateRecords[0];
+
+    tagsAPI.updateFileTags(repoID, [{ record_id, tags }]).then(res => {
+      const newValue = tags ? tags.map(id => ({ row_id: id, display_value: id })) : [];
+      const update = { [PRIVATE_COLUMN_KEY.TAGS]: newValue };
+      const newMetadata = { ...metadata, record: { ...record, ...update } };
+      setMetadata(newMetadata);
+      if (window?.sfMetadataContext?.eventBus) {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, record_id, update);
+      }
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID, metadata]);
+
   useEffect(() => {
     setLoading(true);
     if (SYSTEM_FOLDERS.find(folderPath => filePath.startsWith(folderPath))) {
@@ -98,7 +118,11 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
     metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      const fields = normalizeFields(metadata).map(field => new Column(field));
+      let fields = normalizeFields(metadata).map(field => new Column(field));
+      const isDir = checkIsDir(record);
+      if (isDir) {
+        fields = fields.filter(field => field.type !== CellType.TAGS);
+      }
       updateRecord && updateRecord(record);
       setMetadata({ record, fields });
       setLoading(false);
@@ -134,9 +158,17 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, updateRecord 
         return (
           <DetailItem key={field.key} field={field} readonly={!canEdit}>
             {canEdit ? (
-              <DetailEditor field={field} value={value} onChange={onChange} fields={fields} record={record} modifyColumnData={modifyColumnData} />
+              <DetailEditor
+                field={field}
+                value={value}
+                fields={fields}
+                record={record}
+                modifyColumnData={modifyColumnData}
+                onChange={onChange}
+                updateFileTags={updateFileTags}
+              />
             ) : (
-              <CellFormatter field={field} value={value} emptyTip={gettext('Empty')} className="sf-metadata-property-detail-formatter" />
+              <CellFormatter readonly={true} field={field} value={value} emptyTip={gettext('Empty')} className="sf-metadata-property-detail-formatter" />
             )}
           </DetailItem>
         );

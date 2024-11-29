@@ -35,7 +35,7 @@ const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
-      {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
+      {enableMetadata && (
         <MetadataDetails repoID={repoID} filePath={path} repoInfo={repoInfo} direntType="file" />
       )}
     </>

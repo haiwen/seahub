@@ -28,6 +28,12 @@
   padding: 10px;
 }
 
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .none-search-result {
+  font-size: 14px;
+  opacity: 0.5;
+  display: inline-block;
+}
+
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container {
   align-items: center;
   border-radius: 2px;

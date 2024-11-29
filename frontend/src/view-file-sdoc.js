@@ -7,6 +7,7 @@ import Loading from './components/loading';
 import SdocEditor from './pages/sdoc/sdoc-editor';
 import { MetadataStatusProvider } from './hooks';
 import { CollaboratorsProvider } from './metadata';
+import { TagsProvider } from './tag/hooks';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
 const { username, name } = window.app.userInfo;
@@ -55,7 +56,9 @@ ReactDom.render(
     <Suspense fallback={<Loading />}>
       <MetadataStatusProvider repoID={repoID}>
         <CollaboratorsProvider repoID={repoID}>
-          <SdocEditor />
+          <TagsProvider repoID={repoID} repoInfo={{ permission: filePerm }}>
+            <SdocEditor />
+          </TagsProvider>
         </CollaboratorsProvider>
       </MetadataStatusProvider>
     </Suspense>

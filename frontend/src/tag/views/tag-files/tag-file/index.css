@@ -1,10 +1,15 @@
-.tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter {
-  height: 16px;
-  width: 16px;
-  top: 0;
+.sf-metadata-tags-main .tag-list-title .sf-metadata-ui-tags-container {
+  width: fit-content;
+  max-width: 100%;
 }
 
-.tag-list-title .sf-metadata-tags-formatter .sf-metadata-tag-formatter:last-child {
+.tag-list-title .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
+  height: 16px !important;
+  width: 16px !important;
+  top: 0 !important;
+}
+
+.tag-list-title .sf-metadata-ui-tags-container .sf-metadata-ui-tag:last-child {
   margin-right: 0;
 }
 
@@ -17,9 +22,4 @@
 
 .sf-metadata-tags-main .table-container td.name a {
   word-break: break-word;
-}
-
-.sf-metadata-tags-main .tag-list-title .sf-metadata-tags-formatter {
-  width: fit-content;
-  max-width: 100%;
 }
