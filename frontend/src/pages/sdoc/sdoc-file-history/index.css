@@ -330,18 +330,18 @@
   margin-right: 14px;
 }
 
-.sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle {
+.sdoc-file-history-versions .daily-history-detail-toggle .direction-icon {
   font-size: 18px;
   color: #666;
   transform: rotate(-90deg);
   transition: all .1s;
 }
 
-.sdoc-file-history-versions .daily-history-detail-toggle.daily-history-detail-show .dropdown-toggle {
+.sdoc-file-history-versions .daily-history-detail-toggle.daily-history-detail-show .direction-icon {
   transform: unset;
 }
 
-.sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle:hover {
+.sdoc-file-history-versions .daily-history-detail-toggle .direction-icon:hover {
   color: #212529;
   cursor: pointer;
 }
