@@ -1006,7 +1006,7 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_AD
         path('saml2/complete/', auth_complete, name='saml2_complete'),
     ]
 
-if getattr(settings, 'ENABLE_ONLYOFFICE', False):
+if getattr(settings, 'ENABLE_ONLYOFFICE', False) or getattr(settings, 'ENABLE_MULTIPLE_OFFICE_SUITE', False):
     urlpatterns += [
         path('onlyoffice/', include('seahub.onlyoffice.urls')),
         path('onlyoffice-api/', include('seahub.onlyoffice.api_urls')),

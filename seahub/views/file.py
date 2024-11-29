@@ -141,7 +141,7 @@ FILE_TYPE_FOR_NEW_FILE_LINK = [
     MARKDOWN
 ]
 
-def get_office_feature_by_repo(repo_id):
+def get_office_feature_by_repo(repo):
     return_dict = {
         'ENABLE_ONLYOFFICE': False,
         'ENABLE_OFFICE_WEB_APP': False,
@@ -151,7 +151,9 @@ def get_office_feature_by_repo(repo_id):
             'ENABLE_ONLYOFFICE': ENABLE_ONLYOFFICE,
             'ENABLE_OFFICE_WEB_APP': ENABLE_OFFICE_WEB_APP,
         }
-    repo_feature = _check_feature(repo_id)
+    # repo_feature = _check_feature(repo_id)
+    owner = repo.repo_owner
+    repo_feature = None
     if not repo_feature:
         default_suite = {}
         for s in OFFICE_SUITES:
@@ -367,7 +369,7 @@ def can_preview_file(file_name, file_size, repo):
 
     filetype, fileext = get_file_type_and_ext(file_name)
 
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # Seafile defines 10 kinds of filetype:
     # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
@@ -423,7 +425,7 @@ def can_edit_file(file_name, file_size, repo):
     """Check whether Seafile supports edit file.
     Returns (True, None) if Yes, otherwise (False, error_msg).
     """
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
     can_preview, err_msg = can_preview_file(file_name, file_size, repo)
     if not can_preview:
         return False, err_msg
@@ -521,7 +523,7 @@ def view_lib_file(request, repo_id, path):
     if not file_id:
         return render_error(request, _('File does not exist'))
     
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
     username = request.user.username
@@ -964,7 +966,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     path = request.GET.get('p', '/')
     path = normalize_file_path(path)
 
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -1217,7 +1219,7 @@ def view_shared_file(request, fileshare):
     if not obj_id:
         return render_error(request, _('File does not exist'))
     
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
     shared_by = fileshare.username
@@ -1472,7 +1474,7 @@ def view_file_via_shared_dir(request, fileshare):
     if not repo:
         raise Http404
     
-    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo.repo_id)
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # recourse check
     # Get file path from frontend, and construct request file path
