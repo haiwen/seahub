@@ -500,6 +500,12 @@ class Wiki2PagesView(APIView):
             error_msg = 'page_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        current_id = request.data.get('current_id', None)
+        insert_position = request.data.get('insert_position', None)
+        positions = ['above', 'below', 'inner']
+        if insert_position and insert_position not in positions:
+            error_msg = 'insert_position invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
@@ -514,16 +520,15 @@ class Wiki2PagesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = wiki.repo_id
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        current_id = request.data.get('current_id', None)
+        
         wiki_config = get_wiki_config(repo_id, request.user.username)
         navigation = wiki_config.get('navigation', [])
+        # side panel create Untitled page
         if not current_id:
             page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
         else:
@@ -537,22 +542,6 @@ class Wiki2PagesView(APIView):
         new_file_name = page_name + '.sdoc'
         parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
         path = os.path.join(parent_dir, new_file_name)
-        seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
-        # create new empty file
-        if not is_valid_dirent_name(new_file_name):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
-
-        try:
-            seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, request.user.username)
-        except Exception as e:
-            if str(e) == 'Too many files in library.':
-                error_msg = _("The number of files in library exceeds the limit")
-                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
-            else:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         new_file_path = posixpath.join(parent_dir, new_file_name)
         file_info = self.get_file_info(repo_id, new_file_path)
         file_info['doc_uuid'] = sdoc_uuid
@@ -565,7 +554,27 @@ class Wiki2PagesView(APIView):
             id_set = get_all_wiki_ids(navigation)
             new_page_id = gen_unique_id(id_set)
             file_info['page_id'] = new_page_id
-            gen_new_page_nav_by_id(navigation, new_page_id, current_id)
+            is_find = [False]
+            gen_new_page_nav_by_id(navigation, new_page_id, current_id, insert_position, is_find)
+            if not is_find[0]:
+                error_msg = 'Current page does not exist'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            # create new empty file
+            seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+
+            try:
+                seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, request.user.username)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit")
+                    return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
             new_page = {
                 'id': new_page_id,
                 'name': page_name,

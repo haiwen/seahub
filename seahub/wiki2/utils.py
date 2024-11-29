@@ -173,22 +173,41 @@ def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
             get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
 
 
-def gen_new_page_nav_by_id(navigation, page_id, current_id):
+def gen_new_page_nav_by_id(navigation, page_id, current_id, insert_position, is_find):
     new_nav = {
         'id': page_id,
         'type': 'page',
     }
     if current_id:
-        for nav in navigation:
-            if nav.get('type') == 'page' and nav.get('id') == current_id:
-                sub_nav = nav.get('children', [])
-                sub_nav.append(new_nav)
-                nav['children'] = sub_nav
-                return
-            else:
-                gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id)
+        if insert_position == 'inner':
+            for nav in navigation:
+                if nav.get('type') == 'page' and nav.get('id') == current_id:
+                    sub_nav = nav.get('children', [])
+                    sub_nav.append(new_nav)
+                    nav['children'] = sub_nav
+                    is_find[0] = True
+                    return True
+                else:
+                    gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id, insert_position, is_find)
+        elif insert_position == 'above':
+            for index, nav in enumerate(navigation):
+                if nav.get('type') == 'page' and nav.get('id') == current_id:
+                    navigation.insert(index, new_nav)
+                    is_find[0] = True
+                    return True
+                else:
+                    gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id, insert_position, is_find)
+        elif insert_position == 'below':
+            for index, nav in enumerate(navigation):
+                if nav.get('type') == 'page' and nav.get('id') == current_id:
+                    navigation.insert(index+1, new_nav)
+                    is_find[0] = True
+                    return True
+                else:
+                    gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id, insert_position, is_find)
     else:
         navigation.append(new_nav)
+        return True
 
 
 def get_current_level_page_ids(navigation, page_id, ids=[]):

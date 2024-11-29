@@ -19,6 +19,7 @@ class WikiNav extends Component {
     onDeletePage: PropTypes.func,
     onMovePage: PropTypes.func,
     duplicatePage: PropTypes.func,
+    addSiblingPage: PropTypes.func,
     getCurrentPageId: PropTypes.func,
     addPageInside: PropTypes.func,
     updateWikiConfig: PropTypes.func.isRequired,
@@ -91,6 +92,7 @@ class WikiNav extends Component {
         pathStr={page.id}
         getCurrentPageId={this.props.getCurrentPageId}
         addPageInside={this.props.addPageInside}
+        addSiblingPage={this.props.addSiblingPage}
         getFoldState={this.getFoldState}
         toggleExpand={this.toggleExpand}
         id_page_map={id_page_map}

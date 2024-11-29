@@ -6,14 +6,16 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import wikiAPI from '../../../utils/wiki-api';
+import { INSERT_POSITION } from './constants';
 
 import '../css/add-new-page-dialog.css';
 
 const propTypes = {
+  page: PropTypes.object,
   title: PropTypes.node,
   toggle: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func,
-  getCurrentPageId: PropTypes.func.isRequired,
+  insertPosition: PropTypes.string,
 };
 
 
@@ -71,9 +73,11 @@ class AddNewPageDialog extends React.Component {
   };
 
   createPage = (pageName) => {
-    wikiAPI.createWiki2Page(wikiId, pageName, this.props.getCurrentPageId()).then(res => {
+    const { insertPosition, page } = this.props;
+    wikiAPI.createWiki2Page(wikiId, pageName, page.id, insertPosition).then(res => {
       const { page_id, obj_name, doc_uuid, parent_dir } = res.data.file_info;
       this.props.onAddNewPage({
+        id: page_id,
         page_id: page_id,
         name: pageName,
         icon: '',
@@ -125,5 +129,9 @@ class AddNewPageDialog extends React.Component {
 }
 
 AddNewPageDialog.propTypes = propTypes;
+
+AddNewPageDialog.defaultProps = {
+  insertPosition: INSERT_POSITION.INNER,
+};
 
 export default AddNewPageDialog;

@@ -181,12 +181,15 @@ class WikiAPI {
     return this.req.get(url);
   }
 
-  createWiki2Page(wikiId, pageName, currentId) {
+  createWiki2Page(wikiId, pageName, currentId, insertPosition) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/pages/';
     let form = new FormData();
     form.append('page_name', pageName);
     if (currentId) {
       form.append('current_id', currentId);
+    }
+    if (insertPosition) {
+      form.append('insert_position', insertPosition);
     }
     return this._sendPostRequest(url, form);
   }

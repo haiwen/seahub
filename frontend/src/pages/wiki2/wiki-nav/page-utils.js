@@ -1,3 +1,5 @@
+import { INSERT_POSITION } from './constants';
+
 class NewPage {
   constructor(id) {
     this.id = id;
@@ -8,26 +10,52 @@ class NewPage {
 
 export default class PageUtils {
 
-  static addPage(navigation, page_id, parentId) {
-    if (!parentId) {
-      navigation.push(new NewPage(page_id));
+  static addPage({ navigation, page_id, parent_id, insert_position, sibling_page_id }) {
+    if (!parent_id) {
+      const newPage = new NewPage(page_id);
+      if (sibling_page_id) {
+        let insertIndex = navigation.findIndex(item => item.id === sibling_page_id);
+        if (insertIndex > -1) {
+          if (insert_position === INSERT_POSITION.ABOVE) {
+            insertIndex -= 1;
+          }
+          navigation.splice(insertIndex + 1, 0, newPage);
+        } else {
+          navigation.push(newPage);
+        }
+      } else {
+        navigation.push(newPage);
+      }
     } else {
       navigation.forEach(item => {
-        this._addPageRecursion(page_id, item, parentId);
+        this._addPageRecursion({ page_id, item, parent_id, insert_position, sibling_page_id });
       });
     }
   }
 
-  static _addPageRecursion(page_id, item, parentId) {
+  static _addPageRecursion({ page_id, item, parent_id, insert_position, sibling_page_id }) {
     if (!Array.isArray(item.children)) {
       item.children = [];
     }
-    if (item.id === parentId) {
-      item.children.push(new NewPage(page_id));
+    if (item.id === parent_id) {
+      const newPage = new NewPage(page_id);
+      if (sibling_page_id) {
+        let insertIndex = item.children.findIndex(item => item.id === sibling_page_id);
+        if (insertIndex > -1) {
+          if (insert_position === INSERT_POSITION.ABOVE) {
+            insertIndex -= 1;
+          }
+          item.children.splice(insertIndex + 1, 0, newPage);
+        } else {
+          item.children.push(newPage);
+        }
+      } else {
+        item.children.push(newPage);
+      }
       return true;
     }
     item.children && item.children.forEach(item => {
-      this._addPageRecursion(page_id, item, parentId);
+      this._addPageRecursion({ page_id, item, parent_id, insert_position, sibling_page_id });
     });
   }
 

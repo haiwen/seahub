@@ -132,7 +132,7 @@
   background-color: #DFDFDD;
 }
 
-.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
+.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
   font-size: 14px;
   cursor: pointer;
@@ -270,13 +270,13 @@
 }
 
 .wiki-nav,
-.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge:hover,
+.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge:hover,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover {
   color: #212529;
 }
 
 .wiki-nav .wiki2-trash .sf3-font,
-.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
+.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level {
   color: #666;
 }

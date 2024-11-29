@@ -4,6 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { getWikPageLink } from '../../utils';
+import { INSERT_POSITION } from '../constants';
 
 export default class PageDropdownMenu extends Component {
 
@@ -13,6 +14,7 @@ export default class PageDropdownMenu extends Component {
     pagesLength: PropTypes.number,
     toggle: PropTypes.func,
     toggleNameEditor: PropTypes.func,
+    toggleInsertSiblingPage: PropTypes.func,
     duplicatePage: PropTypes.func,
     onDeletePage: PropTypes.func,
     isOnlyOnePage: PropTypes.bool,
@@ -44,6 +46,14 @@ export default class PageDropdownMenu extends Component {
   onDeletePage = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.props.onDeletePage();
+  };
+
+  addPageAbove = () => {
+    this.props.toggleInsertSiblingPage(INSERT_POSITION.ABOVE);
+  };
+
+  addPageBelow = () => {
+    this.props.toggleInsertSiblingPage(INSERT_POSITION.BELOW);
   };
 
   duplicatePage = () => {
@@ -97,6 +107,14 @@ export default class PageDropdownMenu extends Component {
           <DropdownItem onClick={this.onRename}>
             <i className="sf3-font sf3-font-rename" />
             <span className="item-text">{gettext('Modify name')}</span>
+          </DropdownItem>
+          <DropdownItem onClick={this.addPageAbove}>
+            <i className="sf3-font sf3-font-enlarge" />
+            <span className="item-text">{gettext('Add page above')}</span>
+          </DropdownItem>
+          <DropdownItem onClick={this.addPageBelow}>
+            <i className="sf3-font sf3-font-enlarge" />
+            <span className="item-text">{gettext('Add page below')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.duplicatePage}>
             <i className="sf3-font sf3-font-copy1" />
