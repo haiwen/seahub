@@ -226,6 +226,12 @@ export const getColumnOriginName = (column) => {
   return name;
 };
 
+export const getColumnOriginType = (column) => {
+  const { key, type } = column;
+  if (PRIVATE_COLUMN_KEYS.includes(key)) return type;
+  return type;
+};
+
 export const getNormalizedColumnType = (key, type) => {
   switch (key) {
     case PRIVATE_COLUMN_KEY.CTIME:

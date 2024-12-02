@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
+import { getCellValueByColumn, getFileNameFromRecord, getRecordIdFromRecord, isCellValueChanged } from '../../../utils/cell';
 import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
 import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES,
   REG_NUMBER_DIGIT, REG_STRING_NUMBER_PARTS, COLUMN_RATE_MAX_NUMBER,
+  PASTE_SOURCE,
 } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import { convertCellValue } from './convert-utils';
@@ -58,7 +59,54 @@ class GridUtils {
     return { copiedRecords, copiedColumns };
   }
 
-  async paste({ copied, multiplePaste, pasteRange, isGroupView, columns }) {
+  clearCutData(cutPosition, cutData, isGroupView) {
+    let { rowIdx: startRecordIndex, groupRecordIndex } = cutPosition;
+    const { copiedColumns, copiedRecords } = cutData;
+    let updateRecordIds = [];
+    let idRecordUpdates = {};
+    let idOldRecordData = {};
+    let updateTags = [];
+
+    copiedRecords.forEach((record, index) => {
+      const cutRowIdx = startRecordIndex + index;
+      const cutRecord = this.api.recordGetterByIndex({ isGroupView, groupRecordIndex: groupRecordIndex, recordIndex: cutRowIdx });
+      groupRecordIndex++;
+      const cutRecordId = getRecordIdFromRecord(cutRecord);
+      const canModify = window.sfMetadataContext.canModifyRow(cutRecord);
+      if (canModify) {
+        updateRecordIds.push(cutRecordId);
+        copiedColumns.forEach((copiedColumn, index) => {
+          if (copiedColumn.editable) {
+            const cellValue = getCellValueByColumn(cutRecord, copiedColumn);
+            const copiedColumnName = getColumnOriginName(copiedColumn);
+            if (copiedColumn.type === CellType.TAGS) {
+              const oldValue = Array.isArray(cellValue) ? cellValue : [];
+              if (oldValue.length > 0) {
+                updateTags.push({
+                  record_id: cutRecordId,
+                  tags: [],
+                  old_tags: oldValue.map(i => i.row_id)
+                });
+              }
+            } else {
+              idRecordUpdates[cutRecordId] = Object.assign({}, idRecordUpdates[cutRecordId], { [copiedColumnName]: null });
+              idOldRecordData[cutRecordId] = Object.assign({}, idOldRecordData[cutRecordId], { [copiedColumnName]: cellValue });
+            }
+          }
+        });
+      }
+    });
+
+    if (Object.keys(idRecordUpdates).length > 0) {
+      this.api.modifyRecords(updateRecordIds, idRecordUpdates, idRecordUpdates, idOldRecordData, idOldRecordData, true);
+    }
+
+    if (updateTags.length > 0) {
+      this.api.updateFileTags(updateTags);
+    }
+  }
+
+  async paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, viewId, pasteSource, cutPosition }) {
     const { row_ids: renderRecordIds } = this.metadata;
     const { topLeft, bottomRight = {} } = pasteRange;
     const { rowIdx: startRecordIndex, idx: startColumnIndex, groupRecordIndex } = topLeft;
@@ -69,6 +117,16 @@ class GridUtils {
     const pasteRecordsLen = multiplePaste ? endRecordIndex - startRecordIndex + 1 : copiedRecordsLen;
     const pasteColumnsLen = multiplePaste ? endColumnIndex - startColumnIndex + 1 : copiedColumnsLen;
     const renderRecordsCount = renderRecordIds.length;
+
+    const isFromCut = pasteSource === PASTE_SOURCE.CUT && type === TRANSFER_TYPES.METADATA_FRAGMENT;
+    if (isFromCut) {
+      const { search } = window.location;
+      const urlParams = new URLSearchParams(search);
+      const currentViewId = urlParams.has('view') && urlParams.get('view');
+      if (currentViewId === viewId) {
+        this.clearCutData(cutPosition, copied, isGroupView);
+      }
+    }
 
     // need expand records
     const startExpandRecordIndex = renderRecordsCount - startRecordIndex;
@@ -118,7 +176,11 @@ class GridUtils {
         const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn, this.api);
         if (!isCellValueChanged(pasteCellValue, update, pasteColumn.type)) continue;
         if (pasteColumn.type === CellType.TAGS) {
-          updateTags.push({ record_id: updateRecordId, tags: Array.isArray(update) ? update.map(i => i.row_id) : [], old_tags: pasteCellValue });
+          updateTags.push({
+            record_id: updateRecordId,
+            tags: Array.isArray(update) ? update.map(i => i.row_id) : [],
+            old_tags: Array.isArray(pasteCellValue) ? pasteCellValue.map(i => i.row_id) : []
+          });
           continue;
         }
         originalUpdate[pasteColumnName] = update;
@@ -222,7 +284,11 @@ class GridUtils {
           const oldValue = dragRow[columnName];
           if (isCellValueChanged(fillingValue, oldValue, type)) {
             if (type === CellType.TAGS) {
-              tagsUpdate.push({ record_id: dragRowId, tags: fillingValue || [], old_tags: oldValue });
+              tagsUpdate.push({
+                record_id: dragRowId,
+                tags: fillingValue || [],
+                old_tags: Array.isArray(oldValue) ? oldValue.map(i => i.row_id) : [],
+              });
             } else {
               updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
               oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: oldValue });

@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { toKeyCode } from 'is-hotkey';
 import toaster from '../../../components/toast';
 import TableMain from './table-main';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils, validateName } from '../../../utils/utils';
-import { isModF } from '../../utils/hotkey';
+import { isModZ, isModShiftZ } from '../../utils/hotkey';
 import { gettext } from '../../../utils/constants';
-import { getFileNameFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 
@@ -16,13 +17,34 @@ const Table = () => {
   const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback } = useMetadataView();
   const containerRef = useRef(null);
 
-  const onKeyDown = useCallback((event) => {
-    if (event.target.className.includes('editor-main')) return;
-    if (isModF(event)) {
+  const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
+
+  const focusDataGrid = useCallback(() => {
+    setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);
+  }, []);
+
+  const onHotKey = useCallback((event) => {
+    if (event.keyCode === toKeyCode('mod+shift')) return;
+    if (event.target.className.includes('sf-metadata-editor-main')) return;
+
+    const activeElement = document.activeElement;
+    if (!containerRef.current.contains(activeElement)) return;
+
+    if (isModZ(event)) {
       event.preventDefault();
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_CELLS);
-      return;
+      if (!canModify) return;
+      store.undoOperation();
+      focusDataGrid();
+    } else if (isModShiftZ(event)) {
+      event.preventDefault();
+      if (!canModify) return;
+      store.redoOperation();
+      focusDataGrid();
     }
+  }, [canModify, store, focusDataGrid]);
+
+  const onHotKeyUp = useCallback((event) => {
+    if (event.target.className.includes('sf-metadata-editor-main')) return;
   }, []);
 
   const isGroupView = useMemo(() => {
@@ -71,14 +93,12 @@ const Table = () => {
 
   const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
     const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
-    let oldPath = null;
     let newName = null;
     if (isRename) {
       const rowId = rowIds[0];
       const row = recordGetterById(rowId);
       const rowUpdates = idOriginalRowUpdates[rowId];
       const { _parent_dir, _name } = row;
-      oldPath = Utils.joinPath(_parent_dir, _name);
       newName = getFileNameFromRecord(rowUpdates);
       const { isValid, errMessage } = validateName(newName);
       if (!isValid) {
@@ -99,9 +119,17 @@ const Table = () => {
       fail_callback: (error) => {
         error && toaster.danger(error);
       },
-      success_callback: () => {
-        if (isRename) {
-          renameFileCallback(oldPath, newName);
+      success_callback: (operation) => {
+        if (operation.is_rename) {
+          const rowId = operation.row_ids[0];
+          const row = recordGetterById(rowId);
+          const rowUpdates = operation.id_original_row_updates[rowId];
+          const oldRow = operation.id_original_old_row_data[rowId];
+          const parentDir = getParentDirFromRecord(row);
+          const oldName = getFileNameFromRecord(oldRow);
+          const path = Utils.joinPath(parentDir, oldName);
+          const newName = getFileNameFromRecord(rowUpdates);
+          renameFileCallback(path, newName);
         }
       },
     });
@@ -217,14 +245,6 @@ const Table = () => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="sf-metadata-container" ref={containerRef}>
       <TableMain
@@ -247,6 +267,8 @@ const Table = () => {
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
         updateFileTags={updateFileTags}
+        onGridKeyDown={onHotKey}
+        onGridKeyUp={onHotKeyUp}
       />
     </div>
   );

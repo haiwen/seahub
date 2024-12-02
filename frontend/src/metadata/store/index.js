@@ -23,7 +23,7 @@ class Store {
     this.context = props.context;
     this.startIndex = 0;
     this.redos = [];
-    this.undos = [];
+    this.undo = [];
     this.pendingOperations = [];
     this.isSendingOperation = false;
     this.isReadonly = false;
@@ -37,7 +37,7 @@ class Store {
     this.data = null;
     this.startIndex = 0;
     this.redos = [];
-    this.undos = [];
+    this.undo = [];
     this.pendingOperations = [];
     this.isSendingOperation = false;
   };
@@ -177,7 +177,7 @@ class Store {
     if (isAfterServerOperation) {
       this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
     }
-    operation.success_callback && operation.success_callback();
+    operation.success_callback && operation.success_callback(operation);
 
     // need reload records if has related formula columns
     this.serverOperator.handleReloadRecords(this.data, operation, ({ reloadedRecords, idRecordNotExistMap, relatedColumnKeyMap }) => {
@@ -199,47 +199,31 @@ class Store {
       if (this.redos.length > 0) {
         this.redos = [];
       }
-      if (this.undos.length > 10) {
-        this.undos = this.undos.slice(-10);
+      if (this.undo.length > 10) {
+        this.undo = this.undo.slice(-10);
       }
       if (UNDO_OPERATION_TYPE.includes(operation.op_type)) {
-        this.undos.push(operation);
+        this.undo.push(operation);
       }
     }
     asyncUndoRedo && asyncUndoRedo(operation);
   }
 
   undoOperation() {
-    if (this.isReadonly || this.undos.length === 0) return;
-    const lastOperation = this.undos.pop();
+    if (this.isReadonly || this.undo.length === 0) return;
+    const lastOperation = this.undo.pop();
     const lastInvertOperation = lastOperation.invert();
-    if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastInvertOperation.op_type)) {
-      this.applyOperation(lastInvertOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
-        if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
-          lastOperation.row_id = operation.row_data._id;
-        }
-        this.redos.push(lastOperation);
-      } });
-      return;
-    }
-    this.redos.push(lastOperation);
-    this.applyOperation(lastInvertOperation, { handleUndo: false });
+    this.applyOperation(lastInvertOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
+      this.redos.push(lastOperation);
+    } });
   }
 
   redoOperation() {
     if (this.isReadonly || this.redos.length === 0) return;
     let lastOperation = this.redos.pop();
-    if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastOperation.op_type)) {
-      this.applyOperation(lastOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
-        if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
-          lastOperation = operation;
-        }
-        this.undos.push(lastOperation);
-      } });
-      return;
-    }
-    this.undos.push(lastOperation);
-    this.applyOperation(lastOperation, { handleUndo: false });
+    this.applyOperation(lastOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
+      this.undo.push(lastOperation);
+    } });
   }
 
   syncOperationOnData(operation) {
@@ -483,7 +467,7 @@ class Store {
   insertColumn = (name, columnType, { key, data }) => {
     const operationType = OPERATION_TYPE.INSERT_COLUMN;
     const operation = this.createOperation({
-      type: operationType, repo_id: this.repoId, name, column_type: columnType, key, data
+      type: operationType, repo_id: this.repoId, name, column_type: columnType, column_key: key, data
     });
     this.applyOperation(operation);
   };
@@ -491,7 +475,7 @@ class Store {
   deleteColumn = (columnKey, column) => {
     const type = OPERATION_TYPE.DELETE_COLUMN;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, column_key: columnKey,
+      type, repo_id: this.repoId, column_key: columnKey, column,
     });
     this.applyOperation(operation);
   };

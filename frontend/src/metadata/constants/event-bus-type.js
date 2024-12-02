@@ -21,6 +21,7 @@ export const EVENT_BUS_TYPE = {
   SELECT_NONE: 'select_none',
   COPY_CELLS: 'copy_cells',
   PASTE_CELLS: 'paste_cells',
+  CUT_CELLS: 'cut_cells',
   SEARCH_CELLS: 'search_cells',
   CLOSE_SEARCH_CELLS: 'close_search_cells',
   OPEN_SELECT: 'open_select',
@@ -31,6 +32,7 @@ export const EVENT_BUS_TYPE = {
   EXPAND_ALL_GROUPS: 'expand_all_groups',
   LOCAL_RECORD_CHANGED: 'local_record_changed',
   LOCAL_RECORD_DETAIL_CHANGED: 'local_record_detail_changed',
+  FOCUS_CANVAS: 'focus_canvas',
 
   // metadata
   RELOAD_DATA: 'reload_data',
