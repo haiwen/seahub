@@ -77,7 +77,7 @@ class GridUtils {
         updateRecordIds.push(cutRecordId);
         copiedColumns.forEach((copiedColumn, index) => {
           if (copiedColumn.editable) {
-            const cellValue = getCellValueByColumn(copiedColumn);
+            const cellValue = getCellValueByColumn(cutRecord, copiedColumn);
             const copiedColumnName = getColumnOriginName(copiedColumn);
             if (copiedColumn.type === CellType.TAGS) {
               const oldValue = Array.isArray(cellValue) ? cellValue : [];
@@ -85,7 +85,7 @@ class GridUtils {
                 updateTags.push({
                   record_id: cutRecordId,
                   tags: [],
-                  old_tags: cellValue
+                  old_tags: oldValue.map(i => i.row_id)
                 });
               }
             } else {
