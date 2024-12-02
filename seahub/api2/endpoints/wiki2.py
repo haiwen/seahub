@@ -22,7 +22,9 @@ from django.utils.translation import gettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.search.utils import search_wikis, ai_search_wikis
+from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_wikis, ai_search_wikis
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
