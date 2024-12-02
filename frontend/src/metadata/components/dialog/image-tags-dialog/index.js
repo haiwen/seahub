@@ -118,7 +118,7 @@ const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   return (
     <Modal isOpen={true} toggle={() => onToggle()} className="sf-metadata-auto-image-tags">
-      <ModalHeader toggle={onToggle}>{fileName + gettext('\'s tags')}</ModalHeader>
+      <ModalHeader toggle={() => onToggle()}>{fileName + gettext('\'s tags')}</ModalHeader>
       <ModalBody>
         {isLoading ? (
           <CenteredLoading />
