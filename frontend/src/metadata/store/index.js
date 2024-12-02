@@ -177,7 +177,7 @@ class Store {
     if (isAfterServerOperation) {
       this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
     }
-    operation.success_callback && operation.success_callback();
+    operation.success_callback && operation.success_callback(operation);
 
     // need reload records if has related formula columns
     this.serverOperator.handleReloadRecords(this.data, operation, ({ reloadedRecords, idRecordNotExistMap, relatedColumnKeyMap }) => {

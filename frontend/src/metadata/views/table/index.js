@@ -6,7 +6,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils, validateName } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../utils/hotkey';
 import { gettext } from '../../../utils/constants';
-import { getFileNameFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 
@@ -93,14 +93,12 @@ const Table = () => {
 
   const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
     const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
-    let oldPath = null;
     let newName = null;
     if (isRename) {
       const rowId = rowIds[0];
       const row = recordGetterById(rowId);
       const rowUpdates = idOriginalRowUpdates[rowId];
       const { _parent_dir, _name } = row;
-      oldPath = Utils.joinPath(_parent_dir, _name);
       newName = getFileNameFromRecord(rowUpdates);
       const { isValid, errMessage } = validateName(newName);
       if (!isValid) {
@@ -121,9 +119,17 @@ const Table = () => {
       fail_callback: (error) => {
         error && toaster.danger(error);
       },
-      success_callback: () => {
-        if (isRename) {
-          renameFileCallback(oldPath, newName);
+      success_callback: (operation) => {
+        if (operation.is_rename) {
+          const rowId = operation.row_ids[0];
+          const row = recordGetterById(rowId);
+          const rowUpdates = operation.id_original_row_updates[rowId];
+          const oldRow = operation.id_original_old_row_data[rowId];
+          const parentDir = getParentDirFromRecord(row);
+          const oldName = getFileNameFromRecord(oldRow);
+          const path = Utils.joinPath(parentDir, oldName);
+          const newName = getFileNameFromRecord(rowUpdates);
+          renameFileCallback(path, newName);
         }
       },
     });
