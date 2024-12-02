@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { toKeyCode } from 'is-hotkey';
 import toaster from '../../../components/toast';
 import TableMain from './table-main';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils, validateName } from '../../../utils/utils';
-import { isModF } from '../../utils/hotkey';
+import { isModZ, isModShiftZ } from '../../utils/hotkey';
 import { gettext } from '../../../utils/constants';
 import { getFileNameFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
@@ -16,13 +17,34 @@ const Table = () => {
   const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback } = useMetadataView();
   const containerRef = useRef(null);
 
-  const onKeyDown = useCallback((event) => {
-    if (event.target.className.includes('editor-main')) return;
-    if (isModF(event)) {
+  const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
+
+  const focusDataGrid = useCallback(() => {
+    setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);
+  }, []);
+
+  const onHotKey = useCallback((event) => {
+    if (event.keyCode === toKeyCode('mod+shift')) return;
+    if (event.target.className.includes('sf-metadata-editor-main')) return;
+
+    const activeElement = document.activeElement;
+    if (!containerRef.current.contains(activeElement)) return;
+
+    if (isModZ(event)) {
       event.preventDefault();
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_CELLS);
-      return;
+      if (!canModify) return;
+      store.undoOperation();
+      focusDataGrid();
+    } else if (isModShiftZ(event)) {
+      event.preventDefault();
+      if (!canModify) return;
+      store.redoOperation();
+      focusDataGrid();
     }
+  }, [canModify, store, focusDataGrid]);
+
+  const onHotKeyUp = useCallback((event) => {
+    if (event.target.className.includes('sf-metadata-editor-main')) return;
   }, []);
 
   const isGroupView = useMemo(() => {
@@ -217,14 +239,6 @@ const Table = () => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="sf-metadata-container" ref={containerRef}>
       <TableMain
@@ -247,6 +261,8 @@ const Table = () => {
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
         updateFileTags={updateFileTags}
+        onGridKeyDown={onHotKey}
+        onGridKeyUp={onHotKeyUp}
       />
     </div>
   );

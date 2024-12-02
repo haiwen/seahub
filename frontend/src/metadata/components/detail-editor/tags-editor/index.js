@@ -66,7 +66,7 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
       newValue.splice(optionIdx, 1);
     }
     const recordId = getRecordIdFromRecord(record);
-    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
   }, [validValue, value, record, updateFileTags]);
 
   const renderEditor = useCallback(() => {

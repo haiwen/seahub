@@ -46,6 +46,7 @@ class RecordsBody extends Component {
   componentDidMount() {
     this.props.onRef(this);
     window.sfMetadataBody = this;
+    this.unsubscribeFocus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FOCUS_CANVAS, this.onFocus);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -58,10 +59,20 @@ class RecordsBody extends Component {
   componentWillUnmount() {
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
+    this.unsubscribeFocus();
+
     this.setState = (state, callback) => {
       return;
     };
   }
+
+  onFocus = () => {
+    if (this.interactionMask.container) {
+      this.interactionMask.focus();
+      return;
+    }
+    this.resultContentRef.focus();
+  };
 
   getVisibleIndex = () => {
     return { rowVisibleStartIdx: this.rowVisibleStart, rowVisibleEndIdx: this.rowVisibleEnd };
@@ -507,7 +518,14 @@ class RecordsBody extends Component {
   render() {
     return (
       <Fragment>
-        <div id="canvas" className="sf-metadata-result-table-content" ref={this.setResultContentRef} onScroll={this.onScroll}>
+        <div
+          id="canvas"
+          className="sf-metadata-result-table-content"
+          ref={this.setResultContentRef}
+          onScroll={this.onScroll}
+          onKeyDown={this.props.onGridKeyDown}
+          onKeyUp={this.props.onGridKeyUp}
+        >
           <InteractionMasks
             ref={this.setInteractionMaskRef}
             contextMenu={this.props.contextMenu}

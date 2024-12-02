@@ -23,7 +23,7 @@ class NormalEditorContainer extends React.Component {
     if (inputNode !== undefined) {
       this.setTextInputFocus();
       if (!this.getEditor().disableContainerStyles) {
-        inputNode.className += ' editor-main';
+        inputNode.className += ' sf-metadata-editor-main';
         inputNode.style.height = (this.props.height - 1) + 'px';
       }
     }

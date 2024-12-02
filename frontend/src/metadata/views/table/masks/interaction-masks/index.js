@@ -16,7 +16,7 @@ import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-ut
 import { getFormatRecordData } from '../../../../utils/cell/cell-format-utils';
 import {
   CellType, EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE, GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT,
-  NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, HEADER_HEIGHT_TYPE,
+  NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, HEADER_HEIGHT_TYPE, PASTE_SOURCE
 } from '../../../../constants';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
@@ -67,7 +67,10 @@ class InteractionMasks extends React.Component {
       isEditorEnabled: false,
       openEditorMode: '',
     };
+    this.pasteSource = PASTE_SOURCE.COPY;
+    this.cutPosition = null;
     this.selectionMask = null;
+    this.viewId = '';
   }
 
   componentDidMount() {
@@ -83,6 +86,7 @@ class InteractionMasks extends React.Component {
     this.unsubscribeCloseEditorEvent = eventBus.subscribe(EVENT_BUS_TYPE.CLOSE_EDITOR, this.onCloseEditorEvent);
     this.unsubscribeCopy = eventBus.subscribe(EVENT_BUS_TYPE.COPY_CELLS, this.onCopy);
     this.unsubscribePaste = eventBus.subscribe(EVENT_BUS_TYPE.PASTE_CELLS, this.onPaste);
+    this.unsubscribeCut = eventBus.subscribe(EVENT_BUS_TYPE.CUT_CELLS, this.onCut);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -105,6 +109,7 @@ class InteractionMasks extends React.Component {
     this.unsubscribeCloseEditorEvent();
     this.unsubscribeCopy();
     this.unsubscribePaste();
+    this.unsubscribeCut();
     this.setState = (state, callback) => {
       return;
     };
@@ -529,7 +534,8 @@ class InteractionMasks extends React.Component {
 
       // tags
       if (hasTagsColumn) {
-        tagsUpdate.push({ record_id: _id, tags: [], old_tags: getTagsFromRecord(record) });
+        const oldValue = getTagsFromRecord(record);
+        tagsUpdate.push({ record_id: _id, tags: [], old_tags: Array.isArray(oldValue) ? oldValue.map(i => i.row_id) : [] });
       }
 
       if (Object.keys(originalUpdate).length > 0) {
@@ -592,19 +598,13 @@ class InteractionMasks extends React.Component {
 
   onPaste = (e) => {
     // when activeElement is not cellMask or has no permission, can't paste cell
-    if (!this.isCellMaskActive() || window.sfMetadataContext.getPermission() === 'r') {
-      return;
-    }
+    if (!this.isCellMaskActive() || !window.sfMetadataContext.canModify()) return;
     const { columns, isGroupView } = this.props;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
-    if (idx === -1 || rowIdx === -1) {
-      return; // prevent paste when no cell selected
-    }
+    if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
     const cliperData = getEventTransfer(e);
-    if (!cliperData) {
-      return;
-    }
+    if (!cliperData) return;
 
     const cliperDataType = cliperData.type;
     const copied = cliperData[TRANSFER_TYPES.METADATA_FRAGMENT];
@@ -636,9 +636,54 @@ class InteractionMasks extends React.Component {
       type: cliperDataType,
       pasteRange: selectedRange,
       isGroupView,
+      pasteSource: this.pasteSource,
+      cutPosition: this.cutPosition,
+      viewId: this.viewId
     });
     if (!multiplePaste) {
       this.setPasteRange(copiedRecordsCount, copiedColumnsCount);
+    }
+  };
+
+  onCut = (event) => {
+    // when activeElement is not cellMask or has no permission, can't paste cell
+    if (!this.isCellMaskActive() || !window.sfMetadataContext.canModify()) return;
+    const { selectedPosition, selectedRange } = this.state;
+    const { idx, rowIdx } = selectedPosition;
+    if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
+    event.preventDefault();
+    const { table, columns, isGroupView, recordGetterByIndex, getCopiedRecordsAndColumnsFromRange } = this.props;
+    const { _id: copiedTableId } = table;
+    if (rowIdx < 0 || idx < 0) {
+      return; // can not copy when no cell select
+    }
+    const { topLeft, bottomRight } = selectedRange;
+    const copiedCellsCount = (bottomRight.rowIdx - topLeft.rowIdx + 1) * (bottomRight.idx - topLeft.idx + 1);
+    const type = copiedCellsCount <= 0 ? 'text' : TRANSFER_TYPES.METADATA_FRAGMENT;
+    const tip = copiedCellsCount > 1 ? gettext('xxx cells cut').replace('xxx', copiedCellsCount) : gettext('1 cell cut');
+    toaster.success(tip);
+    const copied = { copiedRange: selectedRange };
+    const { copiedRecords, copiedColumns } = getCopiedRecordsAndColumnsFromRange({ type, copied, isGroupView });
+    setEventTransfer({
+      type,
+      event,
+      copiedRange: { ...selectedRange },
+      copiedRecords,
+      copiedColumns,
+      copiedTableId,
+      tableData: {
+        columns,
+      },
+      isGroupView,
+      recordGetterByIndex,
+    });
+    if (copiedCellsCount > 0) {
+      this.pasteSource = PASTE_SOURCE.CUT;
+      this.cutPosition = { ...selectedPosition };
+      const { search } = window.location;
+      const urlParams = new URLSearchParams(search);
+      if (!urlParams.has('view')) return;
+      this.viewId = urlParams.get('view');
     }
   };
 
@@ -704,6 +749,9 @@ class InteractionMasks extends React.Component {
       isGroupView,
       recordGetterByIndex,
     });
+    this.cutPosition = null;
+    this.pasteSource = PASTE_SOURCE.COPY;
+    this.viewId = '';
   };
 
   isMultiplePaste = (copiedRecordsCount, copiedColumnsCount) => {

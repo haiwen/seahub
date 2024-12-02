@@ -61,6 +61,7 @@ class GroupBody extends Component {
     this.props.onRef(this);
     this.unSubscribeCollapseAllGroups = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.COLLAPSE_ALL_GROUPS, this.collapseAllGroups);
     this.unSubscribeExpandAllGroups = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.EXPAND_ALL_GROUPS, this.expandAllGroups);
+    this.unsubscribeFocus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FOCUS_CANVAS, this.onFocus);
   }
 
   componentDidUpdate(prevProps) {
@@ -93,6 +94,7 @@ class GroupBody extends Component {
     window.removeEventListener('resize', this.onResize);
     this.unSubscribeCollapseAllGroups();
     this.unSubscribeExpandAllGroups();
+    this.unsubscribeFocus();
 
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
@@ -100,6 +102,14 @@ class GroupBody extends Component {
       return;
     };
   }
+
+  onFocus = () => {
+    if (this.interactionMask.container) {
+      this.interactionMask.focus();
+      return;
+    }
+    this.resultContentRef.focus();
+  };
 
   getShownRecords = () => {
     const { startRenderIndex, endRenderIndex, groupMetrics } = this.state;
@@ -865,6 +875,8 @@ class GroupBody extends Component {
           className='sf-metadata-result-table-content'
           ref={this.setResultContentRef}
           onScroll={this.onScroll}
+          onKeyDown={this.props.onGridKeyDown}
+          onKeyUp={this.props.onGridKeyUp}
         >
           <InteractionMasks
             isGroupView

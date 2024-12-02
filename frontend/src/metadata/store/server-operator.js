@@ -83,9 +83,11 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.INSERT_COLUMN: {
-        const { repo_id, name, column_type, key, data } = operation;
-        window.sfMetadataContext.insertColumn(repo_id, name, column_type, { key, data }).then(res => {
+        const { repo_id, name, column_type, column_key, data } = operation;
+        window.sfMetadataContext.insertColumn(repo_id, name, column_type, { key: column_key, data }).then(res => {
           operation.column = res.data.column;
+          operation.column_key = operation.column.key;
+          operation.data = operation.column.data;
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to insert property') });

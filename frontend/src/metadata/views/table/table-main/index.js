@@ -54,8 +54,8 @@ const TableMain = ({
     insertColumn && insertColumn(name, type, { key, data });
   }, [insertColumn]);
 
-  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView }) => {
-    gridUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns });
+  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition, viewId }) => {
+    gridUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId });
   }, [gridUtils, columns]);
 
   return (

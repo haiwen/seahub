@@ -142,3 +142,8 @@ export const GALLERY_DATE_MODE = {
 };
 
 export const UNCATEGORIZED = '_uncategorized';
+
+export const PASTE_SOURCE = {
+  COPY: 'copy',
+  CUT: 'cut',
+};

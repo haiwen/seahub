@@ -53,6 +53,7 @@ class Records extends Component {
   componentDidMount() {
     document.addEventListener('copy', this.onCopyCells);
     document.addEventListener('paste', this.onPasteCells);
+    document.addEventListener('cut', this.onCutCells);
     if (window.isMobile) {
       window.addEventListener('touchstart', this.onTouchStart);
       window.addEventListener('touchend', this.onTouchEnd);
@@ -88,6 +89,7 @@ class Records extends Component {
   componentWillUnmount() {
     document.removeEventListener('copy', this.onCopyCells);
     document.removeEventListener('paste', this.onPasteCells);
+    document.removeEventListener('cut', this.onCutCells);
     if (window.isMobile) {
       window.removeEventListener('touchstart', this.onTouchStart);
       window.removeEventListener('touchend', this.onTouchEnd);
@@ -340,6 +342,10 @@ class Records extends Component {
 
   onPasteCells = (e) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.PASTE_CELLS, e);
+  };
+
+  onCutCells = (e) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.CUT_CELLS, e);
   };
 
   onTouchStart = (e) => {

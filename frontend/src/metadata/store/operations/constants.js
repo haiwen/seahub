@@ -40,20 +40,20 @@ export const COLUMN_DATA_OPERATION_TYPE = {
 export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
   [OPERATION_TYPE.DELETE_RECORDS]: ['repo_id', 'rows_ids', 'deleted_rows'],
-  [OPERATION_TYPE.RESTORE_RECORDS]: ['repo_id', 'rows_data', 'original_rows', 'link_infos', 'upper_row_ids'],
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
+
   [OPERATION_TYPE.MODIFY_FILTERS]: ['repo_id', 'view_id', 'filter_conjunction', 'filters', 'basic_filters'],
   [OPERATION_TYPE.MODIFY_SORTS]: ['repo_id', 'view_id', 'sorts'],
   [OPERATION_TYPE.MODIFY_GROUPBYS]: ['repo_id', 'view_id', 'groupbys'],
   [OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS]: ['repo_id', 'view_id', 'hidden_columns'],
-  [OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'button_column_key'],
-  [OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'updates', 'old_row_data', 'original_updates', 'original_old_row_data', 'button_column_key'],
-  [OPERATION_TYPE.INSERT_COLUMN]: ['repo_id', 'name', 'column_type', 'key', 'data'],
+
+  [OPERATION_TYPE.INSERT_COLUMN]: ['repo_id', 'name', 'column_type', 'column_key', 'data', 'column'],
   [OPERATION_TYPE.RENAME_COLUMN]: ['repo_id', 'column_key', 'new_name', 'old_name'],
   [OPERATION_TYPE.MODIFY_COLUMN_DATA]: ['repo_id', 'column_key', 'new_data', 'old_data', 'option_modify_type'],
   [OPERATION_TYPE.DELETE_COLUMN]: ['repo_id', 'column_key', 'column'],
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
   [OPERATION_TYPE.MODIFY_COLUMN_ORDER]: ['repo_id', 'view_id', 'new_columns_keys', 'old_columns_keys'],
+
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
@@ -62,9 +62,14 @@ export const OPERATION_ATTRIBUTES = {
 };
 
 export const UNDO_OPERATION_TYPE = [
-  // OPERATION_TYPE.MODIFY_RECORDS,
-  // OPERATION_TYPE.RESTORE_RECORDS,
-  // OPERATION_TYPE.INSERT_COLUMN,
+  OPERATION_TYPE.MODIFY_RECORDS,
+  OPERATION_TYPE.INSERT_COLUMN,
+  OPERATION_TYPE.DELETE_COLUMN,
+  OPERATION_TYPE.RENAME_COLUMN,
+  OPERATION_TYPE.MODIFY_COLUMN_DATA,
+  OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
+  OPERATION_TYPE.MODIFY_COLUMN_ORDER,
+  OPERATION_TYPE.UPDATE_FILE_TAGS,
 ];
 
 // only apply operation on the local
