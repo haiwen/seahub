@@ -1,0 +1,27 @@
+.sf-metadata-auto-image-tags .modal-body {
+  min-height: 160px;
+}
+
+.sf-metadata-auto-image-tags .auto-image-tags-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sf-metadata-auto-image-tags .auto-image-tag {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  margin-right: 8px;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.sf-metadata-auto-image-tags .auto-image-tag.selected {
+  border-color: #FF9800;
+}
+
+.sf-metadata-auto-image-tags .auto-image-tag.selected::after {
+  content: ('');
+}

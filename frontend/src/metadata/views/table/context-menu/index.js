@@ -6,16 +6,13 @@ import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
-import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, SELECT_OPTION_COLORS } from '../../../constants';
+import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
-  getTagsFromRecord,
 } from '../../../utils/cell';
-import { useTags } from '../../../../tag/hooks';
+import ImageTagsDialog from '../../../components/dialog/image-tags-dialog';
 
 import './index.css';
-import { getTagByName, getTagId } from '../../../../tag/utils';
-import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -40,9 +37,9 @@ const ContextMenu = (props) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [imageTagsRecord, setImageTagsRecord] = useState(null);
 
   const { metadata } = useMetadataView();
-  const { tagsData, addTags } = useTags();
 
   const checkCanModifyRow = (row) => {
     return window.sfMetadataContext.canModifyRow(row);
@@ -255,67 +252,9 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
-  const imageTags = useCallback((record) => {
-    let path = '';
-    const fileName = getFileNameFromRecord(record);
-    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
-      const parentDir = getParentDirFromRecord(record);
-      path = Utils.joinPath(parentDir, fileName);
-    }
-    if (path === '') return;
-    window.sfMetadataContext.imageTags(path).then(res => {
-      const tags = res.data.tags;
-      let { newTags, exitTagIds } = tags.reduce((cur, pre) => {
-        const tag = getTagByName(tagsData, pre);
-        if (tag) {
-          cur.exitTagIds.push(getTagId(tag));
-        } else {
-          cur.newTags.push(pre);
-        }
-        return cur;
-      }, { newTags: [], exitTagIds: [] });
-
-      newTags = newTags.map(tagName => {
-        const defaultOptions = SELECT_OPTION_COLORS.slice(0, 24);
-        const defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
-        return { [TAGS_PRIVATE_COLUMN_KEY.TAG_NAME]: tagName, [TAGS_PRIVATE_COLUMN_KEY.TAG_COLOR]: defaultOption.COLOR };
-      });
-      const recordId = getRecordIdFromRecord(record);
-      let value = getTagsFromRecord(record);
-      value = value ? value.map(item => item.row_id) : [];
-
-      if (newTags.length > 0) {
-        addTags(newTags, {
-          success_callback: (operation) => {
-            const newTagIds = operation.tags?.map(tag => getTagId(tag));
-            let newValue = [...value, ...newTagIds];
-            exitTagIds.forEach(id => {
-              if (!newValue.includes(id)) {
-                newValue.push(id);
-              }
-            });
-            updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
-          },
-          fail_callback: (error) => {
-          },
-        });
-      } else {
-        let newValue = [...value];
-        exitTagIds.forEach(id => {
-          if (!newValue.includes(id)) {
-            newValue.push(id);
-          }
-        });
-        if (newValue.length !== value.length) {
-          updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
-        }
-      }
-
-    }).catch(error => {
-      const errorMessage = gettext('Failed to generate image tags');
-      toaster.danger(errorMessage);
-    });
-  }, [tagsData, addTags, updateFileTags]);
+  const toggleImageTagsRecord = useCallback((record = null) => {
+    setImageTagsRecord(record);
+  }, []);
 
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
@@ -389,7 +328,7 @@ const ContextMenu = (props) => {
       case OPERATION.IMAGE_TAGS: {
         const { record } = option;
         if (!record) break;
-        imageTags(record);
+        toggleImageTagsRecord(record);
         break;
       }
       case OPERATION.DELETE_RECORD: {
@@ -435,7 +374,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, imageTags, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleImageTagsRecord]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -497,25 +436,36 @@ const ContextMenu = (props) => {
     };
   }, [visible, handleHide]);
 
-  if (!visible) return null;
-  if (options.length === 0) return null;
+  const renderMenu = useCallback(() => {
+    if (!visible) return null;
+    if (options.length === 0) return null;
+    return (
+      <div
+        ref={menuRef}
+        className='dropdown-menu sf-metadata-contextmenu'
+        style={position}
+      >
+        {options.map((option, index) => (
+          <button
+            key={index}
+            className='dropdown-item sf-metadata-contextmenu-item'
+            onClick={(event) => handleOptionClick(event, option)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    );
+  }, [visible, options, position, handleOptionClick]);
 
   return (
-    <div
-      ref={menuRef}
-      className='dropdown-menu sf-metadata-contextmenu'
-      style={position}
-    >
-      {options.map((option, index) => (
-        <button
-          key={index}
-          className='dropdown-item sf-metadata-contextmenu-item'
-          onClick={(event) => handleOptionClick(event, option)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
+    <>
+      {renderMenu()}
+      {imageTagsRecord && (
+        <ImageTagsDialog record={imageTagsRecord} onToggle={toggleImageTagsRecord} onSubmit={updateFileTags} />
+      )}
+    </>
+
   );
 };
 
