@@ -56,42 +56,9 @@
   font-weight: normal;
 }
 
-#notice-popover li {
-  padding: 9px 0 3px;
-  border-bottom: 1px solid #dfdfe1;
-}
-
-#notice-popover li.unread {
-  padding-right: 10px;
-  padding-left: 10px;
-  border-left: 2px solid #feac74;
-}
-
-#notice-popover li.read {
-  padding-right: 10px;
-  padding-left: 10px;
-  border-left: 2px solid transparent;
-}
-
-#notice-popover li:hover {
-  background: #f5f5f7;
-}
-
-#notice-popover li.read:hover {
-  background: #f5f5f7;
-  border-left: 2px solid #dfdfe1;
-}
-
 #notice-popover .avatar {
   border-radius: 1000px;
   float: left;
-}
-
-#notice-popover .brief {
-  margin-left: 40px;
-  margin-bottom: 1rem;
-  font-size: 0.8125rem;
-  line-height: 1.5rem;
 }
 
 #notice-popover .time {

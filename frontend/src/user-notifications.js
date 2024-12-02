@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, TabPane, Nav, NavItem, NavLink, TabContent } from 'reactstrap';
 import { Utils } from './utils/utils';
@@ -209,19 +209,22 @@ class UserNotificationsDialog extends React.Component {
 
 
   renderNoticeContent = (content) => {
+    const { generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
     let activeTab = this.state.activeTab;
     return (
-      <Fragment>
+      <>
         <div className="notice-dialog-side">
-          <Nav pills>
+          <Nav pills className="flex-column">
             <NavItem role="tab" aria-selected={activeTab === 'general'} aria-controls="general-notice-panel">
               <NavLink className={activeTab === 'general' ? 'active' : ''} onClick={this.tabItemClick} tabIndex="0" value="general">
                 {gettext('General')}
+                {generalNoticeListUnseen > 0 && <span>({generalNoticeListUnseen})</span>}
               </NavLink>
             </NavItem>
             <NavItem role="tab" aria-selected={activeTab === 'discussion'} aria-controls="discussion-notice-panel">
               <NavLink className={activeTab === 'discussion' ? 'active' : ''} onClick={this.tabItemClick} tabIndex="1" value="discussion">
                 {gettext('Discussion')}
+                {discussionNoticeListUnseen > 0 && <span>({discussionNoticeListUnseen})</span>}
               </NavLink>
             </NavItem>
           </Nav>
@@ -229,24 +232,22 @@ class UserNotificationsDialog extends React.Component {
         <div className="notice-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             {activeTab === 'general' &&
-              <TabPane tabId="general" role="tabpanel" id="general-notice-panel">
-                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref}
-                  onScroll={this.onHandleScroll}>
+              <TabPane tabId="general" role="tabpanel" id="general-notice-panel" className="h-100">
+                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref} onScroll={this.onHandleScroll}>
                   {content}
                 </div>
               </TabPane>
             }
             {activeTab === 'discussion' &&
-              <TabPane tabId="discussion" role="tabpanel" id="discussion-notice-panel">
-                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref}
-                  onScroll={this.onHandleScroll}>
+              <TabPane tabId="discussion" role="tabpanel" id="discussion-notice-panel" className="h-100">
+                <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref} onScroll={this.onHandleScroll}>
                   {content}
                 </div>
               </TabPane>
             }
           </TabContent>
         </div>
-      </Fragment>
+      </>
     );
   };
 
@@ -278,7 +279,9 @@ class UserNotificationsDialog extends React.Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return (<NoticeItem key={index} noticeItem={item} tr={true} />);
+              return (
+                <NoticeItem key={index} noticeItem={item} tr={true} />
+              );
             })}
           </tbody>
         </table>
@@ -289,8 +292,14 @@ class UserNotificationsDialog extends React.Component {
     }
 
     return (
-      <Modal isOpen={true} toggle={this.toggle} className="notification-list-dialog" contentClassName="notification-list-content"
-        zIndex={1046}>
+      <Modal
+        isOpen={true}
+        size={'lg'}
+        toggle={this.toggle}
+        className="notification-list-dialog"
+        contentClassName="notification-list-content"
+        zIndex={1046}
+      >
         <ModalHeader close={this.renderHeaderRowBtn()} toggle={this.toggle}>{gettext('Notifications')}</ModalHeader>
         <ModalBody className="notification-modal-body">
           {this.renderNoticeContent(content)}

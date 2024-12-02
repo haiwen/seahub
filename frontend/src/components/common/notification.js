@@ -123,7 +123,9 @@ class Notification extends React.Component {
   };
 
   render() {
-    const { unseenCount, currentTab } = this.state;
+    const { unseenCount, currentTab, generalNoticeList, discussionNoticeList } = this.state;
+    const generalNoticeListUnseen = generalNoticeList.filter(item => !item.seen).length;
+    const discussionNoticeListUnseen = discussionNoticeList.filter(item => !item.seen).length;
     return (
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
@@ -140,25 +142,35 @@ class Notification extends React.Component {
             onNotificationDialogToggle={this.onNotificationDialogToggle}
             onMarkAllNotifications={this.onMarkAllNotifications}
             tabItemClick={this.tabItemClick}
+            generalNoticeListUnseen={generalNoticeListUnseen}
+            discussionNoticeListUnseen={discussionNoticeListUnseen}
           >
-            {this.state.currentTab === 'general' &&
+            {currentTab === 'general' &&
               <ul className="notice-list list-unstyled" id="notice-popover">
-                {this.state.generalNoticeList.map(item => {
-                  return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
+                {generalNoticeList.map(item => {
+                  return (
+                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>
+                  );
                 })}
               </ul>
             }
-            {this.state.currentTab === 'discussion' &&
+            {currentTab === 'discussion' &&
               <ul className="notice-list list-unstyled" id="notice-popover">
-                {this.state.discussionNoticeList.map(item => {
-                  return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
+                {discussionNoticeList.map(item => {
+                  return (
+                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>
+                  );
                 })}
               </ul>
             }
           </NotificationPopover>
         }
         {this.state.isShowNotificationDialog &&
-          <UserNotificationsDialog onNotificationDialogToggle={this.onNotificationDialogToggle} />
+          <UserNotificationsDialog
+            onNotificationDialogToggle={this.onNotificationDialogToggle}
+            generalNoticeListUnseen={generalNoticeListUnseen}
+            discussionNoticeListUnseen={discussionNoticeListUnseen}
+          />
         }
       </div>
     );
