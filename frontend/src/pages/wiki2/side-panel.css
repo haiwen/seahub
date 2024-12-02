@@ -31,16 +31,18 @@
   height: 44px;
 }
 
-.wiki2-side-panel .wiki2-side-panel-top .wiki-new-page-tooltip {
+.wiki2-side-panel .wiki-new-page-tooltip {
   z-index: 1001;
 }
 
-.wiki2-side-panel .wiki2-side-panel-top .add-new-page {
+.wiki2-side-panel .add-new-page {
   cursor: pointer;
   border-radius: 4px;
+  font-size: 14px;
+  padding: 3px;
 }
 
-.wiki2-side-panel .wiki2-side-panel-top .add-new-page:hover {
+.wiki2-side-panel .add-new-page:hover {
   background-color: #DFDFDD;
 }
 
@@ -54,8 +56,7 @@
 .wiki2-side-panel .wiki2-side-nav .wiki2-pages-container {
   flex: 1;
   overflow: hidden;
-  padding: 8px;
-  padding-top: 20px;
+  padding: 0 8px 8px;
 }
 
 .wiki2-side-panel .wiki2-side-nav .wiki2-pages-container:hover {
@@ -66,4 +67,10 @@
   margin-left: -10px;
   margin-top: 14px;
   padding-left: 0;
+}
+
+.wiki-nav-group-header {
+  margin-top: 10px;
+  height: 32px;
+  color: #666;
 }
