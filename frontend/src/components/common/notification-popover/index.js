@@ -18,6 +18,8 @@ export default class NotificationPopover extends React.Component {
     tabItemClick: PropTypes.func,
     children: PropTypes.any,
     currentTab: PropTypes.string,
+    generalNoticeListUnseen: PropTypes.number,
+    discussionNoticeListUnseen: PropTypes.number,
   };
 
   static defaultProps = {
@@ -56,7 +58,7 @@ export default class NotificationPopover extends React.Component {
   };
 
   render() {
-    const { headerText, bodyText, footerText, currentTab } = this.props;
+    const { headerText, bodyText, footerText, currentTab, generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
     return (
       <Popover
         className="notification-wrapper"
@@ -77,11 +79,13 @@ export default class NotificationPopover extends React.Component {
                 <li className="nav-item" onClick={() => this.tabItemClick('general')}>
                   <span className={`nav-link ${currentTab === 'general' ? 'active' : ''}`}>
                     {gettext('General')}
+                    {generalNoticeListUnseen > 0 && <span>({generalNoticeListUnseen})</span>}
                   </span>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('discussion')}>
                   <span className={`nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
                     {gettext('Discussion')}
+                    {discussionNoticeListUnseen > 0 && <span>({discussionNoticeListUnseen})</span>}
                   </span>
                 </li>
               </ul>
@@ -103,23 +107,6 @@ export default class NotificationPopover extends React.Component {
               </div>
             </div>
             }
-
-            {/* <div className="mark-notifications" onClick={this.props.onMarkAllNotifications}>
-              <ul className="nav dtable-external-links-tab">
-                <li className="nav-item">
-                  <span className="nav-link">General</span>
-                </li>
-                <li className="nav-item">
-                  <span className="nav-link">Discussion</span>
-                </li>
-              </ul>
-                <span className="mark-all-read">{bodyText}</span>
-            </div>
-            <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
-              <div ref={ref => this.notificationsWrapperRef = ref}>
-                {this.props.children}
-              </div>
-            </div> */}
             <div className="notification-footer" onClick={this.onNotificationDialogToggle}>{footerText}</div>
           </div>
         </div>

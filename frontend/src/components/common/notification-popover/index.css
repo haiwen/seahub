@@ -66,7 +66,7 @@
 }
 
 .notification-container .mark-all-read {
-  color: #b4b4b4;
+  color: #666;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -187,6 +187,9 @@
 
 .notification-container .notification-body .mark-notifications {
   display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ededed;
+  padding-left: 15px;
 }
 
 .notification-container .notification-body .mark-notifications .mark-all-read:hover {
@@ -198,8 +201,9 @@
   margin-right: 15px;
   margin-left: 15px;
   font-size: 14px;
+  color: #212529;
 }
 
 .notification-container .notification-body .nav .nav-item .nav-link.active {
-  color: #ED7109 !important;
+  color: #ED7109;
 }
