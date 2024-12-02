@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { UncontrolledTooltip } from 'reactstrap';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
 import { gettext, wikiPermission } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 import '../css/wiki-nav.css';
 
@@ -24,6 +26,7 @@ class WikiNav extends Component {
     addPageInside: PropTypes.func,
     updateWikiConfig: PropTypes.func.isRequired,
     toggleTrashDialog: PropTypes.func.isRequired,
+    handleAddNewPage: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -110,16 +113,38 @@ class WikiNav extends Component {
     const isOnlyOnePage = pagesLen === 1;
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
+    const isDesktop = Utils.isDesktop();
     return (
       <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
+        <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
+          <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
+          {isDesktop && wikiPermission !== 'public' &&
+          <div>
+            <i
+              id='wiki-add-new-page'
+              onClick={this.props.handleAddNewPage}
+              className='sf3-font sf3-font-enlarge add-new-page'
+            >
+            </i>
+            <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
+              {gettext('New page')}
+            </UncontrolledTooltip>
+          </div>
+          }
+        </div>
         {navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
         {wikiPermission !== 'public' &&
+        <>
+          <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
+            <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
+          </div>
           <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
             <span className="sf3-font-trash sf3-font mr-2"></span>
             <span>{gettext('Trash')}</span>
           </div>
+        </>
         }
       </div>
     );

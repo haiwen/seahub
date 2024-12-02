@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
-import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, isWiki2, wikiId, wikiPermission } from '../../utils/constants';
+import { isWiki2, wikiId, wikiPermission } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -142,6 +141,7 @@ class SidePanel extends PureComponent {
             addPageInside={this.addPageInside}
             toggleTrashDialog={this.toggleTrashDialog}
             addSiblingPage={this.addSiblingPage}
+            handleAddNewPage={this.handleAddNewPage}
           />
         }
       </div>
@@ -174,24 +174,10 @@ class SidePanel extends PureComponent {
 
   render() {
     const { isLoading, config } = this.props;
-    const isDesktop = Utils.isDesktop();
     return (
       <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })}>
         <div className="wiki2-side-panel-top">
-          <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
-          {isDesktop && wikiPermission !== 'public' &&
-            <div>
-              <i
-                id='wiki-add-new-page'
-                onClick={this.handleAddNewPage.bind(true)}
-                className='sf3-font sf3-font-new-page add-new-page p-1'
-              >
-              </i>
-              <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
-                {gettext('New page')}
-              </UncontrolledTooltip>
-            </div>
-          }
+          <h1 className="h4 text-truncate ml-0 mb-0" title={repoName}>{repoName}</h1>
         </div>
         <Wiki2Search
           wikiId={wikiId}
