@@ -190,11 +190,18 @@ class DepartmentsV2 extends React.Component {
         let rootNodes = this.state.rootNodes.slice(0);
         let rootIndex = rootNodes.findIndex(node => node.id === operateNode.id);
         rootNodes.splice(rootIndex, 1);
-        this.setState({
-          rootNodes,
-          checkedDepartmentId: rootNodes[0].id,
-        });
-        this.loadDepartmentMembers(rootNodes[0].id);
+        if (rootNodes.length === 0) {
+          this.setState({
+            rootNodes,
+            checkedDepartmentId: -1
+          });
+        } else {
+          this.setState({
+            rootNodes,
+            checkedDepartmentId: rootNodes[0].id,
+          });
+          this.loadDepartmentMembers(rootNodes[0].id);
+        }
       }
     }).catch(error => {
       if (error.response && error.response.status === 400) {
