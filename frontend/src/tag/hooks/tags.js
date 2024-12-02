@@ -119,6 +119,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     return storeRef.current.addTags([row], callback);
   }, []);
 
+  const addTags = useCallback((rows, callback) => {
+    return storeRef.current.addTags(rows, callback);
+  }, []);
+
   const modifyTags = useCallback((tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback }) => {
     storeRef.current.modifyTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
   }, [storeRef]);
@@ -238,6 +242,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateCurrentDirent: params.updateCurrentDirent,
       closeDirentDetail: params.closeDirentDetail,
       addTag,
+      addTags,
       modifyTags,
       deleteTags,
       duplicateTag,

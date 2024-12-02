@@ -1121,7 +1121,8 @@ class InteractionMasks extends React.Component {
           onClearSelected: this.handleSelectCellsDelete,
           onCopySelected: this.onCopySelected,
           getTableContentRect: this.props.getTableContentRect,
-          getTableCanvasContainerRect: this.props.getTableCanvasContainerRect
+          getTableCanvasContainerRect: this.props.getTableCanvasContainerRect,
+          updateFileTags: this.props.updateFileTags,
         })}
       </div>
     );

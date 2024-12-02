@@ -222,6 +222,15 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  imageTags = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/image-tags/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+    };
+    return this.req.post(url, params);
+  };
+
   extractFileDetails = (repoID, objIds) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
     const params = {

@@ -242,6 +242,11 @@ class Context {
     return this.metadataAPI.imageCaption(repoID, filePath, lang);
   };
 
+  imageTags = (filePath) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.imageTags(repoID, filePath);
+  };
+
   extractFileDetails = (objIds) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.extractFileDetails(repoID, objIds);

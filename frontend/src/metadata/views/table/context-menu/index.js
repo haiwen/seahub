@@ -10,6 +10,7 @@ import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLU
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
 } from '../../../utils/cell';
+import ImageTagsDialog from '../../../components/dialog/image-tags-dialog';
 
 import './index.css';
 
@@ -20,6 +21,7 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
+  IMAGE_TAGS: 'image-tags',
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
   RENAME_FILE: 'rename-file',
@@ -30,11 +32,12 @@ const OPERATION = {
 const ContextMenu = (props) => {
   const {
     isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
-    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone,
+    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileTags,
   } = props;
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [imageTagsRecord, setImageTagsRecord] = useState(null);
 
   const { metadata } = useMetadataView();
 
@@ -57,6 +60,7 @@ const ContextMenu = (props) => {
     const isReadonly = permission === 'r';
     const { columns } = metadata;
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
+    const tagsColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.TAGS);
     let list = [];
 
     // handle selected multiple cells
@@ -137,6 +141,10 @@ const ContextMenu = (props) => {
 
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+    }
+
+    if (tagsColumn && canModifyRow && Utils.imageCheck(fileName)) {
+      list.push({ value: OPERATION.IMAGE_TAGS, label: gettext('Generate image tags'), record: record });
     }
 
     // handle delete folder/file
@@ -244,6 +252,10 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
+  const toggleImageTagsRecord = useCallback((record = null) => {
+    setImageTagsRecord(record);
+  }, []);
+
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
     if (recordObjIds.length > 50) {
@@ -313,6 +325,12 @@ const ContextMenu = (props) => {
         imageCaption(record);
         break;
       }
+      case OPERATION.IMAGE_TAGS: {
+        const { record } = option;
+        if (!record) break;
+        toggleImageTagsRecord(record);
+        break;
+      }
       case OPERATION.DELETE_RECORD: {
         const { record } = option;
         if (!record || !record._id || !deleteRecords) break;
@@ -356,7 +374,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, selectNone, deleteRecords, toggleDeleteFolderDialog, updateFileDetails]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleImageTagsRecord]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -418,25 +436,36 @@ const ContextMenu = (props) => {
     };
   }, [visible, handleHide]);
 
-  if (!visible) return null;
-  if (options.length === 0) return null;
+  const renderMenu = useCallback(() => {
+    if (!visible) return null;
+    if (options.length === 0) return null;
+    return (
+      <div
+        ref={menuRef}
+        className='dropdown-menu sf-metadata-contextmenu'
+        style={position}
+      >
+        {options.map((option, index) => (
+          <button
+            key={index}
+            className='dropdown-item sf-metadata-contextmenu-item'
+            onClick={(event) => handleOptionClick(event, option)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    );
+  }, [visible, options, position, handleOptionClick]);
 
   return (
-    <div
-      ref={menuRef}
-      className='dropdown-menu sf-metadata-contextmenu'
-      style={position}
-    >
-      {options.map((option, index) => (
-        <button
-          key={index}
-          className='dropdown-item sf-metadata-contextmenu-item'
-          onClick={(event) => handleOptionClick(event, option)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
+    <>
+      {renderMenu()}
+      {imageTagsRecord && (
+        <ImageTagsDialog record={imageTagsRecord} onToggle={toggleImageTagsRecord} onSubmit={updateFileTags} />
+      )}
+    </>
+
   );
 };
 
