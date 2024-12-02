@@ -392,6 +392,12 @@ def update_notice_detail(request, notices):
                 notice.detail = d
             except Exception as e:
                 logger.error(e)
+        elif notice.is_face_cluster_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
 
     return notices
 
