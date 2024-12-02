@@ -207,6 +207,7 @@ def gen_new_page_nav_by_id(navigation, page_id, current_id, insert_position, is_
                     gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id, insert_position, is_find)
     else:
         navigation.append(new_nav)
+        is_find[0] = True
         return True
 
 
