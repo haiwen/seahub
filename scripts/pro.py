@@ -657,7 +657,7 @@ def get_seafes_env():
 def update_search_index():
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafes.index_local',
+        '-m', 'seafes.indexes.repo_file.index_local',
         '--loglevel', 'debug',
         'update',
     ]
@@ -677,7 +677,7 @@ def delete_search_index():
 
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafes.index_local',
+        '-m', 'seafes.indexes.repo_file.index_local',
         '--loglevel', 'debug',
         'clear',
     ]
