@@ -207,3 +207,10 @@
 .notification-container .notification-body .nav .nav-item .nav-link.active {
   color: #ED7109;
 }
+
+@media (max-width: 768px) {
+  .notification-container {
+    right: -60px;
+    width: 360px;
+  }
+}

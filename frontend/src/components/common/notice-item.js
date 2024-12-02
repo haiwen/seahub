@@ -403,9 +403,13 @@ class NoticeItem extends React.Component {
     }
 
     return this.props.tr ? (
-      <tr className={noticeItem.seen ? 'read' : 'unread font-weight-bold'}>
+      <tr className='notification-item'>
         <td className="text-center">
+          {!noticeItem.seen && <span className="notification-point" onClick={this.onMarkNotificationRead}></span>}
+        </td>
+        <td>
           <img src={avatar_url} width="32" height="32" className="avatar" alt="" />
+          <span className="ml-2 notification-user-name">{username || gettext('System')}</span>
         </td>
         <td className="pr-1 pr-md-8">
           <p className="m-0" dangerouslySetInnerHTML={{ __html: notice }}></p>
