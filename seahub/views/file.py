@@ -45,7 +45,7 @@ from seahub.onlyoffice.models import RepoOfficeSuite
 from seahub.auth.decorators import login_required
 from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
-from seahub.base.accounts import ANONYMOUS_EMAIL
+from seahub.base.accounts import ANONYMOUS_EMAIL, User
 from seahub.base.templatetags.seahub_tags import file_icon_filter
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
@@ -67,6 +67,7 @@ from seahub.utils.http import json_response, \
         BadRequestException
 from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
+from seahub.utils.user_permissions import get_user_role
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
@@ -165,10 +166,10 @@ def get_office_feature_by_repo(repo):
         repo_feature = _check_feature(repo.repo_id)
 
     if not repo_feature and '@seafile_group' not in repo_owner:
-        role = seafile_api.get_user_role(repo_owner)
-        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get('role')
-
-                
+        user = User.objects.get(email=repo_owner)
+        role = get_user_role(user)
+        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get(role)
+       
     if not repo_feature:
         default_suite = {}
         for s in OFFICE_SUITES:

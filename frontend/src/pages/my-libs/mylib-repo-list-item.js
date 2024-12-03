@@ -227,7 +227,6 @@ class MylibRepoListItem extends React.Component {
   };
 
   onOfficeSuiteToggle = () => {
-    console.log(111)
     this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
   };
 
@@ -276,11 +275,10 @@ class MylibRepoListItem extends React.Component {
     this.onTransferToggle();
   };
 
-  onOfficeSuiteChange = (user, reshare) => {
+  onOfficeSuiteChange = (suiteID) => {
     let repoID = this.props.repo.repo_id;
-    userAPI.transferRepo(repoID, user.email, reshare).then(res => {
-      this.props.onTransferRepo(repoID);
-      let message = gettext('Successfully transferred the library.');
+    userAPI.setOfficeSuite(repoID, suiteID).then(res => {
+      let message = gettext('Successfully change office suite.');
       toaster.success(message);
     }).catch(error => {
       if (error.response) {
@@ -577,6 +575,7 @@ class MylibRepoListItem extends React.Component {
         {this.state.isOfficeSuiteDialogShow && (
           <ModalPortal>
             <OfficeSuiteDialog
+              repoID={repo.repo_id}
               itemName={repo.repo_name}
               submit={this.onOfficeSuiteChange}
               toggleDialog={this.onOfficeSuiteToggle}

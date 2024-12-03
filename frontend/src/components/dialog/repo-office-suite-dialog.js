@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
-import { seafileAPI } from '../../utils/seafile-api';
+import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -14,10 +14,7 @@ const propTypes = {
   itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
-  canTransferToDept: PropTypes.bool,
-  isOrgAdmin: PropTypes.bool,
-  isSysAdmin: PropTypes.bool,
-  isDepAdminTransfer: PropTypes.bool,
+  repoID: PropTypes.string.isRequired,
 
 };
 
@@ -29,9 +26,6 @@ class OfficeSuiteDialog extends React.Component {
     this.state = {
       selectedOption: null,
       errorMsg: [],
-      transferToUser: true,
-      transferToGroup: false,
-      reshare: false,
       activeTab: OFFICE_SUITE,
     };
     this.options = [];
@@ -42,16 +36,21 @@ class OfficeSuiteDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab, reshare } = this.state;
+    const { activeTab, selectedOption } = this.state;
     if (activeTab === OFFICE_SUITE) {
-      let department = this.state.selectedOption;
-      this.props.submit(department, reshare);
+      if (selectedOption === null) {
+        toaster.danger('error');
+      } else {
+        let suite_id = this.state.selectedOption.value;
+        this.props.submit(suite_id);
+      }
+
     }
   };
 
   componentDidMount() {
     if (isPro) {
-      seafileAPI.listDepartments().then((res) => {
+      userAPI.getOfficeSuite(this.props.repoID).then((res) => {
         this.updateOptions(res);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -60,40 +59,29 @@ class OfficeSuiteDialog extends React.Component {
     }
   }
 
-  updateOptions = (departmentsRes) => {
-    departmentsRes.data.forEach(item => {
+  updateOptions = (officeSuites) => {
+    officeSuites.data.suites_info.forEach(item => {
       let option = {
-        value: item.name,
-        email: item.email,
+        value: item.id,
         label: item.name,
+        is_selected: item.is_selected,
       };
       this.options.push(option);
     });
-  };
-
-  onClick = () => {
-    this.setState({
-      transferToUser: !this.state.transferToUser,
-    });
+    let selectedOption = this.options.find(op => op.is_selected);
+    this.setState({ selectedOption });
   };
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
-        reshare: false,
         selectedOption: null,
       });
     }
   };
 
-  toggleReshareStatus = () => {
-    this.setState({
-      reshare: !this.state.reshare
-    });
-  };
-
-  renderTransContent = () => {
+  renderOfficeSuiteContent = () => {
     let activeTab = this.state.activeTab;
     return (
       <Fragment>
@@ -146,7 +134,7 @@ class OfficeSuiteDialog extends React.Component {
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody className="repo-office-suite-dialog-content" role="tablist">
-          {this.renderTransContent()}
+          {this.renderOfficeSuiteContent()}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>

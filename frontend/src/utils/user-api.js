@@ -63,6 +63,22 @@ class UserAPI {
     form.append('reshare', reshare);
     return this.req.put(url, form);
   }
+
+  getOfficeSuite(repoID) {
+    const url = this.server + '/onlyoffice/office-suite/';
+    let params = {
+      repo_id: repoID
+    };
+    return this.req.get(url, { params: params });
+  }
+
+  setOfficeSuite(repoID, suiteID) {
+    const url = this.server + '/onlyoffice/office-suite/';
+    const form = new FormData();
+    form.append('repo_id', repoID);
+    form.append('suite_id', suiteID);
+    return this.req.put(url, form);
+  }
 }
 
 let userAPI = new UserAPI();
