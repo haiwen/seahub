@@ -65,17 +65,13 @@ class UserAPI {
   }
 
   getOfficeSuite(repoID) {
-    const url = this.server + '/onlyoffice/office-suite/';
-    let params = {
-      repo_id: repoID
-    };
-    return this.req.get(url, { params: params });
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/office-suite/';
+    return this.req.get(url);
   }
 
   setOfficeSuite(repoID, suiteID) {
-    const url = this.server + '/onlyoffice/office-suite/';
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/office-suite/';
     const form = new FormData();
-    form.append('repo_id', repoID);
     form.append('suite_id', suiteID);
     return this.req.put(url, form);
   }
