@@ -25,8 +25,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
-from seahub.onlyoffice.models import OnlyOfficeDocKey
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
+from seahub.onlyoffice.models import RepoOfficeSuite
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET, OFFICE_SUITES, ENABLE_MULTIPLE_OFFICE_SUITE
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -507,3 +507,61 @@ class OnlyofficeGetReferenceData(APIView):
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
 
+class OfficeSuiteConfig(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        # arguments check
+        repo_id = request.GET.get('repo_id', '')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        suite_info = RepoOfficeSuite.objects.filter(repo_id=repo_id).values().first()
+        suites_info = OFFICE_SUITES
+        if suite_info:
+            for suite in suites_info:
+                if suite_info.get('suite_id') == suite['id']:
+                    suite['is_selected'] = True
+                else:
+                    suite['is_selected'] = False
+        else:
+            for suite in suites_info:
+                if suite['is_default']:
+                    suite['is_selected'] = True
+                else:
+                    suite['is_selected'] = False
+        
+        return Response({'suites_info': suites_info})
+    
+    def put(self, request):
+        # arguments check
+        repo_id = request.data.get('repo_id', '')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        suite_id = request.data.get('suite_id', '')
+        if suite_id not in ['collabora', 'onlyoffice']:
+            error_msg = 'suite_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        
+        RepoOfficeSuite.objects.update_or_create(repo_id=repo_id,
+                                                 defaults= {'suite_id':suite_id} )
+
+        return Response({"success": True}, status=status.HTTP_200_OK)
