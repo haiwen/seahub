@@ -18,6 +18,7 @@ from seahub.avatar.models import Avatar
 from seahub.profile.models import Profile
 from seahub.utils import render_error, get_site_scheme_and_netloc
 from seahub.auth.models import SocialAuthUser
+from seahub.settings import SITE_ROOT
 
 from seahub.weixin.settings import ENABLE_WEIXIN, \
         WEIXIN_OAUTH_APP_ID, WEIXIN_OAUTH_APP_SECRET, \
@@ -28,6 +29,7 @@ from seahub.weixin.settings import ENABLE_WEIXIN, \
 logger = logging.getLogger(__name__)
 
 # https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
+
 
 def weixin_oauth_login(request):
 
@@ -47,6 +49,7 @@ def weixin_oauth_login(request):
     }
     url = WEIXIN_OAUTH_QR_CONNECT_URL + '?' + urllib.parse.urlencode(data)
     return HttpResponseRedirect(url)
+
 
 def weixin_oauth_callback(request):
 
@@ -140,6 +143,7 @@ def weixin_oauth_callback(request):
     api_token = get_api_token(request)
 
     # redirect user to home page
-    response = HttpResponseRedirect(request.session['weixin_oauth_login_redirect'])
+    response = HttpResponseRedirect(request.session.get('weixin_oauth_login_redirect',
+                                                        SITE_ROOT))
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
     return response

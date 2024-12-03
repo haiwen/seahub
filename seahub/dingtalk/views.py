@@ -26,6 +26,7 @@ from seahub.dingtalk.utils import dingtalk_get_detailed_user_info, \
         dingtalk_get_userid_by_unionid_new, \
         dingtalk_get_detailed_user_info_new
 
+from seahub.settings import SITE_ROOT
 from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 # for 10.0 or later
@@ -248,7 +249,8 @@ def dingtalk_connect_callback(request):
         profile.contact_email = contact_email
         profile.save()
 
-    return HttpResponseRedirect(request.session['dingtalk_connect_redirect'])
+    return HttpResponseRedirect(request.session.get('dingtalk_connect_redirect',
+                                                    SITE_ROOT))
 
 
 @login_required
@@ -366,7 +368,6 @@ def dingtalk_callback_new(request):
 
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
-
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
