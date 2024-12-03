@@ -529,20 +529,19 @@ class OfficeSuiteConfig(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        suite_info = RepoOfficeSuite.objects.filter(repo_id=repo_id).values().first()
-        suites_info = deepcopy(OFFICE_SUITES)
-        if suite_info:
-            for suite in suites_info:
-                if suite_info.get('suite_id') == suite['id']:
-                    suite['is_selected'] = True
-                else:
-                    suite['is_selected'] = False
-        else:
-            for suite in suites_info:
-                if suite['is_default']:
-                    suite['is_selected'] = True
-                else:
-                    suite['is_selected'] = False
+        current_suite = RepoOfficeSuite.objects.filter(repo_id=repo_id).values().first()
+        suites_info = []
+        for office_suite in OFFICE_SUITES:
+            suite_info = {}
+            suite_info['id'] = office_suite.get('id')
+            suite_info['name'] = office_suite.get('name')
+            suite_info['is_default'] = office_suite.get('is_default')
+            if current_suite:
+                suite_info['is_selected'] = (True if current_suite.get('suite_id') == office_suite.get('id') else False)
+            else:
+                suite_info['is_selected'] = office_suite.get('is_default')
+            suites_info.append(suite_info)
+
         
         return Response({'suites_info': suites_info})
     
