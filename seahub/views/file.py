@@ -2183,6 +2183,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
     seadoc_perm = 'rw' if can_edit_file else 'r'
     return_dict['can_edit_file'] = can_edit_file
     return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+    return_dict['mobile_login'] = request.session.get(SESSION_MOBILE_LOGIN_KEY, False)
 
     # revision
     revision_info = is_seadoc_revision(file_uuid, revision)
