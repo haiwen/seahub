@@ -19,7 +19,7 @@ import seaserv
 from seaserv import seafile_api
 
 os.environ['EVENTS_CONFIG_FILE'] = EVENTS_CONFIG_FILE
-from seafes import es_search
+from seafes import es_search, es_wiki_search
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -203,6 +203,10 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
     return result, total
 
 
+def search_wikis(wiki_id, keyword, count):
+    return es_wiki_search(wiki_id, keyword, count)
+
+
 def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, obj_type=None):
     params = {
         'query': keyword,
@@ -224,6 +228,15 @@ def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, 
     total = len(files_found)
 
     return files_found, total
+
+
+def ai_search_wikis(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/wiki-search')
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
 
 
 def is_valid_date_type(data):

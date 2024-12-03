@@ -5,6 +5,7 @@ import time
 import logging
 import requests
 import json
+import os
 import datetime
 import urllib.request
 import urllib.parse
@@ -21,6 +22,7 @@ from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
 from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
                             SEAFEVENTS_SERVER_URL
+
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -318,13 +320,4 @@ def event_export_status(task_id):
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
 
-    return resp
-
-
-def wiki_search(params):
-    payload = {'exp': int(time.time()) + 300, }
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/wiki-search')
-    resp = requests.post(url, json=params, headers=headers)
     return resp
