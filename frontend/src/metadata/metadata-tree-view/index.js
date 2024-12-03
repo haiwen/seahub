@@ -22,9 +22,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   }, [userPerm]);
   const [, setState] = useState(0);
   const {
-    enableFaceRecognition,
     navigation,
-    staticView,
     viewsMap,
     selectView,
     addView,
@@ -136,20 +134,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                 />
               </div>
             )}
-            {enableFaceRecognition && staticView.map((item) => {
-              const view = viewsMap[item._id];
-              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
-              const isSelected = currentPath === viewPath;
-              return (
-                <ViewItem
-                  key={view._id}
-                  userPerm="r"
-                  view={view}
-                  isSelected={isSelected}
-                  onClick={(view) => selectView(view, isSelected)}
-                />
-              );
-            })}
             {canAdd && (
               <div id="sf-metadata-view-popover">
                 <CustomizeAddTool

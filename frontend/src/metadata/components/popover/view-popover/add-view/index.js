@@ -17,8 +17,7 @@ const VIEW_OPTIONS = [
   }, {
     key: 'kanban',
     type: VIEW_TYPE.KANBAN,
-  },
-  {
+  }, {
     key: 'map',
     type: VIEW_TYPE.MAP,
   }

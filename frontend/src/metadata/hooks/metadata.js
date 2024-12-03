@@ -15,21 +15,12 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
   const [isLoading, setLoading] = useState(true);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [navigation, setNavigation] = useState([]);
-  const [staticView, setStaticView] = useState([]);
   const [, setCount] = useState(0);
 
   const viewsMap = useRef({});
   const originalTitleRef = useRef(document.title);
 
   const { enableMetadata, isBeingBuilt, setIsBeingBuilt } = useMetadataStatus();
-
-  const updateEnableFaceRecognition = useCallback((newValue) => {
-    if (newValue === enableFaceRecognition) return;
-    setEnableFaceRecognition(newValue);
-    if (newValue) {
-      toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
-    }
-  }, [enableFaceRecognition]);
 
   // views
   useEffect(() => {
@@ -42,11 +33,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
             viewsMap.current[view._id] = view;
           });
         }
-        viewsMap.current[FACE_RECOGNITION_VIEW_ID] = {
-          _id: FACE_RECOGNITION_VIEW_ID,
-          name: gettext('Photos - classified by people'),
-          type: VIEW_TYPE.FACE_RECOGNITION,
-        };
         setNavigation(navigation);
         setLoading(false);
       }).catch(error => {
@@ -59,7 +45,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
     hideMetadataView && hideMetadataView();
     setEnableFaceRecognition(false);
     viewsMap.current = {};
-    setStaticView([]);
     setNavigation([]);
     setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +52,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
 
   useEffect(() => {
     if (!enableMetadata) {
-      setStaticView([]);
       setEnableFaceRecognition(false);
       return;
     }
@@ -78,14 +62,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       toaster.danger(errorMsg);
     });
   }, [repoID, enableMetadata]);
-
-  useEffect(() => {
-    if (!enableFaceRecognition) {
-      setStaticView([]);
-      return;
-    }
-    setStaticView([{ _id: FACE_RECOGNITION_VIEW_ID, type: 'view' }]);
-  }, [enableFaceRecognition]);
 
   const selectView = useCallback((view, isSelected) => {
     if (isSelected) return;
@@ -176,6 +152,18 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
     });
   }, [repoID]);
 
+  const updateEnableFaceRecognition = useCallback((newValue) => {
+    if (newValue === enableFaceRecognition) return;
+    if (newValue) {
+      toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
+      addView(gettext('Photos - classified by people'), VIEW_TYPE.FACE_RECOGNITION, () => {}, () => {});
+    } else {
+      const isSelected = true;
+      deleteView(FACE_RECOGNITION_VIEW_ID, isSelected);
+    }
+    setEnableFaceRecognition(newValue);
+  }, [enableFaceRecognition, addView, deleteView]);
+
   useEffect(() => {
     if (isLoading) return;
     if (isBeingBuilt) {
@@ -228,7 +216,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       isBeingBuilt,
       setIsBeingBuilt,
       navigation,
-      staticView,
       viewsMap: viewsMap.current,
       selectView,
       addView,
