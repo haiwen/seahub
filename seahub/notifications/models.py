@@ -21,7 +21,6 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
 from seahub.utils import normalize_cache_key, get_site_scheme_and_netloc
 from seahub.constants import HASH_URLS
-from seahub.drafts.models import DraftReviewer
 from seahub.file_participants.utils import list_file_participants
 
 # Get an instance of a logger
@@ -79,7 +78,7 @@ MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
-MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
+MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed' 
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -984,14 +983,11 @@ class UserNotification(models.Model):
 ########## handle signals
 from django.dispatch import receiver
 
-from seahub.signals import upload_file_successful, upload_folder_successful,\
-        comment_file_successful, repo_transfer
+from seahub.signals import upload_file_successful, upload_folder_successful, repo_transfer
 from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful, change_repo_perm_successful, delete_repo_perm_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
-from seahub.drafts.signals import comment_draft_successful, \
-        request_reviewer_successful
 from seahub.adfs_auth.signals import saml_sso_failed
 
 
@@ -1116,47 +1112,6 @@ def add_user_to_group_cb(sender, **kwargs):
     UserNotification.objects.set_add_user_to_group_notice(to_user=added_user,
                                                           detail=detail)
 
-@receiver(comment_file_successful)
-def comment_file_successful_cb(sender, **kwargs):
-    """ send notification to file participants
-    """
-    repo = kwargs['repo']
-    repo_owner = kwargs['repo_owner']
-    file_path = kwargs['file_path']
-    comment = kwargs['comment']
-    author = kwargs['author']
-
-    notify_users = list_file_participants(repo.id, file_path)
-    notify_users = [x for x in notify_users if x != author]
-    for u in notify_users:
-        detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
-        UserNotification.objects.add_file_comment_msg(u, detail)
-
-@receiver(comment_draft_successful)
-def comment_draft_successful_cb(sender, **kwargs):
-    draft = kwargs['draft']
-    comment = kwargs['comment']
-    author = kwargs['author']
-
-    detail = draft_comment_msg_to_json(draft.id, author, comment)
-
-    if draft.username != author:
-        UserNotification.objects.add_draft_comment_msg(draft.username, detail)
-
-    reviewers = DraftReviewer.objects.filter(draft=draft)
-    for r in reviewers:
-        if r.reviewer != author:
-            UserNotification.objects.add_draft_comment_msg(r.reviewer, detail)
-
-@receiver(request_reviewer_successful)
-def requeset_reviewer_successful_cb(sender, **kwargs):
-    from_user = kwargs['from_user']
-    draft_id = kwargs['draft_id']
-    to_user = kwargs['to_user']
-
-    detail = request_reviewer_msg_to_json(draft_id, from_user, to_user)
-
-    UserNotification.objects.add_request_reviewer_msg(to_user, detail)
 
 @receiver(accept_guest_invitation_successful)
 def accept_guest_invitation_successful_cb(sender, **kwargs):

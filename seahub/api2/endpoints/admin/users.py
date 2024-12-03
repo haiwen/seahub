@@ -1902,26 +1902,6 @@ class AdminUpdateUserCcnetEmail(APIView):
             logger.error(e)
 
         try:
-            from seahub.drafts.models import Draft
-            draft_list = Draft.objects.filter(username=old_ccnet_email)
-            for draft in draft_list:
-                draft.username = new_ccnet_email
-                draft.save()
-            logger.debug('the drafts_draft table in seahub database was successfully updated')
-        except Exception as e:
-            logger.error(e)
-
-        try:
-            from seahub.drafts.models import DraftReviewer
-            draftreviewer_list = DraftReviewer.objects.filter(reviewer=old_ccnet_email)
-            for draftreviewer in draftreviewer_list:
-                draftreviewer.reviewer = new_ccnet_email
-                draftreviewer.save()
-            logger.debug('the drafts_draftreviewer table in seahub database was successfully updated')
-        except Exception as e:
-            logger.error(e)
-
-        try:
             from seahub.file_participants.models import FileParticipant
             fileparticipant_list = FileParticipant.objects.filter(username=old_ccnet_email)
             for fileparticipant in fileparticipant_list:

@@ -93,9 +93,6 @@ from seahub.api2.endpoints.notifications import NotificationsView, NotificationV
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
-from seahub.api2.endpoints.drafts import DraftsView, DraftView
-from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
-from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
@@ -557,12 +554,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     ## user::drafts
-    re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
-    re_path(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
-
-    re_path(r'^api/v2.1/drafts/(?P<pk>\d+)/reviewer/$', DraftReviewerView.as_view(), name='api-v2.1-draft-reviewer'),
-    re_path(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/drafts/$', RepoDraftInfo.as_view(), name='api-v2.1-repo-drafts'),
-    re_path(r'^api/v2.1/repo/(?P<repo_id>[-0-9a-f]{36})/draft-counts/$', RepoDraftCounts.as_view(), name='api-v2.1-repo-draft-counts'),
+    
 
     ## user::activities
     re_path(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
