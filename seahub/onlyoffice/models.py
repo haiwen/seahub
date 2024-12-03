@@ -14,3 +14,12 @@ class OnlyOfficeDocKey(models.Model):
     file_path = models.TextField()
     repo_id_file_path_md5 = models.CharField(max_length=100, db_index=True, unique=True)
     created_time = models.DateTimeField(default=datetime.datetime.now)
+
+
+class RepoOfficeSuite(models.Model):
+
+    suite_id = models.CharField(max_length=50, unique=True)
+    repo_id = models.CharField(max_length=36, db_index=True)
+
+    class Meta:
+        db_table = 'repo_office_suite'
