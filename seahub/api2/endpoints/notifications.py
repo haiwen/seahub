@@ -13,7 +13,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
-from seahub.seadoc.models import get_cache_key_of_unseen_sdoc_notifications
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
@@ -209,17 +208,10 @@ class SdocNotificationsView(APIView):
                 notice['seen'] = i.seen
 
                 notification_list.append(notice)
-        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
-        unseen_count_from_cache = cache.get(cache_key, None)
 
-        # for case of count value is `0`
-        if unseen_count_from_cache is not None:
-            result['unseen_count'] = unseen_count_from_cache
-        else:
-            unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
-            result['unseen_count'] = unseen_count
-            cache.set(cache_key, unseen_count)
-
+        unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
+        result['unseen_count'] = unseen_count
+            
         total_count = SeadocNotification.objects.filter(username=username).count()
 
         result['notification_list'] = notification_list
@@ -236,9 +228,6 @@ class SdocNotificationsView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
     
@@ -251,9 +240,6 @@ class SdocNotificationsView(APIView):
         username = request.user.username
 
         SeadocNotification.objects.remove_user_notifications(username)
-
-        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
 
@@ -299,9 +285,6 @@ class SdocNotificationView(APIView):
         if not notice.seen:
             notice.seen = True
             notice.save()
-
-        cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
     
@@ -373,9 +356,6 @@ class AllNotificationsView(APIView):
         cache_key = get_cache_key_of_unseen_notifications(username)
         unseen_count_from_cache = cache.get(cache_key, None)
 
-        sdoc_cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
-        sdoc_unseen_count_from_cache = cache.get(sdoc_cache_key, None)
-
         # for case of count value is `0`
         if unseen_count_from_cache is not None:
             result['general']['unseen_count'] = unseen_count_from_cache
@@ -384,12 +364,8 @@ class AllNotificationsView(APIView):
             result['general']['unseen_count'] = unseen_count
             cache.set(cache_key, unseen_count)
 
-        if sdoc_unseen_count_from_cache is not None:
-            result['discussion']['unseen_count'] = sdoc_unseen_count_from_cache
-        else:
-            sdoc_unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
-            result['discussion']['unseen_count'] = sdoc_unseen_count
-            cache.set(sdoc_cache_key, sdoc_unseen_count)
+        sdoc_unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
+        result['discussion']['unseen_count'] = sdoc_unseen_count
 
         total_count = UserNotification.objects.filter(to_user=username).count()
         sdoc_total_count = SeadocNotification.objects.filter(username=username).count()
@@ -419,8 +395,6 @@ class AllNotificationsView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         cache_key = get_cache_key_of_unseen_notifications(username)
-        sdoc_cache_key = get_cache_key_of_unseen_sdoc_notifications(username)
         cache.delete(cache_key)
-        cache.delete(sdoc_cache_key)
 
         return Response({'success': True})
