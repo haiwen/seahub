@@ -25,6 +25,7 @@ from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_ac
 from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.auth.models import SocialAuthUser
 from django.urls import reverse
+from seahub.settings import SITE_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -221,7 +222,8 @@ def work_weixin_oauth_connect_callback(request):
             update_work_weixin_user_info(api_user)
 
     # redirect user to page
-    response = HttpResponseRedirect(request.session.get('work_weixin_oauth_connect_redirect', '/'))
+    response = HttpResponseRedirect(request.session.get('work_weixin_oauth_connect_redirect',
+                                                        SITE_ROOT))
     return response
 
 
