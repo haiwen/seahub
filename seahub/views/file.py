@@ -34,13 +34,14 @@ from django.template.defaultfilters import filesizeformat
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
-    seafserv_threaded_rpc
+    seafserv_threaded_rpc, get_org_id_by_repo_id
 
 from seahub.settings import SITE_ROOT
 from seahub.share.utils import check_share_link_user_access
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
+from seahub.onlyoffice.models import RepoOfficeSuite
 from seahub.auth.decorators import login_required
 from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
@@ -131,6 +132,7 @@ except ImportError:
 from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
+from seahub.settings import ROLES_DEFAULT_OFFCICE_SUITE
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -141,14 +143,32 @@ FILE_TYPE_FOR_NEW_FILE_LINK = [
     MARKDOWN
 ]
 
+def _check_feature(repo_id):
+    office_suite = RepoOfficeSuite.objects.filter(repo_id=repo_id).first()
+    if office_suite:
+        return office_suite.suite_id
+    return None
+
 def get_office_feature_by_repo(repo):
     enable_onlyoffice, enable_office_app = False, False
     if not ENABLE_MULTIPLE_OFFICE_SUITE:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
+    
+    org_id = get_org_id_by_repo_id(repo.repo_id)
+    if org_id > 0:
+        repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.repo_id)
+    if '@seafile_group' in repo_owner:
+        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE['default']
+    else:
+        repo_feature = _check_feature(repo.repo_id)
 
-    # repo_feature = _check_feature(repo_id)
-    owner = repo.repo_owner
-    repo_feature = None
+    if not repo_feature and '@seafile_group' not in repo_owner:
+        role = seafile_api.get_user_role(repo_owner)
+        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get('role')
+
+                
     if not repo_feature:
         default_suite = {}
         for s in OFFICE_SUITES:
@@ -877,7 +897,15 @@ def view_lib_file(request, repo_id, path):
                                       action_name=action_name,
                                       language_code=request.LANGUAGE_CODE,
                                       can_download=parse_repo_perm(permission).can_download)
-
+            wopi_dict = {}
+            wopi_dict['repo_id'] = repo_id
+            wopi_dict['path'] = 'file_path'
+            wopi_dict['can_edit'] = action_name == 'edit'
+            wopi_dict['action_url'] = 'http://127.0.0.1:9980'
+            wopi_dict['access_token'] = 'access_token'
+            wopi_dict['access_token_ttl'] = 'access_token_ttl'
+            wopi_dict['doc_title'] = 'file_name'
+            wopi_dict['enable_watermark'] = ENABLE_WATERMARK and action_name == 'view'
             if wopi_dict:
                 send_file_access_msg(request, repo, path, 'web')
                 return render(request, 'wopi_file_view_react.html', {**return_dict, **wopi_dict})
@@ -1467,7 +1495,7 @@ def view_file_via_shared_dir(request, fileshare):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
-    
+
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # recourse check

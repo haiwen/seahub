@@ -48,7 +48,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
         'monthly_rate_limit': '',
-        'monthly_rate_limit_per_user': ''
+        'monthly_rate_limit_per_user': '',
+        'can_use_office_suite': False,
     },
     GUEST_USER: {
         'can_add_repo': False,

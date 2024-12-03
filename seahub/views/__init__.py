@@ -51,6 +51,7 @@ from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_adm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.user_permissions import get_user_role
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
@@ -1108,6 +1109,12 @@ def react_fake_view(request, **kwargs):
     if enable_clean_trash:
         enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
 
+    enable_multiple_office_suite = settings.ENABLE_MULTIPLE_OFFICE_SUITE
+    if enable_multiple_office_suite:
+        role = get_user_role(request.user)
+        can_choose_office_suite = True if role in settings.ROLES_CAN_CHOOSE_OFFICE_SUITE else False
+
+
     return_dict = {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1149,7 +1156,9 @@ def react_fake_view(request, **kwargs):
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
-        'enable_show_about': settings.ENABLE_SHOW_ABOUT
+        'enable_show_about': settings.ENABLE_SHOW_ABOUT,
+        'enable_multiple_office_suite': can_choose_office_suite,
+        'office_suites': settings.OFFICE_SUITES,
 
     }
 
