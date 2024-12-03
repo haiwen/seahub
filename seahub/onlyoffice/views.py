@@ -7,6 +7,7 @@ import requests
 import posixpath
 import email.utils
 import urllib.parse
+from copy import deepcopy
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -36,8 +37,10 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
     normalize_file_path, check_filename_with_rename, \
     gen_inner_file_get_url, get_service_url, get_file_type_and_ext, gen_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
+from seahub.utils.user_permissions import get_user_role
 from seahub.views import check_folder_permission
 from seahub.utils.file_types import SPREADSHEET
+from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 
 
 # Get an instance of a logger
@@ -527,7 +530,7 @@ class OfficeSuiteConfig(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         suite_info = RepoOfficeSuite.objects.filter(repo_id=repo_id).values().first()
-        suites_info = OFFICE_SUITES
+        suites_info = deepcopy(OFFICE_SUITES)
         if suite_info:
             for suite in suites_info:
                 if suite_info.get('suite_id') == suite['id']:
@@ -560,6 +563,15 @@ class OfficeSuiteConfig(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # permission check
+        can_choose_office_suite = False
+        if ENABLE_MULTIPLE_OFFICE_SUITE:
+            role = get_user_role(request.user)
+            role_permissions = ENABLED_ROLE_PERMISSIONS.get(role)
+            can_choose_office_suite = role_permissions.get('can_use_office_suite') if role_permissions else False
+        if not can_choose_office_suite:
+            error_msg = 'Permission denied'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         RepoOfficeSuite.objects.update_or_create(repo_id=repo_id,
                                                  defaults= {'suite_id':suite_id} )

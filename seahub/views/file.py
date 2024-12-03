@@ -169,7 +169,7 @@ def get_office_feature_by_repo(repo):
         user = User.objects.get(email=repo_owner)
         role = get_user_role(user)
         repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get(role)
-       
+
     if not repo_feature:
         default_suite = {}
         for s in OFFICE_SUITES:
@@ -898,15 +898,7 @@ def view_lib_file(request, repo_id, path):
                                       action_name=action_name,
                                       language_code=request.LANGUAGE_CODE,
                                       can_download=parse_repo_perm(permission).can_download)
-            wopi_dict = {}
-            wopi_dict['repo_id'] = repo_id
-            wopi_dict['path'] = 'file_path'
-            wopi_dict['can_edit'] = action_name == 'edit'
-            wopi_dict['action_url'] = 'http://127.0.0.1:9980'
-            wopi_dict['access_token'] = 'access_token'
-            wopi_dict['access_token_ttl'] = 'access_token_ttl'
-            wopi_dict['doc_title'] = 'file_name'
-            wopi_dict['enable_watermark'] = ENABLE_WATERMARK and action_name == 'view'
+
             if wopi_dict:
                 send_file_access_msg(request, repo, path, 'web')
                 return render(request, 'wopi_file_view_react.html', {**return_dict, **wopi_dict})

@@ -39,7 +39,7 @@ class OfficeSuiteDialog extends React.Component {
     const { activeTab, selectedOption } = this.state;
     if (activeTab === OFFICE_SUITE) {
       if (selectedOption === null) {
-        toaster.danger('error');
+        toaster.danger('option cannot be null');
       } else {
         let suite_id = this.state.selectedOption.value;
         this.props.submit(suite_id);
