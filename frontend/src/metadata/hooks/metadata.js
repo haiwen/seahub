@@ -158,11 +158,16 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
       addView(gettext('Photos - classified by people'), VIEW_TYPE.FACE_RECOGNITION, () => {}, () => {});
     } else {
-      const isSelected = true;
+      if (!viewsMap.current[FACE_RECOGNITION_VIEW_ID]) return;
+      let isSelected = false;
+      if (currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
+        const currentViewId = currentPath.split('/').pop();
+        isSelected = currentViewId === FACE_RECOGNITION_VIEW_ID;
+      }
       deleteView(FACE_RECOGNITION_VIEW_ID, isSelected);
     }
     setEnableFaceRecognition(newValue);
-  }, [enableFaceRecognition, addView, deleteView]);
+  }, [enableFaceRecognition, currentPath, addView, deleteView]);
 
   useEffect(() => {
     if (isLoading) return;
