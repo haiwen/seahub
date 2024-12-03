@@ -5,7 +5,7 @@
 .notification-container {
   position: absolute;
   background: #fff;
-  width: 320px;
+  width: 400px;
   right: -16px;
   top: -1px;
   border-radius: 3px;
@@ -65,19 +65,13 @@
   margin-left: 20px;
 }
 
-.notification-container .notification-body .mark-notifications {
-  color: #b4b4b4;
+.notification-container .mark-all-read {
+  color: #666;
   cursor: pointer;
-  border-bottom: 1px solid #ededed;
-  height: 36px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding-right: 1rem;
-}
-
-.notification-container .notification-body .mark-notifications:hover {
-  text-decoration: underline;
 }
 
 .notification-body .notification-list-container {
@@ -189,4 +183,34 @@
 
 .notification-body .notification-footer:hover {
   text-decoration: underline;
+}
+
+.notification-container .notification-body .mark-notifications {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ededed;
+  padding-left: 15px;
+}
+
+.notification-container .notification-body .mark-notifications .mark-all-read:hover {
+  text-decoration: underline;
+}
+
+.notification-container .notification-body .nav .nav-item .nav-link {
+  height: 46px;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-size: 14px;
+  color: #212529;
+}
+
+.notification-container .notification-body .nav .nav-item .nav-link.active {
+  color: #ED7109;
+}
+
+@media (max-width: 768px) {
+  .notification-container {
+    right: -60px;
+    width: 360px;
+  }
 }

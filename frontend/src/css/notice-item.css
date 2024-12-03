@@ -1,0 +1,94 @@
+.notification-item {
+  padding: 14px 16px 14px 10px;
+  border-bottom: 1px solid #ededed;
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background: #f5f5f5;
+}
+
+.notification-item .notification-item-header {
+  display: flex;
+  align-items: center
+}
+
+.notification-item .notification-point {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
+  margin-right: 12px;
+  position: absolute;
+}
+
+.notification-item .notification-header-info {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 20px;
+  width: calc(100% - 20px);
+}
+
+.notification-item .notification-user-detail {
+  display: flex;
+  width: 65%;
+}
+
+.notification-item .notification-user-detail .notification-user-avatar {
+  width: 24px;
+  height: 24px;
+  margin-top: 3px;
+  border-radius: 50%;
+}
+
+.notification-item .notification-user-detail .notification-user-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.notification-item .notification-header-info .notification-time {
+  color: #666;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.notification-item .notification-content-wrapper {
+  font-size: 13px;
+  margin-left: 52px;
+}
+
+.notification-item .notification-content-quotes {
+  width: 8px;
+}
+
+.notification-item .notification-comment-content {
+  max-width: calc(100% - 16px);
+}
+
+.notification-item .notification-comment-content p {
+  display: inline-block;
+  letter-spacing: 1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.notification-item .notification-comment-content p img {
+  max-width: 70%;
+  height: auto;
+  max-height: 60px;
+}
