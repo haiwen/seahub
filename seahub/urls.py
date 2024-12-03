@@ -212,6 +212,7 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
+from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
 
 
 urlpatterns = [
@@ -463,6 +464,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
 
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),

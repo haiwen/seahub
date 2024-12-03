@@ -7,7 +7,6 @@ import requests
 import posixpath
 import email.utils
 import urllib.parse
-from copy import deepcopy
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -26,8 +25,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
-from seahub.onlyoffice.models import RepoOfficeSuite
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET, OFFICE_SUITES, ENABLE_MULTIPLE_OFFICE_SUITE
+
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -37,10 +36,9 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
     normalize_file_path, check_filename_with_rename, \
     gen_inner_file_get_url, get_service_url, get_file_type_and_ext, gen_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils.user_permissions import get_user_role
 from seahub.views import check_folder_permission
 from seahub.utils.file_types import SPREADSHEET
-from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
+
 
 
 # Get an instance of a logger
@@ -509,70 +507,3 @@ class OnlyofficeGetReferenceData(APIView):
         }
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
-
-class OfficeSuiteConfig(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request):
-        # arguments check
-        repo_id = request.GET.get('repo_id', '')
-        if not repo_id:
-            error_msg = 'repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        current_suite = RepoOfficeSuite.objects.filter(repo_id=repo_id).values().first()
-        suites_info = []
-        for office_suite in OFFICE_SUITES:
-            suite_info = {}
-            suite_info['id'] = office_suite.get('id')
-            suite_info['name'] = office_suite.get('name')
-            suite_info['is_default'] = office_suite.get('is_default')
-            if current_suite:
-                suite_info['is_selected'] = (True if current_suite.get('suite_id') == office_suite.get('id') else False)
-            else:
-                suite_info['is_selected'] = office_suite.get('is_default')
-            suites_info.append(suite_info)
-
-        
-        return Response({'suites_info': suites_info})
-    
-    def put(self, request):
-        # arguments check
-        repo_id = request.data.get('repo_id', '')
-        if not repo_id:
-            error_msg = 'repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        suite_id = request.data.get('suite_id', '')
-        if suite_id not in ['collabora', 'onlyoffice']:
-            error_msg = 'suite_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        can_choose_office_suite = False
-        if ENABLE_MULTIPLE_OFFICE_SUITE:
-            role = get_user_role(request.user)
-            role_permissions = ENABLED_ROLE_PERMISSIONS.get(role)
-            can_choose_office_suite = role_permissions.get('can_use_office_suite') if role_permissions else False
-        if not can_choose_office_suite:
-            error_msg = 'Permission denied'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        RepoOfficeSuite.objects.update_or_create(repo_id=repo_id,
-                                                 defaults= {'suite_id':suite_id} )
-
-        return Response({"success": True}, status=status.HTTP_200_OK)
