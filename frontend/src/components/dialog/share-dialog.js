@@ -66,7 +66,7 @@ class ShareDialog extends React.Component {
 
     if (enableShareLink) {
       return 'shareLink';
-    } else if (enableUploadLink) {
+    } else if (itemType != 'file' && enableUploadLink) {
       return 'uploadLink';
     } else if (itemType == 'file' || itemType == 'dir') {
       return 'internalLink';
