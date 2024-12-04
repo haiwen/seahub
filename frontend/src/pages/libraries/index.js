@@ -17,11 +17,15 @@ import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
+import { GroupsReposManager } from './groups-repos-manager';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 import '../../css/files.css';
 
 class Libraries extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -39,19 +43,39 @@ class Libraries extends Component {
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
     };
+
+    this.groupsReposManager = new GroupsReposManager();
   }
 
   componentDidMount() {
+    this.initLibraries();
+
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeAddNewGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_NEW_GROUP, this.addNewGroup);
+    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, this.insertRepoIntoGroup);
+    this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UN_SHARE_REPO_TO_GROUP, this.unshareRepoToGroup);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeAddNewGroup();
+    this.unsubscribeAddSharedRepoIntoGroup();
+    this.unsubscribeUnsharedRepoToGroup();
+  }
+
+
+  initLibraries = () => {
     const promiseListRepos = seafileAPI.listRepos({ 'type': ['mine', 'shared', 'public'] });
     const promiseListGroups = seafileAPI.listGroups(true);
     Promise.all([promiseListRepos, promiseListGroups]).then(res => {
       const [resListRepos, resListGroups] = res;
       const repoList = resListRepos.data.repos.map((item) => new Repo(item));
-      const groups = resListGroups.data.map(item => {
+      let groups = resListGroups.data.map(item => {
         let group = new Group(item);
         group.repos = item.repos.map(item => new Repo(item));
         return group;
-      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
+      });
+      groups = this.sortGroups(groups);
+      this.groupsReposManager.init(groups);
       const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
       this.setState({
         isLoading: false,
@@ -59,7 +83,7 @@ class Libraries extends Component {
         groupList,
         sharedRepoList,
         publicRepoList,
-        repoList: myRepoList
+        repoList: myRepoList,
       });
     }).catch((error) => {
       this.setState({
@@ -67,7 +91,14 @@ class Libraries extends Component {
         errorMsg: Utils.getErrorMsg(error, true),
       });
     });
-  }
+  };
+
+  sortGroups = (groups) => {
+    if (!Array.isArray(groups) || groups.length === 0) {
+      return [];
+    }
+    return groups.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
+  };
 
   sortRepos = (repoList, groups) => {
     const allRepoList = Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder);
@@ -163,34 +194,62 @@ class Libraries extends Component {
           group.repos.push(repoToMove);
         }
       });
+      this.groupsReposManager.remove(repoID, oldGroupID);
+      this.groupsReposManager.add(repoID, newGroupID);
     }
     this.setState({ groupList: updatedGroups });
   };
 
-  onRenameRepo = (repo, newName) => {
-    let repoList = this.state.repoList.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.repo_name = newName;
+  renameRepo = (repoId, newName, repoList) => {
+    if (!Array.isArray(repoList) || repoList.length === 0) {
+      return repoList;
+    }
+    let updatedRepoList = repoList.map((repo) => {
+      if (repo.repo_id === repoId) {
+        return { ...repo, repo_name: newName };
       }
-      return item;
+      return repo;
     });
-    this.setState({ repoList: repoList });
+    return Utils.sortRepos(updatedRepoList, this.state.sortBy, this.state.sortOrder);
+  };
+
+  onRenameRepo = (repo, newName) => {
+    const targetRepoId = repo.repo_id;
+    const repoList = this.renameRepo(targetRepoId, newName, this.state.repoList);
+    this.renameRelatedGroupsRepos(targetRepoId, newName);
+    this.setState({ repoList });
+  };
+
+  monitorRepo = (repoId, monitored, repoList) => {
+    if (!Array.isArray(repoList) || repoList.length === 0) {
+      return repoList;
+    }
+    return repoList.map((repo) => {
+      if (repo.repo_id === repoId) {
+        return { ...repo, monitored };
+      }
+      return repo;
+    });
   };
 
   onMonitorRepo = (repo, monitored) => {
-    let repoList = this.state.repoList.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.monitored = monitored;
-      }
-      return item;
-    });
-    this.setState({ repoList: repoList });
+    const targetRepoId = repo.repo_id;
+    const repoList = this.monitorRepo(targetRepoId, monitored, this.state.repoList);
+    this.monitorRelatedGroupsRepos(targetRepoId, monitored);
+    this.setState({ repoList });
+  };
+
+  deleteRepo = (repoId, repoList) => {
+    if (!Array.isArray(repoList) || repoList.length === 0) {
+      return repoList;
+    }
+    return repoList.filter((repo) => repo.repo_id !== repoId);
   };
 
   onDeleteRepo = (repo) => {
-    let repoList = this.state.repoList.filter(item => {
-      return item.repo_id !== repo.repo_id;
-    });
+    const targetRepoId = repo.repo_id;
+    const repoList = this.deleteRepo(targetRepoId, this.state.repoList);
+    this.deleteRelatedGroupsRepos(targetRepoId);
     this.setState({ repoList: repoList });
   };
 
@@ -213,16 +272,102 @@ class Libraries extends Component {
   };
   */
 
-  updateGroup = (group) => {
+  insertRepoIntoGroup = ({ repo, group_id }) => {
+    if (!repo) {
+      return;
+    }
+
     const { groupList } = this.state;
-    this.setState({
-      groupList: groupList.map((item) => {
-        if (item.id == group.id) {
-          item = group;
-        }
-        return item;
-      })
+    let newGroupList = [...groupList];
+    let targetGroup = newGroupList.find((group) => group.id === group_id);
+    if (!targetGroup) {
+      return;
+    }
+    const isExist = targetGroup.repos.findIndex((currRepo) => currRepo.repo_id === repo.repo_id) > -1;
+    if (isExist) {
+      return;
+    }
+
+    targetGroup.repos.unshift(repo);
+    targetGroup.repos = Utils.sortRepos(targetGroup.repos, this.state.sortBy, this.state.sortOrder);
+    this.groupsReposManager.add(repo.repo_id, group_id);
+    this.setState({ groupList: newGroupList });
+  };
+
+  unshareRepoToGroup = ({ repo_id, group_id }) => {
+    const { groupList } = this.state;
+    let newGroupList = [...groupList];
+    let targetGroup = newGroupList.find((group) => group.id === group_id);
+    if (!targetGroup) {
+      return;
+    }
+    targetGroup.repos = targetGroup.repos.filter((repo) => repo.repo_id !== repo_id);
+    this.groupsReposManager.remove(repo_id, group_id);
+    this.setState({ groupList: newGroupList });
+  };
+
+  renameRelatedGroupsRepos = (repoId, newName) => {
+    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
+    if (relatedGroups.length === 0) {
+      return;
+    }
+
+    const { groupList } = this.state;
+    const updatedGroups = groupList.map((group) => {
+      const { repos } = group;
+      if (!relatedGroups.includes(group.id)) {
+        return group;
+      }
+      const updatedRepos = this.renameRepo(repoId, newName, repos);
+      return { ...group, repos: updatedRepos };
     });
+    this.setState({ groupList: updatedGroups });
+  };
+
+  monitorRelatedGroupsRepos = (repoId, monitored) => {
+    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
+    if (relatedGroups.length === 0) {
+      return;
+    }
+
+    const { groupList } = this.state;
+    const updatedGroups = groupList.map((group) => {
+      const { repos } = group;
+      if (!relatedGroups.includes(group.id)) {
+        return group;
+      }
+      const updatedRepos = this.monitorRepo(repoId, monitored, repos);
+      return { ...group, repos: updatedRepos };
+    });
+    this.setState({ groupList: updatedGroups });
+  };
+
+  deleteRelatedGroupsRepos = (repoId) => {
+    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
+    if (relatedGroups.length === 0) {
+      return;
+    }
+
+    const { groupList } = this.state;
+    const updatedGroups = groupList.map((group) => {
+      const { repos } = group;
+      if (!relatedGroups.includes(group.id)) {
+        return group;
+      }
+      const updatedRepos = this.deleteRepo(repoId, repos);
+      return { ...group, repos: updatedRepos };
+    });
+
+    this.groupsReposManager.removeRepo(repoId);
+    this.setState({ groupList: updatedGroups });
+  };
+
+  addNewGroup = ({ group }) => {
+    const { groupList } = this.state;
+    let newGroupList = [...groupList];
+    newGroupList.push(group);
+    newGroupList = this.sortGroups(newGroupList);
+    this.setState({ groupList: newGroupList });
   };
 
   toggleCreateRepoDialog = () => {
@@ -338,7 +483,11 @@ class Libraries extends Component {
                         key={group.id}
                         inAllLibs={true}
                         group={group}
-                        updateGroup={this.updateGroup}
+                        onMonitorRepo={this.onMonitorRepo}
+                        renameRelatedGroupsRepos={this.renameRelatedGroupsRepos}
+                        deleteRelatedGroupsRepos={this.deleteRelatedGroupsRepos}
+                        insertRepoIntoGroup={this.insertRepoIntoGroup}
+                        unshareRepoToGroup={this.unshareRepoToGroup}
                         onTransferRepo={this.onGroupTransferRepo}
                         currentViewMode={currentViewMode}
                       />

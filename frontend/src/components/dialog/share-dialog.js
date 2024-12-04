@@ -22,6 +22,7 @@ const propTypes = {
   itemType: PropTypes.string.isRequired, // there will be three choose: ['library', 'dir', 'file']
   itemName: PropTypes.string.isRequired,
   itemPath: PropTypes.string.isRequired,
+  repo: PropTypes.object,
   toggleDialog: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool,
@@ -86,7 +87,6 @@ class ShareDialog extends React.Component {
   };
 
   renderDirContent = () => {
-
     if (!this.state.isRepoJudgemented) {
       return <Loading />;
     }
@@ -223,6 +223,7 @@ class ShareDialog extends React.Component {
                       itemPath={this.props.itemPath}
                       repoID={this.props.repoID}
                       isRepoOwner={this.state.isRepoOwner}
+                      repo={this.props.repo}
                       onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
                     />
                   </TabPane>

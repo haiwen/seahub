@@ -14,9 +14,12 @@ const propTypes = {
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,
-  updateGroup: PropTypes.func.isRequired,
-  onTransferRepo: PropTypes.func.isRequired
-
+  onMonitorRepo: PropTypes.func,
+  renameRelatedGroupsRepos: PropTypes.func,
+  deleteRelatedGroupsRepos: PropTypes.func,
+  insertRepoIntoGroup: PropTypes.func,
+  unshareRepoToGroup: PropTypes.func,
+  onTransferRepo: PropTypes.func.isRequired,
 };
 
 
@@ -31,11 +34,9 @@ class GroupItem extends React.Component {
 
   onItemUnshare = (repo) => {
     const { group } = this.props;
-    seafileAPI.unshareRepoToGroup(repo.repo_id, group.id).then(() => {
-      group.repos = group.repos.filter(item => {
-        return item.repo_id !== repo.repo_id;
-      });
-      this.props.updateGroup(group);
+    const { id: group_id } = group;
+    seafileAPI.unshareRepoToGroup(repo.repo_id, group_id).then(() => {
+      this.props.unshareRepoToGroup({ repo_id: repo.repo_id, group_id });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -43,24 +44,13 @@ class GroupItem extends React.Component {
   };
 
   onItemDelete = (repo) => {
-    const { group } = this.props;
-    group.repos = group.repos.filter(item => {
-      return item.repo_id !== repo.repo_id;
-    });
-    this.props.updateGroup(group);
+    this.props.deleteRelatedGroupsRepos(repo.repo_id);
   };
 
   onItemRename = (repo, newName) => {
     let group = this.props.group;
     seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
-      const { group } = this.props;
-      group.repos = group.repos.map(item => {
-        if (item.repo_id === repo.repo_id) {
-          item.repo_name = newName;
-        }
-        return item;
-      });
-      this.props.updateGroup(group);
+      this.props.renameRelatedGroupsRepos(repo.repo_id, newName);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -68,14 +58,7 @@ class GroupItem extends React.Component {
   };
 
   onMonitorRepo = (repo, monitored) => {
-    const { group } = this.props;
-    group.repos = group.repos.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.monitored = monitored;
-      }
-      return item;
-    });
-    this.props.updateGroup(group);
+    this.props.onMonitorRepo(repo, monitored);
   };
 
   toggleCreateRepoDialog = () => {
@@ -86,8 +69,8 @@ class GroupItem extends React.Component {
 
   onCreateRepo = (repo) => {
     const { group } = this.props;
-    const { id: groupId, repos } = group;
-    seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => {
+    const { id: group_id } = group;
+    seafileAPI.createGroupOwnedLibrary(group_id, repo).then(res => {
       let object = {
         repo_id: res.data.id,
         repo_name: res.data.name,
@@ -99,15 +82,13 @@ class GroupItem extends React.Component {
         encrypted: res.data.encrypted,
       };
       const newRepo = new Repo(object);
-      repos.unshift(newRepo);
-      this.props.updateGroup(group);
+      this.props.insertRepoIntoGroup({ repo: newRepo, group_id });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
     this.toggleCreateRepoDialog();
   };
-
 
   render() {
     const { inAllLibs = false, group, currentViewMode = LIST_MODE } = this.props;

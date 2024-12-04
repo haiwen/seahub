@@ -1,5 +1,16 @@
 class EventBus {
-  subscribers = {};
+
+  constructor() {
+    this.instance = null;
+    this.subscribers = {};
+  }
+
+  static getInstance() {
+    if (this.instance) return this.instance;
+    this.instance = new EventBus();
+    return this.instance;
+  }
+
 
   subscribe(type, handler) {
     if (!this.subscribers[type]) {
