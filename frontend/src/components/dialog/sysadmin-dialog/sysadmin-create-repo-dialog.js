@@ -36,13 +36,9 @@ class SysAdminCreateRepoDialog extends React.Component {
   };
 
   handleSelectChange = (option) => {
-    let ownerEmail = '';
-    if (option != null && option.length > 0) {
-      ownerEmail = option[0].email;
-    }
-    // option can be null
+    // option can be `null`, `[{...}]`, or `[]`
     this.setState({
-      ownerEmail: ownerEmail
+      ownerEmail: option && option.length ? option[0].email : ''
     });
   };
 
