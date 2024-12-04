@@ -23,6 +23,10 @@ class OfficeSuiteConfig(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
+        if not request.user.permissions.can_use_office_suite:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -41,7 +45,6 @@ class OfficeSuiteConfig(APIView):
                 suite_info['is_selected'] = office_suite.get('is_default')
             suites_info.append(suite_info)
 
-        
         return Response({'suites_info': suites_info})
     
     def put(self, request, repo_id):
@@ -50,6 +53,10 @@ class OfficeSuiteConfig(APIView):
         if suite_id not in ['collabora', 'onlyoffice']:
             error_msg = 'suite_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if not request.user.permissions.can_use_office_suite:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         # resource check
         repo = seafile_api.get_repo(repo_id)
