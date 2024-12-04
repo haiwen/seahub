@@ -17,7 +17,10 @@ def generate_random_string_lower_digits(length):
     return random_string
 
 
-def generate_view_id(length, view_ids=None):
+def generate_view_id(length, type, view_ids=None):
+    if type == 'face_recognition':
+        return '_face_recognition'
+
     if not view_ids:
         return generate_random_string_lower_digits(length)
 
@@ -81,7 +84,7 @@ class RepoView(object):
 
     def init_view(self, view_ids=None):
         self.view_json = {
-            "_id": generate_view_id(4, view_ids),
+            "_id": generate_view_id(4, self.type, view_ids),
             "table_id": '0001',  # by default
             "name": self.name,
             "filters": [],

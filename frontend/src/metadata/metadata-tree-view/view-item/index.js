@@ -7,7 +7,7 @@ import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../../utils/utils';
 import { useMetadata } from '../../hooks';
-import { VIEW_TYPE_ICON } from '../../constants';
+import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE_ICON } from '../../constants';
 import { isValidViewName } from '../../utils/validate';
 import { isEnter } from '../../utils/hotkey';
 import toaster from '../../../components/toast';
@@ -49,6 +49,11 @@ const ViewItem = ({
 
   const operations = useMemo(() => {
     if (!canUpdate) return [];
+    if (view._id === FACE_RECOGNITION_VIEW_ID) {
+      return [
+        { key: 'rename', value: gettext('Rename') },
+      ];
+    }
     let value = [
       { key: 'rename', value: gettext('Rename') },
       { key: 'duplicate', value: gettext('Duplicate') }
@@ -57,7 +62,7 @@ const ViewItem = ({
       value.push({ key: 'delete', value: gettext('Delete') });
     }
     return value;
-  }, [canUpdate, canDelete]);
+  }, [view, canUpdate, canDelete]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
