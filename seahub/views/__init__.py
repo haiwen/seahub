@@ -1111,12 +1111,6 @@ def react_fake_view(request, **kwargs):
     if enable_clean_trash:
         enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
 
-    enable_multiple_office_suite = settings.ENABLE_MULTIPLE_OFFICE_SUITE
-    if enable_multiple_office_suite:
-        role = get_user_role(request.user)
-        role_permissions = ENABLED_ROLE_PERMISSIONS.get(role)
-        can_choose_office_suite = role_permissions.get('can_use_office_suite') if role_permissions else False
-
     return_dict = {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1159,8 +1153,6 @@ def react_fake_view(request, **kwargs):
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
         'enable_show_about': settings.ENABLE_SHOW_ABOUT,
-        'enable_multiple_office_suite': can_choose_office_suite if enable_multiple_office_suite else False
-
     }
 
     if ENABLE_METADATA_MANAGEMENT:
