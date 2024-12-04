@@ -65,6 +65,7 @@ class RepoMetadata(models.Model):
     from_commit = models.CharField(max_length=40)
     to_commit = models.CharField(max_length=40)
     tags_enabled = models.BooleanField(db_index=True)
+    last_face_cluster_time = models.DateTimeField(db_index=True, blank=True, null=True)
 
     objects = RepoMetadataManager()
 

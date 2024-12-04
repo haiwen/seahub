@@ -23,6 +23,7 @@ const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 const MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change';
 const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
+const MSG_TYPE_FACE_CLUSTER = 'face_cluster';
 
 dayjs.extend(relativeTime);
 
@@ -349,6 +350,19 @@ class NoticeItem extends React.Component {
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
 
       let notice = gettext('Your library {libraryName} has recently deleted a large number of files.');
+      notice = notice.replace('{libraryName}', repoLink);
+
+      return { avatar_url: null, notice };
+    }
+
+    if (noticeType === MSG_TYPE_FACE_CLUSTER) {
+      let repo_id = detail.repo_id;
+      let repo_name = detail.repo_name;
+
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+
+      let notice = gettext('Face recognition is done for library {libraryName}.');
       notice = notice.replace('{libraryName}', repoLink);
 
       return { avatar_url: null, notice };

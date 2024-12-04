@@ -80,6 +80,7 @@ MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
 MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
+MSG_TYPE_FACE_CLUSTER = 'face_cluster'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -474,6 +475,9 @@ class UserNotification(models.Model):
 
     def is_saml_sso_error_msg(self):
         return self.msg_type == MSG_TYPE_SAML_SSO_FAILED
+
+    def is_face_cluster_msg(self):
+        return self.msg_type == MSG_TYPE_FACE_CLUSTER
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and

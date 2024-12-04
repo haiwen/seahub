@@ -14,9 +14,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_unmodifiable_columns, can_read_metadata, init_faces, add_init_face_recognition_task, \
+    get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH, \
-    init_tags, remove_tags_table
+    init_tags, remove_tags_table, add_init_face_recognition_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -1146,8 +1146,8 @@ class FaceRecognitionManage(APIView):
 
         params = {
             'repo_id': repo_id,
+            'username': request.user.username,
         }
-
         try:
             task_id = add_init_face_recognition_task(params=params)
         except Exception as e:
@@ -1189,6 +1189,7 @@ class FaceRecognitionManage(APIView):
 
         try:
             record.face_recognition_enabled = False
+            record.last_face_cluster_time = None
             record.save()
         except Exception as e:
             logger.error(e)
@@ -1253,7 +1254,7 @@ class MetadataTagsStatusManage(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is not enabled for repo {repo_id}.'
@@ -1352,11 +1353,11 @@ class MetadataTags(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        return Response(query_result)
-    
 
-    
+        return Response(query_result)
+
+
+
     def post(self, request, repo_id):
         tags_data = request.data.get('tags_data', [])
 
@@ -1377,7 +1378,7 @@ class MetadataTags(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
@@ -1393,20 +1394,20 @@ class MetadataTags(APIView):
         tags_table_id = tags_table_id[0] if tags_table_id else None
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
+
         try:
             resp = metadata_server_api.insert_rows(tags_table_id, tags_data)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         row_ids = resp.get('row_ids', [])
 
         if not row_ids:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         sql = 'SELECT * FROM %s WHERE `%s` in (%s)' % (TAGS_TABLE.name, TAGS_TABLE.columns.id.name, ', '.join(["'%s'" % id for id in row_ids]))
 
         try:
@@ -1423,7 +1424,7 @@ class MetadataTags(APIView):
         if not tags_data:
             error_msg = 'tags_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
@@ -1437,7 +1438,7 @@ class MetadataTags(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
@@ -1453,7 +1454,7 @@ class MetadataTags(APIView):
         tags_table_id = tags_table_id[0] if tags_table_id else None
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
+
         tag_id_to_tag = {}
         sql = f'SELECT `_id` FROM `{TAGS_TABLE.name}` WHERE '
         parameters = []
@@ -1524,7 +1525,7 @@ class MetadataTags(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
@@ -1540,14 +1541,14 @@ class MetadataTags(APIView):
         tags_table_id = tags_table_id[0] if tags_table_id else None
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
+
         try:
             resp = metadata_server_api.delete_rows(tags_table_id, tag_ids)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response({'success': True})
 
 
@@ -1561,7 +1562,7 @@ class MetadataFileTags(APIView):
         if not file_tags_data:
             error_msg = 'file_tags_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         tags = request.data.get('tags', [])
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -1577,7 +1578,7 @@ class MetadataFileTags(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
@@ -1593,7 +1594,7 @@ class MetadataFileTags(APIView):
         tags_table_id = tags_table_id[0] if tags_table_id else None
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
+
         file_record_ids = []
         file_tags_map = {}
         for file_tags in file_tags_data:
@@ -1614,13 +1615,13 @@ class MetadataFileTags(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         success_records = []
         failed_records = []
         files_records = current_result_query.get('results', [])
         if not files_records:
             return api_error(status.HTTP_404_NOT_FOUND, 'files not found')
-        
+
         for file_record in files_records:
             current_tags = file_record.get(METADATA_TABLE.columns.tags.key, [])
             record_id = file_record.get(METADATA_TABLE.columns.id.key)
@@ -1634,7 +1635,7 @@ class MetadataFileTags(APIView):
                 success_records.append(record_id)
             except Exception as e:
                 failed_records.append(record_id)
-            
+
         return Response({'success': success_records, 'fail': failed_records})
 
 
@@ -1657,7 +1658,7 @@ class MetadataTagFiles(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
@@ -1673,7 +1674,7 @@ class MetadataTagFiles(APIView):
         tags_table_id = tags_table_id[0] if tags_table_id else None
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-        
+
         tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = "{tag_id}"'
         try:
             tag_query = metadata_server_api.query_rows(tag_files_record_sql)
@@ -1681,11 +1682,11 @@ class MetadataTagFiles(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         tag_files_records = tag_query.get('results', [])
         if not tag_files_records:
             return Response({ 'metadata': [], 'results': [] })
-        
+
         tag_files_record = tag_files_records[0]
         tag_files_record_ids = tag_files_record.get(TAGS_TABLE.columns.file_links.name , [])
 
@@ -1703,6 +1704,6 @@ class MetadataTagFiles(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response(tag_files_query)
-        
+
