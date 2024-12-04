@@ -16,7 +16,7 @@ from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH, \
-    init_tags, remove_tags_table
+    init_tags, remove_tags_table, add_init_face_recognition_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -1144,7 +1144,17 @@ class FaceRecognitionManage(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'success': True})
+        params = {
+            'repo_id': repo_id,
+            'username': request.user.username,
+        }
+        try:
+            task_id = add_init_face_recognition_task(params=params)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'task_id': task_id})
 
     def delete(self, request, repo_id):
         # recource check
