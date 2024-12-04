@@ -8,6 +8,8 @@ import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
+import EventBus from '../../common/event-bus';
+import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -153,7 +155,9 @@ class RepoShareAdminGroupShares extends Component {
   }
 
   deleteItem = (item) => {
+    const eventBus = EventBus.getInstance();
     seafileAPI.deleteShareToGroupItem(item.repo_id, item.path, 'group', item.share_to).then(res => {
+      eventBus.dispatch(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, { repo_id: item.repo_id, group_id: item.share_to });
       let items = this.state.items.filter(shareItem => {
         return shareItem.path + shareItem.share_to !== item.path + item.share_to;
       });

@@ -18,6 +18,8 @@ import FilesSubNav from '../components/files-sub-nav';
 import { SUB_NAV_ITEM_HEIGHT } from '../constants';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
+import { EVENT_BUS_TYPE } from './common/event-bus-type';
+import EventBus from './common/event-bus';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -26,6 +28,7 @@ const propTypes = {
 };
 
 class MainSideNav extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -93,6 +96,10 @@ class MainSideNav extends React.Component {
     const { groupItems: newList } = this.state;
     newList.push(newGroup);
     this.filesNavHeight += SUB_NAV_ITEM_HEIGHT;
+
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EVENT_BUS_TYPE.ADD_NEW_GROUP, { group: newGroup });
+
     this.setState({
       groupItems: newList
     });

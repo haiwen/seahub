@@ -289,6 +289,7 @@ class Item extends Component {
                 itemName={data.repo_name}
                 itemPath={'/'}
                 repoID={data.repo_id}
+                repo={data}
                 repoEncrypted={data.encrypted}
                 enableDirPrivateShare={true}
                 userPerm={data.permission}
@@ -340,6 +341,7 @@ class Item extends Component {
                 itemName={data.repo_name}
                 itemPath={'/'}
                 repoID={data.repo_id}
+                repo={data}
                 repoEncrypted={data.encrypted}
                 enableDirPrivateShare={true}
                 userPerm={data.permission}

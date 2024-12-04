@@ -7,6 +7,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import { SeahubSelect, NoGroupMessage } from '../common/select';
+import EventBus from '../common/event-bus';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 class GroupItem extends React.Component {
 
@@ -115,6 +117,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoType: PropTypes.string,
   isRepoOwner: PropTypes.bool.isRequired,
+  repo: PropTypes.object,
   onAddCustomPermissionToggle: PropTypes.func,
 };
 
@@ -200,13 +203,12 @@ class ShareToGroup extends React.Component {
   };
 
   shareToGroup = () => {
-
-    let path = this.props.itemPath;
-    let repoID = this.props.repoID;
-    let isGroupOwnedRepo = this.props.isGroupOwnedRepo;
-
+    const eventBus = EventBus.getInstance();
+    const { isGroupOwnedRepo, itemPath: path, repoID } = this.props;
+    const { permission, selectedOption } = this.state;
+    const targetGroupId = selectedOption.id;
     if (isGroupOwnedRepo) {
-      seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, this.state.selectedOption['id'], path).then(res => {
+      seafileAPI.shareGroupOwnedRepoToGroup(repoID, permission, targetGroupId, path).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -224,6 +226,11 @@ class ShareToGroup extends React.Component {
           return sharedItem;
         });
 
+        if (this.props.repo && res.data.success.length > 0) {
+          const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
+          eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+        }
+
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
@@ -235,12 +242,17 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, [this.state.selectedOption['id']]).then(res => {
+      seafileAPI.shareFolder(repoID, path, 'group', permission, [targetGroupId]).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
+        }
+
+        if (this.props.repo && res.data.success.length > 0) {
+          const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
+          eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
         }
 
         this.setState({
@@ -257,10 +269,12 @@ class ShareToGroup extends React.Component {
   };
 
   deleteShareItem = (groupID) => {
-    let path = this.props.itemPath;
-    let repoID = this.props.repoID;
-    if (this.props.isGroupOwnedRepo) {
+    const eventBus = EventBus.getInstance();
+    const { isGroupOwnedRepo, itemPath: path, repoID } = this.props;
+    if (isGroupOwnedRepo) {
       seafileAPI.deleteGroupOwnedRepoSharedGroupItem(repoID, groupID, path).then(() => {
+        eventBus.dispatch(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, { repo_id: repoID, group_id: groupID });
+
         this.setState({
           sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; })
         });
@@ -270,6 +284,8 @@ class ShareToGroup extends React.Component {
       });
     } else {
       seafileAPI.deleteShareToGroupItem(repoID, path, 'group', groupID).then(() => {
+        eventBus.dispatch(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, { repo_id: repoID, group_id: groupID });
+
         this.setState({
           sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; })
         });

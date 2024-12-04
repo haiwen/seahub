@@ -465,6 +465,7 @@ class MylibRepoListItem extends React.Component {
               itemName={repo.repo_name}
               itemPath={'/'}
               repoID={repo.repo_id}
+              repo={repo}
               repoEncrypted={repo.encrypted}
               enableDirPrivateShare={true}
               userPerm={repo.permission}
