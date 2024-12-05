@@ -63,16 +63,6 @@ class OfficeSuiteConfig(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        can_choose_office_suite = False
-        if ENABLE_MULTIPLE_OFFICE_SUITE:
-            role = get_user_role(request.user)
-            role_permissions = ENABLED_ROLE_PERMISSIONS.get(role)
-            can_choose_office_suite = role_permissions.get('can_use_office_suite') if role_permissions else False
-        if not can_choose_office_suite:
-            error_msg = 'Permission denied'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         RepoOfficeSuite.objects.update_or_create(repo_id=repo_id,
                                                  defaults= {'suite_id':suite_id} )
