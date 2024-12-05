@@ -52,10 +52,14 @@ class StatisticChart extends React.Component {
       datasets: filesData
     };
     let options = {
-      title: {
-        display: true,
-        fontSize: 14,
-        text: chartTitle,
+      plugins: {
+        title: {
+          display: true,
+          font: { weight: 'bold', size: 20 },
+          align: 'center',
+          text: chartTitle,
+          color: '#666',
+        },
       },
       elements: {
         line: {
