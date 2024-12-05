@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2024\n"
 "Language-Team: Korean (https://app.transifex.com/haiwen/teams/5086/ko/)\n"
@@ -668,12 +668,6 @@ msgid ""
 msgstr ""
 "윈도우 파일 탐색기의 \"SeaDrive\" 바로 가기 아이콘은 SeaDrive 프로그램에서 나가거나 SeaDrive의 시파일 계정을 "
 "바꾸어도 없어지지 않습니다. 의도한 기능이며, 나중에 계정에 접근해야 할 경우를 대비하여 굳이 제거할 필요가 없습니다."
-
-#: templates/help/drive_client_2.0_for_windows_10.html:52
-msgid ""
-"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
-" Explorer and you want to remove it."
-msgstr "어떤 경우에는, \"SeaDrive\" 바로 가기 아이콘을 윈도우 파일 탐색기에서 제거하고 싶을 때가 있습니다."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
@@ -1513,15 +1507,6 @@ msgid ""
 "library state at the point of time."
 msgstr "수정 기록 어디에서든 \"스냅샷 보기\" 링크를 누릅니다. 해당 시점의 라이브러리 상태를 볼 수 있습니다."
 
-#: templates/help/library_history_and_snapshots.html:13
-msgid ""
-"In the snapshot view, you can download or restore any file or folder. If "
-"you're the library's owner, you can restore the enitre library to this point"
-" of time."
-msgstr ""
-"스냅샷 보기에서 파일 또는 폴더를 다운로드하거나 복원할 수 있습니다. 라이브러리 소유자라면 해당 시점으로 라이브러리 전체를 되돌릴 수 "
-"있습니다."
-
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1631,24 +1616,6 @@ msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr "파일 브라우저 인터페이스에서는 현재 라이브러리의 모든 일 태그를 제공합니다."
-
-#: templates/help/read-only_syncing.html:6
-#, python-format
-msgid ""
-"For ready-only libraries or folders, Seafile will show a forbidden icon "
-"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"to indicate they are read-only. However, users can still modify the synced "
-"local copies. When a local copy is modified, Seafile will ignore the "
-"modified one. When the copy at the server is also modified, the client will "
-"popup a notification, saying that the local modified copy conflicts with the"
-" copy at the server side. To prevent data loss, the local copy is renamed to"
-" a conflict file."
-msgstr ""
-"Seafile에서는 읽기 전용 라이브러리 또는 폴더에 금지 아이콘(<img "
-"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />)을 표시하여 "
-"읽기 전용 대상임을 나타냅니다. 그러나 동기화한 로컬 사본을 사용자가 수정할 수는 있습니다. Seafile에서는 수정한 로컬 사본을 "
-"무시합니다. 서버의 사본을 수정하면 클라이언트에 알림을 띄워 서버측에 동일 시점에 수정한 다른 내용이 있음을 알립니다. 데이터를 잃지 "
-"않게 하기 위해 로컬 사본을 다른 이름으로 바꿉니다."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -1855,15 +1822,6 @@ msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr "링크를 공유할 때 접근 권한을 설정할 수도 있습니다. 세가지 권한 형태가 있습니다:"
-
-#: templates/help/sharing_files_and_folders.html:21
-msgid ""
-"Preview and Download: the file or files in the folder can be downloaded. If "
-"the type of files can be previewd in web browser, they can also be viewed "
-"online (e.g. Office files)."
-msgstr ""
-"미리 보기 및 다운로드: 파일 또는 폴더의 파일을 다운로드할 수 있습니다. 웹 브라우저에서 미리 볼 수 있는 파일 형식이라면, "
-"온라인에서도 볼 수 있습니다(예: 오피스 파일)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
