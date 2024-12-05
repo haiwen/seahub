@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
-  isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
+  isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg, enableShowAbout } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
@@ -239,12 +239,14 @@ class MainSideNavFolded extends React.Component {
                       <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                     </a>
                   </li>
+                  {enableShowAbout &&
                   <li className='nav-item'>
                     <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
                       <span className="sf3-font-about sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
                       <Tip target="main-side-nav-folded-about" text={gettext('About')} />
                     </a>
                   </li>
+                  }
                   {showWechatSupportGroup &&
                   <li className='nav-item'>
                     <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
@@ -264,7 +266,7 @@ class MainSideNavFolded extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.isAboutDialogShow && (
+        {this.state.isAboutDialogShow && enableShowAbout && (
           <ModalPortal>
             <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
           </ModalPortal>
