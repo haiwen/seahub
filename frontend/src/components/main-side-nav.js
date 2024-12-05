@@ -339,7 +339,7 @@ class MainSideNav extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.isAboutDialogShow && (
+        {this.state.isAboutDialogShow && enableShowAbout && (
           <ModalPortal>
             <AboutDialog onCloseAboutDialog={this.toggleAboutDialog} />
           </ModalPortal>
