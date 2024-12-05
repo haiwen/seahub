@@ -1,807 +1,1059 @@
 {
   "status": "done",
   "assets": {
-    "static/css/app.ce867cc5.css": {
-      "name": "static/css/app.ce867cc5.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/app.ce867cc5.css"
-    },
-    "static/css/app.ce867cc5.css.map": {
-      "name": "static/css/app.ce867cc5.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/app.ce867cc5.css.map"
-    },
-    "static/css/commons.2c40b537.css": {
-      "name": "static/css/commons.2c40b537.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/commons.2c40b537.css"
-    },
-    "static/css/commons.2c40b537.css.map": {
-      "name": "static/css/commons.2c40b537.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/commons.2c40b537.css.map"
-    },
-    "static/css/draft.dfd8ec8b.css": {
-      "name": "static/css/draft.dfd8ec8b.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/draft.dfd8ec8b.css"
-    },
-    "static/css/draft.dfd8ec8b.css.map": {
-      "name": "static/css/draft.dfd8ec8b.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/draft.dfd8ec8b.css.map"
-    },
-    "static/css/fileHistory.c207f9b1.css": {
-      "name": "static/css/fileHistory.c207f9b1.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistory.c207f9b1.css"
-    },
-    "static/css/fileHistory.c207f9b1.css.map": {
-      "name": "static/css/fileHistory.c207f9b1.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistory.c207f9b1.css.map"
-    },
-    "static/css/fileHistoryOld.34922be6.css": {
-      "name": "static/css/fileHistoryOld.34922be6.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistoryOld.34922be6.css"
-    },
-    "static/css/fileHistoryOld.34922be6.css.map": {
-      "name": "static/css/fileHistoryOld.34922be6.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/fileHistoryOld.34922be6.css.map"
-    },
-    "static/css/historyTrashFileView.d2070387.css": {
-      "name": "static/css/historyTrashFileView.d2070387.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/historyTrashFileView.d2070387.css"
-    },
-    "static/css/historyTrashFileView.d2070387.css.map": {
-      "name": "static/css/historyTrashFileView.d2070387.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/historyTrashFileView.d2070387.css.map"
-    },
-    "static/css/markdownEditor.c66eb93d.css": {
-      "name": "static/css/markdownEditor.c66eb93d.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/markdownEditor.c66eb93d.css"
-    },
-    "static/css/markdownEditor.c66eb93d.css.map": {
-      "name": "static/css/markdownEditor.c66eb93d.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/markdownEditor.c66eb93d.css.map"
-    },
-    "static/css/orgAdmin.bb6a05c5.css": {
-      "name": "static/css/orgAdmin.bb6a05c5.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/orgAdmin.bb6a05c5.css"
-    },
-    "static/css/orgAdmin.bb6a05c5.css.map": {
-      "name": "static/css/orgAdmin.bb6a05c5.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/orgAdmin.bb6a05c5.css.map"
-    },
-    "static/css/repoFolderTrash.d4170c41.css": {
-      "name": "static/css/repoFolderTrash.d4170c41.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoFolderTrash.d4170c41.css"
-    },
-    "static/css/repoFolderTrash.d4170c41.css.map": {
-      "name": "static/css/repoFolderTrash.d4170c41.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoFolderTrash.d4170c41.css.map"
-    },
-    "static/css/repoHistory.f0ad8622.css": {
-      "name": "static/css/repoHistory.f0ad8622.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoHistory.f0ad8622.css"
-    },
-    "static/css/repoHistory.f0ad8622.css.map": {
-      "name": "static/css/repoHistory.f0ad8622.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoHistory.f0ad8622.css.map"
-    },
-    "static/css/repoSnapshot.c6bbee77.css": {
-      "name": "static/css/repoSnapshot.c6bbee77.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoSnapshot.c6bbee77.css"
-    },
-    "static/css/repoSnapshot.c6bbee77.css.map": {
-      "name": "static/css/repoSnapshot.c6bbee77.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/repoSnapshot.c6bbee77.css.map"
-    },
-    "static/css/sdocFileHistory.f936c666.css": {
-      "name": "static/css/sdocFileHistory.f936c666.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sdocFileHistory.f936c666.css"
-    },
-    "static/css/sdocFileHistory.f936c666.css.map": {
-      "name": "static/css/sdocFileHistory.f936c666.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sdocFileHistory.f936c666.css.map"
-    },
-    "static/css/settings.391717d2.css": {
-      "name": "static/css/settings.391717d2.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/settings.391717d2.css"
-    },
-    "static/css/settings.391717d2.css.map": {
-      "name": "static/css/settings.391717d2.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/settings.391717d2.css.map"
-    },
-    "static/css/sharedDirView.945789e9.css": {
-      "name": "static/css/sharedDirView.945789e9.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedDirView.945789e9.css"
-    },
-    "static/css/sharedDirView.945789e9.css.map": {
-      "name": "static/css/sharedDirView.945789e9.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedDirView.945789e9.css.map"
-    },
-    "static/css/sharedFileViewSpreadsheet.ff1ddac7.css": {
-      "name": "static/css/sharedFileViewSpreadsheet.ff1ddac7.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.ff1ddac7.css"
-    },
-    "static/css/sharedFileViewSpreadsheet.ff1ddac7.css.map": {
-      "name": "static/css/sharedFileViewSpreadsheet.ff1ddac7.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.ff1ddac7.css.map"
-    },
-    "static/css/sysAdmin.feb7b73d.css": {
-      "name": "static/css/sysAdmin.feb7b73d.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sysAdmin.feb7b73d.css"
-    },
-    "static/css/sysAdmin.feb7b73d.css.map": {
-      "name": "static/css/sysAdmin.feb7b73d.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/sysAdmin.feb7b73d.css.map"
-    },
-    "static/css/TCAccept.05d88392.css": {
-      "name": "static/css/TCAccept.05d88392.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCAccept.05d88392.css"
-    },
-    "static/css/TCAccept.05d88392.css.map": {
-      "name": "static/css/TCAccept.05d88392.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCAccept.05d88392.css.map"
-    },
-    "static/css/TCView.05d88392.css": {
-      "name": "static/css/TCView.05d88392.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCView.05d88392.css"
-    },
-    "static/css/TCView.05d88392.css.map": {
-      "name": "static/css/TCView.05d88392.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/TCView.05d88392.css.map"
-    },
-    "static/css/uploadLink.01103a58.css": {
-      "name": "static/css/uploadLink.01103a58.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/uploadLink.01103a58.css"
-    },
-    "static/css/uploadLink.01103a58.css.map": {
-      "name": "static/css/uploadLink.01103a58.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/uploadLink.01103a58.css.map"
-    },
-    "static/css/viewFileSpreadsheet.ff1ddac7.css": {
-      "name": "static/css/viewFileSpreadsheet.ff1ddac7.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.ff1ddac7.css"
-    },
-    "static/css/viewFileSpreadsheet.ff1ddac7.css.map": {
-      "name": "static/css/viewFileSpreadsheet.ff1ddac7.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.ff1ddac7.css.map"
-    },
-    "static/css/wiki.2d406fab.css": {
-      "name": "static/css/wiki.2d406fab.css",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/wiki.2d406fab.css"
-    },
-    "static/css/wiki.2d406fab.css.map": {
-      "name": "static/css/wiki.2d406fab.css.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/css/wiki.2d406fab.css.map"
-    },
-    "static/js/305.d8dbbbbc.chunk.js": {
-      "name": "static/js/305.d8dbbbbc.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/305.d8dbbbbc.chunk.js"
-    },
-    "static/js/305.d8dbbbbc.chunk.js.map": {
-      "name": "static/js/305.d8dbbbbc.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/305.d8dbbbbc.chunk.js.map"
-    },
-    "static/js/311.e7e04ffb.chunk.js": {
-      "name": "static/js/311.e7e04ffb.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/311.e7e04ffb.chunk.js"
-    },
-    "static/js/311.e7e04ffb.chunk.js.map": {
-      "name": "static/js/311.e7e04ffb.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/311.e7e04ffb.chunk.js.map"
-    },
-    "static/js/379.e48ee7a7.chunk.js": {
-      "name": "static/js/379.e48ee7a7.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/379.e48ee7a7.chunk.js"
-    },
-    "static/js/379.e48ee7a7.chunk.js.map": {
-      "name": "static/js/379.e48ee7a7.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/379.e48ee7a7.chunk.js.map"
-    },
-    "static/js/482.40023cf1.chunk.js": {
-      "name": "static/js/482.40023cf1.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/482.40023cf1.chunk.js"
-    },
-    "static/js/482.40023cf1.chunk.js.map": {
-      "name": "static/js/482.40023cf1.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/482.40023cf1.chunk.js.map"
-    },
-    "static/js/54.f8d765ee.chunk.js": {
-      "name": "static/js/54.f8d765ee.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/54.f8d765ee.chunk.js"
-    },
-    "static/js/54.f8d765ee.chunk.js.map": {
-      "name": "static/js/54.f8d765ee.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/54.f8d765ee.chunk.js.map"
-    },
-    "static/js/545.2cc3d80f.chunk.js": {
-      "name": "static/js/545.2cc3d80f.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/545.2cc3d80f.chunk.js"
-    },
-    "static/js/545.2cc3d80f.chunk.js.map": {
-      "name": "static/js/545.2cc3d80f.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/545.2cc3d80f.chunk.js.map"
-    },
-    "static/js/921.ba8481b9.chunk.js": {
-      "name": "static/js/921.ba8481b9.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/921.ba8481b9.chunk.js"
-    },
-    "static/js/921.ba8481b9.chunk.js.map": {
-      "name": "static/js/921.ba8481b9.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/921.ba8481b9.chunk.js.map"
-    },
-    "static/js/975.7f1d8705.chunk.js": {
-      "name": "static/js/975.7f1d8705.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/975.7f1d8705.chunk.js"
-    },
-    "static/js/975.7f1d8705.chunk.js.map": {
-      "name": "static/js/975.7f1d8705.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/975.7f1d8705.chunk.js.map"
-    },
-    "static/js/997.4e7b85c4.chunk.js": {
-      "name": "static/js/997.4e7b85c4.chunk.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/997.4e7b85c4.chunk.js"
-    },
-    "static/js/997.4e7b85c4.chunk.js.map": {
-      "name": "static/js/997.4e7b85c4.chunk.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/997.4e7b85c4.chunk.js.map"
-    },
-    "static/js/app.800f919a.js": {
-      "name": "static/js/app.800f919a.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/app.800f919a.js"
-    },
-    "static/js/app.800f919a.js.LICENSE.txt": {
-      "name": "static/js/app.800f919a.js.LICENSE.txt",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/app.800f919a.js.LICENSE.txt"
-    },
-    "static/js/app.800f919a.js.map": {
-      "name": "static/js/app.800f919a.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/app.800f919a.js.map"
-    },
-    "static/js/commons.84df398e.js": {
-      "name": "static/js/commons.84df398e.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/commons.84df398e.js"
-    },
-    "static/js/commons.84df398e.js.LICENSE.txt": {
-      "name": "static/js/commons.84df398e.js.LICENSE.txt",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/commons.84df398e.js.LICENSE.txt"
-    },
-    "static/js/commons.84df398e.js.map": {
-      "name": "static/js/commons.84df398e.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/commons.84df398e.js.map"
-    },
-    "static/js/draft.b5d27191.js": {
-      "name": "static/js/draft.b5d27191.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/draft.b5d27191.js"
-    },
-    "static/js/draft.b5d27191.js.map": {
-      "name": "static/js/draft.b5d27191.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/draft.b5d27191.js.map"
-    },
-    "static/js/fileHistory.88bff865.js": {
-      "name": "static/js/fileHistory.88bff865.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistory.88bff865.js"
-    },
-    "static/js/fileHistory.88bff865.js.map": {
-      "name": "static/js/fileHistory.88bff865.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistory.88bff865.js.map"
-    },
-    "static/js/fileHistoryOld.3f18f9ad.js": {
-      "name": "static/js/fileHistoryOld.3f18f9ad.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistoryOld.3f18f9ad.js"
-    },
-    "static/js/fileHistoryOld.3f18f9ad.js.map": {
-      "name": "static/js/fileHistoryOld.3f18f9ad.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileHistoryOld.3f18f9ad.js.map"
-    },
-    "static/js/fileView.f3d13498.js": {
-      "name": "static/js/fileView.f3d13498.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileView.f3d13498.js"
-    },
-    "static/js/fileView.f3d13498.js.map": {
-      "name": "static/js/fileView.f3d13498.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/fileView.f3d13498.js.map"
-    },
-    "static/js/historyTrashFileView.11fe180d.js": {
-      "name": "static/js/historyTrashFileView.11fe180d.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.11fe180d.js"
-    },
-    "static/js/historyTrashFileView.11fe180d.js.map": {
-      "name": "static/js/historyTrashFileView.11fe180d.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.11fe180d.js.map"
-    },
-    "static/js/markdownEditor.3ee490c8.js": {
-      "name": "static/js/markdownEditor.3ee490c8.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.3ee490c8.js"
-    },
-    "static/js/markdownEditor.3ee490c8.js.LICENSE.txt": {
-      "name": "static/js/markdownEditor.3ee490c8.js.LICENSE.txt",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.3ee490c8.js.LICENSE.txt"
-    },
-    "static/js/markdownEditor.3ee490c8.js.map": {
-      "name": "static/js/markdownEditor.3ee490c8.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.3ee490c8.js.map"
-    },
-    "static/js/orgAdmin.c982a7fd.js": {
-      "name": "static/js/orgAdmin.c982a7fd.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.c982a7fd.js"
-    },
-    "static/js/orgAdmin.c982a7fd.js.LICENSE.txt": {
-      "name": "static/js/orgAdmin.c982a7fd.js.LICENSE.txt",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.c982a7fd.js.LICENSE.txt"
-    },
-    "static/js/orgAdmin.c982a7fd.js.map": {
-      "name": "static/js/orgAdmin.c982a7fd.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.c982a7fd.js.map"
-    },
-    "static/js/repoFolderTrash.28b24f80.js": {
-      "name": "static/js/repoFolderTrash.28b24f80.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoFolderTrash.28b24f80.js"
-    },
-    "static/js/repoFolderTrash.28b24f80.js.map": {
-      "name": "static/js/repoFolderTrash.28b24f80.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoFolderTrash.28b24f80.js.map"
-    },
-    "static/js/repoHistory.576546cc.js": {
-      "name": "static/js/repoHistory.576546cc.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoHistory.576546cc.js"
-    },
-    "static/js/repoHistory.576546cc.js.map": {
-      "name": "static/js/repoHistory.576546cc.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoHistory.576546cc.js.map"
-    },
-    "static/js/repoSnapshot.8c570ae6.js": {
-      "name": "static/js/repoSnapshot.8c570ae6.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoSnapshot.8c570ae6.js"
-    },
-    "static/js/repoSnapshot.8c570ae6.js.map": {
-      "name": "static/js/repoSnapshot.8c570ae6.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/repoSnapshot.8c570ae6.js.map"
-    },
-    "static/js/runtime.028fa1ae.js": {
-      "name": "static/js/runtime.028fa1ae.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/runtime.028fa1ae.js"
-    },
-    "static/js/runtime.028fa1ae.js.map": {
-      "name": "static/js/runtime.028fa1ae.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/runtime.028fa1ae.js.map"
-    },
-    "static/js/sdocFileHistory.5d6a8c34.js": {
-      "name": "static/js/sdocFileHistory.5d6a8c34.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sdocFileHistory.5d6a8c34.js"
-    },
-    "static/js/sdocFileHistory.5d6a8c34.js.map": {
-      "name": "static/js/sdocFileHistory.5d6a8c34.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sdocFileHistory.5d6a8c34.js.map"
-    },
-    "static/js/sdocPublishedRevision.aeef61c9.js": {
-      "name": "static/js/sdocPublishedRevision.aeef61c9.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.aeef61c9.js"
-    },
-    "static/js/sdocPublishedRevision.aeef61c9.js.map": {
-      "name": "static/js/sdocPublishedRevision.aeef61c9.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.aeef61c9.js.map"
-    },
-    "static/js/search.60173edb.js": {
-      "name": "static/js/search.60173edb.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/search.60173edb.js"
-    },
-    "static/js/search.60173edb.js.map": {
-      "name": "static/js/search.60173edb.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/search.60173edb.js.map"
-    },
-    "static/js/settings.4f5512b2.js": {
-      "name": "static/js/settings.4f5512b2.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/settings.4f5512b2.js"
-    },
-    "static/js/settings.4f5512b2.js.map": {
-      "name": "static/js/settings.4f5512b2.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/settings.4f5512b2.js.map"
-    },
-    "static/js/sharedDirView.859e8ccc.js": {
-      "name": "static/js/sharedDirView.859e8ccc.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedDirView.859e8ccc.js"
-    },
-    "static/js/sharedDirView.859e8ccc.js.map": {
-      "name": "static/js/sharedDirView.859e8ccc.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedDirView.859e8ccc.js.map"
-    },
-    "static/js/sharedFileViewAudio.cedd033e.js": {
-      "name": "static/js/sharedFileViewAudio.cedd033e.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.cedd033e.js"
-    },
-    "static/js/sharedFileViewAudio.cedd033e.js.map": {
-      "name": "static/js/sharedFileViewAudio.cedd033e.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.cedd033e.js.map"
-    },
-    "static/js/sharedFileViewDocument.180f58d8.js": {
-      "name": "static/js/sharedFileViewDocument.180f58d8.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.180f58d8.js"
-    },
-    "static/js/sharedFileViewDocument.180f58d8.js.map": {
-      "name": "static/js/sharedFileViewDocument.180f58d8.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.180f58d8.js.map"
-    },
-    "static/js/sharedFileViewImage.9d0dda04.js": {
-      "name": "static/js/sharedFileViewImage.9d0dda04.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewImage.9d0dda04.js"
-    },
-    "static/js/sharedFileViewImage.9d0dda04.js.map": {
-      "name": "static/js/sharedFileViewImage.9d0dda04.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewImage.9d0dda04.js.map"
-    },
-    "static/js/sharedFileViewMarkdown.7dbe56ed.js": {
-      "name": "static/js/sharedFileViewMarkdown.7dbe56ed.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.7dbe56ed.js"
-    },
-    "static/js/sharedFileViewMarkdown.7dbe56ed.js.map": {
-      "name": "static/js/sharedFileViewMarkdown.7dbe56ed.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.7dbe56ed.js.map"
-    },
-    "static/js/sharedFileViewPDF.a00415f0.js": {
-      "name": "static/js/sharedFileViewPDF.a00415f0.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.a00415f0.js"
-    },
-    "static/js/sharedFileViewPDF.a00415f0.js.map": {
-      "name": "static/js/sharedFileViewPDF.a00415f0.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.a00415f0.js.map"
-    },
-    "static/js/sharedFileViewSdoc.4a7b0355.js": {
-      "name": "static/js/sharedFileViewSdoc.4a7b0355.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.4a7b0355.js"
-    },
-    "static/js/sharedFileViewSdoc.4a7b0355.js.map": {
-      "name": "static/js/sharedFileViewSdoc.4a7b0355.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.4a7b0355.js.map"
-    },
-    "static/js/sharedFileViewSpreadsheet.0ffb4373.js": {
-      "name": "static/js/sharedFileViewSpreadsheet.0ffb4373.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.0ffb4373.js"
-    },
-    "static/js/sharedFileViewSpreadsheet.0ffb4373.js.map": {
-      "name": "static/js/sharedFileViewSpreadsheet.0ffb4373.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.0ffb4373.js.map"
-    },
-    "static/js/sharedFileViewSVG.5fd43385.js": {
-      "name": "static/js/sharedFileViewSVG.5fd43385.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.5fd43385.js"
-    },
-    "static/js/sharedFileViewSVG.5fd43385.js.map": {
-      "name": "static/js/sharedFileViewSVG.5fd43385.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.5fd43385.js.map"
-    },
-    "static/js/sharedFileViewText.2fe6341c.js": {
-      "name": "static/js/sharedFileViewText.2fe6341c.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.2fe6341c.js"
-    },
-    "static/js/sharedFileViewText.2fe6341c.js.map": {
-      "name": "static/js/sharedFileViewText.2fe6341c.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.2fe6341c.js.map"
-    },
-    "static/js/sharedFileViewUnknown.a0e468e0.js": {
-      "name": "static/js/sharedFileViewUnknown.a0e468e0.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.a0e468e0.js"
-    },
-    "static/js/sharedFileViewUnknown.a0e468e0.js.map": {
-      "name": "static/js/sharedFileViewUnknown.a0e468e0.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.a0e468e0.js.map"
-    },
-    "static/js/sharedFileViewVideo.6af2fa31.js": {
-      "name": "static/js/sharedFileViewVideo.6af2fa31.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.6af2fa31.js"
-    },
-    "static/js/sharedFileViewVideo.6af2fa31.js.map": {
-      "name": "static/js/sharedFileViewVideo.6af2fa31.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.6af2fa31.js.map"
-    },
-    "static/js/sysAdmin.6fc63bb6.js": {
-      "name": "static/js/sysAdmin.6fc63bb6.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.6fc63bb6.js"
-    },
-    "static/js/sysAdmin.6fc63bb6.js.LICENSE.txt": {
-      "name": "static/js/sysAdmin.6fc63bb6.js.LICENSE.txt",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.6fc63bb6.js.LICENSE.txt"
-    },
-    "static/js/sysAdmin.6fc63bb6.js.map": {
-      "name": "static/js/sysAdmin.6fc63bb6.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.6fc63bb6.js.map"
-    },
-    "static/js/TCAccept.c1a15517.js": {
-      "name": "static/js/TCAccept.c1a15517.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCAccept.c1a15517.js"
-    },
-    "static/js/TCAccept.c1a15517.js.map": {
-      "name": "static/js/TCAccept.c1a15517.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCAccept.c1a15517.js.map"
-    },
-    "static/js/TCView.d87affdd.js": {
-      "name": "static/js/TCView.d87affdd.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCView.d87affdd.js"
-    },
-    "static/js/TCView.d87affdd.js.map": {
-      "name": "static/js/TCView.d87affdd.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/TCView.d87affdd.js.map"
-    },
-    "static/js/uploadLink.d3bf7687.js": {
-      "name": "static/js/uploadLink.d3bf7687.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/uploadLink.d3bf7687.js"
-    },
-    "static/js/uploadLink.d3bf7687.js.map": {
-      "name": "static/js/uploadLink.d3bf7687.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/uploadLink.d3bf7687.js.map"
-    },
-    "static/js/viewFileDocument.8a503cff.js": {
-      "name": "static/js/viewFileDocument.8a503cff.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileDocument.8a503cff.js"
-    },
-    "static/js/viewFileDocument.8a503cff.js.map": {
-      "name": "static/js/viewFileDocument.8a503cff.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileDocument.8a503cff.js.map"
-    },
-    "static/js/viewFileSdoc.c9c556b9.js": {
-      "name": "static/js/viewFileSdoc.c9c556b9.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSdoc.c9c556b9.js"
-    },
-    "static/js/viewFileSdoc.c9c556b9.js.map": {
-      "name": "static/js/viewFileSdoc.c9c556b9.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSdoc.c9c556b9.js.map"
-    },
-    "static/js/viewFileSpreadsheet.77d500a4.js": {
-      "name": "static/js/viewFileSpreadsheet.77d500a4.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.77d500a4.js"
-    },
-    "static/js/viewFileSpreadsheet.77d500a4.js.map": {
-      "name": "static/js/viewFileSpreadsheet.77d500a4.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.77d500a4.js.map"
-    },
-    "static/js/viewFileText.7b29a2fb.js": {
-      "name": "static/js/viewFileText.7b29a2fb.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.7b29a2fb.js"
-    },
-    "static/js/viewFileText.7b29a2fb.js.map": {
-      "name": "static/js/viewFileText.7b29a2fb.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.7b29a2fb.js.map"
-    },
-    "static/js/wiki.fd7804d0.js": {
-      "name": "static/js/wiki.fd7804d0.js",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/wiki.fd7804d0.js"
-    },
-    "static/js/wiki.fd7804d0.js.map": {
-      "name": "static/js/wiki.fd7804d0.js.map",
-      "path": "/Users/lidongze/seafile/seafile-10.0/data/dev/seahub/frontend/build/frontend/static/js/wiki.fd7804d0.js.map"
+    "static/css/app.23295983.css": {
+      "name": "static/css/app.23295983.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/app.23295983.css"
+    },
+    "static/css/commons.e3d60fa8.css": {
+      "name": "static/css/commons.e3d60fa8.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/commons.e3d60fa8.css"
+    },
+    "static/css/draft.299cd106.css": {
+      "name": "static/css/draft.299cd106.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/draft.299cd106.css"
+    },
+    "static/css/fileHistory.46b8df90.css": {
+      "name": "static/css/fileHistory.46b8df90.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistory.46b8df90.css"
+    },
+    "static/css/fileHistoryOld.56e922f5.css": {
+      "name": "static/css/fileHistoryOld.56e922f5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistoryOld.56e922f5.css"
+    },
+    "static/css/fileView.abc5c98e.css": {
+      "name": "static/css/fileView.abc5c98e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileView.abc5c98e.css"
+    },
+    "static/css/historyTrashFileView.f7648302.css": {
+      "name": "static/css/historyTrashFileView.f7648302.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/historyTrashFileView.f7648302.css"
+    },
+    "static/css/markdownEditor.f109cf01.css": {
+      "name": "static/css/markdownEditor.f109cf01.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/markdownEditor.f109cf01.css"
+    },
+    "static/css/orgAdmin.4879b268.css": {
+      "name": "static/css/orgAdmin.4879b268.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/orgAdmin.4879b268.css"
+    },
+    "static/css/plainMarkdownEditor.d1350671.css": {
+      "name": "static/css/plainMarkdownEditor.d1350671.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/plainMarkdownEditor.d1350671.css"
+    },
+    "static/css/repoFolderTrash.7c99f0ca.css": {
+      "name": "static/css/repoFolderTrash.7c99f0ca.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoFolderTrash.7c99f0ca.css"
+    },
+    "static/css/repoHistory.e698b443.css": {
+      "name": "static/css/repoHistory.e698b443.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoHistory.e698b443.css"
+    },
+    "static/css/repoSnapshot.08027567.css": {
+      "name": "static/css/repoSnapshot.08027567.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoSnapshot.08027567.css"
+    },
+    "static/css/sdocFileHistory.a4cf585e.css": {
+      "name": "static/css/sdocFileHistory.a4cf585e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sdocFileHistory.a4cf585e.css"
+    },
+    "static/css/sdocPublishedRevision.8b574ede.css": {
+      "name": "static/css/sdocPublishedRevision.8b574ede.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sdocPublishedRevision.8b574ede.css"
+    },
+    "static/css/settings.7199ead5.css": {
+      "name": "static/css/settings.7199ead5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/settings.7199ead5.css"
+    },
+    "static/css/sharedDirView.35e07ad8.css": {
+      "name": "static/css/sharedDirView.35e07ad8.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedDirView.35e07ad8.css"
+    },
+    "static/css/sharedFileViewAudio.48b683a3.css": {
+      "name": "static/css/sharedFileViewAudio.48b683a3.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewAudio.48b683a3.css"
+    },
+    "static/css/sharedFileViewImage.546a26eb.css": {
+      "name": "static/css/sharedFileViewImage.546a26eb.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewImage.546a26eb.css"
+    },
+    "static/css/sharedFileViewMarkdown.66efb225.css": {
+      "name": "static/css/sharedFileViewMarkdown.66efb225.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewMarkdown.66efb225.css"
+    },
+    "static/css/sharedFileViewSdoc.8b574ede.css": {
+      "name": "static/css/sharedFileViewSdoc.8b574ede.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSdoc.8b574ede.css"
+    },
+    "static/css/sharedFileViewSpreadsheet.aea7959b.css": {
+      "name": "static/css/sharedFileViewSpreadsheet.aea7959b.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.aea7959b.css"
+    },
+    "static/css/sharedFileViewSVG.e2d59eb8.css": {
+      "name": "static/css/sharedFileViewSVG.e2d59eb8.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSVG.e2d59eb8.css"
+    },
+    "static/css/sharedFileViewText.c88e34ff.css": {
+      "name": "static/css/sharedFileViewText.c88e34ff.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewText.c88e34ff.css"
+    },
+    "static/css/sharedFileViewVideo.48a9c811.css": {
+      "name": "static/css/sharedFileViewVideo.48a9c811.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewVideo.48a9c811.css"
+    },
+    "static/css/subscription.39e7e396.css": {
+      "name": "static/css/subscription.39e7e396.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/subscription.39e7e396.css"
+    },
+    "static/css/sysAdmin.f13663c8.css": {
+      "name": "static/css/sysAdmin.f13663c8.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sysAdmin.f13663c8.css"
+    },
+    "static/css/TCAccept.b6a1c3b5.css": {
+      "name": "static/css/TCAccept.b6a1c3b5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCAccept.b6a1c3b5.css"
+    },
+    "static/css/TCView.b6a1c3b5.css": {
+      "name": "static/css/TCView.b6a1c3b5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCView.b6a1c3b5.css"
+    },
+    "static/css/uploadLink.e5a87aa8.css": {
+      "name": "static/css/uploadLink.e5a87aa8.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/uploadLink.e5a87aa8.css"
+    },
+    "static/css/viewFileSdoc.aad0f0c9.css": {
+      "name": "static/css/viewFileSdoc.aad0f0c9.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSdoc.aad0f0c9.css"
+    },
+    "static/css/viewFileSpreadsheet.aea7959b.css": {
+      "name": "static/css/viewFileSpreadsheet.aea7959b.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.aea7959b.css"
+    },
+    "static/css/viewFileText.53fcb568.css": {
+      "name": "static/css/viewFileText.53fcb568.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileText.53fcb568.css"
+    },
+    "static/css/wiki.c2e1d497.css": {
+      "name": "static/css/wiki.c2e1d497.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki.c2e1d497.css"
+    },
+    "static/css/wiki2.954d51c0.css": {
+      "name": "static/css/wiki2.954d51c0.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki2.954d51c0.css"
+    },
+    "static/js/1082.e17b4811.chunk.js": {
+      "name": "static/js/1082.e17b4811.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1082.e17b4811.chunk.js"
+    },
+    "static/js/1284.2b99ba15.chunk.js": {
+      "name": "static/js/1284.2b99ba15.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1284.2b99ba15.chunk.js"
+    },
+    "static/js/1431.8be94882.chunk.js": {
+      "name": "static/js/1431.8be94882.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1431.8be94882.chunk.js"
+    },
+    "static/js/1507.89f63b8b.chunk.js": {
+      "name": "static/js/1507.89f63b8b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1507.89f63b8b.chunk.js"
+    },
+    "static/js/1739.645ec20e.chunk.js": {
+      "name": "static/js/1739.645ec20e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1739.645ec20e.chunk.js"
+    },
+    "static/js/1799.88adfee8.chunk.js": {
+      "name": "static/js/1799.88adfee8.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1799.88adfee8.chunk.js"
+    },
+    "static/js/1817.15bbe3c5.chunk.js": {
+      "name": "static/js/1817.15bbe3c5.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1817.15bbe3c5.chunk.js"
+    },
+    "static/js/194.a8da8733.chunk.js": {
+      "name": "static/js/194.a8da8733.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/194.a8da8733.chunk.js"
+    },
+    "static/js/2002.150d997b.chunk.js": {
+      "name": "static/js/2002.150d997b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2002.150d997b.chunk.js"
+    },
+    "static/js/2029.0d08056e.chunk.js": {
+      "name": "static/js/2029.0d08056e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2029.0d08056e.chunk.js"
+    },
+    "static/js/2077.bfe07702.chunk.js": {
+      "name": "static/js/2077.bfe07702.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2077.bfe07702.chunk.js"
+    },
+    "static/js/2083.0f8488f7.chunk.js": {
+      "name": "static/js/2083.0f8488f7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2083.0f8488f7.chunk.js"
+    },
+    "static/js/2092.8d19e763.chunk.js": {
+      "name": "static/js/2092.8d19e763.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2092.8d19e763.chunk.js"
+    },
+    "static/js/2134.370f4699.chunk.js": {
+      "name": "static/js/2134.370f4699.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2134.370f4699.chunk.js"
+    },
+    "static/js/2235.ad3dd60e.chunk.js": {
+      "name": "static/js/2235.ad3dd60e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2235.ad3dd60e.chunk.js"
+    },
+    "static/js/2237.235a28f5.chunk.js": {
+      "name": "static/js/2237.235a28f5.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2237.235a28f5.chunk.js"
+    },
+    "static/js/2265.12e08ce7.chunk.js": {
+      "name": "static/js/2265.12e08ce7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2265.12e08ce7.chunk.js"
+    },
+    "static/js/2272.988336e5.chunk.js": {
+      "name": "static/js/2272.988336e5.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2272.988336e5.chunk.js"
+    },
+    "static/js/2280.697b3445.chunk.js": {
+      "name": "static/js/2280.697b3445.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2280.697b3445.chunk.js"
+    },
+    "static/js/233.c7382c95.chunk.js": {
+      "name": "static/js/233.c7382c95.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/233.c7382c95.chunk.js"
+    },
+    "static/js/2378.61ab4198.chunk.js": {
+      "name": "static/js/2378.61ab4198.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2378.61ab4198.chunk.js"
+    },
+    "static/js/2405.f6d72ea3.chunk.js": {
+      "name": "static/js/2405.f6d72ea3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2405.f6d72ea3.chunk.js"
+    },
+    "static/js/2468.eb7ac683.chunk.js": {
+      "name": "static/js/2468.eb7ac683.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2468.eb7ac683.chunk.js"
+    },
+    "static/js/2504.44c93a0b.chunk.js": {
+      "name": "static/js/2504.44c93a0b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2504.44c93a0b.chunk.js"
+    },
+    "static/js/2638.fca656d8.chunk.js": {
+      "name": "static/js/2638.fca656d8.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2638.fca656d8.chunk.js"
+    },
+    "static/js/279.edf61df2.chunk.js": {
+      "name": "static/js/279.edf61df2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/279.edf61df2.chunk.js"
+    },
+    "static/js/2879.8fc2be8b.chunk.js": {
+      "name": "static/js/2879.8fc2be8b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2879.8fc2be8b.chunk.js"
+    },
+    "static/js/2943.4b999148.chunk.js": {
+      "name": "static/js/2943.4b999148.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2943.4b999148.chunk.js"
+    },
+    "static/js/2977.a70d421a.chunk.js": {
+      "name": "static/js/2977.a70d421a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2977.a70d421a.chunk.js"
+    },
+    "static/js/298.84e66bd0.chunk.js": {
+      "name": "static/js/298.84e66bd0.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/298.84e66bd0.chunk.js"
+    },
+    "static/js/3032.cd86dfed.chunk.js": {
+      "name": "static/js/3032.cd86dfed.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3032.cd86dfed.chunk.js"
+    },
+    "static/js/3219.cb42f8b1.chunk.js": {
+      "name": "static/js/3219.cb42f8b1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3219.cb42f8b1.chunk.js"
+    },
+    "static/js/3286.f34d0dc2.chunk.js": {
+      "name": "static/js/3286.f34d0dc2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3286.f34d0dc2.chunk.js"
+    },
+    "static/js/3287.f0676d36.chunk.js": {
+      "name": "static/js/3287.f0676d36.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3287.f0676d36.chunk.js"
+    },
+    "static/js/3319.060859db.chunk.js": {
+      "name": "static/js/3319.060859db.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3319.060859db.chunk.js"
+    },
+    "static/js/3338.64dce22c.chunk.js": {
+      "name": "static/js/3338.64dce22c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3338.64dce22c.chunk.js"
+    },
+    "static/js/3605.a68fa6d6.chunk.js": {
+      "name": "static/js/3605.a68fa6d6.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3605.a68fa6d6.chunk.js"
+    },
+    "static/js/3642.32b7e716.chunk.js": {
+      "name": "static/js/3642.32b7e716.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3642.32b7e716.chunk.js"
+    },
+    "static/js/3646.986fc163.chunk.js": {
+      "name": "static/js/3646.986fc163.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3646.986fc163.chunk.js"
+    },
+    "static/js/3750.f172c917.chunk.js": {
+      "name": "static/js/3750.f172c917.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3750.f172c917.chunk.js"
+    },
+    "static/js/3925.59fbf849.chunk.js": {
+      "name": "static/js/3925.59fbf849.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3925.59fbf849.chunk.js"
+    },
+    "static/js/4092.f09c6772.chunk.js": {
+      "name": "static/js/4092.f09c6772.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4092.f09c6772.chunk.js"
+    },
+    "static/js/4222.b9d0e198.chunk.js": {
+      "name": "static/js/4222.b9d0e198.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4222.b9d0e198.chunk.js"
+    },
+    "static/js/4312.7db2cbc5.chunk.js": {
+      "name": "static/js/4312.7db2cbc5.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4312.7db2cbc5.chunk.js"
+    },
+    "static/js/4449.4fbcf7f1.chunk.js": {
+      "name": "static/js/4449.4fbcf7f1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4449.4fbcf7f1.chunk.js"
+    },
+    "static/js/4482.bd25cda4.chunk.js": {
+      "name": "static/js/4482.bd25cda4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4482.bd25cda4.chunk.js"
+    },
+    "static/js/4725.d3cc6ee2.chunk.js": {
+      "name": "static/js/4725.d3cc6ee2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4725.d3cc6ee2.chunk.js"
+    },
+    "static/js/5053.05085b85.chunk.js": {
+      "name": "static/js/5053.05085b85.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5053.05085b85.chunk.js"
+    },
+    "static/js/5110.e9f5e0df.chunk.js": {
+      "name": "static/js/5110.e9f5e0df.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5110.e9f5e0df.chunk.js"
+    },
+    "static/js/5112.39543189.chunk.js": {
+      "name": "static/js/5112.39543189.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5112.39543189.chunk.js"
+    },
+    "static/js/5143.b22d1977.chunk.js": {
+      "name": "static/js/5143.b22d1977.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5143.b22d1977.chunk.js"
+    },
+    "static/js/5149.a9440257.chunk.js": {
+      "name": "static/js/5149.a9440257.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5149.a9440257.chunk.js"
+    },
+    "static/js/5179.332760ae.chunk.js": {
+      "name": "static/js/5179.332760ae.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5179.332760ae.chunk.js"
+    },
+    "static/js/5250.108f3c6d.chunk.js": {
+      "name": "static/js/5250.108f3c6d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5250.108f3c6d.chunk.js"
+    },
+    "static/js/5306.85568d11.chunk.js": {
+      "name": "static/js/5306.85568d11.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5306.85568d11.chunk.js"
+    },
+    "static/js/5389.d9eac3d9.chunk.js": {
+      "name": "static/js/5389.d9eac3d9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5389.d9eac3d9.chunk.js"
+    },
+    "static/js/5500.5495be7d.chunk.js": {
+      "name": "static/js/5500.5495be7d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5500.5495be7d.chunk.js"
+    },
+    "static/js/5648.c58151c4.chunk.js": {
+      "name": "static/js/5648.c58151c4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5648.c58151c4.chunk.js"
+    },
+    "static/js/5682.ebabe68b.chunk.js": {
+      "name": "static/js/5682.ebabe68b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5682.ebabe68b.chunk.js"
+    },
+    "static/js/5784.7980842d.chunk.js": {
+      "name": "static/js/5784.7980842d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5784.7980842d.chunk.js"
+    },
+    "static/js/5807.3994e563.chunk.js": {
+      "name": "static/js/5807.3994e563.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5807.3994e563.chunk.js"
+    },
+    "static/js/6011.e49bb0ff.chunk.js": {
+      "name": "static/js/6011.e49bb0ff.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6011.e49bb0ff.chunk.js"
+    },
+    "static/js/6052.7fb24a8a.chunk.js": {
+      "name": "static/js/6052.7fb24a8a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6052.7fb24a8a.chunk.js"
+    },
+    "static/js/6082.e4951c67.chunk.js": {
+      "name": "static/js/6082.e4951c67.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6082.e4951c67.chunk.js"
+    },
+    "static/js/6296.8c9b79fb.chunk.js": {
+      "name": "static/js/6296.8c9b79fb.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6296.8c9b79fb.chunk.js"
+    },
+    "static/js/6361.637866c4.chunk.js": {
+      "name": "static/js/6361.637866c4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6361.637866c4.chunk.js"
+    },
+    "static/js/6550.cdcaaf65.chunk.js": {
+      "name": "static/js/6550.cdcaaf65.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6550.cdcaaf65.chunk.js"
+    },
+    "static/js/6555.458955aa.chunk.js": {
+      "name": "static/js/6555.458955aa.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6555.458955aa.chunk.js"
+    },
+    "static/js/6684.161a2499.chunk.js": {
+      "name": "static/js/6684.161a2499.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6684.161a2499.chunk.js"
+    },
+    "static/js/6722.443426aa.chunk.js": {
+      "name": "static/js/6722.443426aa.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6722.443426aa.chunk.js"
+    },
+    "static/js/6919.a52c30ba.chunk.js": {
+      "name": "static/js/6919.a52c30ba.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6919.a52c30ba.chunk.js"
+    },
+    "static/js/7334.3dd2402a.chunk.js": {
+      "name": "static/js/7334.3dd2402a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7334.3dd2402a.chunk.js"
+    },
+    "static/js/7530.3aa7111a.chunk.js": {
+      "name": "static/js/7530.3aa7111a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7530.3aa7111a.chunk.js"
+    },
+    "static/js/7601.348505d0.chunk.js": {
+      "name": "static/js/7601.348505d0.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7601.348505d0.chunk.js"
+    },
+    "static/js/7702.5a8c1b09.chunk.js": {
+      "name": "static/js/7702.5a8c1b09.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7702.5a8c1b09.chunk.js"
+    },
+    "static/js/7728.d58677ad.chunk.js": {
+      "name": "static/js/7728.d58677ad.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7728.d58677ad.chunk.js"
+    },
+    "static/js/78.2323c278.chunk.js": {
+      "name": "static/js/78.2323c278.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/78.2323c278.chunk.js"
+    },
+    "static/js/7881.27c93a8d.chunk.js": {
+      "name": "static/js/7881.27c93a8d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7881.27c93a8d.chunk.js"
+    },
+    "static/js/7926.c372e3fb.chunk.js": {
+      "name": "static/js/7926.c372e3fb.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7926.c372e3fb.chunk.js"
+    },
+    "static/js/7969.3156b7ef.chunk.js": {
+      "name": "static/js/7969.3156b7ef.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7969.3156b7ef.chunk.js"
+    },
+    "static/js/8116.78dfdd7e.chunk.js": {
+      "name": "static/js/8116.78dfdd7e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8116.78dfdd7e.chunk.js"
+    },
+    "static/js/8197.c5d1369a.chunk.js": {
+      "name": "static/js/8197.c5d1369a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8197.c5d1369a.chunk.js"
+    },
+    "static/js/8411.9348d010.chunk.js": {
+      "name": "static/js/8411.9348d010.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8411.9348d010.chunk.js"
+    },
+    "static/js/8466.691d633d.chunk.js": {
+      "name": "static/js/8466.691d633d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8466.691d633d.chunk.js"
+    },
+    "static/js/8590.bf239b32.chunk.js": {
+      "name": "static/js/8590.bf239b32.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8590.bf239b32.chunk.js"
+    },
+    "static/js/8836.fd3c5cf2.chunk.js": {
+      "name": "static/js/8836.fd3c5cf2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8836.fd3c5cf2.chunk.js"
+    },
+    "static/js/8868.3d4e1b75.chunk.js": {
+      "name": "static/js/8868.3d4e1b75.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8868.3d4e1b75.chunk.js"
+    },
+    "static/js/8883.73aaf63a.chunk.js": {
+      "name": "static/js/8883.73aaf63a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8883.73aaf63a.chunk.js"
+    },
+    "static/js/9011.7831b91c.chunk.js": {
+      "name": "static/js/9011.7831b91c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9011.7831b91c.chunk.js"
+    },
+    "static/js/9072.75c60489.chunk.js": {
+      "name": "static/js/9072.75c60489.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9072.75c60489.chunk.js"
+    },
+    "static/js/9107.cfab64d6.chunk.js": {
+      "name": "static/js/9107.cfab64d6.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9107.cfab64d6.chunk.js"
+    },
+    "static/js/9273.3f8d6124.chunk.js": {
+      "name": "static/js/9273.3f8d6124.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9273.3f8d6124.chunk.js"
+    },
+    "static/js/9431.412046d8.chunk.js": {
+      "name": "static/js/9431.412046d8.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9431.412046d8.chunk.js"
+    },
+    "static/js/9478.e0af85a2.chunk.js": {
+      "name": "static/js/9478.e0af85a2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9478.e0af85a2.chunk.js"
+    },
+    "static/js/9493.b333bf9b.chunk.js": {
+      "name": "static/js/9493.b333bf9b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9493.b333bf9b.chunk.js"
+    },
+    "static/js/9538.8493c862.chunk.js": {
+      "name": "static/js/9538.8493c862.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9538.8493c862.chunk.js"
+    },
+    "static/js/959.d6a4a2c0.chunk.js": {
+      "name": "static/js/959.d6a4a2c0.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/959.d6a4a2c0.chunk.js"
+    },
+    "static/js/9675.601c5a98.chunk.js": {
+      "name": "static/js/9675.601c5a98.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9675.601c5a98.chunk.js"
+    },
+    "static/js/9984.86960be9.chunk.js": {
+      "name": "static/js/9984.86960be9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9984.86960be9.chunk.js"
+    },
+    "static/js/9997.5762e075.chunk.js": {
+      "name": "static/js/9997.5762e075.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9997.5762e075.chunk.js"
+    },
+    "static/js/app.5f3388af.js": {
+      "name": "static/js/app.5f3388af.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.5f3388af.js"
+    },
+    "static/js/app.5f3388af.js.LICENSE.txt": {
+      "name": "static/js/app.5f3388af.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.5f3388af.js.LICENSE.txt"
+    },
+    "static/js/commons.c9213491.js": {
+      "name": "static/js/commons.c9213491.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.c9213491.js"
+    },
+    "static/js/commons.c9213491.js.LICENSE.txt": {
+      "name": "static/js/commons.c9213491.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.c9213491.js.LICENSE.txt"
+    },
+    "static/js/draft.5aa48a0a.js": {
+      "name": "static/js/draft.5aa48a0a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/draft.5aa48a0a.js"
+    },
+    "static/js/fileHistory.f83d2f3b.js": {
+      "name": "static/js/fileHistory.f83d2f3b.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistory.f83d2f3b.js"
+    },
+    "static/js/fileHistoryOld.32df1cc9.js": {
+      "name": "static/js/fileHistoryOld.32df1cc9.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistoryOld.32df1cc9.js"
+    },
+    "static/js/fileView.7da16c80.js": {
+      "name": "static/js/fileView.7da16c80.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.7da16c80.js"
+    },
+    "static/js/fileView.7da16c80.js.LICENSE.txt": {
+      "name": "static/js/fileView.7da16c80.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.7da16c80.js.LICENSE.txt"
+    },
+    "static/js/historyTrashFileView.803b1e00.js": {
+      "name": "static/js/historyTrashFileView.803b1e00.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.803b1e00.js"
+    },
+    "static/js/historyTrashFileView.803b1e00.js.LICENSE.txt": {
+      "name": "static/js/historyTrashFileView.803b1e00.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.803b1e00.js.LICENSE.txt"
+    },
+    "static/js/institutionAdmin.d203d7e4.js": {
+      "name": "static/js/institutionAdmin.d203d7e4.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/institutionAdmin.d203d7e4.js"
+    },
+    "static/js/markdownEditor.38aa0136.js": {
+      "name": "static/js/markdownEditor.38aa0136.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.38aa0136.js"
+    },
+    "static/js/markdownEditor.38aa0136.js.LICENSE.txt": {
+      "name": "static/js/markdownEditor.38aa0136.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.38aa0136.js.LICENSE.txt"
+    },
+    "static/js/orgAdmin.63feeab6.js": {
+      "name": "static/js/orgAdmin.63feeab6.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/orgAdmin.63feeab6.js"
+    },
+    "static/js/orgAdmin.63feeab6.js.LICENSE.txt": {
+      "name": "static/js/orgAdmin.63feeab6.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/orgAdmin.63feeab6.js.LICENSE.txt"
+    },
+    "static/js/plainMarkdownEditor.97f2d728.js": {
+      "name": "static/js/plainMarkdownEditor.97f2d728.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.97f2d728.js"
+    },
+    "static/js/plainMarkdownEditor.97f2d728.js.LICENSE.txt": {
+      "name": "static/js/plainMarkdownEditor.97f2d728.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.97f2d728.js.LICENSE.txt"
+    },
+    "static/js/repoFolderTrash.463ed807.js": {
+      "name": "static/js/repoFolderTrash.463ed807.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoFolderTrash.463ed807.js"
+    },
+    "static/js/repoHistory.fec5754f.js": {
+      "name": "static/js/repoHistory.fec5754f.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoHistory.fec5754f.js"
+    },
+    "static/js/repoSnapshot.4ea1bde5.js": {
+      "name": "static/js/repoSnapshot.4ea1bde5.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoSnapshot.4ea1bde5.js"
+    },
+    "static/js/runtime.054055c8.js": {
+      "name": "static/js/runtime.054055c8.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/runtime.054055c8.js"
+    },
+    "static/js/sdocFileHistory.eef8d09f.js": {
+      "name": "static/js/sdocFileHistory.eef8d09f.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocFileHistory.eef8d09f.js"
+    },
+    "static/js/sdocFileHistory.eef8d09f.js.LICENSE.txt": {
+      "name": "static/js/sdocFileHistory.eef8d09f.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocFileHistory.eef8d09f.js.LICENSE.txt"
+    },
+    "static/js/sdocPublishedRevision.d64e13f0.js": {
+      "name": "static/js/sdocPublishedRevision.d64e13f0.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.d64e13f0.js"
+    },
+    "static/js/sdocPublishedRevision.d64e13f0.js.LICENSE.txt": {
+      "name": "static/js/sdocPublishedRevision.d64e13f0.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.d64e13f0.js.LICENSE.txt"
+    },
+    "static/js/search.7a19ee66.js": {
+      "name": "static/js/search.7a19ee66.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/search.7a19ee66.js"
+    },
+    "static/js/settings.90adc1a3.js": {
+      "name": "static/js/settings.90adc1a3.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/settings.90adc1a3.js"
+    },
+    "static/js/sharedDirView.8cccef9d.js": {
+      "name": "static/js/sharedDirView.8cccef9d.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedDirView.8cccef9d.js"
+    },
+    "static/js/sharedFileViewAudio.6e32c374.js": {
+      "name": "static/js/sharedFileViewAudio.6e32c374.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.6e32c374.js"
+    },
+    "static/js/sharedFileViewAudio.6e32c374.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewAudio.6e32c374.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.6e32c374.js.LICENSE.txt"
+    },
+    "static/js/sharedFileViewDocument.12d527a2.js": {
+      "name": "static/js/sharedFileViewDocument.12d527a2.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.12d527a2.js"
+    },
+    "static/js/sharedFileViewImage.63eab097.js": {
+      "name": "static/js/sharedFileViewImage.63eab097.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewImage.63eab097.js"
+    },
+    "static/js/sharedFileViewMarkdown.3d353cfe.js": {
+      "name": "static/js/sharedFileViewMarkdown.3d353cfe.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.3d353cfe.js"
+    },
+    "static/js/sharedFileViewMarkdown.3d353cfe.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewMarkdown.3d353cfe.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.3d353cfe.js.LICENSE.txt"
+    },
+    "static/js/sharedFileViewPDF.020ab7eb.js": {
+      "name": "static/js/sharedFileViewPDF.020ab7eb.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.020ab7eb.js"
+    },
+    "static/js/sharedFileViewSdoc.d4a3a430.js": {
+      "name": "static/js/sharedFileViewSdoc.d4a3a430.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.d4a3a430.js"
+    },
+    "static/js/sharedFileViewSdoc.d4a3a430.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewSdoc.d4a3a430.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.d4a3a430.js.LICENSE.txt"
+    },
+    "static/js/sharedFileViewSpreadsheet.f8a1d57a.js": {
+      "name": "static/js/sharedFileViewSpreadsheet.f8a1d57a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.f8a1d57a.js"
+    },
+    "static/js/sharedFileViewSVG.50d9031b.js": {
+      "name": "static/js/sharedFileViewSVG.50d9031b.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.50d9031b.js"
+    },
+    "static/js/sharedFileViewText.4b4619aa.js": {
+      "name": "static/js/sharedFileViewText.4b4619aa.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.4b4619aa.js"
+    },
+    "static/js/sharedFileViewText.4b4619aa.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewText.4b4619aa.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.4b4619aa.js.LICENSE.txt"
+    },
+    "static/js/sharedFileViewUnknown.c2574eee.js": {
+      "name": "static/js/sharedFileViewUnknown.c2574eee.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.c2574eee.js"
+    },
+    "static/js/sharedFileViewVideo.1a0d1fe2.js": {
+      "name": "static/js/sharedFileViewVideo.1a0d1fe2.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.1a0d1fe2.js"
+    },
+    "static/js/sharedFileViewVideo.1a0d1fe2.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewVideo.1a0d1fe2.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.1a0d1fe2.js.LICENSE.txt"
+    },
+    "static/js/subscription.05249984.js": {
+      "name": "static/js/subscription.05249984.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/subscription.05249984.js"
+    },
+    "static/js/sysAdmin.8ad35cb8.js": {
+      "name": "static/js/sysAdmin.8ad35cb8.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sysAdmin.8ad35cb8.js"
+    },
+    "static/js/sysAdmin.8ad35cb8.js.LICENSE.txt": {
+      "name": "static/js/sysAdmin.8ad35cb8.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sysAdmin.8ad35cb8.js.LICENSE.txt"
+    },
+    "static/js/TCAccept.91ae9f73.js": {
+      "name": "static/js/TCAccept.91ae9f73.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCAccept.91ae9f73.js"
+    },
+    "static/js/TCView.e821a5ff.js": {
+      "name": "static/js/TCView.e821a5ff.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCView.e821a5ff.js"
+    },
+    "static/js/uploadLink.d0bf453a.js": {
+      "name": "static/js/uploadLink.d0bf453a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/uploadLink.d0bf453a.js"
+    },
+    "static/js/viewFileCollaboraOnline.30438ef7.js": {
+      "name": "static/js/viewFileCollaboraOnline.30438ef7.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileCollaboraOnline.30438ef7.js"
+    },
+    "static/js/viewFileDocument.99b2187a.js": {
+      "name": "static/js/viewFileDocument.99b2187a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileDocument.99b2187a.js"
+    },
+    "static/js/viewFileOnlyoffice.03a87d22.js": {
+      "name": "static/js/viewFileOnlyoffice.03a87d22.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileOnlyoffice.03a87d22.js"
+    },
+    "static/js/viewFileSdoc.659db316.js": {
+      "name": "static/js/viewFileSdoc.659db316.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSdoc.659db316.js"
+    },
+    "static/js/viewFileSdoc.659db316.js.LICENSE.txt": {
+      "name": "static/js/viewFileSdoc.659db316.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSdoc.659db316.js.LICENSE.txt"
+    },
+    "static/js/viewFileSpreadsheet.026b6368.js": {
+      "name": "static/js/viewFileSpreadsheet.026b6368.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.026b6368.js"
+    },
+    "static/js/viewFileText.b6639a4a.js": {
+      "name": "static/js/viewFileText.b6639a4a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.b6639a4a.js"
+    },
+    "static/js/viewFileText.b6639a4a.js.LICENSE.txt": {
+      "name": "static/js/viewFileText.b6639a4a.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.b6639a4a.js.LICENSE.txt"
+    },
+    "static/js/wiki.fac5678a.js": {
+      "name": "static/js/wiki.fac5678a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.fac5678a.js"
+    },
+    "static/js/wiki.fac5678a.js.LICENSE.txt": {
+      "name": "static/js/wiki.fac5678a.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.fac5678a.js.LICENSE.txt"
+    },
+    "static/js/wiki2.e9f738c0.js": {
+      "name": "static/js/wiki2.e9f738c0.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki2.e9f738c0.js"
+    },
+    "static/js/wiki2.e9f738c0.js.LICENSE.txt": {
+      "name": "static/js/wiki2.e9f738c0.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki2.e9f738c0.js.LICENSE.txt"
     }
   },
   "chunks": {
     "app": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/app.ce867cc5.css",
-      "static/js/app.800f919a.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/app.23295983.css",
+      "static/js/app.5f3388af.js"
     ],
     "draft": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/draft.dfd8ec8b.css",
-      "static/js/draft.b5d27191.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/draft.299cd106.css",
+      "static/js/draft.5aa48a0a.js"
     ],
     "fileHistory": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/fileHistory.c207f9b1.css",
-      "static/js/fileHistory.88bff865.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/fileHistory.46b8df90.css",
+      "static/js/fileHistory.f83d2f3b.js"
     ],
     "fileHistoryOld": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/fileHistoryOld.34922be6.css",
-      "static/js/fileHistoryOld.3f18f9ad.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/fileHistoryOld.56e922f5.css",
+      "static/js/fileHistoryOld.32df1cc9.js"
     ],
     "fileView": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/fileView.f3d13498.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/fileView.abc5c98e.css",
+      "static/js/fileView.7da16c80.js"
     ],
     "historyTrashFileView": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/historyTrashFileView.d2070387.css",
-      "static/js/historyTrashFileView.11fe180d.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/historyTrashFileView.f7648302.css",
+      "static/js/historyTrashFileView.803b1e00.js"
+    ],
+    "institutionAdmin": [
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/institutionAdmin.d203d7e4.js"
     ],
     "markdownEditor": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/markdownEditor.c66eb93d.css",
-      "static/js/markdownEditor.3ee490c8.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/markdownEditor.f109cf01.css",
+      "static/js/markdownEditor.38aa0136.js"
     ],
     "orgAdmin": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/orgAdmin.bb6a05c5.css",
-      "static/js/orgAdmin.c982a7fd.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/orgAdmin.4879b268.css",
+      "static/js/orgAdmin.63feeab6.js"
+    ],
+    "plainMarkdownEditor": [
+      "static/js/runtime.054055c8.js",
+      "static/css/plainMarkdownEditor.d1350671.css",
+      "static/js/plainMarkdownEditor.97f2d728.js"
     ],
     "repoFolderTrash": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/repoFolderTrash.d4170c41.css",
-      "static/js/repoFolderTrash.28b24f80.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/repoFolderTrash.7c99f0ca.css",
+      "static/js/repoFolderTrash.463ed807.js"
     ],
     "repoHistory": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/repoHistory.f0ad8622.css",
-      "static/js/repoHistory.576546cc.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/repoHistory.e698b443.css",
+      "static/js/repoHistory.fec5754f.js"
     ],
     "repoSnapshot": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/repoSnapshot.c6bbee77.css",
-      "static/js/repoSnapshot.8c570ae6.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/repoSnapshot.08027567.css",
+      "static/js/repoSnapshot.4ea1bde5.js"
     ],
     "sdocFileHistory": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/sdocFileHistory.f936c666.css",
-      "static/js/sdocFileHistory.5d6a8c34.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sdocFileHistory.a4cf585e.css",
+      "static/js/sdocFileHistory.eef8d09f.js"
     ],
     "sdocPublishedRevision": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sdocPublishedRevision.aeef61c9.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sdocPublishedRevision.8b574ede.css",
+      "static/js/sdocPublishedRevision.d64e13f0.js"
     ],
     "search": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/search.60173edb.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/search.7a19ee66.js"
     ],
     "settings": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/settings.391717d2.css",
-      "static/js/settings.4f5512b2.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/settings.7199ead5.css",
+      "static/js/settings.90adc1a3.js"
     ],
     "sharedDirView": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/sharedDirView.945789e9.css",
-      "static/js/sharedDirView.859e8ccc.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/sharedDirView.35e07ad8.css",
+      "static/js/sharedDirView.8cccef9d.js"
     ],
     "sharedFileViewAudio": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewAudio.cedd033e.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sharedFileViewAudio.48b683a3.css",
+      "static/js/sharedFileViewAudio.6e32c374.js"
     ],
     "sharedFileViewDocument": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewDocument.180f58d8.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/sharedFileViewDocument.12d527a2.js"
     ],
     "sharedFileViewImage": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewImage.9d0dda04.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/sharedFileViewImage.546a26eb.css",
+      "static/js/sharedFileViewImage.63eab097.js"
     ],
     "sharedFileViewMarkdown": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewMarkdown.7dbe56ed.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sharedFileViewMarkdown.66efb225.css",
+      "static/js/sharedFileViewMarkdown.3d353cfe.js"
     ],
     "sharedFileViewPDF": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewPDF.a00415f0.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/sharedFileViewPDF.020ab7eb.js"
     ],
     "sharedFileViewSdoc": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewSdoc.4a7b0355.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sharedFileViewSdoc.8b574ede.css",
+      "static/js/sharedFileViewSdoc.d4a3a430.js"
     ],
     "sharedFileViewSpreadsheet": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/sharedFileViewSpreadsheet.ff1ddac7.css",
-      "static/js/sharedFileViewSpreadsheet.0ffb4373.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/sharedFileViewSpreadsheet.aea7959b.css",
+      "static/js/sharedFileViewSpreadsheet.f8a1d57a.js"
     ],
     "sharedFileViewSVG": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewSVG.5fd43385.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/sharedFileViewSVG.e2d59eb8.css",
+      "static/js/sharedFileViewSVG.50d9031b.js"
     ],
     "sharedFileViewText": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewText.2fe6341c.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sharedFileViewText.c88e34ff.css",
+      "static/js/sharedFileViewText.4b4619aa.js"
     ],
     "sharedFileViewUnknown": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewUnknown.a0e468e0.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/sharedFileViewUnknown.c2574eee.js"
     ],
     "sharedFileViewVideo": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/sharedFileViewVideo.6af2fa31.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/sharedFileViewVideo.48a9c811.css",
+      "static/js/sharedFileViewVideo.1a0d1fe2.js"
+    ],
+    "subscription": [
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/subscription.39e7e396.css",
+      "static/js/subscription.05249984.js"
     ],
     "sysAdmin": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/sysAdmin.feb7b73d.css",
-      "static/js/sysAdmin.6fc63bb6.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/sysAdmin.f13663c8.css",
+      "static/js/sysAdmin.8ad35cb8.js"
     ],
     "TCAccept": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/TCAccept.05d88392.css",
-      "static/js/TCAccept.c1a15517.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/TCAccept.b6a1c3b5.css",
+      "static/js/TCAccept.91ae9f73.js"
     ],
     "TCView": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/TCView.05d88392.css",
-      "static/js/TCView.d87affdd.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/TCView.b6a1c3b5.css",
+      "static/js/TCView.e821a5ff.js"
     ],
     "uploadLink": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/uploadLink.01103a58.css",
-      "static/js/uploadLink.d3bf7687.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/uploadLink.e5a87aa8.css",
+      "static/js/uploadLink.d0bf453a.js"
+    ],
+    "viewFileCollaboraOnline": [
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/viewFileCollaboraOnline.30438ef7.js"
     ],
     "viewFileDocument": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/viewFileDocument.8a503cff.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/viewFileDocument.99b2187a.js"
+    ],
+    "viewFileOnlyoffice": [
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/js/viewFileOnlyoffice.03a87d22.js"
     ],
     "viewFileSdoc": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/viewFileSdoc.c9c556b9.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/viewFileSdoc.aad0f0c9.css",
+      "static/js/viewFileSdoc.659db316.js"
     ],
     "viewFileSpreadsheet": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/viewFileSpreadsheet.ff1ddac7.css",
-      "static/js/viewFileSpreadsheet.77d500a4.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/viewFileSpreadsheet.aea7959b.css",
+      "static/js/viewFileSpreadsheet.026b6368.js"
     ],
     "viewFileText": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/js/viewFileText.7b29a2fb.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/viewFileText.53fcb568.css",
+      "static/js/viewFileText.b6639a4a.js"
     ],
     "wiki": [
-      "static/js/runtime.028fa1ae.js",
-      "static/css/commons.2c40b537.css",
-      "static/js/commons.84df398e.js",
-      "static/css/wiki.2d406fab.css",
-      "static/js/wiki.fd7804d0.js"
+      "static/js/runtime.054055c8.js",
+      "static/css/commons.e3d60fa8.css",
+      "static/js/commons.c9213491.js",
+      "static/css/wiki.c2e1d497.css",
+      "static/js/wiki.fac5678a.js"
+    ],
+    "wiki2": [
+      "static/js/runtime.054055c8.js",
+      "static/css/wiki2.954d51c0.css",
+      "static/js/wiki2.e9f738c0.js"
     ]
   }
 }
