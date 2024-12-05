@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 14:14+0800\n"
+"POT-Creation-Date: 2024-12-05 10:23+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Oleksandr Suvorov <say@say.od.ua>, 2016\n"
 "Language-Team: Ukrainian (http://app.transifex.com/haiwen/seahub/language/uk/)\n"
@@ -447,14 +447,14 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:435 seahub/api2/endpoints/wiki2.py:463
+#: seahub/api2/endpoints/wiki2.py:437 seahub/api2/endpoints/wiki2.py:465
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4040
-#: seahub/notifications/models.py:538 seahub/notifications/models.py:579
-#: seahub/notifications/models.py:621 seahub/notifications/models.py:672
-#: seahub/notifications/models.py:728 seahub/notifications/models.py:758
-#: seahub/notifications/models.py:780 seahub/notifications/models.py:806
-#: seahub/notifications/models.py:823 seahub/notifications/models.py:840
-#: seahub/notifications/models.py:869 seahub/seadoc/apis.py:2660
+#: seahub/notifications/models.py:542 seahub/notifications/models.py:583
+#: seahub/notifications/models.py:625 seahub/notifications/models.py:676
+#: seahub/notifications/models.py:732 seahub/notifications/models.py:762
+#: seahub/notifications/models.py:784 seahub/notifications/models.py:810
+#: seahub/notifications/models.py:827 seahub/notifications/models.py:844
+#: seahub/notifications/models.py:873 seahub/seadoc/apis.py:2761
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
 #: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
@@ -482,7 +482,8 @@ msgstr "Невірний шлях призначення"
 #: seahub/api2/views.py:2095 seahub/api2/views.py:2141
 #: seahub/api2/views.py:2190 seahub/api2/views.py:2603
 #: seahub/api2/views.py:2711 seahub/seadoc/apis.py:380
-#: seahub/seadoc/apis.py:489 seahub/seadoc/apis.py:2993
+#: seahub/seadoc/apis.py:498 seahub/seadoc/apis.py:590
+#: seahub/seadoc/apis.py:3094
 msgid "Out of quota."
 msgstr ""
 
@@ -497,7 +498,7 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:749 seahub/api2/endpoints/file.py:862
 #: seahub/api2/endpoints/via_repo_token.py:1029
 #: seahub/api2/endpoints/via_repo_token.py:1169
-#: seahub/api2/endpoints/wiki2.py:764
+#: seahub/api2/endpoints/wiki2.py:775
 msgid "File is locked"
 msgstr ""
 
@@ -527,10 +528,10 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1346 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
 #: seahub/profile/forms.py:24 seahub/profile/views.py:261
-#: seahub/seadoc/apis.py:2644 seahub/seadoc/views.py:31
+#: seahub/seadoc/apis.py:2745 seahub/seadoc/views.py:31
 #: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
 #: seahub/search/views.py:174 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -542,8 +543,8 @@ msgstr "Доступ заборонено"
 
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:866
-#: seahub/api2/endpoints/wiki2.py:549 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3000
+#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3101
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -556,7 +557,7 @@ msgstr ""
 msgid "You can not refresh this file's lock."
 msgstr ""
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2651
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
 msgid "The participant already exists."
 msgstr ""
 
@@ -592,7 +593,7 @@ msgid "User %s is an organization user."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:456
+#: seahub/group/error_msg.py:23 seahub/views/file.py:462
 msgid "Group does not exist"
 msgstr "Група не існує"
 
@@ -715,7 +716,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:542
+#: seahub/seadoc/apis.py:643
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -774,7 +775,7 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
-#: seahub/notifications/models.py:909
+#: seahub/notifications/models.py:913
 msgid "file"
 msgstr ""
 
@@ -784,7 +785,7 @@ msgid "A file is shared to you on %s"
 msgstr "Файл надано Вам в спільне користування на %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/notifications/models.py:909
+#: seahub/notifications/models.py:913
 msgid "folder"
 msgstr ""
 
@@ -829,9 +830,9 @@ msgstr ""
 #: seahub/organizations/api/admin/info.py:127
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
-#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:37
-#: seahub/work_weixin/views.py:62 seahub/work_weixin/views.py:151
-#: seahub/work_weixin/views.py:171 seahub/work_weixin/views.py:231
+#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:38
+#: seahub/work_weixin/views.py:63 seahub/work_weixin/views.py:152
+#: seahub/work_weixin/views.py:172 seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
 msgstr ""
 
@@ -871,20 +872,20 @@ msgstr "У вас вже є %(nb_avatars)d аватар, максимально 
 msgid "Length of WebDav password should be less than 30."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:193 seahub/api2/endpoints/wiki2.py:1361
+#: seahub/api2/endpoints/wiki2.py:195 seahub/api2/endpoints/wiki2.py:1383
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1224
+#: seahub/api2/endpoints/wiki2.py:1235
 msgid "URL is invalid"
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1228
+#: seahub/api2/endpoints/wiki2.py:1239
 msgid "The custom part of URL should have 5-30 characters."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1246
+#: seahub/api2/endpoints/wiki2.py:1257
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr ""
 
@@ -1351,29 +1352,29 @@ msgstr ""
 msgid "Email is required."
 msgstr "Потрібен email."
 
-#: seahub/dingtalk/views.py:50 seahub/dingtalk/views.py:74
-#: seahub/dingtalk/views.py:83 seahub/dingtalk/views.py:105
-#: seahub/dingtalk/views.py:122 seahub/dingtalk/views.py:166
-#: seahub/dingtalk/views.py:191 seahub/dingtalk/views.py:200
-#: seahub/dingtalk/views.py:222 seahub/dingtalk/views.py:258
-#: seahub/dingtalk/views.py:298 seahub/dingtalk/views.py:345
-#: seahub/dingtalk/views.py:365 seahub/dingtalk/views.py:435
-#: seahub/dingtalk/views.py:482 seahub/oauth/views.py:89
+#: seahub/dingtalk/views.py:51 seahub/dingtalk/views.py:75
+#: seahub/dingtalk/views.py:84 seahub/dingtalk/views.py:106
+#: seahub/dingtalk/views.py:123 seahub/dingtalk/views.py:167
+#: seahub/dingtalk/views.py:192 seahub/dingtalk/views.py:201
+#: seahub/dingtalk/views.py:223 seahub/dingtalk/views.py:260
+#: seahub/dingtalk/views.py:300 seahub/dingtalk/views.py:347
+#: seahub/dingtalk/views.py:367 seahub/dingtalk/views.py:436
+#: seahub/dingtalk/views.py:483 seahub/oauth/views.py:89
 #: seahub/oauth/views.py:112 seahub/oauth/views.py:158
 #: seahub/oauth/views.py:170 seahub/oauth/views.py:176
 #: seahub/oauth/views.py:209 seahub/templates/remote_user/error.html:8
-#: seahub/weixin/views.py:35 seahub/weixin/views.py:54
-#: seahub/weixin/views.py:59 seahub/weixin/views.py:78
-#: seahub/weixin/views.py:96 seahub/work_weixin/views.py:68
-#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
-#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
-#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
-#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
+#: seahub/weixin/views.py:37 seahub/weixin/views.py:57
+#: seahub/weixin/views.py:62 seahub/weixin/views.py:81
+#: seahub/weixin/views.py:99 seahub/work_weixin/views.py:69
+#: seahub/work_weixin/views.py:74 seahub/work_weixin/views.py:84
+#: seahub/work_weixin/views.py:88 seahub/work_weixin/views.py:107
+#: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
+#: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
 msgstr ""
 
-#: seahub/dingtalk/views.py:125 seahub/dingtalk/views.py:368
-#: seahub/weixin/views.py:99
+#: seahub/dingtalk/views.py:126 seahub/dingtalk/views.py:370
+#: seahub/weixin/views.py:102
 #, python-format
 msgid "User %s not found or inactive."
 msgstr ""
@@ -1529,9 +1530,9 @@ msgstr "Команда %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1149
-#: seahub/views/file.py:1174 seahub/views/file.py:1394
-#: seahub/views/file.py:1431 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1156
+#: seahub/views/file.py:1181 seahub/views/file.py:1405
+#: seahub/views/file.py:1442 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
 #: seahub/views/repo.py:412
 msgid "Permission denied"
@@ -1733,31 +1734,31 @@ msgstr "Новий запис на  %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr ""
 
-#: seahub/notifications/models.py:556
+#: seahub/notifications/models.py:560
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "Файл <a href='%(file_link)s'>%(file_name)s</a> було завантажено до <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:563
+#: seahub/notifications/models.py:567
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:598
+#: seahub/notifications/models.py:602
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:605
+#: seahub/notifications/models.py:609
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:739
+#: seahub/notifications/models.py:743
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -1765,35 +1766,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "Користувач <a href='%(user_profile)s'>%(username)s</a> запросив приєднання до групи <a href='%(href)s'>%(group_name)s</a>, перевірочне повідомлення: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:768
+#: seahub/notifications/models.py:772
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "Користувач <a href='%(user_profile)s'>%(group_staff)s</a> був доданий до вашої групи <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:794
+#: seahub/notifications/models.py:798
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr ""
 
-#: seahub/notifications/models.py:811
+#: seahub/notifications/models.py:815
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr ""
 
-#: seahub/notifications/models.py:828
+#: seahub/notifications/models.py:832
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:851
+#: seahub/notifications/models.py:855
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
@@ -1801,67 +1802,67 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr ""
 
-#: seahub/notifications/models.py:875
+#: seahub/notifications/models.py:879
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 msgstr ""
 
-#: seahub/notifications/models.py:948
+#: seahub/notifications/models.py:952
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:950
+#: seahub/notifications/models.py:954
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:955
+#: seahub/notifications/models.py:959
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:957
+#: seahub/notifications/models.py:961
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:961
+#: seahub/notifications/models.py:965
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:965
+#: seahub/notifications/models.py:969
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:970
+#: seahub/notifications/models.py:974
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:972
+#: seahub/notifications/models.py:976
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:976
+#: seahub/notifications/models.py:980
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:979
+#: seahub/notifications/models.py:983
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
@@ -2000,21 +2001,21 @@ msgstr ""
 msgid "Virus is detected on regular scanning:"
 msgstr ""
 
-#: seahub/notifications/utils.py:423
+#: seahub/notifications/utils.py:429
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgstr ""
 
-#: seahub/notifications/utils.py:430 seahub/notifications/utils.py:450
+#: seahub/notifications/utils.py:436 seahub/notifications/utils.py:456
 msgid "Details"
 msgstr "Деталі"
 
-#: seahub/notifications/utils.py:436
+#: seahub/notifications/utils.py:442
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
 msgstr ""
 
-#: seahub/notifications/utils.py:442
+#: seahub/notifications/utils.py:448
 #, python-format
 #| msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgid ""
@@ -2024,7 +2025,7 @@ msgstr ""
 
 #: seahub/oauth/views.py:212
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
-#: seahub/work_weixin/views.py:110
+#: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
 msgstr ""
@@ -2750,7 +2751,7 @@ msgid "Note"
 msgstr "Примітка"
 
 #: seahub/templates/remote_user/not_active.html:6
-#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:131
+#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:132
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
@@ -3109,10 +3110,10 @@ msgstr "Невірний repo id"
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:450 seahub/views/file.py:481
-#: seahub/views/file.py:1169 seahub/views/file.py:1426
-#: seahub/views/file.py:2091 seahub/views/file.py:2096
-#: seahub/views/file.py:2103
+#: seahub/views/ajax.py:338 seahub/views/file.py:456 seahub/views/file.py:487
+#: seahub/views/file.py:1176 seahub/views/file.py:1437
+#: seahub/views/file.py:2101 seahub/views/file.py:2106
+#: seahub/views/file.py:2113
 msgid "File does not exist"
 msgstr "Файл не існує"
 
@@ -3124,73 +3125,73 @@ msgstr ""
 msgid "No conflict in the merge."
 msgstr "Немає конфлікту при злитті."
 
-#: seahub/views/file.py:184
+#: seahub/views/file.py:190
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP помилка: файл не може бути відкритий в он-лайн режимі."
 
-#: seahub/views/file.py:188
+#: seahub/views/file.py:194
 msgid "URLError: failed to open file online"
 msgstr "URL помилка: файл не може бути відкритий в он-лайн режимі."
 
-#: seahub/views/file.py:195
+#: seahub/views/file.py:201
 msgid "The encoding you chose is not proper."
 msgstr "Обраний режим шифрування не є правильним."
 
-#: seahub/views/file.py:212 seahub/views/file.py:215
+#: seahub/views/file.py:218 seahub/views/file.py:221
 msgid "Unknown file encoding"
 msgstr "Шевідомий алгоритм шифрування файлу."
 
-#: seahub/views/file.py:335 seahub/views/file.py:370 seahub/views/file.py:699
-#: seahub/views/file.py:783 seahub/views/file.py:884
+#: seahub/views/file.py:341 seahub/views/file.py:376 seahub/views/file.py:705
+#: seahub/views/file.py:790 seahub/views/file.py:891
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Розмір файлу перевищує %s, і не може бути відкритий в онлайн режимі."
 
-#: seahub/views/file.py:342 seahub/views/file.py:818
+#: seahub/views/file.py:348 seahub/views/file.py:825
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
-#: seahub/views/file.py:437 seahub/views/file.py:459 seahub/views/file.py:464
-#: seahub/views/file.py:515 seahub/views/file.py:773 seahub/views/file.py:1021
-#: seahub/views/file.py:1047 seahub/views/file.py:1077
-#: seahub/views/file.py:1215 seahub/views/file.py:1326
-#: seahub/views/file.py:1467 seahub/views/file.py:1585
+#: seahub/views/file.py:443 seahub/views/file.py:465 seahub/views/file.py:470
+#: seahub/views/file.py:521 seahub/views/file.py:780 seahub/views/file.py:1028
+#: seahub/views/file.py:1054 seahub/views/file.py:1084
+#: seahub/views/file.py:1225 seahub/views/file.py:1337
+#: seahub/views/file.py:1478 seahub/views/file.py:1596
 msgid "Unable to view file"
 msgstr "Не вдається переглянути файл"
 
-#: seahub/views/file.py:842 seahub/views/file.py:965 seahub/views/file.py:1286
-#: seahub/views/file.py:1523
+#: seahub/views/file.py:849 seahub/views/file.py:972 seahub/views/file.py:1296
+#: seahub/views/file.py:1534
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:877 seahub/views/file.py:981 seahub/views/file.py:1306
-#: seahub/views/file.py:1539
+#: seahub/views/file.py:884 seahub/views/file.py:988 seahub/views/file.py:1316
+#: seahub/views/file.py:1550
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1113
+#: seahub/views/file.py:1120
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:1122
+#: seahub/views/file.py:1129
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:1129
+#: seahub/views/file.py:1136
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1341 seahub/views/file.py:1604
+#: seahub/views/file.py:1352 seahub/views/file.py:1615
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1740 seahub/views/file.py:1745
+#: seahub/views/file.py:1750 seahub/views/file.py:1755
 msgid "Unable to download file"
 msgstr ""
 
-#: seahub/views/file.py:2084
+#: seahub/views/file.py:2094
 msgid "The original file does not exist"
 msgstr ""
 

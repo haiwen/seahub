@@ -7,15 +7,16 @@
 # zheng xie <xiez1989@gmail.com>, 2024
 # llj <lingjun.li1@gmail.com>, 2024
 # imwhatiam <imwhatiam123@gmail.com>, 2024
+# BingbingHaidian <michael18811380328@163.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>, 2024\n"
+"Last-Translator: BingbingHaidian <michael18811380328@163.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/haiwen/teams/5086/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -412,8 +413,8 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
-"HTTP 代理和 SOCKS5 代理要求您输入代理服务器的地址和端口。如果你使用系统代理设置，Seafile "
-"客户端会从操作系统读取代理设置。操作系统有一定的机制来自动检测代理服务器信息，所以，您不必手动输入代理服务器的地址。"
+"HTTP 代理和 SOCKS5 代理要求你输入代理服务器的地址和端口。如果你使用系统代理设置，Seafile "
+"客户端会从操作系统读取代理设置。操作系统有一定的机制来自动检测代理服务器信息，所以，你不必手动输入代理服务器的地址。"
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -451,9 +452,9 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
-"您可以从 Seafile 官方网站下载 SeaDrive 2.0。 安装并登录Seafile帐户后，SeaDrive "
-"将从服务器上下载资料库和文件列表（就像在 SeaDrive 1.0.x 中一样）。 这可能需要一些时间，具体取决于您 seafile "
-"帐户中可用的文件数量。 下载是渐进式的，因此与此同时，您已经可以访问虚拟盘中的一些文件了。"
+"你可以从 Seafile 官方网站下载 SeaDrive 2.0。 安装并登录Seafile帐户后，SeaDrive "
+"将从服务器上下载资料库和文件列表（就像在 SeaDrive 1.0.x 中一样）。 这可能需要一些时间，具体取决于你 seafile "
+"帐户中可用的文件数量。 下载是渐进式的，因此与此同时，你已经可以访问虚拟盘中的一些文件了。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
@@ -475,7 +476,7 @@ msgstr "虚拟盘中的资料库被分成 4 类：我的资料库，共享给我
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr "如您所见，文件状态图标与 1.0 版本有些区别，更多集成在Windows文件资源管理器中。"
+msgstr "如你所见，文件状态图标与 1.0 版本有些区别，更多集成在Windows文件资源管理器中。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
@@ -514,7 +515,7 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
-"您可以控制缓存哪些文件或文件夹。可以在文件或文件夹上点击右键菜单来进行更改。如果要在本地固定保存文件或文件夹，请选择“始终保留在此设备上”；如果要清除文件或文件夹的缓存，请选择“释放空间”。"
+"你可以控制缓存哪些文件或文件夹。可以在文件或文件夹上点击右键菜单来进行更改。如果要在本地固定保存文件或文件夹，请选择“始终保留在此设备上”；如果要清除文件或文件夹的缓存，请选择“释放空间”。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -535,7 +536,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr "当你打开一个占位符文件时，操作系统会自动开始下载。如果文件下载时间比较长，文件资源管理器中将自动显示一个进度条，您可以取消下载。"
+msgstr "当你打开一个占位符文件时，操作系统会自动开始下载。如果文件下载时间比较长，文件资源管理器中将自动显示一个进度条，你可以取消下载。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -543,7 +544,7 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr "有时后台的应用程序可能会尝试下载虚拟盘中的文件（如杀毒软件），操作系统将会通知您，您可以选择取消下载或禁止应用程序自动下载文件。"
+msgstr "有时后台的应用程序可能会尝试下载虚拟盘中的文件（如杀毒软件），操作系统将会通知你，你可以选择取消下载或禁止应用程序自动下载文件。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
@@ -561,7 +562,7 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
-"可以。在虚拟盘中创建、删除或重命名资料库目录时，这些操作将同步到服务器端。您只能在“我的资料库”类别下创建、删除、重命名资料库，在其他类别的资料库中这些操作将被忽略。"
+"可以。在虚拟盘中创建、删除或重命名资料库目录时，这些操作将同步到服务器端。你只能在“我的资料库”类别下创建、删除、重命名资料库，在其他类别的资料库中这些操作将被忽略。"
 " "
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
@@ -589,8 +590,8 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
-"可以。默认情况下，加密资料库不会同步并显示在虚拟盘中。您需要手动选择要同步的加密资料库并输入密码。右键单击系统托盘区域中的 SeaDrive "
-"图标，然后选择“显示加密资料库”。在弹出的窗口中您可以选择同步或者取消同步加密资料库。 "
+"可以。默认情况下，加密资料库不会同步并显示在虚拟盘中。你需要手动选择要同步的加密资料库并输入密码。右键单击系统托盘区域中的 SeaDrive "
+"图标，然后选择“显示加密资料库”。在弹出的窗口中你可以选择同步或者取消同步加密资料库。 "
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
@@ -605,7 +606,7 @@ msgid ""
 "the files to server or copy them out."
 msgstr ""
 " SeaDrive 2.0将使用任何已有的账号及其元数据（保存在 C:\\users\\username\\seadrive\\ 文件夹下），但不会使用"
-" SeaDrive 1.0 中的缓存文件。因此1.0版本中的缓存文件是无法在2.0版本中访问的。您可以用 Seadrive 1.0 "
+" SeaDrive 1.0 中的缓存文件。因此1.0版本中的缓存文件是无法在2.0版本中访问的。你可以用 Seadrive 1.0 "
 "将这些文件上传到服务器或者先将它们拷贝出去。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
@@ -621,7 +622,7 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
-"您可以手动选择要在本地缓存的文件夹或文件。如果你发现一个文件夹占用了太多的空间，只需选择“释放空间”，该文件夹中的所有缓存文件都将被清除。不需要像 "
+"你可以手动选择要在本地缓存的文件夹或文件。如果你发现一个文件夹占用了太多的空间，只需选择“释放空间”，该文件夹中的所有缓存文件都将被清除。不需要像 "
 "SeaDrive 1.0 中那样设置缓存清理时间和缓存大小限制。因为占位符文件只是在本地磁盘上创建的普通文件，所以缓存大小仅受可用磁盘空间的限制。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
@@ -638,17 +639,11 @@ msgstr ""
 "当你退出 SeaDrive 应用程序或者切换 Seafile 帐号后，Windows 资源管理器中的 “SeaDrive” "
 "快捷方式不会消失。这是特意设计的行为。如果以后还需要访问帐号，就不需要删除它们。"
 
-#: templates/help/drive_client_2.0_for_windows_10.html:52
-msgid ""
-"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
-" Explorer and you want to remove it."
-msgstr "在某些情况下，您可能需要删除 Windows 资源管理器中的 “SeaDrive” 快捷方式。"
-
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
-msgstr "您可以通过卸载 SeaDrive 程序来删除这些快捷方式，卸载的时候需要选择“删除账号信息”。"
+msgstr "你可以通过卸载 SeaDrive 程序来删除这些快捷方式，卸载的时候需要选择“删除账号信息”。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -674,7 +669,7 @@ msgid ""
 "file contents."
 msgstr ""
 "Seafile "
-"提供客户端侧、端到端的数据加密。您可以使用此功能创建加密资料库。加密资料库中的文件是在客户端进行加密的，密码也并不存储在服务器上。因此，即使服务器管理员也无法访问您的文件内容。"
+"提供客户端侧、端到端的数据加密。你可以使用此功能创建加密资料库。加密资料库中的文件是在客户端进行加密的，密码也并不存储在服务器上。因此，即使服务器管理员也无法访问你的文件内容。"
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
@@ -1242,7 +1237,7 @@ msgstr "安装 Seafile 客户端"
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
-msgstr "在您下载完 Seafile 客户端后，只需下面的步骤来安装使用："
+msgstr "在你下载完 Seafile 客户端后，只需下面的步骤来安装使用："
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
@@ -1420,13 +1415,6 @@ msgid ""
 "library state at the point of time."
 msgstr "点击任意修改记录上的“查看快照”链接，你可以看到那个时间点上的资料库状态。"
 
-#: templates/help/library_history_and_snapshots.html:13
-msgid ""
-"In the snapshot view, you can download or restore any file or folder. If "
-"you're the library's owner, you can restore the enitre library to this point"
-" of time."
-msgstr "在快照页面，你可以下载或恢复任意的文件或目录。如果你是资料库的所有者，你还可以将整个资料库都恢复到这个时间点。"
-
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1446,7 +1434,7 @@ msgid ""
 "add links to other documents in a Markdown file."
 msgstr ""
 "以一种易于使用的方式捕获和存储非结构化的数据，这就是 Seafile Wiki 的目的。 Wiki 页面以 "
-"Markdown（MD），一种简单的标记语言，编写，以确保跨平台兼容性。 MD 文件存储文本，表格和图形信息； 您还可以在 Markdown "
+"Markdown（MD），一种简单的标记语言，编写，以确保跨平台兼容性。 MD 文件存储文本，表格和图形信息； 你还可以在 Markdown "
 "文件中添加指向其他文档的链接。"
 
 #: templates/help/manage_library_as_wiki.html:7
@@ -1472,7 +1460,7 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
-"Wiki 通常有一个包含树状文件夹结构的侧边栏，以实现对 Wiki 页面的快速便捷浏览。 Seafile 的分栏视图允许您以与 Wiki "
+"Wiki 通常有一个包含树状文件夹结构的侧边栏，以实现对 Wiki 页面的快速便捷浏览。 Seafile 的分栏视图允许你以与 Wiki "
 "空间相同的方式管理资料库中的文件。 用户可以在其中浏览，并且通过拖放来移动文件和文件夹。 "
 "可以在右键单击弹出的菜单中找到诸如重命名，移动，和在客户端中打开等文件操作。"
 
@@ -1532,23 +1520,6 @@ msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr "文件浏览页面提供当前资料库的所有文件标签。"
-
-#: templates/help/read-only_syncing.html:6
-#, python-format
-msgid ""
-"For ready-only libraries or folders, Seafile will show a forbidden icon "
-"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"to indicate they are read-only. However, users can still modify the synced "
-"local copies. When a local copy is modified, Seafile will ignore the "
-"modified one. When the copy at the server is also modified, the client will "
-"popup a notification, saying that the local modified copy conflicts with the"
-" copy at the server side. To prevent data loss, the local copy is renamed to"
-" a conflict file."
-msgstr ""
-"对于只读资料库和目录，Seafile 会显示一个禁止图标(<img "
-"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"以说明它们是只读的。然而用户仍然可以修改同步后的本地副本。当一个本地副本被修改后， Seafile 会忽略它。当服务器端的副本被修改后， "
-"客户端会弹出通知，说明本地修改后的副本和服务器端的副本有冲突。为了避免数据丢失，本地副本会被重命名为一个冲突文件。"
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -1639,7 +1610,7 @@ msgstr "设置资料库历史保留期限"
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr "资料库的历史记录保留期限长度控制着您可以通过以下功能访问历史数据的时间："
+msgstr "资料库的历史记录保留期限长度控制着你可以通过以下功能访问历史数据的时间："
 
 #: templates/help/setting_library_history.html:9
 msgid ""
@@ -1734,13 +1705,6 @@ msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr "你也可以设置共享外链的访问权限。有以下三种："
-
-#: templates/help/sharing_files_and_folders.html:21
-msgid ""
-"Preview and Download: the file or files in the folder can be downloaded. If "
-"the type of files can be previewd in web browser, they can also be viewed "
-"online (e.g. Office files)."
-msgstr "预览和下载：文件或者目录中的文件可以下载。如果该文件支持在浏览器中预览，那么它们也可以在线查看（例如 Office 文件）。"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""

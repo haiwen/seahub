@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2024\n"
 "Language-Team: Russian (https://app.transifex.com/haiwen/teams/5086/ru/)\n"
@@ -753,14 +753,6 @@ msgstr ""
 "программы SeaDrive или переключения учетных записей Seafile в SeaDrive. Это "
 "намеренное поведение. Не нужно удалять их, если вам может потребоваться "
 "получить доступ к учетной записи позже."
-
-#: templates/help/drive_client_2.0_for_windows_10.html:52
-msgid ""
-"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
-" Explorer and you want to remove it."
-msgstr ""
-"В некоторых крайних случаях ярлык \"SeaDrvie\" может остаться в проводнике "
-"Windows, и вы можете удалить его позднее."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
@@ -1738,16 +1730,6 @@ msgstr ""
 "Щелкните ссылку \"просмотреть снимок\" в любой записи об изменении. Вы "
 "увидите состояние библиотеки на определенный момент времени."
 
-#: templates/help/library_history_and_snapshots.html:13
-msgid ""
-"In the snapshot view, you can download or restore any file or folder. If "
-"you're the library's owner, you can restore the enitre library to this point"
-" of time."
-msgstr ""
-"В режиме просмотра снимков вы можете загрузить или восстановить любой файл "
-"или папку. Если вы являетесь владельцем библиотеки, вы можете восстановить "
-"библиотеку до этого момента времени."
-
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1879,28 +1861,6 @@ msgid ""
 msgstr ""
 "Интерфейс обозревателя файлов предоставляет сводку всех тегов файлов в "
 "текущей библиотеке."
-
-#: templates/help/read-only_syncing.html:6
-#, python-format
-msgid ""
-"For ready-only libraries or folders, Seafile will show a forbidden icon "
-"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"to indicate they are read-only. However, users can still modify the synced "
-"local copies. When a local copy is modified, Seafile will ignore the "
-"modified one. When the copy at the server is also modified, the client will "
-"popup a notification, saying that the local modified copy conflicts with the"
-" copy at the server side. To prevent data loss, the local copy is renamed to"
-" a conflict file."
-msgstr ""
-"Для готовых библиотек или папок Seafile покажет запрещающий значок (<img "
-"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />), чтобы"
-" указать, что они доступны только для чтения. Однако пользователи по-"
-"прежнему могут изменять синхронизированные локальные копии. Когда локальная "
-"копия изменена, Seafile проигнорирует изменение. Когда копия на сервере "
-"также изменяется, клиент выдает всплывающее уведомление о том, что локальная"
-" измененная копия конфликтует с копией на стороне сервера. Чтобы "
-"предотвратить потерю данных, локальная копия переименовывается в файл "
-"конфликта."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2149,16 +2109,6 @@ msgid ""
 msgstr ""
 "Вы также можете установить разрешения доступа для обмена ссылками. Есть три "
 "типа разрешений:"
-
-#: templates/help/sharing_files_and_folders.html:21
-msgid ""
-"Preview and Download: the file or files in the folder can be downloaded. If "
-"the type of files can be previewd in web browser, they can also be viewed "
-"online (e.g. Office files)."
-msgstr ""
-"Предварительный просмотр и скачиване: файл или файлы в папке можно скачать. "
-"Если тип файлов можно предварительно просмотреть в веб-браузере, их также "
-"можно будет просматривать онлайн (например, файлы Office)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""

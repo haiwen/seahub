@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/haiwen/teams/5086/es/)\n"
@@ -760,12 +760,6 @@ msgid ""
 " SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr ""
-
-#: templates/help/drive_client_2.0_for_windows_10.html:52
-msgid ""
-"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
-" Explorer and you want to remove it."
 msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
@@ -1730,16 +1724,6 @@ msgstr ""
 "modificación. Podrá ver el estado de la biblioteca en ese instante de "
 "tiempo."
 
-#: templates/help/library_history_and_snapshots.html:13
-msgid ""
-"In the snapshot view, you can download or restore any file or folder. If "
-"you're the library's owner, you can restore the enitre library to this point"
-" of time."
-msgstr ""
-"En la vista de la  instantánea, puede descargar o restaurar cualquier "
-"archivo o carpeta. Si es el propietario de la biblioteca, puede restaurar la"
-" biblioteca completa al estado en ese instante de tiempo."
-
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1830,19 +1814,6 @@ msgstr ""
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
-
-#: templates/help/read-only_syncing.html:6
-#, python-format
-msgid ""
-"For ready-only libraries or folders, Seafile will show a forbidden icon "
-"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"to indicate they are read-only. However, users can still modify the synced "
-"local copies. When a local copy is modified, Seafile will ignore the "
-"modified one. When the copy at the server is also modified, the client will "
-"popup a notification, saying that the local modified copy conflicts with the"
-" copy at the server side. To prevent data loss, the local copy is renamed to"
-" a conflict file."
 msgstr ""
 
 #: templates/help/read-only_syncing.html:7
@@ -2032,13 +2003,6 @@ msgstr ""
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
-
-#: templates/help/sharing_files_and_folders.html:21
-msgid ""
-"Preview and Download: the file or files in the folder can be downloaded. If "
-"the type of files can be previewd in web browser, they can also be viewed "
-"online (e.g. Office files)."
 msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:22

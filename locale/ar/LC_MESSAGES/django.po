@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 14:14+0800\n"
+"POT-Creation-Date: 2024-12-05 10:23+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023-2024\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -73,7 +73,7 @@ msgstr "فشل تسجيل الدخول: تم إلغاء تنشيط المستخ�
 
 #: seahub/adfs_auth/views.py:498
 msgid "Failed to unbind SAML, please set a password first."
-msgstr "فشل في إلغاء ربط SAML، يرجى تعيين كلمة مرور أولاً."
+msgstr "فشل في إلغاء ربط SAML، يرجى تعيين كلمة السر أولاً."
 
 #: seahub/adfs_auth/views.py:502
 msgid "Failed to unbind SAML, please set a contact email first."
@@ -375,43 +375,43 @@ msgstr "نجح التحرير، و لكن فشل ارسال بريد الكتر�
 
 #: seahub/api2/endpoints/admin/users.py:1507 seahub/auth/views.py:371
 msgid "Unable to reset password."
-msgstr "غير قادر على إعادة تعيين كلمة المرور."
+msgstr "غير قادر على إعادة تعيين كلمة السر."
 
 #: seahub/api2/endpoints/admin/users.py:1533 seahub/auth/forms.py:201
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
-msgstr "إعادة تهيئة كلمة المرور على %s"
+msgstr "إعادة تهيئة كلمة السر على %s"
 
 #: seahub/api2/endpoints/admin/users.py:1537
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr "تم إرسال رابط إعادة تعيين كلمة المرور إلى  {contact_email} ."
+msgstr "تم إرسال رابط إعادة تعيين كلمة السر إلى  {contact_email} ."
 
 #: seahub/api2/endpoints/admin/users.py:1555 seahub/views/sysadmin.py:486
 #, python-format
 msgid "Password has been reset on %s"
-msgstr "تم إعادة تعيين كلمة المرور على %s"
+msgstr "تم إعادة تعيين كلمة السر على %s"
 
 #: seahub/api2/endpoints/admin/users.py:1557
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr "تم إعادة تعيين كلمة المرور بنجاح، وتم إرسال بريد إلكتروني إلى %(user)s ."
+msgstr "تم إعادة تعيين كلمة السر بنجاح، وتم إرسال بريد إلكتروني إلى %(user)s ."
 
 #: seahub/api2/endpoints/admin/users.py:1561 seahub/views/sysadmin.py:516
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، ولكن فشل في إرسال البريد الإلكتروني إلى %(user)s، الرجاء التحقق من تكوين البريد الإلكتروني الخاص بك."
+msgstr "تم بنجاح إعادة تعيين كلمة السر إلى %(passwd)s، ولكن فشل في إرسال البريد الإلكتروني إلى %(user)s، الرجاء التحقق من إعداد البريد الإلكتروني الخاص بك."
 
 #: seahub/api2/endpoints/admin/users.py:1564
 #: seahub/organizations/api/admin/user_set_password.py:88
 #: seahub/views/sysadmin.py:520
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
-msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى%(passwd)s للمستخدم %(user)s."
+msgstr "تم بنجاح إعادة تعيين كلمة السر إلى%(passwd)s للمستخدم %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1567 seahub/views/sysadmin.py:523
 #, python-format
@@ -419,7 +419,7 @@ msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى%(passwd)s للمستخدم %(user)s. و لكن لا يمكن ارسال الاشعار بالبريد، بسبب عدم تكوين خدمة البريد بصورة صحيحة."
+msgstr "تم بنجاح إعادة تعيين كلمة السر إلى%(passwd)s للمستخدم %(user)s. و لكن لا يمكن ارسال الاشعار بالبريد، بسبب عدم إعداد خدمة البريد بصورة صحيحة."
 
 #: seahub/api2/endpoints/admin/users_batch.py:173
 msgid "must be an integer that is greater than or equal to 0."
@@ -443,14 +443,14 @@ msgstr "ملف الفيروس لم يعثر عليه."
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:435 seahub/api2/endpoints/wiki2.py:463
+#: seahub/api2/endpoints/wiki2.py:437 seahub/api2/endpoints/wiki2.py:465
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4040
-#: seahub/notifications/models.py:538 seahub/notifications/models.py:579
-#: seahub/notifications/models.py:621 seahub/notifications/models.py:672
-#: seahub/notifications/models.py:728 seahub/notifications/models.py:758
-#: seahub/notifications/models.py:780 seahub/notifications/models.py:806
-#: seahub/notifications/models.py:823 seahub/notifications/models.py:840
-#: seahub/notifications/models.py:869 seahub/seadoc/apis.py:2660
+#: seahub/notifications/models.py:542 seahub/notifications/models.py:583
+#: seahub/notifications/models.py:625 seahub/notifications/models.py:676
+#: seahub/notifications/models.py:732 seahub/notifications/models.py:762
+#: seahub/notifications/models.py:784 seahub/notifications/models.py:810
+#: seahub/notifications/models.py:827 seahub/notifications/models.py:844
+#: seahub/notifications/models.py:873 seahub/seadoc/apis.py:2761
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
 #: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
@@ -478,7 +478,8 @@ msgstr "مسار الوجهة غير صحيح"
 #: seahub/api2/views.py:2095 seahub/api2/views.py:2141
 #: seahub/api2/views.py:2190 seahub/api2/views.py:2603
 #: seahub/api2/views.py:2711 seahub/seadoc/apis.py:380
-#: seahub/seadoc/apis.py:489 seahub/seadoc/apis.py:2993
+#: seahub/seadoc/apis.py:498 seahub/seadoc/apis.py:590
+#: seahub/seadoc/apis.py:3094
 msgid "Out of quota."
 msgstr "نفدت المساحة المخصصة."
 
@@ -493,7 +494,7 @@ msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات الم
 #: seahub/api2/endpoints/file.py:749 seahub/api2/endpoints/file.py:862
 #: seahub/api2/endpoints/via_repo_token.py:1029
 #: seahub/api2/endpoints/via_repo_token.py:1169
-#: seahub/api2/endpoints/wiki2.py:764
+#: seahub/api2/endpoints/wiki2.py:775
 msgid "File is locked"
 msgstr "الملف مقفل"
 
@@ -523,10 +524,10 @@ msgstr " لم يتم العثور على المستخدم %s ."
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1346 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
 #: seahub/profile/forms.py:24 seahub/profile/views.py:261
-#: seahub/seadoc/apis.py:2644 seahub/seadoc/views.py:31
+#: seahub/seadoc/apis.py:2745 seahub/seadoc/views.py:31
 #: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
 #: seahub/search/views.py:174 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -538,8 +539,8 @@ msgstr "الترخيص مرفوض."
 
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:866
-#: seahub/api2/endpoints/wiki2.py:549 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3000
+#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3101
 msgid "The number of files in library exceeds the limit"
 msgstr "عدد الملفات في المكتبة يتجاوز الحد المسموح"
 
@@ -552,7 +553,7 @@ msgstr "الملف غير مقفل."
 msgid "You can not refresh this file's lock."
 msgstr "لا يمكنك تحديث قفل هذا الملف."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2651
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
 msgid "The participant already exists."
 msgstr "المُشارك موجود بالفعل."
 
@@ -588,7 +589,7 @@ msgid "User %s is an organization user."
 msgstr "المستخدم %s مستخدم منظمة."
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:456
+#: seahub/group/error_msg.py:23 seahub/views/file.py:462
 msgid "Group does not exist"
 msgstr "المجموعة غير موجودة"
 
@@ -645,21 +646,21 @@ msgstr "فشل ارسال البريد، خدمة البريد الالكترو�
 #: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4193
 #: seahub/api2/views.py:4313
 msgid "Password is required."
-msgstr "كلمة المرور مطلوبة."
+msgstr "كلمة السر مطلوبة."
 
 #: seahub/api2/endpoints/multi_share_links.py:110
 #: seahub/api2/endpoints/share_links.py:341
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
-msgstr "كلمة المرور قصيرة جدا."
+msgstr "كلمة السر قصيرة جدا."
 
 #: seahub/api2/endpoints/multi_share_links.py:114
 #: seahub/api2/endpoints/share_links.py:345
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr "كلمة المرور ضعيفة جداً"
+msgstr "كلمة السر ضعيفة جداً"
 
 #: seahub/api2/endpoints/multi_share_links.py:118
 #: seahub/api2/endpoints/share_links.py:349
@@ -668,7 +669,7 @@ msgstr "كلمة المرور ضعيفة جداً"
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr "كلمة المرور يجب أن تحتوي على رقم و حرف كبير وحرف صغير و علامة ."
+msgstr "كلمة السر يجب أن تحتوي على رقم و حرف كبير وحرف صغير و علامة ."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -711,7 +712,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "يجب أن تكون أيام انتهاء الصلاحية قبل %s"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:542
+#: seahub/seadoc/apis.py:643
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -731,16 +732,16 @@ msgstr "ميزة معطلة."
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr "لا يمكن إعادة تعيين كلمة مرور هذه المكتبة."
+msgstr "لا يمكن إعادة تعيين كلمة سر هذه المكتبة."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr "كلمة مرور جديدة للمكتبة %s"
+msgstr "كلمة سر جديدة للمكتبة %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4037
 msgid "Wrong password"
-msgstr "كلمة مرور غير صحيحة"
+msgstr "كلمة سر غير صحيحة"
 
 #: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4043
 msgid "Decrypt library error"
@@ -748,7 +749,7 @@ msgstr "خطأ فك تشفير المكتبة"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
-msgstr "كلمة مرور غير صحيحة"
+msgstr "كلمة سر غير صحيحة"
 
 #: seahub/api2/endpoints/repos_batch.py:1298
 #: seahub/api2/endpoints/repos_batch.py:1557
@@ -770,7 +771,7 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr "لا يمكن حذف المجلد %s ،يرجى التحقق من الإذن."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
-#: seahub/notifications/models.py:909
+#: seahub/notifications/models.py:913
 msgid "file"
 msgstr "ملف"
 
@@ -780,7 +781,7 @@ msgid "A file is shared to you on %s"
 msgstr "تم مشاركة ملف معك على %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/notifications/models.py:909
+#: seahub/notifications/models.py:913
 msgid "folder"
 msgstr "مجلد"
 
@@ -825,9 +826,9 @@ msgstr "رابط المشاركة %sموجود بالفعل."
 #: seahub/organizations/api/admin/info.py:127
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
-#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:37
-#: seahub/work_weixin/views.py:62 seahub/work_weixin/views.py:151
-#: seahub/work_weixin/views.py:171 seahub/work_weixin/views.py:231
+#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:38
+#: seahub/work_weixin/views.py:63 seahub/work_weixin/views.py:152
+#: seahub/work_weixin/views.py:172 seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
 msgstr "لم يتم تفعيل الميزة."
 
@@ -865,22 +866,22 @@ msgstr "أنت تمتلك %(nb_avatars)d شعارات, و الحد المسمو�
 
 #: seahub/api2/endpoints/webdav_secret.py:56
 msgid "Length of WebDav password should be less than 30."
-msgstr "طول كلمة مرور WebDav يجب أن تكون أقل من 30 ."
+msgstr "طول كلمة سر ويبداف -WebDav- يجب أن تكون أقل من 30 ."
 
-#: seahub/api2/endpoints/wiki2.py:193 seahub/api2/endpoints/wiki2.py:1361
+#: seahub/api2/endpoints/wiki2.py:195 seahub/api2/endpoints/wiki2.py:1383
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "يمكن أن يحتوي الاسم على أحرف أو أرقام أو نقطة أو شرّطة أو شرّطة سفلية."
 
-#: seahub/api2/endpoints/wiki2.py:1224
+#: seahub/api2/endpoints/wiki2.py:1235
 msgid "URL is invalid"
 msgstr "عنوان URL غير صالح"
 
-#: seahub/api2/endpoints/wiki2.py:1228
+#: seahub/api2/endpoints/wiki2.py:1239
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "يجب أن يتكون الجزء المخصص من عنوان URL من 5-30 حرفا."
 
-#: seahub/api2/endpoints/wiki2.py:1246
+#: seahub/api2/endpoints/wiki2.py:1257
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "هذا المجال المخصص قيد الاستخدام بالفعل ولا يمكن استخدامه لموقع ويكي wiki الخاص بك"
 
@@ -922,7 +923,7 @@ msgstr "البريد أو اسم المستخدم"
 #: seahub/templates/sysadmin/sudo_mode.html:28 seahub/views/sysadmin.py:766
 #: seahub/views/sysadmin.py:781
 msgid "Password"
-msgstr "كلمة المرور"
+msgstr "كلمة السر"
 
 #: seahub/auth/forms.py:66 seahub/auth/forms.py:67 seahub/auth/forms.py:104
 #: seahub/auth/forms.py:105
@@ -933,7 +934,7 @@ msgstr "هذا الحساب غير فعال."
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
-msgstr "الرجاء ادخال بريد/اسم مستخدم و كلمة مرور. لاحظ بأن كلا الحقلين حساسين لحالة الأحرف."
+msgstr "الرجاء ادخال البريد أو اسم المستخدم و كلمة السر. لاحظ بأن كلا الحقلين حساسين لحالة الأحرف."
 
 #: seahub/auth/forms.py:89 seahub/auth/forms.py:174
 msgid ""
@@ -958,32 +959,32 @@ msgstr "البريد"
 
 #: seahub/auth/forms.py:177
 msgid "Can not reset password, please contact LDAP admin."
-msgstr "لا يمكن إعادة تهيئة كلمة المرور، اتصل بمدير LDAP."
+msgstr "لا يمكن إعادة تهيئة كلمة السر، اتصل بمدير LDAP."
 
 #: seahub/auth/forms.py:210
 msgid "New password"
-msgstr "كلمة مرور جديدة"
+msgstr "كلمة سر جديدة"
 
 #: seahub/auth/forms.py:211
 msgid "New password confirmation"
-msgstr "تأكيد كلمة المرور"
+msgstr "تأكيد كلمة السر"
 
 #: seahub/auth/forms.py:238 seahub/auth/forms.py:284
 #: seahub/base/accounts.py:1296 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
-msgstr "كلمتي المرور غير متطابقتان."
+msgstr "كلمتي السر غير متطابقتين."
 
 #: seahub/auth/forms.py:252
 msgid "Old password"
-msgstr "كلمو المرور السابقة"
+msgstr "كلمو السر السابقة"
 
 #: seahub/auth/forms.py:260
 msgid "Your old password was entered incorrectly. Please enter it again."
-msgstr "كلمة المرور السابقة غير صحيحة. الرجاء إعادة الادخال."
+msgstr "كلمة السر السابقة غير صحيحة. الرجاء إعادة الادخال."
 
 #: seahub/auth/forms.py:273 seahub/base/accounts.py:1243
 msgid "Password (again)"
-msgstr "كلمة المرور(إعادة)"
+msgstr "(إعادة) كلمة السر"
 
 #: seahub/auth/forms.py:304 seahub/forms.py:35 seahub/invitations/views.py:39
 #: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
@@ -1005,7 +1006,7 @@ msgstr "فشل ارسال البريد، اتصل بالمدير."
 
 #: seahub/auth/views.py:466
 msgid "Unable to change password."
-msgstr "غير قادر على تغيير كلمة المرور."
+msgstr "غير قادر على تغيير كلمة السر."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1357,36 +1358,36 @@ msgstr "%s PB"
 msgid "Email is required."
 msgstr "عنوان البريد مطلوب"
 
-#: seahub/dingtalk/views.py:50 seahub/dingtalk/views.py:74
-#: seahub/dingtalk/views.py:83 seahub/dingtalk/views.py:105
-#: seahub/dingtalk/views.py:122 seahub/dingtalk/views.py:166
-#: seahub/dingtalk/views.py:191 seahub/dingtalk/views.py:200
-#: seahub/dingtalk/views.py:222 seahub/dingtalk/views.py:258
-#: seahub/dingtalk/views.py:298 seahub/dingtalk/views.py:345
-#: seahub/dingtalk/views.py:365 seahub/dingtalk/views.py:435
-#: seahub/dingtalk/views.py:482 seahub/oauth/views.py:89
+#: seahub/dingtalk/views.py:51 seahub/dingtalk/views.py:75
+#: seahub/dingtalk/views.py:84 seahub/dingtalk/views.py:106
+#: seahub/dingtalk/views.py:123 seahub/dingtalk/views.py:167
+#: seahub/dingtalk/views.py:192 seahub/dingtalk/views.py:201
+#: seahub/dingtalk/views.py:223 seahub/dingtalk/views.py:260
+#: seahub/dingtalk/views.py:300 seahub/dingtalk/views.py:347
+#: seahub/dingtalk/views.py:367 seahub/dingtalk/views.py:436
+#: seahub/dingtalk/views.py:483 seahub/oauth/views.py:89
 #: seahub/oauth/views.py:112 seahub/oauth/views.py:158
 #: seahub/oauth/views.py:170 seahub/oauth/views.py:176
 #: seahub/oauth/views.py:209 seahub/templates/remote_user/error.html:8
-#: seahub/weixin/views.py:35 seahub/weixin/views.py:54
-#: seahub/weixin/views.py:59 seahub/weixin/views.py:78
-#: seahub/weixin/views.py:96 seahub/work_weixin/views.py:68
-#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
-#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
-#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
-#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
+#: seahub/weixin/views.py:37 seahub/weixin/views.py:57
+#: seahub/weixin/views.py:62 seahub/weixin/views.py:81
+#: seahub/weixin/views.py:99 seahub/work_weixin/views.py:69
+#: seahub/work_weixin/views.py:74 seahub/work_weixin/views.py:84
+#: seahub/work_weixin/views.py:88 seahub/work_weixin/views.py:107
+#: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
+#: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
 msgstr "خطأ يرجى التواصل مع مدير النظام ."
 
-#: seahub/dingtalk/views.py:125 seahub/dingtalk/views.py:368
-#: seahub/weixin/views.py:99
+#: seahub/dingtalk/views.py:126 seahub/dingtalk/views.py:370
+#: seahub/weixin/views.py:102
 #, python-format
 msgid "User %s not found or inactive."
 msgstr "المستخدم %s غير موجود أو خامل ."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
-msgstr "كلمتي المرور غير متطابقتين."
+msgstr "كلمتي السر غير متطابقتين."
 
 #: seahub/forms.py:68
 msgid "Name can't be empty"
@@ -1535,9 +1536,9 @@ msgstr "فريق %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1149
-#: seahub/views/file.py:1174 seahub/views/file.py:1394
-#: seahub/views/file.py:1431 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1156
+#: seahub/views/file.py:1181 seahub/views/file.py:1405
+#: seahub/views/file.py:1442 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
 #: seahub/views/repo.py:412
 msgid "Permission denied"
@@ -1625,7 +1626,7 @@ msgstr "إنشاء حساب"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr "حدد كلمة مرور"
+msgstr "حدد كلمة السر"
 
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/options/templates/options/set_user_options.html:14
@@ -1741,31 +1742,31 @@ msgstr "ملاحظة جديدة على %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr "لديك %(num)s إشعارات جديدة على %(site_name)s :\n"
 
-#: seahub/notifications/models.py:556
+#: seahub/notifications/models.py:560
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "الملف <a href='%(file_link)s'>%(file_name)s</a> تم تحميله إلى <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:563
+#: seahub/notifications/models.py:567
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
 msgstr "تم رفع ملف بإسم <strong>%(file_name)s</strong>."
 
-#: seahub/notifications/models.py:598
+#: seahub/notifications/models.py:602
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
 msgstr "تم رفع مجلد بإسم <a href='%(folder_link)s'>%(folder_name)s</a>لـ<a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:605
+#: seahub/notifications/models.py:609
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
 msgstr "تم رفع مجلد بإسم <strong>%(folder_name)s</strong>."
 
-#: seahub/notifications/models.py:739
+#: seahub/notifications/models.py:743
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -1773,35 +1774,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "المستخدم <a href='%(user_profile)s'>%(username)s</a> قد طلب الانضمام الى مجموعة <a href='%(href)s'>%(group_name)s</a>, رسالة التحقق: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:768
+#: seahub/notifications/models.py:772
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "لقد قام المستخدم <a href='%(user_profile)s'>%(group_staff)s</a> بإضافتك الى مجموعة <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:794
+#: seahub/notifications/models.py:798
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "الملف <a href='%(file_url)s'>%(file_name)s</a> لديه تعليق جديد من المستخدم %(author)s"
 
-#: seahub/notifications/models.py:811
+#: seahub/notifications/models.py:815
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "<a href='%(file_url)s'> مسودة رقم %(draft_id)s </a>لديها تعليق جديد من المستخدم %(author)s"
 
-#: seahub/notifications/models.py:828
+#: seahub/notifications/models.py:832
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s أرسل لك طلب <a href='%(file_url)s'> للمسودة رقم %(draft_id)s </a>"
 
-#: seahub/notifications/models.py:851
+#: seahub/notifications/models.py:855
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
@@ -1809,67 +1810,67 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "الضيف %(user)s قبل <a href=\"%(url_base)s%(inv_url)s\">دعوتك</a> الساعة %(time)s"
 
-#: seahub/notifications/models.py:875
+#: seahub/notifications/models.py:879
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 msgstr "المستخدم %(user)sقام بنقل مكتبة باسم <a href=\"%(repo_url)s\">%(repo_name)s</a> لك"
 
-#: seahub/notifications/models.py:948
+#: seahub/notifications/models.py:952
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
 msgstr "قام {name} بإنشاء  {obj_type} {obj_link} من المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:950
+#: seahub/notifications/models.py:954
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr "قام {name} بإنشاء {obj_type} {obj_link} و  {obj_path_count_minus_one} غيرها من نوع  {obj_type} من المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:955
+#: seahub/notifications/models.py:959
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
 msgstr "قام {name} بحذف {obj_type} {obj_name} من المكتبة  {repo_link}."
 
-#: seahub/notifications/models.py:957
+#: seahub/notifications/models.py:961
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr "قام {name} بحذف {obj_type} {obj_name} و {obj_path_count_minus_one}  غيرها من نوع {obj_type} من المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:961
+#: seahub/notifications/models.py:965
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
 msgstr "قام {name} باستعادة {obj_type} {obj_link} في المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:965
+#: seahub/notifications/models.py:969
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
 msgstr "قام {name} بإعادة تسمية {obj_type} {old_obj_name} إلى {obj_link} في المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:970
+#: seahub/notifications/models.py:974
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
 msgstr "قام {name} بنقل {obj_type} {obj_link} في المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:972
+#: seahub/notifications/models.py:976
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr "قام {name} بنقل {obj_type} {obj_link} و {obj_path_count_minus_one} من {obj_type} أخرى في المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:976
+#: seahub/notifications/models.py:980
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
 msgstr "قام {name} بتحديث {obj_type} {obj_link} في المكتبة {repo_link}."
 
-#: seahub/notifications/models.py:979
+#: seahub/notifications/models.py:983
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
 msgstr "{name} {op_type} {obj_type} {obj_link} في المكتبة {repo_link}."
@@ -2010,21 +2011,21 @@ msgstr "أثناء المسح المنتظم عن الفيروسات تم اكت
 msgid "Virus is detected on regular scanning:"
 msgstr "تم الكشف عن الفيروس في الفحص المنتظم:"
 
-#: seahub/notifications/utils.py:423
+#: seahub/notifications/utils.py:429
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgstr "تمت إضافة تعليق من قبل %(author)s على المستند %(sdoc_name)s"
 
-#: seahub/notifications/utils.py:430 seahub/notifications/utils.py:450
+#: seahub/notifications/utils.py:436 seahub/notifications/utils.py:456
 msgid "Details"
 msgstr "تفاصيل"
 
-#: seahub/notifications/utils.py:436
+#: seahub/notifications/utils.py:442
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
 msgstr "تمت إضافة تعليق من قبل %(author)s على المستند %(sdoc_name)s"
 
-#: seahub/notifications/utils.py:442
+#: seahub/notifications/utils.py:448
 #, python-format
 #| msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgid ""
@@ -2034,7 +2035,7 @@ msgstr "%(author)s وضع علامة على التعليق \"%(resolve_comment)s
 
 #: seahub/oauth/views.py:212
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
-#: seahub/work_weixin/views.py:110
+#: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
 msgstr "خطأ ، تسجيل مستخدم جديد غير مسموح به ، يرجى الاتصال بالمدير."
@@ -2045,7 +2046,7 @@ msgstr "الرجاء اختيار طريقة عرض المكتبات المشف�
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
-msgstr "إرسال كلمات المرور إلى الملقم."
+msgstr "إرسال كلمات السر إلى الخادم."
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Files will be decrypted in the server before being sent to you."
@@ -2053,7 +2054,7 @@ msgstr "سيتم فك تشفير الملفات في الخادم قبل إرس�
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Save passwords in your browser."
-msgstr "حفظ كلمات المرور في المتصفح الخاص بك."
+msgstr "حفظ كلمات السر في المتصفح الخاص بك."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Files will be decrypted in your browser when you download them."
@@ -2118,7 +2119,7 @@ msgstr "البريد الإلكتروني للمدير"
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:37
 msgid "Confirm Password"
-msgstr "تأكيد كلمة المرور"
+msgstr "تأكيد كلمة السر"
 
 #: seahub/organizations/templates/organizations/org_register.html:75
 #: seahub/templates/registration/registration_form.html:80
@@ -2133,7 +2134,7 @@ msgstr "البريد الإلكتروني لا يمكن أن يكون فارغا
 #: seahub/templates/registration/registration_form.html:84
 #: seahub/templates/sysadmin/sudo_mode.html:70
 msgid "Password cannot be blank"
-msgstr "كلمة المرور لا يمكن أن تكون فارغة"
+msgstr "كلمة السر لا يمكن أن تكون فارغة"
 
 #: seahub/organizations/templates/organizations/org_register.html:83
 #: seahub/templates/registration/password_change_form.html:57
@@ -2141,7 +2142,7 @@ msgstr "كلمة المرور لا يمكن أن تكون فارغة"
 #: seahub/templates/registration/password_set_form.html:55
 #: seahub/templates/registration/registration_form.html:88
 msgid "Please enter the password again"
-msgstr "الرجاء إدخال كلمة المرور مرة أخرى"
+msgstr "الرجاء إدخال كلمة السر مرة أخرى"
 
 #: seahub/organizations/templates/organizations/org_register.html:87
 #: seahub/templates/registration/password_change_form.html:61
@@ -2149,7 +2150,7 @@ msgstr "الرجاء إدخال كلمة المرور مرة أخرى"
 #: seahub/templates/registration/password_set_form.html:59
 #: seahub/templates/registration/registration_form.html:92
 msgid "Passwords don't match"
-msgstr "كلمتي المرور غير متطابقتين"
+msgstr "كلمتي السر غير متطابقتين"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/search/templates/search_results.html:98
@@ -2186,7 +2187,7 @@ msgstr "الاسم:"
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
-msgstr "قم بتعيين كلمة المرور"
+msgstr "قم بتعيين كلمة السر"
 
 #: seahub/profile/templates/profile/set_profile_react.html:26
 msgid "Update"
@@ -2326,11 +2327,11 @@ msgstr "تجاوز عدد روابط المشاركة الحد."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
-msgstr "كلمة المرور لا يمكن أن تكون فارغة"
+msgstr "كلمة السر لا يمكن أن تكون فارغة"
 
 #: seahub/share/models.py:134
 msgid "Please enter a correct password."
-msgstr "الرجاء ادخال كلمة مرور صحيحة."
+msgstr "الرجاء ادخال كلمة سر صحيحة."
 
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
@@ -2490,12 +2491,12 @@ msgstr "هل تريد تسجيل الدخول لبرنامج سطح المكتب
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr "هذه المكتبة مشفرة. الرجاء ادخال كلمة مرور إذا رغبت في تصفحها اونلاين. سيتم الاحتفاظ بكلمة المرور على الخادم لمدة ساعة واحدة فقط."
+msgstr "هذه المكتبة مشفرة. الرجاء ادخال كلمة السر إذا رغبت في تصفحها عن طريق المتصفح. سيتم الاحتفاظ بكلمة السر على الخادم لمدة ساعة 1 فقط."
 
 #: seahub/templates/decrypt_repo_form.html:26
 #: seahub/templates/share_access_validation.html:40
 msgid "Please enter the password."
-msgstr "الرجاء ادخال كلمة المرور."
+msgstr "الرجاء ادخال كلمة السر."
 
 #: seahub/templates/download.html:4
 msgid "Download"
@@ -2595,7 +2596,7 @@ msgstr "تحديث"
 
 #: seahub/templates/registration/login.html:63
 msgid "Incorrect email or password"
-msgstr "كلمة المرور أو بريد غير صحيح"
+msgstr "البريد أو كلمة السر غير صحيحه"
 
 #: seahub/templates/registration/login.html:71
 #, python-format
@@ -2613,7 +2614,7 @@ msgstr "تسجيل الدخول باستخدام"
 
 #: seahub/templates/registration/login.html:115
 msgid "Forgot password?"
-msgstr "نسيت كلمة المرور ؟"
+msgstr "نسيت كلمة السر ؟"
 
 #: seahub/templates/registration/login.html:183
 msgid "Failed to refresh the CAPTCHA, please try again later."
@@ -2626,40 +2627,40 @@ msgstr "البريد الإلكتروني أو اسم المستخدم لا يم
 
 #: seahub/templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr "تغيير كلمة المرور بنجاح"
+msgstr "تغيير كلمة السر بنجاح"
 
 #: seahub/templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr "تم تغيير كلمة المرور الخاصة بك بنجاح."
+msgstr "تم تغيير كلمة السر الخاصة بك بنجاح."
 
 #: seahub/templates/registration/password_change_form.html:3
 #: seahub/templates/registration/password_change_form.html:12
 msgid "Password Modification"
-msgstr "تعديل كلمة المرور"
+msgstr "تعديل كلمة السر"
 
 #: seahub/templates/registration/password_change_form.html:15
 msgid "Please update your password before continue."
-msgstr "الرجاء تحديث كلمة المرور الخاصة بك قبل الاستمرار."
+msgstr "الرجاء تحديث كلمة السر الخاصة بك قبل الاستمرار."
 
 #: seahub/templates/registration/password_change_form.html:17
 msgid "Current Password"
-msgstr "كلمة المرور الحالية"
+msgstr "كلمة السر الحالية"
 
 #: seahub/templates/registration/password_change_form.html:19
 msgid "New Password"
-msgstr "كلمة المرور الجديدة"
+msgstr "كلمة السر الجديدة"
 
 #: seahub/templates/registration/password_change_form.html:49
 msgid "Current password cannot be blank"
-msgstr "كلمة المرور الحالية لا يمكن أن يكون فارغاً"
+msgstr "كلمة السر الحالية لا يمكن أن يكون فارغاً"
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr "تم إعادة تعيين كلمة المرور بنجاح"
+msgstr "تم إعادة تعيين كلمة السر بنجاح"
 
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "تم إعادة تعيين كلمة المرور بنجاح."
+msgstr "تم إعادة تعيين كلمة السر بنجاح."
 
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_done.html:4
@@ -2667,27 +2668,27 @@ msgstr "تم إعادة تعيين كلمة المرور بنجاح."
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:35
 msgid "Password Reset"
-msgstr "إعادة تعيين كلمة المرور"
+msgstr "إعادة تعيين كلمة السر"
 
 #: seahub/templates/registration/password_reset_confirm.html:17
 msgid "Reset Password"
-msgstr "إعادة تعيين كلمة المرور"
+msgstr "إعادة تعيين كلمة السر"
 
 #: seahub/templates/registration/password_reset_confirm.html:19
 msgid "New Password: "
-msgstr "كلمة مرور جديدة: "
+msgstr "كلمة سر جديدة: "
 
 #: seahub/templates/registration/password_reset_confirm.html:23
 msgid "Confirm Password: "
-msgstr "تأكيد كلمة المرور: "
+msgstr "تأكيد كلمة السر: "
 
 #: seahub/templates/registration/password_reset_confirm.html:35
 msgid "Failed to reset password: this link is no longer available."
-msgstr "فشل إعادة تعيين كلمة المرور: هذا الارتباط لم يعد متوفراً."
+msgstr "فشل إعادة تعيين كلمة السر: هذا الرابط لم يعد متوفراً."
 
 #: seahub/templates/registration/password_reset_done.html:31
 msgid "We've sent a password reset email to your mailbox."
-msgstr "لقد ارسلنا رسالة إعادة تعيين كلمة المرور إلى بريدك."
+msgstr "لقد ارسلنا رسالة إعادة تعيين كلمة السر إلى بريدك."
 
 #: seahub/templates/registration/password_reset_done.html:32
 msgid "Back to login page"
@@ -2698,7 +2699,7 @@ msgstr "العودة إلى صفحة تسجيل الدخول"
 msgid ""
 "To reset the password of your account %(account)s on %(site_name)s, please "
 "click the following link: "
-msgstr "لإعادة تعيين كلمة مرور حسابك %(account)s على %(site_name)s، الرجاء النقر على الرابط التالي: "
+msgstr "لإعادة تعيين كلمة سر حسابك %(account)s على %(site_name)s، الرجاء النقر على الرابط التالي: "
 
 #: seahub/templates/registration/password_reset_email.html:20
 msgid "If you did not request it, just skip it."
@@ -2706,7 +2707,7 @@ msgstr "إذا لم تقم بطلبها، تجاوزها و حسب."
 
 #: seahub/templates/registration/password_reset_form.html:37
 msgid "We will send you an email to set new password"
-msgstr "سنرسل لك بريد لإعداد كلمة مرور جديدة"
+msgstr "سنرسل لك بريد لإعداد كلمة سر جديدة"
 
 #: seahub/templates/registration/password_reset_form.html:38
 msgid "Your email used in login"
@@ -2762,7 +2763,7 @@ msgid "Note"
 msgstr "ملاحظة"
 
 #: seahub/templates/remote_user/not_active.html:6
-#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:131
+#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:132
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
@@ -2783,7 +2784,7 @@ msgstr "لقطه"
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr "يرجى إدخال كلمة المرور إذا كنت تريد تصفح الملف / المجلد المشترك."
+msgstr "يرجى إدخال كلمة السر إذا كنت تريد تصفح الملف / المجلد المشترك."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2797,7 +2798,7 @@ msgstr "لقد قام %(escaped_nickname)s بمشاركة %(file_shared_type)s <
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
 msgid "Password:"
-msgstr "كلمة المرور:"
+msgstr "كلمة السر:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
@@ -2810,18 +2811,18 @@ msgstr "يمكنك الانتقال إلى الصفحة التالية وتحم�
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Insufficient password strength"
-msgstr "قوة كلمة المرور غير كافية"
+msgstr "قوة كلمة السر غير كافية"
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr "قوة كلمة المرور"
+msgstr "قوة كلمة السر"
 
 #: seahub/templates/snippets/password_strength_js.html:18
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr "يجب أن تحتوي كلمة المرور على أنواع مختلفة من الأحرف لجعلها قوية: الأحرف الكبيرة والأحرف الصغيرة والأرقام والأحرف الخاصة."
+msgstr "يجب أن تحتوي كلمة السر على أنواع مختلفة من الأحرف لجعلها قوية: الأحرف الانجليزية الكبيرة والأحرف الانجليزية الصغيرة والأرقام والأحرف الخاصة."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
@@ -2847,28 +2848,28 @@ msgstr "استعادة"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr "كلمة المرور للمكتبة %(repo_name)s هي %(password)s. يرجى تغيرها في أقرب وقت وشكراً. "
+msgstr "كلمة السر للمكتبة %(repo_name)s هي %(password)s. يرجى تغيرها في أقرب وقت وشكراً. "
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr "قام المدير على %(site_name)s بإعادة تعيين كلمة المرور الخاصة بك للحساب %(account)s ، الرجاء النقر فوق الرابط التالي للمتابعة: "
+msgstr "قام المدير على %(site_name)s بإعادة تعيين كلمة السر الخاصة بك للحساب %(account)s ، الرجاء النقر فوق الرابط التالي للمتابعة: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Confirm password to continue"
-msgstr "تأكيد كلمة المرور للمتابعة"
+msgstr "تأكيد كلمة السر للمتابعة"
 
 #: seahub/templates/sysadmin/sudo_mode.html:25
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr "أنت الان داخل منطقة الادارة، لن نقوم بطلب كلمة مرور منك مرة أخرى لبضعة ساعات."
+msgstr "أنت الان داخل منطقة الادارة، لن نقوم بطلب كلمة سر منك مرة أخرى لبضعة ساعات."
 
 #: seahub/templates/sysadmin/sudo_mode.html:32
 msgid "Incorrect password"
-msgstr "كلمة المرور غير صحيحة"
+msgstr "كلمة السر غير صحيحة"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
@@ -2909,7 +2910,7 @@ msgstr "لقد تجمد الحساب %(user)s نتيجة للإفراط في م�
 msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
-msgstr "تم إعادة تعيين كلمة المرور الخاصة بك على %(site_name)s. والان هي %(password)s. يرجى تغييره باسرع ما يمكن. "
+msgstr "تم إعادة تعيين كلمة السر الخاصة بك على %(site_name)s. والان هي %(password)s. يرجى تغييرها باسرع ما يمكن. "
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
@@ -3121,10 +3122,10 @@ msgstr "معرف تقرير خاطئ"
 msgid "Bad upload link token."
 msgstr "رمز رابط تحميل غير صالح."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:450 seahub/views/file.py:481
-#: seahub/views/file.py:1169 seahub/views/file.py:1426
-#: seahub/views/file.py:2091 seahub/views/file.py:2096
-#: seahub/views/file.py:2103
+#: seahub/views/ajax.py:338 seahub/views/file.py:456 seahub/views/file.py:487
+#: seahub/views/file.py:1176 seahub/views/file.py:1437
+#: seahub/views/file.py:2101 seahub/views/file.py:2106
+#: seahub/views/file.py:2113
 msgid "File does not exist"
 msgstr "الملف غير موجود"
 
@@ -3136,73 +3137,73 @@ msgstr "معرف تقرير غير صالح في رابط التحميل."
 msgid "No conflict in the merge."
 msgstr "لا يوجد تعارضات في الدمج."
 
-#: seahub/views/file.py:184
+#: seahub/views/file.py:190
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: فشل في فتح ملف على الإنترنت"
 
-#: seahub/views/file.py:188
+#: seahub/views/file.py:194
 msgid "URLError: failed to open file online"
 msgstr "URLError: فشل في فتح ملف على الإنترنت"
 
-#: seahub/views/file.py:195
+#: seahub/views/file.py:201
 msgid "The encoding you chose is not proper."
 msgstr "الترميز الذي اخترته غير مناسب."
 
-#: seahub/views/file.py:212 seahub/views/file.py:215
+#: seahub/views/file.py:218 seahub/views/file.py:221
 msgid "Unknown file encoding"
 msgstr "ترميز الملف غير معروف"
 
-#: seahub/views/file.py:335 seahub/views/file.py:370 seahub/views/file.py:699
-#: seahub/views/file.py:783 seahub/views/file.py:884
+#: seahub/views/file.py:341 seahub/views/file.py:376 seahub/views/file.py:705
+#: seahub/views/file.py:790 seahub/views/file.py:891
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "حجم الملف يتجاوز %s، ولا يمكن فتحه على الإنترنت."
 
-#: seahub/views/file.py:342 seahub/views/file.py:818
+#: seahub/views/file.py:348 seahub/views/file.py:825
 msgid "The library is encrypted, can not open file online."
 msgstr "المكتبة مشفرة، و لا يمكن فتحها على الانترنت."
 
-#: seahub/views/file.py:437 seahub/views/file.py:459 seahub/views/file.py:464
-#: seahub/views/file.py:515 seahub/views/file.py:773 seahub/views/file.py:1021
-#: seahub/views/file.py:1047 seahub/views/file.py:1077
-#: seahub/views/file.py:1215 seahub/views/file.py:1326
-#: seahub/views/file.py:1467 seahub/views/file.py:1585
+#: seahub/views/file.py:443 seahub/views/file.py:465 seahub/views/file.py:470
+#: seahub/views/file.py:521 seahub/views/file.py:780 seahub/views/file.py:1028
+#: seahub/views/file.py:1054 seahub/views/file.py:1084
+#: seahub/views/file.py:1225 seahub/views/file.py:1337
+#: seahub/views/file.py:1478 seahub/views/file.py:1596
 msgid "Unable to view file"
 msgstr "غير قادر على عرض الملف"
 
-#: seahub/views/file.py:842 seahub/views/file.py:965 seahub/views/file.py:1286
-#: seahub/views/file.py:1523
+#: seahub/views/file.py:849 seahub/views/file.py:972 seahub/views/file.py:1296
+#: seahub/views/file.py:1534
 msgid "Error when prepare Office Online file preview page."
 msgstr "خطأ عند تحضير صفحة معاينة ملف Office Online."
 
-#: seahub/views/file.py:877 seahub/views/file.py:981 seahub/views/file.py:1306
-#: seahub/views/file.py:1539
+#: seahub/views/file.py:884 seahub/views/file.py:988 seahub/views/file.py:1316
+#: seahub/views/file.py:1550
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "خطأ عند تحضير صفحة معاينة ملف OnlyOffice."
 
-#: seahub/views/file.py:1113
+#: seahub/views/file.py:1120
 msgid "Unable to download file, invalid file path"
 msgstr "غير قادر على تنزيل الملف، مسار الملف غير صحيح"
 
-#: seahub/views/file.py:1122
+#: seahub/views/file.py:1129
 msgid "Unable to download file, wrong file path"
 msgstr "غير قادر على تنزيل الملف، مسار الملف خاطئ"
 
-#: seahub/views/file.py:1129
+#: seahub/views/file.py:1136
 msgid "Unable to download file."
 msgstr "غير قادر على تحميل الملف."
 
-#: seahub/views/file.py:1341 seahub/views/file.py:1604
+#: seahub/views/file.py:1352 seahub/views/file.py:1615
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr "شارك الرابط لـ%s."
 
-#: seahub/views/file.py:1740 seahub/views/file.py:1745
+#: seahub/views/file.py:1750 seahub/views/file.py:1755
 msgid "Unable to download file"
 msgstr "غير قادر على تنزيل الملف"
 
-#: seahub/views/file.py:2084
+#: seahub/views/file.py:2094
 msgid "The original file does not exist"
 msgstr "الملف الأصلي غير موجود"
 
@@ -3256,11 +3257,11 @@ msgstr "فشل إلغاء صلاحية المدير: المستخدم غير م�
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، تم إرسال بريد إلكتروني إلى %(user)s."
+msgstr "إعادة تعيين كلمة السر إلى %(passwd)s تم بنجاح، وتم إرسال بريد إلكتروني إلى %(user)s."
 
 #: seahub/views/sysadmin.py:526
 msgid "Failed to reset password: user does not exist"
-msgstr "فشل في إعادة تعيين كلمة المرور: المستخدم غير موجود"
+msgstr "فشل في إعادة تعيين كلمة السر: المستخدم غير موجود"
 
 #: seahub/views/sysadmin.py:575
 #, python-format

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:23+0800\n"
+"POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/haiwen/teams/5086/ar/)\n"
@@ -668,10 +668,10 @@ msgid ""
 " can choose to sync or unsync an encrypted library."
 msgstr ""
 "نعم. بشكل افتراضي ، لا تتم مزامنة المكتبات المشفرة وعرضها في محرك الأقراص "
-"الظاهري. تحتاج إلى اختيار المكتبات المشفرة يدويا لمزامنتها وإدخال كلمة "
-"المرور. فقط انقر بزر الماوس الأيمن على أيقونة SeaDrive في منطقة علبة النظام "
-"واختر \"إظهار المكتبات المشفرة\". ستظهر نافذة ويمكنك اختيار مزامنة مكتبة "
-"مشفرة أو إلغاء مزامنتها."
+"الظاهري. تحتاج إلى اختيار المكتبات المشفرة يدويا لمزامنتها وإدخال كلمة السر."
+" فقط انقر بزر الفأرة الأيمن على أيقونة برنامج سيدرايف -SeaDrive- في منطقة "
+"علبة النظام واختر \"إظهار المكتبات المشفرة\". ستظهر نافذة ويمكنك اختيار "
+"مزامنة مكتبة مشفرة أو إلغاء مزامنتها."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
@@ -727,14 +727,6 @@ msgstr ""
 "أو تبديل حسابات Seafile في SeaDrive. هذا هو السلوك المقصود. لا تحتاج إلى "
 "إزالتها إذا كنت لا تزال بحاجة إلى الوصول إلى الحساب لاحقا."
 
-#: templates/help/drive_client_2.0_for_windows_10.html:52
-msgid ""
-"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
-" Explorer and you want to remove it."
-msgstr ""
-"في بعض الحالات ، سيتم ترك اختصار \"SeaDrvie\" في مستكشف ويندوز ويجب إزالته "
-"يدوياً."
-
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -770,10 +762,10 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
-"يوفر سيفايل Seafile تشفير البيانات من جهة العميل -client-side- و من طرف الى "
-"طرف -end-to-end-.لاستخدام هذه الميزة يمكنك إنشاء مكتبات مشفرة . يتم تشفير "
-"محتويات الملف في مكتبات مشفرة على جانب العميل. لا يتم تخزين كلمة مرور "
-"التشفير في الخادم. بل وحتى المدير عن الخادم لا يمكنه الوصول إلى محتويات "
+"يوفر برنامج عميل سيفايل Seafile تشفير البيانات من جهة العميل -client-side- و"
+" من طرف الى طرف -end-to-end-.لاستخدام هذه الميزة يمكنك إنشاء مكتبات مشفرة . "
+"يتم تشفير محتويات الملف في مكتبات مشفرة على جانب العميل. لا يتم تخزين كلمة "
+"سر التشفير في الخادم. بل وحتى مدير الخادم لا يمكنه الوصول إلى محتويات "
 "الملفات الخاص بك في المكتبة المشفرة."
 
 #: templates/help/encrypted_libraries.html:10
@@ -786,9 +778,8 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
-"إذا قمت بإنشاء مكتبة مشفرة في تطبيق الويب، سيتم إرسال كلمة المرور إلى "
-"الخادم. يستخدم الخادم كلمة المرور هذه لإنشاء المكتبة. لكنه لا يخزن كلمة "
-"المرور ."
+"إذا قمت بإنشاء مكتبة مشفرة في تطبيق الويب، سيتم إرسال كلمة السر إلى الخادم. "
+"يستخدم الخادم كلمة السر هذه لإنشاء المكتبة. لكنه لا يخزن كلمة السر ."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -797,9 +788,9 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
-"إذا قمت بإنشاء مكتبة مشفرة من مجلد محلي باستخدام عميل سطح المكتب (راجع <a "
-"href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة الملفات</a>)، فلن يتم إرسال "
-"كلمة المرور إلى الخادم."
+"إذا قمت بإنشاء مكتبة مشفرة من مجلد محلي باستخدام برنامج عميل سطح المكتب "
+"(راجع <a href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة الملفات</a>)، فلن "
+"يتم إرسال كلمة السر إلى الخادم."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -811,9 +802,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
-"إذا كنت تستخدم تطبيق الويب، يتعين عليك إدخال كلمة المرور للخادم. سيقوم "
-"الملقم بالتخزين المؤقت لكلمة المرور بتنسيق مشفر لمدة ساعة واحدة. لن يقوم "
-"بتخزين كلمة المرور على القرص."
+"إذا كنت تستخدم تطبيق الويب، يتعين عليك إدخال كلمة السر للخادم. سيقوم الخادم "
+"بالتخزين المؤقت لكلمة السر مشفرة لمدة ساعة 1 واحدة. ولن يقوم بتخزين كلمة "
+"السر في قرص الخادم."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -821,9 +812,9 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
-"إذا كنت تستخدم عميل سطح المكتب لمزامنة المكتبة، لا يتم إرسال كلمة المرور إلى"
-" الخادم. يقوم العميل بفك تشفير محتويات الملف وتشفيرها محليا. لا يتم تخزين "
-"كلمة المرور على قرص العميل أيضا."
+"إذا كنت تستخدم برنامج عميل سطح المكتب لمزامنة المكتبة، لا يتم إرسال كلمة "
+"السر إلى الخادم. يقوم العميل بفك تشفير محتويات الملف وتشفيرها محليا. لا يتم "
+"تخزين كلمة السر على قرص العميل أيضا."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
@@ -1662,15 +1653,6 @@ msgstr ""
 "انقر على رابط \"عرض لقطة\" في أي سجل التعديلات. سترى حالة المكتبة في الوقت "
 "المناسب."
 
-#: templates/help/library_history_and_snapshots.html:13
-msgid ""
-"In the snapshot view, you can download or restore any file or folder. If "
-"you're the library's owner, you can restore the enitre library to this point"
-" of time."
-msgstr ""
-"في طريقة عرض اللقطة ، يمكنك تنزيل أو استعادة أي ملف أو مجلد. إذا كنت مالك "
-"المكتبة، يمكنك استعادة المكتبة كاملاً إلى هذا الوقت."
-
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1794,27 +1776,6 @@ msgid ""
 "current library."
 msgstr ""
 "توفر واجهة مستعرض الملفات ملخصا لجميع علامات الملفات في المكتبة الحالية."
-
-#: templates/help/read-only_syncing.html:6
-#, python-format
-msgid ""
-"For ready-only libraries or folders, Seafile will show a forbidden icon "
-"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"to indicate they are read-only. However, users can still modify the synced "
-"local copies. When a local copy is modified, Seafile will ignore the "
-"modified one. When the copy at the server is also modified, the client will "
-"popup a notification, saying that the local modified copy conflicts with the"
-" copy at the server side. To prevent data loss, the local copy is renamed to"
-" a conflict file."
-msgstr ""
-"بالنسبة للمكتبات أو المجلدات الجاهزة فقط ، سيعرض سيفايل رمزا محظورا (<img "
-"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
-"للإشارة إلى أنها للقراءة فقط. ومع ذلك، لا يزال بإمكان المستخدمين تعديل النسخ"
-" المحلية التي تمت مزامنتها. عندما يتم تعديل نسخة محلية ، سيتجاهل سيفايل "
-"النسخة المعدلة. عندما يتم تعديل النسخة الموجودة على الخادم أيضا ، سيظهر "
-"العميل إشعارا ، يفيد بأن النسخة المعدلة المحلية تتعارض مع النسخة الموجودة "
-"على جانب الخادم. لمنع فقدان البيانات، تتم إعادة تسمية النسخة المحلية إلى ملف"
-" تعارض."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2046,7 +2007,7 @@ msgid ""
 msgstr ""
 "روابط المشاركة هي روابط عامة للملفات أو المجلدات. يمكن الوصول إليها من قبل "
 "أي شخص ، بما في ذلك أولئك الذين ليس لديهم حساب سيفايل. يمكنك أيضا استخدام "
-"كلمة المرور ووقت انتهاء الصلاحية لحماية الروابط الخاصة بك."
+"كلمة السر ووقت انتهاء الصلاحية لحماية الروابط الخاصة بك."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
@@ -2054,16 +2015,6 @@ msgid ""
 "permissions:"
 msgstr ""
 "يمكنك أيضا تعيين إذن الوصول لمشاركة الروابط. هناك ثلاثة أنواع من الأذونات:"
-
-#: templates/help/sharing_files_and_folders.html:21
-msgid ""
-"Preview and Download: the file or files in the folder can be downloaded. If "
-"the type of files can be previewd in web browser, they can also be viewed "
-"online (e.g. Office files)."
-msgstr ""
-"معاينة وتنزيل: يمكن تنزيل الملف أو الملفات الموجودة في المجلد. إذا كان من "
-"الممكن معاينة نوع الملفات في متصفح الويب ، فيمكن أيضا عرضها عبر الإنترنت "
-"(مثل ملفات أوفيس )."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -2104,7 +2055,7 @@ msgid ""
 msgstr ""
 "ستظهر نافذة منبثقة بها خيارات المشاركة. انقر فوق علامة التبويب \"مشاركة "
 "الرابط\" على اللوحة اليمنى. ثم انقر فوق الزر \"إنشاء\" لإنشاء رابط. يمكنك "
-"استخدام كلمة المرور ووقت انتهاء الصلاحية والإذن لحماية الرابط الخاص بك."
+"استخدام كلمة السر ووقت انتهاء الصلاحية والإذن لحماية الرابط الخاص بك."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -2175,7 +2126,7 @@ msgid ""
 msgstr ""
 "ستظهر نافذة منبثقة تحتوي على خيارات المشاركة. انقر فوق علامة التبويب \"تحميل"
 " الرابط\" في اللوحة اليسرى. ثم انقر فوق الزر \"إنشاء\" لإنشاء رابط. يمكنك "
-"استخدام كلمة مرور لحماية الرابط الخاص بك."
+"استخدام كلمة سر لحماية الرابط الخاص بك."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
