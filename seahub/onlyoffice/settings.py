@@ -55,7 +55,7 @@ if ENABLE_MULTIPLE_OFFICE_SUITE:
             office_info = s
             break
     ONLYOFFICE_APIJS_URL = office_info.get('ONLYOFFICE_APIJS_URL')
-    ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/documents/api.js", "/ConvertService.ashx"),
+    ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL and ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/documents/api.js", "/ConvertService.ashx")
     ONLYOFFICE_FORCE_SAVE = office_info.get('ONLYOFFICE_FORCE_SAVE', False)
     ONLYOFFICE_JWT_SECRET = office_info.get('ONLYOFFICE_JWT_SECRET', '')
     ONLYOFFICE_JWT_HEADER = office_info.get('ONLYOFFICE_JWT_HEADER', 'Authorization')

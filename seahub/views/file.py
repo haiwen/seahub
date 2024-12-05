@@ -155,13 +155,16 @@ def get_office_feature_by_repo(repo):
     if not ENABLE_MULTIPLE_OFFICE_SUITE:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
     
+    if not OFFICE_SUITES:
+        return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
+    
     org_id = get_org_id_by_repo_id(repo.repo_id)
     if org_id > 0:
         repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
     else:
         repo_owner = seafile_api.get_repo_owner(repo.repo_id)
     if '@seafile_group' in repo_owner:
-        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE['default']
+        repo_feature = None
     else:
         repo_feature = _check_feature(repo.repo_id)
 
@@ -176,7 +179,6 @@ def get_office_feature_by_repo(repo):
             if s.get('is_default'):
                 default_suite = s
                 break
-
         if default_suite.get('id') == 'onlyoffice':
             enable_onlyoffice = True
         if default_suite.get('id') == 'collabora':
