@@ -51,7 +51,6 @@ from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_adm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
-from seahub.utils.user_permissions import get_user_role
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
@@ -70,8 +69,6 @@ from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
-
-from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
@@ -1152,7 +1149,7 @@ def react_fake_view(request, **kwargs):
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
-        'enable_show_about': settings.ENABLE_SHOW_ABOUT,
+        'enable_show_about': settings.ENABLE_SHOW_ABOUT
     }
 
     if ENABLE_METADATA_MANAGEMENT:
