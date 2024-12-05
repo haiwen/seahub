@@ -664,7 +664,7 @@ export const Utils = {
       list.push(HISTORY);
     }
 
-    if (permission == 'rw' && enableOnlyoffice &&
+    if (permission == 'rw' && currentRepoInfo.enable_onlyoffice &&
       onlyofficeConverterExtensions.includes(Utils.getFileExtension(dirent.name, false))) {
       list.push(ONLYOFFICE_CONVERT);
     }
