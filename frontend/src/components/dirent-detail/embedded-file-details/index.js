@@ -8,6 +8,7 @@ import { Header, Body } from '../detail';
 import FileDetails from './file-details';
 import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
+import Settings from '../../../metadata/components/metadata-details/settings';
 
 import './index.css';
 
@@ -52,7 +53,9 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         })}
         style={{ width }}
       >
-        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} />
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} >
+          <Settings />
+        </Header>
         <Body>
           {dirent && direntDetail && (
             <div className="detail-content">
