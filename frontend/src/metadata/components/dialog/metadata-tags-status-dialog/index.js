@@ -25,7 +25,7 @@ const langOptions = [
 
 const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
-  const [lang, setLang] = useState({ value: oldLang, label: langOptions.find(item => item.value === oldLang).label });
+  const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
 
@@ -39,8 +39,8 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
       return;
     }
     setSubmitting(true);
-    tagsAPI.openTags(repoID, lang.value).then(res => {
-      submit(true, lang.value);
+    tagsAPI.openTags(repoID, lang).then(res => {
+      submit(true, lang);
       toggle();
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -71,9 +71,11 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
     setValue(nextValue);
   }, [value]);
 
-  const onSelectChange = (option) => {
-    setLang(option);
-  };
+  const onSelectChange = useCallback((option) => {
+    const newValue = option.value;
+    if (newValue === lang) return;
+    setLang(newValue);
+  }, [lang]);
 
   return (
     <>
@@ -97,7 +99,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
                 <span>{gettext('Tags language:')}</span>
                 <SeahubSelect
                   className='tags-language-selector'
-                  value={lang || { value: 'en', label: 'English' }}
+                  value={langOptions.find(o => o.value === lang) || langOptions[1]}
                   options={langOptions}
                   onChange={onSelectChange}
                 />
