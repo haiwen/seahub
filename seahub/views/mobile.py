@@ -40,7 +40,7 @@ def mobile_login(request):
         return render_error(request, error_msg)
 
     user.backend = AuthBackend.__module__ + ".AuthBackend"
-    login(request, user)
+    login(request, user, mobile_login=True)
 
     redirect_to = request.GET.get(REDIRECT_FIELD_NAME, SITE_ROOT)
     response = HttpResponseRedirect(redirect_to)

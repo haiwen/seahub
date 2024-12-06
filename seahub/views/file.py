@@ -42,6 +42,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
+from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
 from seahub.base.templatetags.seahub_tags import file_icon_filter
@@ -560,6 +561,7 @@ def view_lib_file(request, repo_id, path):
             return render(request, 'view_file_thirdparty_editor.html', editor_dict)
 
     org_id = request.user.org.org_id if is_org_context(request) else -1
+    mobile_login = request.session.get(SESSION_MOBILE_LOGIN_KEY, False)
     # basic file info
     return_dict = {
         'is_pro': is_pro_version(),
@@ -582,7 +584,8 @@ def view_lib_file(request, repo_id, path):
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
-        'file_download_url': gen_file_get_url_new(repo_id, path)
+        'file_download_url': gen_file_get_url_new(repo_id, path),
+        'mobile_login': mobile_login,
     }
 
     if ENABLE_METADATA_MANAGEMENT:
@@ -1224,7 +1227,7 @@ def view_shared_file(request, fileshare):
     if not access_token:
         return render_error(request, _('Unable to view file'))
 
-    
+
     raw_path = gen_file_get_url(access_token, filename)
 
     if request.GET.get('raw', '') == '1':
@@ -1239,7 +1242,7 @@ def view_shared_file(request, fileshare):
         return HttpResponseRedirect(raw_path)
 
     # preview file
-    
+
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
 
@@ -2117,6 +2120,8 @@ def view_sdoc_revision(request, repo_id, revision_id):
     if not permission:
         return convert_repo_path_when_can_not_view_file(request, repo_id, path)
 
+    mobile_login = request.session.get(SESSION_MOBILE_LOGIN_KEY, False)
+
     org_id = request.user.org.org_id if is_org_context(request) else -1
     # basic file info
     return_dict = {
@@ -2139,6 +2144,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
+        'mobile_login': mobile_login,
     }
 
     is_locked = False

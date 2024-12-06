@@ -13,6 +13,9 @@ from constance import config
 SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
 REDIRECT_FIELD_NAME = 'next'
+SESSION_MOBILE_LOGIN_KEY = "MOBILE_LOGIN"
+MOBILE_SESSION_DAYS = 365
+
 
 def load_backend(path):
     i = path.rfind('.')
@@ -63,7 +66,7 @@ def authenticate(**credentials):
         user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
         return user
 
-def login(request, user):
+def login(request, user, mobile_login=False):
     """
     Persist a user id and a backend in the request. This way a user doesn't
     have to reauthenticate on every request.
@@ -94,8 +97,12 @@ def login(request, user):
     request.session[SESSION_KEY] = user.username
     request.session[BACKEND_SESSION_KEY] = user.backend
 
-    if request.session.get('remember_me', False):
+    if mobile_login:
+        request.session[SESSION_MOBILE_LOGIN_KEY] = mobile_login
+        request.session.set_expiry(MOBILE_SESSION_DAYS * 24 * 60 * 60)
+    elif request.session.get('remember_me', False):
         request.session.set_expiry(config.LOGIN_REMEMBER_DAYS * 24 * 60 * 60)
+
     if hasattr(request, 'user'):
         request.user = user
     user_logged_in.send(sender=user.__class__, request=request, user=user)
