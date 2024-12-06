@@ -78,7 +78,7 @@ MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
-MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed' 
+MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
