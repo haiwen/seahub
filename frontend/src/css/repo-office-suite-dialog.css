@@ -1,47 +1,20 @@
 .repo-office-suite-dialog .repo-office-suite-dialog-content {
     padding: 0;
-    min-height: 22.5rem;
+    min-height: 5.5rem;
+    min-width: 10rem;
     display: flex;
     flex-direction: column;
   }
   
-  @media (min-width: 768px) {
+  @media (min-width: 268px) {
     .repo-office-suite-dialog .repo-office-suite-dialog-content {
-      flex-direction: row;
-    }
-  }
-  
-  .repo-office-suite-dialog-content .repo-office-suite-dialog-side {
-    flex-basis: 29%;
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .repo-office-suite-dialog .nav .nav-item .nav-link {
-    padding: 0.3125rem 0.25rem;
-  }
-  
-  @media (min-width: 768px) {
-    .repo-office-suite-dialog-content .repo-office-suite-dialog-side {
-      padding: 12px 8px;
-      border: 0;
-      border-right: 1px solid #eee;
-    }
-  
-    .repo-office-suite-dialog-side .nav {
       flex-direction: column;
-    }
-  
-    .repo-office-suite-dialog-side .nav-pills .nav-item .nav-link {
-      width: 100%;
-      padding: 0.3125rem 0.5rem;
-      margin: 0;
     }
   }
   
   .repo-office-suite-dialog-content .repo-office-suite-dialog-main {
     display: flex;
-    flex-basis: 78%;
+    flex-basis: 48%;
     padding: 1rem;
   }
   
@@ -49,40 +22,9 @@
     flex: 1;
   }
   
-  .repo-office-suite-dialog-content .repo-office-suite-dialog-main .tab-pane {
-    height: 100%;
-  }
-  
-  .repo-office-suite-dialog-content .repo-office-suite-dialog-main .office-suite-label {
-    color: #666;
-  }
   
   .repo-office-suite-dialog-content .repo-office-suite-dialog-main .repo-select-office-suite {
     padding: 8px 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
   }
   
-  .repo-office-suite-dialog-side .nav-item .nav-link:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .repo-office-suite-dialog-side .nav-item .nav-link.active {
-    position: relative;
-    background-color: #f5f5f5;
-    color: #212529;
-    border-bottom: 0.125rem solid transparent;
-  }
-  
-  .repo-office-suite-dialog-side .nav-item .nav-link.active::before {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 3px;
-    height: 28px;
-    left: -4px;
-    top: 3px;
-    background-color: #ff9800;
-    border-radius: 2px;
-  }
   

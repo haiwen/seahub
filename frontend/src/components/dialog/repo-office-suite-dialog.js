@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
@@ -18,15 +17,12 @@ const propTypes = {
 
 };
 
-const OFFICE_SUITE = 'officeSuite';
-
 class OfficeSuiteDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedOption: null,
-      errorMsg: [],
-      activeTab: OFFICE_SUITE,
+      errorMsg: []
     };
     this.options = [];
   }
@@ -36,16 +32,8 @@ class OfficeSuiteDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab, selectedOption } = this.state;
-    if (activeTab === OFFICE_SUITE) {
-      if (selectedOption === null) {
-        toaster.danger('option cannot be null');
-      } else {
-        let suite_id = this.state.selectedOption.value;
-        this.props.submit(suite_id);
-      }
-
-    }
+    let suite_id = this.state.selectedOption.value;
+    this.props.submit(suite_id);
   };
 
   componentDidMount() {
@@ -72,39 +60,14 @@ class OfficeSuiteDialog extends React.Component {
     this.setState({ selectedOption });
   };
 
-  toggle = (tab) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-        selectedOption: null,
-      });
-    }
-  };
 
   renderOfficeSuiteContent = () => {
-    let activeTab = this.state.activeTab;
     return (
-      <Fragment>
-        <div className="repo-office-suite-dialog-side">
-          <Nav pills>
-            {isPro &&
-            <NavItem role="tab" aria-selected={activeTab === OFFICE_SUITE} aria-controls="office-suite-panel">
-              <NavLink
-                className={activeTab === OFFICE_SUITE ? 'active' : ''}
-                onClick={this.toggle.bind(this, OFFICE_SUITE)}
-                tabIndex="0"
-              >
-                {gettext('Office Suite Change')}
-              </NavLink>
-            </NavItem>}
-          </Nav>
-        </div>
+      <React.Fragment>
         <div className="repo-office-suite-dialog-main">
-          <TabContent activeTab={this.state.activeTab}>
-            <Fragment>
-              {isPro &&
-              <TabPane tabId="officeSuite" role="tabpanel" id="office-suite-panel">
-                <Label className='office-suite-label'>{gettext('Office Suite')}</Label>
+          <TabContent>
+            {isPro &&
+              <TabPane role="tabpanel" id="office-suite-panel">
                 <SeahubSelect
                   isClearable
                   maxMenuHeight={200}
@@ -117,10 +80,9 @@ class OfficeSuiteDialog extends React.Component {
                   className="repo-select-office-suite"
                 />
               </TabPane>}
-            </Fragment>
           </TabContent>
         </div>
-      </Fragment>
+      </React.Fragment>
     );
   };
 
@@ -129,7 +91,7 @@ class OfficeSuiteDialog extends React.Component {
     let title = gettext('{library_name} Office Suite');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
-      <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="repo-office-suite-dialog">
+      <Modal isOpen={true} toggle={this.props.toggleDialog} className="repo-office-suite-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>
