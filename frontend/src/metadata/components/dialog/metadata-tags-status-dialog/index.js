@@ -25,7 +25,7 @@ const langOptions = [
 
 const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
-  const [lang, setLang] = useState({ value: oldLang || 'en', label: langOptions.find(item => item.value === oldLang).label });
+  const [lang, setLang] = useState({ value: oldLang, label: langOptions.find(item => item.value === oldLang).label });
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
 
