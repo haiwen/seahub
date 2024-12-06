@@ -38,7 +38,7 @@ from seahub.share.utils import VALID_SHARE_LINK_SCOPE, SCOPE_SPECIFIC_USERS, SCO
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
     normalize_dir_path, is_pro_version, get_file_type_and_ext, \
     check_filename_with_rename, gen_file_upload_url, \
-    get_password_strength_level, is_valid_password, is_valid_email, string2list
+    get_password_strength_level, is_valid_password, is_valid_email, string2list, gen_file_get_url_by_sharelink
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
@@ -108,6 +108,8 @@ def get_share_link_info(fileshare):
 
     data['token'] = token
     data['link'] = gen_shared_link(token, fileshare.s_type)
+    data['download_link'] = gen_file_get_url_by_sharelink(token)
+    data['show_download_link'] = fileshare.show_download_link
     data['view_cnt'] = fileshare.view_cnt
     data['ctime'] = ctime
     data['expire_date'] = expire_date
@@ -284,6 +286,8 @@ class ShareLinks(APIView):
             link_info['is_dir'] = True if s_type == 'd' else False
             link_info['token'] = token
             link_info['link'] = gen_shared_link(token, s_type)
+            link_info['download_link'] = gen_file_get_url_by_sharelink(token)
+            link_info['show_download_link'] = fs.show_download_link
             link_info['view_cnt'] = fs.view_cnt
             link_info['ctime'] = datetime_to_isoformat_timestr(fs.ctime) if fs.ctime else ''
             link_info['expire_date'] = datetime_to_isoformat_timestr(fs.expire_date) if fs.expire_date else ''
