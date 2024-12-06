@@ -245,7 +245,7 @@ INSTALLED_APPS = [
     'seahub.api2',
     'seahub.avatar',
     'seahub.contacts',
-    'seahub.drafts',
+    # 'seahub.drafts',
     'seahub.institutions',
     'seahub.invitations',
     'seahub.wiki',
