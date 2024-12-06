@@ -1,0 +1,41 @@
+import React, { useMemo, useCallback, useState } from 'react';
+import Icon from '../../../../components/icon';
+import HideColumnPopover from '../../popover/hidden-column-popover';
+import { useMetadataDetails } from '../../../hooks';
+
+import './index.css';
+
+const Settings = () => {
+  const [isShowSetter, setShowSetter] = useState(false);
+
+  const { modifyColumnOrder, modifyHiddenColumns, columns } = useMetadataDetails();
+  const hiddenColumns = useMemo(() => columns.filter(c => !c.shown).map(c => c.key), [columns]);
+
+  const onSetterToggle = useCallback(() => {
+    setShowSetter(!isShowSetter);
+  }, [isShowSetter]);
+  const target = useMemo(() => 'detail-control-settings-btn', []);
+
+  return (
+    <>
+      <div className="detail-control mr-2" id={target} onClick={onSetterToggle}>
+        <Icon symbol="set-up" className="detail-control-close" />
+      </div>
+      {isShowSetter && (
+        <HideColumnPopover
+          readOnly={false}
+          hiddenColumns={hiddenColumns}
+          target={target}
+          placement="bottom-end"
+          columns={columns}
+          hidePopover={onSetterToggle}
+          onChange={modifyHiddenColumns}
+          modifyColumnOrder={modifyColumnOrder}
+        />
+      )}
+    </>
+  );
+
+};
+
+export default Settings;

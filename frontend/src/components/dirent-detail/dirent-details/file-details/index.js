@@ -10,7 +10,7 @@ import { gettext } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
-import { MetadataDetails } from '../../../../metadata';
+import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
@@ -57,10 +57,10 @@ const getImageInfoValue = (key, value) => {
   }
 };
 
-const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
+const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadata } = useMetadataStatus();
-  const [record, setRecord] = useState(null);
+  const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
+  const { record } = useMetadataDetails();
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);
@@ -76,10 +76,6 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
   const fileTagChanged = useCallback(() => {
     onFileTagChanged(dirent, direntPath);
   }, [dirent, direntPath, onFileTagChanged]);
-
-  const updateRecord = useCallback((record) => {
-    setRecord(record);
-  }, []);
 
   const dom = (
     <>
@@ -116,8 +112,8 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
           </div>
         </DetailItem>
       )}
-      {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} repoInfo={repoInfo} direntType="file" updateRecord={updateRecord} />
+      {enableMetadataManagement && enableMetadata && (
+        <MetadataDetails />
       )}
     </>
   );
