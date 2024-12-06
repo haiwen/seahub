@@ -16,7 +16,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   const [isLoading, setLoading] = useState(true);
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
-  const [tagsLang, setTagsLang] = useState(null);
+  const [tagsLang, setTagsLang] = useState('en');
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
   const cancelMetadataURL = useCallback(() => {
@@ -42,7 +42,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
-      setTagsLang(tagsLang);
+      setTagsLang(tagsLang || 'en');
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
