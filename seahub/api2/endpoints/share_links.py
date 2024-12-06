@@ -1116,14 +1116,13 @@ class ShareLinkUploadDone(APIView):
         share_link = None
         upload_link = None
 
-        try:
-            share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
-        except FileShare.DoesNotExist:
-            upload_link = UploadLinkShare.objects.get(token=token)
-        except UploadLinkShare.DoesNotExist:
+        share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
+        upload_link = UploadLinkShare.objects.filter(token=token).first()
+
+        if not (share_link or upload_link):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+        
         if share_link:
 
             # check if login required
@@ -1178,7 +1177,7 @@ class ShareLinkUploadDone(APIView):
             if upload_link.is_expired():
                 error_msg = 'Upload link is expired'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+            
             repo_id = upload_link.repo_id
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -1192,7 +1191,7 @@ class ShareLinkUploadDone(APIView):
                                                     link_owner) != 'rw':
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+            
         # send signal
         dirent_path = request.data.get('file_path')
         if not dirent_path:

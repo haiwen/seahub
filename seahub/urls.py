@@ -752,7 +752,7 @@ urlpatterns = [
     path('work-weixin/', include('seahub.work_weixin.urls')),
     path('weixin/', include('seahub.weixin.urls')),
     # Must specify a namespace if specifying app_name.
-    path('drafts/', include(('seahub.drafts.urls', 'drafts'), namespace='drafts')),
+    # path('drafts/', include(('seahub.drafts.urls', 'drafts'), namespace='drafts')),
 
     ## admin::address book
     re_path(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
