@@ -16,6 +16,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
 from seahub.utils.user_permissions import get_user_role
 from seahub.role_permissions.settings import DEFAULT_ENABLED_ROLE_PERMISSIONS
+from seahub.utils.file_size import get_quota_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -216,9 +217,10 @@ class InternalDownloadRateLimitView(APIView):
         for role, v in DEFAULT_ENABLED_ROLE_PERMISSIONS.items():
             rate_limit = {}
             if 'monthly_rate_limit' in v:
-                rate_limit['monthly_rate_limit'] = v['monthly_rate_limit']
+                monthly_rate_limit = get_quota_from_string(v['monthly_rate_limit'])
+                rate_limit['monthly_rate_limit'] = monthly_rate_limit
             if 'monthly_rate_limit_per_user' in v:
-                rate_limit['monthly_rate_limit_per_user'] = v['monthly_rate_limit_per_user']
+                monthly_rate_limit_per_user = get_quota_from_string(v['monthly_rate_limit_per_user'])
+                rate_limit['monthly_rate_limit_per_user'] = monthly_rate_limit_per_user
             traffic_info_dict[role] = rate_limit
-
         return Response(traffic_info_dict)

@@ -46,8 +46,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_repo': True,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
-        'monthly_rate_limit': 0,
-        'monthly_rate_limit_per_user': 0
+        'monthly_rate_limit': '',
+        'monthly_rate_limit_per_user': ''
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -70,8 +70,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_repo': False,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
-        'monthly_rate_limit': 0,
-        'monthly_rate_limit_per_user': 0
+        'monthly_rate_limit': '',
+        'monthly_rate_limit_per_user': ''
     },
 }
 
