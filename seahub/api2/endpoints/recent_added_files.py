@@ -12,7 +12,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.utils import EVENTS_ENABLED, get_user_activities_by_timestamp
 from seahub.api2.utils import api_error
-from seahub.drafts.models import Draft
 
 
 logger = logging.getLogger(__name__)
@@ -59,22 +58,6 @@ class RecentAddedFilesView(APIView):
             file_dict = dict(repo_id=event.repo_id)
             file_dict['path'] = event.path
             file_dict['added_time'] = event.timestamp
-
-            if event.path.endswith('(draft).md'):
-                try:
-                    draft = Draft.objects.filter(
-                        username=event.op_user,
-                        origin_repo_id=event.repo_id,
-                        draft_file_path=event.path
-                    )
-                    if draft:
-                        draft = draft[0]
-                        file_dict['draft_id'] = draft.id
-                    else:
-                        logger.warning('draft %s not found' % event.path)
-                except Draft.DoesNotExist:
-                    pass
-
             recent_added_files.append(file_dict)
 
         return Response({'recent_added_files': recent_added_files})

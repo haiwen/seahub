@@ -19,8 +19,6 @@ from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
 from seahub.base.models import FileComment
-from seahub.drafts.models import Draft
-from seahub.drafts.utils import is_draft_file, get_file_draft
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
@@ -817,9 +815,6 @@ class ViaRepoTokenFile(APIView):
 
         username = ''
         parent_dir = os.path.dirname(path)
-
-        is_draft = request.POST.get('is_draft', '')
-
         if operation == 'create':
 
             # resource check
@@ -838,17 +833,6 @@ class ViaRepoTokenFile(APIView):
             if check_folder_permission_by_repo_api(request, repo_id, parent_dir) != 'rw':
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            if is_draft.lower() == 'true':
-                file_name = os.path.basename(path)
-                file_dir = os.path.dirname(path)
-
-                draft_type = os.path.splitext(file_name)[0][-7:]
-                file_type = os.path.splitext(file_name)[-1]
-
-                if draft_type != '(draft)':
-                    f = os.path.splitext(file_name)[0]
-                    path = file_dir + '/' + f + '(draft)' + file_type
 
             # create new empty file
             new_file_name = os.path.basename(path)
@@ -870,9 +854,6 @@ class ViaRepoTokenFile(APIView):
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            if is_draft.lower() == 'true':
-                Draft.objects.add(username, repo, path, file_exist=False)
 
             LANGUAGE_DICT = {
                 'cs': 'cs-CZ',

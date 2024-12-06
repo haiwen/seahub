@@ -62,9 +62,6 @@ from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.drafts.models import Draft
-from seahub.drafts.utils import get_file_draft, \
-    is_draft_file, has_draft_file
 from seahub.signals import (repo_created, repo_deleted, repo_transfer)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -3041,7 +3038,6 @@ class FileView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
         operation = request.POST.get('operation', '')
-        is_draft = request.POST.get('is_draft', '')
 
         file_info = {}
         if operation.lower() == 'rename':
@@ -3186,17 +3182,6 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
-            if is_draft.lower() == 'true':
-                file_name = os.path.basename(path)
-                file_dir = os.path.dirname(path)
-
-                draft_type = os.path.splitext(file_name)[0][-7:]
-                file_type = os.path.splitext(file_name)[-1]
-
-                if draft_type != '(draft)':
-                    f = os.path.splitext(file_name)[0]
-                    path = file_dir + '/' + f + '(draft)' + file_type
-
             new_file_name = os.path.basename(path)
 
             if not is_valid_dirent_name(new_file_name):
@@ -3211,9 +3196,6 @@ class FileView(APIView):
             except SearpcError as e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
-
-            if is_draft.lower() == 'true':
-                Draft.objects.add(username, repo, path, file_exist=False)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo, parent_dir)
@@ -3385,18 +3367,10 @@ class FileDetailView(APIView):
 
         file_type, file_ext = get_file_type_and_ext(file_name)
         if file_type == MARKDOWN:
-            is_draft = is_draft_file(repo_id, path)
-
-            has_draft = False
-            if not is_draft:
-                has_draft = has_draft_file(repo_id, path)
-
-            draft = get_file_draft(repo_id, path, is_draft, has_draft)
-
-            entry['is_draft'] = is_draft
-            entry['has_draft'] = has_draft
-            entry['draft_file_path'] = draft['draft_file_path']
-            entry['draft_id'] = draft['draft_id']
+            entry['is_draft'] = False
+            entry['has_draft'] = False
+            entry['draft_file_path'] = ''
+            entry['draft_id'] = None
 
         # fetch file contributors and latest contributor
         try:

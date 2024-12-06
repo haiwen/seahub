@@ -71,8 +71,6 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
-from seahub.drafts.utils import get_file_draft, \
-        is_draft_file, has_draft_file
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, is_seadoc_revision
 from seahub.seadoc.models import SeadocRevision
 

@@ -37,10 +37,6 @@ from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
 from seahub.seadoc.utils import get_seadoc_file_uuid
-
-from seahub.drafts.models import Draft
-from seahub.drafts.utils import is_draft_file, get_file_draft
-
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -170,8 +166,6 @@ class FileView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
 
-        is_draft = request.POST.get('is_draft', '')
-
         if operation == 'create':
 
             # resource check
@@ -190,17 +184,6 @@ class FileView(APIView):
             if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            if is_draft.lower() == 'true':
-                file_name = os.path.basename(path)
-                file_dir = os.path.dirname(path)
-
-                draft_type = os.path.splitext(file_name)[0][-7:]
-                file_type = os.path.splitext(file_name)[-1]
-
-                if draft_type != '(draft)':
-                    f = os.path.splitext(file_name)[0]
-                    path = file_dir + '/' + f + '(draft)' + file_type
 
             # create new empty file
             new_file_name = os.path.basename(path)
@@ -222,9 +205,6 @@ class FileView(APIView):
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            if is_draft.lower() == 'true':
-                Draft.objects.add(username, repo, path, file_exist=False)
 
             LANGUAGE_DICT = {
                 'cs': 'cs-CZ',
@@ -349,18 +329,6 @@ class FileView(APIView):
 
             # rename draft file
             filetype, fileext = get_file_type_and_ext(new_file_name)
-            if filetype == MARKDOWN or filetype == TEXT:
-                is_draft = is_draft_file(repo.id, path)
-                review = get_file_draft(repo.id, path, is_draft)
-                draft_id = review['draft_id']
-                if is_draft:
-                    try:
-                        draft = Draft.objects.get(pk=draft_id)
-                        draft.draft_file_path = new_file_path
-                        draft.save()
-                    except Draft.DoesNotExist:
-                        pass
-
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)
 
