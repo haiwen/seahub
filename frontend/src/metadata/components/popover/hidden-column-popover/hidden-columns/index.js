@@ -1,27 +1,29 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DropTarget } from 'react-dnd';
 import HideColumn from './hide-column';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 import { gettext } from '../../../../../utils/constants';
 
 const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
 
   const isEmpty = useMemo(() => {
     if (!Array.isArray(columns) || columns.length === 0) return true;
     return false;
   }, [columns]);
 
-  const onMouseEnter = useCallback((columnIndex) => {
-    if (currentIndex === columnIndex) return;
-    setCurrentIndex(columnIndex);
-  }, [currentIndex]);
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingColumnKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingColumnKey]);
 
-  const onMouseLeave = useCallback(() => {
-    setCurrentIndex(-1);
-  }, []);
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverColumnKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverColumnKey]);
+
+  const draggingColumnIndex = draggingColumnKey ? columns.findIndex(c => c.key === draggingColumnKey) : -1;
 
   return (
     <div className={classnames('hide-columns-list', { 'empty-hide-columns-container': isEmpty })}>
@@ -32,13 +34,15 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColum
             key={column.key}
             readOnly={readOnly}
             columnIndex={columnIndex}
-            currentIndex={currentIndex}
             isHidden={!hiddenColumns.includes(column.key)}
             column={column}
+            draggingColumnKey={draggingColumnKey}
+            draggingColumnIndex={draggingColumnIndex}
+            dragOverColumnKey={dragOverColumnKey}
             onChange={onChange}
             onMove={modifyColumnOrder}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            updateDraggingKey={updateDraggingKey}
+            updateDragOverKey={updateDragOverKey}
           />
         );
       })}
@@ -54,8 +58,4 @@ HiddenColumns.propTypes = {
   modifyColumnOrder: PropTypes.func,
 };
 
-const DndHiddenColumns = DropTarget('sfMetadataHiddenColumns', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(HiddenColumns);
-
-export default html5DragDropContext(DndHiddenColumns);
+export default HiddenColumns;

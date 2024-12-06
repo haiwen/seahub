@@ -831,6 +831,7 @@ class MetadataViewsMoveView(APIView):
         try:
             results = RepoMetadataViews.objects.move_view(repo_id, view_id, target_view_id)
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
@@ -1184,7 +1185,7 @@ class FaceRecognitionManage(APIView):
         return Response({'task_id': task_id})
 
     def delete(self, request, repo_id):
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -1393,13 +1394,11 @@ class MetadataTags(APIView):
 
         return Response(query_result)
 
-
-
     def post(self, request, repo_id):
         tags_data = request.data.get('tags_data', [])
 
         if not tags_data:
-            error_msg = f'Tags data is required.'
+            error_msg = 'Tags data is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -1546,7 +1545,7 @@ class MetadataTags(APIView):
         tag_ids = request.data.get('tag_ids', [])
 
         if not tag_ids:
-            error_msg = f'Tag ids is required.'
+            error_msg = 'Tag ids is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -1722,13 +1721,13 @@ class MetadataTagFiles(APIView):
 
         tag_files_records = tag_query.get('results', [])
         if not tag_files_records:
-            return Response({ 'metadata': [], 'results': [] })
+            return Response({'metadata': [], 'results': []})
 
         tag_files_record = tag_files_records[0]
         tag_files_record_ids = tag_files_record.get(TAGS_TABLE.columns.file_links.name , [])
 
         if not tag_files_record_ids:
-            return Response({ 'metadata': [], 'results': [] })
+            return Response({'metadata': [], 'results': []})
 
         tag_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
                                                                                     METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
@@ -1743,4 +1742,3 @@ class MetadataTagFiles(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(tag_files_query)
-

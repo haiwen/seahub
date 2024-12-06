@@ -2,7 +2,7 @@ import { Utils } from '../../../utils/utils';
 
 export const getDirentPath = (dirent, path) => {
   if (Utils.isMarkdownFile(path)) return path; // column mode: view file
-  return Utils.joinPath(path, dirent.name);
+  return Utils.joinPath(path, dirent?.name);
 };
 
 export const getFileParent = (dirent, path) => {
