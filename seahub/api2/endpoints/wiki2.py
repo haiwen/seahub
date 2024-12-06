@@ -527,7 +527,7 @@ class Wiki2PagesView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         wiki_config = get_wiki_config(repo_id, request.user.username)
         navigation = wiki_config.get('navigation', [])
         # side panel create Untitled page
@@ -992,7 +992,7 @@ class Wiki2DuplicatePageView(APIView):
                                   )
 
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(dst_sdoc_uuid, dst_repo_id, parent_dir, dst_dirent, is_dir=False)
-            copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_doc_uuid, dst_repo_id, str(dst_sdoc_uuid), username, is_async=False)
+            copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_doc_uuid, dst_repo_id, str(dst_sdoc_uuid), username, is_async=True)
 
         wiki_config['pages'] = new_pages
         wiki_config = json.dumps(wiki_config)
