@@ -16,10 +16,12 @@ class OnlyOfficeDocKey(models.Model):
     created_time = models.DateTimeField(default=datetime.datetime.now)
 
 
-class RepoOfficeSuite(models.Model):
+REPO_OFFICE_CONFIG = 'office'
+class RepoExtraConfig(models.Model):
 
-    suite_id = models.CharField(max_length=50, unique=True)
+    config = models.CharField(max_length=50, unique=True)
     repo_id = models.CharField(max_length=36, db_index=True)
+    config_details = models.TextField()
 
     class Meta:
-        db_table = 'repo_office_suite'
+        db_table = 'repo_extra_config'

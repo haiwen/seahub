@@ -41,7 +41,7 @@ from seahub.share.utils import check_share_link_user_access
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
-from seahub.onlyoffice.models import RepoOfficeSuite
+from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
 from seahub.auth.decorators import login_required
 from seahub.auth import SESSION_MOBILE_LOGIN_KEY
 from seahub.base.decorators import repo_passwd_set_required
@@ -145,9 +145,11 @@ FILE_TYPE_FOR_NEW_FILE_LINK = [
 ]
 
 def _check_feature(repo_id):
-    office_suite = RepoOfficeSuite.objects.filter(repo_id=repo_id).first()
+    office_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config=REPO_OFFICE_CONFIG).first()
     if office_suite:
-        return office_suite.suite_id
+        repo_config_details = json.loads(office_suite.config_details)
+        office_config = repo_config_details.get('office')
+        return office_config.get('suite_id') if office_config else None
     return None
 
 def get_office_feature_by_repo(repo):
