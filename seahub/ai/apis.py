@@ -2,6 +2,7 @@ import logging
 import os.path
 
 from pysearpc import SearpcError
+from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
 
 from rest_framework.authentication import SessionAuthentication
@@ -161,6 +162,13 @@ class ImageTags(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        try:
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
             error_msg = 'Permission denied.'
@@ -182,7 +190,8 @@ class ImageTags(APIView):
 
         params = {
             'path': path,
-            'download_token': token
+            'download_token': token,
+            'lang': record.tags_lang if record and record.tags_enabled else None
         }
 
         try:

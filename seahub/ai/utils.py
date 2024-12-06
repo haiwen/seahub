@@ -38,5 +38,6 @@ def generate_summary(params):
 def image_tags(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/image-tags/')
+    print(params)
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
