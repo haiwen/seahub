@@ -248,10 +248,10 @@ def copy_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
         return
     dst_repo = seafile_api.get_repo(dst_repo_id)
     dst_file_uuid = get_seadoc_file_uuid(dst_repo, dst_path)
-    dst_image_parent_path = gen_seadoc_image_parent_path(
-        dst_file_uuid, dst_repo_id, username=username)
-    image_dirents = seafile_api.list_dir_by_path(src_repo_id, src_image_parent_path)
-    image_names = [item.obj_name for item in image_dirents]
+
+    dir_id = seafile_api.get_dir_id_by_path(dst_repo_id, SDOC_IMAGES_DIR)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(dst_repo_id, '/', SDOC_IMAGES_DIR.strip('/'), username)
 
     if is_async:
         need_progress=1
@@ -259,11 +259,12 @@ def copy_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
     else:
         need_progress=0
         synchronous=1
+    # copy sdoc image dir
     seafile_api.copy_file(
-        src_repo_id, src_image_parent_path,
-        json.dumps(image_names),
-        dst_repo_id, dst_image_parent_path,
-        json.dumps(image_names),
+        src_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([src_file_uuid]),
+        dst_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([dst_file_uuid]),
         username=username,
         need_progress=need_progress, synchronous=synchronous,
     )
@@ -276,10 +277,9 @@ def copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_file_uuid, dst_repo_id, dst
     if not src_dir_id:
         return
 
-    dst_image_parent_path = gen_seadoc_image_parent_path(
-        dst_file_uuid, dst_repo_id, username=username)
-    image_dirents = seafile_api.list_dir_by_path(src_repo_id, src_image_parent_path)
-    image_names = [item.obj_name for item in image_dirents]
+    dir_id = seafile_api.get_dir_id_by_path(dst_repo_id, SDOC_IMAGES_DIR)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(dst_repo_id, '/', SDOC_IMAGES_DIR.strip('/'), username)
 
     if is_async:
         need_progress=1
@@ -288,10 +288,10 @@ def copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_file_uuid, dst_repo_id, dst
         need_progress=0
         synchronous=1
     seafile_api.copy_file(
-        src_repo_id, src_image_parent_path,
-        json.dumps(image_names),
-        dst_repo_id, dst_image_parent_path,
-        json.dumps(image_names),
+        src_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([src_file_uuid]),
+        dst_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([dst_file_uuid]),
         username=username,
         need_progress=need_progress, synchronous=synchronous,
     )
@@ -307,10 +307,9 @@ def move_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
         return
     dst_repo = seafile_api.get_repo(dst_repo_id)
     dst_file_uuid = get_seadoc_file_uuid(dst_repo, dst_path)
-    dst_image_parent_path = gen_seadoc_image_parent_path(
-        dst_file_uuid, dst_repo_id, username=username)
-    image_dirents = seafile_api.list_dir_by_path(src_repo_id, src_image_parent_path)
-    image_names = [item.obj_name for item in image_dirents]
+    dir_id = seafile_api.get_dir_id_by_path(dst_repo_id, SDOC_IMAGES_DIR)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(dst_repo_id, '/', SDOC_IMAGES_DIR.strip('/'), username)
 
     if is_async:
         need_progress=1
@@ -319,10 +318,10 @@ def move_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
         need_progress=0
         synchronous=1
     seafile_api.move_file(
-        src_repo_id, src_image_parent_path,
-        json.dumps(image_names),
-        dst_repo_id, dst_image_parent_path,
-        json.dumps(image_names),
+        src_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([src_file_uuid]),
+        dst_repo_id, SDOC_IMAGES_DIR,
+        json.dumps([dst_file_uuid]),
         replace=False, username=username,
         need_progress=need_progress, synchronous=synchronous,
     )
