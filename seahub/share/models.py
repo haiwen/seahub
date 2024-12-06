@@ -409,6 +409,14 @@ class FileShare(models.Model):
             return '%s/f/%s/' % (service_url, self.token)
         else:
             return '%s/d/%s/' % (service_url, self.token)
+    
+    @property   
+    def show_download_link(self):
+        if self.is_encrypted():
+            return False
+        if self.user_scope != 'all_users':
+            return False
+        return True
 
     def get_permissions(self):
         perm_dict = {}

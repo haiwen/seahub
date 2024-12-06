@@ -19,6 +19,8 @@ class ShareLink {
     this.ctime = object.ctime;
     this.password = object.password;
     this.user_scope = object.user_scope;
+    this.download_link = object.download_link;
+    this.show_download_link = object.show_download_link;
   }
 
 }
