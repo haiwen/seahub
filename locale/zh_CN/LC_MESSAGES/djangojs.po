@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: BingbingHaidian <michael18811380328@163.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -138,7 +138,7 @@ msgstr "{share_from} 给群组 {group_link} 共享了一个资料库 {repo_link}
 #: frontend/src/components/common/notice-item.js:156
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
-msgstr "{share_from} 给群组 {group_link} 共享了一个目录 {group_link}。"
+msgstr "{share_from} 给群组 {group_link} 共享了一个目录 {repo_link} 。"
 
 #: frontend/src/components/common/notice-item.js:182
 msgid "{user} has transfered a library named {repo_link} to you."
