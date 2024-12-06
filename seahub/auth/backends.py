@@ -9,7 +9,7 @@ from django.conf import settings
 
 from seaserv import ccnet_api, seafile_api
 
-from seahub.base.accounts import User, AuthBackend
+from seahub.base.accounts import User, AuthBackend, CustomLDAPBackend
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -93,9 +93,14 @@ class SeafileRemoteUserBackend(AuthBackend):
     create_unknown_user = getattr(settings, 'REMOTE_USER_CREATE_UNKNOWN_USER',
                                   True)
 
+    import_from_ldap = getattr(settings, 'REMOTE_USER_IMPORT_FROM_LDAP',
+                               True)
+
     # Create active user by default.
     auto_activate = getattr(settings,
                             'REMOTE_USER_ACTIVATE_USER_AFTER_CREATION', True)
+
+    ldapBackend = CustomLDAPBackend()
 
     # map user attribute in HTTP header and Seahub user attribute
     # REMOTE_USER_ATTRIBUTE_MAP = {
@@ -143,6 +148,9 @@ class SeafileRemoteUserBackend(AuthBackend):
 
         # get user from ccnet
         user = self.get_user(username)
+        if not user and self.import_from_ldap:
+            user = self.ldapBackend.authenticate(ldap_user=username, password=None, no_check_password=True)
+
         if not user:
             # when user doesn't exist
             if not self.create_unknown_user:
@@ -195,15 +203,18 @@ class SeafileRemoteUserBackend(AuthBackend):
 
         By default, returns the user unmodified.
         """
+        if self.import_from_ldap:
+            self.ldapBackend.authenticate(ldap_user=user.username, password=None, no_check_password=True)
+        else:
+            user_info = self.parse_user_info(request, user)
 
-        user_info = self.parse_user_info(request, user)
-
-        self.update_user_profile(user_info)
-        self.update_user_role(user_info)
+            self.update_user_profile(user_info)
+            self.update_user_role(user_info)
 
     def parse_user_info(self, request, user):
         """ Pull the mapped user info from the http headers.
         """
+
         user_info = {}
 
         for header, user_info_key in list(self.remote_user_attribute_map.items()):
