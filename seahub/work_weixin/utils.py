@@ -161,15 +161,15 @@ def update_work_weixin_user_info(api_user):
             logger.error(e)
 
     # avatar
-
-    try:
-        image_name = 'work_weixin_avatar'
-        image_file = requests.get(headimgurl).content
-        avatar = Avatar.objects.filter(emailuser=username, primary=True).first()
-        avatar = avatar or Avatar(emailuser=username, primary=True)
-        avatar_file = ContentFile(image_file)
-        avatar_file.name = image_name
-        avatar.avatar = avatar_file
-        avatar.save()
-    except Exception as e:
-        logger.error(e)
+    if headimgurl:
+        try:
+            image_name = 'work_weixin_avatar'
+            image_file = requests.get(headimgurl).content
+            avatar = Avatar.objects.filter(emailuser=username, primary=True).first()
+            avatar = avatar or Avatar(emailuser=username, primary=True)
+            avatar_file = ContentFile(image_file)
+            avatar_file.name = image_name
+            avatar.avatar = avatar_file
+            avatar.save()
+        except Exception as e:
+            logger.error(e)
