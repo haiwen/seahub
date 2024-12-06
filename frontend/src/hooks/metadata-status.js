@@ -65,14 +65,14 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   }, [enableMetadata, cancelMetadataURL]);
 
   const updateEnableTags = useCallback((newValue, lang = 'en') => {
-    if (newValue === enableTags) return;
+    if (newValue === enableTags && lang === tagsLang) return;
     if (!newValue) {
       cancelMetadataURL();
       hideMetadataView && hideMetadataView();
     }
     setEnableTags(newValue);
     setTagsLang(lang);
-  }, [enableTags, cancelMetadataURL, hideMetadataView]);
+  }, [enableTags, tagsLang, cancelMetadataURL, hideMetadataView]);
 
   return (
     <EnableMetadataContext.Provider

@@ -1266,6 +1266,8 @@ class MetadataTagsStatusManage(APIView):
             error_msg = f'The metadata module is not enabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        old_tags_enabled = metadata.tags_enabled
+
         try:
             metadata.tags_enabled = True
             metadata.tags_lang = lang
@@ -1274,8 +1276,9 @@ class MetadataTagsStatusManage(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_tags(metadata_server_api)
+        if not old_tags_enabled:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            init_tags(metadata_server_api)
 
         return Response({'success': True})
 
