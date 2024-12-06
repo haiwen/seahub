@@ -26,7 +26,7 @@ class WechatDialog extends React.PureComponent {
             <img src={`${mediaUrl}img/wechat-QR-code.png`} width="150" alt="" />
             <div className="wechat-dialog-message">
               <p>扫描二维码</p>
-              <p>{`加入 Seafile ${isWorkWeixin(window.navigator.userAgent.toLowerCase()) ? '企业' : ''}微信咨询群`}</p>
+              <p>{`加入${isWorkWeixin(window.navigator.userAgent.toLowerCase()) ? '企业' : ''}微信咨询群`}</p>
             </div>
           </div>
         </ModalBody>
