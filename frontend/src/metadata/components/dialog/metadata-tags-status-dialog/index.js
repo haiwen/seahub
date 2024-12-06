@@ -8,11 +8,24 @@ import tagsAPI from '../../../../tag/api';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
 import TurnOffConfirmDialog from './turn-off-confirm';
+import { SeahubSelect } from '../../../../components/common/select';
 
-// import './index.css';
+import './index.css';
 
-const MetadataTagsStatusDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
+const langOptions = [
+  {
+    value: 'zh-cn',
+    label: '简体中文'
+  },
+  {
+    value: 'en',
+    label: 'English'
+  }
+];
+
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
+  const [lang, setLang] = useState({ value: oldLang || 'en', label: langOptions.find(item => item.value === oldLang).label });
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
 
@@ -26,15 +39,15 @@ const MetadataTagsStatusDialog = ({ value: oldValue, repoID, toggleDialog: toggl
       return;
     }
     setSubmitting(true);
-    tagsAPI.openTags(repoID).then(res => {
-      submit(true);
+    tagsAPI.openTags(repoID, lang.value).then(res => {
+      submit(true, lang.value);
       toggle();
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       setSubmitting(false);
     });
-  }, [repoID, submit, toggle, value]);
+  }, [lang, repoID, submit, toggle, value]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -58,6 +71,10 @@ const MetadataTagsStatusDialog = ({ value: oldValue, repoID, toggleDialog: toggl
     setValue(nextValue);
   }, [value]);
 
+  const onSelectChange = (option) => {
+    setLang(option);
+  };
+
   return (
     <>
       {!showTurnOffConfirmDialog && (
@@ -75,10 +92,21 @@ const MetadataTagsStatusDialog = ({ value: oldValue, repoID, toggleDialog: toggl
             <p className="tip m-0">
               {gettext('Enable tags to add tags to files and search files by tags.')}
             </p>
+            {value && (
+              <div className="tags-language-container">
+                <span>{gettext('Tags language:')}</span>
+                <SeahubSelect
+                  className='tags-language-selector'
+                  value={lang || { value: 'en', label: 'English' }}
+                  options={langOptions}
+                  onChange={onSelectChange}
+                />
+              </div>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" disabled={(oldValue === value && oldLang === lang.value) || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
         </>
       )}

@@ -62,6 +62,7 @@ class MetadataManage(APIView):
         return Response({
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
+            'tags_lang': record.tags_lang,
         })
 
     def put(self, request, repo_id):
@@ -1245,6 +1246,11 @@ class MetadataTagsStatusManage(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def put(self, request, repo_id):
+        lang = request.data.get('lang')
+        if not lang:
+            error_msg = 'lang invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -1260,15 +1266,19 @@ class MetadataTagsStatusManage(APIView):
             error_msg = f'The metadata module is not enabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        old_tags_enabled = metadata.tags_enabled
+
         try:
-           metadata.tags_enabled = True
-           metadata.save()
+            metadata.tags_enabled = True
+            metadata.tags_lang = lang
+            metadata.save()
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_tags(metadata_server_api)
+        if not old_tags_enabled:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            init_tags(metadata_server_api)
 
         return Response({'success': True})
 
@@ -1300,6 +1310,7 @@ class MetadataTagsStatusManage(APIView):
 
         try:
             record.tags_enabled = False
+            record.tags_lang = None
             record.save()
         except Exception as e:
             logger.error(e)

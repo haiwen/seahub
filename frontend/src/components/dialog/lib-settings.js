@@ -44,7 +44,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { enableFaceRecognition, updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata, enableTags, updateEnableTags } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -139,6 +139,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   <LibMetadataTagsStatusSettingPanel
                     repoID={repoID}
                     value={enableTags}
+                    lang={tagsLang}
                     submit={updateEnableTags}
                     toggleDialog={toggleDialog}
                   />

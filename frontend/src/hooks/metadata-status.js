@@ -16,6 +16,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   const [isLoading, setLoading] = useState(true);
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
+  const [tagsLang, setTagsLang] = useState(null);
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
   const cancelMetadataURL = useCallback(() => {
@@ -36,11 +37,12 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       return;
     }
     metadataAPI.getMetadataStatus(repoID).then(res => {
-      const { enabled: enableMetadata, tags_enabled: enableTags } = res.data;
+      const { enabled: enableMetadata, tags_enabled: enableTags, tags_lang: tagsLang } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
+      setTagsLang(tagsLang);
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -62,14 +64,15 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
     setEnableMetadata(newValue);
   }, [enableMetadata, cancelMetadataURL]);
 
-  const updateEnableTags = useCallback((newValue) => {
-    if (newValue === enableTags) return;
+  const updateEnableTags = useCallback((newValue, lang = 'en') => {
+    if (newValue === enableTags && lang === tagsLang) return;
     if (!newValue) {
       cancelMetadataURL();
       hideMetadataView && hideMetadataView();
     }
     setEnableTags(newValue);
-  }, [enableTags, cancelMetadataURL, hideMetadataView]);
+    setTagsLang(lang);
+  }, [enableTags, tagsLang, cancelMetadataURL, hideMetadataView]);
 
   return (
     <EnableMetadataContext.Provider
@@ -80,6 +83,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
         updateEnableMetadata,
         setIsBeingBuilt,
         enableTags,
+        tagsLang,
         updateEnableTags,
       }}
     >
