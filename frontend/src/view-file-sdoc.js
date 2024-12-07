@@ -12,7 +12,7 @@ import { TagsProvider } from './tag/hooks';
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
-  repoID, repoName, parentDir, filePerm,
+  repoID, repoName, repoEncrypted, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
   originFilePath, originDocUuid, revisionId, isFreezed
@@ -51,12 +51,14 @@ window.seafile = {
   isPro: isPro === 'True' ? true : false,
 };
 
+const repoInfo = { encrypted: repoEncrypted, permission: filePerm };
+
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <MetadataStatusProvider repoID={repoID}>
+      <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
         <CollaboratorsProvider repoID={repoID}>
-          <TagsProvider repoID={repoID} repoInfo={{ permission: filePerm }}>
+          <TagsProvider repoID={repoID} repoInfo={repoInfo}>
             <SdocEditor />
           </TagsProvider>
         </CollaboratorsProvider>
