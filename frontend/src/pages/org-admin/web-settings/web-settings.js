@@ -27,7 +27,8 @@ class OrgWebSettings extends Component {
       file_ext_white_list: '',
       force_adfs_login: false,
       disable_org_encrypted_library: false,
-      disable_org_user_clean_trash: false
+      disable_org_user_clean_trash: false,
+      user_default_quota: ''
     };
   }
 
@@ -39,7 +40,8 @@ class OrgWebSettings extends Component {
         file_ext_white_list: res.data.file_ext_white_list,
         force_adfs_login: res.data.force_adfs_login,
         disable_org_encrypted_library: res.data.disable_org_encrypted_library,
-        disable_org_user_clean_trash: res.data.disable_org_user_clean_trash
+        disable_org_user_clean_trash: res.data.disable_org_user_clean_trash,
+        user_default_quota: Utils.bytesToSize(res.data.user_default_quota),
       });
     }).catch((error) => {
       this.setState({
@@ -82,8 +84,17 @@ class OrgWebSettings extends Component {
     });
   };
 
+  orgUpdateUserDefaultQuota = (key, quota) => {
+    orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, quota).then((res) => {
+      toaster.success(gettext('User default quota updated'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, disable_org_encrypted_library, disable_org_user_clean_trash } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, disable_org_encrypted_library, disable_org_user_clean_trash, user_default_quota } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
@@ -169,6 +180,17 @@ class OrgWebSettings extends Component {
                     </Fragment>
                   </Section>
                 }
+                <Section headingText={gettext('User')}>
+                  <Fragment>
+                    <InputItem
+                      className={'form-control'}
+                      saveSetting={this.orgUpdateUserDefaultQuota}
+                      displayName={gettext('Set User default quota')}
+                      value={user_default_quota}
+                      helpTip={gettext('Tip: 0 means default limit, the unit is MB')}
+                    />
+                  </Fragment>
+                </Section>
               </Fragment>
               }
             </div>
