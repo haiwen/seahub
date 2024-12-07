@@ -15,7 +15,7 @@ const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
-  originFilePath, originDocUuid, revisionId, isFreezed
+  originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -49,6 +49,7 @@ window.seafile = {
   mediaUrl,
   isFreezed,
   isPro: isPro === 'True' ? true : false,
+  mobileLogin,
 };
 
 ReactDom.render(
