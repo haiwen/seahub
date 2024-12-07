@@ -14,6 +14,9 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
+from seahub.utils.user_permissions import get_user_role
+from seahub.role_permissions.settings import DEFAULT_ENABLED_ROLE_PERMISSIONS
+from seahub.utils.file_size import get_quota_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -198,3 +201,26 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'user': rat.app_name})
+
+
+class InternalDownloadRateLimitView(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
+
+    def post(self, request):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        traffic_info_dict = {}
+        for role, v in DEFAULT_ENABLED_ROLE_PERMISSIONS.items():
+            rate_limit = {}
+            if 'monthly_rate_limit' in v:
+                monthly_rate_limit = get_quota_from_string(v['monthly_rate_limit'])
+                rate_limit['monthly_rate_limit'] = monthly_rate_limit
+            if 'monthly_rate_limit_per_user' in v:
+                monthly_rate_limit_per_user = get_quota_from_string(v['monthly_rate_limit_per_user'])
+                rate_limit['monthly_rate_limit_per_user'] = monthly_rate_limit_per_user
+            traffic_info_dict[role] = rate_limit
+        return Response(traffic_info_dict)
