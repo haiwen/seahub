@@ -48,12 +48,14 @@ class MetadataManage(APIView):
 
         is_enabled = False
         is_tags_enabled = False
+        tags_lang = ''
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 is_enabled = True
             if record and record.tags_enabled:
                 is_tags_enabled = True
+                tags_lang = record.tags_lang
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -62,7 +64,7 @@ class MetadataManage(APIView):
         return Response({
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
-            'tags_lang': record.tags_lang,
+            'tags_lang': tags_lang,
         })
 
     def put(self, request, repo_id):
