@@ -25,7 +25,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
-from seahub.onlyoffice.models import OnlyOfficeDocKey
+
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
@@ -38,6 +38,7 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.views import check_folder_permission
 from seahub.utils.file_types import SPREADSHEET
+
 
 
 # Get an instance of a logger
@@ -506,4 +507,3 @@ class OnlyofficeGetReferenceData(APIView):
         }
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
-
