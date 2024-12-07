@@ -5,6 +5,7 @@ import json
 import logging
 import requests
 import posixpath
+import time
 import email.utils
 import urllib.parse
 
@@ -432,6 +433,7 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
         payload['key'] = obj_id
         payload['url'] = full_url
         payload['version'] = obj_id
+        payload['exp'] = int(time.time()) + 300
 
         jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
         payload['token'] = jwt_token
@@ -440,28 +442,28 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
 
 
 class OnlyofficeGetReferenceData(APIView):
-    
+
     throttle_classes = (UserRateThrottle, )
-    
+
     def post(self, request):
         instance_id = request.data.get('instanceId')
         file_key = request.data.get('fileKey')
 
         username = request.user.username
-        
+
         try:
             payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
         except:
             err_msg = 'File key invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
-        
+
         source_repo_id = payload.get('repo_id')
         source_file_path = payload.get('file_path')
-        
+
         if not seafile_api.get_repo(source_repo_id):
             error_msg = 'Library %s not found.' % source_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         file_id = seafile_api.get_file_id_by_path(source_repo_id, source_file_path)
         if not file_id:
             error_msg = 'Souce file does not exist'
@@ -492,7 +494,7 @@ class OnlyofficeGetReferenceData(APIView):
         doc_url = gen_file_get_url(dl_token, file_name)
         link = "%s%s"% (instance_id, reverse('view_lib_file', args=[
             source_repo_id, source_file_path]))
-        
+
         result = {
             "fileType": fileext,
             "key": doc_key,
@@ -502,7 +504,8 @@ class OnlyofficeGetReferenceData(APIView):
                 "instanceId": instance_id,
             },
             "url": doc_url,
-            "link": link
+            "link": link,
+            "exp": int(time.time()) + 300
         }
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
