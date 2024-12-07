@@ -13,8 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
-from seahub.settings import OFFICE_SUITES, ENABLE_MULTIPLE_OFFICE_SUITE
-from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
+from seahub.settings import OFFICE_SUITES
 from seahub.utils.user_permissions import get_user_role
 
 class OfficeSuiteConfig(APIView):
@@ -33,7 +32,7 @@ class OfficeSuiteConfig(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        current_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config=REPO_OFFICE_CONFIG).first()
+        current_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG).first()
         suites_info = []
         for office_suite in OFFICE_SUITES:
             suite_info = {}
@@ -42,7 +41,7 @@ class OfficeSuiteConfig(APIView):
             suite_info['is_default'] = office_suite.get('is_default')
             if current_suite:
                 config_details = json.loads(current_suite.config_details)
-                office_config = config_details.get('office')
+                office_config = config_details.get('office_suite')
                 suite_info['is_selected'] = (True if office_config and office_config.get('suite_id') == office_suite.get('id') else False)
             else:
                 suite_info['is_selected'] = office_suite.get('is_default')
@@ -68,11 +67,11 @@ class OfficeSuiteConfig(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         config_details = {
-            'office': {
+            'office_suite': {
                 'suite_id': suite_id
             }
         }
-        RepoExtraConfig.objects.update_or_create(repo_id=repo_id, config=REPO_OFFICE_CONFIG,
+        RepoExtraConfig.objects.update_or_create(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG,
                                                  defaults= {'config_details':json.dumps(config_details)} )
 
         return Response({"success": True}, status=status.HTTP_200_OK)

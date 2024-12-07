@@ -145,10 +145,10 @@ FILE_TYPE_FOR_NEW_FILE_LINK = [
 ]
 
 def _check_feature(repo_id):
-    office_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config=REPO_OFFICE_CONFIG).first()
+    office_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG).first()
     if office_suite:
         repo_config_details = json.loads(office_suite.config_details)
-        office_config = repo_config_details.get('office')
+        office_config = repo_config_details.get('office_suite')
         return office_config.get('suite_id') if office_config else None
     return None
 
