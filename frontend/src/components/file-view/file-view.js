@@ -31,7 +31,7 @@ const propTypes = {
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, filePerm, enableWatermark, userNickName,
-  fileName
+  fileName, repoEncrypted
 } = window.app.pageOptions;
 
 class FileView extends React.Component {
@@ -114,6 +114,10 @@ class FileView extends React.Component {
   render() {
     const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
+    const repoInfo = {
+      permission: filePerm,
+      encrypted: repoEncrypted
+    };
     return (
       <I18nextProvider i18n={ i18n }>
         <Suspense fallback={<Loading />}>
@@ -152,14 +156,14 @@ class FileView extends React.Component {
               }
               {this.props.content}
               {isDetailsPanelOpen && (
-                <MetadataStatusProvider repoID={repoID} >
+                <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
                   <CollaboratorsProvider repoID={repoID}>
-                    <TagsProvider repoID={repoID} repoInfo={{ permission: filePerm }}>
+                    <TagsProvider repoID={repoID} repoInfo={repoInfo}>
                       <EmbeddedFileDetails
                         repoID={repoID}
                         path={filePath}
                         dirent={{ 'name': fileName, type: 'file' }}
-                        repoInfo={{ permission: filePerm }}
+                        repoInfo={repoInfo}
                         onClose={this.toggleDetailsPanel}
                       />
                     </TagsProvider>
