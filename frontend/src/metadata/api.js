@@ -65,6 +65,12 @@ class MetadataManagerAPI {
     return this.req.delete(url);
   }
 
+  modifyMetadataDetailsSettings(repoID, settings) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/details-settings/';
+    const data = { settings_data: settings };
+    return this.req.put(url, data);
+  }
+
   getMetadata(repoID, params) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     return this.req.get(url, { params: params });

@@ -50,10 +50,14 @@ class MetadataManage(APIView):
         is_enabled = False
         is_tags_enabled = False
         tags_lang = ''
+        details_settings = '{}'
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 is_enabled = True
+                details_settings = record.details_settings
+                if not details_settings:
+                    details_settings = '{}'
             if record and record.tags_enabled:
                 is_tags_enabled = True
                 tags_lang = record.tags_lang
@@ -66,6 +70,7 @@ class MetadataManage(APIView):
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
             'tags_lang': tags_lang,
+            'details_settings': json.dumps(details_settings)
         })
 
     def put(self, request, repo_id):
@@ -148,12 +153,55 @@ class MetadataManage(APIView):
             record.enabled = False
             record.face_recognition_enabled = False
             record.tags_enabled = False
+            record.details_settings = '{}'
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class MetadataDetailsSettingsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def pu(self, request, repo_id):
+        settings = request.data.get('settings_data', {})
+        if not settings:
+            error_msg = 'settings invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        old_details_settings = metadata.details_settings
+        if not old_details_settings:
+            old_details_settings = '{}'
+        old_details_settings = json.loads(old_details_settings)
+        
+        details_settings = old_details_settings.update(settings)
+        try:
+            metadata.details_settings = json.dumps(details_settings)
+            metadata.save()
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
 
