@@ -2,12 +2,14 @@ import React, { useMemo, useCallback, useState } from 'react';
 import Icon from '../../../../components/icon';
 import HideColumnPopover from '../../popover/hidden-column-popover';
 import { useMetadataDetails } from '../../../hooks';
+import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 
 const Settings = () => {
   const [isShowSetter, setShowSetter] = useState(false);
 
+  const { enableMetadata } = useMetadataStatus();
   const { modifyColumnOrder, modifyHiddenColumns, columns } = useMetadataDetails();
   const hiddenColumns = useMemo(() => columns.filter(c => !c.shown).map(c => c.key), [columns]);
 
@@ -15,6 +17,8 @@ const Settings = () => {
     setShowSetter(!isShowSetter);
   }, [isShowSetter]);
   const target = useMemo(() => 'detail-control-settings-btn', []);
+
+  if (!enableMetadata) return null;
 
   return (
     <>
