@@ -12,22 +12,41 @@ import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColu
 } from '../utils/cell';
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
-import LocalStorage from '../utils/local-storage';
 
 const MetadataDetailsContext = React.createContext(null);
 
 export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, direntDetail, direntType, children }) => {
+  const { enableMetadata, detailsSettings, modifyDetailsSettings } = useMetadataStatus();
+
   const [isLoading, setLoading] = useState(true);
   const [record, setRecord] = useState(null);
-  const [columns, setColumns] = useState([]);
+  const [originColumns, setOriginColumns] = useState([]);
 
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
 
   const allColumnsRef = useRef([]);
-  const localStorageRef = useRef(null);
-  const localStorageKeyRef = useRef('properties');
 
-  const { enableMetadata } = useMetadataStatus();
+  const columns = useMemo(() => {
+    const orderAndHiddenColumns = detailsSettings?.columns || [];
+    if (!Array.isArray(orderAndHiddenColumns) || orderAndHiddenColumns.length === 0) {
+      return originColumns.map(c => ({ ...c, shown: true }));
+    }
+    const oldColumnsMap = orderAndHiddenColumns.reduce((pre, cur) => {
+      pre[cur.key] = true;
+      return pre;
+    }, {});
+    const columnsMap = originColumns.reduce((pre, cur) => {
+      pre[cur.key] = cur;
+      return pre;
+    }, {});
+    const exitColumnsOrder = orderAndHiddenColumns.map(c => {
+      const column = columnsMap[c.key];
+      if (column) return { ...c, ...column };
+      return null;
+    }).filter(c => c);
+    const newColumns = originColumns.filter(c => !oldColumnsMap[c.key]).map(c => ({ ...c, shown: false }));
+    return [...exitColumnsOrder, ...newColumns];
+  }, [originColumns, detailsSettings]);
 
   const localRecordChanged = useCallback((recordId, updates) => {
     if (getRecordIdFromRecord(record) !== recordId) return;
@@ -36,7 +55,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   }, [record]);
 
   const onChange = useCallback((fieldKey, newValue) => {
-    const field = getColumnByKey(columns, fieldKey);
+    const field = getColumnByKey(originColumns, fieldKey);
     const fileName = getColumnOriginName(field);
     const recordId = getRecordIdFromRecord(record);
     const fileObjId = getFileObjIdFromRecord(record);
@@ -55,14 +74,14 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, [repoID, record, columns]);
+  }, [repoID, record, originColumns]);
 
   const modifyColumnData = useCallback((fieldKey, newData) => {
-    let newColumns = columns.slice(0);
+    let newColumns = originColumns.slice(0);
     let update;
     metadataAPI.modifyColumnData(repoID, fieldKey, newData).then(res => {
       const newColumn = new Column(res.data.column);
-      const fieldIndex = columns.findIndex(f => f.key === fieldKey);
+      const fieldIndex = originColumns.findIndex(f => f.key === fieldKey);
       newColumns[fieldIndex] = newColumn;
       return newColumn;
     }).then((newField) => {
@@ -78,13 +97,13 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       }
       return metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id);
     }).then(res => {
-      setColumns(newColumns);
+      setOriginColumns(newColumns);
       setRecord({ ...record, ...update });
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, [repoID, record, columns]);
+  }, [repoID, record, originColumns]);
 
   const updateFileTags = useCallback((updateRecords) => {
     const { record_id, tags } = updateRecords[0];
@@ -102,35 +121,9 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     });
   }, [repoID, record]);
 
-  const initColumns = useCallback((columns) => {
-    const orderAndHiddenColumns = localStorageRef.current.getItem(localStorageKeyRef.current);
-    if (!Array.isArray(orderAndHiddenColumns) || orderAndHiddenColumns.length === 0) {
-      const newColumns = columns.map(c => ({ ...c, shown: true }));
-      setColumns(newColumns);
-      return;
-    }
-    const oldColumnsMap = orderAndHiddenColumns.reduce((pre, cur) => {
-      pre[cur.key] = true;
-      return pre;
-    }, {});
-    const columnsMap = columns.reduce((pre, cur) => {
-      pre[cur.key] = cur;
-      return pre;
-    }, {});
-    const exitColumnsOrder = orderAndHiddenColumns.map(c => {
-      const column = columnsMap[c.key];
-      if (column) return { ...c, ...column };
-      return null;
-    }).filter(c => c);
-    const newColumns = columns.filter(c => !oldColumnsMap[c.key]).map(c => ({ ...c, shown: false }));
-    setColumns([...exitColumnsOrder, ...newColumns]);
-  }, []);
-
   const saveColumns = useCallback((columns) => {
-    setColumns(columns);
-    const saveValue = columns.map(c => ({ key: c.key, shown: c.shown }));
-    localStorageRef.current.setItem(localStorageKeyRef.current, saveValue);
-  }, []);
+    modifyDetailsSettings({ columns: columns.map(c => ({ key: c.key, shown: c.shown })) });
+  }, [modifyDetailsSettings]);
 
   const modifyHiddenColumns = useCallback((hiddenColumns) => {
     let newColumns = columns.slice(0);
@@ -151,7 +144,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     setLoading(true);
     if (!dirent || !direntDetail || !enableMetadata || SYSTEM_FOLDERS.find(folderPath => path.startsWith(folderPath))) {
       setRecord(null);
-      setColumns([]);
+      setOriginColumns([]);
       setLoading(false);
       return;
     }
@@ -169,8 +162,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const columns = normalizeFields(metadata).map(field => new Column(field));
       allColumnsRef.current = columns;
       setRecord(record);
-      localStorageRef.current = new LocalStorage(`sf-metadata-detail-settings-${repoID}`);
-      initColumns(columns);
+      setOriginColumns(columns);
       setLoading(false);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);

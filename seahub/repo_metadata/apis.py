@@ -70,7 +70,7 @@ class MetadataManage(APIView):
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
             'tags_lang': tags_lang,
-            'details_settings': json.dumps(details_settings)
+            'details_settings': details_settings
         })
 
     def put(self, request, repo_id):
@@ -169,7 +169,7 @@ class MetadataDetailsSettingsView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def pu(self, request, repo_id):
+    def put(self, request, repo_id):
         settings = request.data.get('settings_data', {})
         if not settings:
             error_msg = 'settings invalid.'
@@ -178,7 +178,7 @@ class MetadataDetailsSettingsView(APIView):
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % repo_id
+            error_msg = f'Library {repo_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not is_repo_admin(request.user.username, repo_id):
@@ -191,13 +191,20 @@ class MetadataDetailsSettingsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         old_details_settings = metadata.details_settings
+        print('old_details_settings: ', old_details_settings)
         if not old_details_settings:
             old_details_settings = '{}'
         old_details_settings = json.loads(old_details_settings)
-        
-        details_settings = old_details_settings.update(settings)
+        if not old_details_settings:
+            old_details_settings = {}
+
+
+        print('old_details_settings: ', old_details_settings)
+        print('settings: ', settings)
+
+        old_details_settings.update(settings)
         try:
-            metadata.details_settings = json.dumps(details_settings)
+            metadata.details_settings = json.dumps(old_details_settings)
             metadata.save()
         except Exception as e:
             logger.exception(e)
