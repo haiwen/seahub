@@ -38,3 +38,8 @@ export const MODE_TYPE_MAP = {
   RECENTLY_USED: 'recently_used',
   SEARCH_RESULTS: 'search_results',
 };
+
+export const SYSTEM_FOLDERS = [
+  '/_Internal',
+  '/images'
+];

@@ -1,4 +1,4 @@
-import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { PRIVATE_COLUMN_KEY, CellType } from '../../constants';
 
 export const NOT_DISPLAY_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.ID,
@@ -23,11 +23,7 @@ export const NOT_DISPLAY_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FACE_VECTORS,
 ];
 
-export const SYSTEM_FOLDERS = [
-  '/_Internal',
-  '/images'
-];
-
 export {
   PRIVATE_COLUMN_KEY,
+  CellType,
 };

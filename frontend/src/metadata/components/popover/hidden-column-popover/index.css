@@ -145,6 +145,10 @@
   display: none;
 }
 
+.sf-metadata-hide-columns-popover .hide-column-item.dragging {
+  background-color: #f5f5f5;
+}
+
 .sf-metadata-hide-columns-popover .hide-column-item.hide-column-can-drop::after,
 .sf-metadata-hide-columns-popover .hide-column-item.hide-column-can-drop-top::before {
   content: '';
