@@ -40,7 +40,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     let { currentPage, availableUsers } = this.state;
-    seafileAPI.listActivities(currentPage).then(res => {
+    seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
@@ -139,7 +139,7 @@ class FilesActivities extends Component {
 
   getMore() {
     const { currentPage, availableUsers, targetUsers } = this.state;
-    seafileAPI.listActivities(currentPage).then(res => {
+    seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
@@ -184,13 +184,10 @@ class FilesActivities extends Component {
     const { onlyMine } = this.props;
     const { targetUsers } = this.state;
 
-    if (onlyMine) {
-      return events.filter(item => item.author_email == username);
-    } else if (targetUsers.length) {
+    if (!onlyMine && targetUsers.length) {
       return events.filter(item => targetUsers.map(item => item.email).indexOf(item.author_email) != -1);
-    } else {
-      return events;
     }
+    return events;
   };
 
   setTargetUsers = (selectedUsers) => {
