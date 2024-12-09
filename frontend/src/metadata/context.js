@@ -3,7 +3,6 @@ import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
   FACE_RECOGNITION_VIEW_ID,
-  VIEW_TYPE,
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
@@ -98,17 +97,6 @@ class Context {
   };
 
   getView = (viewId) => {
-    if (viewId === FACE_RECOGNITION_VIEW_ID) {
-      return {
-        data: {
-          view: {
-            _id: FACE_RECOGNITION_VIEW_ID,
-            type: VIEW_TYPE.FACE_RECOGNITION,
-          }
-        }
-      };
-    }
-
     const repoID = this.settings['repoID'];
     return this.metadataAPI.getView(repoID, viewId);
   };

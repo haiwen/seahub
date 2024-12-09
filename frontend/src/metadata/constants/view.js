@@ -70,7 +70,7 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
 export const VIEW_TYPE_DEFAULT_SORTS = {
   [VIEW_TYPE.TABLE]: [],
   [VIEW_TYPE.GALLERY]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
-  [VIEW_TYPE.FACE_RECOGNITION]: [],
+  [VIEW_TYPE.FACE_RECOGNITION]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
   [VIEW_TYPE.KANBAN]: [],
   [VIEW_TYPE.MAP]: [],
 };
@@ -78,7 +78,7 @@ export const VIEW_TYPE_DEFAULT_SORTS = {
 export const VIEW_SORT_COLUMN_RULES = {
   [VIEW_TYPE.TABLE]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
-  [VIEW_TYPE.FACE_RECOGNITION]: () => {},
+  [VIEW_TYPE.FACE_RECOGNITION]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.MAP]: () => {},
 };
@@ -86,7 +86,7 @@ export const VIEW_SORT_COLUMN_RULES = {
 export const VIEW_FIRST_SORT_COLUMN_RULES = {
   [VIEW_TYPE.TABLE]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
-  [VIEW_TYPE.FACE_RECOGNITION]: () => {},
+  [VIEW_TYPE.FACE_RECOGNITION]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.MAP]: () => {},
 };

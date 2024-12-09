@@ -21,6 +21,7 @@ from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_met
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
 
 logger = logging.getLogger(__name__)
@@ -1069,11 +1070,26 @@ class PeoplePhotos(APIView):
         faces_record = faces_records[0]
 
         try:
+            view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        from seafevents.repo_metadata.utils import gen_sorts_sql
+        try:
+            columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
+            order_sql = gen_sorts_sql(METADATA_TABLE, columns, view.get('sorts'))
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
             record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, [])]
             selected_ids = record_ids[start:limit]
             selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
-
-            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str}) ORDER BY `{METADATA_TABLE.columns.file_ctime.name}`'
+            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str}) {order_sql}'
             someone_photos_result = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)

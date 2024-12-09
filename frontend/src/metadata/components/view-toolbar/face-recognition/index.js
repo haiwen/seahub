@@ -1,26 +1,36 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, GallerySliderSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../../../constants';
 
-const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, view, showDetail }) => {
+const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, showDetail }) => {
   const [isShow, setShow] = useState(false);
-  const [columns, setColumns] = useState([]);
+  const [view, setView] = useState({});
 
-  const onToggle = useCallback((isShow, columns = []) => {
-    setColumns(columns);
+  const viewColumns = useMemo(() => {
+    if (!view) return [];
+    return view.columns;
+  }, [view]);
+
+  const onToggle = useCallback((isShow) => {
     setShow(isShow);
   }, []);
 
+  const setRecognitionView = useCallback(view => {
+    setView(view);
+  }, []);
+
   const modifySorts = useCallback((sorts) => {
-    console.log(sorts);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW_CHANGE, { sorts });
   }, []);
 
   useEffect(() => {
-    const unsubscribeToggle = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, onToggle, columns);
+    const unsubscribeToggle = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, onToggle);
+    const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW, setRecognitionView);
     return () => {
       unsubscribeToggle && unsubscribeToggle();
+      unsubscribeView && unsubscribeView();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -39,7 +49,7 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, view, showDe
           readOnly={readOnly}
           sorts={view.sorts}
           type={VIEW_TYPE.FACE_RECOGNITION}
-          columns={columns}
+          columns={viewColumns}
           modifySorts={modifySorts}
         />
         {!isCustomPermission && (
@@ -55,7 +65,7 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, view, showDe
 
 FaceRecognitionViewToolbar.propTypes = {
   isCustomPermission: PropTypes.bool,
-  view: PropTypes.object.isRequired,
+  readOnly: PropTypes.bool,
   showDetail: PropTypes.func,
 };
 
