@@ -49,7 +49,8 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
         gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
         get_service_url, is_valid_username, is_pro_version, \
-        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url
+        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url, \
+        get_non_sdoc_file_exts
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
@@ -2918,7 +2919,16 @@ class SeadocSearchFilenameView(APIView):
         except ValueError:
             current_page = 1
             per_page = 10
-
+        search_type = request.GET.get('search_type', None)
+        suffixes = []
+        if search_type == 'sdoc':
+            suffixes = ['sdoc',]
+        if search_type == 'file':
+            suffixes = get_non_sdoc_file_exts
+        if not suffixes:
+            error_msg = 'search_type is not valid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         # resource check
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
@@ -2928,7 +2938,7 @@ class SeadocSearchFilenameView(APIView):
         repo = seafile_api.get_repo(repo_id)
 
         search_filename_only = True
-        suffixes = ['sdoc',]
+        
         if HAS_FILE_SEARCH:
             org_id = get_org_id_by_repo_id(repo_id)
             map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
