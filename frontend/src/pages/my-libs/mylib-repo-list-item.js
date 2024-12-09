@@ -20,6 +20,7 @@ import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
+import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
@@ -57,6 +58,7 @@ class MylibRepoListItem extends React.Component {
       isAPITokenDialogShow: false,
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
+      isOfficeSuiteDialogShow: false,
     };
   }
 
@@ -127,6 +129,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Share Admin':
         this.toggleRepoShareAdminDialog();
+        break;
+      case 'Office Suite':
+        this.onOfficeSuiteToggle();
         break;
       default:
         break;
@@ -221,6 +226,10 @@ class MylibRepoListItem extends React.Component {
     this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
   };
 
+  onOfficeSuiteToggle = () => {
+    this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
+  };
+
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
@@ -264,6 +273,21 @@ class MylibRepoListItem extends React.Component {
       }
     });
     this.onTransferToggle();
+  };
+
+  onOfficeSuiteChange = (suiteID) => {
+    let repoID = this.props.repo.repo_id;
+    userAPI.setOfficeSuite(repoID, suiteID).then(res => {
+      let message = gettext('Successfully change office suite.');
+      toaster.success(message);
+    }).catch(error => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
+      }
+    });
+    this.onOfficeSuiteToggle();
   };
 
   onDeleteRepo = (repo) => {
@@ -544,6 +568,17 @@ class MylibRepoListItem extends React.Component {
             <RepoShareAdminDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareAdminDialog}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isOfficeSuiteDialogShow && (
+          <ModalPortal>
+            <OfficeSuiteDialog
+              repoID={repo.repo_id}
+              itemName={repo.repo_name}
+              submit={this.onOfficeSuiteChange}
+              toggleDialog={this.onOfficeSuiteToggle}
             />
           </ModalPortal>
         )}
