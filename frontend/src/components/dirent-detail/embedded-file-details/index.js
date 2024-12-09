@@ -7,6 +7,8 @@ import toaster from '../../toast';
 import { Header, Body } from '../detail';
 import FileDetails from './file-details';
 import { MetadataContext } from '../../../metadata';
+import { MetadataDetailsProvider } from '../../../metadata/hooks';
+import Settings from '../../../metadata/components/metadata-details/settings';
 
 import './index.css';
 
@@ -36,27 +38,33 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   }, []);
 
   return (
-    <div
-      className={classnames('cur-view-detail', className, {
-        'cur-view-detail-small': width < 400,
-        'cur-view-detail-large': width > 400
-      })}
-      style={{ width }}
+    <MetadataDetailsProvider
+      repoID={repoID}
+      repoInfo={repoInfo}
+      path={path}
+      dirent={dirent}
+      direntDetail={direntDetail}
+      direntType="file"
     >
-      <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} />
-      <Body>
-        {dirent && direntDetail && (
-          <div className="detail-content">
-            <FileDetails
-              repoID={repoID}
-              repoInfo={repoInfo}
-              path={path}
-              direntDetail={direntDetail}
-            />
-          </div>
-        )}
-      </Body>
-    </div>
+      <div
+        className={classnames('cur-view-detail', className, {
+          'cur-view-detail-small': width < 400,
+          'cur-view-detail-large': width > 400
+        })}
+        style={{ width }}
+      >
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} >
+          <Settings />
+        </Header>
+        <Body>
+          {dirent && direntDetail && (
+            <div className="detail-content">
+              <FileDetails direntDetail={direntDetail} />
+            </div>
+          )}
+        </Body>
+      </div>
+    </MetadataDetailsProvider>
   );
 };
 

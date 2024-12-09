@@ -1,10 +1,10 @@
 import { getNormalizedColumnType } from '../../utils/column';
 import { getCellValueByColumn } from '../../utils/cell';
-import { NOT_DISPLAY_COLUMN_KEYS } from './constants';
+import { NOT_DISPLAY_COLUMN_KEYS, CellType, PRIVATE_COLUMN_KEY } from './constants';
 
 export const normalizeFields = (fields) => {
   if (!Array.isArray(fields) || fields.length === 0) return [];
-  const validFields = fields.map((field) => {
+  let validFields = fields.map((field) => {
     const { type, key, ...params } = field;
     return {
       ...params,
@@ -13,11 +13,8 @@ export const normalizeFields = (fields) => {
       width: 200,
     };
   }).filter(field => !NOT_DISPLAY_COLUMN_KEYS.includes(field.key));
-  let displayFields = [];
-  validFields.forEach(field => {
-    displayFields.push(field);
-  });
-  return displayFields;
+  validFields.push({ key: PRIVATE_COLUMN_KEY.LOCATION, type: CellType.GEOLOCATION, width: 200 });
+  return validFields;
 };
 
 export {

@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../../icon';
+import Title from './title';
 
 import './index.css';
 
-const Header = ({ title, icon, iconSize = 32, onClose, component = {} }) => {
+const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} }) => {
   const { closeIcon } = component;
   return (
     <div className="detail-header">
-      <div className="detail-title dirent-title">
-        <div className="detail-header-icon-container">
-          <img src={icon} width={iconSize} height={iconSize} alt="" />
+      <Title title={title} icon={icon} iconSize={iconSize} />
+      <div className="detail-control-container">
+        {children}
+        <div className="detail-control" onClick={onClose}>
+          {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
         </div>
-        <span className="name ellipsis" title={title}>{title}</span>
-      </div>
-      <div className="detail-control" onClick={onClose}>
-        {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
       </div>
     </div>
   );
@@ -26,6 +25,7 @@ Header.propTypes = {
   icon: PropTypes.string.isRequired,
   iconSize: PropTypes.number,
   component: PropTypes.object,
+  children: PropTypes.any,
   onClose: PropTypes.func.isRequired,
 };
 

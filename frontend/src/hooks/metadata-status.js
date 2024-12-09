@@ -17,6 +17,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
   const [tagsLang, setTagsLang] = useState('en');
+  const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
   const cancelMetadataURL = useCallback(() => {
@@ -37,12 +38,13 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       return;
     }
     metadataAPI.getMetadataStatus(repoID).then(res => {
-      const { enabled: enableMetadata, tags_enabled: enableTags, tags_lang: tagsLang } = res.data;
+      const { enabled: enableMetadata, tags_enabled: enableTags, tags_lang: tagsLang, details_settings: detailsSettings } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
+      setDetailsSettings(JSON.parse(detailsSettings));
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -60,6 +62,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       cancelMetadataURL();
       setEnableTags(false);
     }
+    setDetailsSettings({});
     setIsBeingBuilt(newValue);
     setEnableMetadata(newValue);
   }, [enableMetadata, cancelMetadataURL]);
@@ -74,6 +77,16 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
     setTagsLang(lang);
   }, [enableTags, tagsLang, cancelMetadataURL, hideMetadataView]);
 
+  const modifyDetailsSettings = useCallback((update) => {
+    metadataAPI.modifyMetadataDetailsSettings(repoID, update).then(res => {
+      const newDetailsSettings = { ...detailsSettings, ...update };
+      setDetailsSettings(newDetailsSettings);
+    }).catch(error => {
+      const newDetailsSettings = { ...detailsSettings, ...update };
+      setDetailsSettings(newDetailsSettings);
+    });
+  }, [repoID, detailsSettings]);
+
   return (
     <EnableMetadataContext.Provider
       value={{
@@ -85,6 +98,8 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
         enableTags,
         tagsLang,
         updateEnableTags,
+        detailsSettings,
+        modifyDetailsSettings,
       }}
     >
       {!isLoading && children}

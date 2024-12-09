@@ -68,7 +68,7 @@ from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
-from seahub.utils.repo import is_repo_owner, parse_repo_perm
+from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
@@ -567,6 +567,7 @@ def view_lib_file(request, repo_id, path):
         'file_id': file_id,
         'last_commit_id': repo.head_cmmt_id,
         'is_repo_owner': is_repo_owner(request, repo_id, username),
+        'is_repo_admin': is_repo_admin(username, repo_id),
         'path': path,
         'parent_dir': parent_dir,
         'filename': filename,

@@ -50,10 +50,14 @@ class MetadataManage(APIView):
         is_enabled = False
         is_tags_enabled = False
         tags_lang = ''
+        details_settings = '{}'
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 is_enabled = True
+                details_settings = record.details_settings
+                if not details_settings:
+                    details_settings = '{}'
             if record and record.tags_enabled:
                 is_tags_enabled = True
                 tags_lang = record.tags_lang
@@ -66,6 +70,7 @@ class MetadataManage(APIView):
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
             'tags_lang': tags_lang,
+            'details_settings': details_settings
         })
 
     def put(self, request, repo_id):
@@ -148,12 +153,55 @@ class MetadataManage(APIView):
             record.enabled = False
             record.face_recognition_enabled = False
             record.tags_enabled = False
+            record.details_settings = '{}'
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class MetadataDetailsSettingsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id):
+        settings = request.data.get('settings', {})
+        if not settings:
+            error_msg = 'settings invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        old_details_settings = metadata.details_settings if metadata.details_settings else '{}'
+        old_details_settings = json.loads(old_details_settings)
+        if not old_details_settings:
+            old_details_settings = {}
+
+        old_details_settings.update(settings)
+        try:
+            metadata.details_settings = json.dumps(old_details_settings)
+            metadata.save()
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
 
@@ -831,6 +879,7 @@ class MetadataViewsMoveView(APIView):
         try:
             results = RepoMetadataViews.objects.move_view(repo_id, view_id, target_view_id)
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
@@ -1184,7 +1233,7 @@ class FaceRecognitionManage(APIView):
         return Response({'task_id': task_id})
 
     def delete(self, request, repo_id):
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -1393,13 +1442,11 @@ class MetadataTags(APIView):
 
         return Response(query_result)
 
-
-
     def post(self, request, repo_id):
         tags_data = request.data.get('tags_data', [])
 
         if not tags_data:
-            error_msg = f'Tags data is required.'
+            error_msg = 'Tags data is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -1546,7 +1593,7 @@ class MetadataTags(APIView):
         tag_ids = request.data.get('tag_ids', [])
 
         if not tag_ids:
-            error_msg = f'Tag ids is required.'
+            error_msg = 'Tag ids is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -1722,13 +1769,13 @@ class MetadataTagFiles(APIView):
 
         tag_files_records = tag_query.get('results', [])
         if not tag_files_records:
-            return Response({ 'metadata': [], 'results': [] })
+            return Response({'metadata': [], 'results': []})
 
         tag_files_record = tag_files_records[0]
         tag_files_record_ids = tag_files_record.get(TAGS_TABLE.columns.file_links.name , [])
 
         if not tag_files_record_ids:
-            return Response({ 'metadata': [], 'results': [] })
+            return Response({'metadata': [], 'results': []})
 
         tag_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
                                                                                     METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
@@ -1743,4 +1790,3 @@ class MetadataTagFiles(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(tag_files_query)
-

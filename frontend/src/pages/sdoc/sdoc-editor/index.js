@@ -16,7 +16,7 @@ const SdocEditor = () => {
   const [currentDirent, setCurrentDirent] = useState(null);
   const { collaborators } = useCollaborators();
   const plugins = useMemo(() => {
-    const { repoID, docPath, docPerm } = window.seafile;
+    const { repoID, docPath, docPerm, isRepoAdmin } = window.seafile;
     return [
       {
         name: 'sdoc-info',
@@ -29,7 +29,7 @@ const SdocEditor = () => {
               repoID={repoID}
               path={docPath}
               dirent={currentDirent}
-              repoInfo={{ permission: docPerm }}
+              repoInfo={{ permission: docPerm, is_admin: isRepoAdmin }}
               width={width - 1}
               component={{
                 headerComponent: {

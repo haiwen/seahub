@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import { MetadataDetails } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 
-const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
+const FileDetails = ({ direntDetail }) => {
   const { enableMetadata } = useMetadataStatus();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
@@ -36,16 +36,13 @@ const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
       {enableMetadata && (
-        <MetadataDetails repoID={repoID} filePath={path} repoInfo={repoInfo} direntType="file" />
+        <MetadataDetails />
       )}
     </>
   );
 };
 
 FileDetails.propTypes = {
-  repoID: PropTypes.string,
-  repoInfo: PropTypes.object,
-  path: PropTypes.string,
   direntDetail: PropTypes.object,
 };
 

@@ -17,7 +17,7 @@ import Dirent from '../../../../src/models/dirent';
 import '../css/header-toolbar.css';
 
 const { seafileCollabServer } = window.app.config;
-const { canDownloadFile, repoID, filePath } = window.app.pageOptions;
+const { canDownloadFile, repoID, filePath, isRepoAdmin } = window.app.pageOptions;
 
 const propTypes = {
   editorApi: PropTypes.object.isRequired,
@@ -95,7 +95,7 @@ class HeaderToolbar extends React.Component {
   };
 
   onArticleInfoToggle = () => {
-    const repoInfo = { permission: this.currentDirent.permission };
+    const repoInfo = { permission: this.currentDirent.permission, is_admin: isRepoAdmin, };
     const eventBus = EventBus.getInstance();
 
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {

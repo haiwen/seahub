@@ -2,7 +2,7 @@ from django.urls import re_path
 from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
-    MetadataFileTags, MetadataTagFiles
+    MetadataFileTags, MetadataTagFiles, MetadataDetailsSettingsView
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -23,6 +23,9 @@ urlpatterns = [
     re_path(r'^face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
 
     re_path(r'^extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
+
+    # details settings
+    re_path(r'^details-settings/', MetadataDetailsSettingsView.as_view(), name='api-v2.1-metadata-details-settings'),
 
     # tags api
     re_path(r'^tags-status/$', MetadataTagsStatusManage.as_view(), name='api-v2.1-metadata-tags-status'),

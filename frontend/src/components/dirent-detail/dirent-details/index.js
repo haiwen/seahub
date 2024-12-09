@@ -9,6 +9,9 @@ import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../metadata/utils/object-utils';
+import { MetadataDetailsProvider } from '../../../metadata/hooks';
+import Settings from '../../../metadata/components/metadata-details/settings';
+import { getDirentPath } from './utils';
 
 import './index.css';
 
@@ -95,38 +98,59 @@ class DirentDetails extends React.Component {
 
   render() {
     const { dirent, direntDetail } = this.state;
-    const { repoID, path, fileTags } = this.props;
+    const { repoID, fileTags } = this.props;
+
+    if (!dirent || !direntDetail) {
+      return (
+        <Detail>
+          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} />
+          <Body>
+            {this.renderImage()}
+          </Body>
+        </Detail>
+      );
+    }
+
+    let path = this.props.path;
+    if (dirent?.type !== 'file') {
+      path = this.props.dirent ? Utils.joinPath(path, dirent.name) : path;
+    }
+
     return (
-      <Detail>
-        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} />
-        <Body>
-          {this.renderImage()}
-          {dirent && direntDetail && (
-            <div className="detail-content">
-              {dirent.type !== 'file' ?
-                <DirDetails
-                  repoID={repoID}
-                  repoInfo={this.props.currentRepoInfo}
-                  dirent={dirent}
-                  direntDetail={direntDetail}
-                  path={this.props.dirent ? Utils.joinPath(path, dirent.name) : path}
-                />
-                :
-                <FileDetails
-                  repoID={repoID}
-                  repoInfo={this.props.currentRepoInfo}
-                  dirent={dirent}
-                  path={path}
-                  direntDetail={direntDetail}
-                  repoTags={this.props.repoTags}
-                  fileTagList={dirent ? dirent.file_tags : fileTags}
-                  onFileTagChanged={this.props.onFileTagChanged}
-                />
-              }
-            </div>
-          )}
-        </Body>
-      </Detail>
+      <MetadataDetailsProvider
+        repoID={repoID}
+        repoInfo={this.props.currentRepoInfo}
+        path={getDirentPath(dirent, path)}
+        dirent={dirent}
+        direntDetail={direntDetail}
+        direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
+      >
+        <Detail>
+          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} >
+            <Settings />
+          </Header>
+          <Body>
+            {this.renderImage()}
+            {dirent && direntDetail && (
+              <div className="detail-content">
+                {dirent.type !== 'file' ? (
+                  <DirDetails direntDetail={direntDetail} />
+                ) : (
+                  <FileDetails
+                    repoID={repoID}
+                    dirent={dirent}
+                    path={path}
+                    direntDetail={direntDetail}
+                    repoTags={this.props.repoTags}
+                    fileTagList={dirent ? dirent.file_tags : fileTags}
+                    onFileTagChanged={this.props.onFileTagChanged}
+                  />
+                )}
+              </div>
+            )}
+          </Body>
+        </Detail>
+      </MetadataDetailsProvider>
     );
   }
 }

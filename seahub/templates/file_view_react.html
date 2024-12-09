@@ -30,6 +30,7 @@ window.app.pageOptions = {
   repoID: '{{ repo.id }}',
   repoName: '{{ repo.name|escapejs }}',
   repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
+  isRepoAdmin: {% if is_repo_admin %}true{% else %}false{% endif %},
   filePath: '{{ path|escapejs }}',
   filePerm: '{{ file_perm }}',
   fileType: '{{ filetype }}',
