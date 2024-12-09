@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2024-12-09 10:41+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Stefano Ruberti <stefano.ruberti@gmail.com>, 2017-2019,2024\n"
 "Language-Team: Italian (http://app.transifex.com/haiwen/seahub/language/it/)\n"
@@ -252,7 +252,7 @@ msgstr "Viste"
 #: frontend/src/components/dirent-detail/detail-list-view.js:110
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:70
 #: frontend/src/components/toolbar/view-file-toolbar.js:142
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:73
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:92
 #: frontend/src/metadata/utils/column/index.js:213
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:81
 #: frontend/src/utils/text-translation.js:120
@@ -540,7 +540,7 @@ msgstr "Descrizione"
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/turn-off-confirm.js:14
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:81
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/turn-off-confirm.js:14
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:80
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:110
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/turn-off-confirm.js:14
 #: frontend/src/metadata/components/popover/column-popover/index.js:105
 #: frontend/src/metadata/components/popover/filter-popover/index.js:200
@@ -662,7 +662,7 @@ msgstr "Annulla"
 #: frontend/src/metadata/components/dialog/image-tags-dialog/index.js:150
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:81
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:82
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:81
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:111
 #: frontend/src/metadata/components/popover/column-popover/index.js:106
 #: frontend/src/metadata/components/popover/filter-popover/index.js:201
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:136
@@ -4019,7 +4019,7 @@ msgstr "Apri cartella principale"
 msgid "Online view is not applicable to this file format"
 msgstr "La visualizzazione online non è applicabile a questo formato di file"
 
-#: frontend/src/components/file-view/file-view.js:149
+#: frontend/src/components/file-view/file-view.js:153
 msgid "Unfold"
 msgstr ""
 
@@ -5319,8 +5319,13 @@ msgid ""
 " all be deleted."
 msgstr "Vuoi davvero disattivare le proprietà estese? Le proprietà esistenti verranno tutte eliminate."
 
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:76
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:95
 msgid "Enable tags to add tags to files and search files by tags."
+msgstr ""
+
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:99
+#| msgid "Language"
+msgid "Tags language:"
 msgstr ""
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/turn-off-confirm.js:9
@@ -7096,6 +7101,7 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:231
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:154
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:257
 #: frontend/src/utils/utils.js:439
 msgid "Encrypted library"
@@ -7683,6 +7689,11 @@ msgstr ""
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:157
 msgid "Not allow user to create encrypted libraries"
+msgstr ""
+
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:163
+#| msgid "Allow user to clean library trash"
+msgid "Disable user clean trash"
 msgstr ""
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:166
