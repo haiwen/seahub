@@ -30,7 +30,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
         const { navigation, views } = res.data;
         if (Array.isArray(views)) {
           views.forEach(view => {
-            viewsMap.current[view._id] = view;
+            viewsMap.current[view._id] = { ...view, name: view.type === VIEW_TYPE.FACE_RECOGNITION ? gettext('People') : view.name };
           });
         }
         setNavigation(navigation);
@@ -91,7 +91,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       const view = res.data.view;
       let newNavigation = navigation.slice(0);
       newNavigation.push({ _id: view._id, type: 'view' });
-      viewsMap.current[view._id] = view;
+      viewsMap.current[view._id] = { ...view, name: view.type === VIEW_TYPE.FACE_RECOGNITION ? gettext('People') : view.name };
       setNavigation(newNavigation);
       selectView(view);
       successCallback && successCallback();
@@ -156,7 +156,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
     if (newValue === enableFaceRecognition) return;
     if (newValue) {
       toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
-      addView(gettext('Photos - classified by people'), VIEW_TYPE.FACE_RECOGNITION, () => {}, () => {});
+      addView('_people', VIEW_TYPE.FACE_RECOGNITION, () => {}, () => {});
     } else {
       if (viewsMap.current[FACE_RECOGNITION_VIEW_ID]) {
         let isSelected = false;
