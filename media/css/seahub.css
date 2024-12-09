@@ -2057,6 +2057,10 @@ a.sf-popover-item {
   text-decoration: none;
 }
 
+#lang-context .sf3-font.sf3-font-down {
+  font-size: 12px;
+}
+
 .captcha {
   float: right;
 }
