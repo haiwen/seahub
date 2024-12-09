@@ -22,7 +22,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   const [record, setRecord] = useState(null);
   const [originColumns, setOriginColumns] = useState([]);
 
-  const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
+  const canModifyRecord = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? false : true, [repoInfo]);
+  const canModifyDetails = useMemo(() => repoInfo.permission === 'admin' ? true : false, [repoInfo]);
 
   const allColumnsRef = useRef([]);
 
@@ -185,7 +186,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     <MetadataDetailsContext.Provider
       value={{
         isLoading,
-        permission,
+        canModifyRecord,
+        canModifyDetails,
         record,
         columns,
         onChange,

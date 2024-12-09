@@ -13,7 +13,7 @@ import { checkIsDir } from '../../utils/row';
 import './index.css';
 
 const MetadataDetails = () => {
-  const { isLoading, permission, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
+  const { isLoading, canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
 
@@ -35,7 +35,7 @@ const MetadataDetails = () => {
 
         if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) return null;
 
-        let canEdit = permission === 'rw' && field.editable;
+        let canEdit = canModifyRecord && field.editable;
         if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
           canEdit = false;
         }
