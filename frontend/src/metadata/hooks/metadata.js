@@ -7,6 +7,7 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../constants';
 import { useMetadataStatus } from '../../hooks';
 import { updateFavicon } from '../utils/favicon';
+import { getViewName } from '../utils/view';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
@@ -30,7 +31,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
         const { navigation, views } = res.data;
         if (Array.isArray(views)) {
           views.forEach(view => {
-            viewsMap.current[view._id] = { ...view, name: view.type === VIEW_TYPE.FACE_RECOGNITION ? gettext('People') : view.name };
+            viewsMap.current[view._id] = { ...view, name: getViewName(view) };
           });
         }
         setNavigation(navigation);
@@ -91,7 +92,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       const view = res.data.view;
       let newNavigation = navigation.slice(0);
       newNavigation.push({ _id: view._id, type: 'view' });
-      viewsMap.current[view._id] = { ...view, name: view.type === VIEW_TYPE.FACE_RECOGNITION ? gettext('People') : view.name };
+      viewsMap.current[view._id] = { ...view, name: getViewName(view) };
       setNavigation(newNavigation);
       selectView(view);
       successCallback && successCallback();
