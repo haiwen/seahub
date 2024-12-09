@@ -1493,8 +1493,11 @@ class SeafileAPI {
   }
 
   // ---- Activities API
-  listActivities(pageNum) {
-    const url = this.server + '/api/v2.1/activities/?page=' + pageNum;
+  listActivities(pageNum, operationUser) {
+    let url = this.server + '/api/v2.1/activities/?page=' + pageNum;
+    if (operationUser) {
+      url += '&op_user=' + encodeURIComponent(operationUser);
+    }
     return this.req.get(url);
   }
 
