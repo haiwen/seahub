@@ -151,7 +151,7 @@ class OrgWebSettings extends Component {
                       {sysEnableEncryptedLibrary &&
                         <CheckboxItem
                           saveSetting={this.orgSaveSetting}
-                          displayName='Encrypted library'
+                          displayName={gettext('Encrypted library')}
                           keyText='disable_org_encrypted_library'
                           value={disable_org_encrypted_library}
                           helpTip={gettext('Not allow user to create encrypted libraries')}
@@ -160,7 +160,7 @@ class OrgWebSettings extends Component {
                       {sysEnableUserCleanTrash &&
                         <CheckboxItem
                           saveSetting={this.orgSaveSetting}
-                          displayName='Disable user clean trash'
+                          displayName={gettext('Disable user clean trash')}
                           keyText='disable_org_user_clean_trash'
                           value={disable_org_user_clean_trash}
                           helpTip={gettext('Not allow user to clean library trash')}

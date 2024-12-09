@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:23+0800\n"
+"POT-Creation-Date: 2024-12-09 10:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>, 2021\n"
 "Language-Team: Swedish (http://app.transifex.com/haiwen/seahub/language/sv/)\n"
@@ -84,12 +84,12 @@ msgid "Failed to unbind SAML, please set a contact email first."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:204
-#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:374
+#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:371
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Namnet är för långt (max 64 tecken)"
 
 #: seahub/api2/endpoints/admin/account.py:208
-#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:378
+#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:375
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Namn ska inte innehålla '/'."
@@ -126,7 +126,7 @@ msgstr "Måste vara ett heltal större eller lika med 0."
 #: seahub/api2/endpoints/admin/groups.py:134
 #: seahub/api2/endpoints/admin/groups.py:273
 #: seahub/api2/endpoints/groups.py:229 seahub/api2/endpoints/groups.py:302
-#: seahub/api2/views.py:4706 seahub/group/forms.py:36
+#: seahub/api2/views.py:4680 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -177,19 +177,19 @@ msgstr "Misslyckades att lägga till %s till institutionen: användaren tillhör
 msgid "System library can not be deleted."
 msgstr "Systemkatalog kan inte tas bort."
 
-#: seahub/api2/endpoints/admin/libraries.py:389 seahub/api2/views.py:1862
+#: seahub/api2/endpoints/admin/libraries.py:389 seahub/api2/views.py:1859
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "Överföring misslyckades: rolen för %s är %s, kan inte lägga till katalog."
 
-#: seahub/api2/endpoints/admin/libraries.py:415 seahub/api2/views.py:1867
+#: seahub/api2/endpoints/admin/libraries.py:415 seahub/api2/views.py:1864
 msgid "Library can not be transferred to owner."
 msgstr "Katalogen kan inte överföras till ägaren."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
-#: seahub/api2/endpoints/share_links.py:573
-#: seahub/api2/endpoints/share_links.py:795
+#: seahub/api2/endpoints/share_links.py:577
+#: seahub/api2/endpoints/share_links.py:799
 msgid "There is an associated published library."
 msgstr "Det finns en associerad publicerad katalog."
 
@@ -442,19 +442,19 @@ msgstr "Virusfilen kunde inte hittas."
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:102
-#: seahub/api2/endpoints/share_links.py:586
+#: seahub/api2/endpoints/share_links.py:590
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:437 seahub/api2/endpoints/wiki2.py:465
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4040
-#: seahub/notifications/models.py:542 seahub/notifications/models.py:583
-#: seahub/notifications/models.py:625 seahub/notifications/models.py:676
-#: seahub/notifications/models.py:732 seahub/notifications/models.py:762
-#: seahub/notifications/models.py:784 seahub/notifications/models.py:810
-#: seahub/notifications/models.py:827 seahub/notifications/models.py:844
-#: seahub/notifications/models.py:873 seahub/seadoc/apis.py:2761
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4014
+#: seahub/notifications/models.py:541 seahub/notifications/models.py:582
+#: seahub/notifications/models.py:624 seahub/notifications/models.py:675
+#: seahub/notifications/models.py:731 seahub/notifications/models.py:761
+#: seahub/notifications/models.py:783 seahub/notifications/models.py:809
+#: seahub/notifications/models.py:826 seahub/notifications/models.py:843
+#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2761
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
 #: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
@@ -465,23 +465,23 @@ msgstr "Internt serverproblem"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
-#: seahub/api2/endpoints/via_repo_token.py:1289
+#: seahub/api2/endpoints/via_repo_token.py:1270
 msgid "Destination path is too long."
 msgstr "Destinationens sökväg är för lång"
 
 #: seahub/api2/endpoints/copy_move_task.py:91
 #: seahub/api2/endpoints/move_folder_merge.py:133
-#: seahub/api2/endpoints/via_repo_token.py:1285
+#: seahub/api2/endpoints/via_repo_token.py:1266
 msgid "Invalid destination path"
 msgstr "Felaktig destination"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1949
-#: seahub/api2/views.py:1989 seahub/api2/views.py:2051
-#: seahub/api2/views.py:2095 seahub/api2/views.py:2141
-#: seahub/api2/views.py:2190 seahub/api2/views.py:2603
-#: seahub/api2/views.py:2711 seahub/seadoc/apis.py:380
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1946
+#: seahub/api2/views.py:1986 seahub/api2/views.py:2048
+#: seahub/api2/views.py:2092 seahub/api2/views.py:2138
+#: seahub/api2/views.py:2187 seahub/api2/views.py:2600
+#: seahub/api2/views.py:2708 seahub/seadoc/apis.py:380
 #: seahub/seadoc/apis.py:498 seahub/seadoc/apis.py:590
 #: seahub/seadoc/apis.py:3094
 msgid "Out of quota."
@@ -493,11 +493,11 @@ msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
-#: seahub/api2/endpoints/file.py:540 seahub/api2/endpoints/file.py:598
-#: seahub/api2/endpoints/file.py:749 seahub/api2/endpoints/file.py:862
-#: seahub/api2/endpoints/via_repo_token.py:1029
-#: seahub/api2/endpoints/via_repo_token.py:1169
+#: seahub/api2/endpoints/file.py:316 seahub/api2/endpoints/file.py:393
+#: seahub/api2/endpoints/file.py:508 seahub/api2/endpoints/file.py:566
+#: seahub/api2/endpoints/file.py:717 seahub/api2/endpoints/file.py:830
+#: seahub/api2/endpoints/via_repo_token.py:1010
+#: seahub/api2/endpoints/via_repo_token.py:1150
 #: seahub/api2/endpoints/wiki2.py:775
 msgid "File is locked"
 msgstr "Filen är låst"
@@ -507,53 +507,49 @@ msgid "Cancel failed"
 msgstr "Avbrytning misslyckades"
 
 #: seahub/api2/endpoints/dir_shared_items.py:356
-#: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:950
 msgid "username invalid."
 msgstr "ogiltigt användarnam."
 
 #: seahub/api2/endpoints/dir_shared_items.py:365
-#: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:959
 #, python-format
 msgid "User %s not found."
 msgstr "Användare %s hittades inte."
 
-#: seahub/api2/endpoints/draft_reviewer.py:96
-#: seahub/api2/endpoints/file.py:324
+#: seahub/api2/endpoints/file.py:201 seahub/api2/endpoints/upload_links.py:530
+#: seahub/api2/endpoints/via_repo_token.py:850
+#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/views.py:1994 seahub/seadoc/apis.py:3101
+msgid "The number of files in library exceeds the limit"
+msgstr ""
+
+#: seahub/api2/endpoints/file.py:304
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
-#: seahub/api2/endpoints/share_links.py:566
+#: seahub/api2/endpoints/share_links.py:570
 #: seahub/api2/endpoints/subscription.py:36
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
 #: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
-#: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
-#: seahub/profile/forms.py:24 seahub/profile/views.py:261
-#: seahub/seadoc/apis.py:2745 seahub/seadoc/views.py:31
-#: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
-#: seahub/search/views.py:174 seahub/subscription/views.py:27
-#: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
-#: seahub/thumbnail/views.py:172 seahub/views/__init__.py:626
-#: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
-#: seahub/views/sso.py:238
+#: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
+#: seahub/profile/views.py:261 seahub/seadoc/apis.py:2745
+#: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
+#: seahub/seadoc/views.py:168 seahub/search/views.py:174
+#: seahub/subscription/views.py:27 seahub/subscription/views.py:43
+#: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:172
+#: seahub/views/__init__.py:626 seahub/views/ajax.py:83
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:238
 msgid "Permission denied."
 msgstr "Åtkomst nekas"
 
-#: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:530
-#: seahub/api2/endpoints/via_repo_token.py:866
-#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1997 seahub/seadoc/apis.py:3101
-msgid "The number of files in library exceeds the limit"
-msgstr ""
-
-#: seahub/api2/endpoints/file.py:767 seahub/api2/endpoints/file.py:787
-#: seahub/api2/endpoints/via_repo_token.py:1186
+#: seahub/api2/endpoints/file.py:735 seahub/api2/endpoints/file.py:755
+#: seahub/api2/endpoints/via_repo_token.py:1167
 msgid "File is not locked."
 msgstr "Filen är inte låst."
 
-#: seahub/api2/endpoints/file.py:814 seahub/api2/endpoints/share_links.py:877
+#: seahub/api2/endpoints/file.py:782 seahub/api2/endpoints/share_links.py:881
 msgid "You can not refresh this file's lock."
 msgstr "Du kan inte uppdatera denna fillåsning."
 
@@ -577,7 +573,7 @@ msgstr "Användaren %s är redan medlem i gruppen."
 
 #: seahub/api2/endpoints/group_members.py:110
 #: seahub/api2/endpoints/group_members.py:341
-#: seahub/api2/endpoints/group_members.py:489 seahub/api2/views.py:1857
+#: seahub/api2/endpoints/group_members.py:489 seahub/api2/views.py:1854
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -593,7 +589,7 @@ msgid "User %s is an organization user."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:462
+#: seahub/group/error_msg.py:23 seahub/views/file.py:461
 msgid "Group does not exist"
 msgstr "Gruppen finns inte"
 
@@ -646,28 +642,28 @@ msgstr "Misslyckades att skicka email. Email-tjänsten är inte korrekt konfigur
 
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
-#: seahub/api2/endpoints/share_links.py:335
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4193
-#: seahub/api2/views.py:4313
+#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4167
+#: seahub/api2/views.py:4287
 msgid "Password is required."
 msgstr "Lösenord krävs."
 
 #: seahub/api2/endpoints/multi_share_links.py:110
-#: seahub/api2/endpoints/share_links.py:341
+#: seahub/api2/endpoints/share_links.py:345
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "Lösenordet är för kort."
 
 #: seahub/api2/endpoints/multi_share_links.py:114
-#: seahub/api2/endpoints/share_links.py:345
+#: seahub/api2/endpoints/share_links.py:349
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
 msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:118
-#: seahub/api2/endpoints/share_links.py:349
+#: seahub/api2/endpoints/share_links.py:353
 #: seahub/api2/endpoints/upload_links.py:184
 #: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
@@ -677,28 +673,28 @@ msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
-#: seahub/api2/endpoints/share_links.py:372
-#: seahub/api2/endpoints/share_links.py:713
+#: seahub/api2/endpoints/share_links.py:376
+#: seahub/api2/endpoints/share_links.py:717
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3603
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3577
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Utgångsdatum ska vara större eller lika med %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
-#: seahub/api2/endpoints/share_links.py:378
-#: seahub/api2/endpoints/share_links.py:719
+#: seahub/api2/endpoints/share_links.py:382
+#: seahub/api2/endpoints/share_links.py:723
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3609
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3583
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Utgångsdagar ska vara minde än eller lika med %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
-#: seahub/api2/endpoints/share_links.py:400
-#: seahub/api2/endpoints/share_links.py:743
+#: seahub/api2/endpoints/share_links.py:404
+#: seahub/api2/endpoints/share_links.py:747
 #: seahub/api2/endpoints/upload_links.py:235
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
@@ -707,8 +703,8 @@ msgstr "Utgångstid bör vara senare än %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
-#: seahub/api2/endpoints/share_links.py:409
-#: seahub/api2/endpoints/share_links.py:752
+#: seahub/api2/endpoints/share_links.py:413
+#: seahub/api2/endpoints/share_links.py:756
 #: seahub/api2/endpoints/upload_links.py:244
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
@@ -743,11 +739,11 @@ msgstr "Kan inte återställa katalogens lösenord."
 msgid "New password of library %s"
 msgstr "Nytt lösenord för katalog %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4037
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4011
 msgid "Wrong password"
 msgstr "Fel lösenord"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4043
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4017
 msgid "Decrypt library error"
 msgstr "Fel vid avkryptering av katalog"
 
@@ -775,7 +771,7 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr "Kan inte ta bort mappen %s, vänligen kontrollera dess rättigheter."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
-#: seahub/notifications/models.py:913
+#: seahub/notifications/models.py:912
 msgid "file"
 msgstr "fil"
 
@@ -785,7 +781,7 @@ msgid "A file is shared to you on %s"
 msgstr "En fil är delad med dig på %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/notifications/models.py:913
+#: seahub/notifications/models.py:912
 msgid "folder"
 msgstr ""
 
@@ -818,8 +814,8 @@ msgstr ""
 msgid "Email %s is invalid."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:478
-#: seahub/api2/endpoints/share_links.py:487
+#: seahub/api2/endpoints/share_links.py:482
+#: seahub/api2/endpoints/share_links.py:491
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Delningslänk %s existerar redan."
@@ -1520,9 +1516,9 @@ msgstr "%(site_name)s teamet"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1156
-#: seahub/views/file.py:1181 seahub/views/file.py:1405
-#: seahub/views/file.py:1442 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1157
+#: seahub/views/file.py:1182 seahub/views/file.py:1406
+#: seahub/views/file.py:1443 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
 #: seahub/views/repo.py:412
 msgid "Permission denied"
@@ -1722,31 +1718,31 @@ msgstr "Ny notis på %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr ""
 
-#: seahub/notifications/models.py:560
+#: seahub/notifications/models.py:559
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "En fil med namn <a href='%(file_link)s'>%(file_name)s</a> är uppladdad till <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:567
+#: seahub/notifications/models.py:566
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:602
+#: seahub/notifications/models.py:601
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:609
+#: seahub/notifications/models.py:608
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:743
+#: seahub/notifications/models.py:742
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -1754,35 +1750,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "Användare <a href='%(user_profile)s'>%(username)s</a> har bett dig anluta till gruppen <a href='%(href)s'>%(group_name)s</a>, Meddelande: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:772
+#: seahub/notifications/models.py:771
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "Användaren <a href='%(user_profile)s'>%(group_staff)s</a> har lagt till dig till gruppen <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:798
+#: seahub/notifications/models.py:797
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "Filen <a href='%(file_url)s'>%(file_name)s</a> har en ny kommentar från användaren %(author)s"
 
-#: seahub/notifications/models.py:815
+#: seahub/notifications/models.py:814
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "<a href='%(file_url)s'>Förslag #%(draft_id)s</a> har en ny kommentar från användare %(author)s"
 
-#: seahub/notifications/models.py:832
+#: seahub/notifications/models.py:831
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s har skickat en förfrågan för <a href='%(file_url)s'>förlsag #%(draft_id)s</a>"
 
-#: seahub/notifications/models.py:855
+#: seahub/notifications/models.py:854
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
@@ -1790,67 +1786,67 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "Gästen %(user)s accepterade din <a href=\"%(url_base)s%(inv_url)s\">inbjudan</a> vid %(time)s."
 
-#: seahub/notifications/models.py:879
+#: seahub/notifications/models.py:878
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 msgstr "%(user)s har överfört katalogen <a href=\"%(repo_url)s\">%(repo_name)s</a> till dig."
 
-#: seahub/notifications/models.py:952
+#: seahub/notifications/models.py:951
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:954
+#: seahub/notifications/models.py:953
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:959
+#: seahub/notifications/models.py:958
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:961
+#: seahub/notifications/models.py:960
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:965
+#: seahub/notifications/models.py:964
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:969
+#: seahub/notifications/models.py:968
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:974
+#: seahub/notifications/models.py:973
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:976
+#: seahub/notifications/models.py:975
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:980
+#: seahub/notifications/models.py:979
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:983
+#: seahub/notifications/models.py:982
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
@@ -3094,10 +3090,10 @@ msgstr "Fel repo id"
 msgid "Bad upload link token."
 msgstr "Dålig uppladdningslänk symbol."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:456 seahub/views/file.py:487
-#: seahub/views/file.py:1176 seahub/views/file.py:1437
-#: seahub/views/file.py:2101 seahub/views/file.py:2106
-#: seahub/views/file.py:2113
+#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
+#: seahub/views/file.py:1177 seahub/views/file.py:1438
+#: seahub/views/file.py:2102 seahub/views/file.py:2107
+#: seahub/views/file.py:2114
 msgid "File does not exist"
 msgstr "Filen existerar inte"
 
@@ -3109,73 +3105,73 @@ msgstr "Dålig katalog id i uppladdningslänk."
 msgid "No conflict in the merge."
 msgstr "Ingen konflikt i sammanslagningen"
 
-#: seahub/views/file.py:190
+#: seahub/views/file.py:189
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:194
+#: seahub/views/file.py:193
 msgid "URLError: failed to open file online"
 msgstr "URL-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:201
+#: seahub/views/file.py:200
 msgid "The encoding you chose is not proper."
 msgstr "Krypteringen du har valt är inte korrekt."
 
-#: seahub/views/file.py:218 seahub/views/file.py:221
+#: seahub/views/file.py:217 seahub/views/file.py:220
 msgid "Unknown file encoding"
 msgstr "Okänd fil-kodning"
 
-#: seahub/views/file.py:341 seahub/views/file.py:376 seahub/views/file.py:705
-#: seahub/views/file.py:790 seahub/views/file.py:891
+#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:706
+#: seahub/views/file.py:791 seahub/views/file.py:892
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Filen är större än %s och kan inte öppnas online."
 
-#: seahub/views/file.py:348 seahub/views/file.py:825
+#: seahub/views/file.py:347 seahub/views/file.py:826
 msgid "The library is encrypted, can not open file online."
 msgstr "Katalogen är krypterad, kan inte öppna filen online."
 
-#: seahub/views/file.py:443 seahub/views/file.py:465 seahub/views/file.py:470
-#: seahub/views/file.py:521 seahub/views/file.py:780 seahub/views/file.py:1028
-#: seahub/views/file.py:1054 seahub/views/file.py:1084
-#: seahub/views/file.py:1225 seahub/views/file.py:1337
-#: seahub/views/file.py:1478 seahub/views/file.py:1596
+#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
+#: seahub/views/file.py:520 seahub/views/file.py:781 seahub/views/file.py:1029
+#: seahub/views/file.py:1055 seahub/views/file.py:1085
+#: seahub/views/file.py:1226 seahub/views/file.py:1338
+#: seahub/views/file.py:1479 seahub/views/file.py:1597
 msgid "Unable to view file"
 msgstr "Kan inte läsa fil"
 
-#: seahub/views/file.py:849 seahub/views/file.py:972 seahub/views/file.py:1296
-#: seahub/views/file.py:1534
+#: seahub/views/file.py:850 seahub/views/file.py:973 seahub/views/file.py:1297
+#: seahub/views/file.py:1535
 msgid "Error when prepare Office Online file preview page."
 msgstr "Fel vid förberedelse av Office Online filvisningssidan."
 
-#: seahub/views/file.py:884 seahub/views/file.py:988 seahub/views/file.py:1316
-#: seahub/views/file.py:1550
+#: seahub/views/file.py:885 seahub/views/file.py:989 seahub/views/file.py:1317
+#: seahub/views/file.py:1551
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Fel vid förberedelse av OnlyOffice filvisningssidan."
 
-#: seahub/views/file.py:1120
+#: seahub/views/file.py:1121
 msgid "Unable to download file, invalid file path"
 msgstr "Kan inte ladda ner fil. Felaktig filsökväg"
 
-#: seahub/views/file.py:1129
+#: seahub/views/file.py:1130
 msgid "Unable to download file, wrong file path"
 msgstr "Kan inte ladda ner fil. Felaktig sökväg"
 
-#: seahub/views/file.py:1136
+#: seahub/views/file.py:1137
 msgid "Unable to download file."
 msgstr "Kan inte ladda ner fil."
 
-#: seahub/views/file.py:1352 seahub/views/file.py:1615
+#: seahub/views/file.py:1353 seahub/views/file.py:1616
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr "Dela länk för %s."
 
-#: seahub/views/file.py:1750 seahub/views/file.py:1755
+#: seahub/views/file.py:1751 seahub/views/file.py:1756
 msgid "Unable to download file"
 msgstr "Kan inte ladda ner fil"
 
-#: seahub/views/file.py:2094
+#: seahub/views/file.py:2095
 msgid "The original file does not exist"
 msgstr ""
 
