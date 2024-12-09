@@ -64,7 +64,7 @@ class DirColumnNav extends React.Component {
       isMoveDialogShow: false,
       isMultipleOperation: false,
       operationList: [],
-      isDisplayFiles: false,
+      isDisplayFiles: localStorage.getItem('sf_display_files') === 'true' || false,
     };
     this.isNodeMenuShow = true;
     this.imageItemsSnapshot = [];
@@ -215,7 +215,9 @@ class DirColumnNav extends React.Component {
   };
 
   onDisplayFilesToggle = () => {
-    this.setState({ isDisplayFiles: !this.state.isDisplayFiles });
+    this.setState({ isDisplayFiles: !this.state.isDisplayFiles }, () => {
+      localStorage.setItem('sf_display_files', this.state.isDisplayFiles);
+    });
   };
 
   checkDuplicatedName = (newName) => {
