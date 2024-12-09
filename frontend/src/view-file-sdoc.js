@@ -15,11 +15,12 @@ const {
   repoID, repoName, repoEncrypted, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
-  originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin
+  originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin, isRepoAdmin
 } = window.app.pageOptions;
 
 window.seafile = {
   repoID,
+  isRepoAdmin,
   docPath,
   docName,
   docUuid,
@@ -52,7 +53,7 @@ window.seafile = {
   mobileLogin,
 };
 
-const repoInfo = { encrypted: repoEncrypted, permission: filePerm };
+const repoInfo = { encrypted: repoEncrypted, permission: filePerm, is_admin: isRepoAdmin };
 
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >

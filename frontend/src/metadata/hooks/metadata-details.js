@@ -23,7 +23,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   const [originColumns, setOriginColumns] = useState([]);
 
   const canModifyRecord = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? false : true, [repoInfo]);
-  const canModifyDetails = useMemo(() => repoInfo.permission === 'admin' ? true : false, [repoInfo]);
+  const canModifyDetails = useMemo(() => repoInfo.is_admin, [repoInfo]);
 
   const allColumnsRef = useRef([]);
 

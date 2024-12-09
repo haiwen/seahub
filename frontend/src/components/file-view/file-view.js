@@ -31,7 +31,7 @@ const propTypes = {
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, filePerm, enableWatermark, userNickName,
-  fileName, repoEncrypted
+  fileName, repoEncrypted, isRepoAdmin
 } = window.app.pageOptions;
 
 class FileView extends React.Component {
@@ -116,7 +116,8 @@ class FileView extends React.Component {
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
     const repoInfo = {
       permission: filePerm,
-      encrypted: repoEncrypted
+      encrypted: repoEncrypted,
+      is_admin: isRepoAdmin,
     };
     return (
       <I18nextProvider i18n={ i18n }>

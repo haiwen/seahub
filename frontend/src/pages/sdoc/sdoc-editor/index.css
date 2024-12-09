@@ -15,6 +15,16 @@
   background-color: inherit;
 }
 
+.sdoc-content-right-panel .detail-header .seafile-multicolor-icon-set-up {
+  fill: #999;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.sdoc-content-right-panel .detail-header .detail-control:hover .seafile-multicolor-icon-set-up {
+  fill: #5a5a5a;
+}
+
 .sdoc-content-right-panel .detail-header .sdoc-sm-close {
   color: #999;
   font-weight: 700;
