@@ -37,7 +37,7 @@ const FaceRecognition = () => {
   return (
     <div className="sf-metadata-container">
       {showPeopleFaces ? (
-        <PeoplePhotos people={peopleRef.current} onClose={closePeople} onDeletePeoplePhotos={onDeletePeoplePhotos} />
+        <PeoplePhotos people={peopleRef.current} view={metadata.view} onClose={closePeople} onDeletePeoplePhotos={onDeletePeoplePhotos} />
       ) : (
         <Peoples peoples={peoples} onRename={onRename} onOpenPeople={openPeople} />
       )}

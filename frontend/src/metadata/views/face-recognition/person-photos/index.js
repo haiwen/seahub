@@ -10,12 +10,12 @@ import { Utils } from '../../../../utils/utils';
 import toaster from '../../../../components/toast';
 import Gallery from '../../gallery/main';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { PER_LOAD_NUMBER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS, EVENT_BUS_TYPE } from '../../../constants';
+import { PER_LOAD_NUMBER, EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID } from '../../../constants';
 
 import './index.css';
 import '../../gallery/index.css';
 
-const PeoplePhotos = ({ people, onClose, onDeletePeoplePhotos }) => {
+const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
   const [isLoading, setLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [metadata, setMetadata] = useState({ rows: [] });
@@ -102,22 +102,37 @@ const PeoplePhotos = ({ people, onClose, onDeletePeoplePhotos }) => {
     });
   }, [deleteFilesCallback, repoID, deletedByIds]);
 
-  useEffect(() => {
-    const repoID = window.sfMetadataContext.getSetting('repoID');
+  const loadData = useCallback((view) => {
+    setLoading(true);
     metadataAPI.getPeoplePhotos(repoID, people._id, 0, PER_LOAD_NUMBER).then(res => {
       const rows = res?.data?.results || [];
       const columns = normalizeColumns(res?.data?.metadata);
-      let metadata = new Metadata({ rows, columns, view: { sorts: VIEW_TYPE_DEFAULT_SORTS[VIEW_TYPE.GALLERY] } });
+      let metadata = new Metadata({ rows, columns, view });
       if (rows.length < PER_LOAD_NUMBER) {
         metadata.hasMore = false;
       }
       setMetadata(metadata);
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW, metadata.view);
       setLoading(false);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
       toaster.danger(errorMessage);
       setLoading(false);
     });
+  }, [repoID, people]);
+
+  const onViewChange = useCallback((update) => {
+    metadataAPI.modifyView(repoID, FACE_RECOGNITION_VIEW_ID, update).then(res => {
+      const newView = { ...metadata.view, ...update };
+      loadData(newView);
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error);
+      toaster.danger(errorMessage);
+    });
+  }, [repoID, metadata, loadData]);
+
+  useEffect(() => {
+    loadData({ sorts: view.sorts });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -128,6 +143,13 @@ const PeoplePhotos = ({ people, onClose, onDeletePeoplePhotos }) => {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW_CHANGE, onViewChange);
+    return () => {
+      unsubscribeViewChange && unsubscribeViewChange();
+    };
+  }, [onViewChange]);
 
   if (isLoading) return (<CenteredLoading />);
 
@@ -146,6 +168,7 @@ const PeoplePhotos = ({ people, onClose, onDeletePeoplePhotos }) => {
 
 PeoplePhotos.propTypes = {
   people: PropTypes.object,
+  view: PropTypes.object,
   onClose: PropTypes.func,
   onDelete: PropTypes.func,
 };

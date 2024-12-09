@@ -6,6 +6,7 @@ import copy
 from django.db import models
 
 from seahub.utils import get_no_duplicate_obj_name
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
 
 logger = logging.getLogger(__name__)
@@ -19,7 +20,7 @@ def generate_random_string_lower_digits(length):
 
 def generate_view_id(length, type, view_ids=None):
     if type == 'face_recognition':
-        return '_face_recognition'
+        return FACE_RECOGNITION_VIEW_ID
 
     if not view_ids:
         return generate_random_string_lower_digits(length)
