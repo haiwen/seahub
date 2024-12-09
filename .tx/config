@@ -28,8 +28,8 @@ minimum_perc  = 0
 resource_name = sdoc-editor
 
 [o:haiwen:p:seahub:r:seafile-editor]
-file_filter = media/locales/<lang>/seafile-editor.json
-source_file = media/locales/en/seafile-editor.json
+file_filter = media/seafile-editor/locales/<lang>/seafile-editor.json
+source_file = media/seafile-editor/locales/en/seafile-editor.json
 source_lang = en
 type        = KEYVALUEJSON
 
