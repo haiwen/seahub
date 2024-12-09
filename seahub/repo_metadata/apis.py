@@ -170,7 +170,7 @@ class MetadataDetailsSettingsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id):
-        settings = request.data.get('settings_data', {})
+        settings = request.data.get('settings', {})
         if not settings:
             error_msg = 'settings invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -190,17 +190,10 @@ class MetadataDetailsSettingsView(APIView):
             error_msg = f'The metadata module is not enabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        old_details_settings = metadata.details_settings
-        print('old_details_settings: ', old_details_settings)
-        if not old_details_settings:
-            old_details_settings = '{}'
+        old_details_settings = metadata.details_settings if metadata.details_settings else '{}'
         old_details_settings = json.loads(old_details_settings)
         if not old_details_settings:
             old_details_settings = {}
-
-
-        print('old_details_settings: ', old_details_settings)
-        print('settings: ', settings)
 
         old_details_settings.update(settings)
         try:

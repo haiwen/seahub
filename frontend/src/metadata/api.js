@@ -67,7 +67,7 @@ class MetadataManagerAPI {
 
   modifyMetadataDetailsSettings(repoID, settings) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/details-settings/';
-    const data = { settings_data: settings };
+    const data = { settings: settings };
     return this.req.put(url, data);
   }
 

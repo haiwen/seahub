@@ -10,7 +10,7 @@ const Settings = () => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const { enableMetadata } = useMetadataStatus();
-  const { modifyColumnOrder, modifyHiddenColumns, columns } = useMetadataDetails();
+  const { modifyColumnOrder, modifyHiddenColumns, columns, permission } = useMetadataDetails();
   const hiddenColumns = useMemo(() => columns.filter(c => !c.shown).map(c => c.key), [columns]);
 
   const onSetterToggle = useCallback(() => {
@@ -19,6 +19,7 @@ const Settings = () => {
   const target = useMemo(() => 'detail-control-settings-btn', []);
 
   if (!enableMetadata) return null;
+  if (permission !== 'rw') return null;
 
   return (
     <>
