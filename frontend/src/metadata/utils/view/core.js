@@ -1,6 +1,19 @@
+import { gettext } from '../../../utils/constants';
+import { VIEW_TYPE } from '../../constants';
 import { getValidFilters } from '../filter';
 import { getValidGroupbys } from '../group';
 import { getValidSorts } from '../sort';
+
+/**
+ * Get view name
+ * @param {object} view e.g. { type, name, _id }
+ * @returns view name, string
+ */
+const getViewName = (view = {}) => {
+  const { type, name } = view;
+  if (type === VIEW_TYPE.FACE_RECOGNITION) return gettext('People');
+  return name;
+};
 
 /**
  * Get view by id
@@ -85,6 +98,7 @@ const getViewShownColumns = (view, columns) => {
 };
 
 export {
+  getViewName,
   getViewById,
   getViewByName,
   isDefaultView,

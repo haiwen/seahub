@@ -1,4 +1,5 @@
 export {
+  getViewName,
   getViewById,
   getViewByName,
   isDefaultView,

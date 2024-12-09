@@ -50,9 +50,7 @@ const ViewItem = ({
   const operations = useMemo(() => {
     if (!canUpdate) return [];
     if (view._id === FACE_RECOGNITION_VIEW_ID) {
-      return [
-        { key: 'rename', value: gettext('Rename') },
-      ];
+      return [];
     }
     let value = [
       { key: 'rename', value: gettext('Rename') },
@@ -240,19 +238,21 @@ const ViewItem = ({
             <Icon symbol={VIEW_TYPE_ICON[view.type] || 'table'} className="metadata-views-icon" />
           </div>
         </div>
-        <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
-          {highlight && (
-            <ItemDropdownMenu
-              item={{ name: 'metadata-view' }}
-              toggleClass="sf3-font sf3-font-more"
-              freezeItem={freezeItem}
-              unfreezeItem={unfreezeItem}
-              getMenuList={() => operations}
-              onMenuItemClick={operationClick}
-              menuStyle={isMobile ? { zIndex: 1050 } : {}}
-            />
-          )}
-        </div>
+        {operations.length > 0 && (
+          <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
+            {highlight && (
+              <ItemDropdownMenu
+                item={{ name: 'metadata-view' }}
+                toggleClass="sf3-font sf3-font-more"
+                freezeItem={freezeItem}
+                unfreezeItem={unfreezeItem}
+                getMenuList={() => operations}
+                onMenuItemClick={operationClick}
+                menuStyle={isMobile ? { zIndex: 1050 } : {}}
+              />
+            )}
+          </div>
+        )}
       </div>
     </>
   );
