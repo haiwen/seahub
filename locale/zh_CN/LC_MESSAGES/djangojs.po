@@ -46,7 +46,7 @@ msgstr "退出系统管理"
 
 #: frontend/src/components/common/account.js:114
 msgid "Exit Organization Admin"
-msgstr "退出机构管理"
+msgstr "退出团队管理"
 
 #: frontend/src/components/common/account.js:119
 msgid "Exit Institution Admin"
@@ -60,7 +60,7 @@ msgstr "系统管理"
 
 #: frontend/src/components/common/account.js:132
 msgid "Organization Admin"
-msgstr "机构管理"
+msgstr "团队管理"
 
 #: frontend/src/components/common/account.js:137
 msgid "Institution Admin"
@@ -3251,7 +3251,7 @@ msgstr "密码不匹配。"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:91
 #: frontend/src/pages/sys-admin/orgs/orgs.js:128
 msgid "Add Organization"
-msgstr "添加机构"
+msgstr "添加团队"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:100
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:74
@@ -3283,7 +3283,7 @@ msgstr "拥有者"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:101
 msgid "Owner can use admin panel in an organization, must be a new account."
-msgstr "拥有者能使用机构的管理员面板, 必须是一个新的账号。"
+msgstr "拥有者能使用团队的管理员面板, 必须是一个新的账号。"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog.js:41
 #: frontend/src/pages/sys-admin/notifications/notifications.js:302
@@ -8181,7 +8181,7 @@ msgstr "用户数限制"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:125
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:134
 msgid "Organizations"
-msgstr "机构"
+msgstr "团队"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:165
 #: frontend/src/pages/sys-admin/users/users-content.js:424
@@ -8332,7 +8332,7 @@ msgstr "确定要重置 {placeholder} 的密码吗？"
 msgid ""
 "{userCount} user(s) and {repoCount} libraries of this organization will also"
 " be deleted."
-msgstr "该机构中的 {userCount} 个用户和 {repoCount} 个资料库也将被删除。"
+msgstr "该团队中的 {userCount} 个用户和 {repoCount} 个资料库也将被删除。"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:209
 #| msgid "Organization"
@@ -8351,11 +8351,11 @@ msgstr "权限修改成功"
 
 #: frontend/src/pages/sys-admin/orgs/orgs.js:114
 msgid "Search organizations"
-msgstr "搜索机构"
+msgstr "搜索团队"
 
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:110
 msgid "Search Organizations"
-msgstr "搜索机构"
+msgstr "搜索团队"
 
 #: frontend/src/pages/sys-admin/repos/all-repos.js:117
 msgid "Search libraries by name or ID"

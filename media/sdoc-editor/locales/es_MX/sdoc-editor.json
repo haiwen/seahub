@@ -575,5 +575,6 @@
   "Video": "Video",
   "Upload_local_video": "Upload_local_video",
   "The_current_version_does_not_support_>5MB_video_file": "The_current_version_does_not_support_>5MB_video_file",
-  "Token_expired_Please_refresh_the_page": "Token expired. Please refresh the page."
+  "Token_expired_Please_refresh_the_page": "Token expired. Please refresh the page.",
+  "Link_to_page": "Link to page"
 }

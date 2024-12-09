@@ -29,7 +29,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:23+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: BingbingHaidian <michael18811380328@163.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -596,14 +596,14 @@ msgstr "用户 %s 已经是群组成员。"
 #: seahub/organizations/api/admin/users.py:339
 #, python-format
 msgid "User %s not found in organization."
-msgstr "机构内无用户 %s 。"
+msgstr "团队内无用户 %s 。"
 
 #: seahub/api2/endpoints/group_members.py:113
 #: seahub/api2/endpoints/group_members.py:349
 #: seahub/api2/endpoints/group_members.py:497
 #, python-format
 msgid "User %s is an organization user."
-msgstr " %s 是机构用户。"
+msgstr " %s 是团队用户。"
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:462
@@ -2084,7 +2084,7 @@ msgstr "欢迎回来，你已登录。"
 
 #: seahub/organizations/templates/organizations/org_register.html:18
 msgid "Organization Name"
-msgstr "机构名称"
+msgstr "团队名称"
 
 #: seahub/organizations/templates/organizations/org_register.html:32
 msgid "Admin Name"
@@ -2858,7 +2858,7 @@ msgstr "你的 %(site_name)s 帐户 %(username)s 已被激活。"
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr "%(nickname)s 在 %(site_name)s 上邀请你加入机构 \"%(org_name)s\" 。"
+msgstr "%(nickname)s 在 %(site_name)s 上邀请你加入团队 \"%(org_name)s\" 。"
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
@@ -3218,7 +3218,7 @@ msgstr "设置配额失败：内部错误"
 
 #: seahub/views/sysadmin.py:351
 msgid "Failed to delete: the user is an organization creator"
-msgstr "删除失败：该用户为机构创建者"
+msgstr "删除失败：该用户为团队创建者"
 
 #: seahub/views/sysadmin.py:396
 #, python-format

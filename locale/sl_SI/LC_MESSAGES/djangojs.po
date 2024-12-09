@@ -5,13 +5,14 @@
 # Translators:
 # Translators:
 # Domen Pubec, 2024
+# BingbingHaidian <michael18811380328@163.com>, 2024
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Domen Pubec, 2024\n"
+"Last-Translator: BingbingHaidian <michael18811380328@163.com>, 2024\n"
 "Language-Team: Slovenian (Slovenia) (http://app.transifex.com/haiwen/seahub/language/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +22,7 @@ msgstr ""
 
 #: frontend/src/components/btn-qr-code.js:38
 msgid "Scan the QR code to view the shared content directly"
-msgstr ""
+msgstr "Skenirajte QR kodo za neposredno ogled vsebine v skupni rabi"
 
 #: frontend/src/components/common/account.js:109
 msgid "Exit System Admin"
@@ -29,11 +30,11 @@ msgstr "Izhod iz sistemske admin"
 
 #: frontend/src/components/common/account.js:114
 msgid "Exit Organization Admin"
-msgstr ""
+msgstr "Skrbnik za izhod iz organizacije"
 
 #: frontend/src/components/common/account.js:119
 msgid "Exit Institution Admin"
-msgstr ""
+msgstr "Skrbnik izstopne institucije"
 
 #: frontend/src/components/common/account.js:127
 #: frontend/src/pages/sys-admin/side-panel.js:33
@@ -43,16 +44,16 @@ msgstr "Sistemski admin"
 
 #: frontend/src/components/common/account.js:132
 msgid "Organization Admin"
-msgstr ""
+msgstr "Skrbnik organizacije"
 
 #: frontend/src/components/common/account.js:137
 msgid "Institution Admin"
-msgstr ""
+msgstr "Upravnik institucije"
 
 #: frontend/src/components/common/account.js:152
 #: frontend/src/components/common/account.js:155
 msgid "View profile and more"
-msgstr ""
+msgstr "Oglejte si profil in še več"
 
 #: frontend/src/components/common/account.js:167
 msgid "Used:"
@@ -74,7 +75,7 @@ msgstr "Nastavitve"
 #: frontend/src/components/common/account.js:174
 #| msgid "Custom properties"
 msgid "Customer Portal"
-msgstr ""
+msgstr "Portal strank"
 
 #: frontend/src/components/common/account.js:175
 #: frontend/src/components/common/logout.js:6
@@ -217,17 +218,17 @@ msgstr "Obvestila"
 #: frontend/src/components/common/notification.js:103
 #| msgid "Notifications"
 msgid "Notification"
-msgstr ""
+msgstr "Obvestilo"
 
 #: frontend/src/components/common/notification.js:104
 #| msgid "Mark all read"
 msgid "Mark all as read"
-msgstr ""
+msgstr "Označi vse kot prebrane"
 
 #: frontend/src/components/common/notification.js:105
 #| msgid "All Notifications"
 msgid "View all notifications"
-msgstr ""
+msgstr "Ogled vseh obvestil"
 
 #: frontend/src/components/common/select/no-group-message.js:8
 msgid "Group not found"
@@ -237,7 +238,7 @@ msgstr ""
 #: frontend/src/components/main-side-nav-folded.js:91
 #: frontend/src/components/main-side-nav.js:81
 msgid "A file is being uploaded. Are you sure you want to leave this page?"
-msgstr ""
+msgstr "Datoteka se nalagajo. Ali ste prepričani, da želite zapustiti to stran?"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:140
 #: frontend/src/components/dir-view-mode/dir-views.js:35
@@ -382,7 +383,7 @@ msgstr "O nas"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:31
 msgid "Contact information is required."
-msgstr ""
+msgstr "Zahtevane so kontaktne informacije."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:37
 msgid "Abuse report added"
@@ -843,7 +844,7 @@ msgstr "Nova stran"
 
 #: frontend/src/components/dialog/change-group-dialog.js:29
 msgid "Are you sure to change group {placeholder} to department ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite spremeniti skupino {placeholder} v oddelku?"
 
 #: frontend/src/components/dialog/change-group-dialog.js:33
 msgid "Change group to department"
@@ -1136,7 +1137,7 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:29
 #: frontend/src/components/user-settings/social-login-saml.js:61
 msgid "Are you sure you want to disconnect?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite prekiniti povezavo?"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:31
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:264
@@ -1177,7 +1178,7 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-unlink-device.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:38
 msgid "Are you sure you want to unlink this device?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite razvezati to napravo?"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:44
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:42
@@ -1638,7 +1639,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/delete-dialog.js:29
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati?"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:45
 #: frontend/src/components/dialog/delete-repo-dialog.js:52
@@ -2013,7 +2014,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:47
 msgid "Are you sure to revoke access of user {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite preklicati dovoljenje uporabnika {placeholder}?"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:51
 #: frontend/src/pages/invitations/invitations-view.js:94
@@ -2435,7 +2436,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-add-user-dialog.js:99
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:51
 msgid "email is required"
-msgstr ""
+msgstr "E-pošta je zahtevana"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:133
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:108
@@ -2519,7 +2520,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:193
 #: frontend/src/pages/sys-admin/users/users-content.js:422
 msgid "Are you sure you want to delete {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati {placeholder}?"
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:38
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog.js:39
@@ -2577,7 +2578,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:89
 msgid "URL is required"
-msgstr ""
+msgstr "URL je zahtevan"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:97
 msgid "URL is copied to the clipboard"
@@ -2610,7 +2611,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/remove-webdav-password.js:35
 msgid "Are you sure you want to delete WebDAV password?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati geslo za WebDAV?"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #: frontend/src/components/dialog/rename-dirent.js:101
@@ -2845,7 +2846,7 @@ msgstr ""
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:325
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the selected upload link(s) ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati izbrane povezave za prenos?"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:42
 msgid ""
@@ -3141,7 +3142,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:21
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati?"
 
 #: frontend/src/components/dialog/sysadmin-dialog/rename-department-v2-dialog.js:61
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:331
@@ -3184,7 +3185,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:71
 msgid "Version Number is required."
-msgstr ""
+msgstr "Zahtevana je številka različice."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:75
 msgid "Version Number must be a number."
@@ -3192,7 +3193,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:79
 msgid "Text is required."
-msgstr ""
+msgstr "Besedilo je zahtevano."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:102
 msgid "Update Terms and Conditions"
@@ -4521,7 +4522,7 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-item.js:119
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the share link?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati povezavo za deljenje?"
 
 #: frontend/src/components/share-link-panel/link-list.js:70
 msgid "Export"
@@ -4870,7 +4871,7 @@ msgstr ""
 
 #: frontend/src/components/user-settings/two-factor-auth.js:18
 msgid "Status: enabled"
-msgstr ""
+msgstr "Status: omogočeno"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:20
 #: frontend/src/pages/sys-admin/users/user-info.js:183
@@ -4902,12 +4903,12 @@ msgstr ""
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
-msgstr ""
+msgstr "Dvočrkovna verifikacija ni omogočena za vaš račun. Omogočite dvočrkovno verifikacijo za izboljšanje varnosti računa."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:39
 #| msgid "Two-Factor Authentication"
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Omogoči dvočrkovno verifikacijo"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:48
 #: frontend/src/pages/sys-admin/users/user-info.js:178
@@ -5042,7 +5043,7 @@ msgstr ""
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:285
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
-msgstr ""
+msgstr "Ali ste prepričani, da želite neobjaviti Wiki?"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:292
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:304
@@ -5054,7 +5055,7 @@ msgstr ""
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:305
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati Wiki?"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:298
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:310
@@ -5066,7 +5067,7 @@ msgstr ""
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:311
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
-msgstr ""
+msgstr "Ali ste prepričani, da želite zapustiti deljenje Wiki?"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:88
 msgid "My Wikis"
@@ -5260,7 +5261,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:11
 msgid "Are you sure to delete "
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati?"
 
 #: frontend/src/metadata/components/dialog/image-tags-dialog/index.js:44
 #| msgid "Failed to generate image description"
@@ -5274,7 +5275,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:76
 msgid "Enable face recognition to identify people in your photos."
-msgstr ""
+msgstr "Omogoči prepoznavo ljudi v vaših slikah."
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/turn-off-confirm.js:9
 #| msgid "Face recognition"
@@ -5298,14 +5299,14 @@ msgstr ""
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:74
 msgid "Enable extended properties"
-msgstr ""
+msgstr "Omogoči razširjene lastnosti"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:77
 msgid ""
 "After enable extended properties for files, you can add different properties"
 " to files, like collaborators, file expiring time, file description. You can"
 " also create different views for files based extended properties."
-msgstr ""
+msgstr "Po omogočeni razširjenih lastnosti za datoteke lahko dodate različne lastnosti, kot so sodelavci, datum poteka datoteke, opis datoteke. Tudi ustvarite različne pogledi za datoteke na podlagi razširjenih lastnosti."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/turn-off-confirm.js:9
 msgid "Turn off extended properties"
@@ -5319,7 +5320,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:76
 msgid "Enable tags to add tags to files and search files by tags."
-msgstr ""
+msgstr "Omogoči označevanje z oznakami, da dodate oznake datotekam in poišče datoteke po oznakah."
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/turn-off-confirm.js:9
 #| msgid "Turn off"
@@ -5421,7 +5422,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/column-popover/utils.js:7
 #: frontend/src/metadata/components/popover/column-popover/utils.js:66
 msgid "This is required"
-msgstr ""
+msgstr "To je zahtevano"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:11
 msgid "Name cannot contain dots"
@@ -5610,7 +5611,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:28
 #| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this option?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati to možnost?"
 
 #: frontend/src/metadata/components/popover/options-popover/index.js:162
 msgid "No options"
@@ -7107,12 +7108,12 @@ msgstr ""
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:254
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:258
 msgid "Are you sure you want to delete {placeholder} completely?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati {placeholder} popolnoma?"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:265
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:269
 msgid "Are you sure you want to restore {placeholder}?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite obnoviti {placeholder}?"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:360
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:364
@@ -7371,7 +7372,7 @@ msgstr "Neuspešno"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:232
 #: frontend/src/pages/sys-admin/users/users-content.js:425
 msgid "Are you sure you want to set {user_placeholder} inactive?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite nastaviti {user_placeholder} kot neaktiven?"
 
 #: frontend/src/pages/org-admin/org-user-item.js:189
 #| msgid "Reset"
@@ -7768,7 +7769,7 @@ msgstr ""
 #: frontend/src/pages/search/main-panel.js:107
 #: frontend/src/pages/sys-admin/repos/search-repos.js:42
 msgid "Required at least three letters."
-msgstr ""
+msgstr "Zahtevanih je vsaj tri črke."
 
 #: frontend/src/pages/search/search-results.js:73
 msgid "result"
@@ -7850,7 +7851,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/share-links.js:602
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to clean invalid share links?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati neveljavne povezave za deljenje?"
 
 #: frontend/src/pages/share-admin/upload-links.js:260
 #| msgid "Successfully cleared trash."
@@ -7866,7 +7867,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:300
 #| msgid "Are you sure you want to clear trash?"
 msgid "Are you sure you want to clean invalid upload links?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati neveljavne povezave za prenos?"
 
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:40
 msgid "At server"
@@ -8011,7 +8012,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/departments-v2/departments-v2.js:357
 #| msgid "Rename Department"
 msgid "Enable departments feature"
-msgstr ""
+msgstr "Omogoči funkcijo oddelkov"
 
 #: frontend/src/pages/sys-admin/departments-v2/role-status-utils.js:27
 #| msgid "Set Admin"
@@ -8051,7 +8052,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:149
 msgid "Are you sure you want to remove {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite odstraniti {placeholder}?"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:183
 #| msgid "Delete Member"
@@ -8076,7 +8077,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/groups/group-repos.js:127
 #| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unshare {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite preklicati dovoljenje za skrbnika za {placeholder}?"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:144
 #| msgid "Restore Library"
@@ -8170,7 +8171,7 @@ msgstr "Organizacija"
 #: frontend/src/pages/sys-admin/users/users-content.js:424
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite nastaviti {placeholder} kot skrbnika?"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
 #: frontend/src/pages/sys-admin/users/users-content.js:597
@@ -8209,7 +8210,7 @@ msgstr "Nastavi za admin"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:201
 msgid "Are you sure you want to set {placeholder} as Admin?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite nastaviti {placeholder} kot skrbnika?"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
 #| msgid "Name updated"
@@ -8296,7 +8297,7 @@ msgstr "Izbriši obvestilo"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:205
 msgid "Are you sure you want to delete the notification ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati obvestilo?"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:307
 msgid "All Notifications"
@@ -8309,7 +8310,7 @@ msgstr "Število skupin"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:231
 #: frontend/src/pages/sys-admin/users/users-content.js:423
 msgid "Are you sure you want to reset the password of {placeholder} ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite ponastaviti geslo za {placeholder}?"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:139
 msgid ""
@@ -8424,7 +8425,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/search-users.js:361
 #: frontend/src/pages/sys-admin/users/users.js:550
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati izbrane uporabnike?"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:71
 msgid "Set Login ID"
@@ -8553,7 +8554,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:147
 msgid "Enable branding CSS"
-msgstr ""
+msgstr "Omogoči branding CSS"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:150
 msgid "Use custom CSS"
@@ -8621,11 +8622,11 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:213
 msgid "Enable sharing to all groups"
-msgstr ""
+msgstr "Omogoči deli na vse skupine"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:216
 msgid "Enable users to share libraries to any groups in the system."
-msgstr ""
+msgstr "Omogoči uporabnikom, da delijo knjižnice na vse skupine v sistemu."
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:224
 #| msgid "Confirm password"
@@ -8649,7 +8650,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:238
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:241
 msgid "Enable two factor authentication"
-msgstr ""
+msgstr "Omogoči dvočrkovno overjanje"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:250
 #| msgid "Library Type"
@@ -8711,7 +8712,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:292
 #| msgid "Allow user to clean library trash"
 msgid "Enable users to clean trash"
-msgstr ""
+msgstr "Omogoči uporabnikom čiščenje koša"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:295
 #| msgid "Allow user to clean library trash"
@@ -8751,13 +8752,13 @@ msgstr ""
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:325
 #| msgid "No terms and conditions"
 msgid "Enable terms and conditions"
-msgstr ""
+msgstr "Omogoči pogoje uporabe"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:328
 msgid ""
 "Enable system admin to add Terms and Conditions, and all users will have to "
 "accept the terms."
-msgstr ""
+msgstr "Omogoči sistemskemu skrbniku dodajanje Pogojev uporabe in vsi uporabniki morajo sprejeti pogoje."
 
 #: frontend/src/pages/upload-link/file-uploader.js:434
 msgid "Failed to upload {file_name}."

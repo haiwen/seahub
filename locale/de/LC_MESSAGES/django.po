@@ -19,6 +19,7 @@
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # dbeuchler, 2014
 # 6e06821c22592dce14a601e4724b482d_c1359da, 2014
+# Elias Schneuwly <elias.schneuwly@speicherbox.ch>, 2024
 # Enno Gröper <enno+github@groeper-berlin.de>, 2016-2017
 # flexo3001 <mrckndt@gmail.com>, 2014
 # flexo3001 <mrckndt@gmail.com>, 2014
@@ -81,7 +82,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:23+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024\n"
+"Last-Translator: Elias Schneuwly <elias.schneuwly@speicherbox.ch>, 2024\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -456,7 +457,7 @@ msgstr "Passwort für %s zurücksetzen"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Ein Link zum Zurücksetzen des Passworts wurde an {contact_email} gesendet."
 
 #: seahub/api2/endpoints/admin/users.py:1555 seahub/views/sysadmin.py:486
 #, python-format
@@ -555,7 +556,7 @@ msgstr "Speicherplatz ist verbraucht."
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Der Ordner %(src)s kann nicht in den Unterordner %(des)s verschoben werden"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -852,7 +853,7 @@ msgstr "Es wurde eine Datei freigegeben unter %s"
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:913
 msgid "folder"
-msgstr ""
+msgstr "Ordner"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
@@ -871,17 +872,17 @@ msgstr "Für Sie wurde ein Upload-Link auf %s freigegeben."
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Der Benutzer %s existiert nicht."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "E-Mail %s existiert bereits."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "E-Mail %s ist ungültig."
 
 #: seahub/api2/endpoints/share_links.py:478
 #: seahub/api2/endpoints/share_links.py:487
@@ -944,15 +945,15 @@ msgstr "Namen dürfen nur Buchstaben, Zahlen, Leerzeichen, Bindestriche und Unte
 
 #: seahub/api2/endpoints/wiki2.py:1235
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL ist ungültig"
 
 #: seahub/api2/endpoints/wiki2.py:1239
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "Der benutzerdefinierte Teil der URL sollte 5-30 Zeichen enthalten."
 
 #: seahub/api2/endpoints/wiki2.py:1257
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Diese benutzerdefinierte Domäne ist bereits in Gebrauch und kann nicht für Ihr Wiki verwendet werden."
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
@@ -969,7 +970,7 @@ msgstr "Name erforderlich"
 
 #: seahub/api2/utils.py:317
 msgid "A share link for you"
-msgstr ""
+msgstr "Ein Freigabelink für Sie"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -1014,7 +1015,7 @@ msgstr "Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft. Sind Sie s
 #: seahub/auth/forms.py:136 seahub/auth/forms.py:137
 #: seahub/templates/registration/login.html:61
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Bitte verwenden Sie Single Sign-On zur Anmeldung."
 
 #: seahub/auth/forms.py:142
 msgid ""
@@ -1277,11 +1278,11 @@ msgstr "Verschoben:"
 
 #: seahub/base/templatetags/seahub_tags.py:144
 msgid "Added folder"
-msgstr ""
+msgstr "Ordner hinzugefügt"
 
 #: seahub/base/templatetags/seahub_tags.py:145
 msgid "Removed folder"
-msgstr ""
+msgstr "Entfernter Ordner"
 
 #: seahub/base/templatetags/seahub_tags.py:146
 #: seahub/notifications/management/commands/send_file_updates.py:172
@@ -1311,7 +1312,7 @@ msgstr "Die Datei %(file)s wurde auf den Stand von %(time)s zurückgesetzt."
 #: seahub/base/templatetags/seahub_tags.py:170
 #: seahub/base/templatetags/seahub_tags.py:241
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Wiederhergestellter gelöschter Ordner"
 
 #: seahub/base/templatetags/seahub_tags.py:172
 #: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:460
