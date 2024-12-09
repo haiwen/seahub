@@ -48,7 +48,7 @@
             {% if not request.user.is_authenticated %}
             {# for non-logged-in user #}
             <div id="lang">
-                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="icon-caret-down"></span></a>
+                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="sf3-font sf3-font-down"></span></a>
                 <div id="lang-context-selector" class="sf-popover hide">
                     <ul class="sf-popover-con">
                         {% for LANG in LANGUAGES %}
