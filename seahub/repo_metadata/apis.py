@@ -1077,6 +1077,7 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         from seafevents.repo_metadata.utils import gen_sorts_sql
+        from seafevents.repo_metadata.constants import PrivatePropertyKeys
         try:
             columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
             order_sql = gen_sorts_sql(METADATA_TABLE, columns, view.get('sorts'))
@@ -1085,11 +1086,18 @@ class PeoplePhotos(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # Reduce the size of the response
+        select_columns = f'`{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}`, `{METADATA_TABLE.columns.file_mtime.name}`'
+        capture_time_column = [column for column in columns if column.get('key') == PrivatePropertyKeys.CAPTURE_TIME]
+        capture_time_column_name = capture_time_column[0].get('name') if capture_time_column else ''
+        if capture_time_column_name:
+            select_columns = f'{select_columns}, `{capture_time_column_name}`'
+
         try:
             record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, [])]
             selected_ids = record_ids[start:limit]
             selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
-            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str}) {order_sql}'
+            sql = f'SELECT {select_columns} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str}) {order_sql}'
             someone_photos_result = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)
