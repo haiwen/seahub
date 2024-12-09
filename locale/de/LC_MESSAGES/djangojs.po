@@ -1227,7 +1227,7 @@ msgstr "Ungültiger Zielpfad"
 #: frontend/src/components/dialog/move-dirent-dialog.js:135
 #: frontend/src/components/dialog/move-dirent-dialog.js:171
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Der Ordner %(src)s kann nicht in den Unterordner %(des)s verschoben werden"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:158
 msgid "Can not copy folder %(src)s to its subfolder %(des)s"

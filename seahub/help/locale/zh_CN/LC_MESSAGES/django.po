@@ -8,6 +8,7 @@
 # llj <lingjun.li1@gmail.com>, 2024
 # imwhatiam <imwhatiam123@gmail.com>, 2024
 # BingbingHaidian <michael18811380328@163.com>, 2024
+# Seafile Info <info@seafile.com>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: BingbingHaidian <michael18811380328@163.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/haiwen/teams/5086/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -212,21 +213,21 @@ msgstr "管理和使用部门"
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr "一些机构由复杂的部门层级组成。 这些机构通常有两种常见的文件管理用例："
+msgstr "一些团队由复杂的部门层级组成。 这些团队通常有两种常见的文件管理用例："
 
 #: templates/help/departments.html:8
 msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr "机构应该有一个公用的文件共享空间。 文件夹层次结构应映射部门层级结构。 每个部门都将分配单独的文件夹或空间。"
+msgstr "团队应该有一个公用的文件共享空间。 文件夹层次结构应映射部门层级结构。 每个部门都将分配单独的文件夹或空间。"
 
 #: templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr "共享空间应由机构拥有和管理，而不是单个的员工。 这样，当一个员工离开该机构时，文件的所有权不用被更改。"
+msgstr "共享空间应由团队拥有和管理，而不是单个的员工。 这样，当一个员工离开该团队时，文件的所有权不用被更改。"
 
 #: templates/help/departments.html:11
 msgid ""
@@ -286,7 +287,7 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
-"系统管理员也可以从 AD 中的 OU（机构单位）导入层级结构。每个 OU 将作为一个部门导入。一个 OU下的子 OU "
+"系统管理员也可以从 AD 中的 OU（团队单位）导入层级结构。每个 OU 将作为一个部门导入。一个 OU下的子 OU "
 "则将作为子部门导入。部门资料库可以在导入过程中自动创建。"
 
 #: templates/help/departments.html:28
@@ -1823,7 +1824,7 @@ msgstr "共享给群组：可以共享给一个群组。"
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr "共享给机构：如果使用的是私有服务器，有时共享给服务器（整个机构）上的所有成员很有用。"
+msgstr "共享给团队：如果使用的是私有服务器，有时共享给服务器（整个团队）上的所有成员很有用。"
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -1887,7 +1888,7 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
-"共享一个资料库到整个机构：在 Seafile web app "
+"共享一个资料库到整个团队：在 Seafile web app "
 "中，点击左侧面板上的“公共资料库”。然后点击“添加资料库”按钮。在弹出的下拉菜单中，你可以选择共享一个已存在的资料库，或者新建一个资料库并共享它。"
 
 #: templates/help/sharing_files_and_folders.html:67
