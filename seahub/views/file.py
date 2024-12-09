@@ -2129,7 +2129,6 @@ def view_sdoc_revision(request, repo_id, revision_id):
         'file_id': file_id,
         'last_commit_id': repo.head_cmmt_id,
         'is_repo_owner': is_repo_owner(request, repo_id, username),
-        'is_repo_admin': is_repo_admin(username, repo_id),
         'path': path,
         'parent_dir': parent_dir,
         'filename': filename,
