@@ -27,10 +27,7 @@ class WikiExternalOperations extends React.Component {
   }
 
   onAddWikiPageDialogDisplayed = ({ newFileName: wikiPageName = '' }) => {
-    this.setState({
-      wikiPageName,
-      isShowAddWikiPageDialog: true,
-    });
+    this.props.onAddWikiPage(false, wikiPageName, true);
   };
 
   changeAddWikiPageDialogDisplayed = () => {
