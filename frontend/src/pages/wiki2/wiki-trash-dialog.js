@@ -62,6 +62,7 @@ class WikiTrashDialog extends React.Component {
       this.getItems(1);
     });
   };
+
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
   };
@@ -236,7 +237,6 @@ class Item extends React.Component {
       toaster.danger(errorMsg);
     });
   };
-
 
   render() {
     const item = this.props.item;

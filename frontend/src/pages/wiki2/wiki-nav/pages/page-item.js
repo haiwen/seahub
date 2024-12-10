@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import NameEditPopover from '../../common/name-edit-popover';
 import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
-import DeleteDialog from '../../common/delete-dialog';
 import { gettext, wikiPermission } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
@@ -20,7 +19,6 @@ class PageItem extends Component {
     this.state = {
       isShowNameEditor: false,
       isShowOperationDropdown: false,
-      isShowDeleteDialog: false,
       isShowInsertPage: false,
       isShowAddSiblingPage: false,
       insertPosition: '',
@@ -98,14 +96,6 @@ class PageItem extends Component {
 
   onChangeName = (newName) => {
     this.setState({ pageName: newName });
-  };
-
-  openDeleteDialog = () => {
-    this.setState({ isShowDeleteDialog: true });
-  };
-
-  closeDeleteDialog = () => {
-    this.setState({ isShowDeleteDialog: false });
   };
 
   toggleDropdown = () => {
@@ -277,7 +267,7 @@ class PageItem extends Component {
                             toggle={this.toggleDropdown}
                             toggleNameEditor={this.toggleNameEditor}
                             duplicatePage={this.props.duplicatePage}
-                            onDeletePage={this.openDeleteDialog}
+                            onDeletePage={this.props.onDeletePage.bind(this, page.id)}
                             toggleInsertSiblingPage={this.toggleInsertSiblingPage}
                           />
                         }
@@ -288,12 +278,6 @@ class PageItem extends Component {
                     </>
                   }
                 </div>
-                {this.state.isShowDeleteDialog &&
-                  <DeleteDialog
-                    closeDeleteDialog={this.closeDeleteDialog}
-                    handleSubmit={this.props.onDeletePage.bind(this, page.id)}
-                  />
-                }
                 {this.state.isShowInsertPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertPage}

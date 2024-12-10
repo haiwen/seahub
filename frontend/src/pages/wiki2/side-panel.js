@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
-import { isWiki2, wikiId, wikiPermission } from '../../utils/constants';
+import { isWiki2, wikiId, wikiPermission, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -15,6 +15,7 @@ import WikiExternalOperations from './wiki-external-operations';
 import WikiTrashDialog from './wiki-trash-dialog';
 import { DEFAULT_PAGE_NAME } from './constant';
 import Wiki2Search from '../../components/search/wiki2-search';
+import CommonUndoTool from '../../components/common/common-undo-tool';
 
 import './side-panel.css';
 
@@ -40,7 +41,7 @@ class SidePanel extends PureComponent {
     };
   }
 
-  confirmDeletePage = (pageId) => {
+  onDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
     const { pages } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
@@ -48,6 +49,12 @@ class SidePanel extends PureComponent {
     wikiAPI.deleteWiki2Page(wikiId, pageId).then((res) => {
       if (res.data.success === true) {
         this.props.updateWikiConfig(config);
+        toaster.success(
+          <span>
+            {gettext('xxx page deleted').replace('xxx', pages[index].name)}
+            <CommonUndoTool onUndoOperation={() => this.revertWikiPage(pageId)} />
+          </span>
+        );
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -57,6 +64,18 @@ class SidePanel extends PureComponent {
       const newPageId = config.pages.length > 0 ? config.pages[0].id : '';
       this.props.setCurrentPage(newPageId);
     }
+  };
+
+  revertWikiPage = (pageId) => {
+    wikiAPI.revertTrashPage(wikiId, pageId).then(res => {
+      if (res.data.success === true) {
+        this.props.getWikiConfig();
+        toaster.success(gettext('Successfully restored 1 item.'));
+      }
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   addPageInside = async ({ parentPageId, page_id, name, icon, path, docUuid, successCallback, errorCallback }) => {
@@ -130,7 +149,7 @@ class SidePanel extends PureComponent {
             isEditMode={isWiki2}
             navigation={navigation}
             pages={pages}
-            onDeletePage={this.confirmDeletePage}
+            onDeletePage={this.onDeletePage}
             onUpdatePage={onUpdatePage}
             setCurrentPage={this.props.setCurrentPage}
             onMovePage={this.movePage}
