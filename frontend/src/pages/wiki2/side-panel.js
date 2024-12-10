@@ -45,13 +45,14 @@ class SidePanel extends PureComponent {
     const config = deepCopy(this.props.config);
     const { pages } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
+    const deletePageName = pages[index].name;
     config.pages.splice(index, 1);
     wikiAPI.deleteWiki2Page(wikiId, pageId).then((res) => {
       if (res.data.success === true) {
         this.props.updateWikiConfig(config);
         toaster.success(
           <span>
-            {gettext('xxx page deleted').replace('xxx', pages[index].name)}
+            {gettext('xxx page deleted').replace('xxx', deletePageName)}
             <CommonUndoTool onUndoOperation={() => this.revertWikiPage(pageId)} />
           </span>
         );
