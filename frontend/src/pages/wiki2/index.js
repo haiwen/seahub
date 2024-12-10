@@ -230,7 +230,7 @@ class Wiki extends Component {
     });
   };
 
-  cacheHistoryFiles = async (docUuid, name, pageId, icon) => {
+  cacheHistoryFiles = (docUuid, name, pageId, icon) => {
     let arr = [];
     const { wikiRepoId, config } = this.state; // different from repoId
     const { path, isDir } = getNamePaths(config, pageId);
