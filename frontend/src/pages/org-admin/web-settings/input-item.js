@@ -13,6 +13,7 @@ const propTypes = {
   displayName: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   inputAddon: PropTypes.node,
+  valueFixed: PropTypes.number,
 };
 
 class WebSettingInput extends Component {
@@ -44,9 +45,11 @@ class WebSettingInput extends Component {
   };
 
   onSubmit = (e) => {
+    const { valueFixed = 0 } = this.props;
     const value = this.state.value.trim();
     if (value != this.props.value) {
       this.props.saveSetting(this.props.keyText, value);
+      this.setState({ value: parseInt(value).toFixed(valueFixed) });
     }
     this.toggleBtns();
   };

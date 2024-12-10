@@ -196,6 +196,7 @@ class OrgWebSettings extends Component {
                           <InputGroupText>MB</InputGroupText>
                         </InputGroupAddon>
                       }
+                      valueFixed={1}
                     />
                   </Fragment>
                 </Section>
