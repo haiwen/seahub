@@ -149,12 +149,27 @@ class SidePanel extends PureComponent {
   };
 
   // default page name
-  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME) => {
+  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME, isInsertCurrentPage) => {
     if (this.isAddingPage === true) return;
     this.isAddingPage = true;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
       this.isAddingPage = false;
       const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
+      if (isInsertCurrentPage) {
+        this.addPageInside({
+          parentPageId: this.props.getCurrentPageId(),
+          page_id: page_id,
+          name: page_name,
+          icon: '',
+          path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+          docUuid: doc_uuid,
+          successCallback: () => {},
+          errorCallback: () => {},
+          jumpToNewPage,
+        });
+        return;
+      }
+
       this.onAddNewPage({
         page_id: page_id,
         name: page_name,
@@ -188,7 +203,6 @@ class SidePanel extends PureComponent {
         <div className="wiki2-side-nav">
           {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>
-        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)}/>
         {this.state.isShowTrashDialog && (
           <WikiTrashDialog
             showTrashDialog={this.state.isShowTrashDialog}
