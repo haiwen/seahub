@@ -275,15 +275,17 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
   }, [imageItems]);
 
-  const moveToPrevImage = () => {
+  const moveToPrevImage = useCallback(() => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
-  };
+    setSelectedImages([imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength]]);
+  }, [imageItems, imageIndex]);
 
-  const moveToNextImage = () => {
+  const moveToNextImage = useCallback(() => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
-  };
+    setSelectedImages([imageItems[(imageIndex + 1) % imageItemsLength]]);
+  }, [imageItems, imageIndex]);
 
   const handleImageSelection = useCallback((selectedImages) => {
     setSelectedImages(selectedImages);
@@ -340,6 +342,28 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     }
   }, [handleImageSelection, updateSelectedImage]);
 
+  const deleteImage = useCallback(() => {
+    const image = selectedImages[0];
+    const index = imageItems.findIndex(item => item.id === image.id);
+    onDelete(selectedImages);
+
+    const newImageItems = imageItems.filter(item => item.id !== image.id);
+    let newSelectedImage;
+
+    if (newImageItems.length === 0) {
+      setSelectedImages([]);
+      setIsImagePopupOpen(false);
+      setImageIndex(0);
+    } else {
+      const newIndex = Math.min(index, newImageItems.length - 1);
+      newSelectedImage = newImageItems[newIndex];
+      setImageIndex(newIndex);
+    }
+
+    setSelectedImages([newSelectedImage]);
+    updateSelectedImage(newSelectedImage);
+  }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
+
   return (
     <>
       <div
@@ -385,6 +409,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
             closeImagePopup={closeImagePopup}
             moveToPrevImage={moveToPrevImage}
             moveToNextImage={moveToNextImage}
+            onDeleteImage={deleteImage}
           />
         </ModalPortal>
       )}
