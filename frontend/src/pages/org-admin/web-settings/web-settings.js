@@ -8,6 +8,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
+import { InputGroupAddon, InputGroupText } from 'reactstrap';
 
 import '../../../css/system-admin-web-settings.css';
 import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
@@ -34,6 +35,8 @@ class OrgWebSettings extends Component {
 
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then((res) => {
+      const user_default_quota = res.data.user_default_quota;
+      const i = parseInt(Math.floor(Math.log(user_default_quota) / Math.log(1000)), 10);
       this.setState({
         loading: false,
         config_dict: res.data,
@@ -41,7 +44,7 @@ class OrgWebSettings extends Component {
         force_adfs_login: res.data.force_adfs_login,
         disable_org_encrypted_library: res.data.disable_org_encrypted_library,
         disable_org_user_clean_trash: res.data.disable_org_user_clean_trash,
-        user_default_quota: Utils.bytesToSize(res.data.user_default_quota),
+        user_default_quota: (user_default_quota / (1000 ** i)).toFixed(1),
       });
     }).catch((error) => {
       this.setState({
@@ -85,7 +88,7 @@ class OrgWebSettings extends Component {
   };
 
   orgUpdateUserDefaultQuota = (key, quota) => {
-    orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, quota).then((res) => {
+    orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, parseInt(quota)).then((res) => {
       toaster.success(gettext('User default quota updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -185,9 +188,14 @@ class OrgWebSettings extends Component {
                     <InputItem
                       className={'form-control'}
                       saveSetting={this.orgUpdateUserDefaultQuota}
-                      displayName={gettext('Set User default quota')}
+                      displayName={gettext('User default quota')}
                       value={user_default_quota}
                       helpTip={gettext('Tip: 0 means default limit, the unit is MB')}
+                      inputAddon={
+                        <InputGroupAddon addonType="append">
+                          <InputGroupText>MB</InputGroupText>
+                        </InputGroupAddon>
+                      }
                     />
                   </Fragment>
                 </Section>

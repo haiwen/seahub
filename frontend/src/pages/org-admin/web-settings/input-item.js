@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Button } from 'reactstrap';
+import { Input, Button, InputGroup } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SettingItemBase from './setting-item-base';
 
@@ -12,6 +12,7 @@ const propTypes = {
   helpTip: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
+  inputAddon: PropTypes.node,
 };
 
 class WebSettingInput extends Component {
@@ -52,7 +53,7 @@ class WebSettingInput extends Component {
 
   render() {
     const { isBtnsShown, value } = this.state;
-    const { helpTip, displayName, inputType, disabled } = this.props;
+    const { helpTip, displayName, inputType, disabled, inputAddon } = this.props;
     return (
       <SettingItemBase
         displayName={displayName}
@@ -60,7 +61,10 @@ class WebSettingInput extends Component {
         mainContent={
           disabled ?
             <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} value={value} disabled /> :
-            <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns} value={value} />
+            <InputGroup>
+              <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns} value={value} />
+              {inputAddon && inputAddon}
+            </InputGroup>
         }
         extraContent={
           isBtnsShown ?
