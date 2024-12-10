@@ -275,15 +275,17 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
   }, [imageItems]);
 
-  const moveToPrevImage = () => {
+  const moveToPrevImage = useCallback(() => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
-  };
+    setSelectedImages([imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength]]);
+  }, [imageItems, imageIndex]);
 
-  const moveToNextImage = () => {
+  const moveToNextImage = useCallback(() => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
-  };
+    setSelectedImages([imageItems[(imageIndex + 1) % imageItemsLength]]);
+  }, [imageItems, imageIndex]);
 
   const handleImageSelection = useCallback((selectedImages) => {
     setSelectedImages(selectedImages);
@@ -340,6 +342,33 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     }
   }, [handleImageSelection, updateSelectedImage]);
 
+  const deleteImage = useCallback((name) => {
+    const image = selectedImages.find(image => image.name === name);
+    if (!image) return;
+    onDelete([image], () => {
+      const index = imageItems.findIndex(item => item.id === image.id);
+      if (index === -1) return;
+
+      const newImageItems = imageItems.filter(item => item.id !== image.id);
+      let newSelectedImages = [];
+
+      if (newImageItems.length === 0) {
+        setSelectedImages([]);
+        setIsImagePopupOpen(false);
+      } else if (index === 0) {
+        newSelectedImages = [newImageItems[0]];
+      } else if (index === newImageItems.length - 1) {
+        newSelectedImages = [newImageItems[index - 1]];
+      } else {
+        newSelectedImages = [newImageItems[index]];
+      }
+
+      setSelectedImages(newSelectedImages);
+      updateSelectedImage();
+    });
+  }
+  , [selectedImages, imageItems, onDelete, updateSelectedImage]);
+
   return (
     <>
       <div
@@ -385,6 +414,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
             closeImagePopup={closeImagePopup}
             moveToPrevImage={moveToPrevImage}
             moveToNextImage={moveToNextImage}
+            onDeleteImage={deleteImage}
           />
         </ModalPortal>
       )}
