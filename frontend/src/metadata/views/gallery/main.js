@@ -345,26 +345,27 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const deleteImage = useCallback((name) => {
     const image = selectedImages.find(image => image.name === name);
     if (!image) return;
-    onDelete([image], () => {
-      const index = imageItems.findIndex(item => item.id === image.id);
-      if (index === -1) return;
+    const index = imageItems.findIndex(item => item.id === image.id);
+    if (index === -1) return;
 
-      const newImageItems = imageItems.filter(item => item.id !== image.id);
-      let newSelectedImages = [];
+    onDelete([image]);
 
-      if (newImageItems.length === 0) {
-        setSelectedImages([]);
-        setIsImagePopupOpen(false);
-      } else {
-        // Select the next image or the previous image if the next image is not available
-        newSelectedImages = [newImageItems[Math.min(index, newImageItems.length - 1)]];
-      }
+    const newImageItems = imageItems.filter(item => item.id !== image.id);
+    let newSelectedImages = [];
 
-      setSelectedImages(newSelectedImages);
-      updateSelectedImage(newSelectedImages[0]);
-    });
-  }
-  , [selectedImages, imageItems, onDelete, updateSelectedImage]);
+    if (newImageItems.length === 0) {
+      setSelectedImages([]);
+      setIsImagePopupOpen(false);
+      setImageIndex(0);
+    } else {
+      const newIndex = Math.min(index, newImageItems.length - 1);
+      newSelectedImages = [newImageItems[newIndex]];
+      setImageIndex(newIndex);
+    }
+
+    setSelectedImages(newSelectedImages);
+    updateSelectedImage(newSelectedImages[0]);
+  }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
 
   return (
     <>
