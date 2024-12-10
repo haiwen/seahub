@@ -355,16 +355,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       if (newImageItems.length === 0) {
         setSelectedImages([]);
         setIsImagePopupOpen(false);
-      } else if (index === 0) {
-        newSelectedImages = [newImageItems[0]];
-      } else if (index === newImageItems.length - 1) {
-        newSelectedImages = [newImageItems[index - 1]];
       } else {
-        newSelectedImages = [newImageItems[index]];
+        // Select the next image or the previous image if the next image is not available
+        newSelectedImages = [newImageItems[Math.min(index, newImageItems.length - 1)]];
       }
 
       setSelectedImages(newSelectedImages);
-      updateSelectedImage();
+      updateSelectedImage(newSelectedImages[0]);
     });
   }
   , [selectedImages, imageItems, onDelete, updateSelectedImage]);
