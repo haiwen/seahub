@@ -8,6 +8,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
+import { InputGroupAddon, InputGroupText } from 'reactstrap';
 
 import '../../../css/system-admin-web-settings.css';
 import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
@@ -27,19 +28,23 @@ class OrgWebSettings extends Component {
       file_ext_white_list: '',
       force_adfs_login: false,
       disable_org_encrypted_library: false,
-      disable_org_user_clean_trash: false
+      disable_org_user_clean_trash: false,
+      user_default_quota: ''
     };
   }
 
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then((res) => {
+      const user_default_quota = res.data.user_default_quota;
+      const i = parseInt(Math.floor(Math.log(user_default_quota) / Math.log(1000)), 10);
       this.setState({
         loading: false,
         config_dict: res.data,
         file_ext_white_list: res.data.file_ext_white_list,
         force_adfs_login: res.data.force_adfs_login,
         disable_org_encrypted_library: res.data.disable_org_encrypted_library,
-        disable_org_user_clean_trash: res.data.disable_org_user_clean_trash
+        disable_org_user_clean_trash: res.data.disable_org_user_clean_trash,
+        user_default_quota: (user_default_quota / (1000 ** i)).toFixed(1),
       });
     }).catch((error) => {
       this.setState({
@@ -82,8 +87,17 @@ class OrgWebSettings extends Component {
     });
   };
 
+  orgUpdateUserDefaultQuota = (key, quota) => {
+    orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, parseInt(quota)).then((res) => {
+      toaster.success(gettext('User default quota updated'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, disable_org_encrypted_library, disable_org_user_clean_trash } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, disable_org_encrypted_library, disable_org_user_clean_trash, user_default_quota } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
@@ -169,6 +183,23 @@ class OrgWebSettings extends Component {
                     </Fragment>
                   </Section>
                 }
+                <Section headingText={gettext('User')}>
+                  <Fragment>
+                    <InputItem
+                      className={'form-control'}
+                      saveSetting={this.orgUpdateUserDefaultQuota}
+                      displayName={gettext('User default quota')}
+                      value={user_default_quota}
+                      helpTip={gettext('Tip: 0 means default limit, the unit is MB')}
+                      inputAddon={
+                        <InputGroupAddon addonType="append">
+                          <InputGroupText>MB</InputGroupText>
+                        </InputGroupAddon>
+                      }
+                      valueFixed={1}
+                    />
+                  </Fragment>
+                </Section>
               </Fragment>
               }
             </div>
