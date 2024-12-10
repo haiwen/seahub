@@ -2,42 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import NavItemIcon from '../common/nav-item-icon';
 import CustomIcon from '../custom-icon';
+import { getPaths } from '../utils/index';
 
 import './index.css';
-
-// Find the path array from the root to the leaf based on the currentPageId (leaf)
-function getPaths(navigation, currentPageId, pages) {
-  let idPageMap = {};
-  pages.forEach(page => idPageMap[page.id] = page);
-  navigation.forEach(item => {
-    if (!idPageMap[item.id]) {
-      idPageMap[item.id] = item;
-    }
-  });
-  let pathStr = null;
-  function runNode(node) {
-    const newPath = node._path ? (node._path + '-' + node.id) : node.id;
-    if (node.id === currentPageId) {
-      pathStr = newPath;
-      return;
-    }
-    if (node.children) {
-      node.children.forEach(child => {
-        if (child) {
-          child._path = newPath;
-          runNode(child);
-        }
-      });
-    }
-  }
-  let root = {};
-  root.id = '';
-  root._path = '';
-  root.children = navigation;
-  runNode(root);
-  if (!pathStr) return [];
-  return pathStr.split('-').map(id => idPageMap[id]);
-}
 
 function WikiTopNav({ config, currentPageId, setCurrentPage }) {
   const { navigation, pages } = config;

@@ -68,6 +68,66 @@ const throttle = (fn, delay) => {
   };
 };
 
+// Find the path array from the root to the leaf based on the currentPageId (leaf)
+const getPaths = (navigation, currentPageId, pages, isGetPathStr) => {
+  let idPageMap = {};
+  pages.forEach(page => idPageMap[page.id] = page);
+  navigation.forEach(item => {
+    if (!idPageMap[item.id]) {
+      idPageMap[item.id] = item;
+    }
+  });
+  let pathStr = null;
+  let curNode = null;
+  function runNode(node) {
+    const newPath = node._path ? (node._path + '-' + node.id) : node.id;
+    if (node.id === currentPageId) {
+      pathStr = newPath;
+      curNode = node;
+      return;
+    }
+    if (node.children) {
+      node.children.forEach(child => {
+        if (child) {
+          child._path = newPath;
+          runNode(child);
+        }
+      });
+    }
+  }
+  let root = {};
+  root.id = '';
+  root._path = '';
+  root.children = navigation;
+  runNode(root);
+  if (!pathStr) return [];
+  if (isGetPathStr) return {
+    paths: pathStr,
+    curNode
+  };
+  return pathStr.split('-').map(id => idPageMap[id]);
+};
+
+const getNamePaths = (config, pageId) => {
+  const { navigation, pages } = config;
+  const { paths, curNode } = getPaths(navigation, pageId, pages, true);
+  const pathArr = paths.split('-');
+  const nameArr = [];
+  if (pathArr.length > 1) {
+    pathArr.forEach(pid => {
+      const page = pages.find((item) => item.id === pid);
+      if (page) {
+        const { name } = page;
+        nameArr.push(name);
+      }
+    });
+  }
+  return {
+    path: nameArr.length === 0 ? '' : nameArr.slice(0, -1).join(' / '),
+    isDir: curNode?.children?.length ? true : false
+  };
+};
+
 
 export {
   generatorBase64Code,
@@ -77,4 +137,6 @@ export {
   getCurrentPageConfig,
   getWikPageLink,
   throttle,
+  getPaths,
+  getNamePaths
 };

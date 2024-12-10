@@ -14,7 +14,7 @@ import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
 import { DEFAULT_PAGE_NAME } from './constant';
 import { eventBus } from '../../components/common/event-bus';
-import { throttle } from './utils';
+import { throttle, getNamePaths } from './utils';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -88,6 +88,23 @@ class Wiki extends Component {
     return isWiki2 ? 'wikis/' : 'published/';
   };
 
+  setNavConfig = (config, wikiRepoId) => {
+    const { pages } = config;
+    const newPages = JSON.parse(JSON.stringify(pages));
+    newPages.map((item) => {
+      const { path, isDir } = getNamePaths(config, item.id);
+      item['path'] = path;
+      item['doc_uuid'] = item['docUuid'];
+      item['pageId'] = item['id'];
+      item['wikiRepoId'] = wikiRepoId;
+      item['isDir'] = isDir;
+      return item;
+    });
+    window.wiki.config['navConfig'] = {
+      pages: newPages
+    };
+  };
+
   getWikiConfig = () => {
     let wikiAPIConfig;
     if (wikiPermission === 'public') {
@@ -98,6 +115,7 @@ class Wiki extends Component {
     wikiAPIConfig.then(res => {
       const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
       const config = new WikiConfig(wiki_config || {});
+      this.setNavConfig(config, wikiRepoId);
       this.setState({
         config,
         isConfigLoading: false,
@@ -212,21 +230,31 @@ class Wiki extends Component {
     });
   };
 
-  cacheHistoryFiles = (docUuid, name, pageId) => {
+  cacheHistoryFiles = async (docUuid, name, pageId, icon) => {
     let arr = [];
-    const { wikiRepoId } = this.state; // different from repoId
+    const { wikiRepoId, config } = this.state; // different from repoId
+    const { path, isDir } = getNamePaths(config, pageId);
     const recentFiles = LocalStorage.getItem('wiki-recent-files', []);
-    const newFile = { doc_uuid: docUuid, name: name, wikiRepoId, pageId };
+    const newFile = {
+      doc_uuid: docUuid,
+      name,
+      wikiRepoId,
+      pageId,
+      icon,
+      path,
+      isDir
+    };
     if (recentFiles.length) {
-      const isExist = recentFiles.find((item) => item.doc_uuid === docUuid);
-      if (isExist) return;
-      if (!isExist) {
-        let newRecentFiles = recentFiles.slice(0);
-        if (recentFiles.length === 10) {
-          newRecentFiles.shift();
-        }
-        arr = [newFile, ...newRecentFiles];
+      if (recentFiles.length === 50) {
+        recentFiles.pop();
       }
+
+      const fileIndex = recentFiles.findIndex((item) => item.doc_uuid === docUuid);
+      if (fileIndex !== -1) {
+        recentFiles.splice(fileIndex, 1);
+      }
+      let newRecentFiles = recentFiles.slice(0);
+      arr = [newFile, ...newRecentFiles];
     } else {
       arr.push(newFile);
     }
@@ -245,7 +273,7 @@ class Wiki extends Component {
       callback && callback();
       return;
     }
-    const { path, id, name, docUuid } = currentPage;
+    const { path, id, name, docUuid, icon } = currentPage;
     if (path !== this.state.path) {
       this.updateSdocPage(pageId, path);
     }
@@ -256,7 +284,7 @@ class Wiki extends Component {
       callback && callback();
       eventBus.dispatch('update-wiki-current-page');
     });
-    this.cacheHistoryFiles(docUuid, name, id);
+    this.cacheHistoryFiles(docUuid, name, id, icon);
     this.updateDocumentTitle(name);
 
     if (viaPopstate) {
