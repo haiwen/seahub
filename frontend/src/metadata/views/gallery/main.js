@@ -16,6 +16,7 @@ import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbn
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
+import { openFile } from '../../utils/open-file';
 
 import './index.css';
 
@@ -68,20 +69,23 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
+    let init = metadata.rows
       .reduce((_init, record) => {
         const id = record[PRIVATE_COLUMN_KEY.ID];
         const fileName = getFileNameFromRecord(record);
+        const isVideo = Utils.videoCheck(fileName);
+        if (!Utils.imageCheck(fileName) && !isVideo) return _init;
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
+        const iconUrl = Utils.getFileIconUrl(fileName);
         const img = {
           id,
           name: fileName,
           path: parentDir,
+          src: isVideo ? iconUrl : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          thumbnail: isVideo ? iconUrl : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           date: date,
         };
@@ -262,10 +266,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   }, [imageItems, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
-    const index = imageItems.findIndex(item => item.id === image.id);
-    setImageIndex(index);
-    setIsImagePopupOpen(true);
-  }, [imageItems]);
+    const record = getRowById(metadata, image.id);
+    openFile(record, window.sfMetadataContext.eventBus, () => {
+      const index = imageItems.findIndex(item => item.id === image.id);
+      setImageIndex(index);
+      setIsImagePopupOpen(true);
+    });
+  }, [imageItems, metadata]);
 
   const handleRightClick = useCallback((event, image) => {
     event.preventDefault();
