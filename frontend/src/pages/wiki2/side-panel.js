@@ -149,28 +149,38 @@ class SidePanel extends PureComponent {
   };
 
   // default page name
-  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME, isInsertCurrentPage) => {
+  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME) => {
     if (this.isAddingPage === true) return;
     this.isAddingPage = true;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
       this.isAddingPage = false;
       const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
-      if (isInsertCurrentPage) {
-        this.addPageInside({
-          parentPageId: this.props.getCurrentPageId(),
-          page_id: page_id,
-          name: page_name,
-          icon: '',
-          path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
-          docUuid: doc_uuid,
-          successCallback: () => {},
-          errorCallback: () => {},
-          jumpToNewPage,
-        });
-        return;
-      }
-
       this.onAddNewPage({
+        page_id: page_id,
+        name: page_name,
+        icon: '',
+        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+        docUuid: doc_uuid,
+        successCallback: () => {},
+        errorCallback: () => {},
+        jumpToNewPage,
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.isAddingPage = false;
+    });
+  };
+
+  onAddWikiPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME, insert_position) => {
+    if (this.isAddingPage === true) return;
+    this.isAddingPage = true;
+    const currentPageId = this.props.getCurrentPageId();
+    wikiAPI.createWiki2Page(wikiId, pageName, currentPageId, insert_position).then(res => {
+      this.isAddingPage = false;
+      const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
+      this.addPageInside({
+        parentPageId: currentPageId,
         page_id: page_id,
         name: page_name,
         icon: '',
@@ -211,7 +221,7 @@ class SidePanel extends PureComponent {
           />
         )}
         {wikiPermission !== 'public' &&
-          <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+          <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
         }
       </div>
     );
