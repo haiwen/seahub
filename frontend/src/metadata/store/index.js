@@ -300,62 +300,23 @@ class Store {
   }
 
   deleteRecords(rows_ids, { fail_callback, success_callback }) {
-    const type = OPERATION_TYPE.DELETE_RECORDS;
-
-    if (!Array.isArray(rows_ids) || rows_ids.length === 0) {
-      return;
-    }
-    const valid_rows_ids = Array.isArray(rows_ids) ? rows_ids.filter((rowId) => {
-      const row = getRowById(this.data, rowId);
-      return row && this.context.canModifyRow(row);
-    }) : [];
-
-    // delete rows where parent dir is deleted
-    const deletedDirsPaths = rows_ids.map((rowId) => {
-      const row = getRowById(this.data, rowId);
-      if (row && checkIsDir(row)) {
-        const { _parent_dir, _name } = row;
-        return Utils.joinPath(_parent_dir, _name);
-      }
-      return null;
-    }).filter(Boolean);
-    if (deletedDirsPaths.length > 0) {
-      this.data.rows.forEach((row) => {
-        if (deletedDirsPaths.some((deletedDirPath) => row._parent_dir.includes(deletedDirPath)) && !valid_rows_ids.includes(row._id)) {
-          valid_rows_ids.push(row._id);
-        }
-      });
-    }
-
-    if (valid_rows_ids.length === 0) {
-      return;
-    }
-
-    const deleted_rows = valid_rows_ids.map((rowId) => getRowById(this.data, rowId));
-
-    const operation = this.createOperation({
-      type,
-      repo_id: this.repoId,
-      rows_ids: valid_rows_ids,
-      deleted_rows,
-      fail_callback,
-      success_callback,
-    });
-    this.applyOperation(operation);
+    this._deleteRecords(rows_ids, OPERATION_TYPE.DELETE_RECORDS, { fail_callback, success_callback });
   }
 
   deleteLocalRecords(rows_ids, { fail_callback, success_callback }) {
-    const type = OPERATION_TYPE.DELETE_LOCAL_RECORDS;
+    this._deleteRecords(rows_ids, OPERATION_TYPE.DELETE_LOCAL_RECORDS, { fail_callback, success_callback });
+  }
 
+  _deleteRecords(rows_ids, type, { fail_callback, success_callback }) {
     if (!Array.isArray(rows_ids) || rows_ids.length === 0) {
       return;
     }
-    const valid_rows_ids = Array.isArray(rows_ids) ? rows_ids.filter((rowId) => {
+
+    const valid_rows_ids = rows_ids.filter((rowId) => {
       const row = getRowById(this.data, rowId);
       return row && this.context.canModifyRow(row);
-    }) : [];
+    });
 
-    // delete rows where parent dir is deleted
     const deletedDirsPaths = rows_ids.map((rowId) => {
       const row = getRowById(this.data, rowId);
       if (row && checkIsDir(row)) {
@@ -364,6 +325,7 @@ class Store {
       }
       return null;
     }).filter(Boolean);
+
     if (deletedDirsPaths.length > 0) {
       this.data.rows.forEach((row) => {
         if (deletedDirsPaths.some((deletedDirPath) => row._parent_dir.includes(deletedDirPath)) && !valid_rows_ids.includes(row._id)) {

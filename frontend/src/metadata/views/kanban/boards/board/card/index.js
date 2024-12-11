@@ -17,6 +17,7 @@ const Card = ({
   displayColumns,
   onOpenFile,
   onSelectCard,
+  onContextMenu,
 }) => {
   const titleValue = getCellValueByColumn(record, titleColumn);
 
@@ -41,6 +42,7 @@ const Card = ({
       data-id={record._id}
       className={classnames('sf-metadata-kanban-card', { 'selected': isSelected })}
       onClick={handleClickCard}
+      onContextMenu={onContextMenu}
     >
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header" onClick={handleClickFilename}>
@@ -82,6 +84,7 @@ Card.propTypes = {
   displayColumns: PropTypes.array,
   onOpenFile: PropTypes.func.isRequired,
   onSelectCard: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 export default Card;

@@ -1,4 +1,7 @@
+import { siteRoot } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../cell';
 import { getTableById } from '../table';
 
 /**
@@ -26,7 +29,7 @@ const updateTableRowsWithRowsData = (tables, tableId, recordsData = []) => {
   });
 };
 
-export const checkIsDir = (record) => {
+const checkIsDir = (record) => {
   if (!record) return false;
   const isDir = record[PRIVATE_COLUMN_KEY.IS_DIR];
   if (typeof isDir === 'string') {
@@ -35,7 +38,33 @@ export const checkIsDir = (record) => {
   return isDir;
 };
 
+const openInNewTab = (record) => {
+  const repoID = window.sfMetadataStore.repoId;
+  const isDir = checkIsDir(record);
+  const parentDir = getParentDirFromRecord(record);
+  const name = getFileNameFromRecord(record);
+  const url = isDir
+    ? window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, name))
+    : `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, name))}`;
+
+  window.open(url, '_blank');
+};
+
+const openParentFolder = (record) => {
+  let parentDir = getParentDirFromRecord(record);
+
+  if (window.location.pathname.endsWith('/')) {
+    parentDir = parentDir.slice(1);
+  }
+
+  const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
+  window.open(url, '_blank');
+};
+
 export {
   isTableRows,
   updateTableRowsWithRowsData,
+  checkIsDir,
+  openInNewTab,
+  openParentFolder,
 };

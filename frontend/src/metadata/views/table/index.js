@@ -251,8 +251,6 @@ const Table = () => {
     const parentDir = getParentDirFromRecord(record);
     const updates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
     const oldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
-    const originalUpdates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
-    const originalOldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
 
     const handleSuccess = () => moveItem(destRepo, dirent, destPath, nodePath, isByDialog);
     const handleError = (error) => error && toaster.danger(error);
@@ -261,9 +259,9 @@ const Table = () => {
       store.modifyRecords(
         [recordID],
         { [recordID]: updates },
-        { [recordID]: originalUpdates },
+        { [recordID]: updates },
         { [recordID]: oldRowData },
-        { [recordID]: originalOldRowData },
+        { [recordID]: oldRowData },
         false,
         false,
         { fail_callback: handleError, success_callback: handleSuccess }

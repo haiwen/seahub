@@ -5,7 +5,6 @@ import metadataAPI from '../../api';
 import URLDecorator from '../../../utils/url-decorator';
 import toaster from '../../../components/toast';
 import Content from './content';
-import ContextMenu from './context-menu';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
@@ -18,6 +17,7 @@ import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
 import { Dirent } from '../../../models';
+import ContextMenu from '../../components/context-menu';
 
 import './index.css';
 
@@ -406,6 +406,14 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const dirent = new Dirent({ name: selectedImages[0]?.name });
   const path = selectedImages[0]?.path;
 
+  const getContainerRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
+
+  const getContentRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
+
   return (
     <>
       <div
@@ -439,9 +447,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       </div>
       <ContextMenu
         options={options}
-        handleOptionClick={handleOptionClick}
-        getContentRect={() => containerRef.current.getBoundingClientRect()}
-        getContainerRect={() => containerRef.current.getBoundingClientRect()}
+        onOptionClick={handleOptionClick}
+        getContainerRect={getContainerRect}
+        getContentRect={getContentRect}
+        validTargets={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
       />
       {isImagePopupOpen && (
         <ModalPortal>

@@ -54,18 +54,20 @@ const Kanban = () => {
   }, [isShowSettings]);
 
   return (
-    <div className="sf-metadata-view-kanban">
-      <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} onCloseSettings={closeSettings} />
-      <div className="sf-metadata-view-setting-panel sf-metadata-view-kanban-setting h-100">
-        {isShowSettings && (
-          <Settings
-            columns={columns}
-            columnsMap={metadata.key_column_map}
-            settings={metadata.view.settings}
-            modifySettings={modifySettings}
-            onClose={closeSettings}
-          />
-        )}
+    <div className="sf-metadata-container">
+      <div className="sf-metadata-view-kanban">
+        <Boards modifyRecord={modifyRecord} modifyColumnData={modifyColumnData} onCloseSettings={closeSettings} />
+        <div className="sf-metadata-view-setting-panel sf-metadata-view-kanban-setting h-100">
+          {isShowSettings && (
+            <Settings
+              columns={columns}
+              columnsMap={metadata.key_column_map}
+              settings={metadata.view.settings}
+              modifySettings={modifySettings}
+              onClose={closeSettings}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

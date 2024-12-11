@@ -11,7 +11,7 @@ export const OPERATION_TYPE = {
   MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
   MODIFY_SETTINGS: 'modify_settings',
   MODIFY_LOCAL_RECORD: 'modify_local_record',
-  DELETE_LOCAL_RECORDS: 'delete_local_record',
+  DELETE_LOCAL_RECORDS: 'delete_local_records',
 
   // column
   INSERT_COLUMN: 'insert_column',

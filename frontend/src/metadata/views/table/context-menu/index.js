@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toaster from '../../../../components/toast';
-import { gettext, siteRoot } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../../hooks';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
-import { checkIsDir } from '../../../utils/row';
+import { checkIsDir, openInNewTab, openParentFolder } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
@@ -180,32 +180,6 @@ const ContextMenu = (props) => {
     }
   }, [menuRef, visible]);
 
-  const onOpenFileInNewTab = useCallback((record) => {
-    const repoID = window.sfMetadataStore.repoId;
-    const isFolder = checkIsDir(record);
-    const parentDir = getParentDirFromRecord(record);
-    const fileName = getFileNameFromRecord(record);
-
-    const url = isFolder ?
-      window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)) :
-      `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
-
-    window.open(url, '_blank');
-  }, []);
-
-  const onOpenParentFolder = useCallback((event, record) => {
-    event.preventDefault();
-    event.stopPropagation();
-    let parentDir = getParentDirFromRecord(record);
-
-    if (window.location.pathname.endsWith('/')) {
-      parentDir = parentDir.slice(1);
-    }
-
-    const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
-    window.open(url, '_blank');
-  }, []);
-
   const generateDescription = useCallback((record) => {
     const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
@@ -334,13 +308,13 @@ const ContextMenu = (props) => {
       case OPERATION.OPEN_IN_NEW_TAB: {
         const { record } = option;
         if (!record) break;
-        onOpenFileInNewTab(record);
+        openInNewTab(record);
         break;
       }
       case OPERATION.OPEN_PARENT_FOLDER: {
         const { record } = option;
         if (!record) break;
-        onOpenParentFolder(event, record);
+        openParentFolder(record);
         break;
       }
       case OPERATION.COPY_SELECTED: {
@@ -424,7 +398,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
+  }, [onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
