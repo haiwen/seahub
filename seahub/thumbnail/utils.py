@@ -285,7 +285,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     if image_memory_cost > THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT:
         return (False, 403)
 
-    if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+    if image.mode not in ["1", "L", "RGB", "RGBA"]:
         image = image.convert("RGB")
 
     image = get_rotated_image(image)
