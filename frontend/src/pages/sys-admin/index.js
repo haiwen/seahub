@@ -35,6 +35,7 @@ import UserLinks from './users/user-links';
 import UserGroups from './users/user-groups';
 
 import AllRepos from './repos/all-repos';
+import AllWikis from './repos/all-wikis';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
 import SearchRepos from './repos/search-repos';
@@ -225,6 +226,7 @@ class SysAdmin extends React.Component {
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />
             <AllRepos path={siteRoot + 'sys/all-libraries'} {...commonProps} />
+            <AllWikis path={siteRoot + 'sys/all-wikis'} {...commonProps} />
             <SystemRepo path={siteRoot + 'sys/system-library'} {...commonProps} />
             <TrashRepos path={siteRoot + 'sys/trash-libraries'} {...commonProps} />
             <SearchRepos path={siteRoot + 'sys/search-libraries'} {...commonProps} />
