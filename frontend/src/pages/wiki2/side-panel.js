@@ -52,7 +52,7 @@ class SidePanel extends PureComponent {
         this.props.updateWikiConfig(config);
         toaster.success(
           <span>
-            {gettext('xxx page deleted').replace('xxx', deletePageName)}
+            {gettext('Page xxx deleted.').replace('xxx', deletePageName)}
             <CommonUndoTool onUndoOperation={() => this.revertWikiPage(pageId)} />
           </span>
         );
@@ -71,7 +71,8 @@ class SidePanel extends PureComponent {
     wikiAPI.revertTrashPage(wikiId, pageId).then(res => {
       if (res.data.success === true) {
         this.props.getWikiConfig();
-        toaster.success(gettext('Successfully restored 1 item.'));
+        toaster.closeAll();
+        toaster.success(gettext('Restored 1 item'));
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

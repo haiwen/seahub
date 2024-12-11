@@ -270,7 +270,7 @@ class FolderItem extends React.Component {
       seafileAPI.revertFolder(repoID, path, commitID) :
       seafileAPI.revertFile(repoID, path, commitID);
     request.then((res) => {
-      toaster.success(gettext('Successfully restored 1 item.'));
+      toaster.success(gettext('Restored 1 item'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
