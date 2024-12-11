@@ -8,7 +8,7 @@ import SetWebdavPassword from '../dialog/set-webdav-password';
 import ResetWebdavPassword from '../dialog/reset-webdav-password';
 import RemoveWebdavPassword from '../dialog/remove-webdav-password';
 
-const { username, webdavUrl, webdavPasswordSetted } = window.app.pageOptions;
+const { contactEmail, webdavUrl, webdavPasswordSetted } = window.app.pageOptions;
 
 class WebdavPassword extends React.Component {
 
@@ -92,7 +92,7 @@ class WebdavPassword extends React.Component {
         <div id="update-webdav-passwd" className="setting-item">
           <h3 className="setting-item-heading">{gettext('WebDAV Access')}</h3>
           <p>WebDAV URL: <a href={webdavUrl}>{webdavUrl}</a></p>
-          <p>{gettext('WebDAV username:')} {username}</p>
+          <p>{gettext('WebDAV username:')} {contactEmail}</p>
           {!isWebdavPasswordSetted ?
             <React.Fragment>
               <p>{gettext('WebDAV password:')} {gettext('not set')}</p>

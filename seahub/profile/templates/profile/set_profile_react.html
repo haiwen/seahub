@@ -13,6 +13,7 @@
 // overwrite the one in base_for_react.html
 window.app.pageOptions = {
   username: "{{request.user.username|escapejs}}",
+  contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
   avatarURL: '{% avatar_url request.user %}',
   csrfToken: '{{ csrf_token }}',
 
