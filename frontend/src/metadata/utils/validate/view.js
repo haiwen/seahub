@@ -1,6 +1,6 @@
 import { gettext } from '../../../utils/constants';
 
-export const isValidViewName = (name, names) => {
+export const validateName = (name, names) => {
   if (typeof name !== 'string') {
     return { isValid: false, message: gettext('Name should be string') };
   }

@@ -112,7 +112,9 @@ class ItemDropdownMenu extends React.Component {
   onMenuItemClick = (event) => {
     let operation = Utils.getEventData(event, 'toggle') ?? event.currentTarget.getAttribute('data-toggle');
     let item = this.props.item;
+    this.props.unfreezeItem();
     this.props.onMenuItemClick(operation, event, item);
+    this.setState({ isItemMenuShow: false });
   };
 
   onDropDownMouseMove = () => {
@@ -176,7 +178,7 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown direction='down' isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
@@ -192,6 +194,10 @@ class ItemDropdownMenu extends React.Component {
         <ModalPortal>
           <DropdownMenu
             style={menuStyle}
+            className={this.props.menuClassname}
+            positionFixed
+            flip={false}
+            modifiers={{ preventOverflow: { boundariesElement: document.body } }}
           >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
@@ -214,13 +220,21 @@ class ItemDropdownMenu extends React.Component {
                       <span className="mr-auto">{menuItem.value}</span>
                       <i className="sf3-font-down sf3-font rotate-270"></i>
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu
+                      positionFixed
+                      flip={false}
+                      modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+                    >
+                      {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}
                       {menuItem.subOpList.map((item, index) => {
                         if (item == 'Divider') {
                           return <DropdownItem key={index} divider />;
                         } else {
                           return (
-                            <DropdownItem key={index} data-toggle={item.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{item.value}</DropdownItem>
+                            <DropdownItem key={index} data-toggle={item.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>
+                              {item.icon_dom || null}
+                              <span>{item.value}</span>
+                            </DropdownItem>
                           );
                         }
                       })}

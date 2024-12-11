@@ -109,7 +109,28 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
-  // view
+  // views
+  addFolder = (repoID, name) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/folders/';
+    const params = { name };
+    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
+
+  modifyFolder = (repoID, folder_id, folder_data) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/folders/';
+    const params = {
+      folder_id,
+      folder_data,
+    };
+    return this.req.put(url, params);
+  };
+
+  deleteFolder = (repoID, folder_id) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/folders/';
+    const params = { folder_id };
+    return this.req.delete(url, { data: params });
+  };
+
   listViews = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     return this.req.get(url);
@@ -120,7 +141,7 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  addView = (repoID, name, type = 'table') => {
+  addView = (repoID, name, type = 'table', folder_id = '') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     let params = {
       name,
@@ -130,12 +151,18 @@ class MetadataManagerAPI {
         sorts: VIEW_TYPE_DEFAULT_SORTS[type],
       }
     };
+    if (folder_id) {
+      params.folder_id = folder_id;
+    }
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
-  duplicateView = (repoID, viewId) => {
+  duplicateView = (repoID, viewId, folder_id = '') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/duplicate-view/';
-    const params = { view_id: viewId };
+    let params = { view_id: viewId };
+    if (folder_id) {
+      params.folder_id = folder_id;
+    }
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
@@ -148,19 +175,22 @@ class MetadataManagerAPI {
     return this.req.put(url, params);
   };
 
-  deleteView = (repoID, viewId) => {
+  deleteView = (repoID, viewId, folder_id = '') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
-    const params = {
-      view_id: viewId,
-    };
+    let params = { view_id: viewId };
+    if (folder_id) {
+      params.folder_id = folder_id;
+    }
     return this.req.delete(url, { data: params });
   };
 
-  moveView = (repoID, viewId, targetViewId) => {
+  moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/move-views/';
     const params = {
-      view_id: viewId,
-      target_view_id: targetViewId,
+      source_view_id,
+      source_folder_id,
+      target_view_id,
+      target_folder_id,
     };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };

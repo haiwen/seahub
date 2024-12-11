@@ -6,6 +6,8 @@ import { getTagId } from '../utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import AllTags from './all-tags';
 
+import './index.css';
+
 const TagsTreeView = ({ currentPath }) => {
   const { tagsData, selectTag } = useTags();
 
@@ -15,7 +17,7 @@ const TagsTreeView = ({ currentPath }) => {
   }, [tagsData]);
 
   return (
-    <div className="tree-view tree metadata-tree-view">
+    <div className="tree-view tree metadata-tree-view metadata-tree-view-tag">
       <div className="tree-node">
         <div className="children">
           {tags.slice(0, 20).map(tag => {

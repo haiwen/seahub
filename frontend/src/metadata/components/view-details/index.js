@@ -9,9 +9,9 @@ import { VIEW_TYPE } from '../../constants';
 import './index.css';
 
 const ViewDetails = ({ viewId, onClose }) => {
-  const { viewsMap } = useMetadata();
+  const { idViewMap } = useMetadata();
 
-  const view = useMemo(() => viewsMap[viewId], [viewId, viewsMap]);
+  const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
   const icon = useMemo(() => {
     const type = view.type;
     if (type === VIEW_TYPE.GALLERY) return `${mediaUrl}favicons/gallery.png`;

@@ -1,160 +1,173 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { Input } from 'reactstrap';
+import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
-import toaster from '../../components/toast';
-import Icon from '../../components/icon';
-import ViewItem from './view-item';
-import { AddView } from '../components/popover/view-popover';
+import ViewsFolder from './folder';
+import ViewItem from './view';
+import NewFolder from './new-folder';
+import NewView from './new-view';
 import { gettext } from '../../utils/constants';
 import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
-import { isValidViewName } from '../utils/validate';
-import { isEnter } from '../utils/hotkey';
+import { EVENT_BUS_TYPE, TREE_NODE_LEFT_INDENT, VIEWS_TYPE_FOLDER } from '../constants';
+import EventBus from '../../components/common/event-bus';
 
 import './index.css';
 
 const MetadataTreeView = ({ userPerm, currentPath }) => {
-  const canAdd = useMemo(() => {
-    if (userPerm !== 'rw' && userPerm !== 'admin') return false;
-    return true;
-  }, [userPerm]);
-  const [, setState] = useState(0);
   const {
     navigation,
-    viewsMap,
+    idViewMap,
     selectView,
     addView,
     duplicateView,
     deleteView,
     updateView,
-    moveView
   } = useMetadata();
-  const [newView, setNewView] = useState(null);
-  const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [newView, setNewView] = useState(null);
 
-  const inputRef = useRef(null);
+  const eventBus = EventBus.getInstance();
 
-  const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
-    updateView(viewId, update, () => {
-      setState(n => n + 1);
-      successCallback && successCallback();
-    }, failCallback);
-  }, [updateView]);
+  const dragMode = useRef(null);
 
-  const togglePopover = (event) => {
-    event.stopPropagation();
-    setShowAddViewPopover(!showAddViewPopover);
+  const setDragMode = useCallback((currDragMode) => {
+    dragMode.current = currDragMode;
+  }, []);
+
+  const getDragMode = useCallback(() => {
+    return dragMode.current;
+  }, []);
+
+  const canDeleteView = useMemo(() => {
+    return Object.keys(idViewMap).length > 1;
+  }, [idViewMap]);
+
+  const getFolders = useCallback(() => {
+    return navigation.filter((nav) => nav.type === VIEWS_TYPE_FOLDER);
+  }, [navigation]);
+
+  const getFoldersNames = useCallback(() => {
+    return getFolders().map((folder) => folder.name);
+  }, [getFolders]);
+
+  const prepareAddFolder = () => {
+    setShowInput(true);
   };
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const handlePopoverOptionClick = useCallback((option) => {
-    setNewView(option);
+  const generateNewViewDefaultName = useCallback(() => {
     let newViewName = gettext('Untitled');
-    const otherViewsName = Object.values(viewsMap).map(v => v.name);
+    const otherViewsName = Object.values(idViewMap).map(v => v.name);
     let i = 1;
     while (otherViewsName.includes(newViewName)) {
       newViewName = gettext('Untitled') + ' (' + (i++) + ')';
     }
-    setInputValue(newViewName);
+    return newViewName;
+  }, [idViewMap]);
+
+  const prepareAddView = useCallback(({ viewType }) => {
+    setNewView({ key: viewType, type: viewType, default_name: generateNewViewDefaultName() });
     setShowInput(true);
-    setShowAddViewPopover(false);
-  }, [viewsMap]);
+  }, [generateNewViewDefaultName]);
 
-  const handleInputSubmit = useCallback((event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const viewNames = Object.values(viewsMap).map(v => v.name);
-    const { isValid, message } = isValidViewName(inputValue, viewNames);
-    if (!isValid) {
-      toaster.danger(message);
-      inputRef.current.focus();
-      return;
-    }
-    addView(message, newView.type);
+  const closeNewView = useCallback(() => {
     setShowInput(false);
-  }, [inputValue, viewsMap, addView, newView]);
+  }, []);
 
-  const onKeyDown = useCallback((event) => {
-    if (isEnter(event)) {
-      handleInputSubmit(event);
-    }
-  }, [handleInputSubmit]);
+  const closeNewFolder = useCallback(() => {
+    setShowInput(false);
+  }, []);
+
+  const modifyView = useCallback((viewId, update, successCallback, failCallback) => {
+    updateView(viewId, update, () => {
+      successCallback && successCallback();
+    }, failCallback);
+  }, [updateView]);
+
+  const getMoveableFolders = useCallback((currentFolderId) => {
+    const folders = getFolders();
+    return folders.filter((folder) => folder._id !== currentFolderId);
+  }, [getFolders]);
+
+  const handleAddView = useCallback((name, type) => {
+    addView({ name, type });
+  }, [addView]);
+
+  const handleDuplicateView = useCallback((viewId) => {
+    duplicateView({ viewId });
+  }, [duplicateView]);
+
+  const handleDeleteView = useCallback((viewId, isSelected) => {
+    deleteView({ viewId, isSelected });
+  }, [deleteView]);
 
   useEffect(() => {
-    if (showInput && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
-    }
-  }, [showInput]);
+    const unsubscribeAddFolder = eventBus.subscribe(EVENT_BUS_TYPE.ADD_FOLDER, prepareAddFolder);
+    const unsubscribeAddView = eventBus.subscribe(EVENT_BUS_TYPE.ADD_VIEW, prepareAddView);
+    return () => {
+      unsubscribeAddFolder();
+      unsubscribeAddView();
+    };
+  }, [prepareAddView, eventBus]);
+
+  const renderFolder = (folder) => {
+    return (
+      <ViewsFolder
+        key={`metadata-views-folder-${folder._id}`}
+        leftIndent={TREE_NODE_LEFT_INDENT * 2}
+        folder={folder}
+        currentPath={currentPath}
+        userPerm={userPerm}
+        canDeleteView={canDeleteView}
+        getFoldersNames={getFoldersNames}
+        getMoveableFolders={getMoveableFolders}
+        generateNewViewDefaultName={generateNewViewDefaultName}
+        setDragMode={setDragMode}
+        getDragMode={getDragMode}
+        selectView={selectView}
+        modifyView={modifyView}
+      />
+    );
+  };
+
+  const renderView = (view) => {
+    const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
+    const isSelected = currentPath === viewPath;
+    return (
+      <ViewItem
+        key={`metadata-views-folder-${view._id}`}
+        leftIndent={TREE_NODE_LEFT_INDENT * 2}
+        canDelete={canDeleteView}
+        isSelected={isSelected}
+        userPerm={userPerm}
+        view={view}
+        getMoveableFolders={getMoveableFolders}
+        setDragMode={setDragMode}
+        getDragMode={getDragMode}
+        onClick={selectView}
+        onDelete={handleDeleteView}
+        onCopy={handleDuplicateView}
+        onUpdate={modifyView}
+      />
+    );
+  };
 
   return (
-    <>
-      <div className="tree-view tree metadata-tree-view">
-        <div className="tree-node">
-          <div className="children">
-            {navigation.map((item, index) => {
-              const view = viewsMap[item._id];
-              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
-              const isSelected = currentPath === viewPath;
-              return (
-                <ViewItem
-                  key={view._id}
-                  canDelete={index !== 0}
-                  isSelected={isSelected}
-                  userPerm={userPerm}
-                  view={view}
-                  onClick={(view) => selectView(view, isSelected)}
-                  onDelete={() => deleteView(view._id, isSelected)}
-                  onCopy={() => duplicateView(view._id)}
-                  onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
-                  onMove={moveView}
-                />
-              );
-            })}
-            {showInput && (
-              <div className="tree-view-inner sf-metadata-view-form">
-                <div className="left-icon">
-                  <Icon symbol={VIEW_TYPE_ICON[newView.type] || VIEW_TYPE.TABLE} className="metadata-views-icon" />
-                </div>
-                <Input
-                  className="sf-metadata-view-input"
-                  innerRef={inputRef}
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  autoFocus={true}
-                  onBlur={handleInputSubmit}
-                  onKeyDown={onKeyDown}
-                />
-              </div>
-            )}
-            {canAdd && (
-              <div id="sf-metadata-view-popover">
-                <CustomizeAddTool
-                  className="sf-metadata-add-view"
-                  callBack={togglePopover}
-                  footerName={gettext('Add view')}
-                  addIconClassName="sf-metadata-add-view-icon"
-                />
-              </div>
-            )}
-          </div>
+    <div className="tree-view tree metadata-tree-view">
+      <div className="tree-node">
+        <div className="children">
+          {navigation.map((item, index) => {
+            if (item.type === VIEWS_TYPE_FOLDER) {
+              return renderFolder(item, index);
+            }
+            const view = idViewMap[item._id];
+            return renderView(view, index);
+          })}
+          {showInput && (newView ?
+            <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 2} closeNewView={closeNewView} addView={handleAddView} /> :
+            <NewFolder closeNewFolder={closeNewFolder} />
+          )}
         </div>
       </div>
-      {showAddViewPopover && (
-        <AddView
-          target='sf-metadata-view-popover'
-          toggle={togglePopover}
-          onOptionClick={handlePopoverOptionClick}
-        />
-      )}
-    </>
+    </div>
   );
 };
 

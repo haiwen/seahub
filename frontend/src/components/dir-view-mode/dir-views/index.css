@@ -1,0 +1,29 @@
+.metadata-views-dropdown-menu .dropdown-header {
+  padding: 0 1rem;
+  font-weight: normal;
+  color: #666;
+}
+
+.metadata-views-dropdown-menu .dropdown-header,
+.metadata-views-dropdown-menu .dropdown-item {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.metadata-views-dropdown-menu .metadata-view-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #666;
+  fill: #666;
+}
+
+.metadata-views-dropdown-menu .dropdown-item:hover .metadata-view-icon,
+.metadata-views-dropdown-menu .dropdown-item:focus .metadata-view-icon,
+.metadata-views-dropdown-menu .dropdown-item:focus .sf3-font {
+  color: #fff;
+  fill: #fff;
+}

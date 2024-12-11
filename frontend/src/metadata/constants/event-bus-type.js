@@ -3,6 +3,10 @@
 */
 
 export const EVENT_BUS_TYPE = {
+  // folder/views
+  ADD_FOLDER: 'add_folder',
+  ADD_VIEW: 'add_view',
+
   QUERY_COLLABORATORS: 'query_collaborators',
   QUERY_COLLABORATOR: 'query_collaborator',
   UPDATE_TABLE_ROWS: 'update_table_rows',
