@@ -353,7 +353,9 @@ class ShareToGroup extends React.Component {
                   placeholder={gettext('Select groups')}
                   maxMenuHeight={200}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage: NoGroupMessage }}
+                  noOptionsMessage={NoGroupMessage}
+                  isSearchable={true}
+                  isClearable={true}
                 />
               </td>
               <td>
