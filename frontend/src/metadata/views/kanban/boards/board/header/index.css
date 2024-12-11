@@ -1,10 +1,14 @@
 .sf-metadata-view-kanban-board-header {
+  top: 16px;
+  position: sticky;
   height: 32px;
   width: 100%;
   overflow: visible;
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+  background-color: white;
+  z-index: 999;
 }
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title {
