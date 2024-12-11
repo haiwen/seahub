@@ -5,17 +5,17 @@ import metadataAPI from '../../api';
 import URLDecorator from '../../../utils/url-decorator';
 import toaster from '../../../components/toast';
 import Content from './content';
-import ContextMenu from './context-menu';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal, gettext } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
+import ContextMenu from '../../components/context-menu';
 
 import './index.css';
 
@@ -364,6 +364,34 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     updateSelectedImage(newSelectedImage);
   }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
 
+  const options = useMemo(() => {
+    return [
+      { value: 'download', label: gettext('Download') },
+      { value: 'delete', label: gettext('Delete') }
+    ];
+  }, []);
+
+  const handleOptionClick = useCallback(option => {
+    switch (option.value) {
+      case 'download':
+        handleDownload();
+        break;
+      case 'delete':
+        handleDelete();
+        break;
+      default:
+        break;
+    }
+  }, [handleDownload, handleDelete]);
+
+  const getContainerRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
+
+  const getContentRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
+
   return (
     <>
       <div
@@ -396,10 +424,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         )}
       </div>
       <ContextMenu
-        getContentRect={() => containerRef.current.getBoundingClientRect()}
-        getContainerRect={() => containerRef.current.getBoundingClientRect()}
-        onDownload={handleDownload}
-        onDelete={handleDelete}
+        options={options}
+        onOptionClick={handleOptionClick}
+        getContainerRect={getContainerRect}
+        getContentRect={getContentRect}
+        validTargets={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
       />
       {isImagePopupOpen && (
         <ModalPortal>

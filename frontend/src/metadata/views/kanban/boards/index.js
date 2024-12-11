@@ -6,22 +6,23 @@ import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
 import { CellType, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
-import { gettext, siteRoot } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
-import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../../../utils/column';
+import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
+import { openFile } from '../../../utils/open-file';
+import { checkIsDir, openInNewTab, openParentFolder } from '../../../utils/row';
+import URLDecorator from '../../../../utils/url-decorator';
+import { Utils, validateName } from '../../../../utils/utils';
+import { getRowById } from '../../../utils/table';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
-import { openFile } from '../../../utils/open-file';
-import { checkIsDir } from '../../../utils/row';
-import ContextMenu from '../context-menu';
-import URLDecorator from '../../../../utils/url-decorator';
-import { Utils, validateName } from '../../../../utils/utils';
 import toaster from '../../../../components/toast';
 import Rename from '../rename';
+import ContextMenu from '../../../components/context-menu';
 
 import './index.css';
 
@@ -226,47 +227,15 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setDragging(isDragging);
   }, []);
 
-  const handleRightClick = useCallback((event, recordId) => {
+  const onContextMenu = useCallback((event, recordId) => {
     event.preventDefault();
     setSelectedCard(recordId);
   }, []);
 
-  const handleOpenInNewTab = useCallback(() => {
-    if (!selectedCard) return;
-
-    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
-    if (!record) return;
-
-    const isDir = checkIsDir(record);
-    const parentDir = getParentDirFromRecord(record);
-    const name = getFileNameFromRecord(record);
-    const url = isDir
-      ? window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, name))
-      : `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, name))}`;
-
-    window.open(url, '_blank');
-  }, [selectedCard, metadata.rows, repoID]);
-
-  const handleOpenParentFolder = useCallback(() => {
-    if (!selectedCard) return;
-
-    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
-    if (!record) return;
-
-    let parentDir = getParentDirFromRecord(record);
-    if (!parentDir) return;
-    if (window.location.pathname.endsWith('/')) {
-      parentDir = parentDir.slice(1);
-    }
-
-    const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
-    window.open(url, '_blank');
-  }, [selectedCard, metadata.rows]);
-
   const handleDownload = useCallback(() => {
     if (!selectedCard) return;
 
-    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    const record = getRowById(metadata, selectedCard);
     if (!record) return;
 
     const path = getParentDirFromRecord(record);
@@ -275,12 +244,12 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, path: direntPath });
     location.href = url;
     return;
-  }, [selectedCard, metadata.rows, repoID]);
+  }, [selectedCard, metadata, repoID]);
 
   const handleDelete = useCallback(() => {
     if (!selectedCard) return;
 
-    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    const record = getRowById(metadata, selectedCard);
     if (!record) return;
 
     const parentDir = getParentDirFromRecord(record);
@@ -302,7 +271,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         toaster.success(msg.replace('{name}', fileNames[0]));
       },
     });
-  }, [store, metadata.rows, selectedCard, deleteFilesCallback]);
+  }, [store, metadata, selectedCard, deleteFilesCallback]);
 
   const handleRename = useCallback(() => {
     setIsRenameDialogShow(true);
@@ -311,7 +280,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const handleSubmitRename = useCallback((newName) => {
     if (!selectedCard) return;
 
-    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    const record = getRowById(metadata, selectedCard);
     if (!record) return;
 
     const { isValid, errMessage } = validateName(newName);
@@ -327,16 +296,14 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
       return;
     }
 
-    const column = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.FILE_NAME);
     const rowId = selectedCard;
     const oldName = getFileNameFromRecord(record);
     const path = Utils.joinPath(parentDir, oldName);
     const newPath = Utils.joinPath(parentDir, newName);
 
     const rowIds = [rowId];
-    const updates = { [column.key]: newName };
-    const oldValue = getCellValueByColumn(record, column);
-    const oldRowData = { [column.key]: oldValue };
+    const updates = { [PRIVATE_COLUMN_KEY.FILE_NAME]: newName };
+    const oldRowData = { [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName };
 
     store.modifyRecords(rowIds, { [rowId]: updates }, { [rowId]: updates }, { [rowId]: oldRowData }, { [rowId]: oldRowData }, false, true, {
       fail_callback: (error) => {
@@ -348,7 +315,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         setIsRenameDialogShow(false);
       },
     });
-  }, [store, metadata.columns, metadata.rows, selectedCard, renameFileCallback]);
+  }, [store, metadata, selectedCard, renameFileCallback]);
 
   useEffect(() => {
     if (!isDirentDetailShow) {
@@ -356,10 +323,61 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     }
   }, [isDirentDetailShow]);
 
-  const selectedRecord = useMemo(() => metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard), [metadata.rows, selectedCard]);
+  const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
   const isDir = useMemo(() => selectedRecord && checkIsDir(selectedRecord), [selectedRecord]);
   const oldName = useMemo(() => selectedRecord && getFileNameFromRecord(selectedRecord), [selectedRecord]);
   const isEmpty = boards.length === 0;
+
+  const options = useMemo(() => {
+    return [
+      { value: 'open-in-new-tab', label: isDir ? gettext('Open folder in new tab') : gettext('Open file in new tab') },
+      { value: 'open-parent-folder', label: gettext('Open parent folder') },
+      { value: 'download', label: gettext('Download') },
+      { value: 'delete', label: gettext('Delete') },
+      { value: 'rename', label: gettext('Rename') },
+    ];
+  }, [isDir]);
+
+  const handleOptionClick = useCallback((option) => {
+    if (!selectedCard) return;
+
+    const record = getRowById(metadata, selectedCard);
+    if (!record) return;
+
+    switch (option.value) {
+      case 'open-in-new-tab': {
+        openInNewTab(record);
+        break;
+      }
+      case 'open-parent-folder': {
+        openParentFolder(record);
+        break;
+      }
+      case 'download': {
+        handleDownload();
+        break;
+      }
+      case 'delete': {
+        handleDelete();
+        break;
+      }
+      case 'rename': {
+        handleRename();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }, [metadata, selectedCard, handleDownload, handleDelete, handleRename]);
+
+  const getContainerRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
+
+  const getContentRect = useCallback(() => {
+    return containerRef.current.getBoundingClientRect();
+  }, []);
 
   return (
     <>
@@ -396,7 +414,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
                     onOpenFile={onOpenFile}
                     onSelectCard={onSelectCard}
                     updateDragging={updateDragging}
-                    onRightClick={handleRightClick}
+                    onContextMenu={onContextMenu}
                   />
                 );
               })}
@@ -415,13 +433,11 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
         />
       )}
       <ContextMenu
-        isDir={isDir}
-        getContainerRect={() => containerRef.current.getBoundingClientRect()}
-        onOpenInNewTab={handleOpenInNewTab}
-        onOpenParentFolder={handleOpenParentFolder}
-        onDownload={handleDownload}
-        onDelete={handleDelete}
-        onRename={handleRename}
+        options={options}
+        getContainerRect={getContainerRect}
+        getContentRect={getContentRect}
+        onOptionClick={handleOptionClick}
+        validTargets={['.sf-metadata-kanban-card']}
       />
       {isRenameDialogShow && (
         <ModalPortal>

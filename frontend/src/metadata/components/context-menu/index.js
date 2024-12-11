@@ -1,49 +1,17 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
 import './index.css';
 
-const OPERATION = {
-  DOWNLOAD: 'download',
-  DELETE: 'delete',
-};
-
-const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete }) => {
+const ContextMenu = ({ options, getContainerRect, getContentRect, onOptionClick, validTargets }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  const options = useMemo(() => {
-    if (!visible) return [];
-    return [
-      { value: OPERATION.DOWNLOAD, label: gettext('Download') },
-      { value: OPERATION.DELETE, label: gettext('Delete') }
-    ];
-  }, [visible]);
 
   const handleHide = useCallback((event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setVisible(false);
     }
   }, [menuRef]);
-
-  const handleOptionClick = useCallback((event, option) => {
-    event.stopPropagation();
-    switch (option.value) {
-      case OPERATION.DOWNLOAD: {
-        onDownload && onDownload();
-        break;
-      }
-      case OPERATION.DELETE: {
-        onDelete && onDelete();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    setVisible(false);
-  }, [onDownload, onDelete]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -72,17 +40,22 @@ const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete })
     return menuStyles;
   }, [getContentRect, getContainerRect]);
 
+  const handleOptionClick = useCallback((event, option) => {
+    event.stopPropagation();
+    onOptionClick(option);
+    setVisible(false);
+  }, [onOptionClick]);
+
   useEffect(() => {
     const handleShow = (event) => {
       event.preventDefault();
       if (menuRef.current && menuRef.current.contains(event.target)) return;
 
-      if (event.target.tagName.toLowerCase() !== 'img') {
+      if (validTargets && !validTargets.some(target => event.target.closest(target))) {
         return;
       }
 
       setVisible(true);
-
       const position = getMenuPosition(event.clientX, event.clientY);
       setPosition(position);
     };
@@ -92,8 +65,7 @@ const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete })
     return () => {
       document.removeEventListener('contextmenu', handleShow);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getMenuPosition, validTargets]);
 
   useEffect(() => {
     if (visible) {
@@ -113,14 +85,14 @@ const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete })
   return (
     <div
       ref={menuRef}
-      className='dropdown-menu sf-metadata-contextmenu'
+      className="dropdown-menu sf-metadata-contextmenu"
       style={position}
     >
       {options.map((option, index) => (
         <button
           key={index}
-          className='dropdown-item sf-metadata-contextmenu-item'
-          onClick={(event) => handleOptionClick(event, option)}
+          className="dropdown-item sf-metadata-contextmenu-item"
+          onClick={(e) => handleOptionClick(e, option)}
         >
           {option.label}
         </button>
@@ -130,10 +102,14 @@ const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete })
 };
 
 ContextMenu.propTypes = {
-  getContentRect: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  })).isRequired,
   getContainerRect: PropTypes.func.isRequired,
-  onDownload: PropTypes.func,
-  onDelete: PropTypes.func,
+  getContentRect: PropTypes.func.isRequired,
+  onOptionClick: PropTypes.func.isRequired,
+  validTargets: PropTypes.array,
 };
 
 export default ContextMenu;

@@ -28,7 +28,7 @@ const Board = ({
   onOpenFile,
   onSelectCard,
   updateDragging,
-  onRightClick,
+  onContextMenu,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
@@ -94,7 +94,7 @@ const Board = ({
               displayColumns={displayColumns}
               onOpenFile={onOpenFile}
               onSelectCard={onSelectCard}
-              onRightClick={(e) => onRightClick(e, recordId)}
+              onContextMenu={(e) => onContextMenu(e, recordId)}
             />
           );
           if (readonly) return CardElement;
@@ -127,7 +127,7 @@ Board.propTypes = {
   onOpenFile: PropTypes.func.isRequired,
   onSelectCard: PropTypes.func.isRequired,
   updateDragging: PropTypes.func.isRequired,
-  onRightClick: PropTypes.func,
+  onContextMenu: PropTypes.func,
 };
 
 export default Board;

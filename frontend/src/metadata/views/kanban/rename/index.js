@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import { validateName } from '../../../../utils/utils';
+import { isEnter } from '../../../utils/hotkey';
 
 const Rename = ({ isDir, oldName, onSubmit, onCancel }) => {
   const [newName, setNewName] = useState('');
@@ -27,7 +28,7 @@ const Rename = ({ isDir, oldName, onSubmit, onCancel }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (isEnter(e)) {
       handleSubmit();
     }
   };
