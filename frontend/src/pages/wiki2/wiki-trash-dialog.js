@@ -62,6 +62,7 @@ class WikiTrashDialog extends React.Component {
       this.getItems(1);
     });
   };
+
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
   };
@@ -225,7 +226,8 @@ class Item extends React.Component {
         restored: true
       });
       this.props.getWikiConfig();
-      toaster.success(gettext('Successfully restored 1 item.'));
+      toaster.closeAll();
+      toaster.success(gettext('Restored 1 item'));
     }).catch((error) => {
       let errorMsg = '';
       if (error.response) {
@@ -236,7 +238,6 @@ class Item extends React.Component {
       toaster.danger(errorMsg);
     });
   };
-
 
   render() {
     const item = this.props.item;

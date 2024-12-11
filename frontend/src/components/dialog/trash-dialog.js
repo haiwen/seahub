@@ -358,7 +358,7 @@ class Item extends React.Component {
       this.setState({
         restored: true
       });
-      toaster.success(gettext('Successfully restored 1 item.'));
+      toaster.success(gettext('Restored 1 item'));
     }).catch((error) => {
       let errorMsg = '';
       if (error.response) {
