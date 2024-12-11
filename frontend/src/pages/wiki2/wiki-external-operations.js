@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
 import AddWikiPageDialog from '../../components/dialog/add-wiki-page-dialog';
+import { INSERT_POSITION } from './wiki-nav/constants';
 
 const propTypes = {
   onAddWikiPage: PropTypes.func.isRequired,
@@ -27,10 +28,7 @@ class WikiExternalOperations extends React.Component {
   }
 
   onAddWikiPageDialogDisplayed = ({ newFileName: wikiPageName = '' }) => {
-    this.setState({
-      wikiPageName,
-      isShowAddWikiPageDialog: true,
-    });
+    this.props.onAddWikiPage(false, wikiPageName, INSERT_POSITION.INNER);
   };
 
   changeAddWikiPageDialogDisplayed = () => {

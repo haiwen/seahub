@@ -193,6 +193,31 @@ class SidePanel extends PureComponent {
     });
   };
 
+  onAddWikiPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME, insert_position) => {
+    if (this.isAddingPage === true) return;
+    this.isAddingPage = true;
+    const currentPageId = this.props.getCurrentPageId();
+    wikiAPI.createWiki2Page(wikiId, pageName, currentPageId, insert_position).then(res => {
+      this.isAddingPage = false;
+      const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
+      this.addPageInside({
+        parentPageId: currentPageId,
+        page_id: page_id,
+        name: page_name,
+        icon: '',
+        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+        docUuid: doc_uuid,
+        successCallback: () => {},
+        errorCallback: () => {},
+        jumpToNewPage,
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.isAddingPage = false;
+    });
+  };
+
   render() {
     const { isLoading, config } = this.props;
     return (
@@ -209,7 +234,6 @@ class SidePanel extends PureComponent {
         <div className="wiki2-side-nav">
           {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>
-        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)}/>
         {this.state.isShowTrashDialog && (
           <WikiTrashDialog
             showTrashDialog={this.state.isShowTrashDialog}
@@ -218,7 +242,7 @@ class SidePanel extends PureComponent {
           />
         )}
         {wikiPermission !== 'public' &&
-          <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+          <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
         }
       </div>
     );
