@@ -576,5 +576,7 @@
   "Upload_local_video": "Загрузка_локального_видео",
   "The_current_version_does_not_support_>5MB_video_file": "Текущая_версия_не_поддерживает_видео_файл_>5_МБ",
   "Token_expired_Please_refresh_the_page": "Срок действия токена истек. Обновите страницу.",
-  "Link_to_page": "Ссылка на страницу"
+  "Link_to_page": "Ссылка на страницу",
+  "No_page_results": "Нет результатов на странице",
+  "Page": "Страница"
 }
