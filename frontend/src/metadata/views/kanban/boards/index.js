@@ -1,21 +1,27 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
+import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
-import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
+import { CellType, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
-import { gettext } from '../../../../utils/constants';
+import { gettext, siteRoot } from '../../../../utils/constants';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
-import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
+import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import { openFile } from '../../../utils/open-file';
 import { checkIsDir } from '../../../utils/row';
+import ContextMenu from '../context-menu';
+import URLDecorator from '../../../../utils/url-decorator';
+import { Utils, validateName } from '../../../../utils/utils';
+import toaster from '../../../../components/toast';
+import Rename from '../rename';
 
 import './index.css';
 
@@ -24,12 +30,16 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
   const [isDragging, setDragging] = useState(false);
+  const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
 
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail, deleteFilesCallback, renameFileCallback } = useMetadataView();
   const { collaborators } = useCollaborators();
+
+  const repoID = window.sfMetadataContext.getSetting('repoID');
+  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   const groupByColumn = useMemo(() => {
     const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
@@ -216,56 +226,184 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setDragging(isDragging);
   }, []);
 
+  const handleRightClick = useCallback((event, recordId) => {
+    event.preventDefault();
+    setSelectedCard(recordId);
+  }, []);
+
+  const handleOpenInNewTab = useCallback(() => {
+    if (!selectedCard) return;
+
+    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    if (!record) return;
+
+    const isDir = checkIsDir(record);
+    const parentDir = getParentDirFromRecord(record);
+    const name = getFileNameFromRecord(record);
+    const url = isDir
+      ? window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, name))
+      : `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, name))}`;
+
+    window.open(url, '_blank');
+  }, [selectedCard, metadata.rows, repoID]);
+
+  const handleOpenParentFolder = useCallback(() => {
+    if (!selectedCard) return;
+
+    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    if (!record) return;
+
+    let parentDir = getParentDirFromRecord(record);
+    if (!parentDir) return;
+    if (window.location.pathname.endsWith('/')) {
+      parentDir = parentDir.slice(1);
+    }
+
+    const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
+    window.open(url, '_blank');
+  }, [selectedCard, metadata.rows]);
+
+  const handleDownload = useCallback(() => {
+    if (!selectedCard) return;
+
+    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    if (!record) return;
+
+    const path = getParentDirFromRecord(record);
+    const name = getFileNameFromRecord(record);
+    const direntPath = Utils.joinPath(path, name);
+    const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, path: direntPath });
+    location.href = url;
+    return;
+  }, [selectedCard, metadata.rows, repoID]);
+
+  const handleDelete = useCallback(() => {
+    if (!selectedCard) return;
+
+    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    if (!record) return;
+
+    const parentDir = getParentDirFromRecord(record);
+    const name = getFileNameFromRecord(record);
+    if (!parentDir || !name) return;
+
+    const path = Utils.joinPath(parentDir, name);
+    const recordsIds = [selectedCard];
+    const paths = [path];
+    const fileNames = [name];
+
+    store.deleteRecords(recordsIds, {
+      fail_callback: (error) => {
+        toaster.danger(error);
+      },
+      success_callback: () => {
+        deleteFilesCallback(paths, fileNames);
+        const msg = gettext('Successfully deleted {name}');
+        toaster.success(msg.replace('{name}', fileNames[0]));
+      },
+    });
+  }, [store, metadata.rows, selectedCard, deleteFilesCallback]);
+
+  const handleRename = useCallback(() => {
+    setIsRenameDialogShow(true);
+  }, []);
+
+  const handleSubmitRename = useCallback((newName) => {
+    if (!selectedCard) return;
+
+    const record = metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard);
+    if (!record) return;
+
+    const { isValid, errMessage } = validateName(newName);
+    if (!isValid) {
+      toaster.danger(errMessage);
+      return;
+    }
+
+    const parentDir = getParentDirFromRecord(record);
+    if (store.checkDuplicatedName(newName, parentDir)) {
+      const errMessage = gettext('The name "{name}" is already taken. Please choose a different name.').replace('{name}', Utils.HTMLescape(newName));
+      toaster.danger(errMessage);
+      return;
+    }
+
+    const column = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.FILE_NAME);
+    const rowId = selectedCard;
+    const oldName = getFileNameFromRecord(record);
+    const path = Utils.joinPath(parentDir, oldName);
+    const newPath = Utils.joinPath(parentDir, newName);
+
+    const rowIds = [rowId];
+    const updates = { [column.key]: newName };
+    const oldValue = getCellValueByColumn(record, column);
+    const oldRowData = { [column.key]: oldValue };
+
+    store.modifyRecords(rowIds, { [rowId]: updates }, { [rowId]: updates }, { [rowId]: oldRowData }, { [rowId]: oldRowData }, false, true, {
+      fail_callback: (error) => {
+        toaster.danger(error);
+      },
+      success_callback: () => {
+        renameFileCallback(path, newPath);
+        toaster.success(gettext('Successfully renamed {name}').replace('{name}', oldName));
+        setIsRenameDialogShow(false);
+      },
+    });
+  }, [store, metadata.columns, metadata.rows, selectedCard, renameFileCallback]);
+
   useEffect(() => {
     if (!isDirentDetailShow) {
       setSelectedCard(null);
     }
   }, [isDirentDetailShow]);
 
+  const selectedRecord = useMemo(() => metadata.rows.find(row => getRecordIdFromRecord(row) === selectedCard), [metadata.rows, selectedCard]);
+  const isDir = useMemo(() => selectedRecord && checkIsDir(selectedRecord), [selectedRecord]);
+  const oldName = useMemo(() => selectedRecord && getFileNameFromRecord(selectedRecord), [selectedRecord]);
   const isEmpty = boards.length === 0;
-  const repoID = window.sfMetadataContext.getSetting('repoID');
-  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   return (
-    <div
-      ref={containerRef}
-      className={classnames('sf-metadata-view-kanban-boards', {
-        'sf-metadata-view-kanban-boards-text-wrap': textWrap,
-        'readonly': readonly,
-      })}
-      onClick={handleClickOutside}
-    >
-      <div className="smooth-dnd-container horizontal">
-        {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
-        {!isEmpty && (
-          <>
-            {boards.map((board, index) => {
-              return (
-                <Board
-                  key={board.key}
-                  board={board}
-                  index={index}
-                  readonly={readonly}
-                  displayEmptyValue={displayEmptyValue}
-                  displayColumnName={displayColumnName}
-                  haveFreezed={haveFreezed}
-                  groupByColumn={groupByColumn}
-                  titleColumn={titleColumn}
-                  displayColumns={displayColumns}
-                  selectedCard={selectedCard}
-                  onMove={onMove}
-                  deleteOption={deleteOption}
-                  onFreezed={onFreezed}
-                  onUnFreezed={onUnFreezed}
-                  onOpenFile={onOpenFile}
-                  onSelectCard={onSelectCard}
-                  updateDragging={updateDragging}
-                />
-              );
-            })}
-          </>
-        )}
-        {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
+    <>
+      <div
+        ref={containerRef}
+        className={classnames('sf-metadata-view-kanban-boards', {
+          'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+          'readonly': readonly,
+        })}
+        onClick={handleClickOutside}
+      >
+        <div className="smooth-dnd-container horizontal">
+          {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
+          {!isEmpty && (
+            <>
+              {boards.map((board, index) => {
+                return (
+                  <Board
+                    key={board.key}
+                    board={board}
+                    index={index}
+                    readonly={readonly}
+                    displayEmptyValue={displayEmptyValue}
+                    displayColumnName={displayColumnName}
+                    haveFreezed={haveFreezed}
+                    groupByColumn={groupByColumn}
+                    titleColumn={titleColumn}
+                    displayColumns={displayColumns}
+                    selectedCard={selectedCard}
+                    onMove={onMove}
+                    deleteOption={deleteOption}
+                    onFreezed={onFreezed}
+                    onUnFreezed={onUnFreezed}
+                    onOpenFile={onOpenFile}
+                    onSelectCard={onSelectCard}
+                    updateDragging={updateDragging}
+                    onRightClick={handleRightClick}
+                  />
+                );
+              })}
+            </>
+          )}
+          {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
+        </div>
       </div>
       {isImagePreviewerVisible && (
         <ImagePreviewer
@@ -276,7 +414,26 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
           closeImagePopup={closeImagePreviewer}
         />
       )}
-    </div>
+      <ContextMenu
+        isDir={isDir}
+        getContainerRect={() => containerRef.current.getBoundingClientRect()}
+        onOpenInNewTab={handleOpenInNewTab}
+        onOpenParentFolder={handleOpenParentFolder}
+        onDownload={handleDownload}
+        onDelete={handleDelete}
+        onRename={handleRename}
+      />
+      {isRenameDialogShow && (
+        <ModalPortal>
+          <Rename
+            isDir={isDir}
+            oldName={oldName}
+            onSubmit={handleSubmitRename}
+            onCancel={() => setIsRenameDialogShow(false)}
+          />
+        </ModalPortal>
+      )}
+    </>
   );
 };
 
