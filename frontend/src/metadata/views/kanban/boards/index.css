@@ -1,3 +1,14 @@
+.sf-metadata-kanban-title-backboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  background-color: white;
+  opacity: 1;
+  z-index: 99;
+}
+
 .sf-metadata-view-kanban-boards {
   flex: 1;
   height: 100%;
