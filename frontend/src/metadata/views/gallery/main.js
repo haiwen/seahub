@@ -355,7 +355,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       setIsImagePopupOpen(false);
       setImageIndex(0);
     } else {
-      const newIndex = Math.min(index, newImageItems.length - 1);
+      const newIndex = index >= newImageItems.length ? 0 : index;
       newSelectedImage = newImageItems[newIndex];
       setImageIndex(newIndex);
     }
