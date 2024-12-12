@@ -32,6 +32,12 @@ const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
     onChangeAPI(newValue.current);
   }, [value, newValue, onChangeAPI]);
 
+  const onBlur = useCallback((type) => {
+    if (type !== 'enter') return;
+    if (!isCellValueChanged(value, newValue.current, CellType.DATE)) return;
+    onChangeAPI(newValue.current);
+  }, [value, newValue, onChangeAPI]);
+
   const onClickOutside = useCallback((event) => {
     let className = getEventClassName(event);
     if (className.indexOf('rc-calendar') > -1 || !className && event.target.tagName === 'LI') return;
@@ -49,7 +55,7 @@ const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
       </div>
       {showEditor && (
         <ClickOutside onClickOutside={onClickOutside}>
-          <SfCalendar lang={lang} format={format} value={value} onChange={onChange} onClose={closeEditor} onClear={onClear} />
+          <SfCalendar lang={lang} format={format} value={value} onChange={onChange} onClose={closeEditor} onClear={onClear} onBlur={onBlur} />
         </ClickOutside>
       )}
     </>
