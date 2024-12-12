@@ -1,5 +1,5 @@
 .pdf-file-view {
-  overflow: hidden;
+  /*overflow: hidden; */
   position: relative;
   z-index: 0;
 }
@@ -35,7 +35,113 @@
 }
 
 #findbar {
-  top: -3px;
+  top: -7px;
+  right: 10px;
+  inset-inline-start: auto;
+  background: #fff;
+  padding: 8px;
+  margin: 0;
+}
+
+#findbar::before {
+  inset-inline-start: auto;
+  margin-inline-start: auto;
+  right: 272px;
+}
+
+#findbar::after {
+  inset-inline-start: auto;
+  margin-inline-start: auto;
+  border-bottom-color: #fff;
+  right: 273px;
+}
+
+#findbar * {
+  float: none;
+}
+
+#findbarInputContainer,
+#findbarOptionsOneContainer,
+#findbarOptionsTwoContainer {
+  height: auto;
+}
+
+#findInput {
+  margin: 0;
+  width: 300px;
+  height: 30px;
+  font-size: .875rem;
+}
+
+input#findInput {
+  font-size: .875rem;
+}
+
+#findInput[data-status="notFound"] {
+  background: inherit;
+}
+
+#findbarMiscContainer {
+  right: 5px;
+  top: 5px;
+}
+
+#findResultsCount {
+  background: inherit;
+  font-size: .75rem;
+  color: #666666;
+  padding: 0 8px;
+  margin: 0;
+}
+
+#findPrevious,
+#findNext {
+  font-size: 7px!important;
+  width: 20px;
+  height: 20px;
+  background: #e5e5e5;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+#findNext {
+  transform: rotate(180deg);
+}
+
+#findPrevious:hover,
+#findNext:hover {
+  background: #ededed;
+  color: #666666;
+}
+
+#findPrevious::before,
+#findNext::before {
+  mask-image: none;
+}
+
+#findPrevious .find-label,
+#findNext .find-label {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+#findbar .toolbarLabel {
+  margin: 0 0 0 .5rem;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 8px;
+  font-size: .875rem;
+  color: inherit;
+}
+
+.findbar .toolbarField[type="checkbox"]:checked + .toolbarLabel {
+  background: #e9e9e9!important;
+}
+
+#findbar .toolbarLabel:hover {
+  background: #f5f5f5;
 }
 
 .pdfViewer .page {

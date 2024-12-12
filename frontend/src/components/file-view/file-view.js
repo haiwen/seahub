@@ -31,7 +31,7 @@ const propTypes = {
 
 const { isStarred, isLocked, lockedByMe,
   repoID, filePath, filePerm, enableWatermark, userNickName,
-  fileName, repoEncrypted, isRepoAdmin
+  fileName, repoEncrypted, isRepoAdmin, fileType
 } = window.app.pageOptions;
 
 class FileView extends React.Component {
@@ -146,7 +146,7 @@ class FileView extends React.Component {
                 />
               }
             </div>
-            <div className={`file-view-body flex-auto d-flex o-hidden ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
+            <div className={`file-view-body flex-auto d-flex ${fileType == 'PDF' ? '' : 'o-hidden'} ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
               {(isOnlyofficeFile && !isHeaderShown) &&
                 <IconButton
                   id="unfold-onlyoffice-file-view-header"

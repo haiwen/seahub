@@ -4798,6 +4798,7 @@ class PDFFindBar {
     });
   }
   updateUIState(state, previous, matchesCount) {
+    /*
     let findMsg = Promise.resolve("");
     let status = "";
     switch (state) {
@@ -4815,38 +4816,24 @@ class PDFFindBar {
         break;
     }
     this.findField.setAttribute("data-status", status);
+    */
     this.findField.setAttribute("aria-invalid", state === _pdf_find_controller.FindState.NOT_FOUND);
+    // custom for seafile: don't display it.
+    /*
     findMsg.then(msg => {
       this.findMsg.setAttribute("data-status", status);
       this.findMsg.textContent = msg;
       this.#adjustWidth();
     });
+    */
     this.updateResultsCount(matchesCount);
   }
   updateResultsCount({
     current = 0,
     total = 0
   } = {}) {
-    const limit = MATCHES_COUNT_LIMIT;
-    let matchCountMsg = Promise.resolve("");
-    if (total > 0) {
-      if (total > limit) {
-        let key = "find_match_count_limit";
-        matchCountMsg = this.l10n.get(key, {
-          limit
-        });
-      } else {
-        let key = "find_match_count";
-        matchCountMsg = this.l10n.get(key, {
-          current,
-          total
-        });
-      }
-    }
-    matchCountMsg.then(msg => {
-      this.findResultsCount.textContent = msg;
-      this.#adjustWidth();
-    });
+    const matchCountMsg = `${current} / ${total}`;
+    this.findResultsCount.textContent = matchCountMsg;
   }
   open() {
     if (!this.opened) {
@@ -13588,7 +13575,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -13602,14 +13589,14 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
@@ -13668,7 +13655,7 @@ function getViewerConfiguration() {
       zoomOut: document.getElementById("zoomOut"),
       viewFind: document.getElementById("viewFind"),
       openFile: document.getElementById("openFile"),
-      // custom for seafile: 'seafile-pdf-print' only exists in 'pdf file view' page, not in 'shared/history/trash' file view pages
+      // custom for seafile: 'seafile-pdf-print' only exists in 'pdf file view' page, not in 'shared/history/trash' pdf file view pages
       print: document.getElementById("seafile-pdf-print") || document.getElementById("print"),
       editorFreeTextButton: document.getElementById("editorFreeText"),
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
@@ -13717,7 +13704,8 @@ function getViewerConfiguration() {
     },
     findBar: {
       bar: document.getElementById("findbar"),
-      toggleButton: document.getElementById("viewFind"),
+      // custom for seafile: only in 'pdf file view' page.
+      toggleButton: document.getElementById("seafile-pdf-find") || document.getElementById("viewFind"),
       findField: document.getElementById("findInput"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),

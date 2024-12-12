@@ -62,17 +62,23 @@ class PDFViewer extends React.Component {
           {/* <!-- sidebarContainer -->*/}
 
           <div id="mainContainer">
-            <div className="findbar hidden doorHanger" id="findbar">
+            <div className="findbar hidden doorHanger d-flex align-items-center" id="findbar">
               <div id="findbarInputContainer">
                 <input id="findInput" className="toolbarField" title="Find" placeholder="Find in document…" tabIndex="91" data-l10n-id="find_input" aria-invalid="false" />
-                <div className="splitToolbarButton">
-                  <button id="findPrevious" className="toolbarButton" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
-                    <span data-l10n-id="find_previous_label">Previous</span>
-                  </button>
-                  <div className="splitToolbarButtonSeparator"></div>
-                  <button id="findNext" className="toolbarButton" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
-                    <span data-l10n-id="find_next_label">Next</span>
-                  </button>
+                <div className="position-absolute d-flex align-items-center" id="findbarMiscContainer">
+                  <div id="findbarMessageContainer" aria-live="polite">
+                    <span id="findResultsCount"></span>
+                    <span id="findMsg" className="toolbarLabel d-none"></span>
+                  </div>
+                  <div className="splitToolbarButton m-0">
+                    <button id="findPrevious" className="border-0 sf3-font sf3-font-drop-down" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
+                      <span data-l10n-id="find_previous_label" className="find-label">Previous</span>
+                    </button>
+                    <div className="splitToolbarButtonSeparator d-none"></div>
+                    <button id="findNext" className="border-0 sf3-font sf3-font-drop-down" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
+                      <span data-l10n-id="find_next_label" className="find-label">Next</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -87,11 +93,6 @@ class PDFViewer extends React.Component {
                 <label htmlFor="findMatchDiacritics" className="toolbarLabel" data-l10n-id="find_match_diacritics_label">Match Diacritics</label>
                 <input type="checkbox" id="findEntireWord" className="toolbarField" tabIndex="97" />
                 <label htmlFor="findEntireWord" className="toolbarLabel" data-l10n-id="find_entire_word_label">Whole Words</label>
-              </div>
-
-              <div id="findbarMessageContainer" aria-live="polite">
-                <span id="findResultsCount" className="toolbarLabel"></span>
-                <span id="findMsg" className="toolbarLabel"></span>
               </div>
             </div>
             {/* <!-- findbar -->*/}
