@@ -202,11 +202,11 @@ class GenerateFileTags(APIView):
             from seafevents.repo_metadata.constants import TAGS_TABLE
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-            sql = f'SELECT _tag_name FROM `{TAGS_TABLE.name}`'
+            sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}`'
             query_result = metadata_server_api.query_rows(sql).get('results', [])
 
             params['file_type'] = 'doc'
-            params['candidate_tags'] = [item['_tag_name'] for item in query_result]
+            params['candidate_tags'] = [item[TAGS_TABLE.columns.name.name].strip() for item in query_result]
 
         try:
             resp = generate_file_tags(params)
