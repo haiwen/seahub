@@ -227,59 +227,56 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   return (
-    <>
-      <div className="sf-metadata-kanban-title-backboard"></div>
-      <div
-        ref={containerRef}
-        className={classnames('sf-metadata-view-kanban-boards', {
-          'sf-metadata-view-kanban-boards-text-wrap': textWrap,
-          'readonly': readonly,
-        })}
-        onClick={handleClickOutside}
-      >
-        <div className="smooth-dnd-container horizontal">
-          {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
-          {!isEmpty && (
-            <>
-              {boards.map((board, index) => {
-                return (
-                  <Board
-                    key={board.key}
-                    board={board}
-                    index={index}
-                    readonly={readonly}
-                    displayEmptyValue={displayEmptyValue}
-                    displayColumnName={displayColumnName}
-                    haveFreezed={haveFreezed}
-                    groupByColumn={groupByColumn}
-                    titleColumn={titleColumn}
-                    displayColumns={displayColumns}
-                    selectedCard={selectedCard}
-                    onMove={onMove}
-                    deleteOption={deleteOption}
-                    onFreezed={onFreezed}
-                    onUnFreezed={onUnFreezed}
-                    onOpenFile={onOpenFile}
-                    onSelectCard={onSelectCard}
-                    updateDragging={updateDragging}
-                  />
-                );
-              })}
-            </>
-          )}
-          {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
-        </div>
-        {isImagePreviewerVisible && (
-          <ImagePreviewer
-            repoID={repoID}
-            repoInfo={repoInfo}
-            record={currentImageRef.current}
-            table={metadata}
-            closeImagePopup={closeImagePreviewer}
-          />
+    <div
+      ref={containerRef}
+      className={classnames('sf-metadata-view-kanban-boards', {
+        'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+        'readonly': readonly,
+      })}
+      onClick={handleClickOutside}
+    >
+      <div className="smooth-dnd-container horizontal">
+        {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
+        {!isEmpty && (
+          <>
+            {boards.map((board, index) => {
+              return (
+                <Board
+                  key={board.key}
+                  board={board}
+                  index={index}
+                  readonly={readonly}
+                  displayEmptyValue={displayEmptyValue}
+                  displayColumnName={displayColumnName}
+                  haveFreezed={haveFreezed}
+                  groupByColumn={groupByColumn}
+                  titleColumn={titleColumn}
+                  displayColumns={displayColumns}
+                  selectedCard={selectedCard}
+                  onMove={onMove}
+                  deleteOption={deleteOption}
+                  onFreezed={onFreezed}
+                  onUnFreezed={onUnFreezed}
+                  onOpenFile={onOpenFile}
+                  onSelectCard={onSelectCard}
+                  updateDragging={updateDragging}
+                />
+              );
+            })}
+          </>
         )}
+        {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
       </div>
-    </>
+      {isImagePreviewerVisible && (
+        <ImagePreviewer
+          repoID={repoID}
+          repoInfo={repoInfo}
+          record={currentImageRef.current}
+          table={metadata}
+          closeImagePopup={closeImagePreviewer}
+        />
+      )}
+    </div>
   );
 };
 

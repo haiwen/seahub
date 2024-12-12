@@ -1,7 +1,10 @@
 .sf-metadata-view-kanban .sf-metadata-kanban-add-board-button {
+  position: sticky;
+  top: 16px;
   min-width: 300px;
   height: 2rem;
   padding: 0 8px;
+  margin-top: 16px;
   display: flex;
   justify-content: start;
   align-items: center;
