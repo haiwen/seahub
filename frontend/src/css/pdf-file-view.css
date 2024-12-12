@@ -89,29 +89,35 @@ input#findInput {
 #findResultsCount {
   background: inherit;
   font-size: .75rem;
+  line-height: 20px;
   color: #666666;
   padding: 0 8px;
   margin: 0;
 }
 
 #findPrevious,
-#findNext {
-  font-size: 7px!important;
+#findNext,
+#findClearQuery {
+  font-size: .75rem!important;
+  color: #666666;
   width: 20px;
   height: 20px;
-  background: #e5e5e5;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
+  background: transparent;
+  border-radius: 3px;
 }
 
-#findNext {
+#findPrevious {
   transform: rotate(180deg);
 }
 
+#findClearQuery {
+  font-size: .875rem!important;
+}
+
 #findPrevious:hover,
-#findNext:hover {
-  background: #ededed;
-  color: #666666;
+#findNext:hover,
+#findClearQuery:hover {
+  background: #efefef;
 }
 
 #findPrevious::before,

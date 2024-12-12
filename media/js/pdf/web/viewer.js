@@ -4742,12 +4742,17 @@ class PDFFindBar {
     this.findResultsCount = options.findResultsCount;
     this.findPreviousButton = options.findPreviousButton;
     this.findNextButton = options.findNextButton;
+    this.clearQueryButton = options.clearQueryButton;
     this.eventBus = eventBus;
     this.l10n = l10n;
     this.toggleButton.addEventListener("click", () => {
       this.toggle();
     });
     this.findField.addEventListener("input", () => {
+      this.dispatchEvent("");
+    });
+    this.clearQueryButton.addEventListener("click", () => {
+      this.findField.value = '';
       this.dispatchEvent("");
     });
     this.bar.addEventListener("keydown", e => {
@@ -4798,34 +4803,12 @@ class PDFFindBar {
     });
   }
   updateUIState(state, previous, matchesCount) {
-    /*
-    let findMsg = Promise.resolve("");
-    let status = "";
-    switch (state) {
-      case _pdf_find_controller.FindState.FOUND:
-        break;
-      case _pdf_find_controller.FindState.PENDING:
-        status = "pending";
-        break;
-      case _pdf_find_controller.FindState.NOT_FOUND:
-        findMsg = this.l10n.get("find_not_found");
-        status = "notFound";
-        break;
-      case _pdf_find_controller.FindState.WRAPPED:
-        findMsg = this.l10n.get(`find_reached_${previous ? "top" : "bottom"}`);
-        break;
-    }
-    this.findField.setAttribute("data-status", status);
-    */
     this.findField.setAttribute("aria-invalid", state === _pdf_find_controller.FindState.NOT_FOUND);
-    // custom for seafile: don't display it.
-    /*
-    findMsg.then(msg => {
-      this.findMsg.setAttribute("data-status", status);
-      this.findMsg.textContent = msg;
-      this.#adjustWidth();
-    });
-    */
+    if (this.findField.value.trim() != '') {
+      this.clearQueryButton.classList.remove('hidden');
+    } else {
+      this.clearQueryButton.classList.add('hidden');
+    }
     this.updateResultsCount(matchesCount);
   }
   updateResultsCount({
@@ -4834,6 +4817,14 @@ class PDFFindBar {
   } = {}) {
     const matchCountMsg = `${current} / ${total}`;
     this.findResultsCount.textContent = matchCountMsg;
+
+    if (total > 0) {
+      this.findPreviousButton.classList.remove('hidden');
+      this.findNextButton.classList.remove('hidden');
+    } else {
+      this.findPreviousButton.classList.add('hidden');
+      this.findNextButton.classList.add('hidden');
+    }
   }
   open() {
     if (!this.opened) {
@@ -13714,7 +13705,8 @@ function getViewerConfiguration() {
       findMsg: document.getElementById("findMsg"),
       findResultsCount: document.getElementById("findResultsCount"),
       findPreviousButton: document.getElementById("findPrevious"),
-      findNextButton: document.getElementById("findNext")
+      findNextButton: document.getElementById("findNext"),
+      clearQueryButton: document.getElementById("findClearQuery")
     },
     passwordOverlay: {
       dialog: document.getElementById("passwordDialog"),
