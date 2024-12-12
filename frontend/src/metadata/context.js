@@ -230,9 +230,9 @@ class Context {
     return this.metadataAPI.imageCaption(repoID, filePath, lang);
   };
 
-  imageTags = (filePath) => {
+  generateFileTags = (filePath) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.imageTags(repoID, filePath);
+    return this.metadataAPI.generateFileTags(repoID, filePath);
   };
 
   extractFileDetails = (objIds) => {
