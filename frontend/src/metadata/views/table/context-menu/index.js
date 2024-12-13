@@ -4,6 +4,7 @@ import toaster from '../../../../components/toast';
 import { gettext, siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
+import { useMetadataStatus } from '../../../../hooks';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
@@ -39,6 +40,7 @@ const ContextMenu = (props) => {
   const [fileTagsRecord, setFileTagsRecord] = useState(null);
 
   const { metadata } = useMetadataView();
+  const { enableOCR } = useMetadataStatus();
 
   const checkCanModifyRow = (row) => {
     return window.sfMetadataContext.canModifyRow(row);
@@ -60,7 +62,6 @@ const ContextMenu = (props) => {
     const { columns } = metadata;
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const tagsColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.TAGS);
-    const ocrResultColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.OCR_RESULT);
     let list = [];
 
     // handle selected multiple cells
@@ -139,7 +140,7 @@ const ContextMenu = (props) => {
       }
     }
 
-    if (ocrResultColumn && canModifyRow && Utils.imageCheck(fileName)) {
+    if (enableOCR && canModifyRow && Utils.imageCheck(fileName)) {
       list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
     }
 
@@ -161,7 +162,7 @@ const ContextMenu = (props) => {
     }
 
     return list;
-  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, getAbleDeleteRecords]);
+  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, enableOCR, getAbleDeleteRecords]);
 
   const handleHide = useCallback((event) => {
     if (!menuRef.current && visible) {
@@ -261,7 +262,7 @@ const ContextMenu = (props) => {
   }, []);
 
   const ocr = useCallback((record) => {
-    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR_RESULT;
+    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
     let path = '';
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
@@ -279,8 +280,8 @@ const ContextMenu = (props) => {
       const recordIds = [updateRecordId];
       let idRecordUpdates = {};
       let idOriginalRecordUpdates = {};
-      idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: `\n\n\`\`\`json\n${JSON.stringify(ocrResult)}\n\`\`\`\n\n\n` };
-      idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: `\n\n\`\`\`json\n${JSON.stringify(ocrResult)}\n\`\`\`\n\n\n` };
+      idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+      idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
       updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
     }).catch(error => {
       const errorMessage = gettext('OCR failed');

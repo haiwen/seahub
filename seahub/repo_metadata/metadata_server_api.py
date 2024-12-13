@@ -55,6 +55,8 @@ def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
         column_name = column.get('name')
         if column_name == METADATA_TABLE.columns.face_vectors.name:
             continue
+        elif column_name == METADATA_TABLE.columns.ocr.name:
+            continue
         column_name_str = '`%s`, ' % column_name
         query_fields_str += column_name_str
     query_fields_str = query_fields_str.strip(', ')
