@@ -40,18 +40,14 @@ class ActivitiesView(APIView):
         except ValueError:
             per_page = 25
 
-        try:
-            op_user = request.GET.get('op_user', '')
-        except ValueError:
-            op_user = ''
-
+        op_user = request.GET.get('op_user', '')
         start = (page - 1) * per_page
         count = per_page
 
         email = request.user.username
 
         try:
-            events = get_user_activities(email, op_user, start, count)
+            events = get_user_activities(email, start, count, op_user)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
