@@ -27,7 +27,7 @@ from seahub.weixin.settings import ENABLE_WEIXIN, \
         WEIXIN_OAUTH_APP_ID, WEIXIN_OAUTH_APP_SECRET, \
         WEIXIN_OAUTH_SCOPE, WEIXIN_OAUTH_RESPONSE_TYPE, WEIXIN_OAUTH_QR_CONNECT_URL, \
         WEIXIN_OAUTH_GRANT_TYPE, WEIXIN_OAUTH_ACCESS_TOKEN_URL, \
-        WEIXIN_OAUTH_USER_INFO_URL
+        WEIXIN_OAUTH_USER_INFO_URL, WEIXIN_OAUTH_CREATE_UNKNOWN_USER
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +94,7 @@ def weixin_oauth_callback(request):
         email = None
         is_new_user = True
 
-    if is_new_user:
+    if is_new_user and not WEIXIN_OAUTH_CREATE_UNKNOWN_USER:
         return render(request, 'weixin/weixin_user_not_found_error.html')
 
     try:
