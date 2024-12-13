@@ -35,6 +35,7 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 logger = logging.getLogger(__name__)
 
