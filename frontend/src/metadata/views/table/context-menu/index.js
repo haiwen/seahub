@@ -4,6 +4,7 @@ import toaster from '../../../../components/toast';
 import { gettext, siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
+import { useMetadataStatus } from '../../../../hooks';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
@@ -12,14 +13,13 @@ import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
 } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
 
-import './index.css';
-
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
   COPY_SELECTED: 'copy-selected',
   OPEN_PARENT_FOLDER: 'open-parent-folder',
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
+  OCR: 'ocr',
   IMAGE_CAPTION: 'image-caption',
   FILE_TAGS: 'file-tags',
   DELETE_RECORD: 'delete-record',
@@ -40,6 +40,7 @@ const ContextMenu = (props) => {
   const [fileTagsRecord, setFileTagsRecord] = useState(null);
 
   const { metadata } = useMetadataView();
+  const { enableOCR } = useMetadataStatus();
 
   const checkCanModifyRow = (row) => {
     return window.sfMetadataContext.canModifyRow(row);
@@ -139,6 +140,10 @@ const ContextMenu = (props) => {
       }
     }
 
+    if (enableOCR && canModifyRow && Utils.imageCheck(fileName)) {
+      list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
+    }
+
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
     }
@@ -157,7 +162,7 @@ const ContextMenu = (props) => {
     }
 
     return list;
-  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, getAbleDeleteRecords]);
+  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, enableOCR, getAbleDeleteRecords]);
 
   const handleHide = useCallback((event) => {
     if (!menuRef.current && visible) {
@@ -256,6 +261,34 @@ const ContextMenu = (props) => {
     setFileTagsRecord(record);
   }, []);
 
+  const ocr = useCallback((record) => {
+    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
+    let path = '';
+    let idOldRecordData = {};
+    let idOriginalOldRecordData = {};
+    const fileName = getFileNameFromRecord(record);
+    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
+      const parentDir = getParentDirFromRecord(record);
+      path = Utils.joinPath(parentDir, fileName);
+      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
+      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
+    }
+    if (path === '') return;
+    window.sfMetadataContext.ocr(path).then(res => {
+      const ocrResult = res.data.ocr_result;
+      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+      const recordIds = [updateRecordId];
+      let idRecordUpdates = {};
+      let idOriginalRecordUpdates = {};
+      idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+      idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+    }).catch(error => {
+      const errorMessage = gettext('OCR failed');
+      toaster.danger(errorMessage);
+    });
+  }, [updateRecords]);
+
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
     if (recordObjIds.length > 50) {
@@ -331,6 +364,12 @@ const ContextMenu = (props) => {
         toggleFileTagsRecord(record);
         break;
       }
+      case OPERATION.OCR: {
+        const { record } = option;
+        if (!record) break;
+        ocr(record);
+        break;
+      }
       case OPERATION.DELETE_RECORD: {
         const { record } = option;
         if (!record || !record._id || !deleteRecords) break;
@@ -374,7 +413,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

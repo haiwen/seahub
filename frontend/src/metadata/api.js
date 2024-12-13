@@ -306,6 +306,26 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  // ocr
+  openOCR = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';
+    return this.req.put(url);
+  };
+
+  closeOCR = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';
+    return this.req.delete(url);
+  };
+
+  ocr = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/ocr/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+    };
+    return this.req.post(url, params);
+  };
+
 }
 
 const metadataAPI = new MetadataManagerAPI();

@@ -16,7 +16,7 @@ from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH, \
-    init_tags, remove_tags_table, add_init_face_recognition_task
+    init_tags, remove_tags_table, add_init_face_recognition_task, init_ocr, remove_ocr_column
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -51,6 +51,8 @@ class MetadataManage(APIView):
         is_tags_enabled = False
         tags_lang = ''
         details_settings = '{}'
+        is_ocr_enabled = False
+
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
@@ -58,9 +60,11 @@ class MetadataManage(APIView):
                 details_settings = record.details_settings
                 if not details_settings:
                     details_settings = '{}'
-            if record and record.tags_enabled:
-                is_tags_enabled = True
-                tags_lang = record.tags_lang
+                if record.tags_enabled:
+                    is_tags_enabled = True
+                    tags_lang = record.tags_lang
+                if record.ocr_enabled:
+                    is_ocr_enabled = True
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -70,7 +74,8 @@ class MetadataManage(APIView):
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
             'tags_lang': tags_lang,
-            'details_settings': details_settings
+            'details_settings': details_settings,
+            'ocr_enabled': is_ocr_enabled
         })
 
     def put(self, request, repo_id):
@@ -154,6 +159,7 @@ class MetadataManage(APIView):
             record.face_recognition_enabled = False
             record.tags_enabled = False
             record.details_settings = '{}'
+            record.ocr_enabled = False
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
@@ -204,6 +210,78 @@ class MetadataDetailsSettingsView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
+
+
+class MetadataOCRManageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id):
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            metadata.ocr_enabled = True
+            metadata.save()
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        init_ocr(metadata_server_api)
+
+        return Response({'success': True})
+
+    def delete(self, request, repo_id):
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check dose the repo have opened metadata manage
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled or not record.ocr_enabled:
+            error_msg = f'The repo {repo_id} has disabled the OCR.'
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        try:
+            remove_ocr_column(metadata_server_api)
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            record.ocr_enabled = False
+            record.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
 
 class MetadataRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 
-const TurnOffConfirmDialog = ({ toggle, submit }) => {
+const TurnOffConfirmDialog = ({ title, children, toggle, submit }) => {
   return (
     <Modal isOpen={true} toggle={toggle}>
-      <ModalHeader toggle={toggle}>{gettext('Turn off tags')}</ModalHeader>
+      <ModalHeader toggle={toggle}>{title}</ModalHeader>
       <ModalBody>
-        <p>{gettext('Do you really want to turn off tags? Existing tags will all be deleted.')}</p>
+        {children}
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={toggle}>{gettext('Cancel')}</Button>
@@ -19,6 +19,8 @@ const TurnOffConfirmDialog = ({ toggle, submit }) => {
 };
 
 TurnOffConfirmDialog.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.any,
   toggle: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired
 };

@@ -40,3 +40,9 @@ def generate_file_tags(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-file-tags/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
+
+def ocr(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/ocr/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp

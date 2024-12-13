@@ -37,6 +37,9 @@ export const PRIVATE_COLUMN_KEY = {
 
   // tag
   TAGS: '_tags',
+
+  // ocr
+  OCR: '_ocr',
 };
 
 export const PRIVATE_COLUMN_KEYS = [
@@ -71,6 +74,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FACE_VECTORS,
   PRIVATE_COLUMN_KEY.FILE_RATE,
   PRIVATE_COLUMN_KEY.TAGS,
+  PRIVATE_COLUMN_KEY.OCR,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [
