@@ -9,7 +9,7 @@
   padding: 16px 0 0 16px;
   margin-bottom: 8px;
   background-color: white;
-  z-index: 999;
+  z-index: 1;
 }
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title {
