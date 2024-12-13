@@ -17,12 +17,11 @@ import '../../css/transfer-dialog.css';
 const propTypes = {
   itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
-  submit: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
   canTransferToDept: PropTypes.bool,
   isOrgAdmin: PropTypes.bool,
   isSysAdmin: PropTypes.bool,
   isDepAdminTransfer: PropTypes.bool,
-
 };
 
 const TRANS_USER = 'transUser';
@@ -47,17 +46,9 @@ class TransferDialog extends React.Component {
   };
 
   submit = () => {
-    const { activeTab, reshare } = this.state;
-    if (activeTab === TRANS_DEPART) {
-      let department = this.state.selectedOption;
-      this.props.submit(department, reshare);
-    } else if (activeTab === TRANS_USER) {
-      let selectedOption = this.state.selectedOption;
-      if (selectedOption && selectedOption[0]) {
-        let user = selectedOption[0];
-        this.props.submit(user, reshare);
-      }
-    }
+    const { activeTab, reshare, selectedOption } = this.state;
+    const email = activeTab === TRANS_DEPART ? selectedOption.email : selectedOption[0].email;
+    this.props.onTransferRepo(email, reshare);
   };
 
   componentDidMount() {
@@ -88,13 +79,13 @@ class TransferDialog extends React.Component {
   }
 
   updateOptions = (departmentsRes) => {
-    departmentsRes.data.forEach(item => {
+    this.options = departmentsRes.data.map(item => {
       let option = {
         value: item.name,
         email: item.email,
         label: item.name,
       };
-      this.options.push(option);
+      return option;
     });
   };
 
@@ -211,9 +202,14 @@ class TransferDialog extends React.Component {
   };
 
   render() {
+    const { selectedOption } = this.state;
     const { itemName: repoName } = this.props;
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+    let buttonDisabled = false;
+    if (selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)) {
+      buttonDisabled = true;
+    }
     return (
       <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
@@ -224,7 +220,7 @@ class TransferDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.submit} disabled={buttonDisabled}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

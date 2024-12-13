@@ -250,9 +250,9 @@ class MylibRepoListItem extends React.Component {
     this.setState({ isRenaming: !this.state.isRenaming });
   };
 
-  onTransferRepo = (user, reshare) => {
+  onTransferRepo = (email, reshare) => {
     let repoID = this.props.repo.repo_id;
-    userAPI.transferRepo(repoID, user.email, reshare).then(res => {
+    userAPI.transferRepo(repoID, email, reshare).then(res => {
       this.props.onTransferRepo(repoID);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
@@ -487,7 +487,7 @@ class MylibRepoListItem extends React.Component {
           <ModalPortal>
             <TransferDialog
               itemName={repo.repo_name}
-              submit={this.onTransferRepo}
+              onTransferRepo={this.onTransferRepo}
               toggleDialog={this.onTransferToggle}
             />
           </ModalPortal>
