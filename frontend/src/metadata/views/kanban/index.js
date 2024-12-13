@@ -11,6 +11,7 @@ const Kanban = () => {
   const [isShowSettings, setShowSettings] = useState(false);
 
   const { metadata, store } = useMetadataView();
+  console.log(metadata);
 
   const columns = useMemo(() => metadata.view.columns, [metadata.view.columns]);
 

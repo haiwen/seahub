@@ -8,6 +8,7 @@ import {
   MetadataStatusManagementDialog as LibExtendedPropertiesSettingPanel,
   MetadataFaceRecognitionDialog as LibFaceRecognitionSettingPanel,
   MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
+  MetadataOCRStatusManagementDialog as LibMetadataOCRStatusSettingPanel,
   useMetadata
 } from '../../metadata';
 import { useMetadataStatus } from '../../hooks';
@@ -19,7 +20,8 @@ const TAB = {
   AUTO_DEL_SETTING: 'auto_delete_setting',
   EXTENDED_PROPERTIES_SETTING: 'extended_properties_setting',
   FACE_RECOGNITION_SETTING: 'face_recognition_setting',
-  TAGS_SETTING: 'tags_setting'
+  TAGS_SETTING: 'tags_setting',
+  OCR_SETTING: 'ocr_setting',
 };
 
 const propTypes = {
@@ -44,7 +46,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { enableFaceRecognition, updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableOCR, updateEnableOCR } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -95,6 +97,13 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                     </NavLink>
                   </NavItem>
                 )}
+                {enableMetadataOtherSettings && (
+                  <NavItem role="tab" aria-selected={activeTab === TAB.OCR_SETTING} aria-controls="ocr-setting-panel">
+                    <NavLink className={activeTab === TAB.OCR_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.OCR_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                      {gettext('OCR')}
+                    </NavLink>
+                  </NavItem>
+                )}
               </Nav>
             </div>
             <TabContent activeTab={activeTab} className="flex-fill">
@@ -141,6 +150,17 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                     value={enableTags}
                     lang={tagsLang}
                     submit={updateEnableTags}
+                    toggleDialog={toggleDialog}
+                  />
+                </TabPane>
+              )}
+              {(enableMetadataOtherSettings && activeTab === TAB.OCR_SETTING) && (
+                <TabPane tabId={TAB.OCR_SETTING} role="tabpanel" id="ocr-setting-panel">
+                  <LibMetadataOCRStatusSettingPanel
+                    repoID={repoID}
+                    value={enableOCR}
+                    lang={tagsLang}
+                    submit={updateEnableOCR}
                     toggleDialog={toggleDialog}
                   />
                 </TabPane>

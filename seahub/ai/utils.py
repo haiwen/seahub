@@ -36,7 +36,7 @@ def generate_summary(params):
 
 
 def generate_file_tags(params):
-    headers = gen_seafile_ai_headers()
+    headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-file-tags/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp

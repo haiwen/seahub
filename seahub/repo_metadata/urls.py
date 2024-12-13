@@ -2,7 +2,7 @@ from django.urls import re_path
 from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
-    MetadataFileTags, MetadataTagFiles, MetadataDetailsSettingsView
+    MetadataFileTags, MetadataTagFiles, MetadataDetailsSettingsView, MetadataOCRManageView
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -26,6 +26,9 @@ urlpatterns = [
 
     # details settings
     re_path(r'^details-settings/', MetadataDetailsSettingsView.as_view(), name='api-v2.1-metadata-details-settings'),
+
+    # ocr
+    re_path(r'^ocr/', MetadataOCRManageView.as_view(), name='api-v2.1-metadata-ocr'),
 
     # tags api
     re_path(r'^tags-status/$', MetadataTagsStatusManage.as_view(), name='api-v2.1-metadata-tags-status'),

@@ -9,9 +9,7 @@ import metadataAPI from '../../../api';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 
-import './index.css';
-
-const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
+const MetadataOCRStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
@@ -27,7 +25,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
       return;
     }
     setSubmitting(true);
-    metadataAPI.createMetadata(repoID).then(res => {
+    metadataAPI.openOCR(repoID).then(res => {
       submit(true);
       toggle();
     }).catch(error => {
@@ -44,7 +42,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
   const turnOffConfirmSubmit = useCallback(() => {
     setShowTurnOffConfirmDialog(false);
     setSubmitting(true);
-    metadataAPI.deleteMetadata(repoID).then(res => {
+    metadataAPI.closeOCR(repoID).then(res => {
       submit(false);
       toggle();
     }).catch(error => {
@@ -71,10 +69,10 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
               textPosition="right"
               className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
               onChange={onValueChange}
-              placeholder={gettext('Enable extended properties')}
+              placeholder={gettext('Enable OCR')}
             />
             <p className="tip m-0">
-              {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
+              {gettext('After enable OCR, you can extract text from a file.')}
             </p>
           </ModalBody>
           <ModalFooter>
@@ -84,19 +82,19 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
         </>
       )}
       {showTurnOffConfirmDialog && (
-        <TurnOffConfirmDialog title={gettext('Turn off extended properties')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
-          <p>{gettext('Do you really want to turn off extended properties? Existing properties will all be deleted.')}</p>
+        <TurnOffConfirmDialog title={gettext('Turn off OCR')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
+          <p>{gettext('Do you really want to turn off OCR? Existing OCR results will be deleted.')}</p>
         </TurnOffConfirmDialog>
       )}
     </>
   );
 };
 
-MetadataStatusManagementDialog.propTypes = {
+MetadataOCRStatusManagementDialog.propTypes = {
   value: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
 
-export default MetadataStatusManagementDialog;
+export default MetadataOCRStatusManagementDialog;

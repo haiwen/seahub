@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 import metadataAPI from '../../../api';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
-import TurnOffConfirmDialog from './turn-off-confirm';
+import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
 import './index.css';
 
@@ -83,7 +83,9 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
         </>
       )}
       {showTurnOffConfirmDialog && (
-        <TurnOffConfirmDialog toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit} />
+        <TurnOffConfirmDialog title={gettext('Turn off face recognition')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
+          <p>{gettext('Do you really want to turn off face recognition? Existing results will all be deleted.')}</p>
+        </TurnOffConfirmDialog>
       )}
     </>
   );

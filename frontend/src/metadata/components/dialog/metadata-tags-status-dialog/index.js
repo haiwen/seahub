@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 import tagsAPI from '../../../../tag/api';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
-import TurnOffConfirmDialog from './turn-off-confirm';
+import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 import { SeahubSelect } from '../../../../components/common/select';
 
 import './index.css';
@@ -16,8 +16,7 @@ const langOptions = [
   {
     value: 'zh-cn',
     label: '简体中文'
-  },
-  {
+  }, {
     value: 'en',
     label: 'English'
   }
@@ -113,7 +112,9 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
         </>
       )}
       {showTurnOffConfirmDialog && (
-        <TurnOffConfirmDialog toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit} />
+        <TurnOffConfirmDialog title={gettext('Turn off tags')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
+          <p>{gettext('Do you really want to turn off tags? Existing tags will all be deleted.')}</p>
+        </TurnOffConfirmDialog>
       )}
     </>
   );

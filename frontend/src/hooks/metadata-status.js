@@ -17,6 +17,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
   const [tagsLang, setTagsLang] = useState('en');
+  const [enableOCR, setEnableOCR] = useState(false);
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
@@ -38,13 +39,20 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       return;
     }
     metadataAPI.getMetadataStatus(repoID).then(res => {
-      const { enabled: enableMetadata, tags_enabled: enableTags, tags_lang: tagsLang, details_settings: detailsSettings } = res.data;
+      const {
+        enabled: enableMetadata,
+        tags_enabled: enableTags,
+        tags_lang: tagsLang,
+        details_settings: detailsSettings,
+        ocr_enabled: enableOCR
+      } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
+      setEnableOCR(enableOCR);
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -77,6 +85,11 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
     setTagsLang(lang);
   }, [enableTags, tagsLang, cancelMetadataURL, hideMetadataView]);
 
+  const updateEnableOCR = useCallback((newValue) => {
+    if (newValue === enableOCR) return;
+    setEnableOCR(newValue);
+  }, [enableOCR]);
+
   const modifyDetailsSettings = useCallback((update) => {
     metadataAPI.modifyMetadataDetailsSettings(repoID, update).then(res => {
       const newDetailsSettings = { ...detailsSettings, ...update };
@@ -100,6 +113,8 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
         updateEnableTags,
         detailsSettings,
         modifyDetailsSettings,
+        enableOCR,
+        updateEnableOCR,
       }}
     >
       {!isLoading && children}

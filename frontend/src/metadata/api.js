@@ -237,15 +237,6 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
-  ocr = (repoID, filePath) => {
-    const url = this.server + '/api/v2.1/ai/ocr/';
-    const params = {
-      path: filePath,
-      repo_id: repoID,
-    };
-    return this.req.post(url, params);
-  };
-
   extractFileDetails = (repoID, objIds) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
     const params = {
@@ -313,6 +304,26 @@ class MetadataManagerAPI {
   getPeoplePhotos = (repoID, peopleId, start = 0, limit = 1000) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/?start=' + start + '&limit=' + limit;
     return this.req.get(url);
+  };
+
+  // ocr
+  openOCR = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';
+    return this.req.put(url);
+  };
+
+  closeOCR = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';
+    return this.req.delete(url);
+  };
+
+  ocr = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/ocr/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+    };
+    return this.req.post(url, params);
   };
 
 }

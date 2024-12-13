@@ -12,8 +12,6 @@ import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
 } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
 
-import './index.css';
-
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
   COPY_SELECTED: 'copy-selected',
@@ -141,10 +139,8 @@ const ContextMenu = (props) => {
       }
     }
 
-    if (ocrResultColumn) {
-      if (canModifyRow && Utils.imageCheck(fileName)) {
-        list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
-      }
+    if (ocrResultColumn && canModifyRow && Utils.imageCheck(fileName)) {
+      list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
     }
 
     if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
