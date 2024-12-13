@@ -111,6 +111,9 @@ const getPaths = (navigation, currentPageId, pages, isGetPathStr) => {
 const getNamePaths = (config, pageId) => {
   const { navigation, pages } = config;
   const { paths, curNode } = getPaths(navigation, pageId, pages, true);
+  if (!paths || !curNode) {
+    return { path: null, isDir: false };
+  }
   const pathArr = paths.split('-');
   const nameArr = [];
   if (pathArr.length > 1) {
