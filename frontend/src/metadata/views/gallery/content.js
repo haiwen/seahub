@@ -26,7 +26,7 @@ const Content = ({
   const [selectionStart, setSelectionStart] = useState(null);
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
-  const selectedImageIds = useMemo(() => selectedImages.map(img => img.id), [selectedImages]);
+  const selectedImageIds = useMemo(() => selectedImages.map(img => img && img.id), [selectedImages]);
 
   const handleMouseDown = useCallback((e) => {
     if (e.button !== 0) return;
