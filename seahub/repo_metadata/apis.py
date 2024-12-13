@@ -260,8 +260,8 @@ class MetadataOCRManageView(APIView):
 
         # check dose the repo have opened metadata manage
         record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled or not record.tags_enabled:
-            error_msg = f'The repo {repo_id} has disabled the tags manage.'
+        if not record or not record.enabled or not record.ocr_enabled:
+            error_msg = f'The repo {repo_id} has disabled the OCR.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
