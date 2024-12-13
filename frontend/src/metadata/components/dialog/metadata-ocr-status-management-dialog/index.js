@@ -72,7 +72,7 @@ const MetadataOCRStatusManagementDialog = ({ value: oldValue, repoID, toggleDial
               placeholder={gettext('Enable OCR')}
             />
             <p className="tip m-0">
-              {gettext('After enable OCR, you can extract text from a file.')}
+              {gettext('After enable OCR, you can extract text from images or scanned PDFs.')}
             </p>
           </ModalBody>
           <ModalFooter>
