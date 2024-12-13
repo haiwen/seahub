@@ -53,7 +53,7 @@ class LinkDetails extends React.Component {
 
   onCopyDownloadLink = () => {
     const { sharedLinkInfo } = this.props;
-    copy(`${sharedLinkInfo.download_link}`);
+    copy(`${sharedLinkInfo.download_link}?op=view`);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
   };
 
@@ -182,7 +182,7 @@ class LinkDetails extends React.Component {
               <dt className="text-secondary font-weight-normal">{gettext('Direct download link')}</dt>
               <dd>
                 <SharedLink
-                  link={`${sharedLinkInfo.download_link}`}
+                  link={`${sharedLinkInfo.download_link}?op=view`}
                   linkExpired={sharedLinkInfo.is_expired}
                   copyLink={this.onCopyDownloadLink}
                 />

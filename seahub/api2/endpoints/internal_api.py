@@ -95,11 +95,6 @@ class InternalCheckShareLinkAccess(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            can_download = share_obj.get_permissions()['can_download']
-            if not can_download:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         repo_id = share_obj.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
