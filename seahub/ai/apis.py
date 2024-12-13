@@ -15,7 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption, verify_ai_config, generate_summary, image_tags
+from seahub.ai.utils import image_caption, verify_ai_config, generate_summary, generate_file_tags
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +140,7 @@ class GenerateSummary(APIView):
         return Response(resp_json, resp.status_code)
 
 
-class ImageTags(APIView):
+class GenerateFileTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -161,13 +161,6 @@ class ImageTags(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        try:
-            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
@@ -191,11 +184,32 @@ class ImageTags(APIView):
         params = {
             'path': path,
             'download_token': token,
-            'lang': record.tags_lang if record and record.tags_enabled else None
         }
 
+        file_type, _ = get_file_type_and_ext(os.path.basename(path))
+        if file_type == IMAGE:
+            try:
+                record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            params['file_type'] = 'image'
+            params['lang'] = record.tags_lang if record and record.tags_enabled else None
+        else:
+            from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+            from seafevents.repo_metadata.constants import TAGS_TABLE
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+            sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}`'
+            query_result = metadata_server_api.query_rows(sql).get('results', [])
+
+            params['file_type'] = 'doc'
+            params['candidate_tags'] = [item[TAGS_TABLE.columns.name.name].strip() for item in query_result]
+
         try:
-            resp = image_tags(params)
+            resp = generate_file_tags(params)
             resp_json = resp.json()
         except Exception as e:
             error_msg = 'Internal Server Error'

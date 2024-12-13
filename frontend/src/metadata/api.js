@@ -228,8 +228,8 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
-  imageTags = (repoID, filePath) => {
-    const url = this.server + '/api/v2.1/ai/image-tags/';
+  generateFileTags = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/generate-file-tags/';
     const params = {
       path: filePath,
       repo_id: repoID,

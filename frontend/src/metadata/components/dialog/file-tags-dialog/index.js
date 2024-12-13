@@ -15,11 +15,11 @@ import { useTags } from '../../../../tag/hooks';
 
 import './index.css';
 
-const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
+const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [isSubmitting, setSubmitting] = useState(false);
-  const [imageTags, setImageTags] = useState([]);
+  const [fileTags, setFileTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
@@ -28,7 +28,7 @@ const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   useEffect(() => {
     let path = '';
-    if (Utils.imageCheck(fileName) && window.sfMetadataContext.canModifyRow(record)) {
+    if (window.sfMetadataContext.canModifyRow(record)) {
       const parentDir = getParentDirFromRecord(record);
       path = Utils.joinPath(parentDir, fileName);
     }
@@ -36,12 +36,12 @@ const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
       setLoading(false);
       return;
     }
-    window.sfMetadataContext.imageTags(path).then(res => {
-      const tags = res.data.tags;
-      setImageTags(tags);
+    window.sfMetadataContext.generateFileTags(path).then(res => {
+      const tags = res.data.tags || [];
+      setFileTags(tags);
       setLoading(false);
     }).catch(error => {
-      const errorMessage = gettext('Failed to generate image tags');
+      const errorMessage = gettext('Failed to generate file tags');
       toaster.danger(errorMessage);
       setLoading(false);
     });
@@ -124,9 +124,9 @@ const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
           <CenteredLoading />
         ) : (
           <div className="auto-image-tags-container">
-            {imageTags.length > 0 ? (
+            {fileTags.length > 0 ? (
               <>
-                {imageTags.map((tagName, index) => {
+                {fileTags.map((tagName, index) => {
                   const isSelected = selectedTags.includes(tagName);
                   return (
                     <div
@@ -153,10 +153,10 @@ const ImageTagsDialog = ({ record, onToggle, onSubmit }) => {
   );
 };
 
-ImageTagsDialog.propTypes = {
+FileTagsDialog.propTypes = {
   record: PropTypes.object,
   onToggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default ImageTagsDialog;
+export default FileTagsDialog;

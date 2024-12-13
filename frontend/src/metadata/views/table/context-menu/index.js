@@ -10,7 +10,7 @@ import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLU
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
 } from '../../../utils/cell';
-import ImageTagsDialog from '../../../components/dialog/image-tags-dialog';
+import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
 
 import './index.css';
 
@@ -21,7 +21,7 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
-  IMAGE_TAGS: 'image-tags',
+  FILE_TAGS: 'file-tags',
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
   RENAME_FILE: 'rename-file',
@@ -37,7 +37,7 @@ const ContextMenu = (props) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [imageTagsRecord, setImageTagsRecord] = useState(null);
+  const [fileTagsRecord, setFileTagsRecord] = useState(null);
 
   const { metadata } = useMetadataView();
 
@@ -143,8 +143,8 @@ const ContextMenu = (props) => {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
     }
 
-    if (tagsColumn && canModifyRow && Utils.imageCheck(fileName)) {
-      list.push({ value: OPERATION.IMAGE_TAGS, label: gettext('Generate image tags'), record: record });
+    if (tagsColumn && canModifyRow && (Utils.imageCheck(fileName) || checkIsDescribableDoc(record))) {
+      list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
     }
 
     // handle delete folder/file
@@ -252,8 +252,8 @@ const ContextMenu = (props) => {
     });
   }, [updateRecords]);
 
-  const toggleImageTagsRecord = useCallback((record = null) => {
-    setImageTagsRecord(record);
+  const toggleFileTagsRecord = useCallback((record = null) => {
+    setFileTagsRecord(record);
   }, []);
 
   const updateFileDetails = useCallback((records) => {
@@ -325,10 +325,10 @@ const ContextMenu = (props) => {
         imageCaption(record);
         break;
       }
-      case OPERATION.IMAGE_TAGS: {
+      case OPERATION.FILE_TAGS: {
         const { record } = option;
         if (!record) break;
-        toggleImageTagsRecord(record);
+        toggleFileTagsRecord(record);
         break;
       }
       case OPERATION.DELETE_RECORD: {
@@ -374,7 +374,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleImageTagsRecord]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -461,8 +461,8 @@ const ContextMenu = (props) => {
   return (
     <>
       {renderMenu()}
-      {imageTagsRecord && (
-        <ImageTagsDialog record={imageTagsRecord} onToggle={toggleImageTagsRecord} onSubmit={updateFileTags} />
+      {fileTagsRecord && (
+        <FileTagsDialog record={fileTagsRecord} onToggle={toggleFileTagsRecord} onSubmit={updateFileTags} />
       )}
     </>
 
