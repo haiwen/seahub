@@ -406,16 +406,25 @@ class PDFViewer extends React.Component {
                 <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
               </div>
             </dialog>
-            <dialog id="printServiceDialog" style={{ minWidth: '200px' }}>
-              <div className="row">
-                <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
-              </div>
-              <div className="row">
-                <progress value="0" max="100"></progress>
-                <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
-              </div>
-              <div className="buttonRow">
-                <button id="printCancel" className="dialogButton"><span data-l10n-id="print_progress_close">Cancel</span></button>
+            <dialog id="printServiceDialog" className="modal-dialog p-0">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{gettext('Print document')}</h5>
+                  <button type="button" id="printCancel2" className="close sf3-font sf3-font-close" aria-label={gettext('Close')} autoFocus={false}></button>
+                </div>
+                <div className="modal-body py-6">
+                  <p className="mb-2">
+                    <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
+                    <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
+                  </p>
+                  <progress value="0" max="100" className="d-none"></progress>
+                  <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button id="printCancel" className="btn btn-secondary"><span data-l10n-id="print_progress_close">Cancel</span></button>
+                </div>
               </div>
             </dialog>
           </div>

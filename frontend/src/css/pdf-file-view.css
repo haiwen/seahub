@@ -150,6 +150,16 @@ input#findInput {
   background: #f5f5f5;
 }
 
+#printServiceDialog {
+  font-size: inherit;
+}
+
+#printServiceDialog .progress,
+#printServiceDialog .progress-bar {
+  height: 10px;
+  border-radius: 5px;
+}
+
 .pdfViewer .page {
   position: relative;
   background: #fff;

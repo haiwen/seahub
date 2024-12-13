@@ -13477,12 +13477,15 @@ function renderProgress(index, total, l10n) {
   dialog ||= document.getElementById("printServiceDialog");
   const progress = Math.round(100 * index / total);
   const progressBar = dialog.querySelector("progress");
+  const progressBarSf = dialog.querySelector(".progress-bar");
   const progressPerc = dialog.querySelector(".relative-progress");
   progressBar.value = progress;
+  progressBarSf.setAttribute('aria-valuenow', progress);
   l10n.get("print_progress_percent", {
     progress
   }).then(msg => {
     progressPerc.textContent = msg;
+    progressBarSf.style.width = msg;
   });
 }
 window.addEventListener("keydown", function (event) {
@@ -13511,6 +13514,7 @@ function ensureOverlay() {
     dialog ||= document.getElementById("printServiceDialog");
     overlayPromise = overlayManager.register(dialog, true);
     document.getElementById("printCancel").onclick = abort;
+    document.getElementById("printCancel2").onclick = abort;
     dialog.addEventListener("close", abort);
   }
   return overlayPromise;
