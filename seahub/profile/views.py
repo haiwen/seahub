@@ -26,10 +26,11 @@ from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from seahub.weixin.settings import ENABLE_WEIXIN
 from constance import config
 try:
     from seahub.settings import SAML_PROVIDER_IDENTIFIER
-except ImportError as e:
+except ImportError:
     SAML_PROVIDER_IDENTIFIER = 'saml'
 
 
@@ -107,6 +108,14 @@ def edit_profile(request):
         enable_dingtalk = False
         social_connected_dingtalk = False
 
+    if ENABLE_WEIXIN:
+        enable_weixin = True
+        social_connected_weixin = SocialAuthUser.objects.filter(
+            username=request.user.username, provider='weixin').count() > 0
+    else:
+        enable_weixin = False
+        social_connected_weixin = False
+
     if ENABLE_ADFS_LOGIN:
         enable_adfs = True
         saml_connected = SocialAuthUser.objects.filter(
@@ -164,6 +173,8 @@ def edit_profile(request):
             'social_connected': social_connected,
             'enable_dingtalk': enable_dingtalk,
             'social_connected_dingtalk': social_connected_dingtalk,
+            'enable_weixin': enable_weixin,
+            'social_connected_weixin': social_connected_weixin,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'ENABLE_USER_SET_NAME': settings.ENABLE_USER_SET_NAME,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,

@@ -78,6 +78,12 @@ window.app.pageOptions = {
   socialNextPage: "{{ social_next_page|escapejs }}",
   {% endif %}
 
+  enableWeixin: {% if enable_weixin %} true {% else %} false {% endif %},
+  {% if enable_weixin %}
+  socialConnectedWeixin: {% if social_connected_weixin %} true {% else %} false {% endif %},
+  socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
+
   enableADFS: {% if enable_adfs %} true {% else %} false {% endif %},
   {% if enable_adfs %}
   samlConnected: {% if saml_connected %} true {% else %} false {% endif %},

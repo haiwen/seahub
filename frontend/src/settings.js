@@ -19,6 +19,7 @@ import EmailNotice from './components/user-settings/email-notice';
 import TwoFactorAuthentication from './components/user-settings/two-factor-auth';
 import SocialLogin from './components/user-settings/social-login';
 import SocialLoginDingtalk from './components/user-settings/social-login-dingtalk';
+import SocialLoginWeixin from './components/user-settings/social-login-weixin';
 import SocialLoginSAML from './components/user-settings/social-login-saml';
 import LinkedDevices from './components/user-settings/linked-devices';
 import DeleteAccount from './components/user-settings/delete-account';
@@ -39,6 +40,7 @@ const {
   twoFactorAuthEnabled,
   enableWechatWork,
   enableDingtalk,
+  enableWeixin,
   isOrgContext,
   enableADFS,
   enableMultiADFS,
@@ -59,7 +61,7 @@ class Settings extends React.Component {
       { show: true, href: '#lang-setting', text: gettext('Language') },
       { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
       { show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication') },
-      { show: (enableWechatWork || enableDingtalk || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login') },
+      { show: (enableWechatWork || enableDingtalk || enableWeixin || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login') },
       { show: true, href: '#linked-devices', text: gettext('Linked Devices') },
       { show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account') },
     ];
@@ -180,6 +182,7 @@ class Settings extends React.Component {
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
+                {enableWeixin && <SocialLoginWeixin />}
                 {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
                 <LinkedDevices />
                 {enableDeleteAccount && <DeleteAccount />}
