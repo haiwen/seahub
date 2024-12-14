@@ -143,6 +143,8 @@ export const MetadataViewProvider = ({
         closeDirentDetail: params.closeDirentDetail,
         showDirentDetail: params.showDirentDetail,
         moveItem: params.moveItem,
+        copyItem: params.copyItem,
+        addFolder: params.addFolder,
       }}
     >
       {children}

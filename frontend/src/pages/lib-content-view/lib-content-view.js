@@ -1228,7 +1228,7 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false, success_callback = () => {}) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
     this.updateCurrentNotExistDirent(dirent);
     let repoID = this.props.repoID;
     // just for view list state
@@ -1298,7 +1298,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false) => {
+  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false, success_callback = null) => {
     let repoID = this.props.repoID;
     // just for view list state
     let dirName = dirent.name;
@@ -1325,7 +1325,7 @@ class LibContentView extends React.Component {
           this.updateMoveCopyTreeNode(copyToDirentPath);
         }
 
-        if (copyToDirentPath === nodeParentPath) {
+        if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
           this.loadDirentList(this.state.path);
         }
 
@@ -1336,6 +1336,8 @@ class LibContentView extends React.Component {
         if (byDialog) {
           this.updateRecentlyUsedRepos(destRepo, copyToDirentPath);
         }
+
+        success_callback && setTimeout(success_callback, 500);
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {

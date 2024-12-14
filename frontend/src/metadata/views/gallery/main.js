@@ -12,10 +12,12 @@ import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal, gettext } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
+import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
+import { Dirent } from '../../../models';
 
 import './index.css';
 
@@ -31,12 +33,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const containerRef = useRef(null);
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
-  const { updateCurrentDirent } = useMetadataView();
+  const { updateCurrentDirent, copyItem, addFolder } = useMetadataView();
 
   useEffect(() => {
     updateCurrentDirent();
@@ -364,6 +367,45 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     updateSelectedImage(newSelectedImage);
   }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
 
+  const toggleCopyDialog = useCallback(() => {
+    setIsCopyDialogOpen(!isCopyDialogOpen);
+  }, [isCopyDialogOpen]);
+
+  const handleCopyItem = (destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+    const handleSuccess = () => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+    copyItem(destRepo, dirent, destPath, nodeParentPath, isByDialog, handleSuccess);
+  };
+
+  const options = useMemo(() => {
+    const baseOptions = [
+      { value: 'download', label: gettext('Download') },
+      { value: 'delete', label: gettext('Delete') },
+    ];
+    if (selectedImages.length === 1) {
+      baseOptions.push({ value: 'copy', label: gettext('Copy') });
+    }
+    return baseOptions;
+  }, [selectedImages]);
+
+  const handleOptionClick = useCallback((event, option) => {
+    switch (option.value) {
+      case 'download':
+        handleDownload();
+        break;
+      case 'delete':
+        handleDelete();
+        break;
+      case 'copy':
+        toggleCopyDialog();
+        break;
+      default:
+        break;
+    }
+  }, [handleDownload, handleDelete, toggleCopyDialog]);
+
+  const dirent = new Dirent({ name: selectedImages[0]?.name });
+  const path = selectedImages[0]?.path;
+
   return (
     <>
       <div
@@ -396,10 +438,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         )}
       </div>
       <ContextMenu
+        options={options}
+        handleOptionClick={handleOptionClick}
         getContentRect={() => containerRef.current.getBoundingClientRect()}
         getContainerRect={() => containerRef.current.getBoundingClientRect()}
-        onDownload={handleDownload}
-        onDelete={handleDelete}
       />
       {isImagePopupOpen && (
         <ModalPortal>
@@ -420,6 +462,20 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
             path={'/'}
             target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
             toggleDialog={closeZipDialog}
+          />
+        </ModalPortal>
+      )}
+      {isCopyDialogOpen && (
+        <ModalPortal>
+          <CopyDirent
+            path={path}
+            repoID={repoID}
+            dirent={dirent}
+            isMultipleOperation={false}
+            repoEncrypted={false}
+            onItemCopy={handleCopyItem}
+            onCancelCopy={toggleCopyDialog}
+            onAddFolder={addFolder}
           />
         </ModalPortal>
       )}

@@ -269,8 +269,7 @@ const Table = () => {
         { fail_callback: handleError, success_callback: handleSuccess }
       );
     } else {
-      store.deleteLocalRecords([recordID], { fail_callback: handleError, success_callback: () => {} });
-      handleSuccess();
+      store.deleteLocalRecords([recordID], { fail_callback: handleError, success_callback: handleSuccess });
     }
   }, [store, recordGetterById, moveItem]);
 

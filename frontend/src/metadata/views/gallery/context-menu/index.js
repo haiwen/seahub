@@ -1,49 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
+
 import './index.css';
 
-const OPERATION = {
-  DOWNLOAD: 'download',
-  DELETE: 'delete',
-};
-
-const ContextMenu = ({ getContentRect, getContainerRect, onDownload, onDelete }) => {
+const ContextMenu = ({ options, handleOptionClick, getContentRect, getContainerRect }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  const options = useMemo(() => {
-    if (!visible) return [];
-    return [
-      { value: OPERATION.DOWNLOAD, label: gettext('Download') },
-      { value: OPERATION.DELETE, label: gettext('Delete') }
-    ];
-  }, [visible]);
 
   const handleHide = useCallback((event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setVisible(false);
     }
   }, [menuRef]);
-
-  const handleOptionClick = useCallback((event, option) => {
-    event.stopPropagation();
-    switch (option.value) {
-      case OPERATION.DOWNLOAD: {
-        onDownload && onDownload();
-        break;
-      }
-      case OPERATION.DELETE: {
-        onDelete && onDelete();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    setVisible(false);
-  }, [onDownload, onDelete]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

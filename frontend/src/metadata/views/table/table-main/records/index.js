@@ -795,7 +795,6 @@ class Records extends Component {
             path={path}
             repoID={repoID}
             dirent={dirent}
-            selectedDirentList={[dirent]}
             isMultipleOperation={false}
             onItemMove={this.handleMoveItem}
             onCancelMove={this.toggleMoveDialog}
@@ -835,6 +834,7 @@ Records.propTypes = {
   modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveItem: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default Records;

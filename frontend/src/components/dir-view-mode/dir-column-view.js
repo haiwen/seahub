@@ -209,6 +209,8 @@ class DirColumnView extends React.Component {
               closeDirentDetail={this.props.closeDirentDetail}
               showDirentDetail={this.props.showDirentDetail}
               moveItem={this.props.onItemMove}
+              copyItem={this.props.onItemCopy}
+              addFolder={this.props.onAddFolder}
             />
           )}
           {currentMode === TAGS_MODE && (
