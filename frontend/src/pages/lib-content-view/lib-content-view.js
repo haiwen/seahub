@@ -1228,7 +1228,7 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false, success_callback = () => {}) => {
     this.updateCurrentNotExistDirent(dirent);
     let repoID = this.props.repoID;
     // just for view list state

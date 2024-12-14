@@ -18,6 +18,9 @@ import RecordMetrics from '../../utils/record-metrics';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
 import { isWindowsBrowser, isWebkitBrowser, addClassName, removeClassName } from '../../utils';
 import { getVisibleBoundaries } from '../../utils/viewport';
+import MoveDirent from '../../../../../components/dialog/move-dirent-dialog';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../../utils/cell';
+import { Dirent } from '../../../../../models';
 
 class Records extends Component {
 
@@ -44,6 +47,8 @@ class Records extends Component {
       selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
       deletedFolderPath: '',
+      isMoveDialogShow: false,
+      activeRecord: null,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
@@ -640,6 +645,15 @@ class Records extends Component {
     this.props.deleteRecords([this.deletedRecord._id]);
   };
 
+  toggleMoveDialog = (record) => {
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow, activeRecord: record });
+  };
+
+  handleMoveItem = (repo, dirent, targetPath, nodePath, isByDialog) => {
+    const recordID = getRecordIdFromRecord(this.state.activeRecord);
+    this.props.moveItem(repo, dirent, targetPath, nodePath, isByDialog, recordID);
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -652,6 +666,7 @@ class Records extends Component {
         <ContextMenu
           isGroupView={isGroupView}
           toggleDeleteFolderDialog={this.toggleDeleteFolderDialog}
+          toggleMoveDialog={this.toggleMoveDialog}
           recordGetterByIndex={this.props.recordGetterByIndex}
           updateRecords={this.props.updateRecords}
           deleteRecords={this.props.deleteRecords}
@@ -696,7 +711,7 @@ class Records extends Component {
       recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
       deleteColumn, modifyColumnOrder, insertColumn,
     } = this.props;
-    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
+    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx, isMoveDialogShow, activeRecord } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
     const hasSelectedRecord = this.hasSelectedRecord();
@@ -705,6 +720,10 @@ class Records extends Component {
     if (recordsCount === 0 && !this.props.hasMore) {
       return (<EmptyTip text={gettext('No record')} />);
     }
+
+    const dirent = new Dirent({ name: getFileNameFromRecord(activeRecord) });
+    const path = getParentDirFromRecord(activeRecord);
+    const repoID = window.sfMetadataStore.repoId;
 
     return (
       <>
@@ -765,10 +784,22 @@ class Records extends Component {
         />
         {this.state.deletedFolderPath && (
           <DeleteFolderDialog
-            repoID={window.sfMetadataStore.repoId}
+            repoID={repoID}
             path={this.state.deletedFolderPath}
             deleteFolder={this.deleteFolder}
             toggleDialog={this.toggleDeleteFolderDialog}
+          />
+        )}
+        {isMoveDialogShow && (
+          <MoveDirent
+            path={path}
+            repoID={repoID}
+            dirent={dirent}
+            selectedDirentList={[dirent]}
+            isMultipleOperation={false}
+            onItemMove={this.handleMoveItem}
+            onCancelMove={this.toggleMoveDialog}
+            onAddFolder={this.props.onAddFolder}
           />
         )}
       </>
@@ -803,6 +834,7 @@ Records.propTypes = {
   modifyColumnWidth: PropTypes.func,
   modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
+  moveItem: PropTypes.func,
 };
 
 export default Records;

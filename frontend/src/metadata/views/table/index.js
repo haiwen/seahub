@@ -8,13 +8,13 @@ import { isModZ, isModShiftZ } from '../../utils/hotkey';
 import { gettext } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../../constants';
 
 import './index.css';
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
-  const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback } = useMetadataView();
+  const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback, moveItem } = useMetadataView();
   const containerRef = useRef(null);
 
   const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
@@ -91,7 +91,16 @@ const Table = () => {
     }
   }, [metadata, store]);
 
-  const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
+  const recordGetterById = useCallback((recordId) => {
+    return metadata.id_row_map[recordId];
+  }, [metadata]);
+
+  const recordGetter = useCallback((recordIndex) => {
+    const recordId = metadata.view.rows[recordIndex];
+    return recordId && recordGetterById(recordId);
+  }, [metadata, recordGetterById]);
+
+  const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
     const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
     let newName = null;
     if (isRename) {
@@ -133,7 +142,7 @@ const Table = () => {
         }
       },
     });
-  };
+  }, [store, recordGetterById, renameFileCallback]);
 
   const deleteRecords = (recordsIds) => {
     let paths = [];
@@ -163,14 +172,14 @@ const Table = () => {
     });
   };
 
-  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
+  const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
     const idOriginalRowUpdates = { [rowId]: originalUpdates };
     const idOldRowData = { [rowId]: oldRowData };
     const idOriginalOldRowData = { [rowId]: originalOldRowData };
     modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData);
-  };
+  }, [modifyRecords]);
 
   const getAdjacentRowsIds = useCallback((rowIds) => {
     const rowIdsLen = metadata.row_ids.length;
@@ -220,15 +229,6 @@ const Table = () => {
     store.insertColumn(name, type, { key, data });
   }, [store]);
 
-  const recordGetterById = useCallback((recordId) => {
-    return metadata.id_row_map[recordId];
-  }, [metadata]);
-
-  const recordGetter = useCallback((recordIndex) => {
-    const recordId = metadata.view.rows[recordIndex];
-    return recordId && recordGetterById(recordId);
-  }, [metadata, recordGetterById]);
-
   const groupRecordGetter = useCallback((groupRecordIndex) => {
     if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) return null;
     const groupRecord = window.sfMetadataBody.getGroupRecordByIndex(groupRecordIndex);
@@ -244,6 +244,35 @@ const Table = () => {
   const getTableContentRect = useCallback(() => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
+
+  const handleMoveItem = useCallback((destRepo, dirent, destPath, nodePath, isByDialog, recordID) => {
+    const currrentRepoID = window.sfMetadataStore.repoId;
+    const record = recordGetterById(recordID);
+    const parentDir = getParentDirFromRecord(record);
+    const updates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
+    const oldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
+    const originalUpdates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
+    const originalOldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
+
+    const handleSuccess = () => moveItem(destRepo, dirent, destPath, nodePath, isByDialog);
+    const handleError = (error) => error && toaster.danger(error);
+
+    if (currrentRepoID === destRepo.repo_id) {
+      store.modifyRecords(
+        [recordID],
+        { [recordID]: updates },
+        { [recordID]: originalUpdates },
+        { [recordID]: oldRowData },
+        { [recordID]: originalOldRowData },
+        false,
+        false,
+        { fail_callback: handleError, success_callback: handleSuccess }
+      );
+    } else {
+      store.deleteLocalRecords([recordID], { fail_callback: handleError, success_callback: () => {} });
+      handleSuccess();
+    }
+  }, [store, recordGetterById, moveItem]);
 
   return (
     <div className="sf-metadata-container" ref={containerRef}>
@@ -269,6 +298,7 @@ const Table = () => {
         updateFileTags={updateFileTags}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
+        moveItem={handleMoveItem}
       />
     </div>
   );

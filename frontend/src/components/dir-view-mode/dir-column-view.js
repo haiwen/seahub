@@ -208,6 +208,7 @@ class DirColumnView extends React.Component {
               updateCurrentDirent={this.props.updateCurrentDirent}
               closeDirentDetail={this.props.closeDirentDetail}
               showDirentDetail={this.props.showDirentDetail}
+              moveItem={this.props.onItemMove}
             />
           )}
           {currentMode === TAGS_MODE && (

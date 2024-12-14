@@ -142,6 +142,7 @@ export const MetadataViewProvider = ({
         updateCurrentDirent: params.updateCurrentDirent,
         closeDirentDetail: params.closeDirentDetail,
         showDirentDetail: params.showDirentDetail,
+        moveItem: params.moveItem,
       }}
     >
       {children}
