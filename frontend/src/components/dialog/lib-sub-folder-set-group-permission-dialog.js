@@ -302,7 +302,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
                   placeholder={gettext('Select a group')}
                   maxMenuHeight={200}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage: NoGroupMessage }}
+                  noOptionsMessage={NoGroupMessage}
                 />
               </td>
               {showPath &&

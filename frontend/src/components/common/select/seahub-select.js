@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select, { components, createFilter } from 'react-select';
+import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 
 const ClearIndicator = ({ innerProps, ...props }) => {
@@ -64,8 +64,8 @@ export default class SeahubSelect extends React.Component {
     options: [],
     value: {},
     isDisabled: false,
-    isSearchable: false,
-    isClearable: false,
+    isSearchable: true,
+    isClearable: true,
     placeholder: '',
     isMulti: false,
     menuPortalTarget: '.modal',
@@ -94,10 +94,6 @@ export default class SeahubSelect extends React.Component {
         classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
         components={{ Option, MenuList, ClearIndicator }}
-        filterOption={createFilter({
-          matchFrom: 'any',
-          stringify: option => `${option.data.labelValue}`,
-        })}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={isClearable}

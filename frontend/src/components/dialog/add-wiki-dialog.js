@@ -5,7 +5,7 @@ import { gettext, isPro } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import { SeahubSelect, NoOptionsStyle } from '../common/select';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
@@ -96,9 +96,6 @@ class AddWikiDialog extends React.Component {
                 placeholder={gettext('Select a department')}
                 maxMenuHeight={200}
                 value={this.state.selectedOption}
-                components={{ NoOptionsMessage: (
-                  <div style={NoOptionsStyle}>{gettext('No department')}</div>
-                ) }}
                 noOptionsMessage={() => {return gettext('No options available');}}
               />
             </>
