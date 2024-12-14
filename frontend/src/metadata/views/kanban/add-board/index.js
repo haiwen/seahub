@@ -34,7 +34,7 @@ const AddBoard = ({ groupByColumn }) => {
   }, [isShowPopover]);
 
   return (
-    <>
+    <div className="sf-metadata-kanban-add-board-wrapper">
       <div id={id} className="sf-metadata-kanban-add-board-button" onClick={handleButtonClick} title={gettext('New category')}>
         <Icon iconName="add-table" />
         <span className="sf-metadata-kanban-add-board-title">{gettext('New category')}</span>
@@ -42,7 +42,7 @@ const AddBoard = ({ groupByColumn }) => {
       {isShowPopover && (
         <AddCategoryPopover target={id} options={options} onCancel={onToggle} onSubmit={handleAddNewOption} />
       )}
-    </>
+    </div>
   );
 };
 
