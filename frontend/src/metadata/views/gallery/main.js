@@ -360,7 +360,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       setImageIndex(newIndex);
     }
 
-    setSelectedImages([newSelectedImage]);
+    setSelectedImages(newSelectedImage ? [newSelectedImage] : []);
     updateSelectedImage(newSelectedImage);
   }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
 
