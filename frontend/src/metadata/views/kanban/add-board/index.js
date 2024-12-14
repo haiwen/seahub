@@ -34,7 +34,7 @@ const AddBoard = ({ groupByColumn }) => {
   }, [isShowPopover]);
 
   return (
-    <div className="sf-metadata-kanban-button-wrapper">
+    <div className="sf-metadata-kanban-add-board-wrapper">
       <div id={id} className="sf-metadata-kanban-add-board-button" onClick={handleButtonClick} title={gettext('New category')}>
         <Icon iconName="add-table" />
         <span className="sf-metadata-kanban-add-board-title">{gettext('New category')}</span>

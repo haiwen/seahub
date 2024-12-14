@@ -1,9 +1,9 @@
-.sf-metadata-view-kanban .sf-metadata-kanban-button-wrapper {
+.sf-metadata-kanban-add-board-wrapper {
   position: sticky;
-  top: 0;
-  height: 3rem;
-  padding: 16px 0 0 16px;
-  background-color: white;
+  top: 16px;
+  margin-left: 8px;
+  padding-right: 16px;
+  height: fit-content;
 }
 
 .sf-metadata-view-kanban .sf-metadata-kanban-add-board-button {

@@ -3,9 +3,13 @@
   flex-shrink: 0;
 }
 
+.sf-metadata-view-kanban-board:first-child {
+  margin-left: 8px;
+}
+
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical {
   height: calc(100% - 32px);
-  margin-left: 16px;
+  margin: 0 8px;
 }
 
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper:last-child .sf-metadata-kanban-card {
