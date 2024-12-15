@@ -387,7 +387,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     return baseOptions;
   }, [selectedImages]);
 
-  const handleOptionClick = useCallback((event, option) => {
+  const handleOptionClick = useCallback((option) => {
     switch (option.value) {
       case 'download':
         handleDownload();
