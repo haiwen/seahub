@@ -31,7 +31,7 @@ const UserSetPassword = ({ toggle }) => {
       return;
     }
     if (!validatePassword(password)) {
-      setErrorMessage(gettext('Insufficient password strength'));
+      setErrorMessage(gettext('Password strength should be strong or very strong'));
       return;
     }
 
