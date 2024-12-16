@@ -94,6 +94,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 };
 
 GalleryContextMenu.propTypes = {
+  metadata: PropTypes.object,
   selectedImages: PropTypes.array,
   boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
