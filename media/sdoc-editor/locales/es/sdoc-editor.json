@@ -578,5 +578,7 @@
   "Token_expired_Please_refresh_the_page": "Token expired. Please refresh the page.",
   "Link_to_page": "Link to page",
   "No_page_results": "No page results",
-  "Page": "Page"
+  "Page": "Page",
+  "Link_to_file": "Link to file",
+  "Create_a_new_file": "Create a new file"
 }

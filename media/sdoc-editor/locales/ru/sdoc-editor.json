@@ -578,5 +578,7 @@
   "Token_expired_Please_refresh_the_page": "Срок действия токена истек. Обновите страницу.",
   "Link_to_page": "Ссылка на страницу",
   "No_page_results": "Нет результатов на странице",
-  "Page": "Страница"
+  "Page": "Страница",
+  "Link_to_file": "Ссылка на файл",
+  "Create_a_new_file": "Создать новый файл"
 }

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-09 10:41+0800\n"
+"POT-Creation-Date: 2024-12-16 10:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2024\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -454,7 +454,7 @@ msgstr "바이러스 파일이 없습니다."
 #: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2761
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
-#: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
+#: seahub/utils/__init__.py:1207 seahub/views/__init__.py:819
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -531,7 +531,7 @@ msgstr "라이브러리의 한계 파일 갯수를 넘었습니다"
 #: seahub/api2/endpoints/upload_links.py:316
 #: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:261 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2745
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -823,9 +823,12 @@ msgstr "%s 공유 링크가 이미 있습니다."
 #: seahub/organizations/api/admin/info.py:127
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
-#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:38
-#: seahub/work_weixin/views.py:63 seahub/work_weixin/views.py:152
-#: seahub/work_weixin/views.py:172 seahub/work_weixin/views.py:233
+#: seahub/subscription/views.py:40 seahub/weixin/views.py:40
+#: seahub/weixin/views.py:62 seahub/weixin/views.py:164
+#: seahub/weixin/views.py:187 seahub/weixin/views.py:230
+#: seahub/work_weixin/views.py:38 seahub/work_weixin/views.py:63
+#: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
+#: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
 msgstr "기능을 사용하도록 설정하지 않았습니다."
 
@@ -1341,9 +1344,9 @@ msgstr "전자메일 주소가 필요합니다."
 #: seahub/oauth/views.py:112 seahub/oauth/views.py:158
 #: seahub/oauth/views.py:170 seahub/oauth/views.py:176
 #: seahub/oauth/views.py:209 seahub/templates/remote_user/error.html:8
-#: seahub/weixin/views.py:37 seahub/weixin/views.py:57
-#: seahub/weixin/views.py:62 seahub/weixin/views.py:81
-#: seahub/weixin/views.py:99 seahub/work_weixin/views.py:69
+#: seahub/weixin/views.py:67 seahub/weixin/views.py:86
+#: seahub/weixin/views.py:107 seahub/weixin/views.py:192
+#: seahub/weixin/views.py:211 seahub/work_weixin/views.py:69
 #: seahub/work_weixin/views.py:74 seahub/work_weixin/views.py:84
 #: seahub/work_weixin/views.py:88 seahub/work_weixin/views.py:107
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
@@ -1352,7 +1355,7 @@ msgid "Error, please contact administrator."
 msgstr "오류 발생. 관리자에게 문의하세요."
 
 #: seahub/dingtalk/views.py:126 seahub/dingtalk/views.py:370
-#: seahub/weixin/views.py:102
+#: seahub/weixin/views.py:110
 #, python-format
 msgid "User %s not found or inactive."
 msgstr "%s 사용자가 없거나 비활동 상태입니다."
@@ -1508,9 +1511,9 @@ msgstr "%(site_name)s 팀"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1157
-#: seahub/views/file.py:1182 seahub/views/file.py:1406
-#: seahub/views/file.py:1443 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1158
+#: seahub/views/file.py:1183 seahub/views/file.py:1407
+#: seahub/views/file.py:1444 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
 #: seahub/views/repo.py:412
 msgid "Permission denied"
@@ -2140,18 +2143,18 @@ msgstr "부적절한 토큰"
 msgid "Settings"
 msgstr "설정"
 
-#: seahub/profile/templates/profile/set_profile_react.html:20
+#: seahub/profile/templates/profile/set_profile_react.html:21
 msgctxt "true name"
 msgid "Name:"
 msgstr "이름:"
 
-#: seahub/profile/templates/profile/set_profile_react.html:26
+#: seahub/profile/templates/profile/set_profile_react.html:27
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
 msgstr "암호 설정"
 
-#: seahub/profile/templates/profile/set_profile_react.html:26
+#: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
 msgstr "업데이트"
 
@@ -2159,31 +2162,31 @@ msgstr "업데이트"
 msgid "Profile"
 msgstr "프로파일"
 
-#: seahub/profile/views.py:48
+#: seahub/profile/views.py:49
 msgid "Successfully edited profile."
 msgstr "프로파일 편집에 성공했습니다."
 
-#: seahub/profile/views.py:52
+#: seahub/profile/views.py:53
 msgid "Failed to edit profile"
 msgstr "프로파일 편집에 실패했습니다"
 
-#: seahub/profile/views.py:246
+#: seahub/profile/views.py:257
 msgid "Has not accepted invitation yet"
 msgstr "아직 초대를 수락하지 않았습니다"
 
-#: seahub/profile/views.py:271
+#: seahub/profile/views.py:282
 msgid "Demo account can not be deleted."
 msgstr "데모 계정은 삭제할 수 없습니다."
 
-#: seahub/profile/views.py:298
+#: seahub/profile/views.py:309
 msgid "Failed to set default library."
 msgstr "기본 라이브러리 설정에 실패했습니다."
 
-#: seahub/profile/views.py:302
+#: seahub/profile/views.py:313
 msgid "Can not set encrypted library as default library."
 msgstr "암호화 라이브러리를 기본 라이브러리로 지정할 수 없습니다."
 
-#: seahub/profile/views.py:307
+#: seahub/profile/views.py:318
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" 기본 라이브러리 설정에 성공했습니다."
@@ -3080,9 +3083,9 @@ msgid "Bad upload link token."
 msgstr "잘못된 업로드 링크 토큰입니다."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1177 seahub/views/file.py:1438
-#: seahub/views/file.py:2102 seahub/views/file.py:2107
-#: seahub/views/file.py:2114
+#: seahub/views/file.py:1178 seahub/views/file.py:1439
+#: seahub/views/file.py:2103 seahub/views/file.py:2108
+#: seahub/views/file.py:2115
 msgid "File does not exist"
 msgstr "파일이 없습니다"
 
@@ -3110,57 +3113,57 @@ msgstr "선택한 인코딩이 적합하지 않습니다"
 msgid "Unknown file encoding"
 msgstr "알 수 없는 파일 인코딩"
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:706
-#: seahub/views/file.py:791 seahub/views/file.py:892
+#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:707
+#: seahub/views/file.py:792 seahub/views/file.py:893
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
-#: seahub/views/file.py:347 seahub/views/file.py:826
+#: seahub/views/file.py:347 seahub/views/file.py:827
 msgid "The library is encrypted, can not open file online."
 msgstr "라이브러리를 암호화했습니다. 온라인에서 파일을 열어볼 수 없습니다."
 
 #: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:520 seahub/views/file.py:781 seahub/views/file.py:1029
-#: seahub/views/file.py:1055 seahub/views/file.py:1085
-#: seahub/views/file.py:1226 seahub/views/file.py:1338
-#: seahub/views/file.py:1479 seahub/views/file.py:1597
+#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
+#: seahub/views/file.py:1056 seahub/views/file.py:1086
+#: seahub/views/file.py:1227 seahub/views/file.py:1339
+#: seahub/views/file.py:1480 seahub/views/file.py:1598
 msgid "Unable to view file"
 msgstr "파일을 볼 수 없습니다"
 
-#: seahub/views/file.py:850 seahub/views/file.py:973 seahub/views/file.py:1297
-#: seahub/views/file.py:1535
+#: seahub/views/file.py:851 seahub/views/file.py:974 seahub/views/file.py:1298
+#: seahub/views/file.py:1536
 msgid "Error when prepare Office Online file preview page."
 msgstr "오피스 온라인 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:885 seahub/views/file.py:989 seahub/views/file.py:1317
-#: seahub/views/file.py:1551
+#: seahub/views/file.py:886 seahub/views/file.py:990 seahub/views/file.py:1318
+#: seahub/views/file.py:1552
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "오피스 파일 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:1121
+#: seahub/views/file.py:1122
 msgid "Unable to download file, invalid file path"
 msgstr "파일을 다운로드할 수 없습니다. 부적절한 파일 경로입니다."
 
-#: seahub/views/file.py:1130
+#: seahub/views/file.py:1131
 msgid "Unable to download file, wrong file path"
 msgstr "파일 경로가 잘못되어 파일을 다운로드할 수 없습니다"
 
-#: seahub/views/file.py:1137
+#: seahub/views/file.py:1138
 msgid "Unable to download file."
 msgstr "파일을 다운로드할 수 없습니다."
 
-#: seahub/views/file.py:1353 seahub/views/file.py:1616
+#: seahub/views/file.py:1354 seahub/views/file.py:1617
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr "%s(에)게 링크를 공유합니다."
 
-#: seahub/views/file.py:1751 seahub/views/file.py:1756
+#: seahub/views/file.py:1752 seahub/views/file.py:1757
 msgid "Unable to download file"
 msgstr "파일을 다운로드 할 수 없습니다."
 
-#: seahub/views/file.py:2095
+#: seahub/views/file.py:2096
 msgid "The original file does not exist"
 msgstr "원본 파일이 없습니다"
 
