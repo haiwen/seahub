@@ -15,7 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption, verify_ai_config, generate_summary, generate_file_tags, ocr
+from seahub.ai.utils import image_caption, translate, verify_ai_config, generate_summary, generate_file_tags, ocr
 
 logger = logging.getLogger(__name__)
 
@@ -273,6 +273,38 @@ class OCR(APIView):
 
         try:
             resp = ocr(params)
+            resp_json = resp.json()
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)
+
+
+class Translate(APIView):
+    # authentication_classes = (TokenAuthentication, SessionAuthentication)
+    # permission_classes = (IsAuthenticated,)
+    # throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
+        text = request.data.get('text')
+        lang = request.data.get('lang')
+
+        if not text:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
+        if not lang:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+
+        params = {
+            'text': text,
+            'lang': lang,
+        }
+
+        try:
+            resp = translate(params)
             resp_json = resp.json()
         except Exception as e:
             error_msg = 'Internal Server Error'
