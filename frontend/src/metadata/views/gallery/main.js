@@ -362,6 +362,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         )}
       </div>
       <GalleryContextmenu
+        metadata={metadata}
         selectedImages={selectedImages}
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}

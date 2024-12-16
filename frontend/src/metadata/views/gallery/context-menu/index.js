@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
 import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
 import { getRowById } from '../../../utils/table';
-import { useMetadataView } from '../../../hooks/metadata-view';
 import { downloadFile } from '../../../utils/file';
 import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 import metadataAPI from '../../../api';
@@ -16,10 +15,9 @@ const CONTEXT_MENU_KEY = {
   DELETE: 'delete',
 };
 
-const GalleryContextMenu = ({ selectedImages, boundaryCoordinates, onDelete }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
-  const { metadata } = useMetadataView();
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
 
@@ -96,6 +94,7 @@ const GalleryContextMenu = ({ selectedImages, boundaryCoordinates, onDelete }) =
 };
 
 GalleryContextMenu.propTypes = {
+  metadata: PropTypes.object,
   selectedImages: PropTypes.array,
   boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
