@@ -26,10 +26,10 @@ const GalleryContextMenu = ({ selectedImages, boundaryCoordinates, onDelete }) =
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: gettext('Delete') });
+      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
     return validOptions;
-  }, [checkCanDeleteRow]);
+  }, [checkCanDeleteRow, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
