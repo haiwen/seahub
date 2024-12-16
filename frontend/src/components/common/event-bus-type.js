@@ -5,7 +5,7 @@ export const EVENT_BUS_TYPE = {
 
   // group
   ADD_NEW_GROUP: 'add_new_group',
-  ADD_SHARED_REPO_INO_GROUP: 'add_shared_repo_into_group',
+  ADD_SHARED_REPO_INTO_GROUP: 'add_shared_repo_into_group',
   UNSHARE_REPO_TO_GROUP: 'unshare_repo_to_group',
 
   RESTORE_IMAGE: 'restore_image',

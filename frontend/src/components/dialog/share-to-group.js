@@ -246,7 +246,7 @@ class ShareToGroup extends React.Component {
         if (this.props.repo && res.data.success.length > 0) {
           const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
           targetGroupIds.forEach(targetGroupId => {
-            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
           });
         }
 
@@ -272,7 +272,7 @@ class ShareToGroup extends React.Component {
         if (this.props.repo && res.data.success.length > 0) {
           const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
           targetGroupIds.forEach(targetGroupId => {
-            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
           });
         }
 
