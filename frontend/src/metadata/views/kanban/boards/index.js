@@ -12,18 +12,15 @@ import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRec
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import { openFile } from '../../../utils/file';
 import { checkIsDir } from '../../../utils/row';
-import { Utils, validateName } from '../../../../utils/utils';
-import { getRowById } from '../../../utils/table';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
-import toaster from '../../../../components/toast';
 import ContextMenu from '../context-menu';
 
 import './index.css';
 
-const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
+const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
@@ -32,7 +29,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail, deleteFilesCallback, renameFileCallback } = useMetadataView();
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -228,80 +225,18 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setSelectedCard(recordId);
   }, []);
 
-  const onDelete = useCallback((recordsIds) => {
-    if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
-
-    let paths = [];
-    let fileNames = [];
-    recordsIds.forEach((recordId) => {
-      const record = getRowById(metadata, recordId);
-      const { _parent_dir, _name } = record || {};
-      if (_parent_dir && _name) {
-        const path = Utils.joinPath(_parent_dir, _name);
-        paths.push(path);
-        fileNames.push(_name);
-      }
-    });
-    store.deleteRecords(recordsIds, {
-      fail_callback: (error) => {
-        toaster.danger(error);
-      },
+  const onDeleteRecords = useCallback((recordIds) => {
+    deleteRecords(recordIds, {
       success_callback: () => {
-        deleteFilesCallback(paths, fileNames);
-        let msg = fileNames.length > 1
-          ? gettext('Successfully deleted {name} and {n} other items')
-          : gettext('Successfully deleted {name}');
-        msg = msg.replace('{name}', fileNames[0])
-          .replace('{n}', fileNames.length - 1);
-        toaster.success(msg);
+        setSelectedCard(null);
+        updateCurrentDirent();
       },
     });
-  }, [store, metadata, deleteFilesCallback]);
+  }, [deleteRecords, updateCurrentDirent]);
 
-  const onModify = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback }) => {
-    const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
-    let newName = null;
-    if (isRename) {
-      const rowId = rowIds[0];
-      const row = getRowById(metadata, rowId);
-      const rowUpdates = idOriginalRowUpdates[rowId];
-      const { _parent_dir, _name } = row;
-      newName = getFileNameFromRecord(rowUpdates);
-      const { isValid, errMessage } = validateName(newName);
-      if (!isValid) {
-        toaster.danger(errMessage);
-        return;
-      }
-      if (newName === _name) {
-        return;
-      }
-      if (store.checkDuplicatedName(newName, _parent_dir)) {
-        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-        toaster.danger(errMessage);
-        return;
-      }
-    }
-    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, false, isRename, {
-      fail_callback: (error) => {
-        error && toaster.danger(error);
-      },
-      success_callback: (operation) => {
-        if (operation.is_rename) {
-          const rowId = operation.row_ids[0];
-          const row = getRowById(metadata, rowId);
-          const rowUpdates = operation.id_original_row_updates[rowId];
-          const oldRow = operation.id_original_old_row_data[rowId];
-          const parentDir = getParentDirFromRecord(row);
-          const oldName = getFileNameFromRecord(oldRow);
-          const path = Utils.joinPath(parentDir, oldName);
-          const newName = getFileNameFromRecord(rowUpdates);
-          renameFileCallback(path, newName);
-          success_callback && success_callback();
-        }
-      },
-    });
-  };
+  const onRename = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback }) => {
+    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback });
+  }, [modifyRecord]);
 
   useEffect(() => {
     if (!isDirentDetailShow) {
@@ -358,8 +293,8 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
       <ContextMenu
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect()}
         selectedCard={selectedCard}
-        onDelete={onDelete}
-        onModify={onModify}
+        onDelete={onDeleteRecords}
+        onRename={onRename}
       />
       {isImagePreviewerVisible && (
         <ImagePreviewer

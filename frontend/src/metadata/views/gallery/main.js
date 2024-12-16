@@ -293,9 +293,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const handleDeleteSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
     onDelete(selectedImages, () => {
+      updateCurrentDirent();
       setSelectedImages([]);
     });
-  }, [onDelete]);
+  }, [onDelete, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);

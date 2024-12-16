@@ -23,7 +23,7 @@ const CONTEXT_MENU_KEY = {
   RENAME: 'rename',
 };
 
-const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onModify }) => {
+const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
@@ -67,15 +67,13 @@ const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onModi
     const record = getRowById(metadata, selectedCard);
     if (!record) return;
 
-    const rowId = selectedCard;
     const oldName = getFileNameFromRecord(record);
-    const rowIds = [selectedCard];
     const updates = { [PRIVATE_COLUMN_KEY.FILE_NAME]: newName };
     const oldRowData = { [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName };
-    onModify(rowIds, { [rowId]: updates }, { [rowId]: updates }, { [rowId]: oldRowData }, { [rowId]: oldRowData }, {
+    onRename(selectedCard, updates, oldRowData, updates, oldRowData, {
       success_callback: () => setIsRenameDialogShow(false),
     });
-  }, [metadata, selectedCard, onModify]);
+  }, [metadata, selectedCard, onRename]);
 
   const handelDownload = useCallback((record) => {
     if (!isDir) {
@@ -159,7 +157,7 @@ KanbanContextMenu.propTypes = {
   boundaryCoordinates: PropTypes.object,
   selectedCard: PropTypes.string,
   onDelete: PropTypes.func,
-  onModify: PropTypes.func,
+  onRename: PropTypes.func,
 };
 
 export default KanbanContextMenu;
