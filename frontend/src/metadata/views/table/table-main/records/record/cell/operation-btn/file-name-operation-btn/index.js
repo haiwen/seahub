@@ -5,7 +5,7 @@ import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../../../../../utils/constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../../constants';
 import { checkIsDir } from '../../../../../../../../utils/row';
-import { openFile } from '../../../../../../../../utils/open-file';
+import { openFile } from '../../../../../../../../utils/file';
 
 import './index.css';
 

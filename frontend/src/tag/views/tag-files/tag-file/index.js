@@ -9,7 +9,7 @@ import { getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, g
   getFileMTimeFromRecord, getTagsFromRecord, getFilePathByRecord,
 } from '../../../../metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
-import { openFile } from '../../../../metadata/utils/open-file';
+import { openFile } from '../../../../metadata/utils/file';
 
 import './index.css';
 

@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+
 import './index.css';
 
-const ContextMenu = ({ options, getContainerRect, getContentRect, onOptionClick, validTargets }) => {
+const ContextMenu = ({ options, boundaryCoordinates, onOptionClick, ignoredTriggerElements }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -20,25 +21,24 @@ const ContextMenu = ({ options, getContainerRect, getContentRect, onOptionClick,
     };
     if (!menuRef.current) return menuStyles;
     const rect = menuRef.current.getBoundingClientRect();
-    const containerRect = getContainerRect();
-    const { right: innerWidth, bottom: innerHeight } = getContentRect();
-    menuStyles.top = menuStyles.top - containerRect.top;
-    menuStyles.left = menuStyles.left - containerRect.left;
+    const { top: boundaryTop, right: boundaryRight, bottom: boundaryBottom, left: boundaryLeft } = boundaryCoordinates || {};
+    menuStyles.top = menuStyles.top - boundaryTop;
+    menuStyles.left = menuStyles.left - boundaryLeft;
 
-    if (y + rect.height > innerHeight - 10) {
+    if (y + rect.height > boundaryBottom - 10) {
       menuStyles.top -= rect.height;
     }
-    if (x + rect.width > innerWidth) {
+    if (x + rect.width > boundaryRight) {
       menuStyles.left -= rect.width;
     }
     if (menuStyles.top < 0) {
-      menuStyles.top = rect.bottom > innerHeight ? (innerHeight - 10 - rect.height) / 2 : 0;
+      menuStyles.top = rect.bottom > boundaryBottom ? (boundaryBottom - 10 - rect.height) / 2 : 0;
     }
     if (menuStyles.left < 0) {
-      menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
+      menuStyles.left = rect.width < boundaryRight ? (boundaryRight - rect.width) / 2 : 0;
     }
     return menuStyles;
-  }, [getContentRect, getContainerRect]);
+  }, [boundaryCoordinates]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
@@ -51,7 +51,7 @@ const ContextMenu = ({ options, getContainerRect, getContentRect, onOptionClick,
       event.preventDefault();
       if (menuRef.current && menuRef.current.contains(event.target)) return;
 
-      if (validTargets && !validTargets.some(target => event.target.closest(target))) {
+      if (ignoredTriggerElements && !ignoredTriggerElements.some(target => event.target.closest(target))) {
         return;
       }
 
@@ -65,7 +65,7 @@ const ContextMenu = ({ options, getContainerRect, getContentRect, onOptionClick,
     return () => {
       document.removeEventListener('contextmenu', handleShow);
     };
-  }, [getMenuPosition, validTargets]);
+  }, [getMenuPosition, ignoredTriggerElements]);
 
   useEffect(() => {
     if (visible) {
@@ -106,10 +106,9 @@ ContextMenu.propTypes = {
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   })).isRequired,
-  getContainerRect: PropTypes.func.isRequired,
-  getContentRect: PropTypes.func.isRequired,
+  boundaryCoordinates: PropTypes.object,
+  ignoredTriggerElements: PropTypes.array,
   onOptionClick: PropTypes.func.isRequired,
-  validTargets: PropTypes.array,
 };
 
 export default ContextMenu;

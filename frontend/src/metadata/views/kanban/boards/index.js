@@ -1,19 +1,17 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useCollaborators } from '../../../hooks';
-import { CellType, KANBAN_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, UNCATEGORIZED } from '../../../constants';
+import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { gettext } from '../../../../utils/constants';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
-import { openFile } from '../../../utils/open-file';
-import { checkIsDir, openInNewTab, openParentFolder } from '../../../utils/row';
-import URLDecorator from '../../../../utils/url-decorator';
+import { openFile } from '../../../utils/file';
+import { checkIsDir } from '../../../utils/row';
 import { Utils, validateName } from '../../../../utils/utils';
 import { getRowById } from '../../../utils/table';
 import AddBoard from '../add-board';
@@ -21,8 +19,7 @@ import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import toaster from '../../../../components/toast';
-import Rename from '../rename';
-import ContextMenu from '../../../components/context-menu';
+import ContextMenu from './context-menu';
 
 import './index.css';
 
@@ -31,7 +28,6 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
   const [isDragging, setDragging] = useState(false);
-  const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
 
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
@@ -232,90 +228,80 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setSelectedCard(recordId);
   }, []);
 
-  const handleDownload = useCallback(() => {
-    if (!selectedCard) return;
+  const onDelete = useCallback((recordsIds) => {
+    if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
 
-    const record = getRowById(metadata, selectedCard);
-    if (!record) return;
-
-    const path = getParentDirFromRecord(record);
-    const name = getFileNameFromRecord(record);
-    const direntPath = Utils.joinPath(path, name);
-    const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, path: direntPath });
-    location.href = url;
-    return;
-  }, [selectedCard, metadata, repoID]);
-
-  const handleDelete = useCallback(() => {
-    if (!selectedCard) return;
-
-    const record = getRowById(metadata, selectedCard);
-    if (!record) return;
-
-    const parentDir = getParentDirFromRecord(record);
-    const name = getFileNameFromRecord(record);
-    if (!parentDir || !name) return;
-
-    const path = Utils.joinPath(parentDir, name);
-    const recordsIds = [selectedCard];
-    const paths = [path];
-    const fileNames = [name];
-
+    let paths = [];
+    let fileNames = [];
+    recordsIds.forEach((recordId) => {
+      const record = getRowById(metadata, recordId);
+      const { _parent_dir, _name } = record || {};
+      if (_parent_dir && _name) {
+        const path = Utils.joinPath(_parent_dir, _name);
+        paths.push(path);
+        fileNames.push(_name);
+      }
+    });
     store.deleteRecords(recordsIds, {
       fail_callback: (error) => {
         toaster.danger(error);
       },
       success_callback: () => {
         deleteFilesCallback(paths, fileNames);
-        const msg = gettext('Successfully deleted {name}');
-        toaster.success(msg.replace('{name}', fileNames[0]));
+        let msg = fileNames.length > 1
+          ? gettext('Successfully deleted {name} and {n} other items')
+          : gettext('Successfully deleted {name}');
+        msg = msg.replace('{name}', fileNames[0])
+          .replace('{n}', fileNames.length - 1);
+        toaster.success(msg);
       },
     });
-  }, [store, metadata, selectedCard, deleteFilesCallback]);
+  }, [store, metadata, deleteFilesCallback]);
 
-  const handleRename = useCallback(() => {
-    setIsRenameDialogShow(true);
-  }, []);
-
-  const handleSubmitRename = useCallback((newName) => {
-    if (!selectedCard) return;
-
-    const record = getRowById(metadata, selectedCard);
-    if (!record) return;
-
-    const { isValid, errMessage } = validateName(newName);
-    if (!isValid) {
-      toaster.danger(errMessage);
-      return;
+  const onModify = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback }) => {
+    const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
+    let newName = null;
+    if (isRename) {
+      const rowId = rowIds[0];
+      const row = getRowById(metadata, rowId);
+      const rowUpdates = idOriginalRowUpdates[rowId];
+      const { _parent_dir, _name } = row;
+      newName = getFileNameFromRecord(rowUpdates);
+      const { isValid, errMessage } = validateName(newName);
+      if (!isValid) {
+        toaster.danger(errMessage);
+        return;
+      }
+      if (newName === _name) {
+        return;
+      }
+      if (store.checkDuplicatedName(newName, _parent_dir)) {
+        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+        toaster.danger(errMessage);
+        return;
+      }
     }
-
-    const parentDir = getParentDirFromRecord(record);
-    if (store.checkDuplicatedName(newName, parentDir)) {
-      const errMessage = gettext('The name "{name}" is already taken. Please choose a different name.').replace('{name}', Utils.HTMLescape(newName));
-      toaster.danger(errMessage);
-      return;
-    }
-
-    const rowId = selectedCard;
-    const oldName = getFileNameFromRecord(record);
-    const path = Utils.joinPath(parentDir, oldName);
-    const newPath = Utils.joinPath(parentDir, newName);
-
-    const rowIds = [rowId];
-    const updates = { [PRIVATE_COLUMN_KEY.FILE_NAME]: newName };
-    const oldRowData = { [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName };
-
-    store.modifyRecords(rowIds, { [rowId]: updates }, { [rowId]: updates }, { [rowId]: oldRowData }, { [rowId]: oldRowData }, false, true, {
+    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, false, isRename, {
       fail_callback: (error) => {
-        toaster.danger(error);
+        error && toaster.danger(error);
       },
-      success_callback: () => {
-        renameFileCallback(path, newPath);
-        toaster.success(gettext('Successfully renamed {name}').replace('{name}', oldName));
-        setIsRenameDialogShow(false);
+      success_callback: (operation) => {
+        if (operation.is_rename) {
+          const rowId = operation.row_ids[0];
+          const row = getRowById(metadata, rowId);
+          const rowUpdates = operation.id_original_row_updates[rowId];
+          const oldRow = operation.id_original_old_row_data[rowId];
+          const parentDir = getParentDirFromRecord(row);
+          const oldName = getFileNameFromRecord(oldRow);
+          const path = Utils.joinPath(parentDir, oldName);
+          const newName = getFileNameFromRecord(rowUpdates);
+          renameFileCallback(path, newName);
+          success_callback && success_callback();
+        }
       },
     });
-  }, [store, metadata, selectedCard, renameFileCallback]);
+  };
 
   useEffect(() => {
     if (!isDirentDetailShow) {
@@ -323,61 +309,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     }
   }, [isDirentDetailShow]);
 
-  const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
-  const isDir = useMemo(() => selectedRecord && checkIsDir(selectedRecord), [selectedRecord]);
-  const oldName = useMemo(() => selectedRecord && getFileNameFromRecord(selectedRecord), [selectedRecord]);
   const isEmpty = boards.length === 0;
-
-  const options = useMemo(() => {
-    return [
-      { value: 'open-in-new-tab', label: isDir ? gettext('Open folder in new tab') : gettext('Open file in new tab') },
-      { value: 'open-parent-folder', label: gettext('Open parent folder') },
-      { value: 'download', label: gettext('Download') },
-      { value: 'delete', label: gettext('Delete') },
-      { value: 'rename', label: gettext('Rename') },
-    ];
-  }, [isDir]);
-
-  const handleOptionClick = useCallback((option) => {
-    if (!selectedCard) return;
-
-    const record = getRowById(metadata, selectedCard);
-    if (!record) return;
-
-    switch (option.value) {
-      case 'open-in-new-tab': {
-        openInNewTab(record);
-        break;
-      }
-      case 'open-parent-folder': {
-        openParentFolder(record);
-        break;
-      }
-      case 'download': {
-        handleDownload();
-        break;
-      }
-      case 'delete': {
-        handleDelete();
-        break;
-      }
-      case 'rename': {
-        handleRename();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }, [metadata, selectedCard, handleDownload, handleDelete, handleRename]);
-
-  const getContainerRect = useCallback(() => {
-    return containerRef.current.getBoundingClientRect();
-  }, []);
-
-  const getContentRect = useCallback(() => {
-    return containerRef.current.getBoundingClientRect();
-  }, []);
 
   return (
     <>
@@ -423,6 +355,12 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
           {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
         </div>
       </div>
+      <ContextMenu
+        boundaryCoordinates={containerRef?.current?.getBoundingClientRect()}
+        selectedCard={selectedCard}
+        onDelete={onDelete}
+        onModify={onModify}
+      />
       {isImagePreviewerVisible && (
         <ImagePreviewer
           repoID={repoID}
@@ -431,23 +369,6 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
           table={metadata}
           closeImagePopup={closeImagePreviewer}
         />
-      )}
-      <ContextMenu
-        options={options}
-        getContainerRect={getContainerRect}
-        getContentRect={getContentRect}
-        onOptionClick={handleOptionClick}
-        validTargets={['.sf-metadata-kanban-card']}
-      />
-      {isRenameDialogShow && (
-        <ModalPortal>
-          <Rename
-            isDir={isDir}
-            oldName={oldName}
-            onSubmit={handleSubmitRename}
-            onCancel={() => setIsRenameDialogShow(false)}
-          />
-        </ModalPortal>
       )}
     </>
   );

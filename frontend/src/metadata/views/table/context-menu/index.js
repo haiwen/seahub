@@ -6,12 +6,13 @@ import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../../hooks';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
-import { checkIsDir, openInNewTab, openParentFolder } from '../../../utils/row';
+import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
 } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
+import { openInNewTab, openParentFolder } from '../../../utils/file';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -299,16 +300,17 @@ const ContextMenu = (props) => {
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
+    const repoID = window.sfMetadataStore.repoId;
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
         const { record } = option;
-        if (!record) break;
-        openInNewTab(record);
+        openInNewTab(repoID, record);
         break;
       }
       case OPERATION.OPEN_PARENT_FOLDER: {
+        event.preventDefault();
+        event.stopPropagation();
         const { record } = option;
-        if (!record) break;
         openParentFolder(record);
         break;
       }
