@@ -121,6 +121,17 @@ class ExternalOperations extends React.Component {
   };
 
   onCreateSdocFile = (params) => {
+    if (params?.noShowDialog) {
+      this.setState({
+        insertSdocFileLink: params.insertSdocFileLink,
+        editor: params.editor,
+      }, () => {
+        const filePath = `${this.props.dirPath}/${params.newFileName}.sdoc`;
+        this.onAddFile(filePath);
+      });
+      return;
+    }
+
     if (params?.editor && params?.insertSdocFileLink) {
       this.setState({ editor: params.editor, insertSdocFileLink: params.insertSdocFileLink });
     }
