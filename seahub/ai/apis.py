@@ -282,9 +282,9 @@ class OCR(APIView):
 
 
 class Translate(APIView):
-    # authentication_classes = (TokenAuthentication, SessionAuthentication)
-    # permission_classes = (IsAuthenticated,)
-    # throttle_classes = (UserRateThrottle,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
         if not verify_ai_config():
