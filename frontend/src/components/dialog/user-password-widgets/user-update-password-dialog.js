@@ -39,7 +39,7 @@ const UserUpdatePassword = ({ toggle }) => {
       setErrorMessage(gettext('New password cannot be the same as old password'));
     }
     if (!validatePassword(newPassword)) {
-      setErrorMessage(gettext('Insufficient password strength'));
+      setErrorMessage(gettext('Password strength should be strong or very strong'));
       return;
     }
     setErrorMessage('');

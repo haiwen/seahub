@@ -228,7 +228,7 @@ class ResetPasswordView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'New password cannot be the same as old password')
 
         if not is_password_strength_valid(new_password):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Insufficient password strength')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Password strength should be strong or very strong')
 
         user = request.user
         if user.enc_password != UNUSABLE_PASSWORD and not old_password:
