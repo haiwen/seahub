@@ -73,7 +73,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
     onDeletePeoplePhotos && onDeletePeoplePhotos(people._id, ids);
   }, [metadata, onClose, people, onDeletePeoplePhotos]);
 
-  const handelDelete = useCallback((deletedImages, callback) => {
+  const handelDelete = useCallback((deletedImages, { success_callback } = {}) => {
     if (!deletedImages.length) return;
     let recordIds = [];
     let paths = [];
@@ -88,7 +88,6 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
       }
     });
     window.sfMetadataContext.batchDeleteFiles(repoID, paths).then(res => {
-      callback && callback();
       deletedByIds(recordIds);
       deleteFilesCallback(paths, fileNames);
       let msg = fileNames.length > 1
@@ -97,6 +96,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
       msg = msg.replace('{name}', fileNames[0])
         .replace('{n}', fileNames.length - 1);
       toaster.success(msg);
+      success_callback && success_callback();
     }).catch(error => {
       toaster.danger(gettext('Failed to delete records'));
     });

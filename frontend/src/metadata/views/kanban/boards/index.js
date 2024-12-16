@@ -17,6 +17,7 @@ import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import ContextMenu from '../context-menu';
+import { getRowById } from '../../../utils/table';
 
 import './index.css';
 
@@ -192,9 +193,9 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     setImagePreviewerVisible(false);
   }, []);
 
-  const onSelectCard = useCallback((record) => {
+  const handelUpdateCurrentDirent = useCallback((record) => {
+    if (!record) return;
     const recordId = getRecordIdFromRecord(record);
-    if (selectedCard === recordId) return;
     const name = getFileNameFromRecord(record);
     const path = getParentDirFromRecord(record);
     const isDir = checkIsDir(record);
@@ -206,9 +207,15 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
       file_tags: []
     });
     setSelectedCard(recordId);
+  }, [updateCurrentDirent]);
+
+  const onSelectCard = useCallback((record) => {
+    const recordId = getRecordIdFromRecord(record);
+    if (selectedCard === recordId) return;
+    handelUpdateCurrentDirent(record);
     onCloseSettings();
     showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, updateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, showDirentDetail, handelUpdateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     if (isDragging) return;
@@ -222,8 +229,10 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
 
   const onContextMenu = useCallback((event, recordId) => {
     event.preventDefault();
-    setSelectedCard(recordId);
-  }, []);
+    if (selectedCard === recordId) return;
+    const record = getRowById(metadata, recordId);
+    handelUpdateCurrentDirent(record);
+  }, [metadata, selectedCard, handelUpdateCurrentDirent]);
 
   const onDeleteRecords = useCallback((recordIds) => {
     deleteRecords(recordIds, {
