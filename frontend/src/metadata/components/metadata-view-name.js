@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { useMetadata } from '../hooks';
 
 const MetadataViewName = ({ id }) => {
-  const { viewsMap } = useMetadata();
+  const { idViewMap } = useMetadata();
   if (!id) return null;
-  const view = viewsMap[id];
+  const view = idViewMap[id];
   if (!view) return null;
   return (<>{view.name}</>);
 };

@@ -1,41 +1,42 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Input } from 'reactstrap';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext } from '../../../utils/constants';
-import Icon from '../../../components/icon';
-import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
-import { Utils, isMobile } from '../../../utils/utils';
-import { useMetadata } from '../../hooks';
-import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE_ICON } from '../../constants';
-import { isValidViewName } from '../../utils/validate';
-import { isEnter } from '../../utils/hotkey';
-import toaster from '../../../components/toast';
+import { gettext } from '../../utils/constants';
+import Icon from '../../components/icon';
+import ItemDropdownMenu from '../../components/dropdown-menu/item-dropdown-menu';
+import toaster from '../../components/toast';
+import InlineNameEditor from './inline-name-editor';
+import { Utils, isMobile } from '../../utils/utils';
+import { useMetadata } from '../hooks';
+import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { validateName } from '../utils/validate';
 
-import './index.css';
+const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 
 const ViewItem = ({
+  leftIndent,
   canDelete,
   userPerm,
   isSelected,
+  folderId,
   view,
+  getMoveableFolders,
+  setDragMode,
+  getDragMode,
   onClick,
   onDelete,
   onCopy,
   onUpdate,
-  onMove,
 }) => {
+  const { _id: viewId, name: viewName } = view;
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
   const [isRenaming, setRenaming] = useState(false);
-  const [inputValue, setInputValue] = useState(view.name || '');
 
-  const inputRef = useRef(null);
+  const { idViewMap, moveView } = useMetadata();
 
-  const { viewsMap } = useMetadata();
-
-  const otherViewsName = Object.values(viewsMap).filter(v => v._id !== view._id).map(v => v.name);
+  const otherViewsName = Object.values(idViewMap).filter(v => v._id !== view._id).map(v => v.name);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -49,18 +50,27 @@ const ViewItem = ({
 
   const operations = useMemo(() => {
     if (!canUpdate) return [];
-    if (view._id === FACE_RECOGNITION_VIEW_ID) {
+    if (viewId === FACE_RECOGNITION_VIEW_ID) {
       return [];
     }
     let value = [
       { key: 'rename', value: gettext('Rename') },
       { key: 'duplicate', value: gettext('Duplicate') }
     ];
+
+    const moveableFolders = getMoveableFolders(folderId);
+    if (moveableFolders.length > 0) {
+      value.push({
+        key: 'move',
+        value: gettext('Move'),
+        subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <i className="sf3-font sf3-font-folder"></i> })),
+      });
+    }
     if (canDelete) {
       value.push({ key: 'delete', value: gettext('Delete') });
     }
     return value;
-  }, [view, canUpdate, canDelete]);
+  }, [folderId, viewId, canUpdate, canDelete, getMoveableFolders]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
@@ -79,6 +89,7 @@ const ViewItem = ({
 
   const freezeItem = useCallback(() => {
     setFreeze(true);
+    setHighlight(true);
   }, []);
 
   const unfreezeItem = useCallback(() => {
@@ -87,45 +98,60 @@ const ViewItem = ({
   }, []);
 
   const operationClick = useCallback((operationKey) => {
+    if (operationKey.startsWith(MOVE_TO_FOLDER_PREFIX)) {
+      const targetFolderId = operationKey.split(MOVE_TO_FOLDER_PREFIX)[1];
+      moveView({ sourceViewId: viewId, sourceFolderId: folderId, targetFolderId });
+      return;
+    }
     if (operationKey === 'rename') {
       setRenaming(true);
       return;
     }
 
     if (operationKey === 'duplicate') {
-      onCopy();
+      onCopy(viewId);
       return;
     }
 
     if (operationKey === 'delete') {
-      onDelete();
+      onDelete(viewId, isSelected);
       return;
     }
-  }, [onDelete, onCopy]);
+  }, [folderId, viewId, isSelected, onDelete, onCopy, moveView]);
 
   const renameView = useCallback((name, failCallback) => {
-    onUpdate({ name }, () => {
+    onUpdate(viewId, { name }, () => {
       setRenaming(false);
       if (!isSelected) return;
       document.title = `${name} - Seafile`;
     }, (error) => {
       failCallback(error);
       if (!isSelected) return;
-      document.title = `${view.name} - Seafile`;
+      document.title = `${viewName} - Seafile`;
     });
-  }, [isSelected, onUpdate, view.name]);
+  }, [isSelected, onUpdate, viewId, viewName]);
 
   const onDragStart = useCallback((event) => {
     if (!canDrop) return false;
-    const dragData = JSON.stringify({ type: 'sf-metadata-view', view_id: view._id });
+    const dragData = JSON.stringify({
+      type: METADATA_VIEWS_KEY,
+      mode: VIEWS_TYPE_VIEW,
+      view_id: viewId,
+      folder_id: folderId,
+    });
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/drag-sf-metadata-view', dragData);
-  }, [canDrop, view]);
+    event.dataTransfer.setData(METADATA_VIEWS_DRAG_DATA_KEY, dragData);
+    setDragMode(VIEWS_TYPE_VIEW);
+  }, [canDrop, viewId, folderId, setDragMode]);
 
   const onDragEnter = useCallback((event) => {
-    if (!canDrop) return false;
+    const dragMode = getDragMode();
+    if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER) {
+      // not allowed drag folder into folder
+      return false;
+    }
     setDropShow(true);
-  }, [canDrop]);
+  }, [canDrop, folderId, getDragMode]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
@@ -139,78 +165,43 @@ const ViewItem = ({
   }, [canDrop]);
 
   const onDrop = useCallback((event) => {
-    if (!canDrop) return false;
+    const dragMode = getDragMode();
+    if (!canDrop || (folderId && dragMode === VIEWS_TYPE_FOLDER)) return false;
     event.stopPropagation();
     setDropShow(false);
 
-    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view');
+    let dragData = event.dataTransfer.getData(METADATA_VIEWS_DRAG_DATA_KEY);
     if (!dragData) return;
     dragData = JSON.parse(dragData);
-    if (dragData.type !== 'sf-metadata-view') return false;
-    if (!dragData.view_id) return;
-    onMove && onMove(dragData.view_id, view._id);
-  }, [canDrop, view, onMove]);
+    const { view_id: sourceViewId, folder_id: sourceFolderId } = dragData;
+    if ((dragMode === VIEWS_TYPE_VIEW && !sourceViewId) || (dragMode === VIEWS_TYPE_FOLDER && !sourceFolderId)) {
+      return;
+    }
+    moveView({ sourceViewId, sourceFolderId, targetViewId: viewId, targetFolderId: folderId });
+  }, [canDrop, folderId, viewId, getDragMode, moveView]);
 
-  const onChange = useCallback((e) => {
-    setInputValue(e.target.value);
-  }, []);
-
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const { isValid, message } = isValidViewName(inputValue, otherViewsName);
+  const handleSubmit = useCallback((name) => {
+    const { isValid, message } = validateName(name, otherViewsName);
     if (!isValid) {
       toaster.danger(message);
       return;
     }
-    if (message === view.name) {
+    if (message === viewName) {
       setRenaming(false);
       return;
     }
     renameView(message);
-  }, [view, inputValue, otherViewsName, renameView]);
-
-  const onKeyDown = useCallback((event) => {
-    if (isEnter(event)) {
-      handleSubmit(event);
-      unfreezeItem();
-    }
-  }, [handleSubmit, unfreezeItem]);
-
-  useEffect(() => {
-    if (isRenaming && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
-    }
-  }, [isRenaming]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
-        handleSubmit(event);
-      }
-    };
-
-    if (isRenaming) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isRenaming, handleSubmit]);
+  }, [viewName, otherViewsName, renameView]);
 
   return (
-    <>
+    <div className="tree-node">
       <div
         className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-drop': isDropShow })}
-        title={view.name}
+        title={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
-        onClick={() => onClick(view)}
+        onClick={() => onClick(view, isSelected)}
       >
         <div
           className="tree-node-text"
@@ -220,29 +211,27 @@ const ViewItem = ({
           onDragLeave={onDragLeave}
           onDragOver={onDragMove}
           onDrop={onDrop}
+          style={{ paddingLeft: leftIndent + 5 }}
         >
           {isRenaming ? (
-            <Input
-              innerRef={inputRef}
-              className="sf-metadata-view-input mt-0"
-              value={inputValue}
-              onChange={onChange}
-              autoFocus={true}
-              onBlur={() => setRenaming(false)}
-              onKeyDown={onKeyDown}
+            <InlineNameEditor
+              name={viewName}
+              className="rename mt-0"
+              onSubmit={handleSubmit}
             />
-          ) : view.name}
+          ) : viewName}
         </div>
-        <div className="left-icon">
+        <div className="left-icon" style={{ left: leftIndent - 40 }}>
           <div className="tree-node-icon">
             <Icon symbol={VIEW_TYPE_ICON[view.type] || 'table'} className="metadata-views-icon" />
           </div>
         </div>
         {operations.length > 0 && (
-          <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
+          <div className="right-icon" id={`metadata-view-dropdown-item-${viewId}`} >
             {highlight && (
               <ItemDropdownMenu
                 item={{ name: 'metadata-view' }}
+                menuClassname="metadata-views-dropdown-menu"
                 toggleClass="sf3-font sf3-font-more"
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
@@ -254,14 +243,19 @@ const ViewItem = ({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
 ViewItem.propTypes = {
+  leftIndent: PropTypes.number,
   canDelete: PropTypes.bool,
   isSelected: PropTypes.bool,
+  folderId: PropTypes.string,
   view: PropTypes.object,
+  getMoveableFolders: PropTypes.func,
+  setDragMode: PropTypes.func,
+  getDragMode: PropTypes.func,
   onClick: PropTypes.func,
 };
 

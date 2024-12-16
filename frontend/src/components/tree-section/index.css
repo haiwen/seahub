@@ -73,7 +73,11 @@
   margin-left: 0;
   line-height: 1.5;
   font-size: 16px;
-  color: #999 !important;
+  color: #666 !important;
+}
+
+.tree-section .tree-section-more-operation .dropdown .sf-dropdown-toggle.sf3-font-new {
+  font-size: 12px;
 }
 
 .tree-section .tree-section-header .tree-section-more-operation {

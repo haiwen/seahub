@@ -4,6 +4,16 @@ import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_CO
   GALLERY_SORT_PRIVATE_COLUMN_KEYS, GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS,
 } from './sort';
 
+export const METADATA_VIEWS_KEY = 'sf-metadata-views';
+
+export const METADATA_VIEWS_DRAG_DATA_KEY = 'application/drag-sf-metadata-views';
+
+export const TREE_NODE_LEFT_INDENT = 20;
+
+export const VIEWS_TYPE_FOLDER = 'folder';
+
+export const VIEWS_TYPE_VIEW = 'view';
+
 export const VIEW_TYPE = {
   TABLE: 'table',
   GALLERY: 'gallery',

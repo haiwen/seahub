@@ -1,17 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import TreeSection from '../tree-section';
-import { MetadataTreeView, useMetadata } from '../../metadata';
-import ExtensionPrompts from './extension-prompts';
-import LibSettingsDialog, { TAB } from '../dialog/lib-settings';
-import { useMetadataStatus } from '../../hooks';
+import TreeSection from '../../tree-section';
+import ExtensionPrompts from '../extension-prompts';
+import LibSettingsDialog, { TAB } from '../../dialog/lib-settings';
+import ViewsMoreOperations from './views-more-operations';
+import { MetadataTreeView, useMetadata } from '../../../metadata';
+import { useMetadataStatus } from '../../../hooks';
+import { gettext } from '../../../utils/constants';
+
+import './index.css';
 
 const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const enableMetadataManagement = useMemo(() => {
     if (currentRepoInfo.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
   const { navigation } = useMetadata();
@@ -30,9 +33,27 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     return null;
   }
 
+  const renderTreeSectionHeaderOperations = (menuProps) => {
+    const canAdd = userPerm === 'rw' || userPerm === 'admin';
+
+    let operations = [];
+    if (enableMetadata && canAdd) {
+      operations.push(
+        <ViewsMoreOperations
+          key={'tree-section-more-operation'}
+          menuProps={menuProps}
+        />
+      );
+    }
+    return operations;
+  };
+
   return (
     <>
-      <TreeSection title={gettext('Views')}>
+      <TreeSection
+        title={gettext('Views')}
+        renderHeaderOperations={renderTreeSectionHeaderOperations}
+      >
         {!enableMetadata ? (
           <ExtensionPrompts onExtendedProperties={onExtendedProperties} />
         ) : Array.isArray(navigation) && navigation.length > 0 ? (

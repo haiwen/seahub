@@ -1,20 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
-import { isMobile } from '../../utils/utils';
 
 import './index.css';
 
-const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick, className, isDisplayFiles }) => {
+const TreeSection = ({ title, children, renderHeaderOperations, className }) => {
   const [showChildren, setShowChildren] = useState(true);
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
-
-  const validMoreOperations = useMemo(() => {
-    if (!Array.isArray(moreOperations) || moreOperations.length === 0) return [];
-    return moreOperations.filter(operation => operation.key && operation.value);
-  }, [moreOperations]);
 
   const toggleShowChildren = useCallback((event) => {
     event.stopPropagation();
@@ -39,12 +32,23 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
 
   const freezeItem = useCallback(() => {
     setFreeze(true);
+    setHighlight(true);
   }, []);
 
   const unfreezeItem = useCallback(() => {
     setFreeze(false);
     setHighlight(false);
   }, []);
+
+  const renderOperations = useCallback(() => {
+    if (!renderHeaderOperations) {
+      return null;
+    }
+    return renderHeaderOperations({
+      freezeItem,
+      unfreezeItem,
+    });
+  }, [renderHeaderOperations, freezeItem, unfreezeItem]);
 
   return (
     <div className={classnames('tree-section', className)}>
@@ -56,22 +60,7 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
       >
         <div className="tree-section-header-title">{title}</div>
         <div className="tree-section-header-operations">
-          {validMoreOperations.length > 0 && (
-            <>
-              <div className="tree-section-header-operation tree-section-more-operation">
-                <ItemDropdownMenu
-                  item={moreKey}
-                  toggleClass="sf3-font sf3-font-more"
-                  freezeItem={freezeItem}
-                  unfreezeItem={unfreezeItem}
-                  getMenuList={() => validMoreOperations}
-                  onMenuItemClick={moreOperationClick}
-                  menuStyle={isMobile ? { zIndex: 1050 } : {}}
-                  isDisplayFiles={isDisplayFiles}
-                />
-              </div>
-            </>
-          )}
+          {renderOperations()}
           <div className="tree-section-header-operation" onClick={toggleShowChildren}>
             <i className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
           </div>
@@ -88,12 +77,8 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
 
 TreeSection.propTypes = {
   title: PropTypes.any.isRequired,
-  moreOperations: PropTypes.array,
   children: PropTypes.any,
-  moreKey: PropTypes.object,
-  moreOperationClick: PropTypes.func,
   className: PropTypes.string,
-  isDisplayFiles: PropTypes.bool,
 };
 
 export default TreeSection;
