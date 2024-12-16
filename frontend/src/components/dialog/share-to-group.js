@@ -375,6 +375,7 @@ class ShareToGroup extends React.Component {
                   onDeleteOption={this.onDeleteOption}
                   searchPlaceholder={gettext('Search groups')}
                   noOptionsPlaceholder={gettext('No results')}
+                  isInModal={true}
                 />
               </td>
               <td>

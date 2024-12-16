@@ -1830,7 +1830,13 @@ class SeafileAPI {
     let form = new FormData();
     form.append('permission', permission);
     form.append('folder_path', folderPath);
-    form.append('group_id', groupID);
+    if (Array.isArray(groupID)) {
+      groupID.forEach(item => {
+        form.append('group_id', item);
+      });
+    } else {
+      form.append('group_id', groupID);
+    }
     return this._sendPostRequest(url, form);
   }
 
@@ -1908,7 +1914,13 @@ class SeafileAPI {
     let form = new FormData();
     form.append('permission', permission);
     form.append('folder_path', folderPath);
-    form.append('group_id', groupID);
+    if (Array.isArray(groupID)) {
+      groupID.forEach(item => {
+        form.append('group_id', item);
+      });
+    } else {
+      form.append('group_id', groupID);
+    }
     return this._sendPostRequest(url, form);
   }
 

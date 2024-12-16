@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser';
-import { SeahubSelect, NoGroupMessage } from '../common/select';
+import GroupSelect from '../common/group-select';
 import toaster from '../../components/toast';
 
 class GroupItem extends React.Component {
@@ -96,7 +96,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedOptions: [],
       errorMsg: [],
       permission: 'rw',
       groupPermissionItems: [],
@@ -111,10 +111,6 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
     }
   }
 
-  handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
-  };
-
   componentDidMount() {
     this.loadOptions();
     this.listGroupPermissionItems();
@@ -126,6 +122,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
         return {
           id: item.id,
           label: item.name,
+          name: item.name,
           value: item.name
         };
       });
@@ -152,20 +149,41 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
     });
   };
 
+  onSelectOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    } else {
+      selectedOptions.push(option);
+    }
+    this.setState({ selectedOptions: selectedOptions });
+  };
+
+  onDeleteOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    }
+    this.setState({ selectedOptions: selectedOptions });
+  };
+
   setPermission = (permission) => {
     this.setState({ permission: permission });
   };
 
   addGroupFolderPerm = () => {
-    const { selectedOption } = this.state;
+    const { selectedOptions } = this.state;
     const folderPath = this.props.folderPath || this.state.folderPath;
-    if (!selectedOption || !folderPath) {
+    if (selectedOptions.length === 0 || !folderPath) {
       return false;
     }
 
+    const targetGroupIds = selectedOptions.map(op => op.id);
     const request = this.props.isDepartmentRepo ?
-      seafileAPI.addDepartmentRepoGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, selectedOption.id) :
-      seafileAPI.addGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, selectedOption.id);
+      seafileAPI.addDepartmentRepoGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, targetGroupIds) :
+      seafileAPI.addGroupFolderPerm(this.props.repoID, this.state.permission, folderPath, targetGroupIds);
     request.then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
@@ -176,7 +194,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       this.setState({
         errorMsg: errorMsg,
         groupPermissionItems: this.state.groupPermissionItems.concat(res.data.success),
-        selectedOption: null,
+        selectedOptions: [],
         permission: 'rw',
         folderPath: ''
       });
@@ -296,13 +314,14 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
           <tbody>
             <tr>
               <td>
-                <SeahubSelect
-                  onChange={this.handleSelectChange}
+                <GroupSelect
+                  selectedOptions={this.state.selectedOptions}
                   options={this.options}
-                  placeholder={gettext('Select a group')}
-                  maxMenuHeight={200}
-                  value={this.state.selectedOption}
-                  noOptionsMessage={NoGroupMessage}
+                  onSelectOption={this.onSelectOption}
+                  onDeleteOption={this.onDeleteOption}
+                  searchPlaceholder={gettext('Search groups')}
+                  noOptionsPlaceholder={gettext('No results')}
+                  isInModal={true}
                 />
               </td>
               {showPath &&
