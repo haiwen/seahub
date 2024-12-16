@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 09:55+0800\n"
+"POT-Creation-Date: 2024-12-16 10:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -547,7 +547,7 @@ msgstr "该资料库中的文件数量已超过限制"
 #: seahub/api2/endpoints/upload_links.py:316
 #: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:261 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2745
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -839,9 +839,12 @@ msgstr "共享链接 \"%s\" 已存在。"
 #: seahub/organizations/api/admin/info.py:127
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
-#: seahub/subscription/views.py:40 seahub/work_weixin/views.py:38
-#: seahub/work_weixin/views.py:63 seahub/work_weixin/views.py:152
-#: seahub/work_weixin/views.py:172 seahub/work_weixin/views.py:233
+#: seahub/subscription/views.py:40 seahub/weixin/views.py:40
+#: seahub/weixin/views.py:62 seahub/weixin/views.py:164
+#: seahub/weixin/views.py:187 seahub/weixin/views.py:230
+#: seahub/work_weixin/views.py:38 seahub/work_weixin/views.py:63
+#: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
+#: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
 msgstr "功能未启用。"
 
@@ -1357,9 +1360,9 @@ msgstr "邮箱为必填项。"
 #: seahub/oauth/views.py:112 seahub/oauth/views.py:158
 #: seahub/oauth/views.py:170 seahub/oauth/views.py:176
 #: seahub/oauth/views.py:209 seahub/templates/remote_user/error.html:8
-#: seahub/weixin/views.py:37 seahub/weixin/views.py:57
-#: seahub/weixin/views.py:62 seahub/weixin/views.py:81
-#: seahub/weixin/views.py:99 seahub/work_weixin/views.py:69
+#: seahub/weixin/views.py:67 seahub/weixin/views.py:86
+#: seahub/weixin/views.py:107 seahub/weixin/views.py:192
+#: seahub/weixin/views.py:211 seahub/work_weixin/views.py:69
 #: seahub/work_weixin/views.py:74 seahub/work_weixin/views.py:84
 #: seahub/work_weixin/views.py:88 seahub/work_weixin/views.py:107
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
@@ -1368,7 +1371,7 @@ msgid "Error, please contact administrator."
 msgstr "出错了，请联系管理员。"
 
 #: seahub/dingtalk/views.py:126 seahub/dingtalk/views.py:370
-#: seahub/weixin/views.py:102
+#: seahub/weixin/views.py:110
 #, python-format
 msgid "User %s not found or inactive."
 msgstr "用户 %s 不存在或未激活。"
@@ -2175,31 +2178,31 @@ msgstr "更新"
 msgid "Profile"
 msgstr "个人信息"
 
-#: seahub/profile/views.py:48
+#: seahub/profile/views.py:49
 msgid "Successfully edited profile."
 msgstr "修改成功"
 
-#: seahub/profile/views.py:52
+#: seahub/profile/views.py:53
 msgid "Failed to edit profile"
 msgstr "修改失败"
 
-#: seahub/profile/views.py:246
+#: seahub/profile/views.py:257
 msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
-#: seahub/profile/views.py:271
+#: seahub/profile/views.py:282
 msgid "Demo account can not be deleted."
 msgstr "Demo帐号无法被删除。"
 
-#: seahub/profile/views.py:298
+#: seahub/profile/views.py:309
 msgid "Failed to set default library."
 msgstr "设置默认资料库失败。"
 
-#: seahub/profile/views.py:302
+#: seahub/profile/views.py:313
 msgid "Can not set encrypted library as default library."
 msgstr "无法把加密资料库设为默认资料库。"
 
-#: seahub/profile/views.py:307
+#: seahub/profile/views.py:318
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "成功设置 \"%s\"为你的默认资料库。"

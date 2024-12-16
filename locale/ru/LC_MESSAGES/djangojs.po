@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 09:55+0800\n"
+"POT-Creation-Date: 2024-12-16 10:15+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2024\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
@@ -71,7 +71,7 @@ msgstr "Использовано:"
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:109
 #: frontend/src/pages/sys-admin/side-panel.js:78
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:93
-#: frontend/src/settings.js:160
+#: frontend/src/settings.js:162
 msgid "Settings"
 msgstr "Настройки"
 
@@ -448,6 +448,7 @@ msgstr "Описание"
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:35
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
+#: frontend/src/components/dialog/confirm-disconnect-weixin.js:35
 #: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/confirm-unlink-device.js:49
 #: frontend/src/components/dialog/convert-wiki-dialog.js:101
@@ -985,7 +986,7 @@ msgstr "Подтвердить"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:27
 #: frontend/src/components/user-settings/delete-account.js:36
-#: frontend/src/settings.js:64
+#: frontend/src/settings.js:66
 msgid "Delete Account"
 msgstr "Удалить аккаунт"
 
@@ -1130,16 +1131,20 @@ msgstr "Удалить"
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:36
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:27
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:36
+#: frontend/src/components/dialog/confirm-disconnect-weixin.js:27
+#: frontend/src/components/dialog/confirm-disconnect-weixin.js:36
 #: frontend/src/components/user-settings/social-login-dingtalk.js:41
 #: frontend/src/components/user-settings/social-login-saml.js:52
 #: frontend/src/components/user-settings/social-login-saml.js:59
 #: frontend/src/components/user-settings/social-login-saml.js:68
+#: frontend/src/components/user-settings/social-login-weixin.js:41
 #: frontend/src/components/user-settings/social-login.js:41
 msgid "Disconnect"
 msgstr "Разъединить"
 
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:29
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:29
+#: frontend/src/components/dialog/confirm-disconnect-weixin.js:29
 #: frontend/src/components/user-settings/social-login-saml.js:61
 msgid "Are you sure you want to disconnect?"
 msgstr "Вы уверены, что хотите разъединить?"
@@ -1415,7 +1420,7 @@ msgstr "Шифровать"
 #: frontend/src/components/share-link-panel/link-creation.js:313
 #: frontend/src/components/share-link-panel/link-details.js:194
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:220
-#: frontend/src/settings.js:55 frontend/src/settings.js:170
+#: frontend/src/settings.js:57 frontend/src/settings.js:172
 msgid "Password"
 msgstr "Пароль"
 
@@ -4794,7 +4799,7 @@ msgid "Email notification updated"
 msgstr "Уведомление по электронной почте обновлено"
 
 #: frontend/src/components/user-settings/email-notice.js:68
-#: frontend/src/settings.js:60
+#: frontend/src/settings.js:62
 msgid "Email Notification"
 msgstr "Уведомление на email"
 
@@ -4852,12 +4857,12 @@ msgstr "Отвязан %(name)s."
 
 #: frontend/src/components/user-settings/linked-devices.js:232
 #: frontend/src/pages/linked-devices/linked-devices.js:235
-#: frontend/src/settings.js:63
+#: frontend/src/settings.js:65
 msgid "Linked Devices"
 msgstr "Связанные устройства"
 
 #: frontend/src/components/user-settings/list-in-address-book.js:30
-#: frontend/src/settings.js:58
+#: frontend/src/settings.js:60
 msgid "Global Address Book"
 msgstr "Глобальная адресная книга"
 
@@ -4869,13 +4874,15 @@ msgstr "Добавьте свой аккаунт в глобальную адр�
 
 #: frontend/src/components/user-settings/social-login-dingtalk.js:38
 #: frontend/src/components/user-settings/social-login-saml.js:49
+#: frontend/src/components/user-settings/social-login-weixin.js:38
 #: frontend/src/components/user-settings/social-login.js:38
-#: frontend/src/settings.js:62
+#: frontend/src/settings.js:64
 msgid "Social Login"
 msgstr "Социальный вход"
 
 #: frontend/src/components/user-settings/social-login-dingtalk.js:42
 #: frontend/src/components/user-settings/social-login-saml.js:53
+#: frontend/src/components/user-settings/social-login-weixin.js:42
 #: frontend/src/components/user-settings/social-login.js:42
 msgid "Connect"
 msgstr "Соединить"
@@ -4923,7 +4930,7 @@ msgstr "Включить двухфакторную аутентификацию
 
 #: frontend/src/components/user-settings/two-factor-auth.js:48
 #: frontend/src/pages/sys-admin/users/user-info.js:178
-#: frontend/src/settings.js:61
+#: frontend/src/settings.js:63
 msgid "Two-Factor Authentication"
 msgstr "Двухфакторная аутентификация"
 
@@ -4973,7 +4980,7 @@ msgid "Auth Token deleted"
 msgstr "Токен аутентификации удален"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:75
-#: frontend/src/settings.js:56
+#: frontend/src/settings.js:58
 msgid "Web API Auth Token"
 msgstr "Токен Web API Auth"
 
@@ -8998,23 +9005,23 @@ msgstr "Просмотр снимка"
 msgid "{placeholder} Snapshot"
 msgstr "{placeholder} Снимок"
 
-#: frontend/src/settings.js:54
+#: frontend/src/settings.js:56
 msgid "Profile"
 msgstr "Профиль"
 
-#: frontend/src/settings.js:57
+#: frontend/src/settings.js:59
 msgid "WebDav Access"
 msgstr "Доступ к WebDAV"
 
-#: frontend/src/settings.js:59
+#: frontend/src/settings.js:61
 msgid "Language"
 msgstr "Язык"
 
-#: frontend/src/settings.js:92
+#: frontend/src/settings.js:94
 msgid "User info updated"
 msgstr "Информация о пользователе обновлена"
 
-#: frontend/src/settings.js:164
+#: frontend/src/settings.js:166
 msgid "Profile Setting"
 msgstr "Настройки профиля"
 
