@@ -148,6 +148,7 @@ from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserRe
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
+from seahub.api2.endpoints.admin.wikis import AdminWikis
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
         AdminSystemLibraryUploadLink
@@ -733,6 +734,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/invitations/$', AdminInvitations.as_view(), name='api-v2.1-admin-invitations'),
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
+    ## admin:: wiki
+    re_path(r'^api/v2.1/admin/wikis/$', AdminWikis.as_view(), name='api-v2.1-admin-wikis'),
+
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/$', wiki_view, name='wiki'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/file_revisions/(?P<wiki_id>[^/]+)/$', wiki_history_view, name='wiki-history'),
@@ -821,6 +825,7 @@ urlpatterns = [
     path('sys/notifications/', sysadmin_react_fake_view, name="sys_notifications"),
     path('sys/web-settings/', sysadmin_react_fake_view, name="sys_web_settings"),
     path('sys/all-libraries/', sysadmin_react_fake_view, name="sys_all_libraries"),
+    path('sys/all-wikis/', sysadmin_react_fake_view, name="sys_all_wikis"),
     path('sys/search-libraries/', sysadmin_react_fake_view, name="sys_search_libraries"),
     path('sys/system-library/', sysadmin_react_fake_view, name="sys_system_library"),
     path('sys/trash-libraries/', sysadmin_react_fake_view, name="sys_trash_libraries"),

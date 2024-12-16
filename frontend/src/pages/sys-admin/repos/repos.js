@@ -83,9 +83,19 @@ class Content extends Component {
                     gettext('Files') / gettext('Size')
                   }
                 </th>
-                <th width="32%">ID</th>
-                <th width="18%">{gettext('Owner')}</th>
-                <th width="5%">{/* Operations*/}</th>
+                {this.props.isWiki == true ?
+                  <Fragment>
+                    <th width="32%">ID</th>
+                    <th width="10%">Published</th>
+                    <th width="8%">{gettext('Owner')}</th>
+                    <th width="5%">{/* Operations*/}</th>
+                  </Fragment> :
+                  <Fragment>
+                    <th width="32%">ID</th>
+                    <th width="18%">{gettext('Owner')}</th>
+                    <th width="5%">{/* Operations*/}</th>
+                  </Fragment>
+                }
               </tr>
             </thead>
             <tbody>
@@ -98,6 +108,7 @@ class Content extends Component {
                   onUnfreezedItem={this.onUnfreezedItem}
                   onDeleteRepo={this.props.onDeleteRepo}
                   onTransferRepo={this.props.onTransferRepo}
+                  isWiki={this.props.isWiki}
                 />);
               })}
             </tbody>
@@ -317,6 +328,13 @@ class Item extends Component {
           <td>{this.renderRepoName()}</td>
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.id}</td>
+          {this.props.isWiki &&
+            <td>
+              { repo.is_published ?
+                'True' : 'False'
+              }
+            </td>
+          }
           <td>
             {isGroupOwnedRepo ?
               <Link to={`${siteRoot}sys/departments/${departmentID}/`}>{repo.owner_name}</Link> :
