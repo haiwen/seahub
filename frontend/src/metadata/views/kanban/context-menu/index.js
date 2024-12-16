@@ -45,10 +45,10 @@ const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onRena
       { value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') },
     ];
     if (checkCanDeleteRow) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: gettext('Delete file') });
+      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: isDir ? gettext('Delete folder') : gettext('Delete file') });
     }
     if (canModifyRow) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.RENAME, label: gettext('Rename file') });
+      validOptions.push({ value: CONTEXT_MENU_KEY.RENAME, label: isDir ? gettext('Rename folder') : gettext('Rename file') });
     }
 
     return validOptions;
