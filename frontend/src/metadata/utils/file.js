@@ -103,13 +103,9 @@ export const openFile = (repoID, record, _openImage = () => {}) => {
 export const openInNewTab = (repoID, record) => {
   if (!record) return;
   const isDir = checkIsDir(record);
-  const parentDir = getParentDirFromRecord(record);
   const fileName = getFileNameFromRecord(record);
-  const url = isDir
-    ? window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName))
-    : `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
-
-  window.open(url, '_blank');
+  const parentDir = _getParentDir(record);
+  _openByNewWindow(repoID, fileName, parentDir, isDir ? FILE_TYPE.FOLDER : '');
 };
 
 export const openParentFolder = (record) => {
