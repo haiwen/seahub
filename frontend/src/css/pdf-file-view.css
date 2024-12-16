@@ -157,6 +157,10 @@ input#findInput {
   font-size: inherit;
 }
 
+#printServiceDialog .modal-close {
+  outline: none;
+}
+
 #printServiceDialog .progress,
 #printServiceDialog .progress-bar {
   height: 10px;

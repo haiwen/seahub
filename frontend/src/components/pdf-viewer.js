@@ -410,7 +410,7 @@ class PDFViewer extends React.Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Print document')}</h5>
-                  <button type="button" id="printCancel2" className="close sf3-font sf3-font-close" aria-label={gettext('Close')} autoFocus={false}></button>
+                  <button type="button" id="printCancel2" className="align-self-center bg-transparent border-0 sf3-font sf3-font-x-01 modal-close" aria-label={gettext('Close')}></button>
                 </div>
                 <div className="modal-body py-6">
                   <p className="mb-2">

@@ -1415,6 +1415,17 @@ a.table-sort-op:hover {
   white-space: nowrap;
 }
 
+.modal-close {
+  color: #000;
+  opacity: 0.5;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  opacity: 0.75;
+}
+
 .word-break-all {
   word-break: break-all;
 }
