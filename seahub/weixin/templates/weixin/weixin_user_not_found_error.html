@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="text-panel">
+    <p class="error">没找到对应的账号，请先用邮箱注册一个团队账号，然后在个人设置页绑定微信后再扫码登录。</p>
+    <p class="error"><a href="{% url 'org_register' %}">[注册团队账号]</a></p>
+</div>
+{% endblock %}
