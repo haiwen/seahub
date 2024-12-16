@@ -86,15 +86,16 @@ class Content extends Component {
                 {this.props.isWiki == true ?
                   <Fragment>
                     <th width="32%">ID</th>
-                    <th width="8%">Published</th>
-                    <th width="10%">{gettext('Owner')}</th>
+                    <th width="10%">Published</th>
+                    <th width="8%">{gettext('Owner')}</th>
+                    <th width="5%">{/* Operations*/}</th>
                   </Fragment> :
                   <Fragment>
                     <th width="32%">ID</th>
                     <th width="18%">{gettext('Owner')}</th>
+                    <th width="5%">{/* Operations*/}</th>
                   </Fragment>
                 }
-                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
