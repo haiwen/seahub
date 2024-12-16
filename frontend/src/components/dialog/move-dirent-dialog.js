@@ -237,14 +237,16 @@ class MoveDirent extends React.Component {
 
   onUpdateSearchResults = (results) => {
     this.setState({
-      searchResults: results
+      searchResults: results,
+      selectedRepo: results.length > 0 ? new RepoInfo(results[0]) : null,
+      selectedPath: results.length > 0 ? results[0].path : '',
     });
   };
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
       selectedPath: selectedPath,
-      repo,
+      selectedRepo: repo,
       errMessage: '',
     });
   };
