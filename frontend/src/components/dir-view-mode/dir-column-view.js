@@ -81,7 +81,6 @@ const propTypes = {
   onItemsScroll: PropTypes.func.isRequired,
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
-  closeDirentDetail: PropTypes.func.isRequired,
 };
 
 class DirColumnView extends React.Component {
@@ -206,7 +205,6 @@ class DirColumnView extends React.Component {
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
               updateCurrentDirent={this.props.updateCurrentDirent}
-              closeDirentDetail={this.props.closeDirentDetail}
               showDirentDetail={this.props.showDirentDetail}
             />
           )}
@@ -219,7 +217,6 @@ class DirColumnView extends React.Component {
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
               updateCurrentDirent={this.props.updateCurrentDirent}
-              closeDirentDetail={this.props.closeDirentDetail}
             />
           )}
           {currentMode === LIST_MODE &&

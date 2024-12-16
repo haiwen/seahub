@@ -17,7 +17,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
 
   const containerRef = useRef(null);
 
-  const { metadata, store, closeDirentDetail } = useMetadataView();
+  const { metadata, store } = useMetadataView();
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -61,12 +61,6 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
       containerRef.current.scrollTop = Number(scrollTop);
     }
     return () => {};
-  }, []);
-
-  useEffect(() => {
-    closeDirentDetail();
-    return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip text={gettext('Identifying portraits...')} />);

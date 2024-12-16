@@ -140,7 +140,6 @@ export const MetadataViewProvider = ({
         deleteFilesCallback: params.deleteFilesCallback,
         renameFileCallback: params.renameFileCallback,
         updateCurrentDirent: params.updateCurrentDirent,
-        closeDirentDetail: params.closeDirentDetail,
         showDirentDetail: params.showDirentDetail,
       }}
     >

@@ -240,7 +240,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteFilesCallback: params.deleteFilesCallback,
       renameFileCallback: params.renameFileCallback,
       updateCurrentDirent: params.updateCurrentDirent,
-      closeDirentDetail: params.closeDirentDetail,
       addTag,
       addTags,
       modifyTags,

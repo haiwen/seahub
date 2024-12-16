@@ -6,7 +6,7 @@ import { gettext } from '../../../../utils/constants';
 
 const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,
-  modifyFilters, modifySorts, showDetail,
+  modifyFilters, modifySorts, onToggleDetail,
 }) => {
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
@@ -48,7 +48,7 @@ const GalleryViewToolbar = ({
           modifySorts={modifySorts}
         />
         {!isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={showDetail}>
+          <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
             <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
           </div>
         )}
@@ -65,7 +65,7 @@ GalleryViewToolbar.propTypes = {
   collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
-  showDetail: PropTypes.func,
+  onToggleDetail: PropTypes.func,
 };
 
 export default GalleryViewToolbar;
