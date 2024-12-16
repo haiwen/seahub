@@ -406,7 +406,7 @@ class PDFViewer extends React.Component {
                 <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
               </div>
             </dialog>
-            <dialog id="printServiceDialog" className="modal-dialog p-0">
+            <dialog id="printServiceDialog" className="modal-dialog p-0 rounded border-0 shadow-none">
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Print document')}</h5>

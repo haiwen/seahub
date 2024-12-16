@@ -167,6 +167,11 @@ input#findInput {
   border-radius: 5px;
 }
 
+.pdf-file-view dialog::backdrop {
+  background-color: rgba(0, 0, 0);
+  opacity: 0.5;
+}
+
 .pdfViewer .page {
   position: relative;
   background: #fff;
