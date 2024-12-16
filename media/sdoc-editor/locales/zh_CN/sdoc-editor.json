@@ -578,5 +578,7 @@
   "Token_expired_Please_refresh_the_page": "Token已过期。请刷新页面。",
   "Link_to_page": "链接到页面",
   "No_page_results": "没有页面结果",
-  "Page": "页面"
+  "Page": "页面",
+  "Link_to_file": "链接到文件",
+  "Create_a_new_file": "新建文件"
 }

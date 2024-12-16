@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-09 10:41+0800\n"
+"POT-Creation-Date: 2024-12-16 09:55+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Kunda, 2013-2014\n"
 "Language-Team: Hebrew (http://app.transifex.com/haiwen/seahub/language/he/)\n"
@@ -454,7 +454,7 @@ msgstr ""
 #: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2761
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
-#: seahub/utils/__init__.py:1203 seahub/views/__init__.py:819
+#: seahub/utils/__init__.py:1207 seahub/views/__init__.py:819
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -1518,9 +1518,9 @@ msgstr ""
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1157
-#: seahub/views/file.py:1182 seahub/views/file.py:1406
-#: seahub/views/file.py:1443 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1158
+#: seahub/views/file.py:1183 seahub/views/file.py:1407
+#: seahub/views/file.py:1444 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
 #: seahub/views/repo.py:412
 msgid "Permission denied"
@@ -2154,18 +2154,18 @@ msgstr ""
 msgid "Settings"
 msgstr "הגדרות"
 
-#: seahub/profile/templates/profile/set_profile_react.html:20
+#: seahub/profile/templates/profile/set_profile_react.html:21
 msgctxt "true name"
 msgid "Name:"
 msgstr "שם:"
 
-#: seahub/profile/templates/profile/set_profile_react.html:26
+#: seahub/profile/templates/profile/set_profile_react.html:27
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile_react.html:26
+#: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
 msgstr "עדכן"
 
@@ -3096,9 +3096,9 @@ msgid "Bad upload link token."
 msgstr ""
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1177 seahub/views/file.py:1438
-#: seahub/views/file.py:2102 seahub/views/file.py:2107
-#: seahub/views/file.py:2114
+#: seahub/views/file.py:1178 seahub/views/file.py:1439
+#: seahub/views/file.py:2103 seahub/views/file.py:2108
+#: seahub/views/file.py:2115
 msgid "File does not exist"
 msgstr "קובץ לא קיים"
 
@@ -3126,57 +3126,57 @@ msgstr ""
 msgid "Unknown file encoding"
 msgstr "קידוד קובץ לא ידוע"
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:706
-#: seahub/views/file.py:791 seahub/views/file.py:892
+#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:707
+#: seahub/views/file.py:792 seahub/views/file.py:893
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr ""
 
-#: seahub/views/file.py:347 seahub/views/file.py:826
+#: seahub/views/file.py:347 seahub/views/file.py:827
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
 #: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:520 seahub/views/file.py:781 seahub/views/file.py:1029
-#: seahub/views/file.py:1055 seahub/views/file.py:1085
-#: seahub/views/file.py:1226 seahub/views/file.py:1338
-#: seahub/views/file.py:1479 seahub/views/file.py:1597
+#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
+#: seahub/views/file.py:1056 seahub/views/file.py:1086
+#: seahub/views/file.py:1227 seahub/views/file.py:1339
+#: seahub/views/file.py:1480 seahub/views/file.py:1598
 msgid "Unable to view file"
 msgstr "לא ניתן להציג קובץ"
 
-#: seahub/views/file.py:850 seahub/views/file.py:973 seahub/views/file.py:1297
-#: seahub/views/file.py:1535
+#: seahub/views/file.py:851 seahub/views/file.py:974 seahub/views/file.py:1298
+#: seahub/views/file.py:1536
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:885 seahub/views/file.py:989 seahub/views/file.py:1317
-#: seahub/views/file.py:1551
+#: seahub/views/file.py:886 seahub/views/file.py:990 seahub/views/file.py:1318
+#: seahub/views/file.py:1552
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1121
+#: seahub/views/file.py:1122
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:1130
+#: seahub/views/file.py:1131
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:1137
+#: seahub/views/file.py:1138
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1353 seahub/views/file.py:1616
+#: seahub/views/file.py:1354 seahub/views/file.py:1617
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1751 seahub/views/file.py:1756
+#: seahub/views/file.py:1752 seahub/views/file.py:1757
 msgid "Unable to download file"
 msgstr ""
 
-#: seahub/views/file.py:2095
+#: seahub/views/file.py:2096
 msgid "The original file does not exist"
 msgstr ""
 
