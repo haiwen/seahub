@@ -4,7 +4,7 @@ import { GalleryGroupBySetter, GallerySliderSetter, SortSetter } from '../../dat
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../../../constants';
 
-const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, showDetail }) => {
+const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDetail }) => {
   const [isShow, setShow] = useState(false);
   const [view, setView] = useState({});
 
@@ -53,7 +53,7 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, showDetail }
           modifySorts={modifySorts}
         />
         {!isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={showDetail}>
+          <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
             <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
           </div>
         )}
@@ -66,7 +66,7 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, showDetail }
 FaceRecognitionViewToolbar.propTypes = {
   isCustomPermission: PropTypes.bool,
   readOnly: PropTypes.bool,
-  showDetail: PropTypes.func,
+  onToggleDetail: PropTypes.func,
 };
 
 export default FaceRecognitionViewToolbar;
