@@ -40,10 +40,13 @@
   inset-inline-start: auto;
   background: #fff;
   padding: 8px;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
   margin: 0;
 }
 
 #findbar::before {
+  border-bottom-color: rgba(0, 40, 100, 0.12);
   inset-inline-start: auto;
   margin-inline-start: auto;
   right: 272px;

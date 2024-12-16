@@ -64,7 +64,7 @@ class PDFViewer extends React.Component {
           <div id="mainContainer">
             <div className="findbar hidden doorHanger d-flex align-items-center" id="findbar">
               <div id="findbarInputContainer">
-                <input id="findInput" className="toolbarField" title="Find" placeholder="Find in document…" tabIndex="91" data-l10n-id="find_input" aria-invalid="false" />
+                <input id="findInput" className="form-control" title="Find" placeholder="Find in document…" tabIndex="91" data-l10n-id="find_input" aria-invalid="false" />
                 <div className="position-absolute d-flex align-items-center" id="findbarMiscContainer">
                   <div id="findbarMessageContainer" aria-live="polite">
                     <span id="findResultsCount"></span>
