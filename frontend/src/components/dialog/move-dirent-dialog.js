@@ -93,8 +93,8 @@ class MoveDirent extends React.Component {
   };
 
   moveItems = () => {
-    let { repoID } = this.props;
-    let { selectedRepo, selectedPath } = this.state;
+    const { repoID, selectedDirentList, path } = this.props;
+    const { selectedRepo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
 
     if (!selectedRepo || selectedPath === '') {
@@ -102,21 +102,16 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    let selectedDirentList = this.props.selectedDirentList;
-    let direntPaths = [];
-    selectedDirentList.forEach(dirent => {
-      let path = Utils.joinPath(this.props.path, dirent.name);
-      direntPaths.push(path);
-    });
+    const direntPaths = selectedDirentList.map(dirent => Utils.joinPath(path, dirent.name));
 
     // move dirents to one of them. eg: A/B, A/C -> A/B
-    if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
+    if (direntPaths.includes(selectedPath)) {
       this.setErrMessage(message);
       return;
     }
 
     // move dirents to current path
-    if (selectedPath && selectedPath === this.props.path && (selectedRepo.repo_id === repoID)) {
+    if (selectedPath === path && selectedRepo.repo_id === repoID) {
       this.setErrMessage(message);
       return;
     }
@@ -124,11 +119,11 @@ class MoveDirent extends React.Component {
     // move dirents to one of their child. eg: A/B, A/D -> A/B/C
     let moveDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {
-      let flag = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
-      if (flag) {
+      let isChild = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
+      if (isChild) {
         moveDirentPath = direntPath;
       }
-      return flag;
+      return isChild;
     });
 
     if (isChildPath) {
@@ -144,38 +139,30 @@ class MoveDirent extends React.Component {
   };
 
   moveItem = () => {
-    let { repoID } = this.props;
-    let { selectedRepo, selectedPath } = this.state;
-    let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    const { repoID, dirent, path, onItemMove } = this.props;
+    const { selectedRepo, selectedPath } = this.state;
+    const direntPath = Utils.joinPath(path, dirent.name);
     let message = gettext('Invalid destination path');
 
-    if (!selectedRepo || (selectedRepo.repo_id === repoID && selectedPath === '')) {
+    if (!selectedRepo || (selectedRepo.repo_id === repoID && !selectedPath)) {
       this.setErrMessage(message);
       return;
     }
 
-    // copy the dirent to itself. eg: A/B -> A/B
-    if (selectedPath && direntPath === selectedPath) {
+    if (direntPath === selectedPath || (selectedPath === path && selectedRepo.repo_id === repoID)) {
       this.setErrMessage(message);
       return;
     }
 
-    // copy the dirent to current path
-    if (selectedPath && this.props.path === selectedPath && selectedRepo.repo_id === repoID) {
+    if (selectedPath.length > direntPath.length && selectedPath.includes(direntPath)) {
+      message = gettext('Can not move folder %(src)s to its subfolder %(des)s')
+        .replace('%(src)s', direntPath)
+        .replace('%(des)s', selectedPath);
       this.setErrMessage(message);
       return;
     }
 
-    // copy the dirent to it's child. eg: A/B -> A/B/C
-    if (selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
-      message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
-      message = message.replace('%(src)s', direntPath);
-      message = message.replace('%(des)s', selectedPath);
-      this.setErrMessage(message);
-      return;
-    }
-
-    this.props.onItemMove(selectedRepo, this.props.dirent, selectedPath, this.props.path, true);
+    onItemMove(selectedRepo, dirent, selectedPath, path, true);
     this.toggle();
   };
 
@@ -197,6 +184,10 @@ class MoveDirent extends React.Component {
 
   setErrMessage = (message) => {
     this.setState({ errMessage: message });
+  };
+
+  clearErrMessage = () => {
+    this.setState({ errMessage: '' });
   };
 
   updateMode = (mode) => {
@@ -229,6 +220,7 @@ class MoveDirent extends React.Component {
     }
 
     this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+    this.clearErrMessage();
   };
 
   onUpdateSearchStatus = (status) => {
@@ -237,20 +229,15 @@ class MoveDirent extends React.Component {
 
   onUpdateSearchResults = (results) => {
     this.setState({
-      searchResults: results
-    });
-  };
-
-  onDirentItemClick = (repo, selectedPath) => {
-    this.setState({
-      selectedPath: selectedPath,
-      repo,
-      errMessage: '',
+      searchResults: results,
+      selectedRepo: results.length > 0 ? new RepoInfo(results[0]) : null,
+      selectedPath: results.length > 0 ? results[0].path : '',
     });
   };
 
   onOpenSearchBar = () => {
     this.setState({ showSearchBar: true });
+    this.clearErrMessage();
   };
 
   onCloseSearchBar = () => {
@@ -263,12 +250,14 @@ class MoveDirent extends React.Component {
       showSearchBar: false,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
+    this.clearErrMessage();
   };
 
   onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
     let repo = new RepoInfo(item);
     this.onDirentItemClick(repo, item.path, item);
+    this.clearErrMessage();
   };
 
   onSearchedItemDoubleClick = (item) => {
@@ -298,6 +287,14 @@ class MoveDirent extends React.Component {
     this.setState({ selectedSearchedItem: item });
   };
 
+  onDirentItemClick = (repo, selectedPath) => {
+    this.setState({
+      selectedPath,
+      selectedRepo: repo,
+    });
+    this.clearErrMessage();
+  };
+
   renderTitle = () => {
     const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Move {placeholder} to');
@@ -311,7 +308,8 @@ class MoveDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
-    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
+
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -356,7 +354,9 @@ class MoveDirent extends React.Component {
           onCancel={this.toggle}
           selectRepo={this.selectRepo}
           setSelectedPath={this.setSelectedPath}
+          errMessage={errMessage}
           setErrMessage={this.setErrMessage}
+          clearErrMessage={this.clearErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
           searchStatus={searchStatus}

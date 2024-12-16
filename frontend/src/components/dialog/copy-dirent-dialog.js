@@ -94,42 +94,38 @@ class CopyDirent extends React.Component {
   };
 
   copyItems = () => {
-    let { selectedRepo, selectedPath } = this.state;
+    const { selectedRepo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
 
     if (!selectedRepo || selectedPath === '') {
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
-    let selectedDirentList = this.props.selectedDirentList;
-    let direntPaths = [];
-    selectedDirentList.forEach(dirent => {
-      let path = Utils.joinPath(this.props.path, dirent.name);
-      direntPaths.push(path);
-    });
+    const { selectedDirentList, path } = this.props;
+    const direntPaths = selectedDirentList.map(dirent => Utils.joinPath(path, dirent.name));
 
     // copy dirents to one of them. eg: A/B, A/C -> A/B
-    if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
-      this.setState({ errMessage: message });
+    if (direntPaths.includes(selectedPath)) {
+      this.setErrMessage(message);
       return;
     }
 
     // copy dirents to one of their child. eg: A/B, A/D -> A/B/C
     let copyDirentPath = '';
-    let isChildPath = direntPaths.some(direntPath => {
-      let flag = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
-      if (flag) {
+    const isChildPath = direntPaths.some(direntPath => {
+      let isChild = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
+      if (isChild) {
         copyDirentPath = direntPath;
       }
-      return flag;
+      return isChild;
     });
 
     if (isChildPath) {
       message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
       message = message.replace('%(src)s', copyDirentPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({ errMessage: message });
+      this.setErrMessage(message);
       return;
     }
 
@@ -138,27 +134,20 @@ class CopyDirent extends React.Component {
   };
 
   copyItem = () => {
-    let { repoID, selectedRepo, selectedPath } = this.state;
-    let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    const { repoID, selectedRepo, selectedPath } = this.state;
+    const direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
-    if (!selectedRepo || (selectedRepo.repo_id === repoID && selectedPath === '')) {
-      this.setState({ errMessage: message });
+    if (!selectedRepo || (selectedRepo.repo_id === repoID && !selectedPath)) {
+      this.setErrMessage(message);
       return;
     }
 
-    // copy the dirent to itself. eg: A/B -> A/B
-    if (selectedPath && direntPath === selectedPath) {
-      this.setState({ errMessage: message });
-      return;
-    }
-
-    // copy the dirent to it's child. eg: A/B -> A/B/C
-    if (selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
-      message = gettext('Can not copy folder %(src)s to its subfolder %(des)s');
-      message = message.replace('%(src)s', direntPath);
-      message = message.replace('%(des)s', selectedPath);
-      this.setState({ errMessage: message });
+    if (direntPath === selectedPath || (selectedPath.length > direntPath.length && selectedPath.includes(direntPath))) {
+      message = gettext('Can not copy folder %(src)s to its subfolder %(des)s')
+        .replace('%(src)s', direntPath)
+        .replace('%(des)s', selectedPath);
+      this.setErrMessage(message);
       return;
     }
 
@@ -184,6 +173,10 @@ class CopyDirent extends React.Component {
 
   setErrMessage = (message) => {
     this.setState({ errMessage: message });
+  };
+
+  clearErrMessage = () => {
+    this.setState({ errMessage: '' });
   };
 
   updateMode = (mode) => {
@@ -216,6 +209,7 @@ class CopyDirent extends React.Component {
     }
 
     this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+    this.clearErrMessage();
   };
 
   onUpdateSearchStatus = (status) => {
@@ -224,12 +218,15 @@ class CopyDirent extends React.Component {
 
   onUpdateSearchResults = (results) => {
     this.setState({
-      searchResults: results
+      searchResults: results,
+      selectedRepo: results.length > 0 ? new RepoInfo(results[0]) : null,
+      selectedPath: results.length > 0 ? results[0].path : '',
     });
   };
 
   onOpenSearchBar = () => {
     this.setState({ showSearchBar: true });
+    this.clearErrMessage();
   };
 
   onCloseSearchBar = () => {
@@ -242,12 +239,14 @@ class CopyDirent extends React.Component {
       showSearchBar: false,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
+    this.clearErrMessage();
   };
 
   onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
     let repo = new RepoInfo(item);
     this.onDirentItemClick(repo, item.path, item);
+    this.clearErrMessage();
   };
 
   onSearchedItemDoubleClick = (item) => {
@@ -279,18 +278,10 @@ class CopyDirent extends React.Component {
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
-      repo: repo,
-      selectedPath: selectedPath,
-      errMessage: ''
+      selectedPath,
+      selectedRepo: repo,
     });
-  };
-
-  onRepoItemClick = (repo) => {
-    this.setState({
-      repo: repo,
-      selectedPath: '/',
-      errMessage: ''
-    });
+    this.clearErrMessage();
   };
 
   renderTitle = () => {
@@ -306,7 +297,7 @@ class CopyDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
-    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
 
     const copiedDirent = dirent || selectedDirentList[0];
     const { permission } = copiedDirent;
@@ -352,7 +343,9 @@ class CopyDirent extends React.Component {
           onCancel={this.toggle}
           selectRepo={this.selectRepo}
           setSelectedPath={this.setSelectedPath}
+          errMessage={errMessage}
           setErrMessage={this.setErrMessage}
+          clearErrMessage={this.clearErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
           searchStatus={searchStatus}

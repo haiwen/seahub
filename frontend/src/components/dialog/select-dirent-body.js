@@ -22,7 +22,6 @@ class SelectDirentBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      errMessage: '',
       showCreateFolderDialog: false,
       folderListOfSelectedRepo: [],
     };
@@ -52,13 +51,13 @@ class SelectDirentBody extends React.Component {
   onDirentItemClick = (repo, selectedPath) => {
     this.props.selectRepo(repo);
     this.props.setSelectedPath(selectedPath);
-    this.props.setErrMessage('');
+    this.props.clearErrMessage();
   };
 
   onRepoItemClick = (repo) => {
     this.props.selectRepo(repo);
     this.props.setSelectedPath('/');
-    this.props.setErrMessage('');
+    this.props.clearErrMessage();
   };
 
   loadRepoDirentList = async (repo, path) => {
@@ -72,7 +71,7 @@ class SelectDirentBody extends React.Component {
 
   createFolder = (fullPath) => {
     if (!this.props.selectedRepo) {
-      this.setState({ errMessage: gettext('Please select a library or folder first.') });
+      this.props.setErrMessage(gettext('Please select a library or folder first.'));
       return;
     }
     this.newFolderName = fullPath.split('/').pop();
@@ -103,7 +102,8 @@ class SelectDirentBody extends React.Component {
     } else {
       this.setState({ folderListOfSelectedRepo: [] });
     }
-    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog, errMessage: '' });
+    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog });
+    this.props.clearErrMessage();
   };
 
   checkDuplicatedName = (newName) => {
@@ -120,6 +120,7 @@ class SelectDirentBody extends React.Component {
       this.props.selectRepo(null);
     }
     this.props.setSelectedPath('/');
+    this.props.clearErrMessage();
   };
 
   render() {
@@ -218,7 +219,9 @@ SelectDirentBody.propTypes = {
   handleSubmit: PropTypes.func,
   selectRepo: PropTypes.func.isRequired,
   setSelectedPath: PropTypes.func,
+  errMessage: PropTypes.string,
   setErrMessage: PropTypes.func,
+  clearErrMessage: PropTypes.func,
   mode: PropTypes.string,
   onUpdateMode: PropTypes.func,
   searchStatus: PropTypes.string,
