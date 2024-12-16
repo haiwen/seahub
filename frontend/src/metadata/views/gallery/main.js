@@ -16,6 +16,7 @@ import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT,
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import ContextMenu from '../../components/context-menu';
+import { downloadFile } from '../../utils/file';
 
 import './index.css';
 
@@ -267,7 +268,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     setIsImagePopupOpen(true);
   }, [imageItems]);
 
-  const handleRightClick = useCallback((event, image) => {
+  const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();
     const index = imageItems.findIndex(item => item.id === image.id);
     if (isNaN(index) || index === -1) return;
@@ -299,9 +300,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     if (!selectedImages.length) return;
     if (selectedImages.length === 1) {
       const image = selectedImages[0];
-      let direntPath = image.path === '/' ? image.name : Utils.joinPath(image.path, image.name);
-      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-      location.href = url;
+      const record = getRowById(metadata, image.id);
+      downloadFile(repoID, record);
       return;
     }
     if (!useGoFileserver) {
@@ -319,7 +319,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, selectedImages]);
+  }, [repoID, metadata, selectedImages]);
 
   const handleDelete = useCallback(() => {
     if (!selectedImages.length) return;
@@ -384,14 +384,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     }
   }, [handleDownload, handleDelete]);
 
-  const getContainerRect = useCallback(() => {
-    return containerRef.current.getBoundingClientRect();
-  }, []);
-
-  const getContentRect = useCallback(() => {
-    return containerRef.current.getBoundingClientRect();
-  }, []);
-
   return (
     <>
       <div
@@ -413,7 +405,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
               onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
-              onImageRightClick={handleRightClick}
+              onContextMenu={handleContextMenu}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
@@ -426,9 +418,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
       <ContextMenu
         options={options}
         onOptionClick={handleOptionClick}
-        getContainerRect={getContainerRect}
-        getContentRect={getContentRect}
-        validTargets={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
+        boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
+        ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
       />
       {isImagePopupOpen && (
         <ModalPortal>

@@ -16,7 +16,7 @@ const Content = ({
   onImageSelect,
   onImageClick,
   onImageDoubleClick,
-  onImageRightClick
+  onContextMenu
 }) => {
   const containerRef = useRef(null);
   const imageRef = useRef(null);
@@ -136,7 +136,7 @@ const Content = ({
                   size={size}
                   onClick={(e) => onImageClick(e, img)}
                   onDoubleClick={(e) => onImageDoubleClick(e, img)}
-                  onContextMenu={(e) => onImageRightClick(e, img)}
+                  onContextMenu={(e) => onContextMenu(e, img)}
                 />
               );
             });
@@ -144,7 +144,7 @@ const Content = ({
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight, mode, selectedImageIds, onImageClick, onImageDoubleClick, onImageRightClick]);
+  }, [overScan, columns, size, imageHeight, mode, selectedImageIds, onImageClick, onImageDoubleClick, onContextMenu]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -191,7 +191,7 @@ Content.propTypes = {
   onImageSelect: PropTypes.func.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,
-  onImageRightClick: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 export default Content;

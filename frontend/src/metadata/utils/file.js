@@ -121,9 +121,10 @@ export const openParentFolder = (record) => {
 
 export const downloadFile = (repoID, record) => {
   if (!repoID || !record) return;
-  const path = getParentDirFromRecord(record);
+  if (checkIsDir(record)) return;
+  const parentDir = _getParentDir(record);
   const name = getFileNameFromRecord(record);
-  const direntPath = Utils.joinPath(path, name);
+  const direntPath = Utils.joinPath(parentDir, name);
   const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
   location.href = url;
 };

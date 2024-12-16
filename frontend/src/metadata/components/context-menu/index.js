@@ -92,7 +92,7 @@ const ContextMenu = ({ options, boundaryCoordinates, onOptionClick, ignoredTrigg
         <button
           key={index}
           className="dropdown-item sf-metadata-contextmenu-item"
-          onClick={(e) => handleOptionClick(e, option)}
+          onClick={(event) => handleOptionClick(event, option)}
         >
           {option.label}
         </button>
