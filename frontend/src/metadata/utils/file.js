@@ -114,7 +114,10 @@ export const openInNewTab = (repoID, record) => {
 
 export const openParentFolder = (record) => {
   if (!record) return;
-  const parentDir = _getParentDir(record);
+  let parentDir = getParentDirFromRecord(record);
+  if (window.location.pathname.endsWith('/')) {
+    parentDir = parentDir.slice(1);
+  }
   const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
   window.open(url, '_blank');
 };
