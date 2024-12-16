@@ -285,13 +285,13 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     if image_memory_cost > THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT:
         return (False, 403)
 
-    if image.mode not in ["1", "L", "RGB", "RGBA"]:
+    if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
         image = image.convert("RGB")
 
     image = get_rotated_image(image)
     image.thumbnail((size, size), Image.Resampling.LANCZOS)
     save_type = THUMBNAIL_EXTENSION
-    if image.mode == 'RGBA':
+    if image.mode in ['RGBA', 'P']:
         save_type = 'png'
     image.save(thumbnail_file, save_type)
     return (True, 200)
