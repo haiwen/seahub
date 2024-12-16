@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toaster from '../../../../components/toast';
-import { gettext, siteRoot } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../../hooks';
@@ -12,6 +12,7 @@ import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
   getRecordIdFromRecord,
 } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
+import { openInNewTab, openParentFolder } from '../../../utils/file';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -175,32 +176,6 @@ const ContextMenu = (props) => {
     }
   }, [menuRef, visible]);
 
-  const onOpenFileInNewTab = useCallback((record) => {
-    const repoID = window.sfMetadataStore.repoId;
-    const isFolder = checkIsDir(record);
-    const parentDir = getParentDirFromRecord(record);
-    const fileName = getFileNameFromRecord(record);
-
-    const url = isFolder ?
-      window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)) :
-      `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
-
-    window.open(url, '_blank');
-  }, []);
-
-  const onOpenParentFolder = useCallback((event, record) => {
-    event.preventDefault();
-    event.stopPropagation();
-    let parentDir = getParentDirFromRecord(record);
-
-    if (window.location.pathname.endsWith('/')) {
-      parentDir = parentDir.slice(1);
-    }
-
-    const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
-    window.open(url, '_blank');
-  }, []);
-
   const generateDescription = useCallback((record) => {
     const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
@@ -325,17 +300,18 @@ const ContextMenu = (props) => {
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
+    const repoID = window.sfMetadataStore.repoId;
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
         const { record } = option;
-        if (!record) break;
-        onOpenFileInNewTab(record);
+        openInNewTab(repoID, record);
         break;
       }
       case OPERATION.OPEN_PARENT_FOLDER: {
+        event.preventDefault();
+        event.stopPropagation();
         const { record } = option;
-        if (!record) break;
-        onOpenParentFolder(event, record);
+        openParentFolder(record);
         break;
       }
       case OPERATION.COPY_SELECTED: {
@@ -413,7 +389,7 @@ const ContextMenu = (props) => {
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
+  }, [onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

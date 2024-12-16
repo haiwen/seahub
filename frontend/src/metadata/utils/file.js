@@ -2,6 +2,7 @@ import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
+import URLDecorator from '../../utils/url-decorator';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
@@ -99,3 +100,34 @@ export const openFile = (repoID, record, _openImage = () => {}) => {
   }
 };
 
+export const openInNewTab = (repoID, record) => {
+  if (!record) return;
+  const isDir = checkIsDir(record);
+  const parentDir = getParentDirFromRecord(record);
+  const fileName = getFileNameFromRecord(record);
+  const url = isDir
+    ? window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName))
+    : `${siteRoot}lib/${repoID}/file${Utils.encodePath(Utils.joinPath(parentDir, fileName))}`;
+
+  window.open(url, '_blank');
+};
+
+export const openParentFolder = (record) => {
+  if (!record) return;
+  let parentDir = getParentDirFromRecord(record);
+  if (window.location.pathname.endsWith('/')) {
+    parentDir = parentDir.slice(1);
+  }
+  const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
+  window.open(url, '_blank');
+};
+
+export const downloadFile = (repoID, record) => {
+  if (!repoID || !record) return;
+  if (checkIsDir(record)) return;
+  const parentDir = _getParentDir(record);
+  const name = getFileNameFromRecord(record);
+  const direntPath = Utils.joinPath(parentDir, name);
+  const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+  location.href = url;
+};

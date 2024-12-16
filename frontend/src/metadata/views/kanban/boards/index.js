@@ -10,16 +10,17 @@ import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRec
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
 import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
+import { openFile } from '../../../utils/file';
+import { checkIsDir } from '../../../utils/row';
 import AddBoard from '../add-board';
 import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
-import { openFile } from '../../../utils/open-file';
-import { checkIsDir } from '../../../utils/row';
+import ContextMenu from '../context-menu';
 
 import './index.css';
 
-const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
+const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings }) => {
   const [haveFreezed, setHaveFreezed] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
@@ -30,6 +31,9 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
 
   const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
   const { collaborators } = useCollaborators();
+
+  const repoID = window.sfMetadataContext.getSetting('repoID');
+  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   const groupByColumn = useMemo(() => {
     const groupByColumnKey = metadata.view.settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY];
@@ -216,6 +220,24 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
     setDragging(isDragging);
   }, []);
 
+  const onContextMenu = useCallback((event, recordId) => {
+    event.preventDefault();
+    setSelectedCard(recordId);
+  }, []);
+
+  const onDeleteRecords = useCallback((recordIds) => {
+    deleteRecords(recordIds, {
+      success_callback: () => {
+        setSelectedCard(null);
+        updateCurrentDirent();
+      },
+    });
+  }, [deleteRecords, updateCurrentDirent]);
+
+  const onRename = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback }) => {
+    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback });
+  }, [modifyRecord]);
+
   useEffect(() => {
     if (!isDirentDetailShow) {
       setSelectedCard(null);
@@ -223,50 +245,57 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
   }, [isDirentDetailShow]);
 
   const isEmpty = boards.length === 0;
-  const repoID = window.sfMetadataContext.getSetting('repoID');
-  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   return (
-    <div
-      ref={containerRef}
-      className={classnames('sf-metadata-view-kanban-boards', {
-        'sf-metadata-view-kanban-boards-text-wrap': textWrap,
-        'readonly': readonly,
-      })}
-      onClick={handleClickOutside}
-    >
-      <div className="smooth-dnd-container horizontal">
-        {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
-        {!isEmpty && (
-          <>
-            {boards.map((board, index) => {
-              return (
-                <Board
-                  key={board.key}
-                  board={board}
-                  index={index}
-                  readonly={readonly}
-                  displayEmptyValue={displayEmptyValue}
-                  displayColumnName={displayColumnName}
-                  haveFreezed={haveFreezed}
-                  groupByColumn={groupByColumn}
-                  titleColumn={titleColumn}
-                  displayColumns={displayColumns}
-                  selectedCard={selectedCard}
-                  onMove={onMove}
-                  deleteOption={deleteOption}
-                  onFreezed={onFreezed}
-                  onUnFreezed={onUnFreezed}
-                  onOpenFile={onOpenFile}
-                  onSelectCard={onSelectCard}
-                  updateDragging={updateDragging}
-                />
-              );
-            })}
-          </>
-        )}
-        {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
+    <>
+      <div
+        ref={containerRef}
+        className={classnames('sf-metadata-view-kanban-boards', {
+          'sf-metadata-view-kanban-boards-text-wrap': textWrap,
+          'readonly': readonly,
+        })}
+        onClick={handleClickOutside}
+      >
+        <div className="smooth-dnd-container horizontal">
+          {isEmpty && (<EmptyTip className="tips-empty-boards" text={gettext('No categories')} />)}
+          {!isEmpty && (
+            <>
+              {boards.map((board, index) => {
+                return (
+                  <Board
+                    key={board.key}
+                    board={board}
+                    index={index}
+                    readonly={readonly}
+                    displayEmptyValue={displayEmptyValue}
+                    displayColumnName={displayColumnName}
+                    haveFreezed={haveFreezed}
+                    groupByColumn={groupByColumn}
+                    titleColumn={titleColumn}
+                    displayColumns={displayColumns}
+                    selectedCard={selectedCard}
+                    onMove={onMove}
+                    deleteOption={deleteOption}
+                    onFreezed={onFreezed}
+                    onUnFreezed={onUnFreezed}
+                    onOpenFile={onOpenFile}
+                    onSelectCard={onSelectCard}
+                    updateDragging={updateDragging}
+                    onContextMenu={onContextMenu}
+                  />
+                );
+              })}
+            </>
+          )}
+          {!readonly && (<AddBoard groupByColumn={groupByColumn}/>)}
+        </div>
       </div>
+      <ContextMenu
+        boundaryCoordinates={containerRef?.current?.getBoundingClientRect()}
+        selectedCard={selectedCard}
+        onDelete={onDeleteRecords}
+        onRename={onRename}
+      />
       {isImagePreviewerVisible && (
         <ImagePreviewer
           repoID={repoID}
@@ -276,7 +305,7 @@ const Boards = ({ modifyRecord, modifyColumnData, onCloseSettings }) => {
           closeImagePopup={closeImagePreviewer}
         />
       )}
-    </div>
+    </>
   );
 };
 

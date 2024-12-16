@@ -1,21 +1,17 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
-import metadataAPI from '../../api';
-import URLDecorator from '../../../utils/url-decorator';
-import toaster from '../../../components/toast';
 import Content from './content';
-import ContextMenu from './context-menu';
 import ImageDialog from '../../../components/dialog/image-dialog';
-import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, useGoFileserver, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
+import GalleryContextmenu from './context-menu';
 
 import './index.css';
 
@@ -28,7 +24,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
   const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
-  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -267,7 +262,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     setIsImagePopupOpen(true);
   }, [imageItems]);
 
-  const handleRightClick = useCallback((event, image) => {
+  const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();
     const index = imageItems.findIndex(item => item.id === image.id);
     if (isNaN(index) || index === -1) return;
@@ -291,46 +286,17 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     setSelectedImages(selectedImages);
   }, []);
 
-  const closeImagePopup = () => {
+  const closeImagePopup = useCallback(() => {
     setIsImagePopupOpen(false);
-  };
+  }, []);
 
-  const handleDownload = useCallback(() => {
-    if (!selectedImages.length) return;
-    if (selectedImages.length === 1) {
-      const image = selectedImages[0];
-      let direntPath = image.path === '/' ? image.name : Utils.joinPath(image.path, image.name);
-      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-      location.href = url;
-      return;
-    }
-    if (!useGoFileserver) {
-      setIsZipDialogOpen(true);
-      return;
-    }
-    const dirents = selectedImages.map(image => {
-      const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
-      return value;
-    });
-    metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
-      const zipToken = res.data['zip_token'];
-      location.href = `${fileServerRoot}zip/${zipToken}`;
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }, [repoID, selectedImages]);
-
-  const handleDelete = useCallback(() => {
+  const handleDeleteSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
     onDelete(selectedImages, () => {
+      updateCurrentDirent();
       setSelectedImages([]);
     });
-  }, [selectedImages, onDelete]);
-
-  const closeZipDialog = () => {
-    setIsZipDialogOpen(false);
-  };
+  }, [onDelete, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);
@@ -385,7 +351,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
               onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
-              onImageRightClick={handleRightClick}
+              onContextMenu={handleContextMenu}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
@@ -395,11 +361,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
           </>
         )}
       </div>
-      <ContextMenu
-        getContentRect={() => containerRef.current.getBoundingClientRect()}
-        getContainerRect={() => containerRef.current.getBoundingClientRect()}
-        onDownload={handleDownload}
-        onDelete={handleDelete}
+      <GalleryContextmenu
+        selectedImages={selectedImages}
+        boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
+        onDelete={handleDeleteSelectedImages}
       />
       {isImagePopupOpen && (
         <ModalPortal>
@@ -410,16 +375,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
             moveToPrevImage={moveToPrevImage}
             moveToNextImage={moveToNextImage}
             onDeleteImage={deleteImage}
-          />
-        </ModalPortal>
-      )}
-      {isZipDialogOpen && (
-        <ModalPortal>
-          <ZipDownloadDialog
-            repoID={repoID}
-            path={'/'}
-            target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
-            toggleDialog={closeZipDialog}
           />
         </ModalPortal>
       )}

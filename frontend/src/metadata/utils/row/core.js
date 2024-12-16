@@ -26,7 +26,7 @@ const updateTableRowsWithRowsData = (tables, tableId, recordsData = []) => {
   });
 };
 
-export const checkIsDir = (record) => {
+const checkIsDir = (record) => {
   if (!record) return false;
   const isDir = record[PRIVATE_COLUMN_KEY.IS_DIR];
   if (typeof isDir === 'string') {
@@ -38,4 +38,5 @@ export const checkIsDir = (record) => {
 export {
   isTableRows,
   updateTableRowsWithRowsData,
+  checkIsDir,
 };
