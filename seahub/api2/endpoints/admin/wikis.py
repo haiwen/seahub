@@ -6,13 +6,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import gettext as _
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.views import get_system_default_repo_id
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import group_id_to_name
 from seahub.utils.repo import normalize_repo_status_code
@@ -35,7 +33,6 @@ def get_wiki_info(wiki, publish_wiki_ids):
             org_wiki_owner = None
 
     owner = wiki_owner or org_wiki_owner or ''
-    print(wiki.__dict__)
     result = {}
     result['id'] = wiki.repo_id
     result['name'] = wiki.repo_name
@@ -65,8 +62,8 @@ class AdminWikis(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
-    def get(self, request, format=None):
-        """ List 'all' wiki (by name/owner/page)
+    def get(self, request):
+        """ List 'all' wiki
 
         Permission checking:
         1. only admin can perform this action.
@@ -90,22 +87,19 @@ class AdminWikis(APIView):
 
         start = (current_page - 1) * per_page
         limit = per_page + 1
-
         if order_by:
-            repos_all = seafile_api.get_repo_list(start, limit, order_by)
+            repos_all = seafile_api.get_repo_list(-1, -1, order_by)
         else:
-            repos_all = seafile_api.get_repo_list(start, limit)
-
-        if len(repos_all) > per_page:
-            repos_all = repos_all[:per_page]
+            repos_all = seafile_api.get_repo_list(-1, -1)
+        all_wikis = [r for r in repos_all if is_wiki_repo(r)][start: start+limit]
+        if len(all_wikis) > per_page:
+            all_wikis = all_wikis[:per_page]
             has_next_page = True
         else:
             has_next_page = False
 
-        all_wikis = [r for r in repos_all if is_wiki_repo(r)]
-        
         # get publish wiki
-        wiki_ids = [r.repo_id for r in all_wikis]
+        wiki_ids = [w.repo_id for w in all_wikis]
         publish_wiki_ids = []
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
         for w in published_wikis:
