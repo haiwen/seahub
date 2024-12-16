@@ -28,11 +28,11 @@ class AllWikis extends Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
-      this.getReposByPage(this.state.currentPage);
+      this.getWikisByPage(this.state.currentPage);
     });
   }
 
-  getReposByPage = (page) => {
+  getWikisByPage = (page) => {
     const { perPage, sortBy } = this.state;
     systemAdminAPI.sysAdminListAllWikis(page, perPage, sortBy).then((res) => {
       this.setState({
@@ -60,7 +60,7 @@ class AllWikis extends Component {
       searchParams.set('order_by', sortBy);
       url.search = searchParams.toString();
       navigate(url.toString());
-      this.getReposByPage(currentPage);
+      this.getWikisByPage(currentPage);
     });
   };
 
@@ -68,11 +68,11 @@ class AllWikis extends Component {
     this.setState({
       perPage: perPage
     }, () => {
-      this.getReposByPage(1);
+      this.getWikisByPage(1);
     });
   };
 
-  onDeleteRepo = (targetRepo) => {
+  onDeleteWiki = (targetRepo) => {
     let wikis = this.state.wikis.filter(repo => {
       return repo.id != targetRepo.id;
     });
@@ -81,7 +81,7 @@ class AllWikis extends Component {
     });
   };
 
-  onTransferRepo = (targetRepo) => {
+  onTransferWiki = (targetRepo) => {
     let wikis = this.state.wikis.map((item) => {
       return item.id == targetRepo.id ? targetRepo : item;
     });
@@ -106,10 +106,10 @@ class AllWikis extends Component {
                 sortItems={this.sortItems}
                 pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
-                getListByPage={this.getReposByPage}
+                getListByPage={this.getWikisByPage}
                 resetPerPage={this.resetPerPage}
-                onDeleteRepo={this.onDeleteRepo}
-                onTransferRepo={this.onTransferRepo}
+                onDeleteRepo={this.onDeleteWiki}
+                onTransferRepo={this.onTransferWiki}
                 isWiki={true}
               />
             </div>
