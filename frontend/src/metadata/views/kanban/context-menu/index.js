@@ -1,15 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
-import ContextMenu from '../../../../components/context-menu';
-import { getRowById } from '../../../../utils/table';
-import { checkIsDir } from '../../../../utils/row';
-import { getFileNameFromRecord } from '../../../../utils/cell';
-import { gettext } from '../../../../../utils/constants';
-import { openInNewTab, openParentFolder, downloadFile } from '../../../../utils/file';
-import { useMetadataView } from '../../../../hooks/metadata-view';
-import { PRIVATE_COLUMN_KEY } from '../../../../constants';
-import RenameDialog from '../../../../components/dialog/rename-dialog';
+import ContextMenu from '../../../components/context-menu';
+import { getRowById } from '../../../utils/table';
+import { checkIsDir } from '../../../utils/row';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
+import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
+import { openInNewTab, openParentFolder, downloadFile } from '../../../utils/file';
+import { useMetadataView } from '../../../hooks/metadata-view';
+import { PRIVATE_COLUMN_KEY } from '../../../constants';
+import RenameDialog from '../../../components/dialog/rename-dialog';
+import { Utils } from '../../../../utils/utils';
+import toaster from '../../../../components/toast';
+import metadataAPI from '../../../api';
+import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 
 const CONTEXT_MENU_KEY = {
   OPEN_IN_NEW_TAB: 'open_in_new_tab',
@@ -19,24 +23,40 @@ const CONTEXT_MENU_KEY = {
   RENAME: 'rename',
 };
 
-const KanbanContextmenu = ({ boundaryCoordinates, selectedCard, onDelete, onModify }) => {
+const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onModify }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
+  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+
   const { metadata } = useMetadataView();
 
   const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
-  const isDir = useMemo(() => selectedRecord && checkIsDir(selectedRecord), [selectedRecord]);
-  const oldName = useMemo(() => selectedRecord && getFileNameFromRecord(selectedRecord), [selectedRecord]);
+  const isDir = useMemo(() => checkIsDir(selectedRecord), [selectedRecord]);
+  const oldName = useMemo(() => getFileNameFromRecord(selectedRecord), [selectedRecord]);
+  const parentDir = useMemo(() => getParentDirFromRecord(selectedRecord), [selectedRecord]);
+
   const repoID = window.sfMetadataContext.getSetting('repoID');
+  const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
+  const canModifyRow = window.sfMetadataContext.canModifyRow();
 
   const options = useMemo(() => {
-    return [
+    let validOptions = [
       { value: CONTEXT_MENU_KEY.OPEN_IN_NEW_TAB, label: isDir ? gettext('Open folder in new tab') : gettext('Open file in new tab') },
       { value: CONTEXT_MENU_KEY.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') },
       { value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') },
-      { value: CONTEXT_MENU_KEY.DELETE, label: gettext('Delete') },
-      { value: CONTEXT_MENU_KEY.RENAME, label: gettext('Rename') },
     ];
-  }, [isDir]);
+    if (checkCanDeleteRow) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: gettext('Delete file') });
+    }
+    if (canModifyRow) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.RENAME, label: gettext('Rename file') });
+    }
+
+    return validOptions;
+  }, [isDir, checkCanDeleteRow, canModifyRow]);
+
+  const closeZipDialog = useCallback(() => {
+    setIsZipDialogOpen(false);
+  }, []);
 
   const openRenameDialog = useCallback(() => {
     setIsRenameDialogShow(true);
@@ -52,13 +72,29 @@ const KanbanContextmenu = ({ boundaryCoordinates, selectedCard, onDelete, onModi
     const rowIds = [selectedCard];
     const updates = { [PRIVATE_COLUMN_KEY.FILE_NAME]: newName };
     const oldRowData = { [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName };
-
-
-    // rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback }
     onModify(rowIds, { [rowId]: updates }, { [rowId]: updates }, { [rowId]: oldRowData }, { [rowId]: oldRowData }, {
       success_callback: () => setIsRenameDialogShow(false),
     });
   }, [metadata, selectedCard, onModify]);
+
+  const handelDownload = useCallback((record) => {
+    if (!isDir) {
+      downloadFile(repoID, record);
+      return;
+    }
+    if (!useGoFileserver) {
+      setIsZipDialogOpen(true);
+      return;
+    }
+    const fileName = getFileNameFromRecord(record);
+    metadataAPI.zipDownload(repoID, parentDir, [fileName]).then((res) => {
+      const zipToken = res.data['zip_token'];
+      location.href = `${fileServerRoot}zip/${zipToken}`;
+    }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }, [repoID, isDir, parentDir]);
 
   const handleOptionClick = useCallback((option) => {
     if (!selectedCard) return;
@@ -75,7 +111,7 @@ const KanbanContextmenu = ({ boundaryCoordinates, selectedCard, onDelete, onModi
         break;
       }
       case CONTEXT_MENU_KEY.DOWNLOAD: {
-        downloadFile(repoID, record);
+        handelDownload(record);
         break;
       }
       case CONTEXT_MENU_KEY.DELETE: {
@@ -90,8 +126,7 @@ const KanbanContextmenu = ({ boundaryCoordinates, selectedCard, onDelete, onModi
         break;
       }
     }
-  }, [metadata, repoID, selectedCard, onDelete, openRenameDialog]);
-
+  }, [metadata, repoID, selectedCard, onDelete, openRenameDialog, handelDownload]);
 
   return (
     <>
@@ -111,15 +146,20 @@ const KanbanContextmenu = ({ boundaryCoordinates, selectedCard, onDelete, onModi
           />
         </ModalPortal>
       )}
+      {isZipDialogOpen && (
+        <ModalPortal>
+          <ZipDownloadDialog repoID={repoID} path={parentDir} target={[oldName]} toggleDialog={closeZipDialog}/>
+        </ModalPortal>
+      )}
     </>
   );
 };
 
-KanbanContextmenu.propTypes = {
+KanbanContextMenu.propTypes = {
   boundaryCoordinates: PropTypes.object,
   selectedCard: PropTypes.string,
   onDelete: PropTypes.func,
   onModify: PropTypes.func,
 };
 
-export default KanbanContextmenu;
+export default KanbanContextMenu;

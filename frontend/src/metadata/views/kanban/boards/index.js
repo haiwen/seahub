@@ -19,7 +19,7 @@ import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import toaster from '../../../../components/toast';
-import ContextMenu from './context-menu';
+import ContextMenu from '../context-menu';
 
 import './index.css';
 
