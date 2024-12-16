@@ -1399,7 +1399,13 @@ export const Utils = {
         errorMsg = gettext('Error');
       }
     } else {
-      errorMsg = gettext('Please check the network.');
+      if (typeof error === 'object' && error.name) {
+        errorMsg = error.name;
+      } else {
+        errorMsg = gettext('Please check the network.');
+      }
+      // eslint-disable-next-line
+      console.log(error);
     }
     return errorMsg;
   },
