@@ -104,7 +104,7 @@ export const openInNewTab = (repoID, record) => {
   if (!record) return;
   const isDir = checkIsDir(record);
   const fileName = getFileNameFromRecord(record);
-  let parentDir = _getParentDir(record);
+  const parentDir = _getParentDir(record);
   _openByNewWindow(repoID, fileName, parentDir, isDir ? FILE_TYPE.FOLDER : '');
 };
 
