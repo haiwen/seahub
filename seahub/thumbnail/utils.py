@@ -291,7 +291,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     image = get_rotated_image(image)
     image.thumbnail((size, size), Image.Resampling.LANCZOS)
     save_type = THUMBNAIL_EXTENSION
-    if image.mode == 'RGBA':
+    if image.mode in ['RGBA', 'P']:
         save_type = 'png'
     image.save(thumbnail_file, save_type)
     return (True, 200)
