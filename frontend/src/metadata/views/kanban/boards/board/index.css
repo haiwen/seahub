@@ -12,15 +12,31 @@
   margin: 0 8px;
 }
 
-.sf-metadata-view-kanban-board .smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper:last-child .sf-metadata-kanban-card {
-  margin-bottom: 0;
+.sf-metadata-main .card-ghost {
+  transition: transform 0.18s ease;
+  transform: rotateZ(5deg);
+  cursor: grabbing;
 }
 
-.sf-metadata-view-kanban-board .smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-  overflow: visible;
+.sf-metadata-view-kanban-board .card-drop-preview {
+  position: relative;
+  background-color: #fff;
+  box-sizing: border-box;
 }
 
-.sf-metadata-view-kanban-boards.readonly .sf-metadata-view-kanban-board:last-child {
-  margin-right: 0;
-  padding-right: 16px;
+.sf-metadata-view-kanban-board .card-drop-preview::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: 
+      repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) top / 100% 1px no-repeat,
+      repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) left / 1px 100% no-repeat,
+      repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) right / 1px 100% no-repeat;
 }

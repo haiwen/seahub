@@ -9,6 +9,7 @@ import Draggable from '../../dnd/draggable';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
 
 import './index.css';
+import classNames from 'classnames';
 
 const Board = ({
   board,
@@ -69,14 +70,24 @@ const Board = ({
       <Container
         orientation="vertical"
         groupName={boardName}
-        dragClass="kanban-dragged-card"
-        dropClass="kanban-drop-card"
+        dragClass="card-ghost"
+        dropClass="card-ghost-drop"
         onDragStart={onDragStart}
         onDrop={e => onDragEnd(boardIndex, e)}
         onDragEnter={() => setDraggingOver(true)}
         onDragLeave={() => setDraggingOver(false)}
-        shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
+        shouldAcceptDrop={() => !readonly}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
+        dropPlaceholder={{
+          animationDuration: 150,
+          showOnTop: true,
+          className: 'card-drop-preview',
+        }}
+        dropPlaceholderAnimationDuration={200}
+        getGhostParent={() => {
+          // return anchestor of container who doesn't have a transform property
+          return document.querySelector('.sf-metadata-main');
+        }}
       >
         {board.children.map((cardKey) => {
           const record = getRowById(metadata, cardKey);
@@ -95,6 +106,7 @@ const Board = ({
               onOpenFile={onOpenFile}
               onSelectCard={onSelectCard}
               onContextMenu={(e) => onContextMenu(e, recordId)}
+              readonly={readonly}
             />
           );
           if (readonly) return CardElement;

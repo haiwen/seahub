@@ -1,29 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { constants } from '../../../third-party/trello-smooth-dnd';
+import { constants } from 'smooth-dnd';
 
 const { wrapperClass } = constants;
 
 class Draggable extends Component {
+  static propTypes = {
+    render: PropTypes.func,
+    className: PropTypes.string,
+    children: PropTypes.node,
+  };
 
   render() {
-    if (this.props.render) {
-      return React.cloneElement(this.props.render(), { className: wrapperClass });
+    const { render, className, children, ...restProps } = this.props;
+
+    if (render) {
+      return React.cloneElement(render(), { className: wrapperClass });
     }
 
-    const clsName = `${this.props.className ? this.props.className + ' ' : ''}`;
+    const clsName = `${className ? className + ' ' : ''}${wrapperClass}`;
     return (
-      <div {...this.props} className={`${clsName}${wrapperClass}`}>
-        {this.props.children}
+      <div {...restProps} className={clsName}>
+        {children}
       </div>
     );
   }
 }
-
-Draggable.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.element,
-  render: PropTypes.func
-};
 
 export default Draggable;
