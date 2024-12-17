@@ -11,7 +11,7 @@ import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
 import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
 import { Dirent } from '../../../../models';
-import { EVENT_BUS_TYPE } from '../../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../constants';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
@@ -45,9 +45,33 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     setIsCopyDialogOpen(!isCopyDialogOpen);
   }, [isCopyDialogOpen]);
 
-  const handleCopyItem = (destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
-    onCopyItem(destRepo, dirent, destPath, nodeParentPath, isByDialog);
-    setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA), 500);
+  const copyStatusProbe = async (retries = 3) => {
+    const currentRecordsCount = metadata.recordsCount;
+    const viewID = metadata.view._id;
+    const params = {
+      view_id: viewID,
+      start: 0,
+      limit: PER_LOAD_NUMBER,
+    };
+
+    for (let attempt = 0; attempt < retries; attempt++) {
+      const res = await window.sfMetadataContext.getMetadata(params);
+      const rows = res.data.results;
+      if (rows.length > currentRecordsCount) {
+        return true;
+      }
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    return false;
+  };
+
+  const handleCopyItem = async (destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+    await onCopyItem(destRepo, dirent, destPath, nodeParentPath, isByDialog);
+    const copySuccess = await copyStatusProbe(5);
+    if (copySuccess) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+    }
   };
 
   const handleDownload = useCallback(() => {
