@@ -17,7 +17,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, onCopyItem, onAddFolder }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -368,6 +368,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         selectedImages={selectedImages}
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}
+        onCopyItem={onCopyItem}
+        onAddFolder={onAddFolder}
       />
       {isImagePopupOpen && (
         <ModalPortal>
@@ -389,7 +391,9 @@ Main.propTypes = {
   isLoadingMore: PropTypes.bool,
   metadata: PropTypes.object,
   onDelete: PropTypes.func,
-  onLoadMore: PropTypes.func
+  onLoadMore: PropTypes.func,
+  onCopyItem: PropTypes.func,
+  onAddFolder: PropTypes.func,
 };
 
 export default Main;

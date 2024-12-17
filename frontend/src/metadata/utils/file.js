@@ -3,6 +3,8 @@ import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
+import { DEFAULT_RETRY_INTERVAL, DEFAULT_RETRY_TIMES, PER_LOAD_NUMBER } from '../constants';
+import { getViewById } from './view';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
@@ -126,4 +128,23 @@ export const downloadFile = (repoID, record) => {
   const direntPath = Utils.joinPath(parentDir, name);
   const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
   location.href = url;
+};
+
+export const probeCopyStatus = async (viewID, rowsCount, retries = DEFAULT_RETRY_TIMES, delay = DEFAULT_RETRY_INTERVAL) => {
+  const params = {
+    view_id: viewID,
+    start: 0,
+    limit: PER_LOAD_NUMBER,
+  };
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    const res = await window.sfMetadataContext.getMetadata(params);
+    const rows = res.data.results;
+    if (rows.length > rowsCount) {
+      return true;
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+
+  return false;
 };

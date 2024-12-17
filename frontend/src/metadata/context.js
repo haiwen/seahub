@@ -76,7 +76,6 @@ class Context {
 
   // metadata
   getMetadata = (params) => {
-    console.log('getMetadata', params);
     if (!this.metadataAPI) return null;
     const repoID = this.settings['repoID'];
     const { view_id, start, limit } = params;

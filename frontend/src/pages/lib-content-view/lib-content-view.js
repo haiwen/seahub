@@ -1298,7 +1298,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false, { success_callback } = {}) => {
+  onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false) => {
     let repoID = this.props.repoID;
     // just for view list state
     let dirName = dirent.name;
@@ -1336,7 +1336,6 @@ class LibContentView extends React.Component {
         if (byDialog) {
           this.updateRecentlyUsedRepos(destRepo, copyToDirentPath);
         }
-        success_callback && success_callback();
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
