@@ -93,8 +93,8 @@ class Context {
   };
 
   // tags
-  getTags = () => {
-    return this.api.getTags(this.repoId);
+  getTags = ({ start, limit }) => {
+    return this.api.getTags(this.repoId, start, limit);
   };
 
   addTags = (tags = []) => {

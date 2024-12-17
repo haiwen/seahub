@@ -303,7 +303,7 @@ class MetadataRecords(APIView):
         #args check
         view_id = request.GET.get('view_id', '')
         start = request.GET.get('start', 0)
-        limit = request.GET.get('limit', 100)
+        limit = request.GET.get('limit', 1000)
 
         try:
             start = int(start)
@@ -1660,6 +1660,24 @@ class MetadataTags(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 1000)
+
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
@@ -1690,7 +1708,7 @@ class MetadataTags(APIView):
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
 
-        sql = f'SELECT * FROM `{TAGS_TABLE.name}` ORDER BY `_ctime` LIMIT {0}, {1000}'
+        sql = f'SELECT * FROM `{TAGS_TABLE.name}` ORDER BY `_ctime` LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1715,7 +1733,7 @@ class MetadataTags(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % repo_id
+            error_msg = f'Library {repo_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not can_read_metadata(request, repo_id):
@@ -1738,29 +1756,52 @@ class MetadataTags(APIView):
         if not tags_table_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
 
+        exist_tags = []
+        new_tags = []
+        tags_names = [tag_data.get(TAGS_TABLE.columns.name.name, '') for tag_data in tags_data]
+        tags_names_str = ', '.join([f'"{tag_name}"' for tag_name in tags_names])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tags_names_str})'
+
         try:
-            resp = metadata_server_api.insert_rows(tags_table_id, tags_data)
+            exist_rows = metadata_server_api.query_rows(sql)
+            exist_tags = exist_rows.get('results', [])
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if exist_tags:
+            for tag_data in tags_data:
+                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
+                if tag_name not in tags_names:
+                    new_tags.append(tag_data)
+        else:
+            new_tags = tags_data
+
+        tags = exist_tags
+        if not new_tags:
+            return Response({ 'tags': tags })
+
+        try:
+            resp = metadata_server_api.insert_rows(tags_table_id, new_tags)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         row_ids = resp.get('row_ids', [])
-
-        if not row_ids:
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sql = 'SELECT * FROM %s WHERE `%s` in (%s)' % (TAGS_TABLE.name, TAGS_TABLE.columns.id.name, ', '.join(["'%s'" % id for id in row_ids]))
-
+        row_ids_str = ', '.join([f'"{id}"' for id in row_ids])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({row_ids_str})'
         try:
             query_new_rows = metadata_server_api.query_rows(sql)
+            new_tags_data = query_new_rows.get('results', [])
+            tags.extend(new_tags_data)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({ 'tags': query_new_rows.get('results', []) })
+        return Response({ 'tags': tags })
 
     def put(self, request, repo_id):
         tags_data = request.data.get('tags_data')

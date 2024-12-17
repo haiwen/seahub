@@ -14,11 +14,17 @@ export default function apply(data, operation) {
     case OPERATION_TYPE.ADD_RECORDS: {
       const { tags } = operation;
       const { rows } = data;
-      const updatedRows = [...rows, ...tags];
+      const updatedRows = [...rows];
       tags.forEach(tag => {
-        const id = tag[PRIVATE_COLUMN_KEY.ID];
-        data.id_row_map[id] = tag;
-        data.row_ids.push(id);
+        const tagID = tag[PRIVATE_COLUMN_KEY.ID];
+        const rowIndex = updatedRows.findIndex(r => r._id === tagID);
+        data.id_row_map[tagID] = tag;
+        if (rowIndex === -1) {
+          data.row_ids.push(tagID);
+          updatedRows.push(tag);
+        } else {
+          updatedRows[rowIndex] = tag;
+        }
       });
       data.rows = updatedRows;
       return data;
