@@ -12,6 +12,7 @@ import { getTagByName, getTagId } from '../../../../tag/utils';
 import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { useTags } from '../../../../tag/hooks';
+import EmptyTip from '../../../../components/empty-tip';
 
 import './index.css';
 
@@ -140,14 +141,14 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
                 })}
               </>
             ) : (
-              <div className="empty-tip">{gettext('No tags')}</div>
+              <EmptyTip className="w-100 h-100" text={gettext('No tags')} />
             )}
           </div>
         )}
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={() => onToggle()}>{gettext('Cancel')}</Button>
-        <Button color="primary" disabled={isLoading || isSubmitting} onClick={handelSubmit}>{gettext('Submit')}</Button>
+        <Button color="primary" disabled={isLoading || isSubmitting || fileTags.length === 0} onClick={handelSubmit}>{gettext('Submit')}</Button>
       </ModalFooter>
     </Modal>
   );
