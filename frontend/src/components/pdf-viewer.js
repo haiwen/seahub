@@ -330,16 +330,20 @@ class PDFViewer extends React.Component {
           {/* <!-- mainContainer -->*/}
 
           <div id="dialogContainer">
-            <dialog id="passwordDialog">
-              <div className="row">
-                <label htmlFor="password" id="passwordText" data-l10n-id="password_label">Enter the password to open this PDF file:</label>
-              </div>
-              <div className="row">
-                <input type="password" id="password" className="toolbarField" />
-              </div>
-              <div className="buttonRow">
-                <button id="passwordCancel" className="dialogButton"><span data-l10n-id="password_cancel">Cancel</span></button>
-                <button id="passwordSubmit" className="dialogButton"><span data-l10n-id="password_ok">OK</span></button>
+            <dialog id="passwordDialog" className="modal-dialog p-0 rounded border-0 shadow-none">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{gettext('Decrypt document')}</h5>
+                  <button type="button" id="passwordCancel2" className="align-self-center bg-transparent border-0 sf3-font sf3-font-x-01 modal-close" aria-label={gettext('Close')}></button>
+                </div>
+                <div className="modal-body py-6 text-left">
+                  <label htmlFor="password" id="passwordText" data-l10n-id="password_label">Enter the password to open this PDF file:</label>
+                  <input type="password" id="password" className="form-control" />
+                </div>
+                <div className="modal-footer">
+                  <button id="passwordCancel" className="btn btn-secondary"><span data-l10n-id="password_cancel">Cancel</span></button>
+                  <button id="passwordSubmit" className="btn btn-primary"><span data-l10n-id="password_ok">OK</span></button>
+                </div>
               </div>
             </dialog>
             <dialog id="documentPropertiesDialog">
