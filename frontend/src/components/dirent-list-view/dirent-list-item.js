@@ -136,6 +136,7 @@ class DirentListItem extends React.Component {
 
       if (
         nextProps.dirent.is_locked !== this.state.dirent.is_locked ||
+        nextProps.dirent.isSelected !== this.state.dirent.isSelected ||
         nextProps.dirent.starred !== this.state.dirent.starred
       ) {
         this.setState({ dirent: nextProps.dirent });
