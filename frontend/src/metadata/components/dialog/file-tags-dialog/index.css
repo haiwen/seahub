@@ -14,14 +14,11 @@
   border: 1px solid #dedede;
   border-radius: 4px;
   margin-right: 8px;
+  margin-bottom: 8px;
   line-height: 26px;
   cursor: pointer;
 }
 
 .sf-metadata-auto-image-tags .auto-image-tag.selected {
   border-color: #FF9800;
-}
-
-.sf-metadata-auto-image-tags .auto-image-tag.selected::after {
-  content: ('');
 }
