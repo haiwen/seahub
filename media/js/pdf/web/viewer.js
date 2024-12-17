@@ -4742,12 +4742,17 @@ class PDFFindBar {
     this.findResultsCount = options.findResultsCount;
     this.findPreviousButton = options.findPreviousButton;
     this.findNextButton = options.findNextButton;
+    this.clearQueryButton = options.clearQueryButton;
     this.eventBus = eventBus;
     this.l10n = l10n;
     this.toggleButton.addEventListener("click", () => {
       this.toggle();
     });
     this.findField.addEventListener("input", () => {
+      this.dispatchEvent("");
+    });
+    this.clearQueryButton.addEventListener("click", () => {
+      this.findField.value = '';
       this.dispatchEvent("");
     });
     this.bar.addEventListener("keydown", e => {
@@ -4798,55 +4803,28 @@ class PDFFindBar {
     });
   }
   updateUIState(state, previous, matchesCount) {
-    let findMsg = Promise.resolve("");
-    let status = "";
-    switch (state) {
-      case _pdf_find_controller.FindState.FOUND:
-        break;
-      case _pdf_find_controller.FindState.PENDING:
-        status = "pending";
-        break;
-      case _pdf_find_controller.FindState.NOT_FOUND:
-        findMsg = this.l10n.get("find_not_found");
-        status = "notFound";
-        break;
-      case _pdf_find_controller.FindState.WRAPPED:
-        findMsg = this.l10n.get(`find_reached_${previous ? "top" : "bottom"}`);
-        break;
-    }
-    this.findField.setAttribute("data-status", status);
     this.findField.setAttribute("aria-invalid", state === _pdf_find_controller.FindState.NOT_FOUND);
-    findMsg.then(msg => {
-      this.findMsg.setAttribute("data-status", status);
-      this.findMsg.textContent = msg;
-      this.#adjustWidth();
-    });
+    if (this.findField.value.trim() != '') {
+      this.clearQueryButton.classList.remove('hidden');
+    } else {
+      this.clearQueryButton.classList.add('hidden');
+    }
     this.updateResultsCount(matchesCount);
   }
   updateResultsCount({
     current = 0,
     total = 0
   } = {}) {
-    const limit = MATCHES_COUNT_LIMIT;
-    let matchCountMsg = Promise.resolve("");
+    const matchCountMsg = `${current} / ${total}`;
+    this.findResultsCount.textContent = matchCountMsg;
+
     if (total > 0) {
-      if (total > limit) {
-        let key = "find_match_count_limit";
-        matchCountMsg = this.l10n.get(key, {
-          limit
-        });
-      } else {
-        let key = "find_match_count";
-        matchCountMsg = this.l10n.get(key, {
-          current,
-          total
-        });
-      }
+      this.findPreviousButton.classList.remove('hidden');
+      this.findNextButton.classList.remove('hidden');
+    } else {
+      this.findPreviousButton.classList.add('hidden');
+      this.findNextButton.classList.add('hidden');
     }
-    matchCountMsg.then(msg => {
-      this.findResultsCount.textContent = msg;
-      this.#adjustWidth();
-    });
   }
   open() {
     if (!this.opened) {
@@ -13499,12 +13477,15 @@ function renderProgress(index, total, l10n) {
   dialog ||= document.getElementById("printServiceDialog");
   const progress = Math.round(100 * index / total);
   const progressBar = dialog.querySelector("progress");
+  const progressBarSf = dialog.querySelector(".progress-bar");
   const progressPerc = dialog.querySelector(".relative-progress");
   progressBar.value = progress;
+  progressBarSf.setAttribute('aria-valuenow', progress);
   l10n.get("print_progress_percent", {
     progress
   }).then(msg => {
     progressPerc.textContent = msg;
+    progressBarSf.style.width = msg;
   });
 }
 window.addEventListener("keydown", function (event) {
@@ -13533,6 +13514,7 @@ function ensureOverlay() {
     dialog ||= document.getElementById("printServiceDialog");
     overlayPromise = overlayManager.register(dialog, true);
     document.getElementById("printCancel").onclick = abort;
+    document.getElementById("printCancel2").onclick = abort;
     dialog.addEventListener("close", abort);
   }
   return overlayPromise;
@@ -13588,7 +13570,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -13602,14 +13584,14 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
@@ -13668,7 +13650,7 @@ function getViewerConfiguration() {
       zoomOut: document.getElementById("zoomOut"),
       viewFind: document.getElementById("viewFind"),
       openFile: document.getElementById("openFile"),
-      // custom for seafile: 'seafile-pdf-print' only exists in 'pdf file view' page, not in 'shared/history/trash' file view pages
+      // custom for seafile: 'seafile-pdf-print' only exists in 'pdf file view' page, not in 'shared/history/trash' pdf file view pages
       print: document.getElementById("seafile-pdf-print") || document.getElementById("print"),
       editorFreeTextButton: document.getElementById("editorFreeText"),
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
@@ -13717,7 +13699,8 @@ function getViewerConfiguration() {
     },
     findBar: {
       bar: document.getElementById("findbar"),
-      toggleButton: document.getElementById("viewFind"),
+      // custom for seafile: only in 'pdf file view' page.
+      toggleButton: document.getElementById("seafile-pdf-find") || document.getElementById("viewFind"),
       findField: document.getElementById("findInput"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
@@ -13726,7 +13709,8 @@ function getViewerConfiguration() {
       findMsg: document.getElementById("findMsg"),
       findResultsCount: document.getElementById("findResultsCount"),
       findPreviousButton: document.getElementById("findPrevious"),
-      findNextButton: document.getElementById("findNext")
+      findNextButton: document.getElementById("findNext"),
+      clearQueryButton: document.getElementById("findClearQuery")
     },
     passwordOverlay: {
       dialog: document.getElementById("passwordDialog"),

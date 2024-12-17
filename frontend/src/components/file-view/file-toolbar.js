@@ -114,9 +114,18 @@ class FileToolbar extends React.Component {
       showShareBtn = download_external_link;
     }
 
+    const shortcutMain = Utils.isMac() ? '⌘ + ' : 'Ctrl + ';
+
     return (
       <Fragment>
         <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
+          {fileType == 'PDF' && (
+            <IconButton
+              id="seafile-pdf-find"
+              icon="search"
+              text={`${gettext('Find')}(${shortcutMain}F)`}
+            />
+          )}
           {(fileType == 'PDF' && canDownloadFile) && (
             <IconButton
               id="seafile-pdf-print"

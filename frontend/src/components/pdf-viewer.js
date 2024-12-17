@@ -62,17 +62,24 @@ class PDFViewer extends React.Component {
           {/* <!-- sidebarContainer -->*/}
 
           <div id="mainContainer">
-            <div className="findbar hidden doorHanger" id="findbar">
+            <div className="findbar hidden doorHanger d-flex align-items-center" id="findbar">
               <div id="findbarInputContainer">
-                <input id="findInput" className="toolbarField" title="Find" placeholder="Find in document…" tabIndex="91" data-l10n-id="find_input" aria-invalid="false" />
-                <div className="splitToolbarButton">
-                  <button id="findPrevious" className="toolbarButton" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
-                    <span data-l10n-id="find_previous_label">Previous</span>
-                  </button>
-                  <div className="splitToolbarButtonSeparator"></div>
-                  <button id="findNext" className="toolbarButton" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
-                    <span data-l10n-id="find_next_label">Next</span>
-                  </button>
+                <input id="findInput" className="form-control" title="Find" placeholder="Find in document…" tabIndex="91" data-l10n-id="find_input" aria-invalid="false" />
+                <div className="position-absolute d-flex align-items-center" id="findbarMiscContainer">
+                  <div id="findbarMessageContainer" aria-live="polite">
+                    <span id="findResultsCount"></span>
+                    <span id="findMsg" className="toolbarLabel d-none"></span>
+                  </div>
+                  <div className="splitToolbarButton m-0">
+                    <button id="findPrevious" className="hidden border-0 sf3-font sf3-font-down" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
+                      <span data-l10n-id="find_previous_label" className="find-label">Previous</span>
+                    </button>
+                    <div className="splitToolbarButtonSeparator d-none"></div>
+                    <button id="findNext" className="hidden border-0 sf3-font sf3-font-down" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
+                      <span data-l10n-id="find_next_label" className="find-label">Next</span>
+                    </button>
+                  </div>
+                  <button id="findClearQuery" className="hidden border-0 ml-1 sf3-font sf3-font-close"></button>
                 </div>
               </div>
 
@@ -87,11 +94,6 @@ class PDFViewer extends React.Component {
                 <label htmlFor="findMatchDiacritics" className="toolbarLabel" data-l10n-id="find_match_diacritics_label">Match Diacritics</label>
                 <input type="checkbox" id="findEntireWord" className="toolbarField" tabIndex="97" />
                 <label htmlFor="findEntireWord" className="toolbarLabel" data-l10n-id="find_entire_word_label">Whole Words</label>
-              </div>
-
-              <div id="findbarMessageContainer" aria-live="polite">
-                <span id="findResultsCount" className="toolbarLabel"></span>
-                <span id="findMsg" className="toolbarLabel"></span>
               </div>
             </div>
             {/* <!-- findbar -->*/}
@@ -404,16 +406,25 @@ class PDFViewer extends React.Component {
                 <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
               </div>
             </dialog>
-            <dialog id="printServiceDialog" style={{ minWidth: '200px' }}>
-              <div className="row">
-                <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
-              </div>
-              <div className="row">
-                <progress value="0" max="100"></progress>
-                <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
-              </div>
-              <div className="buttonRow">
-                <button id="printCancel" className="dialogButton"><span data-l10n-id="print_progress_close">Cancel</span></button>
+            <dialog id="printServiceDialog" className="modal-dialog p-0 rounded border-0 shadow-none">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{gettext('Print document')}</h5>
+                  <button type="button" id="printCancel2" className="align-self-center bg-transparent border-0 sf3-font sf3-font-x-01 modal-close" aria-label={gettext('Close')}></button>
+                </div>
+                <div className="modal-body py-6">
+                  <p className="mb-2">
+                    <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
+                    <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
+                  </p>
+                  <progress value="0" max="100" className="d-none"></progress>
+                  <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button id="printCancel" className="btn btn-secondary"><span data-l10n-id="print_progress_close">Cancel</span></button>
+                </div>
               </div>
             </dialog>
           </div>
