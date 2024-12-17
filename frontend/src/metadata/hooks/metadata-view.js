@@ -268,6 +268,9 @@ export const MetadataViewProvider = ({
         modifyColumnWidth,
         insertColumn,
         updateFileTags,
+        moveItem: params.moveItem,
+        copyItem: params.copyItem,
+        addFolder: params.addFolder,
       }}
     >
       {children}

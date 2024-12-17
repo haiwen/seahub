@@ -6,7 +6,8 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../../constants';
+import { getParentDirFromRecord } from '../../utils/cell';
 
 import './index.css';
 
@@ -25,7 +26,9 @@ const Table = () => {
     modifyColumnOrder,
     modifyColumnWidth,
     insertColumn,
-    updateFileTags
+    updateFileTags,
+    moveItem,
+    addFolder
   } = useMetadataView();
   const containerRef = useRef(null);
 
@@ -148,6 +151,32 @@ const Table = () => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
 
+  const moveRecord = useCallback((destRepo, dirent, destPath, nodePath, isByDialog, recordID) => {
+    const currrentRepoID = window.sfMetadataStore.repoId;
+    const record = recordGetterById(recordID);
+    const parentDir = getParentDirFromRecord(record);
+    const updates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
+    const oldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
+
+    const handleSuccess = () => moveItem(destRepo, dirent, destPath, nodePath, isByDialog);
+    const handleError = (error) => error && toaster.danger(error);
+
+    if (currrentRepoID === destRepo.repo_id) {
+      store.modifyRecords(
+        [recordID],
+        { [recordID]: updates },
+        { [recordID]: updates },
+        { [recordID]: oldRowData },
+        { [recordID]: oldRowData },
+        false,
+        false,
+        { fail_callback: handleError, success_callback: handleSuccess }
+      );
+    } else {
+      store.deleteLocalRecords([recordID], { fail_callback: handleError, success_callback: handleSuccess });
+    }
+  }, [store, recordGetterById, moveItem]);
+
   return (
     <div className="sf-metadata-container" ref={containerRef}>
       <TableMain
@@ -172,6 +201,8 @@ const Table = () => {
         updateFileTags={updateFileTags}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
+        moveRecord={moveRecord}
+        addFolder={addFolder}
       />
     </div>
   );

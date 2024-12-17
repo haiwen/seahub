@@ -11,6 +11,7 @@ export const OPERATION_TYPE = {
   MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
   MODIFY_SETTINGS: 'modify_settings',
   MODIFY_LOCAL_RECORD: 'modify_local_record',
+  DELETE_LOCAL_RECORDS: 'delete_local_records',
 
   // column
   INSERT_COLUMN: 'insert_column',
@@ -59,6 +60,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
   [OPERATION_TYPE.UPDATE_FILE_TAGS]: ['repo_id', 'file_tags_data'],
+  [OPERATION_TYPE.DELETE_LOCAL_RECORDS]: ['repo_id', 'rows_ids', 'deleted_rows'],
 };
 
 export const UNDO_OPERATION_TYPE = [
@@ -76,6 +78,7 @@ export const UNDO_OPERATION_TYPE = [
 export const LOCAL_APPLY_OPERATION_TYPE = [
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
   OPERATION_TYPE.MODIFY_LOCAL_RECORD,
+  OPERATION_TYPE.DELETE_LOCAL_RECORDS,
 ];
 
 // apply operation after exec operation on the server

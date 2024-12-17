@@ -226,7 +226,8 @@ class DataProcessor {
         this.updateSummaries();
         break;
       }
-      case OPERATION_TYPE.DELETE_RECORDS: {
+      case OPERATION_TYPE.DELETE_RECORDS:
+      case OPERATION_TYPE.DELETE_LOCAL_RECORDS: {
         const { rows_ids } = operation;
         this.updatePageDataWithDeleteRecords(rows_ids, table);
         this.updateSummaries();

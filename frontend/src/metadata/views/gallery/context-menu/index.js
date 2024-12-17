@@ -9,14 +9,19 @@ import metadataAPI from '../../../api';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
+import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
+import { Dirent } from '../../../../models';
+import { EVENT_BUS_TYPE } from '../../../constants';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
+  COPY: 'copy',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onCopyItem, onAddFolder }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
@@ -26,11 +31,23 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
+    if (selectedImages.length === 1) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.COPY, label: gettext('Copy') });
+    }
     return validOptions;
   }, [checkCanDeleteRow, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
+  };
+
+  const toggleCopyDialog = useCallback(() => {
+    setIsCopyDialogOpen(!isCopyDialogOpen);
+  }, [isCopyDialogOpen]);
+
+  const handleCopyItem = (destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+    onCopyItem(destRepo, dirent, destPath, nodeParentPath, isByDialog);
+    setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA), 500);
   };
 
   const handleDownload = useCallback(() => {
@@ -66,10 +83,16 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       case 'delete':
         onDelete(selectedImages);
         break;
+      case CONTEXT_MENU_KEY.COPY:
+        toggleCopyDialog();
+        break;
       default:
         break;
     }
-  }, [selectedImages, handleDownload, onDelete]);
+  }, [selectedImages, handleDownload, onDelete, toggleCopyDialog]);
+
+  const dirent = new Dirent({ name: selectedImages[0]?.name });
+  const path = selectedImages[0]?.path;
 
   return (
     <>
@@ -86,6 +109,20 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
             path="/"
             target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
             toggleDialog={closeZipDialog}
+          />
+        </ModalPortal>
+      )}
+      {isCopyDialogOpen && (
+        <ModalPortal>
+          <CopyDirent
+            path={path}
+            repoID={repoID}
+            dirent={dirent}
+            isMultipleOperation={false}
+            repoEncrypted={false}
+            onItemCopy={handleCopyItem}
+            onCancelCopy={toggleCopyDialog}
+            onAddFolder={onAddFolder}
           />
         </ModalPortal>
       )}

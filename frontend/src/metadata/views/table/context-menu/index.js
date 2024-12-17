@@ -28,12 +28,13 @@ const OPERATION = {
   RENAME_FILE: 'rename-file',
   FILE_DETAIL: 'file-detail',
   FILE_DETAILS: 'file-details',
+  MOVE: 'move',
 };
 
 const ContextMenu = (props) => {
   const {
     isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
-    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileTags,
+    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileTags, toggleMoveDialog
   } = props;
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -160,6 +161,10 @@ const ContextMenu = (props) => {
 
     if (canModifyRow && column && isNameColumn(column)) {
       list.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
+    }
+
+    if (canModifyRow) {
+      list.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
     }
 
     return list;
@@ -384,12 +389,18 @@ const ContextMenu = (props) => {
         updateFileDetails([record]);
         break;
       }
+      case OPERATION.MOVE: {
+        const { record } = option;
+        if (!record) break;
+        toggleMoveDialog(record);
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
+  }, [onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -493,6 +504,7 @@ ContextMenu.propTypes = {
   getTableContentRect: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   deleteRecords: PropTypes.func,
+  toggleMoveDialog: PropTypes.func,
 };
 
 export default ContextMenu;
