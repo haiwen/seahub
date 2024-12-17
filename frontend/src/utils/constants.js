@@ -68,6 +68,7 @@ export const uploadLinkExpireDaysDefault = window.app.pageOptions.uploadLinkExpi
 export const enableShareToDepartment = window.app.pageOptions.enableShareToDepartment;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
+export const canPublishWiki = window.app.pageOptions.canPublishWiki;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting;
 export const enableUserCleanTrash = window.app.pageOptions.enableUserCleanTrash;

@@ -1239,6 +1239,10 @@ class Wiki2PublishView(APIView):
             error_msg = _('The custom part of URL should have 5-30 characters.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        if not request.user.permissions.can_publish_wiki():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
