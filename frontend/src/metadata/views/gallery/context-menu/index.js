@@ -15,27 +15,48 @@ import { Dirent } from '../../../../models';
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
+<<<<<<< HEAD
   DUPLICATE: 'duplicate',
 };
 
 const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder }) => {
+=======
+  REMOVE: 'remove',
+};
+
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onRemoveImage }) => {
+>>>>>>> ec4119d11 (remove photo)
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
+<<<<<<< HEAD
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
+=======
+  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
+>>>>>>> ec4119d11 (remove photo)
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
+<<<<<<< HEAD
     if (canDuplicateRow && selectedImages.length === 1) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
     return validOptions;
   }, [checkCanDeleteRow, canDuplicateRow, selectedImages]);
+=======
+
+    if (canRemovePhotoFromPeople) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from people' });
+    }
+
+    return validOptions;
+  }, [checkCanDeleteRow, canRemovePhotoFromPeople, selectedImages]);
+>>>>>>> ec4119d11 (remove photo)
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -77,22 +98,31 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {
-      case 'download':
+      case CONTEXT_MENU_KEY.DOWNLOAD:
         handleDownload();
         break;
-      case 'delete':
+      case CONTEXT_MENU_KEY.DELETE:
         onDelete(selectedImages);
         break;
+<<<<<<< HEAD
       case CONTEXT_MENU_KEY.DUPLICATE:
         toggleCopyDialog();
+=======
+      case CONTEXT_MENU_KEY.REMOVE:
+        onRemoveImage(selectedImages);
+>>>>>>> ec4119d11 (remove photo)
         break;
       default:
         break;
     }
+<<<<<<< HEAD
   }, [selectedImages, handleDownload, onDelete, toggleCopyDialog]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
   const path = selectedImages[0]?.path;
+=======
+  }, [selectedImages, handleDownload, onDelete, onRemoveImage]);
+>>>>>>> ec4119d11 (remove photo)
 
   return (
     <>

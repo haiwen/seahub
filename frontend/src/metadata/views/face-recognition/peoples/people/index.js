@@ -91,7 +91,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
           {photosCount + ' ' + gettext('items')}
         </div>
       </div>
-      {!readonly && people._is_someone && (
+      {!readonly && (
         <div className="sf-metadata-people-info-op">
           {active && !renaming && (
             <OpMenu onRename={setRenamingState} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />

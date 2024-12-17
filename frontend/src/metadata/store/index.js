@@ -583,6 +583,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  removePeoplePhotos = (peopleId, removedPhotos, { success_callback }) => {
+    const type = OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, people_id: peopleId, removed_photos: removedPhotos, success_callback
+    });
+    this.applyOperation(operation);
+  };
+
   // tag
   updateFileTags = (data) => {
     const type = OPERATION_TYPE.UPDATE_FILE_TAGS;

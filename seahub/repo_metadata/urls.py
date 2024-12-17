@@ -37,4 +37,4 @@ urlpatterns = [
     re_path(r'^tags-links/$', MetadataTagsLinks.as_view(), name='api-v2.1-metadata-tags-links'),
     re_path(r'^file-tags/$', MetadataFileTags.as_view(), name='api-v2.1-metadata-file-tags'),
     re_path(r'^tag-files/(?P<tag_id>.+)/$', MetadataTagFiles.as_view(), name='api-v2.1-metadata-tag-files'),
-  ]
+]

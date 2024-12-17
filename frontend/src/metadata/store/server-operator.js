@@ -219,6 +219,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS: {
+        const { people_id, removed_photos } = operation;
+        window.sfMetadataContext.removePeoplePhotos(people_id, removed_photos).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to remove people photos') });
+        });
+        break;
+      }
 
       // tags
       case OPERATION_TYPE.UPDATE_FILE_TAGS: {
