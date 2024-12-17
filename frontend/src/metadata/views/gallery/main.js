@@ -17,7 +17,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, onRemoveImage }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -298,6 +298,14 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     });
   }, [onDelete, updateCurrentDirent]);
 
+  const handelRemoveSelectedImages = useCallback((selectedImages) => {
+    if (!selectedImages.length) return;
+    onRemoveImage(selectedImages, () => {
+      updateCurrentDirent();
+      setSelectedImages([]);
+    });
+  }, [onRemoveImage, updateCurrentDirent]);
+
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);
     const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
@@ -366,6 +374,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         selectedImages={selectedImages}
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}
+        onRemoveImage={handelRemoveSelectedImages}
       />
       {isImagePopupOpen && (
         <ModalPortal>

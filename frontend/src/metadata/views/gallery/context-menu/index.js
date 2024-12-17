@@ -13,21 +13,28 @@ import ModalPortal from '../../../../components/modal-portal';
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
+  REMOVE: 'remove',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onRemoveImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
+  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
+
+    if (canRemovePhotoFromPeople) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from people' });
+    }
+
     return validOptions;
-  }, [checkCanDeleteRow, selectedImages]);
+  }, [checkCanDeleteRow, canRemovePhotoFromPeople, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -60,16 +67,19 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {
-      case 'download':
+      case CONTEXT_MENU_KEY.DOWNLOAD:
         handleDownload();
         break;
-      case 'delete':
+      case CONTEXT_MENU_KEY.DELETE:
         onDelete(selectedImages);
+        break;
+      case CONTEXT_MENU_KEY.REMOVE:
+        onRemoveImage(selectedImages);
         break;
       default:
         break;
     }
-  }, [selectedImages, handleDownload, onDelete]);
+  }, [selectedImages, handleDownload, onDelete, onRemoveImage]);
 
   return (
     <>

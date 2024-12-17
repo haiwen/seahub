@@ -42,6 +42,7 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
 
     return response_results
 
+
 def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
     from seafevents.repo_metadata.constants import METADATA_TABLE
     from seafevents.repo_metadata.utils import gen_view_data_sql
@@ -107,27 +108,27 @@ class MetadataServerAPI:
     def insert_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table_id,
-                'rows': rows
-            }
+            'table_id': table_id,
+            'rows': rows
+        }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
     def update_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table_id,
-                'rows': rows
-            }
+            'table_id': table_id,
+            'rows': rows
+        }
         response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
     def delete_rows(self, table_id, row_ids):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table_id,
-                'row_ids': row_ids
-            }
+            'table_id': table_id,
+            'row_ids': row_ids
+        }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
@@ -209,10 +210,9 @@ class MetadataServerAPI:
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-
     # link
-    def insert_link(self, base_id, link_id, table_id, row_id_map):
-        url = f'{METADATA_SERVER_URL}/api/v1/base/{base_id}/links'
+    def insert_link(self, link_id, table_id, row_id_map):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/links'
         data = {
             'link_id': link_id,
             'table_id': table_id,
@@ -221,12 +221,24 @@ class MetadataServerAPI:
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def update_link(self, base_id, link_id, table_id, row_id_map):
-        url = f'{METADATA_SERVER_URL}/api/v1/base/{base_id}/links'
+    def update_link(self, link_id, table_id, row_id_map):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/links'
         data = {
             'link_id': link_id,
             'table_id': table_id,
             'row_id_map': row_id_map
         }
         response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+
+    def add_link_column(self, link_id, table_id, other_table_id, table_column, other_table_column):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/link-columns'
+        data = {
+            'link_id': link_id,
+            'table_id': table_id,
+            'other_table_id': other_table_id,
+            'table_column': table_column,
+            'other_table_column': other_table_column
+        }
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
