@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, canPublishRepo, isPro } from '../../utils/constants';
+import { gettext, username, canCreateWiki, isPro } from '../../utils/constants';
 import WikiCardGroup from './wiki-card-group';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
@@ -30,7 +30,7 @@ class WikiCardView extends Component {
   }
 
   componentDidMount() {
-    if (!canPublishRepo || !isPro) return;
+    if (!canCreateWiki || !isPro) return;
     let departmentMap = {};
     wikiAPI.listWikiDepartments().then(res => {
       res.data.forEach(item => departmentMap[item.id] = true);
@@ -88,7 +88,7 @@ class WikiCardView extends Component {
         title={gettext('My Wikis')}
         isDepartment={false}
         isShowAvatar={false}
-        toggleAddWikiDialog={canPublishRepo ? toggleAddWikiDialog.bind(this, null) : null}
+        toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null) : null}
       />
     );
     wikiCardGroups.push(
@@ -122,7 +122,7 @@ class WikiCardView extends Component {
             title={groupWiki.group_name}
             isDepartment={true}
             isShowAvatar={false}
-            toggleAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id) : null}
+            toggleAddWikiDialog={(canCreateWiki && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id) : null}
           />
         );
       }

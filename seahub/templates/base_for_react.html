@@ -107,7 +107,7 @@
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
             aboutDialogCustomHtml: "{{ about_dialog_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
-            canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
+            canCreateWiki: {% if user.permissions.can_create_wiki %} true {% else %} false {% endif %},
             canPublishWiki: {% if user.permissions.can_publish_wiki %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
             enableRepoHistorySetting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},

@@ -186,6 +186,9 @@ class Wikis2View(APIView):
 
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
+        
+        if not request.user.permissions.can_create_wiki():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
 
         wiki_name = request.data.get("name", None)
         if not wiki_name:
