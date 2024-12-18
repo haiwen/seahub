@@ -9,7 +9,7 @@ import { isCellValueChanged } from '../../../../metadata/utils/cell';
 
 import './index.css';
 
-const Main = React.memo(({ context, tags, onChangeDisplayTag }) => {
+const Main = React.memo(({ context, tags, onChangeDisplayTag, onLoadMore }) => {
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -22,10 +22,16 @@ const Main = React.memo(({ context, tags, onChangeDisplayTag }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handelScroll = debounce(() => {
+  const handelScroll = debounce(async () => {
+    if (!tableRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = tableRef.current;
     const currentLocalStorage = context.localStorage;
-    const currentScrollTop = tableRef.current.scrollTop || 0;
+    const currentScrollTop = scrollTop || 0;
     currentLocalStorage.setItem('scroll_top', currentScrollTop);
+
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      onLoadMore();
+    }
   }, 200);
 
   if (tags.length === 0) {
@@ -57,6 +63,7 @@ Main.propTypes = {
   context: PropTypes.object,
   tags: PropTypes.array,
   onChangeDisplayTag: PropTypes.func,
+  onLoadMore: PropTypes.func,
 };
 
 export default Main;

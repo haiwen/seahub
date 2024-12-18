@@ -62,8 +62,8 @@ class TagsManagerAPI {
     return this.req.delete(url);
   };
 
-  getTags = (repoID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags/';
+  getTags = (repoID, start = 0, limit = 1000) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags/?start=' + start + '&limit=' + limit;
     return this.req.get(url);
   };
 

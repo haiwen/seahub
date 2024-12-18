@@ -16,6 +16,8 @@ class TagsData {
       this.row_ids.push(record._id);
       this.id_row_map[record._id] = record;
     });
+
+    this.hasMore = true;
   }
 
 }
