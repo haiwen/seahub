@@ -4,9 +4,12 @@ import toaster from '../../components/toast';
 import Context from '../context';
 import Store from '../store';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
+import { getRowById } from '../utils/table';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../utils/cell';
+import { gettext } from '../../utils/constants';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -14,6 +17,8 @@ export const MetadataViewProvider = ({
   children,
   repoID,
   viewID,
+  renameFileCallback,
+  deleteFilesCallback,
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -48,32 +53,142 @@ export const MetadataViewProvider = ({
   }, []);
 
   const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
-    window.sfMetadataStore.modifyFilters(filterConjunction, filters, basicFilters);
-  }, []);
+    storeRef.current.modifyFilters(filterConjunction, filters, basicFilters);
+  }, [storeRef]);
 
   const modifySorts = useCallback((sorts, displaySorts = false) => {
-    window.sfMetadataStore.modifySorts(sorts, displaySorts);
-  }, []);
+    storeRef.current.modifySorts(sorts, displaySorts);
+  }, [storeRef]);
 
   const modifyGroupbys = useCallback((groupbys) => {
-    window.sfMetadataStore.modifyGroupbys(groupbys);
-  }, []);
+    storeRef.current.modifyGroupbys(groupbys);
+  }, [storeRef]);
 
   const modifyHiddenColumns = useCallback((hiddenColumns) => {
-    window.sfMetadataStore.modifyHiddenColumns(hiddenColumns);
-  }, []);
-
-  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
-    window.sfMetadataStore.modifyColumnOrder(sourceColumnKey, targetColumnKey);
-  }, []);
+    storeRef.current.modifyHiddenColumns(hiddenColumns);
+  }, [storeRef]);
 
   const modifySettings = useCallback((settings) => {
-    window.sfMetadataStore.modifySettings(settings);
-  }, []);
+    storeRef.current.modifySettings(settings);
+  }, [storeRef]);
 
   const updateLocalRecord = useCallback((recordId, update) => {
-    window.sfMetadataStore.modifyLocalRecord(recordId, update);
-  }, []);
+    storeRef.current.modifyLocalRecord(recordId, update);
+  }, [storeRef]);
+
+  const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {
+    const isRename = storeRef.current.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
+    let newName = null;
+    if (isRename) {
+      const rowId = rowIds[0];
+      const row = getRowById(metadata, rowId);
+      const rowUpdates = idOriginalRowUpdates[rowId];
+      const { _parent_dir, _name } = row;
+      newName = getFileNameFromRecord(rowUpdates);
+      const { isValid, errMessage } = validateName(newName);
+      if (!isValid) {
+        toaster.danger(errMessage);
+        return;
+      }
+      if (newName === _name) {
+        return;
+      }
+      if (storeRef.current.checkDuplicatedName(newName, _parent_dir)) {
+        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+        toaster.danger(errMessage);
+        return;
+      }
+    }
+    storeRef.current.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, isRename, {
+      fail_callback: (error) => {
+        fail_callback && fail_callback(error);
+        error && toaster.danger(error);
+      },
+      success_callback: (operation) => {
+        if (operation.is_rename) {
+          const rowId = operation.row_ids[0];
+          const row = getRowById(metadata, rowId);
+          const rowUpdates = operation.id_original_row_updates[rowId];
+          const oldRow = operation.id_original_old_row_data[rowId];
+          const parentDir = getParentDirFromRecord(row);
+          const oldName = getFileNameFromRecord(oldRow);
+          const path = Utils.joinPath(parentDir, oldName);
+          const newName = getFileNameFromRecord(rowUpdates);
+          renameFileCallback(path, newName);
+        }
+        success_callback && success_callback();
+      },
+    });
+  };
+
+  const deleteRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
+    if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
+    let paths = [];
+    let fileNames = [];
+    recordsIds.forEach((recordId) => {
+      const record = getRowById(metadata, recordId);
+      const { _parent_dir, _name } = record || {};
+      if (_parent_dir && _name) {
+        const path = Utils.joinPath(_parent_dir, _name);
+        paths.push(path);
+        fileNames.push(_name);
+      }
+    });
+    storeRef.current.deleteRecords(recordsIds, {
+      fail_callback: (error) => {
+        fail_callback && fail_callback(error);
+        error && toaster.danger(error);
+      },
+      success_callback: () => {
+        deleteFilesCallback(paths, fileNames);
+        let msg = fileNames.length > 1
+          ? gettext('Successfully deleted {name} and {n} other items')
+          : gettext('Successfully deleted {name}');
+        msg = msg.replace('{name}', fileNames[0])
+          .replace('{n}', fileNames.length - 1);
+        toaster.success(msg);
+        success_callback && success_callback();
+      },
+    });
+  };
+
+  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
+    const rowIds = [rowId];
+    const idRowUpdates = { [rowId]: updates };
+    const idOriginalRowUpdates = { [rowId]: originalUpdates };
+    const idOldRowData = { [rowId]: oldRowData };
+    const idOriginalOldRowData = { [rowId]: originalOldRowData };
+    modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, { success_callback, fail_callback });
+  };
+
+  const renameColumn = useCallback((columnKey, newName, oldName) => {
+    storeRef.current.renameColumn(columnKey, newName, oldName);
+  }, [storeRef]);
+
+  const deleteColumn = useCallback((columnKey, oldColumn) => {
+    storeRef.current.deleteColumn(columnKey, oldColumn);
+  }, [storeRef]);
+
+  const modifyColumnData = useCallback((columnKey, newData, oldData, { optionModifyType } = {}) => {
+    storeRef.current.modifyColumnData(columnKey, newData, oldData, { optionModifyType });
+  }, [storeRef]);
+
+  const modifyColumnWidth = useCallback((columnKey, newWidth) => {
+    storeRef.current.modifyColumnWidth(columnKey, newWidth);
+  }, [storeRef]);
+
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    storeRef.current.modifyColumnOrder(sourceColumnKey, targetColumnKey);
+  }, [storeRef]);
+
+  const insertColumn = useCallback((name, type, { key, data }) => {
+    storeRef.current.insertColumn(name, type, { key, data });
+  }, [storeRef]);
+
+  const updateFileTags = useCallback((data) => {
+    storeRef.current.updateFileTags(data);
+  }, [storeRef]);
 
   // init
   useEffect(() => {
@@ -137,11 +252,22 @@ export const MetadataViewProvider = ({
         metadata,
         store: storeRef.current,
         isDirentDetailShow: params.isDirentDetailShow,
-        deleteFilesCallback: params.deleteFilesCallback,
-        renameFileCallback: params.renameFileCallback,
         updateCurrentDirent: params.updateCurrentDirent,
         closeDirentDetail: params.closeDirentDetail,
         showDirentDetail: params.showDirentDetail,
+        deleteFilesCallback: deleteFilesCallback,
+        renameFileCallback: renameFileCallback,
+        modifySettings,
+        modifyRecords,
+        deleteRecords,
+        modifyRecord,
+        renameColumn,
+        deleteColumn,
+        modifyColumnOrder,
+        modifyColumnData,
+        modifyColumnWidth,
+        insertColumn,
+        updateFileTags,
       }}
     >
       {children}

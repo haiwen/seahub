@@ -292,9 +292,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
 
   const handleDeleteSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
-    onDelete(selectedImages, () => {
-      updateCurrentDirent();
-      setSelectedImages([]);
+    onDelete(selectedImages, {
+      success_callback: () => {
+        updateCurrentDirent();
+        setSelectedImages([]);
+      }
     });
   }, [onDelete, updateCurrentDirent]);
 

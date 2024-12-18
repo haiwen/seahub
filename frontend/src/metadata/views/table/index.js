@@ -3,10 +3,8 @@ import { toKeyCode } from 'is-hotkey';
 import toaster from '../../../components/toast';
 import TableMain from './table-main';
 import { useMetadataView } from '../../hooks/metadata-view';
-import { Utils, validateName } from '../../../utils/utils';
+import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../utils/hotkey';
-import { gettext } from '../../../utils/constants';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 
@@ -14,7 +12,21 @@ import './index.css';
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
-  const { isLoading, metadata, store, renameFileCallback, deleteFilesCallback } = useMetadataView();
+  const {
+    isLoading,
+    metadata,
+    store,
+    modifyRecords,
+    deleteRecords,
+    modifyRecord,
+    renameColumn,
+    deleteColumn,
+    modifyColumnData,
+    modifyColumnOrder,
+    modifyColumnWidth,
+    insertColumn,
+    updateFileTags
+  } = useMetadataView();
   const containerRef = useRef(null);
 
   const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
@@ -91,87 +103,6 @@ const Table = () => {
     }
   }, [metadata, store]);
 
-  const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
-    const isRename = store.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
-    let newName = null;
-    if (isRename) {
-      const rowId = rowIds[0];
-      const row = recordGetterById(rowId);
-      const rowUpdates = idOriginalRowUpdates[rowId];
-      const { _parent_dir, _name } = row;
-      newName = getFileNameFromRecord(rowUpdates);
-      const { isValid, errMessage } = validateName(newName);
-      if (!isValid) {
-        toaster.danger(errMessage);
-        return;
-      }
-      if (newName === _name) {
-        return;
-      }
-      if (store.checkDuplicatedName(newName, _parent_dir)) {
-        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-        toaster.danger(errMessage);
-        return;
-      }
-    }
-    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, isRename, {
-      fail_callback: (error) => {
-        error && toaster.danger(error);
-      },
-      success_callback: (operation) => {
-        if (operation.is_rename) {
-          const rowId = operation.row_ids[0];
-          const row = recordGetterById(rowId);
-          const rowUpdates = operation.id_original_row_updates[rowId];
-          const oldRow = operation.id_original_old_row_data[rowId];
-          const parentDir = getParentDirFromRecord(row);
-          const oldName = getFileNameFromRecord(oldRow);
-          const path = Utils.joinPath(parentDir, oldName);
-          const newName = getFileNameFromRecord(rowUpdates);
-          renameFileCallback(path, newName);
-        }
-      },
-    });
-  };
-
-  const deleteRecords = (recordsIds) => {
-    let paths = [];
-    let fileNames = [];
-    recordsIds.forEach((recordId) => {
-      const record = recordGetterById(recordId);
-      const { _parent_dir, _name } = record || {};
-      if (_parent_dir && _name) {
-        const path = Utils.joinPath(_parent_dir, _name);
-        paths.push(path);
-        fileNames.push(_name);
-      }
-    });
-    store.deleteRecords(recordsIds, {
-      fail_callback: (error) => {
-        toaster.danger(error);
-      },
-      success_callback: () => {
-        deleteFilesCallback(paths, fileNames);
-        let msg = fileNames.length > 1
-          ? gettext('Successfully deleted {name} and {n} other items')
-          : gettext('Successfully deleted {name}');
-        msg = msg.replace('{name}', fileNames[0])
-          .replace('{n}', fileNames.length - 1);
-        toaster.success(msg);
-      },
-    });
-  };
-
-  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
-    const rowIds = [rowId];
-    const idRowUpdates = { [rowId]: updates };
-    const idOriginalRowUpdates = { [rowId]: originalUpdates };
-    const idOldRowData = { [rowId]: oldRowData };
-    const idOriginalOldRowData = { [rowId]: originalOldRowData };
-    modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData);
-  };
-
   const getAdjacentRowsIds = useCallback((rowIds) => {
     const rowIdsLen = metadata.row_ids.length;
     let rowIdsInOrder = [];
@@ -191,34 +122,6 @@ const Table = () => {
     });
     return { rowIdsInOrder, upperRowIds, belowRowIds };
   }, [metadata]);
-
-  const renameColumn = useCallback((columnKey, newName, oldName) => {
-    store.renameColumn(columnKey, newName, oldName);
-  }, [store]);
-
-  const deleteColumn = useCallback((columnKey, oldColumn) => {
-    store.deleteColumn(columnKey, oldColumn);
-  }, [store]);
-
-  const modifyColumnData = useCallback((columnKey, newData, oldData, { optionModifyType } = {}) => {
-    store.modifyColumnData(columnKey, newData, oldData, { optionModifyType });
-  }, [store]);
-
-  const modifyColumnWidth = useCallback((columnKey, newWidth) => {
-    store.modifyColumnWidth(columnKey, newWidth);
-  }, [store]);
-
-  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
-    store.modifyColumnOrder(sourceColumnKey, targetColumnKey);
-  }, [store]);
-
-  const updateFileTags = useCallback((data) => {
-    store.updateFileTags(data);
-  }, [store]);
-
-  const insertColumn = useCallback((name, type, { key, data }) => {
-    store.insertColumn(name, type, { key, data });
-  }, [store]);
 
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
