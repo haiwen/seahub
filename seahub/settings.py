@@ -736,7 +736,8 @@ else:
 
         'formatters': {
             'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
+                'format': '[%(asctime)s] [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
             },
         },
         'filters': {
