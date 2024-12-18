@@ -164,6 +164,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
+    ctx['unable_view_file'] = msg == _('Unable to view file')
     ctx['error_msg'] = msg or _('permission error')
 
     if extra_ctx:
@@ -178,6 +179,7 @@ def render_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
+    ctx['unable_view_file'] = msg == _('Unable to view file')
     ctx['error_msg'] = msg or _('Internal Server Error')
 
     if extra_ctx:
@@ -554,7 +556,7 @@ def gen_file_get_url_new(repo_id, filepath, op='download'):
     Generate fileserver file url.
     Format: http://<domain:port>/repos/<repo_id>files/<filepath>/?op=download
     """
-    
+
     return '%s/repos/%s/files/%s/?op=%s' % (
         get_fileserver_root(),
         repo_id,

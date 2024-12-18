@@ -2969,3 +2969,8 @@ a.sf-popover-item {
   margin-right: 2px;
   background-color: #DBDBDB;
 }
+
+.unable-view-file-tip {
+  margin-top: 20px;
+  font-size: 1.125rem;
+}
