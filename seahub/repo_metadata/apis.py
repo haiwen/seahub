@@ -708,7 +708,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -755,7 +755,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -796,7 +796,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -839,7 +839,6 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(metadata_views)
-
 
     def post(self, request, repo_id):
         #  Add a metadata view
@@ -907,7 +906,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         views = RepoMetadataViews.objects.filter(
-            repo_id = repo_id,
+            repo_id=repo_id,
         ).first()
         if not views:
             error_msg = 'The metadata views does not exists.'
