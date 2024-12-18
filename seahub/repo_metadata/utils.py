@@ -31,33 +31,6 @@ def add_init_face_recognition_task(params):
     return json.loads(resp.content)['task_id']
 
 
-def get_someone_similar_faces(faces, metadata_server_api):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
-    sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
-    parameters = []
-    query_result = []
-    for face in faces:
-        link_row_ids = [item['row_id'] for item in face.get(FACES_TABLE.columns.photo_links.name, [])]
-        if not link_row_ids:
-            continue
-        link_row_id = link_row_ids[0]
-        sql += '?, '
-        parameters.append(link_row_id)
-        if len(parameters) >= 10000:
-            sql = sql.rstrip(', ') + ');'
-            results = metadata_server_api.query_rows(sql, parameters).get('results', [])
-            query_result.extend(results)
-            sql = f'SELECT `{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ('
-            parameters = []
-
-    if parameters:
-        sql = sql.rstrip(', ') + ');'
-        results = metadata_server_api.query_rows(sql, parameters).get('results', [])
-        query_result.extend(results)
-
-    return query_result
-
-
 def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -82,35 +55,21 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 
-def get_face_link_column(face_table_id):
+def get_face_columns():
     from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     columns = [
-        METADATA_TABLE.columns.face_vectors.to_dict(),
-        METADATA_TABLE.columns.face_links.to_dict({
-            'link_id': FACES_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': face_table_id,
-            'display_column_key': FACES_TABLE.columns.name.key,
-        }),
-    ]
-
-    return columns
-
-
-def get_face_columns(face_table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
-    columns = [
-        FACES_TABLE.columns.photo_links.to_dict({
-            'link_id': FACES_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': face_table_id,
-            'display_column_key': METADATA_TABLE.columns.obj_id.key,
-        }),
         FACES_TABLE.columns.vector.to_dict(),
         FACES_TABLE.columns.name.to_dict(),
     ]
 
     return columns
+
+
+def get_table_by_name(metadata_server_api, table_name):
+    metadata = metadata_server_api.get_metadata()
+    tables = metadata.get('tables', [])
+    table = next((table for table in tables if table['name'] == table_name), None)
+    return table
 
 
 def get_unmodifiable_columns():
@@ -151,14 +110,35 @@ def init_faces(metadata_server_api):
 
     remove_faces_table(metadata_server_api)
     resp = metadata_server_api.create_table(FACES_TABLE.name)
+    face_table_id = resp['id']
 
-    # init link column
-    link_column = get_face_link_column(resp['id'])
-    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
+    # add face vector column
+    metadata_server_api.add_columns(METADATA_TABLE.id, [METADATA_TABLE.columns.face_vectors.to_dict()])
 
-    # init face column
-    face_columns = get_face_columns(resp['id'])
-    metadata_server_api.add_columns(resp['id'], face_columns)
+    # init faces column
+    face_columns = get_face_columns()
+    metadata_server_api.add_columns(face_table_id, face_columns)
+
+    # add face link column
+    metadata_server_api.add_link_column(FACES_TABLE.face_link_id, METADATA_TABLE.id, face_table_id, {
+        "key": METADATA_TABLE.columns.face_links.key,
+        "name": METADATA_TABLE.columns.face_links.name,
+        "display_column_key": FACES_TABLE.columns.name.key
+    }, {
+        "key": FACES_TABLE.columns.photo_links.key,
+        "name": FACES_TABLE.columns.photo_links.name,
+        "display_column_key": METADATA_TABLE.columns.obj_id.key
+    })
+
+    metadata_server_api.add_link_column(FACES_TABLE.deleted_face_link_id, METADATA_TABLE.id, face_table_id, {
+        "key": METADATA_TABLE.columns.deleted_face_links.key,
+        "name": METADATA_TABLE.columns.deleted_face_links.name,
+        "display_column_key": FACES_TABLE.columns.name.key
+    }, {
+        "key": FACES_TABLE.columns.deleted_photo_links.key,
+        "name": FACES_TABLE.columns.deleted_photo_links.name,
+        "display_column_key": METADATA_TABLE.columns.obj_id.key
+    })
 
 
 def remove_faces_table(metadata_server_api):
@@ -172,36 +152,16 @@ def remove_faces_table(metadata_server_api):
         elif table['name'] == METADATA_TABLE.name:
             columns = table.get('columns', [])
             for column in columns:
-                if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key]:
+                if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key, METADATA_TABLE.columns.deleted_face_links.key]:
                     metadata_server_api.delete_column(table['id'], column['key'], True)
 
 
 # tag
-def get_tag_link_column(table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
-    columns = [
-        METADATA_TABLE.columns.tags.to_dict({
-            'link_id': TAGS_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': table_id,
-            'display_column_key': TAGS_TABLE.columns.name.key,
-        }),
-    ]
-
-    return columns
-
-
 def get_tag_columns(table_id):
     from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
     columns = [
         TAGS_TABLE.columns.name.to_dict(),
         TAGS_TABLE.columns.color.to_dict(),
-        TAGS_TABLE.columns.file_links.to_dict({
-            'link_id': TAGS_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': table_id,
-            'display_column_key': METADATA_TABLE.columns.id.key,
-        }),
     ]
 
     return columns
@@ -213,15 +173,22 @@ def init_tags(metadata_server_api):
     remove_tags_table(metadata_server_api)
     resp = metadata_server_api.create_table(TAGS_TABLE.name)
 
-    table_id = resp['id']
-
-    # init link column
-    link_column = get_tag_link_column(table_id)
-    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
+    tags_table_id = resp['id']
 
     # init columns
-    tag_columns = get_tag_columns(table_id)
-    metadata_server_api.add_columns(table_id, tag_columns)
+    tag_columns = get_tag_columns(tags_table_id)
+    metadata_server_api.add_columns(tags_table_id, tag_columns)
+
+    # init link column
+    metadata_server_api.add_link_column(TAGS_TABLE.link_id, METADATA_TABLE.id, tags_table_id, {
+        "key": METADATA_TABLE.columns.tags.key,
+        "name": METADATA_TABLE.columns.tags.name,
+        "display_column_key": TAGS_TABLE.columns.name.key
+    }, {
+        "key": TAGS_TABLE.columns.file_links.key,
+        "name": TAGS_TABLE.columns.file_links.name,
+        "display_column_key": METADATA_TABLE.columns.id.key
+    })
 
 
 def remove_tags_table(metadata_server_api):
