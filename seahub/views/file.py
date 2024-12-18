@@ -2064,7 +2064,7 @@ def get_file_content_from_cache(file_id, repo_id, file_name):
                 file_id, 'view', '', use_onetime=False)
 
         if not access_token:
-            err_msg = 'Unable to view file'
+            err_msg = _('Unable to view file')
             return err_msg, file_content
 
         file_raw_path = gen_inner_file_get_url(access_token, file_name)
