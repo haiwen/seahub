@@ -14,7 +14,7 @@ from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from seahub.test_utils import BaseTestCase
 
 TEST_CAN_PUBLISH_REPO_FALSE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
-TEST_CAN_PUBLISH_REPO_FALSE['default']['can_publish_repo'] = False
+TEST_CAN_PUBLISH_REPO_FALSE['default']['can_create_wiki'] = False
 
 TEST_CAN_GENERATE_SHARE_LINK = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
 TEST_CAN_GENERATE_SHARE_LINK['default']['can_generate_share_link'] = False
