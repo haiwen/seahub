@@ -6,8 +6,9 @@ import ViewDetails from '../../metadata/components/view-details';
 import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { TAGS_MODE } from '../dir-view-mode/constants';
 
-const Detail = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+const Detail = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged, currentMode }) => {
   const isView = useMemo(() => path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [path]);
 
   useEffect(() => {
@@ -33,6 +34,8 @@ const Detail = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fi
   if (path === '/' && !dirent) {
     return (<LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />);
   }
+
+  if (currentMode === TAGS_MODE) return null;
 
   return (
     <DirentDetail
@@ -66,6 +69,7 @@ Detail.propTypes = {
   fileTags: PropTypes.array,
   onClose: PropTypes.func,
   onFileTagChanged: PropTypes.func,
+  currentMode: PropTypes.string,
 };
 
 export default Detail;
