@@ -1,7 +1,6 @@
 import { addChildAt, removeChildAt } from './utils';
 import {
   wrapperClass,
-  containersInDraggable
 } from './constants';
 
 export function domDropHandler({ element, draggables, layout, options }) {
@@ -14,10 +13,9 @@ export function domDropHandler({ element, draggables, layout, options }) {
     }
 
     if (addedIndex !== null) {
-      const wrapper = global.document.createElement('div');
+      const wrapper = window.document.createElement('div');
       wrapper.className = `${wrapperClass}`;
       wrapper.appendChild(removedWrapper && removedWrapper.firstElementChild ? removedWrapper.firstElementChild : droppedElement);
-      wrapper[containersInDraggable] = [];
       addChildAt(element, wrapper, addedIndex);
       if (addedIndex >= draggables.length) {
         draggables.push(wrapper);
@@ -33,7 +31,7 @@ export function domDropHandler({ element, draggables, layout, options }) {
 }
 
 export function reactDropHandler() {
-  const handler = ({ element, draggables, layout, options }) => {
+  const handler = () => {
     return (dropResult, onDrop) => {
       if (onDrop) {
         onDrop(dropResult);

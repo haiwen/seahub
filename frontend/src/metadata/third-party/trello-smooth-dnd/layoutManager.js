@@ -1,6 +1,5 @@
 import * as Utils from './utils';
-import { translationValue, visibilityValue, extraSizeForInsertion, containersInDraggable } from './constants';
-
+import { translationValue, visibilityValue, extraSizeForInsertion } from './constants';
 
 const horizontalMap = {
   size: 'offsetWidth',
@@ -32,7 +31,7 @@ const verticalMap = {
   scale: 'scaleY',
   setSize: 'height',
   setters: {
-    'translate': (val) => `translate3d(0,${val + 8}px, 0)`
+    'translate': (val) => `translate3d(0,${val}px, 0)`
   }
 };
 
@@ -53,37 +52,33 @@ function orientationDependentProps(map) {
 
 export default function layoutManager(containerElement, orientation, _animationDuration) {
   containerElement[extraSizeForInsertion] = 0;
-  const animationDuration = _animationDuration;
   const map = orientation === 'horizontal' ? horizontalMap : verticalMap;
   const propMapper = orientationDependentProps(map);
   const values = {
     translation: 0
   };
-  let registeredScrollListener = null;
 
-  global.addEventListener('resize', function () {
+  window.addEventListener('resize', function () {
     invalidateContainerRectangles(containerElement);
-    // invalidateContainerScale(containerElement);
   });
 
   setTimeout(() => {
     invalidate();
   }, 10);
-  // invalidate();
 
-  const scrollListener = Utils.listenScrollParent(containerElement, function () {
-    invalidateContainerRectangles(containerElement);
-    registeredScrollListener && registeredScrollListener();
-  });
   function invalidate() {
     invalidateContainerRectangles(containerElement);
     invalidateContainerScale(containerElement);
   }
 
-  let visibleRect;
   function invalidateContainerRectangles(containerElement) {
     values.rect = Utils.getContainerRect(containerElement);
-    values.visibleRect = Utils.getVisibleRect(containerElement, values.rect);
+    const visibleRect = Utils.getVisibleRect(containerElement, values.rect);
+    if (Utils.isVisible(visibleRect)) {
+      values.lastVisibleRect = values.visibleRect;
+    }
+
+    values.visibleRect = visibleRect;
   }
 
   function invalidateContainerScale(containerElement) {
@@ -95,7 +90,8 @@ export default function layoutManager(containerElement, orientation, _animationD
   function getContainerRectangles() {
     return {
       rect: values.rect,
-      visibleRect: values.visibleRect
+      visibleRect: values.visibleRect,
+      lastVisibleRect: values.lastVisibleRect
     };
   }
 
@@ -118,11 +114,13 @@ export default function layoutManager(containerElement, orientation, _animationD
     return { begin, end };
   }
 
-  function getContainerScale() {
-    return { scaleX: values.scaleX, scaleY: values.scaleY };
-  }
-
   function getSize(element) {
+    const htmlElement = element;
+    if (htmlElement.tagName) {
+      const rect = htmlElement.getBoundingClientRect();
+      return orientation === 'vertical' ? rect.bottom - rect.top : rect.right - rect.left;
+    }
+
     return propMapper.get(element, 'size') * propMapper.get(values, 'scale');
   }
 
@@ -147,14 +145,6 @@ export default function layoutManager(containerElement, orientation, _animationD
     return propMapper.get(position, 'dragPosition');
   }
 
-  function updateDescendantContainerRects(container) {
-    container.layout.invalidateRects();
-    container.onTranslated();
-    if (container.getChildContainers()) {
-      container.getChildContainers().forEach(p => updateDescendantContainerRects(p));
-    }
-  }
-
   function setTranslation(element, translation) {
     if (!translation) {
       element.style.removeProperty('transform');
@@ -162,14 +152,6 @@ export default function layoutManager(containerElement, orientation, _animationD
       propMapper.set(element.style, 'translate', translation);
     }
     element[translationValue] = translation;
-
-    if (element[containersInDraggable]) {
-      setTimeout(() => {
-        element[containersInDraggable].forEach(p => {
-          updateDescendantContainerRects(p);
-        });
-      }, animationDuration + 20);
-    }
   }
 
   function getTranslation(element) {
@@ -207,10 +189,6 @@ export default function layoutManager(containerElement, orientation, _animationD
     }
   }
 
-  function setScrollListener(callback) {
-    registeredScrollListener = callback;
-  }
-
   function getTopLeftOfElementBegin(begin) {
     let top = 0;
     let left = 0;
@@ -239,28 +217,20 @@ export default function layoutManager(containerElement, orientation, _animationD
     return propMapper.set(element, 'scrollValue', val);
   }
 
-  function dispose() {
-    if (scrollListener) {
-      scrollListener.dispose();
-    }
-
-    if (visibleRect) {
-      visibleRect.parentNode.removeChild(visibleRect);
-      visibleRect = null;
-    }
-  }
-
   function getPosition(position) {
-    return isInVisibleRect(position.x, position.y) ? getAxisValue(position) : null;
+    return getAxisValue(position);
   }
 
   function invalidateRects() {
     invalidateContainerRectangles(containerElement);
   }
 
+  function setBegin(style, value) {
+    propMapper.set(style, 'begin', value);
+  }
+
   return {
     getSize,
-    // getDistanceToContainerBegining,
     getContainerRectangles,
     getBeginEndOfDOMRect,
     getBeginEndOfContainer,
@@ -272,9 +242,6 @@ export default function layoutManager(containerElement, orientation, _animationD
     setVisibility,
     isVisible,
     isInVisibleRect,
-    dispose,
-    getContainerScale,
-    setScrollListener,
     setSize,
     getTopLeftOfElementBegin,
     getScrollSize,
@@ -283,5 +250,6 @@ export default function layoutManager(containerElement, orientation, _animationD
     invalidate,
     invalidateRects,
     getPosition,
+    setBegin,
   };
 }
