@@ -6,9 +6,9 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import { SeahubSelect, NoGroupMessage } from '../common/select';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import GroupSelect from '../common/group-select';
 
 class GroupItem extends React.Component {
 
@@ -127,7 +127,7 @@ class ShareToGroup extends React.Component {
     super(props);
     this.state = {
       options: [],
-      selectedOption: null,
+      selectedOptions: [],
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
@@ -151,8 +151,24 @@ class ShareToGroup extends React.Component {
     }
   }
 
-  handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+  onSelectOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    } else {
+      selectedOptions.push(option);
+    }
+    this.setState({ selectedOptions: selectedOptions });
+  };
+
+  onDeleteOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    }
+    this.setState({ selectedOptions: selectedOptions });
   };
 
   componentDidMount() {
@@ -174,6 +190,7 @@ class ShareToGroup extends React.Component {
         obj.value = res.data[i].name;
         obj.id = res.data[i].id;
         obj.label = res.data[i].name;
+        obj.name = res.data[i].name;
         options.push(obj);
       }
       this.setState({ options: options });
@@ -205,10 +222,10 @@ class ShareToGroup extends React.Component {
   shareToGroup = () => {
     const eventBus = EventBus.getInstance();
     const { isGroupOwnedRepo, itemPath: path, repoID } = this.props;
-    const { permission, selectedOption } = this.state;
-    const targetGroupId = selectedOption.id;
+    const { permission, selectedOptions } = this.state;
+    const targetGroupIds = selectedOptions.map(item => item.id);
     if (isGroupOwnedRepo) {
-      seafileAPI.shareGroupOwnedRepoToGroup(repoID, permission, targetGroupId, path).then(res => {
+      seafileAPI.shareGroupOwnedRepoToGroup(repoID, permission, targetGroupIds, path).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -228,13 +245,15 @@ class ShareToGroup extends React.Component {
 
         if (this.props.repo && res.data.success.length > 0) {
           const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
-          eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+          targetGroupIds.forEach(targetGroupId => {
+            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+          });
         }
 
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
-          selectedOption: null,
+          selectedOptions: [],
           permission: 'rw',
         });
       }).catch(error => {
@@ -242,7 +261,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.shareFolder(repoID, path, 'group', permission, [targetGroupId]).then(res => {
+      seafileAPI.shareFolder(repoID, path, 'group', permission, targetGroupIds).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -252,13 +271,15 @@ class ShareToGroup extends React.Component {
 
         if (this.props.repo && res.data.success.length > 0) {
           const sharedRepo = { ...this.props.repo, permission: res.data.success[0].permission };
-          eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+          targetGroupIds.forEach(targetGroupId => {
+            eventBus.dispatch(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, { repo: sharedRepo, group_id: targetGroupId });
+          });
         }
 
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
-          selectedOption: null,
+          selectedOptions: [],
           permission: 'rw'
         });
       }).catch(error => {
@@ -347,15 +368,14 @@ class ShareToGroup extends React.Component {
           <tbody>
             <tr>
               <td>
-                <SeahubSelect
-                  onChange={this.handleSelectChange}
+                <GroupSelect
+                  selectedOptions={this.state.selectedOptions}
                   options={this.state.options}
-                  placeholder={gettext('Select groups')}
-                  maxMenuHeight={200}
-                  value={this.state.selectedOption}
-                  noOptionsMessage={NoGroupMessage}
-                  isSearchable={true}
-                  isClearable={true}
+                  onSelectOption={this.onSelectOption}
+                  onDeleteOption={this.onDeleteOption}
+                  searchPlaceholder={gettext('Search groups')}
+                  noOptionsPlaceholder={gettext('No results')}
+                  isInModal={true}
                 />
               </td>
               <td>

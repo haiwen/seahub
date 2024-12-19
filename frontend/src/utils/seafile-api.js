@@ -267,18 +267,14 @@ class SeafileAPI {
     return this.req.delete(url, { data: params });
   }
 
-  shareGroupOwnedRepoToGroup(repoID, permission, groupID, path) {
+  shareGroupOwnedRepoToGroup(repoID, permission, groupIDs, path) {
     const url = this.server + '/api/v2.1/group-owned-libraries/' + repoID + '/group-share/';
     let form = new FormData();
     form.append('permission', permission);
     form.append('path', path);
-    if (Array.isArray(groupID)) {
-      groupID.forEach(item => {
-        form.append('group_id', item);
-      });
-    } else {
-      form.append('group_id', groupID);
-    }
+    groupIDs.forEach(item => {
+      form.append('group_id', item);
+    });
     return this._sendPostRequest(url, form);
   }
 
@@ -1825,12 +1821,14 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
-  addGroupFolderPerm(repoID, permission, folderPath, groupID) {
+  addGroupFolderPerm(repoID, permission, folderPath, groupIDs) {
     const url = this.server + '/api2/repos/' + repoID + '/group-folder-perm/';
     let form = new FormData();
     form.append('permission', permission);
     form.append('folder_path', folderPath);
-    form.append('group_id', groupID);
+    groupIDs.forEach(item => {
+      form.append('group_id', item);
+    });
     return this._sendPostRequest(url, form);
   }
 
@@ -1903,12 +1901,14 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
-  addDepartmentRepoGroupFolderPerm(repoID, permission, folderPath, groupID) {
+  addDepartmentRepoGroupFolderPerm(repoID, permission, folderPath, groupIDs) {
     const url = this.server + '/api/v2.1/group-owned-libraries/' + repoID + '/group-folder-permission/';
     let form = new FormData();
     form.append('permission', permission);
     form.append('folder_path', folderPath);
-    form.append('group_id', groupID);
+    groupIDs.forEach(item => {
+      form.append('group_id', item);
+    });
     return this._sendPostRequest(url, form);
   }
 

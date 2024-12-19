@@ -52,7 +52,7 @@ class Libraries extends Component {
 
     const eventBus = EventBus.getInstance();
     this.unsubscribeAddNewGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_NEW_GROUP, this.addNewGroup);
-    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INO_GROUP, this.insertRepoIntoGroup);
+    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.insertRepoIntoGroup);
     this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UN_SHARE_REPO_TO_GROUP, this.unshareRepoToGroup);
   }
 

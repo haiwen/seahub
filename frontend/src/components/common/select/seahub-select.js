@@ -3,13 +3,27 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 
+const DropdownIndicator = props => {
+  return (
+    components.DropdownIndicator && (
+      <components.DropdownIndicator {...props}>
+        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+      </components.DropdownIndicator>
+    )
+  );
+};
+
 const ClearIndicator = ({ innerProps, ...props }) => {
   const onMouseDown = e => {
     e.nativeEvent.stopImmediatePropagation();
     innerProps.onMouseDown(e);
   };
   props.innerProps = { ...innerProps, onMouseDown };
-  return <components.ClearIndicator {...props} />;
+  return (
+    <components.ClearIndicator {...props} >
+      <span className="sf3-font sf3-font-x-01" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+    </components.ClearIndicator>
+  );
 };
 
 ClearIndicator.propTypes = {
@@ -93,7 +107,7 @@ export default class SeahubSelect extends React.Component {
         className={className}
         classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
-        components={{ Option, MenuList, ClearIndicator }}
+        components={{ Option, DropdownIndicator, MenuList, ClearIndicator }}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={isClearable}

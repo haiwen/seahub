@@ -7,7 +7,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
-import { SeahubSelect, NoGroupMessage } from '../../common/select';
+import GroupSelect from '../../common/group-select';
 
 class GroupItem extends React.Component {
 
@@ -116,7 +116,7 @@ class SysAdminShareToGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedOptions: [],
       errorMsg: [],
       permission: 'rw',
       sharedItems: []
@@ -128,10 +128,6 @@ class SysAdminShareToGroup extends React.Component {
     }
   }
 
-  handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
-  };
-
   componentDidMount() {
     this.loadOptions();
     this.listSharedGroups();
@@ -142,6 +138,7 @@ class SysAdminShareToGroup extends React.Component {
       this.options = [];
       for (let i = 0 ; i < res.data.length; i++) {
         let obj = {};
+        obj.name = res.data[i].name;
         obj.value = res.data[i].name;
         obj.id = res.data[i].id;
         obj.label = res.data[i].name;
@@ -151,6 +148,26 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  };
+
+  onSelectOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    } else {
+      selectedOptions.push(option);
+    }
+    this.setState({ selectedOptions: selectedOptions });
+  };
+
+  onDeleteOption = (option) => {
+    const selectedOptions = this.state.selectedOptions.slice(0);
+    const index = selectedOptions.findIndex(item => item.id === option.id);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    }
+    this.setState({ selectedOptions: selectedOptions });
   };
 
   listSharedGroups = () => {
@@ -172,12 +189,11 @@ class SysAdminShareToGroup extends React.Component {
   };
 
   shareToGroup = () => {
-    let groups = [];
     let repoID = this.props.repoID;
-    if (this.state.selectedOption) {
-      groups[0] = this.state.selectedOption.id;
-    }
-    systemAdminAPI.sysAdminAddRepoSharedItem(repoID, 'group', groups, this.state.permission).then(res => {
+    let { selectedOptions } = this.state;
+    if (selectedOptions.length === 0) return;
+    let targetGroupIDs = selectedOptions.map(item => { return item.id; });
+    systemAdminAPI.sysAdminAddRepoSharedItem(repoID, 'group', targetGroupIDs, this.state.permission).then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -188,7 +204,7 @@ class SysAdminShareToGroup extends React.Component {
       this.setState({
         errorMsg: errorMsg,
         sharedItems: this.state.sharedItems.concat(items),
-        selectedOption: null,
+        selectedOptions: [],
         permission: 'rw',
       });
     }).catch(error => {
@@ -247,13 +263,14 @@ class SysAdminShareToGroup extends React.Component {
           <tbody>
             <tr>
               <td>
-                <SeahubSelect
-                  onChange={this.handleSelectChange}
+                <GroupSelect
+                  selectedOptions={this.state.selectedOptions}
                   options={this.options}
-                  placeholder={gettext('Select groups')}
-                  maxMenuHeight={200}
-                  value={this.state.selectedOption}
-                  noOptionsMessage={NoGroupMessage}
+                  onSelectOption={this.onSelectOption}
+                  onDeleteOption={this.onDeleteOption}
+                  searchPlaceholder={gettext('Search groups')}
+                  noOptionsPlaceholder={gettext('No results')}
+                  isInModal={true}
                 />
               </td>
               <td>
