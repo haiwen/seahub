@@ -28,6 +28,8 @@ import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
 import { getGroupRecordByIndex } from '../../utils/group-metrics';
 import { isNameColumn } from '../../../../utils/column';
+import { isSpace } from '../../../../utils/hotkey';
+import { openFile } from '../../../../utils/file';
 
 import './index.css';
 
@@ -456,6 +458,18 @@ class InteractionMasks extends React.Component {
     this.closeEditor();
   };
 
+  handleSpaceKeyDown = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    const { selectedPosition } = this.state;
+    const { isGroupView, recordGetterByIndex } = this.props;
+    const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
+    openFile(repoID, record, () => {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
+  };
+
   onKeyDown = (e) => {
     const keyCode = e.keyCode;
     if (isCtrlKeyHeldDown(e)) {
@@ -466,6 +480,8 @@ class InteractionMasks extends React.Component {
       this.onPressTab(e);
     } else if (this.isKeyboardNavigationEvent(e)) {
       this.changeCellFromEvent(e);
+    } else if (isSpace(e)) {
+      this.handleSpaceKeyDown(e);
     } else if (isKeyPrintable(keyCode) || keyCode === KeyCodes.Enter) {
       this.openEditor(e);
     } else if (keyCode === KeyCodes.Backspace || keyCode === KeyCodes.Delete) {
