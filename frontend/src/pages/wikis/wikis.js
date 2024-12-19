@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext, canPublishRepo } from '../../utils/constants';
+import { gettext, canCreateWiki } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
@@ -337,7 +337,7 @@ class Wikis extends Component {
             <div className="cur-view-path">
               <div className="path-container">
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
-                {canPublishRepo &&
+                {canCreateWiki &&
                   <Dropdown
                     direction="down"
                     className="add-wiki-dropdown"

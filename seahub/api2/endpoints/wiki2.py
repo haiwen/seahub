@@ -186,6 +186,9 @@ class Wikis2View(APIView):
 
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
+        
+        if not request.user.permissions.can_create_wiki():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
 
         wiki_name = request.data.get("name", None)
         if not wiki_name:
@@ -1238,6 +1241,10 @@ class Wiki2PublishView(APIView):
         if len(publish_url) < 5 or len(publish_url) > 30:
             error_msg = _('The custom part of URL should have 5-30 characters.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not request.user.permissions.can_publish_wiki():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
