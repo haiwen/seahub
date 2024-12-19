@@ -101,6 +101,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
                   value={langOptions.find(o => o.value === lang) || langOptions[1]}
                   options={langOptions}
                   onChange={onSelectChange}
+                  isClearable={false}
                 />
               </div>
             )}
