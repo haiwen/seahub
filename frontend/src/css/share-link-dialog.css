@@ -24,7 +24,6 @@
     flex-direction: row;
   }
   .share-dialog-content .share-dialog-side {
-    padding: 12px 8px;
     border: 0;
     border-right: 1px solid #eee;
   }
@@ -40,6 +39,29 @@
   .share-link-details-item {
     width: 50%;
   }
+}
+
+.share-dialog-side .nav-pills .nav-item .nav-link.active {
+  background-color: #f0f0f0;
+  color: inherit;
+  position: relative;
+}
+
+.share-dialog-side .nav-pills .nav-item .nav-link.active::before {
+  content: '';
+  display: block;
+  width: 4px;
+  background-color: #ff9800;
+  border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: -8px;
+  z-index: 0;
+}
+
+.share-dialog-side .nav-pills .nav-item .nav-link:hover {
+  background-color: #f0f0f0;
 }
 
 .share-dialog-content .share-dialog-main {
