@@ -397,7 +397,8 @@ class Wiki2ConfigView(APIView):
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
 
-        if not check_wiki_permission(wiki, request.user.username):
+        wiki_perm = check_wiki_permission(wiki, request.user.username)
+        if wiki_perm == 'r':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -517,7 +518,8 @@ class Wiki2PagesView(APIView):
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
 
-        if not check_wiki_permission(wiki, request.user.username):
+        wiki_perm = check_wiki_permission(wiki, request.user.username)
+        if wiki_perm == 'r':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
