@@ -120,6 +120,7 @@ class SelectDirentBody extends React.Component {
       this.props.selectRepo(null);
     }
     this.props.setSelectedPath('/');
+    this.props.setErrMessage('');
   };
 
   render() {

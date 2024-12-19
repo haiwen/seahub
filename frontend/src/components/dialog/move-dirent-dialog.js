@@ -199,6 +199,10 @@ class MoveDirent extends React.Component {
     this.setState({ errMessage: message });
   };
 
+  clearErrMessage = () => {
+    this.setState({ errMessage: '' });
+  };
+
   updateMode = (mode) => {
     if (mode === this.state.mode) return;
 
@@ -229,6 +233,7 @@ class MoveDirent extends React.Component {
     }
 
     this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+    this.clearErrMessage();
   };
 
   onUpdateSearchStatus = (status) => {
@@ -237,20 +242,23 @@ class MoveDirent extends React.Component {
 
   onUpdateSearchResults = (results) => {
     this.setState({
-      searchResults: results
+      searchResults: results,
+      selectedRepo: results.length > 0 ? new RepoInfo(results[0]) : null,
+      selectedPath: results.length > 0 ? results[0].path : '',
     });
   };
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
       selectedPath: selectedPath,
-      repo,
-      errMessage: '',
+      selectedRepo: repo,
     });
+    this.clearErrMessage();
   };
 
   onOpenSearchBar = () => {
     this.setState({ showSearchBar: true });
+    this.clearErrMessage();
   };
 
   onCloseSearchBar = () => {
@@ -263,12 +271,14 @@ class MoveDirent extends React.Component {
       showSearchBar: false,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
+    this.clearErrMessage();
   };
 
   onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
     let repo = new RepoInfo(item);
     this.onDirentItemClick(repo, item.path, item);
+    this.clearErrMessage();
   };
 
   onSearchedItemDoubleClick = (item) => {
@@ -311,7 +321,7 @@ class MoveDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
-    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -356,6 +366,7 @@ class MoveDirent extends React.Component {
           onCancel={this.toggle}
           selectRepo={this.selectRepo}
           setSelectedPath={this.setSelectedPath}
+          errMessage={errMessage}
           setErrMessage={this.setErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
