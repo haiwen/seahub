@@ -238,7 +238,9 @@ export const MetadataViewProvider = ({
     storeRef.current.duplicateRecord(rowId, targetRepo.repo_id, dirent, targetPath, nodeParentPath, {
       success_callback: (operation) => {
         copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetPath, nodeParentPath, operation.task_id, isByDialog);
-        delayReloadMetadata();
+        if (repoID === targetRepo.repo_id) {
+          delayReloadMetadata();
+        }
       },
       fail_callback: (error) => {
         error && toaster.danger(error);

@@ -555,7 +555,8 @@ ContextMenu.propTypes = {
   getTableContentRect: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   deleteRecords: PropTypes.func,
-  toggleMoveDialog: PropTypes.func,
+  moveRecord: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default ContextMenu;

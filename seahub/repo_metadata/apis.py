@@ -476,7 +476,6 @@ class MetadataRecordInfo(APIView):
     def get(self, request, repo_id):
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
-
         if not parent_dir:
             error_msg = 'parent_dir invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

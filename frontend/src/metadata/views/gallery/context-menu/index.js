@@ -18,7 +18,7 @@ const CONTEXT_MENU_KEY = {
   DUPLICATE: 'duplicate',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, duplicateRecord, onAddFolder }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
@@ -45,10 +45,10 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     setIsCopyDialogOpen(!isCopyDialogOpen);
   }, [isCopyDialogOpen]);
 
-  const handleCopy = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+  const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
     const selectedImage = selectedImages[0];
-    duplicateRecord(selectedImage.id, destRepo, dirent, destPath, nodeParentPath, isByDialog);
-  }, [selectedImages, duplicateRecord]);
+    onDuplicate(selectedImage.id, destRepo, dirent, destPath, nodeParentPath, isByDialog);
+  }, [selectedImages, onDuplicate]);
 
   const handleDownload = useCallback(() => {
     if (!selectedImages.length) return;
@@ -120,9 +120,9 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
             dirent={dirent}
             isMultipleOperation={false}
             repoEncrypted={false}
-            onItemCopy={handleCopy}
+            onItemCopy={handleDuplicate}
             onCancelCopy={toggleCopyDialog}
-            onAddFolder={onAddFolder}
+            onAddFolder={addFolder}
           />
         </ModalPortal>
       )}
@@ -135,6 +135,8 @@ GalleryContextMenu.propTypes = {
   selectedImages: PropTypes.array,
   boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
+  onDuplicate: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default GalleryContextMenu;

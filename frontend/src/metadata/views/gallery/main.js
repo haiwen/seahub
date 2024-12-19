@@ -368,8 +368,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         selectedImages={selectedImages}
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}
-        duplicateRecord={duplicateRecord}
-        onAddFolder={onAddFolder}
+        onDuplicate={duplicateRecord}
+        addFolder={onAddFolder}
       />
       {isImagePopupOpen && (
         <ModalPortal>
