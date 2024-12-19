@@ -9,29 +9,46 @@ import metadataAPI from '../../../api';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
+import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
+import { Dirent } from '../../../../models';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
+  DUPLICATE: 'duplicate',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
+  const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
+    if (canDuplicateRow && selectedImages.length === 1) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
+    }
     return validOptions;
-  }, [checkCanDeleteRow, selectedImages]);
+  }, [checkCanDeleteRow, canDuplicateRow, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
   };
+
+  const toggleCopyDialog = useCallback(() => {
+    setIsCopyDialogOpen(!isCopyDialogOpen);
+  }, [isCopyDialogOpen]);
+
+  const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+    const selectedImage = selectedImages[0];
+    onDuplicate(selectedImage.id, destRepo, dirent, destPath, nodeParentPath, isByDialog);
+  }, [selectedImages, onDuplicate]);
 
   const handleDownload = useCallback(() => {
     if (!selectedImages.length) return;
@@ -66,10 +83,16 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       case 'delete':
         onDelete(selectedImages);
         break;
+      case CONTEXT_MENU_KEY.DUPLICATE:
+        toggleCopyDialog();
+        break;
       default:
         break;
     }
-  }, [selectedImages, handleDownload, onDelete]);
+  }, [selectedImages, handleDownload, onDelete, toggleCopyDialog]);
+
+  const dirent = new Dirent({ name: selectedImages[0]?.name });
+  const path = selectedImages[0]?.path;
 
   return (
     <>
@@ -89,6 +112,20 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
           />
         </ModalPortal>
       )}
+      {isCopyDialogOpen && (
+        <ModalPortal>
+          <CopyDirent
+            path={path}
+            repoID={repoID}
+            dirent={dirent}
+            isMultipleOperation={false}
+            repoEncrypted={false}
+            onItemCopy={handleDuplicate}
+            onCancelCopy={toggleCopyDialog}
+            onAddFolder={addFolder}
+          />
+        </ModalPortal>
+      )}
     </>
   );
 };
@@ -98,6 +135,8 @@ GalleryContextMenu.propTypes = {
   selectedImages: PropTypes.array,
   boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
+  onDuplicate: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default GalleryContextMenu;

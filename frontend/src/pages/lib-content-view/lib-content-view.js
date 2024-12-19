@@ -1228,55 +1228,59 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
+  moveItemsAjaxCallback = (repoID, targetRepo, dirent, moveToDirentPath, nodeParentPath, taskId, byDialog = false) => {
     this.updateCurrentNotExistDirent(dirent);
+
+    const dirName = dirent.name;
+    const direntPath = Utils.joinPath(nodeParentPath, dirName);
+    if (repoID !== targetRepo.repo_id) {
+      this.setState({
+        asyncCopyMoveTaskId: taskId,
+        asyncOperatedFilesLength: 1,
+        asyncOperationProgress: 0,
+        asyncOperationType: 'move',
+        isCopyMoveProgressDialogShow: true,
+      }, () => {
+        this.currentMoveItemName = dirName;
+        this.currentMoveItemPath = direntPath;
+        this.getAsyncCopyMoveProgress(dirName, direntPath);
+      });
+    }
+
+    if (this.state.isTreePanelShown) {
+      this.deleteTreeNode(direntPath);
+    }
+
+    // 1. move to current repo
+    // 2. tow columns mode need update left tree
+    if (repoID === targetRepo.repo_id && this.state.isTreePanelShown) {
+      this.updateMoveCopyTreeNode(moveToDirentPath);
+    }
+
+    this.moveDirent(direntPath, moveToDirentPath);
+
+    // show tip message if move to current repo
+    if (repoID === targetRepo.repo_id) {
+      let message = gettext('Successfully moved {name}.');
+      message = message.replace('{name}', dirName);
+      toaster.success(message);
+    }
+
+    if (byDialog) {
+      this.updateRecentlyUsedRepos(targetRepo, moveToDirentPath);
+    }
+  };
+
+  onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
     let repoID = this.props.repoID;
     // just for view list state
     let dirName = dirent.name;
     if (!nodeParentPath) {
       nodeParentPath = this.state.path;
     }
-    let direntPath = Utils.joinPath(nodeParentPath, dirName);
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
-      if (repoID !== destRepo.repo_id) {
-        this.setState({
-          asyncCopyMoveTaskId: res.data.task_id,
-          asyncOperatedFilesLength: 1,
-          asyncOperationProgress: 0,
-          asyncOperationType: 'move',
-          isCopyMoveProgressDialogShow: true,
-        }, () => {
-          this.currentMoveItemName = dirName;
-          this.currentMoveItemPath = direntPath;
-          this.getAsyncCopyMoveProgress(dirName, direntPath);
-        });
-      }
-
-      if (this.state.isTreePanelShown) {
-        this.deleteTreeNode(direntPath);
-      }
-
-      // 1. move to current repo
-      // 2. tow columns mode need update left tree
-      if (repoID === destRepo.repo_id &&
-    this.state.isTreePanelShown) {
-        this.updateMoveCopyTreeNode(moveToDirentPath);
-      }
-
-      this.moveDirent(direntPath, moveToDirentPath);
-
-      // show tip message if move to current repo
-      if (repoID === destRepo.repo_id) {
-        let message = gettext('Successfully moved {name}.');
-        message = message.replace('{name}', dirName);
-        toaster.success(message);
-      }
-
-      if (byDialog) {
-        this.updateRecentlyUsedRepos(destRepo, moveToDirentPath);
-      }
-
+      this.moveItemsAjaxCallback(repoID, destRepo, dirent, moveToDirentPath, nodeParentPath, res.data.task_id, byDialog);
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
@@ -1285,17 +1289,49 @@ class LibContentView extends React.Component {
           errMessage = errMessage.replace('{name}', dirName);
         }
         toaster.danger(errMessage);
-      } else {
-        this.setState({
-          libNeedDecryptWhenMove: true,
-          destRepoWhenCopyMove: destRepo,
-          destDirentPathWhenCopyMove: moveToDirentPath,
-          copyMoveSingleItem: true,
-          srcDirentWhenCopyMove: dirent,
-          srcNodeParentPathWhenCopyMove: nodeParentPath,
-        });
+        return;
       }
+      this.setState({
+        libNeedDecryptWhenMove: true,
+        destRepoWhenCopyMove: destRepo,
+        destDirentPathWhenCopyMove: moveToDirentPath,
+        copyMoveSingleItem: true,
+        srcDirentWhenCopyMove: dirent,
+        srcNodeParentPathWhenCopyMove: nodeParentPath,
+      });
     });
+  };
+
+  copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false) => {
+    if (repoID !== targetRepo.repo_id) {
+      this.setState({
+        asyncCopyMoveTaskId: taskId,
+        asyncOperatedFilesLength: 1,
+        asyncOperationProgress: 0,
+        asyncOperationType: 'copy',
+        isCopyMoveProgressDialogShow: true
+      }, () => {
+        this.getAsyncCopyMoveProgress();
+      });
+      return;
+    }
+
+    if (this.state.isTreePanelShown) {
+      this.updateMoveCopyTreeNode(copyToDirentPath);
+    }
+
+    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
+      this.loadDirentList(this.state.path);
+    }
+
+    const dirName = dirent.name;
+    let message = gettext('Successfully copied %(name)s.');
+    message = message.replace('%(name)s', dirName);
+    toaster.success(message);
+
+    if (byDialog) {
+      this.updateRecentlyUsedRepos(targetRepo, copyToDirentPath);
+    }
   };
 
   onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath, byDialog = false) => {
@@ -1307,36 +1343,7 @@ class LibContentView extends React.Component {
     }
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
-
-      if (repoID !== destRepo.repo_id) {
-        this.setState({
-          asyncCopyMoveTaskId: res.data.task_id,
-          asyncOperatedFilesLength: 1,
-          asyncOperationProgress: 0,
-          asyncOperationType: 'copy',
-          isCopyMoveProgressDialogShow: true
-        }, () => {
-          this.getAsyncCopyMoveProgress();
-        });
-      }
-
-      if (repoID === destRepo.repo_id) {
-        if (this.state.isTreePanelShown) {
-          this.updateMoveCopyTreeNode(copyToDirentPath);
-        }
-
-        if (copyToDirentPath === nodeParentPath) {
-          this.loadDirentList(this.state.path);
-        }
-
-        let message = gettext('Successfully copied %(name)s.');
-        message = message.replace('%(name)s', dirName);
-        toaster.success(message);
-
-        if (byDialog) {
-          this.updateRecentlyUsedRepos(destRepo, copyToDirentPath);
-        }
-      }
+      this.copyItemsAjaxCallback(repoID, destRepo, dirent, copyToDirentPath, nodeParentPath, res.data.task_id || null, byDialog);
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
@@ -2348,7 +2355,9 @@ class LibContentView extends React.Component {
                         deleteFilesCallback={this.deleteItemsAjaxCallback}
                         renameFileCallback={this.renameItemAjaxCallback}
                         onItemMove={this.onMoveItem}
+                        moveFileCallback={this.moveItemsAjaxCallback}
                         onItemCopy={this.onCopyItem}
+                        copyFileCallback={this.copyItemsAjaxCallback}
                         onItemConvert={this.onConvertItem}
                         onDirentClick={this.onDirentClick}
                         updateDirent={this.updateDirent}

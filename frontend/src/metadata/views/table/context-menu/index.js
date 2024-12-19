@@ -13,6 +13,9 @@ import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
 } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
+import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
+import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
+import { Dirent } from '../../../../models';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -28,20 +31,26 @@ const OPERATION = {
   RENAME_FILE: 'rename-file',
   FILE_DETAIL: 'file-detail',
   FILE_DETAILS: 'file-details',
+  MOVE: 'move',
 };
 
-const ContextMenu = (props) => {
-  const {
-    isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
-    getTableContentRect, getTableCanvasContainerRect, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileTags,
-  } = props;
+const ContextMenu = ({
+  isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
+  getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder
+}) => {
   const menuRef = useRef(null);
+  const currentRecord = useRef(null);
+
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [fileTagsRecord, setFileTagsRecord] = useState(null);
+  const [deletedFolderPath, setDeletedFolderPath] = useState('');
+  const [isMoveDialogShow, setMoveDialogShow] = useState(false);
 
   const { metadata } = useMetadataView();
   const { enableOCR } = useMetadataStatus();
+
+  const repoID = window.sfMetadataStore.repoId;
 
   const checkCanModifyRow = (row) => {
     return window.sfMetadataContext.canModifyRow(row);
@@ -55,6 +64,29 @@ const ContextMenu = (props) => {
   const getAbleDeleteRecords = useCallback((records) => {
     return records.filter(record => window.sfMetadataContext.checkCanDeleteRow(record));
   }, []);
+
+  const toggleDeleteFolderDialog = useCallback((record) => {
+    if (deletedFolderPath) {
+      currentRecord.current = null;
+      setDeletedFolderPath('');
+      return;
+    }
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    currentRecord.current = record;
+    setDeletedFolderPath(Utils.joinPath(parentDir, fileName));
+  }, [deletedFolderPath]);
+
+  const toggleMoveDialog = useCallback((record) => {
+    currentRecord.current = record || null;
+    setMoveDialogShow(!isMoveDialogShow);
+  }, [isMoveDialogShow]);
+
+  const deleteFolder = useCallback(() => {
+    if (!currentRecord.current) return;
+    const currentRecordId = getRecordIdFromRecord(currentRecord.current);
+    deleteRecords([currentRecordId]);
+  }, [deleteRecords]);
 
   const options = useMemo(() => {
     if (!visible) return [];
@@ -160,6 +192,10 @@ const ContextMenu = (props) => {
 
     if (canModifyRow && column && isNameColumn(column)) {
       list.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
+    }
+
+    if (canModifyRow) {
+      list.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
     }
 
     return list;
@@ -300,7 +336,6 @@ const ContextMenu = (props) => {
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
-    const repoID = window.sfMetadataStore.repoId;
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
         const { record } = option;
@@ -384,12 +419,18 @@ const ContextMenu = (props) => {
         updateFileDetails([record]);
         break;
       }
+      case OPERATION.MOVE: {
+        const { record } = option;
+        if (!record) break;
+        toggleMoveDialog(record);
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord]);
+  }, [repoID, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -473,14 +514,35 @@ const ContextMenu = (props) => {
     );
   }, [visible, options, position, handleOptionClick]);
 
+  const currentRecordId = getRecordIdFromRecord(currentRecord.current);
+  const fileName = getFileNameFromRecord(currentRecord.current);
+
   return (
     <>
       {renderMenu()}
       {fileTagsRecord && (
         <FileTagsDialog record={fileTagsRecord} onToggle={toggleFileTagsRecord} onSubmit={updateFileTags} />
       )}
+      {deletedFolderPath && (
+        <DeleteFolderDialog
+          repoID={repoID}
+          path={deletedFolderPath}
+          deleteFolder={deleteFolder}
+          toggleDialog={toggleDeleteFolderDialog}
+        />
+      )}
+      {isMoveDialogShow && (
+        <MoveDirent
+          path={getParentDirFromRecord(currentRecord.current)}
+          repoID={repoID}
+          dirent={new Dirent({ name: fileName })}
+          isMultipleOperation={false}
+          onItemMove={(...params) => moveRecord(currentRecordId, ...params)}
+          onCancelMove={toggleMoveDialog}
+          onAddFolder={addFolder}
+        />
+      )}
     </>
-
   );
 };
 
@@ -493,6 +555,8 @@ ContextMenu.propTypes = {
   getTableContentRect: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   deleteRecords: PropTypes.func,
+  moveRecord: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default ContextMenu;

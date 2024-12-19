@@ -6,9 +6,9 @@ import ImageDialog from '../../../components/dialog/image-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
-import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord } from '../../utils/cell';
+import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
@@ -17,7 +17,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -65,7 +65,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
     const firstSort = metadata.view.sorts[0];
     let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
       .reduce((_init, record) => {
-        const id = record[PRIVATE_COLUMN_KEY.ID];
+        const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
@@ -368,6 +368,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore }) => {
         selectedImages={selectedImages}
         boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}
+        onDuplicate={duplicateRecord}
+        addFolder={onAddFolder}
       />
       {isImagePopupOpen && (
         <ModalPortal>
@@ -389,7 +391,9 @@ Main.propTypes = {
   isLoadingMore: PropTypes.bool,
   metadata: PropTypes.object,
   onDelete: PropTypes.func,
-  onLoadMore: PropTypes.func
+  onLoadMore: PropTypes.func,
+  duplicateRecord: PropTypes.func,
+  onAddFolder: PropTypes.func,
 };
 
 export default Main;

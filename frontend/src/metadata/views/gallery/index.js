@@ -10,7 +10,7 @@ import './index.css';
 const Gallery = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
 
-  const { metadata, store, deleteRecords } = useMetadataView();
+  const { metadata, store, deleteRecords, duplicateRecord, addFolder } = useMetadataView();
 
   const onLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -43,7 +43,14 @@ const Gallery = () => {
 
   return (
     <div className="sf-metadata-container">
-      <Main isLoadingMore={isLoadingMore} metadata={metadata} onDelete={handleDelete} onLoadMore={onLoadMore} />
+      <Main
+        isLoadingMore={isLoadingMore}
+        metadata={metadata}
+        onDelete={handleDelete}
+        onLoadMore={onLoadMore}
+        duplicateRecord={duplicateRecord}
+        onAddFolder={addFolder}
+      />
     </div>
   );
 };

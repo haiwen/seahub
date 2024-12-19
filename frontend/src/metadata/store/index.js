@@ -12,7 +12,7 @@ import LocalOperator from './local-operator';
 import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
-import { getFileNameFromRecord } from '../utils/cell';
+import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';
 
 class Store {
 
@@ -300,16 +300,13 @@ class Store {
   }
 
   deleteRecords(rows_ids, { fail_callback, success_callback }) {
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
     const type = OPERATION_TYPE.DELETE_RECORDS;
 
-    if (!Array.isArray(rows_ids) || rows_ids.length === 0) {
-      return;
-    }
-    const valid_rows_ids = Array.isArray(rows_ids) ? rows_ids.filter((rowId) => {
+    const valid_rows_ids = rows_ids.filter((rowId) => {
       const row = getRowById(this.data, rowId);
       return row && this.context.canModifyRow(row);
-    }) : [];
-
+    });
 
     // delete rows where parent dir is deleted
     const deletedDirsPaths = rows_ids.map((rowId) => {
@@ -404,6 +401,39 @@ class Store {
       row_id,
       repo_id: this.repoId,
       updates
+    });
+    this.applyOperation(operation);
+  }
+
+  moveRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.MOVE_RECORD;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_id,
+      target_repo_id,
+      dirent,
+      target_parent_path,
+      source_parent_path,
+      update_data,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  duplicateRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.DUPLICATE_RECORD;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_id,
+      target_repo_id,
+      dirent,
+      target_parent_path,
+      source_parent_path,
+      success_callback,
+      fail_callback,
     });
     this.applyOperation(operation);
   }
@@ -532,8 +562,7 @@ class Store {
   };
 
   checkDuplicatedName = (name, parentDir) => {
-    const newPath = Utils.joinPath(parentDir, name);
-    return this.data.rows.some((row) => newPath === Utils.joinPath(row._parent_dir, row._name));
+    return checkDuplicatedName(this.data.rows, parentDir, name);
   };
 
   renamePeopleName = (peopleId, newName, oldName) => {

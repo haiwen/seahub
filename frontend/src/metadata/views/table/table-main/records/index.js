@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalScrollbar } from '../../../../components/scrollbar';
 import EmptyTip from '../../../../../components/empty-tip';
-import DeleteFolderDialog from '../../../../../components/dialog/delete-folder-dialog';
 import Body from './body';
 import GroupBody from './group-body';
 import RecordsHeader from '../records-header';
@@ -11,7 +10,7 @@ import ContextMenu from '../../context-menu';
 import { recalculate } from '../../../../utils/column';
 import { getEventClassName } from '../../../../utils/common';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
-import { isMobile, Utils } from '../../../../../utils/utils';
+import { isMobile } from '../../../../../utils/utils';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { gettext } from '../../../../../utils/constants';
 import RecordMetrics from '../../utils/record-metrics';
@@ -43,7 +42,6 @@ class Records extends Component {
       },
       selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
-      deletedFolderPath: '',
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
@@ -623,23 +621,6 @@ class Records extends Component {
     return this.resultContainerRef.getBoundingClientRect();
   };
 
-  toggleDeleteFolderDialog = (record) => {
-    if (this.state.deletedFolderPath) {
-      this.deletedRecord = null;
-      this.setState({ deletedFolderPath: '' });
-    } else {
-      const { _parent_dir, _name } = record;
-      const deletedFolderPath = Utils.joinPath(_parent_dir, _name);
-      this.deletedRecord = record;
-      this.setState({ deletedFolderPath: deletedFolderPath });
-    }
-  };
-
-  deleteFolder = () => {
-    if (!this.deletedRecord) return;
-    this.props.deleteRecords([this.deletedRecord._id]);
-  };
-
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -651,10 +632,11 @@ class Records extends Component {
       contextMenu: (
         <ContextMenu
           isGroupView={isGroupView}
-          toggleDeleteFolderDialog={this.toggleDeleteFolderDialog}
           recordGetterByIndex={this.props.recordGetterByIndex}
           updateRecords={this.props.updateRecords}
           deleteRecords={this.props.deleteRecords}
+          moveRecord={this.props.moveRecord}
+          addFolder={this.props.addFolder}
         />
       ),
       hasSelectedRecord: this.hasSelectedRecord(),
@@ -694,7 +676,7 @@ class Records extends Component {
   render() {
     const {
       recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn, modifyColumnOrder, insertColumn,
+      deleteColumn, modifyColumnOrder, insertColumn
     } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
@@ -763,14 +745,6 @@ class Records extends Component {
           getRecordsSummaries={() => { }}
           loadAll={this.props.loadAll}
         />
-        {this.state.deletedFolderPath && (
-          <DeleteFolderDialog
-            repoID={window.sfMetadataStore.repoId}
-            path={this.state.deletedFolderPath}
-            deleteFolder={this.deleteFolder}
-            toggleDialog={this.toggleDeleteFolderDialog}
-          />
-        )}
       </>
     );
   }
@@ -803,6 +777,8 @@ Records.propTypes = {
   modifyColumnWidth: PropTypes.func,
   modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
+  moveRecord: PropTypes.func,
+  addFolder: PropTypes.func,
 };
 
 export default Records;

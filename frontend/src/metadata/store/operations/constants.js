@@ -1,16 +1,10 @@
 export const OPERATION_TYPE = {
-  MODIFY_RECORDS: 'modify_records',
-  DELETE_RECORDS: 'delete_records',
-  RESTORE_RECORDS: 'restore_records',
-  RELOAD_RECORDS: 'reload_records',
+  // view
   MODIFY_FILTERS: 'modify_filters',
   MODIFY_SORTS: 'modify_sorts',
   MODIFY_GROUPBYS: 'modify_groupbys',
   MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
-  LOCK_RECORD_VIA_BUTTON: 'lock_record_via_button',
-  MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
   MODIFY_SETTINGS: 'modify_settings',
-  MODIFY_LOCAL_RECORD: 'modify_local_record',
 
   // column
   INSERT_COLUMN: 'insert_column',
@@ -19,6 +13,17 @@ export const OPERATION_TYPE = {
   MODIFY_COLUMN_DATA: 'modify_column_data',
   MODIFY_COLUMN_WIDTH: 'modify_column_width',
   MODIFY_COLUMN_ORDER: 'modify_column_order',
+
+  // record
+  MODIFY_RECORDS: 'modify_records',
+  DELETE_RECORDS: 'delete_records',
+  RESTORE_RECORDS: 'restore_records',
+  RELOAD_RECORDS: 'reload_records',
+  LOCK_RECORD_VIA_BUTTON: 'lock_record_via_button',
+  MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
+  MODIFY_LOCAL_RECORD: 'modify_local_record',
+  MOVE_RECORD: 'move_record',
+  DUPLICATE_RECORD: 'duplicate_record',
 
   // face table
   RENAME_PEOPLE_NAME: 'rename_people_name',
@@ -41,6 +46,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
   [OPERATION_TYPE.DELETE_RECORDS]: ['repo_id', 'rows_ids', 'deleted_rows'],
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
+  [OPERATION_TYPE.MOVE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path', 'update_data'],
+  [OPERATION_TYPE.DUPLICATE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path'],
 
   [OPERATION_TYPE.MODIFY_FILTERS]: ['repo_id', 'view_id', 'filter_conjunction', 'filters', 'basic_filters'],
   [OPERATION_TYPE.MODIFY_SORTS]: ['repo_id', 'view_id', 'sorts'],
@@ -83,6 +90,8 @@ export const NEED_APPLY_AFTER_SERVER_OPERATION = [
   OPERATION_TYPE.INSERT_COLUMN,
   OPERATION_TYPE.MODIFY_FILTERS,
   OPERATION_TYPE.MODIFY_SORTS,
+  OPERATION_TYPE.MOVE_RECORD,
+  OPERATION_TYPE.DUPLICATE_RECORD,
 ];
 
 export const VIEW_OPERATION = [

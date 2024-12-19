@@ -39,7 +39,6 @@ class DataProcessor {
   }
 
   static updateSummaries(table, rows) {
-    // const tableRows = isTableRows(rows) ? rows : getRowsByIds(table, rows);
     // todo
   }
 
@@ -109,7 +108,7 @@ class DataProcessor {
     // todo update sort and filter and ui change
   }
 
-  static updatePageDataWithDeleteRecords(deletedRowsIds, table) {
+  static updateDataWithDeleteRecords(deletedRowsIds, table) {
     const { available_columns, groupbys, groups, rows } = table.view;
     const idNeedDeletedMap = deletedRowsIds.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
     table.view.rows = rows.filter(rowId => !idNeedDeletedMap[rowId]);
@@ -228,7 +227,7 @@ class DataProcessor {
       }
       case OPERATION_TYPE.DELETE_RECORDS: {
         const { rows_ids } = operation;
-        this.updatePageDataWithDeleteRecords(rows_ids, table);
+        this.updateDataWithDeleteRecords(rows_ids, table);
         this.updateSummaries();
         break;
       }
@@ -253,6 +252,10 @@ class DataProcessor {
         table.view.rows = updatedRowIds;
         this.updateDataWithModifyRecords(table, { collaborators });
         this.updateSummaries();
+        break;
+      }
+      case OPERATION_TYPE.MOVE_RECORD: {
+        this.run(table, { collaborators });
         break;
       }
       case OPERATION_TYPE.MODIFY_GROUPBYS: {

@@ -125,6 +125,12 @@ class Context {
     return true;
   };
 
+  canDuplicateRow = () => {
+    if (this.permission === 'r') return false;
+    const viewId = this.getSetting('viewID');
+    return viewId !== FACE_RECOGNITION_VIEW_ID;
+  };
+
   canModifyColumn = (column) => {
     if (this.permission === 'r') return false;
     const { editable } = column;
