@@ -368,7 +368,6 @@ class MoveDirent extends React.Component {
           setSelectedPath={this.setSelectedPath}
           errMessage={errMessage}
           setErrMessage={this.setErrMessage}
-          clearErrMessage={this.clearErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
           searchStatus={searchStatus}

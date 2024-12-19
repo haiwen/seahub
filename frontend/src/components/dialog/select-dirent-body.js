@@ -22,6 +22,7 @@ class SelectDirentBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      errMessage: '',
       showCreateFolderDialog: false,
       folderListOfSelectedRepo: [],
     };
@@ -51,13 +52,13 @@ class SelectDirentBody extends React.Component {
   onDirentItemClick = (repo, selectedPath) => {
     this.props.selectRepo(repo);
     this.props.setSelectedPath(selectedPath);
-    this.props.clearErrMessage();
+    this.props.setErrMessage('');
   };
 
   onRepoItemClick = (repo) => {
     this.props.selectRepo(repo);
     this.props.setSelectedPath('/');
-    this.props.clearErrMessage();
+    this.props.setErrMessage('');
   };
 
   loadRepoDirentList = async (repo, path) => {
@@ -71,7 +72,7 @@ class SelectDirentBody extends React.Component {
 
   createFolder = (fullPath) => {
     if (!this.props.selectedRepo) {
-      this.props.setErrMessage(gettext('Please select a library or folder first.'));
+      this.setState({ errMessage: gettext('Please select a library or folder first.') });
       return;
     }
     this.newFolderName = fullPath.split('/').pop();
@@ -102,8 +103,7 @@ class SelectDirentBody extends React.Component {
     } else {
       this.setState({ folderListOfSelectedRepo: [] });
     }
-    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog });
-    this.props.clearErrMessage();
+    this.setState({ showCreateFolderDialog: !this.state.showCreateFolderDialog, errMessage: '' });
   };
 
   checkDuplicatedName = (newName) => {
@@ -120,7 +120,7 @@ class SelectDirentBody extends React.Component {
       this.props.selectRepo(null);
     }
     this.props.setSelectedPath('/');
-    this.props.clearErrMessage();
+    this.props.setErrMessage('');
   };
 
   render() {
@@ -220,7 +220,6 @@ SelectDirentBody.propTypes = {
   selectRepo: PropTypes.func.isRequired,
   setSelectedPath: PropTypes.func,
   setErrMessage: PropTypes.func,
-  clearErrMessage: PropTypes.func,
   mode: PropTypes.string,
   onUpdateMode: PropTypes.func,
   searchStatus: PropTypes.string,
