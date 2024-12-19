@@ -64,7 +64,9 @@ const propTypes = {
   deleteFilesCallback: PropTypes.func,
   renameFileCallback: PropTypes.func,
   onItemMove: PropTypes.func.isRequired,
+  moveFileCallback: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  copyFileCallback: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
@@ -205,12 +207,12 @@ class DirColumnView extends React.Component {
               viewID={this.props.viewId}
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
+              moveFileCallback={this.props.moveFileCallback}
+              copyFileCallback={this.props.copyFileCallback}
+              addFolder={this.props.onAddFolder}
               updateCurrentDirent={this.props.updateCurrentDirent}
               closeDirentDetail={this.props.closeDirentDetail}
               showDirentDetail={this.props.showDirentDetail}
-              moveItem={this.props.onItemMove}
-              copyItem={this.props.onItemCopy}
-              addFolder={this.props.onAddFolder}
             />
           )}
           {currentMode === TAGS_MODE && (

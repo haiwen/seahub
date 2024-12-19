@@ -16,11 +16,6 @@ class LocalOperator {
         }
         break;
       }
-      case OPERATION_TYPE.DELETE_LOCAL_RECORDS: {
-        const { success_callback } = operation;
-        success_callback && success_callback();
-        break;
-      }
       default: {
         break;
       }

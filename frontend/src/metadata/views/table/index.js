@@ -27,7 +27,7 @@ const Table = () => {
     modifyColumnWidth,
     insertColumn,
     updateFileTags,
-    moveItem,
+    moveRecord,
     addFolder
   } = useMetadataView();
   const containerRef = useRef(null);
@@ -150,32 +150,6 @@ const Table = () => {
   const getTableContentRect = useCallback(() => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
-
-  const moveRecord = useCallback((destRepo, dirent, destPath, nodePath, isByDialog, recordID) => {
-    const currrentRepoID = window.sfMetadataStore.repoId;
-    const record = recordGetterById(recordID);
-    const parentDir = getParentDirFromRecord(record);
-    const updates = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: destPath };
-    const oldRowData = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
-
-    const handleSuccess = () => moveItem(destRepo, dirent, destPath, nodePath, isByDialog);
-    const handleError = (error) => error && toaster.danger(error);
-
-    if (currrentRepoID === destRepo.repo_id) {
-      store.modifyRecords(
-        [recordID],
-        { [recordID]: updates },
-        { [recordID]: updates },
-        { [recordID]: oldRowData },
-        { [recordID]: oldRowData },
-        false,
-        false,
-        { fail_callback: handleError, success_callback: handleSuccess }
-      );
-    } else {
-      store.deleteLocalRecords([recordID], { fail_callback: handleError, success_callback: handleSuccess });
-    }
-  }, [store, recordGetterById, moveItem]);
 
   return (
     <div className="sf-metadata-container" ref={containerRef}>

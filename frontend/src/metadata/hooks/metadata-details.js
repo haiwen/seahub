@@ -157,7 +157,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     if (!parentDir.startsWith('/')) {
       parentDir = '/' + parentDir;
     }
-    metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
+    metadataAPI.getMetadataRecordInfo(repoID, { parentDir, fileName }).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
       const columns = normalizeFields(metadata).map(field => new Column(field));

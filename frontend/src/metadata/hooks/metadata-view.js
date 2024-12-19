@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useRef, useState, useCallback } from 'rea
 import toaster from '../../components/toast';
 import Context from '../context';
 import Store from '../store';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constants';
 import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
 import { getRowById } from '../utils/table';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { gettext } from '../../utils/constants';
+import { checkIsDir } from '../utils/row';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -19,6 +20,8 @@ export const MetadataViewProvider = ({
   viewID,
   renameFileCallback,
   deleteFilesCallback,
+  moveFileCallback,
+  copyFileCallback,
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -162,6 +165,77 @@ export const MetadataViewProvider = ({
     modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, { success_callback, fail_callback });
   };
 
+  const moveRecord = (rowId, targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+    const targetRepoId = targetRepo.repo_id;
+    const row = getRowById(metadata, rowId);
+    const { rows } = metadata;
+    const isDir = checkIsDir(row);
+    const oldName = dirent.name;
+    const oldParentPath = Utils.joinPath(sourceParentPath, oldName);
+
+    let needDeletedRowIds = [];
+    let updateRowIds = [];
+    let idRowUpdates = {};
+    let idOldRowData = {};
+
+    if (repoID === targetRepoId) {
+      const newName = getUniqueFileName(rows, targetParentPath, oldName);
+      updateRowIds.push(rowId);
+      idRowUpdates[rowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: targetParentPath, [PRIVATE_COLUMN_KEY.FILE_NAME]: newName };
+      idOldRowData[rowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: sourceParentPath, [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName };
+      if (isDir) {
+        const newPath = Utils.joinPath(targetParentPath, newName);
+        rows.forEach((row) => {
+          const parentDir = getParentDirFromRecord(row);
+          if (row && parentDir.startsWith(oldParentPath)) {
+            const updateRowId = getRecordIdFromRecord(row);
+            updateRowIds.push(updateRowId);
+            idRowUpdates[updateRowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir.replace(oldParentPath, newPath) };
+            idOldRowData[updateRowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
+          }
+        });
+      }
+    } else {
+      needDeletedRowIds = [rowId];
+      if (isDir) {
+        rows.forEach((row) => {
+          const parentDir = getParentDirFromRecord(row);
+          if (row && parentDir.startsWith(oldParentPath)) {
+            const id = getRecordIdFromRecord(row);
+            needDeletedRowIds.push(id);
+          }
+        });
+      }
+    }
+
+    storeRef.current.moveRecord(rowId, targetRepoId, dirent, targetParentPath, sourceParentPath, {
+      modify_row_ids: updateRowIds,
+      modify_id_row_updates: idRowUpdates,
+      modify_id_old_row_data: idOldRowData,
+      delete_row_ids: needDeletedRowIds,
+    }, {
+      success_callback: (operation) => {
+        moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, operation.task_id, isByDialog);
+      },
+      fail_callback: (error) => {
+        error && toaster.danger(error);
+      }
+    });
+  };
+
+  const duplicateRecord = (rowId, targetRepo, dirent, targetPath, nodeParentPath, isByDialog) => {
+    storeRef.current.duplicateRecord(rowId, targetRepo.repo_id, dirent, targetPath, nodeParentPath, {
+      success_callback: (operation) => {
+        let message = gettext('Successfully copied %(name)s, please refresh the view.');
+        message = message.replace('%(name)s', dirent.name);
+        copyFileCallback && copyFileCallback(repoID, targetRepo, targetPath, nodeParentPath, message, operation.task_id, isByDialog);
+      },
+      fail_callback: (error) => {
+        error && toaster.danger(error);
+      }
+    });
+  };
+
   const renameColumn = useCallback((columnKey, newName, oldName) => {
     storeRef.current.renameColumn(columnKey, newName, oldName);
   }, [storeRef]);
@@ -261,6 +335,8 @@ export const MetadataViewProvider = ({
         modifyRecords,
         deleteRecords,
         modifyRecord,
+        moveRecord,
+        duplicateRecord,
         renameColumn,
         deleteColumn,
         modifyColumnOrder,
@@ -268,8 +344,6 @@ export const MetadataViewProvider = ({
         modifyColumnWidth,
         insertColumn,
         updateFileTags,
-        moveItem: params.moveItem,
-        copyItem: params.copyItem,
         addFolder: params.addFolder,
       }}
     >

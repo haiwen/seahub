@@ -12,41 +12,50 @@ dayjs.extend(utc);
 export default function apply(data, operation) {
   const { op_type } = operation;
 
+  const updateDataByModifyRecords = ({ id_original_row_updates = {}, id_row_updates = {} } = {}) => {
+    const { rows } = data;
+    const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
+    const modifier = window.sfMetadataContext.getUsername();
+    let updatedRows = [...rows];
+
+    rows.forEach((row, index) => {
+      const { _id: rowId } = row;
+      const originalRowUpdates = id_original_row_updates[rowId];
+      const rowUpdates = id_row_updates[rowId];
+      if (rowUpdates || originalRowUpdates) {
+        const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
+          '_mtime': modifyTime,
+          '_last_modifier': modifier,
+        });
+        updatedRows[index] = updatedRow;
+        data.id_row_map[rowId] = updatedRow;
+      }
+    });
+
+    data.rows = updatedRows;
+  };
+
+  const updateDataByDeleteRecords = (deletedIds) => {
+    const idNeedDeletedMap = deletedIds.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
+    data.rows = data.rows.filter((row) => !idNeedDeletedMap[row._id]);
+
+    // delete rows in id_row_map
+    deletedIds.forEach(rowId => {
+      delete data.id_row_map[rowId];
+    });
+
+    data.row_ids = data.row_ids.filter(row_id => !idNeedDeletedMap[row_id]);
+  };
+
   switch (op_type) {
     case OPERATION_TYPE.MODIFY_RECORDS: {
       const { id_original_row_updates, id_row_updates } = operation;
-      const { rows } = data;
-      const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
-      const modifier = window.sfMetadataContext.getUsername();
-      let updatedRows = [...rows];
-
-      rows.forEach((row, index) => {
-        const { _id: rowId } = row;
-        const originalRowUpdates = id_original_row_updates[rowId];
-        const rowUpdates = id_row_updates[rowId];
-        if (rowUpdates || originalRowUpdates) {
-          const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
-            '_mtime': modifyTime,
-            '_last_modifier': modifier,
-          });
-          updatedRows[index] = updatedRow;
-          data.id_row_map[rowId] = updatedRow;
-        }
-      });
-
-      data.rows = updatedRows;
+      updateDataByModifyRecords({ id_original_row_updates, id_row_updates });
       return data;
     }
     case OPERATION_TYPE.DELETE_RECORDS: {
       const { rows_ids } = operation;
-      const idNeedDeletedMap = rows_ids.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
-      data.rows = data.rows.filter((row) => !idNeedDeletedMap[row._id]);
-
-      // delete rows in id_row_map
-      rows_ids.forEach(rowId => {
-        delete data.id_row_map[rowId];
-      });
-
+      updateDataByDeleteRecords(rows_ids);
       return data;
     }
     case OPERATION_TYPE.RESTORE_RECORDS: {
@@ -115,6 +124,23 @@ export default function apply(data, operation) {
       });
 
       data.rows = updatedRows;
+      return data;
+    }
+    case OPERATION_TYPE.MOVE_RECORD: {
+      const { update_data } = operation;
+      const {
+        modify_row_ids: updateRowIds,
+        modify_id_row_updates: idRowUpdates,
+        delete_row_ids: deletedRowIds,
+      } = update_data;
+
+      if (Array.isArray(updateRowIds) && updateRowIds.length > 0) {
+        updateDataByModifyRecords({ id_row_updates: idRowUpdates });
+      }
+
+      if (Array.isArray(deletedRowIds) && deletedRowIds.length > 0) {
+        updateDataByDeleteRecords(deletedRowIds);
+      }
       return data;
     }
     case OPERATION_TYPE.MODIFY_FILTERS: {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalScrollbar } from '../../../../components/scrollbar';
 import EmptyTip from '../../../../../components/empty-tip';
-import DeleteFolderDialog from '../../../../../components/dialog/delete-folder-dialog';
 import Body from './body';
 import GroupBody from './group-body';
 import RecordsHeader from '../records-header';
@@ -11,16 +10,13 @@ import ContextMenu from '../../context-menu';
 import { recalculate } from '../../../../utils/column';
 import { getEventClassName } from '../../../../utils/common';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
-import { isMobile, Utils } from '../../../../../utils/utils';
+import { isMobile } from '../../../../../utils/utils';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { gettext } from '../../../../../utils/constants';
 import RecordMetrics from '../../utils/record-metrics';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
 import { isWindowsBrowser, isWebkitBrowser, addClassName, removeClassName } from '../../utils';
 import { getVisibleBoundaries } from '../../utils/viewport';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../../utils/cell';
-import { Dirent } from '../../../../../models';
-import MoveDirent from '../../../../../components/dialog/move-dirent-dialog';
 
 class Records extends Component {
 
@@ -46,9 +42,6 @@ class Records extends Component {
       },
       selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
-      deletedFolderPath: '',
-      isMoveDialogShow: false,
-      activeRecord: null,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
@@ -628,32 +621,6 @@ class Records extends Component {
     return this.resultContainerRef.getBoundingClientRect();
   };
 
-  toggleDeleteFolderDialog = (record) => {
-    if (this.state.deletedFolderPath) {
-      this.deletedRecord = null;
-      this.setState({ deletedFolderPath: '' });
-    } else {
-      const { _parent_dir, _name } = record;
-      const deletedFolderPath = Utils.joinPath(_parent_dir, _name);
-      this.deletedRecord = record;
-      this.setState({ deletedFolderPath: deletedFolderPath });
-    }
-  };
-
-  deleteFolder = () => {
-    if (!this.deletedRecord) return;
-    this.props.deleteRecords([this.deletedRecord._id]);
-  };
-
-  toggleMoveDialog = (record) => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow, activeRecord: record });
-  };
-
-  moveRecord = (repo, dirent, targetPath, nodePath, isByDialog) => {
-    const recordID = getRecordIdFromRecord(this.state.activeRecord);
-    this.props.moveRecord(repo, dirent, targetPath, nodePath, isByDialog, recordID);
-  };
-
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -665,11 +632,11 @@ class Records extends Component {
       contextMenu: (
         <ContextMenu
           isGroupView={isGroupView}
-          toggleDeleteFolderDialog={this.toggleDeleteFolderDialog}
           recordGetterByIndex={this.props.recordGetterByIndex}
           updateRecords={this.props.updateRecords}
           deleteRecords={this.props.deleteRecords}
-          toggleMoveDialog={this.toggleMoveDialog}
+          moveRecord={this.props.moveRecord}
+          addFolder={this.props.addFolder}
         />
       ),
       hasSelectedRecord: this.hasSelectedRecord(),
@@ -709,9 +676,9 @@ class Records extends Component {
   render() {
     const {
       recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn, modifyColumnOrder, insertColumn, addFolder
+      deleteColumn, modifyColumnOrder, insertColumn
     } = this.props;
-    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx, deletedFolderPath, isMoveDialogShow, activeRecord } = this.state;
+    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
     const hasSelectedRecord = this.hasSelectedRecord();
@@ -720,10 +687,6 @@ class Records extends Component {
     if (recordsCount === 0 && !this.props.hasMore) {
       return (<EmptyTip text={gettext('No record')} />);
     }
-
-    const dirent = new Dirent({ name: getFileNameFromRecord(activeRecord) });
-    const path = getParentDirFromRecord(activeRecord);
-    const repoID = window.sfMetadataStore.repoId;
 
     return (
       <>
@@ -782,25 +745,6 @@ class Records extends Component {
           getRecordsSummaries={() => { }}
           loadAll={this.props.loadAll}
         />
-        {deletedFolderPath && (
-          <DeleteFolderDialog
-            repoID={repoID}
-            path={this.state.deletedFolderPath}
-            deleteFolder={this.deleteFolder}
-            toggleDialog={this.toggleDeleteFolderDialog}
-          />
-        )}
-        {isMoveDialogShow && (
-          <MoveDirent
-            path={path}
-            repoID={repoID}
-            dirent={dirent}
-            isMultipleOperation={false}
-            onItemMove={this.moveRecord}
-            onCancelMove={this.toggleMoveDialog}
-            onAddFolder={addFolder}
-          />
-        )}
       </>
     );
   }

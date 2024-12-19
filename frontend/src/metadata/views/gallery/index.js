@@ -10,7 +10,7 @@ import './index.css';
 const Gallery = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
 
-  const { metadata, store, deleteRecords, copyItem, addFolder } = useMetadataView();
+  const { metadata, store, deleteRecords, duplicateRecord, addFolder } = useMetadataView();
 
   const onLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -48,7 +48,7 @@ const Gallery = () => {
         metadata={metadata}
         onDelete={handleDelete}
         onLoadMore={onLoadMore}
-        onCopyItem={copyItem}
+        duplicateRecord={duplicateRecord}
         onAddFolder={addFolder}
       />
     </div>

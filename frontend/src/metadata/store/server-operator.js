@@ -82,6 +82,30 @@ class ServerOperator {
         callback({ operation });
         break;
       }
+      case OPERATION_TYPE.MOVE_RECORD: {
+        const { row_id, repo_id, target_repo_id, dirent, target_parent_path, source_parent_path } = operation;
+        seafileAPI.moveDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirent.name).then(res => {
+          operation.task_id = res.data.task_id;
+          callback({ operation });
+        }).catch(error => {
+          const row = getRowById(data, row_id);
+          const isDir = checkIsDir(row);
+          callback({ error: isDir ? gettext('Failed to move folder') : gettext('Failed to move file') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.DUPLICATE_RECORD: {
+        const { row_id, repo_id, target_repo_id, dirent, target_parent_path, source_parent_path } = operation;
+        seafileAPI.copyDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirent.name).then(res => {
+          operation.task_id = res.data.task_id;
+          callback({ operation });
+        }).catch(error => {
+          const row = getRowById(data, row_id);
+          const isDir = checkIsDir(row);
+          callback({ error: isDir ? gettext('Failed to duplicate folder') : gettext('Failed to duplicate file') });
+        });
+        break;
+      }
       case OPERATION_TYPE.INSERT_COLUMN: {
         const { repo_id, name, column_type, column_key, data } = operation;
         window.sfMetadataContext.insertColumn(repo_id, name, column_type, { key: column_key, data }).then(res => {

@@ -88,7 +88,7 @@ class Context {
 
   getRecord = (parentDir, fileName) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName);
+    return this.metadataAPI.getMetadataRecordInfo(repoID, { parentDir, fileName });
   };
 
   getViews = () => {
@@ -123,6 +123,12 @@ class Context {
   canModifyRows = () => {
     if (this.permission === 'r') return false;
     return true;
+  };
+
+  canDuplicateRow = () => {
+    if (this.permission === 'r') return false;
+    const viewId = this.getSetting('viewID');
+    return viewId !== FACE_RECOGNITION_VIEW_ID;
   };
 
   canModifyColumn = (column) => {

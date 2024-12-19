@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
 import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
 import { getRowById } from '../../../utils/table';
-import { downloadFile, probeCopyStatus } from '../../../utils/file';
+import { downloadFile } from '../../../utils/file';
 import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 import metadataAPI from '../../../api';
 import toaster from '../../../../components/toast';
@@ -11,31 +11,31 @@ import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
 import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
 import { Dirent } from '../../../../models';
-import { EVENT_BUS_TYPE } from '../../../constants';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
-  COPY: 'copy',
+  DUPLICATE: 'duplicate',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onCopyItem, onAddFolder }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, duplicateRecord, onAddFolder }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
+  const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
-    if (selectedImages.length === 1) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.COPY, label: gettext('Copy') });
+    if (canDuplicateRow && selectedImages.length === 1) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
     return validOptions;
-  }, [checkCanDeleteRow, selectedImages]);
+  }, [checkCanDeleteRow, canDuplicateRow, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -45,19 +45,10 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     setIsCopyDialogOpen(!isCopyDialogOpen);
   }, [isCopyDialogOpen]);
 
-  const handleCopyItem = async (destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
-    await onCopyItem(destRepo, dirent, destPath, nodeParentPath, isByDialog);
-    if (repoID !== destRepo.repo_id) return;
-
-    const viewID = metadata.view._id;
-    const rowsCount = metadata.recordsCount;
-    const retries = 5;
-    const delay = 300;
-    const copySuccess = await probeCopyStatus(viewID, rowsCount, retries, delay);
-    if (copySuccess) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
-    }
-  };
+  const handleCopy = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
+    const selectedImage = selectedImages[0];
+    duplicateRecord(selectedImage.id, destRepo, dirent, destPath, nodeParentPath, isByDialog);
+  }, [selectedImages, duplicateRecord]);
 
   const handleDownload = useCallback(() => {
     if (!selectedImages.length) return;
@@ -92,7 +83,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       case 'delete':
         onDelete(selectedImages);
         break;
-      case CONTEXT_MENU_KEY.COPY:
+      case CONTEXT_MENU_KEY.DUPLICATE:
         toggleCopyDialog();
         break;
       default:
@@ -129,7 +120,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
             dirent={dirent}
             isMultipleOperation={false}
             repoEncrypted={false}
-            onItemCopy={handleCopyItem}
+            onItemCopy={handleCopy}
             onCancelCopy={toggleCopyDialog}
             onAddFolder={onAddFolder}
           />

@@ -31,3 +31,7 @@ export {
 export {
   getTagsDisplayString,
 } from './tag';
+export {
+  checkDuplicatedName,
+  getUniqueFileName,
+} from './file-name';

@@ -300,17 +300,8 @@ class Store {
   }
 
   deleteRecords(rows_ids, { fail_callback, success_callback }) {
-    this._deleteRecords(rows_ids, OPERATION_TYPE.DELETE_RECORDS, { fail_callback, success_callback });
-  }
-
-  deleteLocalRecords(rows_ids, { fail_callback, success_callback }) {
-    this._deleteRecords(rows_ids, OPERATION_TYPE.DELETE_LOCAL_RECORDS, { fail_callback, success_callback });
-  }
-
-  _deleteRecords(rows_ids, type, { fail_callback, success_callback }) {
-    if (!Array.isArray(rows_ids) || rows_ids.length === 0) {
-      return;
-    }
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
+    const type = OPERATION_TYPE.DELETE_RECORDS;
 
     const valid_rows_ids = rows_ids.filter((rowId) => {
       const row = getRowById(this.data, rowId);
@@ -326,7 +317,6 @@ class Store {
       }
       return null;
     }).filter(Boolean);
-
     if (deletedDirsPaths.length > 0) {
       this.data.rows.forEach((row) => {
         if (deletedDirsPaths.some((deletedDirPath) => row._parent_dir.includes(deletedDirPath)) && !valid_rows_ids.includes(row._id)) {
@@ -411,6 +401,39 @@ class Store {
       row_id,
       repo_id: this.repoId,
       updates
+    });
+    this.applyOperation(operation);
+  }
+
+  moveRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.MOVE_RECORD;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_id,
+      target_repo_id,
+      dirent,
+      target_parent_path,
+      source_parent_path,
+      update_data,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  duplicateRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.DUPLICATE_RECORD;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_id,
+      target_repo_id,
+      dirent,
+      target_parent_path,
+      source_parent_path,
+      success_callback,
+      fail_callback,
     });
     this.applyOperation(operation);
   }
