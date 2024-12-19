@@ -655,6 +655,11 @@ def get_seafes_env():
     return env
 
 def update_search_index():
+    update_file_search_index()
+    update_wiki_search_index()
+
+
+def update_file_search_index():
     argv = [
         Utils.get_python_executable(),
         '-m', 'seafes.indexes.repo_file.index_local',
@@ -662,9 +667,23 @@ def update_search_index():
         'update',
     ]
 
-    Utils.info('\nUpdating search index, this may take a while...\n')
+    Utils.info('\nUpdating file index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
+
+
+def update_wiki_search_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafes.indexes.wiki.index_wiki_local',
+        '--loglevel', 'debug',
+        'update',
+    ]
+
+    Utils.info('\nUpdating wiki index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
 
 def delete_search_index():
     choice = None
@@ -675,6 +694,11 @@ def delete_search_index():
     if choice == 'n':
         return
 
+    delete_file_search_index()
+    delete_wiki_search_index()
+
+
+def delete_file_search_index():
     argv = [
         Utils.get_python_executable(),
         '-m', 'seafes.indexes.repo_file.index_local',
@@ -682,7 +706,20 @@ def delete_search_index():
         'clear',
     ]
 
-    Utils.info('\nDelete search index, this may take a while...\n')
+    Utils.info('\nDelete file index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
+
+def delete_wiki_search_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafes.indexes.wiki.index_wiki_local',
+        '--loglevel', 'debug',
+        'clear',
+    ]
+
+    Utils.info('\nDelete wiki index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
 
