@@ -9,7 +9,7 @@
 
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical {
   height: calc(100% - 32px);
-  margin: 0 8px;
+  margin: 0 4px;
 }
 
 .sf-metadata-main .card-ghost {
@@ -27,10 +27,10 @@
 .sf-metadata-view-kanban-board .card-drop-preview::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
   pointer-events: none;
   border: 1px solid transparent;
   border-radius: 6px;

@@ -19,28 +19,27 @@
 // Overwrites native 'firstElementChild' prototype.
 // Adds Document & DocumentFragment support for IE9 & Safari.
 // Returns array instead of HTMLCollection.
-// (function(constructor) {
-//   console.log(constructor, constructor.prototype)
-//   if (
-//     constructor &&
-//     constructor.prototype &&
-//     constructor.prototype.firstElementChild == null
-//   ) {
-//     Object.defineProperty(constructor.prototype, "firstElementChild", {
-//       get: function() {
-//         var node,
-//           nodes = this.childNodes,
-//           i = 0;
-//         while ((node = nodes[i++])) {
-//           if (node.nodeType === 1) {
-//             return node;
-//           }
-//         }
-//         return null;
-//       }
-//     });
-//   }
-// })(global.Node || global.Element);
+(function (constructor) {
+  if (
+    constructor &&
+    constructor.prototype &&
+    constructor.prototype.firstElementChild == null
+  ) {
+    Object.defineProperty(constructor.prototype, 'firstElementChild', {
+      get: function () {
+        var node;
+        var nodes = this.childNodes;
+        var i = 0;
+        while ((node = nodes[i++])) {
+          if (node.nodeType === 1) {
+            return node;
+          }
+        }
+        return null;
+      }
+    });
+  }
+})(global.Node || global.Element);
 
 // Production steps of ECMA-262, Edition 5, 15.4.4.17
 // Reference: http://es5.github.io/#x15.4.4.17

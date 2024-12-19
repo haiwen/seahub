@@ -9,7 +9,6 @@ import Draggable from '../../dnd/draggable';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
 
 import './index.css';
-import classNames from 'classnames';
 
 const Board = ({
   board,
@@ -76,7 +75,7 @@ const Board = ({
         onDrop={e => onDragEnd(boardIndex, e)}
         onDragEnter={() => setDraggingOver(true)}
         onDragLeave={() => setDraggingOver(false)}
-        shouldAcceptDrop={() => !readonly}
+        shouldAcceptDrop={() => true}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
         dropPlaceholder={{
           animationDuration: 150,

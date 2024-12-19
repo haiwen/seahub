@@ -1,4 +1,4 @@
-import * as constants from './constants';
+import { containerClass, disbaleTouchActions, dropPlaceholderFlexContainerClass, dropPlaceholderInnerClass, dropPlaceholderWrapperClass, ghostClass, noUserSelectClass, stretcherElementClass, wrapperClass, dropPlaceholderDefaultClass } from './constants';
 
 const verticalWrapperClass = {
   'overflow': 'hidden',
@@ -7,9 +7,8 @@ const verticalWrapperClass = {
 
 const horizontalWrapperClass = {
   'height': '100%',
-  'display': 'inline-block',
+  'display': 'table-cell',
   'vertical-align': 'top',
-  'white-space': 'normal'
 };
 
 const stretcherElementHorizontalClass = {
@@ -17,44 +16,70 @@ const stretcherElementHorizontalClass = {
 };
 
 const css = {
-  [`.${constants.containerClass}`]: {
+  [`.${containerClass}`]: {
     'position': 'relative',
+    'min-height': '30px',
+    'min-width': '30px'
   },
-  [`.${constants.containerClass} *`]: {
+  [`.${containerClass}.horizontal`]: {
+    'display': 'table',
+  },
+  [`.${containerClass}.horizontal > .${stretcherElementClass}`]: stretcherElementHorizontalClass,
+  [`.${containerClass}.horizontal > .${wrapperClass}`]: horizontalWrapperClass,
+  [`.${containerClass}.vertical > .${wrapperClass}`]: verticalWrapperClass,
+  [`.${wrapperClass}`]: {
+    'box-sizing': 'border-box'
+  },
+  [`.${wrapperClass}.horizontal`]: horizontalWrapperClass,
+  [`.${wrapperClass}.vertical`]: verticalWrapperClass,
+  [`.${wrapperClass}.animated`]: {
+    'transition': 'transform ease',
+  },
+  [`.${ghostClass}`]: {
     'box-sizing': 'border-box',
   },
-  [`.${constants.containerClass}.horizontal`]: {
-    'white-space': 'nowrap',
-  },
-  [`.${constants.containerClass}.horizontal > .${constants.stretcherElementClass}`]: stretcherElementHorizontalClass,
-  [`.${constants.containerClass}.horizontal > .${constants.wrapperClass}`]: horizontalWrapperClass,
-  [`.${constants.containerClass}.vertical > .${constants.wrapperClass}`]: verticalWrapperClass,
-  [`.${constants.wrapperClass}`]: {
-    // 'overflow': 'hidden'
-  },
-  [`.${constants.wrapperClass}.horizontal`]: horizontalWrapperClass,
-  [`.${constants.wrapperClass}.vertical`]: verticalWrapperClass,
-  [`.${constants.wrapperClass}.animated`]: {
-    'transition': 'transform ease'
-  },
-  [`.${constants.ghostClass} *`]: {
-    // 'perspective': '800px',
-    'box-sizing': 'border-box',
-  },
-  [`.${constants.ghostClass}.animated`]: {
+  [`.${ghostClass}.animated`]: {
     'transition': 'all ease-in-out'
   },
-  [`.${constants.disbaleTouchActions} *`]: {
-    'touch-actions': 'none',
-    '-ms-touch-actions': 'none'
+  [`.${ghostClass} *`]: {
+    'pointer-events': 'none'
   },
-  [`.${constants.noUserSelectClass} *`]: {
+  [`.${disbaleTouchActions} *`]: {
+    'touch-action': 'none',
+    '-ms-touch-action': 'none'
+  },
+  [`.${noUserSelectClass}`]: {
     '-webkit-touch-callout': 'none',
     '-webkit-user-select': 'none',
     '-khtml-user-select': 'none',
     '-moz-user-select': 'none',
     '-ms-user-select': 'none',
     'user-select': 'none'
+  },
+  [`.${dropPlaceholderInnerClass}`]: {
+    'flex': '1'
+  },
+  [`.${containerClass}.horizontal > .${dropPlaceholderWrapperClass}`]: {
+    'height': '100%',
+    'overflow': 'hidden',
+    'display': 'table-cell',
+    'vertical-align': 'top',
+  },
+  [`.${containerClass}.vertical > .${dropPlaceholderWrapperClass}`]: {
+    'overflow': 'hidden',
+    'display': 'block',
+    'width': '100%',
+  },
+  [`.${dropPlaceholderFlexContainerClass}`]: {
+    'width': '100%',
+    'height': '100%',
+    'display': 'flex',
+    'justify-content': 'stretch',
+    'align-items': 'stretch'
+  },
+  [`.${dropPlaceholderDefaultClass}`]: {
+    'background-color': 'rgba(150, 150, 150, 0.1)',
+    'border': '1px solid #ccc',
   }
 };
 
@@ -70,14 +95,15 @@ function convertToCssString(css) {
 
 function addStyleToHead() {
   if (typeof (window) !== 'undefined') {
-    const head = global.document.head || global.document.getElementsByTagName('head')[0];
-    const style = global.document.createElement('style');
+    const head = window.document.head || window.document.getElementsByTagName('head')[0];
+    const style = window.document.createElement('style');
+    style.id = 'smooth-dnd-style-definitions';
     const cssString = convertToCssString(css);
     style.type = 'text/css';
     if (style.styleSheet) {
       style.styleSheet.cssText = cssString;
     } else {
-      style.appendChild(global.document.createTextNode(cssString));
+      style.appendChild(window.document.createTextNode(cssString));
     }
 
     head.appendChild(style);
@@ -86,8 +112,8 @@ function addStyleToHead() {
 
 function addCursorStyleToBody(cursor) {
   if (cursor && typeof (window) !== 'undefined') {
-    const head = global.document.head || global.document.getElementsByTagName('head')[0];
-    const style = global.document.createElement('style');
+    const head = window.document.head || window.document.getElementsByTagName('head')[0];
+    const style = window.document.createElement('style');
     const cssString = convertToCssString({
       'body *': {
         cursor: `${cursor} !important`
@@ -97,7 +123,7 @@ function addCursorStyleToBody(cursor) {
     if (style.styleSheet) {
       style.styleSheet.cssText = cssString;
     } else {
-      style.appendChild(global.document.createTextNode(cssString));
+      style.appendChild(window.document.createTextNode(cssString));
     }
 
     head.appendChild(style);
@@ -110,13 +136,10 @@ function addCursorStyleToBody(cursor) {
 
 function removeStyle(styleElement) {
   if (styleElement && typeof (window) !== 'undefined') {
-    const head = global.document.head || global.document.getElementsByTagName('head')[0];
+    const head = window.document.head || window.document.getElementsByTagName('head')[0];
     head.removeChild(styleElement);
   }
 }
 
-export {
-  addStyleToHead,
-  addCursorStyleToBody,
-  removeStyle
-};
+export { addStyleToHead, addCursorStyleToBody, removeStyle };
+

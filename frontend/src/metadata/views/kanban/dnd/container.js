@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import { smoothDnD as container, dropHandlers } from 'smooth-dnd';
+import container, { dropHandlers } from '../../../third-party/trello-smooth-dnd';
 
 container.dropHandler = dropHandlers.reactDropHandler().handler;
 container.wrapChild = false;
