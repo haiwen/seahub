@@ -14,7 +14,7 @@
         return i > -1;
       };
   }
-})(global.Node || global.Element);
+})(window.Node || window.Element);
 
 // Overwrites native 'firstElementChild' prototype.
 // Adds Document & DocumentFragment support for IE9 & Safari.
@@ -39,7 +39,7 @@
       }
     });
   }
-})(global.Node || global.Element);
+})(window.Node || window.Element);
 
 // Production steps of ECMA-262, Edition 5, 15.4.4.17
 // Reference: http://es5.github.io/#x15.4.4.17

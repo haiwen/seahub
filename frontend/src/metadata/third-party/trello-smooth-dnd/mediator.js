@@ -477,6 +477,7 @@ function onMouseUp() {
     removeStyle(cursorStyleElement);
     cursorStyleElement = null;
   }
+
   if (draggableInfo) {
     containerRectableWatcher.stop();
     handleMissedDragFrame();
