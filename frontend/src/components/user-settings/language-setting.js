@@ -29,6 +29,7 @@ class LanguageSetting extends React.Component {
           value={{ value: currentLang.langCode, label: currentLang.langName }}
           options={options}
           onChange={this.onSelectChange}
+          isClearable={false}
         />
       </div>
     );
