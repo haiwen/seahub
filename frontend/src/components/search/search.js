@@ -743,7 +743,12 @@ class Search extends Component {
                   ref={this.inputRef}
                 />
                 {this.state.isCloseShow &&
-                  <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                  <button
+                    type="button"
+                    className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    onClick={this.onCloseHandler}
+                    aria-label={gettext('Close')}
+                  ></button>
                 }
               </div>
               <div
@@ -777,7 +782,12 @@ class Search extends Component {
                     autoComplete="off"
                   />
                   {this.state.isCloseShow &&
-                    <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                    <button
+                      type="button"
+                      className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                      onClick={this.onCloseHandler}
+                      aria-label={gettext('Close')}
+                    ></button>
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
