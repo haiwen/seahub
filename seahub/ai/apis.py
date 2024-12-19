@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.ai.utils import image_caption, translate, verify_ai_config, generate_summary, generate_file_tags, ocr
@@ -282,7 +282,7 @@ class OCR(APIView):
 
 
 class Translate(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
