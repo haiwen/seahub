@@ -27,7 +27,10 @@ export const MetadataViewProvider = ({
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
+
   const storeRef = useRef(null);
+  const delayReloadDataTimer = useRef(null);
+
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
 
@@ -48,12 +51,20 @@ export const MetadataViewProvider = ({
     storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
       setMetadata(storeRef.current.data);
       setLoading(false);
+      delayReloadDataTimer.current = null;
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       setErrorMessage(errorMsg);
       setLoading(false);
     });
   }, []);
+
+  const delayReloadMetadata = useCallback(() => {
+    delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
+    delayReloadDataTimer.current = setTimeout(() => {
+      reloadMetadata();
+    }, 600);
+  }, [reloadMetadata]);
 
   const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
     storeRef.current.modifyFilters(filterConjunction, filters, basicFilters);
@@ -226,9 +237,8 @@ export const MetadataViewProvider = ({
   const duplicateRecord = (rowId, targetRepo, dirent, targetPath, nodeParentPath, isByDialog) => {
     storeRef.current.duplicateRecord(rowId, targetRepo.repo_id, dirent, targetPath, nodeParentPath, {
       success_callback: (operation) => {
-        let message = gettext('Successfully copied %(name)s, please refresh the view.');
-        message = message.replace('%(name)s', dirent.name);
-        copyFileCallback && copyFileCallback(repoID, targetRepo, targetPath, nodeParentPath, message, operation.task_id, isByDialog);
+        copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetPath, nodeParentPath, operation.task_id, isByDialog);
+        delayReloadMetadata();
       },
       fail_callback: (error) => {
         error && toaster.danger(error);
@@ -313,6 +323,7 @@ export const MetadataViewProvider = ({
       unsubscribeModifyColumnOrder();
       unsubscribeModifySettings();
       unsubscribeLocalRecordChanged();
+      delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);

@@ -474,18 +474,16 @@ class MetadataRecordInfo(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        record_id = request.GET.get('record_id')
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
 
-        if not record_id:
-            if not parent_dir:
-                error_msg = 'parent_dir invalid'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not parent_dir:
+            error_msg = 'parent_dir invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if not name:
-                error_msg = 'name invalid'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not name:
+            error_msg = 'name invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
@@ -505,14 +503,9 @@ class MetadataRecordInfo(APIView):
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-        if record_id:
-            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
-                `{METADATA_TABLE.columns.id.name}`=?;'
-            parameters = [record_id]
-        else:
-            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
-                `{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?;'
-            parameters = [parent_dir, name]
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
+            `{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?;'
+        parameters = [parent_dir, name]
 
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)

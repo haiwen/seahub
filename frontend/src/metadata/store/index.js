@@ -12,7 +12,7 @@ import LocalOperator from './local-operator';
 import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
-import { getFileNameFromRecord } from '../utils/cell';
+import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';
 
 class Store {
 
@@ -562,8 +562,7 @@ class Store {
   };
 
   checkDuplicatedName = (name, parentDir) => {
-    const newPath = Utils.joinPath(parentDir, name);
-    return this.data.rows.some((row) => newPath === Utils.joinPath(row._parent_dir, row._name));
+    return checkDuplicatedName(this.data.rows, parentDir, name);
   };
 
   renamePeopleName = (peopleId, newName, oldName) => {

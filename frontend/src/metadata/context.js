@@ -88,7 +88,7 @@ class Context {
 
   getRecord = (parentDir, fileName) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.getMetadataRecordInfo(repoID, { parentDir, fileName });
+    return this.metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName);
   };
 
   getViews = () => {

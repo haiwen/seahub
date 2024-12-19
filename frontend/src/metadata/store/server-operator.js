@@ -85,7 +85,7 @@ class ServerOperator {
       case OPERATION_TYPE.MOVE_RECORD: {
         const { row_id, repo_id, target_repo_id, dirent, target_parent_path, source_parent_path } = operation;
         seafileAPI.moveDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirent.name).then(res => {
-          operation.task_id = res.data.task_id;
+          operation.task_id = res.data.task_id || null;
           callback({ operation });
         }).catch(error => {
           const row = getRowById(data, row_id);
@@ -97,7 +97,7 @@ class ServerOperator {
       case OPERATION_TYPE.DUPLICATE_RECORD: {
         const { row_id, repo_id, target_repo_id, dirent, target_parent_path, source_parent_path } = operation;
         seafileAPI.copyDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirent.name).then(res => {
-          operation.task_id = res.data.task_id;
+          operation.task_id = res.data.task_id || null;
           callback({ operation });
         }).catch(error => {
           const row = getRowById(data, row_id);

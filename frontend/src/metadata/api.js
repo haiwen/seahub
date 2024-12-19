@@ -76,18 +76,14 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  getMetadataRecordInfo(repoID, { parentDir, fileName, recordId }) {
+  getMetadataRecordInfo(repoID, parentDir, name) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let params = {};
-    if (recordId) {
-      params['record_id'] = recordId;
-    } else {
-      if (parentDir) {
-        params['parent_dir'] = parentDir;
-      }
-      if (fileName) {
-        params['name'] = fileName;
-      }
+    if (parentDir) {
+      params['parent_dir'] = parentDir;
+    }
+    if (name) {
+      params['name'] = name;
     }
     return this.req.get(url, { params: params });
   }

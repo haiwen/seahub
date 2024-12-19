@@ -1302,7 +1302,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  copyItemsAjaxCallback = (repoID, targetRepo, copyToDirentPath, nodeParentPath, message, taskId, byDialog = false) => {
+  copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false) => {
     if (repoID !== targetRepo.repo_id) {
       this.setState({
         asyncCopyMoveTaskId: taskId,
@@ -1324,6 +1324,9 @@ class LibContentView extends React.Component {
       this.loadDirentList(this.state.path);
     }
 
+    const dirName = dirent.name;
+    let message = gettext('Successfully copied %(name)s.');
+    message = message.replace('%(name)s', dirName);
     toaster.success(message);
 
     if (byDialog) {
@@ -1340,9 +1343,7 @@ class LibContentView extends React.Component {
     }
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirName);
-      this.copyItemsAjaxCallback(repoID, destRepo, copyToDirentPath, nodeParentPath, message, res.data.task_id, byDialog);
+      this.copyItemsAjaxCallback(repoID, destRepo, dirent, copyToDirentPath, nodeParentPath, res.data.task_id || null, byDialog);
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
