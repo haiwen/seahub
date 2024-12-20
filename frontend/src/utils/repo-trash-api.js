@@ -34,7 +34,7 @@ class RepotrashAPI {
     return this;
   }
 
-  getRepoFolderTrash2(repoID, page, per_page) {
+  getRepoFolderTrash(repoID, page, per_page) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/';
     let params = {
       page: page || 1,
@@ -44,8 +44,8 @@ class RepotrashAPI {
   }
 }
 
-let repotrashAPI = new RepotrashAPI();
+let repoTrashAPI = new RepotrashAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
-repotrashAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+repoTrashAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export { repotrashAPI };
+export { repoTrashAPI };
