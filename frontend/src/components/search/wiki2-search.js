@@ -165,7 +165,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-1" onClick={resetToDefault}></button>
+              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 mr-2" onClick={() => setValue('')} aria-label={gettext('Close')}></button>
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
