@@ -1,14 +1,11 @@
 @font-face {
-  font-family: "sdocfont";
-  /* Project id 4097705 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1734577970007');
-  /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1734577970007#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */
-    url('./sdoc-editor-font/iconfont.woff2?t=1734577970007') format('woff2'),
-    url('./sdoc-editor-font/iconfont.woff?t=1734577970007') format('woff'),
-    url('./sdoc-editor-font/iconfont.ttf?t=1734577970007') format('truetype'),
-    url('./sdoc-editor-font/iconfont.svg?t=1734577970007#sdocfont') format('svg');
+  font-family: "sdocfont"; /* Project id 4097705 */
+  src: url('iconfont.eot?t=1734577970007'); /* IE9 */
+  src: url('iconfont.eot?t=1734577970007#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1734577970007') format('woff2'),
+       url('iconfont.woff?t=1734577970007') format('woff'),
+       url('iconfont.ttf?t=1734577970007') format('truetype'),
+       url('iconfont.svg?t=1734577970007#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -542,3 +539,4 @@
 .sdoc-user:before {
   content: "\e629";
 }
+
