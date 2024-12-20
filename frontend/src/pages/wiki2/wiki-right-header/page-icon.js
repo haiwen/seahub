@@ -29,7 +29,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
           <span>{currentPageConfig.icon}</span>
         </div>
       </div>
-      {isDesktop && wikiPermission !== 'public' &&
+      {isDesktop && wikiPermission === 'rw' &&
         <UncontrolledPopover
           ref={popoverRef}
           flip

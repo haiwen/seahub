@@ -51,7 +51,7 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
   return (
     <div id="wiki-page-cover" className='wiki-page-cover' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <img className='wiki-page-cover__img' alt={gettext('Cover')} src={getCoverImgUrl(currentPageConfig.cover_img_url)} />
-      {isDesktop && wikiPermission !== 'public' && isShowCoverController && (
+      {isDesktop && wikiPermission === 'rw' && isShowCoverController && (
         <>
           <button className='wiki-cover-controller-btn border-0 d-flex align-items-center' id='wiki-change-cover-btn'>
             <i className="sf3-font sf3-font-image mr-1"></i>
