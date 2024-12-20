@@ -1252,7 +1252,7 @@ class FacesRecords(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import FACES_TABLE
-        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.deleted_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1266,7 +1266,7 @@ class FacesRecords(APIView):
 
         valid_faces_records = []
         for record in faces_records:
-            deleted_photo_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.deleted_photo_links.name, [])]
+            deleted_photo_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
             valid_photo_links = [item for item in record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_photo_ids]
             if not valid_photo_links:
                 continue
@@ -1387,7 +1387,7 @@ class PeoplePhotos(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
-        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.deleted_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1427,7 +1427,7 @@ class PeoplePhotos(APIView):
             select_columns = f'{select_columns}, `{capture_time_column_name}`'
 
         try:
-            deleted_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.deleted_photo_links.name, [])]
+            deleted_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
             record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_record_ids]
             if not record_ids:
                 return Response({'metadata': [], 'results': []})
@@ -1477,7 +1477,7 @@ class PeoplePhotos(APIView):
         faces_table_id = faces_table['id']
 
         try:
-            metadata_server_api.insert_link(FACES_TABLE.deleted_face_link_id, faces_table_id, {
+            metadata_server_api.insert_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
                 people_id: record_ids
             })
         except Exception as e:

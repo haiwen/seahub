@@ -132,13 +132,13 @@ def init_faces(metadata_server_api):
         "display_column_key": METADATA_TABLE.columns.obj_id.key
     })
 
-    metadata_server_api.add_link_column(FACES_TABLE.deleted_face_link_id, METADATA_TABLE.id, face_table_id, {
+    metadata_server_api.add_link_column(FACES_TABLE.excluded_face_link_id, METADATA_TABLE.id, face_table_id, {
         "key": METADATA_TABLE.columns.excluded_face_links.key,
         "name": METADATA_TABLE.columns.excluded_face_links.name,
         "display_column_key": FACES_TABLE.columns.name.key
     }, {
-        "key": FACES_TABLE.columns.deleted_photo_links.key,
-        "name": FACES_TABLE.columns.deleted_photo_links.name,
+        "key": FACES_TABLE.columns.excluded_photo_links.key,
+        "name": FACES_TABLE.columns.excluded_photo_links.name,
         "display_column_key": METADATA_TABLE.columns.obj_id.key
     })
 
