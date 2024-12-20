@@ -43,13 +43,17 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const resetToDefault = useCallback(() => {
+  const onClearSearch = useCallback(() => {
     setValue('');
     setHighlightIndex(0);
     setResults([]);
     setIsResultGotten(false);
-    setIsModalOpen(false);
   }, []);
+
+  const resetToDefault = useCallback(() => {
+    onClearSearch();
+    setIsModalOpen(false);
+  }, [onClearSearch]);
 
   const onKeyDown = useCallback((e) => {
     if (isHotkey('esc', e)) {
@@ -165,7 +169,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-1" onClick={resetToDefault}></button>
+              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 mr-2" onClick={onClearSearch} aria-label={gettext('Close')}></button>
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
