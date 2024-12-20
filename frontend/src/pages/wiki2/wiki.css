@@ -115,11 +115,6 @@ body {
   border: none;
 }
 
-/* .sdoc-editor-container .sdoc-article-container .article h1,
-.sdoc-editor-container .sdoc-article-container .article :first-child {
-  margin-top: 0;
-} */
-
 .sdoc-editor-container .sdoc-article-container .article>div {
   caret-color: blue;
 }

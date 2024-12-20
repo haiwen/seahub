@@ -241,7 +241,7 @@ class SidePanel extends PureComponent {
             getWikiConfig={this.props.getWikiConfig}
           />
         )}
-        {wikiPermission !== 'public' &&
+        {wikiPermission === 'rw' &&
           <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
         }
       </div>

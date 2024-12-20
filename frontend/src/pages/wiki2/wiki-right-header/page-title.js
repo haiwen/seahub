@@ -51,33 +51,31 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
     document.getElementById('favicon').href = faviconUrl;
   }, [currentPageConfig.icon]);
 
-
   return (
     <div id="wiki-page-title" className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentPageConfig.icon && (
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}
-      {wikiPermission == 'public'
-        ? <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>
-        : (
-          <>
-            <div className={classnames('wiki-page-controller', { 'show': isShowController, 'd-none': !isDesktop })}>
-              {!currentPageConfig.icon && (
-                <div className='wiki-page-controller-item' onClick={handleAddIcon}>
-                  <i className='sf3-font sf3-font-icon'></i>
-                  <span className='text'>{gettext('Add icon')}</span>
-                </div>
-              )}
-              {!currentPageConfig.cover_img_url && (
-                <div className='wiki-page-controller-item' onClick={handleAddCover}>
-                  <i className='sf3-font sf3-font-image'></i>
-                  <span className='text'>{gettext('Add cover')}</span>
-                </div>
-              )}
-            </div>
-            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
-          </>
-        )}
+      {wikiPermission === 'rw' ?
+        <>
+          <div className={classnames('wiki-page-controller', { 'show': isShowController, 'd-none': !isDesktop })}>
+            {!currentPageConfig.icon &&
+              <div className='wiki-page-controller-item' onClick={handleAddIcon}>
+                <i className='sf3-font sf3-font-icon'></i>
+                <span className='text'>{gettext('Add icon')}</span>
+              </div>
+            }
+            {!currentPageConfig.cover_img_url &&
+              <div className='wiki-page-controller-item' onClick={handleAddCover}>
+                <i className='sf3-font sf3-font-image'></i>
+                <span className='text'>{gettext('Add cover')}</span>
+              </div>
+            }
+          </div>
+          <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+        </>
+        :
+        <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>}
     </div>
   );
 };

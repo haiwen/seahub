@@ -93,14 +93,14 @@ class MainPanel extends Component {
               <DocInfo initContext={true}/>
             </div>
           </div>
-          {username && wikiPermission !== 'public' && (
-            <div className='d-flex align-items-center'>
+          <div className='d-flex align-items-center'>
+            {wikiPermission === 'rw' &&
               <div className='wiki2-file-history-button' onClick={this.handleClickHistory}>
                 <i className='sf3-font sf3-font-history'/>
               </div>
-              <Account />
-            </div>
-          )}
+            }
+            {username && <Account />}
+          </div>
         </div>
         <div className="main-panel-center">
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>

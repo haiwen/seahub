@@ -118,7 +118,7 @@ class WikiNav extends Component {
       <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
         <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
           <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
-          {isDesktop && wikiPermission !== 'public' &&
+          {isDesktop && wikiPermission === 'rw' &&
           <div>
             <i
               id='wiki-add-new-page'
@@ -135,7 +135,7 @@ class WikiNav extends Component {
         {navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
-        {wikiPermission !== 'public' &&
+        {wikiPermission === 'rw' &&
         <>
           <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
             <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
