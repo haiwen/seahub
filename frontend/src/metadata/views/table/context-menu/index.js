@@ -287,13 +287,16 @@ const ContextMenu = ({
     if (path === '') return;
     window.sfMetadataContext.ocr(path).then(res => {
       const ocrResult = res.data.ocr_result;
-      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
-      const recordIds = [updateRecordId];
-      let idRecordUpdates = {};
-      let idOriginalRecordUpdates = {};
-      idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-      idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      const validResult = Array.isArray(ocrResult) && ocrResult.length > 0 ? JSON.stringify(ocrResult) : null;
+      if (validResult) {
+        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+        const recordIds = [updateRecordId];
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      }
     }).catch(error => {
       const errorMessage = gettext('OCR failed');
       toaster.danger(errorMessage);

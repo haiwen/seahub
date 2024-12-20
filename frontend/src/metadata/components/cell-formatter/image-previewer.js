@@ -32,6 +32,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
           url: `${siteRoot}lib/${repoID}/file${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           src: src,
+          parentDir,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
           rawPath: Utils.joinPath(parentDir, fileName),
         };

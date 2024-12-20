@@ -190,10 +190,10 @@ class DirentListView extends React.Component {
 
   // for image popup
   prepareImageItem = (item) => {
+    const { path: parentDir, repoID, currentRepoInfo } = this.props;
     const name = item.name;
-    const repoID = this.props.repoID;
-    const repoEncrypted = this.props.currentRepoInfo.encrypted;
-    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+    const repoEncrypted = currentRepoInfo.encrypted;
+    const path = Utils.encodePath(Utils.joinPath(parentDir, name));
     const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
 
     let thumbnail = '';
@@ -216,6 +216,7 @@ class DirentListView extends React.Component {
       name,
       thumbnail,
       src,
+      parentDir,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`
     };

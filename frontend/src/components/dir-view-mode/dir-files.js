@@ -253,6 +253,7 @@ class DirFiles extends React.Component {
       }
       return {
         name,
+        parentDir: node.parentNode.path,
         src,
         thumbnail,
         'url': `${siteRoot}lib/${repoID}/file${path}`,

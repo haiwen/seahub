@@ -86,11 +86,6 @@ class Context {
     return this.metadataAPI.getMetadata(repoID, params);
   };
 
-  getRecord = (parentDir, fileName) => {
-    const repoID = this.settings['repoID'];
-    return this.metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName);
-  };
-
   getViews = () => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.listViews(repoID);
@@ -203,8 +198,8 @@ class Context {
   };
 
   // record
-  modifyRecord = (repoId, recordId, objID, update) => {
-    return this.metadataAPI.modifyRecord(repoId, recordId, objID, update);
+  modifyRecord = (repoId, recordId, update) => {
+    return this.metadataAPI.modifyRecord(repoId, { recordId }, update);
   };
 
   modifyRecords = (repoId, recordsData, isCopyPaste) => {

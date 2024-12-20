@@ -7,9 +7,7 @@ import { SYSTEM_FOLDERS } from '../../constants';
 import Column from '../model/column';
 import { normalizeFields } from '../components/metadata-details/utils';
 import { CellType, EVENT_BUS_TYPE, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../constants';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord,
-  getFileObjIdFromRecord
-} from '../utils/cell';
+import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord } from '../utils/cell';
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 
@@ -57,16 +55,15 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
 
   const onChange = useCallback((fieldKey, newValue) => {
     const field = getColumnByKey(originColumns, fieldKey);
-    const fileName = getColumnOriginName(field);
+    const columnName = getColumnOriginName(field);
     const recordId = getRecordIdFromRecord(record);
-    const fileObjId = getFileObjIdFromRecord(record);
-    let update = { [fileName]: newValue };
+    let update = { [columnName]: newValue };
     if (field.type === CellType.SINGLE_SELECT) {
-      update = { [fileName]: getColumnOptionNameById(field, newValue) };
+      update = { [columnName]: getColumnOptionNameById(field, newValue) };
     } else if (field.type === CellType.MULTIPLE_SELECT) {
-      update = { [fileName]: newValue ? getColumnOptionNamesByIds(field, newValue) : [] };
+      update = { [columnName]: newValue ? getColumnOptionNamesByIds(field, newValue) : [] };
     }
-    metadataAPI.modifyRecord(repoID, recordId, update, fileObjId).then(res => {
+    metadataAPI.modifyRecord(repoID, { recordId }, update).then(res => {
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, recordId, update);
@@ -96,7 +93,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         const oldValue = getCellValueByColumn(record, newField) || [];
         update = { [fileName]: [...oldValue, newOption.name] };
       }
-      return metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id);
+      return metadataAPI.modifyRecord(repoID, { recordId: record._id }, update);
     }).then(res => {
       setOriginColumns(newColumns);
       setRecord({ ...record, ...update });
@@ -157,7 +154,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     if (!parentDir.startsWith('/')) {
       parentDir = '/' + parentDir;
     }
-    metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
+    metadataAPI.getRecord(repoID, { parentDir, fileName }).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
       const columns = normalizeFields(metadata).map(field => new Column(field));

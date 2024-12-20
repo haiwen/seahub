@@ -73,7 +73,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const img = {
           id,
           name: fileName,
-          path: parentDir,
+          parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
@@ -232,7 +232,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     updateCurrentDirent({
       type: 'file',
       name: image.name,
-      path: image.path,
+      path: image.parentDir,
       file_tags: []
     });
   }, [metadata, updateCurrentDirent]);
