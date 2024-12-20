@@ -51,7 +51,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 =======
 
     if (canRemovePhotoFromPeople) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from people' });
+      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from this group' });
     }
 
     return validOptions;
