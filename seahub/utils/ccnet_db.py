@@ -200,3 +200,11 @@ class CcnetDB:
                 active_users.append(user[0])
 
         return active_users
+
+    def add_user_to_org(self, ccnet_email, org_id):
+        sql = f"""
+        INSERT INTO `{self.db_name}`.`OrgUser` (org_id, email, is_staff)
+        VALUES ({org_id}, '{ccnet_email}', 0);
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
