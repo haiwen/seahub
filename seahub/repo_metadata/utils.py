@@ -296,6 +296,7 @@ def can_read_metadata(request, repo_id):
         return True
     return False
 
+
 def get_column_valid_value(column, value):
     from seafevents.repo_metadata.constants import PropertyTypes
     if value and column['type'] == PropertyTypes.DATE:
@@ -314,6 +315,7 @@ def get_column_valid_value(column, value):
         return None
 
     return value
+
 
 def get_update_record(update={}, columns=[], unmodifiable_column_names=[]):
     if not update:
