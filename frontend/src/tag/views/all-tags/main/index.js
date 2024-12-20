@@ -39,9 +39,11 @@ const Main = React.memo(({ context, tags, onChangeDisplayTag }) => {
   return (
     <div className="sf-metadata-tags-table" ref={tableRef} onScroll={handelScroll}>
       <div className="sf-metadata-tags-table-header sf-metadata-tags-table-row">
-        <div className="sf-metadata-tags-table-cell">{gettext('Tag')}</div>
-        <div className="sf-metadata-tags-table-cell">{gettext('File count')}</div>
-        <div className="sf-metadata-tags-table-cell"></div>
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-tag">{gettext('Tag')}</div>
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-parent-tags">{gettext('Parent tags')}</div>
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-sub-tags-count">{gettext('Sub tags count')}</div>
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-tag-files-count">{gettext('File count')}</div>
+        <div className="sf-metadata-tags-table-cell sf-metadata-tags-table-cell-operations-wrapper"></div>
       </div>
       {tags.map(tag => {
         const id = getTagId(tag);

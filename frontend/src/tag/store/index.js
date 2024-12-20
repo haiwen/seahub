@@ -339,6 +339,33 @@ class Store {
     this.applyOperation(operation);
   }
 
+  addTagLinks(column_key, row_id, other_rows_ids, success_callback, fail_callback) {
+    const type = OPERATION_TYPE.ADD_TAG_LINKS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      column_key,
+      row_id,
+      other_rows_ids,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  deleteTagLinks(column_key, row_id, other_rows_ids, success_callback, fail_callback) {
+    const type = OPERATION_TYPE.DELETE_TAG_LINKS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      column_key,
+      row_id,
+      other_rows_ids,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
 }
 
 export default Store;

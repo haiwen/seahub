@@ -1,0 +1,130 @@
+.sf-metadata-set-linked-tags-popover .popover {
+  max-width: unset;
+}
+
+.sf-metadata-set-linked-tags-popover-selected,
+.sf-metadata-set-linked-tags-popover-selector {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sf-metadata-set-linked-tags-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 46px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sf-metadata-set-linked-tags-popover-title {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sf-metadata-set-linked-tags-popover-selector .sf-metadata-set-linked-tags-popover-title {
+  margin-left: -3px;
+}
+
+.sf-metadata-set-linked-tags-popover-body {
+  flex: 1;
+  height: calc(100% - 46px);
+}
+
+.sf-metadata-set-linked-tags-popover-selectable-tags-wrapper {
+  height: calc(100% - 48px);
+}
+
+.sf-metadata-editing-tags-list {
+  height: 100%;
+  padding: 10px 20px;
+  overflow-y: scroll;
+}
+
+.sf-metadata-editing-tags-list.selectable:hover {
+  cursor: pointer;
+}
+
+.sf-metadata-editing-tag:hover {
+  background: #f5f5f5;
+}
+
+.sf-metadata-editing-tag-container {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  width: 100%;
+  border-radius: 2px;
+  font-size: 13px;
+  color: #212529;
+}
+
+.sf-metadata-set-linked-tags-popover-search-container {
+  height: 48px;
+  padding: 10px 20px 0;
+}
+
+.sf-metadata-editing-tag-color-name {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.sf-metadata-editing-tag-color-name .sf-metadata-tag-color {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sf-metadata-editing-tag-color-name .sf-metadata-tag-name {
+  flex: 1;
+  margin-left: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-metadata-editing-tag-operation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.sf-metadata-editing-tag-delete-icon {
+  font-size: 14px;
+}
+
+.sf-metadata-editing-tag-delete:hover .sf-metadata-editing-tag-delete-icon {
+  fill: #555;
+}
+
+.sf-metadata-set-linked-tags-popover-header-operation {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  margin-right: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-metadata-set-linked-tags-popover-header-operation:hover {
+  border-radius: 3px;
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.sf-metadata-set-linked-tags-popover-back-icon {
+  display: inline-block;
+  transform: rotate(180deg);
+  font-size: 14px;
+  color: #666;
+}

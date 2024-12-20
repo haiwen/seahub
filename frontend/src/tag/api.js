@@ -105,6 +105,24 @@ class TagsManagerAPI {
     return this.req.put(url, params);
   };
 
+  addTagLinks = (repoID, link_column_key, row_id_map) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-links/';
+    const params = {
+      link_column_key,
+      row_id_map,
+    };
+    return this.req.post(url, params);
+  };
+
+  deleteTagLinks = (repoID, link_column_key, row_id_map) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-links/';
+    const params = {
+      link_column_key,
+      row_id_map,
+    };
+    return this.req.delete(url, { data: params });
+  };
+
 }
 
 const tagsAPI = new TagsManagerAPI();

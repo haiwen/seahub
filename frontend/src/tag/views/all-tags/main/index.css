@@ -30,30 +30,36 @@
   background-color: #f8f8f8;
 }
 
-.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:first-child {
-  width: calc((100% - 64px) * 0.7);
-  height: 100%;
-  padding-left: 10px;
-}
-
-.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:nth-child(2) {
-  width: calc((100% - 64px) * 0.3);
-  height: 100%;
-}
-
-.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell:last-child {
-  width: 64px;
-  height: 100%;
-}
-
 .sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell {
-  font-size: 14px;
+  position: relative;
   height: 100%;
+  padding: 0 8px;
+  font-size: 14px;
   line-height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 8px;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-tag {
+  width: calc((100% - 96px) * 0.3);
+  padding-left: 10px;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-parent-tags,
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-sub-tags-count,
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-tag-files-count {
+  width: calc((100% - 96px) * 0.2);
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-operations-wrapper {
+  width: 96px;
+  height: 100%;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-row .sf-metadata-tags-table-cell-parent-tags {
+  display: flex;
+  align-items: center;
 }
 
 .sf-metadata-tags-table .sf-metadata-tags-table-header .sf-metadata-tags-table-cell {
@@ -61,4 +67,12 @@
   font-size: 13px;
   line-height: 16px;
   padding: 10px 8px;
+}
+
+.sf-metadata-tags-table .sf-metadata-tags-table-cell .sf-metadata-tags-operation-pop-handler {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
 }

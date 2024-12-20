@@ -109,6 +109,14 @@ class Context {
     return this.api.deleteTags(this.repoId, tags);
   };
 
+  addTagLinks = (link_column_key, row_id_map) => {
+    return this.api.addTagLinks(this.repoId, link_column_key, row_id_map);
+  };
+
+  deleteTagLinks = (link_column_key, row_id_map) => {
+    return this.api.deleteTagLinks(this.repoId, link_column_key, row_id_map);
+  };
+
 }
 
 export default Context;
