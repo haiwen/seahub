@@ -101,34 +101,34 @@ export default class PageDropdownMenu extends Component {
           positionFixed={true}
         >
           <DropdownItem onClick={this.handleCopyLink}>
-            <i className="sf3-font sf3-font-link" />
+            <i className="sf3-font sf3-font-link" aria-hidden="true" />
             <span className="item-text">{gettext('Copy link')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.onRename}>
-            <i className="sf3-font sf3-font-rename" />
+            <i className="sf3-font sf3-font-rename" aria-hidden="true" />
             <span className="item-text">{gettext('Modify name')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.addPageAbove}>
-            <i className="sf3-font sf3-font-enlarge" />
+            <i className="sf3-font sf3-font-enlarge" aria-hidden="true" />
             <span className="item-text">{gettext('Add page above')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.addPageBelow}>
-            <i className="sf3-font sf3-font-enlarge" />
+            <i className="sf3-font sf3-font-enlarge" aria-hidden="true" />
             <span className="item-text">{gettext('Add page below')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.duplicatePage}>
-            <i className="sf3-font sf3-font-copy1" />
+            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
             <span className="item-text">{gettext('Duplicate page')}</span>
           </DropdownItem>
           {(isOnlyOnePage || pagesLength === 1) ? '' : (
             <DropdownItem onClick={this.onDeletePage}>
-              <i className="sf3-font sf3-font-delete1" />
+              <i className="sf3-font sf3-font-delete1" aria-hidden="true" />
               <span className="item-text">{gettext('Delete page')}</span>
             </DropdownItem>
           )}
           <hr className='divider' />
           <DropdownItem onClick={this.handleOpenInNewTab}>
-            <i className='sf3-font sf3-font-open-in-new-tab' />
+            <i className='sf3-font sf3-font-open-in-new-tab' aria-hidden="true" />
             <span className="item-text">{gettext('Open in new tab')}</span>
           </DropdownItem>
         </DropdownMenu>

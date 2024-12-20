@@ -238,8 +238,8 @@ class PageItem extends Component {
                     }
                     {(!this.state.isMouseEnter && childNumber > 0) && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'files'} disable={true} />)}
                     {(this.state.isMouseEnter && childNumber > 0) &&
-                      <div className='nav-item-icon' onClick={this.toggleExpand}>
-                        <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`}></i>
+                      <div className='nav-item-icon' onClick={this.toggleExpand} role='button'>
+                        <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`} aria-hidden="true"></i>
                       </div>
                     }
                     <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
@@ -272,8 +272,8 @@ class PageItem extends Component {
                           />
                         }
                       </div>
-                      <div className="wiki-add-page-btn" onClick={this.toggleInsertPage}>
-                        <span className='sf3-font sf3-font-enlarge'></span>
+                      <div className="wiki-add-page-btn" onClick={this.toggleInsertPage} role='button'>
+                        <span className='sf3-font sf3-font-enlarge' aria-hidden="true"></span>
                       </div>
                     </>
                   }
