@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
-import { gettext, username, wikiPermission } from '../../utils/constants';
+import { gettext, username, wikiPermission, wikiId, siteRoot } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
@@ -57,14 +57,8 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
-  handleClickHistory = () => {
-    const { wikiId, permission } = window.wiki.config;
-    if (permission !== 'rw') return;
-
-    const { siteRoot } = window.app.config;
-    const { currentPageConfig } = this.state;
-    const historyUrl = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${currentPageConfig.id}`;
-    window.location.href = historyUrl;
+  openHistory = () => {
+    window.location.href = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${this.state.currentPageConfig.id}`;
   };
 
   render() {
@@ -94,9 +88,9 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
-            {wikiPermission === 'rw' &&
-              <div className='wiki2-file-history-button' onClick={this.handleClickHistory}>
-                <i className='sf3-font sf3-font-history'/>
+            {(wikiPermission === 'rw' && this.state.currentPageConfig) &&
+              <div className='wiki2-file-history-button' onClick={this.openHistory} role="button">
+                <i className='sf3-font sf3-font-history' aria-hidden="true" />
               </div>
             }
             {username && <Account />}
