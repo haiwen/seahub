@@ -186,6 +186,14 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyLocalTags]);
 
+  const addTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
+    storeRef.current.addTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
+  }, []);
+
+  const deleteTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
+    storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
+  }, []);
+
   useEffect(() => {
     if (!handelSelectTag) return;
     if (isLoading) return;
@@ -247,6 +255,8 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteTags,
       duplicateTag,
       updateTag,
+      addTagLinks,
+      deleteTagLinks,
       updateLocalTag,
       selectTag: handelSelectTag,
     }}>

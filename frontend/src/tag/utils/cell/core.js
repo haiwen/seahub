@@ -24,6 +24,19 @@ export const getTagId = (tag) => {
   return tag ? tag[PRIVATE_COLUMN_KEY.ID] : '';
 };
 
+export const getParentLinks = (tag) => {
+  return (tag && tag[PRIVATE_COLUMN_KEY.PARENT_LINKS]) || [];
+};
+
+export const getSubLinks = (tag) => {
+  return (tag && tag[PRIVATE_COLUMN_KEY.SUB_LINKS]) || [];
+};
+
+export const getSubTagsCount = (tag) => {
+  const subLinks = getSubLinks(tag);
+  return subLinks.length;
+};
+
 export const getTagFilesCount = (tag) => {
   const links = tag ? tag[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS] : [];
   if (Array.isArray(links)) return links.length;

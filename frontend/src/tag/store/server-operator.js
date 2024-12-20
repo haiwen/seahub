@@ -51,6 +51,30 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.ADD_TAG_LINKS: {
+        const { column_key, row_id, other_rows_ids } = operation;
+        const id_linked_rows_ids_map = {
+          [row_id]: other_rows_ids,
+        };
+        this.context.addTagLinks(column_key, id_linked_rows_ids_map).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to add linked tags') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.DELETE_TAG_LINKS: {
+        const { column_key, row_id, other_rows_ids } = operation;
+        const id_linked_rows_ids_map = {
+          [row_id]: other_rows_ids,
+        };
+        this.context.deleteTagLinks(column_key, id_linked_rows_ids_map).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to delete linked tags') });
+        });
+        break;
+      }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { repo_id, rows_data } = operation;
         if (!Array.isArray(rows_data) || rows_data.length === 0) {

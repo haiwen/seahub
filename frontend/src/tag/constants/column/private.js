@@ -9,6 +9,8 @@ export const PRIVATE_COLUMN_KEY = {
   TAG_NAME: '_tag_name',
   TAG_COLOR: '_tag_color',
   TAG_FILE_LINKS: '_tag_file_links',
+  PARENT_LINKS: '_tag_parent_links',
+  SUB_LINKS: '_tag_sub_links',
 };
 
 export const PRIVATE_COLUMN_KEYS = [

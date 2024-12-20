@@ -16,7 +16,7 @@ from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH, \
-    init_tags, remove_tags_table, add_init_face_recognition_task, init_ocr, remove_ocr_column
+    init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, remove_ocr_column
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -1936,6 +1936,225 @@ class MetadataTags(APIView):
         return Response({'success': True})
 
 
+class MetadataTagsLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        link_column_key = request.data.get('link_column_key')
+        row_id_map = request.data.get('row_id_map')
+
+        if not link_column_key:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'link_column_key invalid')
+
+        if not row_id_map:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'row_id_map invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        tables = metadata.get('tables', [])
+        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
+        tags_table_id = tags_table_id[0] if tags_table_id else None
+        if not tags_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+
+        try:
+            columns_data = metadata_server_api.list_columns(tags_table_id)
+            columns = columns_data.get('columns', [])
+
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        link_column = [column for column in columns if column['key'] == link_column_key and column['type'] == 'link']
+        link_column = link_column[0] if link_column else None
+        if not link_column:
+            # init self link columns
+            if link_column_key == TAGS_TABLE.columns.parent_links.key or link_column_key == TAGS_TABLE.columns.sub_links.key:
+                try:
+                    init_tag_self_link_columns(metadata_server_api, tags_table_id)
+                    link_id = TAGS_TABLE.self_link_id;
+                    is_linked_back = link_column_key == TAGS_TABLE.columns.sub_links.key if True else False
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'link column %s not found' % link_column_key)
+        else:
+            link_column_data = link_column.get('data', {})
+            link_id = link_column_data.get('link_id', '')
+            is_linked_back = link_column_data.get('is_linked_back', False)
+
+        if not link_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
+
+        try:
+            metadata_server_api.insert_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
+
+    def put(self, request, repo_id):
+        link_column_key = request.data.get('link_column_key')
+        row_id_map = request.data.get('row_id_map')
+
+        if not row_id_map:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'row_id_map invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        tables = metadata.get('tables', [])
+        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
+        tags_table_id = tags_table_id[0] if tags_table_id else None
+        if not tags_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+
+        try:
+            columns_data = metadata_server_api.list_columns(tags_table_id)
+            columns = columns_data.get('columns', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        link_column = [column for column in columns if column['key'] == link_column_key and column['type'] == 'link']
+        link_column = link_column[0] if link_column else None
+        if not link_column:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'link column %s not found' % link_column_key)
+
+        link_column_data = link_column.get('data', {})
+        link_id = link_column_data.get('link_id', '')
+        is_linked_back = link_column_data.get('is_linked_back', False)
+
+        if not link_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
+
+        try:
+            metadata_server_api.update_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
+
+    def delete(self, request, repo_id):
+        link_column_key = request.data.get('link_column_key')
+        row_id_map = request.data.get('row_id_map')
+
+        if not link_column_key:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'link_id invalid')
+
+        if not row_id_map:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'row_id_map invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        tables = metadata.get('tables', [])
+        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
+        tags_table_id = tags_table_id[0] if tags_table_id else None
+        if not tags_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+
+        try:
+            columns_data = metadata_server_api.list_columns(tags_table_id)
+            columns = columns_data.get('columns', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        link_column = [column for column in columns if column['key'] == link_column_key and column['type'] == 'link']
+        link_column = link_column[0] if link_column else None
+        if not link_column:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'link column %s not found' % link_column_key)
+
+        link_column_data = link_column.get('data', {})
+        link_id = link_column_data.get('link_id', '')
+        is_linked_back = link_column_data.get('is_linked_back', False)
+
+        if not link_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
+
+        try:
+            metadata_server_api.delete_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
+
+
 class MetadataFileTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -2013,9 +2232,9 @@ class MetadataFileTags(APIView):
 
             try:
                 if not current_tags:
-                    metadata_server_api.insert_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
+                    metadata_server_api.insert_link(repo_id, TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
                 else:
-                    metadata_server_api.update_link(repo_id, TAGS_TABLE.link_id, METADATA_TABLE.id, { record_id: tags })
+                    metadata_server_api.update_link(repo_id, TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
                 success_records.append(record_id)
             except Exception as e:
                 failed_records.append(record_id)

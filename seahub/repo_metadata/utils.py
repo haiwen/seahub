@@ -177,52 +177,71 @@ def remove_faces_table(metadata_server_api):
 
 
 # tag
-def get_tag_link_column(table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
-    columns = [
-        METADATA_TABLE.columns.tags.to_dict({
-            'link_id': TAGS_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': table_id,
-            'display_column_key': TAGS_TABLE.columns.name.key,
-        }),
-    ]
-
-    return columns
-
-
 def get_tag_columns(table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    from seafevents.repo_metadata.constants import TAGS_TABLE
     columns = [
         TAGS_TABLE.columns.name.to_dict(),
         TAGS_TABLE.columns.color.to_dict(),
-        TAGS_TABLE.columns.file_links.to_dict({
-            'link_id': TAGS_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': table_id,
-            'display_column_key': METADATA_TABLE.columns.id.key,
-        }),
     ]
 
     return columns
 
 
-def init_tags(metadata_server_api):
+def init_tag_file_links_column(metadata_server_api, tag_table_id):
     from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+
+    file_link_id = TAGS_TABLE.file_link_id
+    table_id = METADATA_TABLE.id
+    other_table_id = tag_table_id
+    table_column = {
+        'key': METADATA_TABLE.columns.tags.key,
+        'name': METADATA_TABLE.columns.tags.name,
+        'display_column_key': TAGS_TABLE.columns.name.name,
+    }
+    other_table_column = {
+        'key': TAGS_TABLE.columns.file_links.key,
+        'name': TAGS_TABLE.columns.file_links.name,
+        'display_column_key': TAGS_TABLE.columns.id.key,
+    }
+    metadata_server_api.add_link_columns(file_link_id, table_id, other_table_id, table_column, other_table_column)
+
+def init_tag_self_link_columns(metadata_server_api, tag_table_id):
+    from seafevents.repo_metadata.constants import TAGS_TABLE
+    link_id = TAGS_TABLE.self_link_id
+    table_id = tag_table_id
+    other_table_id = tag_table_id
+
+    # as parent tags which is_linked_back is false
+    table_column = {
+        'key': TAGS_TABLE.columns.parent_links.key,
+        'name': TAGS_TABLE.columns.parent_links.name,
+        'display_column_key': TAGS_TABLE.columns.id.key,
+    }
+
+    # as sub tags which is_linked_back is true
+    other_table_column = {
+        'key': TAGS_TABLE.columns.sub_links.key,
+        'name': TAGS_TABLE.columns.sub_links.name,
+        'display_column_key': TAGS_TABLE.columns.id.key,
+    }
+    metadata_server_api.add_link_columns(link_id, table_id, other_table_id, table_column, other_table_column)
+
+
+def init_tags(metadata_server_api):
+    from seafevents.repo_metadata.constants import TAGS_TABLE
 
     remove_tags_table(metadata_server_api)
     resp = metadata_server_api.create_table(TAGS_TABLE.name)
 
     table_id = resp['id']
 
-    # init link column
-    link_column = get_tag_link_column(table_id)
-    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
-
     # init columns
     tag_columns = get_tag_columns(table_id)
     metadata_server_api.add_columns(table_id, tag_columns)
 
+    # init link columns
+    init_tag_file_links_column(metadata_server_api, table_id)
+    init_tag_self_link_columns(metadata_server_api, table_id)
 
 def remove_tags_table(metadata_server_api):
     from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE

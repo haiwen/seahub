@@ -4,6 +4,7 @@ import { UTC_FORMAT_DEFAULT } from '../../../metadata/constants';
 import { OPERATION_TYPE } from './constants';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { username } from '../../../utils/constants';
+import { addRowLinks, removeRowLinks } from '../../utils/link';
 
 dayjs.extend(utc);
 
@@ -82,6 +83,68 @@ export default function apply(data, operation) {
         data.id_row_map[row._id] = insertRow;
       });
       data.rows.push(insertRows);
+      return data;
+    }
+    case OPERATION_TYPE.ADD_TAG_LINKS: {
+      const { column_key, row_id, other_rows_ids } = operation;
+      if (column_key === PRIVATE_COLUMN_KEY.PARENT_LINKS) {
+        data.rows = data.rows.map((row) => {
+          const currentRowId = row._id;
+          if (currentRowId === row_id) {
+            // add parent tags to current tag
+            row = addRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+          }
+          if (other_rows_ids.includes(currentRowId)) {
+            // add current tag as sub tag to related tags
+            row = addRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+          }
+          return row;
+        });
+      } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
+        data.rows = data.rows.map((row) => {
+          const currentRowId = row._id;
+          if (currentRowId === row_id) {
+            // add sub tags to current tag
+            row = addRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+          }
+          if (other_rows_ids.includes(currentRowId)) {
+            // add current tag as parent tag to related tags
+            row = addRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+          }
+          return row;
+        });
+      }
+      return data;
+    }
+    case OPERATION_TYPE.DELETE_TAG_LINKS: {
+      const { column_key, row_id, other_rows_ids } = operation;
+      if (column_key === PRIVATE_COLUMN_KEY.PARENT_LINKS) {
+        data.rows = data.rows.map((row) => {
+          const currentRowId = row._id;
+          if (currentRowId === row_id) {
+            // remove parent tags from current tag
+            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+          }
+          if (other_rows_ids.includes(currentRowId)) {
+            // remove current tag as sub tag from related tags
+            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+          }
+          return row;
+        });
+      } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
+        data.rows = data.rows.map((row) => {
+          const currentRowId = row._id;
+          if (currentRowId === row_id) {
+            // remove sub tags from current tag
+            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+          }
+          if (other_rows_ids.includes(currentRowId)) {
+            // remove current tag as parent tag from related tags
+            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+          }
+          return row;
+        });
+      }
       return data;
     }
     default: {
