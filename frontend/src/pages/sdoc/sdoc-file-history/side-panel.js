@@ -77,13 +77,25 @@ class SidePanel extends Component {
 
   renameHistoryVersion = (objID, newName) => {
     seafileAPI.renameSdocHistory(docUuid, objID, newName).then((res) => {
-      this.setState({
-        historyGroups: this.state.historyGroups.map(item => {
-          if (item.obj_id == objID) {
-            item.name = newName;
+      let newHistoryGroups = this.state.historyGroups.slice(0);
+      for (let i = 0; i < newHistoryGroups.length; i++) {
+        const month = newHistoryGroups[i];
+        if (Array.isArray(month.children)) {
+          for (let j = 0; j < month.children.length; j++) {
+            const day = month.children[j];
+            if (Array.isArray(day.children)) {
+              for (let k = 0; k < day.children.length; k++) {
+                const version = day.children[k];
+                if (version.obj_id == objID) {
+                  version.name = newName;
+                }
+              }
+            }
           }
-          return item;
-        })
+        }
+      }
+      this.setState({
+        historyGroups: newHistoryGroups
       });
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);
