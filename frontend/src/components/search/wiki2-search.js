@@ -150,14 +150,14 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   return (
     <>
       <div className="wiki2-search" onClick={() => setIsModalOpen(true)}>
-        <i className="sf3-font sf3-font-search"></i>
+        <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
         <span>{gettext('Search')}</span>
       </div>
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
           <ModalBody>
             <div className="wiki2-search-input mb-4 position-relative">
-              <i className="sf3-font sf3-font-search"></i>
+              <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
               <Input
                 type="text"
                 className="form-control search-input"

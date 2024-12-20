@@ -3,7 +3,7 @@ import ProtoTypes from 'prop-types';
 
 const CustomIcon = ({ icon }) => {
   return (
-    <span className='nav-item-icon nav-item-icon-disable'>{icon}</span>
+    <span className='nav-item-icon nav-item-icon-disable' aria-hidden="true">{icon}</span>
   );
 };
 

@@ -7,8 +7,8 @@ import '../css/nav-item-icon.css';
 
 function NavItemIcon({ symbol, className, disable, onClick }) {
   return (
-    <div onClick={onClick} className={classNames('nav-item-icon', { 'nav-item-icon-disable': disable })}>
-      <Icon symbol={symbol} className={className} />
+    <div onClick={onClick} className={classNames('nav-item-icon', { 'nav-item-icon-disable': disable })} role="button">
+      <Icon symbol={symbol} className={className} aria-hidden="true" />
     </div>
   );
 }
