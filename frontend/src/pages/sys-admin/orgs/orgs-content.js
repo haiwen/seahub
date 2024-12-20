@@ -52,11 +52,12 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="20%">{gettext('Name')}</th>
-                <th width="20%">{gettext('Creator')}</th>
-                <th width="20%">{gettext('Role')}</th>
+                <th width="15%">{gettext('Name')}</th>
+                <th width="15%">{gettext('Creator')}</th>
+                <th width="15%">{gettext('Role')}</th>
                 <th width="15%">{gettext('Space Used')}</th>
                 <th width="20%">{gettext('Created At')}</th>
+                <th width="20%">{gettext('Last Access')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -200,6 +201,10 @@ class Item extends Component {
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
           <td>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
+          {item.last_activity_time ?
+            <td>{dayjs(item.last_activity_time).format('YYYY-MM-DD HH:mm:ss')}</td> :
+            <td>{'--'}</td>
+          }
           <td>
             <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
