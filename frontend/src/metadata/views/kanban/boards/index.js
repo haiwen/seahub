@@ -200,6 +200,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     const path = getParentDirFromRecord(record);
     const isDir = checkIsDir(record);
     updateCurrentDirent({
+      id: recordId,
       type: isDir ? 'dir' : 'file',
       mtime: '',
       name,
@@ -244,8 +245,14 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   }, [deleteRecords, updateCurrentDirent]);
 
   const onRename = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback }) => {
-    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback });
-  }, [modifyRecord]);
+    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData, {
+      success_callback: (operation) => {
+        success_callback && success_callback(operation);
+        const record = getRowById(metadata, rowId);
+        handelUpdateCurrentDirent(record);
+      }
+    });
+  }, [metadata, modifyRecord, handelUpdateCurrentDirent]);
 
   useEffect(() => {
     if (!isDirentDetailShow) {

@@ -12,31 +12,31 @@ class ObjectUtils {
     return ['Object', 'Array'].includes(this.getDataType(data));
   }
 
-  static isObjectChanged(source, comparison) {
+  static isObjectChanged(source, comparison, notIncludeKeys = []) {
     if (!this.iterable(source)) {
       throw new Error(`source should be a Object or Array , but got ${this.getDataType(source)}`);
     }
     if (this.getDataType(source) !== this.getDataType(comparison)) {
       return true;
     }
-    const sourceKeys = Object.keys(source);
-    const comparisonKeys = Object.keys({ ...source, ...comparison });
+    const sourceKeys = Object.keys(source).filter(key => !notIncludeKeys.includes(key));
+    const comparisonKeys = Object.keys({ ...source, ...comparison }).filter(key => !notIncludeKeys.includes(key));
     if (sourceKeys.length !== comparisonKeys.length) {
       return true;
     }
     return comparisonKeys.some(key => {
       if (this.iterable(source[key])) {
-        return this.isObjectChanged(source[key], comparison[key]);
+        return this.isObjectChanged(source[key], comparison[key], notIncludeKeys);
       } else {
         return source[key] !== comparison[key];
       }
     });
   }
 
-  static isSameObject(source, comparison) {
+  static isSameObject(source, comparison, notIncludeKeys = []) {
     if (!source && !comparison) return true;
     if (!source || !comparison) return false;
-    return !this.isObjectChanged(source, comparison);
+    return !this.isObjectChanged(source, comparison, notIncludeKeys);
   }
 
   static isEmpty = (target) => {

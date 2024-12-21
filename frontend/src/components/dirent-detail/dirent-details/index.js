@@ -65,7 +65,7 @@ class DirentDetails extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { dirent, path, repoID, currentRepoInfo, repoTags, fileTags } = this.props;
     if (!ObjectUtils.isSameObject(currentRepoInfo, nextProps.currentRepoInfo) ||
-        !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
+        !ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name']) ||
         JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
         JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
         path !== nextProps.path ||
@@ -74,6 +74,8 @@ class DirentDetails extends React.Component {
       this.setState({ dirent: null }, () => {
         this.loadDetail(nextProps.repoID, nextProps.dirent, nextProps.path);
       });
+    } else if (nextProps.dirent && ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name'])) {
+      this.setState({ dirent: nextProps.dirent });
     }
   }
 

@@ -59,6 +59,19 @@ class Dirent {
     return this.type !== 'file';
   }
 
+  toJson() {
+    return {
+      id: this.id,
+      name: this.name,
+      mtime: this.mtime,
+      type: this.type,
+      size: this.size,
+      modifier_name: this.modifier_name,
+      modifier_email: this.modifier_email,
+      modifier_contact_email: this.modifier_contact_email,
+    };
+  }
+
 }
 
 export default Dirent;
