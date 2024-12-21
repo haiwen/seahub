@@ -6,6 +6,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import Icon from '../icon';
 
 import '../../css/commit-details.css';
 
@@ -45,10 +46,13 @@ class CommitDetails extends React.Component {
   render() {
     const { toggleDialog, commitTime } = this.props;
     return (
-      <Modal isOpen={true} centered={true} toggle={toggleDialog}>
+      <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</ModalHeader>
         <ModalBody>
-          <p className="small">{dayjs(commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+          <p className="repo-commit-time mb-6 d-flex align-items-center">
+            <Icon symbol="time" className="mr-1" />
+            {dayjs(commitTime).format('YYYY-MM-DD HH:mm:ss')}
+          </p>
           <Content data={this.state} />
         </ModalBody>
       </Modal>
@@ -87,11 +91,11 @@ class Content extends React.Component {
           }
           return (
             <React.Fragment key={index}>
-              <h6>{item.title}</h6>
-              <ul>
+              <h6 className="mt-4">{item.title}</h6>
+              <ul className="list-unstyled">
                 {
                   data[item.type].map((item, index) => {
-                    return <li key={index} dangerouslySetInnerHTML={{ __html: item }} className="commit-detail-item text-truncate"></li>;
+                    return <li key={index} dangerouslySetInnerHTML={{ __html: item }} className="text-truncate"></li>;
                   })
                 }
               </ul>

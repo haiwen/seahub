@@ -1,3 +1,9 @@
-.commit-detail-item {
-  list-style-type: none;
+.repo-commit-time {
+  font-size: .875rem;
+}
+
+.repo-commit-time .seafile-multicolor-icon-time {
+  width: 1rem;
+  height: 1rem;
+  color: #999;
 }

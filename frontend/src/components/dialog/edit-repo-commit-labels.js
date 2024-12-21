@@ -57,7 +57,7 @@ class UpdateRepoCommitLabels extends React.Component {
   render() {
     const { formErrorMsg } = this.state;
     return (
-      <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{gettext('Edit labels')}</ModalHeader>
         <ModalBody>
           <React.Fragment>
