@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { siteRoot, gettext, isPro } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import Paginator from '../../../components/paginator';
@@ -224,6 +224,13 @@ class Item extends Component {
       `${siteRoot}sys/groups/${item.id}/libraries/` :
       `${siteRoot}sys/departments/${item.id}/`;
 
+    let operations = [];
+    if (isPro) {
+      operations = ['Delete', 'Transfer', 'Change'];
+    } else {
+      operations = ['Delete', 'Transfer'];
+    }
+
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
@@ -240,7 +247,7 @@ class Item extends Component {
           <td>
             {(isOpIconShown && item.owner != 'system admin') &&
             <OpMenu
-              operations={['Delete', 'Transfer', 'Change']}
+              operations={operations}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}

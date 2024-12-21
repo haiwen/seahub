@@ -25,6 +25,7 @@ from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.permissions import IsProVersion
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.utils.ccnet_db import CcnetDB
 
@@ -404,7 +405,7 @@ class AdminDepartments(APIView):
 class AdminGroupToDeptView(APIView):
     """group to department"""
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request, group_id):
