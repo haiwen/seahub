@@ -145,6 +145,14 @@ PREVIEW_FILEEXT = {
     SEADOC: ('sdoc',),
 }
 
+def get_non_sdoc_file_exts():
+    exts = []
+    for filetype in PREVIEW_FILEEXT.keys():
+        if filetype in [IMAGE, SEADOC]:
+            continue
+        exts.extend(list(PREVIEW_FILEEXT.get(filetype, [])))
+    return exts
+
 def gen_fileext_type_map():
     """
     Generate previewed file extension and file type relation map.
