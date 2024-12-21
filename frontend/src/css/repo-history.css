@@ -39,3 +39,24 @@ body {
 .go-back .sf3-font-down {
   font-size: 1.75rem !important;
 }
+
+/* for the dialog */
+.repo-snapshot-tip {
+  font-size: .875rem;
+  color: #666;
+}
+
+#repo-history-dialog.modal-dialog {
+  max-height: calc(100% - 3.5rem);
+  overflow: hidden;
+  height: calc(100% - 3.5rem);
+}
+
+#repo-history-dialog .modal-content {
+  max-height: 100%;
+  overflow: hidden;
+}
+
+#repo-history-dialog .modal-body {
+  overflow: auto;
+}

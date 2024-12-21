@@ -13,10 +13,11 @@ const propTypes = {
   gotoNextPage: PropTypes.func.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
   resetPerPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired
+  curPerPage: PropTypes.number.isRequired,
+  noURLUpdate: PropTypes.bool
 };
 
-const PAGES = [25, 50, 100];
+const PER_PAGES = [25, 50, 100];
 
 class Paginator extends Component {
 
@@ -45,6 +46,10 @@ class Paginator extends Component {
   };
 
   updateURL = (page, perPage) => {
+    const { noURLUpdate = false } = this.props;
+    if (noURLUpdate) {
+      return;
+    }
     let url = new URL(location.href);
     let searchParams = new URLSearchParams(url.search);
     searchParams.set('page', page);
@@ -106,7 +111,7 @@ class Paginator extends Component {
             <span className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
           </DropdownToggle>
           <DropdownMenu>
-            {PAGES.map(perPage => {
+            {PER_PAGES.map(perPage => {
               return this.renderDropdownItem(curPerPage, perPage);
             })}
           </DropdownMenu>
