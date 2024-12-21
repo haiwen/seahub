@@ -15,7 +15,7 @@
 
 .history-header .title {
   font-size: 1.25rem;
-  line-height: 1rem;
+  line-height: 1.25rem;
 }
 
 .history-header .title .go-back {
@@ -24,7 +24,7 @@
 }
 
 .history-header .title .go-back:hover {
-  color:#ff9933;
+  color: #ff9933;
   text-decoration: none;
 }
 
@@ -42,6 +42,14 @@
   background-color: #fafaf9;
   padding: 20px 40px;
   display: block;
+}
+
+.content-viewer .sf-slate-viewer-scroll-container .sf-slate-article-content {
+  min-height: 100%;
+}
+
+.content-viewer .sf-slate-viewer-scroll-container .sf-slate-viewer-article-container {
+  width: 100%;
 }
 
 .content-viewer .sf-slate-viewer-article-container .article {
