@@ -13,6 +13,13 @@ import UpdateRepoCommitLabels from '../../components/dialog/edit-repo-commit-lab
 
 import '../../css/repo-history.css';
 
+const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
+  toggleDialog: PropTypes.func.isRequired
+};
+
 class RepoHistory extends React.Component {
 
   constructor(props) {
@@ -301,5 +308,7 @@ class Item extends React.Component {
 Item.propTypes = {
   item: PropTypes.object.isRequired,
 };
+
+RepoHistory.propTypes = propTypes;
 
 export default RepoHistory;
