@@ -23,6 +23,7 @@ const TagsEditor = forwardRef(({
   editorPosition = { left: 0, top: 0 },
   onPressTab,
   updateFileTags,
+  modifyColumnData,
 }, ref) => {
   const { tagsData, addTag, context } = useTags();
 
@@ -104,12 +105,17 @@ const TagsEditor = forwardRef(({
         const newValue = [...value, ...tags];
         updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
+        const options = tagsData.rows.map(tag => ({
+          row_id: getTagId(tag),
+          display_value: getTagName(tag),
+        })) || [];
+        modifyColumnData(column.key, { options }, { options: column.data.options || [] });
       },
       fail_callback: () => {
 
       },
     });
-  }, [value, searchValue, record, addTag, updateFileTags]);
+  }, [value, searchValue, record, addTag, updateFileTags, modifyColumnData, column, tagsData]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
