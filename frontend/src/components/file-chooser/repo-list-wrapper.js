@@ -12,7 +12,7 @@ const RepoListWrapper = (props) => {
   const {
     mode, isShowFile, fileSuffixes, currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
-    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName, initToShowChildren
+    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, newFolderName, initToShowChildren
   } = props;
 
   const onScroll = (event) => {
@@ -101,7 +101,6 @@ const RepoListWrapper = (props) => {
               selectedItemInfo={selectedItemInfo}
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
-              selectedSearchedRepo={selectedSearchedRepo}
               newFolderName={newFolderName}
             />
           </div>
@@ -139,7 +138,6 @@ const RepoListWrapper = (props) => {
               selectedItemInfo={selectedItemInfo}
               onRepoItemClick={props.handleClickRepo}
               onDirentItemClick={props.handleClickDirent}
-              selectedSearchedRepo={selectedSearchedRepo}
               newFolderName={newFolderName}
             />
           </div>
@@ -183,7 +181,6 @@ RepoListWrapper.propTypes = {
   searchResults: PropTypes.array,
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
-  selectedSearchedRepo: PropTypes.object,
   newFolderName: PropTypes.string,
   initToShowChildren: PropTypes.bool,
 };

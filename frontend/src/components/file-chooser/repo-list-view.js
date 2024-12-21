@@ -15,7 +15,6 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   currentPath: PropTypes.string,
-  selectedSearchedRepo: PropTypes.object,
   newFolderName: PropTypes.string,
 };
 
@@ -34,15 +33,10 @@ const defaultProps = {
 class RepoListView extends React.Component {
 
   render() {
-    let { currentRepoInfo, currentPath, repoList, selectedSearchedRepo, initToShowChildren } = this.props;
+    let { currentRepoInfo, currentPath, repoList, initToShowChildren } = this.props;
     if (currentRepoInfo) {
       repoList = [];
       repoList.push(currentRepoInfo);
-    }
-
-    if (selectedSearchedRepo) {
-      repoList = [];
-      repoList.push(selectedSearchedRepo);
     }
 
     return (

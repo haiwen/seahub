@@ -124,7 +124,7 @@ class SelectDirentBody extends React.Component {
   };
 
   render() {
-    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo, selectedSearchedItem } = this.props;
+    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedItem } = this.props;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -171,7 +171,6 @@ class SelectDirentBody extends React.Component {
               searchResults={searchResults}
               onSearchedItemClick={this.props.onSearchedItemClick}
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
-              selectedSearchedRepo={selectedSearchedRepo}
               newFolderName={this.newFolderName}
               initToShowChildren={this.props.initToShowChildren}
             />
@@ -228,7 +227,6 @@ SelectDirentBody.propTypes = {
   searchResults: PropTypes.array,
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
-  selectedSearchedRepo: PropTypes.object,
   onSelectSearchedRepo: PropTypes.func,
   onAddFolder: PropTypes.func,
   initToShowChildren: PropTypes.bool,

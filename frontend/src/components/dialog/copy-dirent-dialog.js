@@ -34,7 +34,6 @@ class CopyDirent extends React.Component {
       selectedRepo: { repo_id: this.props.repoID },
       repoList: [],
       selectedPath: this.props.path,
-      selectedSearchedRepo: null,
       selectedSearchedItem: { repoID: '', filePath: '' },
       searchStatus: '',
       searchResults: [],
@@ -53,7 +52,10 @@ class CopyDirent extends React.Component {
     try {
       const res = await seafileAPI.getRepoInfo(this.props.repoID);
       const repo = new RepoInfo(res.data);
-      this.setState({ currentRepo: repo });
+      this.setState({
+        currentRepo: repo,
+        selectedRepo: repo,
+      });
       await this.fetchRepoList();
     } catch (error) {
       const errMessage = Utils.getErrorMsg(error);
@@ -74,11 +76,7 @@ class CopyDirent extends React.Component {
         }
       }
       const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
-      const selectedRepo = sortedRepoList.find((repo) => repo.repo_id === this.props.repoID);
-      this.setState({
-        repoList: sortedRepoList,
-        repo: selectedRepo,
-      });
+      this.setState({ repoList: sortedRepoList });
     } catch (error) {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -163,10 +161,6 @@ class CopyDirent extends React.Component {
     this.setState({ selectedRepo: repo });
   };
 
-  selectSearchedRepo = (repo) => {
-    this.setState({ selectedSearchedRepo: repo });
-  };
-
   setSelectedPath = (selectedPath) => {
     this.setState({ selectedPath });
   };
@@ -186,29 +180,24 @@ class CopyDirent extends React.Component {
       this.lastMode = mode;
     }
 
-    const isShowChildren = mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY || mode === MODE_TYPE_MAP.SEARCH_RESULTS;
-    this.setState({
+    let newState = {
       mode,
-      initToShowChildren: isShowChildren,
-    });
+      initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY || mode === MODE_TYPE_MAP.SEARCH_RESULTS,
+      showSearchBar: mode === MODE_TYPE_MAP.SEARCH_RESULTS,
+      selectedSearchedItem: { repoID: '', filePath: '' },
+    };
 
-    if (this.state.mode === MODE_TYPE_MAP.SEARCH_RESULTS) {
-      this.setState({
-        selectedSearchedRepo: null,
-        searchResults: [],
-        showSearchBar: false,
-      });
+    if (mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
+      newState.searchResults = [];
     }
 
-    if (this.state.selectedSearchedRepo && mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
-      this.setState({
-        selectedSearchedRepo: null,
-        searchResults: [],
-        showSearchBar: false,
-      });
+    if (mode === MODE_TYPE_MAP.SEARCH_RESULTS && this.state.searchResults.length > 0) {
+      const firstResult = this.state.searchResults[0];
+      newState.selectedRepo = new RepoInfo(firstResult);
+      newState.selectedPath = firstResult.path;
     }
 
-    this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+    this.setState(newState);
     this.clearErrMessage();
   };
 
@@ -217,11 +206,14 @@ class CopyDirent extends React.Component {
   };
 
   onUpdateSearchResults = (results) => {
-    this.setState({
-      searchResults: results,
-      selectedRepo: results.length > 0 ? new RepoInfo(results[0]) : null,
-      selectedPath: results.length > 0 ? results[0].path : '',
-    });
+    if (this.state.mode === MODE_TYPE_MAP.SEARCH_RESULTS && results.length > 0) {
+      const firstResult = results[0];
+      this.setState({
+        selectedRepo: new RepoInfo(firstResult),
+        selectedPath: firstResult.path
+      });
+    }
+    this.setState({ searchResults: results });
   };
 
   onOpenSearchBar = () => {
@@ -235,7 +227,6 @@ class CopyDirent extends React.Component {
       mode,
       searchStatus: '',
       searchResults: [],
-      selectedSearchedRepo: null,
       showSearchBar: false,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
@@ -260,7 +251,6 @@ class CopyDirent extends React.Component {
       this.setState({
         mode,
         selectedRepo: repoInfo,
-        selectedSearchedRepo: repoInfo,
         selectedPath: path,
         selectedSearchedItem: { repoID: item.repo_id, filePath: path },
         showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
@@ -297,7 +287,7 @@ class CopyDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
-    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo, errMessage } = this.state;
+    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, errMessage } = this.state;
 
     const copiedDirent = dirent || selectedDirentList[0];
     const { permission } = copiedDirent;
@@ -354,7 +344,6 @@ class CopyDirent extends React.Component {
           onSelectedSearchedItem={this.selectSearchedItem}
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
-          selectedSearchedRepo={selectedSearchedRepo}
           onSelectSearchedRepo={this.selectSearchedRepo}
           onAddFolder={this.props.onAddFolder}
           initToShowChildren={this.state.initToShowChildren}
