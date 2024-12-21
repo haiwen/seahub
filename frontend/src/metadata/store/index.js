@@ -394,11 +394,13 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifyLocalRecord(row_id, updates) {
+  modifyLocalRecord({ parent_dir, file_name, record_id }, updates) {
     const type = OPERATION_TYPE.MODIFY_LOCAL_RECORD;
     const operation = this.createOperation({
       type,
-      row_id,
+      row_id: record_id,
+      parent_dir,
+      file_name,
       repo_id: this.repoId,
       updates
     });

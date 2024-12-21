@@ -86,8 +86,8 @@ export const MetadataViewProvider = ({
     storeRef.current.modifySettings(settings);
   }, [storeRef]);
 
-  const updateLocalRecord = useCallback((recordId, update) => {
-    storeRef.current.modifyLocalRecord(recordId, update);
+  const updateLocalRecord = useCallback(({ recordId, parentDir, fileName }, update) => {
+    storeRef.current.modifyLocalRecord({ record_id: recordId, parent_dir: parentDir, file_name: fileName }, update);
   }, [storeRef]);
 
   const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {

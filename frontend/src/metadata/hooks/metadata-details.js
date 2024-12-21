@@ -66,7 +66,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     metadataAPI.modifyRecord(repoID, { recordId }, update).then(res => {
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, recordId, update);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -111,7 +111,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const update = { [PRIVATE_COLUMN_KEY.TAGS]: newValue };
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, record_id, update);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record_id }, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
