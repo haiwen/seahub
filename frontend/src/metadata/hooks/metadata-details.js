@@ -12,6 +12,7 @@ import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColu
 } from '../utils/cell';
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
+import ObjectUtils from '../utils/object-utils';
 
 const MetadataDetailsContext = React.createContext(null);
 
@@ -26,6 +27,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   const canModifyDetails = useMemo(() => repoInfo.is_admin, [repoInfo]);
 
   const allColumnsRef = useRef([]);
+  const direntRef = useRef(null);
 
   const columns = useMemo(() => {
     const orderAndHiddenColumns = detailsSettings?.columns || [];
@@ -142,13 +144,18 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   }, [columns, saveColumns]);
 
   useEffect(() => {
-    setLoading(true);
     if (!dirent || !direntDetail || !enableMetadata || SYSTEM_FOLDERS.find(folderPath => path.startsWith(folderPath))) {
+      setLoading(true);
+      direntRef.current = null;
       setRecord(null);
       setOriginColumns([]);
       setLoading(false);
       return;
     }
+    if (ObjectUtils.isSameObject(direntRef.current, dirent, ['name'])) return;
+
+    setLoading(true);
+    direntRef.current = dirent;
 
     const dirName = Utils.getDirName(path);
     const fileName = Utils.getFileName(path);

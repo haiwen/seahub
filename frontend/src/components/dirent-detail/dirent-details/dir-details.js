@@ -26,10 +26,6 @@ const DirDetails = ({ direntDetail }) => {
 };
 
 DirDetails.propTypes = {
-  repoID: PropTypes.string,
-  repoInfo: PropTypes.object,
-  dirent: PropTypes.object,
-  path: PropTypes.string,
   direntDetail: PropTypes.object,
 };
 

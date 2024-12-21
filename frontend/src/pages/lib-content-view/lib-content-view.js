@@ -2202,6 +2202,11 @@ class LibContentView extends React.Component {
       }
     }
 
+    let currentDirent = this.state.currentDirent;
+    if (currentDirent instanceof Dirent) {
+      currentDirent = currentDirent.toJson();
+    }
+
     return (
       <MetadataStatusProvider repoID={repoID} currentRepoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
@@ -2382,8 +2387,8 @@ class LibContentView extends React.Component {
                       <Detail
                         path={this.state.path}
                         repoID={this.props.repoID}
-                        currentRepoInfo={this.state.currentRepoInfo}
-                        dirent={this.state.currentDirent}
+                        currentRepoInfo={{ ...this.state.currentRepoInfo }}
+                        dirent={currentDirent}
                         repoTags={this.state.repoTags}
                         fileTags={this.state.isViewFile ? this.state.fileTags : []}
                         onFileTagChanged={this.onFileTagChanged}
