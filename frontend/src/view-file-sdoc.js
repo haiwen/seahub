@@ -8,12 +8,13 @@ import SdocEditor from './pages/sdoc/sdoc-editor';
 import { MetadataStatusProvider } from './hooks';
 import { CollaboratorsProvider } from './metadata';
 import { TagsProvider } from './tag/hooks';
+import { SimpleViewer } from '@seafile/sdoc-editor';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, repoEncrypted, parentDir, filePerm,
-  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
+  docPath, docName, docUuid, docPerm, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
   originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin, isRepoAdmin
 } = window.app.pageOptions;
@@ -61,7 +62,8 @@ ReactDom.render(
       <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
         <CollaboratorsProvider repoID={repoID}>
           <TagsProvider repoID={repoID} repoInfo={repoInfo}>
-            <SdocEditor />
+            {filePerm === 'rw' && <SdocEditor />}
+            {filePerm !== 'rw' && <SimpleViewer />}
           </TagsProvider>
         </CollaboratorsProvider>
       </MetadataStatusProvider>
