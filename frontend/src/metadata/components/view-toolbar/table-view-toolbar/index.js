@@ -4,7 +4,7 @@ import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../..
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 
 const TableViewToolbar = ({
-  readOnly, view, collaborators,
+  readOnly, view, collaborators, tags,
   modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns, modifyColumnOrder
 }) => {
   const viewType = useMemo(() => view.type, [view]);
@@ -33,6 +33,7 @@ const TableViewToolbar = ({
           modifyFilters={modifyFilters}
           collaborators={collaborators}
           viewType={viewType}
+          tags={tags}
         />
         <SortSetter
           isNeedSubmit={true}
@@ -77,6 +78,7 @@ TableViewToolbar.propTypes = {
   modifyGroupbys: PropTypes.func,
   modifyHiddenColumns: PropTypes.func,
   modifyColumnOrder: PropTypes.func,
+  tags: PropTypes.array,
 };
 
 export default TableViewToolbar;

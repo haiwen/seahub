@@ -275,6 +275,13 @@ class ValidateFilter {
         const options = getColumnOptions(filterColumn);
         return this.isValidSelectedOptions(term, options);
       }
+      case CellType.TAGS: {
+        if (!this.isValidTermType(term, TERM_TYPE_MAP.ARRAY)) {
+          return false;
+        }
+
+        return true;
+      }
       default: {
         return false;
       }

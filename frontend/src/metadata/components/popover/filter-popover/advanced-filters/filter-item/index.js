@@ -16,6 +16,8 @@ import {
   filterTermModifierIsWithin,
 } from '../../../../../constants';
 import FilterItemUtils from '../filter-item-utils';
+import TagsFilter from './tags-filter';
+import { getTagColor, getTagId, getTagName } from '../../../../../../tag/utils';
 
 import './index.css';
 
@@ -505,6 +507,15 @@ class FilterItem extends React.Component {
             {rateList}
           </div>
         );
+      }
+      case CellType.TAGS: {
+        const options = (window.sfTagsDataStore.data?.rows || []).map(tag => ({
+          id: getTagId(tag),
+          name: getTagName(tag),
+          color: getTagColor(tag),
+        }));
+
+        return <TagsFilter options={options} filterTerm={filter_term} readOnly={readOnly} onSelectMultiple={this.onSelectMultiple} />;
       }
       default: {
         return null;
