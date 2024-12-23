@@ -182,6 +182,7 @@ class Content extends React.Component {
           hasNextPage={hasNextPage}
           curPerPage={curPerPage}
           resetPerPage={this.props.resetPerPage}
+          noURLUpdate={true}
         />
       </React.Fragment>
     );
