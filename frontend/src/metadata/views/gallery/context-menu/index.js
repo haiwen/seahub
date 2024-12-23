@@ -16,15 +16,17 @@ const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
   DUPLICATE: 'duplicate',
+  REMOVE: 'remove',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
+  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
@@ -34,8 +36,11 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     if (canDuplicateRow && selectedImages.length === 1) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
+    if (canRemovePhotoFromPeople) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from this group' });
+    }
     return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, selectedImages]);
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -77,19 +82,22 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {
-      case 'download':
+      case CONTEXT_MENU_KEY.DOWNLOAD:
         handleDownload();
         break;
-      case 'delete':
+      case CONTEXT_MENU_KEY.DELETE:
         onDelete(selectedImages);
         break;
       case CONTEXT_MENU_KEY.DUPLICATE:
         toggleCopyDialog();
         break;
+      case CONTEXT_MENU_KEY.REMOVE:
+        onRemoveImage(selectedImages);
+        break;
       default:
         break;
     }
-  }, [selectedImages, handleDownload, onDelete, toggleCopyDialog]);
+  }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
   const path = selectedImages[0]?.path;

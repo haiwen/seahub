@@ -15,7 +15,7 @@ from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
-    extract_file_details, get_someone_similar_faces, remove_faces_table, FACES_SAVE_PATH, \
+    extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
     remove_ocr_column, get_update_record
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
@@ -300,7 +300,7 @@ class MetadataRecords(APIView):
                 order_by: list with string, like ['`parent_dir` ASC']
         """
 
-        #args check
+        # args check
         view_id = request.GET.get('view_id', '')
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 1000)
@@ -446,6 +446,7 @@ class MetadataRecords(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
 
 class MetadataRecord(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -636,7 +637,6 @@ class MetadataColumns(APIView):
             error_msg = 'column_name duplicated.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-
         if column_key and column_key.startswith('_') and column_key in column_keys:
             error_msg = 'predefined column duplicated'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -655,7 +655,6 @@ class MetadataColumns(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'column': column})
-
 
     def put(self, request, repo_id):
         column_key = request.data.get('column_key', '')
@@ -707,7 +706,6 @@ class MetadataColumns(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'column': new_column})
-
 
     def delete(self, request, repo_id):
         column_key = request.data.get('column_key', '')
@@ -779,7 +777,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -826,7 +824,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -867,7 +865,7 @@ class MetadataFolders(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check metadata_views
-        metadata_views = RepoMetadataViews.objects.filter(repo_id = repo_id).first()
+        metadata_views = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
         if not metadata_views:
             error_msg = 'The metadata views does not exists.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -910,7 +908,6 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(metadata_views)
-
 
     def post(self, request, repo_id):
         #  Add a metadata view
@@ -978,7 +975,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         views = RepoMetadataViews.objects.filter(
-            repo_id = repo_id,
+            repo_id=repo_id,
         ).first()
         if not views:
             error_msg = 'The metadata views does not exists.'
@@ -1239,8 +1236,8 @@ class FacesRecords(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1255,21 +1252,7 @@ class FacesRecords(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import FACES_TABLE
-
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        faces_table_id = faces_table_id[0] if faces_table_id else None
-        if not faces_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
-
-        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.vector.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1278,36 +1261,25 @@ class FacesRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        faces_records = query_result.get('results')
+        faces_records = query_result.get('results', [])
         metadata_columns = query_result.get('metadata', [])
-        metadata_columns.append({
-            'key': '_is_someone',
-            'type': 'checkbox',
-            'name': '_is_someone',
-            'data': None,
-        })
 
-        if not faces_records:
-            return Response({
-                'metadata': metadata_columns,
-                'results': [],
-            })
-
-        if not query_result:
-            return Response({
-                'metadata': metadata_columns,
-                'results': [],
-            })
-
+        valid_faces_records = []
         for record in faces_records:
-            vector = record.get(FACES_TABLE.columns.vector.name, None)
-            record['_is_someone'] = bool(vector)
-            if FACES_TABLE.columns.vector.name in record:
-                del record[FACES_TABLE.columns.vector.name]
+            deleted_photo_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+            valid_photo_links = [item for item in record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_photo_ids]
+            if not valid_photo_links:
+                continue
+
+            valid_faces_records.append({
+                FACES_TABLE.columns.id.name: record.get(FACES_TABLE.columns.id.name),
+                FACES_TABLE.columns.name.name: record.get(FACES_TABLE.columns.name.name),
+                FACES_TABLE.columns.photo_links.name: valid_photo_links,
+            })
 
         return Response({
             'metadata': metadata_columns,
-            'results': faces_records,
+            'results': valid_faces_records,
         })
 
 
@@ -1320,8 +1292,8 @@ class FacesRecord(APIView):
         name = request.data.get('name')
         record_id = request.data.get('record_id')
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # resource check
@@ -1338,17 +1310,15 @@ class FacesRecord(APIView):
         from seafevents.repo_metadata.constants import FACES_TABLE
 
         try:
-            metadata = metadata_server_api.get_metadata()
+            faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        faces_table_id = faces_table_id[0] if faces_table_id else None
-        if not faces_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
+        if not faces_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
+        faces_table_id = faces_table['id']
 
         sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{record_id}"'
         try:
@@ -1401,8 +1371,8 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1417,20 +1387,7 @@ class PeoplePhotos(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        faces_table_id = [table['id'] for table in tables if table['name'] == FACES_TABLE.name]
-        faces_table_id = faces_table_id[0] if faces_table_id else None
-        if not faces_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'face recognition not be used')
-
-        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}" LIMIT {start}, {limit}'
+        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1465,16 +1422,18 @@ class PeoplePhotos(APIView):
 
         # Reduce the size of the response
         select_columns = f'`{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}`, `{METADATA_TABLE.columns.file_mtime.name}`'
-        capture_time_column = [column for column in columns if column.get('key') == PrivatePropertyKeys.CAPTURE_TIME]
-        capture_time_column_name = capture_time_column[0].get('name') if capture_time_column else ''
+        capture_time_column_name = next((column.get('name') for column in columns if column.get('key') == PrivatePropertyKeys.CAPTURE_TIME), None)
         if capture_time_column_name:
             select_columns = f'{select_columns}, `{capture_time_column_name}`'
 
         try:
-            record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, [])]
-            selected_ids = record_ids[start:limit]
-            selected_ids_str = ', '.join(["'%s'" % id for id in selected_ids])
-            sql = f'SELECT {select_columns} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({selected_ids_str}) {order_sql}'
+            deleted_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+            record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_record_ids]
+            if not record_ids:
+                return Response({'metadata': [], 'results': []})
+
+            record_ids_str = ', '.join(["'%s'" % id for id in record_ids])
+            sql = f'SELECT {select_columns} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({record_ids_str}) {order_sql} LIMIT {start}, {limit}'
             someone_photos_result = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)
@@ -1482,6 +1441,51 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(someone_photos_result)
+
+    def delete(self, request, repo_id, people_id):
+        record_ids = request.data.get('record_ids')
+
+        if not record_ids or not isinstance(record_ids, list):
+            error_msg = 'record_ids invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        from seafevents.repo_metadata.constants import FACES_TABLE
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        try:
+            faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not faces_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
+        faces_table_id = faces_table['id']
+
+        try:
+            metadata_server_api.insert_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
+                people_id: record_ids
+            })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 
 class FaceRecognitionManage(APIView):
@@ -1748,8 +1752,8 @@ class MetadataTags(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1764,21 +1768,7 @@ class MetadataTags(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.constants import TAGS_TABLE
 
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-
         sql = f'SELECT * FROM `{TAGS_TABLE.name}` ORDER BY `_ctime` LIMIT {start}, {limit}'
-
         try:
             query_result = metadata_server_api.query_rows(sql)
         except Exception as e:
@@ -1796,8 +1786,8 @@ class MetadataTags(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1813,17 +1803,15 @@ class MetadataTags(APIView):
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
-            metadata = metadata_server_api.get_metadata()
+            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+        if not tags_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+        tags_table_id = tags_table['id']
 
         exist_tags = []
         new_tags = []
@@ -1849,7 +1837,7 @@ class MetadataTags(APIView):
 
         tags = exist_tags
         if not new_tags:
-            return Response({ 'tags': tags })
+            return Response({'tags': tags})
 
         try:
             resp = metadata_server_api.insert_rows(tags_table_id, new_tags)
@@ -1870,7 +1858,7 @@ class MetadataTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({ 'tags': tags })
+        return Response({'tags': tags})
 
     def put(self, request, repo_id):
         tags_data = request.data.get('tags_data')
@@ -1879,8 +1867,8 @@ class MetadataTags(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1896,17 +1884,15 @@ class MetadataTags(APIView):
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
-            metadata = metadata_server_api.get_metadata()
+            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+        if not tags_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+        tags_table_id = tags_table['id']
 
         tag_id_to_tag = {}
         sql = f'SELECT `_id` FROM `{TAGS_TABLE.name}` WHERE '
@@ -1966,8 +1952,8 @@ class MetadataTags(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -1983,17 +1969,15 @@ class MetadataTags(APIView):
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
-            metadata = metadata_server_api.get_metadata()
+            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+        if not tags_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+        tags_table_id = tags_table['id']
 
         try:
             resp = metadata_server_api.delete_rows(tags_table_id, tag_ids)
@@ -2235,11 +2219,9 @@ class MetadataFileTags(APIView):
             error_msg = 'file_tags_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        tags = request.data.get('tags', [])
-
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -2251,59 +2233,19 @@ class MetadataFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
-
-        file_record_ids = []
-        file_tags_map = {}
-        for file_tags in file_tags_data:
-            record_id = file_tags.get('record_id', '')
-            tags = file_tags.get('tags', [])
-            if record_id:
-                file_record_ids.append(record_id)
-                file_tags_map[record_id] = tags
-
-        if not file_record_ids:
-            return Response({'success': [], 'fail': []})
-
-        file_record_ids_str = ', '.join(["'%s'" % id for id in file_record_ids])
-        current_result_sql = f'SELECT `{METADATA_TABLE.columns.tags.key}`, `{METADATA_TABLE.columns.id.key}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.key}` IN ({file_record_ids_str})'
-        try:
-            current_result_query = metadata_server_api.query_rows(current_result_sql)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         success_records = []
         failed_records = []
-        files_records = current_result_query.get('results', [])
-        if not files_records:
-            return api_error(status.HTTP_404_NOT_FOUND, 'files not found')
-
-        for file_record in files_records:
-            current_tags = file_record.get(METADATA_TABLE.columns.tags.key, [])
-            record_id = file_record.get(METADATA_TABLE.columns.id.key)
-            tags = file_tags_map[record_id]
-
+        for file_tags in file_tags_data:
+            record_id = file_tags.get('record_id', '')
+            tags = file_tags.get('tags', [])
+            if not record_id:
+                continue
             try:
-                if not current_tags:
-                    metadata_server_api.insert_link(repo_id, TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
-                else:
-                    metadata_server_api.update_link(repo_id, TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
+
+                metadata_server_api.update_link(TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
                 success_records.append(record_id)
             except Exception as e:
                 failed_records.append(record_id)
@@ -2318,8 +2260,8 @@ class MetadataTagFiles(APIView):
 
     def get(self, request, repo_id, tag_id):
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -2334,18 +2276,6 @@ class MetadataTagFiles(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
-        try:
-            metadata = metadata_server_api.get_metadata()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        tables = metadata.get('tables', [])
-        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
-        tags_table_id = tags_table_id[0] if tags_table_id else None
-        if not tags_table_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
 
         tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = "{tag_id}"'
         try:
@@ -2359,9 +2289,7 @@ class MetadataTagFiles(APIView):
         if not tag_files_records:
             return Response({'metadata': [], 'results': []})
 
-        tag_files_record = tag_files_records[0]
-        tag_files_record_ids = tag_files_record.get(TAGS_TABLE.columns.file_links.name , [])
-
+        tag_files_record_ids = tag_files_records[0].get(TAGS_TABLE.columns.file_links.name, [])
         if not tag_files_record_ids:
             return Response({'metadata': [], 'results': []})
 

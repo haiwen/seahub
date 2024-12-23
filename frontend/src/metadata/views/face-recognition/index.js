@@ -20,6 +20,11 @@ const FaceRecognition = () => {
     store.deletePeoplePhotos(peopleId, peoplePhotos);
   }, [store]);
 
+  const onRemovePeoplePhotos = useCallback((peopleId, peoplePhotos, { success_callback }) => {
+    //
+    store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
+  }, [store]);
+
   const openPeople = useCallback((people) => {
     peopleRef.current = people;
     setShowPeopleFaces(true);
@@ -37,7 +42,13 @@ const FaceRecognition = () => {
   return (
     <div className="sf-metadata-container">
       {showPeopleFaces ? (
-        <PeoplePhotos people={peopleRef.current} view={metadata.view} onClose={closePeople} onDeletePeoplePhotos={onDeletePeoplePhotos} />
+        <PeoplePhotos
+          people={peopleRef.current}
+          view={metadata.view}
+          onClose={closePeople}
+          onDeletePeoplePhotos={onDeletePeoplePhotos}
+          onRemovePeoplePhotos={onRemovePeoplePhotos}
+        />
       ) : (
         <Peoples peoples={peoples} onRename={onRename} onOpenPeople={openPeople} />
       )}

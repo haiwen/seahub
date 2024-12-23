@@ -15,7 +15,7 @@ import { PER_LOAD_NUMBER, EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID } from '../..
 import './index.css';
 import '../../gallery/index.css';
 
-const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
+const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeoplePhotos }) => {
   const [isLoading, setLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [metadata, setMetadata] = useState({ rows: [] });
@@ -53,7 +53,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
 
   }, [isLoadingMore, metadata, people, repoID]);
 
-  const deletedByIds = useCallback((ids) => {
+  const deletedByIds = useCallback((ids, needDeleteFromParent = true) => {
     if (!Array.isArray(ids) || ids.length === 0) return;
     const newMetadata = deepCopy(metadata);
     const idNeedDeletedMap = ids.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
@@ -70,7 +70,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
     if (newMetadata.rows.length === 0) {
       onClose && onClose();
     }
-    onDeletePeoplePhotos && onDeletePeoplePhotos(people._id, ids);
+    needDeleteFromParent && onDeletePeoplePhotos && onDeletePeoplePhotos(people._id, ids);
   }, [metadata, onClose, people, onDeletePeoplePhotos]);
 
   const handelDelete = useCallback((deletedImages, { success_callback } = {}) => {
@@ -101,6 +101,25 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
       toaster.danger(gettext('Failed to delete records'));
     });
   }, [deleteFilesCallback, repoID, deletedByIds]);
+
+  const handelRemove = useCallback((removedImages, callback) => {
+    if (!removedImages.length) return;
+    let recordIds = [];
+    removedImages.forEach((record) => {
+      const { id, parentDir, name } = record || {};
+      if (parentDir && name) {
+        recordIds.push(id);
+      }
+    });
+
+    onRemovePeoplePhotos(people._id, recordIds, {
+      success_callback: () => {
+        deletedByIds(recordIds, false);
+        toaster.success(gettext('Successfully remove'));
+        callback && callback();
+      }
+    });
+  }, [people, deletedByIds, onRemovePeoplePhotos]);
 
   const loadData = useCallback((view) => {
     setLoading(true);
@@ -161,7 +180,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos }) => {
         </div>
         <div className="sf-metadata-people-name">{people._name || gettext('Person image')}</div>
       </div>
-      <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} />
+      <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} onRemoveImage={handelRemove} />
     </div>
   );
 };

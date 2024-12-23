@@ -352,6 +352,14 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  removePeoplePhotos = (repoID, peopleId, recordIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/';
+    const params = {
+      record_ids: recordIds
+    };
+    return this.req.delete(url, { data: params });
+  };
+
   // ocr
   openOCR = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';
