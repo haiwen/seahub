@@ -255,15 +255,3 @@ class MetadataServerAPI:
         }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
-
-    def add_link_column(self, link_id, table_id, other_table_id, table_column, other_table_column):
-        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/link-columns'
-        data = {
-            'link_id': link_id,
-            'table_id': table_id,
-            'other_table_id': other_table_id,
-            'table_column': table_column,
-            'other_table_column': other_table_column
-        }
-        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
-        return parse_response(response)
