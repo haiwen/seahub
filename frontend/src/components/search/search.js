@@ -520,6 +520,17 @@ class Search extends Component {
     });
   }
 
+  onClearSearch = () => {
+    this.setState({
+      value: '',
+      inputValue: '',
+      isResultGotten: false,
+      resultItems: [],
+      highlightIndex: 0,
+      isSearchInputShow: false,
+    });
+  }
+
   renderSearchResult() {
     const { resultItems, width, showRecent, isResultGotten, isLoading } = this.state;
     if (!width || width === 'default') return null;
@@ -746,8 +757,8 @@ class Search extends Component {
                   <button
                     type="button"
                     className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
-                    onClick={this.onCloseHandler}
-                    aria-label={gettext('Close')}
+                    onClick={this.onClearSearch}
+                    aria-label={gettext('Clear search')}
                   ></button>
                 }
               </div>
@@ -785,8 +796,8 @@ class Search extends Component {
                     <button
                       type="button"
                       className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
-                      onClick={this.onCloseHandler}
-                      aria-label={gettext('Close')}
+                      onClick={this.onClearSearch}
+                      aria-label={gettext('Clear search')}
                     ></button>
                   }
                 </div>
