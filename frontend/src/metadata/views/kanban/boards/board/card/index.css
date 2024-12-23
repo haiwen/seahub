@@ -17,8 +17,13 @@
   border-color: #ff9800;
 }
 
-.sf-metadata-kanban-card.readonly {
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-kanban-card {
   cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-kanban-card:last-child {
+  margin-bottom: 0;
 }
 
 .sf-metadata-kanban-card:hover {

@@ -7,9 +7,18 @@
   margin-left: 8px;
 }
 
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-view-kanban-board:last-child {
+  padding-right: 8px;
+  width: 286px;
+}
+
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical {
   height: calc(100% - 40px);
   margin: 0 4px;
+}
+
+.sf-metadata-view-kanban-boards.readonly .smooth-dnd-container.vertical {
+  height: calc(100% - 36px) !important;
 }
 
 .sf-metadata-main .kanban-drag-card {

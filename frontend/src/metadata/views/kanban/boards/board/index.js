@@ -104,7 +104,6 @@ const Board = ({
               onOpenFile={onOpenFile}
               onSelectCard={onSelectCard}
               onContextMenu={(e) => onContextMenu(e, recordId)}
-              readonly={readonly}
             />
           );
           if (readonly) return CardElement;
