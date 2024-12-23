@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useCallback, useState, useMemo } from 're
 import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
+import { MetadataOperationsProvider } from './metadata-operation';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
-const EnableMetadataContext = React.createContext(null);
+const MetadataStatusContext = React.createContext(null);
 
 export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataView, children }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -101,7 +102,7 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
   }, [repoID, detailsSettings]);
 
   return (
-    <EnableMetadataContext.Provider
+    <MetadataStatusContext.Provider
       value={{
         enableMetadataManagement,
         enableMetadata,
@@ -117,15 +118,24 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
         updateEnableOCR,
       }}
     >
-      {!isLoading && children}
-    </EnableMetadataContext.Provider>
+      {!isLoading && (
+        <MetadataOperationsProvider
+          repoID={repoID}
+          enableMetadata={enableMetadata}
+          enableOCR={enableOCR}
+          repoInfo={currentRepoInfo}
+        >
+          {children}
+        </MetadataOperationsProvider>
+      )}
+    </MetadataStatusContext.Provider>
   );
 };
 
 export const useMetadataStatus = () => {
-  const context = useContext(EnableMetadataContext);
+  const context = useContext(MetadataStatusContext);
   if (!context) {
-    throw new Error('\'EnableMetadataContext\' is null');
+    throw new Error('\'MetadataStatusContext\' is null');
   }
   return context;
 };

@@ -5,7 +5,7 @@ import { OPERATION_TYPE } from './constants';
 import Column from '../../model/column';
 import View from '../../model/metadata/view';
 import { getColumnOriginName } from '../../utils/column';
-import { getRecordIdFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
 dayjs.extend(utc);
 
@@ -106,14 +106,16 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.MODIFY_LOCAL_RECORD: {
-      const { row_id, updates } = operation;
+      const { row_id, parent_dir = '', file_name = '', updates } = operation;
       const { rows } = data;
       const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
       const modifier = window.sfMetadataContext.getUsername();
       let updatedRows = [...rows];
       rows.forEach((row, index) => {
-        const { _id: rowId } = row;
-        if (rowId === row_id && updates) {
+        const rowId = getRecordIdFromRecord(row);
+        const parentDir = getParentDirFromRecord(row);
+        const fileName = getFileNameFromRecord(row);
+        if ((rowId === row_id || (parentDir === parent_dir && fileName === file_name)) && updates) {
           const updatedRow = Object.assign({}, row, updates, {
             '_mtime': modifyTime,
             '_last_modifier': modifier,

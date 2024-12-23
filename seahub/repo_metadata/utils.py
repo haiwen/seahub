@@ -4,9 +4,11 @@ import requests
 import json
 import random
 from urllib.parse import urljoin
+from datetime import datetime
 
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.views import check_folder_permission
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seaserv import seafile_api
 
@@ -293,3 +295,40 @@ def can_read_metadata(request, repo_id):
     if permission:
         return True
     return False
+
+
+def get_column_valid_value(column, value):
+    from seafevents.repo_metadata.constants import PropertyTypes
+    if value and column['type'] == PropertyTypes.DATE:
+        column_data = column.get('data', {})
+        format = column_data.get('format', 'YYYY-MM-DD')
+        saved_format = '%Y-%m-%d'
+        if 'HH:mm:ss' in format:
+            saved_format = '%Y-%m-%d %H:%M:%S'
+        elif 'HH:mm' in format:
+            saved_format = '%Y-%m-%d %H:%M'
+
+        datetime_obj = datetime.strptime(value, saved_format)
+        return datetime_to_isoformat_timestr(datetime_obj)
+
+    if column['type'] == PropertyTypes.SINGLE_SELECT and not value:
+        return None
+
+    return value
+
+
+def get_update_record(update={}, columns=[], unmodifiable_column_names=[]):
+    if not update:
+        return None
+
+    update_record = {}
+    for column_name, value in update.items():
+        if column_name not in unmodifiable_column_names:
+            try:
+                column = next(column for column in columns if column['name'] == column_name)
+                valid_value = get_column_valid_value(column, value)
+                update_record[column_name] = valid_value
+            except Exception as e:
+                pass
+
+    return update_record

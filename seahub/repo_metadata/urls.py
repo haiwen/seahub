@@ -1,5 +1,5 @@
 from django.urls import re_path
-from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
+from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecord, \
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataDetailsSettingsView, MetadataOCRManageView
@@ -7,7 +7,7 @@ from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataReco
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
     re_path(r'^records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
-    re_path(r'^record/$', MetadataRecordInfo.as_view(), name='api-v2.1-metadata-record-info'),
+    re_path(r'^record/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record-info'),
     re_path(r'^columns/$', MetadataColumns.as_view(), name='api-v2.1-metadata-columns'),
 
     # view

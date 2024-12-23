@@ -48,6 +48,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
   [OPERATION_TYPE.MOVE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path', 'update_data'],
   [OPERATION_TYPE.DUPLICATE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path'],
+  [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'parent_dir', 'file_name', 'updates'],
 
   [OPERATION_TYPE.MODIFY_FILTERS]: ['repo_id', 'view_id', 'filter_conjunction', 'filters', 'basic_filters'],
   [OPERATION_TYPE.MODIFY_SORTS]: ['repo_id', 'view_id', 'sorts'],
@@ -64,7 +65,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
-  [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'updates'],
+
   [OPERATION_TYPE.UPDATE_FILE_TAGS]: ['repo_id', 'file_tags_data'],
 };
 

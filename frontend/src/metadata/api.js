@@ -76,24 +76,6 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  getMetadataRecordInfo(repoID, parentDir, name) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
-    let params = {};
-    if (parentDir) {
-      params['parent_dir'] = parentDir;
-    }
-    if (name) {
-      params['name'] = name;
-    }
-    return this.req.get(url, { params: params });
-  }
-
-  modifyRecord = (repoID, recordID, update, objID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
-    const data = { records_data: [{ record_id: recordID, record: update, obj_id: objID }] };
-    return this.req.put(url, data);
-  };
-
   modifyRecords = (repoID, recordsData, is_copy_paste = false) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     let data = { records_data: recordsData };
@@ -102,6 +84,40 @@ class MetadataManagerAPI {
     }
     return this.req.put(url, data);
   };
+
+  getRecord(repoID, { recordId, parentDir, fileName }) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
+    let params = {};
+    if (recordId) {
+      params['record_id'] = recordId;
+    } else {
+      if (parentDir) {
+        params['parent_dir'] = parentDir;
+      }
+      if (fileName) {
+        params['file_name'] = fileName;
+      }
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  modifyRecord(repoID, { recordId, parentDir, fileName }, updateData) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
+    let data = {
+      'data': updateData
+    };
+    if (recordId) {
+      data['record_id'] = recordId;
+    } else {
+      if (parentDir) {
+        data['parent_dir'] = parentDir;
+      }
+      if (fileName) {
+        data['file_name'] = fileName;
+      }
+    }
+    return this.req.put(url, data);
+  }
 
   listUserInfo = (userIds) => {
     const url = this.server + '/api/v2.1/user-list/';
