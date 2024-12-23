@@ -21,7 +21,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY } from '../../constants';
 import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
@@ -53,11 +53,11 @@ class LibContentView extends React.Component {
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
     if (storedTreePanelState != undefined) {
-      isTreePanelShown = storedTreePanelState == 'true';
+      isTreePanelShown = storedTreePanelState === 'true';
     }
 
-    const storedDirentDetailShowState = localStorage.getItem('dirent_detail_show');
-    const isDirentDetailShow = storedDirentDetailShowState == 'true';
+    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
+    const isDirentDetailShow = storedDirentDetailShowState === 'true';
 
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
@@ -92,7 +92,7 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
-      isDirentDetailShow: isDirentDetailShow,
+      isDirentDetailShow,
       itemsShowLength: 100,
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
@@ -137,19 +137,22 @@ class LibContentView extends React.Component {
   };
 
   showDirentDetail = () => {
-    this.setState({ isDirentDetailShow: true });
-    localStorage.setItem('dirent_detail_show', 'true');
+    this.setState({ isDirentDetailShow: true }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, true);
+    });
   };
 
   toggleDirentDetail = () => {
     const newState = !this.state.isDirentDetailShow;
-    this.setState({ isDirentDetailShow: newState });
-    localStorage.setItem('dirent_detail_show', newState);
+    this.setState({ isDirentDetailShow: newState }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, newState);
+    });
   };
 
   closeDirentDetail = () => {
-    this.setState({ isDirentDetailShow: false });
-    localStorage.setItem('dirent_detail_show', 'false');
+    this.setState({ isDirentDetailShow: false }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, false);
+    });
   };
 
   componentDidMount() {
@@ -2384,7 +2387,7 @@ class LibContentView extends React.Component {
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>
                     }
-                    {this.state.isDirentDetailShow && (
+                    {!isCustomPermission && this.state.isDirentDetailShow && (
                       <Detail
                         path={this.state.path}
                         repoID={this.props.repoID}

@@ -35,23 +35,25 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!isShow) return null;
-
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <GalleryGroupBySetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
-        <GallerySliderSetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
-        <SortSetter
-          isNeedSubmit={true}
-          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
-          target="sf-metadata-sort-popover"
-          readOnly={readOnly}
-          sorts={view.sorts}
-          type={VIEW_TYPE.FACE_RECOGNITION}
-          columns={viewColumns}
-          modifySorts={modifySorts}
-        />
+        {isShow && (
+          <>
+            <GalleryGroupBySetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
+            <GallerySliderSetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
+            <SortSetter
+              isNeedSubmit={true}
+              wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
+              target="sf-metadata-sort-popover"
+              readOnly={readOnly}
+              sorts={view.sorts}
+              type={VIEW_TYPE.FACE_RECOGNITION}
+              columns={viewColumns}
+              modifySorts={modifySorts}
+            />
+          </>
+        )}
         {!isCustomPermission && (
           <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
             <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
