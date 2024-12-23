@@ -9,7 +9,7 @@ import { useTags } from '../../../../tag/hooks';
 import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell/core';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../utils/table';
-import { SELECT_OPTION_COLORS } from '../../../constants';
+import { PRIVATE_COLUMN_KEY, SELECT_OPTION_COLORS } from '../../../constants';
 import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 import DeleteTags from './delete-tags';
 
@@ -106,10 +106,10 @@ const TagsEditor = forwardRef(({
         updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
         const options = tagsData.rows.map(tag => ({
-          row_id: getTagId(tag),
-          display_value: getTagName(tag),
+          id: getTagId(tag),
+          name: getTagName(tag),
         })) || [];
-        modifyColumnData(column.key, { options }, { options: column.data.options || [] });
+        modifyColumnData(PRIVATE_COLUMN_KEY.TAGS, { options }, { options: column.data.options || [] });
       },
       fail_callback: () => {
 

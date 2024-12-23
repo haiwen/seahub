@@ -117,6 +117,10 @@ class Context {
     return this.api.deleteTagLinks(this.repoId, link_column_key, row_id_map);
   };
 
+  getTagStatus = () => {
+    return this.api.getTagsStatus(this.repoId);
+  };
+
 }
 
 export default Context;
