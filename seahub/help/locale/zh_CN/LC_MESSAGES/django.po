@@ -325,7 +325,7 @@ msgid ""
 "As noted above, department admin is a special role assigned by the system "
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
-msgstr "如上所述，部门管理员是由系统管理员分配给部门中某些成员的特殊角色。 部门管理员登录到自己的帐户后可以在部门中执行以下操作。"
+msgstr "如上所述，部门管理员是由系统管理员分配给部门中某些成员的特殊角色。 部门管理员登录到自己的账号后，可以在部门中执行以下操作。"
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
@@ -453,9 +453,9 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
-"你可以从 Seafile 官方网站下载 SeaDrive 2.0。 安装并登录Seafile帐户后，SeaDrive "
+"你可以从 Seafile 官方网站下载 SeaDrive 2.0。 安装并登录Seafile账号后，SeaDrive "
 "将从服务器上下载资料库和文件列表（就像在 SeaDrive 1.0.x 中一样）。 这可能需要一些时间，具体取决于你 seafile "
-"帐户中可用的文件数量。 下载是渐进式的，因此与此同时，你已经可以访问虚拟盘中的一些文件了。"
+"账号中可用的文件数量。 下载是渐进式的，因此与此同时，你已经可以访问虚拟盘中的一些文件了。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""

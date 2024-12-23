@@ -6,11 +6,12 @@
 # Translators:
 # Amr Mothana <amrusud@gmail.com>, 2017
 # malnaim <malnaim@safedecision.com.sa>, 2021,2023-2024
+# Seafile Info <info@seafile.com>, 2024
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:15+0800\n"
+"POT-Creation-Date: 2024-12-23 11:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023-2024\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -326,7 +327,7 @@ msgid "There are more than 500 users, and sort is not offered."
 msgstr " هناك أكثر من 500 مستخدم ، ولا يتم عرض الفرز."
 
 #: seahub/api2/endpoints/admin/users.py:808
-#: seahub/api2/endpoints/admin/users.py:1292 seahub/base/accounts.py:1253
+#: seahub/api2/endpoints/admin/users.py:1292 seahub/base/accounts.py:1258
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
 msgstr "عدد المستخدمين تجاوز الحد المسموح."
@@ -443,17 +444,17 @@ msgstr "ملف الفيروس لم يعثر عليه."
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:437 seahub/api2/endpoints/wiki2.py:465
+#: seahub/api2/endpoints/wiki2.py:441 seahub/api2/endpoints/wiki2.py:469
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4014
 #: seahub/notifications/models.py:541 seahub/notifications/models.py:582
 #: seahub/notifications/models.py:624 seahub/notifications/models.py:675
 #: seahub/notifications/models.py:731 seahub/notifications/models.py:761
 #: seahub/notifications/models.py:783 seahub/notifications/models.py:809
 #: seahub/notifications/models.py:826 seahub/notifications/models.py:843
-#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2761
+#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2762
 #: seahub/search/views.py:200 seahub/share/views.py:230
-#: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
-#: seahub/utils/__init__.py:1207 seahub/views/__init__.py:819
+#: seahub/subscription/views.py:90 seahub/utils/__init__.py:191
+#: seahub/utils/__init__.py:1217 seahub/views/__init__.py:819
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -477,9 +478,9 @@ msgstr "مسار الوجهة غير صحيح"
 #: seahub/api2/views.py:1986 seahub/api2/views.py:2048
 #: seahub/api2/views.py:2092 seahub/api2/views.py:2138
 #: seahub/api2/views.py:2187 seahub/api2/views.py:2600
-#: seahub/api2/views.py:2708 seahub/seadoc/apis.py:380
-#: seahub/seadoc/apis.py:498 seahub/seadoc/apis.py:590
-#: seahub/seadoc/apis.py:3094
+#: seahub/api2/views.py:2708 seahub/seadoc/apis.py:381
+#: seahub/seadoc/apis.py:499 seahub/seadoc/apis.py:591
+#: seahub/seadoc/apis.py:3101
 msgid "Out of quota."
 msgstr "نفدت المساحة المخصصة."
 
@@ -494,7 +495,7 @@ msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات الم
 #: seahub/api2/endpoints/file.py:717 seahub/api2/endpoints/file.py:830
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
-#: seahub/api2/endpoints/wiki2.py:775
+#: seahub/api2/endpoints/wiki2.py:780
 msgid "File is locked"
 msgstr "الملف مقفل"
 
@@ -515,8 +516,8 @@ msgstr " لم يتم العثور على المستخدم %s ."
 
 #: seahub/api2/endpoints/file.py:201 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:850
-#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1994 seahub/seadoc/apis.py:3101
+#: seahub/api2/endpoints/wiki2.py:578 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/views.py:1994 seahub/seadoc/apis.py:3108
 msgid "The number of files in library exceeds the limit"
 msgstr "عدد الملفات في المكتبة يتجاوز الحد المسموح"
 
@@ -528,9 +529,9 @@ msgstr "عدد الملفات في المكتبة يتجاوز الحد المس
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1377 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2746
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -549,7 +550,7 @@ msgstr "الملف غير مقفل."
 msgid "You can not refresh this file's lock."
 msgstr "لا يمكنك تحديث قفل هذا الملف."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2753
 msgid "The participant already exists."
 msgstr "المُشارك موجود بالفعل."
 
@@ -620,7 +621,7 @@ msgstr "لقد تم دعوة %s مسبقا."
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
 #: seahub/api2/endpoints/repo_share_invitations.py:173
-#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1264
+#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1269
 #: seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
@@ -708,7 +709,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "يجب أن تكون أيام انتهاء الصلاحية قبل %s"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:643
+#: seahub/seadoc/apis.py:644
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -867,20 +868,20 @@ msgstr "أنت تمتلك %(nb_avatars)d شعارات, و الحد المسمو�
 msgid "Length of WebDav password should be less than 30."
 msgstr "طول كلمة سر ويبداف -WebDav- يجب أن تكون أقل من 30 ."
 
-#: seahub/api2/endpoints/wiki2.py:195 seahub/api2/endpoints/wiki2.py:1383
+#: seahub/api2/endpoints/wiki2.py:198 seahub/api2/endpoints/wiki2.py:1392
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "يمكن أن يحتوي الاسم على أحرف أو أرقام أو نقطة أو شرّطة أو شرّطة سفلية."
 
-#: seahub/api2/endpoints/wiki2.py:1235
+#: seahub/api2/endpoints/wiki2.py:1240
 msgid "URL is invalid"
 msgstr "عنوان URL غير صالح"
 
-#: seahub/api2/endpoints/wiki2.py:1239
+#: seahub/api2/endpoints/wiki2.py:1244
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "يجب أن يتكون الجزء المخصص من عنوان URL من 5-30 حرفا."
 
-#: seahub/api2/endpoints/wiki2.py:1257
+#: seahub/api2/endpoints/wiki2.py:1266
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "هذا المجال المخصص قيد الاستخدام بالفعل ولا يمكن استخدامه لموقع ويكي wiki الخاص بك"
 
@@ -911,7 +912,7 @@ msgid "Email or Username"
 msgstr "البريد أو اسم المستخدم"
 
 #: seahub/auth/forms.py:33 seahub/auth/forms.py:272
-#: seahub/base/accounts.py:1241
+#: seahub/base/accounts.py:1246
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:41
 #: seahub/share/views.py:224 seahub/templates/decrypt_repo_form.html:10
@@ -969,7 +970,7 @@ msgid "New password confirmation"
 msgstr "تأكيد كلمة السر"
 
 #: seahub/auth/forms.py:238 seahub/auth/forms.py:284
-#: seahub/base/accounts.py:1296 seahub/organizations/forms.py:71
+#: seahub/base/accounts.py:1301 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
 msgstr "كلمتي السر غير متطابقتين."
 
@@ -981,7 +982,7 @@ msgstr "كلمو السر السابقة"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "كلمة السر السابقة غير صحيحة. الرجاء إعادة الادخال."
 
-#: seahub/auth/forms.py:273 seahub/base/accounts.py:1243
+#: seahub/auth/forms.py:273 seahub/base/accounts.py:1248
 msgid "Password (again)"
 msgstr "كلمة السر (مرة أخرى)"
 
@@ -1024,44 +1025,44 @@ msgstr "تم تحديث شعارك بنجاح"
 msgid "Successfully deleted the requested avatars."
 msgstr "تم حذف الشعارات المحددة بنجاح."
 
-#: seahub/base/accounts.py:720 seahub/base/accounts.py:751
+#: seahub/base/accounts.py:725 seahub/base/accounts.py:756
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "الحساب %(account)s تجمد على %(site)s."
 
-#: seahub/base/accounts.py:1231
+#: seahub/base/accounts.py:1236
 msgid "Email address"
 msgstr "عنوان الريد"
 
-#: seahub/base/accounts.py:1237
+#: seahub/base/accounts.py:1242
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: seahub/base/accounts.py:1238
+#: seahub/base/accounts.py:1243
 msgid "This value must be of length 40"
 msgstr "القيمة يجب أن تكون بطول 40 خانة"
 
-#: seahub/base/accounts.py:1257
+#: seahub/base/accounts.py:1262
 msgid "Enter a valid email address."
 msgstr "أدخل عنوان بريد صحيح."
 
-#: seahub/base/accounts.py:1268
+#: seahub/base/accounts.py:1273
 msgid "Invalid user id."
 msgstr "رمز دخول غير صحيح."
 
-#: seahub/base/accounts.py:1318
+#: seahub/base/accounts.py:1323
 msgid "name"
 msgstr "اسم"
 
-#: seahub/base/accounts.py:1321
+#: seahub/base/accounts.py:1326
 msgid "department"
 msgstr "قسم"
 
-#: seahub/base/accounts.py:1324
+#: seahub/base/accounts.py:1329
 msgid "telephone"
 msgstr "التلفون"
 
-#: seahub/base/accounts.py:1327
+#: seahub/base/accounts.py:1332
 msgid "note"
 msgstr "ملاحظة"
 
@@ -2063,7 +2064,7 @@ msgstr "سيتم فك تشفير الملفات في متصفحك عندما ت�
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr "تلميح: الطريقة الأخيرة أكثر أمنا، ولكنها ليست مدعومة جيدا من قبل جميع المتصفحات. نحن ننصحك باستخدام أحدث نسخة من كروم أو فايرفوكس."
+msgstr "معلومة: الطريقة الأخيرة أكثر أمنا، ولكنها ليست مدعومة جيدا من قبل جميع المتصفحات. نحن ننصحك باستخدام أحدث نسخة من كروم أو فايرفوكس."
 
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
@@ -2809,8 +2810,8 @@ msgid "You can go to the following page and upload your files:"
 msgstr "يمكنك الانتقال إلى الصفحة التالية وتحميل الملفات الخاصة بك:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
-msgid "Insufficient password strength"
-msgstr "قوة كلمة السر غير كافية"
+msgid "Password strength should be strong or very strong"
+msgstr "يجب أن تكون قوة كلمة السر قوية أو قوية جدًا"
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:97
@@ -3067,7 +3068,17 @@ msgstr "أنت على وشك تعطيل المصادقة الثنائية.\n ه�
 msgid "Disable"
 msgstr "عطل"
 
-#: seahub/utils/__init__.py:167
+#: seahub/utils/__init__.py:175 seahub/utils/__init__.py:190
+#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
+#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
+#: seahub/views/file.py:1056 seahub/views/file.py:1086
+#: seahub/views/file.py:1227 seahub/views/file.py:1339
+#: seahub/views/file.py:1480 seahub/views/file.py:1598
+#: seahub/views/file.py:2067
+msgid "Unable to view file"
+msgstr "غير قادر على عرض الملف"
+
+#: seahub/utils/__init__.py:176
 msgid "permission error"
 msgstr "خطأ في الإذن"
 
@@ -3161,14 +3172,6 @@ msgstr "حجم الملف يتجاوز %s، ولا يمكن فتحه على ال
 #: seahub/views/file.py:347 seahub/views/file.py:827
 msgid "The library is encrypted, can not open file online."
 msgstr "المكتبة مشفرة، و لا يمكن فتحها على الانترنت."
-
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
-#: seahub/views/file.py:1056 seahub/views/file.py:1086
-#: seahub/views/file.py:1227 seahub/views/file.py:1339
-#: seahub/views/file.py:1480 seahub/views/file.py:1598
-msgid "Unable to view file"
-msgstr "غير قادر على عرض الملف"
 
 #: seahub/views/file.py:851 seahub/views/file.py:974 seahub/views/file.py:1298
 #: seahub/views/file.py:1536
@@ -3326,6 +3329,9 @@ msgstr "خياري"
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
 msgstr "غير قادر على عرض الويكي"
+
+#~ msgid "Insufficient password strength"
+#~ msgstr "Insufficient password strength"
 
 #~ msgid ""
 #~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"

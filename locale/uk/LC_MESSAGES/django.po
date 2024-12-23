@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:15+0800\n"
+"POT-Creation-Date: 2024-12-23 11:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Oleksandr Suvorov <say@say.od.ua>, 2016\n"
 "Language-Team: Ukrainian (http://app.transifex.com/haiwen/seahub/language/uk/)\n"
@@ -330,7 +330,7 @@ msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:808
-#: seahub/api2/endpoints/admin/users.py:1292 seahub/base/accounts.py:1253
+#: seahub/api2/endpoints/admin/users.py:1292 seahub/base/accounts.py:1258
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
 msgstr ""
@@ -447,17 +447,17 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:437 seahub/api2/endpoints/wiki2.py:465
+#: seahub/api2/endpoints/wiki2.py:441 seahub/api2/endpoints/wiki2.py:469
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4014
 #: seahub/notifications/models.py:541 seahub/notifications/models.py:582
 #: seahub/notifications/models.py:624 seahub/notifications/models.py:675
 #: seahub/notifications/models.py:731 seahub/notifications/models.py:761
 #: seahub/notifications/models.py:783 seahub/notifications/models.py:809
 #: seahub/notifications/models.py:826 seahub/notifications/models.py:843
-#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2761
+#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2762
 #: seahub/search/views.py:200 seahub/share/views.py:230
-#: seahub/subscription/views.py:90 seahub/utils/__init__.py:181
-#: seahub/utils/__init__.py:1207 seahub/views/__init__.py:819
+#: seahub/subscription/views.py:90 seahub/utils/__init__.py:191
+#: seahub/utils/__init__.py:1217 seahub/views/__init__.py:819
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -481,9 +481,9 @@ msgstr "Невірний шлях призначення"
 #: seahub/api2/views.py:1986 seahub/api2/views.py:2048
 #: seahub/api2/views.py:2092 seahub/api2/views.py:2138
 #: seahub/api2/views.py:2187 seahub/api2/views.py:2600
-#: seahub/api2/views.py:2708 seahub/seadoc/apis.py:380
-#: seahub/seadoc/apis.py:498 seahub/seadoc/apis.py:590
-#: seahub/seadoc/apis.py:3094
+#: seahub/api2/views.py:2708 seahub/seadoc/apis.py:381
+#: seahub/seadoc/apis.py:499 seahub/seadoc/apis.py:591
+#: seahub/seadoc/apis.py:3101
 msgid "Out of quota."
 msgstr ""
 
@@ -498,7 +498,7 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:717 seahub/api2/endpoints/file.py:830
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
-#: seahub/api2/endpoints/wiki2.py:775
+#: seahub/api2/endpoints/wiki2.py:780
 msgid "File is locked"
 msgstr ""
 
@@ -519,8 +519,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/file.py:201 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:850
-#: seahub/api2/endpoints/wiki2.py:573 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1994 seahub/seadoc/apis.py:3101
+#: seahub/api2/endpoints/wiki2.py:578 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/views.py:1994 seahub/seadoc/apis.py:3108
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -532,9 +532,9 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1368 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1377 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2746
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -553,7 +553,7 @@ msgstr ""
 msgid "You can not refresh this file's lock."
 msgstr ""
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2753
 msgid "The participant already exists."
 msgstr ""
 
@@ -624,7 +624,7 @@ msgstr ""
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
 #: seahub/api2/endpoints/repo_share_invitations.py:173
-#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1264
+#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1269
 #: seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
@@ -712,7 +712,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:643
+#: seahub/seadoc/apis.py:644
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -871,20 +871,20 @@ msgstr "У вас вже є %(nb_avatars)d аватар, максимально 
 msgid "Length of WebDav password should be less than 30."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:195 seahub/api2/endpoints/wiki2.py:1383
+#: seahub/api2/endpoints/wiki2.py:198 seahub/api2/endpoints/wiki2.py:1392
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1235
+#: seahub/api2/endpoints/wiki2.py:1240
 msgid "URL is invalid"
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1239
+#: seahub/api2/endpoints/wiki2.py:1244
 msgid "The custom part of URL should have 5-30 characters."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1257
+#: seahub/api2/endpoints/wiki2.py:1266
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr ""
 
@@ -915,7 +915,7 @@ msgid "Email or Username"
 msgstr "Email або Ім'я користувача"
 
 #: seahub/auth/forms.py:33 seahub/auth/forms.py:272
-#: seahub/base/accounts.py:1241
+#: seahub/base/accounts.py:1246
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:41
 #: seahub/share/views.py:224 seahub/templates/decrypt_repo_form.html:10
@@ -973,7 +973,7 @@ msgid "New password confirmation"
 msgstr "Підтвердження нового паролю"
 
 #: seahub/auth/forms.py:238 seahub/auth/forms.py:284
-#: seahub/base/accounts.py:1296 seahub/organizations/forms.py:71
+#: seahub/base/accounts.py:1301 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
 msgstr "Паролі не збігаються."
 
@@ -985,7 +985,7 @@ msgstr "Старий пароль"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Ваш старий пароль було введено невірно. Будь ласка, введіть його знову."
 
-#: seahub/auth/forms.py:273 seahub/base/accounts.py:1243
+#: seahub/auth/forms.py:273 seahub/base/accounts.py:1248
 msgid "Password (again)"
 msgstr "Пароль (ще раз)"
 
@@ -1028,44 +1028,44 @@ msgstr "Ваш аватар успішно завантажено."
 msgid "Successfully deleted the requested avatars."
 msgstr "Аватар успішно видалено."
 
-#: seahub/base/accounts.py:720 seahub/base/accounts.py:751
+#: seahub/base/accounts.py:725 seahub/base/accounts.py:756
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr ""
 
-#: seahub/base/accounts.py:1231
+#: seahub/base/accounts.py:1236
 msgid "Email address"
 msgstr "Email адреса"
 
-#: seahub/base/accounts.py:1237
+#: seahub/base/accounts.py:1242
 msgid "Username"
 msgstr "Ім'я користувача"
 
-#: seahub/base/accounts.py:1238
+#: seahub/base/accounts.py:1243
 msgid "This value must be of length 40"
 msgstr "Це значення повинно мати довжину 40"
 
-#: seahub/base/accounts.py:1257
+#: seahub/base/accounts.py:1262
 msgid "Enter a valid email address."
 msgstr "Введіть дійсну адресу електронної пошти."
 
-#: seahub/base/accounts.py:1268
+#: seahub/base/accounts.py:1273
 msgid "Invalid user id."
 msgstr "Неправильний ідентифікатор користувача"
 
-#: seahub/base/accounts.py:1318
+#: seahub/base/accounts.py:1323
 msgid "name"
 msgstr "ім'я"
 
-#: seahub/base/accounts.py:1321
+#: seahub/base/accounts.py:1326
 msgid "department"
 msgstr "департамент"
 
-#: seahub/base/accounts.py:1324
+#: seahub/base/accounts.py:1329
 msgid "telephone"
 msgstr "телефон"
 
-#: seahub/base/accounts.py:1327
+#: seahub/base/accounts.py:1332
 msgid "note"
 msgstr "примітка"
 
@@ -2797,7 +2797,7 @@ msgid "You can go to the following page and upload your files:"
 msgstr "Ви можете перейти до наступної сторінки та завантажити ваші файли:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
-msgid "Insufficient password strength"
+msgid "Password strength should be strong or very strong"
 msgstr ""
 
 #: seahub/templates/snippets/password_strength_js.html:11
@@ -3055,7 +3055,17 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: seahub/utils/__init__.py:167
+#: seahub/utils/__init__.py:175 seahub/utils/__init__.py:190
+#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
+#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
+#: seahub/views/file.py:1056 seahub/views/file.py:1086
+#: seahub/views/file.py:1227 seahub/views/file.py:1339
+#: seahub/views/file.py:1480 seahub/views/file.py:1598
+#: seahub/views/file.py:2067
+msgid "Unable to view file"
+msgstr "Не вдається переглянути файл"
+
+#: seahub/utils/__init__.py:176
 msgid "permission error"
 msgstr "помилка прав доступу"
 
@@ -3149,14 +3159,6 @@ msgstr "Розмір файлу перевищує %s, і не може бути
 #: seahub/views/file.py:347 seahub/views/file.py:827
 msgid "The library is encrypted, can not open file online."
 msgstr ""
-
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:520 seahub/views/file.py:782 seahub/views/file.py:1030
-#: seahub/views/file.py:1056 seahub/views/file.py:1086
-#: seahub/views/file.py:1227 seahub/views/file.py:1339
-#: seahub/views/file.py:1480 seahub/views/file.py:1598
-msgid "Unable to view file"
-msgstr "Не вдається переглянути файл"
 
 #: seahub/views/file.py:851 seahub/views/file.py:974 seahub/views/file.py:1298
 #: seahub/views/file.py:1536
@@ -3314,6 +3316,9 @@ msgstr ""
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
 msgstr ""
+
+#~ msgid "Insufficient password strength"
+#~ msgstr "Insufficient password strength"
 
 #~ msgid ""
 #~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"

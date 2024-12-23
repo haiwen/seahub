@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 10:15+0800\n"
+"POT-Creation-Date: 2024-12-23 11:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Lithuanian (http://app.transifex.com/haiwen/seahub/language/lt/)\n"
@@ -59,8 +59,8 @@ msgstr ""
 
 #: frontend/src/components/common/account.js:171
 #: frontend/src/components/dialog/lib-settings.js:59
-#: frontend/src/components/dir-view-mode/dir-others/index.js:31
-#: frontend/src/components/dir-view-mode/dir-others/index.js:33
+#: frontend/src/components/dir-view-mode/dir-others/index.js:32
+#: frontend/src/components/dir-view-mode/dir-others/index.js:34
 #: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:70
 #: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:71
 #: frontend/src/metadata/views/kanban/settings/index.js:92
@@ -237,10 +237,6 @@ msgstr ""
 msgid "View all notifications"
 msgstr ""
 
-#: frontend/src/components/common/select/no-group-message.js:8
-msgid "Group not found"
-msgstr ""
-
 #: frontend/src/components/cur-dir-path/dir-path.js:59
 #: frontend/src/components/main-side-nav-folded.js:91
 #: frontend/src/components/main-side-nav.js:81
@@ -248,7 +244,7 @@ msgid "A file is being uploaded. Are you sure you want to leave this page?"
 msgstr ""
 
 #: frontend/src/components/cur-dir-path/dir-path.js:140
-#: frontend/src/components/dir-view-mode/dir-views.js:35
+#: frontend/src/components/dir-view-mode/dir-views/index.js:54
 msgid "Views"
 msgstr ""
 
@@ -272,7 +268,7 @@ msgstr ""
 
 #: frontend/src/components/cur-dir-path/dir-path.js:249
 #: frontend/src/components/cur-dir-path/dir-path.js:255
-#: frontend/src/components/dir-view-mode/dir-column-nav/index.js:385
+#: frontend/src/components/dir-view-mode/dir-files.js:365
 #: frontend/src/components/dirent-detail/lib-details.js:18
 #: frontend/src/components/main-side-nav.js:236
 #: frontend/src/components/main-side-nav.js:238
@@ -290,13 +286,13 @@ msgstr "Bylos"
 #: frontend/src/components/cur-dir-path/dir-tool.js:145
 #: frontend/src/components/dialog/op-menu.js:53
 #: frontend/src/components/dialog/op-menu.js:54
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:936
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:937
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:155
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:156
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:185
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:188
-#: frontend/src/components/file-view/file-toolbar.js:228
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:938
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:157
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:158
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:187
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:190
+#: frontend/src/components/file-view/file-toolbar.js:237
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:54
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:55
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:75
@@ -371,8 +367,8 @@ msgstr "Bylos"
 #: frontend/src/pages/sys-admin/logs-page/file-access-item-menu.js:36
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:121
-#: frontend/src/shared-dir-view.js:798 frontend/src/shared-dir-view.js:799
-#: frontend/src/shared-dir-view.js:878 frontend/src/shared-dir-view.js:879
+#: frontend/src/shared-dir-view.js:800 frontend/src/shared-dir-view.js:801
+#: frontend/src/shared-dir-view.js:880 frontend/src/shared-dir-view.js:881
 msgid "More operations"
 msgstr ""
 
@@ -430,6 +426,8 @@ msgstr ""
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:85
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:142
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:31
+#: frontend/src/components/dialog/repo-history.js:103
+#: frontend/src/components/dialog/repo-history.js:110
 #: frontend/src/metadata/utils/column/index.js:195
 #: frontend/src/pages/sys-admin/abuse-reports.js:95
 #: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
@@ -470,7 +468,7 @@ msgstr "Aprašymas"
 #: frontend/src/components/dialog/leave-group-dialog.js:32
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:144
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:120
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:272
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:290
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:252
 #: frontend/src/components/dialog/org-add-department-dialog.js:86
 #: frontend/src/components/dialog/org-add-member-dialog.js:66
@@ -542,11 +540,12 @@ msgstr "Aprašymas"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:144
 #: frontend/src/components/user-settings/social-login-saml.js:67
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:14
-#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:149
+#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:150
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:80
 #: frontend/src/metadata/components/dialog/metadata-ocr-status-management-dialog/index.js:79
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:81
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:109
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:110
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:71
 #: frontend/src/metadata/components/dialog/turn-off-confirm-dialog.js:14
 #: frontend/src/metadata/components/popover/column-popover/index.js:105
 #: frontend/src/metadata/components/popover/filter-popover/index.js:200
@@ -554,7 +553,6 @@ msgstr "Aprašymas"
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:68
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:31
 #: frontend/src/metadata/components/popover/sort-popover/index.js:281
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:85
 #: frontend/src/pages/org-admin/input-item.js:92
 #: frontend/src/pages/org-admin/web-settings/input-item.js:76
 #: frontend/src/pages/sys-admin/web-settings/input-item.js:70
@@ -590,8 +588,8 @@ msgstr "Atšaukti"
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:145
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:121
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:273
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:326
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:291
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:345
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:253
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:305
 #: frontend/src/components/dialog/org-add-admin-dialog.js:65
@@ -621,7 +619,7 @@ msgstr "Atšaukti"
 #: frontend/src/components/dialog/set-org-user-quota.js:80
 #: frontend/src/components/dialog/set-webdav-password.js:90
 #: frontend/src/components/dialog/share-repo-dialog.js:153
-#: frontend/src/components/dialog/share-to-group.js:375
+#: frontend/src/components/dialog/share-to-group.js:395
 #: frontend/src/components/dialog/share-to-invite-people.js:301
 #: frontend/src/components/dialog/share-to-other-server.js:258
 #: frontend/src/components/dialog/share-to-user.js:383
@@ -651,7 +649,7 @@ msgstr "Atšaukti"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:65
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:271
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:288
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:256
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
 #: frontend/src/components/dialog/transfer-dialog.js:223
@@ -665,17 +663,17 @@ msgstr "Atšaukti"
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:202
 #: frontend/src/components/user-settings/email-notice.js:91
 #: frontend/src/components/user-settings/user-basic-info-form.js:89
-#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:150
+#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:151
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:81
 #: frontend/src/metadata/components/dialog/metadata-ocr-status-management-dialog/index.js:80
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:82
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:110
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:111
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:72
 #: frontend/src/metadata/components/popover/column-popover/index.js:106
 #: frontend/src/metadata/components/popover/filter-popover/index.js:201
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:136
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:69
 #: frontend/src/metadata/components/popover/sort-popover/index.js:282
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:86
 #: frontend/src/pages/org-admin/input-item.js:91
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:281
 #: frontend/src/pages/org-admin/org-users-search-users.js:183
@@ -732,12 +730,11 @@ msgstr "Sukurti Wiki"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:65
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:82
-#: frontend/src/components/dialog/trash-dialog.js:252
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:732
+#: frontend/src/components/dialog/trash-dialog/table/index.js:34
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:733
 #: frontend/src/components/group-members.js:30
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:159
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:23
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:77
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:37
 #: frontend/src/pages/institution-admin/user-content/user-info.js:52
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:38
@@ -808,7 +805,7 @@ msgstr "Sukurti Wiki"
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:32
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:137
 #: frontend/src/repo-folder-trash.js:240 frontend/src/repo-snapshot.js:200
-#: frontend/src/shared-dir-view.js:671
+#: frontend/src/shared-dir-view.js:673
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:97
 #: frontend/src/tag/views/tag-files/index.js:107
 msgid "Name"
@@ -924,7 +921,7 @@ msgid "Clean succeeded."
 msgstr ""
 
 #: frontend/src/components/dialog/clean-trash.js:63
-#: frontend/src/components/dialog/trash-dialog.js:197
+#: frontend/src/components/dialog/trash-dialog/index.js:199
 #: frontend/src/components/dialog/wiki-clean-trash.js:63
 #: frontend/src/pages/org-admin/devices/devices-errors.js:194
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:375
@@ -942,37 +939,37 @@ msgstr ""
 msgid "Clear files in trash and history："
 msgstr "Išvalyti bylas šiukšliadėžėje ir žurnale:"
 
-#: frontend/src/components/dialog/commit-details.js:49
+#: frontend/src/components/dialog/commit-details.js:50
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:123
 msgid "Modification Details"
 msgstr "Pakeitimai išsamiai"
 
-#: frontend/src/components/dialog/commit-details.js:63
+#: frontend/src/components/dialog/commit-details.js:67
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:61
 msgid "New files"
 msgstr ""
 
-#: frontend/src/components/dialog/commit-details.js:64
+#: frontend/src/components/dialog/commit-details.js:68
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:71
 msgid "Deleted files"
 msgstr ""
 
-#: frontend/src/components/dialog/commit-details.js:65
+#: frontend/src/components/dialog/commit-details.js:69
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:81
 msgid "Renamed or Moved files"
 msgstr ""
 
-#: frontend/src/components/dialog/commit-details.js:66
+#: frontend/src/components/dialog/commit-details.js:70
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:91
 msgid "Modified files"
 msgstr ""
 
-#: frontend/src/components/dialog/commit-details.js:67
+#: frontend/src/components/dialog/commit-details.js:71
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:101
 msgid "New directories"
 msgstr ""
 
-#: frontend/src/components/dialog/commit-details.js:68
+#: frontend/src/components/dialog/commit-details.js:72
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:111
 msgid "Deleted directories"
 msgstr ""
@@ -1032,8 +1029,8 @@ msgstr "Tikrai norite ištrinti savo paskyrą?"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:39
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:61
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:60
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:750
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:773
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:751
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:774
 #: frontend/src/components/group-members.js:163
 #: frontend/src/components/popover/tag-list-item.js:55
 #: frontend/src/components/popover/tag-list-item.js:56
@@ -1059,10 +1056,9 @@ msgstr "Tikrai norite ištrinti savo paskyrą?"
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:15
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:176
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:32
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:60
-#: frontend/src/metadata/views/gallery/context-menu/index.js:20
+#: frontend/src/metadata/views/gallery/context-menu/index.js:32
 #: frontend/src/metadata/views/kanban/boards/board/header/op-menu/index.js:44
-#: frontend/src/metadata/views/table/context-menu/index.js:109
+#: frontend/src/metadata/views/table/context-menu/index.js:142
 #: frontend/src/pages/institution-admin/user-list-search/index.js:92
 #: frontend/src/pages/institution-admin/user-list/index.js:144
 #: frontend/src/pages/institution-admin/user-list/user-item.js:88
@@ -1119,7 +1115,7 @@ msgstr "Tikrai norite ištrinti savo paskyrą?"
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:69
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:402
 #: frontend/src/pages/wiki2/common/delete-dialog.js:26
-#: frontend/src/tag/views/all-tags/main/tag/index.js:67
+#: frontend/src/tag/views/all-tags/main/tag/index.js:124
 #: frontend/src/utils/text-translation.js:44
 msgid "Delete"
 msgstr "Ištrinti"
@@ -1159,8 +1155,8 @@ msgstr "Tikrai norite atkurti šią biblioteką?"
 #: frontend/src/components/dialog/confirm-restore-repo.js:37
 #: frontend/src/components/dialog/my-deleted-repos.js:149
 #: frontend/src/components/dialog/my-deleted-repos.js:150
-#: frontend/src/components/dialog/trash-dialog.js:395
-#: frontend/src/components/dialog/trash-dialog.js:406
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:71
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:88
 #: frontend/src/components/history-list-view/history-list-item.js:103
 #: frontend/src/pages/file-history-old/history-item.js:126
 #: frontend/src/pages/my-libs/my-libs-deleted.js:174
@@ -1252,7 +1248,6 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:41
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:48
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:32
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:25
 #: frontend/src/metadata/utils/validate/view.js:9
 #: frontend/src/tag/utils/validate/tag.js:9 frontend/src/utils/utils.js:1898
 msgid "Name is required"
@@ -1275,7 +1270,7 @@ msgstr ""
 #: frontend/src/components/dialog/rename-dirent.js:58
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:148
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:85
-#: frontend/src/metadata/views/table/index.js:112
+#: frontend/src/metadata/hooks/metadata-view.js:111
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
@@ -1354,20 +1349,20 @@ msgstr ""
 
 #: frontend/src/components/dialog/create-repo-dialog.js:224
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:21
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:286
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:304
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:266
 #: frontend/src/components/dialog/repo-api-token-dialog.js:223
 #: frontend/src/components/dialog/repo-share-admin/group-shares.js:190
 #: frontend/src/components/dialog/repo-share-admin/user-shares.js:186
 #: frontend/src/components/dialog/share-repo-dialog.js:133
-#: frontend/src/components/dialog/share-to-group.js:338
+#: frontend/src/components/dialog/share-to-group.js:359
 #: frontend/src/components/dialog/share-to-invite-people.js:274
 #: frontend/src/components/dialog/share-to-invite-people.js:317
 #: frontend/src/components/dialog/share-to-other-server.js:85
 #: frontend/src/components/dialog/share-to-other-server.js:223
 #: frontend/src/components/dialog/share-to-user.js:350
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:243
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:291
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:259
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:308
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:230
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:281
 #: frontend/src/components/share-link-panel/link-details.js:254
@@ -1468,13 +1463,13 @@ msgstr ""
 
 #: frontend/src/components/dialog/create-tag-dialog.js:108
 #: frontend/src/components/dialog/create-tag-dialog.js:109
-#: frontend/src/components/file-view/file-toolbar.js:152
-#: frontend/src/components/file-view/file-toolbar.js:216
+#: frontend/src/components/file-view/file-toolbar.js:161
+#: frontend/src/components/file-view/file-toolbar.js:225
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:181
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:238
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:286
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:316
-#: frontend/src/shared-dir-view.js:495
+#: frontend/src/shared-dir-view.js:497
 msgid "Save"
 msgstr ""
 
@@ -1513,24 +1508,25 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-links.js:197
 #: frontend/src/pages/upload-link/file-uploader.js:624
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:66
-#: frontend/src/shared-dir-view.js:479
+#: frontend/src/shared-dir-view.js:481
 msgid "Upload"
 msgstr ""
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:157
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:180
 #: frontend/src/components/dialog/zip-download-dialog.js:123
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:744
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:767
-#: frontend/src/components/file-view/file-toolbar.js:166
-#: frontend/src/components/file-view/file-toolbar.js:250
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:745
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:768
+#: frontend/src/components/file-view/file-toolbar.js:175
+#: frontend/src/components/file-view/file-toolbar.js:259
 #: frontend/src/components/file-view/file-view-tip.js:25
 #: frontend/src/components/history-list-view/history-list-item.js:104
 #: frontend/src/components/history-trash-file-view/download.js:10
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:27
 #: frontend/src/components/shared-file-view/shared-file-view.js:133
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:400
-#: frontend/src/metadata/views/gallery/context-menu/index.js:19
+#: frontend/src/metadata/views/gallery/context-menu/index.js:30
+#: frontend/src/metadata/views/kanban/context-menu/index.js:45
 #: frontend/src/pages/file-history-old/history-item.js:127
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:193
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
@@ -1548,10 +1544,10 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:201
-#: frontend/src/repo-snapshot.js:309 frontend/src/shared-dir-view.js:779
-#: frontend/src/shared-dir-view.js:806 frontend/src/shared-dir-view.js:854
-#: frontend/src/shared-dir-view.js:886 frontend/src/shared-dir-view.js:955
-#: frontend/src/shared-dir-view.js:973
+#: frontend/src/repo-snapshot.js:309 frontend/src/shared-dir-view.js:781
+#: frontend/src/shared-dir-view.js:808 frontend/src/shared-dir-view.js:856
+#: frontend/src/shared-dir-view.js:888 frontend/src/shared-dir-view.js:957
+#: frontend/src/shared-dir-view.js:975
 #: frontend/src/utils/text-translation.js:40
 msgid "Download"
 msgstr ""
@@ -1603,6 +1599,7 @@ msgstr ""
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:55
 #: frontend/src/components/dialog/generate-upload-link.js:343
 #: frontend/src/components/dialog/generate-upload-link.js:344
+#: frontend/src/components/dialog/repo-history.js:270
 #: frontend/src/components/dialog/repo-share-admin/group-shares.js:89
 #: frontend/src/components/dialog/repo-share-admin/group-shares.js:90
 #: frontend/src/components/dialog/repo-share-admin/user-shares.js:87
@@ -1630,7 +1627,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users-content.js:533
 #: frontend/src/pages/wiki/main-panel.js:106
 #: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:306
-#: frontend/src/tag/views/all-tags/main/tag/index.js:62
+#: frontend/src/tag/views/all-tags/main/tag/index.js:118
 msgid "Edit"
 msgstr "Redaguoti"
 
@@ -1706,8 +1703,11 @@ msgstr ""
 #: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:152
 #: frontend/src/components/dialog/transfer-group-dialog.js:73
-#: frontend/src/components/search/search.js:746
-#: frontend/src/components/search/search.js:780
+#: frontend/src/components/pdf-viewer.js:337
+#: frontend/src/components/pdf-viewer.js:417
+#: frontend/src/components/search/search.js:750
+#: frontend/src/components/search/search.js:789
+#: frontend/src/components/search/wiki2-search.js:172
 #: frontend/src/components/system-notification.js:46
 msgid "Close"
 msgstr "Uždaryti"
@@ -1930,33 +1930,39 @@ msgid ""
 "can not create libraries."
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:53
+#: frontend/src/components/dialog/image-dialog.js:48
 msgid "The image could not be loaded."
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:54
+#: frontend/src/components/dialog/image-dialog.js:49
 msgid "Previous (Left arrow key)"
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:55
+#: frontend/src/components/dialog/image-dialog.js:50
 msgid "Next (Right arrow key)"
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:56
+#: frontend/src/components/dialog/image-dialog.js:51
 #| msgid "Close"
 msgid "Close (Esc)"
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:57
+#: frontend/src/components/dialog/image-dialog.js:52
 msgid "Zoom in"
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:58
+#: frontend/src/components/dialog/image-dialog.js:53
 msgid "Zoom out"
 msgstr ""
 
-#: frontend/src/components/dialog/image-dialog.js:63
+#: frontend/src/components/dialog/image-dialog.js:58
 msgid "View original image"
+msgstr ""
+
+#: frontend/src/components/dialog/image-dialog.js:61
+#: frontend/src/components/dialog/lib-settings.js:103
+#: frontend/src/metadata/views/table/context-menu/index.js:177
+msgid "OCR"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
@@ -2121,9 +2127,9 @@ msgid "The password will be kept in the server for only 1 hour."
 msgstr ""
 
 #: frontend/src/components/dialog/lib-settings.js:68
-#: frontend/src/components/dir-view-mode/dir-others/index.js:43
-#: frontend/src/components/dir-view-mode/dir-others/index.js:45
-#: frontend/src/components/file-view/file-toolbar.js:196
+#: frontend/src/components/dir-view-mode/dir-others/index.js:44
+#: frontend/src/components/dir-view-mode/dir-others/index.js:46
+#: frontend/src/components/file-view/file-toolbar.js:205
 #: frontend/src/components/toolbar/view-file-toolbar.js:143
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:65
 #: frontend/src/utils/text-translation.js:108
@@ -2141,11 +2147,6 @@ msgstr ""
 #: frontend/src/components/dialog/lib-settings.js:89
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:73
 msgid "Face recognition"
-msgstr ""
-
-#: frontend/src/components/dialog/lib-settings.js:103
-#: frontend/src/metadata/views/table/context-menu/index.js:144
-msgid "OCR"
 msgstr ""
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:54
@@ -2211,18 +2212,18 @@ msgstr ""
 msgid "Set permission of {placeholder}"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:282
-#: frontend/src/components/dialog/share-to-group.js:337
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:242
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:290
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:300
+#: frontend/src/components/dialog/share-to-group.js:358
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:258
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:307
 #| msgid "Groups"
 msgid "Group"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:284
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:302
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:264
-#: frontend/src/components/dialog/trash-dialog.js:389
-#: frontend/src/components/dialog/trash-dialog.js:449
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:65
+#: frontend/src/components/dialog/trash-dialog/table/folder-records/folder-record.js:34
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:85
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:93
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:52
@@ -2231,16 +2232,27 @@ msgstr ""
 msgid "Folder"
 msgstr "Aplankas"
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:293
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:311
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:273
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:302
-#| msgid "Delete group"
-msgid "Select a group"
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:322
+#: frontend/src/components/dialog/share-to-group.js:376
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:271
+#: frontend/src/pages/org-admin/org-groups-search-groups.js:276
+msgid "Search groups"
+msgstr ""
+
+#: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:323
+#: frontend/src/components/dialog/share-to-group.js:377
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:272
+#: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:581
+#: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:189
+#: frontend/src/metadata/components/popover/sort-popover/index.js:230
+msgid "No results"
 msgstr ""
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:282
@@ -2269,6 +2281,8 @@ msgid "Created Files"
 msgstr ""
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:32
+#: frontend/src/components/dialog/repo-history.js:104
+#: frontend/src/components/dialog/repo-history.js:111
 #: frontend/src/file-history-old.js:243
 #: frontend/src/pages/dashboard/content.js:35
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:166
@@ -2290,12 +2304,12 @@ msgstr ""
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
 #: frontend/src/components/dialog/search-file-dialog.js:97
-#: frontend/src/components/dialog/trash-dialog.js:256
+#: frontend/src/components/dialog/trash-dialog/table/index.js:37
 #: frontend/src/components/dirent-detail/detail-list-view.js:106
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:67
 #: frontend/src/components/dirent-detail/embedded-file-details/file-details.js:14
 #: frontend/src/components/dirent-detail/lib-details.js:19
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:735
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:736
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:161
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
@@ -2325,7 +2339,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:34
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:139
 #: frontend/src/repo-folder-trash.js:243 frontend/src/repo-snapshot.js:201
-#: frontend/src/shared-dir-view.js:673
+#: frontend/src/shared-dir-view.js:675
 #: frontend/src/tag/views/tag-files/index.js:110
 msgid "Size"
 msgstr "Dydis"
@@ -2335,7 +2349,7 @@ msgstr "Dydis"
 #: frontend/src/components/dialog/share-repo-dialog.js:132
 #: frontend/src/components/dirent-detail/detail-list-view.js:84
 #: frontend/src/components/dirent-detail/detail-list-view.js:108
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:736
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:737
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:162
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:40
@@ -2351,7 +2365,7 @@ msgstr "Dydis"
 #: frontend/src/pages/starred/starred.js:43
 #: frontend/src/pages/sys-admin/repos/dir-content.js:108
 #: frontend/src/pages/sys-admin/users/user-repos.js:57
-#: frontend/src/shared-dir-view.js:674
+#: frontend/src/shared-dir-view.js:676
 #: frontend/src/tag/views/tag-files/index.js:111
 msgid "Last Update"
 msgstr "Paskutinis atnaujinimas"
@@ -2627,21 +2641,25 @@ msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #: frontend/src/components/dialog/rename-dirent.js:101
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:58
 msgid "Rename File"
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #: frontend/src/components/dialog/rename-dirent.js:101
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:58
 msgid "Rename Folder"
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:100
 #: frontend/src/components/dialog/rename-dirent.js:103
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:61
 msgid "New file name"
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:100
 #: frontend/src/components/dialog/rename-dirent.js:103
+#: frontend/src/metadata/components/dialog/rename-dialog/index.js:61
 msgid "New folder name"
 msgstr ""
 
@@ -2672,20 +2690,20 @@ msgid "API token is copied to the clipboard."
 msgstr ""
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
-#: frontend/src/components/dialog/trash-dialog.js:127
+#: frontend/src/components/dialog/trash-dialog/index.js:128
 #: frontend/src/pages/lib-content-view/lib-content-view.js:229
 #: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1392
 msgid "Permission denied"
 msgstr "Prieiga uždrausta"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:197
-#: frontend/src/components/dialog/trash-dialog.js:132
-#: frontend/src/components/dialog/trash-dialog.js:365
+#: frontend/src/components/dialog/trash-dialog/index.js:133
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:43
 #: frontend/src/components/dialog/zip-download-dialog.js:76
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:242
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:297
-#: frontend/src/metadata/store/server-operator.js:398
-#: frontend/src/metadata/store/server-operator.js:416
+#: frontend/src/metadata/store/server-operator.js:422
+#: frontend/src/metadata/store/server-operator.js:440
 #: frontend/src/pages/lib-content-view/lib-content-view.js:235
 #: frontend/src/pages/lib-content-view/lib-content-view.js:788
 #: frontend/src/pages/lib-content-view/lib-content-view.js:840
@@ -2694,9 +2712,9 @@ msgstr "Prieiga uždrausta"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1141
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1177
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1205
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1283
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1343
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1381
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1350
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1388
 #: frontend/src/pages/my-libs/my-libs-deleted.js:150
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:283
@@ -2716,8 +2734,8 @@ msgid "Error"
 msgstr "Klaida"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:199
-#: frontend/src/components/dialog/trash-dialog.js:138
-#: frontend/src/components/dialog/trash-dialog.js:367
+#: frontend/src/components/dialog/trash-dialog/index.js:139
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:45
 #: frontend/src/pages/lib-content-view/lib-content-view.js:225
 #: frontend/src/pages/search/main-panel.js:77
 #: frontend/src/pages/sys-admin/abuse-reports.js:47
@@ -2739,6 +2757,84 @@ msgstr ""
 #| msgid "{placeholder} Access Log"
 msgid "{placeholder} API Token"
 msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:70
+#: frontend/src/repo-history.js:96
+msgid "{placeholder} Modification History"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:79
+#: frontend/src/repo-history.js:115
+msgid ""
+"Tip: a snapshot will be generated after modification, which records the "
+"library state after the modification."
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:105
+#: frontend/src/components/dialog/repo-history.js:112
+#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:142
+#: frontend/src/repo-history.js:149
+msgid "Modifier"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:106
+#: frontend/src/components/dialog/repo-history.js:113
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:90
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
+msgid "Device"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:106
+#: frontend/src/components/dialog/repo-history.js:113
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:47
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
+#: frontend/src/pages/sys-admin/info.js:115
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:50
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
+msgid "Version"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:107
+#: frontend/src/repo-history.js:144
+msgid "Labels"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:244
+#: frontend/src/repo-history.js:280
+msgid "None"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:247
+#: frontend/src/repo-history.js:283 frontend/src/repo-snapshot.js:162
+msgid "Unknown"
+msgstr "Nežinoma"
+
+#: frontend/src/components/dialog/repo-history.js:256
+#: frontend/src/components/file-view/file-toolbar.js:182
+#: frontend/src/components/file-view/file-toolbar.js:263
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:48
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:80
+#: frontend/src/pages/org-admin/org-logs-file-update.js:260
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:139
+#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:64
+msgid "Details"
+msgstr ""
+
+#: frontend/src/components/dialog/repo-history.js:277
+#: frontend/src/repo-history.js:313
+#| msgid "(current version)"
+msgid "Current Version"
+msgstr "Dabartinė versija"
+
+#: frontend/src/components/dialog/repo-history.js:278
+#: frontend/src/repo-history.js:314
+#| msgid "View Related Snapshot"
+msgid "View Snapshot"
+msgstr "Peržiūrėti momentinę kopiją"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:54
 msgid "{placeholder} Share Admin"
@@ -2896,8 +2992,8 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:84
 #: frontend/src/components/file-chooser/index.js:464
 #: frontend/src/components/file-chooser/searcher/index.js:117
-#: frontend/src/components/search/wiki2-search.js:150
-#: frontend/src/components/search/wiki2-search.js:161
+#: frontend/src/components/search/wiki2-search.js:154
+#: frontend/src/components/search/wiki2-search.js:165
 msgid "Search"
 msgstr ""
 
@@ -2907,7 +3003,7 @@ msgid "Search files in this library"
 msgstr "Ieškoti bylų šioje bibliotekoje"
 
 #: frontend/src/components/dialog/search-file-dialog.js:91
-#: frontend/src/components/search/wiki2-search.js:175
+#: frontend/src/components/search/wiki2-search.js:179
 #: frontend/src/pages/search/search-results.js:73
 msgid "No result"
 msgstr ""
@@ -2999,10 +3095,10 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:328
 #: frontend/src/components/dialog/share-wiki-dialog.js:160
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:84
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:747
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:770
-#: frontend/src/components/file-view/file-toolbar.js:139
-#: frontend/src/components/file-view/file-toolbar.js:244
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:748
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:771
+#: frontend/src/components/file-view/file-toolbar.js:148
+#: frontend/src/components/file-view/file-toolbar.js:253
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:343
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:493
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:261
@@ -3036,12 +3132,6 @@ msgstr ""
 #: frontend/src/components/dialog/share-repo-dialog.js:124
 msgid "Select libraries to share"
 msgstr "Pasirinkti bibliotekas bendrinimui"
-
-#: frontend/src/components/dialog/share-to-group.js:353
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:253
-#| msgid "Delete group"
-msgid "Select groups"
-msgstr ""
 
 #: frontend/src/components/dialog/share-to-invite-people.js:319
 #: frontend/src/pages/sys-admin/invitations/invitations.js:61
@@ -3159,7 +3249,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/rename-department-v2-dialog.js:61
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:331
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:56
+#: frontend/src/metadata/metadata-tree-view/view.js:57
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:44
 #: frontend/src/pages/groups/group-view.js:377
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:142
@@ -3393,7 +3483,9 @@ msgid "Keep sharing"
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog.js:170
-msgid "If the library is shared to another user, the sharing will be ketp."
+#| msgid ""
+#| "the library is shared to another user, the sharing will be ketp."
+msgid "If the library is shared to another user, the sharing will be kept."
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog.js:174
@@ -3410,8 +3502,10 @@ msgid "Departments"
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog.js:195
+#| msgid ""
+#| " library is shared to another department, the sharing will be ketp."
 msgid ""
-"If the library is shared to another department, the sharing will be ketp."
+"If the library is shared to another department, the sharing will be kept."
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:46
@@ -3431,40 +3525,29 @@ msgstr ""
 msgid "Please enter 1 or more character"
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:187
+#: frontend/src/components/dialog/trash-dialog/index.js:188
 #: frontend/src/repo-folder-trash.js:186
 msgid "{placeholder} Trash"
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:195
+#: frontend/src/components/dialog/trash-dialog/index.js:197
 msgid "Visit old version page"
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:208
-#: frontend/src/components/dirent-grid-view/dirent-grid-view.js:888
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:796
+#: frontend/src/components/dialog/trash-dialog/index.js:210
+#: frontend/src/components/dirent-grid-view/dirent-grid-view.js:889
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:797
 msgid "No file"
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:213
+#: frontend/src/components/dialog/trash-dialog/index.js:215
 #: frontend/src/components/shared-file-view/shared-file-view.js:121
 #: frontend/src/repo-folder-trash.js:206 frontend/src/repo-snapshot.js:168
-#: frontend/src/shared-dir-view.js:455
+#: frontend/src/shared-dir-view.js:457
 msgid "Current path: "
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:254
-#: frontend/src/repo-folder-trash.js:241
-msgid "Original path"
-msgstr ""
-
-#: frontend/src/components/dialog/trash-dialog.js:255
-#: frontend/src/pages/wiki2/wiki-trash-dialog.js:140
-#: frontend/src/repo-folder-trash.js:242
-msgid "Delete Time"
-msgstr "Ištrinimo laikas"
-
-#: frontend/src/components/dialog/trash-dialog.js:361
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:39
 #: frontend/src/pages/wiki2/side-panel.js:75
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:230
 #: frontend/src/repo-folder-trash.js:330 frontend/src/repo-snapshot.js:273
@@ -3472,8 +3555,8 @@ msgstr "Ištrinimo laikas"
 msgid "Restored 1 item"
 msgstr ""
 
-#: frontend/src/components/dialog/trash-dialog.js:400
-#: frontend/src/components/dialog/trash-dialog.js:459
+#: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:76
+#: frontend/src/components/dialog/trash-dialog/table/folder-records/folder-record.js:44
 #: frontend/src/pages/dashboard/content.js:34
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
 #: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
@@ -3484,6 +3567,17 @@ msgstr ""
 #: frontend/src/repo-snapshot.js:304
 msgid "File"
 msgstr ""
+
+#: frontend/src/components/dialog/trash-dialog/table/index.js:35
+#: frontend/src/repo-folder-trash.js:241
+msgid "Original path"
+msgstr ""
+
+#: frontend/src/components/dialog/trash-dialog/table/index.js:36
+#: frontend/src/pages/wiki2/wiki-trash-dialog.js:140
+#: frontend/src/repo-folder-trash.js:242
+msgid "Delete Time"
+msgstr "Ištrinimo laikas"
 
 #: frontend/src/components/dialog/upload-remind-dialog.js:35
 msgid "Replace file {filename}?"
@@ -3523,7 +3617,7 @@ msgstr "Slaptažodis negali būti tuščias"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:34
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:42
-msgid "Insufficient password strength"
+msgid "Password strength should be strong or very strong"
 msgstr ""
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:41
@@ -3586,18 +3680,36 @@ msgstr ""
 msgid "Packaging..."
 msgstr ""
 
-#: frontend/src/components/dir-view-mode/dir-others/index.js:29
+#: frontend/src/components/dir-view-mode/dir-others/index.js:30
 msgid "Others"
 msgstr ""
 
-#: frontend/src/components/dir-view-mode/dir-others/index.js:37
-#: frontend/src/components/dir-view-mode/dir-others/index.js:39
+#: frontend/src/components/dir-view-mode/dir-others/index.js:38
+#: frontend/src/components/dir-view-mode/dir-others/index.js:40
 #: frontend/src/components/history-trash-file-view/file-view.js:33
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:16
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:17
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:145
 #: frontend/src/utils/text-translation.js:124
 msgid "Trash"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/dir-views/new-view-menu.js:37
+msgid "Table"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/dir-views/new-view-menu.js:39
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:71
+msgid "Gallery"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/dir-views/new-view-menu.js:41
+msgid "Kanban"
+msgstr ""
+
+#: frontend/src/components/dir-view-mode/dir-views/new-view-menu.js:43
+#| msgid "Max"
+msgid "Map"
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:15
@@ -3708,39 +3820,39 @@ msgid "Capture information"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:332
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:806
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:807
 msgid "freezed"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:332
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:806
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:807
 #: frontend/src/components/file-view/file-info.js:32
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:17
 msgid "locked"
 msgstr "užrakintas"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:333
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:800
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:801
 msgid "Frozen by {name}"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:333
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:800
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:801
 msgid "locked by {name}"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:839
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:840
 #| msgid "Unselect"
 msgid "Unselect this item"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:839
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:840
 #| msgid "Select File"
 msgid "Select this item"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:846
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:946
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:847
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:947
 #: frontend/src/components/file-view/file-info.js:41
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:644
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:645
@@ -3762,8 +3874,8 @@ msgstr ""
 msgid "Unstar"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:846
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:946
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:847
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:947
 #: frontend/src/components/file-view/file-info.js:41
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:644
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:645
@@ -3776,14 +3888,14 @@ msgstr ""
 msgid "Star"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:725
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:726
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:727
 #| msgid "Select all"
 msgid "Unselect all items"
 msgstr ""
 
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:725
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:726
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:727
 #| msgid "Select all"
 msgid "Select all items"
 msgstr ""
@@ -3875,8 +3987,8 @@ msgstr ""
 
 #: frontend/src/components/file-uploader/upload-list-item.js:96
 #: frontend/src/components/file-uploader/upload-list-item.js:122
-#: frontend/src/components/file-view/file-toolbar.js:146
-#: frontend/src/components/file-view/file-toolbar.js:210
+#: frontend/src/components/file-view/file-toolbar.js:155
+#: frontend/src/components/file-view/file-toolbar.js:219
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:96
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:122
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:176
@@ -3996,31 +4108,26 @@ msgstr "Užrakinti"
 msgid "Unlock"
 msgstr "Atrakinti"
 
-#: frontend/src/components/file-view/file-toolbar.js:124
+#: frontend/src/components/file-view/file-toolbar.js:126
+msgid "Find"
+msgstr ""
+
+#: frontend/src/components/file-view/file-toolbar.js:133
 msgid "Print"
 msgstr ""
 
-#: frontend/src/components/file-view/file-toolbar.js:173
-#: frontend/src/components/file-view/file-toolbar.js:254
-#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:48
-#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:80
-#: frontend/src/pages/org-admin/org-logs-file-update.js:260
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:139
-#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:64
-msgid "Details"
-msgstr ""
-
-#: frontend/src/components/file-view/file-toolbar.js:180
+#: frontend/src/components/file-view/file-toolbar.js:189
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:207
 #: frontend/src/utils/text-translation.js:68
 msgid "Open via Client"
 msgstr "Atidaryti iš kliento"
 
-#: frontend/src/components/file-view/file-toolbar.js:200
-#: frontend/src/components/file-view/file-toolbar.js:234
+#: frontend/src/components/file-view/file-toolbar.js:209
+#: frontend/src/components/file-view/file-toolbar.js:243
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:62
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:83
-#: frontend/src/metadata/views/table/context-menu/index.js:132
+#: frontend/src/metadata/views/kanban/context-menu/index.js:44
+#: frontend/src/metadata/views/table/context-menu/index.js:165
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:69
 msgid "Open parent folder"
 msgstr ""
@@ -4252,12 +4359,22 @@ msgstr ""
 msgid "Shared Libraries"
 msgstr ""
 
-#: frontend/src/components/paginator.js:57
+#: frontend/src/components/paginator.js:62
 msgid "{number_placeholder} / Page"
 msgstr ""
 
 #: frontend/src/components/pdf-viewer.js:20
 msgid "Thumbnail"
+msgstr ""
+
+#: frontend/src/components/pdf-viewer.js:336
+#| msgid "Document"
+msgid "Decrypt document"
+msgstr ""
+
+#: frontend/src/components/pdf-viewer.js:416
+#| msgid "Document"
+msgid "Print document"
 msgstr ""
 
 #: frontend/src/components/permission-denied-tip.js:6
@@ -4267,8 +4384,8 @@ msgid ""
 msgstr ""
 
 #: frontend/src/components/popover/edit-filetag-popover.js:141
-#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:143
-#: frontend/src/tag/views/all-tags/main/index.js:34
+#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:144
+#: frontend/src/tag/views/all-tags/main/index.js:40
 msgid "No tags"
 msgstr ""
 
@@ -4327,7 +4444,7 @@ msgid "Last modified by"
 msgstr ""
 
 #: frontend/src/components/search/search.js:538
-#: frontend/src/components/search/wiki2-search.js:173
+#: frontend/src/components/search/wiki2-search.js:177
 msgid "Type characters to start search"
 msgstr ""
 
@@ -4549,7 +4666,7 @@ msgid "Successfully saved"
 msgstr ""
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:63
-#: frontend/src/shared-dir-view.js:78
+#: frontend/src/shared-dir-view.js:79
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Bylos atsisiuntimas išjungtas: išnaudotas bendrinimo nuorodos savininko galimo srauto limitas."
 
@@ -4747,6 +4864,7 @@ msgid "selected"
 msgstr ""
 
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:385
+#: frontend/src/metadata/metadata-tree-view/view.js:65
 #: frontend/src/utils/text-translation.js:52
 msgid "Move"
 msgstr ""
@@ -5094,20 +5212,21 @@ msgstr ""
 
 #: frontend/src/file-history-old.js:237
 #: frontend/src/pages/file-history/side-panel.js:105
-#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:257
+#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:269
 msgid "History Versions"
-msgstr ""
-
-#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:142
-#: frontend/src/repo-history.js:149
-msgid "Modifier"
 msgstr ""
 
 #: frontend/src/file-history-old.js:268
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:56
 #: frontend/src/repo-folder-trash.js:285
+#: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:40
 msgid "More"
 msgstr "Daugiau"
+
+#: frontend/src/hooks/metadata-operation.js:20
+#| msgid "Successfully saved"
+msgid "Successfully OCR"
+msgstr ""
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:214
 msgid "No collaborators available"
@@ -5142,6 +5261,7 @@ msgid "Add option"
 msgstr ""
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:209
+#: frontend/src/tag/components/popover/set-linked-tags-popover/add-linked-tags.js:92
 #| msgid "No options available"
 msgid "No tags available"
 msgstr ""
@@ -5152,6 +5272,7 @@ msgid "No tag"
 msgstr ""
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:245
+#: frontend/src/tag/components/popover/set-linked-tags-popover/add-linked-tags.js:86
 #| msgid "Search"
 msgid "Search tag"
 msgstr ""
@@ -5278,12 +5399,12 @@ msgstr ""
 msgid "Are you sure to delete "
 msgstr ""
 
-#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:44
+#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:45
 #| msgid "Failed to generate image description"
 msgid "Failed to generate file tags"
 msgstr ""
 
-#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:121
+#: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:122
 #| msgid "No tags"
 msgid "'s tags"
 msgstr ""
@@ -5357,12 +5478,12 @@ msgstr ""
 msgid "Tags language:"
 msgstr ""
 
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:115
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:116
 #| msgid "Turn off"
 msgid "Turn off tags"
 msgstr ""
 
-#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:116
+#: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:117
 #| msgid ""
 #| " really want to turn off extended properties? Existing properties l all "
 #| "deleted."
@@ -5529,12 +5650,6 @@ msgstr ""
 msgid "Search property"
 msgstr ""
 
-#: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:581
-#: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:189
-#: frontend/src/metadata/components/popover/sort-popover/index.js:230
-msgid "No results"
-msgstr ""
-
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-folder-filter.js:7
 msgid "Only files"
 msgstr ""
@@ -5698,28 +5813,6 @@ msgstr ""
 #: frontend/src/metadata/components/popover/sort-popover/index.js:274
 #| msgid "Add User"
 msgid "Add sort"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/add-view/index.js:48
-msgid "Table"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/add-view/index.js:50
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:71
-msgid "Gallery"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/add-view/index.js:52
-msgid "Kanban"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/add-view/index.js:54
-#| msgid "Max"
-msgid "Map"
-msgstr ""
-
-#: frontend/src/metadata/components/popover/view-popover/add-view/index.js:72
-msgid "New view"
 msgstr ""
 
 #: frontend/src/metadata/components/view-details/index.js:29
@@ -5906,40 +5999,32 @@ msgstr ""
 msgid "is none of..."
 msgstr ""
 
-#: frontend/src/metadata/hooks/metadata.js:159
+#: frontend/src/metadata/hooks/metadata-view.js:160
+#: frontend/src/metadata/views/face-recognition/person-photos/index.js:94
+msgid "Successfully deleted {name} and {n} other items"
+msgstr ""
+
+#: frontend/src/metadata/hooks/metadata-view.js:161
+#: frontend/src/metadata/views/face-recognition/person-photos/index.js:95
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1167
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1195
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:365
+#: frontend/src/pages/org-admin/org-groups-search-groups.js:229
+#: frontend/src/pages/org-admin/org-groups.js:127
+msgid "Successfully deleted {name}"
+msgstr ""
+
+#: frontend/src/metadata/hooks/metadata.js:373
 msgid "Recognizing portraits. Please refresh the page later."
 msgstr ""
 
-#: frontend/src/metadata/metadata-tree-view/index.js:59
-#: frontend/src/metadata/metadata-tree-view/index.js:63
+#: frontend/src/metadata/metadata-tree-view/index.js:57
+#: frontend/src/metadata/metadata-tree-view/index.js:61
 msgid "Untitled"
 msgstr ""
 
-#: frontend/src/metadata/metadata-tree-view/index.js:142
-msgid "Add view"
-msgstr ""
-
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:21
-#: frontend/src/metadata/utils/validate/view.js:5
-#: frontend/src/tag/utils/validate/tag.js:5
-msgid "Name should be string"
-msgstr ""
-
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:28
-#: frontend/src/metadata/utils/validate/view.js:12
-#: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:57
-#: frontend/src/tag/utils/validate/tag.js:12 frontend/src/utils/utils.js:1903
-msgid "Name cannot contain slash"
-msgstr ""
-
-#: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:31
-#: frontend/src/metadata/utils/validate/view.js:15
-#: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:61
-#: frontend/src/tag/utils/validate/tag.js:15 frontend/src/utils/utils.js:1913
-msgid "Name cannot contain backslash"
-msgstr ""
-
-#: frontend/src/metadata/metadata-tree-view/view-item/index.js:57
+#: frontend/src/metadata/metadata-tree-view/view.js:58
+#: frontend/src/metadata/views/gallery/context-menu/index.js:35
 msgid "Duplicate"
 msgstr ""
 
@@ -5958,58 +6043,78 @@ msgid "Failed to restore records"
 msgstr ""
 
 #: frontend/src/metadata/store/server-operator.js:93
+#| msgid "Failed to modify filter"
+msgid "Failed to move folder"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:93
+#| msgid "Failed to modify filter"
+msgid "Failed to move file"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:105
+#| msgid "Failed to duplicate page"
+msgid "Failed to duplicate folder"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:105
+#| msgid "Failed to duplicate page"
+msgid "Failed to duplicate file"
+msgstr ""
+
+#: frontend/src/metadata/store/server-operator.js:117
 msgid "Failed to insert property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:102
+#: frontend/src/metadata/store/server-operator.js:126
 msgid "Failed to delete property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:111
+#: frontend/src/metadata/store/server-operator.js:135
 msgid "Failed to rename property"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:129
+#: frontend/src/metadata/store/server-operator.js:153
 msgid "Failed to modify property data"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:138
+#: frontend/src/metadata/store/server-operator.js:162
 msgid "Failed to modify property order"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:147
+#: frontend/src/metadata/store/server-operator.js:171
 msgid "Failed to modify filter"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:156
+#: frontend/src/metadata/store/server-operator.js:180
 msgid "Failed to modify sort"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:165
+#: frontend/src/metadata/store/server-operator.js:189
 msgid "Failed to modify group"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:174
+#: frontend/src/metadata/store/server-operator.js:198
 msgid "Failed to modify hidden properties"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:183
+#: frontend/src/metadata/store/server-operator.js:207
 #| msgid "Failed to modify sort"
 msgid "Failed to modify settings"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:194
+#: frontend/src/metadata/store/server-operator.js:218
 msgid "Failed to modify people name"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:211
+#: frontend/src/metadata/store/server-operator.js:235
 #: frontend/src/tag/store/server-operator.js:41
 #| msgid "Failed to modify sort"
 msgid "Failed to modify tags"
 msgstr ""
 
-#: frontend/src/metadata/store/server-operator.js:399
-#: frontend/src/metadata/store/server-operator.js:417
+#: frontend/src/metadata/store/server-operator.js:423
+#: frontend/src/metadata/store/server-operator.js:441
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1127
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1143
 msgid "Renaming {name} failed"
@@ -6114,6 +6219,23 @@ msgstr ""
 msgid "Outdated"
 msgstr ""
 
+#: frontend/src/metadata/utils/validate/view.js:5
+#: frontend/src/tag/utils/validate/tag.js:5
+msgid "Name should be string"
+msgstr ""
+
+#: frontend/src/metadata/utils/validate/view.js:12
+#: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:57
+#: frontend/src/tag/utils/validate/tag.js:12 frontend/src/utils/utils.js:1903
+msgid "Name cannot contain slash"
+msgstr ""
+
+#: frontend/src/metadata/utils/validate/view.js:15
+#: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:61
+#: frontend/src/tag/utils/validate/tag.js:15 frontend/src/utils/utils.js:1913
+msgid "Name cannot contain backslash"
+msgstr ""
+
 #: frontend/src/metadata/utils/validate/view.js:18
 #: frontend/src/tag/utils/validate/tag.js:18
 msgid "Name already exists"
@@ -6136,26 +6258,15 @@ msgstr ""
 msgid "items"
 msgstr ""
 
-#: frontend/src/metadata/views/face-recognition/person-photos/index.js:95
-#: frontend/src/metadata/views/gallery/index.js:55
-#: frontend/src/metadata/views/table/index.js:157
-msgid "Successfully deleted {name} and {n} other items"
-msgstr ""
-
-#: frontend/src/metadata/views/face-recognition/person-photos/index.js:96
-#: frontend/src/metadata/views/gallery/index.js:56
-#: frontend/src/metadata/views/table/index.js:158
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1167
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1195
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:365
-#: frontend/src/pages/org-admin/org-groups-search-groups.js:229
-#: frontend/src/pages/org-admin/org-groups.js:127
-msgid "Successfully deleted {name}"
-msgstr ""
-
 #: frontend/src/metadata/views/gallery/content.js:150
-#: frontend/src/metadata/views/table/table-main/records/index.js:706
+#: frontend/src/metadata/views/table/table-main/records/index.js:688
 msgid "No record"
+msgstr ""
+
+#: frontend/src/metadata/views/gallery/context-menu/index.js:32
+#: frontend/src/metadata/views/kanban/context-menu/index.js:48
+#: frontend/src/metadata/views/table/context-menu/index.js:190
+msgid "Delete file"
 msgstr ""
 
 #: frontend/src/metadata/views/kanban/add-board/index.js:38
@@ -6168,9 +6279,34 @@ msgstr ""
 msgid "Uncategorized"
 msgstr ""
 
-#: frontend/src/metadata/views/kanban/boards/index.js:239
+#: frontend/src/metadata/views/kanban/boards/index.js:276
 #| msgid "No changes"
 msgid "No categories"
+msgstr ""
+
+#: frontend/src/metadata/views/kanban/context-menu/index.js:43
+#: frontend/src/metadata/views/table/context-menu/index.js:164
+msgid "Open folder in new tab"
+msgstr ""
+
+#: frontend/src/metadata/views/kanban/context-menu/index.js:43
+#: frontend/src/metadata/views/table/context-menu/index.js:164
+msgid "Open file in new tab"
+msgstr ""
+
+#: frontend/src/metadata/views/kanban/context-menu/index.js:48
+#: frontend/src/metadata/views/table/context-menu/index.js:190
+msgid "Delete folder"
+msgstr ""
+
+#: frontend/src/metadata/views/kanban/context-menu/index.js:51
+#: frontend/src/metadata/views/table/context-menu/index.js:194
+msgid "Rename folder"
+msgstr ""
+
+#: frontend/src/metadata/views/kanban/context-menu/index.js:51
+#: frontend/src/metadata/views/table/context-menu/index.js:194
+msgid "Rename file"
 msgstr ""
 
 #: frontend/src/metadata/views/kanban/settings/index.js:116
@@ -6202,108 +6338,94 @@ msgstr ""
 msgid "Failed to get user location"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:69
+#: frontend/src/metadata/views/table/context-menu/index.js:102
 msgid "Clear selected"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:70
+#: frontend/src/metadata/views/table/context-menu/index.js:103
 msgid "Copy selected"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:83
+#: frontend/src/metadata/views/table/context-menu/index.js:116
 msgid "Delete selected"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:91
-#: frontend/src/metadata/views/table/context-menu/index.js:116
+#: frontend/src/metadata/views/table/context-menu/index.js:124
+#: frontend/src/metadata/views/table/context-menu/index.js:149
 msgid "Extract file details"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:131
-msgid "Open folder in new tab"
-msgstr ""
-
-#: frontend/src/metadata/views/table/context-menu/index.js:131
-msgid "Open file in new tab"
-msgstr ""
-
-#: frontend/src/metadata/views/table/context-menu/index.js:137
+#: frontend/src/metadata/views/table/context-menu/index.js:170
 msgid "Generate description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:139
+#: frontend/src/metadata/views/table/context-menu/index.js:172
 msgid "Generate image description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:148
+#: frontend/src/metadata/views/table/context-menu/index.js:181
 msgid "Extract file detail"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:152
+#: frontend/src/metadata/views/table/context-menu/index.js:185
 #| msgid "Generate image description"
 msgid "Generate file tags"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:157
-msgid "Delete folder"
+#: frontend/src/metadata/views/table/context-menu/index.js:198
+#| msgid "Moved folder"
+msgid "Move folder"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:157
-msgid "Delete file"
+#: frontend/src/metadata/views/table/context-menu/index.js:198
+#| msgid "Moved file"
+msgid "Move file"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:161
-msgid "Rename folder"
-msgstr ""
-
-#: frontend/src/metadata/views/table/context-menu/index.js:161
-msgid "Rename file"
-msgstr ""
-
-#: frontend/src/metadata/views/table/context-menu/index.js:227
+#: frontend/src/metadata/views/table/context-menu/index.js:238
 msgid "Failed to generate description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:255
+#: frontend/src/metadata/views/table/context-menu/index.js:266
 msgid "Failed to generate image description"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:287
+#: frontend/src/metadata/views/table/context-menu/index.js:301
 #| msgid "Copy failed"
 msgid "OCR failed"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:295
+#: frontend/src/metadata/views/table/context-menu/index.js:309
 msgid "Select up to 50 files"
 msgstr ""
 
-#: frontend/src/metadata/views/table/context-menu/index.js:321
+#: frontend/src/metadata/views/table/context-menu/index.js:335
 msgid "Failed to extract file details"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:663
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:679
 #| msgid "xxx cells selected"
 msgid "xxx cells cut"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:663
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:679
 #| msgid "1 cell copied"
 msgid "1 cell cut"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:703
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:719
 msgid "xxx rows are copied."
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:703
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:719
 msgid "1 row is copied."
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:735
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:751
 msgid "xxx cells copied"
 msgstr ""
 
-#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:735
+#: frontend/src/metadata/views/table/masks/interaction-masks/index.js:751
 msgid "1 cell copied"
 msgstr ""
 
@@ -6582,7 +6704,7 @@ msgid "View Related Snapshot"
 msgstr ""
 
 #: frontend/src/pages/file-history/side-panel.js:92
-#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:110
+#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:122
 msgid "Successfully restored."
 msgstr ""
 
@@ -6821,7 +6943,7 @@ msgid "Failed to move files to another library."
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:649
-#: frontend/src/shared-dir-view.js:218
+#: frontend/src/shared-dir-view.js:219
 msgid "Failed to copy files to another library."
 msgstr ""
 
@@ -6830,7 +6952,7 @@ msgid "Successfully moved files to another library."
 msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:681
-#: frontend/src/shared-dir-view.js:232
+#: frontend/src/shared-dir-view.js:233
 msgid "Successfully copied files to another library."
 msgstr ""
 
@@ -6863,37 +6985,37 @@ msgstr ""
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1271
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1264
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1284
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1288
 msgid "Failed to move {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1332
-#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:127
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1328
+#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:139
 #: frontend/src/utils/utils.js:1501
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1344
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1351
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1364
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1371
 msgid "Converting, please wait..."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1376
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1383
 msgid "Successfully converted the file."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1383
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1390
 msgid "Failed to convert {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2163
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2170
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:259
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:111
 #: frontend/src/pages/shared-libs/item.js:213
@@ -6902,13 +7024,13 @@ msgstr ""
 msgid "Leave Share"
 msgstr "Atmesti bendrinimą"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2207
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2219
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2370
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2384
 #: frontend/src/pages/wiki/main-panel.js:82
-#: frontend/src/pages/wiki2/main-panel.js:108
+#: frontend/src/pages/wiki2/main-panel.js:102
 msgid "Folder does not exist."
 msgstr ""
 
@@ -7063,26 +7185,9 @@ msgstr "Taisyti saugyklos dydį"
 msgid "No sub-departments"
 msgstr ""
 
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
-#: frontend/src/pages/org-admin/devices/devices-errors.js:50
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:47
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
-#: frontend/src/pages/sys-admin/info.js:115
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:50
-#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
-msgid "Version"
-msgstr ""
-
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:122
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:126
 msgid "Successfully unlinked the device."
-msgstr ""
-
-#: frontend/src/pages/org-admin/devices/devices-errors.js:50
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:90
-#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
-msgid "Device"
 msgstr ""
 
 #: frontend/src/pages/org-admin/devices/devices-errors.js:52
@@ -7182,10 +7287,6 @@ msgstr "Išvalyti"
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:272
 #: frontend/src/pages/sys-admin/groups/search-groups.js:114
 msgid "Search Groups"
-msgstr ""
-
-#: frontend/src/pages/org-admin/org-groups-search-groups.js:276
-msgid "Search groups"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:287
@@ -7764,11 +7865,11 @@ msgstr ""
 msgid "Next modification"
 msgstr ""
 
-#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:188
+#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:200
 msgid "No version history"
 msgstr ""
 
-#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:272
+#: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:284
 msgid "Show changes"
 msgstr ""
 
@@ -8831,7 +8932,7 @@ msgid "shared by:"
 msgstr ""
 
 #: frontend/src/pages/upload-link/index.js:48
-#: frontend/src/shared-dir-view.js:477
+#: frontend/src/shared-dir-view.js:479
 msgid "The owner of this library has run out of space."
 msgstr ""
 
@@ -8941,11 +9042,11 @@ msgstr ""
 msgid "Emojis"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:68
+#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:65
 msgid "Add icon"
 msgstr ""
 
-#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:74
+#: frontend/src/pages/wiki2/wiki-right-header/page-title.js:71
 msgid "Add cover"
 msgstr ""
 
@@ -8965,38 +9066,6 @@ msgstr ""
 #| msgid "You can add a Wiki by clicking the \"Add Wiki\" item in the menu."
 msgid "You can add a Wiki by clicking the \"Add Wiki\" item in the dropdown menu."
 msgstr ""
-
-#: frontend/src/repo-history.js:96
-msgid "{placeholder} Modification History"
-msgstr ""
-
-#: frontend/src/repo-history.js:115
-msgid ""
-"Tip: a snapshot will be generated after modification, which records the "
-"library state after the modification."
-msgstr ""
-
-#: frontend/src/repo-history.js:144
-msgid "Labels"
-msgstr ""
-
-#: frontend/src/repo-history.js:280
-msgid "None"
-msgstr ""
-
-#: frontend/src/repo-history.js:283 frontend/src/repo-snapshot.js:162
-msgid "Unknown"
-msgstr "Nežinoma"
-
-#: frontend/src/repo-history.js:313
-#| msgid "(current version)"
-msgid "Current Version"
-msgstr "Dabartinė versija"
-
-#: frontend/src/repo-history.js:314
-#| msgid "View Related Snapshot"
-msgid "View Snapshot"
-msgstr "Peržiūrėti momentinę kopiją"
 
 #: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
@@ -9022,31 +9091,31 @@ msgstr ""
 msgid "Profile Setting"
 msgstr "Profilio nustatymai"
 
-#: frontend/src/shared-dir-view.js:453
+#: frontend/src/shared-dir-view.js:455
 #| msgid "Shared by"
 msgid "Shared by: "
 msgstr "Bendrinama:"
 
-#: frontend/src/shared-dir-view.js:462 frontend/src/shared-dir-view.js:463
+#: frontend/src/shared-dir-view.js:464 frontend/src/shared-dir-view.js:465
 #| msgid "List view"
 msgid "List"
 msgstr ""
 
-#: frontend/src/shared-dir-view.js:469 frontend/src/shared-dir-view.js:470
+#: frontend/src/shared-dir-view.js:471 frontend/src/shared-dir-view.js:472
 #| msgid "Grid view"
 msgid "Grid"
 msgstr ""
 
-#: frontend/src/shared-dir-view.js:486
+#: frontend/src/shared-dir-view.js:488
 #| msgid "Save Selected Items"
 msgid "ZIP Selected Items"
 msgstr ""
 
-#: frontend/src/shared-dir-view.js:488 frontend/src/translate.js:27
+#: frontend/src/shared-dir-view.js:490 frontend/src/translate.js:27
 msgid "Save Selected Items"
 msgstr ""
 
-#: frontend/src/shared-dir-view.js:493
+#: frontend/src/shared-dir-view.js:495
 #| msgid "IP"
 msgid "ZIP"
 msgstr "ZIP"
@@ -9073,6 +9142,27 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+#: frontend/src/tag/components/popover/set-linked-tags-popover/add-linked-tags.js:78
+#: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:16
+msgid "Link existing tags"
+msgstr ""
+
+#: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
+#: frontend/src/tag/views/all-tags/main/index.js:49
+#| msgid "Import tags"
+msgid "Parent tags"
+msgstr ""
+
+#: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
+#| msgid "No tags"
+msgid "Sub tags"
+msgstr ""
+
+#: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:20
+#| msgid "No tags"
+msgid "No parent tag"
+msgstr ""
+
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:60
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:66
 #| msgid "New Tag"
@@ -9082,7 +9172,7 @@ msgstr ""
 #: frontend/src/tag/components/tag-view-name/index.js:15
 #: frontend/src/tag/components/tag-view-name/index.js:17
 #: frontend/src/tag/components/tag-view-name/index.js:18
-#: frontend/src/tag/hooks/tags.js:218
+#: frontend/src/tag/hooks/tags.js:226
 #: frontend/src/tag/tags-tree-view/all-tags/index.js:28
 #| msgid "No tags"
 msgid "All tags"
@@ -9102,30 +9192,54 @@ msgstr ""
 msgid "Failed to delete tags"
 msgstr ""
 
-#: frontend/src/tag/store/server-operator.js:57
-#: frontend/src/tag/store/server-operator.js:63
+#: frontend/src/tag/store/server-operator.js:62
+#| msgid "Failed to modify sort"
+msgid "Failed to add linked tags"
+msgstr ""
+
+#: frontend/src/tag/store/server-operator.js:74
+#| msgid "Failed to delete {name}"
+msgid "Failed to delete linked tags"
+msgstr ""
+
+#: frontend/src/tag/store/server-operator.js:81
+#: frontend/src/tag/store/server-operator.js:87
 #| msgid "Failed to restore {name}"
 msgid "Failed to restore tags"
 msgstr ""
 
-#: frontend/src/tag/views/all-tags/main/index.js:42
+#: frontend/src/tag/views/all-tags/main/index.js:48
 #| msgid "Tags"
 msgid "Tag"
 msgstr ""
 
-#: frontend/src/tag/views/all-tags/main/index.js:43
+#: frontend/src/tag/views/all-tags/main/index.js:50
+msgid "Sub tags count"
+msgstr ""
+
+#: frontend/src/tag/views/all-tags/main/index.js:51
 #| msgid "File name"
 msgid "File count"
 msgstr ""
 
-#: frontend/src/tag/views/all-tags/main/tag/index.js:75
+#: frontend/src/tag/views/all-tags/main/tag/index.js:132
 #| msgid "Edit Quota"
 msgid "Edit tag"
 msgstr ""
 
-#: frontend/src/tag/views/all-tags/main/tag/index.js:78
+#: frontend/src/tag/views/all-tags/main/tag/index.js:135
 #| msgid "Delete page"
 msgid "Delete tag"
+msgstr ""
+
+#: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:17
+#| msgid "Search"
+msgid "Set parent tags"
+msgstr ""
+
+#: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:18
+#| msgid "Set Quota"
+msgid "Set sub tags"
 msgstr ""
 
 #: frontend/src/tag/views/tag-files/index.js:85
@@ -9322,6 +9436,15 @@ msgstr ""
 msgid "API Token"
 msgstr ""
 
+#: frontend/src/utils/text-translation.js:191
+#| msgid "Folder"
+msgid "Add Folder"
+msgstr ""
+
+#: frontend/src/utils/text-translation.js:195
+msgid "Add view"
+msgstr ""
+
 #: frontend/src/utils/utils.js:441
 msgid "Admin access"
 msgstr ""
@@ -9455,6 +9578,21 @@ msgstr ""
 #: frontend/src/utils/utils.js:1918
 msgid "Name cannot be double dots"
 msgstr ""
+
+#~ msgid "Group not found"
+#~ msgstr "Group not found"
+
+#~ msgid "Select a group"
+#~ msgstr "Delete group"
+
+#~ msgid "Select groups"
+#~ msgstr "Delete group"
+
+#~ msgid "Insufficient password strength"
+#~ msgstr "Insufficient password strength"
+
+#~ msgid "New view"
+#~ msgstr "New view"
 
 #~ msgid "No department"
 #~ msgstr "No department"
