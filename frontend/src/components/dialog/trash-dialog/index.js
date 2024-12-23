@@ -226,6 +226,7 @@ class TrashDialog extends React.Component {
                   hasNextPage={hasNextPage}
                   curPerPage={perPage}
                   resetPerPage={this.resetPerPage}
+                  noURLUpdate={true}
                 />
               </div>
             }
