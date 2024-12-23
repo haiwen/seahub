@@ -1,11 +1,15 @@
 .my-deleted-repos-dialog {
   max-width: 720px;
+  height: calc(100% - 56px);
+  overflow: hidden;
 }
 
-.my-deleted-repos-container {
-  min-height: 200px;
-  max-height: 500px;
-  overflow: auto;
+.my-deleted-repos-dialog .modal-content {
+  height: 100%;
+}
+
+.my-deleted-repos-dialog .my-deleted-repos-container {
+  overflow-y: scroll;
 }
 
 .my-deleted-repos-empty-tip {
@@ -25,5 +29,5 @@
 
 .my-deleted-repos-tip {
   font-size: .8125rem;
-  color: #9c9c9c;
+  color: #666;
 }
