@@ -167,7 +167,7 @@ class TransferDialog extends React.Component {
                   onChange={this.toggleReshareStatus}
                   placeholder={gettext('Keep sharing')}
                 />
-                <div className='tip'>{gettext('If the library is shared to another user, the sharing will be ketp.')}</div>
+                <div className='tip'>{gettext('If the library is shared to another user, the sharing will be kept.')}</div>
               </TabPane>
               {isPro && canTransferToDept &&
               <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
@@ -192,7 +192,7 @@ class TransferDialog extends React.Component {
                   onChange={this.toggleReshareStatus}
                   placeholder={gettext('Keep sharing')}
                 />
-                <div className='tip'>{gettext('If the library is shared to another department, the sharing will be ketp.')}</div>
+                <div className='tip'>{gettext('If the library is shared to another department, the sharing will be kept.')}</div>
               </TabPane>}
             </Fragment>
           </TabContent>
