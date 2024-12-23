@@ -223,7 +223,8 @@ class ValidateFilter {
     switch (filterColumn.type) {
       case CellType.TEXT:
       case CellType.GEOLOCATION:
-      case CellType.FILE_NAME: {
+      case CellType.FILE_NAME:
+      case CellType.TAGS: {
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
       }
       case CellType.NUMBER:
@@ -237,7 +238,7 @@ class ValidateFilter {
       }
       case CellType.COLLABORATOR:
       case CellType.CREATOR:
-      case CellType.LAST_MODIFIER: {
+      case CellType.LAST_MODIFIER:{
         return this.isValidTermType(term, TERM_TYPE_MAP.ARRAY);
       }
       case CellType.DATE:
@@ -274,13 +275,6 @@ class ValidateFilter {
         // contains deleted option(s)
         const options = getColumnOptions(filterColumn);
         return this.isValidSelectedOptions(term, options);
-      }
-      case CellType.TAGS: {
-        if (!this.isValidTermType(term, TERM_TYPE_MAP.ARRAY)) {
-          return false;
-        }
-
-        return true;
       }
       default: {
         return false;

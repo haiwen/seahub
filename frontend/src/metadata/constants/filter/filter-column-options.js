@@ -48,15 +48,6 @@ const dateTermModifiers = [
   FILTER_TERM_MODIFIER_TYPE.EXACT_DATE,
 ];
 
-const tagsPredicates = [
-  FILTER_PREDICATE_TYPE.HAS_ANY_OF,
-  FILTER_PREDICATE_TYPE.HAS_ALL_OF,
-  FILTER_PREDICATE_TYPE.HAS_NONE_OF,
-  FILTER_PREDICATE_TYPE.IS_EXACTLY,
-  FILTER_PREDICATE_TYPE.EMPTY,
-  FILTER_PREDICATE_TYPE.NOT_EMPTY,
-];
-
 const FILTER_COLUMN_OPTIONS = {
   [CellType.TEXT]: {
     filterPredicateList: textPredicates,
@@ -153,7 +144,7 @@ const FILTER_COLUMN_OPTIONS = {
     filterPredicateList: numberPredicates,
   },
   [CellType.TAGS]: {
-    filterPredicateList: tagsPredicates,
+    filterPredicateList: textPredicates,
   },
 };
 
