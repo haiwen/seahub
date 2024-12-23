@@ -254,3 +254,4 @@ class MetadataServerAPI:
             'row_id_map': row_id_map
         }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
