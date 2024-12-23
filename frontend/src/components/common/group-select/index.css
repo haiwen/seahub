@@ -11,13 +11,10 @@
   max-width: 900px;
   user-select: none;
   text-align: left;
-  border-color: hsl(0, 0%, 80%);
+  border-color: 1px solid rgba(0, 40, 100, 0.12);
   height: auto;
   min-height: 38px;
-}
-
-.group-select.custom-select:hover {
-  border-color: hsl(0, 0%, 70%);
+  cursor: pointer;
 }
 
 .group-select.custom-select:focus,
@@ -32,11 +29,6 @@
   border-color: rgba(0, 40, 100, 0.12) !important;
   box-shadow: unset;
   cursor: default;
-}
-
-.group-select.custom-select:hover {
-  cursor: pointer;
-  border-color: rgb(179, 179, 179);
 }
 
 .group-select .sf3-font-down {

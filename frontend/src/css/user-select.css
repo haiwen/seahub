@@ -30,11 +30,3 @@
   line-height: 20px;
   margin-left: 5px;
 }
-
-.user-select .true__control.true__control--is-focused,
-.user-select .true__control.true__control--is-focused:hover {
-  background-color: #ffffff;
-  border-color: #1991eb;
-  outline: 0;
-  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
-}
