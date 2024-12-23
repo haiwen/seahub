@@ -82,30 +82,9 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 
-def get_face_link_column(face_table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
+def get_face_columns():
+    from seafevents.repo_metadata.constants import FACES_TABLE
     columns = [
-        METADATA_TABLE.columns.face_vectors.to_dict(),
-        METADATA_TABLE.columns.face_links.to_dict({
-            'link_id': FACES_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': face_table_id,
-            'display_column_key': FACES_TABLE.columns.name.key,
-        }),
-    ]
-
-    return columns
-
-
-def get_face_columns(face_table_id):
-    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
-    columns = [
-        FACES_TABLE.columns.photo_links.to_dict({
-            'link_id': FACES_TABLE.link_id,
-            'table_id': METADATA_TABLE.id,
-            'other_table_id': face_table_id,
-            'display_column_key': METADATA_TABLE.columns.obj_id.key,
-        }),
         FACES_TABLE.columns.vector.to_dict(),
         FACES_TABLE.columns.name.to_dict(),
     ]
@@ -151,14 +130,25 @@ def init_faces(metadata_server_api):
 
     remove_faces_table(metadata_server_api)
     resp = metadata_server_api.create_table(FACES_TABLE.name)
+    face_table_id = resp['id']
 
-    # init link column
-    link_column = get_face_link_column(resp['id'])
-    metadata_server_api.add_columns(METADATA_TABLE.id, link_column)
+    # add face vector column
+    metadata_server_api.add_columns(METADATA_TABLE.id, [METADATA_TABLE.columns.face_vectors.to_dict()])
 
-    # init face column
-    face_columns = get_face_columns(resp['id'])
-    metadata_server_api.add_columns(resp['id'], face_columns)
+    # init faces column
+    face_columns = get_face_columns()
+    metadata_server_api.add_columns(face_table_id, face_columns)
+
+    # add face link column
+    metadata_server_api.add_link_column(FACES_TABLE.link_id, METADATA_TABLE.id, face_table_id, {
+        "key": METADATA_TABLE.columns.face_links.key,
+        "name": METADATA_TABLE.columns.face_links.name,
+        "display_column_key": FACES_TABLE.columns.name.key
+    }, {
+        "key": FACES_TABLE.columns.photo_links.key,
+        "name": FACES_TABLE.columns.photo_links.name,
+        "display_column_key": METADATA_TABLE.columns.obj_id.key
+    })
 
 
 def remove_faces_table(metadata_server_api):
@@ -205,6 +195,7 @@ def init_tag_file_links_column(metadata_server_api, tag_table_id):
     }
     metadata_server_api.add_link_columns(file_link_id, table_id, other_table_id, table_column, other_table_column)
 
+
 def init_tag_self_link_columns(metadata_server_api, tag_table_id):
     from seafevents.repo_metadata.constants import TAGS_TABLE
     link_id = TAGS_TABLE.self_link_id
@@ -242,6 +233,7 @@ def init_tags(metadata_server_api):
     # init link columns
     init_tag_file_links_column(metadata_server_api, table_id)
     init_tag_self_link_columns(metadata_server_api, table_id)
+
 
 def remove_tags_table(metadata_server_api):
     from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
