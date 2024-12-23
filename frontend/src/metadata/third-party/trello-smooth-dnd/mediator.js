@@ -5,6 +5,7 @@ import { addStyleToHead, addCursorStyleToBody, removeStyle } from './styles';
 import dragScroller from './dragscroller';
 import { isMobile } from '../../../utils/utils';
 import { defaultOptions } from './defaults';
+import { debounce } from '../../utils/common';
 
 const grabEvents = ['mousedown', 'touchstart'];
 const moveEvents = ['mousemove', 'touchmove'];
@@ -107,11 +108,9 @@ function getGhostElement(wrapperElement, { x, y }, container, cursor) {
   ghost.style.userSelect = 'none';
 
   if (container.getOptions().dragClass) {
-    setTimeout(() => {
-      Utils.addClass(ghost.firstElementChild, container.getOptions().dragClass);
-      const dragCursor = window.getComputedStyle(ghost.firstElementChild).cursor;
-      cursorStyleElement = addCursorStyleToBody(dragCursor);
-    });
+    Utils.addClass(ghost.firstElementChild, container.getOptions().dragClass);
+    const dragCursor = window.getComputedStyle(ghost.firstElementChild).cursor;
+    cursorStyleElement = addCursorStyleToBody(dragCursor);
   } else {
     cursorStyleElement = addCursorStyleToBody(cursor);
   }
@@ -459,7 +458,7 @@ function onMouseMove(event) {
   }
 }
 
-var debouncedHandleMissedDragFrame = Utils.debounce(handleMissedDragFrame, 20, false);
+var debouncedHandleMissedDragFrame = debounce(handleMissedDragFrame, 20, false);
 
 function handleMissedDragFrame() {
   if (missedDrag) {

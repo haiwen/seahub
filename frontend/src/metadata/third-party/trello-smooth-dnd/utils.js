@@ -236,23 +236,6 @@ export const removeClass = (element, cls) => {
   }
 };
 
-export const debounce = (fn, delay, immediate) => {
-  let timer = null;
-  return (...params) => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    if (immediate && !timer) {
-      fn.call(null, ...params);
-    } else {
-      timer = setTimeout(() => {
-        timer = null;
-        fn.call(null, ...params);
-      }, delay);
-    }
-  };
-};
-
 export const removeChildAt = (parent, index) => {
   return parent.removeChild(parent.children[index]);
 };

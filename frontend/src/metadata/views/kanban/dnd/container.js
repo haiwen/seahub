@@ -7,45 +7,6 @@ container.dropHandler = dropHandlers.reactDropHandler().handler;
 container.wrapChild = false;
 
 class Container extends Component {
-  static propTypes = {
-    behaviour: PropTypes.oneOf(['move', 'copy', 'drop-zone', 'contain']),
-    groupName: PropTypes.string,
-    orientation: PropTypes.oneOf(['horizontal', 'vertical']),
-    style: PropTypes.object,
-    dragHandleSelector: PropTypes.string,
-    nonDragAreaSelector: PropTypes.string,
-    dragBeginDelay: PropTypes.number,
-    animationDuration: PropTypes.number,
-    autoScrollEnabled: PropTypes.bool,
-    lockAxis: PropTypes.string,
-    dragClass: PropTypes.string,
-    dropClass: PropTypes.string,
-    onDragStart: PropTypes.func,
-    onDragEnd: PropTypes.func,
-    onDrop: PropTypes.func,
-    getChildPayload: PropTypes.func,
-    shouldAnimateDrop: PropTypes.func,
-    shouldAcceptDrop: PropTypes.func,
-    onDragEnter: PropTypes.func,
-    onDragLeave: PropTypes.func,
-    render: PropTypes.func,
-    getGhostParent: PropTypes.func,
-    removeOnDropOut: PropTypes.bool,
-    dropPlaceholder: PropTypes.oneOfType([
-      PropTypes.shape({
-        className: PropTypes.string,
-        animationDuration: PropTypes.number,
-        showOnTop: PropTypes.bool,
-      }),
-      PropTypes.bool,
-    ]),
-  };
-
-  static defaultProps = {
-    behaviour: 'move',
-    orientation: 'vertical',
-    className: 'reactTrelloBoard',
-  };
 
   constructor(props) {
     super(props);
@@ -97,18 +58,6 @@ class Container extends Component {
     return false;
   }
 
-  render() {
-    if (this.props.render) {
-      return this.props.render(this.containerRef);
-    } else {
-      return (
-        <div style={this.props.style} ref={this.containerRef}>
-          {this.props.children}
-        </div>
-      );
-    }
-  }
-
   getContainer() {
     return this.containerRef.current;
   }
@@ -129,6 +78,57 @@ class Container extends Component {
       return result;
     }, {});
   }
+
+  render() {
+    if (this.props.render) {
+      return this.props.render(this.containerRef);
+    }
+    return (
+      <div style={this.props.style} ref={this.containerRef}>
+        {this.props.children}
+      </div>
+    );
+  }
 }
+
+Container.propTypes = {
+  behaviour: PropTypes.oneOf(['move', 'copy', 'drop-zone', 'contain']),
+  groupName: PropTypes.string,
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+  style: PropTypes.object,
+  dragHandleSelector: PropTypes.string,
+  nonDragAreaSelector: PropTypes.string,
+  dragBeginDelay: PropTypes.number,
+  animationDuration: PropTypes.number,
+  autoScrollEnabled: PropTypes.bool,
+  lockAxis: PropTypes.string,
+  dragClass: PropTypes.string,
+  dropClass: PropTypes.string,
+  onDragStart: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  onDrop: PropTypes.func,
+  getChildPayload: PropTypes.func,
+  shouldAnimateDrop: PropTypes.func,
+  shouldAcceptDrop: PropTypes.func,
+  onDragEnter: PropTypes.func,
+  onDragLeave: PropTypes.func,
+  render: PropTypes.func,
+  getGhostParent: PropTypes.func,
+  removeOnDropOut: PropTypes.bool,
+  dropPlaceholder: PropTypes.oneOfType([
+    PropTypes.shape({
+      className: PropTypes.string,
+      animationDuration: PropTypes.number,
+      showOnTop: PropTypes.bool,
+    }),
+    PropTypes.bool,
+  ]),
+};
+
+Container.defaultProps = {
+  behaviour: 'move',
+  orientation: 'vertical',
+  className: 'react-trello-board',
+};
 
 export default Container;

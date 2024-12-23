@@ -8,12 +8,11 @@
 }
 
 .sf-metadata-view-kanban-board .smooth-dnd-container.vertical {
-  height: calc(100% - 32px);
+  height: calc(100% - 40px);
   margin: 0 4px;
 }
 
-.sf-metadata-main .card-ghost {
-  transition: transform 0.18s ease;
+.sf-metadata-main .kanban-drag-card {
   transform: rotateZ(5deg);
   cursor: grabbing;
 }
@@ -35,8 +34,8 @@
   border: 1px solid transparent;
   border-radius: 6px;
   background: 
-      repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) top / 100% 1px no-repeat,
-      repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) bottom / 100% 1px no-repeat,
-      repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) left / 1px 100% no-repeat,
-      repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) right / 1px 100% no-repeat;
+    repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) top / 100% 1px no-repeat,
+    repeating-linear-gradient(to right, #aaa 0 4px, transparent 4px 8px) bottom / 100% 1px no-repeat,
+    repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) left / 1px 100% no-repeat,
+    repeating-linear-gradient(to bottom, #aaa 0 4px, transparent 4px 8px) right / 1px 100% no-repeat;
 }

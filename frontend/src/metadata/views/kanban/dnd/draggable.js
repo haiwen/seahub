@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { constants } from '../../../third-party/trello-smooth-dnd';
 
 const { wrapperClass } = constants;
 
 class Draggable extends Component {
-  static propTypes = {
-    render: PropTypes.func,
-    className: PropTypes.string,
-    children: PropTypes.node,
-  };
 
   render() {
     const { render, className, children, ...restProps } = this.props;
@@ -18,13 +14,18 @@ class Draggable extends Component {
       return React.cloneElement(render(), { className: wrapperClass });
     }
 
-    const clsName = `${className ? className + ' ' : ''}${wrapperClass}`;
     return (
-      <div {...restProps} className={clsName}>
+      <div {...restProps} className={classnames(className, wrapperClass)}>
         {children}
       </div>
     );
   }
 }
+
+Draggable.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.element,
+  render: PropTypes.func
+};
 
 export default Draggable;

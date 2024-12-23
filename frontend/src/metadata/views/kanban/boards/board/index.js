@@ -69,8 +69,8 @@ const Board = ({
       <Container
         orientation="vertical"
         groupName={boardName}
-        dragClass="card-ghost"
-        dropClass="card-ghost-drop"
+        dragClass="kanban-drag-card"
+        dropClass="kanban-drop-card"
         onDragStart={onDragStart}
         onDrop={e => onDragEnd(boardIndex, e)}
         onDragEnter={() => setDraggingOver(true)}
@@ -78,11 +78,10 @@ const Board = ({
         shouldAcceptDrop={() => true}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
         dropPlaceholder={{
-          animationDuration: 150,
+          animationDuration: 300,
           showOnTop: true,
           className: 'card-drop-preview',
         }}
-        dropPlaceholderAnimationDuration={200}
         getGhostParent={() => {
           // return anchestor of container who doesn't have a transform property
           return document.querySelector('.sf-metadata-main');
