@@ -9,7 +9,7 @@ import MapViewToolBar from './map-view-toolbar';
 
 import './index.css';
 
-const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) => {
+const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -89,14 +89,14 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) =>
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
-          showDetail={showDetail}
+          onToggleDetail={onToggleDetail}
         />
       )}
       {viewType === VIEW_TYPE.FACE_RECOGNITION && (
         <FaceRecognitionViewToolbar
           isCustomPermission={isCustomPermission}
           view={view}
-          showDetail={showDetail}
+          onToggleDetail={onToggleDetail}
         />
       )}
       {viewType === VIEW_TYPE.KANBAN && (
@@ -107,8 +107,7 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) =>
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
-          showDetail={showDetail}
-          closeDetail={closeDetail}
+          onToggleDetail={onToggleDetail}
         />
       )}
       {viewType === VIEW_TYPE.MAP && (
@@ -126,8 +125,7 @@ const ViewToolBar = ({ viewId, isCustomPermission, showDetail, closeDetail }) =>
 ViewToolBar.propTypes = {
   viewId: PropTypes.string,
   isCustomPermission: PropTypes.bool,
-  showDetail: PropTypes.func,
-  closeDetail: PropTypes.func,
+  onToggleDetail: PropTypes.func,
 };
 
 export default ViewToolBar;

@@ -9,7 +9,7 @@ const FaceRecognition = () => {
   const [showPeopleFaces, setShowPeopleFaces] = useState(false);
   const peopleRef = useRef(null);
 
-  const { metadata, store } = useMetadataView();
+  const { metadata, store, updateCurrentDirent } = useMetadataView();
 
   const peoples = useMemo(() => {
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
@@ -21,7 +21,6 @@ const FaceRecognition = () => {
   }, [store]);
 
   const onRemovePeoplePhotos = useCallback((peopleId, peoplePhotos, { success_callback }) => {
-    //
     store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
   }, [store]);
 
@@ -33,7 +32,8 @@ const FaceRecognition = () => {
   const closePeople = useCallback(() => {
     peopleRef.current = null;
     setShowPeopleFaces(false);
-  }, []);
+    updateCurrentDirent();
+  }, [updateCurrentDirent]);
 
   const onRename = useCallback((id, newName, oldName) => {
     store.renamePeopleName(id, newName, oldName);

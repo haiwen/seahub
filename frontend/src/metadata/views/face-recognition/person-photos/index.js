@@ -158,7 +158,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
   useEffect(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, true);
     return () => {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, false);
+      window?.sfMetadataContext?.eventBus?.dispatch(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, false);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

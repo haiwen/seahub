@@ -43,3 +43,5 @@ export const SYSTEM_FOLDERS = [
   '/_Internal',
   '/images'
 ];
+
+export const DIRENT_DETAIL_SHOW_KEY = 'sf_dirent_detail_show';

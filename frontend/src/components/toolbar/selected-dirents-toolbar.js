@@ -35,7 +35,6 @@ const propTypes = {
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
-  switchViewMode: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemRename: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,

@@ -10,7 +10,6 @@ import ViewModes from '../../components/view-modes';
 import SortMenu from '../../components/sort-menu';
 import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { DIRENT_DETAIL_MODE } from '../dir-view-mode/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -25,7 +24,7 @@ const propTypes = {
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
   viewId: PropTypes.string,
-  onCloseDetail: PropTypes.func,
+  onToggleDetail: PropTypes.func,
 };
 
 class DirTool extends React.Component {
@@ -92,14 +91,10 @@ class DirTool extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   };
 
-  showDirentDetail = () => {
-    this.props.switchViewMode(DIRENT_DETAIL_MODE);
-  };
-
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission, onToggleDetail } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
     const isTagView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
@@ -110,8 +105,7 @@ class DirTool extends React.Component {
           <MetadataViewToolBar
             viewId={viewId}
             isCustomPermission={isCustomPermission}
-            showDetail={this.showDirentDetail}
-            closeDetail={this.props.onCloseDetail}
+            onToggleDetail={onToggleDetail}
           />
         </div>
       );
@@ -130,7 +124,7 @@ class DirTool extends React.Component {
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
           <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
           {(!isCustomPermission) &&
-            <div className="cur-view-path-btn" onClick={this.showDirentDetail}>
+            <div className="cur-view-path-btn" onClick={onToggleDetail}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </div>
           }

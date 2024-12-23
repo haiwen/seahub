@@ -21,17 +21,16 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY } from '../../constants';
 import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
-import { LIST_MODE, METADATA_MODE, DIRENT_DETAIL_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
-import { VIEW_TYPE } from '../../metadata/constants';
 
 import '../../css/lib-content-view.css';
 
@@ -53,8 +52,12 @@ class LibContentView extends React.Component {
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
     if (storedTreePanelState != undefined) {
-      isTreePanelShown = storedTreePanelState == 'true';
+      isTreePanelShown = storedTreePanelState === 'true';
     }
+
+    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
+    const isDirentDetailShow = storedDirentDetailShowState === 'true';
+
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
@@ -88,7 +91,7 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
-      isDirentDetailShow: false,
+      isDirentDetailShow,
       itemsShowLength: 100,
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
@@ -133,15 +136,22 @@ class LibContentView extends React.Component {
   };
 
   showDirentDetail = () => {
-    this.setState({ isDirentDetailShow: true });
+    this.setState({ isDirentDetailShow: true }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, true);
+    });
   };
 
   toggleDirentDetail = () => {
-    this.setState({ isDirentDetailShow: !this.state.isDirentDetailShow });
+    const newState = !this.state.isDirentDetailShow;
+    this.setState({ isDirentDetailShow: newState }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, newState);
+    });
   };
 
   closeDirentDetail = () => {
-    this.setState({ isDirentDetailShow: false });
+    this.setState({ isDirentDetailShow: false }, () => {
+      localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, false);
+    });
   };
 
   componentDidMount() {
@@ -501,14 +511,13 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId, viewType) => {
+  showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
     this.setState({
       currentMode: METADATA_MODE,
       path: filePath,
       viewId: viewId,
-      isDirentDetailShow: viewType === VIEW_TYPE.GALLERY ? this.state.isDirentDetailShow : false,
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
@@ -532,7 +541,6 @@ class LibContentView extends React.Component {
       currentMode: TAGS_MODE,
       path: filePath,
       tagId: tagId,
-      isDirentDetailShow: false
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
@@ -988,10 +996,7 @@ class LibContentView extends React.Component {
     if (mode === this.state.currentMode) {
       return;
     }
-    if (mode === DIRENT_DETAIL_MODE) {
-      this.toggleDirentDetail();
-      return;
-    }
+
     cookie.save('seafile_view_mode', mode);
     let path = this.state.path;
     if (this.state.isTreePanelShown && this.state.isViewFile) {
@@ -1869,7 +1874,7 @@ class LibContentView extends React.Component {
     } else {
       if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || VIEW_TYPE.TABLE);
+          this.showFileMetadata(node.path, node.view_id || '0000');
         }
       } else if (Utils.isTags(node?.object?.type)) {
         if (node.path !== this.state.path) {
@@ -2001,6 +2006,7 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       currentMode: nextModel,
+      currentDirent: null,
     });
   };
 
@@ -2248,7 +2254,6 @@ class LibContentView extends React.Component {
                           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                           showDirentDetail={this.showDirentDetail}
                           currentMode={this.state.currentMode}
-                          switchViewMode={this.switchViewMode}
                           onItemConvert={this.onConvertItem}
                           onAddFolder={this.onAddFolder}
                         />
@@ -2304,7 +2309,7 @@ class LibContentView extends React.Component {
                           sortItems={this.sortItems}
                           viewId={this.state.viewId}
                           viewType={this.props.viewType}
-                          onCloseDetail={this.closeDirentDetail}
+                          onToggleDetail={this.toggleDirentDetail}
                         />
                       </div>
                     }
@@ -2378,12 +2383,11 @@ class LibContentView extends React.Component {
                         onItemsScroll={this.onItemsScroll}
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
-                        closeDirentDetail={this.closeDirentDetail}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>
                     }
-                    {this.state.isDirentDetailShow && (
+                    {!isCustomPermission && this.state.isDirentDetailShow && (
                       <Detail
                         path={this.state.path}
                         repoID={this.props.repoID}
@@ -2393,6 +2397,7 @@ class LibContentView extends React.Component {
                         fileTags={this.state.isViewFile ? this.state.fileTags : []}
                         onFileTagChanged={this.onFileTagChanged}
                         onClose={this.closeDirentDetail}
+                        currentMode={this.state.currentMode}
                       />
                     )}
                   </div>
