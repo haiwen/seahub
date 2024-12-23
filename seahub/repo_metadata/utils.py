@@ -132,7 +132,7 @@ def init_faces(metadata_server_api):
         "display_column_key": METADATA_TABLE.columns.obj_id.key
     })
 
-    metadata_server_api.add_link_column(FACES_TABLE.excluded_face_link_id, METADATA_TABLE.id, face_table_id, {
+    metadata_server_api.add_link_columns(FACES_TABLE.excluded_face_link_id, METADATA_TABLE.id, face_table_id, {
         "key": METADATA_TABLE.columns.excluded_face_links.key,
         "name": METADATA_TABLE.columns.excluded_face_links.name,
         "display_column_key": FACES_TABLE.columns.name.key

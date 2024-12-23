@@ -106,7 +106,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
     if (!removedImages.length) return;
     let recordIds = [];
     removedImages.forEach((record) => {
-      const { id, path: parentDir, name } = record || {};
+      const { id, parentDir, name } = record || {};
       if (parentDir && name) {
         recordIds.push(id);
       }

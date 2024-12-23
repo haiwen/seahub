@@ -15,48 +15,32 @@ import { Dirent } from '../../../../models';
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
-<<<<<<< HEAD
   DUPLICATE: 'duplicate',
-};
-
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder }) => {
-=======
   REMOVE: 'remove',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onRemoveImage }) => {
->>>>>>> ec4119d11 (remove photo)
+const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-<<<<<<< HEAD
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
-=======
   const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
->>>>>>> ec4119d11 (remove photo)
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
     if (checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
-<<<<<<< HEAD
     if (canDuplicateRow && selectedImages.length === 1) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
-    return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, selectedImages]);
-=======
-
     if (canRemovePhotoFromPeople) {
       validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from this group' });
     }
-
     return validOptions;
-  }, [checkCanDeleteRow, canRemovePhotoFromPeople, selectedImages]);
->>>>>>> ec4119d11 (remove photo)
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -104,25 +88,19 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       case CONTEXT_MENU_KEY.DELETE:
         onDelete(selectedImages);
         break;
-<<<<<<< HEAD
       case CONTEXT_MENU_KEY.DUPLICATE:
         toggleCopyDialog();
-=======
+        break;
       case CONTEXT_MENU_KEY.REMOVE:
         onRemoveImage(selectedImages);
->>>>>>> ec4119d11 (remove photo)
         break;
       default:
         break;
     }
-<<<<<<< HEAD
-  }, [selectedImages, handleDownload, onDelete, toggleCopyDialog]);
+  }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
   const path = selectedImages[0]?.path;
-=======
-  }, [selectedImages, handleDownload, onDelete, onRemoveImage]);
->>>>>>> ec4119d11 (remove photo)
 
   return (
     <>
