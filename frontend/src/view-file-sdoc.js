@@ -14,7 +14,7 @@ const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.co
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, repoEncrypted, parentDir, filePerm,
-  docPath, docName, docUuid, docPerm, seadocAccessToken, seadocServerUrl, assetsUrl,
+  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
   originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin, isRepoAdmin
 } = window.app.pageOptions;
@@ -62,8 +62,7 @@ ReactDom.render(
       <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
         <CollaboratorsProvider repoID={repoID}>
           <TagsProvider repoID={repoID} repoInfo={repoInfo}>
-            {filePerm === 'rw' && <SdocEditor />}
-            {filePerm !== 'rw' && <SimpleViewer />}
+            {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer />}
           </TagsProvider>
         </CollaboratorsProvider>
       </MetadataStatusProvider>
