@@ -115,7 +115,6 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
     onRemovePeoplePhotos(people._id, recordIds, {
       success_callback: () => {
         deletedByIds(recordIds, false);
-        toaster.success(gettext('Successfully remove'));
         callback && callback();
       }
     });
