@@ -21,7 +21,6 @@ const FaceRecognition = () => {
   }, [store]);
 
   const onRemovePeoplePhotos = useCallback((peopleId, peoplePhotos, { success_callback }) => {
-    //
     store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
   }, [store]);
 

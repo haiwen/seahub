@@ -6,10 +6,10 @@ import ViewDetails from '../../metadata/components/view-details';
 import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { TAGS_MODE } from '../dir-view-mode/constants';
+import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
 
 const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
-  const isView = useMemo(() => path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [path]);
+  const isView = useMemo(() => currentMode === METADATA_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [currentMode, path]);
 
   useEffect(() => {
     if (isView) return;

@@ -31,7 +31,6 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
-import { VIEW_TYPE } from '../../metadata/constants';
 
 import '../../css/lib-content-view.css';
 
@@ -512,7 +511,7 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId, viewType) => {
+  showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
     this.setState({
@@ -1875,7 +1874,7 @@ class LibContentView extends React.Component {
     } else {
       if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || VIEW_TYPE.TABLE);
+          this.showFileMetadata(node.path, node.view_id || '0000');
         }
       } else if (Utils.isTags(node?.object?.type)) {
         if (node.path !== this.state.path) {
@@ -2007,6 +2006,7 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       currentMode: nextModel,
+      currentDirent: null,
     });
   };
 
