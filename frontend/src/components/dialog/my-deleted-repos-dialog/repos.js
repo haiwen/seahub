@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import RepoItem from './repo-item';
 import { gettext, trashReposExpireDays } from '../../../utils/constants';
 
@@ -45,5 +46,9 @@ const Repos = ({ repos, filterRestoredRepo }) => {
   );
 };
 
+Repos.propTypes = {
+  repos: PropTypes.array,
+  filterRestoredRepo: PropTypes.func,
+};
 
 export default Repos;
