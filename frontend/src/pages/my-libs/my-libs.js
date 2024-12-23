@@ -14,7 +14,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import DeletedReposDialog from '../../components/dialog/my-deleted-repos';
+import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import MylibRepoListView from './mylib-repo-list-view';
 
