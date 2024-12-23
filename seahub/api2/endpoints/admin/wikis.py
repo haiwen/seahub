@@ -17,6 +17,7 @@ from seahub.utils.repo import normalize_repo_status_code
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.wiki2.models import Wiki2Publish
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.utils.db_api import SeafileDB
 
 
 
@@ -31,18 +32,17 @@ def get_wiki_info(wiki, publish_wiki_ids):
             org_wiki_owner = seafile_api.get_org_repo_owner(wiki.repo_id)
         except Exception:
             org_wiki_owner = None
-
     owner = wiki_owner or org_wiki_owner or ''
     result = {}
     result['id'] = wiki.repo_id
-    result['name'] = wiki.repo_name
+    result['name'] = wiki.wiki_name
     result['owner'] = owner
     result['owner_email'] = owner
     result['owner_contact_email'] = email2contact_email(owner)
-    result['size'] = wiki.size
+    result['size'] = wiki.size if wiki.size else 0
     result['size_formatted'] = filesizeformat(wiki.size)
     result['encrypted'] = wiki.encrypted
-    result['file_count'] = wiki.file_count
+    result['file_count'] = wiki.file_count if wiki.file_count else 0
     result['status'] = normalize_repo_status_code(wiki.status)
     result['last_modified'] = timestamp_to_isoformat_timestr(wiki.last_modified)
     result["is_published"] = True if wiki.repo_id in publish_wiki_ids else False
@@ -87,11 +87,8 @@ class AdminWikis(APIView):
 
         start = (current_page - 1) * per_page
         limit = per_page + 1
-        if order_by:
-            repos_all = seafile_api.get_repo_list(-1, -1, order_by)
-        else:
-            repos_all = seafile_api.get_repo_list(-1, -1)
-        all_wikis = [r for r in repos_all if is_wiki_repo(r)][start: start+limit]
+        seafile_db = SeafileDB()
+        all_wikis = seafile_db.get_all_wikis(start, limit, order_by)
         if len(all_wikis) > per_page:
             all_wikis = all_wikis[:per_page]
             has_next_page = True
