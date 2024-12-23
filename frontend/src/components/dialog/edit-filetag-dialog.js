@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import CreateTagDialog from './create-tag-dialog';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
+
 require('../../css/repo-tag.css');
 
 const TagItemPropTypes = {
@@ -116,7 +118,7 @@ class TagList extends React.Component {
     const { repoTags } = this.props;
     return (
       <Fragment>
-        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Select Tags')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleCancel}>{gettext('Select Tags')}</SeahubModalHeader>
         <ModalBody className="px-0">
           <ul className="tag-list tag-list-container">
             {repoTags.map((repoTag) => {

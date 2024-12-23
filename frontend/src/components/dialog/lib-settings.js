@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, enableRepoAutoDel } from '../../utils/constants';
 import LibHistorySettingPanel from './lib-settings/lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-setting-panel';
@@ -11,6 +11,7 @@ import {
   MetadataOCRStatusManagementDialog as LibMetadataOCRStatusSettingPanel,
   useMetadata
 } from '../../metadata';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { useMetadataStatus } from '../../hooks';
 
 import '../../css/lib-settings.css';
@@ -55,9 +56,9 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
   return (
     <div>
       <Modal isOpen={true} className="lib-settings-dialog" toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>
+        <SeahubModalHeader toggle={toggleDialog}>
           {gettext('Settings')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody className="d-md-flex p-md-0" role="tablist">
           <Fragment>
             <div className="lib-setting-nav p-4">

@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
+
 import '../../css/copy-move-dirent-progress-dialog.css';
 
 const propTypes = {
@@ -24,7 +26,7 @@ class CopyMoveDirentProgressDialog extends React.Component {
     };
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} className="copy-move-dirent-progress-dialog">
-        <ModalHeader toggle={this.props.toggleDialog}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{title}</SeahubModalHeader>
         <ModalBody>
           <div className="progress">
             <div

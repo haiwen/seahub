@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 export default class DeleteDialog extends React.Component {
 
@@ -17,7 +18,7 @@ export default class DeleteDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Delete page')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Delete page')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to delete this page?')}</p>
         </ModalBody>

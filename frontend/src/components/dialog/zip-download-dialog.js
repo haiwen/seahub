@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { mediaUrl, gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   data: PropTypes.object,
@@ -120,7 +121,7 @@ class ZipDownloadDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggleDialog}>
-        <ModalHeader toggle={this.toggleDialog}>{gettext('Download')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggleDialog}>{gettext('Download')}</SeahubModalHeader>
         <ModalBody>
           <Content data={this.state} />
         </ModalBody>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import toaster from '../toast';
 import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
@@ -29,7 +30,7 @@ class ViewLinkDialog extends React.Component {
     const href = this.props.currentLinkHref;
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Link')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Link')}</SeahubModalHeader>
         <ModalBody>
           <p><a target="_blank" href={href} rel="noreferrer">{href}</a></p>
         </ModalBody>

@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const shareRepoListItemProps = {
   repo: PropTypes.object.isRequired,
@@ -121,7 +122,7 @@ class ShareRepoDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Select libraries to share')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Select libraries to share')}</SeahubModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>

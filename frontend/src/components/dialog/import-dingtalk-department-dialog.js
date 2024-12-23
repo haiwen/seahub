@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import Loading from '../loading';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   importDepartmentDialogToggle: PropTypes.func.isRequired,
@@ -33,9 +34,9 @@ class ImportDingtalkDepartmentDialog extends React.Component {
     const { departmentsCount, membersCount, departmentName } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>
+        <SeahubModalHeader toggle={this.toggle}>
           <span>{'导入部门 '}</span><span className="op-target" title={departmentName}>{departmentName}</span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <p>{'将要导入 '}<strong>{departmentsCount}</strong>{' 个部门，其中包括 '}<strong>{membersCount}</strong>{' 个成员'}</p>
           {this.state.isLoading && <Loading/>}

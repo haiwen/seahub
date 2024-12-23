@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   uploadOrDownload: PropTypes.string.isRequired,
@@ -47,7 +48,7 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
     const { rateLimit, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.uploadOrDownload == 'upload' ? gettext('Set Upload Rate Limit') : gettext('Set Download Rate Limit')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{this.props.uploadOrDownload == 'upload' ? gettext('Set Upload Rate Limit') : gettext('Set Download Rate Limit')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

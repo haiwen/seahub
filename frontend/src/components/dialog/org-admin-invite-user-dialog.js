@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -58,7 +59,7 @@ class OrgAdminInviteUserDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Invite users')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Invite users')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('You can enter multiple emails. An invitation link will be sent to each of them.')}</p>
           <Form>

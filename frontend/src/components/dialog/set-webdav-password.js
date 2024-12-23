@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   setPassword: PropTypes.func.isRequired,
@@ -69,7 +70,7 @@ class SetWebdavPassword extends Component {
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Set WebDAV Password')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Set WebDAV Password')}</SeahubModalHeader>
         <ModalBody>
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>

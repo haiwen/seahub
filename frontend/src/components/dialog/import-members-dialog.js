@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Alert, Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext, siteRoot, groupImportMembersExtraMsg } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggleImportMembersDialog: PropTypes.func.isRequired,
@@ -47,7 +48,7 @@ class ImportMembersDialog extends React.Component {
     let { errorMsg } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Import members from a .xlsx file')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Import members from a .xlsx file')}</SeahubModalHeader>
 
         <ModalBody>
           <p>{groupImportMembersExtraMsg}</p>

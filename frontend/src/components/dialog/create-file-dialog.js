@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils, validateName } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   fileType: PropTypes.string,
@@ -88,7 +89,7 @@ class CreateFile extends React.Component {
     const { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog} onOpened={this.onAfterModelOpened}>
-        <ModalHeader toggle={toggleDialog}>{gettext('New File')}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{gettext('New File')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

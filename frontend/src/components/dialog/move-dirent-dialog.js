@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader } from 'reactstrap';
+import { Modal } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import SelectDirentBody from './select-dirent-body';
@@ -10,6 +10,7 @@ import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import { MODE_TYPE_MAP } from '../../constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -318,7 +319,7 @@ class MoveDirent extends React.Component {
 
     return (
       <Modal className="custom-modal" isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle} close={
+        <SeahubModalHeader toggle={this.toggle} close={
           <div className="header-close-list">
             <span aria-hidden="true" className="sf3-font sf3-font-x-01 comment-close-icon" onClick={this.toggle}></span>
           </div>
@@ -344,7 +345,7 @@ class MoveDirent extends React.Component {
               />
             )
           )}
-        </ModalHeader>
+        </SeahubModalHeader>
         <SelectDirentBody
           mode={mode}
           currentRepo={currentRepo}

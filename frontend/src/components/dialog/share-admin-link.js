@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   link: PropTypes.string.isRequired,
@@ -26,7 +27,7 @@ class ShareAdminLink extends React.Component {
     const { link, toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>{gettext('Link')}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{gettext('Link')}</SeahubModalHeader>
         <ModalBody>
           <a href={link}>{link}</a>
         </ModalBody>

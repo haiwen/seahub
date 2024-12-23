@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, username, additionalShareDialogNote, canShareRepo } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
@@ -8,6 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/share-link-dialog.css';
 
@@ -156,10 +157,10 @@ class ShareWikiDialog extends React.Component {
     return (
       <div>
         <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
-          <ModalHeader toggle={this.props.toggleDialog} tag="div">
+          <SeahubModalHeader toggle={this.props.toggleDialog} tag="div">
             <h5 className="text-truncate">{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></h5>
             {this.renderExternalShareMessage()}
-          </ModalHeader>
+          </SeahubModalHeader>
           <ModalBody className="share-dialog-content" role="tablist">
             {(itemType === 'library') && this.renderDirContent()}
           </ModalBody>

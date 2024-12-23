@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import Icon from '../icon';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/commit-details.css';
 
@@ -47,7 +48,7 @@ class CommitDetails extends React.Component {
     const { toggleDialog, commitTime } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</SeahubModalHeader>
         <ModalBody>
           <p className="repo-commit-time mb-6 d-flex align-items-center">
             <Icon symbol="time" className="mr-1" />

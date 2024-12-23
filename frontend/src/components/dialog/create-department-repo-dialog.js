@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext, maxFileName } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   onCreateRepo: PropTypes.func.isRequired,
@@ -74,7 +75,7 @@ class CreateDepartmentRepoDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Department Library')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('New Department Library')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

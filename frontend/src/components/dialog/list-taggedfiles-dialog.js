@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import dayjs from 'dayjs';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -76,7 +77,7 @@ class ListTaggedFilesDialog extends React.Component {
     let taggedFileList = this.state.taggedFileList;
     return (
       <Modal isOpen={true} style={{ maxWidth: '678px' }}>
-        <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</SeahubModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import TermsPreviewWidget from '../terms-preview-widget';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   title: PropTypes.string,
@@ -31,7 +32,7 @@ class TermsPreviewDialog extends React.Component {
         wrapClassName={'conditions-perview-wrapper'}
         toggle={this.toggle}
       >
-        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody>
           <TermsPreviewWidget content={content} />
         </ModalBody>

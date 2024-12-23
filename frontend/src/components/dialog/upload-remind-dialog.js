@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   currentResumableFile: PropTypes.object.isRequired,
@@ -31,9 +32,9 @@ class UploadRemindDialog extends React.Component {
     const { fileName } = this.props.currentResumableFile;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>
+        <SeahubModalHeader toggle={this.toggle}>
           <span>{gettext('Replace file {filename}?').replace('{filename}', fileName)}</span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <p>{gettext('A file with the same name already exists in this folder.')}</p>
           <p>{gettext('Replacing it will overwrite its content.')}</p>

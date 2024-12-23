@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -56,7 +57,7 @@ class SetGroupQuotaDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Set Quota')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Set Quota')}</SeahubModalHeader>
         <ModalBody>
           <InputGroup>
             <Input

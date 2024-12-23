@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import toaster from '../toast';
 import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -64,7 +65,7 @@ class InternalLinkDialog extends React.Component {
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{gettext('Internal Link')}</ModalHeader>
+          <SeahubModalHeader toggle={this.toggle}>{gettext('Internal Link')}</SeahubModalHeader>
           <ModalBody>
             <p className="tip mb-1">{tipMessage}</p>
             <p>

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   member: PropTypes.object.isRequired,
@@ -37,7 +38,7 @@ class DeleteMemberDialog extends React.Component {
     subtitle = subtitle.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.member.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Delete Member')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Delete Member')}</SeahubModalHeader>
         <ModalBody>
           <div dangerouslySetInnerHTML={{ __html: subtitle }}></div>
         </ModalBody>

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { mediaUrl } from '../../utils/constants';
 import { isWorkWeixin } from './weixin-utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import '../../css/wechat-dialog.css';
 
 const propTypes = {
@@ -18,9 +19,9 @@ class WechatDialog extends React.PureComponent {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle} zIndex='1060'>
-        <ModalHeader toggle={this.toggle}>
+        <SeahubModalHeader toggle={this.toggle}>
           加入咨询群
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <div className="wechat-dialog-body">
             <img src={`${mediaUrl}img/wechat-QR-code.png`} width="150" alt="" />

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader } from 'reactstrap';
+import { Modal } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import Searcher from '../file-chooser/searcher';
 import SelectDirentBody from './select-dirent-body';
@@ -314,7 +315,7 @@ class CopyDirent extends React.Component {
 
     return (
       <Modal className="custom-modal" isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle} close={
+        <SeahubModalHeader toggle={this.toggle} close={
           <div className="header-close-list">
             <span aria-hidden="true" className="sf3-font sf3-font-x-01 comment-close-icon" onClick={this.toggle}></span>
           </div>
@@ -340,7 +341,7 @@ class CopyDirent extends React.Component {
               />
             )
           )}
-        </ModalHeader>
+        </SeahubModalHeader>
         <SelectDirentBody
           mode={mode}
           currentRepo={currentRepo}

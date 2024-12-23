@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const DeleteConfirmDialog = ({ title, content, onToggle, onSubmit }) => {
   return (
     <Modal isOpen={true} toggle={onToggle}>
-      <ModalHeader toggle={onToggle}>{title}</ModalHeader>
+      <SeahubModalHeader toggle={onToggle}>{title}</SeahubModalHeader>
       <ModalBody>
         <p>{gettext('Are you sure to delete ') + content}</p>
       </ModalBody>

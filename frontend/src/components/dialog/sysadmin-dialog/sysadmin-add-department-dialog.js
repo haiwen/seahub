@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   groupID: PropTypes.string,
@@ -66,7 +67,7 @@ class AddDepartDialog extends React.Component {
     let header = this.props.parentGroupID ? gettext('New Sub-department') : gettext('New Department');
     return (
       <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{header}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import ListAndAddGroupMembers from '../list-and-add-group-members';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/manage-members-dialog.css';
 
@@ -18,7 +19,7 @@ class ManageMembersDialog extends React.Component {
     const { groupID, isOwner, toggleManageMembersDialog: toggle } = this.props;
     return (
       <Modal isOpen={true} toggle={toggle} className="group-manage-members-dialog">
-        <ModalHeader toggle={toggle}>{gettext('Manage group members')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Manage group members')}</SeahubModalHeader>
         <ModalBody className="pb-0">
           <ListAndAddGroupMembers
             groupID={groupID}

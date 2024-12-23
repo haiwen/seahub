@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   wikiPageName: PropTypes.string,
@@ -54,7 +55,7 @@ class AddWikiPageDialog extends React.Component {
     const { handleClose } = this.props;
     return (
       <Modal isOpen={true} toggle={handleClose} onOpened={this.onDialogLoad}>
-        <ModalHeader toggle={handleClose}>{gettext('New page')}</ModalHeader>
+        <SeahubModalHeader toggle={handleClose}>{gettext('New page')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   wiki: PropTypes.object,
@@ -67,7 +68,7 @@ class RenameWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Rename Wiki')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Rename Wiki')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('New Wiki name')}</p>
           <Input

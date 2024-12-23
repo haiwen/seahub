@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
 import copy from '../copy-to-clipboard';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -28,7 +29,7 @@ class OrgAdminInviteUserViaWeiXinDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{'通过微信邀请用户'}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{'通过微信邀请用户'}</SeahubModalHeader>
         <ModalBody>
           <p>{'请将邀请链接发送给其他人，这样他们就可以通过扫描链接里的二维码来加入组织。'}</p>
           <p>{this.props.invitationLink}</p>

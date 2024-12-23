@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro } from '../../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   unlinkDevice: PropTypes.func.isRequired,
@@ -33,7 +34,7 @@ class SysAdminUnlinkDevice extends React.Component {
     const toggle = this.props.toggleDialog;
     return (
       <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Unlink device')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Unlink device')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to unlink this device?')}</p>
           {isPro &&

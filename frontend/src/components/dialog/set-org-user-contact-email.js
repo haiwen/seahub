@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   orgID: PropTypes.string,
@@ -54,7 +55,7 @@ class SetOrgUserContactEmail extends React.Component {
     const { inputValue, formErrorMsg, submitBtnDisabled } = this.state;
     return (
       <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Set user contact email')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Set user contact email')}</SeahubModalHeader>
         <ModalBody>
           <React.Fragment>
             <input type="text" className="form-control" value={inputValue} onChange={this.handleInputChange} />

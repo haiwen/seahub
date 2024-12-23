@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
+import SeahubModalHeader from '../common/seahub-modal-header';
 import { gettext, isPro } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
@@ -82,7 +83,7 @@ class AddWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add Wiki')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Add Wiki')}</SeahubModalHeader>
         <ModalBody>
           <Label>{gettext('Name')}</Label>
           <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>

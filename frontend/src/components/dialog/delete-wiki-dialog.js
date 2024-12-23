@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
@@ -14,7 +15,7 @@ const propTypes = {
 function DeleteWikiDialog({ handleSubmit, toggleCancel, title, content, footer }) {
   return (
     <Modal isOpen={true} toggle={toggleCancel}>
-      <ModalHeader toggle={toggleCancel}>{title}</ModalHeader>
+      <SeahubModalHeader toggle={toggleCancel}>{title}</SeahubModalHeader>
       <ModalBody>{content}</ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={toggleCancel}>{gettext('Cancel')}</Button>

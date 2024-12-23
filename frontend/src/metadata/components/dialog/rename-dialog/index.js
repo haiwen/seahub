@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import { validateName } from '../../../../utils/utils';
 import { isEnter } from '../../../utils/hotkey';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const RenameDialog = ({ isDir, oldName, onSubmit, onCancel }) => {
   const [newName, setNewName] = useState('');
@@ -54,9 +55,9 @@ const RenameDialog = ({ isDir, oldName, onSubmit, onCancel }) => {
 
   return (
     <Modal isOpen={true} toggle={onCancel} onOpened={onAfterModelOpened}>
-      <ModalHeader toggle={onCancel}>
+      <SeahubModalHeader toggle={onCancel}>
         {isDir ? gettext('Rename Folder') : gettext('Rename File')}
-      </ModalHeader>
+      </SeahubModalHeader>
       <ModalBody>
         <p>{isDir ? gettext('New folder name') : gettext('New file name')}</p>
         <Input

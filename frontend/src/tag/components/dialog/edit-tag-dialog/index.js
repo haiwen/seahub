@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Button, Alert, Label } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Form, FormGroup, Input, Button, Alert, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils/constants';
@@ -10,6 +10,7 @@ import { isEnter } from '../../../../metadata/utils/hotkey';
 import { isValidTagName } from '../../../utils';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import toaster from '../../../../components/toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import './index.css';
 
@@ -66,7 +67,7 @@ const EditTagDialog = ({ tags, tag, title, onSubmit, onToggle }) => {
 
   return (
     <Modal isOpen={true} toggle={onToggle} autoFocus={false} className="sf-metadata-tags-edit-dialog">
-      <ModalHeader toggle={onToggle}>{title}</ModalHeader>
+      <SeahubModalHeader toggle={onToggle}>{title}</SeahubModalHeader>
       <ModalBody>
         <Form>
           <FormGroup className="mb-0">

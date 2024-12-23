@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
 import RepoShareAdminGroupShares from './repo-share-admin/group-shares';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/repo-share-admin.css';
 
@@ -56,9 +57,9 @@ class RepoShareAdminDialog extends React.Component {
     return (
       <div>
         <Modal isOpen={true} className="repo-share-admin-container share-dialog" toggle={this.props.toggleDialog}>
-          <ModalHeader toggle={this.props.toggleDialog}>
+          <SeahubModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-          </ModalHeader>
+          </SeahubModalHeader>
           <ModalBody className="repo-share-admin-content-container share-dialog-content" role="tablist">
             <Fragment>
               <div className="share-dialog-side">

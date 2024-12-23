@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
 import { gettext, wikiId } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import wikiAPI from '../../../utils/wiki-api';
 import { INSERT_POSITION } from './constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../css/add-new-page-dialog.css';
 
@@ -105,7 +106,7 @@ class AddNewPageDialog extends React.Component {
     const { title } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false} className='add-new-page-dialog'>
-        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody className='pr-4'>
           <Label>{gettext('Page name')}</Label>
           <Input

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import toaster from '../../toast';
 import { gettext } from '../../../utils/constants';
 import { Utils, validateName } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   parentNode: PropTypes.object,
@@ -70,7 +71,7 @@ class AddDepartmentV2Dialog extends React.Component {
     }
     return (
       <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.props.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{title}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { gettext, contactEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -43,9 +44,9 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           {gettext('Reset library password')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           {this.state.showLoading && (
             <span>{gettext('Sending new password...')}</span>

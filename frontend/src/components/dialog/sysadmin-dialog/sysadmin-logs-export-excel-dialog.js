@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
 import { gettext, siteRoot } from '../../../utils/constants';
@@ -8,6 +8,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { userAPI } from '../../../utils/user-api';
 import toaster from '../../../components/toast';
 import SeahubIODialog from '../../dialog/seahub-io-dialog';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class LogsExportExcelDialog extends React.Component {
 
@@ -150,7 +151,7 @@ class LogsExportExcelDialog extends React.Component {
       <React.Fragment>
         {!this.state.isShowIODialog &&
         <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
-          <ModalHeader toggle={this.props.toggle}>{gettext('Choose date')}</ModalHeader>
+          <SeahubModalHeader toggle={this.props.toggle}>{gettext('Choose date')}</SeahubModalHeader>
           <ModalBody>
             <FormGroup>
               <Label>{gettext('Start date')}</Label>

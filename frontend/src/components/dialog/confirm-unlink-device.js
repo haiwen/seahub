@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup, Label, Input } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   executeOperation: PropTypes.func.isRequired,
@@ -35,7 +36,7 @@ class ConfirmUnlinkDevice extends Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Unlink device')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Unlink device')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to unlink this device?')}</p>
           <FormGroup check>

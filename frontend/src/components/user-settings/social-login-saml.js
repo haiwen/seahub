@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const {
   csrfToken,
@@ -56,7 +57,7 @@ class SocialLoginSAML extends React.Component {
         {this.state.isConfirmDialogOpen && (
           <ModalPortal>
             <Modal centered={true} isOpen={true} toggle={this.toggleDialog}>
-              <ModalHeader toggle={this.toggleDialog}>{gettext('Disconnect')}</ModalHeader>
+              <SeahubModalHeader toggle={this.toggleDialog}>{gettext('Disconnect')}</SeahubModalHeader>
               <ModalBody>
                 <p>{gettext('Are you sure you want to disconnect?')}</p>
                 <form ref={this.form} className="d-none" method="post" action={disconnectUrl}>

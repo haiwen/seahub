@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   formActionURL: PropTypes.string.isRequired,
@@ -24,7 +25,7 @@ class ConfirmDeleteAccount extends Component {
     const { formActionURL, csrfToken, toggle } = this.props;
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Delete Account')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Delete Account')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Really want to delete your account?')}</p>
           <form ref={this.form} className="d-none" method="post" action={formActionURL}>

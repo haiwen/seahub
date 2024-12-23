@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { gettext, siteRoot, enableUserCleanTrash, username } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -12,6 +12,7 @@ import CleanTrash from '../clean-trash';
 import Paginator from '../../paginator';
 import Loading from '../../loading';
 import EmptyTip from '../../empty-tip';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
@@ -191,7 +192,7 @@ class TrashDialog extends React.Component {
     return (
       <>
         <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
-          <ModalHeader
+          <SeahubModalHeader
             close={
               <>
                 <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
@@ -203,7 +204,7 @@ class TrashDialog extends React.Component {
             }
           >
             <div dangerouslySetInnerHTML={{ __html: title }}></div>
-          </ModalHeader>
+          </SeahubModalHeader>
           <ModalBody>
             {isLoading && <Loading />}
             {!isLoading && items.length === 0 &&

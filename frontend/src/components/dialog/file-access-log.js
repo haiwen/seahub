@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { fileAccessLogAPI } from '../../utils/file-access-log-api';
 import toaster from '../toast';
 import Loading from '../loading';
 import EmptyTip from '../empty-tip';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/file-access-log.css';
 
@@ -88,9 +89,9 @@ class FileAccessLog extends React.Component {
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} className="file-access-log-container">
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody className="file-access-log-content-container" onScroll={this.handleScroll}>
           {isLoading ? <Loading /> : (
             <>

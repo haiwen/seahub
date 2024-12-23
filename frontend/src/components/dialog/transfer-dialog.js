@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
+import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
@@ -212,9 +213,9 @@ class TransferDialog extends React.Component {
     }
     return (
       <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody className="transfer-dialog-content" role="tablist">
           {this.renderTransContent()}
         </ModalBody>

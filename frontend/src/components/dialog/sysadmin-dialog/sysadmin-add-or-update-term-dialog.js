@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Alert, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import TermsPreviewWidget from '../../terms-preview-widget';
 import TermsEditorDialog from '../terms-editor-dialog';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../../css/terms-conditions-editor.css';
 
@@ -103,7 +104,7 @@ class AddOrUpdateTermDialog extends React.Component {
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.props.toggle}>
-          <ModalHeader toggle={this.props.toggle}>{title}</ModalHeader>
+          <SeahubModalHeader toggle={this.props.toggle}>{title}</SeahubModalHeader>
           <ModalBody>
             <FormGroup>
               <Label for="name">{gettext('Name')}</Label>

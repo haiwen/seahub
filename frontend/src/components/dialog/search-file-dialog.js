@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -77,7 +78,7 @@ class SearchFileDialog extends React.Component {
     const { q, errMessage, fileList, isSubmitDisabled, isSubmitting } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Search')}</SeahubModalHeader>
         <ModalBody style={{ height: '250px' }} className="o-auto">
           <div className="d-flex">
             <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} autoFocus={true} />

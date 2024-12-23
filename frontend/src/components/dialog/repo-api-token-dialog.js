@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Modal, ModalHeader, ModalBody, Button, Input } from 'reactstrap';
+import { Modal, ModalBody, Button, Input } from 'reactstrap';
 import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -9,6 +9,7 @@ import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 import Loading from '../loading';
 import OpIcon from '../op-icon';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -288,9 +289,9 @@ class RepoAPITokenDialog extends React.Component {
         isOpen={true} style={{ maxWidth: '800px' }}
         toggle={this.props.onRepoAPITokenToggle}
       >
-        <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
+        <SeahubModalHeader toggle={this.props.onRepoAPITokenToggle}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <div className="o-auto">
             {this.renderContent()}

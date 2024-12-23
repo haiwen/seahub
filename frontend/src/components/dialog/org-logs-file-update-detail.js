@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -119,9 +120,9 @@ class FileUpdateDetailDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggleCancel}>
-        <ModalHeader toggle={this.props.toggleCancel}>
+        <SeahubModalHeader toggle={this.props.toggleCancel}>
           {gettext('Modification Details')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           {this.renderContent()}
         </ModalBody>

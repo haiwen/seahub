@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, enableRepoSnapshotLabel as showLabel } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -10,6 +10,7 @@ import Paginator from '../../components/paginator';
 import ModalPortal from '../../components/modal-portal';
 import CommitDetails from '../../components/dialog/commit-details';
 import UpdateRepoCommitLabels from '../../components/dialog/edit-repo-commit-labels';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/repo-history.css';
 
@@ -72,9 +73,9 @@ class RepoHistory extends React.Component {
 
     return (
       <Modal isOpen={true} toggle={toggleDialog} size='xl' id="repo-history-dialog">
-        <ModalHeader toggle={toggleDialog}>
+        <SeahubModalHeader toggle={toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           {userPerm == 'rw' && <p className="repo-snapshot-tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
           <Content

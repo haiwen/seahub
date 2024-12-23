@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import Loading from '../loading';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/seahub-io-dialog.css';
 
@@ -20,9 +21,9 @@ class WikiConvertStatusDialog extends React.Component {
   render() {
     return (
       <Modal className='seahub-io-dialog' isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>
+        <SeahubModalHeader toggle={this.toggle}>
           {gettext('Converting')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <>
             <Loading/>

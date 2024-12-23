@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import toaster from './toast';
-import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 import { gettext, serviceURL } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import { subscriptionAPI } from '../utils/subscription-api';
 import Loading from './loading';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../css/layout.css';
 import '../css/subscription.css';
@@ -338,7 +339,7 @@ class PlansDialog extends Component {
     if (isLoading) {
       return (
         <Modal isOpen={true} toggle={toggleDialog}>
-          <ModalHeader toggle={toggleDialog}>{paymentTypeTrans}</ModalHeader>
+          <SeahubModalHeader toggle={toggleDialog}>{paymentTypeTrans}</SeahubModalHeader>
           <ModalBody>
             <Loading />
           </ModalBody>
@@ -348,7 +349,7 @@ class PlansDialog extends Component {
     if (isWaiting) {
       return (
         <Modal isOpen={true} toggle={this.onReload}>
-          <ModalHeader toggle={this.onReload}>{paymentTypeTrans}</ModalHeader>
+          <SeahubModalHeader toggle={this.onReload}>{paymentTypeTrans}</SeahubModalHeader>
           <ModalBody>
             <div>{'是否完成付款?'}</div>
           </ModalBody>
@@ -360,7 +361,7 @@ class PlansDialog extends Component {
     }
     return (
       <Modal isOpen={true} toggle={toggleDialog} style={modalStyle}>
-        <ModalHeader toggle={toggleDialog}>{paymentTypeTrans}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{paymentTypeTrans}</SeahubModalHeader>
         <ModalBody>
           <div className="d-flex justify-content-between">
             <Plans

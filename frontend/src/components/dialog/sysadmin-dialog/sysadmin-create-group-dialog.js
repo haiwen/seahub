@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import UserSelect from '../../user-select';
-
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   createGroup: PropTypes.func.isRequired,
@@ -58,7 +58,7 @@ class SysAdminCreateGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Group')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('New Group')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

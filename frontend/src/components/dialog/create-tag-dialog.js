@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Button, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { TAG_COLORS } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -69,10 +70,10 @@ class CreateTagDialog extends React.Component {
     let canSave = this.state.tagName.trim() ? true : false;
     return (
       <Fragment>
-        <ModalHeader toggle={this.props.onClose}>
+        <SeahubModalHeader toggle={this.props.onClose}>
           <span className="tag-dialog-back sf3-font sf3-font-arrow rotate-180 d-inline-block" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('New Tag')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <div role="form" className="tag-create">
             <div className="form-group">

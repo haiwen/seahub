@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   value: PropTypes.string.isRequired,
@@ -43,7 +44,7 @@ class UpdateUser extends React.Component {
     const { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
