@@ -4,24 +4,29 @@
   border: 1px solid #eee;
   border-radius: 6px;
   background-color: #fff;
-  margin-bottom: 8px;
+  margin: 4px;
   transition: transform 0.3s ease, margin 0.3s ease;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   user-select: none;
-}
-
-.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper:last-child .sf-metadata-kanban-card {
-  margin-bottom: 0;
+  cursor: grab;
 }
 
 .sf-metadata-kanban-card.selected {
   border-color: #ff9800;
 }
 
-.sf-metadata-kanban-card:hover {
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-kanban-card {
   cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.sf-metadata-view-kanban-boards.readonly .sf-metadata-kanban-card:last-child {
+  margin-bottom: 0;
+}
+
+.sf-metadata-kanban-card:hover {
   box-shadow: 0 0 6px #0000002e;
 }
 

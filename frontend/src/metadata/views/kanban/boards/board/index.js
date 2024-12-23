@@ -69,14 +69,23 @@ const Board = ({
       <Container
         orientation="vertical"
         groupName={boardName}
-        dragClass="kanban-dragged-card"
+        dragClass="kanban-drag-card"
         dropClass="kanban-drop-card"
         onDragStart={onDragStart}
         onDrop={e => onDragEnd(boardIndex, e)}
         onDragEnter={() => setDraggingOver(true)}
         onDragLeave={() => setDraggingOver(false)}
-        shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
+        shouldAcceptDrop={() => true}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
+        dropPlaceholder={{
+          animationDuration: 300,
+          showOnTop: true,
+          className: 'card-drop-preview',
+        }}
+        getGhostParent={() => {
+          // return anchestor of container who doesn't have a transform property
+          return document.querySelector('.sf-metadata-main');
+        }}
       >
         {board.children.map((cardKey) => {
           const record = getRowById(metadata, cardKey);

@@ -1,3 +1,5 @@
+import { containerInstance } from './constants';
+
 export const getIntersection = (rect1, rect2) => {
   return {
     left: Math.max(rect1.left, rect2.left),
@@ -48,7 +50,7 @@ export const getContainerRect = element => {
 };
 
 export const getScrollingAxis = element => {
-  const style = global.getComputedStyle(element);
+  const style = window.getComputedStyle(element);
   const overflow = style['overflow'];
   const general = overflow === 'auto' || overflow === 'scroll';
   if (general) return 'xy';
@@ -61,16 +63,16 @@ export const getScrollingAxis = element => {
 };
 
 export const isScrolling = (element, axis) => {
-  const style = global.getComputedStyle(element);
+  const style = window.getComputedStyle(element);
   const overflow = style['overflow'];
   const overFlowAxis = style[`overflow-${axis}`];
-  const general = overflow === 'auto' || overflow === 'scroll';
-  const dimensionScroll = overFlowAxis === 'auto' || overFlowAxis === 'scroll';
+  const general = overflow === 'auto' || overflow === 'scroll' || overflow === 'hidden';
+  const dimensionScroll = overFlowAxis === 'auto' || overFlowAxis === 'scroll' || overFlowAxis === 'hidden';
   return general || dimensionScroll;
 };
 
 export const isScrollingOrHidden = (element, axis) => {
-  const style = global.getComputedStyle(element);
+  const style = window.getComputedStyle(element);
   const overflow = style['overflow'];
   const overFlowAxis = style[`overflow-${axis}`];
   const general =
@@ -127,33 +129,60 @@ export const getVisibleRect = (element, elementRect) => {
   return rect;
 };
 
+export const getParentRelevantContainerElement = (element, relevantContainers) => {
+  let current = element;
+
+  while (current) {
+    if ((current)[containerInstance]) {
+      const container = current[containerInstance];
+      if (relevantContainers.some(p => p === container)) {
+        return container;
+      }
+    }
+    current = current.parentElement;
+  }
+
+  return null;
+};
+
 export const listenScrollParent = (element, clb) => {
   let scrollers = [];
-  const dispose = () => {
-    scrollers.forEach(p => {
-      p.removeEventListener('scroll', clb);
-    });
-    global.removeEventListener('scroll', clb);
-  };
 
-  setTimeout(function () {
+  setScrollers();
+
+  function setScrollers() {
     let currentElement = element;
     while (currentElement) {
-      if (
-        isScrolling(currentElement, 'x') ||
-        isScrolling(currentElement, 'y')
-      ) {
-        currentElement.addEventListener('scroll', clb);
+      if (isScrolling(currentElement, 'x') || isScrolling(currentElement, 'y')) {
         scrollers.push(currentElement);
       }
       currentElement = currentElement.parentElement;
     }
+  }
 
-    global.addEventListener('scroll', clb);
-  }, 10);
+  function dispose() {
+    stop();
+    scrollers = null;
+  }
+
+  function start() {
+    if (scrollers) {
+      scrollers.forEach(p => p.addEventListener('scroll', clb));
+      window.addEventListener('scroll', clb);
+    }
+  }
+
+  function stop() {
+    if (scrollers) {
+      scrollers.forEach(p => p.removeEventListener('scroll', clb));
+      window.removeEventListener('scroll', clb);
+    }
+  }
 
   return {
-    dispose
+    dispose,
+    start,
+    stop
   };
 };
 
@@ -220,23 +249,23 @@ export const addChildAt = (parent, child, index) => {
 };
 
 export const clearSelection = () => {
-  if (global.getSelection) {
-    if (global.getSelection().empty) {
+  if (window.getSelection) {
+    if (window.getSelection().empty) {
       // Chrome
-      global.getSelection().empty();
-    } else if (global.getSelection().removeAllRanges) {
+      window.getSelection().empty();
+    } else if (window.getSelection().removeAllRanges) {
       // Firefox
-      global.getSelection().removeAllRanges();
+      window.getSelection().removeAllRanges();
     }
-  } else if (global.document.selection) {
+  } else if (window.document.selection) {
     // IE?
-    global.document.selection.empty();
+    window.document.selection.empty();
   }
 };
 
 export const getElementCursor = (element) => {
   if (element) {
-    const style = global.getComputedStyle(element);
+    const style = window.getComputedStyle(element);
     if (style) {
       return style.cursor;
     }
@@ -244,3 +273,7 @@ export const getElementCursor = (element) => {
 
   return null;
 };
+
+export function isVisible(rect) {
+  return !(rect.bottom <= rect.top || rect.right <= rect.left);
+}

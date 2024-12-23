@@ -1,9 +1,49 @@
+import { preventAutoScrollClass } from './constants';
 import {
   getScrollingAxis,
   getVisibleRect,
+  hasClass,
 } from './utils';
 
 const maxSpeed = 1500; // px/s
+
+function getScrollParams(position, axis, rect) {
+  const { left, right, top, bottom } = rect;
+  const { x, y } = position;
+  if (x < left || x > right || y < top || y > bottom) {
+    return null;
+  }
+
+  let begin;
+  let end;
+  let pos;
+  if (axis === 'x') {
+    begin = left;
+    end = right;
+    pos = x;
+  } else {
+    begin = top;
+    end = bottom;
+    pos = y;
+  }
+
+  const scrollerSize = end - begin;
+
+  const moveDistance = scrollerSize > 400 ? 100 : scrollerSize / 4;
+  if (end - pos < moveDistance) {
+    return {
+      direction: 'end',
+      speedFactor: (moveDistance - (end - pos)) / moveDistance
+    };
+  } else if (pos - begin < moveDistance) {
+    return {
+      direction: 'begin',
+      speedFactor: (moveDistance - (pos - begin)) / moveDistance
+    };
+  }
+
+  return null;
+}
 
 function addScrollValue(element, axis, value) {
   if (element) {
@@ -24,7 +64,6 @@ function addScrollValue(element, axis, value) {
 }
 
 const createAnimator = (element, axis = 'y') => {
-  let isAnimating = false;
   let request = null;
   let startTime = null;
   let direction = null;
@@ -33,18 +72,13 @@ const createAnimator = (element, axis = 'y') => {
   function animate(_direction, _speed) {
     direction = _direction;
     speed = _speed;
-    isAnimating = true;
-    if (isAnimating) {
-      start();
-    }
+    start();
   }
 
   function start() {
     if (request === null) {
       request = requestAnimationFrame((timestamp) => {
-        if (startTime === null) {
-          startTime = timestamp;
-        }
+        if (startTime === null) { startTime = timestamp; }
         const timeDiff = timestamp - startTime;
         startTime = timestamp;
         let distanceDiff = (timeDiff / 1000) * speed;
@@ -57,12 +91,11 @@ const createAnimator = (element, axis = 'y') => {
   }
 
   function stop() {
-    if (isAnimating) {
+    if (request !== null) {
       cancelAnimationFrame(request);
-      isAnimating = false;
-      startTime = null;
       request = null;
     }
+    startTime = null;
   }
 
   return {
@@ -71,132 +104,145 @@ const createAnimator = (element, axis = 'y') => {
   };
 };
 
-function getAutoScrollInfo(position, scrollableInfo) {
-  const { left, right, top, bottom } = scrollableInfo.rect;
-  const { x, y } = position;
-  if (x < left || x > right || y < top || y > bottom) {
-    return null;
-  }
-
-  let begin;
-  let end;
-  let pos;
-  if (scrollableInfo.axis === 'x') {
-    begin = left;
-    end = right;
-    pos = x;
-  } else {
-    begin = top;
-    end = bottom;
-    pos = y;
-  }
-
-  const moveDistance = 100;
-  if (end - pos < moveDistance) {
-    return {
-      direction: 'end',
-      speedFactor: (moveDistance - (end - pos)) / moveDistance
-    };
-  } else if (pos - begin < moveDistance) {
-    return {
-      direction: 'begin',
-      speedFactor: (moveDistance - (pos - begin)) / moveDistance
-    };
-  }
-}
-
-function scrollableInfo(element) {
-  let result = {
-    element,
-    rect: getVisibleRect(element, element.getBoundingClientRect()),
-    descendants: [],
-    invalidate,
-    axis: null,
-    dispose
+function rectangleGetter(element) {
+  return () => {
+    return getVisibleRect(element, element.getBoundingClientRect());
   };
-
-  function dispose() {
-    element.removeEventListener('scroll', invalidate);
-  }
-
-  function invalidate() {
-    result.rect = getVisibleRect(element, element.getBoundingClientRect());
-    result.descendants.forEach(p => p.invalidate());
-  }
-
-  element.addEventListener('scroll', invalidate);
-
-  return result;
 }
 
-function getScrollableElements(containerElements) {
-  const scrollables = [];
-  let firstDescendentScrollable = null;
-  containerElements.forEach(el => {
-    let current = el;
-    firstDescendentScrollable = null;
-    while (current) {
-      const scrollingAxis = getScrollingAxis(current);
-      if (scrollingAxis) {
-        // eslint-disable-next-line no-loop-func
-        if (!scrollables.some(p => p.element === current)) {
-          const info = scrollableInfo(current);
-          if (firstDescendentScrollable) {
-            info.descendants.push(firstDescendentScrollable);
-          }
-          firstDescendentScrollable = info;
-          if (scrollingAxis === 'xy') {
-            scrollables.push(Object.assign({}, info, { axis: 'x' }));
-            scrollables.push(Object.assign({}, info, { axis: 'y' }, { descendants: [] }));
-          } else {
-            scrollables.push(Object.assign({}, info, { axis: scrollingAxis }));
-          }
-        }
+function getScrollerAnimator(container) {
+  const scrollerAnimators = [];
+
+  let current = container.element;
+
+  while (current) {
+    const scrollingAxis = getScrollingAxis(current);
+
+    if (scrollingAxis && !hasClass(current, preventAutoScrollClass)) {
+
+      const axisAnimations = {};
+      switch (scrollingAxis) {
+        case 'xy':
+          axisAnimations.x = {
+            animator: createAnimator(current, 'x'),
+          };
+          axisAnimations.y = {
+            animator: createAnimator(current, 'y'),
+          };
+          break;
+        case 'x':
+          axisAnimations.x = {
+            animator: createAnimator(current, 'x'),
+          };
+          break;
+        case 'y':
+          axisAnimations.y = {
+            animator: createAnimator(current, 'y'),
+          };
+          break;
+        default:
       }
-      current = current.parentElement;
+
+      scrollerAnimators.push({
+        axisAnimations,
+        getRect: rectangleGetter(current),
+        scrollerElement: current,
+      });
+    }
+    current = current.parentElement;
+  }
+  return scrollerAnimators;
+}
+
+function setScrollParams(animatorInfos, position) {
+  animatorInfos.forEach((animator) => {
+    const { axisAnimations, getRect } = animator;
+    const rect = getRect();
+    if (axisAnimations.x) {
+      axisAnimations.x.scrollParams = getScrollParams(position, 'x', rect);
+      animator.cachedRect = rect;
+    }
+
+    if (axisAnimations.y) {
+      axisAnimations.y.scrollParams = getScrollParams(position, 'y', rect);
+      animator.cachedRect = rect;
     }
   });
-  return scrollables;
 }
 
-function getScrollableAnimator(scrollableInfo) {
-  return Object.assign(scrollableInfo, createAnimator(scrollableInfo.element, scrollableInfo.axis));
-}
+function getTopmostScrollAnimator(animatorInfos, position) {
+  let current = document.elementFromPoint(position.x, position.y);
 
-function getWindowAnimators() {
-  function getWindowRect() {
-    return {
-      left: 0, right: global.innerWidth, top: 0, bottom: global.innerHeight
-    };
+  while (current) {
+    const scrollAnimator = animatorInfos.find(p => p.scrollerElement === current);
+    if (scrollAnimator) {
+      return scrollAnimator;
+    }
+
+    current = current.parentElement;
   }
 
-  return [
-    Object.assign({ rect: getWindowRect(), axis: 'y' }, createAnimator(global)),
-    Object.assign({ rect: getWindowRect(), axis: 'x' }, createAnimator(global, 'x'))
-  ];
+  return null;
 }
 
-const dragscroller = (containers) => {
-  const scrollablesInfo = getScrollableElements(containers.map(p => p.element));
-  const animators = [...scrollablesInfo.map(getScrollableAnimator), ...getWindowAnimators()];
-  return ({ draggableInfo, reset }) => {
-    if (animators.length) {
-      if (reset) {
-        animators.forEach(p => p.stop());
-        scrollablesInfo.forEach(p => p.dispose());
-        return null;
-      }
+const dragScroller = (containers, maxScrollSpeed = maxSpeed) => {
+  const animatorInfos = containers.reduce((acc, container) => {
+    const filteredAnimators = getScrollerAnimator(container).filter(p => {
+      return !acc.find(q => q.scrollerElement === p.scrollerElement);
+    });
+    return [...acc, ...filteredAnimators];
+  }, []);
 
-      animators.forEach(animator => {
-        const scrollParams = getAutoScrollInfo(draggableInfo.mousePosition, animator);
-        if (scrollParams) {
-          animator.animate(scrollParams.direction, scrollParams.speedFactor * maxSpeed);
-        } else {
-          animator.stop();
+
+  return ({ draggableInfo, reset }) => {
+    if (reset) {
+      animatorInfos.forEach(p => {
+        p.axisAnimations.x && p.axisAnimations.x.animator.stop();
+        p.axisAnimations.y && p.axisAnimations.y.animator.stop();
+      });
+      return;
+    }
+
+    if (draggableInfo) {
+      setScrollParams(animatorInfos, draggableInfo.mousePosition);
+
+      animatorInfos.forEach(animator => {
+        const { x, y } = animator.axisAnimations;
+        if (x) {
+          if (x.scrollParams) {
+            const { direction, speedFactor } = x.scrollParams;
+            x.animator.animate(direction, speedFactor * maxScrollSpeed);
+          } else {
+            x.animator.stop();
+          }
+        }
+
+        if (y) {
+          if (y.scrollParams) {
+            const { direction, speedFactor } = y.scrollParams;
+            y.animator.animate(direction, speedFactor * maxScrollSpeed);
+          } else {
+            y.animator.stop();
+          }
         }
       });
+
+      const overlappingAnimators = animatorInfos.filter(p => p.cachedRect);
+      if (overlappingAnimators.length && overlappingAnimators.length > 1) {
+        // stop animations except topmost
+        const topScrollerAnimator = getTopmostScrollAnimator(overlappingAnimators, draggableInfo.mousePosition);
+
+        if (topScrollerAnimator) {
+          overlappingAnimators.forEach(p => {
+            if (p !== topScrollerAnimator) {
+              p.axisAnimations.x && p.axisAnimations.x.animator.stop();
+              p.axisAnimations.y && p.axisAnimations.y.animator.stop();
+            }
+          });
+        }
+      }
     }
   };
 };
 
-export default dragscroller;
+export default dragScroller;
