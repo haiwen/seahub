@@ -1252,7 +1252,7 @@ class FacesRecords(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import FACES_TABLE
-        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}`, `{FACES_TABLE.columns.vector.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1275,6 +1275,7 @@ class FacesRecords(APIView):
                 FACES_TABLE.columns.id.name: record.get(FACES_TABLE.columns.id.name),
                 FACES_TABLE.columns.name.name: record.get(FACES_TABLE.columns.name.name),
                 FACES_TABLE.columns.photo_links.name: valid_photo_links,
+                '_is_someone': bool(record.get(FACES_TABLE.columns.vector.name)),
             })
 
         return Response({
