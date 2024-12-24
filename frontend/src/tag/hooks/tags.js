@@ -39,10 +39,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     setTagsData(data);
   }, []);
 
-  const getTagsStatus = useCallback(() => {
-    return contextRef.current.api.getTagsStatus(repoID);
-  }, [repoID]);
-
   const reloadTags = useCallback(() => {
     setReloading(true);
     storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
@@ -262,7 +258,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteTagLinks,
       updateLocalTag,
       selectTag: handelSelectTag,
-      getTagsStatus,
     }}>
       {children}
     </TagsContext.Provider>
