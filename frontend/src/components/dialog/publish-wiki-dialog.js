@@ -23,7 +23,7 @@ class PublishWikiDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: this.props.customUrl,
+      url: this.props.customUrlString,
       errMessage: '',
       isSubmitBtnActive: false,
     };
@@ -130,7 +130,7 @@ class PublishWikiDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          {this.props.customUrl !== '' &&
+          {this.props.customUrlString !== '' &&
             <Button color="secondary" onClick={this.deleteCustomUrl}>{gettext('Unpublish')}</Button>
           }
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
