@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class LeaveGroupDialog extends React.Component {
 
@@ -24,7 +25,7 @@ class LeaveGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggleLeaveGroupDialog}>
-        <ModalHeader toggle={this.props.toggleLeaveGroupDialog}>{gettext('Leave Group')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleLeaveGroupDialog}>{gettext('Leave Group')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Really want to leave this group?')}</p>
         </ModalBody>

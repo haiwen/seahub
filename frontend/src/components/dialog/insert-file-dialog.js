@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import FileChooser from '../file-chooser';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -52,7 +53,7 @@ class InsertFileDialog extends React.Component {
     const toggle = this.props.toggleCancel;
     return (
       <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Select File')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Select File')}</SeahubModalHeader>
         <ModalBody>
           <FileChooser
             isShowFile={true}

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   formActionURL: PropTypes.string.isRequired,
@@ -24,7 +25,7 @@ class ConfirmDisconnectDingtalk extends Component {
     const { formActionURL, csrfToken, toggle } = this.props;
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Disconnect')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Disconnect')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to disconnect?')}</p>
           <form ref={this.form} className="d-none" method="post" action={formActionURL}>

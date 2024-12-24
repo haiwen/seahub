@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalFooter, ModalHeader, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   node: PropTypes.object,
@@ -14,9 +15,9 @@ class DeleteDepartmentV2ConfirmDialog extends React.Component {
     const { node, toggle } = this.props;
     return (
       <Modal isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>
+        <SeahubModalHeader toggle={toggle}>
           {gettext('Delete department')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure to delete')}{' '}<b>{node.name}</b> ?</p>
         </ModalBody>

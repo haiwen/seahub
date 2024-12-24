@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import UserSelect from '../../user-select';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -37,7 +38,7 @@ class SysAdminBatchAddAdminDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add Admin')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Add Admin')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
             isMulti={true}

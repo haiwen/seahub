@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -63,7 +64,7 @@ class DeleteRepoDialog extends Component {
 
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</SeahubModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: message }}></p>
           { alert_message != '' && <p className="error" dangerouslySetInnerHTML={{ __html: alert_message }}></p>}

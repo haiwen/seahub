@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   availableRoles: PropTypes.array.isRequired,
@@ -123,7 +124,7 @@ class SysAdminAddUserDialog extends React.Component {
     } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{dialogTitle || gettext('Add Member')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{dialogTitle || gettext('Add Member')}</SeahubModalHeader>
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup>

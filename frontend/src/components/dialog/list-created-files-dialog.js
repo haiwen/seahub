@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   activity: PropTypes.object.isRequired,
@@ -23,7 +24,7 @@ class ListCreatedFileDialog extends React.Component {
     let activity = this.props.activity;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Created Files')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Created Files')}</SeahubModalHeader>
         <ModalBody>
           <Table>
             <thead>

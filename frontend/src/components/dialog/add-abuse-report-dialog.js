@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
@@ -65,7 +66,7 @@ class AddAbuseReportDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={this.props.isAddAbuseReportDialogOpen} toggle={this.props.toggleAddAbuseReportDialog}>
-        <ModalHeader toggle={this.props.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

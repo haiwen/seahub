@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalFooter, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   groupName: PropTypes.string.isRequired,
@@ -29,9 +30,9 @@ class ChangeGroupDialog extends React.Component {
     const msg = gettext('Are you sure to change group {placeholder} to department ?').replace('{placeholder}', groupName);
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           {gettext('Change group to department')}
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: msg }}></p>
         </ModalBody>

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   currentNode: PropTypes.object.isRequired,
@@ -24,7 +25,7 @@ class Delete extends React.Component {
     }
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to delete')}{' '}<b>{name}</b> ?</p>
         </ModalBody>

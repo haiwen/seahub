@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
+
 import '../../css/insert-repo-image-dialog.css';
 
 const { siteRoot, serviceUrl } = window.app.config;
@@ -54,7 +56,7 @@ class InsertRepoImageDialog extends React.Component {
     }
     return (
       <Modal isOpen={true} toggle={toggle} size='lg'>
-        <ModalHeader toggle={toggle}>{gettext('Select Image')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Select Image')}</SeahubModalHeader>
         <ModalBody>
           <div className="d-flex">
             <div className="col-6">

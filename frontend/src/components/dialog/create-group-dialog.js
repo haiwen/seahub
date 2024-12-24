@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class CreateGroupDialog extends React.Component {
 
@@ -65,7 +66,7 @@ class CreateGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} autoFocus={false}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('New Group')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('New Group')}</SeahubModalHeader>
         <ModalBody>
           <label htmlFor="groupName">{gettext('Name')}</label>
           <Input

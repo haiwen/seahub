@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, Alert } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, Form, Alert } from 'reactstrap';
 import toaster from '../../toast';
 import PasswordInput from './password-input';
 import { userAPI } from '../../../utils/user-api';
 import { gettext } from '../../../utils/constants';
 import { Utils, validatePassword } from '../../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func,
@@ -56,7 +57,7 @@ const UserUpdatePassword = ({ toggle }) => {
 
   return (
     <Modal centered={true} isOpen={true} toggle={toggle}>
-      <ModalHeader toggle={toggle}>{gettext('Update password')}</ModalHeader>
+      <SeahubModalHeader toggle={toggle}>{gettext('Update password')}</SeahubModalHeader>
       <ModalBody>
         <Form>
           <PasswordInput

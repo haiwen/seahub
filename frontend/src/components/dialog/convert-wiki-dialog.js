@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 import { gettext, isPro } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { SeahubSelect } from '../common/select';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
@@ -78,7 +79,7 @@ class ConvertWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Convert Wiki')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Convert Wiki')}</SeahubModalHeader>
         <ModalBody>
           <Label>{gettext('Name')}</Label>
           <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>

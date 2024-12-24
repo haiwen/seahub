@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   value: PropTypes.string.isRequired,
@@ -47,7 +48,7 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
     const { value, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Set max number of members')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Set max number of members')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

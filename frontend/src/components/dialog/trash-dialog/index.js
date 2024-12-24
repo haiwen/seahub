@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { gettext, siteRoot, enableUserCleanTrash, username } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   restoreRepo: PropTypes.func.isRequired,
@@ -28,7 +29,7 @@ class ConfirmRestoreRepo extends Component {
     const { toggle } = this.props;
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Restore Library')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Restore Library')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to restore this library?')}</p>
         </ModalBody>

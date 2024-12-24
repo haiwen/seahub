@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class DismissGroupDialog extends React.Component {
 
@@ -25,7 +26,7 @@ class DismissGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={this.props.showDismissGroupDialog} toggle={this.props.toggleDismissGroupDialog}>
-        <ModalHeader>{gettext('Delete Group')}</ModalHeader>
+        <SeahubModalHeader>{gettext('Delete Group')}</SeahubModalHeader>
         <ModalBody>
           <span>{gettext('Really want to delete this group?')}</span>
         </ModalBody>

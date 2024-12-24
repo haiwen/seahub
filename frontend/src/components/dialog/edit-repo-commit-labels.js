@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -58,7 +59,7 @@ class UpdateRepoCommitLabels extends React.Component {
     const { formErrorMsg } = this.state;
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Edit labels')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Edit labels')}</SeahubModalHeader>
         <ModalBody>
           <React.Fragment>
             <CreatableSelect

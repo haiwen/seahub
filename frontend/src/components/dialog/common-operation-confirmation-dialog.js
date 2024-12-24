@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   title: PropTypes.string.isRequired,
@@ -26,7 +27,7 @@ class CommonOperationConfirmationDialog extends Component {
     let { title, message, confirmBtnText } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: message }}></p>
         </ModalBody>

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import FileChooser from '../file-chooser';
 import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
@@ -60,7 +61,7 @@ class SaveSharedFileDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} className="sf-save-file">
-        <ModalHeader toggle={this.props.toggleCancel}>{gettext('Save to:')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleCancel}>{gettext('Save to:')}</SeahubModalHeader>
         <ModalBody>
           <FileChooser
             isShowFile={false}

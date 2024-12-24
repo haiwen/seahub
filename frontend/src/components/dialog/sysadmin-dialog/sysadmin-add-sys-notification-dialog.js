@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -38,7 +39,7 @@ class SysAdminAddSysNotificationDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add new notification')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Add new notification')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

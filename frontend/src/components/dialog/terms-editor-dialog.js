@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { SimpleEditor } from '@seafile/seafile-editor';
 import { gettext } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   title: PropTypes.string,
@@ -63,7 +64,7 @@ class TermsEditorDialog extends React.Component {
         size={'lg'}
         style={{ width: 770 }}
       >
-        <ModalHeader className="conditions-editor-dialog-title" toggle={this.toggle}>{title}</ModalHeader>
+        <SeahubModalHeader className="conditions-editor-dialog-title" toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody className={'conditions-editor-dialog-main'}>
           <SimpleEditor
             ref={this.editorRef}

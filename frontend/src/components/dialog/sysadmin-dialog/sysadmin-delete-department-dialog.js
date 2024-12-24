@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   group: PropTypes.object.isRequired,
@@ -36,7 +37,7 @@ class DeleteDepartmentDialog extends React.Component {
     tipMessage = tipMessage.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(group.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</SeahubModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: tipMessage }}></p>
         </ModalBody>

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import Loading from '../loading';
 
 const propTypes = {
@@ -82,7 +83,7 @@ class GroupMembers extends React.Component {
     }
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{`${gettext('Group members')} (${memberNumber})`}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{`${gettext('Group members')} (${memberNumber})`}</SeahubModalHeader>
         <ModalBody className="px-0 group-members-container" onScroll={this.handleScroll}>
           {isLoading ? <Loading /> : (
             <>

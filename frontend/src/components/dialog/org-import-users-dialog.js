@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Alert, Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -47,7 +48,7 @@ class ImportOrgUsersDialog extends React.Component {
     let { errorMsg } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Import users from a .xlsx file')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Import users from a .xlsx file')}</SeahubModalHeader>
         <ModalBody>
           <p><a className="text-secondary small" href={`${siteRoot}useradmin/batchadduser/example/`}>{gettext('Download an example file')}</a></p>
           <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload file')}</button>

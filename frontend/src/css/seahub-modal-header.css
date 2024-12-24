@@ -1,0 +1,23 @@
+.modal-header .seahub-modal-close.close {
+  padding: 14px 16px;
+  opacity: 1;
+}
+
+.modal-header .seahub-modal-close.close:not(:disabled):not(.disabled):hover {
+  opacity: 1;
+}
+
+.modal-header .seahub-modal-close .seahub-modal-close-inner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+}
+
+.modal-header .seahub-modal-close .seahub-modal-close-inner:hover {
+  background-color: #efefef;
+}
+
+.modal-header .seahub-modal-close .seahub-modal-close-inner .sf3-font {
+  color: #666;
+}

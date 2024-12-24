@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
@@ -88,7 +89,7 @@ class SysAdminAddOrgDialog extends React.Component {
     const { errorMsg, password, passwordAgain, email, name, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Add Organization')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Add Organization')}</SeahubModalHeader>
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup>

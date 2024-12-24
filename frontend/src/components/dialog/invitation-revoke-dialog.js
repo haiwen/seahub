@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   accepter: PropTypes.string.isRequired,
@@ -48,7 +49,7 @@ class InvitationRevokeDialog extends React.Component {
 
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>{gettext('Revoke Access')}</ModalHeader>
+        <SeahubModalHeader toggle={toggleDialog}>{gettext('Revoke Access')}</SeahubModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: content }}></p>
         </ModalBody>

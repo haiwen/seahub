@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import { gettext, serviceURL } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, InputGroup, InputGroupText } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { Button, Modal, ModalBody, ModalFooter, Alert, InputGroup, InputGroupText } from 'reactstrap';
 import toaster from '../toast';
 import wikiAPI from '../../utils/wiki-api';
 
@@ -104,7 +105,7 @@ class PublishWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Publish Wiki')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Publish Wiki')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Customize URL')}</p>
           <InputGroup className="publish-wiki-custom-url-inputs">

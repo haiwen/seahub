@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils, validateName } from '../../utils/utils';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   onRename: PropTypes.func.isRequired,
@@ -98,7 +99,7 @@ class Rename extends React.Component {
     let type = this.props.dirent.type;
     return (
       <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
-        <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</SeahubModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext('New file name') : gettext('New folder name')}</p>
           <Input onKeyDown={this.handleKeyDown} innerRef={this.newInput} value={this.state.newName} onChange={this.handleChange} />

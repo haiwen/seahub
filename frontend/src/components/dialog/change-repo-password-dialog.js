@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -100,9 +101,9 @@ class ChangeRepoPasswordDialog extends React.Component {
 
     return (
       <Modal isOpen={true} style={{ height: 'auto' }} toggle={toggleDialog}>
-        <ModalHeader toggle={toggleDialog}>
+        <SeahubModalHeader toggle={toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <form id="repo-change-passwd-form" action="" method="post">
             <label htmlFor="passwd">{gettext('Old Password')}</label>

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const TurnOffConfirmDialog = ({ title, children, toggle, submit }) => {
   return (
     <Modal isOpen={true} toggle={toggle}>
-      <ModalHeader toggle={toggle}>{title}</ModalHeader>
+      <SeahubModalHeader toggle={toggle}>{title}</SeahubModalHeader>
       <ModalBody>
         {children}
       </ModalBody>

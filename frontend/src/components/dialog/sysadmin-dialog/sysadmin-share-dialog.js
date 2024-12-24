@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SysAdminShareToUser from './sysadmin-share-to-user';
 import SysAdminShareToGroup from './sysadmin-share-to-group';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import '../../../css/share-link-dialog.css';
 
 const propTypes = {
@@ -81,7 +82,7 @@ class SysAdminShareDialog extends React.Component {
     return (
       <div>
         <Modal isOpen={true} style={{ maxWidth: '800px' }} className="share-dialog" toggle={this.props.toggleDialog}>
-          <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="op-target" title={this.props.itemName}>{this.props.itemName}</span></ModalHeader>
+          <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="op-target" title={this.props.itemName}>{this.props.itemName}</span></SeahubModalHeader>
           <ModalBody className="share-dialog-content">
             {this.renderDirContent()}
           </ModalBody>

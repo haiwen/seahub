@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import UserSelect from '../user-select';
@@ -58,7 +59,7 @@ class TransferGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Transfer Group')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Transfer Group')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Transfer group to')}</p>
           <UserSelect

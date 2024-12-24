@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   groupID: PropTypes.oneOfType([
@@ -75,7 +76,7 @@ class RenameDepartmentDialog extends React.Component {
     let header = gettext('Rename Department');
     return (
       <Modal isOpen={true} toggle={this.props.toggle} onOpened={this.onAfterModelOpened}>
-        <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{header}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

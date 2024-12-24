@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import toaster from '../toast';
 
 class RenameGroupDialog extends React.Component {
@@ -56,7 +57,7 @@ class RenameGroupDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={this.props.showRenameGroupDialog} toggle={this.props.toggleRenameGroupDialog}>
-        <ModalHeader>{gettext('Rename Group')}</ModalHeader>
+        <SeahubModalHeader>{gettext('Rename Group')}</SeahubModalHeader>
         <ModalBody>
           <label htmlFor="newGroupName">{gettext('Rename group to')}</label>
           <Input type="text" id="newGroupName" value={this.state.newGroupName}

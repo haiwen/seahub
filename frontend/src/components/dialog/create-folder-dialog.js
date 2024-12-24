@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils, validateName } from '../../utils/utils';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   fileType: PropTypes.string,
@@ -76,7 +77,7 @@ class CreateForder extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Folder')}</ModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('New Folder')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

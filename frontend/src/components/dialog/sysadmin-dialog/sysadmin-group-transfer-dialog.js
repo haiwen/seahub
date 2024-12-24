@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import UserSelect from '../../user-select';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   groupName: PropTypes.string.isRequired,
@@ -40,9 +41,9 @@ class SysAdminTransferGroupDialog extends React.Component {
     const msg = gettext('Transfer Group {placeholder} to').replace('{placeholder}', groupName);
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: msg }}></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"

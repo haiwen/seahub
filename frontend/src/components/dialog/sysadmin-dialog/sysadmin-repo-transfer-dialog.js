@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import UserSelect from '../../user-select';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -35,9 +36,9 @@ class SysAdminRepoTransferDialog extends React.Component {
     let message = msg.replace('{library_name}', innerSpan);
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>
+        <SeahubModalHeader toggle={this.props.toggle}>
           <div dangerouslySetInnerHTML={{ __html: message }} />
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"

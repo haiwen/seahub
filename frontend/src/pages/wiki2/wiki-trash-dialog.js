@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, wikiId } from '../../utils/constants';

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -30,7 +31,7 @@ class RemoveWebdavPassword extends Component {
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Delete WebDAV Password')}</ModalHeader>
+        <SeahubModalHeader toggle={toggle}>{gettext('Delete WebDAV Password')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure you want to delete WebDAV password?')}</p>
         </ModalBody>

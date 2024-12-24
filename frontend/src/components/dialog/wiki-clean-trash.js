@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import CreatableSelect from 'react-select/creatable';
 import { MenuSelectStyle } from '../common/select/seahub-select-style';
 import { gettext } from '../../utils/constants';
@@ -60,7 +61,7 @@ class WikiCleanTrash extends React.Component {
     const { formErrorMsg } = this.state;
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Clean')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Clean')}</SeahubModalHeader>
         <ModalBody>
           <React.Fragment>
             <p>{gettext('Clear files in trash and history：')}</p>

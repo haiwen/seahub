@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserSelect from '../../user-select';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 export default class AddDepartMemberV2Dialog extends React.Component {
 
@@ -48,7 +49,7 @@ export default class AddDepartMemberV2Dialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Add member')}</ModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Add member')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
             placeholder={gettext('Search users')}

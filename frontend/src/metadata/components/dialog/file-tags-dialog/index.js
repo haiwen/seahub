@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
@@ -13,6 +13,7 @@ import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/c
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { useTags } from '../../../../tag/hooks';
 import EmptyTip from '../../../../components/empty-tip';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import './index.css';
 
@@ -119,7 +120,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   return (
     <Modal isOpen={true} toggle={() => onToggle()} className="sf-metadata-auto-image-tags">
-      <ModalHeader toggle={() => onToggle()}>{fileName + gettext('\'s tags')}</ModalHeader>
+      <SeahubModalHeader toggle={() => onToggle()}>{fileName + gettext('\'s tags')}</SeahubModalHeader>
       <ModalBody>
         {isLoading ? (
           <CenteredLoading />
