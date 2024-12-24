@@ -36,7 +36,7 @@ class WikiCardItem extends Component {
       isShowShareDialog: false,
       isShowPublishDialog: false,
       isShowConvertDialog: false,
-      customUrl: '',
+      customUrlString: this.props.wiki.url_string,
     };
   }
 
@@ -66,8 +66,15 @@ class WikiCardItem extends Component {
     });
   };
 
-  onPublishToggle = (e) => {
-    this.getPublishWikiLink();
+  onPublishToggle = () => {
+    this.setState({
+      isShowPublishDialog: !this.state.isShowPublishDialog,
+    });
+  };
+  handleCustomUrl = (url) => {
+    this.setState({
+      customUrlString: url,
+    });
   };
 
   onDeleteCancel = () => {
@@ -104,7 +111,7 @@ class WikiCardItem extends Component {
     const publish_url = url.substring(urlIndex + '/publish/'.length);
     wikiAPI.publishWiki(this.props.wiki.id, publish_url).then((res) => {
       const { publish_url } = res.data;
-      this.setState({ customUrl: publish_url });
+      this.setState({ customUrlString: publish_url });
       toaster.success(gettext('Wiki published'));
     }).catch((error) => {
       if (error.response) {
@@ -118,7 +125,7 @@ class WikiCardItem extends Component {
     wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
       const { publish_url } = res.data;
       this.setState({
-        customUrl: publish_url,
+        customUrlString: publish_url,
         isShowPublishDialog: !this.state.isShowPublishDialog,
       });
     }).catch((error) => {
@@ -272,7 +279,7 @@ class WikiCardItem extends Component {
           </div>
           <div className="wiki-item-bottom">
             {dayjs(wiki.updated_at).fromNow()}
-            {wiki.is_published && (<span>{gettext('Published')}</span>)}
+            {this.state.customUrlString && (<span>{gettext('Published')}</span>)}
           </div>
         </div>
         {this.state.isShowDeleteDialog &&
@@ -341,9 +348,10 @@ class WikiCardItem extends Component {
           <ModalPortal>
             <PublishWikiDialog
               toggleCancel={this.onPublishToggle}
+              handleCustomUrl={this.handleCustomUrl}
               onPublish={this.publishWiki}
               wiki={wiki}
-              customUrl={this.state.customUrl}
+              customUrlString={this.state.customUrlString}
             />
           </ModalPortal>
         }

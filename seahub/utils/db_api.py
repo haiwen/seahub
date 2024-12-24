@@ -13,6 +13,18 @@ class RepoTrash(object):
         self.size = kwargs.get('size')
         self.del_time = kwargs.get('del_time')
 
+class WikiInfo(object):
+    def __init__(self, **kwargs):
+        self.repo_id = kwargs.get('repo_id')
+        self.wiki_name = kwargs.get('wiki_name')
+        self.owner_id = kwargs.get('owner_id')
+        self.encrypted = kwargs.get('is_encrypted')
+        self.size = kwargs.get('size')
+        self.status = kwargs.get('status')
+        self.file_count = kwargs.get('file_count')
+        self.last_modified = kwargs.get('last_modified')
+
+
 
 class SeafileDB:
 
@@ -462,3 +474,77 @@ class SeafileDB:
           """
         with connection.cursor() as cursor:
             cursor.execute(sql)
+    
+    def get_all_wikis(self, start, limit,order_by):
+        sql1 = f"""
+            SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
+            FROM
+                 `{self.db_name}`.`Repo` r
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON i.repo_id = o.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoSize` s ON s.repo_id = r.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+            WHERE
+                i.type = 'wiki'
+            ORDER BY
+                s.size DESC
+            LIMIT {limit} OFFSET {start}
+            """
+        sql2 = f"""
+            SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
+            FROM
+                 `{self.db_name}`.`Repo` r
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON i.repo_id = o.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoSize` s ON s.repo_id = r.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+            WHERE
+                i.type = 'wiki'
+            ORDER BY
+                c.file_count DESC
+            LIMIT {limit} OFFSET {start}
+            """
+        sql3 = f"""
+            SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
+            FROM
+                 `{self.db_name}`.`Repo` r
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON r.repo_id = o.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoSize` s ON r.repo_id = s.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+            WHERE
+                i.type = 'wiki'
+            LIMIT {limit} OFFSET {start}
+        """
+        
+        with connection.cursor() as cursor:
+            wikis = []
+            if order_by == 'size':
+                cursor.execute(sql1)
+                
+            elif order_by == 'file_count':
+                cursor.execute(sql2)
+            else:
+                cursor.execute(sql3)
+            for item in cursor.fetchall():
+                repo_id = item[0]
+                wiki_name = item[1]
+                owner_id = item[2]
+                is_encrypted = item[3]
+                size = item[4]
+                status = item[5]
+                file_count = item[6]
+                last_modified = item[7]
+                params = {
+                    'repo_id': repo_id,
+                    'wiki_name': wiki_name,
+                    'owner_id': owner_id,
+                    'is_encrypted': is_encrypted,
+                    'size': size,
+                    'status': status,
+                    'file_count': file_count,
+                    'last_modified': last_modified
+                }
+                wiki_info = WikiInfo(**params)
+                wikis.append(wiki_info)
+            return wikis
