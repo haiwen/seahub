@@ -128,6 +128,19 @@ export const getUpdatedFilterByCollaborator = (filter, collaborator) => {
   return Object.assign({}, filter, { filter_term: filterTerm });
 };
 
+export const getUpdatedFilterByTag = (filter, tag) => {
+  let filterTerm = filter.filter_term ? filter.filter_term.slice(0) : [];
+  // let selectedTagId = tag.id;
+  let selectedTagName = tag.name;
+  let tag_index = filterTerm.indexOf(selectedTagName);
+  if (tag_index > -1) {
+    filterTerm.splice(tag_index, 1);
+  } else {
+    filterTerm.push(selectedTagName);
+  }
+  return Object.assign({}, filter, { filter_term: filterTerm });
+};
+
 export const getUpdatedFilterByRate = (filter, value) => {
   if (filter.filter_term === value) {
     return Object.assign({}, filter, { filter_term: 0 });
