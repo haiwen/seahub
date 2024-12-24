@@ -12,6 +12,7 @@ class OrgInfo extends Component {
     super(props);
     this.state = {
       org_name: '',
+      monthly_traffic: '',
       storage_quota: 0,
       storage_usage: 0,
       member_quota: 0,
@@ -23,12 +24,12 @@ class OrgInfo extends Component {
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then(res => {
       const {
-        org_id, org_name,
+        org_id, org_name, monthly_traffic,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage
       } = res.data;
       this.setState({
-        org_id, org_name,
+        org_id, org_name, monthly_traffic,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage
       });
@@ -37,7 +38,7 @@ class OrgInfo extends Component {
 
   render() {
     const {
-      org_id, org_name,
+      org_id, org_name, monthly_traffic,
       member_quota, member_usage, active_members,
       storage_quota, storage_usage
     } = this.state;
@@ -103,6 +104,12 @@ class OrgInfo extends Component {
                   ) : (
                     <p>{Utils.bytesToSize(storage_usage)}</p>
                   )}
+                </div>
+                <div className="info-content-item">
+                  <h4 className="info-content-item-heading">{gettext('Traffic this month')}</h4>
+                    {gettext('Download')} {Utils.bytesToSize(monthly_traffic.link_file_download + monthly_traffic.sync_file_download + monthly_traffic.web_file_download)}
+                    <br/>
+                    {gettext('Upload')} {Utils.bytesToSize(monthly_traffic.link_file_upload + monthly_traffic.sync_file_upload + monthly_traffic.web_file_upload)}
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -16,12 +17,15 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
-from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, DISABLE_ORG_USER_CLEAN_TRASH
+from seahub.utils import get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
+
+from seahub.organizations.api.permissions import IsOrgAdmin
+from seahub.organizations.models import OrgAdminSettings, \
+        OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
+        DISABLE_ORG_USER_CLEAN_TRASH
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
-from seahub.organizations.api.permissions import IsOrgAdmin
-from seahub.organizations.models import OrgAdminSettings
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +88,8 @@ def get_org_info(request, org_id):
     if settings.ENABLE_MULTI_ADFS is False:
         info[FORCE_ADFS_LOGIN] = False
 
+    current_date = datetime.now()
+    info['monthly_traffic'] = get_org_traffic_by_month(org_id, current_date)
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['user_default_quota'] = user_default_quota
