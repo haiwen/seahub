@@ -6,6 +6,35 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
   const [pageName, setPageName] = useState(currentPageConfig.name);
   const isChineseInput = useRef(false);
   const contentEditableRef = useRef(null);
+  const selectionRef = useRef(null);
+
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0);
+      selectionRef.current = {
+        startContainer: range.startContainer,
+        startOffset: range.startOffset,
+        endContainer: range.endContainer,
+        endOffset: range.endOffset
+      };
+    }
+  };
+
+  const restoreSelection = useCallback(() => {
+    if (selectionRef.current) {
+      const { startContainer, startOffset, endContainer, endOffset } = selectionRef.current;
+      // modify pageName by side panel
+      if (pageName.length < startOffset) return;
+      const range = window.document.createRange();
+      range.setStart(startContainer, startOffset);
+      range.setEnd(endContainer, endOffset);
+
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }, [pageName.length]);
 
   const onKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -22,6 +51,8 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
     isChineseInput.current = false;
     setPageName(e.target.innerText);
 
+    saveSelection();
+
     const newName = e.target.innerText.trim();
     const { id, icon } = currentPageConfig;
     const pageConfig = { name: newName, icon };
@@ -29,6 +60,7 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
   }, [currentPageConfig, onUpdatePage]);
 
   const handleInput = useCallback((e) => {
+    saveSelection();
     if (isChineseInput.current === false) {
       setPageName(e.target.innerText);
 
@@ -44,18 +76,21 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
   useEffect(() => {
     if (pageName !== currentPageConfig.name && isUpdateBySide) {
       setPageName(currentPageConfig.name);
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(contentEditableRef.current);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageConfig.name, isUpdateBySide]);
 
   useEffect(() => {
-    const range = document.createRange();
-    const selection = window.getSelection();
-    range.selectNodeContents(contentEditableRef.current);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }, [pageName]);
+    if (!isUpdateBySide) {
+      restoreSelection();
+    }
+  }, [isUpdateBySide, restoreSelection]);
 
   return (
     <div
