@@ -36,6 +36,10 @@
   height: calc(100% - 46px);
 }
 
+.sf-metadata-set-linked-tags-popover .empty-tip {
+  margin-top: 0;
+}
+
 .sf-metadata-set-linked-tags-popover-selectable-tags-wrapper {
   height: calc(100% - 48px);
 }
