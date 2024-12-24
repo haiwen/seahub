@@ -23,7 +23,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
     return Array.isArray(people._photo_links) ? people._photo_links.length : 0;
   }, [people._photo_links]);
 
-  const name = useMemo(() => people._name || gettext('Person image'), [people._name]);
+  const name = useMemo(() => people._is_someone ? (people._name || gettext('Person image')) : gettext('Unknown people'), [people]);
 
   const [renaming, setRenaming] = useState(false);
   const [active, setActive] = useState(false);
@@ -91,7 +91,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
           {photosCount + ' ' + gettext('items')}
         </div>
       </div>
-      {!readonly && (
+      {!readonly && people._is_someone && (
         <div className="sf-metadata-people-info-op">
           {active && !renaming && (
             <OpMenu onRename={setRenamingState} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
