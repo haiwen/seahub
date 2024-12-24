@@ -13,6 +13,7 @@ const propTypes = {
   wiki: PropTypes.object,
   onPublish: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  handleCustomUrl: PropTypes.func.isRequired
 };
 
 const DEFAULT_URL = serviceURL + '/wiki/publish/';
@@ -62,6 +63,7 @@ class PublishWikiDialog extends React.Component {
     let wiki_id = this.props.wiki.id;
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
       this.setState({ url: '' });
+      this.props.handleCustomUrl('');
       toaster.success(gettext('Wiki custom URL deleted'));
     }).catch((error) => {
       if (error.response) {

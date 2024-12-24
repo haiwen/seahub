@@ -36,7 +36,7 @@ class WikiCardItem extends Component {
       isShowShareDialog: false,
       isShowPublishDialog: false,
       isShowConvertDialog: false,
-      customUrl: '',
+      customUrl: this.props.wiki.url_string,
     };
   }
 
@@ -66,8 +66,15 @@ class WikiCardItem extends Component {
     });
   };
 
-  onPublishToggle = (e) => {
-    this.getPublishWikiLink();
+  onPublishToggle = () => {
+    this.setState({
+      isShowPublishDialog: !this.state.isShowPublishDialog,
+    });
+  };
+  handleCustomUrl = (url) => {
+    this.setState({
+      customUrl: url,
+    });
   };
 
   onDeleteCancel = () => {
@@ -272,7 +279,7 @@ class WikiCardItem extends Component {
           </div>
           <div className="wiki-item-bottom">
             {dayjs(wiki.updated_at).fromNow()}
-            {wiki.is_published && (<span>{gettext('Published')}</span>)}
+            {this.state.customUrl && (<span>{gettext('Published')}</span>)}
           </div>
         </div>
         {this.state.isShowDeleteDialog &&
@@ -341,6 +348,7 @@ class WikiCardItem extends Component {
           <ModalPortal>
             <PublishWikiDialog
               toggleCancel={this.onPublishToggle}
+              handleCustomUrl={this.handleCustomUrl}
               onPublish={this.publishWiki}
               wiki={wiki}
               customUrl={this.state.customUrl}
