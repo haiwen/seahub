@@ -223,9 +223,14 @@ class CopyDirent extends React.Component {
   };
 
   onUpdateSearchResults = (results) => {
-    this.setState({
-      searchResults: results
-    });
+    if (results.length > 0) {
+      const firstResult = results[0];
+      this.setState({
+        selectedRepo: new RepoInfo(firstResult),
+        selectedPath: firstResult.path
+      });
+    }
+    this.setState({ searchResults: results });
   };
 
   onOpenSearchBar = () => {
@@ -240,6 +245,7 @@ class CopyDirent extends React.Component {
       searchResults: [],
       selectedSearchedRepo: null,
       showSearchBar: false,
+      selectedPath: this.props.path,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
   };
@@ -279,7 +285,7 @@ class CopyDirent extends React.Component {
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
-      repo: repo,
+      selectedRepo: repo,
       selectedPath: selectedPath,
       errMessage: ''
     });
