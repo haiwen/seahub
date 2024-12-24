@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { gettext, trashReposExpireDays } from '../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -35,7 +36,7 @@ const MyDeletedReposDialog = ({ toggleDialog }) => {
 
   return (
     <Modal isOpen={true} toggle={toggleDialog} className="my-deleted-repos-dialog">
-      <ModalHeader toggle={toggleDialog}>{gettext('Deleted Libraries')}</ModalHeader>
+      <SeahubModalHeader toggle={toggleDialog}>{gettext('Deleted Libraries')}</SeahubModalHeader>
       <ModalBody className="my-deleted-repos-container">
         {isLoading ? (
           <Loading />
