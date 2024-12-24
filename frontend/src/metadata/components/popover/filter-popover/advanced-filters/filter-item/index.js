@@ -10,6 +10,7 @@ import { isCheckboxColumn, isDateColumn, getColumnOptions as getSelectColumnOpti
 import {
   getFilterByColumn, getUpdatedFilterBySelectSingle, getUpdatedFilterBySelectMultiple, getUpdatedFilterByCreator, getUpdatedFilterByCollaborator,
   getColumnOptions, getUpdatedFilterByPredicate,
+  getUpdatedFilterByTag,
 } from '../../../../../utils/filter';
 import {
   CellType, DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS, FILTER_PREDICATE_TYPE, FILTER_TERM_MODIFIER_TYPE, FILTER_ERR_MSG,
@@ -202,6 +203,14 @@ class FilterItem extends React.Component {
     this.resetState(newFilter);
     this.props.updateFilter(index, newFilter);
 
+  };
+
+  onSelectTag = (value) => {
+    const { index, filter } = this.props;
+    const { columnOption: tag } = value;
+    let newFilter = getUpdatedFilterByTag(filter, tag);
+    this.resetState(newFilter);
+    this.props.updateFilter(index, newFilter);
   };
 
   onFilterTermCheckboxChanged = (e) => {
@@ -515,7 +524,7 @@ class FilterItem extends React.Component {
           color: getTagColor(tag),
         }));
 
-        return <TagsFilter options={options} filterTerm={filter_term} readOnly={readOnly} onSelectMultiple={this.onSelectMultiple} />;
+        return <TagsFilter options={options} filterTerm={filter_term} readOnly={readOnly} onSelectMultiple={this.onSelectTag} />;
       }
       default: {
         return null;

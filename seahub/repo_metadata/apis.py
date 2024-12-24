@@ -1882,7 +1882,7 @@ class MetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE, MetadataColumn
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -1942,26 +1942,26 @@ class MetadataTags(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-            columns = columns_data.get('columns', [])
-            tags_column = next((col for col in columns if col['key'] == METADATA_TABLE.columns.tags.key), None)
-            if tags_column:
-                options = tags_column.get('data', {}).get('options', [])
-                for tag_data in tags_data:
-                    tag = tag_data.get('tag', {})
-                    tag_id = tag_data.get('tag_id', '')
-                    tag_name = tag.get(TAGS_TABLE.columns.name.name)
-                    option = next((opt for opt in options if opt['id'] == tag_id), None)
-                    if option:
-                        option['name'] = tag_name
-                new_column_data = {**tags_column.get('data', {}), 'options': options}
-                new_column = MetadataColumn(tags_column['key'], tags_column['name'], tags_column['type'], new_column_data).to_dict()
-                metadata_server_api.update_column(METADATA_TABLE.id, new_column)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        # try:
+        #     columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+        #     columns = columns_data.get('columns', [])
+        #     tags_column = next((col for col in columns if col['key'] == METADATA_TABLE.columns.tags.key), None)
+        #     if tags_column:
+        #         options = tags_column.get('data', {}).get('options', [])
+        #         for tag_data in tags_data:
+        #             tag = tag_data.get('tag', {})
+        #             tag_id = tag_data.get('tag_id', '')
+        #             tag_name = tag.get(TAGS_TABLE.columns.name.name)
+        #             option = next((opt for opt in options if opt['id'] == tag_id), None)
+        #             if option:
+        #                 option['name'] = tag_name
+        #         new_column_data = {**tags_column.get('data', {}), 'options': options}
+        #         new_column = MetadataColumn(tags_column['key'], tags_column['name'], tags_column['type'], new_column_data).to_dict()
+        #         metadata_server_api.update_column(METADATA_TABLE.id, new_column)
+        # except Exception as e:
+        #     logger.error(e)
+        #     error_msg = 'Internal Server Error'
+        #     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
 
@@ -1988,7 +1988,7 @@ class MetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE, MetadataColumn
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2007,20 +2007,20 @@ class MetadataTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-            columns = columns_data.get('columns', [])
-            tags_column = next((col for col in columns if col['key'] == METADATA_TABLE.columns.tags.key), None)
-            if tags_column:
-                options = tags_column.get('data', {}).get('options', [])
-                options = [opt for opt in options if opt['id'] not in tag_ids]
-                new_column_data = {**tags_column.get('data', {}), 'options': options}
-                new_column = MetadataColumn(tags_column['key'], tags_column['name'], tags_column['type'], new_column_data).to_dict()
-                resp = metadata_server_api.update_column(METADATA_TABLE.id, new_column)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        # try:
+        #     columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+        #     columns = columns_data.get('columns', [])
+        #     tags_column = next((col for col in columns if col['key'] == METADATA_TABLE.columns.tags.key), None)
+        #     if tags_column:
+        #         options = tags_column.get('data', {}).get('options', [])
+        #         options = [opt for opt in options if opt['id'] not in tag_ids]
+        #         new_column_data = {**tags_column.get('data', {}), 'options': options}
+        #         new_column = MetadataColumn(tags_column['key'], tags_column['name'], tags_column['type'], new_column_data).to_dict()
+        #         resp = metadata_server_api.update_column(METADATA_TABLE.id, new_column)
+        # except Exception as e:
+        #     logger.error(e)
+        #     error_msg = 'Internal Server Error'
+        #     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
 

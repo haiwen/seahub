@@ -10,7 +10,7 @@ const TagsFilter = ({ options, filterTerm, readOnly, onSelectMultiple }) => {
 
   const selectValue = useMemo(() => {
     return Array.isArray(filterTerm) && filterTerm.length > 0 && filterTerm.map((item) => {
-      const option = options.find(option => option.id === item);
+      const option = options.find(option => option.name === item);
       if (!option) return null;
       const optionStyle = { margin: '0 10px 0 0' };
       let optionName = null;
@@ -49,7 +49,7 @@ const TagsFilter = ({ options, filterTerm, readOnly, onSelectMultiple }) => {
             <span className="sf-metadata-tag-name">{option.name}</span>
           </div>
           <div className="tag-check-icon">
-            {filterTerm.indexOf(option.id) > -1 && (<Icon iconName="check-mark" />)}
+            {filterTerm.indexOf(option.name) > -1 && (<Icon iconName="check-mark" />)}
           </div>
         </div>
       )

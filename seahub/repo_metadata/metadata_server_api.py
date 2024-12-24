@@ -48,7 +48,9 @@ def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
     from seafevents.repo_metadata.utils import gen_view_data_sql
     metadata_server_api = MetadataServerAPI(repo_id, user)
     columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
+    print(columns)
     sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit, user)
+    print(sql)
 
     # Remove face-vectors from the query SQL because they are too large
     query_fields_str = ''

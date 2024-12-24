@@ -9,7 +9,7 @@ import { useTags } from '../../../../tag/hooks';
 import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell/core';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../utils/table';
-import { PRIVATE_COLUMN_KEY, SELECT_OPTION_COLORS } from '../../../constants';
+import { SELECT_OPTION_COLORS } from '../../../constants';
 import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 import DeleteTags from './delete-tags';
 
@@ -23,7 +23,6 @@ const TagsEditor = forwardRef(({
   editorPosition = { left: 0, top: 0 },
   onPressTab,
   updateFileTags,
-  modifyColumnData,
 }, ref) => {
   const { tagsData, addTag, context } = useTags();
 
@@ -105,17 +104,12 @@ const TagsEditor = forwardRef(({
         const newValue = [...value, ...tags];
         updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
-        const options = tagsData.rows.map(tag => ({
-          id: getTagId(tag),
-          name: getTagName(tag),
-        })) || [];
-        modifyColumnData(PRIVATE_COLUMN_KEY.TAGS, { options }, { options: column.data.options || [] });
       },
       fail_callback: () => {
 
       },
     });
-  }, [value, searchValue, record, addTag, updateFileTags, modifyColumnData, column, tagsData]);
+  }, [value, searchValue, record, addTag, updateFileTags]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
