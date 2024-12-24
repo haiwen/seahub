@@ -2067,7 +2067,7 @@ class MetadataTagsLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
 
         try:
-            metadata_server_api.insert_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+            metadata_server_api.insert_link(link_id, tags_table_id, row_id_map, is_linked_back)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -2132,7 +2132,7 @@ class MetadataTagsLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
 
         try:
-            metadata_server_api.update_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+            metadata_server_api.update_link(link_id, tags_table_id, row_id_map, is_linked_back)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -2200,7 +2200,7 @@ class MetadataTagsLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'invalid link column')
 
         try:
-            metadata_server_api.delete_link(repo_id, link_id, tags_table_id, row_id_map, is_linked_back)
+            metadata_server_api.delete_link(link_id, tags_table_id, row_id_map, is_linked_back)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')

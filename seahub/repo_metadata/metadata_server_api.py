@@ -245,8 +245,8 @@ class MetadataServerAPI:
         response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def delete_link(self, base_id, link_id, table_id, row_id_map, is_linked_back=False):
-        url = f'{METADATA_SERVER_URL}/api/v1/base/{base_id}/links'
+    def delete_link(self, link_id, table_id, row_id_map, is_linked_back=False):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/links'
         data = {
             'link_id': link_id,
             'table_id': table_id,
