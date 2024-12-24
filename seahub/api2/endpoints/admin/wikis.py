@@ -10,7 +10,8 @@ from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, is_wiki_repo
+from seahub.api2.utils import api_error
+from seahub.utils import get_service_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import group_id_to_name
 from seahub.utils.repo import normalize_repo_status_code
@@ -24,7 +25,7 @@ from seahub.utils.db_api import SeafileDB
 logger = logging.getLogger(__name__)
 
 
-def get_wiki_info(wiki, publish_wiki_ids):
+def get_wiki_info(wiki, publish_wikis_dict):
 
     wiki_owner = seafile_api.get_repo_owner(wiki.repo_id)
     if not wiki_owner:
@@ -33,6 +34,10 @@ def get_wiki_info(wiki, publish_wiki_ids):
         except Exception:
             org_wiki_owner = None
     owner = wiki_owner or org_wiki_owner or ''
+    link_prefix = get_service_url().rstrip('/') + '/wiki/publish/'
+    url_string = publish_wikis_dict.get(wiki.repo_id) if wiki.repo_id in publish_wikis_dict else ""
+    link = link_prefix + url_string if url_string else ""
+
     result = {}
     result['id'] = wiki.repo_id
     result['name'] = wiki.wiki_name
@@ -45,7 +50,8 @@ def get_wiki_info(wiki, publish_wiki_ids):
     result['file_count'] = wiki.file_count if wiki.file_count else 0
     result['status'] = normalize_repo_status_code(wiki.status)
     result['last_modified'] = timestamp_to_isoformat_timestr(wiki.last_modified)
-    result["is_published"] = True if wiki.repo_id in publish_wiki_ids else False
+    result['url_string'] = url_string
+    result['link'] = link
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
@@ -97,14 +103,14 @@ class AdminWikis(APIView):
 
         # get publish wiki
         wiki_ids = [w.repo_id for w in all_wikis]
-        publish_wiki_ids = []
+        publish_wikis_dict = {}
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
         for w in published_wikis:
-            publish_wiki_ids.append(w.repo_id)
+            publish_wikis_dict[w.repo_id] = w.publish_url
 
         all_fmt_wikis = []
         for wiki in all_wikis:
-            repo_info = get_wiki_info(wiki, publish_wiki_ids)
+            repo_info = get_wiki_info(wiki, publish_wikis_dict)
             all_fmt_wikis.append(repo_info)
 
         page_info = {

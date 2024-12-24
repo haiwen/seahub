@@ -83,19 +83,11 @@ class Content extends Component {
                     gettext('Files') / gettext('Size')
                   }
                 </th>
-                {this.props.isWiki == true ?
-                  <Fragment>
-                    <th width="32%">ID</th>
-                    <th width="10%">Published</th>
-                    <th width="8%">{gettext('Owner')}</th>
-                    <th width="5%">{/* Operations*/}</th>
-                  </Fragment> :
-                  <Fragment>
-                    <th width="32%">ID</th>
-                    <th width="18%">{gettext('Owner')}</th>
-                    <th width="5%">{/* Operations*/}</th>
-                  </Fragment>
-                }
+                <Fragment>
+                  <th width="32%">ID</th>
+                  <th width="18%">{gettext('Owner')}</th>
+                  <th width="5%">{/* Operations*/}</th>
+                </Fragment>
               </tr>
             </thead>
             <tbody>
@@ -289,6 +281,9 @@ class Item extends Component {
 
   getOperations = () => {
     const { repo } = this.props;
+    if (this.props.isWiki) {
+      return ['Delete'];
+    }
     let operations = ['Delete', 'Transfer'];
     const index = repo.owner_email.indexOf('@seafile_group');
     let isGroupOwnedRepo = index != -1;
@@ -320,21 +315,23 @@ class Item extends Component {
     if (isGroupOwnedRepo) {
       departmentID = repo.owner_email.substring(0, index);
     }
-
+    let wikiName = '';
+    if (this.props.isWiki) {
+      wikiName = this.renderRepoName();
+      if (repo.link) {
+        wikiName = <><span>{wikiName}</span><a href={repo.link}>(Published)</a></>;
+      }
+    }
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>{this.renderRepoName()}</td>
+          {this.props.isWiki ?
+            <td>{wikiName}</td> :
+            <td>{this.renderRepoName()}</td>
+          }
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.id}</td>
-          {this.props.isWiki &&
-            <td>
-              { repo.is_published ?
-                'True' : 'False'
-              }
-            </td>
-          }
           <td>
             {isGroupOwnedRepo ?
               <Link to={`${siteRoot}sys/departments/${departmentID}/`}>{repo.owner_name}</Link> :
