@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, wikiId } from '../../utils/constants';
@@ -10,7 +10,6 @@ import toaster from '../../components/toast';
 import Paginator from '../../components/paginator';
 import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 import NavItemIcon from './common/nav-item-icon';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
@@ -91,7 +90,7 @@ class WikiTrashDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
-        <SeahubModalHeader
+        <ModalHeader
           close={
             <>
               <div className="button-control">
@@ -104,7 +103,7 @@ class WikiTrashDialog extends React.Component {
           }
         >
           <div dangerouslySetInnerHTML={{ __html: title }}></div>
-        </SeahubModalHeader>
+        </ModalHeader>
         <ModalBody>
           <Content
             data={this.state}
