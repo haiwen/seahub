@@ -173,9 +173,7 @@ class AdminOrganizations(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = []
-        org_ids = []
-        for org in orgs:
-            org_ids.append(org.org_id)
+        org_ids = [org.org_id for org in orgs]
         orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
         orgs_last_activity_dict = {org.org_id:org.timestamp for org in orgs_last_activity}
         for org in orgs:
