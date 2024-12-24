@@ -1,0 +1,15 @@
+.view-published-wiki {
+   font-size: .75rem;
+   color: #666;
+   background: transparent;
+   height: 20px; 
+   padding: 0 .5rem;
+   border: 1px solid #dbdbdb;
+   border-radius: 10px;
+ } 
+ 
+ .view-published-wiki:hover {
+   background: #efefef;
+   text-decoration: none;
+   color: #666;
+ }

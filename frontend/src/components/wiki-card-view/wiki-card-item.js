@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { siteRoot, gettext, username, canPublishWiki } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
@@ -12,6 +13,7 @@ import PublishWikiDialog from '../dialog/publish-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
+import PublishedWikiExtrance from '../published-wiki-entrance';
 
 dayjs.extend(relativeTime);
 
@@ -40,6 +42,22 @@ class WikiCardItem extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getPublishWikiLink();
+  }
+
+  getPublishWikiLink = () => {
+    wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
+      const { publish_url } = res.data;
+      this.setState({
+        customUrl: publish_url
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   onRenameToggle = (e) => {
     this.setState({
       isShowRenameDialog: !this.state.isShowRenameDialog,
@@ -66,8 +84,10 @@ class WikiCardItem extends Component {
     });
   };
 
-  onPublishToggle = (e) => {
-    this.getPublishWikiLink();
+  onPublishToggle = () => {
+    this.setState({
+      isShowPublishDialog: !this.state.isShowPublishDialog,
+    });
   };
 
   onDeleteCancel = () => {
@@ -114,24 +134,6 @@ class WikiCardItem extends Component {
     });
   };
 
-  getPublishWikiLink = () => {
-    wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
-      const { publish_url } = res.data;
-      this.setState({
-        customUrl: publish_url,
-        isShowPublishDialog: !this.state.isShowPublishDialog,
-      });
-    }).catch((error) => {
-      this.setState({
-        isShowPublishDialog: !this.state.isShowPublishDialog,
-      });
-      if (error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
-  };
-
   clickWikiCard = (link) => {
     window.open(link);
   };
@@ -167,6 +169,7 @@ class WikiCardItem extends Component {
 
   render() {
     const { wiki, isDepartment, isShowAvatar } = this.props;
+
     let isAdmin = false;
     if (wiki.admins) {
       isAdmin = wiki.admins.includes(username);
@@ -226,10 +229,11 @@ class WikiCardItem extends Component {
           className={`wiki-card-item ${this.state.isItemMenuShow ? 'wiki-card-item-menu-open' : ''}`}
           onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl)}
         >
-          <div className="wiki-card-item-top">
+          <div className="wiki-card-item-top d-flex align-items-center">
             <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
+            {wiki.is_published && <PublishedWikiExtrance wikiID={wiki.id} customURLPart={this.state.customUrl} />}
             {showDropdownMenu &&
-              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown}>
+              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown} className="ml-auto">
                 <DropdownToggle
                   tag="i"
                   role="button"
@@ -272,7 +276,6 @@ class WikiCardItem extends Component {
           </div>
           <div className="wiki-item-bottom">
             {dayjs(wiki.updated_at).fromNow()}
-            {wiki.is_published && (<span>{gettext('Published')}</span>)}
           </div>
         </div>
         {this.state.isShowDeleteDialog &&
