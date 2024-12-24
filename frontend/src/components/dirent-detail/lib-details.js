@@ -68,7 +68,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   );
 
 }, (props, nextProps) => {
-  return props.currentRepo.repo_id === nextProps.currentRepo.repo_id;
+  return props.currentRepoInfo.repo_id === nextProps.currentRepoInfo.repo_id;
 });
 
 LibDetail.propTypes = {
