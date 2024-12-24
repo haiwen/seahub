@@ -1252,7 +1252,8 @@ class FacesRecords(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import FACES_TABLE
-        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}`, `{FACES_TABLE.columns.vector.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1275,7 +1276,7 @@ class FacesRecords(APIView):
                 FACES_TABLE.columns.id.name: record.get(FACES_TABLE.columns.id.name),
                 FACES_TABLE.columns.name.name: record.get(FACES_TABLE.columns.name.name),
                 FACES_TABLE.columns.photo_links.name: valid_photo_links,
-                '_is_someone': bool(record.get(FACES_TABLE.columns.vector.name)),
+                '_is_someone': record.get(FACES_TABLE.columns.name.name) != UNKNOWN_PEOPLE_NAME,
             })
 
         return Response({
@@ -1292,6 +1293,16 @@ class FacesRecord(APIView):
     def put(self, request, repo_id):
         name = request.data.get('name')
         record_id = request.data.get('record_id')
+
+        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        if not name or name == UNKNOWN_PEOPLE_NAME:
+            error_msg = 'name invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not record_id:
+            error_msg = 'record_id invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
             error_msg = f'The face recognition is disabled for repo {repo_id}.'

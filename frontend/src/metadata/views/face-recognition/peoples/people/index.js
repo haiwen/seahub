@@ -23,7 +23,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
     return Array.isArray(people._photo_links) ? people._photo_links.length : 0;
   }, [people._photo_links]);
 
-  const name = useMemo(() => people._name || people._is_someone ? gettext('Person image') : gettext('Unknown people'), [people]);
+  const name = useMemo(() => people._is_someone ? (people._name || gettext('Person image')) : gettext('Unknown people'), [people]);
 
   const [renaming, setRenaming] = useState(false);
   const [active, setActive] = useState(false);
