@@ -9,7 +9,7 @@ import MapViewToolBar from './map-view-toolbar';
 
 import './index.css';
 
-const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail }) => {
+const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -108,6 +108,7 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail }) => {
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
           onToggleDetail={onToggleDetail}
+          onCloseDetail={onCloseDetail}
         />
       )}
       {viewType === VIEW_TYPE.MAP && (
@@ -126,6 +127,7 @@ ViewToolBar.propTypes = {
   viewId: PropTypes.string,
   isCustomPermission: PropTypes.bool,
   onToggleDetail: PropTypes.func,
+  onCloseDetail: PropTypes.func,
 };
 
 export default ViewToolBar;
