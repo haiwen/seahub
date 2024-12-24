@@ -3,3 +3,4 @@ from django.dispatch import Signal
 
 # A new org is created
 org_created = Signal()
+org_last_activity = Signal()

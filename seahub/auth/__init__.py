@@ -7,8 +7,10 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 from seahub.auth.signals import user_logged_in
+from seahub.organizations.signals import org_last_activity
 
 from constance import config
+from seaserv import ccnet_api
 
 SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
@@ -106,6 +108,10 @@ def login(request, user, mobile_login=False):
     if hasattr(request, 'user'):
         request.user = user
     user_logged_in.send(sender=user.__class__, request=request, user=user)
+    orgs = ccnet_api.get_orgs_by_user(user.username)
+    if orgs:
+        org_id = orgs[0].org_id
+        org_last_activity.send(sender=user.__class__, org_id=org_id)
 
 def logout(request):
     """
