@@ -143,6 +143,9 @@ const FILTER_COLUMN_OPTIONS = {
   [CellType.RATE]: {
     filterPredicateList: numberPredicates,
   },
+  [CellType.TAGS]: {
+    filterPredicateList: textPredicates,
+  },
 };
 
 export {

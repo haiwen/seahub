@@ -399,7 +399,8 @@ class FilterItem extends React.Component {
       case CellType.NUMBER:
       case CellType.FILE_NAME:
       case CellType.TEXT:
-      case CellType.URL: { // The data in the formula column is a date type that has been excluded
+      case CellType.URL:
+      case CellType.TAGS: { // The data in the formula column is a date type that has been excluded
         if (filter_predicate === FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID) {
           return null;
         }

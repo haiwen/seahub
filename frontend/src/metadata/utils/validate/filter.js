@@ -223,7 +223,8 @@ class ValidateFilter {
     switch (filterColumn.type) {
       case CellType.TEXT:
       case CellType.GEOLOCATION:
-      case CellType.FILE_NAME: {
+      case CellType.FILE_NAME:
+      case CellType.TAGS: {
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
       }
       case CellType.NUMBER:
