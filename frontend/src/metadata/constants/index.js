@@ -141,6 +141,11 @@ export const GALLERY_DATE_MODE = {
   ALL: 'all',
 };
 
+export const MAP_TYPE = {
+  MAP: 'map',
+  SATELLITE: 'satellite',
+};
+
 export const UNCATEGORIZED = '_uncategorized';
 
 export const PASTE_SOURCE = {

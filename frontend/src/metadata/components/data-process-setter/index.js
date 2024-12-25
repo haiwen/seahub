@@ -5,6 +5,7 @@ import SortSetter from './sort-setter';
 import GroupbySetter from './groupby-setter';
 import PreHideColumnSetter from './pre-hide-column-setter';
 import HideColumnSetter from './hide-column-setter';
+import MapTypeSetter from './map-type-setter';
 
 export {
   GalleryGroupBySetter,
@@ -14,4 +15,5 @@ export {
   GroupbySetter,
   PreHideColumnSetter,
   HideColumnSetter,
+  MapTypeSetter,
 };

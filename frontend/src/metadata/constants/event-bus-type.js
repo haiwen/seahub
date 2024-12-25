@@ -73,4 +73,7 @@ export const EVENT_BUS_TYPE = {
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',
   CLOSE_KANBAN_SETTINGS: 'close_kanban_settings',
+
+  // map
+  SWITCH_MAP_TYPE: 'switch_map_type',
 };

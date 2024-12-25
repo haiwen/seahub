@@ -4,7 +4,7 @@ import { Utils } from '../../../utils/utils';
 export function createBMapGeolocationControl(BMap, callback) {
   function GeolocationControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMap.Size(10, Utils.isDesktop() ? 20 : 90);
+    this.defaultOffset = new BMap.Size(30, Utils.isDesktop() ? 30 : 90);
   }
   GeolocationControl.prototype = new window.BMap.Control();
   GeolocationControl.prototype.initialize = function (map) {
@@ -15,10 +15,10 @@ export function createBMapGeolocationControl(BMap, callback) {
     const icon = document.createElement('img');
     icon.className = 'sf-BMap-icon-current-location';
     icon.src = `${mediaUrl}/img/current-location.svg`;
-    icon.style = 'width: 16px; height: 16px; display: block;';
+    icon.style = 'width: 18px; height: 18px; display: block;';
     div.appendChild(icon);
     if (Utils.isDesktop()) {
-      setNodeStyle(div, 'height: 30px; width: 30px; line-height: 30px');
+      setNodeStyle(div, 'height: 40px; width: 40px; line-height: 40px');
     } else {
       setNodeStyle(div, 'height: 35px; width: 35px; line-height: 35px; opacity: 0.75');
     }
