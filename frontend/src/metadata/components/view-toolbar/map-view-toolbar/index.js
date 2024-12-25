@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { FilterSetter } from '../../data-process-setter';
+import { FilterSetter, MapTypeSetter } from '../../data-process-setter';
 
 const MapViewToolBar = ({
   readOnly,
@@ -22,6 +22,7 @@ const MapViewToolBar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
+        <MapTypeSetter view={view} />
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"

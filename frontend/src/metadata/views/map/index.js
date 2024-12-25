@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import loadBMap, { initMapInfo } from '../../../utils/map-utils';
 import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
-import { MAP_TYPE } from '../../../constants';
 import { isValidPosition } from '../../utils/validate';
+import { MAP_TYPE as MAP_PROVIDER } from '../../../constants';
 import { appAvatarURL, baiduMapKey, gettext, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { useMetadataView } from '../../hooks/metadata-view';
-import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, MAP_TYPE } from '../../constants';
 import { getRecordIdFromRecord, getFileNameFromRecord, getImageLocationFromRecord, getParentDirFromRecord,
   getFileTypeFromRecord
 } from '../../utils/cell';
@@ -17,6 +17,7 @@ import { createBMapGeolocationControl } from './geolocation-control';
 import toaster from '../../../components/toast';
 
 import './index.css';
+import { createBMapZoomControl } from './zoom-control';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -56,15 +57,18 @@ const Map = () => {
   }, [repoID, metadata]);
 
   const addMapController = useCallback(() => {
-    var navigation = new window.BMap.NavigationControl();
+    const ZoomControl = createBMapZoomControl(window.BMap);
+    const zoomControl = new ZoomControl();
     const GeolocationControl = createBMapGeolocationControl(window.BMap, (err, point) => {
       if (!err && point) {
         mapRef.current.setCenter({ lng: point.lng, lat: point.lat });
       }
     });
+
     const geolocationControl = new GeolocationControl();
+
+    mapRef.current.addControl(zoomControl);
     mapRef.current.addControl(geolocationControl);
-    mapRef.current.addControl(navigation);
   }, []);
 
   const renderMarkersBatch = useCallback(() => {
@@ -121,6 +125,16 @@ const Map = () => {
     );
   }, []);
 
+  const getMapType = useCallback((type) => {
+    if (!mapRef.current) return;
+    switch (type) {
+      case MAP_TYPE.SATELLITE:
+        return window.BMAP_SATELLITE_MAP;
+      default:
+        return window.BMAP_NORMAL_MAP;
+    }
+  }, []);
+
   const renderBaiduMap = useCallback(() => {
     setIsLoading(false);
     if (!window.BMap.Map) return;
@@ -142,6 +156,8 @@ const Map = () => {
     const point = new window.BMap.Point(lng, lat);
     mapRef.current.centerAndZoom(point, DEFAULT_ZOOM);
     mapRef.current.enableScrollWheelZoom(true);
+    // const type = window.sfMetadataContext.localStorage.getItem('map-type');
+    // mapRef.current.setMapType(getMapType(type));
 
     addMapController();
     initializeUserMarker();
@@ -152,7 +168,19 @@ const Map = () => {
   }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch]);
 
   useEffect(() => {
-    if (mapInfo.type === MAP_TYPE.B_MAP) {
+    const switchMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_MAP_TYPE, (newType) => {
+      window.sfMetadataContext.localStorage.setItem('map-type', newType);
+      mapRef.current && mapRef.current.setMapType(getMapType(newType));
+    });
+
+    return () => {
+      switchMapTypeSubscribe();
+    };
+
+  }, [getMapType]);
+
+  useEffect(() => {
+    if (mapInfo.type === MAP_PROVIDER.B_MAP) {
       window.renderMap = renderBaiduMap;
       loadBMap(mapInfo.key).then(() => renderBaiduMap());
       return () => {
