@@ -475,8 +475,8 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
     
-    def get_all_wikis(self, start, limit,order_by):
-        sql1 = f"""
+    def get_all_wikis(self, start, limit, order_by):
+        order_by_size_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
                  `{self.db_name}`.`Repo` r
@@ -490,7 +490,7 @@ class SeafileDB:
                 s.size DESC
             LIMIT {limit} OFFSET {start}
             """
-        sql2 = f"""
+        order_by_filecount_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
                  `{self.db_name}`.`Repo` r
@@ -504,7 +504,7 @@ class SeafileDB:
                 c.file_count DESC
             LIMIT {limit} OFFSET {start}
             """
-        sql3 = f"""
+        sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
                  `{self.db_name}`.`Repo` r
@@ -520,12 +520,12 @@ class SeafileDB:
         with connection.cursor() as cursor:
             wikis = []
             if order_by == 'size':
-                cursor.execute(sql1)
+                cursor.execute(order_by_size_sql)
                 
             elif order_by == 'file_count':
-                cursor.execute(sql2)
+                cursor.execute(order_by_filecount_sql)
             else:
-                cursor.execute(sql3)
+                cursor.execute(sql)
             for item in cursor.fetchall():
                 repo_id = item[0]
                 wiki_name = item[1]
