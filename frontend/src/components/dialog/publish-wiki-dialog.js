@@ -13,6 +13,7 @@ const propTypes = {
   wiki: PropTypes.object,
   onPublish: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
+  handleCustomUrl: PropTypes.func.isRequired
 };
 
 const DEFAULT_URL = serviceURL + '/wiki/publish/';
@@ -22,7 +23,7 @@ class PublishWikiDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: this.props.customUrl,
+      url: this.props.customUrlString,
       errMessage: '',
       isSubmitBtnActive: false,
     };
@@ -62,6 +63,7 @@ class PublishWikiDialog extends React.Component {
     let wiki_id = this.props.wiki.id;
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
       this.setState({ url: '' });
+      this.props.handleCustomUrl('');
       toaster.success(gettext('Wiki custom URL deleted'));
     }).catch((error) => {
       if (error.response) {
@@ -128,7 +130,7 @@ class PublishWikiDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          {this.props.customUrl !== '' &&
+          {this.props.customUrlString !== '' &&
             <Button color="secondary" onClick={this.deleteCustomUrl}>{gettext('Unpublish')}</Button>
           }
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>

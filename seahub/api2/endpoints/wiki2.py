@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, get_service_url
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 from seahub.utils.db_api import SeafileDB
@@ -62,7 +62,7 @@ HTTP_520_OPERATION_FAILED = 520
 logger = logging.getLogger(__name__)
 
 
-def _merge_wiki_in_groups(group_wikis, publish_wiki_ids):
+def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
 
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
@@ -75,11 +75,16 @@ def _merge_wiki_in_groups(group_wikis, publish_wiki_ids):
             owner_nickname = group_id_to_name(group_id)
         else:
             owner_nickname = email2nickname(owner)
+        is_published = True if publish_wikis_dict.get(gw.id) else False
+        public_url_suffix = publish_wikis_dict.get(gw.id) if is_published else ""
+        link = link_prefix + public_url_suffix if public_url_suffix else ""
         repo_info = {
                 "type": "group",
                 "permission": gw.permission,
                 "owner_nickname": owner_nickname,
-                "is_published": True if wiki.repo_id in publish_wiki_ids else False
+                "public_url_suffix": public_url_suffix,
+                "public_url": link,
+                "is_published": is_published
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -111,21 +116,27 @@ class Wikis2View(APIView):
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
         group_wikis = [r for r in groups if is_wiki_repo(r)]
         wiki_ids = [w.repo_id for w in owned_wikis + shared_wikis + group_wikis]
-        publish_wiki_ids = []
+        link_prefix = get_service_url().rstrip('/') + '/wiki/publish/'
+        publish_wikis_dict = {}
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
         for w in published_wikis:
-            publish_wiki_ids.append(w.repo_id)
+            publish_wikis_dict[w.repo_id] = w.publish_url
         wiki_list = []
         for r in owned_wikis:
             r.owner = username
             r.permission = 'rw'
             wiki = Wiki(r)
             wiki_info = wiki.to_dict()
+            is_published = True if publish_wikis_dict.get(r.id) else False
+            public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "mine",
                     "permission": 'rw',
                     "owner_nickname": email2nickname(username),
-                    "is_published": True if wiki_info['repo_id'] in publish_wiki_ids else False
+                    "public_url_suffix": public_url_suffix,
+                    "public_url": link,
+                    "is_published": is_published
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -140,11 +151,16 @@ class Wikis2View(APIView):
             else:
                 owner_nickname = email2nickname(owner)
             wiki_info = wiki.to_dict()
+            is_published = True if publish_wikis_dict.get(r.id) else False
+            public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "shared",
                     "permission": r.permission,
                     "owner_nickname": owner_nickname,
-                    "is_published": True if wiki_info['repo_id'] in publish_wiki_ids else False
+                    "public_url_suffix": public_url_suffix,
+                    "public_url": link,
+                    "is_published": is_published
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -165,7 +181,7 @@ class Wikis2View(APIView):
             r.owner = r.user
 
         group_wiki_list = []
-        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_wiki_ids)
+        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix)
         for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
