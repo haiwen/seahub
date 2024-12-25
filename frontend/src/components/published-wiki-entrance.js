@@ -24,6 +24,7 @@ class PublishedWikiExtrance extends Component {
           className="view-published-wiki ml-2"
           href={`${serviceURL}/wiki/publish/${customURLPart}`}
           target="_blank"
+          rel="noreferrer"
           onClick={(e) => {e.stopPropagation();}}
         >
           {gettext('Published')}
