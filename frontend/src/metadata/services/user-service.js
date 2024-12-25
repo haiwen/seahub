@@ -23,7 +23,7 @@ class UserService {
     let validEmails = [];
     emails.forEach(email => {
       this.waitingExecCallbacks.push(callback);
-      if (this.emailUserMap[email] || this.waitingQueryEmails.includes(email)) return;
+      if (!email || this.emailUserMap[email] || this.waitingQueryEmails.includes(email)) return;
       validEmails.push(email);
     });
     if (validEmails.length === 0) return;
@@ -32,24 +32,26 @@ class UserService {
   };
 
   startQueryUsers = () => {
-    if (this.pendingTimer || this.waitingQueryEmails.length === 0) return;
+    if (this.pendingTimer) return;
     this.pendingTimer = setTimeout(() => {
-      this.api(this.waitingQueryEmails).then(res => {
-        const { user_list } = res.data;
-        user_list.forEach(user => {
-          this.emailUserMap[user.email] = user;
+      if (this.waitingQueryEmails.length > 0) {
+        this.api(this.waitingQueryEmails).then(res => {
+          const { user_list } = res.data;
+          user_list.forEach(user => {
+            this.emailUserMap[user.email] = user;
+          });
+          this.queryUserCallback();
+        }).catch(() => {
+          this.waitingQueryEmails.forEach(email => {
+            this.emailUserMap[email] = {
+              email: email,
+              name: email,
+              avatar_url: this.defaultAvatarUrl,
+            };
+          });
+          this.queryUserCallback();
         });
-        this.queryUserCallback();
-      }).catch(() => {
-        this.waitingQueryEmails.forEach(email => {
-          this.emailUserMap[email] = {
-            email: email,
-            name: email,
-            avatar_url: this.defaultAvatarUrl,
-          };
-        });
-        this.queryUserCallback();
-      });
+      }
       clearTimeout(this.pendingTimer);
       this.pendingTimer = null;
     }, PENDING_INTERVAL);
