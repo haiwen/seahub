@@ -1736,14 +1736,6 @@ class MetadataTagsStatusManage(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # Remove _tags conditions from all table views
-        try:
-            RepoMetadataViews.objects.remove_tags_filter_conditions(repo_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         return Response({'success': True})
 
 
