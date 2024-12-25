@@ -36,7 +36,7 @@ class WikiCardItem extends Component {
       isShowShareDialog: false,
       isShowPublishDialog: false,
       isShowConvertDialog: false,
-      customUrlString: this.props.wiki.url_string,
+      customUrlString: this.props.wiki.public_url_suffix,
     };
   }
 

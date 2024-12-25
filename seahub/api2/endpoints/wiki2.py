@@ -75,14 +75,16 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
             owner_nickname = group_id_to_name(group_id)
         else:
             owner_nickname = email2nickname(owner)
-        url_string = publish_wikis_dict.get(gw.id) if publish_wikis_dict.get(gw.id) else ""
-        link = link_prefix + url_string if url_string else ""
+        is_published = True if publish_wikis_dict.get(gw.id) else False
+        public_url_suffix = publish_wikis_dict.get(gw.id) if is_published else ""
+        link = link_prefix + public_url_suffix if public_url_suffix else ""
         repo_info = {
                 "type": "group",
                 "permission": gw.permission,
                 "owner_nickname": owner_nickname,
-                "url_string": url_string,
-                "link": link,
+                "public_url_suffix": public_url_suffix,
+                "public_url": link,
+                "is_published": is_published
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -125,14 +127,16 @@ class Wikis2View(APIView):
             r.permission = 'rw'
             wiki = Wiki(r)
             wiki_info = wiki.to_dict()
-            url_string = publish_wikis_dict.get(r.id) if publish_wikis_dict.get(r.id) else ""
-            link = link_prefix + url_string if url_string else ""
+            is_published = True if publish_wikis_dict.get(r.id) else False
+            public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "mine",
                     "permission": 'rw',
                     "owner_nickname": email2nickname(username),
-                    "url_string": url_string,
-                    "link": link,
+                    "public_url_suffix": public_url_suffix,
+                    "public_url": link,
+                    "is_published": is_published
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -147,14 +151,16 @@ class Wikis2View(APIView):
             else:
                 owner_nickname = email2nickname(owner)
             wiki_info = wiki.to_dict()
-            url_string = publish_wikis_dict.get(r.id) if publish_wikis_dict.get(r.id) else ""
-            link = link_prefix + url_string if url_string else ""
+            is_published = True if publish_wikis_dict.get(r.id) else False
+            public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "shared",
                     "permission": r.permission,
                     "owner_nickname": owner_nickname,
-                    "url_string": url_string,
-                    "link": link,
+                    "public_url_suffix": public_url_suffix,
+                    "public_url": link,
+                    "is_published": is_published
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)

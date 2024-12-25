@@ -35,8 +35,9 @@ def get_wiki_info(wiki, publish_wikis_dict):
             org_wiki_owner = None
     owner = wiki_owner or org_wiki_owner or ''
     link_prefix = get_service_url().rstrip('/') + '/wiki/publish/'
-    url_string = publish_wikis_dict.get(wiki.repo_id) if wiki.repo_id in publish_wikis_dict else ""
-    link = link_prefix + url_string if url_string else ""
+    is_published = True if wiki.repo_id in publish_wikis_dict else False
+    public_url_suffix = publish_wikis_dict.get(wiki.repo_id) if is_published else ""
+    link = link_prefix + public_url_suffix if public_url_suffix else ""
 
     result = {}
     result['id'] = wiki.repo_id
@@ -50,8 +51,9 @@ def get_wiki_info(wiki, publish_wikis_dict):
     result['file_count'] = wiki.file_count if wiki.file_count else 0
     result['status'] = normalize_repo_status_code(wiki.status)
     result['last_modified'] = timestamp_to_isoformat_timestr(wiki.last_modified)
-    result['url_string'] = url_string
-    result['link'] = link
+    result['public_url_suffix'] = public_url_suffix
+    result['public_url'] = link
+    result['is_published'] = is_published
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
