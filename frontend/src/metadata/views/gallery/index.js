@@ -33,7 +33,7 @@ const Gallery = () => {
     if (!deletedImages.length) return;
     let recordsIds = [];
     deletedImages.forEach((record) => {
-      const { path: parentDir, name } = record || {};
+      const { parentDir, name } = record || {};
       if (parentDir && name) {
         recordsIds.push(record.id);
       }

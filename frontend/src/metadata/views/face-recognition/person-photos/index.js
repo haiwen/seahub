@@ -79,7 +79,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
     let paths = [];
     let fileNames = [];
     deletedImages.forEach((record) => {
-      const { id, path: parentDir, name } = record || {};
+      const { id, parentDir, name } = record || {};
       if (parentDir && name) {
         const path = Utils.joinPath(parentDir, name);
         paths.push(path);
