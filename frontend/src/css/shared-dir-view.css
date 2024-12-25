@@ -42,6 +42,7 @@ body {
 .sf-view-mode-btn.current-mode {
   background-color: #ccc;
   color: #fff;
+  box-shadow: none;
 }
 
 .shared-dir-op-btn {
