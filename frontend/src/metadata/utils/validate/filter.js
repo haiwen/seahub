@@ -238,7 +238,7 @@ class ValidateFilter {
       }
       case CellType.COLLABORATOR:
       case CellType.CREATOR:
-      case CellType.LAST_MODIFIER:{
+      case CellType.LAST_MODIFIER: {
         return this.isValidTermType(term, TERM_TYPE_MAP.ARRAY);
       }
       case CellType.DATE:
