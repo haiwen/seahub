@@ -16,6 +16,7 @@ import { openInNewTab, openParentFolder } from '../../../utils/file';
 import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
 import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
 import { Dirent } from '../../../../models';
+import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -24,7 +25,7 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_DESCRIPTION: 'generate-description',
   OCR: 'ocr',
-  IMAGE_CAPTION: 'image-caption',
+  IMAGE_DESCRIPTION: 'image-description',
   FILE_TAGS: 'file-tags',
   DELETE_RECORD: 'delete-record',
   DELETE_RECORDS: 'delete-records',
@@ -49,6 +50,7 @@ const ContextMenu = ({
 
   const { metadata } = useMetadataView();
   const { enableOCR } = useMetadataStatus();
+  const { onOCR, generateDescription, extractFilesDetails } = useMetadataAIOperations();
 
   const repoID = window.sfMetadataStore.repoId;
 
@@ -56,7 +58,7 @@ const ContextMenu = ({
     return window.sfMetadataContext.canModifyRow(row);
   };
 
-  const checkIsDescribableDoc = useCallback((record) => {
+  const checkIsDescribableFile = useCallback((record) => {
     const fileName = getFileNameFromRecord(record);
     return checkCanModifyRow(record) && Utils.isDescriptionSupportedFile(fileName);
   }, []);
@@ -142,6 +144,10 @@ const ContextMenu = ({
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
       }
       const imageOrVideoRecords = records.filter(record => {
+        const isFolder = checkIsDir(record);
+        if (isFolder) return false;
+        const canModifyRow = checkCanModifyRow(record);
+        if (!canModifyRow) return false;
         const fileName = getFileNameFromRecord(record);
         return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
       });
@@ -165,24 +171,29 @@ const ContextMenu = ({
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
     const fileName = getFileNameFromRecord(record);
 
-    if (descriptionColumn) {
-      if (checkIsDescribableDoc(record)) {
-        list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
-      } else if (canModifyRow && Utils.imageCheck(fileName)) {
-        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description'), record });
+    if (!isFolder && canModifyRow) {
+      const isDescribableFile = checkIsDescribableFile(record);
+      const isImage = Utils.imageCheck(fileName);
+      const isVideo = Utils.videoCheck(fileName);
+      if (descriptionColumn && isDescribableFile) {
+        list.push({
+          value: OPERATION.GENERATE_DESCRIPTION,
+          label: Utils.imageCheck(fileName) ? gettext('Generate image description') : gettext('Generate description'),
+          record
+        });
       }
-    }
 
-    if (enableOCR && canModifyRow && Utils.imageCheck(fileName)) {
-      list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
-    }
+      if (enableOCR && isImage) {
+        list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
+      }
 
-    if (canModifyRow && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName))) {
-      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
-    }
+      if (isImage || isVideo) {
+        list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+      }
 
-    if (tagsColumn && canModifyRow && (Utils.imageCheck(fileName) || checkIsDescribableDoc(record))) {
-      list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
+      if (tagsColumn && isDescribableFile && !isVideo) {
+        list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
+      }
     }
 
     // handle delete folder/file
@@ -199,7 +210,7 @@ const ContextMenu = ({
     }
 
     return list;
-  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableDoc, enableOCR, getAbleDeleteRecords]);
+  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
 
   const handleHide = useCallback((event) => {
     if (!menuRef.current && visible) {
@@ -212,83 +223,46 @@ const ContextMenu = ({
     }
   }, [menuRef, visible]);
 
-  const generateDescription = useCallback((record) => {
-    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
-    let path = '';
-    let idOldRecordData = {};
-    let idOriginalOldRecordData = {};
+  const handelGenerateDescription = useCallback((record) => {
+    if (!checkCanModifyRow(record)) return;
+    const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
-    if (Utils.isDescriptionSupportedFile(fileName) && checkCanModifyRow(record)) {
-      const parentDir = getParentDirFromRecord(record);
-      path = Utils.joinPath(parentDir, fileName);
-      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
-      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
-    }
-    if (path === '') return;
-    window.sfMetadataContext.generateDescription(path).then(res => {
-      const description = res.data.summary;
-      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
-      const recordIds = [updateRecordId];
-      let idRecordUpdates = {};
-      let idOriginalRecordUpdates = {};
-      idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
-      idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
-      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-    }).catch(error => {
-      const errorMessage = gettext('Failed to generate description');
-      toaster.danger(errorMessage);
-    });
-  }, [updateRecords]);
+    if (!fileName || !parentDir) return;
+    const checkIsDescribableFile = Utils.isDescriptionSupportedFile(fileName);
+    if (!checkIsDescribableFile) return;
 
-  const imageCaption = useCallback((record) => {
-    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
-    let path = '';
-    let idOldRecordData = {};
-    let idOriginalOldRecordData = {};
-    const fileName = getFileNameFromRecord(record);
-    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
-      const parentDir = getParentDirFromRecord(record);
-      path = Utils.joinPath(parentDir, fileName);
-      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
-      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
-    }
-    if (path === '') return;
-    window.sfMetadataContext.imageCaption(path).then(res => {
-      const desc = res.data.desc;
-      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
-      const recordIds = [updateRecordId];
-      let idRecordUpdates = {};
-      let idOriginalRecordUpdates = {};
-      idRecordUpdates[updateRecordId] = { [summaryColumnKey]: desc };
-      idOriginalRecordUpdates[updateRecordId] = { [summaryColumnKey]: desc };
-      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-    }).catch(error => {
-      const errorMessage = gettext('Failed to generate image description');
-      toaster.danger(errorMessage);
+    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    generateDescription({ parentDir, fileName }, {
+      success_callback: ({ description }) => {
+        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+        const recordIds = [updateRecordId];
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
+        idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
+        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      }
     });
-  }, [updateRecords]);
+  }, [updateRecords, generateDescription]);
 
   const toggleFileTagsRecord = useCallback((record = null) => {
     setFileTagsRecord(record);
   }, []);
 
   const ocr = useCallback((record) => {
-    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
-    let path = '';
-    let idOldRecordData = {};
-    let idOriginalOldRecordData = {};
+    if (!checkCanModifyRow(record)) return;
+    const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
-    if (Utils.imageCheck(fileName) && checkCanModifyRow(record)) {
-      const parentDir = getParentDirFromRecord(record);
-      path = Utils.joinPath(parentDir, fileName);
-      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
-      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [ocrResultColumnKey]: record[ocrResultColumnKey] };
-    }
-    if (path === '') return;
-    window.sfMetadataContext.ocr(path).then(res => {
-      const ocrResult = res.data.ocr_result;
-      const validResult = Array.isArray(ocrResult) && ocrResult.length > 0 ? JSON.stringify(ocrResult) : null;
-      if (validResult) {
+    if (!Utils.imageCheck(fileName)) return;
+
+    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
+    onOCR({ parentDir, fileName }, {
+      success_callback: ({ ocrResult }) => {
+        if (!ocrResult) return;
         const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
         const recordIds = [updateRecordId];
         let idRecordUpdates = {};
@@ -296,12 +270,9 @@ const ContextMenu = ({
         idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
         idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
         updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-      }
-    }).catch(error => {
-      const errorMessage = gettext('OCR failed');
-      toaster.danger(errorMessage);
+      },
     });
-  }, [updateRecords]);
+  }, [updateRecords, onOCR]);
 
   const updateFileDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
@@ -311,10 +282,10 @@ const ContextMenu = ({
     }
 
     const recordIds = records.map(record => getRecordIdFromRecord(record));
-    window.sfMetadataContext.extractFileDetails(recordObjIds).then(res => {
-      const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
-
-      if (captureColumn) {
+    extractFilesDetails(recordObjIds, {
+      success_callback: ({ details }) => {
+        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+        if (!captureColumn) return;
         let idOldRecordData = {};
         let idOriginalOldRecordData = {};
         const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
@@ -324,18 +295,15 @@ const ContextMenu = ({
         });
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
-        res.data.details.forEach(detail => {
+        details.forEach(detail => {
           const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
           idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
           idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
         });
         updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
       }
-    }).catch(error => {
-      const errorMessage = gettext('Failed to extract file details');
-      toaster.danger(errorMessage);
     });
-  }, [metadata, updateRecords]);
+  }, [metadata, extractFilesDetails, updateRecords]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
@@ -363,13 +331,7 @@ const ContextMenu = ({
       case OPERATION.GENERATE_DESCRIPTION: {
         const { record } = option;
         if (!record) break;
-        generateDescription(record);
-        break;
-      }
-      case OPERATION.IMAGE_CAPTION: {
-        const { record } = option;
-        if (!record) break;
-        imageCaption(record);
+        handelGenerateDescription(record);
         break;
       }
       case OPERATION.FILE_TAGS: {
@@ -433,7 +395,7 @@ const ContextMenu = ({
       }
     }
     setVisible(false);
-  }, [repoID, onCopySelected, onClearSelected, generateDescription, imageCaption, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
+  }, [repoID, onCopySelected, onClearSelected, handelGenerateDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

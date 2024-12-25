@@ -10,7 +10,7 @@ import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../metadata/utils/object-utils';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import Settings from '../../../metadata/components/metadata-details/settings';
+import { Settings, AI } from '../../../metadata/components/metadata-details';
 import { getDirentPath } from './utils';
 
 import './index.css';
@@ -129,6 +129,7 @@ class DirentDetails extends React.Component {
       >
         <Detail>
           <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} >
+            <AI />
             <Settings />
           </Header>
           <Body>

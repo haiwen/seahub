@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
-import { useMetadataOperations } from '../../hooks/metadata-operation';
+import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
 import { SYSTEM_FOLDERS } from '../../constants';
 
 import '@seafile/react-image-lightbox/style.css';
 
 const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage }) => {
-  const { onOCR } = useMetadataOperations();
+  const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -33,6 +33,10 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
   }
 
   const isSystemFolder = SYSTEM_FOLDERS.find(folderPath => mainImg.parentDir.startsWith(folderPath));
+  let onOCR = null;
+  if (enableOCR && enableMetadata && canModify && !isSystemFolder) {
+    onOCR = () => onOCRAPI({ parentDir: mainImg.parentDir, fileName: mainImg.name }, { success_callback: OCRSuccessCallBack });
+  }
 
   return (
     <Lightbox
@@ -57,7 +61,7 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
       onViewOriginal={onViewOriginal}
       viewOriginalImageLabel={gettext('View original image')}
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
-      onOCR={onOCR && !isSystemFolder ? () => onOCR(mainImg.parentDir, mainImg.name) : null}
+      onOCR={onOCR}
       OCRLabel={gettext('OCR')}
     />
   );

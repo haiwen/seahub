@@ -1055,7 +1055,12 @@ export const Utils = {
   },
 
   isDescriptionSupportedFile: function (filePath) {
-    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath) || Utils.pdfCheck(filePath) || Utils.isDocxFile(filePath) || Utils.isPptxFile(filePath);
+    return Utils.isSdocFile(filePath) ||
+      Utils.isMarkdownFile(filePath) ||
+      Utils.pdfCheck(filePath) ||
+      Utils.isDocxFile(filePath) ||
+      Utils.isPptxFile(filePath) ||
+      Utils.imageCheck(filePath);
   },
 
   isFileMetadata: function (type) {
