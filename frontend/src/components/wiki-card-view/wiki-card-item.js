@@ -121,24 +121,6 @@ class WikiCardItem extends Component {
     });
   };
 
-  getPublishWikiLink = () => {
-    wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
-      const { publish_url } = res.data;
-      this.setState({
-        customUrlString: publish_url,
-        isShowPublishDialog: !this.state.isShowPublishDialog,
-      });
-    }).catch((error) => {
-      this.setState({
-        isShowPublishDialog: !this.state.isShowPublishDialog,
-      });
-      if (error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
-  };
-
   clickWikiCard = (link) => {
     window.open(link);
   };
