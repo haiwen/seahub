@@ -369,6 +369,22 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views.save()
         return json.loads(metadata_views.details)
 
+    def remove_tags_filter_conditions(self, repo_id):
+        metadata_views = self.filter(repo_id=repo_id).first()
+        if not metadata_views:
+            return
+
+        view_details = json.loads(metadata_views.details)
+        views = view_details.get('views', [])
+
+        for view in views:
+            filters = view.get('filters', [])
+            new_filters = [f for f in filters if f.get('column_key') != '_tags']
+            view['filters'] = new_filters
+
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save()
+
 
 class RepoMetadataViews(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
