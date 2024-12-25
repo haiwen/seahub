@@ -21,6 +21,9 @@ const Selector = ({ options, settingKey, value, defaultValue, onChange }) => {
       value={selectedOption}
       options={options}
       onChange={handelOnChange}
+      isSearchable={false}
+      isClearable={false}
+      menuPosition="absolute"
       menuPortalTarget="sf-metadata-view-setting-panel"
     />
   );
