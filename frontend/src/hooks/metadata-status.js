@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useCallback, useState, useMemo } from 're
 import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
-import { MetadataOperationsProvider } from './metadata-operation';
+import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
@@ -119,14 +119,16 @@ export const MetadataStatusProvider = ({ repoID, currentRepoInfo, hideMetadataVi
       }}
     >
       {!isLoading && (
-        <MetadataOperationsProvider
+        <MetadataAIOperationsProvider
           repoID={repoID}
           enableMetadata={enableMetadata}
           enableOCR={enableOCR}
+          enableTags={enableTags}
+          tagsLang={tagsLang}
           repoInfo={currentRepoInfo}
         >
           {children}
-        </MetadataOperationsProvider>
+        </MetadataAIOperationsProvider>
       )}
     </MetadataStatusContext.Provider>
   );

@@ -9,6 +9,8 @@ import { PRIVATE_COLUMN_KEY } from '../../constants';
 import Location from './location';
 import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
+import AI from './ai';
+import Settings from './settings';
 
 import './index.css';
 
@@ -64,3 +66,7 @@ const MetadataDetails = () => {
 };
 
 export default MetadataDetails;
+export {
+  AI,
+  Settings,
+};

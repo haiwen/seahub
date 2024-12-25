@@ -49,7 +49,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     return [...exitColumnsOrder, ...newColumns];
   }, [originColumns, detailsSettings]);
 
-  const localRecordChanged = useCallback((recordId, updates) => {
+  const onLocalRecordChange = useCallback((recordId, updates) => {
     if (getRecordIdFromRecord(record) !== recordId) return;
     const newRecord = { ...record, ...updates };
     setRecord(newRecord);
@@ -180,11 +180,11 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   useEffect(() => {
     const eventBus = window?.sfMetadataContext?.eventBus;
     if (!eventBus) return;
-    const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, localRecordChanged);
+    const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, onLocalRecordChange);
     return () => {
       unsubscribeLocalRecordChanged();
     };
-  }, [localRecordChanged]);
+  }, [onLocalRecordChange]);
 
   return (
     <MetadataDetailsContext.Provider
@@ -195,6 +195,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         record,
         columns,
         onChange,
+        onLocalRecordChange,
         modifyColumnData,
         updateFileTags,
         modifyHiddenColumns,

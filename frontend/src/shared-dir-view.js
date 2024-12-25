@@ -20,7 +20,7 @@ import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-p
 import RepoInfoBar from './components/repo-info-bar';
 import RepoTag from './models/repo-tag';
 import { GRID_MODE, LIST_MODE } from './components/dir-view-mode/constants';
-import { MetadataOperationsProvider } from './hooks/metadata-operation';
+import { MetadataAIOperationsProvider } from './hooks/metadata-ai-operation';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -441,7 +441,7 @@ class SharedDirView extends React.Component {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
     return (
-      <MetadataOperationsProvider repoID={repoID} enableMetadata={false} enableOCR={false} repoInfo={{ permission: 'r' }} >
+      <MetadataAIOperationsProvider repoID={repoID} enableMetadata={false} enableOCR={false} repoInfo={{ permission: 'r' }} >
         <div className="h-100 d-flex flex-column">
           <div className="top-header d-flex justify-content-between">
             <a href={siteRoot}>
@@ -581,7 +581,7 @@ class SharedDirView extends React.Component {
           />
         </ModalPortal>
         }
-      </MetadataOperationsProvider>
+      </MetadataAIOperationsProvider>
     );
   }
 }
