@@ -6,7 +6,8 @@ import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } f
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
-import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
+import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
+  thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -48,6 +49,8 @@ class SharedDirView extends React.Component {
       errorMsg: '',
       items: [],
 
+      currentMode: mode,
+
       isAllItemsSelected: false,
       selectedItems: [],
 
@@ -81,6 +84,11 @@ class SharedDirView extends React.Component {
       });
     }
 
+    this.listItems(thumbnailSize);
+    this.getShareLinkRepoTags();
+  }
+
+  listItems = (thumbnailSize) => {
     seafileAPI.listSharedDir(token, relativePath, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'].map(item => {
         item.isSelected = false;
@@ -91,7 +99,7 @@ class SharedDirView extends React.Component {
         errorMsg: '',
         items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder)
       });
-      this.getThumbnails();
+      this.getThumbnails(thumbnailSize);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
@@ -99,9 +107,7 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
-
-    this.getShareLinkRepoTags();
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     this.setState({
@@ -111,7 +117,7 @@ class SharedDirView extends React.Component {
     });
   };
 
-  getThumbnails = () => {
+  getThumbnails = (thumbnailSize) => {
     let items = this.state.items.filter((item) => {
       return !item.is_dir &&
         (Utils.imageCheck(item.file_name) ||
@@ -437,7 +443,23 @@ class SharedDirView extends React.Component {
     });
   };
 
+  switchMode = (mode) => {
+    const { currentMode } = this.state;
+    if (mode == currentMode) {
+      return;
+    } else {
+      this.setState({
+        currentMode: mode,
+        isLoading: true
+      }, () => {
+        const thumbnailSize = mode == LIST_MODE ? thumbnailDefaultSize : thumbnailSizeForGrid;
+        this.listItems(thumbnailSize);
+      });
+    }
+  };
+
   render() {
+    const { currentMode: mode } = this.state;
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
     return (
@@ -458,20 +480,20 @@ class SharedDirView extends React.Component {
                 <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
-                    <a
-                      href={`?p=${encodeURIComponent(relativePath)}&mode=list`}
+                    <button
                       className={`${modeBaseClass} sf2-icon-list-view ${mode == LIST_MODE ? 'current-mode' : ''}`}
                       title={gettext('List')}
                       aria-label={gettext('List')}
+                      onClick={this.switchMode.bind(this, LIST_MODE)}
                     >
-                    </a>
-                    <a
-                      href={`?p=${encodeURIComponent(relativePath)}&mode=grid`}
+                    </button>
+                    <button
                       className={`${modeBaseClass} sf2-icon-grid-view ${mode == GRID_MODE ? 'current-mode' : ''}`}
                       title={gettext('Grid')}
                       aria-label={gettext('Grid')}
+                      onClick={this.switchMode.bind(this, GRID_MODE)}
                     >
-                    </a>
+                    </button>
                   </div>
                   }
                   {canUpload && (
@@ -529,6 +551,7 @@ class SharedDirView extends React.Component {
                 isDesktop={isDesktop}
                 isLoading={this.state.isLoading}
                 errorMsg={this.state.errorMsg}
+                mode={mode}
                 items={this.state.items}
                 sortBy={this.state.sortBy}
                 sortOrder={this.state.sortOrder}
@@ -616,7 +639,7 @@ class Content extends React.Component {
   render() {
     const {
       isDesktop,
-      isLoading, errorMsg, items,
+      isLoading, errorMsg, mode, items,
       sortBy, sortOrder,
       isAllItemsSelected
     } = this.props;
@@ -635,6 +658,7 @@ class Content extends React.Component {
           return <Item
             key={index}
             isDesktop={isDesktop}
+            mode={mode}
             item={item}
             zipDownloadFolder={this.props.zipDownloadFolder}
             showImagePopup={this.props.showImagePopup}
@@ -684,6 +708,7 @@ class Content extends React.Component {
         {items.map((item, index) => {
           return <GridItem
             key={index}
+            mode={mode}
             item={item}
             zipDownloadFolder={this.props.zipDownloadFolder}
             showImagePopup={this.props.showImagePopup}
@@ -699,6 +724,7 @@ Content.propTypes = {
   isLoading: PropTypes.bool,
   isAllItemsSelected: PropTypes.bool,
   errorMsg: PropTypes.string,
+  mode: PropTypes.string,
   items: PropTypes.array,
   sortItems: PropTypes.func,
   sortBy: PropTypes.string,
@@ -751,7 +777,7 @@ class Item extends React.Component {
   };
 
   render() {
-    const { item, isDesktop } = this.props;
+    const { item, isDesktop, mode } = this.props;
     const { isIconShown } = this.state;
 
     let toolTipID = '';
@@ -899,6 +925,7 @@ class Item extends React.Component {
 
 Item.propTypes = {
   isDesktop: PropTypes.bool,
+  mode: PropTypes.string,
   item: PropTypes.object,
   sortItems: PropTypes.func,
   sortBy: PropTypes.string,
@@ -942,7 +969,7 @@ class GridItem extends React.Component {
   };
 
   render() {
-    const item = this.props.item;
+    const { item, mode } = this.props;
     const { isIconShown } = this.state;
 
     if (item.is_dir) {
@@ -982,6 +1009,7 @@ class GridItem extends React.Component {
 }
 
 GridItem.propTypes = {
+  mode: PropTypes.string,
   item: PropTypes.object,
   zipDownloadFolder: PropTypes.func,
   showImagePopup: PropTypes.func,
