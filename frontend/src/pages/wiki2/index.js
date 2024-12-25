@@ -151,7 +151,7 @@ class Wiki extends Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, 1000);
+  }, 500);
 
   saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
     this.setState({

@@ -53,20 +53,32 @@ const getWikPageLink = (pageId) => {
   return `${origin}${pathname}?page_id=${pageId}`;
 };
 
-const throttle = (fn, delay) => {
-  let timer;
-  return function () {
-    let _this = this;
-    let args = arguments;
-    if (timer) {
-      return;
+function throttle(func, delay) {
+  let lastCall = 0;
+  let timeoutId = null;
+  let lastArgs = null;
+
+  return function (...args) {
+    const now = new Date().getTime();
+    lastArgs = args;
+
+    if (now - lastCall >= delay) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      lastCall = now;
+      func(...args);
+    } else if (!timeoutId) {
+      timeoutId = setTimeout(() => {
+        lastCall = new Date().getTime();
+        timeoutId = null;
+        func(...lastArgs);
+      }, delay - (now - lastCall));
     }
-    timer = setTimeout(function () {
-      fn.apply(_this, args);
-      timer = null;
-    }, delay);
   };
-};
+}
+
 
 // Find the path array from the root to the leaf based on the currentPageId (leaf)
 const getPaths = (navigation, currentPageId, pages, isGetPathStr) => {
