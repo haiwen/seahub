@@ -175,7 +175,11 @@ function start_seafile_server () {
     sleep 2
 
     # seafile-monitor
-    ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+    if [[ $SEAFILE_LOG_TO_STDOUT = "true" ]]; then
+        ${INSTALLPATH}/seafile-monitor.sh &
+    else
+        ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+    fi
 
     sleep 1
 

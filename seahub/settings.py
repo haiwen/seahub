@@ -647,12 +647,8 @@ TERMS_OF_SERVICE_LINK = ''
 ALLOWED_HOSTS = ['*']
 
 # Logging
-seafile_log_to_stdout = os.getenv('SEAFILE_LOG_TO_STDOUT', 0)
-try:
-    enable_log_to_stdout = int(seafile_log_to_stdout)
-except ValueError:
-    enable_log_to_stdout = 0
-if enable_log_to_stdout:
+seafile_log_to_stdout = os.getenv('SEAFILE_LOG_TO_STDOUT', 'false') == 'true'
+if seafile_log_to_stdout:
     LOGGING = {
         'version': 1,
         # Enable existing loggers so that gunicorn errors will be bubbled up when
