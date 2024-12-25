@@ -723,6 +723,16 @@ if enable_log_to_stdout:
                 'level': 'INFO',
                 'propagate': False
             },
+            'seafes': {
+                'handlers': ['default'],
+                'level': 'WARNING',
+                'propagate': False
+            },
+            'xmlschema': {
+                'handlers': ['default'],
+                'level': 'WARNING',
+                'propagate': False
+            }
         }
     }
 else:
@@ -798,6 +808,16 @@ else:
                 'level': 'INFO',
                 'propagate': False
             },
+            'seafes': {
+                'handlers': ['default'],
+                'level': 'WARNING',
+                'propagate': False
+            },
+            'xmlschema': {
+                'handlers': ['default'],
+                'level': 'WARNING',
+                'propagate': False
+            }
         }
     }
 
