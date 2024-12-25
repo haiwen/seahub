@@ -319,7 +319,7 @@ class Item extends Component {
     if (this.props.isWiki) {
       wikiName = this.renderRepoName();
       if (repo.link) {
-        wikiName = <><span>{wikiName}</span><a href={repo.link} target='_blank'>(Published)</a></>;
+        wikiName = <><span>{wikiName}</span><a href={repo.link} target='_blank' rel='noreferrer'>(Published)</a></>;
       }
     }
     return (
