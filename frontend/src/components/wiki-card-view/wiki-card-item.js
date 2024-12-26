@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { siteRoot, gettext, username, canPublishWiki } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
