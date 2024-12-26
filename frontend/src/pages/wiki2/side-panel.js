@@ -16,6 +16,7 @@ import WikiTrashDialog from './wiki-trash-dialog';
 import { DEFAULT_PAGE_NAME } from './constant';
 import Wiki2Search from '../../components/search/wiki2-search';
 import CommonUndoTool from '../../components/common/common-undo-tool';
+import PublishedWikiExtrance from '../../components/published-wiki-entrance';
 
 import './side-panel.css';
 
@@ -38,8 +39,27 @@ class SidePanel extends PureComponent {
     super(props);
     this.state = {
       isShowTrashDialog: false,
+      customUrl: ''
     };
   }
+
+  componentDidMount() {
+    if (wikiPermission == 'rw') {
+      this.getPublishWikiLink();
+    }
+  }
+
+  getPublishWikiLink = () => {
+    wikiAPI.getPublishWikiLink(wikiId).then((res) => {
+      const { publish_url } = res.data;
+      this.setState({
+        customUrl: publish_url
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   onDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
@@ -224,6 +244,7 @@ class SidePanel extends PureComponent {
       <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })}>
         <div className="wiki2-side-panel-top">
           <h1 className="h4 text-truncate ml-0 mb-0" title={repoName}>{repoName}</h1>
+          {wikiPermission === 'rw' && <PublishedWikiExtrance wikiID={wikiId} customURLPart={this.state.customUrl} />}
         </div>
         <Wiki2Search
           wikiId={wikiId}
