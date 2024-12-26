@@ -141,6 +141,10 @@ class Libraries extends Component {
 
   onSelectSortOption = (sortOption) => {
     const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.sortReposByOption(sortBy, sortOrder);
+  };
+
+  sortReposByOption = (sortBy, sortOrder) => {
     this.setState({ sortBy, sortOrder }, () => {
       localStorage.setItem('sf_repos_sort_by', sortBy);
       localStorage.setItem('sf_repos_sort_order', sortOrder);
@@ -154,6 +158,12 @@ class Libraries extends Component {
         repoList: myRepoList
       });
     });
+  };
+
+  toggleSortOrder = (sortBy, e) => {
+    e.preventDefault();
+    const sortOrder = this.state.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.sortReposByOption(sortBy, sortOrder);
   };
 
   sortRepoList = (sortBy, sortOrder) => {
@@ -387,6 +397,7 @@ class Libraries extends Component {
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
+    const sortIcon = sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     return (
       <>
@@ -407,15 +418,15 @@ class Libraries extends Component {
               {isLoading ? <Loading /> : (
                 <>
                   {(Utils.isDesktop() && currentViewMode == LIST_MODE) && (
-                    <table aria-hidden={true} className="my-3">
+                    <table className="my-3">
                       <thead>
                         <tr>
                           <th width="4%"></th>
                           <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                          <th width="35%">{gettext('Name')}</th>
+                          <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'name')}>{gettext('Name')} {sortBy === 'name' && sortIcon}</a></th>
                           <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                          <th width="14%">{gettext('Size')}</th>
-                          <th width="17%">{gettext('Last Update')}</th>
+                          <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'size')}>{gettext('Size')} {sortBy === 'size' && sortIcon}</a></th>
+                          <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'time')}>{gettext('Last Update')} {sortBy === 'time' && sortIcon}</a></th>
                           <th width="17%">{gettext('Owner')}</th>
                         </tr>
                       </thead>
