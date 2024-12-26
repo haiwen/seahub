@@ -1,10 +1,11 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { useTagView, useTags } from '../../hooks';
 import { gettext } from '../../../utils/constants';
 import TagFile from './tag-file';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import EmptyTip from '../../../components/empty-tip';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
+import FixedWidthTable from '../../../components/common/fixed-width-table';
 
 import './index.css';
 
@@ -13,10 +14,8 @@ const TagFiles = () => {
   const { tagsData } = useTags();
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(0);
 
   const currentImageRef = useRef(null);
-  const containerRef = useRef(null);
 
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
@@ -66,68 +65,77 @@ const TagFiles = () => {
     setImagePreviewerVisible(false);
   }, []);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    const handleResize = () => {
-      if (!container) return;
-      // 32: container padding left + container padding right
-      setContainerWidth(container.offsetWidth - 32);
-    };
-    const resizeObserver = new ResizeObserver(handleResize);
-    container && resizeObserver.observe(container);
-
-    return () => {
-      container && resizeObserver.unobserve(container);
-    };
-  }, []);
-
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
   }
 
   const isSelectedAll = selectedFiles && selectedFiles.length === tagFiles.rows.length;
+  const headers = [
+    {
+      isFixed: true,
+      width: 31,
+      className: 'pl10 pr-2',
+      children: (
+        <input
+          type="checkbox"
+          className="vam"
+          onChange={onSelectedAll}
+          checked={isSelectedAll}
+          title={isSelectedAll ? gettext('Unselect all') : gettext('Select all')}
+          disabled={tagFiles.rows.length === 0}
+        />
+      )
+    }, {
+      isFixed: true,
+      width: 41,
+      className: 'pl-2 pr-2',
+    }, {
+      isFixed: false,
+      width: 0.5,
+      children: (<a className="d-block table-sort-op" href="#">{gettext('Name')}</a>),
+    }, {
+      isFixed: false,
+      width: 0.06,
+    }, {
+      isFixed: false,
+      width: 0.18,
+    }, {
+      isFixed: false,
+      width: 0.11,
+      children: (<a className="d-block table-sort-op" href="#">{gettext('Size')}</a>),
+    }, {
+      isFixed: false,
+      width: 0.15,
+      children: (<a className="d-block table-sort-op" href="#">{gettext('Last Update')}</a>),
+    }
+  ];
 
   return (
     <>
-      <div className="table-container" ref={containerRef}>
-        <table className="table-hover">
-          <thead onMouseDown={onThreadMouseDown} onContextMenu={onThreadContextMenu}>
-            <tr>
-              <th style={{ width: 31 }} className="pl10 pr-2">
-                <input
-                  type="checkbox"
-                  className="vam"
-                  onChange={onSelectedAll}
-                  checked={isSelectedAll}
-                  title={isSelectedAll ? gettext('Unselect all') : gettext('Select all')}
-                  disabled={tagFiles.rows.length === 0}
-                />
-              </th>
-              <th style={{ width: 40 }} className="pl-2 pr-2">{/* icon */}</th>
-              <th style={{ width: (containerWidth - 71) * 0.5 }}><a className="d-block table-sort-op" href="#">{gettext('Name')}</a></th>
-              <th style={{ width: (containerWidth - 71) * 0.06 }}>{/* tag */}</th>
-              <th style={{ width: (containerWidth - 71) * 0.18 }}>{/* operation */}</th>
-              <th style={{ width: (containerWidth - 71) * 0.11 }}><a className="d-block table-sort-op" href="#">{gettext('Size')}</a></th>
-              <th style={{ width: (containerWidth - 71) * 0.15 }}><a className="d-block table-sort-op" href="#">{gettext('Last Update')}</a></th>
-            </tr>
-          </thead>
-          <tbody>
-            {tagFiles.rows.map(file => {
-              const fileId = getRecordIdFromRecord(file);
-              return (
-                <TagFile
-                  key={fileId}
-                  repoID={repoID}
-                  isSelected={selectedFiles && selectedFiles.includes(fileId)}
-                  file={file}
-                  tagsData={tagsData}
-                  onSelectFile={onSelectFile}
-                  reSelectFiles={reSelectFiles}
-                  openImagePreview={openImagePreview}
-                />);
-            })}
-          </tbody>
-        </table>
+      <div className="table-container">
+        <FixedWidthTable
+          headers={headers}
+          className="table-hover"
+          theadOptions={{
+            onMouseDown: onThreadMouseDown,
+            onContextMenu: onThreadContextMenu,
+          }}
+        >
+          {tagFiles.rows.map(file => {
+            const fileId = getRecordIdFromRecord(file);
+            return (
+              <TagFile
+                key={fileId}
+                repoID={repoID}
+                isSelected={selectedFiles && selectedFiles.includes(fileId)}
+                file={file}
+                tagsData={tagsData}
+                onSelectFile={onSelectFile}
+                reSelectFiles={reSelectFiles}
+                openImagePreview={openImagePreview}
+              />);
+          })}
+        </FixedWidthTable>
       </div>
       {isImagePreviewerVisible && (
         <ImagePreviewer

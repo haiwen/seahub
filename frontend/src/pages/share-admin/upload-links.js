@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import classnames from 'classnames';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -13,6 +14,7 @@ import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import FixedWidthTable from '../../components/common/fixed-width-table';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -32,45 +34,37 @@ class Content extends Component {
     if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     }
-
-    const emptyTip = (
-      <EmptyTip
-        title={gettext('No upload links')}
-        text={gettext('You have not created any upload links yet. An upload link allows anyone to upload files to a folder or library. You can create an upload link for a folder or library by clicking the share icon to the right of its name.')}
-      >
-      </EmptyTip>
-    );
+    if (!items.length) {
+      return (
+        <EmptyTip
+          title={gettext('No upload links')}
+          text={gettext('You have not created any upload links yet. An upload link allows anyone to upload files to a folder or library. You can create an upload link for a folder or library by clicking the share icon to the right of its name.')}
+        />
+      );
+    }
 
     const isDesktop = Utils.isDesktop();
-    const table = (
-      <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
-        <thead>
-          {isDesktop ? (
-            <tr>
-              <th width="4%">{/* icon*/}</th>
-              <th width="30%">{gettext('Name')}</th>
-              <th width="24%">{gettext('Library')}</th>
-              <th width="16%">{gettext('Visits')}</th>
-              <th width="16%">{gettext('Expiration')}</th>
-              <th width="10%">{/* Operations*/}</th>
-            </tr>
-          ) : (
-            <tr>
-              <th width="12%"></th>
-              <th width="80%"></th>
-              <th width="8%"></th>
-            </tr>
-          )}
-        </thead>
-        <tbody>
-          {items.map((item, index) => {
-            return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink}/>);
-          })}
-        </tbody>
-      </table>
+    return (
+      <FixedWidthTable
+        className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
+        headers={isDesktop ? [
+          { isFixed: true, width: 40 }, // icon
+          { isFixed: false, width: 0.33, children: gettext('Name') },
+          { isFixed: false, width: 0.25, children: gettext('Library') },
+          { isFixed: false, width: 0.16, children: gettext('Visits') },
+          { isFixed: false, width: 0.16, children: gettext('Expiration') },
+          { isFixed: false, width: 0.1 }, // Operations
+        ] : [
+          { isFixed: false, width: 0.12 },
+          { isFixed: false, width: 0.8 },
+          { isFixed: false, width: 0.08 },
+        ]}
+      >
+        {items.map((item, index) => {
+          return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink}/>);
+        })}
+      </FixedWidthTable>
     );
-
-    return items.length ? table : emptyTip;
   }
 }
 
@@ -145,7 +139,7 @@ class Item extends Component {
       <Fragment>
         {this.props.isDesktop ?
           <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-            <td><img src={iconUrl} alt="" width="24" /></td>
+            <td className="pl-2 pr-2"><img src={iconUrl} alt="" width="24" /></td>
             <td>
               <Link to={objUrl}>{item.obj_name}</Link>
               {item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null}

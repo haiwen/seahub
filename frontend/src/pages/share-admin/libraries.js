@@ -2,6 +2,7 @@ import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -10,6 +11,7 @@ import EmptyTip from '../../components/empty-tip';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedRepoInfo from '../../models/shared-repo-info';
 import PermSelect from '../../components/dialog/perm-select';
+import FixedWidthTable from '../../components/common/fixed-width-table';
 
 class Content extends Component {
 
@@ -25,55 +27,46 @@ class Content extends Component {
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
-    } else if (errorMsg) {
+    }
+    if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
-    } else {
-      const emptyTip = (
+    }
+
+    if (!items.length) {
+      return (
         <EmptyTip
           title={gettext('No libraries shared')}
           text={gettext('You have not shared any libraries with other users yet. You can share a library with other users by clicking the share icon to the right of a library\'s name in "My Libraries".')}
         >
         </EmptyTip>
       );
-
-      // sort
-      const sortByName = sortBy == 'name';
-      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
-
-      const isDesktop = Utils.isDesktop();
-      const table = (
-        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
-          <thead>
-            {isDesktop ? (
-              <tr>
-                <th width="4%">{/* icon*/}</th>
-                <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="30%">{gettext('Share To')}</th>
-                <th width="24%">{gettext('Permission')}</th>
-                <th width="8%"></th>
-              </tr>
-            ) : (
-              <tr>
-                <th width="12%"></th>
-                <th width="80%"></th>
-                <th width="8%"></th>
-              </tr>
-            )}
-          </thead>
-          <tbody>
-            {items.map((item, index) => {
-              return (<Item
-                key={index}
-                isDesktop={isDesktop}
-                item={item}
-              />);
-            })}
-          </tbody>
-        </table>
-      );
-
-      return items.length ? table : emptyTip;
     }
+
+    // sort
+    const sortByName = sortBy == 'name';
+    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+
+    const isDesktop = Utils.isDesktop();
+    return (
+      <FixedWidthTable
+        className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
+        headers={isDesktop ? [
+          { isFixed: true, width: 40 },
+          { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+          { isFixed: false, width: 0.3, children: gettext('Share To') },
+          { isFixed: false, width: 0.25, children: gettext('Permission') },
+          { isFixed: false, width: 0.1 },
+        ] : [
+          { isFixed: false, width: 0.12 },
+          { isFixed: false, width: 0.8 },
+          { isFixed: false, width: 0.08 },
+        ]}
+      >
+        {items.map((item, index) => {
+          return (<Item key={index} isDesktop={isDesktop} item={item} />);
+        })}
+      </FixedWidthTable>
+    );
   }
 }
 
@@ -228,7 +221,7 @@ class Item extends Component {
     if (this.props.isDesktop) {
       return (
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+          <td className="pl10 pr-2"><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td><Link to={repoUrl}>{item.repo_name}</Link></td>
           <td>
             {item.share_type == 'personal' ? <span title={item.contact_email}>{shareTo}</span> : shareTo}

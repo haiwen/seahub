@@ -10,9 +10,11 @@ import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
 
 const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
   const isView = useMemo(() => currentMode === METADATA_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [currentMode, path]);
+  const isTag = useMemo(() => currentMode === TAGS_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES), [currentMode, path]);
 
   useEffect(() => {
     if (isView) return;
+    if (isTag) return;
 
     // init context
     const context = new MetadataContext();
@@ -24,9 +26,9 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
         delete window['sfMetadataContext'];
       }
     };
-  }, [repoID, currentRepoInfo, isView]);
+  }, [repoID, currentRepoInfo, isView, isTag]);
 
-  if (currentMode === TAGS_MODE) return null;
+  if (isTag) return null;
 
   if (isView) {
     const viewId = path.split('/').pop();

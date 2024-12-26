@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
@@ -20,6 +21,7 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
+import FixedWidthTable from '../common/fixed-width-table';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -80,7 +82,6 @@ class DirentListView extends React.Component {
       activeDirent: null,
       isListDropTipShow: false,
       isShowDirentsDraggablePreview: false,
-      containerWidth: 0,
     };
 
     this.enteredCounter = 0; // Determine whether to enter the child element to avoid dragging bubbling bugs。
@@ -101,19 +102,11 @@ class DirentListView extends React.Component {
       const { modify } = customPermission.permission;
       this.canDrop = modify;
     }
-
-    this.containerRef = null;
   }
 
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_IMAGE, this.recalculateImageItems);
-    this.resizeObserver = new ResizeObserver(this.handleResize);
-    this.containerRef && this.resizeObserver.observe(this.containerRef);
   }
-
-  handleResize = () => {
-    this.setState({ containerWidth: this.containerRef.offsetWidth - 32 });
-  };
 
   recalculateImageItems = () => {
     if (!this.state.isImagePopupOpen) return;
@@ -129,7 +122,6 @@ class DirentListView extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribeEvent();
-    this.containerRef && this.resizeObserver.unobserve(this.containerRef);
   }
 
   freezeItem = () => {
@@ -687,18 +679,56 @@ class DirentListView extends React.Component {
     });
   };
 
-  render() {
+  getHeaders = (isDesktop) => {
     const { direntList, sortBy, sortOrder } = this.props;
-    const { containerWidth } = this.state;
+    if (!isDesktop) {
+      return [
+        { isFixed: false, width: 0.12 },
+        { isFixed: false, width: 0.8 },
+        { isFixed: false, width: 0.08 },
+      ];
+    }
 
     // sort
     const sortByName = sortBy == 'name';
     const sortByTime = sortBy == 'time';
     const sortBySize = sortBy == 'size';
     const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+    return [
+      { isFixed: true, width: 31, className: 'pl10 pr-2', children: (
+        <input
+          type="checkbox"
+          className="vam"
+          onChange={this.props.onAllItemSelected}
+          checked={this.props.isAllItemSelected}
+          title={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+          aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+          disabled={direntList.length === 0}
+        />
+      ) }, {
+        isFixed: true, width: 32, className: 'pl-2 pr-2', // star
+      }, {
+        isFixed: true, width: 40, className: 'pl-2 pr-2', // icon
+      }, {
+        isFixed: false, width: 0.5, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>),
+      }, {
+        isFixed: false, width: 0.06, // tag
+      }, {
+        isFixed: false, width: 0.18, // operation
+      }, {
+        isFixed: false, width: 0.11, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a>)
+      }, {
+        isFixed: false, width: 0.15, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a>)
+      }
+    ];
+  };
+
+  render() {
+    const { direntList } = this.props;
 
     const isDesktop = Utils.isDesktop();
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
+    const headers = this.getHeaders(isDesktop);
 
     return (
       <div
@@ -710,43 +740,13 @@ class DirentListView extends React.Component {
         onDragOver={this.onTableDragOver}
         onDragLeave={this.onTableDragLeave}
         onDrop={this.tableDrop}
-        ref={ref => this.containerRef = ref}
       >
-        {direntList.length > 0 &&
-        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
-          {isDesktop ? (
-            <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
-              <tr>
-                <th style={{ width: 31 }} className="pl10 pr-2">
-                  <input
-                    type="checkbox"
-                    className="vam"
-                    onChange={this.props.onAllItemSelected}
-                    checked={this.props.isAllItemSelected}
-                    title={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-                    aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-                    disabled={direntList.length === 0}
-                  />
-                </th>
-                <th style={{ width: 32 }} className="pl-2 pr-2">{/* star */}</th>
-                <th style={{ width: 40 }} className="pl-2 pr-2">{/* icon */}</th>
-                <th style={{ width: (containerWidth - 103) * 0.5 }}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th style={{ width: (containerWidth - 103) * 0.06 }}>{/* tag */}</th>
-                <th style={{ width: (containerWidth - 103) * 0.18 }}>{/* operation */}</th>
-                <th style={{ width: (containerWidth - 103) * 0.11 }}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-                <th style={{ width: (containerWidth - 103) * 0.15 }}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-              </tr>
-            </thead>
-          ) : (
-            <thead>
-              <tr>
-                <th width="12%"></th>
-                <th width="80%"></th>
-                <th width="8%"></th>
-              </tr>
-            </thead>
-          )}
-          <tbody>
+        {direntList.length > 0 && (
+          <FixedWidthTable
+            className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
+            headers={headers}
+            theadOptions={isDesktop ? { onMouseDown: this.onThreadMouseDown, onContextMenu: this.onThreadContextMenu } : {}}
+          >
             {direntList.map((dirent, index) => {
               return (
                 <DirentListItem
@@ -790,9 +790,8 @@ class DirentListView extends React.Component {
                 />
               );
             })}
-          </tbody>
-        </table>
-        }
+          </FixedWidthTable>
+        )}
         {direntList.length === 0 &&
           <EmptyTip text={gettext('No file')}/>
         }
