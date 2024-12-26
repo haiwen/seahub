@@ -19,7 +19,7 @@ const CONTEXT_MENU_KEY = {
   REMOVE: 'remove',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
@@ -106,7 +106,6 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
     <>
       <ContextMenu
         options={options}
-        boundaryCoordinates={boundaryCoordinates}
         ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
         onOptionClick={handleOptionClick}
       />
@@ -141,7 +140,6 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 GalleryContextMenu.propTypes = {
   metadata: PropTypes.object,
   selectedImages: PropTypes.array,
-  boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   addFolder: PropTypes.func,

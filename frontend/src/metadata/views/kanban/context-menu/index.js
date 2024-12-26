@@ -23,7 +23,11 @@ const CONTEXT_MENU_KEY = {
   RENAME: 'rename',
 };
 
-const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onRename }) => {
+const KanbanContextMenu = ({
+  selectedCard,
+  onDelete,
+  onRename
+}) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
@@ -130,7 +134,6 @@ const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onRena
     <>
       <ContextMenu
         options={options}
-        boundaryCoordinates={boundaryCoordinates}
         onOptionClick={handleOptionClick}
         ignoredTriggerElements={['.sf-metadata-kanban-card']}
       />
@@ -154,7 +157,6 @@ const KanbanContextMenu = ({ boundaryCoordinates, selectedCard, onDelete, onRena
 };
 
 KanbanContextMenu.propTypes = {
-  boundaryCoordinates: PropTypes.object,
   selectedCard: PropTypes.string,
   onDelete: PropTypes.func,
   onRename: PropTypes.func,

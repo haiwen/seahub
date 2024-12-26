@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import './index.css';
 
-const ContextMenu = ({ options, boundaryCoordinates, onOptionClick, ignoredTriggerElements }) => {
+const ContextMenu = ({
+  options,
+  boundaryCoordinates = { top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 },
+  onOptionClick,
+  ignoredTriggerElements
+}) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });

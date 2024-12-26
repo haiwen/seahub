@@ -151,7 +151,7 @@ const Table = () => {
   }, [containerRef]);
 
   return (
-    <div className="sf-metadata-container" ref={containerRef}>
+    <div className="sf-metadata-container sf-metadata-container-transform" ref={containerRef}>
       <TableMain
         isGroupView={isGroupView}
         isLoadingMore={isLoadingMore}
