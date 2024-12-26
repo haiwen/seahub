@@ -16,6 +16,8 @@ class SortMenu extends React.Component {
     this.sortOptions = [
       { value: 'name-asc', text: gettext('By name ascending') },
       { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'size-asc', text: gettext('By size ascending') },
+      { value: 'size-desc', text: gettext('By size descending') },
       { value: 'time-asc', text: gettext('By time ascending') },
       { value: 'time-desc', text: gettext('By time descending') }
     ];
