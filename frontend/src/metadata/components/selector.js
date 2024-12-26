@@ -21,7 +21,9 @@ const Selector = ({ options, settingKey, value, defaultValue, onChange }) => {
       value={selectedOption}
       options={options}
       onChange={handelOnChange}
-      menuPortalTarget="sf-metadata-view-setting-panel"
+      isSearchable={false}
+      isClearable={false}
+      menuPortalTarget=".sf-metadata-view-setting-panel"
     />
   );
 };

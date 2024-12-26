@@ -2310,6 +2310,7 @@ class LibContentView extends React.Component {
                           viewId={this.state.viewId}
                           viewType={this.props.viewType}
                           onToggleDetail={this.toggleDirentDetail}
+                          onCloseDetail={this.closeDirentDetail}
                         />
                       </div>
                     }

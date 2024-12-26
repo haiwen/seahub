@@ -13,6 +13,7 @@ const KanbanViewToolBar = ({
   modifyFilters,
   modifySorts,
   onToggleDetail,
+  onCloseDetail,
 }) => {
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
@@ -25,7 +26,7 @@ const KanbanViewToolBar = ({
   }, [viewColumns]);
 
   const onToggleKanbanSetting = () => {
-    onToggleDetail();
+    onCloseDetail();
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_SETTINGS);
   };
 
@@ -89,6 +90,7 @@ KanbanViewToolBar.propTypes = {
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   onToggleDetail: PropTypes.func,
+  onCloseDetail: PropTypes.func,
 };
 
 export default KanbanViewToolBar;

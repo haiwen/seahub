@@ -25,6 +25,7 @@ const propTypes = {
   sortItems: PropTypes.func,
   viewId: PropTypes.string,
   onToggleDetail: PropTypes.func,
+  onCloseDetail: PropTypes.func,
 };
 
 class DirTool extends React.Component {
@@ -94,7 +95,7 @@ class DirTool extends React.Component {
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission, onToggleDetail } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission, onToggleDetail, onCloseDetail } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
     const isTagView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
@@ -106,6 +107,7 @@ class DirTool extends React.Component {
             viewId={viewId}
             isCustomPermission={isCustomPermission}
             onToggleDetail={onToggleDetail}
+            onCloseDetail={onCloseDetail}
           />
         </div>
       );

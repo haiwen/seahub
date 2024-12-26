@@ -1,3 +1,7 @@
+.sf-metadata-wrapper .sf-metadata-main .sf-metadata-view-kanban-container {
+  transform: unset;
+}
+
 .sf-metadata-view-kanban {
   position: relative;
   width: 100%;

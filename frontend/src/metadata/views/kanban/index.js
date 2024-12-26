@@ -42,7 +42,7 @@ const Kanban = () => {
   }, [isShowSettings]);
 
   return (
-    <div className="sf-metadata-container">
+    <div className="sf-metadata-container sf-metadata-view-kanban-container">
       <div className="sf-metadata-view-kanban">
         <Boards
           modifyRecord={modifyRecord}
