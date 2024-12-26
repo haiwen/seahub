@@ -22,6 +22,10 @@
   flex-shrink: 0;
 }
 
+.sf-metadata-peoples-container .sf-metadata-people-info-img img {
+  object-fit: cover;
+}
+
 .sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-name-count {
   flex: 1;
   height: 100%;

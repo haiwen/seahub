@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DTableSearchInput } from 'dtable-ui-component';
+import { SearchInput } from '@seafile/sf-metadata-ui-component';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
 import ClickOutside from './click-outside';
@@ -179,7 +179,7 @@ class SelectOptionGroup extends Component {
           onMouseDown={this.onMouseDown}
         >
           <div className="option-group-search position-relative">
-            <DTableSearchInput
+            <SearchInput
               className="option-search-control"
               placeholder={searchPlaceholder}
               onChange={this.onChangeSearch}
