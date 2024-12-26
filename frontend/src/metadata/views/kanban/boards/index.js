@@ -307,7 +307,6 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
         </div>
       </div>
       <ContextMenu
-        boundaryCoordinates={{ top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 }}
         selectedCard={selectedCard}
         onDelete={onDeleteRecords}
         onRename={onRename}

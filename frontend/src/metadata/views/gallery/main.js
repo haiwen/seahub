@@ -374,7 +374,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       <GalleryContextmenu
         metadata={metadata}
         selectedImages={selectedImages}
-        boundaryCoordinates={containerRef?.current?.getBoundingClientRect() || {}}
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
         addFolder={onAddFolder}

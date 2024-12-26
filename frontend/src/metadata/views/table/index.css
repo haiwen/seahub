@@ -424,6 +424,9 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+}
+
+.sf-metadata-wrapper .sf-metadata-main .sf-metadata-container-transform {
   transform: translateZ(10px);
 }
 

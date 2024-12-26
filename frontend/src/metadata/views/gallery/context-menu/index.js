@@ -19,7 +19,7 @@ const CONTEXT_MENU_KEY = {
   REMOVE: 'remove',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
 
@@ -68,7 +68,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       return;
     }
     const dirents = selectedImages.map(image => {
-      const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
+      const value = image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`;
       return value;
     });
     metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
@@ -100,13 +100,12 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
   }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
-  const path = selectedImages[0]?.path;
+  const parentDir = selectedImages[0]?.parentDir;
 
   return (
     <>
       <ContextMenu
         options={options}
-        boundaryCoordinates={boundaryCoordinates}
         ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
         onOptionClick={handleOptionClick}
       />
@@ -115,7 +114,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
           <ZipDownloadDialog
             repoID={repoID}
             path="/"
-            target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
+            target={selectedImages.map(image => image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`)}
             toggleDialog={closeZipDialog}
           />
         </ModalPortal>
@@ -123,7 +122,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       {isCopyDialogOpen && (
         <ModalPortal>
           <CopyDirent
-            path={path}
+            path={parentDir}
             repoID={repoID}
             dirent={dirent}
             isMultipleOperation={false}
@@ -141,7 +140,6 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
 GalleryContextMenu.propTypes = {
   metadata: PropTypes.object,
   selectedImages: PropTypes.array,
-  boundaryCoordinates: PropTypes.object,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   addFolder: PropTypes.func,
