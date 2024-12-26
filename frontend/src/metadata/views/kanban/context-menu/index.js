@@ -23,11 +23,7 @@ const CONTEXT_MENU_KEY = {
   RENAME: 'rename',
 };
 
-const KanbanContextMenu = ({
-  selectedCard,
-  onDelete,
-  onRename
-}) => {
+const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
