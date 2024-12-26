@@ -68,7 +68,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       return;
     }
     const dirents = selectedImages.map(image => {
-      const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
+      const value = image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`;
       return value;
     });
     metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
@@ -100,7 +100,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
   }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
-  const path = selectedImages[0]?.path;
+  const parentDir = selectedImages[0]?.parentDir;
 
   return (
     <>
@@ -115,7 +115,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
           <ZipDownloadDialog
             repoID={repoID}
             path="/"
-            target={selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`)}
+            target={selectedImages.map(image => image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`)}
             toggleDialog={closeZipDialog}
           />
         </ModalPortal>
@@ -123,7 +123,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, boundaryCoordinates, onD
       {isCopyDialogOpen && (
         <ModalPortal>
           <CopyDirent
-            path={path}
+            path={parentDir}
             repoID={repoID}
             dirent={dirent}
             isMultipleOperation={false}
