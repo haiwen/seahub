@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput } from '@seafile/sf-metadata-ui-component';
+import SearchInput from '../search-input';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
 import ClickOutside from './click-outside';
@@ -45,7 +45,6 @@ class SelectOptionGroup extends Component {
         this.optionGroupRef.style.top = (position.y - height) + 'px';
       }
       this.optionGroupRef.style.opacity = 1;
-      this.searchInputRef.current && this.searchInputRef.current.inputRef.focus();
     }
     else {
       if (height + top > window.innerHeight) {
@@ -181,6 +180,7 @@ class SelectOptionGroup extends Component {
           <div className="option-group-search position-relative">
             <SearchInput
               className="option-search-control"
+              autoFocus={isInModal}
               placeholder={searchPlaceholder}
               onChange={this.onChangeSearch}
               ref={this.searchInputRef}
