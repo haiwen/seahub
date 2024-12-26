@@ -93,6 +93,16 @@ const getMultipleOptionName = (column, targetOptionsIds) => {
   return selectedOptions.map((option) => option.name).join(', ');
 };
 
+const getServerOptions = (column) => {
+  if (!column) return;
+  const options = column?.data?.options || [];
+  if (options.length === 0) return [];
+  return options.map(option => {
+    if (checkIsPredefinedOption(column, option.id)) return { id: option.id, name: option.id };
+    return option;
+  });
+};
+
 export {
   checkIsPredefinedOption,
   getOption,
@@ -101,4 +111,5 @@ export {
   getColumnOptionNamesByIds,
   getColumnOptionIdsByNames,
   getMultipleOptionName,
+  getServerOptions,
 };

@@ -267,7 +267,8 @@ class DataProcessor {
         table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
         break;
       }
-      case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+      case OPERATION_TYPE.MODIFY_COLUMN_DATA:
+      case OPERATION_TYPE.MODIFY_LOCAL_COLUMN_DATA: {
         const { column_key, option_modify_type } = operation;
         const column = getColumnByKey(table.columns, column_key);
         if (!column) break;

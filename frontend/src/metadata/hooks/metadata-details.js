@@ -6,8 +6,8 @@ import { useMetadataStatus } from '../../hooks/metadata-status';
 import { SYSTEM_FOLDERS } from '../../constants';
 import Column from '../model/column';
 import { normalizeFields } from '../components/metadata-details/utils';
-import { CellType, EVENT_BUS_TYPE, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../constants';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord } from '../utils/cell';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../constants';
+import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord, getServerOptions } from '../utils/cell';
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../utils/object-utils';
@@ -78,9 +78,14 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
 
   const modifyColumnData = useCallback((fieldKey, newData) => {
     let newColumns = originColumns.slice(0);
+    const oldColumn = getColumnByKey(originColumns, fieldKey);
+    let newColumn = null;
     let update;
+    if (oldColumn.type === CellType.SINGLE_SELECT) {
+      newData.options = getServerOptions({ key: fieldKey, data: newData });
+    }
     metadataAPI.modifyColumnData(repoID, fieldKey, newData).then(res => {
-      const newColumn = new Column(res.data.column);
+      newColumn = new Column(res.data.column);
       const fieldIndex = originColumns.findIndex(f => f.key === fieldKey);
       newColumns[fieldIndex] = newColumn;
       return newColumn;
@@ -89,8 +94,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const options = getColumnOptions(newField);
       const newOption = options[options.length - 1];
       update = { [fileName]: newOption.id };
-      if (!PREDEFINED_COLUMN_KEYS.includes(fieldKey) && newField.type === CellType.SINGLE_SELECT) {
-        update = { [fileName]: getOptionName(options, newOption.id) };
+      if (newField.type === CellType.SINGLE_SELECT) {
+        update = { [fileName]: getColumnOptionNameById(newField, newOption.id) };
       } else if (newField.type === CellType.MULTIPLE_SELECT) {
         const oldValue = getCellValueByColumn(record, newField) || [];
         update = { [fileName]: [...oldValue, newOption.name] };
@@ -99,6 +104,11 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     }).then(res => {
       setOriginColumns(newColumns);
       setRecord({ ...record, ...update });
+      const eventBus = window?.sfMetadataContext?.eventBus;
+      if (eventBus) {
+        eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, fieldKey, newColumn.data, oldColumn.data);
+        eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record._id }, update);
+      }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

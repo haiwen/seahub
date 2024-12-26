@@ -16,6 +16,7 @@ export {
   getColumnOptionIdsByNames,
   getOptionName,
   getMultipleOptionName,
+  getServerOptions,
 } from './option';
 export {
   getCollaborator,
