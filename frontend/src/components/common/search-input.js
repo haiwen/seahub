@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   placeholder: PropTypes.string,
@@ -87,11 +88,6 @@ class SearchInput extends Component {
     }
   };
 
-  isFunction = (functionToCheck) => {
-    const getType = {};
-    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-  };
-
   renderClear = () => {
     const { isClearable, clearClassName, components = {} } = this.props;
     const { searchValue } = this.state;
@@ -99,7 +95,7 @@ class SearchInput extends Component {
     const { ClearIndicator } = components;
     if (React.isValidElement(ClearIndicator)) {
       return React.cloneElement(ClearIndicator, { clearValue: this.clearSearch });
-    } else if (this.isFunction(ClearIndicator)) {
+    } else if (Utils.isFunction(ClearIndicator)) {
       return <ClearIndicator clearValue={this.clearSearch} />;
     }
     return (
