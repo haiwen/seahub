@@ -36,6 +36,7 @@ export const EVENT_BUS_TYPE = {
   EXPAND_ALL_GROUPS: 'expand_all_groups',
   LOCAL_RECORD_CHANGED: 'local_record_changed',
   LOCAL_RECORD_DETAIL_CHANGED: 'local_record_detail_changed',
+  LOCAL_COLUMN_DATA_CHANGED: 'local_column_data_changed',
   FOCUS_CANVAS: 'focus_canvas',
 
   // metadata

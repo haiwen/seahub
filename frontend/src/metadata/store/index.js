@@ -407,6 +407,18 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifyLocalColumnData(column_key, new_data, old_data) {
+    const type = OPERATION_TYPE.MODIFY_LOCAL_COLUMN_DATA;
+    const operation = this.createOperation({
+      type,
+      column_key,
+      new_data,
+      old_data,
+      repo_id: this.repoId,
+    });
+    this.applyOperation(operation);
+  }
+
   moveRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
     const type = OPERATION_TYPE.MOVE_RECORD;
     const operation = this.createOperation({

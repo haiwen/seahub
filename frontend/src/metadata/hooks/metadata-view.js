@@ -90,6 +90,10 @@ export const MetadataViewProvider = ({
     storeRef.current.modifyLocalRecord({ record_id: recordId, parent_dir: parentDir, file_name: fileName }, update);
   }, [storeRef]);
 
+  const updateLocalColumnData = useCallback((columnKey, newData, oldData) => {
+    storeRef.current.modifyLocalColumnData(columnKey, newData, oldData);
+  }, []);
+
   const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {
     const isRename = storeRef.current.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
     let newName = null;
@@ -307,6 +311,7 @@ export const MetadataViewProvider = ({
     const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
     const unsubscribeModifySettings = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SETTINGS, modifySettings);
     const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, updateLocalRecord);
+    const unsubscribeLocalColumnChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, updateLocalColumnData);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -325,6 +330,7 @@ export const MetadataViewProvider = ({
       unsubscribeModifyColumnOrder();
       unsubscribeModifySettings();
       unsubscribeLocalRecordChanged();
+      unsubscribeLocalColumnChanged();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps

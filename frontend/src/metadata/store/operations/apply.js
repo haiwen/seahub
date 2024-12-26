@@ -211,7 +211,8 @@ export default function apply(data, operation) {
       data.view = new View(data.view, data.columns);
       return data;
     }
-    case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+    case OPERATION_TYPE.MODIFY_COLUMN_DATA:
+    case OPERATION_TYPE.MODIFY_LOCAL_COLUMN_DATA: {
       const { column_key, new_data } = operation;
       const columnIndex = data.columns.findIndex(column => column.key === column_key);
       if (columnIndex !== -1) {

@@ -5,7 +5,7 @@ import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
 import { getRowById } from '../utils/table';
 import { checkIsDir } from '../utils/row';
-import { checkIsPredefinedOption, getFileNameFromRecord } from '../utils/cell';
+import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
 import ObjectUtils from '../utils/object-utils';
 import { CellType } from '../constants';
 
@@ -142,10 +142,7 @@ class ServerOperator {
         let origin_data = new_data;
 
         if (column.type === CellType.SINGLE_SELECT) {
-          origin_data.options = Array.isArray(origin_data.options) ? origin_data.options.map(option => {
-            if (checkIsPredefinedOption(column, option.id)) return { id: option.id, name: option.id };
-            return option;
-          }) : [];
+          origin_data.options = getServerOptions({ key: column_key, data: origin_data });
         }
         window.sfMetadataContext.modifyColumnData(repo_id, column_key, origin_data).then(res => {
           callback({ operation });
