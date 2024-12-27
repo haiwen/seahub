@@ -11,6 +11,7 @@ import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameByI
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../utils/object-utils';
+import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
 
 const MetadataDetailsContext = React.createContext(null);
 
@@ -56,7 +57,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   }, [record]);
 
   const onChange = useCallback((fieldKey, newValue) => {
-    const field = getColumnByKey(originColumns, fieldKey);
+    const field = getColumnByKey(allColumnsRef.current, fieldKey);
     const columnName = getColumnOriginName(field);
     const recordId = getRecordIdFromRecord(record);
     let update = { [columnName]: newValue };
@@ -74,7 +75,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, [repoID, record, originColumns]);
+  }, [repoID, record, allColumnsRef]);
 
   const modifyColumnData = useCallback((fieldKey, newData) => {
     let newColumns = originColumns.slice(0);
@@ -174,8 +175,9 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     metadataAPI.getRecord(repoID, { parentDir, fileName }).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      const columns = normalizeFields(metadata).map(field => new Column(field));
-      allColumnsRef.current = columns;
+      const allColumns = normalizeFields(metadata).map(field => new Column(field));
+      allColumnsRef.current = allColumns;
+      const columns = allColumns.filter(c => !NOT_DISPLAY_COLUMN_KEYS.includes(c.key));
       setRecord(record);
       setOriginColumns(columns);
       setLoading(false);
