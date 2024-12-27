@@ -37,7 +37,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
       validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
     if (canRemovePhotoFromPeople) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: 'Remove from this group' });
+      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: gettext('Remove from this group') });
     }
     return validOptions;
   }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages]);
