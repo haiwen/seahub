@@ -91,7 +91,7 @@ class DirFiles extends React.Component {
         TextTranslation.NEW_FILE
       );
     }
-    list.push(TextTranslation.DISPLAY_FILES)
+    list.push(TextTranslation.DISPLAY_FILES);
     return list;
   };
 
