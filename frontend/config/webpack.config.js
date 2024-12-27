@@ -105,6 +105,7 @@ const excludedChunkNames = [
   'sharedFileViewMarkdown',
   'markdownEditor',
   'plainMarkdownEditor',
+  'tldrawEditor',
 ];
 
 // This is the production and development configuration.

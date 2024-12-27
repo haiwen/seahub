@@ -409,6 +409,9 @@ class DirentGridView extends React.Component {
       case 'New Word File':
         this.onCreateFileToggle('.docx');
         break;
+      case 'New Tldraw File':
+        this.onCreateFileToggle('.tldr');
+        break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');
         break;

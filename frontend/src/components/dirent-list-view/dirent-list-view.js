@@ -418,7 +418,8 @@ class DirentListView extends React.Component {
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
-      NEW_SEADOC_FILE
+      NEW_SEADOC_FILE,
+      NEW_TLDRAW_FILE
     } = TextTranslation;
 
     const direntsContainerMenuList = [
@@ -432,7 +433,8 @@ class DirentListView extends React.Component {
       NEW_MARKDOWN_FILE,
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE
+      NEW_WORD_FILE,
+      NEW_TLDRAW_FILE,
     );
 
     if (this.props.selectedDirentList.length === 0) {
@@ -508,6 +510,9 @@ class DirentListView extends React.Component {
         break;
       case 'New Word File':
         this.onCreateFileToggle('.docx');
+        break;
+      case 'New Tldraw File':
+        this.onCreateFileToggle('.tldr');
         break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');

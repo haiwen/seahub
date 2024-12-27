@@ -108,6 +108,13 @@ class DirOperationToolbar extends React.Component {
     });
   };
 
+  onCreateTldrawToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.tldr'
+    });
+  };
+
   onCreateSeaDocToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
@@ -246,7 +253,8 @@ class DirOperationToolbar extends React.Component {
           { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
           { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
           { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
-          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle }
+          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle },
+          { 'text': gettext('New Tldraw File'), 'onClick': this.onCreateTldrawToggle },
         );
         opList.push({
           'icon': 'new',
