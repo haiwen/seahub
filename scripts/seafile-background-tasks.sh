@@ -116,12 +116,12 @@ function start_seafile_background_tasks () {
     before_start;
     echo "Starting seafile background tasks ..."
     $PYTHON -m seafevents.background_tasks --config-file "${seafevents_conf}" \
-        --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>/dev/null 1>&2 &
+        --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>>"${seafile_background_tasks_log}" 1>&2 &
 
     # Ensure started successfully
     sleep 5
     if ! pgrep -f "seafevents.background_tasks" >/dev/null; then
-        printf "\033[33mError: failed to start seafile background tasks.\033[m\n"
+        printf "\033[33mError: failed to start seafile background tasks\033[m\n:" >&2
         echo "Please try to run \"./seafile-background-tasks.sh start\" again"
         exit 1;
     fi
