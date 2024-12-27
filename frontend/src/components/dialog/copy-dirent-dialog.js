@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader } from 'reactstrap';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import Searcher from '../file-chooser/searcher';
 import SelectDirentBody from './select-dirent-body';
 import { MODE_TYPE_MAP } from '../../constants';
@@ -320,32 +319,33 @@ class CopyDirent extends React.Component {
 
     return (
       <Modal className="custom-modal" isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle} close={
-          <div className="header-close-list">
-            <span aria-hidden="true" className="sf3-font sf3-font-x-01 comment-close-icon" onClick={this.toggle}></span>
-          </div>
-        }>
+        <ModalHeader toggle={this.toggle}
+          close={
+            <div className="header-buttons">
+              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} onClick={this.toggle}>
+                <span className="seahub-modal-btn-inner">
+                  <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                </span>
+              </button>
+              {(isPro && !showSearchBar) &&
+                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} onClick={this.onOpenSearchBar}>
+                  <span className="seahub-modal-btn-inner">
+                    <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
+                  </span>
+                </button>
+              }
+            </div>
+          }
+        >
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex"></div>}
-          {isPro && (
-            showSearchBar ? (
-              <Searcher
-                onUpdateMode={this.updateMode}
-                onUpdateSearchStatus={this.onUpdateSearchStatus}
-                onUpdateSearchResults={this.onUpdateSearchResults}
-                onClose={this.onCloseSearchBar}
-              />
-            ) : (
-              <IconBtn
-                iconName="search"
-                size={24}
-                className="search"
-                onClick={this.onOpenSearchBar}
-                role="button"
-                onKeyDown={() => {}}
-                tabIndex={0}
-              />
-            )
-          )}
+          {(isPro && showSearchBar) &&
+            <Searcher
+              onUpdateMode={this.updateMode}
+              onUpdateSearchStatus={this.onUpdateSearchStatus}
+              onUpdateSearchResults={this.onUpdateSearchResults}
+              onClose={this.onCloseSearchBar}
+            />
+          }
         </ModalHeader>
         <SelectDirentBody
           mode={mode}

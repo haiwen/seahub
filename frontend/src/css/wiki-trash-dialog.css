@@ -17,17 +17,6 @@
   padding: 0 0.5rem;
 }
 
-.trash-dialog .modal-header .trash-dialog-close-icon {
-  color: #000;
-  opacity: 0.5;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.trash-dialog .modal-header .trash-dialog-close-icon:hover {
-  opacity: 0.75;
-}
-
 .trash-dialog .modal-body {
   height: 500px;
   overflow-y: auto;

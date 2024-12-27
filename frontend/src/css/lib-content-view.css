@@ -342,39 +342,8 @@
   max-width: calc(100% - 260px);
 }
 
-.custom-modal .modal-header .search {
-  position: absolute;
-  top: 16px;
-  right: 48px;
-  color: #000;
-  opacity: 0.5;
-}
-
-.custom-modal .modal-header .close {
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  right: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  line-height: 12px;
-  color: #666 !important;
-  opacity: 1;
-}
-
-.custom-modal .modal-header .search:hover,
-.custom-modal .modal-header .close:hover {
-  cursor: pointer;
-  border-radius: 3px;
-  opacity: 0.75;
-}
-
-.custom-modal .modal-header .close span {
-  width: 16px;
-  height: 16px;
+.custom-modal .modal-header .header-buttons .seahub-modal-btn {
+  padding: 14px 12px;
 }
 
 .custom-modal .modal-content {
@@ -508,21 +477,4 @@
 .cur-view-container .cur-view-path .cur-view-path-right {
   flex-shrink: 0;
   margin-left: 10px;
-}
-
-.comment-close-icon {
-  height: 24px;
-  width: 24px;
-  text-align: center;
-}
-
-.comment-close-icon {
-  cursor: pointer;
-  color: #000;
-  opacity: 0.5;
-  font-weight: 700;
-}
-
-.comment-close-icon:hover {
-  opacity: 0.75;
 }

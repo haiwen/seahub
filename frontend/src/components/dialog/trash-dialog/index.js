@@ -193,13 +193,17 @@ class TrashDialog extends React.Component {
         <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
           <ModalHeader
             close={
-              <>
+              <div className="button-control">
                 <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
                 {(enableUserCleanTrash && !showFolder && isRepoAdmin) &&
                   <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                 }
-                <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
-              </>
+                <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={toggleTrashDialog}>
+                  <span className="seahub-modal-btn-inner">
+                    <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
             }
           >
             <div dangerouslySetInnerHTML={{ __html: title }}></div>
