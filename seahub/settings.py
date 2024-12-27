@@ -800,7 +800,7 @@ else:
             }
         }
     }
-LOGGIN_IGNOR_MODULES = ['seafes', 'xmlschema']
+LOGGING_IGNORE_MODULES = ['seafes', 'xmlschema']
 
 #Login Attempt
 LOGIN_ATTEMPT_LIMIT = 5
@@ -1074,10 +1074,10 @@ else:
     load_local_settings(seahub_settings)
     del seahub_settings
 
-# Ignore logs of component ERROR level
-for ig_mol in LOGGIN_IGNOR_MODULES:
-    if ig_mol not in LOGGING['loggers']:
-        LOGGING['loggers'][ig_mol] = {
+# Ignore logs of component in INFO level, and set it to ERROR level
+for module in LOGGING_IGNORE_MODULES:
+    if module not in LOGGING['loggers']:
+        LOGGING['loggers'][module] = {
             'handlers': ['default'],
             'level': 'ERROR',
             'propagate': False
