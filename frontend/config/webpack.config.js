@@ -23,7 +23,6 @@ const modules = require('./modules');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const webpackBundleTracker = require('webpack-bundle-tracker');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
@@ -829,7 +828,6 @@ module.exports = function (webpackEnv) {
         filename: isEnvProduction ? './webpack-stats.pro.json' : './webpack-stats.dev.json',
         publicPath: isEnvProduction ? '' : paths.publicUrlOrPath
       }),
-      // new BundleAnalyzerPlugin(),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

@@ -110,14 +110,22 @@ class UserNotificationsDialog extends React.Component {
             aria-expanded={this.state.isItemMenuShow}
             className="notification-dropdown-toggle"
           >
-            <span className="sf3-font sf3-font-more item-dropdown-icon"></span>
+            <button type="button" className="close seahub-modal-btn" aria-label={gettext('More')}>
+              <span className="seahub-modal-btn-inner">
+                <i className="sf3-font sf3-font-more" aria-hidden="true"></i>
+              </span>
+            </button>
           </DropdownToggle>
           <DropdownMenu right={true} className="dtable-dropdown-menu large">
             <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
             <DropdownItem onClick={this.clearAll}>{gettext('Clear')}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.toggle}></span>
+        <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={this.toggle}>
+          <span className="seahub-modal-btn-inner">
+            <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+          </span>
+        </button>
       </div>
     );
   };

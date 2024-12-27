@@ -12,37 +12,16 @@
   display: flex;
 }
 
+.notification-header-close .seahub-modal-btn {
+  padding: 14px 12px;
+}
+
 .notification-header-close .notification-dropdown-toggle {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 24px;
   width: 24px
-}
-
-.notification-header-close .item-dropdown-icon,
-.notification-header-close .notification-close-icon {
-  height: 24px;
-  width: 24px;
-  cursor: pointer;
-  color: #000;
-  opacity: 0.5;
-}
-
-.notification-header-close .notification-close-icon:hover,
-.notification-header-close .item-dropdown-icon:hover {
-  color: #000;
-  opacity: 0.75;
-}
-
-/* The icon "..." do not need to be bold */
-.notification-header-close .item-dropdown-icon {
-  font-weight: 400;
-}
-
-/* The icon 'x' needs to be bold */
-.notification-header-close .notification-close-icon {
-  font-weight: 700;
 }
 
 .notification-header-close .dropdown-menu {
