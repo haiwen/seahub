@@ -102,11 +102,10 @@ class RepoAPITokenDialog extends React.Component {
       loading: true,
       isSubmitBtnActive: true,
     };
-    this.repo = this.props.repo;
   }
 
   listAPITokens = () => {
-    seafileAPI.listRepoAPITokens(this.repo.repo_id).then((res) => {
+    seafileAPI.listRepoAPITokens(this.props.repo.repo_id).then((res) => {
       this.setState({
         apiTokenList: res.data.repo_api_tokens,
         loading: false,
@@ -150,7 +149,7 @@ class RepoAPITokenDialog extends React.Component {
     });
     const { appName, permission, apiTokenList } = this.state;
 
-    seafileAPI.addRepoAPIToken(this.repo.repo_id, appName, permission).then((res) => {
+    seafileAPI.addRepoAPIToken(this.props.repo.repo_id, appName, permission).then((res) => {
       apiTokenList.push(res.data);
       this.setState({
         apiTokenList: apiTokenList,
@@ -165,7 +164,7 @@ class RepoAPITokenDialog extends React.Component {
   };
 
   deleteAPIToken = (appName) => {
-    seafileAPI.deleteRepoAPIToken(this.repo.repo_id, appName).then((res) => {
+    seafileAPI.deleteRepoAPIToken(this.props.repo.repo_id, appName).then((res) => {
       const apiTokenList = this.state.apiTokenList.filter(item => {
         return item.app_name !== appName;
       });
@@ -178,7 +177,7 @@ class RepoAPITokenDialog extends React.Component {
   };
 
   updateAPIToken = (appName, permission) => {
-    seafileAPI.updateRepoAPIToken(this.repo.repo_id, appName, permission).then((res) => {
+    seafileAPI.updateRepoAPIToken(this.props.repo.repo_id, appName, permission).then((res) => {
       let apiTokenList = this.state.apiTokenList.filter(item => {
         if (item.app_name === appName) {
           item.permission = permission;
@@ -280,9 +279,7 @@ class RepoAPITokenDialog extends React.Component {
   };
 
   render() {
-    let repo = this.repo;
-
-    const itemName = '<span class="op-target text-truncate mr-1">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const itemName = '<span class="op-target text-truncate mr-1">' + Utils.HTMLescape(this.props.repo.repo_name) + '</span>';
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal

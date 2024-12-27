@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import OpIcon from '../op-icon';
@@ -58,14 +58,16 @@ class RepoAPITokenPermissionEditor extends React.Component {
     return (
       <div onClick={this.onSelectHandler}>
         {(isTextMode && !this.state.isEditing) ?
-          <Fragment>
+          <>
             <span>{optionTranslation}</span>
             {this.props.isEditIconShow &&
               <OpIcon title={gettext('Edit')} className="sf3-font sf3-font-rename attr-action-icon" op={this.onEditPermission} />
             }
-          </Fragment>
+          </>
           :
           <SeahubSelect
+            isSearchable={false}
+            isClearable={false}
             options={this.options}
             placeholder={optionTranslation}
             onChange={this.onPermissionChanged}
