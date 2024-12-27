@@ -83,11 +83,16 @@ class DirFiles extends React.Component {
   }
 
   getMenuList = () => {
-    return [
-      TextTranslation.NEW_FOLDER,
-      TextTranslation.NEW_FILE,
-      TextTranslation.DISPLAY_FILES,
-    ];
+    const { userPerm } = this.props;
+    const list = [];
+    if (userPerm == 'rw') {
+      list.push(
+        TextTranslation.NEW_FOLDER,
+        TextTranslation.NEW_FILE
+      );
+    }
+    list.push(TextTranslation.DISPLAY_FILES)
+    return list;
   };
 
   onNodeClick = (node) => {
