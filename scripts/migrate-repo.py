@@ -113,13 +113,14 @@ def get_existing_repo_ids (url):
 
     return results
 
-def get_repo_ids(storage_id):
+def get_repo_ids(storage_id, dest_storage_id):
     host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
     url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
 
     if is_default:
         all_repo_ids = get_repo_ids_by_storage_id (url)
     storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+    dest_storage_repo_ids =  get_repo_ids_by_storage_id (url, dest_storage_id)
 
     existing_repo_ids = get_existing_repo_ids (url)
 
@@ -132,10 +133,10 @@ def get_repo_ids(storage_id):
         #If it's default storage, we should also return the repos which are not in the RepoStorageID table.
         #Repo table is checked to preventing returning deleted repos.
         if is_default:
-            if repo_id in storage_repo_ids or not repo_id in all_repo_ids:
+            if repo_id in storage_repo_ids or not repo_id in all_repo_ids or repo_id in dest_storage_repo_ids:
                 ret_repo_ids.append(repo_id)
         else:
-            if repo_id in storage_repo_ids:
+            if repo_id in storage_repo_ids or repo_id in dest_storage_repo_ids:
                 ret_repo_ids.append(repo_id)
 
     repo_list_in_trash = get_repo_ids_from_trash (url)
@@ -147,10 +148,10 @@ def get_repo_ids(storage_id):
         #If it's default storage, we should also return the repos which are not in the RepoStorageID table.
         #Repo table is checked to preventing returning deleted repos.
         if is_default:
-            if repo_id in storage_repo_ids or not repo_id in all_repo_ids:
+            if repo_id in storage_repo_ids or not repo_id in all_repo_ids or repo_id in dest_storage_repo_ids:
                 ret_repo_ids.append(repo_id)
         else:
-            if repo_id in storage_repo_ids:
+            if repo_id in storage_repo_ids or repo_id in dest_storage_repo_ids:
                 ret_repo_ids.append(repo_id)
 
     return ret_repo_ids
@@ -199,7 +200,7 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
 def migrate_repos(orig_storage_id, dest_storage_id):
-    repo_ids = get_repo_ids(orig_storage_id)
+    repo_ids = get_repo_ids(orig_storage_id, dest_storage_id)
 
     for repo_id in repo_ids:
         api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
