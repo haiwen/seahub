@@ -31,7 +31,7 @@ export const MetadataAIOperationsProvider = ({
 
   const onOCR = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
     const filePath = Utils.joinPath(parentDir, fileName);
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract text, please wait...'));
+    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract text, please wait...'), { duration: null });
     metadataAPI.ocr(repoID, filePath).then(res => {
       const ocrResult = res.data.ocr_result;
       const validResult = Array.isArray(ocrResult) && ocrResult.length > 0 ? JSON.stringify(ocrResult) : null;
@@ -55,7 +55,7 @@ export const MetadataAIOperationsProvider = ({
     }
     if (!APIName) return;
     const descriptionTip = isImage ? gettext('image description') : gettext('description');
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to generate {description}, please wait...').replace('{description}', descriptionTip));
+    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to generate {description}, please wait...').replace('{description}', descriptionTip), { duration: null });
     metadataAPI[APIName](repoID, filePath, lang).then(res => {
       const description = res?.data?.summary || res.data.desc || '';
       inProgressToaster.close();
@@ -70,7 +70,7 @@ export const MetadataAIOperationsProvider = ({
   }, [repoID]);
 
   const extractFilesDetails = useCallback((objIds, { success_callback, fail_callback } = {}) => {
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract file details, please wait...'));
+    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract file details, please wait...'), { duration: null });
     metadataAPI.extractFileDetails(repoID, objIds).then(res => {
       const details = res?.data?.details || [];
       inProgressToaster.close();
