@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -16,6 +17,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import FixedWidthTable from '../../components/common/fixed-width-table';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -60,69 +62,60 @@ class Content extends Component {
 
     if (loading) {
       return <Loading />;
-    } else if (errorMsg) {
+    }
+    if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
-    } else {
-      const emptyTip = (
+    }
+    if (!items.length) {
+      return (
         <EmptyTip
           title={gettext('No share links')}
           text={gettext('You have not created any share links yet. A share link can be used to share files and folders with anyone. You can create a share link for a file or folder by clicking the share icon to the right of its name.')}
-        >
-        </EmptyTip>
+        />
       );
-
-      // sort
-      const sortByName = sortBy == 'name';
-      const sortByTime = sortBy == 'time';
-      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
-
-      const isDesktop = Utils.isDesktop();
-      // only for some columns
-      const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
-      const table = (
-        <table className={`${isDesktop ? '' : 'table-thead-hidden'}`}>
-          <thead>
-            {isDesktop ? (
-              <tr>
-                <th width="4%">{/* icon*/}</th>
-                <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width={columnWidths[0]}>{gettext('Library')}</th>
-                {isPro && <th width="20%">{gettext('Permission')}</th>}
-                <th width={columnWidths[1]}>{gettext('Visits')}</th>
-                <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
-                <th width="10%">{/* Operations*/}</th>
-              </tr>
-            ) : (
-              <tr>
-                <th width="12%"></th>
-                <th width="80%"></th>
-                <th width="8%"></th>
-              </tr>
-            )}
-          </thead>
-          <tbody>
-            {items.map((item, index) => {
-              return (<Item
-                key={index}
-                isDesktop={isDesktop}
-                item={item}
-                onRemoveLink={this.props.onRemoveLink}
-                isItemFreezed={this.state.isItemFreezed}
-                toggleItemFreezed={this.toggleItemFreezed}
-              />
-              );
-            })}
-          </tbody>
-        </table>
-      );
-
-      return items.length ? (
-        <>
-          {table}
-          {this.props.isLoadingMore && <div className="flex-shrink-0"><Loading /></div>}
-        </>
-      ) : emptyTip;
     }
+
+    // sort
+    const sortByName = sortBy == 'name';
+    const sortByTime = sortBy == 'time';
+    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+
+    const isDesktop = Utils.isDesktop();
+    // only for some columns
+    const columnWidths = isPro ? [0.14, 0.07, 0.14] : [0.21, 0.14, 0.2];
+
+    return (
+      <>
+        <FixedWidthTable
+          className={classnames('', { 'table-thead-hidden': !isDesktop })}
+          headers={isDesktop ? [
+            { isFixed: true, width: 40 }, // icon
+            { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+            { isFixed: false, width: columnWidths[0], children: gettext('Library') },
+            isPro ? { isFixed: false, width: 0.2, children: gettext('Permission') } : null,
+            { isFixed: false, width: columnWidths[1], children: gettext('Visits') },
+            { isFixed: false, width: columnWidths[2], children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a>) },
+            { isFixed: false, width: 0.1 }, // operations
+          ].filter(i => i) : [
+            { isFixed: false, width: 0.12 },
+            { isFixed: false, width: 0.8 },
+            { isFixed: false, width: 0.08 },
+          ]}
+        >
+          {items.map((item, index) => {
+            return (<Item
+              key={index}
+              isDesktop={isDesktop}
+              item={item}
+              onRemoveLink={this.props.onRemoveLink}
+              isItemFreezed={this.state.isItemFreezed}
+              toggleItemFreezed={this.toggleItemFreezed}
+            />);
+          })}
+        </FixedWidthTable>
+        {this.props.isLoadingMore && <div className="flex-shrink-0"><Loading /></div>}
+      </>
+    );
   }
 }
 
@@ -277,7 +270,7 @@ class Item extends Component {
             onMouseLeave={this.handleMouseLeave}
             onFocus={this.handleMouseEnter}
           >
-            <td><img src={iconUrl} width="24" alt="" /></td>
+            <td className="pl-2 pr-2"><img src={iconUrl} width="24" alt="" /></td>
             <td>
               {item.is_dir ?
                 <Link to={objUrl}>{item.obj_name}</Link> :
