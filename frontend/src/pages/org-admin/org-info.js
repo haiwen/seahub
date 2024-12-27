@@ -43,7 +43,8 @@ class OrgInfo extends Component {
       member_quota, member_usage, active_members,
       storage_quota, storage_usage
     } = this.state;
-    const download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
+    let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
+    download_traffic = download_traffic ? download_traffic : 0
     return (
       <Fragment>
         <MainPanelTopbar/>
