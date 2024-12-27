@@ -5,7 +5,7 @@ import DetailItem from '../../../components/dirent-detail/detail-item';
 import { Utils } from '../../../utils/utils';
 import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';
 import { gettext } from '../../../utils/constants';
-import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import Location from './location';
 import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
@@ -24,25 +24,23 @@ const MetadataDetails = () => {
   if (!record._id) return null;
 
   const fileName = getFileNameFromRecord(record);
-  const isImage = record && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
-  const isDir = record && checkIsDir(record);
+  const isImage = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+  const isDir = checkIsDir(record);
 
   return (
     <>
       {displayColumns.map(field => {
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION) {
-          if (!isImage) return null;
-          return (<Location key={field.key} position={getCellValueByColumn(record, field)} />);
+        const value = getCellValueByColumn(record, field);
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage && value) {
+          return (<Location key={field.key} position={value} />);
         }
-
-        if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) return null;
 
         let canEdit = canModifyRecord && field.editable;
-        if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
+        if (!isImage && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
+          canEdit = false;
+        } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
           canEdit = false;
         }
-
-        const value = getCellValueByColumn(record, field);
         return (
           <DetailItem key={field.key} field={field} readonly={!canEdit}>
             {canEdit ? (
