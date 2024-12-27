@@ -30,15 +30,16 @@ const MetadataDetails = () => {
   return (
     <>
       {displayColumns.map(field => {
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION) {
-          if (!isImage) return null;
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage) {
           return (<Location key={field.key} position={getCellValueByColumn(record, field)} />);
         }
 
-        if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) return null;
-
         let canEdit = canModifyRecord && field.editable;
         if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
+          canEdit = false;
+        } else if (field.key === PRIVATE_COLUMN_KEY.LOCATION && !isImage) {
+          canEdit = false;
+        } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
           canEdit = false;
         }
 
