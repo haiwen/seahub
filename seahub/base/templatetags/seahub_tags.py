@@ -64,6 +64,7 @@ FILEEXT_ICON_MAP = {
     'docx': 'word.png',
     'odt': 'word.png',
     'fodt': 'word.png',
+    'tldr': 'word.png',
 
     'ppt': 'ppt.png',
     'pptx': 'ppt.png',
