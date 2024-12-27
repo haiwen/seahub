@@ -37,6 +37,7 @@ class SeafileCodeMirror extends React.Component {
           basicSetup={DEFAULT_CODEMIRROR_OPTIONS}
           theme={myTheme}
           readOnly={readOnly}
+          editable={!readOnly}
           extensions={extensions}
           onChange={this.onChange}
         />

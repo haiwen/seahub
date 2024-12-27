@@ -321,19 +321,17 @@ class TreeNodeView extends React.Component {
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>
-          {isNodeMenuShow && (
+          {isNodeMenuShow && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
             <div className="right-icon">
-              {((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
-                <ItemDropdownMenu
-                  item={this.props.node}
-                  toggleClass={'sf3-font sf3-font-more-vertical'}
-                  getMenuList={this.calculateMenuList}
-                  onMenuItemClick={this.onMenuItemClick}
-                  freezeItem={this.props.freezeItem}
-                  unfreezeItem={this.unfreezeItem}
-                  menuStyle={isMobile ? { zIndex: 1050 } : {}}
-                />
-              )}
+              <ItemDropdownMenu
+                item={this.props.node}
+                toggleClass={'sf3-font sf3-font-more-vertical'}
+                getMenuList={this.calculateMenuList}
+                onMenuItemClick={this.onMenuItemClick}
+                freezeItem={this.props.freezeItem}
+                unfreezeItem={this.unfreezeItem}
+                menuStyle={isMobile ? { zIndex: 1050 } : {}}
+              />
             </div>
           )}
         </div>
