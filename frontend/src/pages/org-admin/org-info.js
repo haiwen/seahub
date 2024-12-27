@@ -44,7 +44,7 @@ class OrgInfo extends Component {
       storage_quota, storage_usage
     } = this.state;
     let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
-    download_traffic = download_traffic ? download_traffic : 0
+    download_traffic = download_traffic ? download_traffic : 0;
     return (
       <Fragment>
         <MainPanelTopbar/>

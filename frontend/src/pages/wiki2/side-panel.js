@@ -244,7 +244,9 @@ class SidePanel extends PureComponent {
       <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })}>
         <div className="wiki2-side-panel-top">
           <h1 className="h4 text-truncate ml-0 mb-0" title={repoName}>{repoName}</h1>
-          {wikiPermission === 'rw' && <PublishedWikiExtrance wikiID={wikiId} customURLPart={this.state.customUrl} />}
+          {(wikiPermission === 'rw' && this.state.customUrl) &&
+            <PublishedWikiExtrance wikiID={wikiId} customURLPart={this.state.customUrl} />
+          }
         </div>
         <Wiki2Search
           wikiId={wikiId}
