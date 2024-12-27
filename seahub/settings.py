@@ -722,7 +722,7 @@ if enable_log_to_stdout:
                 'handlers': ['onlyoffice_handler', ],
                 'level': 'INFO',
                 'propagate': False
-            }
+            },
         }
     }
 else:
@@ -797,7 +797,7 @@ else:
                 'handlers': ['onlyoffice_handler', ],
                 'level': 'INFO',
                 'propagate': False
-            }
+            },
         }
     }
 LOGGING_IGNORE_MODULES = ['seafes', 'xmlschema']
