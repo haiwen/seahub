@@ -797,6 +797,9 @@ else:
         }
     }
 
+
+LOGGING_IGNORE_MODULES = ['seafes', 'xmlschema']
+
 #Login Attempt
 LOGIN_ATTEMPT_LIMIT = 5
 LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
@@ -1068,6 +1071,15 @@ else:
 
     load_local_settings(seahub_settings)
     del seahub_settings
+
+# Ignore logs of component in INFO level, and set it to ERROR level
+for module in LOGGING_IGNORE_MODULES:
+    if module not in LOGGING['loggers']:
+        LOGGING['loggers'][module] = {
+            'handlers': ['default'],
+            'level': 'ERROR',
+            'propagate': False
+        }
 
 # config in env
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
