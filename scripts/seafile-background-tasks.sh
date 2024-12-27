@@ -121,7 +121,7 @@ function start_seafile_background_tasks () {
     # Ensure started successfully
     sleep 5
     if ! pgrep -f "seafevents.background_tasks" >/dev/null; then
-        printf "\033[33mError: failed to start seafile background tasks\033[m\n"
+        printf "\033[33mError: failed to start seafile background tasks.\033[m\n"
         echo "Please try to run \"./seafile-background-tasks.sh start\" again"
         exit 1;
     fi
