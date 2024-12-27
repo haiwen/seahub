@@ -48,6 +48,8 @@ def get_quota_from_string(quota_str):
         quota = int(quota_str[:-1]) * get_file_size_unit('gb')
     elif quota_str.endswith('m'):
         quota = int(quota_str[:-1]) * get_file_size_unit('mb')
+    elif quota_str.endswith('k'):
+        quota = int(quota_str[:-1]) * get_file_size_unit('kb')
     else:
         return None
 

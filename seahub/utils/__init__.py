@@ -852,6 +852,11 @@ if EVENTS_CONFIG_FILE:
             res = seafevents_api.get_user_traffic_by_month(session, username, month)
         return res
 
+    def get_org_traffic_by_month(org_id, month):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_traffic_by_month(session, org_id, month)
+        return res
+
     def get_file_history_suffix():
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
 
@@ -870,6 +875,8 @@ else:
     def get_all_orgs_traffic_by_month():
         pass
     def get_user_traffic_by_month():
+        pass
+    def get_org_traffic_by_month():
         pass
     def get_user_activity_stats_by_day():
         pass

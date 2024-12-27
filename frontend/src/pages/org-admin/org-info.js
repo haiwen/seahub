@@ -12,6 +12,8 @@ class OrgInfo extends Component {
     super(props);
     this.state = {
       org_name: '',
+      traffic_this_month: '',
+      traffic_limit: '',
       storage_quota: 0,
       storage_usage: 0,
       member_quota: 0,
@@ -23,12 +25,12 @@ class OrgInfo extends Component {
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then(res => {
       const {
-        org_id, org_name,
+        org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage
       } = res.data;
       this.setState({
-        org_id, org_name,
+        org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage
       });
@@ -37,10 +39,12 @@ class OrgInfo extends Component {
 
   render() {
     const {
-      org_id, org_name,
+      org_id, org_name, traffic_this_month, traffic_limit,
       member_quota, member_usage, active_members,
       storage_quota, storage_usage
     } = this.state;
+    let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
+    download_traffic = download_traffic ? download_traffic : 0
     return (
       <Fragment>
         <MainPanelTopbar/>
@@ -104,6 +108,23 @@ class OrgInfo extends Component {
                     <p>{Utils.bytesToSize(storage_usage)}</p>
                   )}
                 </div>
+                <div className="info-content-item">
+                  <h4 className="info-content-item-heading">{gettext('Traffic this month')}</h4>
+                  {traffic_limit > 0 ? (
+                    <>
+                      <p className="info-content-space-text">{`${(download_traffic / traffic_limit * 100).toFixed(2)}%`}</p>
+                      <div className="progress-container">
+                        <div className="progress">
+                          <div className="progress-bar" role="progressbar" style={{ width: `${download_traffic / traffic_limit * 100}%` }} aria-valuenow={download_traffic / traffic_limit * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p className="progress-text m-0">{`${Utils.bytesToSize(download_traffic)} / ${Utils.bytesToSize(traffic_limit)}`}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <p>{Utils.bytesToSize(download_traffic)}</p>
+                  )}
+                </div>
+
               </div>
             </div>
           </div>

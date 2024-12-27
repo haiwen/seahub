@@ -2,6 +2,7 @@
 import os
 from django.db import connection
 
+
 def get_ccnet_db_name():
     return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
 
@@ -200,3 +201,13 @@ class CcnetDB:
                 active_users.append(user[0])
 
         return active_users
+
+    def get_org_user_count(self, org_id):
+        sql = f"""
+        SELECT COUNT(1) FROM `{self.db_name}`.`OrgUser` WHERE org_id={org_id}
+        """
+        user_count = 0
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            user_count = cursor.fetchone()[0]
+        return user_count

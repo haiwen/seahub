@@ -14,12 +14,9 @@ def get_available_roles():
     return list(ENABLED_ROLE_PERMISSIONS.keys())
 
 
-def get_enabled_role_permissions_by_role(role):
+def get_enabled_role_permissions_by_role(role=DEFAULT_USER):
     """Get permissions dict(perm_name: bool) of a role.
     """
-    if not role:
-        role = DEFAULT_USER
-
     if role not in list(ENABLED_ROLE_PERMISSIONS.keys()):
         logger.warn('%s is not a valid role, use default role.' % role)
         role = DEFAULT_USER
