@@ -623,6 +623,22 @@ class Store {
     this.applyOperation(operation);
   };
 
+  // map
+  deleteLocationPhotos = (rows_ids) => {
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
+
+    const type = OPERATION_TYPE.DELETE_LOCATION_PHOTOS;
+    const valid_rows_ids = rows_ids.filter((rowId) => {
+      const row = getRowById(this.data, rowId);
+      return row && this.context.canModifyRow(row);
+    });
+    const deleted_rows = valid_rows_ids.map((rowId) => getRowById(this.data, rowId));
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, rows_ids, deleted_rows
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;

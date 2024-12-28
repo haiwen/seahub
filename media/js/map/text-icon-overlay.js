@@ -774,7 +774,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
     TextIconOverlay.prototype.initialize = function(map){
         this._map = map;
     
-        this._domElement = document.createElement('div');     
+        this._domElement = document.createElement('div');
+        this._domElement.className = 'custom-image-overlay';
         // this._updateCss();    
         // this._updateText();
         this._updatePosition(); 
