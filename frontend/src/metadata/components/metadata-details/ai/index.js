@@ -44,7 +44,7 @@ const AI = () => {
     if (descriptionColumn && isDescribableDoc) {
       list.push({
         value: OPERATION.GENERATE_DESCRIPTION,
-        label: isImage ? gettext('Generate image description') : gettext('Generate description'),
+        label: gettext('Generate description'),
         record
       });
     }

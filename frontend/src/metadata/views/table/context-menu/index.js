@@ -178,7 +178,7 @@ const ContextMenu = ({
       if (descriptionColumn && isDescribableFile) {
         list.push({
           value: OPERATION.GENERATE_DESCRIPTION,
-          label: Utils.imageCheck(fileName) ? gettext('Generate image description') : gettext('Generate description'),
+          label: gettext('Generate description'),
           record
         });
       }
