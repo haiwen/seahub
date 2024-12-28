@@ -142,8 +142,13 @@ export const GALLERY_DATE_MODE = {
 };
 
 export const MAP_TYPE = {
-  MAP: 'map',
+  NORMAL_MAP: 'normal_map',
   SATELLITE: 'satellite',
+};
+
+export const MAP_VIEW_TOOLBAR_MODE = {
+  MAP: 'map',
+  GALLERY: 'gallery',
 };
 
 export const UNCATEGORIZED = '_uncategorized';

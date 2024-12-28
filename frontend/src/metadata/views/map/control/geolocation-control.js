@@ -1,5 +1,5 @@
-import { mediaUrl } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { mediaUrl } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 export function createBMapGeolocationControl(BMap, callback) {
   function GeolocationControl() {

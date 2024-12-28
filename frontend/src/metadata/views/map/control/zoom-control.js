@@ -1,4 +1,4 @@
-import { Utils } from '../../../utils/utils';
+import { Utils } from '../../../../utils/utils';
 
 export function createBMapZoomControl(BMap, callback) {
   function ZoomControl() {
@@ -12,7 +12,7 @@ export function createBMapZoomControl(BMap, callback) {
     div.style = 'display: flex; justify-content: center; align-items: center;';
 
     const zoomInButton = document.createElement('button');
-    zoomInButton.className = 'sf-BMap-zoom-button';
+    zoomInButton.className = 'sf-BMap-zoom-button btn btn-secondary';
     zoomInButton.style = 'display: flex; justify-content: center; align-items: center;';
     zoomInButton.innerHTML = '<svg class="zoom-in-icon"><use xlink:href="#plus_sign" /></svg>';
     div.appendChild(zoomInButton);
@@ -22,7 +22,7 @@ export function createBMapZoomControl(BMap, callback) {
     div.appendChild(divider);
 
     const zoomOutButton = document.createElement('button');
-    zoomOutButton.className = 'sf-BMap-zoom-button';
+    zoomOutButton.className = 'sf-BMap-zoom-button btn btn-secondary';
     zoomOutButton.style = 'display: flex; justify-content: center; align-items: center;';
     zoomOutButton.innerHTML = '<svg class="zoom-out-icon"><use xlink:href="#minus_sign" /></svg>';
     div.appendChild(zoomOutButton);
@@ -35,8 +35,8 @@ export function createBMapZoomControl(BMap, callback) {
 
     const updateButtonStates = () => {
       const zoomLevel = map.getZoom();
-      const maxZoom = map.getMaxZoom();
-      const minZoom = map.getMinZoom();
+      const maxZoom = map.getMapType().getMaxZoom();
+      const minZoom = map.getMapType().getMinZoom();
 
       zoomInButton.disabled = zoomLevel >= maxZoom;
       zoomOutButton.disabled = zoomLevel <= minZoom;

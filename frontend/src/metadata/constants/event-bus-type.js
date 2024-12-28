@@ -76,4 +76,6 @@ export const EVENT_BUS_TYPE = {
 
   // map
   SWITCH_MAP_TYPE: 'switch_map_type',
+  TOGGLE_MAP_VIEW_TOOLBAR: 'toggle_map_view_toolbar',
+  MAP_VIEW: 'map_view',
 };
