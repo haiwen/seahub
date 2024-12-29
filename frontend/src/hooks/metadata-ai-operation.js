@@ -31,12 +31,12 @@ export const MetadataAIOperationsProvider = ({
 
   const onOCR = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
     const filePath = Utils.joinPath(parentDir, fileName);
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract text, please wait...'), { duration: null });
+    const inProgressToaster = toaster.notifyInProgress(gettext('Extracting text by AI...'), { duration: null });
     metadataAPI.ocr(repoID, filePath).then(res => {
       const ocrResult = res.data.ocr_result;
       const validResult = Array.isArray(ocrResult) && ocrResult.length > 0 ? JSON.stringify(ocrResult) : null;
       inProgressToaster.close();
-      toaster.success(gettext('AI to extract text, completed.'));
+      toaster.success(gettext('Text extracted'));
       success_callback && success_callback({ parentDir, fileName, ocrResult: validResult });
     }).catch(error => {
       inProgressToaster.close();
@@ -54,27 +54,26 @@ export const MetadataAIOperationsProvider = ({
       APIName = isImage ? 'imageCaption' : 'generateDescription';
     }
     if (!APIName) return;
-    const descriptionTip = isImage ? gettext('image description') : gettext('description');
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to generate {description}, please wait...').replace('{description}', descriptionTip), { duration: null });
+    const inProgressToaster = toaster.notifyInProgress(gettext('Generating description by AI...'), { duration: null });
     metadataAPI[APIName](repoID, filePath, lang).then(res => {
       const description = res?.data?.summary || res.data.desc || '';
       inProgressToaster.close();
-      toaster.success(gettext('AI to generate description, completed.').replace('{description}', descriptionTip));
+      toaster.success(gettext('Description generated'));
       success_callback && success_callback({ parentDir, fileName, description });
     }).catch(error => {
       inProgressToaster.close();
-      const errorMessage = gettext('Failed to generate description').replace('{description}', descriptionTip);
+      const errorMessage = gettext('Failed to generate description');
       toaster.danger(errorMessage);
       fail_callback && fail_callback();
     });
   }, [repoID]);
 
   const extractFilesDetails = useCallback((objIds, { success_callback, fail_callback } = {}) => {
-    const inProgressToaster = toaster.notifyInProgress(gettext('Using AI to extract file details, please wait...'), { duration: null });
+    const inProgressToaster = toaster.notifyInProgress(gettext('Extracting file details by AI...'), { duration: null });
     metadataAPI.extractFileDetails(repoID, objIds).then(res => {
       const details = res?.data?.details || [];
       inProgressToaster.close();
-      toaster.success(gettext('AI to extract file details, completed.'));
+      toaster.success(gettext('File details extracted'));
       success_callback && success_callback({ details });
     }).catch(error => {
       inProgressToaster.close();
