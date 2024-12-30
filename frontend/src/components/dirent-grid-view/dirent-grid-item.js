@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MD5 from 'MD5';
@@ -296,8 +296,8 @@ class DirentGridItem extends React.Component {
   };
 
   render() {
-    let { dirent } = this.state;
-    let { is_freezed, is_locked, lock_owner_name, file_tags } = dirent;
+    let { dirent, isGridDropTipShow } = this.state;
+    let { is_freezed, is_locked, lock_owner_name, file_tags, isSelected } = dirent;
     let toolTipID = '';
     let tagTitle = '';
     if (file_tags && file_tags.length > 0) {
@@ -306,15 +306,16 @@ class DirentGridItem extends React.Component {
     }
     const showName = this.getRenderedText(dirent);
     return (
-      <Fragment>
+      <>
         <li
-          className={`grid-item ${dirent.isSelected ? 'grid-selected-active' : ''}`}
+          className={classnames('grid-item cursor-pointer', { 'grid-selected-active': isSelected })}
           onContextMenu={this.onGridItemContextMenu}
-          onMouseDown={this.onGridItemMouseDown}>
+          onMouseDown={this.onGridItemMouseDown}
+          onClick={this.onItemClick}
+        >
           <div
-            className={classnames('grid-file-img-link cursor-pointer', { 'grid-drop-show': this.state.isGridDropTipShow })}
+            className={classnames('grid-file-img-link', { 'grid-drop-show': isGridDropTipShow })}
             draggable={this.canDrag}
-            onClick={this.onItemClick}
             onDragStart={this.onGridItemDragStart}
             onDragEnter={this.onGridItemDragEnter}
             onDragOver={this.onGridItemDragOver}
@@ -336,7 +337,7 @@ class DirentGridItem extends React.Component {
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
             {(dirent.type !== 'dir' && file_tags && file_tags.length > 0) && (
-              <Fragment>
+              <>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
                   {file_tags.map((fileTag, index) => {
                     let length = file_tags.length;
@@ -348,7 +349,7 @@ class DirentGridItem extends React.Component {
                 <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
                   {tagTitle}
                 </UncontrolledTooltip>
-              </Fragment>
+              </>
             )}
             {(!dirent.isDir() && !this.canPreview) ?
               <a
@@ -367,7 +368,7 @@ class DirentGridItem extends React.Component {
             }
           </div>
         </li>
-      </Fragment>
+      </>
     );
   }
 }
