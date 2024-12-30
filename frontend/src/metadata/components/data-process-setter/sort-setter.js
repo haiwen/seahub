@@ -8,7 +8,7 @@ import { getValidSorts } from '../../utils/sort';
 import { EVENT_BUS_TYPE } from '../../constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
 
-const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeedSubmit, wrapperClass, modifySorts }) => {
+const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const sorts = useMemo(() => {
@@ -17,10 +17,10 @@ const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeed
 
   const sortMessage = useMemo(() => {
     const sortsLength = sorts.length;
-    if (sortsLength === 1) return isNeedSubmit ? gettext('1 preset sort') : gettext('1 sort');
-    if (sortsLength > 1) return sortsLength + ' ' + (isNeedSubmit ? gettext('preset sorts') : gettext('sorts'));
-    return isNeedSubmit ? gettext('Preset sort') : gettext('Sort');
-  }, [isNeedSubmit, sorts]);
+    if (sortsLength === 1) return gettext('1 sort');
+    if (sortsLength > 1) return sortsLength + ' ' + gettext('sorts');
+    return gettext('Sort');
+  }, [sorts]);
 
   const displaySetter = useCallback(() => {
     setShowSetter(true);
@@ -67,13 +67,12 @@ const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeed
       />
       {isShowSetter && (
         <SortPopover
-          isNeedSubmit={isNeedSubmit}
           readOnly={readOnly}
           type={type}
           target={target}
           columns={columns}
           sorts={sorts}
-          onSortComponentToggle={onSetterToggle}
+          hidePopover={onSetterToggle}
           update={onChange}
         />
       )}
@@ -84,7 +83,6 @@ const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeed
 
 
 const propTypes = {
-  isNeedSubmit: PropTypes.bool,
   readOnly: PropTypes.bool,
   wrapperClass: PropTypes.string,
   target: PropTypes.string,

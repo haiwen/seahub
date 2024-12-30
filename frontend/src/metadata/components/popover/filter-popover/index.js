@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
-import { Button, FormGroup, Label, UncontrolledPopover } from 'reactstrap';
+import { FormGroup, Label, UncontrolledPopover } from 'reactstrap';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import AdvancedFilters from './advanced-filters';
 import BasicFilters from './basic-filters';
@@ -33,12 +33,13 @@ class FilterPopover extends Component {
       basicFilters: props.basicFilters,
       filters: getValidFilters(props.filters, props.columns),
       filterConjunction: props.filterConjunction || 'And',
-      isSubmitDisabled: true,
+      isChanged: false,
     };
     this.isSelectOpen = false;
   }
 
   componentDidMount() {
+    this.dtablePopoverRef && this.dtablePopoverRef.click();
     document.addEventListener('click', this.hideDTablePopover, true);
     document.addEventListener('keydown', this.onHotKey);
     this.unsubscribeOpenSelect = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_SELECT, this.setSelectStatus);
@@ -50,10 +51,20 @@ class FilterPopover extends Component {
     this.unsubscribeOpenSelect();
   }
 
+  onClosePopover = () => {
+    const { readOnly } = this.props;
+    const { isChanged, filters, filterConjunction, basicFilters } = this.state;
+    if (!readOnly && isChanged) {
+      const update = { filters, filter_conjunction: filterConjunction, basic_filters: basicFilters };
+      this.props.update(update);
+    }
+    this.props.hidePopover();
+  };
+
   onHotKey = (e) => {
     if (isHotkey('esc', e) && !this.isSelectOpen) {
       e.preventDefault();
-      this.props.hidePopover();
+      this.onClosePopover();
     }
   };
 
@@ -63,23 +74,15 @@ class FilterPopover extends Component {
 
   hideDTablePopover = (e) => {
     if (this.dtablePopoverRef && !getEventClassName(e).includes('popover') && !this.dtablePopoverRef.contains(e.target)) {
-      this.props.hidePopover(e);
       e.preventDefault();
       e.stopPropagation();
+      this.onClosePopover();
       return false;
     }
   };
 
   update = (filters) => {
-    if (this.props.isNeedSubmit) {
-      const isSubmitDisabled = false;
-      this.setState({ filters, isSubmitDisabled });
-      return;
-    }
-    this.setState({ filters }, () => {
-      const update = { filters, filter_conjunction: this.state.filterConjunction };
-      this.props.update(update);
-    });
+    this.setState({ filters, isChanged: true });
   };
 
   deleteFilter = (filterIndex, scheduleUpdate) => {
@@ -98,15 +101,7 @@ class FilterPopover extends Component {
   };
 
   modifyFilterConjunction = (conjunction) => {
-    if (this.props.isNeedSubmit) {
-      const isSubmitDisabled = false;
-      this.setState({ filterConjunction: conjunction, isSubmitDisabled });
-      return;
-    }
-    this.setState({ filterConjunction: conjunction }, () => {
-      const update = { filters: this.state.filters, filter_conjunction: conjunction };
-      this.props.update(update);
-    });
+    this.setState({ filterConjunction: conjunction, isChanged: true });
   };
 
   addFilter = (scheduleUpdate) => {
@@ -125,31 +120,12 @@ class FilterPopover extends Component {
     this.update(filters);
   };
 
-  onClosePopover = () => {
-    this.props.hidePopover();
-  };
-
-  onSubmitFilters = () => {
-    const { filters, filterConjunction, basicFilters } = this.state;
-    const update = { filters, filter_conjunction: filterConjunction, basic_filters: basicFilters };
-    this.props.update(update);
-    this.props.hidePopover();
-  };
-
   onPopoverInsideClick = (e) => {
     e.stopPropagation();
   };
 
   onBasicFilterChange = (value) => {
-    if (this.props.isNeedSubmit) {
-      const isSubmitDisabled = false;
-      this.setState({ basicFilters: value, isSubmitDisabled });
-      return;
-    }
-    this.setState({ basicFilters: value }, () => {
-      const update = { filters: this.state.filters, filter_conjunction: this.state.filterConjunction, basic_filters: value };
-      this.props.update(update);
-    });
+    this.setState({ basicFilters: value, isChanged: true });
   };
 
   render() {
@@ -185,20 +161,16 @@ class FilterPopover extends Component {
                   scheduleUpdate={scheduleUpdate}
                   isPre={this.props.isPre}
                 />
-                {!readOnly && (
-                  <CustomizeAddTool
-                    className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
-                    callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
-                    footerName={gettext('Add filter')}
-                    addIconClassName="popover-add-icon"
-                  />
-                )}
               </div>
             </FormGroup>
-            {!readOnly && this.props.isNeedSubmit && (
-              <div className="sf-metadata-popover-footer">
-                <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
-                <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitFilters}>{gettext('Submit')}</Button>
+            {!readOnly && (
+              <div className="sf-metadata-filter-popover-add-btns">
+                <CustomizeAddTool
+                  className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
+                  callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
+                  footerName={gettext('Add filter')}
+                  addIconClassName="popover-add-icon"
+                />
               </div>
             )}
           </div>
@@ -212,7 +184,6 @@ FilterPopover.propTypes = {
   placement: PropTypes.string,
   filtersClassName: PropTypes.string,
   target: PropTypes.string.isRequired,
-  isNeedSubmit: PropTypes.bool,
   readOnly: PropTypes.bool,
   columns: PropTypes.array.isRequired,
   filterConjunction: PropTypes.string,

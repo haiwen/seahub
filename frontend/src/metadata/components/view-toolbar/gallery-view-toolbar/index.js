@@ -24,7 +24,6 @@ const GalleryViewToolbar = ({
         <GalleryGroupBySetter view={view} />
         <GallerySliderSetter view={view} />
         <FilterSetter
-          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
           target="sf-metadata-filter-popover"
@@ -38,7 +37,6 @@ const GalleryViewToolbar = ({
           viewType={viewType}
         />
         <SortSetter
-          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
           target="sf-metadata-sort-popover"
           readOnly={readOnly}
