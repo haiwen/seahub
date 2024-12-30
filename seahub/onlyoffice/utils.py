@@ -169,7 +169,6 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'file_key': jwt.encode({
             'repo_id': origin_repo_id,
             'file_path': origin_file_path,
-            'exp': int(time.time()) + 300
 
         }, ONLYOFFICE_JWT_SECRET),
         'instance_id': base_url,

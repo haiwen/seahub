@@ -506,7 +506,6 @@ class OnlyofficeGetReferenceData(APIView):
             },
             "url": doc_url,
             "link": link,
-            "exp": int(time.time()) + 300
         }
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
