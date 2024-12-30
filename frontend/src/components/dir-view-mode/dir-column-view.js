@@ -83,6 +83,7 @@ const propTypes = {
   onItemsScroll: PropTypes.func.isRequired,
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
+  onUpdatePath: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -199,6 +200,7 @@ class DirColumnView extends React.Component {
         >
           {currentMode === METADATA_MODE && (
             <SeafileMetadata
+              path={this.props.path}
               mediaUrl={mediaUrl}
               isDirentDetailShow={this.props.isDirentDetailShow}
               repoID={this.props.repoID}
@@ -211,6 +213,7 @@ class DirColumnView extends React.Component {
               addFolder={this.props.onAddFolder}
               updateCurrentDirent={this.props.updateCurrentDirent}
               showDirentDetail={this.props.showDirentDetail}
+              onUpdatePath={this.props.onUpdatePath}
             />
           )}
           {currentMode === TAGS_MODE && (

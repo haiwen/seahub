@@ -339,6 +339,7 @@ export const MetadataViewProvider = ({
   return (
     <MetadataViewContext.Provider
       value={{
+        path: params.path,
         isLoading,
         isBeingBuilt,
         errorMessage,
@@ -363,6 +364,7 @@ export const MetadataViewProvider = ({
         insertColumn,
         updateFileTags,
         addFolder: params.addFolder,
+        onUpdatePath: params.onUpdatePath,
       }}
     >
       {children}

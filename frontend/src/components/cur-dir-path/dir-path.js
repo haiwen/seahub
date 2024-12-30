@@ -118,9 +118,26 @@ class DirPath extends React.Component {
     });
   };
 
-  handelRefresh = debounce(() => {
+  handleRefresh = debounce(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }, 200);
+
+  pathItem = ({ index, id, item, showRefresh }) => {
+    return (
+      <Fragment key={index}>
+        <span className="path-split">/</span>
+        <span className="path-item">{id ? <MetadataViewName id={id} /> : item}</span>
+        {showRefresh && (
+          <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handleRefresh}>
+            <i className="sf3-font sf3-font-refresh"></i>
+            <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
+              {gettext('Refresh the view')}
+            </UncontrolledTooltip>
+          </div>
+        )}
+      </Fragment>
+    );
+  };
 
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -133,7 +150,7 @@ class DirPath extends React.Component {
       if (item === '') {
         return null;
       }
-      if (index === pathList.length - 2 && item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+      if ((index === pathList.length - 2 || index === pathList.length - 3) && item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
@@ -152,18 +169,15 @@ class DirPath extends React.Component {
       }
 
       if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <span className="path-item"><MetadataViewName id={item} /></span>
-            <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handelRefresh}>
-              <i className="sf3-font sf3-font-refresh"></i>
-              <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
-                {gettext('Refresh the view')}
-              </UncontrolledTooltip>
-            </div>
-          </Fragment>
-        );
+        return this.pathItem({ index, id: item, showRefresh: true });
+      }
+
+      if (index === pathList.length - 2 && pathList[pathList.length - 3] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES && pathList[pathList.length - 1]) {
+        return this.pathItem({ index, id: item, showRefresh: false });
+      }
+
+      if (index === pathList.length - 1 && pathList[pathList.length - 3] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+        return this.pathItem({ index, item: item, showRefresh: true });
       }
 
       if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.TAGS_PROPERTIES) {

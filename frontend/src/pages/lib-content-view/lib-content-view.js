@@ -2147,6 +2147,10 @@ class LibContentView extends React.Component {
     });
   };
 
+  updatePath = (path) => {
+    this.setState({ path });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2387,6 +2391,7 @@ class LibContentView extends React.Component {
                         onItemsScroll={this.onItemsScroll}
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
+                        onUpdatePath={this.updatePath}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>
