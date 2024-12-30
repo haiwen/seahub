@@ -126,6 +126,11 @@ class Context {
     return viewId !== FACE_RECOGNITION_VIEW_ID;
   };
 
+  canInsertColumn = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   canModifyColumn = (column) => {
     if (this.permission === 'r') return false;
     const { editable } = column;

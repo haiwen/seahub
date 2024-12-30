@@ -157,7 +157,7 @@ class FileView extends React.Component {
               }
               {this.props.content}
               {isDetailsPanelOpen && (
-                <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
+                <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
                   <CollaboratorsProvider repoID={repoID}>
                     <TagsProvider repoID={repoID} repoInfo={repoInfo}>
                       <EmbeddedFileDetails

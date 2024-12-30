@@ -66,6 +66,8 @@ const RecordsHeader = ({
     return value;
   }, [isGroupView, columnMetrics, height]);
 
+  const canInsertColumn = window.sfMetadataContext.canInsertColumn();
+
   const modifyLocalColumnWidth = useCallback((column, width) => {
     setResizingColumnMetrics(recalculateColumnMetricsByResizeColumn(propsColumnMetrics, column.key, Math.max(width, 50)));
   }, [propsColumnMetrics]);
@@ -162,7 +164,7 @@ const RecordsHeader = ({
             />
           );
         })}
-        {insertColumn && (
+        {canInsertColumn && insertColumn && (
           <InsertColumn
             lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]}
             groupOffsetLeft={groupOffsetLeft}
