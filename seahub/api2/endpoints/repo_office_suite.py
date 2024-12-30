@@ -11,6 +11,7 @@ from seaserv import seafile_api
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.api2.permissions import IsProVersion
 
 from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
 from seahub.settings import OFFICE_SUITES
@@ -19,7 +20,7 @@ from seahub.utils.user_permissions import get_user_role
 class OfficeSuiteConfig(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
