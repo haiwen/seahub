@@ -15,7 +15,7 @@ from seahub.api2.permissions import IsProVersion
 
 from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
 from seahub.settings import OFFICE_SUITE_LIST
-from seahub.utils.user_permissions import get_user_role
+from seahub.utils.repo import get_repo_owner
 
 class OfficeSuiteConfig(APIView):
 
@@ -32,6 +32,11 @@ class OfficeSuiteConfig(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo_owner = get_repo_owner(request, repo_id)
+        if '@seafile_group' in repo_owner:
+            error_msg = 'Department repo can not use this feature.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         current_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG).first()
         suites_info = []
@@ -66,6 +71,11 @@ class OfficeSuiteConfig(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo_owner = get_repo_owner(request, repo_id)
+        if '@seafile_group' in repo_owner:
+            error_msg = 'Department repo can not use this feature.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         config_details = {
             'office_suite': {
