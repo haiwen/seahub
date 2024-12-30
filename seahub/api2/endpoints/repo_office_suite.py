@@ -23,7 +23,7 @@ class OfficeSuiteConfig(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        if not request.user.permissions.can_use_office_suite:
+        if not request.user.permissions.can_choose_office_suite:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -56,7 +56,7 @@ class OfficeSuiteConfig(APIView):
             error_msg = 'suite_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        if not request.user.permissions.can_use_office_suite:
+        if not request.user.permissions.can_choose_office_suite:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         

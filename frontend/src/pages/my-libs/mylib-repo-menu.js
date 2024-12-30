@@ -120,7 +120,7 @@ class MylibRepoMenu extends React.Component {
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
-    if (enableMultipleOfficeSuite) {
+    if (enableMultipleOfficeSuite && isPro) {
       operations.push('Office Suite');
     }
     return operations;
