@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from seahub.settings import ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITES, OFFICE_SUITE_ENABLED_FILE_TYPES, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
+from seahub.settings import ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, OFFICE_SUITE_ENABLED_FILE_TYPES, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
 
 ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
@@ -50,7 +50,7 @@ EXT_DOCUMENT = [
 if ENABLE_MULTIPLE_OFFICE_SUITE:
     OFFICE_SUITE_ONLY_OFFICE = 'onlyoffice'
     office_info = {}
-    for s in OFFICE_SUITES:
+    for s in OFFICE_SUITE_LIST:
         if s.get('id') == OFFICE_SUITE_ONLY_OFFICE:
             office_info = s
             break

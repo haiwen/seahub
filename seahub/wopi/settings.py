@@ -31,7 +31,7 @@ OFFICE_WEB_APP_SERVER_CA = getattr(settings, 'OFFICE_WEB_APP_SERVER_CA', True)
 if settings.ENABLE_MULTIPLE_OFFICE_SUITE:
     OFFICE_SUITE_COLLA = 'collabora'
     office_info = {}
-    for s in settings.OFFICE_SUITES:
+    for s in settings.OFFICE_SUITE_LIST:
         if s.get('id') == OFFICE_SUITE_COLLA:
             office_info = s
             break

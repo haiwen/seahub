@@ -90,7 +90,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, ENABLE_MULTIPLE_OFFICE_SUITE, \
-    OFFICE_SUITES
+    OFFICE_SUITE_LIST
 
 
 # wopi
@@ -157,7 +157,7 @@ def get_office_feature_by_repo(repo):
     if not ENABLE_MULTIPLE_OFFICE_SUITE:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
     
-    if not OFFICE_SUITES:
+    if not OFFICE_SUITE_LIST:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
     
     org_id = get_org_id_by_repo_id(repo.repo_id)
@@ -177,7 +177,7 @@ def get_office_feature_by_repo(repo):
 
     if not repo_feature:
         default_suite = {}
-        for s in OFFICE_SUITES:
+        for s in OFFICE_SUITE_LIST:
             if s.get('is_default'):
                 default_suite = s
                 break

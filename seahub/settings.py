@@ -977,7 +977,7 @@ METADATA_SERVER_SECRET_KEY = ''
 # multi office suite support
 #############################
 ENABLE_MULTIPLE_OFFICE_SUITE = False
-OFFICE_SUITES = [
+OFFICE_SUITE_LIST = [
     { 
         "id": "onlyoffice",
         "name": "OnlyOffice",

@@ -14,7 +14,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 
 from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
-from seahub.settings import OFFICE_SUITES
+from seahub.settings import OFFICE_SUITE_LIST
 from seahub.utils.user_permissions import get_user_role
 
 class OfficeSuiteConfig(APIView):
@@ -24,7 +24,7 @@ class OfficeSuiteConfig(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        if not request.user.permissions.can_choose_office_suite:
+        if not request.user.permissions.can_choose_office_suite():
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -35,7 +35,7 @@ class OfficeSuiteConfig(APIView):
 
         current_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG).first()
         suites_info = []
-        for office_suite in OFFICE_SUITES:
+        for office_suite in OFFICE_SUITE_LIST:
             suite_info = {}
             suite_info['id'] = office_suite.get('id')
             suite_info['name'] = office_suite.get('name')
@@ -57,7 +57,7 @@ class OfficeSuiteConfig(APIView):
             error_msg = 'suite_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        if not request.user.permissions.can_choose_office_suite:
+        if not request.user.permissions.can_choose_office_suite():
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
