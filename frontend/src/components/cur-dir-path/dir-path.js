@@ -122,11 +122,11 @@ class DirPath extends React.Component {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }, 200);
 
-  pathItem = ({ index, id, item, showRefresh }) => {
+  pathItem = ({ index, id, item, showRefresh, role, onClick = () => {} }) => {
     return (
       <Fragment key={index}>
         <span className="path-split">/</span>
-        <span className="path-item">{id ? <MetadataViewName id={id} /> : item}</span>
+        <span className="path-item" role={role} onClick={onClick}>{id ? <MetadataViewName id={id} /> : item}</span>
         {showRefresh && (
           <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handleRefresh}>
             <i className="sf3-font sf3-font-refresh"></i>
@@ -173,7 +173,7 @@ class DirPath extends React.Component {
       }
 
       if (index === pathList.length - 2 && pathList[pathList.length - 3] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES && pathList[pathList.length - 1]) {
-        return this.pathItem({ index, id: item, showRefresh: false });
+        return this.pathItem({ index, id: item, showRefresh: false, role: 'button', onClick: this.handleRefresh });
       }
 
       if (index === pathList.length - 1 && pathList[pathList.length - 3] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {

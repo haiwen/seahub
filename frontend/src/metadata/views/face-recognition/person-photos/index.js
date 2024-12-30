@@ -173,12 +173,6 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-people-photos-container">
-      <div className="sf-metadata-people-photos-header">
-        <div className="sf-metadata-people-photos-header-back" onClick={onClose}>
-          <i className="sf3-font sf3-font-arrow rotate-180"></i>
-        </div>
-        <div className="sf-metadata-people-name">{people._name || gettext('Person image')}</div>
-      </div>
       <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} onRemoveImage={handelRemove} />
     </div>
   );
