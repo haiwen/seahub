@@ -367,6 +367,8 @@ class DirFiles extends React.Component {
     return (
       <>
         <TreeSection
+          repoID={repoID}
+          stateStorageKey="files"
           title={gettext('Files')}
           renderHeaderOperations={this.renderTreeSectionHeaderOperations}
         >

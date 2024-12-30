@@ -21,7 +21,7 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   if (!enableMetadata || !enableTags) return null;
 
   return (
-    <TreeSection title={gettext('Tags')}>
+    <TreeSection repoID={repoID} title={gettext('Tags')} stateStorageKey="tags">
       {!isLoading && (<TagsTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} />)}
     </TreeSection>
   );

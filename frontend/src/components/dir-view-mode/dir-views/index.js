@@ -51,6 +51,8 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   return (
     <>
       <TreeSection
+        repoID={repoID}
+        stateStorageKey="views"
         title={gettext('Views')}
         renderHeaderOperations={renderTreeSectionHeaderOperations}
       >

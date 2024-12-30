@@ -224,7 +224,7 @@ class DirColumnView extends React.Component {
               updateCurrentDirent={this.props.updateCurrentDirent}
             />
           )}
-          {currentMode === LIST_MODE &&
+          {currentMode === LIST_MODE && (
             <DirListView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -264,8 +264,8 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
             />
-          }
-          {currentMode === GRID_MODE &&
+          )}
+          {currentMode === GRID_MODE && (
             <DirGridView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -301,7 +301,7 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
             />
-          }
+          )}
         </div>
       </div>
     );
