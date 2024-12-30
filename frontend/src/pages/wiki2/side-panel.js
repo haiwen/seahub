@@ -72,7 +72,7 @@ class SidePanel extends PureComponent {
         this.props.updateWikiConfig(config);
         toaster.success(
           <span>
-            {gettext('Page xxx deleted.').replace('xxx', deletePageName)}
+            {gettext('Page {name_placeholder} deleted.').replace('{name_placeholder}', deletePageName)}
             <CommonUndoTool onUndoOperation={() => this.revertWikiPage(pageId)} />
           </span>
         );
