@@ -39,7 +39,6 @@ const KanbanViewToolBar = ({
     <>
       <div className="sf-metadata-tool-left-operations">
         <FilterSetter
-          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
           target="sf-metadata-filter-popover"
@@ -53,7 +52,6 @@ const KanbanViewToolBar = ({
           viewType={viewType}
         />
         <SortSetter
-          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
           target="sf-metadata-sort-popover"
           readOnly={readOnly}

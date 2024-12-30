@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
-import { Button, UncontrolledPopover } from 'reactstrap';
+import { UncontrolledPopover } from 'reactstrap';
 import { CustomizeAddTool, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils/constants';
 import { getColumnByKey } from '../../../utils/column';
@@ -17,8 +17,7 @@ const SORT_TYPES = [
   {
     name: gettext('Up'),
     value: SORT_TYPE.UP,
-  },
-  {
+  }, {
     name: gettext('Down'),
     value: SORT_TYPE.DOWN,
   },
@@ -26,12 +25,11 @@ const SORT_TYPES = [
 
 const propTypes = {
   readOnly: PropTypes.bool,
-  isNeedSubmit: PropTypes.bool,
   target: PropTypes.string.isRequired,
   type: PropTypes.string,
   sorts: PropTypes.array,
   columns: PropTypes.array.isRequired,
-  onSortComponentToggle: PropTypes.func,
+  hidePopover: PropTypes.func,
   update: PropTypes.func,
 };
 
@@ -50,7 +48,7 @@ class SortPopover extends Component {
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
-      isSubmitDisabled: true,
+      isChanged: false,
     };
     this.isSelectOpen = false;
   }
@@ -69,7 +67,7 @@ class SortPopover extends Component {
 
   hideDTablePopover = (e) => {
     if (this.sortPopoverRef && !getEventClassName(e).includes('popover') && !this.sortPopoverRef.contains(e.target)) {
-      this.props.onSortComponentToggle(e);
+      this.onClosePopover();
       e.preventDefault();
       e.stopPropagation();
       return false;
@@ -79,7 +77,7 @@ class SortPopover extends Component {
   onHotKey = (e) => {
     if (isHotkey('esc', e) && !this.isSelectOpen) {
       e.preventDefault();
-      this.props.onSortComponentToggle();
+      this.onClosePopover();
     }
   };
 
@@ -128,30 +126,15 @@ class SortPopover extends Component {
   };
 
   updateSorts = (sorts) => {
-    if (this.props.isNeedSubmit) {
-      const isSubmitDisabled = false;
-      this.setState({ sorts, isSubmitDisabled });
-      return;
-    }
-    this.setState({ sorts }, () => {
-      this.handleSortAnimation();
-    });
-  };
-
-  handleSortAnimation = () => {
-    const update = { sorts: this.state.sorts };
-    this.props.update(update);
+    this.setState({ sorts, isChanged: true });
   };
 
   onClosePopover = () => {
-    this.props.onSortComponentToggle();
-  };
-
-  onSubmitSorts = () => {
-    const { sorts } = this.state;
-    const update = { sorts: sorts };
-    this.props.update(update);
-    this.props.onSortComponentToggle();
+    const { sorts, isChanged } = this.state;
+    if (isChanged) {
+      this.props.update({ sorts });
+    }
+    this.props.hidePopover();
   };
 
   createColumnsOptions = (columns = []) => {
@@ -276,12 +259,6 @@ class SortPopover extends Component {
               addIconClassName="popover-add-icon"
             />
           }
-          {(this.props.isNeedSubmit && !readOnly) && (
-            <div className="sf-metadata-popover-footer">
-              <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
-              <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{gettext('Submit')}</Button>
-            </div>
-          )}
         </div>
       </UncontrolledPopover>
     );

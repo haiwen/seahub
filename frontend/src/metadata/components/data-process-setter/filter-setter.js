@@ -14,7 +14,6 @@ const FilterSetter = ({
   columns,
   wrapperClass,
   filters: propsFilters,
-  isNeedSubmit,
   isPre,
   collaborators,
   filtersClassName,
@@ -35,10 +34,10 @@ const FilterSetter = ({
   }, [filters, basicFilters]);
 
   const message = useMemo(() => {
-    if (filtersCount === 1) return isNeedSubmit ? gettext('1 preset filter') : gettext('1 filter');
-    if (filtersCount > 1) return filtersCount + ' ' + (isNeedSubmit ? gettext('Preset filters') : gettext('Filters'));
-    return isNeedSubmit ? gettext('Preset filter') : gettext('Filter');
-  }, [isNeedSubmit, filtersCount]);
+    if (filtersCount === 1) return gettext('1 filter');
+    if (filtersCount > 1) return filtersCount + ' ' + gettext('Filters');
+    return gettext('Filter');
+  }, [filtersCount]);
 
   const onSetterToggle = useCallback(() => {
     setShowSetter(!isShowSetter);
@@ -77,7 +76,6 @@ const FilterSetter = ({
           filtersClassName={filtersClassName}
           target={target}
           readOnly={readOnly}
-          isNeedSubmit={isNeedSubmit}
           columns={columns}
           collaborators={collaborators}
           filterConjunction={filterConjunction}
@@ -99,7 +97,6 @@ FilterSetter.propTypes = {
   wrapperClass: PropTypes.string,
   filtersClassName: PropTypes.string,
   target: PropTypes.string,
-  isNeedSubmit: PropTypes.bool,
   filterConjunction: PropTypes.string,
   filters: PropTypes.array,
   columns: PropTypes.array,
@@ -112,7 +109,6 @@ FilterSetter.propTypes = {
 
 FilterSetter.defaultProps = {
   target: 'sf-metadata-filter-popover',
-  isNeedSubmit: false,
   basicFilters: [],
   viewType: VIEW_TYPE.TABLE,
 };
