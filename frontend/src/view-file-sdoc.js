@@ -59,7 +59,7 @@ const repoInfo = { encrypted: repoEncrypted, permission: filePerm, is_admin: isR
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <MetadataStatusProvider repoID={repoID} currentRepoInfo={repoInfo}>
+      <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
         <CollaboratorsProvider repoID={repoID}>
           <TagsProvider repoID={repoID} repoInfo={repoInfo}>
             {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer />}

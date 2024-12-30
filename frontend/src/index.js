@@ -15,7 +15,7 @@ const { repoID, repoEncrypted, filePerm } = window.app.pageOptions;
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <MetadataStatusProvider repoID={repoID} currentRepoInfo={{ permission: filePerm, encrypted: repoEncrypted }}>
+      <MetadataStatusProvider repoID={repoID} repoInfo={{ permission: filePerm, encrypted: repoEncrypted }}>
         <CollaboratorsProvider repoID={repoID}>
           <MarkdownEditor />
         </CollaboratorsProvider>
