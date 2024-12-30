@@ -21,7 +21,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY } from '../../constants';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY } from '../../constants';
 import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
@@ -50,7 +50,7 @@ class LibContentView extends React.Component {
     super(props);
 
     let isTreePanelShown = true;
-    const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
+    const storedTreePanelState = localStorage.getItem(TREE_PANEL_STATE_KEY);
     if (storedTreePanelState != undefined) {
       isTreePanelShown = storedTreePanelState === 'true';
     }
@@ -2140,7 +2140,7 @@ class LibContentView extends React.Component {
       if (this.state.isTreePanelShown) {
         this.loadSidePanel(this.state.path);
       }
-      localStorage.setItem('sf_dir_view_tree_panel_open', String(this.state.isTreePanelShown));
+      localStorage.setItem(TREE_PANEL_STATE_KEY, String(this.state.isTreePanelShown));
     });
   };
 

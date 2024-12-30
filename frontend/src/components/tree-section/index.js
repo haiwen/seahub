@@ -1,19 +1,37 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { TREE_PANEL_SECTION_STATE_KEY } from '../../constants';
 
 import './index.css';
 
-const TreeSection = ({ title, children, renderHeaderOperations, className }) => {
+const TreeSection = ({ repoID, stateStorageKey, title, children, renderHeaderOperations, className }) => {
   const [showChildren, setShowChildren] = useState(true);
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
 
+  const storageKey = useMemo(() => `${TREE_PANEL_SECTION_STATE_KEY}_${repoID}`, [repoID]);
+
+  useEffect(() => {
+    if (!stateStorageKey) return;
+    const stateString = window.localStorage.getItem(storageKey, '{}');
+    const state = JSON.parse(stateString) || {};
+    const currentValue = state[stateStorageKey] === false ? false : true;
+    setShowChildren(currentValue);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggleShowChildren = useCallback((event) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
-    setShowChildren(!showChildren);
-  }, [showChildren]);
+    const newValue = !showChildren;
+    setShowChildren(newValue);
+    if (!stateStorageKey) return;
+    const stateString = window.localStorage.getItem(storageKey, '{}');
+    const stateOldValue = JSON.parse(stateString);
+    const newState = { ...stateOldValue, [stateStorageKey]: newValue };
+    window.localStorage.setItem(storageKey, JSON.stringify(newState));
+  }, [showChildren, storageKey, stateStorageKey]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
@@ -76,6 +94,8 @@ const TreeSection = ({ title, children, renderHeaderOperations, className }) => 
 };
 
 TreeSection.propTypes = {
+  repoID: PropTypes.string,
+  stateStorageKey: PropTypes.string,
   title: PropTypes.any.isRequired,
   children: PropTypes.any,
   className: PropTypes.string,
