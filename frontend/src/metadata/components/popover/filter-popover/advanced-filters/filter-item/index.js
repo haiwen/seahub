@@ -525,7 +525,7 @@ class FilterItem extends React.Component {
     return (
       <div className="ml-2">
         <div ref={this.invalidFilterTip}>
-          <IconBtn iconName="exclamation-triangle" />
+          <IconBtn iconName="exclamation-triangle" iconStyle={{ fill: '#cd201f' }} />
         </div>
         <UncontrolledTooltip
           target={this.invalidFilterTip}
@@ -605,7 +605,7 @@ class FilterItem extends React.Component {
             </div>
             {showToolTip && (
               <div className="ml-2" >
-                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" />
+                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" iconStyle={{ fill: '#FFC92C' }} />
                 <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} className="sf-metadata-tooltip">
                   {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
                 </UncontrolledTooltip>
