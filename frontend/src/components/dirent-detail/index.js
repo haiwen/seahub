@@ -7,6 +7,7 @@ import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
+import { FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
 
 const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
   const isView = useMemo(() => currentMode === METADATA_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [currentMode, path]);
@@ -31,8 +32,12 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
   if (isTag) return null;
 
   if (isView) {
-    const viewId = path.split('/').pop();
-    if (!dirent) return (<ViewDetails viewId={viewId} onClose={onClose} />);
+    const pathParts = path.split('/');
+    const viewId = pathParts[2] || pathParts[pathParts.length - 1];
+    const isPeopleView = pathParts.length === 3 && viewId === FACE_RECOGNITION_VIEW_ID;
+    if (!dirent) {
+      return isPeopleView ? null : <ViewDetails viewId={viewId} onClose={onClose} />;
+    }
   }
 
   if (path === '/' && !dirent) {
