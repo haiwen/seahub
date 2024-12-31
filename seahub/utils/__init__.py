@@ -927,6 +927,8 @@ else:
         pass
     def get_trash_records():
         pass
+    def get_seafevents_metrics():
+        pass
 
 
 def calc_file_path_hash(path, bits=12):
