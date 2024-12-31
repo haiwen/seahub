@@ -458,9 +458,6 @@ class Search(APIView):
 
         # argument check
         keyword = request.GET.get('q', None)
-        if not keyword:
-            error_msg = 'q invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         search_filename_only = request.GET.get('search_filename_only', 'false')
         try:
