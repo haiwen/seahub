@@ -26,6 +26,10 @@ class DirentDetails extends React.Component {
   }
 
   updateDetail = (repoID, dirent, direntPath) => {
+    if (!dirent) {
+      this.setState({ dirent: null, direntDetail: '' });
+      return;
+    }
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
     seafileAPI[apiName](repoID, direntPath).then(res => {
       this.setState(({

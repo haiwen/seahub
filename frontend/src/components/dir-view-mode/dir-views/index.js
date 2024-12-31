@@ -17,7 +17,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
-  const { navigation } = useMetadata();
+  const { isLoading, navigation } = useMetadata();
   const { enableMetadata } = useMetadataStatus();
 
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
@@ -58,7 +58,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
       >
         {!enableMetadata ? (
           <ExtensionPrompts onExtendedProperties={onExtendedProperties} />
-        ) : Array.isArray(navigation) && navigation.length > 0 ? (
+        ) : !isLoading && Array.isArray(navigation) && navigation.length > 0 ? (
           <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
         ) : null}
       </TreeSection>

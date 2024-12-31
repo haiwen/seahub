@@ -72,8 +72,8 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
     }
     hideMetadataView && hideMetadataView();
     setEnableFaceRecognition(false);
-    setIdViewMap({});
     setNavigation([]);
+    setIdViewMap({});
     setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadata]);
@@ -442,6 +442,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
 
   return (
     <MetadataContext.Provider value={{
+      isLoading,
       enableFaceRecognition,
       updateEnableFaceRecognition,
       isBeingBuilt,
