@@ -236,6 +236,7 @@ urlpatterns = [
 
     path('', react_fake_view, name='libraries'),
     re_path(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+    path('metrics/', get_metrics, name='metrics'),
 
     # revert repo
     re_path(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),

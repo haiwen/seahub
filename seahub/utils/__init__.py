@@ -618,10 +618,12 @@ if EVENTS_CONFIG_FILE:
     try:
         EVENTS_ENABLED = True
         SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
+        redis_cache = seafevents_api.init_redis_cache(parsed_events_conf)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
         EVENTS_ENABLED = False
+        redis_cache = None
 
     @contextlib.contextmanager
     def _get_seafevents_session():
@@ -861,6 +863,10 @@ if EVENTS_CONFIG_FILE:
     def get_file_history_suffix():
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
 
+    def get_seafevents_metrics():
+        return seafevents_api.format_metrics(redis_cache)
+
+
     def get_trash_records(repo_id, show_time, start, limit):
         with _get_seafevents_session() as session:
             res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
@@ -930,6 +936,8 @@ else:
     def get_user_activities_by_timestamp():
         pass
     def get_trash_records():
+        pass
+    def get_seafevents_metrics():
         pass
 
 
@@ -1565,4 +1573,3 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
-
