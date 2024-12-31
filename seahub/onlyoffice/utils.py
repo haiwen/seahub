@@ -199,7 +199,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                     "forcesave": ONLYOFFICE_FORCE_SAVE,
                 },
             },
-            'exp': int(time.time()) + 300
+            'exp': int(time.time()) + 3 * 24 * 3600
         }
 
         if request.user.is_authenticated:

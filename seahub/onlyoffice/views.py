@@ -434,7 +434,7 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
         payload['key'] = obj_id
         payload['url'] = full_url
         payload['version'] = obj_id
-        payload['exp'] = int(time.time()) + 300
+        payload['exp'] = int(time.time()) + 3 * 24 * 3600
 
         jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
         payload['token'] = jwt_token
@@ -505,7 +505,7 @@ class OnlyofficeGetReferenceData(APIView):
                 "instanceId": instance_id,
             },
             "url": doc_url,
-            "link": link,
+            "link": link
         }
         result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
         return Response({'data': result})
