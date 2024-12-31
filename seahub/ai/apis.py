@@ -15,7 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption, translate, verify_ai_config, generate_summary, generate_file_tags, ocr
+from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, generate_file_tags, ocr
 
 logger = logging.getLogger(__name__)
 
@@ -305,6 +305,38 @@ class Translate(APIView):
 
         try:
             resp = translate(params)
+            resp_json = resp.json()
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)
+
+
+class WritingAssistant(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
+        text = request.data.get('text')
+        writing_type = request.data.get('writing_type')
+
+        if not text:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
+        if not writing_type:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
+
+        params = {
+            'text': text,
+            'writing_type': writing_type,
+        }
+
+        try:
+            resp = writing_assistant(params)
             resp_json = resp.json()
         except Exception as e:
             error_msg = 'Internal Server Error'

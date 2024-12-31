@@ -54,3 +54,10 @@ def translate(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/translate/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
+
+
+def writing_assistant(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/writing-assistant/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
