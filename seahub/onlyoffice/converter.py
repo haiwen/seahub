@@ -39,7 +39,6 @@ def get_converter_uri(doc_uri, from_ext, to_ext, doc_key, is_async, file_passwor
 
         token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
         payload['token'] = token
-        payload['exp'] = int(time.time()) + 300
 
         header_token = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
         headers[ONLYOFFICE_JWT_HEADER] = f'Bearer {header_token}'
