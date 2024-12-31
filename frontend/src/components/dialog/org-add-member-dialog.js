@@ -58,7 +58,7 @@ class AddMemberDialog extends React.Component {
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             ref="orgSelect"
-            isMulti={false}
+            isMulti={true}
             className='org-add-member-select'
           />
           {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
