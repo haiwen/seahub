@@ -1,5 +1,6 @@
 import logging
 import requests
+import time
 
 from seahub.onlyoffice.converter_utils import get_file_name, get_file_ext
 from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL, \
@@ -21,6 +22,7 @@ def get_converter_uri(doc_uri, from_ext, to_ext, doc_key, is_async, file_passwor
         'filetype': from_ext.replace('.', ''),
         'title': title,
         'key': doc_key,
+        'exp': int(time.time()) + 300
     }
 
     if file_password:
