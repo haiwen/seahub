@@ -47,7 +47,7 @@ class PreHideColumnSetter extends React.Component {
     if (hiddenColumnsLength === 1) {
       message = gettext('1 preset hidden property');
     } else if (hiddenColumnsLength > 1) {
-      message = gettext('xxx preset hidden properties').replace('xxx', hiddenColumnsLength);
+      message = gettext('{name_placeholder} preset hidden properties').replace('{name_placeholder}', hiddenColumnsLength);
     }
     let settingClass = wrapperClass || '';
     settingClass = (settingClass && hiddenColumnsLength > 0) ? settingClass + ' active' : settingClass;

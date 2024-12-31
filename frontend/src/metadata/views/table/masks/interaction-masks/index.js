@@ -676,7 +676,7 @@ class InteractionMasks extends React.Component {
     const { topLeft, bottomRight } = selectedRange;
     const copiedCellsCount = (bottomRight.rowIdx - topLeft.rowIdx + 1) * (bottomRight.idx - topLeft.idx + 1);
     const type = copiedCellsCount <= 0 ? 'text' : TRANSFER_TYPES.METADATA_FRAGMENT;
-    const tip = copiedCellsCount > 1 ? gettext('xxx cells cut').replace('xxx', copiedCellsCount) : gettext('1 cell cut');
+    const tip = copiedCellsCount > 1 ? gettext('{name_placeholder} cells cut').replace('{name_placeholder}', copiedCellsCount) : gettext('1 cell cut');
     toaster.success(tip);
     const copied = { copiedRange: selectedRange };
     const { copiedRecords, copiedColumns } = getCopiedRecordsAndColumnsFromRange({ type, copied, isGroupView });
@@ -716,7 +716,7 @@ class InteractionMasks extends React.Component {
     const { table, columns, recordGetterById, isGroupView, getCopiedRecordsAndColumnsFromRange } = this.props;
     const copiedRowsCount = selectedRecordIds.length;
     toaster.success(
-      copiedRowsCount > 1 ? gettext('xxx rows are copied.').replace('xxx', copiedRowsCount) : gettext('1 row is copied.')
+      copiedRowsCount > 1 ? gettext('{name_placeholder} rows are copied.').replace('{name_placeholder}', copiedRowsCount) : gettext('1 row is copied.')
     );
     const type = TRANSFER_TYPES.METADATA_FRAGMENT;
     const copied = { selectedRecordIds };
@@ -748,7 +748,7 @@ class InteractionMasks extends React.Component {
     const type = TRANSFER_TYPES.METADATA_FRAGMENT;
     const copiedCellsCount = (bottomRight.rowIdx - topLeft.rowIdx + 1) * (bottomRight.idx - topLeft.idx + 1);
     toaster.success(
-      copiedCellsCount > 1 ? gettext('xxx cells copied').replace('xxx', copiedCellsCount) : gettext('1 cell copied')
+      copiedCellsCount > 1 ? gettext('{name_placeholder} cells copied').replace('{name_placeholder}', copiedCellsCount) : gettext('1 cell copied')
     );
     const copied = { copiedRange: selectedRange };
     const { copiedRecords, copiedColumns } = getCopiedRecordsAndColumnsFromRange({ type, copied, isGroupView });

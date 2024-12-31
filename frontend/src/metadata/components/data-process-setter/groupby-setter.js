@@ -22,7 +22,7 @@ const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys,
   const message = useMemo(() => {
     const groupbysLength = groupbys ? groupbys.length : 0;
     if (groupbysLength === 1) return gettext('Grouped by 1 property');
-    if (groupbysLength > 1) return gettext('Grouped by xxx properties').replace('xxx', groupbysLength);
+    if (groupbysLength > 1) return gettext('Grouped by {name_placeholder} properties').replace('{name_placeholder}', groupbysLength);
     // need to translate to Group
     return gettext('Group by');
   }, [groupbys]);
