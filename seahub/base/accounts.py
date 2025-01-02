@@ -450,6 +450,11 @@ class UserPermissions(object):
         if not settings.ENABLE_WIKI:
             return False
         return self._get_perm_by_roles('can_publish_wiki')
+    
+    def can_choose_office_suite(self):
+        if not settings.ENABLE_MULTIPLE_OFFICE_SUITE:
+            return False
+        return self._get_perm_by_roles('can_choose_office_suite')
 
 
 class AdminPermissions(object):

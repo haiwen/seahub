@@ -1150,7 +1150,6 @@ def react_fake_view(request, **kwargs):
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
         'enable_show_about': settings.ENABLE_SHOW_ABOUT
-
     }
 
     if ENABLE_METADATA_MANAGEMENT:

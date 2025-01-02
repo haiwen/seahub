@@ -63,6 +63,18 @@ class UserAPI {
     form.append('reshare', reshare);
     return this.req.put(url, form);
   }
+
+  getOfficeSuite(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/office-suite/';
+    return this.req.get(url);
+  }
+
+  setOfficeSuite(repoID, suiteID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/office-suite/';
+    const form = new FormData();
+    form.append('suite_id', suiteID);
+    return this.req.put(url, form);
+  }
 }
 
 let userAPI = new UserAPI();

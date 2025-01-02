@@ -110,6 +110,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
+from seahub.views.file import get_office_feature_by_repo
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -123,11 +124,6 @@ try:
     from seahub.settings import ORG_MEMBER_QUOTA_DEFAULT
 except ImportError:
     ORG_MEMBER_QUOTA_DEFAULT = None
-
-try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
-except ImportError:
-    ENABLE_OFFICE_WEB_APP = False
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -2827,6 +2823,8 @@ class OwaFileView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        _, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
         action = request.GET.get('action', 'view')
         if action not in ('view', 'edit'):
