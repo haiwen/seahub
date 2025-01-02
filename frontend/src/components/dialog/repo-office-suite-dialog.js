@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
+import SeahubModalHeader from '../common/seahub-modal-header';
 import makeAnimated from 'react-select/animated';
 import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
@@ -14,7 +15,6 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
-
 };
 
 class OfficeSuiteDialog extends React.Component {
@@ -63,26 +63,25 @@ class OfficeSuiteDialog extends React.Component {
 
   renderOfficeSuiteContent = () => {
     return (
-      <React.Fragment>
-        <div className="repo-office-suite-dialog-main">
-          <TabContent>
-            {isPro &&
-              <TabPane role="tabpanel" id="office-suite-panel">
-                <SeahubSelect
-                  isClearable
-                  maxMenuHeight={200}
-                  hideSelectedOptions={true}
-                  components={makeAnimated()}
-                  placeholder={gettext('Select a office suite')}
-                  options={this.options}
-                  onChange={this.handleSelectChange}
-                  value={this.state.selectedOption}
-                  className="repo-select-office-suite"
-                />
-              </TabPane>}
-          </TabContent>
-        </div>
-      </React.Fragment>
+      <div className="repo-office-suite-dialog-main">
+        <TabContent>
+          {isPro &&
+            <TabPane role="tabpanel" id="office-suite-panel">
+              <SeahubSelect
+                isClearable
+                maxMenuHeight={200}
+                hideSelectedOptions={true}
+                components={makeAnimated()}
+                placeholder={gettext('Select a office suite')}
+                options={this.options}
+                onChange={this.handleSelectChange}
+                value={this.state.selectedOption}
+                className="repo-select-office-suite"
+              />
+            </TabPane>
+          }
+        </TabContent>
+      </div>
     );
   };
 
@@ -92,9 +91,9 @@ class OfficeSuiteDialog extends React.Component {
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} className="repo-office-suite-dialog">
-        <ModalHeader toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </ModalHeader>
+        </SeahubModalHeader>
         <ModalBody className="repo-office-suite-dialog-content" role="tablist">
           {this.renderOfficeSuiteContent()}
         </ModalBody>
