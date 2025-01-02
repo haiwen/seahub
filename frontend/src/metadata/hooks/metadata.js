@@ -15,7 +15,7 @@ const CACHED_COLLAPSED_FOLDERS_PREFIX = 'sf-metadata-collapsed-folders';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataView, selectMetadataView, children }) => {
+export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadataView, children }) => {
   const [isLoading, setLoading] = useState(true);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [navigation, setNavigation] = useState([]);
@@ -70,7 +70,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, hideMetadataVi
       });
       return;
     }
-    hideMetadataView && hideMetadataView();
     setEnableFaceRecognition(false);
     setNavigation([]);
     setIdViewMap({});

@@ -22,7 +22,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
 
-  const cancelMetadataURL = useCallback(() => {
+  const cancelMetadataURL = useCallback((isSetRoot = false) => {
     // If attribute extension is turned off, unmark the URL
     const { origin, pathname, search } = window.location;
     const urlParams = new URLSearchParams(search);
@@ -31,7 +31,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
       const url = `${origin}${pathname}`;
       window.history.pushState({ url: url, path: '' }, '', url);
     }
-  }, []);
+    hideMetadataView && hideMetadataView(Boolean(param) || isSetRoot);
+  }, [hideMetadataView]);
 
   useEffect(() => {
     if (!enableMetadataManagement) {
@@ -68,7 +69,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;
     if (!newValue) {
-      cancelMetadataURL();
+      cancelMetadataURL(true);
       setEnableTags(false);
     }
     setDetailsSettings({});
@@ -79,12 +80,11 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
   const updateEnableTags = useCallback((newValue, lang = 'en') => {
     if (newValue === enableTags && lang === tagsLang) return;
     if (!newValue) {
-      cancelMetadataURL();
-      hideMetadataView && hideMetadataView();
+      cancelMetadataURL(true);
     }
     setEnableTags(newValue);
     setTagsLang(lang);
-  }, [enableTags, tagsLang, cancelMetadataURL, hideMetadataView]);
+  }, [enableTags, tagsLang, cancelMetadataURL]);
 
   const updateEnableOCR = useCallback((newValue) => {
     if (newValue === enableOCR) return;
