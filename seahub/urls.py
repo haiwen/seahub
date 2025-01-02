@@ -740,7 +740,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/wikis/$', AdminWikis.as_view(), name='api-v2.1-admin-wikis'),
 
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/$', wiki_view, name='wiki'),
+    re_path(r'^wikis/(?P<wiki_id>[^/]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_view, name='wiki'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
+    re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/file_revisions/(?P<wiki_id>[^/]+)/$', wiki_history_view, name='wiki-history'),
 
     path('avatar/', include('seahub.avatar.urls')),

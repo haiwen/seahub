@@ -48,9 +48,7 @@ const getCurrentPageConfig = (pages, pageId) => {
 };
 
 const getWikPageLink = (pageId) => {
-  const { origin, pathname } = window.location;
-
-  return `${origin}${pathname}?page_id=${pageId}`;
+  return window.location.url.replace(/\/[^\/]+$/, `/${pageId}`);
 };
 
 const throttle = (fn, delay) => {
