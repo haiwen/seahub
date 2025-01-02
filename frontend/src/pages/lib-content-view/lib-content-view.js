@@ -523,13 +523,14 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
-  hideMetadataView = () => {
+  hideMetadataView = (isSetRoot = false) => {
     this.setState({
-      currentMode: LIST_MODE,
+      currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       path: '',
       viewId: '',
       isDirentDetailShow: false
     }, () => {
+      if (!isSetRoot) return;
       this.showDir('/');
     });
   };
@@ -2216,7 +2217,7 @@ class LibContentView extends React.Component {
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
-          <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} hideMetadataView={this.hideMetadataView} >
+          <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
                 <div className="cur-view-container">
