@@ -528,7 +528,7 @@ class LibContentView extends React.Component {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       path: '',
       viewId: '',
-      isDirentDetailShow: false
+      tagId: '',
     }, () => {
       if (!isSetRoot) return;
       this.showDir('/');
