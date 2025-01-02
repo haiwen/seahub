@@ -399,8 +399,7 @@ class FilterItem extends React.Component {
       case CellType.NUMBER:
       case CellType.FILE_NAME:
       case CellType.TEXT:
-      case CellType.URL:
-      case CellType.TAGS: { // The data in the formula column is a date type that has been excluded
+      case CellType.URL: { // The data in the formula column is a date type that has been excluded
         if (filter_predicate === FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID) {
           return null;
         }
@@ -518,6 +517,23 @@ class FilterItem extends React.Component {
     return errMsg && errMsg !== FILTER_ERR_MSG.INCOMPLETE_FILTER;
   };
 
+  renderTipMessage = () => {
+    const { filter, filterColumn } = this.props;
+    const { filter_predicate } = filter;
+    const isContainPredicate = [CellType.LINK].includes(filterColumn.type) && [FILTER_PREDICATE_TYPE.CONTAINS, FILTER_PREDICATE_TYPE.NOT_CONTAIN].includes(filter_predicate);
+    if (!isContainPredicate) return null;
+    const isRenderErrorTips = this.isRenderErrorTips();
+    if (isRenderErrorTips) return null;
+    return (
+      <div className="ml-2" >
+        <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" iconStyle={{ fill: '#FFC92C' }} />
+        <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} fade={false} className="sf-metadata-tooltip">
+          {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
+        </UncontrolledTooltip>
+      </div>
+    );
+  };
+
   renderErrorMessage = () => {
     if (!this.isRenderErrorTips()) {
       return null;
@@ -525,7 +541,7 @@ class FilterItem extends React.Component {
     return (
       <div className="ml-2">
         <div ref={this.invalidFilterTip}>
-          <IconBtn iconName="exclamation-triangle" />
+          <IconBtn iconName="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
         </div>
         <UncontrolledTooltip
           target={this.invalidFilterTip}
@@ -552,9 +568,6 @@ class FilterItem extends React.Component {
     } else if (isCheckboxColumn(filterColumn)) {
       _isCheckboxColumn = true;
     }
-    // const isContainPredicate = [].includes(filterColumn.type) && [FILTER_PREDICATE_TYPE.CONTAINS, FILTER_PREDICATE_TYPE.NOT_CONTAIN].includes(filter_predicate);
-    // const isRenderErrorTips = this.isRenderErrorTips();
-    // const showToolTip = isContainPredicate && !isRenderErrorTips;
 
     // current predicate is not empty
     const isNeedShowTermModifier = !EMPTY_PREDICATE.includes(filter_predicate);
@@ -603,14 +616,7 @@ class FilterItem extends React.Component {
             <div className="filter-term ml-2">
               {this.renderFilterTerm(filterColumn)}
             </div>
-            {/* {showToolTip && (
-              <div className="ml-2" >
-                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" />
-                <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} className="sf-metadata-tooltip">
-                  {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
-                </UncontrolledTooltip>
-              </div>
-            )} */}
+            {this.renderTipMessage()}
             {this.renderErrorMessage()}
           </div>
         </div>

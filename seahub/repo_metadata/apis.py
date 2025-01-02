@@ -330,6 +330,10 @@ class MetadataRecords(APIView):
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        tags_enabled = False
+        if metadata.tags_enabled:
+            tags_enabled = True
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -353,7 +357,7 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            results = list_metadata_view_records(repo_id, request.user.username, view, start, limit)
+            results = list_metadata_view_records(repo_id, request.user.username, view, tags_enabled, start, limit)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'

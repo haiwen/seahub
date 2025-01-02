@@ -4,6 +4,7 @@ import { FormGroup, Label } from 'reactstrap';
 import FileOrFolderFilter from './file-folder-filter';
 import TableFileTypeFilter from './table-file-type-filter';
 import GalleryFileTypeFilter from './gallery-file-type-filter';
+import TagsFilter from './tags-filter';
 import { gettext } from '../../../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
 
@@ -27,6 +28,14 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
     onChange(newFilters);
   }, [filters, onChange]);
 
+  const onChangeTagsFilter = useCallback((newValue) => {
+    const filterIndex = filters.findIndex(filter => filter.column_key === PRIVATE_COLUMN_KEY.TAGS);
+    const filter = filters[filterIndex];
+    const newFilters = filters.slice(0);
+    newFilters[filterIndex] = { ...filter, filter_term: newValue };
+    onChange(newFilters);
+  }, [filters, onChange]);
+
   return (
     <FormGroup className="filter-group-basic filter-group p-4">
       <Label className="filter-group-name">{gettext('Basic')}</Label>
@@ -42,6 +51,9 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
             if (column_key === PRIVATE_COLUMN_KEY.FILE_TYPE) {
               const FileTypeFilter = viewType === VIEW_TYPE.GALLERY ? GalleryFileTypeFilter : TableFileTypeFilter;
               return (<FileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />);
+            }
+            if (column_key === PRIVATE_COLUMN_KEY.TAGS) {
+              return (<TagsFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeTagsFilter} />);
             }
             return null;
           })}
