@@ -595,7 +595,7 @@
   "Deprecation": "弃用",
   "Generated_content_x_words": "已生成内容 {{count}} 字",
   "Ask_AI_anything": "询问 AI 任何事情...",
-  "Thinking": "思考...",
+  "Thinking": "思考中...",
   "Translation_error_message": "翻译出错，请重试",
   "The_translation_content_cannot_be_empty": "翻译内容不能为空",
   "Processing_message": "正在处理，请稍侯...",

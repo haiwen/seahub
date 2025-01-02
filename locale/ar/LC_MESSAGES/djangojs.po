@@ -381,7 +381,7 @@ msgstr "إصدارة الخادم: "
 
 #: frontend/src/components/dialog/about-dialog.js:42
 msgid "Seafile"
-msgstr "Seafile"
+msgstr "سيفايل -Seafile-"
 
 #: frontend/src/components/dialog/about-dialog.js:44
 msgid "About Us"
@@ -4123,7 +4123,7 @@ msgstr "طباعة"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:207
 #: frontend/src/utils/text-translation.js:68
 msgid "Open via Client"
-msgstr "فتح عبر العميل"
+msgstr "فتح عن طريق العميل"
 
 #: frontend/src/components/file-view/file-toolbar.js:209
 #: frontend/src/components/file-view/file-toolbar.js:243
@@ -4286,7 +4286,7 @@ msgstr "مساعدة"
 #: frontend/src/components/main-side-nav-folded.js:239
 #: frontend/src/components/main-side-nav.js:312
 msgid "Clients"
-msgstr "عملاء"
+msgstr "عملاء سطح المكتب أو المحمول"
 
 #: frontend/src/components/main-side-nav-folded.js:246
 #: frontend/src/components/main-side-nav.js:319
@@ -6378,12 +6378,12 @@ msgstr "إنشاء علامات الملف"
 #: frontend/src/metadata/views/table/context-menu/index.js:198
 #| msgid "Moved folder"
 msgid "Move folder"
-msgstr ""
+msgstr "نقل المجلد"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:198
 #| msgid "Moved file"
 msgid "Move file"
-msgstr ""
+msgstr "نقل الملف"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:238
 msgid "Failed to generate description"
@@ -7463,11 +7463,11 @@ msgstr "استخدم هذه القيم لإعداد موفر الهوية الخ
 
 #: frontend/src/pages/org-admin/org-saml-config.js:168
 msgid "Configure Seafile"
-msgstr "إعداد سيفايل -Seafile-"
+msgstr "إعداد سيفايل"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:169
 msgid "Use information from your Identity Provider to configure Seafile"
-msgstr "استخدام المعلومات من موفر الهوية لإعداد سيفايل -Seafile-"
+msgstr "استخدام المعلومات من موفر الهوية لإعداد سيفايل "
 
 #: frontend/src/pages/org-admin/org-saml-config.js:182
 msgid "Certificate"
@@ -9148,23 +9148,23 @@ msgstr "اللون"
 #: frontend/src/tag/components/popover/set-linked-tags-popover/add-linked-tags.js:78
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:16
 msgid "Link existing tags"
-msgstr ""
+msgstr "ربط بالعلامات الموجودة"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
 #: frontend/src/tag/views/all-tags/main/index.js:49
 #| msgid "Import tags"
 msgid "Parent tags"
-msgstr ""
+msgstr "العلامات الأصلية"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
 #| msgid "No tags"
 msgid "Sub tags"
-msgstr ""
+msgstr "العلامات الفرعية"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:20
 #| msgid "No tags"
 msgid "No parent tag"
-msgstr ""
+msgstr "لا يوجد علامة رئيسية"
 
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:60
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:66
@@ -9198,12 +9198,12 @@ msgstr "فشل في حذف العلامات"
 #: frontend/src/tag/store/server-operator.js:62
 #| msgid "Failed to modify sort"
 msgid "Failed to add linked tags"
-msgstr ""
+msgstr "فشل في إضافة العلامات المرتبطة"
 
 #: frontend/src/tag/store/server-operator.js:74
 #| msgid "Failed to delete {name}"
 msgid "Failed to delete linked tags"
-msgstr ""
+msgstr "فشل في حذف العلامات المرتبطة"
 
 #: frontend/src/tag/store/server-operator.js:81
 #: frontend/src/tag/store/server-operator.js:87
@@ -9218,7 +9218,7 @@ msgstr "العلامة"
 
 #: frontend/src/tag/views/all-tags/main/index.js:50
 msgid "Sub tags count"
-msgstr ""
+msgstr "عدد العلامات الفرعية"
 
 #: frontend/src/tag/views/all-tags/main/index.js:51
 #| msgid "File name"
@@ -9238,12 +9238,12 @@ msgstr "حذف العلامة"
 #: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:17
 #| msgid "Search"
 msgid "Set parent tags"
-msgstr ""
+msgstr "تعيين العلامات الأصلية"
 
 #: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:18
 #| msgid "Set Quota"
 msgid "Set sub tags"
-msgstr ""
+msgstr "تعيين العلامات الفرعية"
 
 #: frontend/src/tag/views/tag-files/index.js:85
 #| msgid "No file"
@@ -9442,7 +9442,7 @@ msgstr "رمز واجهة برمجة التطبيقات -API-"
 #: frontend/src/utils/text-translation.js:191
 #| msgid "Folder"
 msgid "Add Folder"
-msgstr ""
+msgstr "إضافة مجلد"
 
 #: frontend/src/utils/text-translation.js:195
 msgid "Add view"
