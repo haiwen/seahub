@@ -526,9 +526,10 @@ class LibContentView extends React.Component {
   hideMetadataView = (isSetRoot = false) => {
     this.setState({
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
-      path: '',
+      path: isSetRoot ? '/' : '',
       viewId: '',
       tagId: '',
+      currentDirent: isSetRoot ? null : this.state.currentDirent,
     }, () => {
       if (!isSetRoot) return;
       this.showDir('/');
