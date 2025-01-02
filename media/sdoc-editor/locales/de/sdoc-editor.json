@@ -604,5 +604,7 @@
   "English": "English",
   "Chinese": "Chinese",
   "Ask_AI": "KI fragen",
-  "Enter_reply": "Enter reply"
+  "Enter_reply": "Enter reply",
+  "Processing_content_cannot_be_empty": "Processing content cannot be empty",
+  "AI_error_message": "Request error, please try again"
 }

@@ -604,5 +604,7 @@
   "English": "英语",
   "Chinese": "中文",
   "Ask_AI": "询问 AI",
-  "Enter_reply": "输入回复"
+  "Enter_reply": "输入回复",
+  "Processing_content_cannot_be_empty": "处理内容不能为空",
+  "AI_error_message": "请求错误，请重试"
 }
