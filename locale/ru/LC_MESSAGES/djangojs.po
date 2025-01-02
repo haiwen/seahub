@@ -3489,7 +3489,7 @@ msgstr "Сохранить общий доступ"
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared to another user, the sharing will be kept."
-msgstr ""
+msgstr "Если библиотека передана ​​другому пользователю, общий доступ сохранится."
 
 #: frontend/src/components/dialog/transfer-dialog.js:174
 #: frontend/src/pages/org-admin/departments/department-list.js:112
@@ -3509,7 +3509,7 @@ msgstr "Отделы"
 #| " library is shared to another department, the sharing will be ketp."
 msgid ""
 "If the library is shared to another department, the sharing will be kept."
-msgstr ""
+msgstr "Если библиотека передана другому отделу, общий доступ сохранится."
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:46
 msgid "Group has been transfered"
@@ -3621,7 +3621,7 @@ msgstr "Пароль не может быть пустым"
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:34
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:42
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Надежный пароль должен быть надежным или очень надежным"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:41
 msgid "Password set"
@@ -4113,7 +4113,7 @@ msgstr "Разблокировать"
 
 #: frontend/src/components/file-view/file-toolbar.js:126
 msgid "Find"
-msgstr ""
+msgstr "Найти"
 
 #: frontend/src/components/file-view/file-toolbar.js:133
 msgid "Print"
@@ -4373,12 +4373,12 @@ msgstr "Миниатюра"
 #: frontend/src/components/pdf-viewer.js:336
 #| msgid "Document"
 msgid "Decrypt document"
-msgstr ""
+msgstr "Расшифровать документ"
 
 #: frontend/src/components/pdf-viewer.js:416
 #| msgid "Document"
 msgid "Print document"
-msgstr ""
+msgstr "Печать документа"
 
 #: frontend/src/components/permission-denied-tip.js:6
 msgid ""
@@ -5229,7 +5229,7 @@ msgstr "Подробнее"
 #: frontend/src/hooks/metadata-operation.js:20
 #| msgid "Successfully saved"
 msgid "Successfully OCR"
-msgstr ""
+msgstr "Успешное распознавание"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:214
 msgid "No collaborators available"
@@ -6048,22 +6048,22 @@ msgstr "Не удалось восстановить записи"
 #: frontend/src/metadata/store/server-operator.js:93
 #| msgid "Failed to modify filter"
 msgid "Failed to move folder"
-msgstr ""
+msgstr "Не удалось переместить папку"
 
 #: frontend/src/metadata/store/server-operator.js:93
 #| msgid "Failed to modify filter"
 msgid "Failed to move file"
-msgstr ""
+msgstr "Не удалось переместить файл"
 
 #: frontend/src/metadata/store/server-operator.js:105
 #| msgid "Failed to duplicate page"
 msgid "Failed to duplicate folder"
-msgstr ""
+msgstr "Не удалось дублировать папку"
 
 #: frontend/src/metadata/store/server-operator.js:105
 #| msgid "Failed to duplicate page"
 msgid "Failed to duplicate file"
-msgstr ""
+msgstr "Не удалось дублировать файл"
 
 #: frontend/src/metadata/store/server-operator.js:117
 msgid "Failed to insert property"
@@ -6378,12 +6378,12 @@ msgstr "Создание тегов файлов"
 #: frontend/src/metadata/views/table/context-menu/index.js:198
 #| msgid "Moved folder"
 msgid "Move folder"
-msgstr ""
+msgstr "Переместить папку"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:198
 #| msgid "Moved file"
 msgid "Move file"
-msgstr ""
+msgstr "Переместить файл"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:238
 msgid "Failed to generate description"
@@ -9148,23 +9148,23 @@ msgstr "Цвет"
 #: frontend/src/tag/components/popover/set-linked-tags-popover/add-linked-tags.js:78
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:16
 msgid "Link existing tags"
-msgstr ""
+msgstr "Связать существующие теги"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
 #: frontend/src/tag/views/all-tags/main/index.js:49
 #| msgid "Import tags"
 msgid "Parent tags"
-msgstr ""
+msgstr "Родительские теги"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:14
 #| msgid "No tags"
 msgid "Sub tags"
-msgstr ""
+msgstr "Вложенные теги"
 
 #: frontend/src/tag/components/popover/set-linked-tags-popover/linked-tags.js:20
 #| msgid "No tags"
 msgid "No parent tag"
-msgstr ""
+msgstr "Нет родительского тега"
 
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:60
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar.js:66
@@ -9198,12 +9198,12 @@ msgstr "Не удалось удалить теги"
 #: frontend/src/tag/store/server-operator.js:62
 #| msgid "Failed to modify sort"
 msgid "Failed to add linked tags"
-msgstr ""
+msgstr "Не удалось добавить связанные теги"
 
 #: frontend/src/tag/store/server-operator.js:74
 #| msgid "Failed to delete {name}"
 msgid "Failed to delete linked tags"
-msgstr ""
+msgstr "Не удалось удалить связанные теги"
 
 #: frontend/src/tag/store/server-operator.js:81
 #: frontend/src/tag/store/server-operator.js:87
@@ -9218,7 +9218,7 @@ msgstr "Тег"
 
 #: frontend/src/tag/views/all-tags/main/index.js:50
 msgid "Sub tags count"
-msgstr ""
+msgstr "Количество вложенных тегов"
 
 #: frontend/src/tag/views/all-tags/main/index.js:51
 #| msgid "File name"
@@ -9238,12 +9238,12 @@ msgstr "Удалить тег"
 #: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:17
 #| msgid "Search"
 msgid "Set parent tags"
-msgstr ""
+msgstr "Установить родительские теги"
 
 #: frontend/src/tag/views/all-tags/main/tag/tag-more-operation.js:18
 #| msgid "Set Quota"
 msgid "Set sub tags"
-msgstr ""
+msgstr "Установить вложенные теги"
 
 #: frontend/src/tag/views/tag-files/index.js:85
 #| msgid "No file"
@@ -9442,7 +9442,7 @@ msgstr "Токен API"
 #: frontend/src/utils/text-translation.js:191
 #| msgid "Folder"
 msgid "Add Folder"
-msgstr ""
+msgstr "Добавить папку"
 
 #: frontend/src/utils/text-translation.js:195
 msgid "Add view"

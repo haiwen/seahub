@@ -147,11 +147,11 @@ msgstr "عميل سطح المكتب "
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr "عميل Seafile لسطح المكتب"
+msgstr "عميل سيفايل لسطح المكتب"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr "عميل Seafile 2.0 لسطح المكتب"
+msgstr "عميل سيفايل 2.0 لنظام ويندوز"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
@@ -180,11 +180,11 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
-"أحيانا قد تقوم أنت و أصدقائك بتحرير نفس المف في نفس الوقت. قد تتعارض "
-"تعديلاتكم مع بعضكم الآخر. في هذه الحالة، سيحتفظ Seafile بالنسخة الأولى على "
-"السرفر بدون تغيير، و في نفس الوقت سيعيد تسمية النسخة الأخرى الى \"ملف "
-"متعارض\". اسم الملف المتعارض ينتهي ب عنوان بريد المحرر، بالاضافة الى الوقت "
-"الحالي، مثلا test.txt (SFConflict name@example.cpm 2015-03-07-11-30-28)."
+"أحيانا قد تقوم أنت و أصدقائك بتحرير نفس الملف في نفس الوقت. قد تتعارض "
+"تعديلاتكم مع بعضكم الآخر. في هذه الحالة، سيحتفظ سيفايل بالنسخة الأولى على "
+"الخادم بدون تغيير، و في نفس الوقت سيعيد تسمية النسخة الأخرى الى \"ملف "
+"متعارض\". اسم الملف المتعارض ينتهي بعنوان بريد المُعدل، بالاضافة الى الوقت "
+"الحالي، مثلا test.txt (SFConflict name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
@@ -436,15 +436,15 @@ msgstr ""
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr "استخدام البروكسي في عميل Seafile"
+msgstr "استخدام الوكيل في عميل سيفايل"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
-"عميل Seafile يدعم ثلاثة أنواع من خوادم البروكسي: HTTP، SOCKS5 و إعدادات "
-"بروكسي النظام."
+"عميل سيفايل يدعم 3 أنواع من خوادم الوكيل: بروتوكول نقل النص الفائق -HTTP-، "
+"سوكس 5 -SOCKS5- و إعدادات وكيل النظام."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -454,10 +454,10 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
-"وكيل HTTP و SOCKS5 الوكيل يتطلب منك إدخال عنوان ومنفذ الخادم الوكيل. إذا كنت"
-" تستخدم إعدادات وكيل النظام، يقرأ عميل Seafile إعدادات الوكيل من نظام "
-"التشغيل. نظام التشغيل لديه بعض التقنيات للكشف الالي عن معلومات الملقم "
-"الوكيل. لذلك ليس عليك إدخال عنوان الخادم الوكيل يدويا."
+"يطلب منك وكيل بروتوكول نقل النص الفائق -HTTP- و وكيل سوكس5 -SOCKS5- إدخال "
+"رابط ومنفذ الوكيل. إذا كنت تستخدم إعدادات وكيل النظام، يقرأ عميل سيفايل "
+"إعدادات الوكيل من نظام التشغيل. نظام التشغيل لديه بعض التقنيات للكشف الالي "
+"عن معلومات خادم الوكيل. حتى لايكون عليك إدخال عنوان الخادم الوكيل يدويا."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -498,12 +498,12 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
-"يمكنك تنزيل SeaDrive 2.0 من موقع Seafile الرسمي. بعد التثبيت وتسجيل الدخول "
-"إلى حساب Seafile الخاص بك ، سيبدأ SeaDrive في تنزيل قوائم المكتبة والملفات "
-"من الخادم (تماما كما هو الحال في SeaDrive 1.0.x). قد يستغرق الأمر بعض الوقت "
-"، اعتمادا على عدد الملفات المتاحة في حساب seafile الخاص بك. التنزيل تقدمي ، "
-"لذلك في الوقت نفسه يمكنك بالفعل الوصول إلى بعض الملفات في محرك الأقراص "
-"الظاهري."
+"يمكنك تنزيل سيدرايف 2.0 -SeaDrive 2.0- من موقع سيفايل الرسمي. بعد التثبيت "
+"وتسجيل الدخول إلى حساب سيفايل الخاص بك ، سيبدأ سيدرايف في تنزيل قوائم "
+"المكتبة والملفات من الخادم (تماما كما هو الحال في SeaDrive 1.0.x). قد يستغرق"
+" الأمر بعض الوقت ، اعتمادا على عدد الملفات المتاحة في حساب سيفايل الخاص بك. "
+"التنزيل تقدمي ، لذلك في الوقت نفسه يمكنك بالفعل الوصول إلى بعض الملفات في "
+"محرك الأقراص الظاهري."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
@@ -723,9 +723,10 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
-"لن يختفي اختصار \"SeaDrive\" في مستكشف ويندوز بعد الخروج من برنامج SeaDrive "
-"أو تبديل حسابات Seafile في SeaDrive. هذا هو السلوك المقصود. لا تحتاج إلى "
-"إزالتها إذا كنت لا تزال بحاجة إلى الوصول إلى الحساب لاحقا."
+"لن يختفي اختصار سيدرايف \"SeaDrive\" في مدير ملفات ويندوز بعد الخروج من "
+"برنامج سيدرايف -SeaDrive- أو تبديل حسابات سيفايل في سيدرايف. هذا هو السلوك "
+"المقصود. لا تحتاج إلى إزالتها إذا كنت لا تزال بحاجة إلى الوصول إلى الحساب "
+"لاحقا."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
@@ -762,10 +763,10 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
-"يوفر برنامج عميل سيفايل Seafile تشفير البيانات من جهة العميل -client-side- و"
-" من طرف الى طرف -end-to-end-.لاستخدام هذه الميزة يمكنك إنشاء مكتبات مشفرة . "
-"يتم تشفير محتويات الملف في مكتبات مشفرة على جانب العميل. لا يتم تخزين كلمة "
-"سر التشفير في الخادم. بل وحتى مدير الخادم لا يمكنه الوصول إلى محتويات "
+"يوفر برنامج عميل سيفايل -Seafile- تشفير البيانات من جهة العميل -client-side-"
+" و من طرف الى طرف -end-to-end-.لاستخدام هذه الميزة يمكنك إنشاء مكتبات مشفرة "
+". يتم تشفير محتويات الملف في مكتبات مشفرة على جانب العميل. لا يتم تخزين كلمة"
+" سر التشفير في الخادم. بل وحتى مدير الخادم لا يمكنه الوصول إلى محتويات "
 "الملفات الخاص بك في المكتبة المشفرة."
 
 #: templates/help/encrypted_libraries.html:10
@@ -821,8 +822,8 @@ msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
-"يدعم عميل iOS التشفير من جانب العميل منذ الإصدار 2.1.6. عميل أندرويد يدعمه "
-"منذ الإصدار 2.1.0."
+"يدعم عميل نظام تشغيل آي -iOS- التشفير من جانب العميل منذ الإصدار 2.1.6. عميل"
+" أندرويد يدعمه منذ الإصدار 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
@@ -1417,7 +1418,7 @@ msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
-"سيكون الملف الذي تم انشاؤه لا يزال مزامنامرة أخرى مع العملاء. ولكن سيتم "
+"سيكون الملف الذي تم انشاؤه لا يزال مزامناً مرة أخرى مع العملاء. ولكن سيتم "
 "تجاهل أية تغييرات محلية لاحقة لتلك الملفات."
 
 #: templates/help/ignore.html:41
@@ -1442,14 +1443,14 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr "تثبيت برنامج عميل Seafile"
+msgstr "تثبيت برنامج عميل سيفايل"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
-"بعد تحميل برنامج عميل Seafile، لديك 3 خطوات متبقية لبدء البرنامج و تشغيله."
+"بعد تحميل برنامج عميل سيفايل، لديك 3 خطوات متبقية لبدء البرنامج و تشغيله."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"

@@ -1252,7 +1252,7 @@ msgstr "تم تغيير اسم او وصف المكتبة"
 #: seahub/base/templatetags/seahub_tags.py:174
 #: seahub/base/templatetags/seahub_tags.py:245
 msgid "Auto merge by seafile system"
-msgstr "دمج تلقائي بواسطة نظام seafile"
+msgstr "دمج تلقائي عن طريق نظام سيفايل"
 
 #: seahub/base/templatetags/seahub_tags.py:176
 #: seahub/base/templatetags/seahub_tags.py:247
@@ -2485,7 +2485,7 @@ msgstr "تأكيد تسجيل دخول العميل"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr "هل تريد تسجيل الدخول لبرنامج سطح المكتب؟"
+msgstr "هل تريد تسجيل الدخول لعميل سطح المكتب؟"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""

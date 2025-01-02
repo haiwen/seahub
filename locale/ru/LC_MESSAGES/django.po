@@ -2810,7 +2810,7 @@ msgstr "Перейдите по ссылке, чтобы загрузить фа
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Надежный пароль должен быть надежным или очень надежным"
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:97
