@@ -23,6 +23,7 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
+import SeahubCheckbox from '../common/seahub-checkbox';
 
 import '../../css/dirent-list-item.css';
 
@@ -829,16 +830,13 @@ class DirentListItem extends React.Component {
             onMouseDown={this.onItemMouseDown}
             onContextMenu={this.onItemContextMenu}
           >
-            <td className={`pl10 pr-2 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-              <input
-                type="checkbox"
-                className="vam"
-                onClick={this.onItemSelected}
-                style={{ position: 'relative', top: -1 }}
-                onChange={() => {}}
-                checked={isSelected}
-                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-              />
+            <td
+              className={`pl10 pr-2 cursor-pointer ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}
+              onClick={this.onItemSelected}
+              role="button"
+              aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+            >
+              <SeahubCheckbox isSelected={isSelected} highlight={this.state.highlight} />
             </td>
             <td className="pl-2 pr-2">
               {dirent.starred !== undefined &&
