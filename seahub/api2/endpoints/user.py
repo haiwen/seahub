@@ -57,11 +57,11 @@ class User(APIView):
 
         profile = Profile.objects.get_profile_by_user(email)
         if profile:
-            info['name'] = profile.nickname
-            info['contact_email'] = profile.contact_email
-            info['login_id'] = profile.login_id
-            info['list_in_address_book'] = profile.list_in_address_book
-            info['phone'] = profile.phone
+            info['name'] = profile.nickname or ''
+            info['contact_email'] = profile.contact_email or ''
+            info['login_id'] = profile.login_id or ''
+            info['phone'] = profile.phone or ''
+            info['list_in_address_book'] = profile.list_in_address_book or False
 
         return info
 
