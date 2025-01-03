@@ -8,7 +8,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
@@ -22,7 +22,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
-  const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
+  const [mode, setMode] = useState(GALLERY_DATE_MODE.YEAR);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
@@ -40,12 +40,40 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   // Number of images per row
   const columns = useMemo(() => {
-    return 8 - zoomGear;
-  }, [zoomGear]);
+    switch (mode) {
+      case GALLERY_DATE_MODE.YEAR:
+        return 2;
+      case GALLERY_DATE_MODE.MONTH:
+        return 3;
+      case GALLERY_DATE_MODE.DAY:
+        return 12;
+      default:
+        return 8 - zoomGear;
+    }
+  }, [mode, zoomGear]);
 
   const imageSize = useMemo(() => {
-    return (containerWidth - (columns - 1) * 2 - 32) / columns;
-  }, [containerWidth, columns]);
+    const baseWidth = containerWidth * 0.8;
+    switch (mode) {
+      case GALLERY_DATE_MODE.YEAR:
+        return (baseWidth - GALLERY_YEAR_MODE_GRID_GAP) / 2;
+      case GALLERY_DATE_MODE.MONTH:
+        return (baseWidth - GALLERY_YEAR_MODE_GRID_GAP * 2) / 3;
+      case GALLERY_DATE_MODE.DAY:
+        return (baseWidth - GALLERY_DEFAULT_GRID_GAP * 5) / 2;
+      default:
+        return (containerWidth - (columns - 1) * GALLERY_DEFAULT_GRID_GAP - 32) / columns;
+    }
+  }, [containerWidth, columns, mode]);
+
+  const rowHeight = useMemo(() => {
+    switch (mode) {
+      case GALLERY_DATE_MODE.ALL:
+        return imageSize + GALLERY_DEFAULT_GRID_GAP;
+      default:
+        return imageSize;
+    }
+  }, [mode, imageSize]);
 
   const dateMode = useMemo(() => {
     switch (mode) {
@@ -93,7 +121,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       }, []);
 
     let _groups = [];
-    const imageHeight = imageSize + GALLERY_IMAGE_GAP;
     const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
     init.forEach((_init, index) => {
       const { children, ...__init } = _init;
@@ -104,43 +131,15 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
         top = lastGroupTop + lastGroupHeight;
       }
+      children.forEach((child, childIndex) => {
+        const rowIndex = ~~(childIndex / columns);
+        if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * rowHeight, children: [] };
+        child.groupIndex = index;
+        child.rowIndex = rowIndex;
+        rows[rowIndex].children.push(child);
+      });
 
-      let height = 0;
-      if (mode === GALLERY_DATE_MODE.YEAR) {
-        const rowHeight = containerWidth * 0.8 / 2;
-        const yearChildren = children.slice(0, 2);
-        rows.push({
-          top: paddingTop + top,
-          children: yearChildren
-        });
-        height = rowHeight + paddingTop;
-      } else if (mode === GALLERY_DATE_MODE.MONTH) {
-        const rowHeight = containerWidth * 0.8 / 3;
-        const monthChildren = children.slice(0, 3);
-        rows.push({
-          top: paddingTop + top,
-          children: monthChildren
-        });
-        height = rowHeight + paddingTop;
-      } else if (mode === GALLERY_DATE_MODE.DAY) {
-        const rowHeight = containerWidth * 0.8 / 2;
-        const dayChildren = children.slice(0, 12);
-        rows.push({
-          top: paddingTop + top,
-          children: dayChildren
-        });
-        height = rowHeight + paddingTop;
-      } else {
-        children.forEach((child, childIndex) => {
-          const rowIndex = ~~(childIndex / columns);
-          if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * imageHeight, children: [] };
-          child.groupIndex = index;
-          child.rowIndex = rowIndex;
-          rows[rowIndex].children.push(child);
-        });
-        height = rows.length * imageHeight + paddingTop;
-      }
-
+      const height = rowHeight + paddingTop;
       _groups.push({
         ...__init,
         top,
@@ -151,7 +150,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
+  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, mode]);
 
   useEffect(() => {
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
@@ -174,9 +173,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       setContainerWidth(offsetWidth);
 
       // Calculate initial overScan information
-      const columns = 8 - gear;
-      const imageSize = (offsetWidth - columns * 2 - 2) / columns;
-      setOverScan({ top: 0, bottom: clientHeight + (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS });
+      setOverScan({ top: 0, bottom: clientHeight + rowHeight * OVER_SCAN_ROWS });
     }
     setFirstLoading(false);
 
@@ -199,7 +196,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
     };
-  }, []);
+  }, [rowHeight]);
 
   useEffect(() => {
     if (!imageSize || imageSize < 0) return;
@@ -212,9 +209,26 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       }
       return previousValue;
     }, 0) + rowIndex;
-    const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
+    const topOffset = rowOffset * perImageOffset;
     containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
     lastState.current = { ...lastState.current, imageSize };
+
+    const { scrollTargetId } = lastState.current;
+    if (scrollTargetId) {
+      if (mode === GALLERY_DATE_MODE.ALL) {
+        const targetImage = imageItems.find(img => img.id === scrollTargetId);
+        if (targetImage) {
+          containerRef.current.scrollTop = targetImage.rowIndex * rowHeight;
+        }
+      } else {
+        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === scrollTargetId)));
+        if (targetGroup) {
+          containerRef.current.scrollTop = targetGroup.top;
+        }
+      }
+      lastState.current = { ...lastState.current, scrollTargetId: null };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSize, groups, mode]);
 
   const handleScroll = useCallback(() => {
@@ -224,8 +238,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       onLoadMore && onLoadMore();
     } else {
       const { scrollTop, clientHeight } = containerRef.current;
-      const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS);
-      const overScanBottom = scrollTop + clientHeight + (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS;
+      const overScanTop = Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS);
+      const overScanBottom = scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS;
       let groupIndex = 0;
       let rowIndex = 0;
       let flag = false;
@@ -245,7 +259,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
       setOverScan({ top: overScanTop, bottom: overScanBottom });
     }
-  }, [imageSize, onLoadMore, groups]);
+  }, [rowHeight, onLoadMore, groups]);
 
   const imageItems = useMemo(() => {
     return groups.flatMap(group => group.children.flatMap(row => row.children));
@@ -298,6 +312,9 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       setImageIndex(index);
       setIsImagePopupOpen(true);
     }
+
+    const scrollTargetId = image.id;
+    lastState.current = { ...lastState.current, scrollTargetId };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageItems]);
 
@@ -321,10 +338,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     setSelectedImages([imageItems[(imageIndex + 1) % imageItemsLength]]);
   }, [imageItems, imageIndex]);
 
-  const handleImageSelection = useCallback((images) => {
-    if (images.length === 0 && selectedImages.length === 0) return;
-    setSelectedImages(images);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleImageSelection = useCallback((selectedImages) => {
+    setSelectedImages(selectedImages);
   }, []);
 
   const closeImagePopup = useCallback(() => {
@@ -350,7 +365,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [onRemoveImage, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
-    event.preventDefault();
     const className = getEventClassName(event);
     const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
 
@@ -391,7 +405,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         ref={containerRef}
         onScroll={handleScroll}
         onMouseDown={handleClickOutside}
-        style={{ paddingBottom: mode !== GALLERY_DATE_MODE.ALL ? '44px' : '0' }}
       >
         {!isFirstLoading && (
           <>
@@ -400,14 +413,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
               size={imageSize}
               columns={columns}
               overScan={overScan}
-              gap={GALLERY_IMAGE_GAP}
               mode={mode}
               selectedImageIds={selectedImageIds}
               onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onContextMenu={handleContextMenu}
-              containerWidth={containerWidth}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">

@@ -1,6 +1,6 @@
 .sf-metadata-gallery-container {
   height: 100%;
-  padding: 0 16px;
+  padding: 0 16px 54px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
 }
 
 .metadata-gallery-date-tag {
-  height: 2.75rem;
+  height: 54px;
   position: absolute;
   top: 0;
   left: 0;
@@ -38,7 +38,24 @@
   flex: 1;
 }
 
-.metadata-gallery-image-list {
+.metadata-gallery-date-tag span {
+  height: 100%;
+  line-height: 0.875rem;
+  padding-top: 24px;
+}
+
+.metadata-gallery-year-list,
+.metadata-gallery-month-list {
+  display: flex;
+  gap: 18px;
+}
+
+.metadata-gallery-day-group {
+  display: flex;
+  gap: 2px;
+}
+
+.metadata-gallery-all-list {
   display: grid;
   gap: 2px;
   list-style: none;
@@ -51,6 +68,12 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.metadata-gallery-year-list .metadata-gallery-image-item,
+.metadata-gallery-month-list .metadata-gallery-image-item {
+  border-radius: 6px;
+  box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
 .metadata-gallery-image-item-selected {
@@ -76,16 +99,4 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-}
-
-.metadata-gallery-year-group,
-.metadata-gallery-month-group {
-  display: flex;
-  gap: 18px;
-}
-
-.metadata-gallery-year-group .metadata-gallery-image-item,
-.metadata-gallery-month-group .metadata-gallery-image-item {
-  border-radius: 6px;
-  box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
 }

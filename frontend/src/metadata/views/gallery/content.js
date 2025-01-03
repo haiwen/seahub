@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
-import { GALLERY_DATE_MODE } from '../../constants';
+import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP } from '../../constants';
 import Image from './image';
+import ImageGrid from './imageGrid';
 
 const Content = ({
   groups,
@@ -15,27 +16,15 @@ const Content = ({
   onImageSelect,
   onImageClick,
   onImageDoubleClick,
-  onContextMenu,
-  containerWidth
+  onContextMenu
 }) => {
-  const containerRef = useRef(null);
   const animationFrameRef = useRef(null);
 
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState(null);
 
-  const imageWidth = useMemo(() => {
-    switch (mode) {
-      case GALLERY_DATE_MODE.YEAR:
-        return (containerWidth * 0.8 - 18) / 2;
-      case GALLERY_DATE_MODE.MONTH:
-        return (containerWidth * 0.8 - 36) / 3;
-      case GALLERY_DATE_MODE.DAY:
-        return (containerWidth * 0.8 - 2) / 2;
-      default:
-        return size;
-    }
-  }, [containerWidth, mode, size]);
+  const middleGridSize = (size - GALLERY_DEFAULT_GRID_GAP * 2) * 2 / 3 + GALLERY_DEFAULT_GRID_GAP;
+  const smallGridSize = (size - GALLERY_DEFAULT_GRID_GAP * 2) / 3;
 
   const handleMouseDown = useCallback((e) => {
     if (e.button !== 0) return;
@@ -90,38 +79,7 @@ const Content = ({
     setIsSelecting(false);
   }, []);
 
-  const handleClick = useCallback((e, img) => onImageClick(e, img), [onImageClick]);
-  const handleDoubleClick = useCallback((e, img) => onImageDoubleClick(e, img), [onImageDoubleClick]);
-  const handleContextMenu = useCallback((e, img) => onContextMenu(e, img), [onContextMenu]);
-
-  const renderByYearOrMonth = useCallback((group) => (
-    <div className={`metadata-gallery-${mode}-group`}>
-      {group.children.map((row, index) => (
-        <div key={index} style={{ display: 'flex', gap: '18px' }}>
-          {row.children.map((img) => {
-            const isSelected = selectedImageIds.includes(img.id);
-            return (
-              <Image
-                key={img.id}
-                img={img}
-                size={imageWidth}
-                isSelected={isSelected}
-                onClick={(e) => handleClick(e, img)}
-                onDoubleClick={(e) => handleDoubleClick(e, img)}
-                onContextMenu={(e) => handleContextMenu(e, img)}
-              />
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  ), [handleClick, handleDoubleClick, handleContextMenu, imageWidth, mode, selectedImageIds]);
-
-  const renderImage = useCallback((image, size, style = {}) => {
-    if (!image) {
-      return <div style={{ width: size, height: size }} />;
-    }
-
+  const renderSingleImage = useCallback((image, size, style = {}) => {
     const isSelected = selectedImageIds.includes(image.id);
     return (
       <Image
@@ -137,91 +95,60 @@ const Content = ({
     );
   }, [selectedImageIds, onImageClick, onImageDoubleClick, onContextMenu]);
 
-  const renderImages = useCallback((images) => (
-    <div style={{
-      position: 'relative',
-      display: 'grid',
-      gridTemplateColumns: `repeat(3, ${imageWidth / 3}px)`,
-      gridTemplateRows: `repeat(3, ${imageWidth / 3}px)`,
-      width: imageWidth,
-      height: imageWidth,
-      gap: '2px',
-      overflow: 'hidden',
-    }}>
-      {renderImage(images[0], (imageWidth * 2 / 3 + 2))}
-      {images.slice(1, 6).map((image, index) => {
-        const positions = [
-          { gridColumn: 3, gridRow: 1 },
-          { gridColumn: 3, gridRow: 2 },
-          { gridColumn: 1, gridRow: 3 },
-          { gridColumn: 2, gridRow: 3 },
-          { gridColumn: 3, gridRow: 3 }
-        ];
-        const style = { gridColumn: positions[index].gridColumn, gridRow: positions[index].gridRow };
-        return renderImage(image, imageWidth / 3, style);
-      })}
-    </div>
-  ), [renderImage, imageWidth]);
+  const renderImageGrid = useCallback((images) => (
+    <ImageGrid
+      images={images}
+      size={size}
+      smallGridSize={smallGridSize}
+      middleGridSize={middleGridSize}
+      renderSingleImage={renderSingleImage}
+    />
+  ), [renderSingleImage, size, smallGridSize, middleGridSize]);
 
-  const renderRow = useCallback((images) => {
+  const renderByDay = useCallback((images) => {
     const imagesCount = images.length;
+    if (imagesCount === 1) {
+      return renderSingleImage(images[0], size, { width: (size * 2 + GALLERY_DEFAULT_GRID_GAP), height: size });
+    }
     if (imagesCount < 7) {
-      return images.slice(0, 2).map((image) => renderImage(image, imageWidth));
+      return images.slice(0, 2).map((image) => renderSingleImage(image, size));
     }
     if (imagesCount < 12) {
       return (
         <>
-          {renderImage(images[0], imageWidth)}
-          {renderImages(images.slice(1, 7))}
+          {renderSingleImage(images[0], size)}
+          {renderImageGrid(images.slice(1, 7))}
         </>
       );
     }
     return (
       <>
-        {renderImages(images.slice(0, 6))}
-        {renderImages(images.slice(6, 12))}
+        {renderImageGrid(images.slice(0, 6))}
+        {renderImageGrid(images.slice(6, 12))}
       </>
     );
-  }, [renderImage, renderImages, imageWidth]);
+  }, [renderSingleImage, renderImageGrid, size]);
 
-  const renderByDay = useCallback((group) => (
-    <div className="metadata-gallery-day-group">
-      {group.children.map((row, index) => (
-        <div key={index} style={{ display: 'flex', gap: '2px' }}>
-          {renderRow(row.children)}
-        </div>
-      ))}
-    </div>
-  ), [renderRow]);
-
-  const renderAll = useCallback((group, childrenStartIndex, childrenEndIndex) => (
+  const renderImageList = useCallback((group, childrenStartIndex, childrenEndIndex, style = {}) => (
     <div
-      className="metadata-gallery-image-list"
-      style={{
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        paddingTop: childrenStartIndex * size,
-        paddingBottom: (group.children.length - 1 - childrenEndIndex) * size,
-      }}
+      key={group.name}
+      className={`metadata-gallery-${mode}-list`}
+      style={style}
     >
-      {group.children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
-        return row.children.map((img) => {
-          const isSelected = selectedImageIds.includes(img.id);
+      {group.children.slice(childrenStartIndex, childrenEndIndex + 1).map((row, rowIndex) => {
+        if (mode === GALLERY_DATE_MODE.DAY) {
           return (
-            <Image
-              key={img.id}
-              isSelected={isSelected}
-              img={img}
-              size={size}
-              onClick={(e) => onImageClick(e, img)}
-              onDoubleClick={(e) => onImageDoubleClick(e, img)}
-              onContextMenu={(e) => onContextMenu(e, img)}
-            />
+            <div key={group.name + rowIndex} className="metadata-gallery-day-group">
+              {renderByDay(row.children)}
+            </div>
           );
+        }
+        return row.children.map((img) => {
+          return renderSingleImage(img, size);
         });
       })}
     </div>
-  ), [columns, size, selectedImageIds, onImageClick, onImageDoubleClick, onContextMenu]);
-
+  ), [mode, size, renderSingleImage, renderByDay]);
 
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
@@ -249,6 +176,22 @@ const Content = ({
       childrenEndIndex = childrenEndIndex - 1;
     }
 
+    const renderByMode = () => {
+      switch (mode) {
+        case GALLERY_DATE_MODE.YEAR:
+        case GALLERY_DATE_MODE.MONTH:
+        case GALLERY_DATE_MODE.DAY:
+          return renderImageList(group, 0, 0);
+        default:
+          const style = {
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            paddingTop: childrenStartIndex * size,
+            paddingBottom: (group.children.length - 1 - childrenEndIndex) * size,
+          };
+          return renderImageList(group, childrenStartIndex, childrenEndIndex, style);
+      }
+    };
+
     return (
       <div
         key={name}
@@ -257,16 +200,13 @@ const Content = ({
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
           <div className="metadata-gallery-date-tag">
-            {name || gettext('Empty')}
+            <span>{name || gettext('Empty')}</span>
           </div>
         )}
-        {mode === GALLERY_DATE_MODE.YEAR && renderByYearOrMonth(group)}
-        {mode === GALLERY_DATE_MODE.MONTH && renderByYearOrMonth(group)}
-        {mode === GALLERY_DATE_MODE.DAY && renderByDay(group)}
-        {mode === GALLERY_DATE_MODE.ALL && renderAll(group, childrenStartIndex, childrenEndIndex)}
+        {renderByMode()}
       </div>
     );
-  }, [overScan, mode, renderByYearOrMonth, renderByDay, renderAll]);
+  }, [overScan, columns, size, mode, renderImageList]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -274,13 +214,12 @@ const Content = ({
 
   return (
     <div
-      ref={containerRef}
-      className='metadata-gallery-main'
+      className="metadata-gallery-main"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {groups && groups.map((group) => {
+      {groups.map((group) => {
         return renderDisplayGroup(group);
       })}
     </div>
@@ -307,14 +246,12 @@ Content.propTypes = {
   }).isRequired,
   columns: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
-  gap: PropTypes.number.isRequired,
   mode: PropTypes.string,
   selectedImageIds: PropTypes.array.isRequired,
   onImageSelect: PropTypes.func.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
-  containerWidth: PropTypes.number.isRequired,
 };
 
 export default Content;

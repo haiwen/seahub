@@ -8,7 +8,7 @@ const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,
   modifyFilters, modifySorts, onToggleDetail,
 }) => {
-  const [currentMode, setCurrentMode] = useState(GALLERY_DATE_MODE.DAY);
+  const [currentMode, setCurrentMode] = useState(GALLERY_DATE_MODE.YEAR);
 
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
