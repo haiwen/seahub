@@ -23,33 +23,23 @@ const TldrawEditor = () => {
   }, []);
 
   useEffect(() => {
-    console.log(333333);
-    // const a = setInterval(() => {
-    //   console.log(23)
-    // }, 1000)
     const saveInterval = setInterval(() => {
-      console.log(5555);
-      // saveDocument();
-    }, 600);
+      saveDocument();
+    }, saveIntervalTime);
 
-    return () => {
-      console.log(4,)
-      clearInterval(saveInterval);
-      // clearInterval(a);
-    };
-  }, []);
-
-  useEffect(() => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = '';
       saveDocument();
     };
+
     window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      clearInterval(saveInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [saveDocument]);
 
   useEffect(() => {
     const fetchTldrawDoc = async () => {
@@ -58,7 +48,7 @@ const TldrawEditor = () => {
         const fileContentRes = await seafileAPI.getFileContent(rawPath);
         const tldrawContent = fileContentRes.data || null;
         if (tldrawContent) {
-          setTldrawDoc(tldrawContent)
+          setTldrawDoc(tldrawContent);
         } else {
           setTldrawDoc(null);
         }
