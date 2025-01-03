@@ -112,7 +112,9 @@ class ItemDropdownMenu extends React.Component {
   onMenuItemClick = (event) => {
     let operation = Utils.getEventData(event, 'toggle') ?? event.currentTarget.getAttribute('data-toggle');
     let item = this.props.item;
-    this.props.unfreezeItem();
+    if (typeof(this.props.unfreezeItem) === 'function') {
+      this.props.unfreezeItem();
+    }
     this.props.onMenuItemClick(operation, event, item);
     this.setState({ isItemMenuShow: false });
   };
