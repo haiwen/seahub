@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block private_style %}
+.login-panel-outer-container {
+    margin-top: 150px;
+}
 .show-password-toggle {
     position: absolute;
     top: 8px;
@@ -23,8 +26,8 @@
 }
 .sms-org-register #sms-send-form {
     position: absolute;
-    top: 280px;
-    margin-right: 25px;
+    top: 305px;
+    margin-right: 60px;
 }
 #captcha-modal {
     overflow: hidden;
@@ -51,6 +54,7 @@
     position: relative;
 }
 .modal-backdrop {
+    z-index: 1040 !important;
     opacity: 0.5 !important;
 }
 .sms-org-register .btn-primary {
@@ -128,24 +132,40 @@
     font-size: 30px;
 }
 
+#send_sms_code {
+    width: 110px;
+    margin: 0px 0 12px;
+    height: 40px;
+}
+
+#send_sms_code_phone, #id_sms_code {
+    margin: 0;
+    border: 1px solid #cdcdcd;
+    padding: 2px 10px;
+    height: 34px;
+    width: 264px;
+    font-size: 13px;
+    border-radius: 2px !important;
+}
+
 .SlideCaptcha__refreshIcon--1SQk5 {
     z-index: 1;
 }
 {% endblock %}
 
 {% block main_content %}
-<div class="login-panel-outer-container mt-6">
+<div class="login-panel-outer-container">
     <div class="login-panel sms-org-register">
         <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
         {% if request.user.is_authenticated %}
         <p>{% trans "Welcome back, you are already signed in." %}</p>
         {% else %}
         <form action="" method="post" id="sms-send-form">{% csrf_token %}
-            <div class="position-relative justify-content-between row m-0" style="top: 275px; height: 40px">
+            <div class="position-relative justify-content-between row m-0">
                 <input id="send_sms_code_phone" type="text" name="phone" placeholder="请输入手机号" {% if phone %}value={{ phone }}{% else %}{% endif %} autocomplete="off" class="input name-input" style="height: 40px; max-width: calc(100% - 120px); box-sizing: border-box;" />
                 <!-- Button to trigger captcha modal -->
                 {% if ENABLE_SLIDE_CAPTCHA %}
-                <button id="send_sms_code" href="#captcha-modal" data-toggle="modal" type="button" class="submit btn btn-primary btn-block ml-2" style="width: 110px; top: -20px; position: relative;">发送验证码</button>
+                <button id="send_sms_code" href="#captcha-modal" data-toggle="modal" type="button" class="submit btn btn-primary btn-block ml-2" style="width: 110px;">发送验证码</button>
                 {% else %}
                 <button id="send_sms_code" type="button" class="submit btn btn-primary btn-block ml-2" style="width: 110px">发送验证码</button>
                 {% endif %}
