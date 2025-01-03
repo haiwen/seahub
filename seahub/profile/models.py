@@ -5,17 +5,24 @@ from django.conf import settings
 from django.db import models, IntegrityError
 from django.core.cache import cache
 from django.dispatch import receiver
-from django.core.exceptions import MultipleObjectsReturned
+from django.db.models.signals import post_save
 
-from seahub.base.fields import LowerCaseCharField
-from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT
-from seahub.institutions.models import Institution
 from registration.signals import user_registered
+
+from seahub.utils import normalize_cache_key
 from seahub.signals import institution_deleted
+from seahub.base.fields import LowerCaseCharField
+from seahub.shortcuts import get_first_object_or_none
 from seahub.institutions.models import InstitutionAdmin
+
+from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT, \
+        NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT, CONTACT_CACHE_TIMEOUT, \
+        CONTACT_CACHE_PREFIX
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 class DuplicatedContactEmailError(Exception):
     pass
@@ -23,7 +30,8 @@ class DuplicatedContactEmailError(Exception):
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
-                      login_id=None, contact_email=None, institution=None, list_in_address_book=None):
+                      login_id=None, contact_email=None,
+                      institution=None, list_in_address_book=None, phone=None):
         """Add or update user profile.
         """
         try:
@@ -49,6 +57,8 @@ class ProfileManager(models.Manager):
             profile.institution = institution
         if list_in_address_book is not None:
             profile.list_in_address_book = list_in_address_book.lower() == 'true'
+        if phone is not None:
+            profile.phone = phone
 
         try:
             profile.save(using=self._db)
@@ -82,7 +92,7 @@ class ProfileManager(models.Manager):
             return None
 
     def get_profile_by_contact_email(self, contact_email):
-        res =  super(ProfileManager, self).filter(contact_email=contact_email)
+        res = super(ProfileManager, self).filter(contact_email=contact_email)
         if len(res) > 0:
             if len(res) > 1:
                 logger.warning('Repeated contact email %s' % contact_email)
@@ -121,20 +131,35 @@ class ProfileManager(models.Manager):
         except Profile.DoesNotExist:
             return None
 
+    def get_username_by_phone(self, phone):
+        if not phone:
+            return None
+
+        try:
+            user = super(ProfileManager, self).filter(phone=phone).first()
+            return user.user if user else None
+        except Exception as e:
+            if e.args and e.args[0] == 1267:  # Illegal mix of collations
+                logger.warning('get username by phone: %s error: %s', phone, e)
+            else:
+                logger.error('get username by phone: %s error: %s', phone, e)
+            return None
+
     def convert_login_str_to_username(self, login_str):
         """
         Convert login id or contact email to username(login email).
-        Use login_str if both login id and contact email are not set.
+        Use login_str if login id, contact email and phone are not set.
         """
-        username = self.get_username_by_login_id(login_str)
-        if username is None:
-            username = self.get_username_by_contact_email(login_str)
-            if username is None:
-                return login_str
-            else:
+        converts = [
+            self.get_username_by_login_id,
+            self.get_username_by_contact_email,
+            self.get_username_by_phone
+        ]
+        for convert in converts:
+            username = convert(login_str)
+            if username is not None:
                 return username
-        else:
-            return username
+        return login_str
 
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if
@@ -156,6 +181,7 @@ class ProfileManager(models.Manager):
     def delete_profile_by_user(self, username):
         self.filter(user=username).delete()
 
+
 class Profile(models.Model):
     user = models.EmailField(unique=True)
     nickname = models.CharField(max_length=64, blank=True)
@@ -168,13 +194,17 @@ class Profile(models.Model):
     is_manually_set_contact_email = models.BooleanField(default=False)
     institution = models.CharField(max_length=225, db_index=True, null=True, blank=True, default='')
     list_in_address_book = models.BooleanField(default=False, db_index=True)
+    phone = models.CharField(max_length=20, db_index=True, unique=True, null=True, blank=True)
+
     objects = ProfileManager()
 
     def set_lang_code(self, lang_code):
         self.lang_code = lang_code
         self.save()
 
+
 class DetailedProfileManager(models.Manager):
+
     def add_detailed_profile(self, username, department, telephone):
         d_profile = self.model(user=username, department=department,
                                telephone=telephone)
@@ -210,6 +240,7 @@ class DetailedProfileManager(models.Manager):
             logger.warn('Remove multiple detailed profile records for user %s' % username)
             return None
 
+
 class DetailedProfile(models.Model):
     user = LowerCaseCharField(max_length=255, db_index=True)
     department = models.CharField(max_length=512)
@@ -217,10 +248,7 @@ class DetailedProfile(models.Model):
     objects = DetailedProfileManager()
 
 
-########## signal handlers
-from django.db.models.signals import post_save
-from .utils import refresh_cache
-
+# signal handlers
 @receiver(user_registered)
 def clean_email_id_cache(sender, **kwargs):
     from seahub.utils import normalize_cache_key
@@ -229,16 +257,27 @@ def clean_email_id_cache(sender, **kwargs):
     key = normalize_cache_key(user.email, EMAIL_ID_CACHE_PREFIX)
     cache.set(key, user.id, EMAIL_ID_CACHE_TIMEOUT)
 
+
 @receiver(post_save, sender=Profile, dispatch_uid="update_profile_cache")
 def update_profile_cache(sender, instance, **kwargs):
     """
     Set profile data to cache when profile data change.
     """
-    refresh_cache(instance.user)
+    username = instance.user
+
+    profile = get_first_object_or_none(Profile.objects.filter(user=username))
+    nickname = profile.nickname if profile else username.split('@')[0]
+    contactemail = profile.contact_email if profile else ''
+
+    key = normalize_cache_key(username, NICKNAME_CACHE_PREFIX)
+    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
+
+    contact_key = normalize_cache_key(username, CONTACT_CACHE_PREFIX)
+    cache.set(contact_key, contactemail, CONTACT_CACHE_TIMEOUT)
+
 
 @receiver(institution_deleted)
 def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
     InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
-

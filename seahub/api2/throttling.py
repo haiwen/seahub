@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.cache import cache as default_cache
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.settings import api_settings
-from rest_framework.throttling import BaseThrottle
 import time
 
 from seahub.utils.ip import get_remote_ip
@@ -208,6 +207,7 @@ class UserRateThrottle(SimpleRateThrottle):
             'ident': ident
         }
 
+
 class ShareLinkZipTaskThrottle(SimpleRateThrottle):
 
     scope = 'share_link_zip_task'
@@ -217,12 +217,11 @@ class ShareLinkZipTaskThrottle(SimpleRateThrottle):
             ident = request.user.id
         else:
             ident = self.get_ident(request)
-        
+
         return self.cache_format % {
             'scope': self.scope,
             'ident': ident
         }
-
 
 
 class ScopedRateThrottle(SimpleRateThrottle):
@@ -271,3 +270,32 @@ class ScopedRateThrottle(SimpleRateThrottle):
             'scope': self.scope,
             'ident': ident
         }
+
+
+class SmsVerifyCodeRateThrottle(SimpleRateThrottle):
+
+    scope = 'sms_verify'
+
+    def get_cache_key(self, request, view):
+        if request.user.is_authenticated:
+            ident = request.user.id
+        else:
+            ident = self.get_ident(request)
+
+        return self.cache_format % {
+            'scope': self.scope,
+            'ident': ident
+        }
+
+
+class OrgRegisterRateThrottle(SimpleRateThrottle):
+    scope = 'org_register'
+
+    def get_cache_key(self, request, view):
+        if request.method == 'POST':
+            ident = self.get_ident(request)
+
+            return self.cache_format % {
+                'scope': self.scope,
+                'ident': ident
+            }
