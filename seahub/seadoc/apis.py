@@ -2982,6 +2982,7 @@ class SeadocSearchFilenameView(APIView):
             return Response({"total":total, "results":results, "has_more":has_more})
 
         elif HAS_FILE_SEASEARCH:
+            repo_obj = repo
             repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
             searched_repos, repos_map = format_repos(repos)
             results, total = ai_search_files(query, searched_repos, per_page, suffixes)
@@ -3003,7 +3004,7 @@ class SeadocSearchFilenameView(APIView):
                     else:
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
-                f['doc_uuid'] = get_seadoc_file_uuid(repo, f['fullpath'])
+                f['doc_uuid'] = get_seadoc_file_uuid(repo_obj, f['fullpath'])
 
             return Response({"total": total, "results": results, "has_more": False})
 
