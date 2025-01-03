@@ -6,6 +6,7 @@ const Image = ({
   isSelected,
   img,
   size,
+  style,
   onClick,
   onDoubleClick,
   onContextMenu,
@@ -23,7 +24,7 @@ const Image = ({
       className={classnames('metadata-gallery-image-item', {
         'metadata-gallery-image-item-selected': isSelected,
       })}
-      style={{ width: size, height: size, background }}
+      style={{ width: size, height: size, background, ...style }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}

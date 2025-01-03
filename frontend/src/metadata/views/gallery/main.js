@@ -104,15 +104,43 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
         top = lastGroupTop + lastGroupHeight;
       }
-      children.forEach((child, childIndex) => {
-        const rowIndex = ~~(childIndex / columns);
-        if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * imageHeight, children: [] };
-        child.groupIndex = index;
-        child.rowIndex = rowIndex;
-        rows[rowIndex].children.push(child);
-      });
 
-      const height = rows.length * imageHeight + paddingTop;
+      let height = 0;
+      if (mode === GALLERY_DATE_MODE.YEAR) {
+        const rowHeight = containerWidth * 0.8 / 2;
+        const yearChildren = children.slice(0, 2);
+        rows.push({
+          top: paddingTop + top,
+          children: yearChildren
+        });
+        height = rowHeight + paddingTop;
+      } else if (mode === GALLERY_DATE_MODE.MONTH) {
+        const rowHeight = containerWidth * 0.8 / 3;
+        const monthChildren = children.slice(0, 3);
+        rows.push({
+          top: paddingTop + top,
+          children: monthChildren
+        });
+        height = rowHeight + paddingTop;
+      } else if (mode === GALLERY_DATE_MODE.DAY) {
+        const rowHeight = containerWidth * 0.8 / 2;
+        const dayChildren = children.slice(0, 12);
+        rows.push({
+          top: paddingTop + top,
+          children: dayChildren
+        });
+        height = rowHeight + paddingTop;
+      } else {
+        children.forEach((child, childIndex) => {
+          const rowIndex = ~~(childIndex / columns);
+          if (!rows[rowIndex]) rows[rowIndex] = { top: paddingTop + top + rowIndex * imageHeight, children: [] };
+          child.groupIndex = index;
+          child.rowIndex = rowIndex;
+          rows[rowIndex].children.push(child);
+        });
+        height = rows.length * imageHeight + paddingTop;
+      }
+
       _groups.push({
         ...__init,
         top,
@@ -129,7 +157,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
 
-    const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.YEAR) || GALLERY_DATE_MODE.YEAR;
     setMode(mode);
 
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
@@ -258,9 +286,19 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [imageItems, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
-    const index = imageItems.findIndex(item => item.id === image.id);
-    setImageIndex(index);
-    setIsImagePopupOpen(true);
+    event.preventDefault();
+    if (mode === GALLERY_DATE_MODE.YEAR) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.MONTH);
+    } else if (mode === GALLERY_DATE_MODE.MONTH) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
+    } else if (mode === GALLERY_DATE_MODE.DAY) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.ALL);
+    } else {
+      const index = imageItems.findIndex(item => item.id === image.id);
+      setImageIndex(index);
+      setIsImagePopupOpen(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageItems]);
 
   const handleContextMenu = useCallback((event, image) => {
@@ -283,8 +321,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     setSelectedImages([imageItems[(imageIndex + 1) % imageItemsLength]]);
   }, [imageItems, imageIndex]);
 
-  const handleImageSelection = useCallback((selectedImages) => {
-    setSelectedImages(selectedImages);
+  const handleImageSelection = useCallback((images) => {
+    if (images.length === 0 && selectedImages.length === 0) return;
+    setSelectedImages(images);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeImagePopup = useCallback(() => {
@@ -310,6 +350,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [onRemoveImage, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
+    event.preventDefault();
     const className = getEventClassName(event);
     const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
 
@@ -341,6 +382,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     updateSelectedImage(newSelectedImage);
   }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
 
+  const selectedImageIds = useMemo(() => selectedImages.map(img => img?.id || []), [selectedImages]);
+
   return (
     <>
       <div
@@ -348,6 +391,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         ref={containerRef}
         onScroll={handleScroll}
         onMouseDown={handleClickOutside}
+        style={{ paddingBottom: mode !== GALLERY_DATE_MODE.ALL ? '44px' : '0' }}
       >
         {!isFirstLoading && (
           <>
@@ -358,11 +402,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
               overScan={overScan}
               gap={GALLERY_IMAGE_GAP}
               mode={mode}
-              selectedImages={selectedImages}
+              selectedImageIds={selectedImageIds}
               onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onContextMenu={handleContextMenu}
+              containerWidth={containerWidth}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
