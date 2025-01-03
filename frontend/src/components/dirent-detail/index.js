@@ -31,13 +31,12 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
 
   if (isTag) return null;
 
-  if (isView) {
+  if (isView && !dirent) {
     const pathParts = path.split('/');
-    const viewId = pathParts[2] || pathParts[pathParts.length - 1];
-    const isPeopleView = pathParts.length === 3 && viewId === FACE_RECOGNITION_VIEW_ID;
-    if (!dirent) {
-      return isPeopleView ? null : <ViewDetails viewId={viewId} onClose={onClose} />;
-    }
+    const [, , viewId, children] = pathParts;
+    if (!viewId) return null;
+    if (viewId === FACE_RECOGNITION_VIEW_ID && !children) return null;
+    return (<ViewDetails viewId={viewId} onClose={onClose} />);
   }
 
   if (path === '/' && !dirent) {

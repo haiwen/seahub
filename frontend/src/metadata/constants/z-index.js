@@ -3,7 +3,7 @@
 export const CELL_MASK = 1;
 export const TABLE_MAIN_INTERVAL = 1;
 export const RESIZE_HANDLE = 1;
-export const SEQUENCE_COLUMN = 1;
+export const SEQUENCE_COLUMN = 2;
 
 //  higher than unfrozen header cell(0), RESIZE_HANDLE
 export const FROZEN_HEADER_CELL = 2;

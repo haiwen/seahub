@@ -2391,7 +2391,7 @@ class LibContentView extends React.Component {
                         onItemsScroll={this.onItemsScroll}
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
-                        onUpdatePath={this.updatePath}
+                        updateCurrentPath={this.updatePath}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>

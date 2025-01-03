@@ -130,7 +130,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
 
   const renderView = (view) => {
     const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
-    const isSelected = currentPath === viewPath;
+    const isSelected = currentPath.includes(viewPath);
     return (
       <ViewItem
         key={`metadata-views-folder-${view._id}`}
