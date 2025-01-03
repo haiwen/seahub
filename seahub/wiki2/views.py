@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def wiki_view(request, wiki_id):
+def wiki_view(request, wiki_id, page_id=None):
     """ edit wiki page. for wiki2
     """
     # get wiki object or 404
@@ -39,7 +39,6 @@ def wiki_view(request, wiki_id):
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
     
-    page_id = request.GET.get('page_id')
     file_path = ''
 
     if page_id:
@@ -86,7 +85,7 @@ def wiki_view(request, wiki_id):
     })
 
 
-def wiki_publish_view(request, publish_url):
+def wiki_publish_view(request, publish_url, page_id=None):
     """ view wiki page. for wiki2
     1 permission
        All user
@@ -104,7 +103,6 @@ def wiki_publish_view(request, publish_url):
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
 
-    page_id = request.GET.get('page_id')
     file_path = ''
 
     if page_id:

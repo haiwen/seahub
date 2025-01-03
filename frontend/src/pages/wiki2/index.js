@@ -78,16 +78,6 @@ class Wiki extends Component {
     }, 0);
   };
 
-  getCustomUrl = () => {
-    const siteRootLen = siteRoot.length;
-    const customUrl = window.location.pathname.substring(siteRootLen);
-    if (customUrl.includes('wiki/publish')) {
-      return customUrl;
-    }
-
-    return isWiki2 ? 'wikis/' : 'published/';
-  };
-
   setNavConfig = (config, wikiRepoId) => {
     const { pages } = config;
     const newPages = JSON.parse(JSON.stringify(pages));
@@ -124,8 +114,7 @@ class Wiki extends Component {
       }, () => {
         let pageId = this.getFirstPageId(config);
         // opened by url
-        const urlSearchParams = new URLSearchParams(location.search);
-        const urlPageId = urlSearchParams.get('page_id');
+        const urlPageId = location.pathname.split('/').filter(item => !!item).pop();
         if (urlPageId) pageId = urlPageId;
         if (pageId) {
           this.setCurrentPage(pageId);
@@ -290,14 +279,15 @@ class Wiki extends Component {
     if (viaPopstate) {
       return false;
     }
-    const params = new URLSearchParams(window.location.search);
-    params.set('page_id', pageId);
-    let customUrl = this.getCustomUrl();
-    let url = `${siteRoot}${customUrl}${wikiId}/?${params.toString()}`;
-    if (customUrl.includes('wiki/publish')) {
-      url = `${siteRoot}${customUrl}?${params.toString()}`;
+    const oldUrl = window.location.pathname.substring(siteRoot.length);
+    if (oldUrl.includes('wiki/publish')) {
+      let customUrl = oldUrl.split('/')[2];
+      let newUrl = `${siteRoot}wiki/publish/${customUrl}/${pageId}/`;
+      window.history.pushState({ url: newUrl, path, pageId: pageId }, '', newUrl);
+    } else {
+      let newUrl = `${siteRoot}${isWiki2 ? 'wikis/' : 'published/'}${wikiId}/${pageId}/`;
+      window.history.pushState({ url: newUrl, path, pageId: pageId }, '', newUrl);
     }
-    window.history.pushState({ url: url, path: path, pageId: pageId }, '', url);
   };
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
