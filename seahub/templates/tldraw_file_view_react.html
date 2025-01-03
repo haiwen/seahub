@@ -11,6 +11,7 @@ docPath: '{{ path|escapejs }}',
 docName: '{{ filename|escapejs }}',
 docUuid: '{{ file_uuid }}',
 lang: '{{ lang }}',
+rawPath: '{{ raw_path|escapejs }}',
 {% endblock %}
 
 {% block render_bundle %}
