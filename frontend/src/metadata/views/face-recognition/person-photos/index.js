@@ -21,7 +21,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
   const [metadata, setMetadata] = useState({ rows: [] });
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
-  const { deleteFilesCallback } = useMetadataView();
+  const { deleteFilesCallback, store } = useMetadataView();
 
   const onLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -141,13 +141,14 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
 
   const onViewChange = useCallback((update) => {
     metadataAPI.modifyView(repoID, FACE_RECOGNITION_VIEW_ID, update).then(res => {
+      store.modifyLocalView(update);
       const newView = { ...metadata.view, ...update };
       loadData(newView);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
       toaster.danger(errorMessage);
     });
-  }, [repoID, metadata, loadData]);
+  }, [repoID, metadata, store, loadData]);
 
   useEffect(() => {
     loadData({ sorts: view.sorts });
@@ -173,12 +174,6 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-people-photos-container">
-      <div className="sf-metadata-people-photos-header">
-        <div className="sf-metadata-people-photos-header-back" onClick={onClose}>
-          <i className="sf3-font sf3-font-arrow rotate-180"></i>
-        </div>
-        <div className="sf-metadata-people-name">{people._name || gettext('Person image')}</div>
-      </div>
       <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} onRemoveImage={handelRemove} />
     </div>
   );

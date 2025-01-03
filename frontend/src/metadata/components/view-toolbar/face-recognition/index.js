@@ -52,12 +52,12 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
               columns={viewColumns}
               modifySorts={modifySorts}
             />
+            {!isCustomPermission && (
+              <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
+                <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
+              </div>
+            )}
           </>
-        )}
-        {!isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
-            <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
-          </div>
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>

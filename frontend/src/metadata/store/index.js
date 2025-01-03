@@ -483,6 +483,17 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifyLocalView(update) {
+    const type = OPERATION_TYPE.MODIFY_LOCAL_VIEW;
+    const operation = this.createOperation({
+      type,
+      update,
+      repo_id: this.repoId,
+      view_id: this.viewId,
+    });
+    this.applyOperation(operation);
+  }
+
   modifyGroupbys(groupbys) {
     const type = OPERATION_TYPE.MODIFY_GROUPBYS;
     const operation = this.createOperation({

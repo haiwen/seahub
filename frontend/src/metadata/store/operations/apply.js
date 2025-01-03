@@ -167,6 +167,11 @@ export default function apply(data, operation) {
       data.view.hidden_columns = hidden_columns;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_LOCAL_VIEW: {
+      const { update } = operation;
+      data.view = { ...data.view, ...update };
+      return data;
+    }
     case OPERATION_TYPE.INSERT_COLUMN: {
       const { column } = operation;
       const newColumn = new Column(column);

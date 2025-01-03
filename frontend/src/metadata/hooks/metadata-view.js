@@ -363,6 +363,7 @@ export const MetadataViewProvider = ({
         insertColumn,
         updateFileTags,
         addFolder: params.addFolder,
+        updateCurrentPath: params.updateCurrentPath,
       }}
     >
       {children}

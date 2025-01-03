@@ -9,7 +9,7 @@ import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { debounce } from '../../metadata/utils/common';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -118,63 +118,59 @@ class DirPath extends React.Component {
     });
   };
 
-  handelRefresh = debounce(() => {
+  handleRefresh = debounce(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }, 200);
 
+  turnViewPathToLink = (pathList) => {
+    if (!Array.isArray(pathList) || pathList.length === 0) return null;
+    const [, , viewId, children] = pathList;
+    const isViewSupportClick = viewId === FACE_RECOGNITION_VIEW_ID && children;
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item">{gettext('Views')}</span>
+        <span className="path-split">/</span>
+        <span className="path-item" role={isViewSupportClick ? 'button' : null} onClick={isViewSupportClick ? this.handleRefresh : () => {}}>
+          <MetadataViewName id={viewId} />
+        </span>
+        {children && (
+          <>
+            <span className="path-split">/</span>
+            <span className="path-item">{children}</span>
+          </>
+        )}
+        <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handleRefresh}>
+          <i className="sf3-font sf3-font-refresh"></i>
+          <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
+            {gettext('Refresh the view')}
+          </UncontrolledTooltip>
+        </div>
+      </>
+    );
+  };
+
+  turnTagPathToLink = (pathList) => {
+    if (!Array.isArray(pathList) || pathList.length === 0) return null;
+    const [, , tagId] = pathList;
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item">{gettext('Tags')}</span>
+        <span className="path-split">/</span>
+        <TagViewName id={tagId} />
+      </>
+    );
+  };
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
-    let pathList = path.split('/');
+    const pathList = path.split('/');
+    if (pathList.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) return this.turnViewPathToLink(pathList);
+    if (pathList.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) return this.turnTagPathToLink(pathList);
     let nodePath = '';
-    if (pathList.length === 2 && !pathList[0] && [PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES, PRIVATE_FILE_TYPE.TAGS_PROPERTIES].includes(pathList[1])) {
-      return null;
-    }
     let pathElem = pathList.map((item, index) => {
-      if (item === '') {
-        return null;
-      }
-      if (index === pathList.length - 2 && item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <span className="path-item">{gettext('Views')}</span>
-          </Fragment>
-        );
-      }
-
-      if (index === pathList.length - 2 && item === PRIVATE_FILE_TYPE.TAGS_PROPERTIES) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <span className="path-item">{gettext('Tags')}</span>
-          </Fragment>
-        );
-      }
-
-      if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <span className="path-item"><MetadataViewName id={item} /></span>
-            <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handelRefresh}>
-              <i className="sf3-font sf3-font-refresh"></i>
-              <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
-                {gettext('Refresh the view')}
-              </UncontrolledTooltip>
-            </div>
-          </Fragment>
-        );
-      }
-
-      if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.TAGS_PROPERTIES) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <TagViewName id={item} />
-          </Fragment>
-        );
-      }
-
+      if (item === '') return null;
       if (index === (pathList.length - 1)) {
         return (
           <Fragment key={index}>
@@ -221,16 +217,9 @@ class DirPath extends React.Component {
     return pathElem;
   };
 
-  isViewMetadata = () => {
-    const { currentPath } = this.props;
-    const path = currentPath[currentPath.length - 1] === '/' ? currentPath.slice(0, currentPath.length - 1) : currentPath;
-    const pathList = path.split('/');
-    return pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
-  };
-
   render() {
-    let { currentPath, repoName } = this.props;
-    let pathElem = this.turnPathToLink(currentPath);
+    const { currentPath, repoName } = this.props;
+    const pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-container dir-view-path">
         <span className="cur-view-path-btn mr-1" onClick={this.props.toggleTreePanel}>

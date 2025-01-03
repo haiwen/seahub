@@ -375,7 +375,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
       if (idViewMap[FACE_RECOGNITION_VIEW_ID]) {
         let isSelected = false;
         if (currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
-          const currentViewId = currentPath.split('/').pop();
+          const [, , currentViewId] = currentPath.split('/');
           isSelected = currentViewId === FACE_RECOGNITION_VIEW_ID;
         }
         const folders = navigation.filter((nav) => nav.type === VIEWS_TYPE_FOLDER);
@@ -428,7 +428,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
 
   useEffect(() => {
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
-    const currentViewId = currentPath.split('/').pop();
+    const [, , currentViewId] = currentPath.split('/');
     const currentView = idViewMap[currentViewId];
     if (currentView) {
       document.title = `${currentView.name} - Seafile`;
