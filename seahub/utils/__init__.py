@@ -143,7 +143,7 @@ PREVIEW_FILEEXT = {
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
     SEADOC: ('sdoc',),
-    TLDRAW: ('tldr',),
+    TLDRAW: ('draw',),
 }
 
 def get_non_sdoc_file_exts():
