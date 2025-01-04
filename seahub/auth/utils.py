@@ -7,6 +7,7 @@ from seahub.utils import normalize_cache_key
 from seahub.utils.ip import get_remote_ip
 
 LOGIN_ATTEMPT_PREFIX = 'UserLoginAttempt_'
+SEND_SMS_ATTEMPT_PREFIX = 'send-sms-attempt'
 
 
 def get_login_failed_attempts(username=None, ip=None):
@@ -84,3 +85,47 @@ def get_virtual_id_by_email(email):
         return email
     else:
         return p.user
+
+
+def get_send_sms_attempts(phone=None, ip=None):
+    if phone is None and ip is None:
+        return 0
+
+    phone_attempts = ip_attempts = 0
+
+    if phone:
+        cache_key = normalize_cache_key(phone, prefix=SEND_SMS_ATTEMPT_PREFIX)
+        phone_attempts = cache.get(cache_key, 0)
+
+    if ip:
+        cache_key = normalize_cache_key(ip, prefix=SEND_SMS_ATTEMPT_PREFIX)
+        ip_attempts = cache.get(cache_key, 0)
+
+    return max(phone_attempts, ip_attempts)
+
+
+def increase_send_sms_attempts(phone=None, ip=None):
+    timeout = settings.SEND_SMS_ATTEMPT_TIMEOUT
+    phone_attempts = 1
+    ip_attempts = 1
+
+    if phone:
+        cache_key = normalize_cache_key(phone, prefix=SEND_SMS_ATTEMPT_PREFIX)
+        try:
+            phone_attempts = cache.incr(cache_key)
+        except ValueError:
+            cache.set(cache_key, 1, timeout)
+
+    if ip:
+        cache_key = normalize_cache_key(ip, prefix=SEND_SMS_ATTEMPT_PREFIX)
+        try:
+            ip_attempts = cache.incr(cache_key)
+        except ValueError:
+            cache.set(cache_key, 1, timeout)
+
+    return max(phone_attempts, ip_attempts)
+
+
+def clear_send_sms_attempts(phone, ip):
+    cache.delete(normalize_cache_key(phone, prefix=SEND_SMS_ATTEMPT_PREFIX))
+    cache.delete(normalize_cache_key(ip, prefix=SEND_SMS_ATTEMPT_PREFIX))

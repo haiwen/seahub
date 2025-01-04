@@ -1,33 +1,38 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
-from django.conf import settings
-import json
+from constance import config
+
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from django.http import HttpResponseRedirect, Http404
 
 import seaserv
 from seaserv import seafile_api
 
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
+
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
-from seahub.utils import is_org_context, is_pro_version, is_valid_username
+
+from seahub.utils import is_org_context, is_pro_version, \
+        is_valid_username, is_ldap_user, get_webdav_url
+from seahub.utils.two_factor_auth import has_two_factor_auth
+
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.contacts.models import Contact
-from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
-from seahub.utils import is_ldap_user, get_webdav_url
-from seahub.utils.two_factor_auth import has_two_factor_auth
+from seahub.options.models import UserOptions, \
+        CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
-from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
-from seahub.dingtalk.settings import ENABLE_DINGTALK
+
 from seahub.weixin.settings import ENABLE_WEIXIN
-from constance import config
+from seahub.dingtalk.settings import ENABLE_DINGTALK
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, \
+        ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS, ENABLE_PHONE_LOGIN
 try:
     from seahub.settings import SAML_PROVIDER_IDENTIFIER
 except ImportError:
@@ -87,9 +92,9 @@ def edit_profile(request):
     owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
-    file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
+    file_updates_email_interval = file_updates_email_interval or 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
-    collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else DEFAULT_COLLABORATE_EMAIL_INTERVAL
+    collaborate_email_interval = collaborate_email_interval or DEFAULT_COLLABORATE_EMAIL_INTERVAL
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
@@ -184,6 +189,7 @@ def edit_profile(request):
             'org_saml_connected': org_saml_connected,
             'org_id': request.user.org and request.user.org.org_id or None,
             'strong_pwd_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),
+            'enable_phone_login': ENABLE_PHONE_LOGIN,
     }
 
     if show_two_factor_auth:
@@ -229,41 +235,6 @@ def user_profile(request, username):
             'contact_email': contact_email,
             'd_profile': d_profile,
             })
-
-
-@login_required
-def get_user_profile(request, user):
-    data = {
-            'email': user,
-            'user_nickname': '',
-            'user_intro': '',
-            'err_msg': '',
-            'new_user': ''
-        }
-    content_type = 'application/json; charset=utf-8'
-
-    try:
-        user_check = User.objects.get(email=user)
-    except User.DoesNotExist:
-        user_check = None
-
-    if user_check:
-        profile = Profile.objects.filter(user=user)
-        if profile:
-            profile = profile[0]
-            data['user_nickname'] = profile.nickname
-            data['user_intro'] = profile.intro
-    else:
-        data['user_intro'] = _('Has not accepted invitation yet')
-
-    if user == request.user.username or \
-            Contact.objects.filter(user_email=request.user.username,
-                                   contact_email=user).count() > 0:
-        data['new_user'] = False
-    else:
-        data['new_user'] = True
-
-    return HttpResponse(json.dumps(data), content_type=content_type)
 
 
 @login_required

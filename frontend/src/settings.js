@@ -20,6 +20,7 @@ import TwoFactorAuthentication from './components/user-settings/two-factor-auth'
 import SocialLogin from './components/user-settings/social-login';
 import SocialLoginDingtalk from './components/user-settings/social-login-dingtalk';
 import SocialLoginWeixin from './components/user-settings/social-login-weixin';
+import BindPhone from './components/user-settings/bind-phone';
 import SocialLoginSAML from './components/user-settings/social-login-saml';
 import LinkedDevices from './components/user-settings/linked-devices';
 import DeleteAccount from './components/user-settings/delete-account';
@@ -41,6 +42,7 @@ const {
   enableWechatWork,
   enableDingtalk,
   enableWeixin,
+  enablePhoneLogin,
   isOrgContext,
   enableADFS,
   enableMultiADFS,
@@ -62,6 +64,7 @@ class Settings extends React.Component {
       { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
       { show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication') },
       { show: (enableWechatWork || enableDingtalk || enableWeixin || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login') },
+      { show: enablePhoneLogin, href: '#bind-phone', text: gettext('Bind phone number') },
       { show: true, href: '#linked-devices', text: gettext('Linked Devices') },
       { show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account') },
     ];
@@ -183,6 +186,9 @@ class Settings extends React.Component {
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
                 {enableWeixin && <SocialLoginWeixin />}
+                {enablePhoneLogin && this.state.userInfo && (
+                  <BindPhone oldBindPhone={this.state.userInfo.phone} updateUserInfo={this.updateUserInfo}/>
+                )}
                 {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
                 <LinkedDevices />
                 {enableDeleteAccount && <DeleteAccount />}

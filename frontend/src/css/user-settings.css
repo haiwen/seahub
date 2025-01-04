@@ -1,39 +1,53 @@
 body {
   overflow: hidden;
 }
+
 #wrapper {
   height: 100%;
 }
 
-.main-panel {
-  overflow: hidden;
+.top-header {
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0.5rem 1rem;
+  flex-shrink: 0;
+}
+
+.heading {
+  padding: 8px 16px;
+  background: #f9f9f9;
+  font-size: 1rem;
+  color: #322;
+  font-weight: normal;
+  line-height: 1.5;
+  margin: 0;
+  border-bottom: 1px solid #eee;
 }
 
 .content {
   padding: 0rem 1rem 8rem;
   overflow: auto;
 }
-.setting-item {
-  font-size: 0.875rem;
-  padding: 1em 0 3em;
-}
+
 .setting-item-heading {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: normal;
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 0.7rem;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 0.7em;
 }
+
 .user-avatar {
-  border-radius: 3px;
+  border-radius: 50%;
 }
+
 .avatar-edit {
   position: absolute;
   left: 0.75rem;
   top: 0;
   width: 80px;
   height: 80px;
-  border-radius: 3px;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.3);
   color: #fff;
   font-size: 24px;
@@ -41,21 +55,107 @@ body {
   text-align: center;
   cursor: pointer;
 }
+
+.user-setting-nav .nav-item .nav-link {
+  flex: auto;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 2px solid transparent;
+  color: #212529;
+}
+
+.user-setting-nav .nav-item.active .nav-link {
+  color: #ED7109;
+  border-left-color: #ED7109;
+}
+
+.user-setting-nav .nav-item .nav-link:hover {
+  color: #ED7109;
+}
+
 .eye-icon {
   color: #666;
 }
+
 .input-tip {
   padding-top: calc(0.375rem + 1px);
   color: #666;
 }
+
 @media (min-width: 768px) {
   .input-tip {
     padding-left: 0;
   }
 }
+
 .language-selector {
   width: 260px;
 }
-.btn {
+
+.bind-phone-module .bind-phone-container .row {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.bind-phone-container .bind-phone-message {
+  display: flex;
+  align-items: center;
+}
+
+.bind-phone-container .btn-outline-disabled {
+  color: #ababab;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  opacity: 1;
+}
+
+.bind-phone-container .btn-outline-custom {
+  color: #212529;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  opacity: 1;
+}
+
+.bind-phone-container .error {
+  color: rgb(236, 76, 71);
+}
+
+.bind-phone-container .success {
+  color: rgb(71, 184, 129);
+}
+
+.bind-phone-container .phone-number {
+  width: 360px;
+}
+
+.bind-phone-container .verify-code-container {
+  display: flex;
+  padding: 0;
+  width: 360px;
+}
+
+.bind-phone-container .verify-code-container .verify-code {
+  flex: 1;
+}
+
+#main .side-panel {
+  flex: 0 0 22%;
+}
+
+#main .main-panel {
+  flex: 1 0 78%;
+}
+
+#main .setting-item {
+  margin: 1em 0 2em;
+}
+
+#main .btn {
   min-width: 60px;
+}
+
+@media (max-width: 768px) {
+  .bind-phone-container .verify-code-container .verify-code {
+    min-width: 50%;
+  }
 }

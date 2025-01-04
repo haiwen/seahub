@@ -1,16 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import hashlib
 import logging
 import jwt
-from datetime import datetime
 from django.conf import settings
-# Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 
 from urllib.parse import quote
 from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
@@ -76,6 +73,7 @@ def log_user_in(request, user, redirect_to):
 
     return HttpResponseRedirect(redirect_to)
 
+
 def _handle_login_form_valid(request, user, redirect_to, remember_me):
     if UserOptions.objects.passwd_change_required(
             user.username):
@@ -90,6 +88,7 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
     # password is valid, log user in
     request.session['remember_me'] = remember_me
     return log_user_in(request, user, redirect_to)
+
 
 @csrf_protect
 @never_cache
@@ -131,15 +130,18 @@ def login(request, template_name='registration/login.html',
 
         # form is invalid
         form.db_record and user_logged_in_failed.send(sender=None, request=request)
-        
+
         failed_attempt = incr_login_failed_attempts(username=login,
                                                     ip=ip)
 
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
                 # log user in if password is valid otherwise freeze account
-                logger.warn('Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attemps: %d' %
-                            (login, ip, failed_attempt))
+                logger.warning(
+                    'Login attempt limit reached. Try to freeze the user. '
+                    'Email/username: %s, IP: %s, attempts: %d',
+                    login, ip, failed_attempt
+                )
                 email = Profile.objects.get_username_by_login_id(login)
                 if email is None:
                     email = Profile.objects.get_username_by_contact_email(login)
@@ -149,22 +151,32 @@ def login(request, template_name='registration/login.html',
                     user = User.objects.get(email)
                     if user.is_active:
                         user.freeze_user(notify_admins=True, notify_org_admins=True)
-                        logger.warn('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
-                                    (login, ip, failed_attempt))
+                        logger.warning(
+                            'Login attempt limit reached. Freezing the user. '
+                            'Email/username: %s, IP: %s, attempts: %d',
+                            login, ip, failed_attempt
+                        )
                 except User.DoesNotExist:
-                    logger.warn('Login attempt limit reached with invalid email/username: %s, ip: %s, attemps: %d' %
-                                (login, ip, failed_attempt))
-                    pass
-                form.errors['freeze_account'] = _('This account has been frozen due to too many failed login attempts.')
+                    logger.warning(
+                        'Login attempt limit reached with invalid email/username: %s, '
+                        'IP: %s, attempts: %d',
+                        login, ip, failed_attempt
+                    )
+                form.errors['freeze_account'] = _(
+                    'This account has been frozen due to too many failed login attempts.'
+                )
             else:
                 # use a new form with Captcha
-                logger.warn('Login attempt limit reached, show Captcha, email/username: %s, ip: %s, attemps: %d' %
-                            (login, ip, failed_attempt))
+                logger.warning(
+                    'Login attempt limit reached. Showing Captcha. '
+                    'Email/username: %s, IP: %s, attempts: %d',
+                    login, ip, failed_attempt
+                )
                 if not used_captcha_already:
                     form = CaptchaAuthenticationForm()
 
     else:
-        ### GET
+        # GET
         failed_attempt = get_login_failed_attempts(ip=ip)
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
@@ -185,7 +197,11 @@ def login(request, template_name='registration/login.html',
         if multi_tenancy:
             org_account_only = getattr(settings, 'FORCE_ORG_REGISTER', False)
             if org_account_only:
-                signup_url = reverse('org_register')
+                use_phone = getattr(settings, 'USE_PHONE_REGISTRATION_BY_DEFAULT', False)
+                if use_phone:
+                    signup_url = reverse('org_sms_register')
+                else:
+                    signup_url = reverse('org_register')
             else:
                 signup_url = reverse('choose_register')
         else:
@@ -193,12 +209,14 @@ def login(request, template_name='registration/login.html',
     else:
         signup_url = ''
 
-    enable_sso = getattr(settings, 'ENABLE_SHIB_LOGIN', False) or \
-                 getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
-                 getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
-                 getattr(settings, 'ENABLE_OAUTH', False) or \
-                 getattr(settings, 'ENABLE_CAS', False) or \
-                 getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
+    enable_sso = (
+        getattr(settings, 'ENABLE_SHIB_LOGIN', False)
+        or getattr(settings, 'ENABLE_KRB5_LOGIN', False)
+        or getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+        or getattr(settings, 'ENABLE_OAUTH', False)
+        or getattr(settings, 'ENABLE_CAS', False)
+        or getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
+    )
 
     login_bg_image_path = get_login_bg_image_path()
 
@@ -213,13 +231,15 @@ def login(request, template_name='registration/login.html',
         'enable_multi_adfs': getattr(settings, 'ENABLE_MULTI_ADFS', False),
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
+        'enable_phone_login': settings.ENABLE_PHONE_LOGIN,
     })
+
 
 def login_simple_check(request):
 
     if not SSO_SECRET_KEY:
         return render_error(request, 'Permission denied.')
-    
+
     login_token = request.GET.get('token', '')
     if not login_token:
         return render_error(request, 'token invalid.')
@@ -233,16 +253,16 @@ def login_simple_check(request):
 
     if 'exp' not in payload:
         return render_error(request, 'token invalid.')
-    
+
     user_id = payload.get('user_id')
     if not user_id:
         return render_error(request, 'token invalid.')
-    
+
     try:
         user = User.objects.get(email=user_id)
     except User.DoesNotExist:
         return render_error(request, 'token invalid.')
-    
+
     for backend in get_backends():
         user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
     auth_login(request, user)
@@ -253,6 +273,7 @@ def login_simple_check(request):
     else:
         next_page = settings.SITE_ROOT
     return HttpResponseRedirect(next_page)
+
 
 def logout(request, next_page=None,
            template_name='registration/logged_out.html',
@@ -266,7 +287,9 @@ def logout(request, next_page=None,
                 from seahub.utils import is_org_context
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    response = HttpResponseRedirect(get_service_url().rstrip('/') + '/org/custom/%s/saml2/logout/' % str(org_id))
+                    org_logout_url = '/org/custom/%s/saml2/logout/' % str(org_id)
+                    redirect_url = get_service_url().rstrip('/') + org_logout_url
+                    response = HttpResponseRedirect(redirect_url)
                 else:
                     response = HttpResponseRedirect(get_service_url().rstrip('/') + '/saml2/logout/')
                 response.delete_cookie('seahub_auth')
@@ -319,9 +342,10 @@ def logout(request, next_page=None,
         if redirect_to:
             response = HttpResponseRedirect(redirect_to)
         else:
+            user_agent = request.headers.get('user-agent', '')
             response = render(request, template_name, {
                 'title': _('Logged out'),
-                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in user_agent,
             })
     else:
         # Redirect to this page until the session has been cleared.
@@ -330,11 +354,13 @@ def logout(request, next_page=None,
     response.delete_cookie('seahub_auth')
     return response
 
+
 def logout_then_login(request, login_url=None):
     "Logs out the user if he is logged in. Then redirects to the log-in page."
     if not login_url:
         login_url = settings.LOGIN_URL
     return logout(request, login_url)
+
 
 def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
     "Redirects the user to the login page, passing the given 'next' page"
@@ -403,11 +429,13 @@ def password_reset(request, is_admin_site=False,
         'login_bg_image_path': login_bg_image_path,
     })
 
+
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
     login_bg_image_path = get_login_bg_image_path()
     return render(request, template_name, {
         'login_bg_image_path': login_bg_image_path,
     })
+
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
@@ -417,7 +445,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     View that checks the hash in a password reset link and presents a
     form for entering a new password.
     """
-    assert uidb36 is not None and token is not None # checked by URLconf
+    assert uidb36 is not None and token is not None  # checked by URLconf
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_complete')
     try:
@@ -444,8 +472,11 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     context_instance['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
     return render(request, template_name, context_instance)
 
-def password_reset_complete(request, template_name='registration/password_reset_complete.html'):
+
+def password_reset_complete(request,
+                            template_name='registration/password_reset_complete.html'):
     return render(request, template_name, {'login_url': settings.LOGIN_URL})
+
 
 @csrf_protect
 @login_required
@@ -498,7 +529,9 @@ def password_change(request, template_name='registration/password_change_form.ht
         'force_passwd_change': request.session.get('force_passwd_change', False),
     })
 
-def password_change_done(request, template_name='registration/password_change_done.html'):
+
+def password_change_done(request,
+                         template_name='registration/password_change_done.html'):
     return render(request, template_name)
 
 
