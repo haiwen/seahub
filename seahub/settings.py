@@ -917,7 +917,6 @@ SEADOC_PRIVATE_KEY = ''
 SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
-ENABLE_SEAFILE_AI = False
 
 ##########################
 # Settings for tldraw    #
@@ -1023,6 +1022,8 @@ METADATA_FILE_TYPES = {
 
 SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
+
+ENABLE_SEAFILE_AI = False
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
