@@ -143,7 +143,8 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "modifier": latest_contributor,
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
-        "permission": 'public'
+        "permission": 'public',
+        "publish_url": publish_url
     })
 
 def wiki_history_view(request, wiki_id):
