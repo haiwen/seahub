@@ -5,9 +5,7 @@ import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 import DepartmentsV2MembersItem from './departments-v2-members-item';
-import RepoItem from '../departments/repo-item';
-import ModalPortal from '../../../components/modal-portal';
-import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
+import RepoItem from './repo-item';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
 const propTypes = {
@@ -31,8 +29,6 @@ class DepartmentsV2MembersList extends React.Component {
       isItemFreezed: false,
       activeNav: 'members',
       repos: [],
-      deletedRepo: {},
-      showDeleteRepoDialog: false,
       dropdownOpen: false,
     };
   }
@@ -46,24 +42,6 @@ class DepartmentsV2MembersList extends React.Component {
       this.getRepos(nextProps.checkedDepartmentId);
     }
   }
-
-  showDeleteRepoDialog = (repo) => {
-    this.setState({
-      showDeleteRepoDialog: true,
-      deletedRepo: repo,
-    });
-  };
-
-  toggleCancel = () => {
-    this.setState({
-      showDeleteRepoDialog: false,
-      deletedRepo: {},
-    });
-  };
-
-  onRepoChanged = () => {
-    this.getRepos(this.props.checkedDepartmentId);
-  };
 
   freezeItem = () => {
     this.setState({ isItemFreezed: true });
@@ -124,6 +102,11 @@ class DepartmentsV2MembersList extends React.Component {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
+  onDeleteRepo = (repoID) => {
+    const { repos } = this.state;
+    this.setState({ repos: repos.filter(item => item.repo_id != repoID) });
+  };
+
   render() {
     const { activeNav, repos } = this.state;
     const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
@@ -179,7 +162,6 @@ class DepartmentsV2MembersList extends React.Component {
               <div className='cur-view-content'>
                 <Table hover>
                   <thead>
-
                     <tr>
                       <th width="60px"></th>
                       <th width="25%" onClick={this.sortByName}>{gettext('Name')}{' '}{sortByName && sortIcon}</th>
@@ -227,7 +209,12 @@ class DepartmentsV2MembersList extends React.Component {
               <tbody>
                 {repos.map((repo, index) => {
                   return (
-                    <RepoItem key={index} repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog} />
+                    <RepoItem
+                      key={index}
+                      repo={repo}
+                      groupID={this.props.checkedDepartmentId}
+                      onDeleteRepo={this.onDeleteRepo}
+                    />
                   );
                 })}
               </tbody>
@@ -237,16 +224,6 @@ class DepartmentsV2MembersList extends React.Component {
         {(activeNav === 'repos' && repos.length === 0) &&
           <EmptyTip text={gettext('No libraries')} />
         }
-        {this.state.showDeleteRepoDialog && (
-          <ModalPortal>
-            <DeleteRepoDialog
-              toggle={this.toggleCancel}
-              onRepoChanged={this.onRepoChanged}
-              repo={this.state.deletedRepo}
-              groupID={this.props.checkedDepartmentId}
-            />
-          </ModalPortal>
-        )}
       </div>
     );
   }

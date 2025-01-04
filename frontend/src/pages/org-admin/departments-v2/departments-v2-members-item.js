@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import RoleSelector from '../../../components/single-selector';
 import { gettext, siteRoot } from '../../../utils/constants';
-import { getRoleOptions } from './role-status-utils';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,
@@ -25,7 +23,10 @@ class DepartmentsV2MembersItem extends React.Component {
       isShowDropdownMenu: false,
       isItemMenuShow: false,
     };
-    this.roles = ['Admin', 'Member'];
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
   }
 
   onMouseEnter = () => {
@@ -62,32 +63,27 @@ class DepartmentsV2MembersItem extends React.Component {
     });
   };
 
-  translateRole = (role) => {
-    if (role === 'Admin') {
-      return gettext('Admin');
-    } else if (role === 'Member') {
-      return gettext('Default member');
-    }
-  };
-
   render() {
     const { member, freezeItem, unfreezeItem } = this.props;
     const { isShowDropdownMenu, isItemMenuShow } = this.state;
-    const currentRole = member.role;
-    const options = getRoleOptions(this.roles) || [];
-    const option = options.find(item => item.value === currentRole) || {};
+
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == member.role;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
 
     return (
       <tr className="departments-members-item" key={member.email} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img className="avatar" src={member.avatar_url} alt=""></img></td>
+        <td><img className="avatar" src={member.avatar_url} alt="" /></td>
         <td className='text-truncate'>
-          <Link to={`${siteRoot}sys/users/${encodeURIComponent(member.email)}/`}>{member.name}</Link>
+          <a href={`${siteRoot}org/useradmin/info/${encodeURIComponent(member.email)}/`}>{member.name}</a>
         </td>
         <td>
           <RoleSelector
             isDropdownToggleShown={isShowDropdownMenu}
-            currentSelectedOption={option}
-            options={options}
+            currentSelectedOption={currentSelectedOption}
+            options={this.roleOptions}
             selectOption={this.setMemberStaff}
             toggleItemFreezed={(freeze) => { freeze ? freezeItem() : unfreezeItem(); }}
           />

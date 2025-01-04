@@ -1,17 +1,17 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
 import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
+import { gettext, orgID } from '../../../utils/constants';
 import Account from '../../../components/common/account';
 import DepartmentNode from './department-node';
 import DepartmentV2TreePanel from './departments-v2-tree-panel';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import DepartmentsV2MembersList from './departments-v2-members-list';
 import AddDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
 import AddDepartMemberV2Dialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
 import RenameDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
 import DeleteDepartmentV2ConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
-import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
+import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
 import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
 
@@ -41,7 +41,7 @@ class DepartmentsV2 extends React.Component {
 
   componentDidMount() {
     this.setState({ isTopDepartmentLoading: true }, () => {
-      systemAdminAPI.sysAdminListAllDepartments().then(res => {
+      orgAdminAPI.orgAdminListDepartGroups(orgID).then(res => {
         const department_list = res.data.data;
         if (department_list && department_list.length > 0) {
           const rootNodes = department_list.map(item => {
@@ -76,7 +76,7 @@ class DepartmentsV2 extends React.Component {
       return;
     }
     this.setState({ isMembersListLoading: true });
-    systemAdminAPI.sysAdminListGroupMembers(nodeId, 0, 100).then(res => {
+    orgAdminAPI.orgAdminListGroupInfo(orgID, nodeId, true).then(res => {
       this.setState({
         membersList: res.data.members,
         isMembersListLoading: false
@@ -96,7 +96,7 @@ class DepartmentsV2 extends React.Component {
       }
     });
     if (!node) return;
-    systemAdminAPI.sysAdminGetDepartmentInfo(nodeId).then(res => {
+    orgAdminAPI.orgAdminListGroupInfo(orgID, nodeId, true).then(res => {
       const childrenNodes = res.data.groups.map(department => new DepartmentNode({
         id: department.id,
         name: department.name,
@@ -113,7 +113,7 @@ class DepartmentsV2 extends React.Component {
   };
 
   getRepos = (nodeId, cb) => {
-    systemAdminAPI.sysAdminListGroupRepos(nodeId).then(res => {
+    orgAdminAPI.orgAdminListGroupRepos(orgID, nodeId).then(res => {
       cb && cb(res.data.libraries);
     }).catch(error => {
       if (error.response && error.response.status === 404) {
@@ -179,7 +179,7 @@ class DepartmentsV2 extends React.Component {
 
   onDelete = () => {
     const { operateNode, checkedDepartmentId } = this.state;
-    systemAdminAPI.sysAdminDeleteDepartment(operateNode.id).then(() => {
+    orgAdminAPI.orgAdminDeleteDepartGroup(orgID, operateNode.id).then((res) => {
       this.toggleDelete();
       if (operateNode.parentNode) {
         operateNode.parentNode.deleteChildById(operateNode.id);
@@ -221,7 +221,7 @@ class DepartmentsV2 extends React.Component {
 
   setMemberStaff = (email, isAdmin) => {
     const { checkedDepartmentId, membersList } = this.state;
-    systemAdminAPI.sysAdminUpdateGroupMemberRole(checkedDepartmentId, email, isAdmin).then(res => {
+    orgAdminAPI.orgAdminSetGroupMemberRole(orgID, checkedDepartmentId, email, isAdmin).then((res) => {
       const member = res.data;
       const newMembersList = membersList.map(memberItem => {
         if (memberItem.email === email) return member;
@@ -236,7 +236,7 @@ class DepartmentsV2 extends React.Component {
 
   deleteMember = (email) => {
     const { checkedDepartmentId, membersList } = this.state;
-    systemAdminAPI.sysAdminDeleteGroupMember(checkedDepartmentId, email).then(() => {
+    orgAdminAPI.orgAdminDeleteGroupMember(orgID, checkedDepartmentId, email).then((res) => {
       const newMembersList = membersList.filter(memberItem => memberItem.email !== email);
       this.setState({ membersList: newMembersList });
     }).catch(error => {
@@ -363,6 +363,7 @@ class DepartmentsV2 extends React.Component {
         </div>
         {isAddMembersDialogShow &&
           <AddDepartMemberV2Dialog
+            orgID={orgID}
             toggle={this.toggleAddMembers}
             nodeId={operateNode.id}
             onMemberChanged={this.onMemberChanged}
@@ -370,6 +371,7 @@ class DepartmentsV2 extends React.Component {
         }
         {isRenameDepartmentDialogShow &&
           <RenameDepartmentV2Dialog
+            orgID={orgID}
             node={operateNode}
             toggle={this.toggleRename}
             renameDepartment={this.renameDepartment}
@@ -388,6 +390,7 @@ class DepartmentsV2 extends React.Component {
             toggle={this.toggleAddDepartment}
             addDepartment={this.addDepartment}
             setRootNode={this.setRootNode}
+            orgID={orgID}
           />
         }
         {this.state.isShowAddRepoDialog && (

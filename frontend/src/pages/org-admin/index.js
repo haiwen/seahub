@@ -29,11 +29,7 @@ import OrgTrashRepos from './libraries/org-repo-trash';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
 
-import Departments from './departments/departments';
-import DepartmentList from './departments/department-list';
-import SubDepartments from './departments/sub-departments';
-import DepartmentMembers from './departments/department-members';
-import DepartmentLibraries from './departments/department-libraries';
+import DepartmentsV2 from './departments-v2/departments-v2';
 
 import OrgLogs from './org-logs';
 import OrgLogsFileAudit from './org-logs-file-audit';
@@ -124,12 +120,7 @@ class Org extends React.Component {
             <OrgAllRepos path={siteRoot + 'org/repoadmin'}/>
             <OrgTrashRepos path={siteRoot + 'org/repoadmin-trash'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
-            <Departments path={siteRoot + 'org/departmentadmin'}>
-              <DepartmentList path='/' />
-              <SubDepartments path='groups/:groupID' />
-              <DepartmentMembers path='groups/:groupID/members' />
-              <DepartmentLibraries path='groups/:groupID/libraries' />
-            </Departments>
+            <DepartmentsV2 path={siteRoot + 'org/departmentadmin/'} />
             <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
               <OrgLogsFileAudit path='/' />
               <OrgLogsFileUpdate path='file-update' />

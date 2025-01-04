@@ -5,6 +5,7 @@ import toaster from '../../toast';
 import { gettext } from '../../../utils/constants';
 import { Utils, validateName } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
@@ -45,8 +46,13 @@ class RenameDepartmentV2Dialog extends React.Component {
       this.setState({ errMessage: response.message });
       return;
     }
-    const { node } = this.props;
-    systemAdminAPI.sysAdminRenameDepartment(node.id, this.state.departName.trim()).then((res) => {
+    const { node, orgID } = this.props;
+    const { departName } = this.state;
+    const newDeptName = departName.trim();
+    const req = orgID ?
+      orgAdminAPI.orgAdminUpdateDepartGroup(orgID, node.id, newDeptName) :
+      systemAdminAPI.sysAdminRenameDepartment(node.id, newDeptName);
+    req.then((res) => {
       this.props.renameDepartment(node, res.data);
       this.props.toggle();
     }).catch(error => {

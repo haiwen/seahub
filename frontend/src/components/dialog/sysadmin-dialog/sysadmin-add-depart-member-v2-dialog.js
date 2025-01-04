@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserSelect from '../../user-select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -31,7 +32,11 @@ export default class AddDepartMemberV2Dialog extends React.Component {
     const emails = this.state.selectedOptions.map(option => option.email);
     if (emails.length === 0) return;
     this.setState({ errMessage: '' });
-    systemAdminAPI.sysAdminAddGroupMember(this.props.nodeId, emails).then((res) => {
+    const { nodeId, orgID } = this.props;
+    const req = orgID ?
+      orgAdminAPI.orgAdminAddGroupMember(orgID, nodeId, emails) :
+      systemAdminAPI.sysAdminAddGroupMember(nodeId, emails);
+    req.then((res) => {
       this.setState({ selectedOptions: [] });
       if (res.data.failed.length > 0) {
         this.setState({ errMessage: res.data.failed[0].error_msg });
