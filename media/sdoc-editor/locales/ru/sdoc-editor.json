@@ -605,6 +605,6 @@
   "Chinese": "Китайский",
   "Ask_AI": "Спросить ИИ",
   "Enter_reply": "Введите ответ",
-  "Processing_content_cannot_be_empty": "Processing content cannot be empty",
-  "AI_error_message": "Request error, please try again"
+  "Processing_content_cannot_be_empty": "Содержимое обработки не может быть пустым",
+  "AI_error_message": "Ошибка запроса, попробуйте еще раз"
 }
