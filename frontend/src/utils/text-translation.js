@@ -28,8 +28,8 @@ const TextTranslation = {
     value: gettext('New Word File')
   },
   NEW_TLDRAW_FILE: {
-    key: 'New Tldraw File',
-    value: gettext('New Tldraw File')
+    key: 'New Whiteboard File',
+    value: gettext('New Whiteboard File')
   },
   NEW_SEADOC_FILE: {
     key: 'New SeaDoc File',

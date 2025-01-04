@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableTldraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
@@ -434,8 +434,11 @@ class DirentListView extends React.Component {
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
-      NEW_TLDRAW_FILE,
     );
+
+    if (enableTldraw) {
+      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
@@ -511,8 +514,8 @@ class DirentListView extends React.Component {
       case 'New Word File':
         this.onCreateFileToggle('.docx');
         break;
-      case 'New Tldraw File':
-        this.onCreateFileToggle('.tldr');
+      case 'New Whiteboard File':
+        this.onCreateFileToggle('.draw');
         break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');

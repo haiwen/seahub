@@ -1,1 +1,1 @@
-export const saveIntervalTime = 3 * 60 * 1000;
+export const SAVE_INTERVAL_TIME = 3 * 60 * 1000;
