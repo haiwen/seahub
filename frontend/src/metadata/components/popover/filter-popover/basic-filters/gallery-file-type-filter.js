@@ -47,7 +47,7 @@ const GalleryFileTypeFilter = ({ readOnly, value = 'picture', onChange: onChange
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select"
+      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select ml-4"
       value={displayValue}
       options={options}
       onSelectOption={onChange}

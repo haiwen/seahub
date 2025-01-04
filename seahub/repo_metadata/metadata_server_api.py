@@ -43,12 +43,23 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
     return response_results
 
 
-def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
-    from seafevents.repo_metadata.constants import METADATA_TABLE
+def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit=1000):
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE, PrivatePropertyKeys
     from seafevents.repo_metadata.utils import gen_view_data_sql
     metadata_server_api = MetadataServerAPI(repo_id, user)
     columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
-    sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit, user)
+
+    basic_filters = view.get('basic_filters', [])
+    tags_data = {'metadata': [], 'results': []}
+    for filter in basic_filters:
+        filter_column_key = filter.get('column_key', '')
+        if filter_column_key == PrivatePropertyKeys.TAGS and tags_enabled:
+            filter_term = filter.get('filter_term', [])
+            if filter_term:
+                tags_ids_str = ', '.join([f'"{tag_id}"' for tag_id in filter_term])
+                sql = f'SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({tags_ids_str})'
+                tags_data = metadata_server_api.query_rows(sql)
+    sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit, {'tags_data': tags_data, 'username': user})
 
     # Remove face-vectors from the query SQL because they are too large
     query_fields_str = ''

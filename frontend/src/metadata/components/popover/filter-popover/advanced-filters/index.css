@@ -134,6 +134,10 @@
   display: inline-block;
 }
 
+.sf-metadata-filters-list .filter-term .sf-metadata-option-group-search .form-control {
+  height: 31px;
+}
+
 .sf-metadata-filters-list .filter-term input {
   display: flex;
   width: 100%;
