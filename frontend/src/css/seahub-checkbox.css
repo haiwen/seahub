@@ -1,0 +1,36 @@
+:root {
+  --seahub-checkbox-hover-color: #c1c5c8;
+  --seahub-checkbox-selected-color: #ff9800;
+  --seahub-checkbox-hover-selected-color: #eb8205;
+}
+
+.seahub-checkbox-icon {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid var(--seahub-checkbox-hover-color);
+}
+
+.seahub-checkbox-icon.seahub-checkbox-icon-highlight {
+  background-color: var(--seahub-checkbox-hover-color);
+}
+
+.seahub-checkbox-icon.seahub-checkbox-icon-selected {
+  background-color: var(--seahub-checkbox-selected-color);
+  border: 1px solid var(--seahub-checkbox-selected-color);
+}
+
+.seahub-checkbox-icon.seahub-checkbox-icon-highlight.seahub-checkbox-icon-selected {
+  background-color: var(--seahub-checkbox-hover-selected-color);
+  border: 1px solid var(--seahub-checkbox-hover-selected-color);
+}
+
+.seahub-checkbox-icon .sf2-icon-tick {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
