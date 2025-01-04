@@ -146,8 +146,8 @@ const AI = () => {
           role="button"
           data-toggle="dropdown"
           aria-expanded={isMenuShow}
-          title={gettext('AI')}
-          aria-label={gettext('AI')}
+          title='AI'
+          aria-label='AI'
           tabIndex={0}
         >
           <div className="detail-control mr-2">
