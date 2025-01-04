@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableTldraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -409,6 +409,9 @@ class DirentGridView extends React.Component {
       case 'New Word File':
         this.onCreateFileToggle('.docx');
         break;
+      case 'New Whiteboard File':
+        this.onCreateFileToggle('.draw');
+        break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');
         break;
@@ -724,7 +727,8 @@ class DirentGridView extends React.Component {
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
-      NEW_SEADOC_FILE
+      NEW_SEADOC_FILE,
+      NEW_TLDRAW_FILE
     } = TextTranslation;
 
     let direntsContainerMenuList = [
@@ -742,6 +746,10 @@ class DirentGridView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     );
+
+    if (enableTldraw) {
+      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
 
     if (selectedDirentList.length === 0) {
       if (!hasCustomPermission('create')) return;

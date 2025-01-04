@@ -61,7 +61,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
+                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException
@@ -815,6 +815,34 @@ def view_lib_file(request, repo_id, path):
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
         return_dict['raw_path'] = raw_path
+
+        can_edit_file = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_edit_file = False
+        elif is_locked and not locked_by_me:
+            can_edit_file = False
+        return_dict['can_edit_file'] = can_edit_file
+
+        return render(request, template, return_dict)
+    
+    if filetype == TLDRAW:
+
+        mode = request.GET.get('mode', '')
+        if mode not in ('edit', 'viewer', 'plain'):
+            mode = 'viewer'
+        if mode == 'plain':
+            template = 'plain_' + template
+
+        return_dict['protocol'] = request.is_secure() and 'https' or 'http'
+        return_dict['domain'] = get_current_site(request).domain
+        return_dict['serviceUrl'] = get_service_url().rstrip('/')
+        return_dict['language_code'] = get_language()
+        return_dict['mode'] = mode
+        return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
+        return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
+        return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
+        return_dict['raw_path'] = raw_path
+
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:

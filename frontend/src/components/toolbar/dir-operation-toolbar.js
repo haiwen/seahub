@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { enableSeadoc, gettext } from '../../utils/constants';
+import { enableSeadoc, enableTldraw, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -105,6 +105,13 @@ class DirOperationToolbar extends React.Component {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.docx'
+    });
+  };
+
+  onCreateTldrawToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.draw'
     });
   };
 
@@ -246,8 +253,11 @@ class DirOperationToolbar extends React.Component {
           { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
           { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
           { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
-          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle }
+          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle },
         );
+        if (enableTldraw) {
+          newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': this.onCreateTldrawToggle });
+        }
         opList.push({
           'icon': 'new',
           'text': gettext('New'),

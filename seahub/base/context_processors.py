@@ -25,7 +25,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, THUMBNAIL_DEFAULT_SIZE, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
-    FILE_SERVER_ROOT
+    FILE_SERVER_ROOT, ENABLE_TLDRAW
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -173,7 +173,8 @@ def base(request):
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
-        'enable_seadoc': ENABLE_SEADOC
+        'enable_seadoc': ENABLE_SEADOC,
+        'enable_tldraw': ENABLE_TLDRAW,
     }
 
     if request.user.is_staff:
