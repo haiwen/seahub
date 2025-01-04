@@ -130,6 +130,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 this._isAverageCenter = opts['isAverageCenter'];
             }
             this._styles = opts["styles"] || [];
+            this._callback = opts["callback"] || function(){};
 
             var that = this;
             this._map.addEventListener("zoomend",function(){
@@ -443,6 +444,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
         return count;
     };
 
+    MarkerClusterer.prototype.getCallback = function() {
+        return this._callback;
+    }
+
     /**
      * @ignore
      * Cluster
@@ -575,8 +580,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
         var thatMap = this._map;
         var thatBounds = this.getBounds();
-        this._clusterMarker.addEventListener("click", function(event){
-            thatMap.setViewport(thatBounds);
+        this._clusterMarker.addEventListener("click",(event) => {
+            // thatMap.setViewport(thatBounds);
+            if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
+                const markers = this._markers;
+                this._markerClusterer.getCallback()(event, markers);
+            }
         });
 
     };

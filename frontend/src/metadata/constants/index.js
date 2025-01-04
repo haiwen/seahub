@@ -141,6 +141,16 @@ export const GALLERY_DATE_MODE = {
   ALL: 'all',
 };
 
+export const MAP_TYPE = {
+  NORMAL_MAP: 'normal_map',
+  SATELLITE: 'satellite',
+};
+
+export const MAP_VIEW_TOOLBAR_MODE = {
+  MAP: 'map',
+  GALLERY: 'gallery',
+};
+
 export const UNCATEGORIZED = '_uncategorized';
 
 export const PASTE_SOURCE = {
