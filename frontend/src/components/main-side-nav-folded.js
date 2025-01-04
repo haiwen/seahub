@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
-  isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg, enableShowAbout } from '../utils/constants';
+  isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg, enableShowAbout } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
@@ -110,7 +110,7 @@ class MainSideNavFolded extends React.Component {
   };
 
   render() {
-    let showActivity = isDocs || isPro || !isDBSqlite3;
+    let showActivity = isPro || !isDBSqlite3;
     const { groupItems, isFilesSubNavShown } = this.state;
     return (
       <Fragment>

@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import io from 'socket.io-client';
 import {
   EXTERNAL_EVENTS,
   EventBus,
@@ -22,7 +21,7 @@ const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
 const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
-const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
+const { siteRoot, serviceUrl } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
 
@@ -46,7 +45,6 @@ class MarkdownEditor extends React.Component {
         id: '',
       },
       editorMode: 'rich',
-      collabServer: seafileCollabServer ? seafileCollabServer : null,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
@@ -65,15 +63,6 @@ class MarkdownEditor extends React.Component {
 
     this.timer = null;
 
-    if (this.state.collabServer) {
-      const socket = io(this.state.collabServer);
-      this.socket = socket;
-      socket.on('presence', (data) => this.receivePresenceData(data));
-      socket.on('repo_update', (data) => this.receiveUpdateData(data));
-      socket.on('connect', () => {
-        this.socket_id = socket.id;
-      });
-    }
     this.editorRef = React.createRef();
     this.isParticipant = false;
     this.editorSelection = null;
@@ -88,18 +77,6 @@ class MarkdownEditor extends React.Component {
     } else {
       seafileAPI.lockfile(repoID, path).then((res) => {
         this.setState({ isLocked: true, lockedByMe: true });
-      });
-    }
-  };
-
-  emitSwitchEditor = (is_editing = false) => {
-    if (userInfo && this.state.collabServer) {
-      const { repoID, path } = this.state.fileInfo;
-      this.socket.emit('presence', {
-        request: 'editing',
-        doc_id: CryptoJS.MD5(repoID + path).toString(),
-        user: userInfo,
-        is_editing,
       });
     }
   };

@@ -491,8 +491,6 @@ ENABLE_SHARE_TO_DEPARTMENT = True
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
-# Enable seafile docs
-ENABLE_SEAFILE_DOCS = False
 
 ENABLE_CONVERT_TO_TEAM_ACCOUNT = False
 
@@ -892,21 +890,7 @@ FILESERVER_TOKEN_ONCE_ONLY = True
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
-##########################
-# Settings for Extra App #
-##########################
 
-##########################
-# Settings for frontend  #
-##########################
-
-SEAFILE_COLLAB_SERVER = ''
-
-##########################
-# Settings for dtable web  #
-##########################
-
-DTABLE_WEB_SERVER = ''
 
 ##########################
 # Settings for seadoc    #

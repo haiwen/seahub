@@ -4,7 +4,6 @@ import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
-import CollabUsersButton from './collab-users-button';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
@@ -16,7 +15,6 @@ import Dirent from '../../../../src/models/dirent';
 
 import '../css/header-toolbar.css';
 
-const { seafileCollabServer } = window.app.config;
 const { canDownloadFile, repoID, filePath, isRepoAdmin } = window.app.pageOptions;
 
 const propTypes = {
@@ -140,13 +138,6 @@ class HeaderToolbar extends React.Component {
               isStarred={this.props.fileInfo.isStarred}
             />
             <div className="topbar-btn-container">
-              {(seafileCollabServer && this.props.collabUsers.length > 0) &&
-                <CollabUsersButton
-                  className="collab-users-dropdown"
-                  users={this.props.collabUsers}
-                  id="usersButton"
-                />
-              }
               <ButtonGroup>
                 {(canLockUnlockFile && !isLocked) && (
                   <ButtonItem
@@ -268,13 +259,6 @@ class HeaderToolbar extends React.Component {
             <FileInfo toggleStar={this.props.toggleStar} editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}/>
             <div className="topbar-btn-container">
-              {(seafileCollabServer && this.props.collabUsers.length > 0) &&
-                <CollabUsersButton
-                  className="collab-users-dropdown"
-                  users={this.props.collabUsers}
-                  id="usersButton"
-                />
-              }
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>

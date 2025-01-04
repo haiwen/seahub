@@ -22,7 +22,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, APPLE_TOUCH_ICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
-    ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, THUMBNAIL_DEFAULT_SIZE, \
+    LOGIN_BG_IMAGE_PATH, THUMBNAIL_DEFAULT_SIZE, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, ENABLE_SEAFILE_AI
@@ -162,7 +162,6 @@ def base(request):
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
         'is_db_sqlite3': IS_DB_SQLITE3,
-        'is_docs': ENABLE_SEAFILE_DOCS,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),

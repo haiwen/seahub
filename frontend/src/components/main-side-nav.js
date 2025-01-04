@@ -6,7 +6,7 @@ import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
-  canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
+  canViewOrg, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -224,7 +224,7 @@ class MainSideNav extends React.Component {
   };
 
   render() {
-    let showActivity = isDocs || isPro || !isDBSqlite3;
+    let showActivity = isPro || !isDBSqlite3;
     const { filesNavUnfolded, groupItems } = this.state;
     return (
       <Fragment>
