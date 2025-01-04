@@ -921,7 +921,7 @@ FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 # Settings for tldraw    #
 ##########################
 
-ENABLE_TLDRAW = False
+ENABLE_WHITEBOARD = False
 
 ############################
 # Settings for Seahub Priv #

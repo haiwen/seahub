@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { enableSeadoc, enableTldraw, gettext } from '../../utils/constants';
+import { enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -255,7 +255,7 @@ class DirOperationToolbar extends React.Component {
           { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
           { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle },
         );
-        if (enableTldraw) {
+        if (enableWhiteboard) {
           newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': this.onCreateTldrawToggle });
         }
         opList.push({
