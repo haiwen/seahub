@@ -90,7 +90,7 @@ export const ocmRemoteServers = window.app.pageOptions.ocmRemoteServers;
 export const enableOCMViaWebdav = window.app.pageOptions.enableOCMViaWebdav;
 export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThirdpartWebsite;
 export const enableSeadoc = window.app.pageOptions.enableSeadoc;
-export const enableTldraw = window.app.pageOptions.enableTldraw;
+export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
