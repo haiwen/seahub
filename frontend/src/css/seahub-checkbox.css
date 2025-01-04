@@ -1,7 +1,7 @@
 :root {
   --seahub-checkbox-hover-color: #c1c5c8;
-  --seahub-checkbox-selected-color: #ff9800;
-  --seahub-checkbox-hover-selected-color: #eb8205;
+  --seahub-checkbox-selected-color: #0276fc;
+  --seahub-checkbox-hover-selected-color: #025dc5;
 }
 
 .seahub-checkbox-icon {
