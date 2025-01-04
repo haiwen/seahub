@@ -391,10 +391,6 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
-    let repoID = this.props.repoID;
-
-    // listen current repo
-
     // list used FileTags
     this.updateUsedRepoTags();
 

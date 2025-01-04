@@ -4,7 +4,6 @@ import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
-import CollabUsersButton from './collab-users-button';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
