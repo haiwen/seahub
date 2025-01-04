@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
-import { isWiki2, wikiId, wikiPermission, gettext } from '../../utils/constants';
+import { wikiId, wikiPermission, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -168,7 +168,6 @@ class SidePanel extends PureComponent {
       <div className="wiki2-pages-container">
         {isObjectNotEmpty(config) &&
           <WikiNav
-            isEditMode={isWiki2}
             navigation={navigation}
             pages={pages}
             onDeletePage={this.onDeletePage}

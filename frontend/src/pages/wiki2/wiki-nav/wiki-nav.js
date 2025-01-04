@@ -13,7 +13,6 @@ import '../css/wiki-nav.css';
 class WikiNav extends Component {
 
   static propTypes = {
-    isEditMode: PropTypes.bool,
     navigation: PropTypes.array,
     pages: PropTypes.array,
     setCurrentPage: PropTypes.func,
@@ -74,7 +73,7 @@ class WikiNav extends Component {
   };
 
   renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
-    const { isEditMode, pages } = this.props;
+    const { pages } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
     return (
@@ -85,7 +84,6 @@ class WikiNav extends Component {
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pages={pages}
         pageIndex={index}
-        isEditMode={isEditMode}
         duplicatePage={this.props.duplicatePage}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
