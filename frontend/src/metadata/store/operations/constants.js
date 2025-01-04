@@ -34,9 +34,6 @@ export const OPERATION_TYPE = {
 
   // tag
   UPDATE_FILE_TAGS: 'update_file_tags',
-
-  // map
-  DELETE_LOCATION_PHOTOS: 'delete_location_photos',
 };
 
 export const COLUMN_DATA_OPERATION_TYPE = {
@@ -77,8 +74,6 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
 
   [OPERATION_TYPE.UPDATE_FILE_TAGS]: ['repo_id', 'file_tags_data'],
-
-  [OPERATION_TYPE.DELETE_LOCATION_PHOTOS]: ['repo_id', 'rows_ids', 'deleted_rows'],
 };
 
 export const UNDO_OPERATION_TYPE = [

@@ -30,13 +30,30 @@ const customImageOverlay = (center, image, callback) => {
       this._div.append(label);
 
       const eventHandler = (event) => {
-        event.stopPropagation();
         event.preventDefault();
         this._callback && this._callback(event, [{ _imageId: this._imageId }]);
       };
 
       if (Utils.isDesktop()) {
-        this._div.addEventListener('click', eventHandler);
+        let clickTimeout;
+        this._div.addEventListener('click', (event) => {
+          if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+            return;
+          }
+          clickTimeout = setTimeout(() => {
+            eventHandler(event);
+            clickTimeout = null;
+          }, 300);
+        });
+        this._div.addEventListener('dblclick', (e) => {
+          e.preventDefault();
+          if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+          }
+        });
       } else {
         this._div.addEventListener('touchend', eventHandler);
       }

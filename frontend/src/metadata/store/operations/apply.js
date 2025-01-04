@@ -335,21 +335,6 @@ export default function apply(data, operation) {
       return data;
     }
 
-    // map
-    case OPERATION_TYPE.DELETE_LOCATION_PHOTOS: {
-      const { rows_ids } = operation;
-      const idNeedDeletedMap = rows_ids.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
-      data.rows = data.rows.filter((row) => !idNeedDeletedMap[row._id]);
-      data.recordsCount = data.rows.length;
-      // delete rows in id_row_map
-      rows_ids.forEach(rowId => {
-        delete data.id_row_map[rowId];
-      });
-
-      data.row_ids = data.row_ids.filter(row_id => !idNeedDeletedMap[row_id]);
-      return data;
-    }
-
     default: {
       return data;
     }

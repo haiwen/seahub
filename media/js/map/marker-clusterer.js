@@ -580,14 +580,29 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
         var thatMap = this._map;
         var thatBounds = this.getBounds();
-        this._clusterMarker.addEventListener("click",(event) => {
-            // thatMap.setViewport(thatBounds);
-            if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
-                const markers = this._markers;
-                this._markerClusterer.getCallback()(event, markers);
+        let clickTimeout;
+        this._clusterMarker.addEventListener("click", (event) => {
+            if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+            return;
             }
+            clickTimeout = setTimeout(() => {
+            if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
+            const markers = this._markers;
+            this._markerClusterer.getCallback()(event, markers);
+            }
+            clickTimeout = null;
+            }, 300); // Delay to differentiate between single and double click
         });
 
+        this._clusterMarker.addEventListener("dblclick", (event) => {
+            if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+            }
+            // Do nothing on double click
+        });
     };
 
     /**

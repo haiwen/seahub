@@ -14,7 +14,7 @@ import './index.css';
 const Map = () => {
   const [showGallery, setShowGallery] = useState(false);
   const [markerIds, setMarkerIds] = useState([]);
-  const { metadata, store } = useMetadataView();
+  const { metadata } = useMetadataView();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
@@ -51,10 +51,6 @@ const Map = () => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MAP_VIEW_TOOLBAR, false);
   }, []);
 
-  const onDeleteLocationPhotos = useCallback((ids) => {
-    store.deleteLocationPhotos(ids);
-  }, [store]);
-
   useEffect(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MAP_VIEW, metadata.view);
   }, [metadata.view]);
@@ -62,7 +58,7 @@ const Map = () => {
   return (
     <>
       {showGallery ? (
-        <ClusterPhotos view={metadata.view} markerIds={markerIds} onClose={closeGallery} onDelete={onDeleteLocationPhotos} />
+        <ClusterPhotos metadata={metadata} markerIds={markerIds} onClose={closeGallery} />
       ) : (
         <Main validImages={validImages} onOpen={openGallery} />
       )}

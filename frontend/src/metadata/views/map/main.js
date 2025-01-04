@@ -71,10 +71,26 @@ const Main = ({ validImages, onOpen }) => {
     }
   }, []);
 
+  const saveMapState = useCallback(() => {
+    if (!mapRef.current) return;
+    const point = mapRef.current.getCenter && mapRef.current.getCenter();
+    const zoom = mapRef.current.getZoom && mapRef.current.getZoom();
+    window.sfMetadataContext.localStorage.setItem('map-center', point);
+    window.sfMetadataContext.localStorage.setItem('map-zoom', zoom);
+  }, []);
+
+  const loadMapState = useCallback(() => {
+    const savedCenter = window.sfMetadataContext.localStorage.getItem('map-center') || DEFAULT_POSITION;
+    const savedZoom = window.sfMetadataContext.localStorage.getItem('map-zoom') || DEFAULT_ZOOM;
+    return { center: savedCenter, zoom: savedZoom };
+  }, []);
+
   const onClickMarker = useCallback((e, markers) => {
+    saveMapState();
+
     const imageIds = markers.map(marker => marker._imageId);
     onOpen(imageIds);
-  }, [onOpen]);
+  }, [onOpen, saveMapState]);
 
   const renderMarkersBatch = useCallback(() => {
     if (!validImages.length || !clusterRef.current) return;
@@ -110,23 +126,23 @@ const Main = ({ validImages, onOpen }) => {
 
   const renderBaiduMap = useCallback(() => {
     if (!mapRef.current || !window.BMap.Map) return;
-    let mapCenter = window.sfMetadataContext.localStorage.getItem('map-center') || DEFAULT_POSITION;
+    let { center, zoom } = loadMapState();
     // ask for user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((userInfo) => {
-        mapCenter = { lng: userInfo.coords.longitude, lat: userInfo.coords.latitude };
-        window.sfMetadataContext.localStorage.setItem('map-center', mapCenter);
+        center = { lng: userInfo.coords.longitude, lat: userInfo.coords.latitude };
+        window.sfMetadataContext.localStorage.setItem('map-center', center);
       });
     }
-    if (!isValidPosition(mapCenter?.lng, mapCenter?.lat)) return;
+    if (!isValidPosition(center?.lng, center?.lat)) return;
 
-    const gcPosition = wgs84_to_gcj02(mapCenter.lng, mapCenter.lat);
+    const gcPosition = wgs84_to_gcj02(center.lng, center.lat);
     const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
     const { lng, lat } = bdPosition;
 
     mapRef.current = new window.BMap.Map('sf-metadata-map-container', { enableMapClick: false });
     const point = new window.BMap.Point(lng, lat);
-    mapRef.current.centerAndZoom(point, DEFAULT_ZOOM);
+    mapRef.current.centerAndZoom(point, zoom);
     mapRef.current.enableScrollWheelZoom(true);
 
     const savedValue = window.sfMetadataContext.localStorage.getItem('map-type');
@@ -138,7 +154,7 @@ const Main = ({ validImages, onOpen }) => {
 
     batchIndexRef.current = 0;
     renderMarkersBatch();
-  }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch, getMapType]);
+  }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch, getMapType, loadMapState]);
 
   useEffect(() => {
     const switchMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_MAP_TYPE, (newType) => {
@@ -150,7 +166,7 @@ const Main = ({ validImages, onOpen }) => {
       switchMapTypeSubscribe();
     };
 
-  }, [getMapType]);
+  }, [getMapType, saveMapState]);
 
   useEffect(() => {
     if (mapInfo.type === MAP_PROVIDER.B_MAP) {
