@@ -491,8 +491,6 @@ ENABLE_SHARE_TO_DEPARTMENT = True
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
-# Enable seafile docs
-ENABLE_SEAFILE_DOCS = False
 
 ENABLE_CONVERT_TO_TEAM_ACCOUNT = False
 

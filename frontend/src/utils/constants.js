@@ -19,7 +19,6 @@ export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === 'True';
 export const isDBSqlite3 = window.app.config.isDBSqlite3;
-export const isDocs = window.app.config.isDocs === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 export const useGoFileserver = window.app.config.useGoFileserver;
