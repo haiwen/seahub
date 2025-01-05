@@ -5,6 +5,7 @@ import toaster from '../../toast';
 import { gettext } from '../../../utils/constants';
 import { Utils, validateName } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
@@ -45,9 +46,13 @@ class AddDepartmentV2Dialog extends React.Component {
       this.setState({ errMessage: response.message });
       return;
     }
-    const { parentNode } = this.props;
+    const { orgID, parentNode } = this.props;
     const parentNodeId = parentNode ? parentNode.id : -1;
-    systemAdminAPI.sysAdminAddNewDepartment(parentNodeId, this.state.departName.trim()).then((res) => {
+    const { departName } = this.state;
+    const newDeptName = departName.trim();
+    const req = orgID ? orgAdminAPI.orgAdminAddDepartGroup(orgID, parentNodeId, newDeptName) : systemAdminAPI.sysAdminAddNewDepartment(parentNodeId, newDeptName);
+
+    req.then((res) => {
       if (parentNode) {
         this.props.addDepartment(parentNode, res.data);
       } else {
