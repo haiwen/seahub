@@ -194,6 +194,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
   }, []);
 
+  const modifyColumnWidth = useCallback((columnKey, newWidth) => {
+    storeRef.current.modifyColumnWidth(columnKey, newWidth);
+  }, [storeRef]);
+
   useEffect(() => {
     if (!handelSelectTag) return;
     if (isLoading) return;
@@ -258,6 +262,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteTagLinks,
       updateLocalTag,
       selectTag: handelSelectTag,
+      modifyColumnWidth,
     }}>
       {children}
     </TagsContext.Provider>

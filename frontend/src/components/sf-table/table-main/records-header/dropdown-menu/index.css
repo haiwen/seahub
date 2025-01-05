@@ -1,0 +1,37 @@
+.sf-table-dropdown-menu .dropdown-item .sf-metadata-icon {
+  margin-right: 10px;
+  font-size: 14px;
+  fill: #666;
+}
+
+.sf-table-dropdown-menu .dropdown-item:hover .sf-metadata-icon {
+  fill: #fff;
+}
+
+.sf-table-dropdown-menu .sf-metadata-column-dropdown-item .item-text {
+  width: calc(100% - 30px);
+  display: inline-block;
+}
+
+.sf-table-dropdown-menu .dropdown-toggle::after {
+  color: #666;
+}
+
+.sf-table-dropdown-menu .dropdown-toggle:hover::after {
+  color: #fff;
+}
+
+.sf-table-dropdown-menu .dropdown-item.disabled,
+.sf-table-dropdown-menu .dropdown-item:disabled {
+  pointer-events: unset !important;
+}
+
+.sf-table-dropdown-menu .disabled.dropdown-item:hover {
+  background-color: unset;
+  cursor: default;
+  color: #c2c2c2;
+}
+
+.sf-table-dropdown-menu .disabled.dropdown-item .sf-metadata-icon {
+  fill: #c2c2c2;
+}

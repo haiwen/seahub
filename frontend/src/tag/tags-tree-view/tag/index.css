@@ -1,8 +1,8 @@
 .tag-tree-node .tag-tree-node-color {
-  height: 10px;
-  width: 10px;
+  height: 12px;
+  width: 12px;
   border-radius: 50%;
-  transform: translateY(3px);
+  transform: translateY(2px);
 }
 
 .tag-tree-node .tag-tree-node-text {

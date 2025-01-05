@@ -1,0 +1,9 @@
+.sf-table-header-cell .sf-table-cell.insert-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-table-header-cell .sf-table-cell.insert-column:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,35 @@
+.sf-table-row .rdg-row-expand-icon {
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.sf-table-row:hover .rdg-row-expand-icon {
+  opacity: 1;
+}
+
+.sf-table-row .sf-table-column-content.actions-checkbox {
+  text-align: center;
+  display: none;
+}
+
+.sf-table-row:hover .sf-table-column-content.actions-checkbox {
+  display: block;
+}
+
+.sf-table-row:hover .sf-table-column-content.row-index {
+  display: none;
+}
+
+.sf-table-row.row-selected .sf-table-column-content.actions-checkbox {
+  display: block !important;
+}
+
+.sf-table-row.row-selected .sf-table-column-content.row-index {
+  display: none !important;
+}
