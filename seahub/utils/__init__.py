@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
-import base64
 from functools import partial
 import os
 import re
@@ -618,10 +617,12 @@ if EVENTS_CONFIG_FILE:
     try:
         EVENTS_ENABLED = True
         SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
+        redis_cache = seafevents_api.init_redis_cache(parsed_events_conf)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
         EVENTS_ENABLED = False
+        redis_cache = None
 
     @contextlib.contextmanager
     def _get_seafevents_session():
@@ -857,7 +858,8 @@ if EVENTS_CONFIG_FILE:
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
 
     def get_seafevents_metrics():
-        return seafevents_api.get_metrics()
+        return seafevents_api.format_metrics(redis_cache)
+
 
     def get_trash_records(repo_id, show_time, start, limit):
         with _get_seafevents_session() as session:
@@ -1561,25 +1563,3 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
-
-
-def check_metric_auth(auth_header):
-    cfg = configparser.ConfigParser()
-    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
-        confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
-    else:
-        confdir = os.environ['SEAFILE_CONF_DIR']
-    conf = os.path.join(confdir, 'seafile.conf')
-    cfg.read(conf)
-    if cfg.has_option('metrics', 'enabled'):
-        auth_username = cfg.get('metrics', 'auth_username')
-        auth_password = cfg.get('metrics', 'auth_password')
-        try:
-            auth_decoded = base64.b64decode(auth_header.split(' ')[1]).decode('utf-8')
-            username, password = auth_decoded.split(':')
-            if username == auth_username and password == auth_password:
-                return True
-        except Exception as e:
-            logger.error(e)
-            return False
-    return False
