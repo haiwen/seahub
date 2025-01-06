@@ -263,7 +263,7 @@ class RepoItem extends React.Component {
           <ModalPortal>
             <TransferDialog
               itemName={repo.repoName}
-              submit={this.onTransferRepo}
+              onTransferRepo={this.onTransferRepo}
               toggleDialog={this.toggleTransfer}
               isOrgAdmin={true}
             />

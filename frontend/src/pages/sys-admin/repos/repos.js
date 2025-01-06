@@ -378,7 +378,7 @@ class Item extends Component {
           <ModalPortal>
             <TransferDialog
               itemName={repo.name}
-              submit={this.onTransferRepo}
+              onTransferRepo={this.onTransferRepo}
               toggleDialog={this.toggleTransferDialog}
               isSysAdmin={true}
             />

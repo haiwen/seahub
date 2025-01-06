@@ -223,7 +223,7 @@ class Item extends Component {
         {isTransferDialogOpen &&
         <TransferDialog
           itemName={item.name}
-          submit={this.transferRepo}
+          onTransferRepo={this.transferRepo}
           canTransferToDept={false}
           toggleDialog={this.toggleTransferDialog}
         />

@@ -811,7 +811,7 @@ class SharedRepoListItem extends React.Component {
           <ModalPortal>
             <TransferDialog
               itemName={repo.repo_name}
-              submit={this.onTransferRepo}
+              onTransferRepo={this.onTransferRepo}
               canTransferToDept={true}
               toggleDialog={this.onTransferToggle}
               isDepAdminTransfer={true}
