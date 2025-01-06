@@ -28,6 +28,7 @@ import { userAPI } from '../../utils/user-api';
 const propTypes = {
   currentViewMode: PropTypes.string,
   repo: PropTypes.object.isRequired,
+  inAllLibs: PropTypes.bool,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
@@ -320,7 +321,7 @@ class MylibRepoListItem extends React.Component {
 
   renderPCUI = () => {
     const { isStarred } = this.state;
-    const { repo, currentViewMode = LIST_MODE } = this.props;
+    const { repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -371,7 +372,7 @@ class MylibRepoListItem extends React.Component {
           )}
         </td>
         <td>{repo.size}</td>
-        {storages.length > 0 && <td>{repo.storage_name}</td>}
+        {(storages.length > 0 && !inAllLibs) && <td>{repo.storage_name}</td>}
         <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</td>
       </tr>
     ) : (

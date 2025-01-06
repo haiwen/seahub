@@ -104,6 +104,7 @@ class MylibRepoListView extends React.Component {
               onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={this.props.currentViewMode}
               onContextMenu={this.onContextMenu}
+              inAllLibs={this.props.inAllLibs}
             />
           );
         })}
