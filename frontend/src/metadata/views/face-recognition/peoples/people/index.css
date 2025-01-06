@@ -1,6 +1,6 @@
 .sf-metadata-peoples-container .sf-metadata-people-info {
-  height: 56px;
-  width: 48%;
+  height: 80px;
+  width: calc((100% - 40px) / 2);
   flex-shrink: 0;
   overflow: visible;
   border-radius: 3px;
@@ -15,11 +15,12 @@
 }
 
 .sf-metadata-peoples-container .sf-metadata-people-info .sf-metadata-people-info-img {
-  height: 36px;
-  width: 36px;
+  height: 60px;
+  width: 60px;
   overflow: hidden;
   border-radius: 50%;
   flex-shrink: 0;
+  margin-right: 10px;
 }
 
 .sf-metadata-peoples-container .sf-metadata-people-info-img img {
@@ -31,7 +32,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 6px;
   padding: 6px 0;
 }
 
