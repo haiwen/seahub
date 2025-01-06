@@ -230,6 +230,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       return;
     }
     updateCurrentDirent({
+      id: image.id,
       type: 'file',
       name: image.name,
       path: image.parentDir,
