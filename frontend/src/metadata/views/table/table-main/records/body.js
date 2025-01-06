@@ -343,6 +343,7 @@ class RecordsBody extends Component {
   };
 
   onCellContextMenu = (cellPosition) => {
+    this.setState({ selectedPosition: cellPosition });
     this.props.onCellContextMenu(cellPosition);
   };
 

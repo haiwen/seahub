@@ -107,7 +107,6 @@ const Cell = React.memo(({
 
   const onCellContextMenu = useCallback((event) => {
     event.preventDefault();
-
     const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
     if (!Utils.isFunction(cellMetaData.onCellContextMenu)) return;
     cellMetaData.onCellContextMenu(cell);

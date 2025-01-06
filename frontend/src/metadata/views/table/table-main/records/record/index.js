@@ -84,7 +84,7 @@ class Record extends React.Component {
       const isCellHighlight = this.isCellHighlight(key, recordId);
       const isCurrentCellHighlight = this.isCurrentCellHighlight(key, recordId);
       const highlightClassName = isCurrentCellHighlight ? 'cell-current-highlight' : isCellHighlight ? 'cell-highlight' : null;
-      const isCellSelected = this.isCellSelected(index);
+      const isCellSelected = this.isCellSelected(columns.findIndex(col => col.key === key));
       const isLastCell = this.isLastCell(columns, key);
       const isLastFrozenCell = key === lastFrozenColumnKey;
       const bgColor = columnColor && columnColor[key];

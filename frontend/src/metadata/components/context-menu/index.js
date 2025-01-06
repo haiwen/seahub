@@ -47,7 +47,7 @@ const ContextMenu = ({
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
-    onOptionClick(option);
+    onOptionClick(option, event);
     setVisible(false);
   }, [onOptionClick]);
 
