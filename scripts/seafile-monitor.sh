@@ -227,7 +227,7 @@ while [ 1 ]; do
 
     monitor_seaf_server
 
-    if [ $ENABLE_FILESERVER ]; then
+    if [ $ENABLE_FILESERVER ] && [ $ENABLE_FILESERVER = "true" ]; then
         monitor_fileserver
     fi
 
@@ -237,7 +237,7 @@ while [ 1 ]; do
         monitor_seafevents
     fi
 
-    if [ $ENABLE_SEAFDAV ]; then
+    if [ $ENABLE_SEAFDAV ] && [ $ENABLE_SEAFDAV = "true" ]; then
         monitor_seafdav
     fi
 
