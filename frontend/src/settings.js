@@ -56,7 +56,7 @@ class Settings extends React.Component {
       { show: true, href: '#user-basic-info', text: gettext('Profile') },
       { show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password') },
       { show: enableGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token') },
-      { show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Access') },
+      { show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDAV Access') },
       { show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book') },
       { show: true, href: '#lang-setting', text: gettext('Language') },
       { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
