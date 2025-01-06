@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
-import { wikiId, wikiPermission, gettext } from '../../utils/constants';
+import { wikiId, wikiPermission, gettext, isWikiAdmin } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -44,7 +44,7 @@ class SidePanel extends PureComponent {
   }
 
   componentDidMount() {
-    if (wikiPermission == 'rw') {
+    if (wikiPermission === 'rw' && isWikiAdmin) {
       this.getPublishWikiLink();
     }
   }
