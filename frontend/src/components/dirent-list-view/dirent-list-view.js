@@ -697,36 +697,52 @@ class DirentListView extends React.Component {
       ];
     }
 
-    // sort
-    const sortByName = sortBy == 'name';
-    const sortByTime = sortBy == 'time';
-    const sortBySize = sortBy == 'size';
-    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
     return [
-      { isFixed: true, width: 31, className: 'pl10 pr-2', children: (
-        <input
-          type="checkbox"
-          className="vam"
-          onChange={this.props.onAllItemSelected}
-          checked={this.props.isAllItemSelected}
-          title={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-          aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-          disabled={direntList.length === 0}
-        />
-      ) }, {
+      { isFixed: true,
+        width: 31,
+        className: 'pl10 pr-2 cursor-pointer',
+        title: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
+        ariaLabel: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
+        children: (
+          <input
+            type="checkbox"
+            className="vam cursor-pointer"
+            checked={this.props.isAllItemSelected}
+            disabled={direntList.length === 0}
+          />
+        ),
+        onClick: (e) => {
+          e.stopPropagation();
+          this.props.onAllItemSelected();
+        }
+      },
+      {
         isFixed: true, width: 32, className: 'pl-2 pr-2', // star
-      }, {
+      },
+      {
         isFixed: true, width: 40, className: 'pl-2 pr-2', // icon
-      }, {
-        isFixed: false, width: 0.5, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>),
-      }, {
+      },
+      {
+        isFixed: false,
+        width: 0.5,
+        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
+      },
+      {
         isFixed: false, width: 0.06, // tag
-      }, {
+      },
+      {
         isFixed: false, width: 0.18, // operation
-      }, {
-        isFixed: false, width: 0.11, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a>)
-      }, {
-        isFixed: false, width: 0.15, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a>)
+      },
+      {
+        isFixed: false,
+        width: 0.11,
+        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
+      },
+      {
+        isFixed: false,
+        width: 0.15,
+        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
       }
     ];
   };
@@ -736,7 +752,6 @@ class DirentListView extends React.Component {
 
     const isDesktop = Utils.isDesktop();
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
-    const headers = this.getHeaders(isDesktop);
 
     return (
       <div
@@ -752,7 +767,7 @@ class DirentListView extends React.Component {
         {direntList.length > 0 && (
           <FixedWidthTable
             className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
-            headers={headers}
+            headers={this.getHeaders(isDesktop)}
             theadOptions={isDesktop ? { onMouseDown: this.onThreadMouseDown, onContextMenu: this.onThreadContextMenu } : {}}
           >
             {direntList.map((dirent, index) => {

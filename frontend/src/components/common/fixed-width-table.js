@@ -26,9 +26,19 @@ const FixedWidthTable = ({ className, headers, theadOptions = {}, children }) =>
       <thead { ...theadOptions }>
         <tr>
           {headers.map((header, index) => {
-            const { width, isFixed, children: thChildren, className } = header;
-            const validWidth = isFixed ? width : (containerWidth - fixedWidth) * width;
-            return (<th key={index} style={{ width: validWidth }} className={className}>{thChildren}</th>);
+            const { width, isFixed, className, onClick = () => {}, title = '', ariaLabel = '' } = header;
+            return (
+              <th
+                key={index}
+                style={{ width: isFixed ? width : (containerWidth - fixedWidth) * width }}
+                className={className}
+                onClick={onClick}
+                title={title}
+                aria-label={ariaLabel}
+              >
+                {header.children}
+              </th>
+            );
           })}
         </tr>
       </thead>
