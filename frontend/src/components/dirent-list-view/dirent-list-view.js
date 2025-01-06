@@ -22,7 +22,6 @@ import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import FixedWidthTable from '../common/fixed-width-table';
-import SeahubCheckbox from '../common/seahub-checkbox';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -689,7 +688,7 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = (isDesktop) => {
-    const { sortBy, sortOrder } = this.props;
+    const { direntList, sortBy, sortOrder } = this.props;
     if (!isDesktop) {
       return [
         { isFixed: false, width: 0.12 },
@@ -705,7 +704,14 @@ class DirentListView extends React.Component {
         className: 'pl10 pr-2 cursor-pointer',
         title: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
         ariaLabel: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
-        children: (<SeahubCheckbox isSelected={this.props.isAllItemSelected} highlight={false} />),
+        children: (
+          <input
+            type="checkbox"
+            className="vam cursor-pointer"
+            checked={this.props.isAllItemSelected}
+            disabled={direntList.length === 0}
+          />
+        ),
         onClick: (e) => {
           e.stopPropagation();
           this.props.onAllItemSelected();
