@@ -115,7 +115,9 @@ class Wiki extends Component {
         let pageId = this.getFirstPageId(config);
         // opened by url
         const urlPageId = location.pathname.split('/').filter(item => !!item).pop();
-        if (urlPageId) pageId = urlPageId;
+        if (urlPageId && urlPageId.length === 4 && PageUtils.getPageById(config.pages, urlPageId)) {
+          pageId = urlPageId;
+        }
         if (pageId) {
           this.setCurrentPage(pageId);
         }
