@@ -11,10 +11,6 @@ const propTypes = {
 };
 
 class PublishedWikiExtrance extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { wikiID, customURLPart } = this.props;
     return (
