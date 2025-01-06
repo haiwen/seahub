@@ -53,7 +53,7 @@ class WebdavSecretView(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if len(secret) >= 30:
-                error_msg = _('Length of WebDav password should be less than 30.')
+                error_msg = _('Length of WebDAV password should be less than 30.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if len(secret) < settings.WEBDAV_SECRET_MIN_LENGTH:
