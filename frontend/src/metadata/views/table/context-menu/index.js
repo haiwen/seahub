@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
@@ -17,6 +17,7 @@ import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dial
 import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
 import { Dirent } from '../../../../models';
 import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
+import ContextMenuComponent from '../../../components/context-menu';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -39,11 +40,8 @@ const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
   getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder
 }) => {
-  const menuRef = useRef(null);
   const currentRecord = useRef(null);
 
-  const [visible, setVisible] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
   const [fileTagsRecord, setFileTagsRecord] = useState(null);
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
   const [isMoveDialogShow, setMoveDialogShow] = useState(false);
@@ -91,7 +89,6 @@ const ContextMenu = ({
   }, [deleteRecords]);
 
   const options = useMemo(() => {
-    if (!visible) return [];
     const permission = window.sfMetadataContext.getPermission();
     const isReadonly = permission === 'r';
     const { columns } = metadata;
@@ -210,18 +207,7 @@ const ContextMenu = ({
     }
 
     return list;
-  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
-
-  const handleHide = useCallback((event) => {
-    if (!menuRef.current && visible) {
-      setVisible(false);
-      return;
-    }
-
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setVisible(false);
-    }
-  }, [menuRef, visible]);
+  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
 
   const handelGenerateDescription = useCallback((record) => {
     if (!checkCanModifyRow(record)) return;
@@ -305,8 +291,7 @@ const ContextMenu = ({
     });
   }, [metadata, extractFilesDetails, updateRecords]);
 
-  const handleOptionClick = useCallback((event, option) => {
-    event.stopPropagation();
+  const handleOptionClick = useCallback((option, event) => {
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
         const { record } = option;
@@ -315,7 +300,6 @@ const ContextMenu = ({
       }
       case OPERATION.OPEN_PARENT_FOLDER: {
         event.preventDefault();
-        event.stopPropagation();
         const { record } = option;
         openParentFolder(record);
         break;
@@ -394,97 +378,21 @@ const ContextMenu = ({
         break;
       }
     }
-    setVisible(false);
   }, [repoID, onCopySelected, onClearSelected, handelGenerateDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
-
-  const getMenuPosition = useCallback((x = 0, y = 0) => {
-    let menuStyles = {
-      top: y,
-      left: x
-    };
-    if (!menuRef.current) return menuStyles;
-    const rect = menuRef.current.getBoundingClientRect();
-    const tableCanvasContainerRect = getTableCanvasContainerRect();
-    const tableContentRect = getTableContentRect();
-    const { right: innerWidth, bottom: innerHeight } = tableContentRect;
-    menuStyles.top = menuStyles.top - tableCanvasContainerRect.top;
-    menuStyles.left = menuStyles.left - tableCanvasContainerRect.left;
-
-    if (y + rect.height > innerHeight - 10) {
-      menuStyles.top -= rect.height;
-    }
-    if (x + rect.width > innerWidth) {
-      menuStyles.left -= rect.width;
-    }
-    if (menuStyles.top < 0) {
-      menuStyles.top = rect.bottom > innerHeight ? (innerHeight - 10 - rect.height) / 2 : 0;
-    }
-    if (menuStyles.left < 0) {
-      menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
-    }
-    return menuStyles;
-  }, [getTableContentRect, getTableCanvasContainerRect]);
-
-  useEffect(() => {
-    const handleShow = (event) => {
-      event.preventDefault();
-      if (menuRef.current && menuRef.current.contains(event.target)) return;
-
-      setVisible(true);
-
-      const position = getMenuPosition(event.clientX, event.clientY);
-      setPosition(position);
-    };
-
-    document.addEventListener('contextmenu', handleShow);
-
-    return () => {
-      document.removeEventListener('contextmenu', handleShow);
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (visible) {
-      document.addEventListener('mousedown', handleHide);
-    } else {
-      document.removeEventListener('mousedown', handleHide);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleHide);
-    };
-  }, [visible, handleHide]);
-
-  const renderMenu = useCallback(() => {
-    if (!visible) return null;
-    if (options.length === 0) return null;
-    return (
-      <div
-        ref={menuRef}
-        className='dropdown-menu sf-metadata-contextmenu'
-        style={position}
-      >
-        {options.map((option, index) => (
-          <button
-            key={index}
-            className='dropdown-item sf-metadata-contextmenu-item'
-            onClick={(event) => handleOptionClick(event, option)}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-    );
-  }, [visible, options, position, handleOptionClick]);
 
   const currentRecordId = getRecordIdFromRecord(currentRecord.current);
   const fileName = getFileNameFromRecord(currentRecord.current);
 
+  const { top, left } = getTableCanvasContainerRect();
+  const { right, bottom } = getTableContentRect();
+
   return (
     <>
-      {renderMenu()}
+      <ContextMenuComponent
+        options={options}
+        boundaryCoordinates={{ top, left, right, bottom }}
+        onOptionClick={handleOptionClick}
+      />
       {fileTagsRecord && (
         <FileTagsDialog record={fileTagsRecord} onToggle={toggleFileTagsRecord} onSubmit={updateFileTags} />
       )}

@@ -618,7 +618,7 @@ class Records extends Component {
   };
 
   getTableCanvasContainerRect = () => {
-    return this.resultContainerRef.getBoundingClientRect();
+    return this.resultContainerRef?.getBoundingClientRect() || { top: 0, left: 0 };
   };
 
   renderRecordsBody = ({ containerWidth }) => {
