@@ -72,6 +72,11 @@ def wiki_view(request, wiki_id, page_id=None):
     
     is_admin = is_repo_admin(username, repo_id)
     last_modified = datetime.fromtimestamp(last_modified)
+    try:
+        publish_config = Wiki2Publish.objects.get(repo_id=wiki.repo_id)
+        publish_url = publish_config.publish_url
+    except Wiki2Publish.DoesNotExist:
+        publish_url = ''
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "is_admin": is_admin,
@@ -81,7 +86,8 @@ def wiki_view(request, wiki_id, page_id=None):
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": permission,
-        "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH
+        "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH,
+        "publish_url": publish_url
     })
 
 

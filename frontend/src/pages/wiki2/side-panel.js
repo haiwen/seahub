@@ -20,7 +20,7 @@ import PublishedWikiExtrance from '../../components/published-wiki-entrance';
 
 import './side-panel.css';
 
-const { repoName } = window.wiki.config;
+const { repoName, publishUrl } = window.wiki.config;
 
 const propTypes = {
   isSidePanelOpen: PropTypes.bool.isRequired,
@@ -39,27 +39,9 @@ class SidePanel extends PureComponent {
     super(props);
     this.state = {
       isShowTrashDialog: false,
-      customUrl: ''
+      customUrl: publishUrl
     };
   }
-
-  componentDidMount() {
-    if (wikiPermission == 'rw') {
-      this.getPublishWikiLink();
-    }
-  }
-
-  getPublishWikiLink = () => {
-    wikiAPI.getPublishWikiLink(wikiId).then((res) => {
-      const { publish_url } = res.data;
-      this.setState({
-        customUrl: publish_url
-      });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
 
   onDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);

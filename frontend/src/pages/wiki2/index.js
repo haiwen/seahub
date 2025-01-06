@@ -97,10 +97,10 @@ class Wiki extends Component {
 
   getWikiConfig = () => {
     let wikiAPIConfig;
-    if (wikiPermission === 'rw') {
-      wikiAPIConfig = wikiAPI.getWiki2Config(wikiId);
-    } else {
+    if (wikiPermission === 'public') {
       wikiAPIConfig = wikiAPI.getWiki2PublishConfig(wikiId);
+    } else {
+      wikiAPIConfig = wikiAPI.getWiki2Config(wikiId);
     }
     wikiAPIConfig.then(res => {
       const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
@@ -200,10 +200,10 @@ class Wiki extends Component {
       isDataLoading: true,
     });
     let getWikiPage;
-    if (wikiPermission === 'rw') {
-      getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
-    } else {
+    if (wikiPermission === 'public') {
       getWikiPage = wikiAPI.getWiki2PublishPage(wikiId, pageId);
+    } else {
+      getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
     }
     getWikiPage.then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
