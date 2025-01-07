@@ -105,6 +105,7 @@ FILEEXT_ICON_MAP = {
     'bmp': 'pic.png',
     'ico': 'pic.png',
     'psd': 'psd.png',
+    'draw': 'draw.png',
 
     # zip file
     'zip': 'zip.png',
