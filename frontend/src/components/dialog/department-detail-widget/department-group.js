@@ -62,7 +62,8 @@ class Item extends Component {
               className={`dtable-font dtable-icon-${isExpanded ? 'drop-down' : 'right-slide'} pr-2`}
               onClick={this.toggleExpanded}
               style={{color: isCurrent ? '#fff' : '#999', fontSize: '12px'}}
-            ></span>
+            >
+            </span>
           }
           <span style={hasChild ? {} : {paddingLeft: '20px'}}>{department.name}</span>
         </div>

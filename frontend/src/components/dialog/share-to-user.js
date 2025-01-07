@@ -52,7 +52,7 @@ class UserItem extends React.Component {
     let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr onMouseEnter={ this.onMouseEnter } onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
           <div className="position-relative d-flex align-items-center">
             <img
@@ -355,7 +355,7 @@ class ShareToUser extends React.Component {
   };
 
   toggleDepartmentDetailDialog = () => {
-    this.setState({isShowDepartmentDetailDialog : !this.state.isShowDepartmentDetailDialog});
+    this.setState({ isShowDepartmentDetailDialog: !this.state.isShowDepartmentDetailDialog });
   }
 
   addUserShares = (membersSelectedObj) => {
