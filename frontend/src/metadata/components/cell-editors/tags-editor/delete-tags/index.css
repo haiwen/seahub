@@ -17,14 +17,15 @@
   padding: 0 8px 0 2px;
   font-size: 13px;
   border-radius: 10px;
-  background: #eaeaea;
+  border: 1px solid #dbdbdb;
+  background: #fff;
   margin-top: 2px;
   margin-bottom: 2px;
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-color {
-  width: 14px;
-  height: 14px;
+  width: 1px;
+  height: 12px;
   border-radius: 50%;
   margin-left: 1px;
 }
@@ -34,7 +35,7 @@
   height: 20px;
   line-height: 20px;
   color: #212529;
-  margin-left: 5px;
+  margin-left: 8px;
   max-width: 200px;
   flex: 1 1;
   overflow: hidden;
@@ -53,4 +54,3 @@
   fill: #666;
   font-size: 12px;
 }
-

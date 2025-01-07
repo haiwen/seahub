@@ -1,5 +1,5 @@
 export const addRowLinks = (row, key, other_rows_ids) => {
-  let updatedRow = row;
+  let updatedRow = { ...row };
   let updatedLinks = Array.isArray(updatedRow[key]) ? [...updatedRow[key]] : [];
   other_rows_ids.forEach((otherRowId) => {
     if (updatedLinks.findIndex((linked) => linked.row_id === otherRowId) < 0) {
@@ -14,7 +14,7 @@ export const removeRowLinks = (row, key, other_rows_ids) => {
   if (!Array.isArray(row[key]) || row[key].length === 0) {
     return row;
   }
-  let updatedRow = row;
+  let updatedRow = { ...row };
   let updatedLinks = [...updatedRow[key]];
   other_rows_ids.forEach((otherRowId) => {
     const deleteIndex = updatedLinks.findIndex((linked) => linked.row_id === otherRowId);

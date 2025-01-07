@@ -1,0 +1,21 @@
+.sf-table-cell-formatter {
+  width: 100%;
+}
+
+.sf-table-sub-tags-formatter,
+.sf-table-tag-files-formatter {
+  text-align: right;
+}
+
+.sf-table-tag-name-formatter {
+  display: flex;
+  align-items: center;
+}
+
+.sf-table-tag-name-formatter .sf-table-tag-color {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}

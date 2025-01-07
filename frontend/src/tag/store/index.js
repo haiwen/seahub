@@ -9,6 +9,8 @@ import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import LocalOperator from './local-operator';
 import TagsData from '../model/tagsData';
+import { normalizeColumns } from '../utils/column';
+import { getColumnByKey } from '../../components/sf-table/utils/column';
 
 class Store {
 
@@ -43,7 +45,8 @@ class Store {
   async loadTagsData(limit) {
     const res = await this.context.getTags({ start: this.startIndex, limit });
     const rows = res?.data?.results || [];
-    let data = new TagsData({ rows, columns: res?.data?.metadata });
+    const columns = normalizeColumns(res?.data?.metadata);
+    let data = new TagsData({ rows, columns });
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
     this.data = data;
@@ -74,6 +77,9 @@ class Store {
       return;
     }
 
+    this.data = { ...this.data };
+    this.data.rows = [...this.data.rows];
+    this.data.row_ids = [...this.data.row_ids];
     this.data.rows.push(...rows);
     rows.forEach(record => {
       this.data.row_ids.push(record._id);
@@ -366,6 +372,15 @@ class Store {
     });
     this.applyOperation(operation);
   }
+
+  modifyColumnWidth = (columnKey, newWidth) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_WIDTH;
+    const column = getColumnByKey(this.data.columns, columnKey);
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey, new_width: newWidth, old_width: column.width
+    });
+    this.applyOperation(operation);
+  };
 }
 
 export default Store;

@@ -1,0 +1,26 @@
+.sf-table-row .cell-jump-link {
+  display: inline-block;
+  font-size: 14px;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 8px;
+  border: 1px solid #eee;
+  padding: 0 2px;
+  color: #666666;
+  border-radius: 2px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 1px;
+}
+
+.cell-highlight {
+  background-color: rgb(239, 199, 151) !important;
+}
+
+.cell-current-highlight {
+  background-color: #f09f3f !important;
+}
+
+.frozen-columns {
+  background-color: #fff;
+}

@@ -59,10 +59,40 @@ export default function apply(data, operation) {
       const { tag_ids } = operation;
       const idNeedDeletedMap = tag_ids.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
       data.rows = data.rows.filter((row) => !idNeedDeletedMap[row._id]);
+      data.row_ids = data.row_ids.filter((rowId) => !idNeedDeletedMap[rowId]);
 
       // delete rows in id_row_map
       tag_ids.forEach(rowId => {
         delete data.id_row_map[rowId];
+      });
+
+      // remove parent/sub links
+      data.rows.forEach((row, index) => {
+        // update parent links
+        const parentLinks = row[PRIVATE_COLUMN_KEY.PARENT_LINKS];
+        const hasRelatedParentLinks = Array.isArray(parentLinks) && parentLinks.some((link) => idNeedDeletedMap[link.row_id]);
+        if (hasRelatedParentLinks) {
+          const updatedParentLinks = parentLinks.filter((link) => !idNeedDeletedMap[link.row_id]);
+          const updatedRow = {
+            ...row,
+            [PRIVATE_COLUMN_KEY.PARENT_LINKS]: updatedParentLinks,
+          };
+          data.rows[index] = updatedRow;
+          data.id_row_map[row._id] = updatedRow;
+        }
+
+        // update sub links
+        const subLinks = row[PRIVATE_COLUMN_KEY.SUB_LINKS];
+        const hasRelatedSubLinks = Array.isArray(subLinks) && subLinks.some((link) => idNeedDeletedMap[link.row_id]);
+        if (hasRelatedSubLinks) {
+          const updatedSubLinks = subLinks.filter((link) => !idNeedDeletedMap[link.row_id]);
+          const updatedRow = {
+            ...row,
+            [PRIVATE_COLUMN_KEY.SUB_LINKS]: updatedSubLinks,
+          };
+          data.rows[index] = updatedRow;
+          data.id_row_map[row._id] = updatedRow;
+        }
       });
 
       return data;
@@ -87,64 +117,93 @@ export default function apply(data, operation) {
     }
     case OPERATION_TYPE.ADD_TAG_LINKS: {
       const { column_key, row_id, other_rows_ids } = operation;
+      data.rows = [...data.rows];
       if (column_key === PRIVATE_COLUMN_KEY.PARENT_LINKS) {
-        data.rows = data.rows.map((row) => {
+        data.rows.forEach((row, index) => {
           const currentRowId = row._id;
+          let updatedRow = { ...row };
           if (currentRowId === row_id) {
             // add parent tags to current tag
-            row = addRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // add current tag as sub tag to related tags
-            row = addRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
-          return row;
         });
       } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
-        data.rows = data.rows.map((row) => {
+        data.rows.forEach((row, index) => {
           const currentRowId = row._id;
+          let updatedRow = { ...row };
           if (currentRowId === row_id) {
             // add sub tags to current tag
-            row = addRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // add current tag as parent tag to related tags
-            row = addRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
-          return row;
         });
       }
       return data;
     }
     case OPERATION_TYPE.DELETE_TAG_LINKS: {
       const { column_key, row_id, other_rows_ids } = operation;
+      data.rows = [...data.rows];
       if (column_key === PRIVATE_COLUMN_KEY.PARENT_LINKS) {
-        data.rows = data.rows.map((row) => {
+        data.rows.forEach((row, index) => {
           const currentRowId = row._id;
+          let updatedRow = { ...row };
           if (currentRowId === row_id) {
             // remove parent tags from current tag
-            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // remove current tag as sub tag from related tags
-            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
-          return row;
         });
       } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
-        data.rows = data.rows.map((row) => {
+        data.rows.forEach((row, index) => {
           const currentRowId = row._id;
+          let updatedRow = { ...row };
           if (currentRowId === row_id) {
             // remove sub tags from current tag
-            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // remove current tag as parent tag from related tags
-            row = removeRowLinks(row, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
+            data.rows[index] = updatedRow;
+            data.id_row_map[currentRowId] = updatedRow;
           }
-          return row;
         });
       }
+      return data;
+    }
+    case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {
+      const { column_key, new_width } = operation;
+      const columnIndex = data.columns.findIndex(column => column.key === column_key);
+      if (columnIndex < 0) {
+        return data;
+      }
+      let updatedColumns = [...data.columns];
+      updatedColumns[columnIndex].width = new_width;
+      data.columns = updatedColumns;
       return data;
     }
     default: {
