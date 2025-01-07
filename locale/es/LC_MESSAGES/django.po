@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 10:21+0800\n"
+"POT-Creation-Date: 2025-01-07 14:55+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015\n"
 "Language-Team: Spanish (http://app.transifex.com/haiwen/seahub/language/es/)\n"
@@ -1118,7 +1118,7 @@ msgid "File Path"
 msgstr "Ruta"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
-#: seahub/base/templatetags/seahub_tags.py:140
+#: seahub/base/templatetags/seahub_tags.py:141
 msgid "Deleted"
 msgstr "Borrado"
 
@@ -1192,86 +1192,86 @@ msgstr "Invitado"
 msgid "Default"
 msgstr "Predeterminado"
 
-#: seahub/base/templatetags/seahub_tags.py:139
+#: seahub/base/templatetags/seahub_tags.py:140
 msgid "Added"
 msgstr "Agregado"
 
-#: seahub/base/templatetags/seahub_tags.py:141
+#: seahub/base/templatetags/seahub_tags.py:142
 msgid "Removed"
 msgstr "Eliminado"
 
-#: seahub/base/templatetags/seahub_tags.py:142
+#: seahub/base/templatetags/seahub_tags.py:143
 msgid "Modified"
 msgstr "Modificado"
 
-#: seahub/base/templatetags/seahub_tags.py:143
+#: seahub/base/templatetags/seahub_tags.py:144
 msgid "Renamed"
 msgstr "Renombrado"
 
-#: seahub/base/templatetags/seahub_tags.py:144
+#: seahub/base/templatetags/seahub_tags.py:145
 msgid "Moved"
 msgstr "Movido"
 
-#: seahub/base/templatetags/seahub_tags.py:145
+#: seahub/base/templatetags/seahub_tags.py:146
 msgid "Added folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:146
+#: seahub/base/templatetags/seahub_tags.py:147
 msgid "Removed folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:147
+#: seahub/base/templatetags/seahub_tags.py:148
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
 msgstr "Carpeta renombrada"
 
-#: seahub/base/templatetags/seahub_tags.py:148
+#: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
 msgstr "Carpeta movida"
 
-#: seahub/base/templatetags/seahub_tags.py:149
+#: seahub/base/templatetags/seahub_tags.py:150
 msgid "Added or modified"
 msgstr "Agregado o modificado"
 
-#: seahub/base/templatetags/seahub_tags.py:164
-#: seahub/base/templatetags/seahub_tags.py:235
+#: seahub/base/templatetags/seahub_tags.py:165
+#: seahub/base/templatetags/seahub_tags.py:236
 msgid "Reverted library to status at"
 msgstr "Estado de la biblioteca revertido a las"
 
-#: seahub/base/templatetags/seahub_tags.py:167
-#: seahub/base/templatetags/seahub_tags.py:238
+#: seahub/base/templatetags/seahub_tags.py:168
+#: seahub/base/templatetags/seahub_tags.py:239
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr "Archivo \"%(file)s\" revertido a las %(time)s."
 
-#: seahub/base/templatetags/seahub_tags.py:171
-#: seahub/base/templatetags/seahub_tags.py:242
+#: seahub/base/templatetags/seahub_tags.py:172
+#: seahub/base/templatetags/seahub_tags.py:243
 msgid "Recovered deleted folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:173
-#: seahub/base/templatetags/seahub_tags.py:244 seahub/views/ajax.py:460
+#: seahub/base/templatetags/seahub_tags.py:174
+#: seahub/base/templatetags/seahub_tags.py:245 seahub/views/ajax.py:460
 msgid "Changed library name or description"
 msgstr "Descripción o nombre de la biblioteca modificados."
 
-#: seahub/base/templatetags/seahub_tags.py:175
-#: seahub/base/templatetags/seahub_tags.py:246
+#: seahub/base/templatetags/seahub_tags.py:176
+#: seahub/base/templatetags/seahub_tags.py:247
 msgid "Auto merge by seafile system"
 msgstr "Auto fusionar por sistema seafile"
 
-#: seahub/base/templatetags/seahub_tags.py:177
-#: seahub/base/templatetags/seahub_tags.py:248
+#: seahub/base/templatetags/seahub_tags.py:178
+#: seahub/base/templatetags/seahub_tags.py:249
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Created library"
 msgstr "Biblioteca creada"
 
-#: seahub/base/templatetags/seahub_tags.py:328
-#: seahub/base/templatetags/seahub_tags.py:364
+#: seahub/base/templatetags/seahub_tags.py:329
+#: seahub/base/templatetags/seahub_tags.py:365
 msgid "Just now"
 msgstr "Ahora"
 
-#: seahub/base/templatetags/seahub_tags.py:339
+#: seahub/base/templatetags/seahub_tags.py:340
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
@@ -1279,7 +1279,7 @@ msgstr[0] "Hace %(days)d día"
 msgstr[1] "Hace %(days)d días"
 msgstr[2] "Hace %(days)d días"
 
-#: seahub/base/templatetags/seahub_tags.py:346
+#: seahub/base/templatetags/seahub_tags.py:347
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
@@ -1287,7 +1287,7 @@ msgstr[0] "Hace %(hours)d hora"
 msgstr[1] "Hace %(hours)d horas"
 msgstr[2] "Hace %(hours)d horas"
 
-#: seahub/base/templatetags/seahub_tags.py:353
+#: seahub/base/templatetags/seahub_tags.py:354
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
@@ -1295,7 +1295,7 @@ msgstr[0] "Hace %(minutes)d minuto"
 msgstr[1] "Hace %(minutes)d minutos"
 msgstr[2] "Hace %(minutes)d minutos"
 
-#: seahub/base/templatetags/seahub_tags.py:359
+#: seahub/base/templatetags/seahub_tags.py:360
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
@@ -1303,16 +1303,16 @@ msgstr[0] "Hace menos de un segundo"
 msgstr[1] "Hace %(seconds)d segundos"
 msgstr[2] "Hace %(seconds)d segundos"
 
-#: seahub/base/templatetags/seahub_tags.py:484
+#: seahub/base/templatetags/seahub_tags.py:485
 msgid "Read-Write"
 msgstr "Lectura / Escritura"
 
-#: seahub/base/templatetags/seahub_tags.py:486
+#: seahub/base/templatetags/seahub_tags.py:487
 msgid "Read-Only"
 msgstr "Sólo lectura"
 
-#: seahub/base/templatetags/seahub_tags.py:510
-#: seahub/base/templatetags/seahub_tags.py:522
+#: seahub/base/templatetags/seahub_tags.py:511
+#: seahub/base/templatetags/seahub_tags.py:523
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
@@ -1320,27 +1320,27 @@ msgstr[0] "%(size)d byte"
 msgstr[1] "%(size)d bytes"
 msgstr[2] "%(size)d bytes"
 
-#: seahub/base/templatetags/seahub_tags.py:524
+#: seahub/base/templatetags/seahub_tags.py:525
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: seahub/base/templatetags/seahub_tags.py:526
+#: seahub/base/templatetags/seahub_tags.py:527
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: seahub/base/templatetags/seahub_tags.py:528
+#: seahub/base/templatetags/seahub_tags.py:529
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: seahub/base/templatetags/seahub_tags.py:530
+#: seahub/base/templatetags/seahub_tags.py:531
 #, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#: seahub/base/templatetags/seahub_tags.py:532
+#: seahub/base/templatetags/seahub_tags.py:533
 #, python-format
 msgid "%s PB"
 msgstr "%s PB"
