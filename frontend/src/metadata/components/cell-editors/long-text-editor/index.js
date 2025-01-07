@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { I18nextProvider } from 'react-i18next';
 import { LongTextEditorDialog, getPreviewContent } from '@seafile/seafile-editor';
 import toaster from '../../../../components/toast';
 import LongtextAPI from './api';
 import { getValidLongTextValue, isLongTextValueExceedLimit } from '../../../utils/column';
 import { lang, serviceURL } from '../../../../utils/constants';
 import { LONG_TEXT_EXCEED_LIMIT_MESSAGE, LONG_TEXT_EXCEED_LIMIT_SUGGEST } from '../../../constants';
+import i18n from '../../../../_i18n/i18n-seafile-editor';
 
 import './index.css';
 
@@ -17,8 +19,11 @@ class LongTextEditor extends React.PureComponent {
     this.repoID = window.sfMetadataContext.getSetting('repoID');
     this.filePath = '/';
     const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
-    const { repo_name } = repoInfo;
-    this.api = new LongtextAPI({ repoID: this.repoID, repoName: repo_name, server: serviceURL });
+    this.api = new LongtextAPI({
+      repoID: this.repoID,
+      repoName: repoInfo.repo_name,
+      server: serviceURL,
+    });
     this.value = this.initEditorValue();
   }
 
@@ -92,24 +97,24 @@ class LongTextEditor extends React.PureComponent {
 
   render() {
     const { column, readOnly } = this.props;
-    const headerName = column.name;
-
     return (
-      <LongTextEditorDialog
-        className="sf-metadata-long-text-editor-dialog"
-        lang={lang}
-        readOnly={readOnly}
-        headerName={headerName}
-        value={this.value.text}
-        autoSave={true}
-        saveDelay={20 * 1000}
-        isCheckBrowser={true}
-        editorApi={this.api}
-        // mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-        onSaveEditorValue={this.onSaveEditorValue}
-        onEditorValueChanged={this.onEditorValueChanged}
-        onCloseEditorDialog={this.onCloseEditorDialog}
-      />
+      <I18nextProvider i18n={ i18n }>
+        <LongTextEditorDialog
+          className="sf-metadata-long-text-editor-dialog"
+          lang={lang}
+          readOnly={readOnly}
+          headerName={column.name}
+          value={this.value.text}
+          autoSave={true}
+          saveDelay={20 * 1000}
+          isCheckBrowser={true}
+          editorApi={this.api}
+          // mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          onSaveEditorValue={this.onSaveEditorValue}
+          onEditorValueChanged={this.onEditorValueChanged}
+          onCloseEditorDialog={this.onCloseEditorDialog}
+        />
+      </I18nextProvider>
     );
   }
 }
