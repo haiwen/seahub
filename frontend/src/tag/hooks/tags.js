@@ -89,7 +89,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     setTagsData(null);
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadata, enableTags]);
+  }, [enableMetadata, enableTags]);
 
   const handelSelectTag = useCallback((tag, isSelected) => {
     if (isSelected) return;
