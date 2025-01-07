@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { debounce } from '../../metadata/utils/common';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
+import { ALL_TAGS_ID } from '../../tag/constants';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -152,13 +153,20 @@ class DirPath extends React.Component {
 
   turnTagPathToLink = (pathList) => {
     if (!Array.isArray(pathList) || pathList.length === 0) return null;
-    const [, , tagId] = pathList;
+    const [, , tagId, children] = pathList;
+    const canSelectAllTags = tagId === ALL_TAGS_ID && !!children;
     return (
       <>
         <span className="path-split">/</span>
         <span className="path-item">{gettext('Tags')}</span>
         <span className="path-split">/</span>
-        <TagViewName id={tagId} />
+        <TagViewName id={tagId} canSelectAllTags={canSelectAllTags} />
+        {children && (
+          <>
+            <span className="path-split">/</span>
+            <span className="path-item">{children}</span>
+          </>
+        )}
       </>
     );
   };

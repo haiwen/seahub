@@ -224,6 +224,7 @@ class DirColumnView extends React.Component {
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
               updateCurrentDirent={this.props.updateCurrentDirent}
+              updateCurrentPath={this.props.updateCurrentPath}
             />
           )}
           {currentMode === LIST_MODE && (
