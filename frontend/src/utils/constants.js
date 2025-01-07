@@ -8,6 +8,13 @@ export const gettext = window.gettext;
 
 export const internalFilePath = '/_Internal/seatable-integration.json';
 
+// for unit test global variable
+if (!window.app) {
+  window.app = {};
+  window.app.config = {};
+  window.app.pageOptions = {};
+}
+
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
 export const avatarInfo = window.app.config.avatarInfo;
