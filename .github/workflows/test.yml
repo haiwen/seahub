@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: run npm lint
+      - name: run npm lint and npm test
         run: |
           cd $GITHUB_WORKSPACE/tests/
           if chmod +x test_frontend_changes.sh && ./test_frontend_changes.sh; then chmod +x github_actions_npm_lint.sh && ./github_actions_npm_lint.sh; else true; fi

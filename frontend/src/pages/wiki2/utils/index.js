@@ -48,7 +48,12 @@ const getCurrentPageConfig = (pages, pageId) => {
 };
 
 const getWikPageLink = (pageId) => {
-  return window.location.url.replace(/\/[^\/]+$/, `/${pageId}`);
+  let { origin, pathname } = window.location;
+  let pathArr = pathname.split('/');
+  // pathname is like `/wikis/${wikiId}/{pageId}/`
+  pathArr[3] = pageId;
+  pathname = pathArr.join('/');
+  return `${origin}${pathname}`;
 };
 
 const throttle = (fn, delay) => {
