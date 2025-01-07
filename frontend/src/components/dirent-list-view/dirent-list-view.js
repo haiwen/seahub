@@ -710,6 +710,7 @@ class DirentListView extends React.Component {
             className="vam cursor-pointer"
             checked={this.props.isAllItemSelected}
             disabled={direntList.length === 0}
+            readOnly
           />
         ),
         onClick: (e) => {
