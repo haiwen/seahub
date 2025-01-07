@@ -16,12 +16,11 @@ const LinkedTags = ({ isParentTags, linkedTags, switchToAddTagsPage, deleteLined
         <Button size="sm" color="primary" className="mr-2" onClick={switchToAddTagsPage}>{gettext('Link existing tags')}</Button>
       </div>
       <div className="sf-metadata-set-linked-tags-popover-body">
-        {linkedTags.length === 0 && (
-          <EmptyTip text={gettext(isParentTags ? 'No parent tag' : 'No sub tag')} />
-        )}
-        {linkedTags.length > 0 && (
+        {linkedTags.length === 0 ?
+          <EmptyTip text={isParentTags ? gettext('No parent tag') : gettext('No sub tag')} />
+          :
           <Tags deletable tags={linkedTags} deleteTag={deleteLinedTag} />
-        )}
+        }
       </div>
     </div>
   );
