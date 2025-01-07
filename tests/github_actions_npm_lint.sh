@@ -17,4 +17,4 @@ echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >~/.npmrc
 
 cd $GITHUB_WORKSPACE
 
-cd ./frontend && npm install && npm run lint
+cd ./frontend && npm install && npm run lint && npm run test
