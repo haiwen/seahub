@@ -859,6 +859,8 @@ class DirentListView extends React.Component {
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog
+                repoID={this.props.repoID}
+                repoInfo={this.props.currentRepoInfo}
                 imageItems={this.state.imageItems}
                 imageIndex={this.state.imageIndex}
                 closeImagePopup={this.closeImagePopup}
@@ -867,6 +869,7 @@ class DirentListView extends React.Component {
                 onDeleteImage={this.deleteImage}
                 onRotateImage={this.rotateImage}
                 enableRotate={canModifyFile}
+                onFileTagChanged={this.props.onFileTagChanged}
               />
             </ModalPortal>
           )}
