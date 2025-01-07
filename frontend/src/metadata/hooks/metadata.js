@@ -75,7 +75,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     setIdViewMap({});
     setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, enableMetadata]);
+  }, [enableMetadata]);
 
   useEffect(() => {
     if (!enableMetadata) {
