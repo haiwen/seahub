@@ -35,6 +35,12 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
   }, [hideMetadataView]);
 
   useEffect(() => {
+    setLoading(true);
+    setEnableMetadata(false);
+    setEnableTags(false);
+    setEnableOCR(false);
+    setDetailsSettings({});
+    setIsBeingBuilt(false);
     if (!enableMetadataManagement) {
       cancelMetadataURL();
       setLoading(false);
