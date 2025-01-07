@@ -1,27 +1,26 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
-import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
 import { gettext, orgID } from '../../../utils/constants';
-import Account from '../../../components/common/account';
-import DepartmentNode from './department-node';
-import DepartmentV2TreePanel from './departments-v2-tree-panel';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import DepartmentsV2MembersList from './departments-v2-members-list';
-import AddDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
-import AddDepartMemberV2Dialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
-import RenameDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
-import DeleteDepartmentV2ConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
+import toaster from '../../../components/toast';
+import Account from '../../../components/common/account';
+import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
+import AddDepartMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
+import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
+import DeleteDepartmentConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
 import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
 import Loading from '../../../components/loading';
-import { Utils } from '../../../utils/utils';
+import DepartmentNode from './department-node';
+import DepartmentsTreePanel from './departments-tree-panel';
+import Department from './department';
 
 import '../../../css/system-departments-v2.css';
 
-class DepartmentsV2 extends React.Component {
+class Departments extends React.Component {
 
   constructor(props) {
     super(props);
-    const localSortItems = localStorage.getItem('departments-members-sort-items') || {};
     this.state = {
       rootNodes: [],
       checkedDepartmentId: -1,
@@ -34,8 +33,8 @@ class DepartmentsV2 extends React.Component {
       membersList: [],
       isTopDepartmentLoading: false,
       isMembersListLoading: false,
-      sortBy: localSortItems.sort_by || 'name', // 'name' or 'role'
-      sortOrder: localSortItems.sort_order || 'asc', // 'asc' or 'desc',
+      sortBy: 'name', // 'name' or 'role'
+      sortOrder: 'asc', // 'asc' or 'desc',
     };
   }
 
@@ -262,18 +261,15 @@ class DepartmentsV2 extends React.Component {
         break;
       case 'role-asc':
         comparator = function (a, b) {
-          return a.is_staff && !b.is_staff ? -1 : 1;
+          return a.role == 'Admin' ? -1 : 1;
         };
         break;
       case 'role-desc':
         comparator = function (a, b) {
-          return a.is_staff && !b.is_staff ? 1 : -1;
+          return a.role == 'Admin' ? 1 : -1;
         };
         break;
-      default:
-        comparator = function () {
-          return true;
-        };
+      // no default
     }
     items.sort((a, b) => {
       return comparator(a, b);
@@ -282,7 +278,6 @@ class DepartmentsV2 extends React.Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    localStorage.setItem('departments-members-sort-items', { sort_by: sortBy, sort_order: sortOrder });
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -318,7 +313,7 @@ class DepartmentsV2 extends React.Component {
               {isTopDepartmentLoading && <Loading/>}
               {(!isTopDepartmentLoading && rootNodes.length > 0) &&
                 <>
-                  <DepartmentV2TreePanel
+                  <DepartmentsTreePanel
                     rootNodes={rootNodes}
                     checkedDepartmentId={checkedDepartmentId}
                     onChangeDepartment={this.onChangeDepartment}
@@ -329,7 +324,7 @@ class DepartmentsV2 extends React.Component {
                     toggleRename={this.toggleRename}
                     toggleDelete={this.toggleDelete}
                   />
-                  <DepartmentsV2MembersList
+                  <Department
                     rootNodes={rootNodes}
                     checkedDepartmentId={checkedDepartmentId}
                     membersList={membersList}
@@ -362,7 +357,7 @@ class DepartmentsV2 extends React.Component {
           </div>
         </div>
         {isAddMembersDialogShow &&
-          <AddDepartMemberV2Dialog
+          <AddDepartMemberDialog
             orgID={orgID}
             toggle={this.toggleAddMembers}
             nodeId={operateNode.id}
@@ -370,7 +365,7 @@ class DepartmentsV2 extends React.Component {
           />
         }
         {isRenameDepartmentDialogShow &&
-          <RenameDepartmentV2Dialog
+          <RenameDepartmentDialog
             orgID={orgID}
             node={operateNode}
             toggle={this.toggleRename}
@@ -378,14 +373,14 @@ class DepartmentsV2 extends React.Component {
           />
         }
         {isDeleteDepartmentDialogShow &&
-          <DeleteDepartmentV2ConfirmDialog
+          <DeleteDepartmentConfirmDialog
             node={operateNode}
             toggle={this.toggleDelete}
             onDelete={this.onDelete}
           />
         }
         {isAddDepartmentDialogShow &&
-          <AddDepartmentV2Dialog
+          <AddDepartmentDialog
             parentNode={operateNode}
             toggle={this.toggleAddDepartment}
             addDepartment={this.addDepartment}
@@ -406,4 +401,4 @@ class DepartmentsV2 extends React.Component {
 
 }
 
-export default DepartmentsV2;
+export default Departments;

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
@@ -20,7 +21,7 @@ export default class AddDepartMemberV2Dialog extends React.Component {
     super(props);
     this.state = {
       selectedOptions: [],
-      errMessage: '',
+      errMsgs: '',
     };
   }
 
@@ -39,7 +40,7 @@ export default class AddDepartMemberV2Dialog extends React.Component {
     req.then((res) => {
       this.setState({ selectedOptions: [] });
       if (res.data.failed.length > 0) {
-        this.setState({ errMessage: res.data.failed[0].error_msg });
+        this.setState({ errMsgs: res.data.failed.map(item => item.error_msg) });
       }
       if (res.data.success.length > 0) {
         this.props.onMemberChanged();
@@ -47,21 +48,28 @@ export default class AddDepartMemberV2Dialog extends React.Component {
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      this.setState({ errMessage });
+      toaster.danger(errMessage);
     });
   };
 
   render() {
+    const { errMsgs } = this.state;
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
-        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Add member')}</SeahubModalHeader>
+        <SeahubModalHeader toggle={this.props.toggle}>{gettext('Add members')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             isMulti={true}
           />
-          {this.state.errMessage && <p className="error mt-2">{this.state.errMessage}</p> }
+          {errMsgs.length > 0 && (
+            <ul className="list-unstyled">
+              {errMsgs.map((item, index) => {
+                return <li key={index} className="error mt-2">{item}</li>;
+              })}
+            </ul>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>

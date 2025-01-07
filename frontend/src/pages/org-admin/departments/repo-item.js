@@ -64,7 +64,7 @@ class RepoItem extends React.Component {
 
 const RepoItemPropTypes = {
   repo: PropTypes.object.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.number.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
 };
 

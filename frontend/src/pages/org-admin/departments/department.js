@@ -4,7 +4,7 @@ import { Table, Dropdown, DropdownToggle } from 'reactstrap';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
-import DepartmentsV2MembersItem from './departments-v2-members-item';
+import MemberItem from './member-item';
 import RepoItem from './repo-item';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
@@ -21,7 +21,7 @@ const propTypes = {
   getRepos: PropTypes.func,
 };
 
-class DepartmentsV2MembersList extends React.Component {
+class Department extends React.Component {
 
   constructor(props) {
     super(props);
@@ -160,7 +160,7 @@ class DepartmentsV2MembersList extends React.Component {
             {isMembersListLoading && <Loading />}
             {!isMembersListLoading && membersList.length > 0 &&
               <div className='cur-view-content'>
-                <Table hover>
+                <Table>
                   <thead>
                     <tr>
                       <th width="60px"></th>
@@ -173,7 +173,7 @@ class DepartmentsV2MembersList extends React.Component {
                   <tbody>
                     {membersList.map((item, index) => {
                       return (
-                        <DepartmentsV2MembersItem
+                        <MemberItem
                           key={index}
                           member={item}
                           deleteMember={this.props.deleteMember}
@@ -229,6 +229,6 @@ class DepartmentsV2MembersList extends React.Component {
   }
 }
 
-DepartmentsV2MembersList.propTypes = propTypes;
+Department.propTypes = propTypes;
 
-export default DepartmentsV2MembersList;
+export default Department;

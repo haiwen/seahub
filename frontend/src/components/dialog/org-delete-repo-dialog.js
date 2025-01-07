@@ -18,7 +18,6 @@ class DeleteRepoDialog extends React.Component {
     orgAdminAPI.orgAdminDeleteDepartmentRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
       if (res.data.success) {
         this.props.onDeleteRepo(repo.repo_id);
-        this.props.toggle();
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -47,7 +46,7 @@ class DeleteRepoDialog extends React.Component {
 const propTypes = {
   repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
+  groupID: PropTypes.number,
   onDeleteRepo: PropTypes.func.isRequired
 };
 
