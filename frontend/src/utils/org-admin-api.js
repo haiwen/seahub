@@ -464,10 +464,12 @@ class OrgAdminAPI {
     return this.req.delete(url);
   }
 
-  orgAdminAddGroupMember(orgID, groupID, userEmail) {
+  orgAdminAddGroupMember(orgID, groupID, emails) {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/members/';
     let form = new FormData();
-    form.append('email', userEmail);
+    for (let i = 0; i < emails.length; i++) {
+      form.append('email', emails[i]);
+    }
     return this._sendPostRequest(url, form);
   }
 
