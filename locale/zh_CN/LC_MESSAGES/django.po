@@ -16,7 +16,7 @@
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
 # llj <lingjun.li1@gmail.com>, 2014
-# Seafile Info <info@seafile.com>, 2023-2024
+# Seafile Info <info@seafile.com>, 2023-2025
 # zheng xie <xiez1989@gmail.com>, 2014-2019
 # zMingGit <517046497@qq.com>, 2017
 # zMingGit <517046497@qq.com>, 2017
@@ -27,9 +27,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-04 10:40+0800\n"
+"POT-Creation-Date: 2025-01-07 10:21+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2023-2025\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -881,8 +881,9 @@ msgid ""
 msgstr "你已经有 %(nb_avatars)d 个头像, 最多允许拥有 %(nb_max_avatars)d 个."
 
 #: seahub/api2/endpoints/webdav_secret.py:56
-msgid "Length of WebDav password should be less than 30."
-msgstr "WebDAV 密码长度需要少于 30 个字符。"
+#| msgid "Length of WebDav password should be less than 30."
+msgid "Length of WebDAV password should be less than 30."
+msgstr "WebDAV 的密码长度应该小于30"
 
 #: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1408
 #: seahub/api2/endpoints/wikis.py:219
@@ -1527,11 +1528,11 @@ msgstr "%(site_name)s 团队"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1247
-#: seahub/views/file.py:1274 seahub/views/file.py:1498
-#: seahub/views/file.py:1537 seahub/views/repo.py:115 seahub/views/repo.py:172
-#: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
-#: seahub/views/repo.py:412
+#: seahub/views/ajax.py:427 seahub/views/file.py:1246
+#: seahub/views/file.py:1273 seahub/views/file.py:1497
+#: seahub/views/file.py:1536 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
+#: seahub/views/repo.py:411
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -2509,8 +2510,8 @@ msgstr "共享的资料库"
 #: seahub/templates/onlyoffice_file_view_react.html:86
 #: seahub/templates/onlyoffice_file_view_react.html:175
 #: seahub/templates/onlyoffice_file_view_react.html:198
-#: seahub/templates/sdoc_file_view_react.html:64
-#: seahub/templates/sdoc_file_view_react.html:87
+#: seahub/templates/sdoc_file_view_react.html:65
+#: seahub/templates/sdoc_file_view_react.html:88
 #: seahub/templates/view_file_onlyoffice.html:93
 #: seahub/templates/view_file_onlyoffice.html:182
 #: seahub/templates/view_file_onlyoffice.html:205
@@ -3046,11 +3047,11 @@ msgstr "禁用"
 
 #: seahub/utils/__init__.py:176 seahub/utils/__init__.py:191
 #: seahub/views/file.py:499 seahub/views/file.py:521 seahub/views/file.py:526
-#: seahub/views/file.py:579 seahub/views/file.py:869 seahub/views/file.py:1119
-#: seahub/views/file.py:1145 seahub/views/file.py:1175
-#: seahub/views/file.py:1318 seahub/views/file.py:1430
-#: seahub/views/file.py:1573 seahub/views/file.py:1691
-#: seahub/views/file.py:2162
+#: seahub/views/file.py:579 seahub/views/file.py:868 seahub/views/file.py:1118
+#: seahub/views/file.py:1144 seahub/views/file.py:1174
+#: seahub/views/file.py:1317 seahub/views/file.py:1429
+#: seahub/views/file.py:1572 seahub/views/file.py:1690
+#: seahub/views/file.py:2161
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
@@ -3082,7 +3083,7 @@ msgstr "指定的历史记录不存在"
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: seahub/views/__init__.py:790 seahub/views/repo.py:292
+#: seahub/views/__init__.py:790 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
@@ -3109,9 +3110,9 @@ msgid "Bad upload link token."
 msgstr "无效的上传链接"
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:512 seahub/views/file.py:543
-#: seahub/views/file.py:1267 seahub/views/file.py:1532
-#: seahub/views/file.py:2198 seahub/views/file.py:2203
-#: seahub/views/file.py:2210
+#: seahub/views/file.py:1266 seahub/views/file.py:1531
+#: seahub/views/file.py:2197 seahub/views/file.py:2202
+#: seahub/views/file.py:2209
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -3139,49 +3140,49 @@ msgstr "文件编码不合适"
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:766
-#: seahub/views/file.py:879 seahub/views/file.py:980
+#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:765
+#: seahub/views/file.py:878 seahub/views/file.py:979
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
-#: seahub/views/file.py:404 seahub/views/file.py:914
+#: seahub/views/file.py:404 seahub/views/file.py:913
 msgid "The library is encrypted, can not open file online."
 msgstr "加密资料库不能在线预览文件。"
 
-#: seahub/views/file.py:938 seahub/views/file.py:1063
-#: seahub/views/file.py:1389 seahub/views/file.py:1629
+#: seahub/views/file.py:937 seahub/views/file.py:1062
+#: seahub/views/file.py:1388 seahub/views/file.py:1628
 msgid "Error when prepare Office Online file preview page."
 msgstr "Office Online 预览文件时出错。"
 
-#: seahub/views/file.py:973 seahub/views/file.py:1079
-#: seahub/views/file.py:1409 seahub/views/file.py:1645
+#: seahub/views/file.py:972 seahub/views/file.py:1078
+#: seahub/views/file.py:1408 seahub/views/file.py:1644
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "OnlyOffice 预览文件时出错。"
 
-#: seahub/views/file.py:1211
+#: seahub/views/file.py:1210
 msgid "Unable to download file, invalid file path"
 msgstr "无法下载文件，无效的文件路径"
 
-#: seahub/views/file.py:1220
+#: seahub/views/file.py:1219
 msgid "Unable to download file, wrong file path"
 msgstr "无法下载文件，错误的文件路径"
 
-#: seahub/views/file.py:1227
+#: seahub/views/file.py:1226
 msgid "Unable to download file."
 msgstr "无法下载文件。"
 
-#: seahub/views/file.py:1445 seahub/views/file.py:1710
-#: seahub/views/repo.py:350
+#: seahub/views/file.py:1444 seahub/views/file.py:1709
+#: seahub/views/repo.py:349
 #, python-format
 msgid "Share link for %s."
 msgstr "%s 的共享链接。"
 
-#: seahub/views/file.py:1846 seahub/views/file.py:1851
+#: seahub/views/file.py:1845 seahub/views/file.py:1850
 msgid "Unable to download file"
 msgstr "无法下载文件"
 
-#: seahub/views/file.py:2191
+#: seahub/views/file.py:2190
 msgid "The original file does not exist"
 msgstr "源文档不存在"
 

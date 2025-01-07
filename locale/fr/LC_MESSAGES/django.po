@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-04 10:40+0800\n"
+"POT-Creation-Date: 2025-01-07 10:21+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Konstantin <kostya49.fr@gmail.com>, 2024\n"
 "Language-Team: French (http://app.transifex.com/haiwen/seahub/language/fr/)\n"
@@ -893,8 +893,9 @@ msgid ""
 msgstr "Vous avez déjà %(nb_avatars)d avatars et la valeur maximale autorisée est de %(nb_max_avatars)d."
 
 #: seahub/api2/endpoints/webdav_secret.py:56
-msgid "Length of WebDav password should be less than 30."
-msgstr "La longueur du mot de passe WebDav doit être inférieur à 30 caractères."
+#| msgid "Length of WebDav password should be less than 30."
+msgid "Length of WebDAV password should be less than 30."
+msgstr ""
 
 #: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1408
 #: seahub/api2/endpoints/wikis.py:219
@@ -1549,11 +1550,11 @@ msgstr "L'équipe de %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1247
-#: seahub/views/file.py:1274 seahub/views/file.py:1498
-#: seahub/views/file.py:1537 seahub/views/repo.py:115 seahub/views/repo.py:172
-#: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
-#: seahub/views/repo.py:412
+#: seahub/views/ajax.py:427 seahub/views/file.py:1246
+#: seahub/views/file.py:1273 seahub/views/file.py:1497
+#: seahub/views/file.py:1536 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
+#: seahub/views/repo.py:411
 msgid "Permission denied"
 msgstr "Autorisation refusée"
 
@@ -2537,8 +2538,8 @@ msgstr "Bibliothèques partagées"
 #: seahub/templates/onlyoffice_file_view_react.html:86
 #: seahub/templates/onlyoffice_file_view_react.html:175
 #: seahub/templates/onlyoffice_file_view_react.html:198
-#: seahub/templates/sdoc_file_view_react.html:64
-#: seahub/templates/sdoc_file_view_react.html:87
+#: seahub/templates/sdoc_file_view_react.html:65
+#: seahub/templates/sdoc_file_view_react.html:88
 #: seahub/templates/view_file_onlyoffice.html:93
 #: seahub/templates/view_file_onlyoffice.html:182
 #: seahub/templates/view_file_onlyoffice.html:205
@@ -3074,11 +3075,11 @@ msgstr "Désactiver"
 
 #: seahub/utils/__init__.py:176 seahub/utils/__init__.py:191
 #: seahub/views/file.py:499 seahub/views/file.py:521 seahub/views/file.py:526
-#: seahub/views/file.py:579 seahub/views/file.py:869 seahub/views/file.py:1119
-#: seahub/views/file.py:1145 seahub/views/file.py:1175
-#: seahub/views/file.py:1318 seahub/views/file.py:1430
-#: seahub/views/file.py:1573 seahub/views/file.py:1691
-#: seahub/views/file.py:2162
+#: seahub/views/file.py:579 seahub/views/file.py:868 seahub/views/file.py:1118
+#: seahub/views/file.py:1144 seahub/views/file.py:1174
+#: seahub/views/file.py:1317 seahub/views/file.py:1429
+#: seahub/views/file.py:1572 seahub/views/file.py:1690
+#: seahub/views/file.py:2161
 msgid "Unable to view file"
 msgstr "Impossible d'afficher le fichier"
 
@@ -3110,7 +3111,7 @@ msgstr "L'historique que vous avez spécifié n'existe pas"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: seahub/views/__init__.py:790 seahub/views/repo.py:292
+#: seahub/views/__init__.py:790 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" n'existe pas."
@@ -3137,9 +3138,9 @@ msgid "Bad upload link token."
 msgstr "Mauvais token de lien d'envoi."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:512 seahub/views/file.py:543
-#: seahub/views/file.py:1267 seahub/views/file.py:1532
-#: seahub/views/file.py:2198 seahub/views/file.py:2203
-#: seahub/views/file.py:2210
+#: seahub/views/file.py:1266 seahub/views/file.py:1531
+#: seahub/views/file.py:2197 seahub/views/file.py:2202
+#: seahub/views/file.py:2209
 msgid "File does not exist"
 msgstr "Le fichier n'existe pas"
 
@@ -3167,49 +3168,49 @@ msgstr "L'encodage que vous avez choisi n'est pas approprié."
 msgid "Unknown file encoding"
 msgstr "Encodage de fichier inconnu"
 
-#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:766
-#: seahub/views/file.py:879 seahub/views/file.py:980
+#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:765
+#: seahub/views/file.py:878 seahub/views/file.py:979
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "La taille du fichier dépasse %s, il ne peut donc pas être visionné en ligne."
 
-#: seahub/views/file.py:404 seahub/views/file.py:914
+#: seahub/views/file.py:404 seahub/views/file.py:913
 msgid "The library is encrypted, can not open file online."
 msgstr "La bibliothèque est cryptée. Elle ne peut pas être ouverte en ligne."
 
-#: seahub/views/file.py:938 seahub/views/file.py:1063
-#: seahub/views/file.py:1389 seahub/views/file.py:1629
+#: seahub/views/file.py:937 seahub/views/file.py:1062
+#: seahub/views/file.py:1388 seahub/views/file.py:1628
 msgid "Error when prepare Office Online file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du document Office Online"
 
-#: seahub/views/file.py:973 seahub/views/file.py:1079
-#: seahub/views/file.py:1409 seahub/views/file.py:1645
+#: seahub/views/file.py:972 seahub/views/file.py:1078
+#: seahub/views/file.py:1408 seahub/views/file.py:1644
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du fichier OnlyOffice"
 
-#: seahub/views/file.py:1211
+#: seahub/views/file.py:1210
 msgid "Unable to download file, invalid file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier invalide"
 
-#: seahub/views/file.py:1220
+#: seahub/views/file.py:1219
 msgid "Unable to download file, wrong file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier erroné"
 
-#: seahub/views/file.py:1227
+#: seahub/views/file.py:1226
 msgid "Unable to download file."
 msgstr "Impossible de télécharger le fichier."
 
-#: seahub/views/file.py:1445 seahub/views/file.py:1710
-#: seahub/views/repo.py:350
+#: seahub/views/file.py:1444 seahub/views/file.py:1709
+#: seahub/views/repo.py:349
 #, python-format
 msgid "Share link for %s."
 msgstr "Partager le lien pour %s."
 
-#: seahub/views/file.py:1846 seahub/views/file.py:1851
+#: seahub/views/file.py:1845 seahub/views/file.py:1850
 msgid "Unable to download file"
 msgstr "Impossible de télécharger le fichier"
 
-#: seahub/views/file.py:2191
+#: seahub/views/file.py:2190
 msgid "The original file does not exist"
 msgstr ""
 
