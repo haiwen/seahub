@@ -25,6 +25,7 @@ gettext('No login logs');
 gettext('No file update logs');
 gettext('No file access logs');
 gettext('Save Selected Items');
+gettext('New view');
 gettext('You have not shared any folders with other users yet. You can share a folder with other users by clicking the share icon to the right of a folder\'s name.');
 gettext('You have not created any share links yet. A share link can be used to share files and folders with anyone. You can create a share link for a file or folder by clicking the share icon to the right of its name.');
 gettext('You have not created any upload links yet. An upload link allows anyone to upload files to a folder or library. You can create an upload link for a folder or library by clicking the share icon to the right of its name.');
