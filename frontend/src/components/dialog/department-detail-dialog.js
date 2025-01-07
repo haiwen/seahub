@@ -34,7 +34,7 @@ class DepartmentDetailDialog extends React.Component {
       departments: [],
       departmentMembers: [],
       newMembersTempObj: {},
-      currentDepartment:  {},
+      currentDepartment: {},
       departmentsLoading: true,
       membersLoading: true,
       selectedMemberMap: {},
@@ -104,7 +104,7 @@ class DepartmentDetailDialog extends React.Component {
       this.setState({
         departments: departments,
         currentDepartment: currentDepartment,
-        departmentsLoading:false,
+        departmentsLoading: false,
         departmentsTree: departmentsTree
       });
       if (isOrgContext) {

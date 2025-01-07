@@ -94,6 +94,16 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
+  listAddressBookDepartments() {
+    const url = this.server + '/api/v2.1/address-book/departments/';
+    return this.req.get(url);
+  }
+
+  listAddressBookDepartmentMembers(department_id) {
+    const url = this.server + '/api/v2.1/address-book/departments/' + department_id + '/members/';
+    return this.req.get(url);
+  }
+
   listGroups(withRepos = false) {
     let options = { with_repos: withRepos ? 1 : 0 };
     const url = this.server + '/api/v2.1/groups/';
