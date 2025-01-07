@@ -1,14 +1,35 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
-import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
-import { SYSTEM_FOLDERS } from '../../constants';
+import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
+import { SYSTEM_FOLDERS } from '../../../constants';
+import { Utils } from '../../../utils/utils';
+import { Dirent } from '../../../models';
+import { seafileAPI } from '../../../utils/seafile-api';
+import SidePanel from './side-panel';
 
 import '@seafile/react-image-lightbox/style.css';
 
-const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage }) => {
+const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, onFileTagChanged }) => {
+  const [direntDetail, setDirentDetail] = useState(null);
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
+
+  useEffect(() => {
+    const getDirentDetail = async (repoID, path) => {
+      try {
+        const res = await seafileAPI.getFileInfo(repoID, path);
+        return res.data;
+      } catch (error) {
+        return null;
+      }
+    };
+
+    const path = Utils.joinPath(imageItems[imageIndex].parentDir, imageItems[imageIndex].name);
+    getDirentDetail(repoID, path).then(res => {
+      setDirentDetail(res);
+    });
+  }, [imageIndex, imageItems, repoID]);
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -38,6 +59,13 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
     onOCR = () => onOCRAPI({ parentDir: mainImg.parentDir, fileName: mainImg.name }, { success_callback: OCRSuccessCallBack });
   }
 
+  const renderSidePanel = () => {
+    const dirent = new Dirent({ name, type: 'file' });
+    const path = Utils.joinPath(mainImg.parentDir, mainImg.name);
+
+    return <SidePanel repoID={repoID} repoInfo={repoInfo} path={path} dirent={dirent} direntDetail={direntDetail} onFileTagChanged={onFileTagChanged} />;
+  };
+
   return (
     <Lightbox
       wrapperClassName='custom-image-previewer'
@@ -63,11 +91,13 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       onOCR={onOCR}
       OCRLabel={gettext('OCR')}
+      onRenderSidePanel={renderSidePanel}
     />
   );
 };
 
 ImageDialog.propTypes = {
+  repoID: PropTypes.string,
   imageItems: PropTypes.array.isRequired,
   imageIndex: PropTypes.number.isRequired,
   closeImagePopup: PropTypes.func.isRequired,
@@ -76,6 +106,7 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
+  onFileTagChanged: PropTypes.func,
 };
 
 ImageDialog.defaultProps = {

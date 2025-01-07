@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
-import ImageDialog from '../../components/dialog/image-dialog';
+import ImageDialog from '../dialog/image-dialog';
 import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
