@@ -39,6 +39,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
     setEnableMetadata(false);
     setEnableTags(false);
     setEnableOCR(false);
+    setDetailsSettings({});
+    setIsBeingBuilt(false);
     if (!enableMetadataManagement) {
       cancelMetadataURL();
       setLoading(false);
