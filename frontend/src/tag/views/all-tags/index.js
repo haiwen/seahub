@@ -2,14 +2,18 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../components/toast';
 import TagsTable from './tags-table';
-import TagFiles from './tag-files';
-import { useTags } from '../../hooks';
+import View from '../view';
+import { TagViewProvider, useTags } from '../../hooks';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../metadata/constants';
 import { Utils } from '../../../utils/utils';
+import { PRIVATE_FILE_TYPE } from '../../../constants';
+import { getRowById } from '../../../components/sf-table/utils/table';
+import { getTagName } from '../../utils';
+import { ALL_TAGS_ID } from '../../constants';
 
 import './index.css';
 
-const AllTags = ({ ...params }) => {
+const AllTags = ({ updateCurrentPath, ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
   const [isLoadingMore, setLoadingMore] = useState(false);
 
@@ -24,8 +28,16 @@ const AllTags = ({ ...params }) => {
 
   const onChangeDisplayTag = useCallback((tagID = '') => {
     if (displayTag === tagID) return;
+
+    const tag = tagID && getRowById(tagsData, tagID);
+    let path = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${ALL_TAGS_ID}`;
+    if (tag) {
+      path += `/${getTagName(tag)}`;
+    }
+    updateCurrentPath(path);
+
     setDisplayTag(tagID);
-  }, [displayTag]);
+  }, [tagsData, displayTag, updateCurrentPath]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -44,10 +56,22 @@ const AllTags = ({ ...params }) => {
 
   }, [isLoadingMore, tagsData, store]);
 
+  useEffect(() => {
+    if (isLoading || isReloading) {
+      onChangeDisplayTag();
+    }
+  }, [isLoading, isReloading, onChangeDisplayTag]);
+
   if (isLoading || isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
-    return (<TagFiles { ...params } tagID={displayTag} onChangeDisplayTag={onChangeDisplayTag} />);
+    return (
+      <div className="sf-metadata-all-tags-tag-files">
+        <TagViewProvider { ...params } tagID={displayTag} updateCurrentPath={updateCurrentPath} >
+          <View />
+        </TagViewProvider>
+      </div>
+    );
   }
 
   return (

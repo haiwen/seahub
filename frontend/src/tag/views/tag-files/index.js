@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useMemo } from 'react';
 import { useTagView, useTags } from '../../hooks';
 import { gettext } from '../../../utils/constants';
 import TagFile from './tag-file';
@@ -17,6 +17,10 @@ const TagFiles = () => {
 
   const currentImageRef = useRef(null);
 
+  const isSelectedAll = useMemo(() => {
+    return selectedFiles ? selectedFiles.length === tagFiles.rows.length : false;
+  }, [selectedFiles, tagFiles]);
+
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
       event.stopPropagation();
@@ -33,9 +37,13 @@ const TagFiles = () => {
   }, []);
 
   const onSelectedAll = useCallback(() => {
-    const allIds = tagFiles.rows.map(record => getRecordIdFromRecord(record));
-    setSelectedFiles(allIds);
-  }, [tagFiles]);
+    if (isSelectedAll) {
+      setSelectedFiles([]);
+    } else {
+      const allIds = tagFiles.rows.map(record => getRecordIdFromRecord(record));
+      setSelectedFiles(allIds);
+    }
+  }, [tagFiles, isSelectedAll]);
 
   const onSelectFile = useCallback((fileId) => {
     let newSelectedFiles = selectedFiles ? selectedFiles.slice(0) : [];
@@ -69,7 +77,6 @@ const TagFiles = () => {
     return (<EmptyTip text={gettext('No files')} />);
   }
 
-  const isSelectedAll = selectedFiles && selectedFiles.length === tagFiles.rows.length;
   const headers = [
     {
       isFixed: true,
@@ -127,7 +134,7 @@ const TagFiles = () => {
               <TagFile
                 key={fileId}
                 repoID={repoID}
-                isSelected={selectedFiles && selectedFiles.includes(fileId)}
+                isSelected={selectedFiles ? selectedFiles.includes(fileId) : false}
                 file={file}
                 tagsData={tagsData}
                 onSelectFile={onSelectFile}

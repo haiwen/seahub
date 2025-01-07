@@ -225,11 +225,18 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   useEffect(() => {
     if (!currentPath) return;
     if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
-    const currentTagId = currentPath.split('/').pop();
+    const pathList = currentPath.split('/');
+    const [, , currentTagId, children] = pathList;
     if (currentTagId === ALL_TAGS_ID) {
-      document.title = `${gettext('All tags')} - Seafile`;
+      if (children) {
+        document.title = `${children} - Seafile`;
+        updateFavicon('default');
+      } else {
+        document.title = `${gettext('All tags')} - Seafile`;
+      }
       return;
     }
+
     const currentTag = getRowById(tagsData, currentTagId);
     if (currentTag) {
       const tagName = getTagName(currentTag);

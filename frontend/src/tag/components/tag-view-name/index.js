@@ -6,15 +6,24 @@ import { getTagName } from '../../utils';
 import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
 import AllTagsOperationToolbar from './all-tags-operation-toolbar';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
-const TagViewName = ({ id }) => {
+const TagViewName = ({ id, canSelectAllTags }) => {
   const { tagsData, context } = useTags();
+
+  const selectAllTags = () => {
+    window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+  };
+
   if (!id) return null;
   if (id === ALL_TAGS_ID) {
+    if (canSelectAllTags) {
+      return (<span className="path-item" role="button" onClick={selectAllTags}>{gettext('All tags')}</span>);
+    }
+
     const canModify = context.canModify();
-    if (!canModify) return (<span className="path-item">{gettext('All tags')}</span>);
     const canAddTag = context.canAddTag();
-    if (!canAddTag) return (<span className="path-item">{gettext('All tags')}</span>);
+    if (!canModify || !canAddTag) return (<span className="path-item">{gettext('All tags')}</span>);
     return (<AllTagsOperationToolbar>{gettext('All tags')}</AllTagsOperationToolbar>);
   }
   const tag = getRowById(tagsData, id);
@@ -24,6 +33,7 @@ const TagViewName = ({ id }) => {
 
 TagViewName.propTypes = {
   id: PropTypes.string,
+  canSelectAllTags: PropTypes.bool,
 };
 
 export default TagViewName;

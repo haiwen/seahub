@@ -17,3 +17,15 @@
   height: 100%;
   width: 100%;
 }
+
+.sf-metadata-all-tags-tag-files {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sf-metadata-all-tags-tag-files .sf-metadata-tags-wrapper {
+  flex: 1;
+}
