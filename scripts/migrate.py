@@ -16,10 +16,11 @@ from seafobj.objstore_factory import SeafObjStoreFactory
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 class Worker(Thread):
-    def __init__(self, do_work, task_queue):
+    def __init__(self, do_work, task_queue, pool):
         Thread.__init__(self)
         self.do_work = do_work
         self.task_queue = task_queue
+        self.pool = pool
 
     def run(self):
         while True:
@@ -29,6 +30,8 @@ class Worker(Thread):
                     break
                 self.do_work(task)
             except Exception as e:
+                self.pool.exit_code = 1
+                self.pool.exception = e
                 logging.warning('Failed to execute task: %s' % e)
             finally:
                 self.task_queue.task_done()
@@ -37,11 +40,13 @@ class ThreadPool(object):
     def __init__(self, do_work, nworker=20):
         self.do_work = do_work
         self.nworker = nworker
+        self.exit_code = 0
+        self.exception = None
         self.task_queue = queue.Queue(maxsize = 2000)
 
     def start(self):
         for i in range(self.nworker):
-            Worker(self.do_work, self.task_queue).start()
+            Worker(self.do_work, self.task_queue, self).start()
 
     def put_task(self, task):
         self.task_queue.put(task)

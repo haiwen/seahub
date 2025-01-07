@@ -190,6 +190,10 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
             logging.warning(w.exception)
             api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
             sys.exit(1)
+        if w.thread_pool.exit_code == 1:
+            logging.warning(w.thread_pool.exception)
+            api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+            sys.exit(1)
 
     if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
         logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
@@ -202,6 +206,7 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
 def migrate_repos(orig_storage_id, dest_storage_id):
     repo_ids = get_repo_ids(orig_storage_id, dest_storage_id)
 
+    pending_repos = {}
     for repo_id in repo_ids:
         api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
         dtypes = ['commits', 'fs', 'blocks']
@@ -236,6 +241,14 @@ def migrate_repos(orig_storage_id, dest_storage_id):
                 logging.warning(w.exception)
                 api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
                 sys.exit(1)
+            if w.thread_pool.exit_code == 1:
+                logging.warning(w.thread_pool.exception)
+                pending_repos[repo_id] = repo_id
+
+        if repo_id in pending_repos:
+            api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+            logging.info('The process of migrating repo [%s] is failed.\n', repo_id)
+            continue
 
         if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
             logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
@@ -244,6 +257,11 @@ def migrate_repos(orig_storage_id, dest_storage_id):
 
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
         logging.info('The process of migrating repo [%s] is over.\n', repo_id)
+
+    if len(pending_repos) != 0:
+        logging.info('The following repos were not migrated successfully and need to be migrated again:\n')
+        for r in pending_repos:
+            logging.info('%s\n', r)
 
 if __name__ == '__main__':
     main(sys.argv)
