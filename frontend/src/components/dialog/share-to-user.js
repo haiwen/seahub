@@ -430,6 +430,9 @@ class ShareToUser extends React.Component {
 
   render() {
     let showDeptBtn = true;
+    if (window.app.config.lang !== 'zh-cn') {
+      showDeptBtn = false;
+    }
     if (cloudMode && !isOrgContext) {
       showDeptBtn = false;
     }
