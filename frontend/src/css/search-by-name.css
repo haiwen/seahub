@@ -1,0 +1,10 @@
+.search-by-name {
+  position: relative;
+}
+
+.search-by-name .search-input {
+  color: #adb5bd;
+  padding: 0 12px 0 40px;
+  display: flex;
+  align-items: center;
+}

@@ -1,14 +1,18 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isHotkey from 'is-hotkey';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import SearchFileDialog from '../dialog/search-file-dialog';
 
-import '../../css/top-search-by-name.css';
+import '../../css/search-by-name.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired
 };
+
+const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
 
 class SearchByName extends Component {
 
@@ -19,6 +23,20 @@ class SearchByName extends Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  onDocumentKeydown = (e) => {
+    if (isHotkey('mod+k')(e)) {
+      this.toggleDialog();
+    }
+  };
+
   toggleDialog = () => {
     this.setState({
       isDialogOpen: !this.state.isDialogOpen
@@ -28,13 +46,20 @@ class SearchByName extends Component {
   render() {
     const { repoID, repoName } = this.props;
     return (
-      <Fragment>
-        <i
-          className="sf3-font sf3-font-search top-search-file-icon"
-          onClick={this.toggleDialog}
-          title={gettext('Search files in this library')}
-        >
-        </i>
+      <>
+        <div className="search-by-name">
+          <i className="input-icon-addon sf3-font sf3-font-search"></i>
+          <div
+            type="text"
+            className="form-control search-input"
+            name="query"
+            onClick={this.toggleDialog}
+            role="button"
+            title={gettext('Search files in this library')}
+          >
+            {gettext('Search files') + ` (${controlKey} + k)`}
+          </div>
+        </div>
         {this.state.isDialogOpen &&
         <SearchFileDialog
           repoID={repoID}
@@ -42,7 +67,7 @@ class SearchByName extends Component {
           toggleDialog={this.toggleDialog}
         />
         }
-      </Fragment>
+      </>
     );
   }
 }
