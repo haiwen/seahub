@@ -912,9 +912,8 @@ urlpatterns += [
 
 from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.views import search, pubuser_search
+    from seahub.search.views import pubuser_search
     urlpatterns += [
-        path('search/', search, name='search'),
         path('pubinfo/users/search/', pubuser_search, name='pubuser_search'),
     ]
 
