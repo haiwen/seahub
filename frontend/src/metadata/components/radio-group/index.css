@@ -51,4 +51,3 @@
 .sf-metadata-radio-group .sf-metadata-radio-group-option.active + .sf-metadata-radio-group-option::before {
   opacity: 0;
 }
-

@@ -98,4 +98,3 @@ export const PASTE_SOURCE = {
   COPY: 'copy',
   CUT: 'cut',
 };
-

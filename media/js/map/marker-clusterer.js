@@ -1,5 +1,5 @@
 /**
- * @fileoverview MarkerClusterer标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。
+ * @fileoverview MarkerCluster标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。
  * 主入口类是<a href="symbols/BMapLib.MarkerCluster.html">MarkerCluster</a>，
  * 基于Baidu Map API 1.2。
  *
@@ -583,14 +583,14 @@ var BMapLib = window.BMapLib = BMapLib || {};
         let clickTimeout;
         this._clusterMarker.addEventListener("click", (event) => {
             if (clickTimeout) {
-            clearTimeout(clickTimeout);
-            clickTimeout = null;
-            return;
+                clearTimeout(clickTimeout);
+                clickTimeout = null;
+                return;
             }
             clickTimeout = setTimeout(() => {
-            if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
-            const markers = this._markers;
-            this._markerClusterer.getCallback()(event, markers);
+                if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
+                const markers = this._markers;
+                this._markerClusterer.getCallback()(event, markers);
             }
             clickTimeout = null;
             }, 300); // Delay to differentiate between single and double click
@@ -598,8 +598,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
         this._clusterMarker.addEventListener("dblclick", (event) => {
             if (clickTimeout) {
-            clearTimeout(clickTimeout);
-            clickTimeout = null;
+                clearTimeout(clickTimeout);
+                clickTimeout = null;
             }
             // Do nothing on double click
         });
