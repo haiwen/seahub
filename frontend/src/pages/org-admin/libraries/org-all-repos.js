@@ -212,10 +212,11 @@ class RepoItem extends React.Component {
     this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
-  onTransferRepo = (user, reshare) => {
+  onTransferRepo = (email, reshare) => {
     let repo = this.props.repo;
-    orgAdminAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, user.email, reshare).then(res => {
-      this.props.transferRepoItem(repo.repoID, user);
+    orgAdminAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, email, reshare).then(res => {
+      const { owner_name, owner_email } = res;
+      this.props.transferRepoItem(repo.repoID, owner_name, owner_email);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);
     }).catch(error => {
@@ -371,12 +372,12 @@ class OrgAllRepos extends Component {
     });
   };
 
-  transferRepoItem = (repoID, user) => {
+  transferRepoItem = (repoID, ownerName, ownerEmail) => {
     this.setState({
       repos: this.state.repos.map(item => {
         if (item.repoID == repoID) {
-          item.ownerEmail = user.email;
-          item.ownerName = user.value;
+          item.ownerEmail = ownerEmail;
+          item.ownerName = ownerName;
         }
         return item;
       })
