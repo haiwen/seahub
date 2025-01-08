@@ -238,25 +238,6 @@ def ai_search_wikis(params):
     resp = requests.post(url, json=params, headers=headers)
     return resp
 
-
-def is_valid_date_type(data):
-    try:
-        data = int(data)
-    except:
-        return False
-    else:
-        return True
-
-def is_valid_size_type(data):
-    try:
-        data = int(data)
-        if data < 0:
-            raise
-    except:
-        return False
-    else:
-        return True
-
 SEARCH_REPOS_LIMIT = 200
 RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
 RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60

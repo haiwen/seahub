@@ -910,13 +910,6 @@ urlpatterns += [
     re_path(r'^demo/', demo),
 ]
 
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
-if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.views import pubuser_search
-    urlpatterns += [
-        path('pubinfo/users/search/', pubuser_search, name='pubuser_search'),
-    ]
-
 from seahub.utils import is_pro_version
 if is_pro_version():
     urlpatterns += [
