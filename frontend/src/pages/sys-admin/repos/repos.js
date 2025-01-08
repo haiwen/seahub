@@ -171,8 +171,8 @@ class Item extends Component {
     });
   };
 
-  onTransferRepo = (owner, reshare) => {
-    systemAdminAPI.sysAdminTransferRepo(this.props.repo.id, owner.email, reshare).then((res) => {
+  onTransferRepo = (email, reshare) => {
+    systemAdminAPI.sysAdminTransferRepo(this.props.repo.id, email, reshare).then((res) => {
       this.props.onTransferRepo(res.data);
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);

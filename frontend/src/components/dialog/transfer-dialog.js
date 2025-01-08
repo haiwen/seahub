@@ -53,29 +53,31 @@ class TransferDialog extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.isOrgAdmin) {
-      orgAdminAPI.orgAdminListDepartments(orgID).then((res) => {
-        this.updateOptions(res);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-    else if (this.props.isSysAdmin) {
-      systemAdminAPI.sysAdminListDepartments().then((res) => {
-        this.updateOptions(res);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-    else if (isPro) {
-      seafileAPI.listDepartments().then((res) => {
-        this.updateOptions(res);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
+    if (isPro) {
+      if (this.props.isOrgAdmin) {
+        orgAdminAPI.orgAdminListDepartments(orgID).then((res) => {
+          this.updateOptions(res);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }
+      else if (this.props.isSysAdmin) {
+        systemAdminAPI.sysAdminListDepartments().then((res) => {
+          this.updateOptions(res);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }
+      else {
+        seafileAPI.listDepartments().then((res) => {
+          this.updateOptions(res);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }
     }
   }
 
