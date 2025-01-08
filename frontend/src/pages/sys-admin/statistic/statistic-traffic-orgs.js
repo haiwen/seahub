@@ -104,7 +104,7 @@ class OrgsTraffic extends React.Component {
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
-    }, () => this.getTrafficList(this.initPage, this.initMonth));
+    }, () => this.getTrafficList(this.initMonth, this.initPage));
   };
 
   render() {
