@@ -1,11 +1,9 @@
 .lightbox-side-panel {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 50px;
-  right: 0;
   width: 10px;
   height: calc(100% - 100px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
   font-size: 1rem;
   color: #fff;
   background-color: #333;
@@ -22,7 +20,15 @@
   width: 10px;
 }
 
-.expand-button {
+.lightbox-side-panel .cur-view-detail {
+  background-color: #333;
+  border-left: 1px solid #666;
+}
+
+.side-panel-controller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 30px;
   left: -40px;
@@ -38,11 +44,16 @@
   cursor: pointer;
 }
 
-.expand-button .sf-metadata-icon {
+.side-panel-controller .expand-button {
   width: 32px;
   height: 32px;
-  color: #999;
-  vertical-align: middle;
+  transform: scale(0.67);
+  opacity: 0.7;
+  border: none;
+}
+
+.side-panel-controller:hover .expand-button {
+  opacity: 1;
 }
 
 .lightbox-side-panel .detail-header {
@@ -62,6 +73,7 @@
 
 .lightbox-side-panel .detail-body {
   overflow-y: auto;
+  scrollbar-color: #666 #333;
   padding: 0;
 }
 
@@ -73,6 +85,13 @@
   margin-bottom: 20px;
 }
 
+.lightbox-side-panel .sf-metadata-ui.collaborator-item {
+  color: #212529;
+}
+
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before,
+.lightbox-side-panel .sf-metadata-property-detail-editor:empty::before,
+.lightbox-side-panel .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .sf3-font-down {
   color: #999;
 }
@@ -82,7 +101,7 @@
   background-color: #666;
 }
 
-.lightbox-side-panel .lightbox-side-panel-divider {
+.lightbox-side-panel .dirent-detail-divider {
   height: 1px;
   background-color: #999;
   margin-bottom: 20px;

@@ -44,6 +44,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
+  fileTags: PropTypes.array,
 };
 
 class DirListView extends React.Component {

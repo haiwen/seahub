@@ -2395,6 +2395,7 @@ class LibContentView extends React.Component {
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
+                        fileTags={this.state.isViewFile ? this.state.fileTags : []}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>

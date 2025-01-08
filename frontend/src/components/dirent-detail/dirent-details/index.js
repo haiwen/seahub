@@ -104,7 +104,7 @@ class DirentDetails extends React.Component {
 
   render() {
     const { dirent, direntDetail } = this.state;
-    const { repoID, fileTags } = this.props;
+    const { repoID, fileTags, withinPreviewer } = this.props;
 
     if (!dirent || !direntDetail) {
       return (
@@ -131,13 +131,13 @@ class DirentDetails extends React.Component {
         direntDetail={direntDetail}
         direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
       >
-        <Detail>
-          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} >
+        <Detail withinPreviewer={withinPreviewer}>
+          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} withinPreviewer={withinPreviewer} >
             <AI />
             <Settings />
           </Header>
           <Body>
-            {this.renderImage()}
+            {!withinPreviewer && this.renderImage()}
             {dirent && direntDetail && (
               <div className="detail-content">
                 {dirent.type !== 'file' ? (
@@ -162,6 +162,10 @@ class DirentDetails extends React.Component {
   }
 }
 
+DirentDetails.defaultProps = {
+  withinPreviewer: false,
+};
+
 DirentDetails.propTypes = {
   repoID: PropTypes.string.isRequired,
   dirent: PropTypes.object,
@@ -171,6 +175,7 @@ DirentDetails.propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   repoTags: PropTypes.array,
   fileTags: PropTypes.array,
+  withinPreviewer: PropTypes.bool,
 };
 
 export default DirentDetails;

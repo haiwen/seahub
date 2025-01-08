@@ -84,6 +84,8 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
   return (
     <ModalPortal>
       <ImageDialog
+        repoID={repoID}
+        repoInfo={repoInfo}
         imageItems={imageItems}
         imageIndex={imageIndex}
         closeImagePopup={closeImagePopup}

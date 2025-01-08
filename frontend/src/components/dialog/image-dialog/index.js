@@ -7,29 +7,21 @@ import { SYSTEM_FOLDERS } from '../../../constants';
 import { Utils } from '../../../utils/utils';
 import { Dirent } from '../../../models';
 import { seafileAPI } from '../../../utils/seafile-api';
-import SidePanel from './side-panel';
+import DirentDetails from '../../dirent-detail/dirent-details';
 
 import '@seafile/react-image-lightbox/style.css';
+import './index.css';
 
-const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, onFileTagChanged }) => {
+const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isShared }) => {
   const [direntDetail, setDirentDetail] = useState(null);
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
   useEffect(() => {
-    const getDirentDetail = async (repoID, path) => {
-      try {
-        const res = await seafileAPI.getFileInfo(repoID, path);
-        return res.data;
-      } catch (error) {
-        return null;
-      }
-    };
-
     const path = Utils.joinPath(imageItems[imageIndex].parentDir, imageItems[imageIndex].name);
-    getDirentDetail(repoID, path).then(res => {
-      setDirentDetail(res);
+    seafileAPI.getFileInfo(repoID, path).then(res => {
+      setDirentDetail(res.data);
     });
-  }, [imageIndex, imageItems, repoID]);
+  }, [imageIndex, imageItems, repoID, repoInfo]);
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -41,6 +33,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
 
   const imageItemsLength = imageItems.length;
   if (imageItemsLength === 0) return null;
+  const id = imageItems[imageIndex].id;
   const name = imageItems[imageIndex].name;
   const mainImg = imageItems[imageIndex];
   const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
@@ -60,10 +53,22 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
   }
 
   const renderSidePanel = () => {
-    const dirent = new Dirent({ name, type: 'file' });
-    const path = Utils.joinPath(mainImg.parentDir, mainImg.name);
+    const dirent = new Dirent({ id, name, type: 'file' });
 
-    return <SidePanel repoID={repoID} repoInfo={repoInfo} path={path} dirent={dirent} direntDetail={direntDetail} onFileTagChanged={onFileTagChanged} />;
+    return (
+      <DirentDetails
+        repoID={repoID}
+        currentRepoInfo={repoInfo}
+        path={mainImg.parentDir}
+        dirent={dirent}
+        direntDetail={direntDetail}
+        onClose={() => {}}
+        repoTags={[]}
+        fileTags={[]}
+        onFileTagChanged={() => {}}
+        withinPreviewer={true}
+      />
+    );
   };
 
   return (
@@ -91,13 +96,18 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       onOCR={onOCR}
       OCRLabel={gettext('OCR')}
-      onRenderSidePanel={renderSidePanel}
+      onRenderSidePanel={!isShared ? renderSidePanel : null}
     />
   );
 };
 
+ImageDialog.defaultProps = {
+  isShared: false,
+};
+
 ImageDialog.propTypes = {
-  repoID: PropTypes.string,
+  repoID: PropTypes.string.isRequired,
+  repoInfo: PropTypes.object.isRequired,
   imageItems: PropTypes.array.isRequired,
   imageIndex: PropTypes.number.isRequired,
   closeImagePopup: PropTypes.func.isRequired,
@@ -106,7 +116,7 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
-  onFileTagChanged: PropTypes.func,
+  isShared: PropTypes.bool,
 };
 
 ImageDialog.defaultProps = {

@@ -608,6 +608,7 @@ class DirentGridView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
@@ -1018,6 +1019,8 @@ class DirentGridView extends React.Component {
         {this.state.isImagePopupOpen && this.state.imageItems.length && (
           <ModalPortal>
             <ImageDialog
+              repoID={this.props.repoID}
+              repoInfo={this.props.currentRepoInfo}
               imageItems={this.state.imageItems}
               imageIndex={this.state.imageIndex}
               closeImagePopup={this.closeImagePopup}
