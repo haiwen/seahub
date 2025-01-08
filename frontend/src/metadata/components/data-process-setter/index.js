@@ -1,4 +1,4 @@
-import GalleryGroupBySetter from './gallery-group-by-setter/index';
+import GalleryGroupBySetter from './gallery-group-by-setter';
 import GallerySliderSetter from './gallery-slider-setter/index';
 import FilterSetter from './filter-setter';
 import SortSetter from './sort-setter';

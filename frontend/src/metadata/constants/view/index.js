@@ -1,8 +1,13 @@
-import { PRIVATE_COLUMN_KEY } from './column';
-import { FILTER_PREDICATE_TYPE } from './filter';
+import { PRIVATE_COLUMN_KEY } from '../column';
+import { FILTER_PREDICATE_TYPE } from '../filter';
 import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_COLUMN_OPTIONS, SORT_TYPE,
   GALLERY_SORT_PRIVATE_COLUMN_KEYS, GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS,
-} from './sort';
+} from '../sort';
+
+export * from './gallery';
+export * from './kanban';
+export * from './map';
+export * from './table';
 
 export const METADATA_VIEWS_KEY = 'sf-metadata-views';
 

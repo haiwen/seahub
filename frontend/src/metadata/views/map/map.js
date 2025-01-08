@@ -5,7 +5,7 @@ import { appAvatarURL, baiduMapKey, gettext, googleMapKey, mediaUrl } from '../.
 import { isValidPosition } from '../../utils/validate';
 import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
 import { MAP_TYPE as MAP_PROVIDER } from '../../../constants';
-import { EVENT_BUS_TYPE, MAP_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE, MAP_TYPE, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../constants';
 import { createBMapGeolocationControl, createBMapZoomControl } from './control';
 import { customAvatarOverlay, customImageOverlay } from './overlay';
 import toaster from '../../../components/toast';
@@ -14,7 +14,7 @@ const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
 const BATCH_SIZE = 500;
 
-const Main = ({ validImages, onOpen }) => {
+const Main = ({ images, onOpenCluster }) => {
   const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
 
   const mapRef = useRef(null);
@@ -61,13 +61,14 @@ const Main = ({ validImages, onOpen }) => {
     );
   }, []);
 
-  const getMapType = useCallback((type) => {
-    if (!mapRef.current) return;
+  const getBMapType = useCallback((type) => {
     switch (type) {
-      case MAP_TYPE.SATELLITE:
+      case MAP_TYPE.SATELLITE: {
         return window.BMAP_SATELLITE_MAP;
-      default:
+      }
+      default: {
         return window.BMAP_NORMAL_MAP;
+      }
     }
   }, []);
 
@@ -75,13 +76,13 @@ const Main = ({ validImages, onOpen }) => {
     if (!mapRef.current) return;
     const point = mapRef.current.getCenter && mapRef.current.getCenter();
     const zoom = mapRef.current.getZoom && mapRef.current.getZoom();
-    window.sfMetadataContext.localStorage.setItem('map-center', point);
-    window.sfMetadataContext.localStorage.setItem('map-zoom', zoom);
+    window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_CENTER_KEY, point);
+    window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_ZOOM_KEY, zoom);
   }, []);
 
   const loadMapState = useCallback(() => {
-    const savedCenter = window.sfMetadataContext.localStorage.getItem('map-center') || DEFAULT_POSITION;
-    const savedZoom = window.sfMetadataContext.localStorage.getItem('map-zoom') || DEFAULT_ZOOM;
+    const savedCenter = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_CENTER_KEY) || DEFAULT_POSITION;
+    const savedZoom = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_ZOOM_KEY) || DEFAULT_ZOOM;
     return { center: savedCenter, zoom: savedZoom };
   }, []);
 
@@ -89,18 +90,18 @@ const Main = ({ validImages, onOpen }) => {
     saveMapState();
 
     const imageIds = markers.map(marker => marker._imageId);
-    onOpen(imageIds);
-  }, [onOpen, saveMapState]);
+    onOpenCluster(imageIds);
+  }, [onOpenCluster, saveMapState]);
 
   const renderMarkersBatch = useCallback(() => {
-    if (!validImages.length || !clusterRef.current) return;
+    if (!images.length || !clusterRef.current) return;
 
     const startIndex = batchIndexRef.current * BATCH_SIZE;
-    const endIndex = Math.min(startIndex + BATCH_SIZE, validImages.length);
+    const endIndex = Math.min(startIndex + BATCH_SIZE, images.length);
     const batchMarkers = [];
 
     for (let i = startIndex; i < endIndex; i++) {
-      const image = validImages[i];
+      const image = images[i];
       const { lng, lat } = image;
       const point = new window.BMap.Point(lng, lat);
       const marker = customImageOverlay(point, image, {
@@ -110,15 +111,15 @@ const Main = ({ validImages, onOpen }) => {
     }
     clusterRef.current.addMarkers(batchMarkers);
 
-    if (endIndex < validImages.length) {
+    if (endIndex < images.length) {
       batchIndexRef.current += 1;
       setTimeout(renderMarkersBatch, 20); // Schedule the next batch
     }
-  }, [validImages, onClickMarker]);
+  }, [images, onClickMarker]);
 
-  const initializeClusterer = useCallback(() => {
+  const initializeCluster = useCallback(() => {
     if (mapRef.current && !clusterRef.current) {
-      clusterRef.current = new window.BMapLib.MarkerClusterer(mapRef.current, {
+      clusterRef.current = new window.BMapLib.MarkerCluster(mapRef.current, {
         callback: (e, markers) => onClickMarker(e, markers)
       });
     }
@@ -131,7 +132,7 @@ const Main = ({ validImages, onOpen }) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((userInfo) => {
         center = { lng: userInfo.coords.longitude, lat: userInfo.coords.latitude };
-        window.sfMetadataContext.localStorage.setItem('map-center', center);
+        window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_CENTER_KEY, center);
       });
     }
     if (!isValidPosition(center?.lng, center?.lat)) return;
@@ -145,28 +146,30 @@ const Main = ({ validImages, onOpen }) => {
     mapRef.current.centerAndZoom(point, zoom);
     mapRef.current.enableScrollWheelZoom(true);
 
-    const savedValue = window.sfMetadataContext.localStorage.getItem('map-type');
-    mapRef.current && mapRef.current.setMapType(getMapType(savedValue));
+
+    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY);
+    mapRef.current && mapRef.current.setMapType(getBMapType(savedValue));
 
     addMapController();
     initializeUserMarker();
-    initializeClusterer();
+    initializeCluster();
 
     batchIndexRef.current = 0;
     renderMarkersBatch();
-  }, [addMapController, initializeClusterer, initializeUserMarker, renderMarkersBatch, getMapType, loadMapState]);
+  }, [addMapController, initializeCluster, initializeUserMarker, renderMarkersBatch, getBMapType, loadMapState]);
 
   useEffect(() => {
-    const switchMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_MAP_TYPE, (newType) => {
-      window.sfMetadataContext.localStorage.setItem('map-type', newType);
-      mapRef.current && mapRef.current.setMapType(getMapType(newType));
+    const modifyMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, (newType) => {
+      window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
+      mapRef.current && mapRef.current.setMapType(getBMapType(newType));
     });
 
     return () => {
-      switchMapTypeSubscribe();
+      modifyMapTypeSubscribe();
     };
 
-  }, [getMapType, saveMapState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (mapInfo.type === MAP_PROVIDER.B_MAP) {
@@ -186,8 +189,8 @@ const Main = ({ validImages, onOpen }) => {
 };
 
 Main.propTypes = {
-  validImages: PropTypes.array,
-  onOpen: PropTypes.func,
+  images: PropTypes.array,
+  onOpenCluster: PropTypes.func,
 };
 
 export default Main;

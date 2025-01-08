@@ -130,7 +130,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
         metadata.hasMore = false;
       }
       setMetadata(metadata);
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW, metadata.view);
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_VIEW, metadata.view);
       setLoading(false);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
@@ -164,7 +164,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
   }, []);
 
   useEffect(() => {
-    const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW_CHANGE, onViewChange);
+    const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, onViewChange);
     return () => {
       unsubscribeViewChange && unsubscribeViewChange();
     };

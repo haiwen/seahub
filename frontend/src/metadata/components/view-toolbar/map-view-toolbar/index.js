@@ -7,6 +7,7 @@ import { gettext } from '../../../../utils/constants';
 const MapViewToolBar = ({
   isCustomPermission,
   readOnly,
+  viewID,
   collaborators,
   modifyFilters,
   onToggleDetail,
@@ -14,7 +15,7 @@ const MapViewToolBar = ({
   const [showGalleryToolbar, setShowGalleryToolbar] = useState(false);
   const [view, setView] = useState({});
 
-  const viewType = useMemo(() => view.type, [view]);
+  const viewType = useMemo(() => VIEW_TYPE.MAP, []);
   const viewColumns = useMemo(() => {
     if (!view) return [];
     return view.columns;
@@ -29,69 +30,73 @@ const MapViewToolBar = ({
   }, []);
 
   const modifySorts = useCallback((sorts) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MAP_GALLERY_VIEW_CHANGE, { sorts });
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, { sorts });
   }, []);
 
-  const setMapView = useCallback(view => setView(view), []);
+  const resetView = useCallback(view => {
+    setView(view);
+  }, []);
 
   useEffect(() => {
-    const unsubscribeToggleViewToolbarMode = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MAP_VIEW_TOOLBAR, onToggle);
-    const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MAP_VIEW, setMapView);
+    const unsubscribeToggle = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, onToggle);
+    const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.RESET_VIEW, resetView);
     return () => {
-      unsubscribeToggleViewToolbarMode();
-      unsubscribeView();
+      unsubscribeToggle && unsubscribeToggle();
+      unsubscribeView && unsubscribeView();
     };
-  }, [setMapView, onToggle]);
-
-  useEffect(() => {
-    setView(window.sfMetadataStore.data.view);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      {showGalleryToolbar ? (
+  useEffect(() => {
+    setShowGalleryToolbar(false);
+  }, [viewID]);
+
+  if (showGalleryToolbar) {
+    return (
+      <>
         <div className="sf-metadata-tool-left-operations">
-          <>
-            <GalleryGroupBySetter view={{ _id: view._id }} />
-            <GallerySliderSetter view={{ _id: view._id }} />
-            <SortSetter
-              isNeedSubmit={true}
-              wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
-              target="sf-metadata-sort-popover"
-              readOnly={readOnly}
-              sorts={view.sorts}
-              type={VIEW_TYPE.MAP}
-              columns={viewColumns}
-              modifySorts={modifySorts}
-            />
-          </>
+          <GalleryGroupBySetter view={{ _id: viewID }} />
+          <GallerySliderSetter view={{ _id: viewID }} />
+          <SortSetter
+            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
+            target="sf-metadata-sort-popover"
+            readOnly={readOnly}
+            sorts={view.sorts}
+            type={VIEW_TYPE.MAP}
+            columns={viewColumns}
+            modifySorts={modifySorts}
+          />
           {!isCustomPermission && (
             <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
               <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
             </div>
           )}
         </div>
-      ) :
-        <>
-          <div className="sf-metadata-tool-left-operations">
-            <MapTypeSetter view={view} />
-            <FilterSetter
-              isNeedSubmit={true}
-              wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
-              filtersClassName="sf-metadata-filters"
-              target="sf-metadata-filter-popover"
-              readOnly={readOnly}
-              filterConjunction={view.filter_conjunction}
-              basicFilters={view.basic_filters}
-              filters={view.filters}
-              columns={filterColumns}
-              modifyFilters={modifyFilters}
-              collaborators={collaborators}
-              viewType={viewType}
-            />
-          </div>
-          <div className="sf-metadata-tool-right-operations"></div>
-        </>}
+        <div className="sf-metadata-tool-right-operations"></div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="sf-metadata-tool-left-operations">
+        <MapTypeSetter view={view} />
+        <FilterSetter
+          isNeedSubmit={true}
+          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
+          filtersClassName="sf-metadata-filters"
+          target="sf-metadata-filter-popover"
+          readOnly={readOnly}
+          filterConjunction={view.filter_conjunction}
+          basicFilters={view.basic_filters}
+          filters={view.filters}
+          columns={filterColumns}
+          modifyFilters={modifyFilters}
+          collaborators={collaborators}
+          viewType={viewType}
+        />
+      </div>
+      <div className="sf-metadata-tool-right-operations"></div>
     </>
   );
 };

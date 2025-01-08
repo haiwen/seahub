@@ -340,6 +340,8 @@ export const MetadataViewProvider = ({
     <MetadataViewContext.Provider
       value={{
         isLoading,
+        repoID,
+        viewID,
         isBeingBuilt,
         errorMessage,
         metadata,

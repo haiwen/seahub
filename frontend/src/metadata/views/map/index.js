@@ -1,24 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileNameFromRecord, getFileTypeFromRecord, getImageLocationFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import ClusterPhotos from './cluster-photos';
-import Main from './main';
-import { EVENT_BUS_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
+import MapView from './map';
+import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
-import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { gettext, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { isValidPosition } from '../../utils/validate';
 import { gcj02_to_bd09, wgs84_to_gcj02 } from '../../../utils/coord-transform';
+import { PRIVATE_FILE_TYPE } from '../../../constants';
 
 import './index.css';
 
 const Map = () => {
-  const [showGallery, setShowGallery] = useState(false);
-  const [markerIds, setMarkerIds] = useState([]);
-  const { metadata } = useMetadataView();
+  const [showCluster, setShowCluster] = useState(false);
+  const { metadata, viewID, updateCurrentPath } = useMetadataView();
+
+  const clusterRef = useRef([]);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
-  const validImages = useMemo(() => {
+  const images = useMemo(() => {
     return metadata.rows
       .map(record => {
         const recordType = getFileTypeFromRecord(record);
@@ -39,31 +41,28 @@ const Map = () => {
       .filter(Boolean);
   }, [repoID, metadata.rows]);
 
-  const openGallery = useCallback((cluster_marker_ids) => {
-    setMarkerIds(cluster_marker_ids);
-    setShowGallery(true);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MAP_VIEW_TOOLBAR, true);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MAP_VIEW, metadata.view);
-  }, [metadata.view]);
+  const openCluster = useCallback((clusterIds) => {
+    clusterRef.current = clusterIds;
+    updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}/${gettext('Location')}`);
+    setShowCluster(true);
+  }, [viewID, updateCurrentPath]);
 
-  const closeGallery = useCallback(() => {
-    setShowGallery(false);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MAP_VIEW_TOOLBAR, false);
-  }, []);
+  const closeCluster = useCallback(() => {
+    clusterRef.current = [];
+    updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
+    setShowCluster(false);
+  }, [viewID, updateCurrentPath]);
 
   useEffect(() => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MAP_VIEW, metadata.view);
-  }, [metadata.view]);
+    updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewID]);
 
-  return (
-    <>
-      {showGallery ? (
-        <ClusterPhotos metadata={metadata} markerIds={markerIds} onClose={closeGallery} />
-      ) : (
-        <Main validImages={validImages} onOpen={openGallery} />
-      )}
-    </>
-  );
+  if (showCluster) {
+    return (<ClusterPhotos markerIds={clusterRef.current} onClose={closeCluster} />);
+  }
+
+  return (<MapView images={images} onOpenCluster={openCluster} />);
 };
 
 export default Map;
