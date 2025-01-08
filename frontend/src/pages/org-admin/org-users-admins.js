@@ -70,7 +70,7 @@ class OrgUsers extends Component {
       orgAdminUsers: this.state.orgAdminUsers
     });
     let msg = gettext('Successfully set %s as admin.');
-    msg = msg.replace('%s', userInfo.email);
+    msg = msg.replace('%s', userInfo.name);
     toaster.success(msg);
     this.toggleAddOrgAdmin();
   };
