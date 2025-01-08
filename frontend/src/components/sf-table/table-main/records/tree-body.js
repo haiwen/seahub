@@ -1,23 +1,25 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Loading } from '@seafile/sf-metadata-ui-component';
 import { RightScrollbar } from '../../scrollbar';
-import Record from './record';
 import InteractionMasks from '../../masks/interaction-masks';
-import { RecordMetrics } from '../../utils/record-metrics';
-import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
+import Record from './record';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { checkIsTreeNodeShown, getTreeNodeId, getTreeNodeKey, getValidKeyTreeNodeFoldedMap } from '../../utils/tree';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
+import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
+import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';
+import { TreeMetrics } from '../../utils/tree-metrics';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
 
-class RecordsBody extends Component {
+class TreeBody extends Component {
 
   static defaultProps = {
     editorPortalTarget: document.body,
@@ -26,23 +28,26 @@ class RecordsBody extends Component {
 
   constructor(props) {
     super(props);
+    const { recordsTree, treeNodeKeyRecordIdMap, keyTreeNodeFoldedMap } = props;
+    const validKeyTreeNodeFoldedMap = getValidKeyTreeNodeFoldedMap(keyTreeNodeFoldedMap, treeNodeKeyRecordIdMap);
+    const nodes = this.getShownNodes(recordsTree, validKeyTreeNodeFoldedMap);
     this.state = {
+      nodes,
       startRenderIndex: 0,
-      endRenderIndex: this.getInitEndIndex(props),
-      activeRecords: [],
-      menuPosition: null,
+      endRenderIndex: this.getInitEndIndex(nodes),
+      keyNodeFoldedMap: validKeyTreeNodeFoldedMap,
       selectedPosition: null,
       isScrollingRightScrollbar: false,
     };
     this.eventBus = EventBus.getInstance();
     this.resultContentRef = null;
     this.resultRef = null;
-    this.recordFrozenRefs = [];
     this.rowVisibleStart = 0;
     this.rowVisibleEnd = this.setRecordVisibleEnd();
     this.columnVisibleStart = 0;
     this.columnVisibleEnd = this.props.getColumnVisibleEnd();
     this.timer = null;
+    this.initFrozenNodesRef();
   }
 
   componentDidMount() {
@@ -53,9 +58,12 @@ class RecordsBody extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { recordsCount, recordIds } = nextProps;
-    if (recordsCount !== this.props.recordsCount || recordIds !== this.props.recordIds) {
-      this.recalculateRenderIndex(recordIds);
+    const { recordsCount, recordIds, treeNodesCount, recordsTree } = nextProps;
+    if (
+      recordsCount !== this.props.recordsCount || recordIds !== this.props.recordIds ||
+      treeNodesCount !== this.props.treeNodesCount || recordsTree !== this.props.recordsTree
+    ) {
+      this.recalculateRenderIndex(recordsTree);
     }
   }
 
@@ -71,8 +79,166 @@ class RecordsBody extends Component {
     };
   }
 
+  initFrozenNodesRef = () => {
+    this.recordFrozenRefs = [];
+  };
+
+  addFrozenNodeRef = (node) => {
+    this.recordFrozenRefs.push(node);
+  };
+
+  getShownNodes = (recordsTree, keyNodeFoldedMap) => {
+    if (!Array.isArray(recordsTree)) {
+      return [];
+    }
+    let shownNodes = [];
+    recordsTree.forEach((node, index) => {
+      const nodeId = getTreeNodeId(node);
+      const row = this.props.recordGetterById(nodeId);
+      const nodeKey = getTreeNodeKey(node);
+      if (row && checkIsTreeNodeShown(nodeKey, keyNodeFoldedMap)) {
+        shownNodes.push({
+          ...node,
+          node_display_index: index + 1,
+        });
+      }
+    });
+    return shownNodes;
+  };
+
+  getInitEndIndex = (nodes) => {
+    if (nodes.length === 0) {
+      return 0;
+    }
+    return Math.min(Math.ceil(window.innerHeight / ROW_HEIGHT) + RENDER_MORE_NUMBER, nodes.length);
+  };
+
+  recalculateRenderEndIndex = (nodes) => {
+    const { height } = this.props.getTableContentRect();
+    const contentScrollTop = this.resultContentRef.scrollTop;
+    return Math.min(Math.ceil((contentScrollTop + height) / ROW_HEIGHT) + RENDER_MORE_NUMBER, nodes.length);
+  };
+
+  recalculateRenderIndex = (recordsTree) => {
+    const { startRenderIndex, endRenderIndex, keyNodeFoldedMap } = this.state;
+    const nodes = this.getShownNodes(recordsTree, keyNodeFoldedMap);
+    const contentScrollTop = this.resultContentRef.scrollTop;
+    const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
+    const end = this.recalculateRenderEndIndex(nodes);
+    const updates = { nodes };
+    if (start !== startRenderIndex) {
+      updates.startRenderIndex = start;
+    }
+    if (end !== endRenderIndex) {
+      updates.endRenderIndex = end;
+    }
+    this.setState(updates);
+  };
+
+  clearScrollbarTimer = () => {
+    if (!this.scrollbarTimer) return;
+    clearTimeout(this.scrollbarTimer);
+    this.scrollbarTimer = null;
+  };
+
+  clearHorizontalScroll = () => {
+    if (!this.timer) return;
+    clearInterval(this.timer);
+    this.timer = null;
+  };
+
+  setResultContentRef = (ref) => {
+    this.resultContentRef = ref;
+  };
+
+  setResultRef = (ref) => {
+    this.resultRef = ref;
+  };
+
+  setRightScrollbar = (ref) => {
+    this.rightScrollbar = ref;
+  };
+
+  setInteractionMaskRef = (ref) => {
+    this.interactionMask = ref;
+  };
+
+  setRecordVisibleEnd = () => {
+    return max(ceil(CONTENT_HEIGHT / ROW_HEIGHT), 0);
+  };
+
+  setScrollTop = (scrollTop) => {
+    this.resultContentRef.scrollTop = scrollTop;
+  };
+
+  setRightScrollbarScrollTop = (scrollTop) => {
+    this.rightScrollbar && this.rightScrollbar.setScrollTop(scrollTop);
+  };
+
+  setScrollLeft = (scrollLeft, scrollTop) => {
+    const { interactionMask } = this;
+    interactionMask && interactionMask.setScrollLeft(scrollLeft, scrollTop);
+  };
+
+  cancelSetScrollLeft = () => {
+    const { interactionMask } = this;
+    interactionMask && interactionMask.cancelSetScrollLeft();
+  };
+
   storeScrollPosition = () => {
     this.props.storeScrollPosition();
+  };
+
+  getCanvasClientHeight = () => {
+    return (this.resultContentRef && this.resultContentRef.clientHeight) || 0;
+  };
+
+  getClientScrollTopOffset = (node) => {
+    const rowHeight = this.getRowHeight();
+    const scrollVariation = node.scrollTop % rowHeight;
+    return scrollVariation > 0 ? rowHeight - scrollVariation : 0;
+  };
+
+  getRecordsWrapperScrollHeight = () => {
+    return (this.resultRef && this.resultRef.scrollHeight) || 0;
+  };
+
+  getTreeNodeByIndex = (nodeIndex) => {
+    const { nodes } = this.state;
+    return nodes[nodeIndex];
+  };
+
+  getRowHeight = () => {
+    return ROW_HEIGHT;
+  };
+
+  getRowTop = (rowIdx) => {
+    return ROW_HEIGHT * rowIdx;
+  };
+
+  getScrollTop = () => {
+    return this.resultContentRef ? this.resultContentRef.scrollTop : 0;
+  };
+
+  getVisibleIndex = () => {
+    return { rowVisibleStartIdx: this.rowVisibleStart, rowVisibleEndIdx: this.rowVisibleEnd };
+  };
+
+  getCellMetaData = () => {
+    if (!this.cellMetaData) {
+      this.cellMetaData = {
+        CellOperationBtn: this.props.CellOperationBtn,
+        onCellClick: this.onCellClick,
+        onCellDoubleClick: this.onCellDoubleClick,
+        onCellMouseDown: this.onCellMouseDown,
+        onCellMouseEnter: this.onCellMouseEnter,
+        onCellMouseMove: this.onCellMouseMove,
+        onDragEnter: this.handleDragEnter,
+        modifyRecord: this.props.modifyRecord,
+        onCellContextMenu: this.onCellContextMenu,
+      };
+    }
+    return this.cellMetaData;
   };
 
   onFocus = () => {
@@ -91,136 +257,46 @@ class RecordsBody extends Component {
     });
   };
 
-  getVisibleIndex = () => {
-    return { rowVisibleStartIdx: this.rowVisibleStart, rowVisibleEndIdx: this.rowVisibleEnd };
+  scrollToRight = () => {
+    if (this.timer) return;
+    this.timer = setInterval(() => {
+      const scrollLeft = this.props.getScrollLeft();
+      this.props.setRecordsScrollLeft(scrollLeft + 20);
+    }, 10);
   };
 
-  getShownRecords = () => {
-    return this.getShownRecordIds().map((id) => this.props.recordGetterById(id));
-  };
-
-  setRecordVisibleEnd = () => {
-    return max(ceil(CONTENT_HEIGHT / ROW_HEIGHT), 0);
-  };
-
-  recalculateRenderIndex = (recordIds) => {
-    const { startRenderIndex, endRenderIndex } = this.state;
-    const contentScrollTop = this.resultContentRef.scrollTop;
-    const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
-    const { height } = this.props.getTableContentRect();
-    const end = Math.min(Math.ceil((contentScrollTop + height) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordIds.length);
-    if (start !== startRenderIndex) {
-      this.setState({ startRenderIndex: start });
-    }
-    if (end !== endRenderIndex) {
-      this.setState({ endRenderIndex: end });
-    }
-  };
-
-  getInitEndIndex = (props) => {
-    return Math.min(Math.ceil(window.innerHeight / ROW_HEIGHT) + RENDER_MORE_NUMBER, props.recordsCount);
-  };
-
-  getShownRecordIds = () => {
-    const { recordIds } = this.props;
-    const { startRenderIndex, endRenderIndex } = this.state;
-    return recordIds.slice(startRenderIndex, endRenderIndex);
-  };
-
-  getRowTop = (rowIdx) => {
-    return ROW_HEIGHT * rowIdx;
-  };
-
-  getRowHeight = () => {
-    return ROW_HEIGHT;
-  };
-
-  jumpToRow = (scrollToRowIndex) => {
-    const { recordsCount } = this.props;
-    const rowHeight = this.getRowHeight();
-    const height = this.resultContentRef.offsetHeight;
-    const scrollTop = Math.min(scrollToRowIndex * rowHeight, recordsCount * rowHeight - height);
-    this.setScrollTop(scrollTop);
-  };
-
-  scrollToColumn = (idx) => {
-    const { columns, getTableContentRect } = this.props;
-    const { width: tableContentWidth } = getTableContentRect();
-    const newScrollLeft = getColumnScrollPosition(columns, idx, tableContentWidth);
-    if (newScrollLeft !== null) {
-      this.props.setRecordsScrollLeft(newScrollLeft);
-    }
-    this.updateColVisibleIndex(newScrollLeft);
-  };
-
-  updateColVisibleIndex = (scrollLeft) => {
-    const { columns } = this.props;
-    const columnVisibleStart = getColVisibleStartIdx(columns, scrollLeft);
-    const columnVisibleEnd = getColVisibleEndIdx(columns, window.innerWidth, scrollLeft);
-    this.columnVisibleStart = columnVisibleStart;
-    this.columnVisibleEnd = columnVisibleEnd;
-  };
-
-  setScrollTop = (scrollTop) => {
-    this.resultContentRef.scrollTop = scrollTop;
-  };
-
-  setScrollLeft = (scrollLeft, scrollTop) => {
-    const { interactionMask } = this;
-    interactionMask && interactionMask.setScrollLeft(scrollLeft, scrollTop);
-  };
-
-  cancelSetScrollLeft = () => {
-    const { interactionMask } = this;
-    interactionMask && interactionMask.cancelSetScrollLeft();
-  };
-
-  getClientScrollTopOffset = (node) => {
-    const rowHeight = this.getRowHeight();
-    const scrollVariation = node.scrollTop % rowHeight;
-    return scrollVariation > 0 ? rowHeight - scrollVariation : 0;
-  };
-
-  onHitBottomCanvas = () => {
-    const rowHeight = this.getRowHeight();
-    const node = this.resultContentRef;
-    node.scrollTop += rowHeight + this.getClientScrollTopOffset(node);
-  };
-
-  onHitTopCanvas = () => {
-    const rowHeight = this.getRowHeight();
-    const node = this.resultContentRef;
-    node.scrollTop -= (rowHeight - this.getClientScrollTopOffset(node));
-  };
-
-  getScrollTop = () => {
-    return this.resultContentRef ? this.resultContentRef.scrollTop : 0;
-  };
-
-  getRecordBodyHeight = () => {
-    return this.resultContentRef ? this.resultContentRef.offsetHeight : 0;
+  scrollToLeft = () => {
+    if (this.timer) return;
+    this.timer = setInterval(() => {
+      const scrollLeft = this.props.getScrollLeft();
+      if (scrollLeft <= 0) {
+        this.clearHorizontalScroll();
+        return;
+      }
+      this.props.setRecordsScrollLeft(scrollLeft - 20);
+    }, 10);
   };
 
   onScroll = () => {
-    const { recordsCount } = this.props;
-    const { startRenderIndex, endRenderIndex } = this.state;
+    const { nodes, startRenderIndex, endRenderIndex } = this.state;
     const { offsetHeight, scrollTop: contentScrollTop } = this.resultContentRef;
+    const nodesCount = nodes.length;
 
     // Calculate the start rendering row index, and end rendering row index
     const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
-    const end = Math.min(Math.ceil((contentScrollTop + this.resultContentRef.offsetHeight) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordsCount);
+    const end = Math.min(Math.ceil((contentScrollTop + this.resultContentRef.offsetHeight) / ROW_HEIGHT) + RENDER_MORE_NUMBER, nodesCount);
 
     this.oldScrollTop = contentScrollTop;
     const renderedRecordsCount = ceil(this.resultContentRef.offsetHeight / ROW_HEIGHT);
     const newRecordVisibleStart = max(0, round(contentScrollTop / ROW_HEIGHT));
-    const newRecordVisibleEnd = min(newRecordVisibleStart + renderedRecordsCount, recordsCount);
+    const newRecordVisibleEnd = min(newRecordVisibleStart + renderedRecordsCount, nodesCount);
     this.rowVisibleStart = newRecordVisibleStart;
     this.rowVisibleEnd = newRecordVisibleEnd;
 
     if (Math.abs(start - startRenderIndex) > 5 || start < 5) {
       this.setState({ startRenderIndex: start });
     }
-    if (Math.abs(end - endRenderIndex) > 5 || end > recordsCount - 5) {
+    if (Math.abs(end - endRenderIndex) > 5 || end > nodesCount - 5) {
       this.setState({ endRenderIndex: end });
     }
     // Scroll to the bottom of the page, load more records
@@ -255,8 +331,22 @@ class RecordsBody extends Component {
     this.setState({ isScrollingRightScrollbar: false });
   };
 
-  setRightScrollbarScrollTop = (scrollTop) => {
-    this.rightScrollbar && this.rightScrollbar.setScrollTop(scrollTop);
+  updateColVisibleIndex = (scrollLeft) => {
+    const { columns } = this.props;
+    const columnVisibleStart = getColVisibleStartIdx(columns, scrollLeft);
+    const columnVisibleEnd = getColVisibleEndIdx(columns, window.innerWidth, scrollLeft);
+    this.columnVisibleStart = columnVisibleStart;
+    this.columnVisibleEnd = columnVisibleEnd;
+  };
+
+  scrollToColumn = (idx) => {
+    const { columns, getTableContentRect } = this.props;
+    const { width: tableContentWidth } = getTableContentRect();
+    const newScrollLeft = getColumnScrollPosition(columns, idx, tableContentWidth);
+    if (newScrollLeft !== null) {
+      this.props.setRecordsScrollLeft(newScrollLeft);
+    }
+    this.updateColVisibleIndex(newScrollLeft);
   };
 
   selectNoneCells = () => {
@@ -288,6 +378,18 @@ class RecordsBody extends Component {
     this.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_END);
   };
 
+  onHitTopCanvas = () => {
+    const rowHeight = this.getRowHeight();
+    const node = this.resultContentRef;
+    node.scrollTop -= (rowHeight - this.getClientScrollTopOffset(node));
+  };
+
+  onHitBottomCanvas = () => {
+    const rowHeight = this.getRowHeight();
+    const node = this.resultContentRef;
+    node.scrollTop += rowHeight + this.getClientScrollTopOffset(node);
+  };
+
   onCellClick = (cell, e) => {
     const { selectedPosition } = this.state;
     if (isShiftKeyDown(e)) {
@@ -317,8 +419,8 @@ class RecordsBody extends Component {
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
   };
 
-  // onRangeSelectStart
   onCellMouseDown = (cellPosition, event) => {
+    // onRangeSelectStart
     if (!isShiftKeyDown(event)) {
       this.selectCell(cellPosition);
       this.selectStart(cellPosition);
@@ -326,8 +428,8 @@ class RecordsBody extends Component {
     }
   };
 
-  // onRangeSelectUpdate
   onCellMouseEnter = (cellPosition) => {
+    // onRangeSelectUpdate
     this.selectUpdate(cellPosition, false, this.updateViewableArea);
   };
 
@@ -351,6 +453,10 @@ class RecordsBody extends Component {
       selectedPosition: Object.assign({}, this.state.selectedPosition, cellPosition),
     });
     this.props.onCellContextMenu(cellPosition);
+  };
+
+  handleDragEnter = ({ overRecordIdx, overGroupRecordIndex }) => {
+    this.eventBus.dispatch(EVENT_BUS_TYPE.DRAG_ENTER, { overRecordIdx, overGroupRecordIndex });
   };
 
   /**
@@ -389,155 +495,114 @@ class RecordsBody extends Component {
     }
   };
 
-  scrollToRight = () => {
-    if (this.timer) return;
-    this.timer = setInterval(() => {
-      const scrollLeft = this.props.getScrollLeft();
-      this.props.setRecordsScrollLeft(scrollLeft + 20);
-    }, 10);
-  };
-
-  scrollToLeft = () => {
-    if (this.timer) return;
-    this.timer = setInterval(() => {
-      const scrollLeft = this.props.getScrollLeft();
-      if (scrollLeft <= 0) {
-        this.clearHorizontalScroll();
-        return;
-      }
-      this.props.setRecordsScrollLeft(scrollLeft - 20);
-    }, 10);
-  };
-
-  clearHorizontalScroll = () => {
-    if (!this.timer) return;
-    clearInterval(this.timer);
-    this.timer = null;
-  };
-
-  clearScrollbarTimer = () => {
-    if (!this.scrollbarTimer) return;
-    clearTimeout(this.scrollbarTimer);
-    this.scrollbarTimer = null;
-  };
-
-  getCellMetaData = () => {
-    if (!this.cellMetaData) {
-      this.cellMetaData = {
-        CellOperationBtn: this.props.CellOperationBtn,
-        onCellClick: this.onCellClick,
-        onCellDoubleClick: this.onCellDoubleClick,
-        onCellMouseDown: this.onCellMouseDown,
-        onCellMouseEnter: this.onCellMouseEnter,
-        onCellMouseMove: this.onCellMouseMove,
-        onDragEnter: this.handleDragEnter,
-        modifyRecord: this.props.modifyRecord,
-        onCellContextMenu: this.onCellContextMenu,
-      };
+  toggleExpandNode = (nodeKey) => {
+    const { recordsTree } = this.props;
+    const { keyNodeFoldedMap, endRenderIndex } = this.state;
+    let updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
+    if (updatedKeyNodeFoldedMap[nodeKey]) {
+      delete updatedKeyNodeFoldedMap[nodeKey];
+    } else {
+      updatedKeyNodeFoldedMap[nodeKey] = true;
     }
-    return this.cellMetaData;
+
+    if (this.props.storeFoldedTreeNodes) {
+      // store folded status
+      this.props.storeFoldedTreeNodes(LOCAL_KEY_TREE_NODE_FOLDED, updatedKeyNodeFoldedMap);
+    }
+
+    const updatedNodes = this.getShownNodes(recordsTree, updatedKeyNodeFoldedMap);
+    let updates = { nodes: updatedNodes, keyNodeFoldedMap: updatedKeyNodeFoldedMap };
+    const end = this.recalculateRenderEndIndex(updatedNodes);
+    if (end !== endRenderIndex) {
+      updates.endRenderIndex = end;
+    }
+    this.setState(updates);
   };
 
-  handleDragEnter = ({ overRecordIdx, overGroupRecordIndex }) => {
-    this.eventBus.dispatch(EVENT_BUS_TYPE.DRAG_ENTER, { overRecordIdx, overGroupRecordIndex });
-  };
-
-  setRightScrollbar = (ref) => {
-    this.rightScrollbar = ref;
-  };
-
-  setInteractionMaskRef = (ref) => {
-    this.interactionMask = ref;
-  };
-
-  setResultRef = (ref) => {
-    this.resultRef = ref;
-  };
-
-  getRecordsWrapperScrollHeight = () => {
-    return (this.resultRef && this.resultRef.scrollHeight) || 0;
-  };
-
-  setResultContentRef = (ref) => {
-    this.resultContentRef = ref;
-  };
-
-  getCanvasClientHeight = () => {
-    return (this.resultContentRef && this.resultContentRef.clientHeight) || 0;
+  getVisibleNodesInRange = () => {
+    const { nodes, startRenderIndex, endRenderIndex } = this.state;
+    return nodes.slice(startRenderIndex, endRenderIndex);
   };
 
   renderRecords = () => {
-    this.recordFrozenRefs = [];
-    const {
-      recordsCount, columns, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
-      recordMetrics, showSequenceColumn, showCellColoring, columnColors,
-    } = this.props;
-    const { startRenderIndex, endRenderIndex, selectedPosition } = this.state;
-    const cellMetaData = this.getCellMetaData();
-    const lastRecordIndex = recordsCount - 1;
-    const shownRecordIds = this.getShownRecordIds();
+    const { treeMetrics, showCellColoring, columnColors } = this.props;
+    const { nodes, keyNodeFoldedMap, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
+    this.initFrozenNodesRef();
+    const visibleNodes = this.getVisibleNodesInRange();
+    const nodesCount = nodes.length;
+    const lastRecordIndex = nodesCount - 1;
     const scrollLeft = this.props.getScrollLeft();
     const rowHeight = this.getRowHeight();
-    let shownRecords = shownRecordIds.map((recordId, index) => {
+    const cellMetaData = this.getCellMetaData();
+    let shownNodes = visibleNodes.map((node, index) => {
+      const { _id: recordId, node_key, node_depth, has_sub_nodes, node_display_index } = node;
       const record = this.props.recordGetterById(recordId);
-      const isSelected = RecordMetrics.isRecordSelected(recordId, recordMetrics);
+      const isSelected = TreeMetrics.checkIsTreeNodeSelected(node_key, treeMetrics);
       const recordIndex = startRenderIndex + index;
       const isLastRecord = lastRecordIndex === recordIndex;
       const hasSelectedCell = this.props.hasSelectedCell({ recordIndex }, selectedPosition);
       const columnColor = showCellColoring ? columnColors[recordId] : {};
+      const isFoldedNode = !!keyNodeFoldedMap[node_key];
       return (
         <Record
-          key={recordId || recordIndex}
+          showRecordAsTree
+          key={`sf-table-tree-node-${node_key}`}
           ref={ref => {
-            this.recordFrozenRefs.push(ref);
+            this.addFrozenNodeRef(ref);
           }}
           isSelected={isSelected}
           index={recordIndex}
+          treeNodeDisplayIndex={node_display_index}
           isLastRecord={isLastRecord}
-          showSequenceColumn={showSequenceColumn}
+          showSequenceColumn={this.props.showSequenceColumn}
           record={record}
-          columns={columns}
-          sequenceColumnWidth={sequenceColumnWidth}
-          colOverScanStartIdx={colOverScanStartIdx}
-          colOverScanEndIdx={colOverScanEndIdx}
-          lastFrozenColumnKey={lastFrozenColumnKey}
+          columns={this.props.columns}
+          sequenceColumnWidth={this.props.sequenceColumnWidth}
+          colOverScanStartIdx={this.props.colOverScanStartIdx}
+          colOverScanEndIdx={this.props.colOverScanEndIdx}
+          lastFrozenColumnKey={this.props.lastFrozenColumnKey}
           scrollLeft={scrollLeft}
           height={rowHeight}
           cellMetaData={cellMetaData}
           columnColor={columnColor}
           searchResult={this.props.searchResult}
+          nodeKey={node_key}
+          nodeDepth={node_depth}
+          hasSubNodes={has_sub_nodes}
+          isFoldedNode={isFoldedNode}
           checkCanModifyRecord={this.props.checkCanModifyRecord}
           checkCellValueChanged={this.props.checkCellValueChanged}
           hasSelectedCell={hasSelectedCell}
-          selectedPosition={this.state.selectedPosition}
+          selectedPosition={selectedPosition}
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
+          toggleExpandNode={() => this.toggleExpandNode(node_key)}
         />
       );
     });
 
     const upperHeight = startRenderIndex * ROW_HEIGHT;
-    const belowHeight = (recordsCount - endRenderIndex) * ROW_HEIGHT;
+    const belowHeight = (nodesCount - endRenderIndex) * ROW_HEIGHT;
 
     // add top placeholder
     if (upperHeight > 0) {
       const style = { height: upperHeight, width: '100%' };
       const upperRow = <div key="upper-placeholder" className="d-flex align-items-end" style={style}><Loading /></div>;
-      shownRecords.unshift(upperRow);
+      shownNodes.unshift(upperRow);
     }
 
     // add bottom placeholder
     if (belowHeight > 0) {
       const style = { height: belowHeight, width: '100%' };
       const belowRow = <div key="below-placeholder" style={style}><Loading /></div>;
-      shownRecords.push(belowRow);
+      shownNodes.push(belowRow);
     }
-    return shownRecords;
+    return shownNodes;
   };
 
   render() {
     return (
-      <Fragment>
+      <>
         <div
           id="canvas"
           className="sf-table-canvas"
@@ -548,36 +613,20 @@ class RecordsBody extends Component {
         >
           <InteractionMasks
             {...this.props}
+            showRecordAsTree
             ref={this.setInteractionMaskRef}
-            contextMenu={this.props.contextMenu}
-            canAddRow={this.props.canAddRow}
-            tableId={this.props.tableId}
-            columns={this.props.columns}
-            recordsCount={this.props.recordsCount}
-            recordMetrics={this.props.recordMetrics}
+            recordsCount={this.state.nodes.length}
+            treeNodeKeyRecordIdMap={this.props.treeNodeKeyRecordIdMap}
+            treeMetrics={this.props.treeMetrics}
             rowHeight={this.getRowHeight()}
             getRowTop={this.getRowTop}
             scrollTop={this.oldScrollTop}
-            getScrollLeft={this.props.getScrollLeft}
-            getTableContentRect={this.props.getTableContentRect}
-            getMobileFloatIconStyle={this.props.getMobileFloatIconStyle}
-            onToggleMobileMoreOperations={this.props.onToggleMobileMoreOperations}
-            editorPortalTarget={this.props.editorPortalTarget}
-            onCellRangeSelectionUpdated={this.onCellRangeSelectionUpdated}
-            recordGetterByIndex={this.props.recordGetterByIndex}
-            recordGetterById={this.props.recordGetterById}
-            editMobileCell={this.props.editMobileCell}
-            frozenColumnsWidth={this.props.frozenColumnsWidth}
             selectNone={this.selectNone}
             getVisibleIndex={this.getVisibleIndex}
             onHitBottomBoundary={this.onHitBottomCanvas}
             onHitTopBoundary={this.onHitTopCanvas}
             onCellClick={this.onCellClick}
             scrollToColumn={this.scrollToColumn}
-            setRecordsScrollLeft={this.props.setRecordsScrollLeft}
-            getUpdateDraggedRecords={this.props.getUpdateDraggedRecords}
-            getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
-            getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
           <div className="sf-table-records-wrapper" style={{ width: this.props.totalWidth + this.props.sequenceColumnWidth }} ref={this.setResultRef}>
             {this.renderRecords()}
@@ -590,18 +639,22 @@ class RecordsBody extends Component {
           onScrollbarScroll={this.onScrollbarScroll}
           onScrollbarMouseUp={this.onScrollbarMouseUp}
         />
-      </Fragment>
+      </>
     );
   }
 }
 
-RecordsBody.propTypes = {
+TreeBody.propTypes = {
   onRef: PropTypes.func,
   contextMenu: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
-  canAddRow: PropTypes.bool,
   tableId: PropTypes.string,
-  recordIds: PropTypes.array,
   recordsCount: PropTypes.number,
+  recordIds: PropTypes.array,
+  recordsTree: PropTypes.array,
+  treeNodesCount: PropTypes.number,
+  treeNodeKeyRecordIdMap: PropTypes.object,
+  keyTreeNodeFoldedMap: PropTypes.object,
+  treeMetrics: PropTypes.object,
   columns: PropTypes.array.isRequired,
   CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
@@ -610,7 +663,6 @@ RecordsBody.propTypes = {
   showSequenceColumn: PropTypes.bool,
   sequenceColumnWidth: PropTypes.number,
   hasSelectedRecord: PropTypes.bool,
-  recordMetrics: PropTypes.object,
   totalWidth: PropTypes.number,
   getColumnVisibleEnd: PropTypes.func,
   getScrollLeft: PropTypes.func,
@@ -631,7 +683,6 @@ RecordsBody.propTypes = {
   onCellRangeSelectionUpdated: PropTypes.func,
   onSelectRecord: PropTypes.func,
   checkCanModifyRecord: PropTypes.func,
-  deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,
   scrollToRowIndex: PropTypes.number,
@@ -644,10 +695,9 @@ RecordsBody.propTypes = {
   onFillingDragRows: PropTypes.func,
   getUpdateDraggedRecords: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
-  openDownloadFilesDialog: PropTypes.func,
-  cacheDownloadFilesProps: PropTypes.func,
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
+  storeFoldedTreeNodes: PropTypes.func,
 };
 
-export default RecordsBody;
+export default TreeBody;

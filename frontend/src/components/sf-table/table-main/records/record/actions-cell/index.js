@@ -51,8 +51,15 @@ class ActionsCell extends Component {
     );
   };
 
+  getRecordNo = () => {
+    if (this.props.showRecordAsTree) {
+      return this.props.treeNodeDisplayIndex;
+    }
+    return this.props.index + 1;
+  };
+
   render() {
-    const { isSelected, isLastFrozenCell, index, height, recordId } = this.props;
+    const { isSelected, isLastFrozenCell, height, recordId } = this.props;
     const cellStyle = {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
@@ -66,7 +73,7 @@ class ActionsCell extends Component {
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
-        {!isSelected && <div className="sf-table-column-content row-index text-truncate">{index + 1}</div>}
+        {!isSelected && <div className="sf-table-column-content row-index text-truncate">{this.getRecordNo()}</div>}
         <div className="sf-table-column-content actions-checkbox">
           <div className="select-cell-checkbox-container" onClick={this.props.onSelectRecord}>
             <input

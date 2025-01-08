@@ -3,6 +3,10 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import { getGroupRows } from '../../metadata/utils/group';
 import { getRowsByIds } from '../../metadata/utils/table';
 import { OPERATION_TYPE } from './operations';
+import { buildTagsTree } from '../utils/tree';
+import { getRecordIdFromRecord } from '../../metadata/utils/cell';
+import { TREE_NODE_KEY } from '../../components/sf-table/constants/tree';
+import { createTreeNode } from '../../components/sf-table/utils/tree';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -12,6 +16,44 @@ import { OPERATION_TYPE } from './operations';
 // generate formula_rows
 // get rendered rows depend on filters/sorts etc.
 class DataProcessor {
+
+  static buildTagsTree(rows, table) {
+    table.rows_tree = buildTagsTree(rows, table);
+  }
+
+  static updateTagsTreeWithNewTags(tags, table) {
+    if (!Array.isArray(tags) || tags.length === 0) return;
+    const { rows_tree } = table;
+    let updated_rows_tree = [...rows_tree];
+    tags.forEach((tag) => {
+      const tagId = getRecordIdFromRecord(tag);
+      const nodeKey = tagId;
+      const node = createTreeNode(tagId, nodeKey, 0, false);
+      updated_rows_tree.push(node);
+    });
+    table.rows_tree = updated_rows_tree;
+  }
+
+  static updateTagsTreeWithDeletedTagsIds(deletedTagsIds, table) {
+    if (!Array.isArray(deletedTagsIds) || deletedTagsIds.length === 0) return;
+    const { rows_tree } = table;
+    const idTagDeletedMap = deletedTagsIds.reduce((currIdTagDeletedMap, tagId) => ({ ...currIdTagDeletedMap, [tagId]: true }), {});
+    const hasDeletedParentNode = rows_tree.some((node) => idTagDeletedMap[node[TREE_NODE_KEY.ID]] && node[TREE_NODE_KEY.HAS_SUB_NODES]);
+    if (hasDeletedParentNode) {
+      // need re-build tree if some parent nodes deleted
+      this.buildTagsTree(table.rows, table);
+      return;
+    }
+
+    // remove the nodes which has no sub nodes directly
+    let updated_rows_tree = [];
+    rows_tree.forEach((node) => {
+      if (!idTagDeletedMap[node[TREE_NODE_KEY.ID]]) {
+        updated_rows_tree.push(node);
+      }
+    });
+    table.rows_tree = updated_rows_tree;
+  }
 
   static getGroupedRows(table, rows, groupbys, { collaborators }) {
     const tableRows = isTableRows(rows) ? rows : getRowsByIds(table, rows);
@@ -57,15 +99,15 @@ class DataProcessor {
   };
 
   static run(table, { collaborators }) {
-    // todo
+    this.buildTagsTree(table.rows, table);
   }
 
   static updateDataWithModifyRecords(table, relatedColumnKeyMap, rowIds, { collaborators }) {
     // todo
   }
 
-  static updatePageDataWithDeleteRecords(deletedRowsIds, table) {
-    // todo
+  static updatePageDataWithDeleteRecords(deletedTagsIds, table) {
+    this.updateTagsTreeWithDeletedTagsIds(deletedTagsIds, table);
   }
 
   static handleReloadedRecords(table, reloadedRecords, relatedColumnKeyMap) {
@@ -142,13 +184,23 @@ class DataProcessor {
         break;
       }
       case OPERATION_TYPE.DELETE_RECORDS: {
-        const { rows_ids } = operation;
-        this.updatePageDataWithDeleteRecords(rows_ids, table);
+        const { tag_ids } = operation;
+        this.updatePageDataWithDeleteRecords(tag_ids, table);
         this.updateSummaries();
         break;
       }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         // todo
+        break;
+      }
+      case OPERATION_TYPE.ADD_RECORDS: {
+        const { tags } = operation;
+        this.updateTagsTreeWithNewTags(tags, table);
+        break;
+      }
+      case OPERATION_TYPE.ADD_TAG_LINKS:
+      case OPERATION_TYPE.DELETE_TAG_LINKS: {
+        this.buildTagsTree(table.rows, table);
         break;
       }
       default: {

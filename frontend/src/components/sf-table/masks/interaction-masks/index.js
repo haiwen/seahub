@@ -20,7 +20,8 @@ import {
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
 } from '../../utils/selected-cell-utils';
-import RecordMetrics from '../../utils/record-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
+import { TreeMetrics } from '../../utils/tree-metrics';
 import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
 import { getGroupRecordByIndex } from '../../utils/group-metrics';
@@ -486,10 +487,12 @@ class InteractionMasks extends React.Component {
 
   onCopy = (e) => {
     e.preventDefault();
-    const { recordMetrics } = this.props;
+    const { showRecordAsTree, recordMetrics, treeMetrics, treeNodeKeyRecordIdMap } = this.props;
 
     // select the records to copy
-    const selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
+    // TODO: need copy each nodes from tree?
+    const selectedRecordIds = showRecordAsTree ? TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap) : RecordMetrics.getSelectedIds(recordMetrics);
+
     if (selectedRecordIds.length > 0) {
       this.copyRows(e, selectedRecordIds);
       return;
@@ -1074,6 +1077,9 @@ class InteractionMasks extends React.Component {
         {isValidElement(contextMenu) && cloneElement(contextMenu, {
           selectedPosition: isSelectedSingleCell ? selectedPosition : null,
           selectedRange: !isSelectedSingleCell ? selectedRange : null,
+          showRecordAsTree: this.props.showRecordAsTree,
+          treeNodeKeyRecordIdMap: this.props.treeNodeKeyRecordIdMap,
+          treeMetrics: this.props.treeMetrics,
           onClearSelected: this.handleSelectCellsDelete,
           onCopySelected: this.onCopySelected,
           getTableContentRect: this.props.getTableContentRect,
@@ -1097,6 +1103,9 @@ InteractionMasks.propTypes = {
   rowHeight: PropTypes.number,
   groupOffsetLeft: PropTypes.number,
   frozenColumnsWidth: PropTypes.number,
+  showRecordAsTree: PropTypes.bool,
+  treeNodeKeyRecordIdMap: PropTypes.object,
+  treeMetrics: PropTypes.object,
   enableCellSelect: PropTypes.bool,
   canModifyRecords: PropTypes.bool,
   getRowTop: PropTypes.func,

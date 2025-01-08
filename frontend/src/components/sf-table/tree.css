@@ -1,0 +1,44 @@
+.sf-table-tree .sf-table-result-content .sf-table-cell.name-cell {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sf-table-cell-tree-node {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sf-table-cell-tree-node-content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 22px;
+}
+
+.sf-table-tree .sf-table-record-tree-expand-icon {
+  position: absolute;
+  display: inline-flex;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.sf-table-tree .sf-table-record-tree-expand-icon .sf3-font {
+  color: #666;
+}
+
+.sf-table-tree .sf-table-record-tree-expand-icon:hover {
+  cursor: pointer;
+}
+
+.sf-table-tree .sf-table-cell.name-cell .sf-table-cell-formatter {
+  flex: 1;
+}

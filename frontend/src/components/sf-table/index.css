@@ -85,6 +85,7 @@
 }
 
 .sf-table-column-content {
+  position: relative;
   height: 100%;
   width: 100%;
   text-align: left;

@@ -34,7 +34,13 @@ class Record extends React.Component {
       nextProps.left !== this.props.left ||
       nextProps.height !== this.props.height ||
       nextProps.searchResult !== this.props.searchResult ||
-      nextProps.columnColor !== this.props.columnColor
+      nextProps.columnColor !== this.props.columnColor ||
+      nextProps.showRecordAsTree !== this.props.showRecordAsTree ||
+      nextProps.nodeKey !== this.props.nodeKey ||
+      nextProps.nodeDepth !== this.props.nodeDepth ||
+      nextProps.hasSubNodes !== this.props.hasSubNodes ||
+      nextProps.treeNodeDisplayIndex !== this.props.treeNodeDisplayIndex ||
+      nextProps.isFoldedNode !== this.props.isFoldedNode
     );
   }
 
@@ -109,6 +115,11 @@ class Record extends React.Component {
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
           bgColor={bgColor}
+          showRecordAsTree={this.props.showRecordAsTree}
+          nodeDepth={this.props.nodeDepth}
+          hasSubNodes={this.props.hasSubNodes}
+          isFoldedNode={this.props.isFoldedNode}
+          toggleExpandNode={this.props.toggleExpandNode}
         />
       );
     });
@@ -171,6 +182,11 @@ class Record extends React.Component {
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
           bgColor={bgColor}
+          showRecordAsTree={this.props.showRecordAsTree}
+          nodeDepth={this.props.nodeDepth}
+          hasSubNodes={this.props.hasSubNodes}
+          isFoldedNode={this.props.isFoldedNode}
+          toggleExpandNode={this.props.toggleExpandNode}
         />
       );
     });
@@ -256,6 +272,8 @@ class Record extends React.Component {
               isSelected={isSelected}
               recordId={record._id}
               index={index}
+              showRecordAsTree={this.props.showRecordAsTree}
+              treeNodeDisplayIndex={this.props.treeNodeDisplayIndex}
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
               height={cellHeight}
@@ -297,6 +315,13 @@ Record.propTypes = {
   reloadRecords: PropTypes.func,
   searchResult: PropTypes.object,
   columnColor: PropTypes.object,
+  showRecordAsTree: PropTypes.bool,
+  nodeKey: PropTypes.string,
+  nodeDepth: PropTypes.number,
+  hasSubNodes: PropTypes.bool,
+  treeNodeDisplayIndex: PropTypes.number,
+  isFoldedNode: PropTypes.bool,
+  toggleExpandNode: PropTypes.func,
 };
 
 export default Record;

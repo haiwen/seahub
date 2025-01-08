@@ -1,7 +1,7 @@
 import React from './index';
 import PropTypes from 'prop-types';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { getTagColor, getTagName } from '../../../../../tag/utils/cell/core';
+import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
 import { getRowById } from '../../../utils/table';
 
 import './index.css';

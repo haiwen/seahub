@@ -4,6 +4,8 @@ import { checkIsNameColumn, getColumnByIndex } from '../../../../components/sf-t
 import EventBus from '../../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
+import { TreeMetrics } from '../../../../components/sf-table/utils/tree-metrics';
+import { RecordMetrics } from '../../../../components/sf-table/utils/record-metrics';
 
 const OPERATION = {
   EDIT_TAG: 'edit_tag',
@@ -19,6 +21,9 @@ export const createContextMenuOptions = ({
   columns,
   recordMetrics,
   isGroupView,
+  showRecordAsTree,
+  treeMetrics,
+  treeNodeKeyRecordIdMap,
   hideMenu,
   recordGetterByIndex,
   recordGetterById,
@@ -82,7 +87,12 @@ export const createContextMenuOptions = ({
       return options;
     }
 
-    const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
+    let selectedRecordsIds = [];
+    if (showRecordAsTree) {
+      selectedRecordsIds = (treeMetrics && TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap)) || [];
+    } else {
+      selectedRecordsIds = (recordMetrics && RecordMetrics.getSelectedIds(recordMetrics)) || [];
+    }
     if (selectedRecordsIds.length > 1) {
       let tagsIds = [];
       selectedRecordsIds.forEach(id => {
@@ -108,7 +118,6 @@ export const createContextMenuOptions = ({
     const tag = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
     const column = getColumnByIndex(idx, columns);
     if (!tag || !tag._id || !column) return options;
-
     if (checkIsNameColumn(column)) {
       options.push({
         label: gettext('Edit tag'),

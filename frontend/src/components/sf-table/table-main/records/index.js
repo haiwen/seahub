@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { HorizontalScrollbar } from '../../scrollbar';
 import RecordsHeader from '../records-header';
 import Body from './body';
+import TreeBody from './tree-body';
 import GroupBody from './group-body';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
-import RecordMetrics from '../../utils/record-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
+import { TreeMetrics } from '../../utils/tree-metrics';
 import { recalculate } from '../../utils/column';
 import { getVisibleBoundaries } from '../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
@@ -18,6 +20,7 @@ import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
 import { isNumber } from '../../../../utils/number';
+import { getTreeNodeKey } from '../../utils/tree';
 
 class Records extends Component {
 
@@ -42,6 +45,7 @@ class Records extends Component {
     this.state = {
       columnMetrics,
       recordMetrics: this.createRowMetrics(),
+      treeMetrics: this.createTreeMetrics(),
       lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
       touchStartPosition: {},
       selectedRange: {
@@ -144,6 +148,15 @@ class Records extends Component {
   createRowMetrics = (props = this.props) => {
     return {
       idSelectedRecordMap: {},
+    };
+  };
+
+  createTreeMetrics = (props = this.props) => {
+    if (!props.showRecordAsTree) {
+      return null;
+    }
+    return {
+      idSelectedNodeMap: {},
     };
   };
 
@@ -407,31 +420,108 @@ class Records extends Component {
     this.setState({ selectedPosition: cellPosition });
   };
 
+  handleSelectTreeNode = ({ groupRecordIndex, recordIndex }) => {
+    const { treeMetrics } = this.state;
+    const node = this.props.getTreeNodeByIndex(recordIndex);
+    const nodeKey = getTreeNodeKey(node);
+    if (!nodeKey) return;
+
+    if (TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+      this.deselectTreeNodeByKey(nodeKey);
+      this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
+      return;
+    }
+    this.selectTreeNodeByKey(nodeKey);
+    this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
+  };
+
   onSelectRecord = ({ groupRecordIndex, recordIndex }, e) => {
     e.stopPropagation();
     if (isShiftKeyDown(e)) {
       this.selectRecordWithShift({ groupRecordIndex, recordIndex });
       return;
     }
-    const { isGroupView } = this.props;
+
+    const { isGroupView, showRecordAsTree } = this.props;
     const { recordMetrics } = this.state;
-    const operateRecord = this.props.recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
-    if (!operateRecord) {
+    if (showRecordAsTree) {
+      this.handleSelectTreeNode({ groupRecordIndex, recordIndex });
       return;
     }
 
+    const operateRecord = this.props.recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
+    if (!operateRecord) return;
+
     const operateRecordId = operateRecord._id;
     if (RecordMetrics.isRecordSelected(operateRecordId, recordMetrics)) {
-      this.deselectRecord(operateRecordId);
+      this.deselectRecordById(operateRecordId);
       this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
       return;
     }
-    this.selectRecord(operateRecordId);
+    this.selectRecordById(operateRecordId);
+    this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
+  };
+
+  getTreeNodesKeysBetweenRange = ({ start, end }) => {
+    const startIndex = Math.min(start, end);
+    const endIndex = Math.max(start, end);
+    let nodeKeys = [];
+    for (let i = startIndex; i <= endIndex; i++) {
+      const node = this.props.getTreeNodeByIndex(i);
+      const nodeKey = getTreeNodeKey(node);
+      if (nodeKey) {
+        nodeKeys.push(nodeKey);
+      }
+    }
+    return nodeKeys;
+  };
+
+  getRecordIdsBetweenRange = ({ start, end }) => {
+    const { recordIds: propsRecordIds } = this.props;
+    const startIndex = Math.min(start, end);
+    const endIndex = Math.max(start, end);
+    let recordIds = [];
+    for (let i = startIndex; i <= endIndex; i++) {
+      const recordId = propsRecordIds[i];
+      if (recordId) {
+        recordIds.push(recordId);
+      }
+    }
+    return recordIds;
+  };
+
+  selectTreeNodesWithShift = ({ groupRecordIndex, recordIndex }) => {
+    const { lastRowIdxUiSelected, treeMetrics } = this.state;
+    const node = this.props.getTreeNodeByIndex(recordIndex);
+    const nodeKey = getTreeNodeKey(node);
+    if (!nodeKey) return;
+
+    const lastSelectedRecordIndex = lastRowIdxUiSelected.recordIndex;
+    if (lastSelectedRecordIndex < 0) {
+      this.selectTreeNodeByKey(nodeKey);
+      this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex } });
+      return;
+    }
+    if (recordIndex === lastSelectedRecordIndex || TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+      this.deselectTreeNodeByKey(nodeKey);
+      this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
+      return;
+    }
+    const nodesKeys = this.getTreeNodesKeysBetweenRange({ start: lastSelectedRecordIndex, end: recordIndex });
+    if (nodesKeys.length === 0) {
+      return;
+    }
+    this.selectTreeNodesByKeys(nodesKeys);
     this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
   };
 
   selectRecordWithShift = ({ groupRecordIndex, recordIndex }) => {
-    const { recordIds, isGroupView } = this.props;
+    const { recordIds, isGroupView, showRecordAsTree } = this.props;
+    if (showRecordAsTree) {
+      this.selectTreeNodesWithShift({ groupRecordIndex, recordIndex });
+      return;
+    }
+
     const { lastRowIdxUiSelected, recordMetrics } = this.state;
     let selectedRecordIds = [];
     if (isGroupView) {
@@ -456,12 +546,12 @@ class Records extends Component {
       }
       const lastSelectedRecordIndex = lastRowIdxUiSelected.recordIndex;
       if (lastSelectedRecordIndex < 0) {
-        this.selectRecord(operateRecordId);
+        this.selectRecordById(operateRecordId);
         this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex } });
         return;
       }
       if (recordIndex === lastSelectedRecordIndex || RecordMetrics.isRecordSelected(operateRecordId, recordMetrics)) {
-        this.deselectRecord(operateRecordId);
+        this.deselectRecordById(operateRecordId);
         this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
         return;
       }
@@ -475,21 +565,7 @@ class Records extends Component {
     this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
   };
 
-  getRecordIdsBetweenRange = ({ start, end }) => {
-    const { recordIds: propsRecordIds } = this.props;
-    const startIndex = Math.min(start, end);
-    const endIndex = Math.max(start, end);
-    let recordIds = [];
-    for (let i = startIndex; i <= endIndex; i++) {
-      const recordId = propsRecordIds[i];
-      if (recordId) {
-        recordIds.push(recordId);
-      }
-    }
-    return recordIds;
-  };
-
-  selectRecord = (recordId) => {
+  selectRecordById = (recordId) => {
     const { recordMetrics } = this.state;
     if (RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
       return;
@@ -514,7 +590,7 @@ class Records extends Component {
     });
   };
 
-  deselectRecord = (recordId) => {
+  deselectRecordById = (recordId) => {
     const { recordMetrics } = this.state;
     if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
       return;
@@ -526,9 +602,51 @@ class Records extends Component {
     });
   };
 
+  selectTreeNodesByKeys = (nodesKeys) => {
+    const { treeMetrics } = this.state;
+    let updatedTreeMetrics = { ...treeMetrics };
+    TreeMetrics.selectTreeNodesByKeys(nodesKeys, updatedTreeMetrics);
+    this.setState({ treeMetrics: updatedTreeMetrics });
+  };
+
+  selectTreeNodeByKey = (nodeKey) => {
+    const { treeMetrics } = this.state;
+    if (TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+      return;
+    }
+
+    let updatedTreeMetrics = { ...treeMetrics };
+    TreeMetrics.selectTreeNode(nodeKey, updatedTreeMetrics);
+    this.setState({ treeMetrics: updatedTreeMetrics });
+  };
+
+  deselectTreeNodeByKey = (nodeKey) => {
+    const { treeMetrics } = this.state;
+    if (!TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+      return;
+    }
+    let updatedTreeMetrics = { ...treeMetrics };
+    TreeMetrics.deselectTreeNode(nodeKey, updatedTreeMetrics);
+    this.setState({ treeMetrics: updatedTreeMetrics });
+  };
+
+  selectAllTreeNodes = () => {
+    const { recordsTree } = this.props;
+    const { treeMetrics } = this.state;
+    let updatedTreeMetrics = { ...treeMetrics };
+    const allNodesKeys = recordsTree.map((node) => getTreeNodeKey(node)).filter(Boolean);
+    TreeMetrics.selectTreeNodesByKeys(allNodesKeys, updatedTreeMetrics);
+    this.setState({ recordMetrics: updatedTreeMetrics });
+  };
+
   selectAllRecords = () => {
-    const { recordIds, isGroupView } = this.props;
+    const { recordIds, isGroupView, showRecordAsTree } = this.props;
     const { recordMetrics } = this.state;
+    if (showRecordAsTree) {
+      this.selectAllTreeNodes();
+      return;
+    }
+
     let updatedRecordMetrics = { ...recordMetrics };
     let selectedRowIds = [];
     if (isGroupView) {
@@ -548,13 +666,29 @@ class Records extends Component {
       selectedRowIds = recordIds;
     }
     RecordMetrics.selectRecordsById(selectedRowIds, updatedRecordMetrics);
+    this.setState({ recordMetrics: updatedRecordMetrics });
+  };
+
+  deselectAllTreeNodes = () => {
+    const { treeMetrics } = this.state;
+    if (!TreeMetrics.checkHasSelectedTreeNodes(treeMetrics)) {
+      return;
+    }
+    let updatedTreeMetrics = { ...treeMetrics };
+    TreeMetrics.deselectAllTreeNodes(updatedTreeMetrics);
     this.setState({
-      recordMetrics: updatedRecordMetrics,
+      treeMetrics: updatedTreeMetrics,
+      lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
     });
   };
 
   onDeselectAllRecords = () => {
     const { recordMetrics } = this.state;
+    if (this.props.showRecordAsTree) {
+      this.deselectAllTreeNodes();
+      return;
+    }
+
     if (!RecordMetrics.hasSelectedRecords(recordMetrics)) {
       return;
     }
@@ -577,13 +711,27 @@ class Records extends Component {
   };
 
   checkHasSelectedRecord = () => {
-    const { recordMetrics } = this.state;
-    if (!RecordMetrics.hasSelectedRecords(recordMetrics)) {
+    const { showSequenceColumn, showRecordAsTree, treeNodeKeyRecordIdMap } = this.props;
+    const { recordMetrics, treeMetrics } = this.state;
+    if (!showSequenceColumn) {
       return false;
     }
-    const selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
-    const selectedRecords = selectedRecordIds && selectedRecordIds.map(id => this.props.recordGetterById(id)).filter(Boolean);
-    return selectedRecords && selectedRecords.length > 0;
+
+    let selectedRecordIds = [];
+    if (showRecordAsTree) {
+      if (!TreeMetrics.checkHasSelectedTreeNodes(treeMetrics)) {
+        return false;
+      }
+      selectedRecordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
+    } else {
+      if (!RecordMetrics.hasSelectedRecords(recordMetrics)) {
+        return false;
+      }
+      selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
+    }
+
+    const selectedRecords = selectedRecordIds.map(id => this.props.recordGetterById(id)).filter(Boolean);
+    return selectedRecords.length > 0;
   };
 
   getHorizontalScrollState = ({ gridWidth, columnMetrics, scrollLeft }) => {
@@ -612,15 +760,26 @@ class Records extends Component {
   };
 
   onCellContextMenu = (cell) => {
+    const { isGroupView, recordGetterByIndex, showRecordAsTree } = this.props;
+    const { recordMetrics, treeMetrics } = this.state;
     const { rowIdx: recordIndex, idx, groupRecordIndex } = cell;
-    const { isGroupView, recordGetterByIndex } = this.props;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
 
-    if (!record) return;
-    const { recordMetrics } = this.state;
-    const recordId = record._id;
-    if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
-      this.setState({ recordMetrics: this.createRowMetrics() });
+    if (showRecordAsTree) {
+      const node = this.props.getTreeNodeByIndex(recordIndex);
+      const nodeKey = getTreeNodeKey(node);
+      if (!nodeKey) return;
+
+      if (!TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+        this.setState({ treeMetrics: this.createTreeMetrics() });
+      }
+    } else {
+      const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
+      if (!record) return;
+
+      const recordId = record._id;
+      if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
+        this.setState({ recordMetrics: this.createRowMetrics() });
+      }
     }
 
     // select cell when click out of selectRange
@@ -641,6 +800,38 @@ class Records extends Component {
 
   getRecordsSummaries = () => {};
 
+  checkIsSelectAll = () => {
+    const {
+      recordIds, showSequenceColumn, showRecordAsTree, recordsTree,
+    } = this.props;
+    const { recordMetrics, treeMetrics } = this.state;
+    if (!showSequenceColumn) {
+      return false;
+    }
+    if (showRecordAsTree) {
+      const allNodesKeys = recordsTree.map((node) => getTreeNodeKey(node)).filter(Boolean);
+      return TreeMetrics.checkIsSelectedAll(allNodesKeys, treeMetrics);
+    }
+    return RecordMetrics.isSelectedAll(recordIds, recordMetrics);
+  };
+
+  getColumnVisibleEnd = () => {
+    const { columnMetrics } = this.state;
+    const { columns } = columnMetrics;
+    const { width: tableContentWidth } = this.props.getTableContentRect();
+    let columnVisibleEnd = 0;
+    const contentScrollLeft = this.getScrollLeft();
+    let endColumnWidth = tableContentWidth + contentScrollLeft;
+    for (let i = 0; i < columns.length; i++) {
+      const { width } = columns[i];
+      endColumnWidth = endColumnWidth - width;
+      if (endColumnWidth < 0) {
+        return columnVisibleEnd = i;
+      }
+    }
+    return columnVisibleEnd;
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
@@ -655,6 +846,7 @@ class Records extends Component {
         />
       ),
       hasSelectedRecord: this.checkHasSelectedRecord(),
+      getColumnVisibleEnd: this.getColumnVisibleEnd,
       getScrollLeft: this.getScrollLeft,
       getScrollTop: this.getScrollTop,
       selectNone: this.selectNone,
@@ -667,6 +859,17 @@ class Records extends Component {
       onCellContextMenu: this.onCellContextMenu,
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
     };
+    if (this.props.showRecordAsTree) {
+      return (
+        <TreeBody
+          onRef={ref => this.bodyRef = ref}
+          {...commonProps}
+          recordsTree={this.props.recordsTree}
+          treeMetrics={this.state.treeMetrics}
+          storeFoldedTreeNodes={this.props.storeFoldedTreeNodes}
+        />
+      );
+    }
     if (this.props.isGroupView) {
       return (
         <GroupBody
@@ -690,13 +893,13 @@ class Records extends Component {
 
   render() {
     const {
-      recordIds, recordsCount, showSequenceColumn, sequenceColumnWidth, isGroupView, groupOffsetLeft,
+      recordsCount, showSequenceColumn, sequenceColumnWidth, isGroupView, groupOffsetLeft,
     } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = this.getContainerWidth();
     const hasSelectedRecord = this.checkHasSelectedRecord();
-    const isSelectedAll = showSequenceColumn && RecordMetrics.isSelectedAll(recordIds, recordMetrics);
+    const isSelectedAll = this.checkIsSelectAll();
 
     return (
       <>
@@ -721,6 +924,7 @@ class Records extends Component {
               sequenceColumnWidth={sequenceColumnWidth}
               isSelectedAll={isSelectedAll}
               isGroupView={isGroupView}
+              showRecordAsTree={this.props.showRecordAsTree}
               groupOffsetLeft={groupOffsetLeft}
               lastFrozenColumnKey={lastFrozenColumnKey}
               selectNoneRecords={this.selectNone}
@@ -749,6 +953,8 @@ class Records extends Component {
             sequenceColumnWidth={sequenceColumnWidth}
             groupOffsetLeft={groupOffsetLeft}
             recordMetrics={recordMetrics}
+            showRecordAsTree={this.props.showRecordAsTree}
+            treeMetrics={this.state.treeMetrics}
             selectedRange={selectedRange}
             isGroupView={isGroupView}
             hasSelectedRecord={hasSelectedRecord}
@@ -777,11 +983,13 @@ Records.propTypes = {
   hasMoreRecords: PropTypes.bool,
   isLoadingMoreRecords: PropTypes.bool,
   isGroupView: PropTypes.bool,
+  showRecordAsTree: PropTypes.bool,
   groupOffsetLeft: PropTypes.number,
   recordIds: PropTypes.array,
   recordsCount: PropTypes.number,
   groups: PropTypes.array,
   groupbys: PropTypes.array,
+  recordsTree: PropTypes.array,
   searchResult: PropTypes.object,
   showGridFooter: PropTypes.bool,
   supportCopy: PropTypes.bool,

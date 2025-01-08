@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTags } from '../../hooks';
 import { getRowById } from '../../../metadata/utils/table';
-import { getTagName } from '../../utils';
+import { getTagName } from '../../utils/cell';
 import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
 import AllTagsOperationToolbar from './all-tags-operation-toolbar';
