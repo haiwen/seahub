@@ -5,17 +5,19 @@ import Title from './title';
 
 import './index.css';
 
-const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} }) => {
+const Header = ({ title, icon, iconSize = 32, onClose, children, component = {}, withinPreviewer }) => {
   const { closeIcon } = component;
   return (
     <div className="detail-header">
       <Title title={title} icon={icon} iconSize={iconSize} />
-      <div className="detail-control-container">
-        {children}
-        <div className="detail-control" onClick={onClose}>
-          {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+      {!withinPreviewer && (
+        <div className="detail-control-container">
+          {children}
+          <div className="detail-control" onClick={onClose}>
+            {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -27,6 +29,7 @@ Header.propTypes = {
   component: PropTypes.object,
   children: PropTypes.any,
   onClose: PropTypes.func.isRequired,
+  withinPreviewer: PropTypes.bool,
 };
 
 export default Header;

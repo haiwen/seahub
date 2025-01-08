@@ -34,6 +34,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const { repoID, updateCurrentDirent } = useMetadataView();
+  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   const images = useMemo(() => {
     if (isFirstLoading) return [];
@@ -434,6 +435,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       {isImagePopupOpen && (
         <ModalPortal>
           <ImageDialog
+            repoID={repoID}
+            repoInfo={repoInfo}
             imageItems={images}
             imageIndex={imageIndex}
             closeImagePopup={closeImagePopup}

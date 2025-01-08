@@ -10,11 +10,12 @@ import { gettext } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
-import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
+import { MetadataDetails, useMetadata, useMetadataDetails } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
 import { useMetadataStatus } from '../../../../hooks';
+import People from './people';
 
 import './index.css';
 
@@ -60,6 +61,7 @@ const getImageInfoValue = (key, value) => {
 const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
   const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
+  const { enableFaceRecognition } = useMetadata();
   const { record } = useMetadataDetails();
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
@@ -140,6 +142,9 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
             })}
           </Collapse>
         )}
+        {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
+          <People repoID={repoID} record={record} />
+        )}
       </>
     );
   }
@@ -180,6 +185,8 @@ FileDetails.propTypes = {
   dirent: PropTypes.object,
   path: PropTypes.string,
   direntDetail: PropTypes.object,
+  repoTags: PropTypes.array,
+  fileTagList: PropTypes.array,
   onFileTagChanged: PropTypes.func,
 };
 

@@ -205,6 +205,7 @@ class DirentListView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
@@ -859,7 +860,6 @@ class DirentListView extends React.Component {
                 onDeleteImage={this.deleteImage}
                 onRotateImage={this.rotateImage}
                 enableRotate={!repoEncrypted}
-                onFileTagChanged={this.props.onFileTagChanged}
               />
             </ModalPortal>
           )}
