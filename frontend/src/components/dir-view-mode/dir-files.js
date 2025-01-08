@@ -257,6 +257,7 @@ class DirFiles extends React.Component {
         thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
       }
       return {
+        id: item.object.id,
         name,
         parentDir: node.parentNode.path,
         src,
@@ -461,6 +462,8 @@ class DirFiles extends React.Component {
         {this.state.isNodeImagePopupOpen && (
           <ModalPortal>
             <ImageDialog
+              repoID={repoID}
+              repoInfo={currentRepoInfo}
               imageItems={this.state.imageNodeItems}
               imageIndex={this.state.imageIndex}
               closeImagePopup={this.closeNodeImagePopup}

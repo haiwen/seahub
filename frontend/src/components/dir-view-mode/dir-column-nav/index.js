@@ -32,6 +32,9 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   getMenuContainerSize: PropTypes.func,
   updateDirent: PropTypes.func,
+  repoTags: PropTypes.array,
+  fileTags: PropTypes.array,
+  onFileTagChanged: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {
@@ -71,6 +74,9 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               onItemsMove={this.props.onItemsMove}
               updateDirent={this.props.updateDirent}
+              repoTags={this.props.repoTags}
+              fileTags={this.props.fileTags}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />

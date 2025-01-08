@@ -84,6 +84,7 @@ const propTypes = {
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
+  fileTags: PropTypes.array,
 };
 
 class DirColumnView extends React.Component {
@@ -182,6 +183,9 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}
+              repoTags={this.props.repoTags}
+              fileTags={this.props.fileTags}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}

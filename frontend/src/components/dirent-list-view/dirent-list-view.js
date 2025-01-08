@@ -205,6 +205,7 @@ class DirentListView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
