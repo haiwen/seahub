@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import { translateCalendar } from '../../../utils/date-format-utils';
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
 
@@ -13,12 +15,15 @@ class Picker extends React.Component {
 
   constructor(props) {
     super(props);
-    this.defaultCalendarValue = null;
-  }
-
-  componentDidMount() {
     let lang = window.app.config.lang;
-    this.defaultCalendarValue = dayjs().locale(lang).clone();
+    let now = dayjs();
+    const isZhcn = lang === 'zh-cn';
+    if (isZhcn) {
+      now = now.locale('zh-cn');
+    } else {
+      now = now.locale('en-gb');
+    }
+    this.defaultCalendarValue = now.clone();
   }
 
   render() {
