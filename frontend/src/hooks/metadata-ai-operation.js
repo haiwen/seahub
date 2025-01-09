@@ -68,6 +68,38 @@ export const MetadataAIOperationsProvider = ({
     });
   }, [repoID]);
 
+  const genDualLayerPDF = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
+    const filePath = Utils.joinPath(parentDir, fileName);
+    const inProgressToaster = toaster.notifyInProgress(gettext('Making PDF searchable by AI...'), { duration: 5 });
+    metadataAPI.genDualLayerPDF(repoID, filePath).then(res => {
+      if (res.data.task_status === 'processing') {
+        toaster.notifyInProgress(gettext('The task has been started, perhaps by another user'), { duration: 5 });
+      } else if (res.data.task_status === 'already_ocr') {
+        const userConfirmed = window.confirm(gettext('The text has already been OCR processed. Do you want to proceed with OCR again?'));
+        if (userConfirmed) {
+          metadataAPI.genDualLayerPDF(repoID, filePath, { force: true }).then(res => {
+            if (res.data.task_status === 'processing') {
+              toaster.notifyInProgress(gettext('The task has been started, perhaps by another user'), { duration: 5 });
+            } else {
+              success_callback && success_callback();
+            }
+          }).catch(() => {
+            const errorMessage = gettext('Failed to make PDF searchable');
+            toaster.danger(errorMessage);
+            fail_callback && fail_callback();
+          });
+        }
+      } else {
+        success_callback && success_callback();
+      }
+    }).catch(() => {
+      inProgressToaster.close();
+      const errorMessage = gettext('Failed to make PDF searchable');
+      toaster.danger(errorMessage);
+      fail_callback && fail_callback();
+    });
+  }, [repoID]);
+
   const extractFilesDetails = useCallback((objIds, { success_callback, fail_callback } = {}) => {
     const inProgressToaster = toaster.notifyInProgress(gettext('Extracting file details by AI...'), { duration: null });
     metadataAPI.extractFileDetails(repoID, objIds).then(res => {
@@ -102,6 +134,7 @@ export const MetadataAIOperationsProvider = ({
       onOCR,
       OCRSuccessCallBack,
       generateDescription,
+      genDualLayerPDF,
       extractFilesDetails,
       extractFileDetails,
     }}>

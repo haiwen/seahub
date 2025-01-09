@@ -264,6 +264,16 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  genDualLayerPDF = (repoID, filePath, options = {}) => {
+    const url = this.server + '/api/v2.1/ai/pdf/generate-text-layer/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+      ...options,
+    };
+    return this.req.post(url, params);
+  };
+
   imageCaption = (repoID, filePath, lang) => {
     const url = this.server + '/api/v2.1/ai/image-caption/';
     const params = {

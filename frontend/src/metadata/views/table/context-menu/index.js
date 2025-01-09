@@ -34,6 +34,7 @@ const OPERATION = {
   FILE_DETAIL: 'file-detail',
   FILE_DETAILS: 'file-details',
   MOVE: 'move',
+  GEN_DUAL_LAYER_PDF: 'gen-dual-layer-pdf',
 };
 
 const ContextMenu = ({
@@ -48,7 +49,7 @@ const ContextMenu = ({
 
   const { metadata } = useMetadataView();
   const { enableOCR } = useMetadataStatus();
-  const { onOCR, generateDescription, extractFilesDetails } = useMetadataAIOperations();
+  const { onOCR, generateDescription, extractFilesDetails, genDualLayerPDF } = useMetadataAIOperations();
 
   const repoID = window.sfMetadataStore.repoId;
 
@@ -172,10 +173,19 @@ const ContextMenu = ({
       const isDescribableFile = checkIsDescribableFile(record);
       const isImage = Utils.imageCheck(fileName);
       const isVideo = Utils.videoCheck(fileName);
+      const isPDF = Utils.pdfCheck(fileName);
       if (descriptionColumn && isDescribableFile) {
         list.push({
           value: OPERATION.GENERATE_DESCRIPTION,
           label: gettext('Generate description'),
+          record
+        });
+      }
+
+      if (isPDF) {
+        list.push({
+          value: OPERATION.GEN_DUAL_LAYER_PDF,
+          label: gettext('Make the PDF searchable'),
           record
         });
       }
@@ -232,6 +242,14 @@ const ContextMenu = ({
       }
     });
   }, [updateRecords, generateDescription]);
+
+  const handleGenerateDualLayerPDF = useCallback((record) => {
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    if (!fileName || !parentDir) return;
+    if (!Utils.pdfCheck(fileName)) return;
+    genDualLayerPDF({ parentDir, fileName });
+  }, [genDualLayerPDF]);
 
   const toggleFileTagsRecord = useCallback((record = null) => {
     setFileTagsRecord(record);
@@ -318,6 +336,12 @@ const ContextMenu = ({
         handelGenerateDescription(record);
         break;
       }
+      case OPERATION.GEN_DUAL_LAYER_PDF: {
+        const { record } = option;
+        if (!record) break;
+        handleGenerateDualLayerPDF(record);
+        break;
+      }
       case OPERATION.FILE_TAGS: {
         const { record } = option;
         if (!record) break;
@@ -378,7 +402,7 @@ const ContextMenu = ({
         break;
       }
     }
-  }, [repoID, onCopySelected, onClearSelected, handelGenerateDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
+  }, [repoID, onCopySelected, onClearSelected, handelGenerateDescription, handleGenerateDualLayerPDF, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
   const currentRecordId = getRecordIdFromRecord(currentRecord.current);
   const fileName = getFileNameFromRecord(currentRecord.current);
