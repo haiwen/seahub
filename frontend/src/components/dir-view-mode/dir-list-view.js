@@ -57,6 +57,9 @@ class DirListView extends React.Component {
           isDirentListLoading={this.props.isDirentListLoading}
           onAddFile={this.props.onAddFile}
           currentRepoInfo={this.props.currentRepoInfo}
+          userPerm={this.props.userPerm}
+          onAddFolder={this.props.onAddFolder}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
       );
     }
