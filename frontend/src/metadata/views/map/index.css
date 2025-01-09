@@ -5,7 +5,11 @@
   flex-direction: column;
 }
 
-.sf-metadata-view-map #platform div:nth-child(2) div:has(.custom-avatar-overlay) {
+.sf-metadata-view-map #platform div:has(.custom-avatar-overlay) {
+  display: block !important;
+}
+
+.sf-metadata-view-map #platform div:has(.custom-image-overlay) {
   display: block !important;
 }
 
