@@ -286,6 +286,7 @@ export const getFileTypeColumnOptions = () => {
     [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.DIAGRAM]: { name: gettext('Diagram'), color: '#4afbbd', textColor: '#FFFFFF', borderColor: '#e5428e' },
   };
 };
 
