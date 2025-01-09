@@ -1,5 +1,5 @@
 const customAvatarOverlay = (point, avatarUrl, bgUrl, width = 20, height = 25) => {
-  class AvatarOverlay extends window.BMap.Overlay {
+  class AvatarOverlay extends window.BMapGL.Overlay {
     constructor(point, avatarUrl, bgUrl, width, height) {
       super();
       this._point = point;

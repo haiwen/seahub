@@ -45,6 +45,7 @@ const Map = () => {
     clusterRef.current = clusterIds;
     updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}/${gettext('Location')}`);
     setShowCluster(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewID, updateCurrentPath]);
 
   const closeCluster = useCallback(() => {
@@ -55,8 +56,8 @@ const Map = () => {
 
   useEffect(() => {
     updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewID]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (showCluster) {
     return (<ClusterPhotos markerIds={clusterRef.current} onClose={closeCluster} />);

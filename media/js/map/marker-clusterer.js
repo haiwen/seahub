@@ -15,11 +15,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 获取一个扩展的视图范围，把上下左右都扩大一样的像素值。
-     * @param {Map} map BMap.Map的实例化对象
-     * @param {BMap.Bounds} bounds BMap.Bounds的实例化对象
+     * @param {Map} map BMapGL.Map的实例化对象
+     * @param {BMapGL.Bounds} bounds BMapGL.Bounds的实例化对象
      * @param {Number} gridSize 要扩大的像素值
      *
-     * @return {BMap.Bounds} 返回扩大后的视图范围。
+     * @return {BMapGL.Bounds} 返回扩大后的视图范围。
      */
     var getExtendedBounds = function(map, bounds, gridSize){
         bounds = cutBoundsInRange(bounds);
@@ -31,21 +31,22 @@ var BMapLib = window.BMapLib = BMapLib || {};
         pixelSW.y += gridSize;
         var newNE = map.pixelToPoint(pixelNE);
         var newSW = map.pixelToPoint(pixelSW);
-        return new BMap.Bounds(newSW, newNE);
+        return new BMapGL.Bounds(newSW, newNE);
     };
 
     /**
      * 按照百度地图支持的世界范围对bounds进行边界处理
-     * @param {BMap.Bounds} bounds BMap.Bounds的实例化对象
+     * @param {BMapGL.Bounds} bounds BMapGL.Bounds的实例化对象
      *
-     * @return {BMap.Bounds} 返回不越界的视图范围
+     * @return {BMapGL.Bounds} 返回不越界的视图范围
      */
     var cutBoundsInRange = function (bounds) {
+        console.log(bounds);
         var maxX = getRange(bounds.getNorthEast().lng, -180, 180);
         var minX = getRange(bounds.getSouthWest().lng, -180, 180);
-        var maxY = getRange(bounds.getNorthEast().lat, -74, 74);
-        var minY = getRange(bounds.getSouthWest().lat, -74, 74);
-        return new BMap.Bounds(new BMap.Point(minX, minY), new BMap.Point(maxX, maxY));
+        var maxY = getRange(bounds.getNorthEast().lat, -90, 90);
+        var minY = getRange(bounds.getSouthWest().lat, -90, 90);
+        return new BMapGL.Bounds(new BMapGL.Point(minX, minY), new BMapGL.Point(maxX, maxY));
     };
 
     /**
@@ -137,9 +138,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 that._redraw();
             });
 
-            // this._map.addEventListener("moveend",function(){
-            //      that._redraw();
-            // });
+            this._map.addEventListener("moveend",function(){
+                 that._redraw();
+            });
 
             var mkrs = opts["markers"];
             isArray(mkrs) && this.addMarkers(mkrs);
@@ -160,7 +161,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 把一个标记添加到要聚合的标记数组中
-     * @param {BMap.Marker} marker 要添加的标记
+     * @param {BMapGL.Marker} marker 要添加的标记
      *
      * @return 无返回值。
      */
@@ -174,7 +175,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 添加一个聚合的标记。
-     * @param {BMap.Marker} marker 要聚合的单个标记。
+     * @param {BMapGL.Marker} marker 要聚合的单个标记。
      * @return 无返回值。
      */
     MarkerCluster.prototype.addMarker = function(marker) {
@@ -190,7 +191,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         var mapBounds = this._map.getBounds();
         var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
         for(var i = 0, marker; marker = this._markers[i]; i++){
-            if(!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition()) ){
+            if(!marker.isInCluster && extendedBounds.containsPoint(marker._position) ){
                 this._addToClosestCluster(marker);
             }
         }
@@ -205,7 +206,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 根据标记的位置，把它添加到最近的聚合中
-     * @param {BMap.Marker} marker 要进行聚合的单个标记
+     * @param {BMapGL.Marker} marker 要进行聚合的单个标记
      *
      * @return 无返回值。
      */
@@ -268,7 +269,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 删除单个标记
-     * @param {BMap.Marker} marker 需要被删除的marker
+     * @param {BMapGL.Marker} marker 需要被删除的marker
      *
      * @return {Boolean} 删除成功返回true，否则返回false
      */
@@ -284,7 +285,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 删除单个标记
-     * @param {BMap.Marker} marker 需要被删除的marker
+     * @param {BMapGL.Marker} marker 需要被删除的marker
      *
      * @return {Boolean} 删除成功返回true，否则返回false
      */
@@ -299,7 +300,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 删除一组标记
-     * @param {Array<BMap.Marker>} markers 需要被删除的marker数组
+     * @param {Array<BMapGL.Marker>} markers 需要被删除的marker数组
      *
      * @return {Boolean} 删除成功返回true，否则返回false
      */
@@ -487,7 +488,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 var l = this._markers.length + 1;
                 var lat = (this._center.lat * (l - 1) + marker.getPosition().lat) / l;
                 var lng = (this._center.lng * (l - 1) + marker.getPosition().lng) / l;
-                this._center = new BMap.Point(lng, lat);
+                this._center = new BMapGL.Point(lng, lat);
                 this.updateGridBounds();
             }//计算新的Center
         }
@@ -550,7 +551,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return 无返回值。
      */
     Cluster.prototype.updateGridBounds = function() {
-        var bounds = new BMap.Bounds(this._center, this._center);
+        var bounds = new BMapGL.Bounds(this._center, this._center);
         this._gridBounds = getExtendedBounds(this._map, bounds, this._markerClusterer.getGridSize());
     };
 
@@ -620,10 +621,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 获取该聚合所包含的所有标记的最小外接矩形的范围。
-     * @return {BMap.Bounds} 计算出的范围。
+     * @return {BMapGL.Bounds} 计算出的范围。
      */
     Cluster.prototype.getBounds = function() {
-        var bounds = new BMap.Bounds(this._center,this._center);
+        var bounds = new BMapGL.Bounds(this._center,this._center);
         for (var i = 0, marker; marker = this._markers[i]; i++) {
             bounds.extend(marker.getPosition());
         }
@@ -632,7 +633,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     /**
      * 获取该聚合的落脚点。
-     * @return {BMap.Point} 该聚合的落脚点。
+     * @return {BMapGL.Point} 该聚合的落脚点。
      */
     Cluster.prototype.getCenter = function() {
         return this._center;

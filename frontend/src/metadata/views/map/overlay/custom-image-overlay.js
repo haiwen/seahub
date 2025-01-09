@@ -5,8 +5,8 @@ const customImageOverlay = (center, image, callback) => {
     constructor(center, image, { callback } = {}) {
       super(center, '', { styles: [] });
       this._center = center;
-      this._imageUrl = image.src;
-      this._imageId = image.id;
+      this._URL = image.src;
+      this._id = image.id;
       this._callback = callback;
     }
 
@@ -18,11 +18,11 @@ const customImageOverlay = (center, image, callback) => {
       map.getPanes().markerPane.appendChild(div);
       this._div = div;
 
-      const imageElement = `<img src=${this._imageUrl} />`;
+      const imageElement = `<img src=${this._URL} />`;
       const htmlString =
         `
           <div class="custom-image-container">
-            ${this._imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
+            ${this._URL ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
           </div>
         `;
       const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
@@ -31,7 +31,7 @@ const customImageOverlay = (center, image, callback) => {
 
       const eventHandler = (event) => {
         event.preventDefault();
-        this._callback && this._callback(event, [{ _imageId: this._imageId }]);
+        this._callback && this._callback(event, [{ _id: this._id }]);
       };
 
       if (Utils.isDesktop()) {

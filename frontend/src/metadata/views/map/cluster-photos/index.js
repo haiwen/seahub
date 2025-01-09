@@ -85,11 +85,16 @@ const ClusterPhotos = ({ markerIds, onClose }) => {
   }, [metadata, repoID, viewID, store, loadData]);
 
   useEffect(() => {
-    const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, onViewChange);
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, true);
     return () => {
-      unsubscribeViewChange();
       window?.sfMetadataContext?.eventBus?.dispatch(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, false);
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribeViewChange = window?.sfMetadataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, onViewChange);
+    return () => {
+      unsubscribeViewChange && unsubscribeViewChange();
     };
   }, [onViewChange]);
 

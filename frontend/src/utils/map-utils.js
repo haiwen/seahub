@@ -39,16 +39,16 @@ export default function loadBMap(ak) {
 
 export function asyncLoadBaiduJs(ak) {
   return new Promise((resolve, reject) => {
-    if (typeof window.BMap !== 'undefined') {
-      resolve(window.BMap);
+    if (typeof window.BMapGL !== 'undefined') {
+      resolve(window.BMapGL);
       return;
     }
     window.renderMap = function () {
-      resolve(window.BMap);
+      resolve(window.BMapGL);
     };
     let script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = `https://api.map.baidu.com/api?v=3.0&ak=${ak}&callback=renderMap`;
+    script.src = `https://api.map.baidu.com/api?type=webgl&v=1.0&ak=${ak}&callback=renderMap`;
     script.onerror = reject;
     document.body.appendChild(script);
   });

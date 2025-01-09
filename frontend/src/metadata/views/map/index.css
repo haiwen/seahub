@@ -28,7 +28,7 @@
 
 .sf-metadata-view-map .custom-image-number {
   position: absolute;
-  right: -15px;
+  right: -16px;
   top: -16px;
   width: 32px;
   height: 32px;
@@ -39,6 +39,7 @@
   text-align: center;
   font-size: 16px;
   line-height: 20px;
+  font-weight: 400;
 }
 
 .sf-metadata-view-map .custom-image-container:active::before,

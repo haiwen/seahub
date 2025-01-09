@@ -754,21 +754,21 @@ var BMapLib = window.BMapLib = BMapLib || {};
             (!this._styles.length) && this._setupDefaultStyles();                  
         };
 
-    T.lang.inherits(TextIconOverlay, BMap.Overlay, "TextIconOverlay");
+    T.lang.inherits(TextIconOverlay, BMapGL.Overlay, "TextIconOverlay");
 
     TextIconOverlay.prototype._setupDefaultStyles = function(){  
         var sizes = [53, 56, 66, 78, 90];
         for(var i = 0, size; size = sizes[i]; i++){
             this._styles.push({
                 url:_IMAGE_PATH + i + '.' + _IMAGE_EXTENSION,
-                size: new BMap.Size(size, size)
+                size: new BMapGL.Size(size, size)
             });
         }//for循环的简洁写法
     };
 
     /**
     *继承Overlay的intialize方法，自定义覆盖物时必须。
-    *@param {Map} map BMap.Map的实例化对象。
+    *@param {Map} map BMapGL.Map的实例化对象。
     *@return {HTMLElement} 返回覆盖物对应的HTML元素。
     */
     TextIconOverlay.prototype.initialize = function(map){
@@ -944,12 +944,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
         } else {
             csstext.push('background-image:url(' + url + ');');
             var backgroundPosition = '0 0';
-            (offset instanceof BMap.Size) && (backgroundPosition = offset.width + 'px' + ' ' + offset.height + 'px');          
+            (offset instanceof BMapGL.Size) && (backgroundPosition = offset.width + 'px' + ' ' + offset.height + 'px');          
             csstext.push('background-position:' + backgroundPosition + ';');
         }
 
-        if (size instanceof BMap.Size){
-            if (anchor instanceof BMap.Size) {
+        if (size instanceof BMapGL.Size){
+            if (anchor instanceof BMapGL.Size) {
                 if (anchor.height > 0 && anchor.height < size.height) {
                       csstext.push('height:' + (size.height - anchor.height) + 'px; padding-top:' + anchor.height + 'px;');
                 }
@@ -999,9 +999,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
      * <br />"<b>target</b>：{BMapLib.TextIconOverlay} 事件目标
 
-     * <br />"<b>point</b> : {BMap.Point} 最新添加上的节点BMap.Point对象
+     * <br />"<b>point</b> : {BMapGL.Point} 最新添加上的节点BMap.Point对象
 
-     * <br />"<b>pixel</b>：{BMap.pixel} 最新添加上的节点BMap.Pixel对象
+     * <br />"<b>pixel</b>：{BMapGL.pixel} 最新添加上的节点BMap.Pixel对象
 
      *
 
@@ -1025,9 +1025,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
      * <br />"<b>target</b>：{BMapLib.TextIconOverlay} 事件目标
 
-     * <br />"<b>point</b> : {BMap.Point} 最新添加上的节点BMap.Point对象
+     * <br />"<b>point</b> : {BMapGL.Point} 最新添加上的节点BMap.Point对象
 
-     * <br />"<b>pixel</b>：{BMap.pixel} 最新添加上的节点BMap.Pixel对象
+     * <br />"<b>pixel</b>：{BMapGL.pixel} 最新添加上的节点BMap.Pixel对象
 
      *
 
@@ -1058,7 +1058,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
             var y = e.clientY || e.pageY;
             if (e && be && x && y && elem){
                 var offset = T.dom.getPosition(map.getContainer());
-                be.pixel = new BMap.Pixel(x - offset.left, y - offset.top);
+                be.pixel = new BMapGL.Pixel(x - offset.left, y - offset.top);
                 be.point = map.pixelToPoint(be.pixel);
             }
             return be;

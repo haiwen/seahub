@@ -84,7 +84,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
       readOnly={readOnly}
       searchable={true}
       supportMultipleSelect={true}
-      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select ml-4"
+      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
       value={displayValue}
       options={options}
       onSelectOption={onChange}

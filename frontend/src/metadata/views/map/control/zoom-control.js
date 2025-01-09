@@ -1,11 +1,14 @@
 import { Utils } from '../../../../utils/utils';
 
-export function createBMapZoomControl(BMap, callback) {
+const maxZoom = 18;
+const minZoom = 3;
+
+export function createBMapZoomControl(BMapGL, callback) {
   function ZoomControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMap.Size(80, Utils.isDesktop() ? 30 : 90);
+    this.defaultOffset = new BMapGL.Size(80, Utils.isDesktop() ? 30 : 90);
   }
-  ZoomControl.prototype = new window.BMap.Control();
+  ZoomControl.prototype = new BMapGL.Control();
   ZoomControl.prototype.initialize = function (map) {
     const div = document.createElement('div');
     div.className = 'sf-BMap-zoom-control';
@@ -35,21 +38,21 @@ export function createBMapZoomControl(BMap, callback) {
 
     const updateButtonStates = () => {
       const zoomLevel = map.getZoom();
-      const maxZoom = map.getMapType().getMaxZoom();
-      const minZoom = map.getMapType().getMinZoom();
-
       zoomInButton.disabled = zoomLevel >= maxZoom;
       zoomOutButton.disabled = zoomLevel <= minZoom;
+      callback && callback(zoomLevel);
     };
 
     zoomInButton.onclick = (e) => {
       e.preventDefault();
-      map.zoomTo(map.getZoom() + 2);
+      const nextZoom = map.getZoom() + 2;
+      map.zoomTo(Math.min(nextZoom, maxZoom));
     };
 
     zoomOutButton.onclick = (e) => {
       e.preventDefault();
-      map.zoomTo(map.getZoom() - 2);
+      const nextZoom = map.getZoom() - 2;
+      map.zoomTo(Math.max(nextZoom, minZoom));
     };
 
     map.addEventListener('zoomend', updateButtonStates);

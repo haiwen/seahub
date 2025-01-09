@@ -54,7 +54,7 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select ml-4"
+      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
       value={displayValue}
       options={options}
       onSelectOption={onChange}

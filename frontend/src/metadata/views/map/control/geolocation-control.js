@@ -1,12 +1,12 @@
 import { mediaUrl } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 
-export function createBMapGeolocationControl(BMap, callback) {
+export function createBMapGeolocationControl(BMapGL, callback) {
   function GeolocationControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMap.Size(30, Utils.isDesktop() ? 30 : 90);
+    this.defaultOffset = new BMapGL.Size(30, Utils.isDesktop() ? 30 : 90);
   }
-  GeolocationControl.prototype = new window.BMap.Control();
+  GeolocationControl.prototype = new BMapGL.Control();
   GeolocationControl.prototype.initialize = function (map) {
     const div = document.createElement('div');
     div.className = 'sf-BMap-geolocation-control';
@@ -24,7 +24,7 @@ export function createBMapGeolocationControl(BMap, callback) {
     }
     div.onclick = (e) => {
       e.preventDefault();
-      const geolocation = new BMap.Geolocation();
+      const geolocation = new BMapGL.Geolocation();
       div.className = 'sf-BMap-geolocation-control sf-BMap-geolocation-control-loading';
       geolocation.getCurrentPosition((result) => {
         div.className = 'sf-BMap-geolocation-control';

@@ -38,6 +38,7 @@ const MapViewToolBar = ({
   }, []);
 
   useEffect(() => {
+    setShowGalleryToolbar(false);
     const unsubscribeToggle = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, onToggle);
     const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.RESET_VIEW, resetView);
     return () => {
@@ -45,10 +46,6 @@ const MapViewToolBar = ({
       unsubscribeView && unsubscribeView();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setShowGalleryToolbar(false);
   }, [viewID]);
 
   if (showGalleryToolbar) {
