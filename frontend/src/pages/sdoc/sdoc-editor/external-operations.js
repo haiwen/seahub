@@ -33,6 +33,7 @@ class ExternalOperations extends React.Component {
       fileType: '.sdoc',
       editor: null,
       insertSdocFileLink: null,
+      insertWhiteboard: null,
     };
   }
 
@@ -46,6 +47,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
+    this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_WHITEBOARD_FILE, this.onCreateWhiteboardFile);
   }
 
   componentWillUnmount() {
@@ -58,6 +60,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
+    this.unsubscribeCreateSdocFile();
   }
 
   onInternalLinkToggle = (options) => {
@@ -143,6 +146,18 @@ class ExternalOperations extends React.Component {
     });
   };
 
+  onCreateWhiteboardFile = (params) => {
+    if (params?.editor && params?.insertWhiteboard) {
+      this.setState({ editor: params.editor, insertWhiteboard: params.insertWhiteboard });
+    }
+    if (params?.fileType) {
+      this.setState({ fileType: '.draw' });
+    }
+    this.setState({
+      isShowCreateFileDialog: !this.state.isShowCreateFileDialog
+    });
+  };
+
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
     let isDuplicated = direntList.some(object => {
@@ -153,9 +168,9 @@ class ExternalOperations extends React.Component {
 
   onAddFile = (filePath) => {
     let repoID = this.props.repoID;
-    const { insertSdocFileLink, editor } = this.state;
+    const { insertWhiteboard, insertSdocFileLink, editor } = this.state;
     seafileAPI.createFile(repoID, filePath).then((res) => {
-      if (insertSdocFileLink && editor) {
+      if ((insertWhiteboard || insertSdocFileLink) && editor) {
         insertSdocFileLink(editor, res.data.obj_name, res.data.doc_uuid);
       }
     }).catch((error) => {
@@ -193,7 +208,7 @@ class ExternalOperations extends React.Component {
             fileType={fileType}
             onAddFile={this.onAddFile}
             checkDuplicatedName={this.checkDuplicatedName}
-            toggleDialog={this.onCreateSdocFile}
+            toggleDialog={this.onCreateSdocFile || this.onCreateWhiteboardFile}
           />
         )}
       </>

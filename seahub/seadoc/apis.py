@@ -2925,6 +2925,8 @@ class SeadocSearchFilenameView(APIView):
             suffixes = ['sdoc',]
         if search_type == 'file':
             suffixes = get_non_sdoc_file_exts()
+        if search_type == 'md':
+            suffixes = ['md',]
         if not suffixes:
             error_msg = 'search_type is not valid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

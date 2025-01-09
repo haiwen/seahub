@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { SimpleEditor } from '@seafile/stldraw-editor';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
 import isHotkey from 'is-hotkey';
 import editorApi from './editor-api';
 import { gettext } from '../../utils/constants';
@@ -85,5 +86,8 @@ const TldrawEditor = () => {
     />
   );
 };
+
+const eventBus = EventBus.getInstance();
+eventBus.dispatch(EXTERNAL_EVENT.REFRESH_DOCUMENT, TldrawEditor);
 
 export default TldrawEditor;
