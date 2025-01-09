@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import searchAPI from '../../utils/search-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
 import { Utils } from '../../utils/utils';
@@ -13,7 +13,6 @@ import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import Icon from '../icon';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -35,7 +34,6 @@ class Search extends Component {
 
   constructor(props) {
     super(props);
-    this.baseSearchPageURL = `${siteRoot}search/`;
     this.state = {
       width: 'default',
       value: '',
@@ -44,13 +42,11 @@ class Search extends Component {
       highlightIndex: 0,
       page: 0,
       isLoading: false,
-      hasMore: false,
       isMaskShow: false,
       showRecent: true,
       isResultGotten: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
-      searchPageUrl: this.baseSearchPageURL,
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
     };
@@ -367,7 +363,6 @@ class Search extends Component {
           inputValue: newValue,
           isLoading: false,
           highlightIndex: 0,
-          // resultItems: [],
           isResultGotten: false,
         }, () => {
           if (!isInRepo && trimmedValue !== '') {
@@ -392,7 +387,6 @@ class Search extends Component {
       this.setState({
         resultItems: results,
         isLoading: false,
-        hasMore: false,
       });
     }).catch(error => {
       // eslint-disable-next-line no-console
@@ -428,7 +422,6 @@ class Search extends Component {
             isResultGotten: true,
             page: page + 1,
             isLoading: false,
-            hasMore: res.data.has_more,
           });
         } else {
           this.setState({
@@ -436,7 +429,6 @@ class Search extends Component {
             resultItems: [],
             isLoading: false,
             isResultGotten: true,
-            hasMore: res.data.has_more,
           });
         }
       }).catch(error => {
@@ -450,7 +442,6 @@ class Search extends Component {
   };
 
   onNormalSearch = (queryData, cancelToken, page) => {
-    this.updateSearchPageURL(queryData);
     queryData['per_page'] = PER_PAGE;
     queryData['page'] = page;
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
@@ -461,7 +452,6 @@ class Search extends Component {
           isResultGotten: true,
           isLoading: false,
           page: page + 1,
-          hasMore: res.data.has_more,
         });
         return;
       }
@@ -470,7 +460,6 @@ class Search extends Component {
         resultItems: [],
         isLoading: false,
         isResultGotten: true,
-        hasMore: res.data.has_more,
       });
     }).catch(error => {
       /* eslint-disable */
@@ -478,14 +467,6 @@ class Search extends Component {
       this.setState({ isLoading: false });
     });
   };
-
-  updateSearchPageURL(queryData) {
-    let params = '';
-    for (let key in queryData) {
-      params += key + '=' + encodeURIComponent(queryData[key]) + '&';
-    }
-    this.setState({searchPageUrl: `${this.baseSearchPageURL}?${params.substring(0, params.length - 1)}`});
-  }
 
   formatResultItems(data) {
     let items = [];
@@ -681,7 +662,7 @@ class Search extends Component {
   };
 
   renderResults = (resultItems, isVisited) => {
-    const { highlightIndex, hasMore, searchPageUrl } = this.state;
+    const { highlightIndex } = this.state;
 
     const results = (
       <>
@@ -700,12 +681,6 @@ class Search extends Component {
           );
         })}
       </ul>
-      {(!this.props.isPublic && hasMore) &&
-        <div className="more-search-result mb-1 pl-2 d-flex align-items-center">
-          <Icon symbol="more-level" className="more-search-result-icon" />
-          <a href={searchPageUrl} className="more-search-result-text ml-1">{gettext('More')}</a>
-        </div>
-      }
       </>
     );
 

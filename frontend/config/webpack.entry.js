@@ -40,7 +40,6 @@ const entryFiles = {
   repoFolderTrash: '/repo-folder-trash.js',
   orgAdmin: '/pages/org-admin',
   sysAdmin: '/pages/sys-admin',
-  search: '/pages/search',
   uploadLink: '/pages/upload-link',
   subscription: '/subscription.js',
   institutionAdmin: '/pages/institution-admin/index.js'
