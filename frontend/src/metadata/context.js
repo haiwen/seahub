@@ -235,6 +235,11 @@ class Context {
     return this.metadataAPI.generateDescription(repoID, filePath);
   };
 
+  genDualLayerPDF = (filePath) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.genDualLayerPDF(repoID, filePath);
+  };
+
   imageCaption = (filePath) => {
     const repoID = this.settings['repoID'];
     const lang = this.settings['lang'];

@@ -20,6 +20,7 @@ const OPERATION = {
   OCR: 'ocr',
   FILE_TAGS: 'file-tags',
   FILE_DETAIL: 'file-detail',
+  GEN_DUAL_LAYER_PDF: 'gen-dual-layer-pdf',
 };
 
 const AI = () => {
