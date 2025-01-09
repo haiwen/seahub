@@ -33,7 +33,7 @@ const Map = ({ images, onOpenCluster }) => {
     const zoomControl = new ZoomControl();
     const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (err, point) => {
       if (!err && point) {
-        mapRef.current.setCenter({ lng: point.lng, lat: point.lat });
+        mapRef.current.setCenter(point);
       }
     });
 
@@ -48,7 +48,6 @@ const Map = ({ images, onOpenCluster }) => {
     const imageUrl = `${mediaUrl}img/marker.png`;
     const avatarMarker = customAvatarOverlay(centerPoint, appAvatarURL, imageUrl);
     mapRef.current.addOverlay(avatarMarker);
-    setTimeout(() => mapRef.current.showOverlayContainer(), 3000);
   }, []);
 
   const getBMapType = useCallback((type) => {
@@ -101,7 +100,8 @@ const Map = ({ images, onOpenCluster }) => {
   const initializeCluster = useCallback(() => {
     if (mapRef.current && !clusterRef.current) {
       clusterRef.current = new window.BMapLib.MarkerCluster(mapRef.current, {
-        callback: (e, markers) => onClickMarker(e, markers)
+        callback: (e, markers) => onClickMarker(e, markers),
+        maxZoom: 21,
       });
     }
   }, [onClickMarker]);
@@ -109,21 +109,24 @@ const Map = ({ images, onOpenCluster }) => {
   const renderBaiduMap = useCallback(() => {
     if (!mapRef.current || !window.BMapGL.Map) return;
     let { center, zoom } = loadMapState();
+    let userPosition = { lng: 116.40396418840683, lat: 39.915106021711345 };
     // ask for user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((userInfo) => {
-        center = { lng: userInfo.coords.longitude, lat: userInfo.coords.latitude };
-        const gcPosition = wgs84_to_gcj02(center.lng, center.lat);
+        const gcPosition = wgs84_to_gcj02(userInfo.coords.longitude, userInfo.coords.latitude);
         const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
         const { lng, lat } = bdPosition;
-        center = new window.BMapGL.Point(lng, lat);
+        userPosition = new window.BMapGL.Point(lng, lat);
+        center = userPosition;
         window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_CENTER_KEY, center);
       });
     }
     const mapTypeValue = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY);
     mapRef.current = new window.BMapGL.Map('sf-metadata-map-container', {
       enableMapClick: false,
-      mapType: getBMapType(mapTypeValue)
+      minZoom: 3,
+      maxZoom: 21,
+      mapType: getBMapType(mapTypeValue),
     });
 
     if (isValidPosition(center?.lng, center?.lat)) {
@@ -131,14 +134,13 @@ const Map = ({ images, onOpenCluster }) => {
     }
 
     mapRef.current.enableScrollWheelZoom(true);
+    addMapController();
 
-    initializeUserMarker(center);
+    initializeUserMarker(userPosition);
     initializeCluster();
 
     batchIndexRef.current = 0;
     renderMarkersBatch();
-
-    addMapController();
   }, [addMapController, initializeCluster, initializeUserMarker, renderMarkersBatch, getBMapType, loadMapState]);
 
   useEffect(() => {

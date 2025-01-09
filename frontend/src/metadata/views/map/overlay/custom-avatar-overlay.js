@@ -13,6 +13,7 @@ const customAvatarOverlay = (point, avatarUrl, bgUrl, width = 20, height = 25) =
       this._map = map;
       const divBox = document.createElement('div');
       const divImg = new Image();
+      divBox.className = 'custom-avatar-overlay';
       divBox.style.position = 'absolute';
       divBox.style.width = `${this._width}px`;
       divBox.style.height = `${this._height}px`;

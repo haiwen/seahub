@@ -31,6 +31,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         pixelSW.y += gridSize;
         var newNE = map.pixelToPoint(pixelNE);
         var newSW = map.pixelToPoint(pixelSW);
+        if (!newSW || !newNE) return null;
         return new BMapGL.Bounds(newSW, newNE);
     };
 
@@ -41,7 +42,6 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return {BMapGL.Bounds} 返回不越界的视图范围
      */
     var cutBoundsInRange = function (bounds) {
-        console.log(bounds);
         var maxX = getRange(bounds.getNorthEast().lng, -180, 180);
         var minX = getRange(bounds.getSouthWest().lng, -180, 180);
         var maxY = getRange(bounds.getNorthEast().lat, -90, 90);
@@ -124,7 +124,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
             var opts = options || {};
             this._gridSize = opts["gridSize"] || 60;
-            this._maxZoom = opts["maxZoom"] || 18;
+            this._maxZoom = opts["maxZoom"] || 21;
             this._minClusterSize = opts["minClusterSize"] || 2;
             this._isAverageCenter = false;
             if (opts['isAverageCenter'] != undefined) {
@@ -138,9 +138,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 that._redraw();
             });
 
-            this._map.addEventListener("moveend",function(){
-                 that._redraw();
-            });
+            // this._map.addEventListener("moveend",function(){
+            //      that._redraw();
+            // });
 
             var mkrs = opts["markers"];
             isArray(mkrs) && this.addMarkers(mkrs);
@@ -191,7 +191,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         var mapBounds = this._map.getBounds();
         var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
         for(var i = 0, marker; marker = this._markers[i]; i++){
-            if(!marker.isInCluster && extendedBounds.containsPoint(marker._position) ){
+            if(!marker.isInCluster && extendedBounds && extendedBounds.containsPoint(marker._position) ){
                 this._addToClosestCluster(marker);
             }
         }
@@ -624,7 +624,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return {BMapGL.Bounds} 计算出的范围。
      */
     Cluster.prototype.getBounds = function() {
-        var bounds = new BMapGL.Bounds(this._center,this._center);
+        var bounds = new BMapGL.Bounds(this._center, this._center);
         for (var i = 0, marker; marker = this._markers[i]; i++) {
             bounds.extend(marker.getPosition());
         }
