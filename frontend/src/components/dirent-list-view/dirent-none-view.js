@@ -63,7 +63,7 @@ class DirentNoneView extends React.Component {
   onContainerContextMenu = (event) => {
     event.preventDefault();
     let permission = this.props.userPerm;
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
     if (permission !== 'admin' && permission !== 'rw' && !isCustomPermission) {
       return;
     }
