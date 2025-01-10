@@ -7,19 +7,20 @@ import { gettext } from '../../../../utils/constants';
 const MapViewToolBar = ({
   isCustomPermission,
   readOnly,
-  viewID,
+  view: oldView,
   collaborators,
   modifyFilters,
   onToggleDetail,
 }) => {
   const [showGalleryToolbar, setShowGalleryToolbar] = useState(false);
-  const [view, setView] = useState({});
+  const [view, setView] = useState(oldView);
 
   const viewType = useMemo(() => VIEW_TYPE.MAP, []);
   const viewColumns = useMemo(() => {
-    if (!view) return [];
-    return view.columns;
-  }, [view]);
+    if (!oldView) return [];
+    return oldView.columns;
+  }, [oldView]);
+  const viewID = useMemo(() => oldView._id, [oldView]);
 
   const filterColumns = useMemo(() => {
     return viewColumns && viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);
@@ -77,16 +78,16 @@ const MapViewToolBar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <MapTypeSetter view={view} />
+        <MapTypeSetter viewID={viewID} />
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
           target="sf-metadata-filter-popover"
           readOnly={readOnly}
-          filterConjunction={view.filter_conjunction}
-          basicFilters={view.basic_filters}
-          filters={view.filters}
+          filterConjunction={oldView.filter_conjunction}
+          basicFilters={oldView.basic_filters}
+          filters={oldView.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
           collaborators={collaborators}
