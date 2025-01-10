@@ -47,7 +47,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select"
+      className="sf-metadata-basic-filters-select mr-4"
       value={displayValue}
       options={options}
       onSelectOption={onChange}

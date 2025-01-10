@@ -1,29 +1,28 @@
-import { Utils } from '../../../utils/utils';
+import { Utils } from '../../../../../utils/utils';
 
-const customImageOverlay = (center, imageUrl) => {
-  class ImageOverlay extends window.BMap.Overlay {
-    constructor(center, imageUrl) {
-      super();
+const customImageOverlay = (center, image, callback) => {
+  class ImageOverlay extends window.BMapLib.TextIconOverlay {
+    constructor(center, image, { callback } = {}) {
+      super(center, '', { styles: [] });
       this._center = center;
-      this._imageUrl = imageUrl;
+      this._URL = image.src;
+      this._id = image.id;
+      this._callback = callback;
     }
 
     initialize(map) {
       this._map = map;
       const div = document.createElement('div');
       div.style.position = 'absolute';
-      div.style.width = '80px';
-      div.style.height = '80px';
       div.style.zIndex = 2000;
       map.getPanes().markerPane.appendChild(div);
       this._div = div;
 
-      const imageElement = `<img src=${this._imageUrl} width="72" height="72" />`;
+      const imageElement = `<img src=${this._URL} />`;
       const htmlString =
         `
           <div class="custom-image-container">
-            ${this._imageUrl ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
-            <i class='sf3-font image-overlay-arrow'></i>
+            ${this._URL ? imageElement : '<div class="empty-custom-image-wrapper"></div>'}
           </div>
         `;
       const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
@@ -31,12 +30,30 @@ const customImageOverlay = (center, imageUrl) => {
       this._div.append(label);
 
       const eventHandler = (event) => {
-        event.stopPropagation();
         event.preventDefault();
+        this._callback && this._callback(event, [{ _id: this._id }]);
       };
 
       if (Utils.isDesktop()) {
-        this._div.addEventListener('click', eventHandler);
+        let clickTimeout;
+        this._div.addEventListener('click', (event) => {
+          if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+            return;
+          }
+          clickTimeout = setTimeout(() => {
+            eventHandler(event);
+            clickTimeout = null;
+          }, 300);
+        });
+        this._div.addEventListener('dblclick', (e) => {
+          e.preventDefault();
+          if (clickTimeout) {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+          }
+        });
       } else {
         this._div.addEventListener('touchend', eventHandler);
       }
@@ -51,7 +68,7 @@ const customImageOverlay = (center, imageUrl) => {
     }
 
     getImageUrl() {
-      return imageUrl || '';
+      return image.src || '';
     }
 
     getPosition() {
@@ -63,7 +80,7 @@ const customImageOverlay = (center, imageUrl) => {
     }
   }
 
-  return new ImageOverlay(center, imageUrl);
+  return new ImageOverlay(center, image, callback);
 };
 
 export default customImageOverlay;

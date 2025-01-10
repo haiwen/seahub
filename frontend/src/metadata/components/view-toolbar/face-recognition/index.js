@@ -17,17 +17,17 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
     setShow(isShow);
   }, []);
 
-  const setRecognitionView = useCallback(view => {
+  const resetView = useCallback(view => {
     setView(view);
   }, []);
 
   const modifySorts = useCallback((sorts) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW_CHANGE, { sorts });
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, { sorts });
   }, []);
 
   useEffect(() => {
     const unsubscribeToggle = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_VIEW_TOOLBAR, onToggle);
-    const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.FACE_RECOGNITION_VIEW, setRecognitionView);
+    const unsubscribeView = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.RESET_VIEW, resetView);
     return () => {
       unsubscribeToggle && unsubscribeToggle();
       unsubscribeView && unsubscribeView();

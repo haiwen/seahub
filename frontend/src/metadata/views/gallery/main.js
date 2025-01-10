@@ -8,7 +8,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_IMAGE_GAP, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
@@ -129,14 +129,14 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
 
-    const mode = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
     setMode(mode);
 
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
       EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
       (mode) => {
         setMode(mode);
-        window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
+        window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, mode);
       }
     );
 
@@ -193,7 +193,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     if (scrollTop + clientHeight >= scrollHeight - 10) {
-      onLoadMore();
+      onLoadMore && onLoadMore();
     } else {
       const { scrollTop, clientHeight } = containerRef.current;
       const overScanTop = Math.max(0, scrollTop - (imageSize + GALLERY_IMAGE_GAP) * OVER_SCAN_ROWS);

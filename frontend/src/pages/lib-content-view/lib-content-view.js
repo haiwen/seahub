@@ -2150,6 +2150,7 @@ class LibContentView extends React.Component {
   };
 
   updatePath = (path) => {
+    if (this.state.path === path) return;
     this.setState({ path });
   };
 

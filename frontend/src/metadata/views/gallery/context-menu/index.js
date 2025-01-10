@@ -30,17 +30,17 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
-    if (checkCanDeleteRow) {
+    if (onDelete && checkCanDeleteRow) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
     }
-    if (canDuplicateRow && selectedImages.length === 1) {
+    if (onDuplicate && canDuplicateRow && selectedImages.length === 1) {
       validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
     }
-    if (canRemovePhotoFromPeople) {
+    if (onRemoveImage && canRemovePhotoFromPeople) {
       validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: gettext('Remove from this group') });
     }
     return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages]);
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages, onDuplicate, onDelete, onRemoveImage]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);

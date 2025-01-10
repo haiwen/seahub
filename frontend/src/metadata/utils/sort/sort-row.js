@@ -59,13 +59,13 @@ const sortRowsWithMultiSorts = (tableRows, sorts, { collaborators }) => {
  * @param {object} value e.g. { collaborators, ... }
  * @returns sorted rows ids, array
  */
-const sortTableRows = (table, rows, sorts, { collaborators }) => {
+const sortTableRows = (table, rows, sorts, { collaborators, isReturnID = true } = {}) => {
   const { columns } = table;
   if (!Array.isArray(rows) || rows.length === 0) return [];
   const sortRows = rows.slice(0);
   const validSorts = deleteInvalidSort(sorts, columns);
   sortRowsWithMultiSorts(sortRows, validSorts, { collaborators });
-  return sortRows.map((row) => row._id);
+  return isReturnID ? sortRows.map((row) => row._id) : sortRows;
 };
 
 export {

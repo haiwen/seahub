@@ -9,7 +9,7 @@ import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { debounce } from '../../metadata/utils/common';
-import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 
 const propTypes = {
@@ -126,13 +126,12 @@ class DirPath extends React.Component {
   turnViewPathToLink = (pathList) => {
     if (!Array.isArray(pathList) || pathList.length === 0) return null;
     const [, , viewId, children] = pathList;
-    const isViewSupportClick = viewId === FACE_RECOGNITION_VIEW_ID && children;
     return (
       <>
         <span className="path-split">/</span>
         <span className="path-item">{gettext('Views')}</span>
         <span className="path-split">/</span>
-        <span className="path-item" role={isViewSupportClick ? 'button' : null} onClick={isViewSupportClick ? this.handleRefresh : () => {}}>
+        <span className="path-item" role={children ? 'button' : null} onClick={children ? this.handleRefresh : () => {}}>
           <MetadataViewName id={viewId} />
         </span>
         {children && (

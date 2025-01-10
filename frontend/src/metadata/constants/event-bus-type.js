@@ -60,17 +60,21 @@ export const EVENT_BUS_TYPE = {
   SAVED: 'saved',
   ERROR: 'error',
 
+  // view
+  TOGGLE_VIEW_TOOLBAR: 'toggle_view_toolbar',
+  RESET_VIEW: 'reset_view',
+  UPDATE_SERVER_VIEW: 'update_server_view',
+
   // gallery
   MODIFY_GALLERY_ZOOM_GEAR: 'modify_gallery_zoom_gear',
   SWITCH_GALLERY_GROUP_BY: 'switch_gallery_group_by',
-
-  // face recognition
-  TOGGLE_VIEW_TOOLBAR: 'toggle_view_toolbar',
-  FACE_RECOGNITION_VIEW: 'face_recognition_view',
-  FACE_RECOGNITION_VIEW_CHANGE: 'face_recognition_view_change',
 
   // kanban
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',
   CLOSE_KANBAN_SETTINGS: 'close_kanban_settings',
+
+  // map
+  MODIFY_MAP_TYPE: 'modify_map_type',
+  MAP_VIEW: 'map_view',
 };

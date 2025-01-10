@@ -94,8 +94,8 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
       )}
       {viewType === VIEW_TYPE.FACE_RECOGNITION && (
         <FaceRecognitionViewToolbar
+          readOnly={readOnly}
           isCustomPermission={isCustomPermission}
-          view={view}
           onToggleDetail={onToggleDetail}
         />
       )}
@@ -114,9 +114,11 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
       {viewType === VIEW_TYPE.MAP && (
         <MapViewToolBar
           readOnly={readOnly}
-          view={view}
+          isCustomPermission={isCustomPermission}
+          viewID={view._id}
           collaborators={collaborators}
           modifyFilters={modifyFilters}
+          onToggleDetail={onToggleDetail}
         />
       )}
     </div>

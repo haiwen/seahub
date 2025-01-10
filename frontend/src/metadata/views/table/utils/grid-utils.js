@@ -2,8 +2,7 @@ import dayjs from 'dayjs';
 import { getCellValueByColumn, getFileNameFromRecord, getRecordIdFromRecord, isCellValueChanged } from '../../../utils/cell';
 import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
 import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES,
-  REG_NUMBER_DIGIT, REG_STRING_NUMBER_PARTS, COLUMN_RATE_MAX_NUMBER,
-  PASTE_SOURCE,
+  REG_NUMBER_DIGIT, REG_STRING_NUMBER_PARTS, RATE_MAX_NUMBER, PASTE_SOURCE,
 } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import { convertCellValue } from './convert-utils';
@@ -594,7 +593,7 @@ class GridUtils {
   }
 
   _getRatingLeastSquares(numberList, data) {
-    const { rate_max_number = COLUMN_RATE_MAX_NUMBER[4].name } = data || {};
+    const { rate_max_number = RATE_MAX_NUMBER[4].name } = data || {};
     let slope;
     let intercept;
     let xAverage;
