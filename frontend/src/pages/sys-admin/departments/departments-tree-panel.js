@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DepartmentsV2TreeNode from './departments-v2-tree-node';
+import DepartmentTreeNode from './tree-node';
 
-const DepartmentV2TreePanelPropTypes = {
+const DepartmentsTreePanelPropTypes = {
   rootNodes: PropTypes.array,
   checkedDepartmentId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChangeDepartment: PropTypes.func,
@@ -14,14 +14,14 @@ const DepartmentV2TreePanelPropTypes = {
   toggleDelete: PropTypes.func
 };
 
-class DepartmentV2TreePanel extends Component {
+class DepartmentsTreePanel extends Component {
   render() {
     const { rootNodes, checkedDepartmentId } = this.props;
     return (
       <div className="departments-tree-panel">
         {rootNodes.map(rootNode => {
           return (
-            <DepartmentsV2TreeNode
+            <DepartmentTreeNode
               key={rootNode.id}
               node={rootNode}
               checkedDepartmentId={checkedDepartmentId}
@@ -40,6 +40,6 @@ class DepartmentV2TreePanel extends Component {
   }
 }
 
-DepartmentV2TreePanel.propTypes = DepartmentV2TreePanelPropTypes;
+DepartmentsTreePanel.propTypes = DepartmentsTreePanelPropTypes;
 
-export default DepartmentV2TreePanel;
+export default DepartmentsTreePanel;

@@ -46,7 +46,7 @@ import SearchGroups from './groups/search-groups';
 import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
-import DepartmentsV2 from './departments-v2/departments-v2';
+import Departments from './departments/departments';
 
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
@@ -237,7 +237,7 @@ class SysAdmin extends React.Component {
             <SearchGroups path={siteRoot + 'sys/search-groups'} {...commonProps} />
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
-            <DepartmentsV2 path={siteRoot + 'sys/departments/'} onCloseSidePanel={this.onCloseSidePanel} />
+            <Departments path={siteRoot + 'sys/departments/'} {...commonProps} />
             <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />

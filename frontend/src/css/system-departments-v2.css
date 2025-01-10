@@ -84,11 +84,6 @@
 .department-content-main {
   flex: 1;
   height: 100%;
-  overflow-y: hidden;
-}
-
-.department-content-main:hover {
-  overflow-y: auto;
 }
 
 .department-content-main table td {
@@ -111,10 +106,6 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-}
-
-.department-content-main .cur-view-content .table {
-  margin-bottom: 6rem;
 }
 
 .department-content-main .cur-view-content .sort-dirent {

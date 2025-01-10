@@ -1,29 +1,33 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import { Link } from '@gatsbyjs/reach-router';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
-import MainPanelTopbar from '../main-panel-topbar';
+import { Table, Dropdown, DropdownToggle } from 'reactstrap';
+import Paginator from '../../../components/paginator';
+import Loading from '../../../components/loading';
+import EmptyTip from '../../../components/empty-tip';
+
+import { gettext } from '../../../utils/constants';
+import MemberItem from './member-item';
+import RepoItem from './repo-item';
 import ModalPortal from '../../../components/modal-portal';
-import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
-import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
-import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
-import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
-import { siteRoot, gettext, lang } from '../../../utils/constants';
+import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
+import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
-import '../../../css/org-department-item.css';
-
-dayjs.locale(lang);
-
-const DepartmentDetailPropTypes = {
-  groupID: PropTypes.string,
-  currentItem: PropTypes.string.isRequired,
-  onAddNewDepartment: PropTypes.func,
-  onAddNewMembers: PropTypes.func,
-  onAddNewRepo: PropTypes.func,
-  children: PropTypes.object
+const propTypes = {
+  rootNodes: PropTypes.array,
+  checkedDepartmentId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  membersList: PropTypes.array,
+  isMembersListLoading: PropTypes.bool,
+  setMemberStaff: PropTypes.func,
+  sortItems: PropTypes.func,
+  sortOrder: PropTypes.string,
+  sortBy: PropTypes.string,
+  deleteMember: PropTypes.func,
+  getRepos: PropTypes.func,
+  getPreviousPageList: PropTypes.func,
+  getNextPageList: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPageInfo: PropTypes.object,
+  perPage: PropTypes.number,
 };
 
 class Department extends React.Component {
@@ -31,161 +35,239 @@ class Department extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupName: '',
-      ancestorGroups: [],
-      isShowAddDepartmentDialog: false,
-      isShowAddMemberDialog: false,
-      isShowRenameDepartmentDialog: false,
-      isShowAddRepoDialog: false
+      isItemFreezed: false,
+      activeNav: 'members',
+      repos: [],
+      deletedRepo: {},
+      showDeleteRepoDialog: false,
+      dropdownOpen: false,
     };
-
-    this.navItems = [
-      { name: 'subDepartments', urlPart: '/', text: gettext('Sub-departments') },
-      { name: 'members', urlPart: '/members/', text: gettext('Members') },
-      { name: 'repos', urlPart: '/libraries/', text: gettext('Libraries') }
-    ];
   }
 
   componentDidMount() {
-    const groupID = this.props.groupID;
-    this.getDepartmentInfo(groupID);
+    this.getRepos(this.props.checkedDepartmentId);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.groupID !== nextProps.groupID) {
-      this.getDepartmentInfo(nextProps.groupID);
+    if (this.props.checkedDepartmentId !== nextProps.checkedDepartmentId || this.props.isAddNewRepo !== nextProps.isAddNewRepo) {
+      this.getRepos(nextProps.checkedDepartmentId);
     }
   }
 
-  getDepartmentInfo = (groupID) => {
-    systemAdminAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
-      this.setState({
-        ancestorGroups: res.data.ancestor_groups,
-        groupName: res.data.name,
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onDepartmentNameChanged = (dept) => {
+  showDeleteRepoDialog = (repo) => {
     this.setState({
-      groupName: dept.name
+      showDeleteRepoDialog: true,
+      deletedRepo: repo,
     });
   };
 
-  toggleRenameDepartmentDialog = () => {
-    this.setState({ isShowRenameDepartmentDialog: !this.state.isShowRenameDepartmentDialog });
+  toggleCancel = () => {
+    this.setState({
+      showDeleteRepoDialog: false,
+      deletedRepo: {},
+    });
   };
 
-  toggleAddRepoDialog = () => {
-    this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
+  onRepoChanged = () => {
+    this.getRepos(this.props.checkedDepartmentId);
   };
 
-  toggleAddMemberDialog = () => {
-    this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
+  freezeItem = () => {
+    this.setState({ isItemFreezed: true });
   };
 
-  toggleAddDepartmentDialog = () => {
-    this.setState({ isShowAddDepartmentDialog: !this.state.isShowAddDepartmentDialog });
+  unfreezeItem = () => {
+    this.setState({ isItemFreezed: false });
+  };
+
+  getCurrentDepartment = () => {
+    const { rootNodes, checkedDepartmentId } = this.props;
+    if (!rootNodes) return {};
+    let currentDepartment = {};
+    let arr = [...rootNodes];
+    while (!currentDepartment.id && arr.length > 0) {
+      let curr = arr.shift();
+      if (curr.id === checkedDepartmentId) {
+        currentDepartment = curr;
+      } else if (curr.children && curr.children.length > 0) {
+        arr.push(...curr.children);
+      }
+    }
+    return currentDepartment;
+  };
+
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    let { sortOrder } = this.props;
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  };
+
+  sortByRole = (e) => {
+    e.preventDefault();
+    const sortBy = 'role';
+    let { sortOrder } = this.props;
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  };
+
+  changeActiveNav = (activeNav) => {
+    this.setState({ activeNav });
+  };
+
+  getRepos = (id) => {
+    this.props.getRepos(id, (repos) => {
+      this.setState({ repos });
+    });
+  };
+
+  dropdownToggle = (e) => {
+    e.stopPropagation();
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
 
   render() {
-    const { groupID, currentItem } = this.props;
-    const { groupName } = this.state;
-
-    const topBtn = 'btn btn-secondary operation-item';
-    const topbarChildren = (
-      <Fragment>
-        {groupID &&
-          <Fragment>
-            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartmentDialog}>{gettext('Rename Department')}</button>
-            {currentItem == 'subDepartments' && <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartmentDialog}>{gettext('New Sub-department')}</button>}
-            {currentItem == 'members' && <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>}
-            {currentItem == 'repos' && <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>}
-          </Fragment>
-        }
-        {this.state.isShowRenameDepartmentDialog && (
-          <ModalPortal>
-            <RenameDepartmentDialog
-              groupID={groupID}
-              name={groupName}
-              toggle={this.toggleRenameDepartmentDialog}
-              onDepartmentNameChanged={this.onDepartmentNameChanged}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShowAddMemberDialog && (
-          <ModalPortal>
-            <AddMemberDialog
-              toggle={this.toggleAddMemberDialog}
-              onAddNewMembers={this.props.onAddNewMembers}
-              groupID={groupID}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShowAddRepoDialog && (
-          <ModalPortal>
-            <AddRepoDialog
-              toggle={this.toggleAddRepoDialog}
-              onAddNewRepo={this.props.onAddNewRepo}
-              groupID={groupID}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShowAddDepartmentDialog && (
-          <ModalPortal>
-            <AddDepartmentDialog
-              onAddNewDepartment={this.props.onAddNewDepartment}
-              parentGroupID={groupID}
-              toggle={this.toggleAddDepartmentDialog}
-            />
-          </ModalPortal>
-        )}
-      </Fragment>
-    );
+    const { activeNav, repos } = this.state;
+    const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
+    const sortByName = sortBy === 'name';
+    const sortByRole = sortBy === 'role';
+    const sortIcon = <span className={`sort-dirent sf3-font sf3-font-down ${sortOrder === 'asc' ? 'rotate-180' : ''}`}></span>;
+    const currentDepartment = this.getCurrentDepartment();
 
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props}>
-          {topbarChildren}
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row h-100">
-          <div className="cur-view-container o-auto">
-            <div className="cur-view-path">
-              <div className="fleft">
-                <h3 className="sf-heading">
-                  {groupID ?
-                    <Link to={siteRoot + 'sys/departments/'}>{gettext('Departments')}</Link>
-                    : <span>{gettext('Departments')}</span>
-                  }
-                  {this.state.ancestorGroups.map(ancestor => {
-                    let newHref = siteRoot + 'sys/departments/' + ancestor.id + '/';
-                    return <span key={ancestor.id}>{' / '}<Link to={newHref}>{ancestor.name}</Link></span>;
-                  })}
-                  {groupID && <span>{' / '}{groupName}</span>}
-                </h3>
-              </div>
-            </div>
-
-            <ul className="nav border-bottom mx-4">
-              {this.navItems.map((item, index) => {
-                return (
-                  <li className="nav-item mr-2" key={index}>
-                    <Link to={`${siteRoot}sys/departments/${groupID}${item.urlPart}`} className={`nav-link ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
-                  </li>
-                );
-              })}
-            </ul>
-            {this.props.children}
-          </div>
+      <div className="department-content-main d-flex flex-column">
+        <div className="department-content-main-name">
+          {currentDepartment.name}
+          <Dropdown
+            isOpen={this.state.dropdownOpen}
+            toggle={(e) => this.dropdownToggle(e)}
+            direction="down"
+            className="department-dropdown-menu"
+          >
+            <DropdownToggle
+              tag='span'
+              role="button"
+              className='sf3-font-down sf3-font ml-1 sf-dropdown-toggle'
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              data-toggle="dropdown"
+            />
+            <DepartmentNodeMenu
+              node={currentDepartment}
+              toggleAddDepartment={this.props.toggleAddDepartment}
+              toggleAddLibrary={this.props.toggleAddLibrary}
+              toggleAddMembers={this.props.toggleAddMembers}
+              toggleRename={this.props.toggleRename}
+              toggleDelete={this.props.toggleDelete}
+            />
+          </Dropdown>
         </div>
-      </Fragment>
+
+        <div className="cur-view-path tab-nav-container">
+          <ul className="nav">
+            <li className="nav-item">
+              <span className={`nav-link ${activeNav === 'members' ? 'active' : ''}`} onClick={() => this.changeActiveNav('members')}>{gettext('Members')}</span>
+            </li>
+            <li className="nav-item">
+              <span className={`nav-link ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
+            </li>
+          </ul>
+        </div>
+
+        {activeNav === 'members' && (
+          <div className='cur-view-content'>
+            {isMembersListLoading
+              ? <Loading />
+              : membersList.length == 0
+                ? <EmptyTip text={gettext('No members')} />
+                : (
+                  <div className="w-xs-250">
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th width="10%"></th>
+                          <th width="25%" onClick={this.sortByName}>{gettext('Name')}{' '}{sortByName && sortIcon}</th>
+                          <th width="25%" onClick={this.sortByRole}>{gettext('Role')}{' '}{sortByRole && sortIcon}</th>
+                          <th width="30%">{gettext('Contact email')}</th>
+                          <th width="10%">{/* Operations */}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {membersList.map((item, index) => {
+                          return (
+                            <MemberItem
+                              key={index}
+                              member={item}
+                              deleteMember={this.props.deleteMember}
+                              setMemberStaff={this.props.setMemberStaff}
+                              unfreezeItem={this.unfreezeItem}
+                              freezeItem={this.freezeItem}
+                              isItemFreezed={this.state.isItemFreezed}
+                            />
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                    {this.props.currentPageInfo &&
+                    <Paginator
+                      gotoPreviousPage={this.props.getPreviousPageList}
+                      gotoNextPage={this.props.getNextPageList}
+                      currentPage={this.props.currentPageInfo.current_page}
+                      hasNextPage={this.props.currentPageInfo.has_next_page}
+                      curPerPage={this.props.perPage}
+                      resetPerPage={this.props.resetPerPage}
+                      noURLUpdate={true}
+                    />
+                    }
+                  </div>
+                )}
+          </div>
+        )}
+
+        {activeNav === 'repos' && (
+          <div className="cur-view-content">
+            {repos.length == 0
+              ? <EmptyTip text={gettext('No libraries')} />
+              : (
+                <>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="5%"></th>
+                        <th width="50%">{gettext('Name')}</th>
+                        <th width="30%">{gettext('Size')}</th>
+                        <th width="15%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {repos.map((repo, index) => {
+                        return (
+                          <RepoItem key={index} repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog} />
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {this.state.showDeleteRepoDialog && (
+                    <ModalPortal>
+                      <DeleteRepoDialog
+                        toggle={this.toggleCancel}
+                        onRepoChanged={this.onRepoChanged}
+                        repo={this.state.deletedRepo}
+                        groupID={this.props.checkedDepartmentId}
+                      />
+                    </ModalPortal>
+                  )}
+                </>
+              )
+            }
+          </div>
+        )}
+      </div>
     );
   }
 }
 
-Department.propTypes = DepartmentDetailPropTypes;
+Department.propTypes = propTypes;
 
 export default Department;

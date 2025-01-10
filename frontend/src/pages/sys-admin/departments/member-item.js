@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import RoleSelector from '../../../components/single-selector';
-import UserLink from '../user-link';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
-const MemberItemPropTypes = {
-  groupID: PropTypes.string,
-  member: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.bool.isRequired,
-  onMemberChanged: PropTypes.func.isRequired,
-  showDeleteMemberDialog: PropTypes.func.isRequired,
-  toggleItemFreezed: PropTypes.func.isRequired,
+const propTypes = {
+  isItemFreezed: PropTypes.bool,
+  member: PropTypes.object,
+  setMemberStaff: PropTypes.func,
+  deleteMember: PropTypes.func,
+  unfreezeItem: PropTypes.func,
+  freezeItem: PropTypes.func,
 };
 
 class MemberItem extends React.Component {
@@ -21,7 +20,8 @@ class MemberItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false
+      highlighted: false,
+      isItemMenuShow: false,
     };
     this.roleOptions = [
       { value: 'Admin', text: gettext('Admin'), isSelected: false },
@@ -30,58 +30,119 @@ class MemberItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({ highlight: true });
+    if (!this.props.isItemFreezed) {
+      this.setState({ highlighted: true });
+    }
   };
 
   onMouseLeave = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({ highlight: false });
+    if (!this.props.isItemFreezed) {
+      this.setState({ highlighted: false });
+    }
   };
 
-  onChangeUserRole = (roleOption) => {
-    let isAdmin = roleOption.value === 'Admin' ? true : false;
-    systemAdminAPI.sysAdminUpdateGroupMemberRole(this.props.groupID, this.props.member.email, isAdmin).then((res) => {
-      this.props.onMemberChanged();
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+  setMemberStaff = (role) => {
+    this.props.setMemberStaff(this.props.member.email, role.value === 'Admin');
+  };
+
+  deleteMember = () => {
+    const { member } = this.props;
+    this.props.deleteMember(member.email);
+  };
+
+  toggleDropdownMenu = () => {
     this.setState({
-      highlight: false
+      isItemMenuShow: !this.state.isItemMenuShow
+    }, () => {
+      if (this.state.isItemMenuShow && typeof(this.props.freezeItem) === 'function') {
+        this.props.freezeItem();
+      } else if (!this.state.isItemMenuShow && typeof(this.props.unfreezeItem) === 'function') {
+        this.props.unfreezeItem();
+      }
+    });
+  };
+
+  toggleItemFreezed = (freezed) => {
+    if (freezed) {
+      this.props.freezeItem();
+    } else {
+      this.props.unfreezeItem();
+      this.setState({ highlighted: false });
+    }
+  };
+
+  toggleDeleteMemberDialog = () => {
+    this.setState({
+      isDeleteMemberDialogOpen: !this.state.isDeleteMemberDialogOpen
     });
   };
 
   render() {
-    const member = this.props.member;
-    const highlight = this.state.highlight;
-    if (member.role === 'Owner') return null;
+    const { member } = this.props;
+    const { highlighted, isItemMenuShow, isDeleteMemberDialogOpen } = this.state;
+
     this.roleOptions = this.roleOptions.map(item => {
       item.isSelected = item.value == member.role;
       return item;
     });
     const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
-        <td><UserLink email={member.email} name={member.name} /></td>
-        <td>
-          <RoleSelector
-            isDropdownToggleShown={highlight}
-            currentSelectedOption={currentSelectedOption}
-            options={this.roleOptions}
-            selectOption={this.onChangeUserRole}
-            toggleItemFreezed={this.props.toggleItemFreezed}
+      <>
+        <tr className={`departments-members-item ${highlighted ? 'tr-highlight' : ''}`} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td><img className="avatar" src={member.avatar_url} alt="" /></td>
+          <td className='text-truncate'>
+            <a href={`${siteRoot}sys/users/${encodeURIComponent(member.email)}/`}>{member.name}</a>
+          </td>
+          <td>
+            <RoleSelector
+              isDropdownToggleShown={highlighted}
+              currentSelectedOption={currentSelectedOption}
+              options={this.roleOptions}
+              selectOption={this.setMemberStaff}
+              toggleItemFreezed={this.toggleItemFreezed}
+            />
+          </td>
+          <td>{member.contact_email}</td>
+          <td>
+            {highlighted &&
+            <Dropdown
+              isOpen={isItemMenuShow}
+              toggle={this.toggleDropdownMenu}
+              direction="down"
+            >
+              <DropdownToggle
+                tag='a'
+                role="button"
+                className='attr-action-icon sf3-font sf3-font-more-vertical'
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                data-toggle="dropdown"
+              />
+              <DropdownMenu right={true}>
+                <DropdownItem onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            }
+          </td>
+        </tr>
+        {isDeleteMemberDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete Member')}
+            message={
+              gettext('Are you sure you want to delete {placeholder} ?')
+                .replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(member.name) + '</span>')
+            }
+            executeOperation={this.deleteMember}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteMemberDialog}
           />
-        </td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-          <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
-      </tr>
+        )}
+      </>
     );
   }
 }
 
-MemberItem.propTypes = MemberItemPropTypes;
+MemberItem.propTypes = propTypes;
 
 export default MemberItem;

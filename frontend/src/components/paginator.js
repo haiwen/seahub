@@ -100,9 +100,8 @@ class Paginator extends Component {
           <span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
         </button>
 
-        <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown">
+        <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
-            className="ml-6"
             data-toggle="dropdown"
             aria-expanded={this.state.isMenuShow}
             onClick={this.toggleOperationMenu}
