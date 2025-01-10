@@ -1025,6 +1025,7 @@ class SeafileAPI {
     return this.req.delete(url, { data: operation }, { headers: { 'Content-Type': 'application/json' } });
   }
 
+  // 获取下载目录 token
   zipDownload(repoID, parent_dir, dirents) { // can download one dir
     const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
     const form = new FormData();
@@ -1677,6 +1678,7 @@ class SeafileAPI {
     });
   }
 
+  // 获取共享的单个文件下载 token
   getShareLinkZipTask(token, path) {
     const url = this.server + '/api/v2.1/share-link-zip-task/';
     const params = {
@@ -1688,6 +1690,7 @@ class SeafileAPI {
     });
   }
 
+  // 获取共享的目录下载 token
   getShareLinkDirentsZipTask(token, path, dirents) {
     const url = this.server + '/api/v2.1/share-link-zip-task/';
     const params = {

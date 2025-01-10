@@ -521,18 +521,22 @@ class DirentListItem extends React.Component {
     });
   };
 
+  // 点击图标下载
   onItemDownload = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
     let dirent = this.state.dirent;
     let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
+    // 下载目录
     if (dirent.type === 'dir') {
+      // 旧版：不使用 go-fileserver，打开下载对话框
       if (!useGoFileserver) {
         this.setState({
           isZipDialogOpen: true
         });
       } else {
+        // 新版：使用 go-fileserver, 先获取 zip 下载链接，然后直接访问 URL 下载
         seafileAPI.zipDownload(repoID, this.props.path, this.state.dirent.name).then((res) => {
           const zipToken = res.data['zip_token'];
           location.href = `${fileServerRoot}zip/${zipToken}`;
@@ -544,7 +548,9 @@ class DirentListItem extends React.Component {
           });
         });
       }
-    } else {
+    }
+    // 下载文件
+    else {
       let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
       location.href = url;
     }
