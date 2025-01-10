@@ -160,14 +160,19 @@ class LibContentView extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.repoID !== this.props.repoID) {
-      this.calculatePara(nextProps);
+      this.setState({ path: '/', viewId: '', tagID: '', currentMode: cookie.load('seafile_view_mode') || LIST_MODE }, () => {
+        this.calculatePara(nextProps);
+      });
     }
   }
 
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const path = this.getPathFromLocation(repoID);
+    const { path, viewId, tagId } = this.getInfoFromLocation(repoID);
+    let currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
+    if (viewId) currentMode = METADATA_MODE;
+    if (tagId) currentMode = TAGS_MODE;
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -179,8 +184,11 @@ class LibContentView extends React.Component {
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
-        isGroupOwnedRepo: isGroupOwnedRepo,
-        path: path
+        isGroupOwnedRepo,
+        path,
+        viewId,
+        tagId,
+        currentMode,
       });
 
       if (this.state.isTreePanelShown) {
@@ -201,13 +209,13 @@ class LibContentView extends React.Component {
     }
   };
 
-  getPathFromLocation = (repoID) => {
+  getInfoFromLocation = (repoID) => {
     const urlParams = new URLSearchParams(window.location.search);
-    const viewID = urlParams.get('view');
-    if (viewID) return `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`;
+    const viewId = urlParams.get('view');
+    if (viewId) return { path: `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`, viewId };
 
-    const tagID = urlParams.get('tag');
-    if (tagID) return `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`;
+    const tagId = urlParams.get('tag');
+    if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`, tagId };
 
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
@@ -216,7 +224,7 @@ class LibContentView extends React.Component {
     if (path.length > 1 && path.endsWith('/')) {
       path = path.slice(0, -1);
     }
-    return path;
+    return { path };
   };
 
   fetchRepoInfo = async (repoID) => {
@@ -518,9 +526,10 @@ class LibContentView extends React.Component {
 
   hideMetadataView = (isSetRoot = false) => {
     const { repoID } = this.props;
+    const { path } = this.getInfoFromLocation(repoID);
     this.setState({
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
-      path: isSetRoot ? '/' : this.getPathFromLocation(repoID),
+      path: isSetRoot ? '/' : path,
       viewId: '',
       tagId: '',
       currentDirent: isSetRoot ? null : this.state.currentDirent,

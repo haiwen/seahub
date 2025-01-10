@@ -88,7 +88,8 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, [repoID, enableMetadata]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableMetadata]);
 
   const getFirstView = useCallback(() => {
     const firstViewNav = navigation.find(item => item.type === VIEWS_TYPE_VIEW);
