@@ -24,6 +24,7 @@ import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialo
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import { userAPI } from '../../utils/user-api';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -138,6 +139,7 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'SeaTable integration':
         this.onSeaTableIntegrationToggle();
+        break;
       case 'Office Suite':
         this.onOfficeSuiteToggle();
         break;
