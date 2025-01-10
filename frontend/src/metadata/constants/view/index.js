@@ -83,13 +83,9 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
   ],
   [VIEW_TYPE.MAP]: [
     {
-      column_key: PRIVATE_COLUMN_KEY.IS_DIR,
-      filter_predicate: FILTER_PREDICATE_TYPE.IS,
-      filter_term: 'file'
-    }, {
       column_key: PRIVATE_COLUMN_KEY.FILE_TYPE,
-      filter_predicate: FILTER_PREDICATE_TYPE.IS_ANY_OF,
-      filter_term: ['_picture']
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'picture'
     }, {
       column_key: PRIVATE_COLUMN_KEY.TAGS,
       filter_predicate: FILTER_PREDICATE_TYPE.HAS_ALL_OF,

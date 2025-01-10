@@ -17,8 +17,14 @@ class View {
 
     const defaultBasicFilters = VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type];
     this.basic_filters = object.basic_filters && object.basic_filters.length > 0 ? object.basic_filters : defaultBasicFilters;
-    if (this.basic_filters.length !== defaultBasicFilters.length) {
+    if (this.basic_filters.length < defaultBasicFilters.length) {
       this.basic_filters = [...this.basic_filters, ...defaultBasicFilters.slice(this.basic_filters.length)];
+    } else if (this.basic_filters.length > defaultBasicFilters.length) {
+      this.basic_filters = defaultBasicFilters.map(defaultFilter => {
+        const filter = this.basic_filters.find(item => item.column_key === defaultFilter.column_key);
+        if (filter) return filter;
+        return defaultFilter;
+      });
     }
 
     // sort
