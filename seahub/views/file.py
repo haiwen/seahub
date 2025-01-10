@@ -852,7 +852,7 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
 
-    elif filetype in (VIDEO, AUDIO, PDF, SVG):
+    elif filetype in (VIDEO, AUDIO, SVG):
         return_dict['raw_path'] = raw_path
         if filetype == VIDEO:
             return_dict['enable_video_thumbnail'] = settings.ENABLE_VIDEO_THUMBNAIL
@@ -907,7 +907,13 @@ def view_lib_file(request, repo_id, path):
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
-    elif filetype in (DOCUMENT, SPREADSHEET):
+    elif filetype in (DOCUMENT, SPREADSHEET, PDF):
+
+        if filetype == PDF:
+            if not ENABLE_ONLYOFFICE or fileext not in ONLYOFFICE_FILE_EXTENSION:
+                return_dict['raw_path'] = raw_path
+                send_file_access_msg(request, repo, path, 'web')
+                return render(request, template, return_dict)
 
         if repo.encrypted:
             return_dict['err'] = _('The library is encrypted, can not open file online.')
