@@ -85,7 +85,7 @@ class MainPanel extends Component {
                 currentPageConfig={currentPageConfig}
                 setCurrentPage={this.props.setCurrentPage}
               />
-              <DocInfo initContext={true}/>
+              <DocInfo key={this.props.currentPageId} initContext={true}/>
             </div>
           </div>
           <div className='d-flex align-items-center'>
