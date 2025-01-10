@@ -563,9 +563,9 @@ class SeafileDB:
             SUM(rs.size) AS quota_usage
         FROM
             `{self.ccnet_db_name}`.`Organization` o
-        JOIN
+        LEFT JOIN
             `{self.db_name}`.`OrgRepo` orp ON o.org_id = orp.org_id
-        JOIN
+        LEFT JOIN
             `{self.db_name}`.`RepoSize` rs ON orp.repo_id = rs.repo_id
         LEFT JOIN
             `{self.db_name}`.`VirtualRepo` vr ON rs.repo_id = vr.repo_id
