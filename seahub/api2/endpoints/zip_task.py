@@ -151,6 +151,7 @@ class ZipTaskView(APIView):
 
         return Response({'zip_token': zip_token})
 
+    # 获取下载目录的 token
     def post(self, request, repo_id, format=None):
         """ Get file server token for download-dir and download-multi.
 

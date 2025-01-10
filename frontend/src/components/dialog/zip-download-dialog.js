@@ -21,6 +21,7 @@ const propTypes = {
 
 let interval;
 
+// 旧版不使用 go-server 下载目录
 class ZipDownloadDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +35,7 @@ class ZipDownloadDialog extends React.Component {
   componentDidMount() {
     const { token, path, repoID, target } = this.props;
     let getZipTask;
+    // 根据下载的目标,调用不同的接口
     if (token) {
       getZipTask = target.length ?
         seafileAPI.getShareLinkDirentsZipTask(token, path, target) :
@@ -41,6 +43,7 @@ class ZipDownloadDialog extends React.Component {
     } else {
       getZipTask = seafileAPI.zipDownload(repoID, path, target);
     }
+    // 获取下载 zip_token
     getZipTask.then((res) => {
       const zipToken = res.data['zip_token'];
       this.setState({
@@ -48,9 +51,9 @@ class ZipDownloadDialog extends React.Component {
         errorMsg: '',
         zipToken: zipToken
       }, () => {
+        // 查询下载进度
         this.queryZipProgress();
       });
-
       interval = setInterval(this.queryZipProgress, 1000);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -63,8 +66,10 @@ class ZipDownloadDialog extends React.Component {
 
   queryZipProgress = () => {
     const zipToken = this.state.zipToken;
+    // 查询下载进度
     seafileAPI.queryZipProgress(zipToken).then((res) => {
       const data = res.data;
+      // 如果下载失败
       if (data.failed == 1) {
         clearInterval(interval);
         let errorMsg;
@@ -83,9 +88,11 @@ class ZipDownloadDialog extends React.Component {
           errorMsg: errorMsg
         });
       } else {
+        // 更新下载进度
         this.setState({
           zipProgress: data.total == 0 ? '100%' : (data.zipped / data.total * 100).toFixed(2) + '%'
         });
+        // 下载完成，关闭下载对话框
         if (data['total'] == data['zipped']) {
           clearInterval(interval);
           this.props.toggleDialog();
@@ -102,6 +109,7 @@ class ZipDownloadDialog extends React.Component {
     });
   };
 
+  // 取消下载任务
   cancelZipTask = () => {
     const zipToken = this.state.zipToken;
     seafileAPI.cancelZipTask(zipToken).then((res) => {
