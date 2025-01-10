@@ -28,6 +28,7 @@ class ShareLinkZipTaskView(APIView):
 
     throttle_classes = (ShareLinkZipTaskThrottle, )
 
+    # 获取共享的单个文件下载 token
     def get(self, request, format=None):
 
         # argument check
@@ -121,6 +122,7 @@ class ShareLinkZipTaskView(APIView):
 
         return Response({'zip_token': zip_token})
 
+    # 获取共享的目录下载 token
     def post(self, request, format=None):
         """ Only used for download dirents in a folder share link.
 

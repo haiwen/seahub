@@ -360,6 +360,7 @@ class DirentListItem extends React.Component {
     window.open(url, '_blank');
   };
 
+  // 点击图标下载
   onItemDownload = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
