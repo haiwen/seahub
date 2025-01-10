@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, SortSetter } from '../../data-process-setter';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, PRIVATE_COLUMN_KEY, STORAGE_GALLERY_DATE_MODE_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 
 const GalleryViewToolbar = ({
@@ -21,9 +21,10 @@ const GalleryViewToolbar = ({
   }, [viewColumns]);
 
   const handleGroupByChange = useCallback((newMode) => {
-    window.sfMetadataContext.localStorage.setItem('gallery-group-by', newMode);
+    if (newMode === currentMode) return;
+    window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, newMode);
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, newMode);
-  }, []);
+  }, [currentMode]);
 
   useEffect(() => {
     const unsubscribeGalleryGroupBy = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, (newMode) => {
@@ -37,7 +38,7 @@ const GalleryViewToolbar = ({
   }, [currentMode]);
 
   useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.YEAR);
+    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.YEAR);
     setCurrentMode(savedValue || GALLERY_DATE_MODE.YEAR);
   }, [view?._id]);
 

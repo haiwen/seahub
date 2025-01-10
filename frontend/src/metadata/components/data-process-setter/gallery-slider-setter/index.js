@@ -2,18 +2,18 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
 import Icon from '../../../../components/icon';
-import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX } from '../../../constants';
+import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 
 import './index.css';
 
 const GallerySliderSetter = ({ view }) => {
   const [sliderValue, setSliderValue] = useState(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0);
+    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0);
     return savedValue || 0;
   });
 
   useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0);
+    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0);
     setSliderValue(savedValue || 0);
   }, [view?._id]);
 

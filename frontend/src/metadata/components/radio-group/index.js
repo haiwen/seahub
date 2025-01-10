@@ -17,14 +17,14 @@ const RadioGroup = ({ value, options, className, onChange: onChangeAPI }) => {
   }, [selected, onChangeAPI]);
 
   return (
-    <div className={classnames('sf-metadata-radio-group', className)}>
+    <div className={classnames('sf-metadata-radio-group', className)} data-active={selected}>
       {options.map(option => {
         const { value, label } = option;
         return (
           <div
             key={value}
             data-option={value}
-            className={classnames('sf-metadata-radio-group-option', { 'active': value === selected })}
+            className="sf-metadata-radio-group-option"
             onClick={onChange}
           >
             {label}

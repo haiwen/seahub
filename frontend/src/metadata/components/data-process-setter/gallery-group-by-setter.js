@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
+import { GALLERY_DATE_MODE } from '../../constants';
 import { gettext } from '../../../utils/constants';
 import RadioGroup from '../radio-group';
 
@@ -11,27 +11,13 @@ const DATE_MODES = [
   { value: GALLERY_DATE_MODE.ALL, label: gettext('All') },
 ];
 
-const GalleryGroupBySetter = ({ view }) => {
-  const [currentMode, setCurrentMode] = useState(GALLERY_DATE_MODE.DAY);
-
-  useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY) || GALLERY_DATE_MODE.DAY;
-    setCurrentMode(savedValue);
-  }, [view?._id]);
-
-  const handleGroupByChange = useCallback((newMode) => {
-    if (currentMode === newMode) return;
-    setCurrentMode(newMode);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, newMode);
-  }, [currentMode]);
-
-  return (<RadioGroup value={currentMode} options={DATE_MODES} onChange={handleGroupByChange} />);
+const GalleryGroupBySetter = ({ mode, onGroupByChange }) => {
+  return (<RadioGroup value={mode} options={DATE_MODES} onChange={onGroupByChange} />);
 };
 
 GalleryGroupBySetter.propTypes = {
-  view: PropTypes.shape({
-    _id: PropTypes.string
-  })
+  mode: PropTypes.string,
+  onGroupByChange: PropTypes.func,
 };
 
 export default GalleryGroupBySetter;

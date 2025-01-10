@@ -8,7 +8,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
@@ -73,7 +73,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       default:
         return imageSize;
     }
-  }, [mode, imageSize]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, containerWidth, imageSize]);
 
   const dateMode = useMemo(() => {
     switch (mode) {
@@ -150,10 +151,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, mode]);
+  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, mode, containerWidth]);
 
   useEffect(() => {
-    const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
+    const gear = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0) || 0;
     setZoomGear(gear);
 
     const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.YEAR) || GALLERY_DATE_MODE.YEAR;
@@ -187,7 +188,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
     // op
     const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
-      window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
+      window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, zoomGear);
       setZoomGear(zoomGear);
     });
 

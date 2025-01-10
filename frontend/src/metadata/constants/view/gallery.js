@@ -16,3 +16,5 @@ export const GALLERY_DATE_MODE = {
 };
 
 export const STORAGE_GALLERY_DATE_MODE_KEY = 'gallery_date_mode';
+
+export const STORAGE_GALLERY_ZOOM_GEAR_KEY = 'gallery_zoom_gear';
