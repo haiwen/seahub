@@ -77,7 +77,7 @@ const MapViewToolBar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <MapTypeSetter view={view} />
+        <MapTypeSetter view={{ view, _id: viewID }} />
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
