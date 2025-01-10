@@ -3,12 +3,21 @@
   height: calc(100% - 100px);
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
+  top: 50px;
+  right: 0;
+  bottom: 50px;
+  position: absolute;
+=======
   position: relative;
+>>>>>>> 45ce3539d (show people in sidepanel)
   font-size: 1rem;
   color: #fff;
   background-color: #333;
   border: 1px solid #666;
   transition: width 0.3s ease;
+<<<<<<< HEAD
+=======
   z-index: 1052;
 }
 
@@ -18,6 +27,7 @@
 
 .lightbox-side-panel.collapsed {
   width: 10px;
+>>>>>>> 45ce3539d (show people in sidepanel)
 }
 
 .lightbox-side-panel .cur-view-detail {
@@ -25,7 +35,11 @@
   border-left: 1px solid #666;
 }
 
+<<<<<<< HEAD
+.lightbox-side-panel .side-panel-controller {
+=======
 .side-panel-controller {
+>>>>>>> 45ce3539d (show people in sidepanel)
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,15 +58,25 @@
   cursor: pointer;
 }
 
+<<<<<<< HEAD
+.lightbox-side-panel .side-panel-controller .expand-button {
+  width: 32px;
+  height: 32px;
+=======
 .side-panel-controller .expand-button {
   width: 32px;
   height: 32px;
   transform: scale(0.67);
+>>>>>>> 45ce3539d (show people in sidepanel)
   opacity: 0.7;
   border: none;
 }
 
+<<<<<<< HEAD
+.lightbox-side-panel .side-panel-controller:hover .expand-button {
+=======
 .side-panel-controller:hover .expand-button {
+>>>>>>> 45ce3539d (show people in sidepanel)
   opacity: 1;
 }
 
@@ -101,8 +125,13 @@
   background-color: #666;
 }
 
+<<<<<<< HEAD
+.lightbox-side-panel .dirent-detail-people {
+  border-top: 1px solid #999;
+=======
 .lightbox-side-panel .dirent-detail-divider {
   height: 1px;
   background-color: #999;
   margin-bottom: 20px;
+>>>>>>> 45ce3539d (show people in sidepanel)
 }

@@ -750,10 +750,11 @@ class DirentListView extends React.Component {
   };
 
   render() {
-    const { direntList } = this.props;
+    const { direntList, userPerm } = this.props;
 
     const isDesktop = Utils.isDesktop();
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     return (
       <div
@@ -860,6 +861,7 @@ class DirentListView extends React.Component {
                 onDeleteImage={this.deleteImage}
                 onRotateImage={this.rotateImage}
                 enableRotate={!repoEncrypted}
+                isCustomPermission={isCustomPermission}
               />
             </ModalPortal>
           )}

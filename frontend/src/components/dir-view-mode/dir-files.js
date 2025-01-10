@@ -363,8 +363,9 @@ class DirFiles extends React.Component {
   };
 
   render() {
-    const { repoID, currentRepoInfo } = this.props;
+    const { repoID, currentRepoInfo, userPerm } = this.props;
     const repoEncrypted = currentRepoInfo.encrypted;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
     return (
       <>
         <TreeSection
@@ -460,6 +461,7 @@ class DirFiles extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={!repoEncrypted}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}
