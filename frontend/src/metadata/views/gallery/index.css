@@ -21,7 +21,6 @@
 }
 
 .metadata-gallery-date-tag {
-  height: 54px;
   position: absolute;
   top: 0;
   left: 0;
@@ -32,16 +31,11 @@
   font-weight: 500;
   z-index: 1;
   user-select: none;
+  padding-top: 8px;
 }
 
 .metadata-gallery-main {
   flex: 1;
-}
-
-.metadata-gallery-date-tag span {
-  height: 100%;
-  line-height: 0.875rem;
-  padding-top: 24px;
 }
 
 .metadata-gallery-year-list,

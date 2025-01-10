@@ -1,4 +1,4 @@
-export const DATE_TAG_HEIGHT = 44;
+export const DATE_TAG_HEIGHT = 54;
 
 export const GALLERY_ZOOM_GEAR_MIN = -2;
 

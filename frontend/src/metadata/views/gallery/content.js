@@ -199,9 +199,7 @@ const Content = ({
         style={{ height, paddingTop }}
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
-          <div className="metadata-gallery-date-tag">
-            <span>{name || gettext('Empty')}</span>
-          </div>
+          <div className="metadata-gallery-date-tag" style={{ height: paddingTop }}>{name || gettext('Empty')}</div>
         )}
         {renderByMode()}
       </div>
