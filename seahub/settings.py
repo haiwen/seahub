@@ -892,6 +892,25 @@ SEATABLE_EX_PROPS_BASE_API_TOKEN = ''
 EX_PROPS_TABLE = ''
 EX_EDITABLE_COLUMNS = []
 
+#############################
+# multi office suite support
+#############################
+ENABLE_MULTIPLE_OFFICE_SUITE = False
+OFFICE_SUITES = [
+    { 
+        "id": "onlyoffice",
+        "name": "OnlyOffice",
+        "is_default": True,
+    },
+    {
+        "id": "collabora",
+        "name": "CollaboraOnline",
+        "is_default": False,
+    }
+]
+ROLES_DEFAULT_OFFCICE_SUITE = {}
+OFFICE_SUITE_ENABLED_FILE_TYPES = []
+OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES = []
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
