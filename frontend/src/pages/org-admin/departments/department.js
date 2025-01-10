@@ -51,10 +51,6 @@ class Department extends React.Component {
     this.setState({ isItemFreezed: false });
   };
 
-  toggleItemFreezed = () => {
-    this.setState({ isItemFreezed: !this.state.isItemFreezed });
-  };
-
   getCurrentDepartment = () => {
     const { rootNodes, checkedDepartmentId } = this.props;
     if (!rootNodes) return {};
@@ -116,7 +112,7 @@ class Department extends React.Component {
     const currentDepartment = this.getCurrentDepartment();
 
     return (
-      <div className="department-content-main">
+      <div className="department-content-main d-flex flex-column">
         <div className="department-content-main-name">
           {currentDepartment.name}
           <Dropdown
@@ -180,7 +176,6 @@ class Department extends React.Component {
                           setMemberStaff={this.props.setMemberStaff}
                           unfreezeItem={this.unfreezeItem}
                           freezeItem={this.freezeItem}
-                          toggleItemFreezed={this.toggleItemFreezed}
                           isItemFreezed={this.state.isItemFreezed}
                         />
                       );

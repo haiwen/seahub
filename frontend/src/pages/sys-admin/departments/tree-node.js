@@ -5,7 +5,7 @@ import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
-const departmentsV2TreeNodePropTypes = {
+const departmentsTreeNodePropTypes = {
   node: PropTypes.object,
   checkedDepartmentId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   listSubDepartments: PropTypes.func,
@@ -17,7 +17,7 @@ const departmentsV2TreeNodePropTypes = {
   toggleDelete: PropTypes.func
 };
 
-class DepartmentsV2TreeNode extends Component {
+class DepartmentsTreeNode extends Component {
 
   constructor(props) {
     super(props);
@@ -74,7 +74,7 @@ class DepartmentsV2TreeNode extends Component {
     if (nodes.length > 0) {
       return nodes.map((node) => {
         return (
-          <DepartmentsV2TreeNode
+          <DepartmentsTreeNode
             key={node.id}
             node={node}
             onChangeDepartment={this.props.onChangeDepartment}
@@ -167,6 +167,6 @@ class DepartmentsV2TreeNode extends Component {
   }
 }
 
-DepartmentsV2TreeNode.propTypes = departmentsV2TreeNodePropTypes;
+DepartmentsTreeNode.propTypes = departmentsTreeNodePropTypes;
 
-export default DepartmentsV2TreeNode;
+export default DepartmentsTreeNode;

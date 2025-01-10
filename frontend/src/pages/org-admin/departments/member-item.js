@@ -13,7 +13,6 @@ const propTypes = {
   deleteMember: PropTypes.func,
   unfreezeItem: PropTypes.func,
   freezeItem: PropTypes.func,
-  toggleItemFreezed: PropTypes.func,
 };
 
 class DepartmentsV2MembersItem extends React.Component {
@@ -86,7 +85,6 @@ class DepartmentsV2MembersItem extends React.Component {
       return item;
     });
     const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
-
 
     return (
       <>
