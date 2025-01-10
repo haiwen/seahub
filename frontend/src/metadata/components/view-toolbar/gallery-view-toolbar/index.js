@@ -45,8 +45,8 @@ const GalleryViewToolbar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
+        <GalleryGroupBySetter mode={currentMode} onChange={handleGroupByChange} />
         {currentMode === GALLERY_DATE_MODE.ALL && <GallerySliderSetter view={view} />}
-        <GalleryGroupBySetter mode={currentMode} onGroupByChange={handleGroupByChange} />
         <FilterSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"

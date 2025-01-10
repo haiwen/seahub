@@ -1,5 +1,4 @@
 .sf-metadata-radio-group {
-  position: relative;
   width: fit-content;
   height: 36px;
   display: flex;
@@ -8,7 +7,6 @@
   border: 1px solid #e2e2e2;
   border-radius: 3px;
   padding: 0 3px;
-  margin-left: 8px;
 }
 
 .sf-metadata-radio-group .sf-metadata-radio-group-option {
@@ -16,7 +14,7 @@
   width: fit-content;
   height: 28px;
   color: #212529;
-  background-color: transparent;
+  background-color: #fff;
   position: relative;
   display: flex;
   align-items: center;
@@ -48,34 +46,8 @@
 }
 
 .sf-metadata-radio-group .sf-metadata-radio-group-option:hover::before,
-.sf-metadata-radio-group .sf-metadata-radio-group-option:hover + .sf-metadata-radio-group-option::before {
+.sf-metadata-radio-group .sf-metadata-radio-group-option.active::before,
+.sf-metadata-radio-group .sf-metadata-radio-group-option:hover + .sf-metadata-radio-group-option::before,
+.sf-metadata-radio-group .sf-metadata-radio-group-option.active + .sf-metadata-radio-group-option::before {
   opacity: 0;
-}
-
-.sf-metadata-radio-group::before {
-  content: '';
-  position: absolute;
-  left: 4px;
-  width: 66px;
-  height: 28px;
-  background-color: #f5f5f5;
-  border-radius: 2px;
-  transition: transform 0.3s ease;
-  z-index: 0;
-}
-
-.sf-metadata-radio-group[data-active="year"]::before {
-  transform: translateX(0);
-}
-
-.sf-metadata-radio-group[data-active="month"]::before {
-  transform: translateX(66px);
-}
-
-.sf-metadata-radio-group[data-active="day"]::before {
-  transform: translateX(132px);
-}
-
-.sf-metadata-radio-group[data-active="all"]::before {
-  transform: translateX(198px);
 }

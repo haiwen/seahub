@@ -11,13 +11,13 @@ const DATE_MODES = [
   { value: GALLERY_DATE_MODE.ALL, label: gettext('All') },
 ];
 
-const GalleryGroupBySetter = ({ mode, onGroupByChange }) => {
-  return (<RadioGroup value={mode} options={DATE_MODES} onChange={onGroupByChange} />);
+const GalleryGroupBySetter = ({ mode, onChange }) => {
+  return (<RadioGroup value={mode} options={DATE_MODES} onChange={onChange} />);
 };
 
 GalleryGroupBySetter.propTypes = {
   mode: PropTypes.string,
-  onGroupByChange: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default GalleryGroupBySetter;
