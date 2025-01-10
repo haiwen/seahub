@@ -111,7 +111,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          *    girdSize {Number} 聚合计算时网格的像素大小，默认60<br />
          *    maxZoom {Number} 最大的聚合级别，大于该级别就不进行相应的聚合<br />
          *    minClusterSize {Number} 最小的聚合数量，小于该数量的不能成为一个聚合，默认为2<br />
-         *    isAverangeCenter {Boolean} 聚合点的落脚位置是否是所有聚合在内点的平均值，默认为否，落脚在聚合内的第一个点<br />
+         *    isAvgCenter {Boolean} 聚合点的落脚位置是否是所有聚合在内点的平均值，默认为否，落脚在聚合内的第一个点<br />
          *    styles {Array<IconStyle>} 自定义聚合后的图标风格，请参考TextIconOverlay类<br />
          */
         BMapLib.MarkerCluster = function(map, options){
@@ -142,8 +142,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
             //      that._redraw();
             // });
 
-            var mkrs = opts["markers"];
-            isArray(mkrs) && this.addMarkers(mkrs);
+            var markers = opts["markers"];
+            isArray(markers) && this.addMarkers(markers);
         };
 
     /**
@@ -454,19 +454,19 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * Cluster
      * @class 表示一个聚合对象，该聚合，包含有N个标记，这N个标记组成的范围，并有予以显示在Map上的TextIconOverlay等。
      * @constructor
-     * @param {MarkerCluster} markerClusterer 一个标记聚合器示例。
+     * @param {MarkerCluster} markerCluster 一个标记聚合器示例。
      */
-    function Cluster(markerClusterer){
-        this._markerClusterer = markerClusterer;
-        this._map = markerClusterer.getMap();
-        this._minClusterSize = markerClusterer.getMinClusterSize();
-        this._isAverageCenter = markerClusterer.isAverageCenter();
+    function Cluster(markerCluster){
+        this._markerCluster = markerCluster;
+        this._map = markerCluster.getMap();
+        this._minClusterSize = markerCluster.getMinClusterSize();
+        this._isAverageCenter = markerCluster.isAverageCenter();
         this._center = null;//落脚位置
         this._markers = [];//这个Cluster中所包含的markers
         this._gridBounds = null;//以中心点为准，向四边扩大gridSize个像素的范围，也即网格范围
         this._isReal = false; //真的是个聚合
 
-        this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, {"styles":this._markerClusterer.getStyles()});
+        this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, {"styles":this._markerCluster.getStyles()});
         //this._map.addOverlay(this._clusterMarker);
     }
 
@@ -552,7 +552,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      */
     Cluster.prototype.updateGridBounds = function() {
         var bounds = new BMapGL.Bounds(this._center, this._center);
-        this._gridBounds = getExtendedBounds(this._map, bounds, this._markerClusterer.getGridSize());
+        this._gridBounds = getExtendedBounds(this._map, bounds, this._markerCluster.getGridSize());
     };
 
     /**
@@ -560,7 +560,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return 无返回值。
      */
     Cluster.prototype.updateClusterMarker = function () {
-        if (this._map.getZoom() > this._markerClusterer.getMaxZoom()) {
+        if (this._map.getZoom() > this._markerCluster.getMaxZoom()) {
             this._clusterMarker && this._map.removeOverlay(this._clusterMarker);
             for (var i = 0, marker; marker = this._markers[i]; i++) {
                 this._map.addOverlay(marker);
@@ -589,9 +589,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 return;
             }
             clickTimeout = setTimeout(() => {
-                if (this._markerClusterer && typeof this._markerClusterer.getCallback() === 'function') {
+                if (this._markerCluster && typeof this._markerCluster.getCallback() === 'function') {
                 const markers = this._markers;
-                this._markerClusterer.getCallback()(event, markers);
+                this._markerCluster.getCallback()(event, markers);
             }
             clickTimeout = null;
             }, 300); // Delay to differentiate between single and double click

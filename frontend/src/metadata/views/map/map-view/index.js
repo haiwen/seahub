@@ -1,19 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import loadBMap, { initMapInfo } from '../../../utils/map-utils';
-import { appAvatarURL, baiduMapKey, googleMapKey, mediaUrl } from '../../../utils/constants';
-import { isValidPosition } from '../../utils/validate';
-import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../utils/coord-transform';
-import { MAP_TYPE as MAP_PROVIDER } from '../../../constants';
-import { EVENT_BUS_TYPE, MAP_TYPE, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../constants';
+import loadBMap, { initMapInfo } from '../../../../utils/map-utils';
+import { appAvatarURL, baiduMapKey, googleMapKey, mediaUrl } from '../../../../utils/constants';
+import { isValidPosition } from '../../../utils/validate';
+import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform';
+import { MAP_TYPE as MAP_PROVIDER } from '../../../../constants';
+import { EVENT_BUS_TYPE, MAP_TYPE, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../../constants';
 import { createBMapGeolocationControl, createBMapZoomControl } from './control';
 import { customAvatarOverlay, customImageOverlay } from './overlay';
+
+import './index.css';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
 const BATCH_SIZE = 500;
+const MAX_ZOOM = 21;
+const MIN_ZOOM = 3;
 
-const Map = ({ images, onOpenCluster }) => {
+const MapView = ({ images, onOpenCluster }) => {
   const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
 
   const mapRef = useRef(null);
@@ -29,16 +33,13 @@ const Map = ({ images, onOpenCluster }) => {
   }, []);
 
   const addMapController = useCallback(() => {
-    const ZoomControl = createBMapZoomControl(window.BMapGL, saveMapState);
+    const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: MAX_ZOOM, minZoom: MIN_ZOOM }, saveMapState);
     const zoomControl = new ZoomControl();
-    const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (err, point) => {
-      if (!err && point) {
-        mapRef.current.setCenter(point);
-      }
+    const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (point) => {
+      point && mapRef.current && mapRef.current.setCenter(point);
     });
 
     const geolocationControl = new GeolocationControl();
-
     mapRef.current.addControl(zoomControl);
     mapRef.current.addControl(geolocationControl);
   }, [saveMapState]);
@@ -124,8 +125,8 @@ const Map = ({ images, onOpenCluster }) => {
     const mapTypeValue = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY);
     mapRef.current = new window.BMapGL.Map('sf-metadata-map-container', {
       enableMapClick: false,
-      minZoom: 3,
-      maxZoom: 21,
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
       mapType: getBMapType(mapTypeValue),
     });
 
@@ -175,9 +176,9 @@ const Map = ({ images, onOpenCluster }) => {
   );
 };
 
-Map.propTypes = {
+MapView.propTypes = {
   images: PropTypes.array,
   onOpenCluster: PropTypes.func,
 };
 
-export default Map;
+export default MapView;

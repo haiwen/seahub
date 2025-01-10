@@ -211,7 +211,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @returns {string} 驼峰化处理后的字符串
          */
         baidu.string.toCamelCase = function (source) {
-            //提前判断，提高getStyle等的效率 thanks xianwei
+            //提前判断，提高getStyle等的效率
             if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
                 return source;
             }
@@ -649,7 +649,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @grammar obj.dispatchEvent(event, options)
          * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
          * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
-         * @remark 处理会调用通过addEventListenr绑定的自定义事件回调函数之外，还会调用直接绑定到对象上面的自定义事件。例如：<br>
+         * @remark 处理会调用通过addEventListener绑定的自定义事件回调函数之外，还会调用直接绑定到对象上面的自定义事件。例如：<br>
         myobj.onMyEvent = function(){}<br>
         myobj.addEventListener("onMyEvent", function(){});
          */
@@ -767,7 +767,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
     };
 
     /**
-    *继承Overlay的intialize方法，自定义覆盖物时必须。
+    *继承Overlay的initialize方法，自定义覆盖物时必须。
     *@param {Map} map BMapGL.Map的实例化对象。
     *@return {HTMLElement} 返回覆盖物对应的HTML元素。
     */
@@ -860,21 +860,20 @@ var BMapLib = window.BMapLib = BMapLib || {};
         var style = this.getStyleByText(this._text, this._styles);
         var newStyle = {
             url: imageUrl, 
-            size: {width: 72, height: 72}
+            size: { width: 86, height: 86 }
         }
         if (imageUrl) {
-            style = Object.assign(style, {url: imageUrl, size: {width: 72, height: 72}})
+            style = Object.assign(style, { url: imageUrl, size: { width: 86, height: 86 } })
         }
 
-        const customImageNumber = `<span class="custom-image-number">${this._text}</span>`;
+        const customImageNumber = `<span class="custom-image-number">${this._text < 1000 ? this._text : '1k+'}</span>`;
         this._domElement.style.cssText = this.buildImageCssText(newStyle);
-        const imageElement = `<img src=${imageUrl} width="72" height="72" />`
+        const imageElement = `<img src=${imageUrl} width="80" height="80" />`
         const htmlString =  `
-        <div class="custom-image-container">
-        ${this._text > 1 ? customImageNumber : ''}
-            ${imageUrl ? imageElement :  '<div class="empty-custom-image-wrapper"></div>'}
-            <i class='plugin-label-arrow dtable-font dtable-icon-drop-down'></i>
-          </div>
+            <div class="custom-image-container">
+                ${this._text > 1 ? customImageNumber : ''}
+                ${imageUrl ? imageElement :  '<div class="empty-custom-image-wrapper"></div>'}
+            </div>
         `
         const labelDocument = new DOMParser().parseFromString(htmlString, 'text/html');
         const label = labelDocument.body.firstElementChild;
@@ -888,14 +887,14 @@ var BMapLib = window.BMapLib = BMapLib || {};
         var textColor = style['textColor'] || 'black';
         var textSize = style['textSize'] || 10;
 
-        var csstext = [];
+        var cssText = [];
 
-        csstext.push('height:' + size.height + 'px; line-height:' + size.height + 'px;');
-        csstext.push('width:' + size.width + 'px; text-align:center;');
+        cssText.push('height:' + size.height + 'px; line-height:' + size.height + 'px;');
+        cssText.push('width:' + size.width + 'px; text-align:center;');
    
-        csstext.push('cursor:pointer; color:' + textColor + '; position:absolute; font-size:' +
+        cssText.push('cursor:pointer; color:' + textColor + '; position:absolute; font-size:' +
             textSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
-        return csstext.join('');
+        return cssText.join('');
     };
 
     /**
@@ -937,34 +936,34 @@ var BMapLib = window.BMapLib = BMapLib || {};
         var textColor = style['textColor'] || 'black';
         var textSize = style['textSize'] || 10;
 
-        var csstext = [];
+        var cssText = [];
         if (T.browser["ie"] < 7) {
-            csstext.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
+            cssText.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
                 'sizingMethod=scale,src="' + url + '");');
         } else {
-            csstext.push('background-image:url(' + url + ');');
+            cssText.push('background-image:url(' + url + ');');
             var backgroundPosition = '0 0';
             (offset instanceof BMapGL.Size) && (backgroundPosition = offset.width + 'px' + ' ' + offset.height + 'px');          
-            csstext.push('background-position:' + backgroundPosition + ';');
+            cssText.push('background-position:' + backgroundPosition + ';');
         }
 
         if (size instanceof BMapGL.Size){
             if (anchor instanceof BMapGL.Size) {
                 if (anchor.height > 0 && anchor.height < size.height) {
-                      csstext.push('height:' + (size.height - anchor.height) + 'px; padding-top:' + anchor.height + 'px;');
+                      cssText.push('height:' + (size.height - anchor.height) + 'px; padding-top:' + anchor.height + 'px;');
                 }
                 if(anchor.width > 0 && anchor.width < size.width){
-                    csstext.push('width:' + (size.width - anchor.width) + 'px; padding-left:' + anchor.width + 'px;');                
+                    cssText.push('width:' + (size.width - anchor.width) + 'px; padding-left:' + anchor.width + 'px;');                
                 }
             } else {
-                csstext.push('height:' + size.height + 'px; line-height:' + size.height + 'px;');
-                csstext.push('width:' + size.width + 'px; text-align:center;');
+                cssText.push('height:' + size.height + 'px; line-height:' + size.height + 'px;');
+                cssText.push('width:' + size.width + 'px; text-align:center;');
             }
         }
    
-        csstext.push('cursor:pointer; color:' + textColor + '; position:absolute; font-size:' +
+        cssText.push('cursor:pointer; color:' + textColor + '; position:absolute; font-size:' +
             textSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
-        return csstext.join('');
+        return cssText.join('');
     };
 
 

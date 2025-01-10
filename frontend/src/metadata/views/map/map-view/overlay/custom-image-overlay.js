@@ -1,4 +1,4 @@
-import { Utils } from '../../../../utils/utils';
+import { Utils } from '../../../../../utils/utils';
 
 const customImageOverlay = (center, image, callback) => {
   class ImageOverlay extends window.BMapLib.TextIconOverlay {

@@ -1,0 +1,63 @@
+.sf-map-control-container {
+  height: 40px;
+  width: fit-content;
+  background-color: rgba(255, 255, 255, .9);
+  opacity: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: -2px -2px 4px 2px rgba(0, 0, 0, 0.1);
+  line-height: 40px;
+}
+
+.sf-map-control-container.sf-map-control-loading {
+  opacity: 0.7;
+}
+
+.sf-map-control-container.sf-map-control-container-mobile {
+  height: 35px;
+  line-height: 35px;
+  opacity: .75;
+}
+
+.sf-map-control-container .sf-map-control-divider {
+  height: 100%;
+  width: 1px;
+  position: relative;
+  background-color: inherit;
+}
+
+.sf-map-control-container .sf-map-control-divider::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  height: 22px;
+  width: 1px;
+  background-color: #ccc;
+}
+
+.sf-map-control-container .sf-map-control {
+  height: 40px;
+  width: 40px;
+  color: #666;
+  background-color: inherit;
+  text-align: center;
+}
+
+.sf-map-control-container.sf-map-control-container-mobile .sf-map-control {
+  height: 35px;
+  width: 35px;
+  opacity: .75;
+}
+
+.sf-map-control-container .sf-map-control .sf-map-control-icon {
+  font-size: 18px;
+}
+
+.sf-map-control-container .sf-map-control:not(.disabled):hover {
+  cursor: pointer;
+  color: #212529;
+}
+
+.sf-map-control-container .sf-map-control.disabled {
+  color: #ccc;
+}

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileNameFromRecord, getFileTypeFromRecord, getImageLocationFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import ClusterPhotos from './cluster-photos';
-import MapView from './map';
+import MapView from './map-view';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
@@ -60,7 +60,7 @@ const Map = () => {
   }, []);
 
   if (showCluster) {
-    return (<ClusterPhotos markerIds={clusterRef.current} onClose={closeCluster} />);
+    return (<ClusterPhotos photoIds={clusterRef.current} onClose={closeCluster} />);
   }
 
   return (<MapView images={images} onOpenCluster={openCluster} />);

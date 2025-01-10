@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('./iconfont.eot?t=1733301127109'); /* IE9 */
-  src: url('./iconfont.eot?t=1733301127109#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('./iconfont.woff2?t=1733301127109') format('woff2'),
-       url('./iconfont.woff?t=1733301127109') format('woff'),
-       url('./iconfont.ttf?t=1733301127109') format('truetype'),
-       url('./iconfont.svg?t=1733301127109#sf3-font') format('svg');
+  src: url('./iconfont.eot?t=1736476800596'); /* IE9 */
+  src: url('./iconfont.eot?t=1736476800596#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./iconfont.woff2?t=1736476800596') format('woff2'),
+       url('./iconfont.woff?t=1736476800596') format('woff'),
+       url('./iconfont.ttf?t=1736476800596') format('truetype'),
+       url('./iconfont.svg?t=1736476800596#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -16,16 +16,36 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sf3-font-zoom-out:before {
+  content: "\e630";
+}
+
+.sf3-font-current-location:before {
+  content: "\e62e";
+}
+
+.sf3-font-zoom-in:before {
+  content: "\e62f";
+}
+
+.sf3-font-ai:before {
+  content: "\e854";
+}
+
+.sf3-font-time:before {
+  content: "\e852";
+}
+
+.sf3-font-description:before {
+  content: "\e853";
+}
+
 .sf3-font-hi:before {
   content: "\e603";
 }
 
 .sf3-font-refresh:before {
   content: "\e851";
-}
-
-.sf3-font-current-location:before {
-  content: "\e850";
 }
 
 .sf3-font-ai_generated:before {
