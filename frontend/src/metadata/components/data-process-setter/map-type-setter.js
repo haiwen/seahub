@@ -9,13 +9,13 @@ const MAP_TYPES = [
   { value: MAP_TYPE.SATELLITE, label: gettext('Satellite') },
 ];
 
-const MapTypeSetter = ({ view }) => {
+const MapTypeSetter = ({ viewID }) => {
   const [currentType, setCurrentType] = useState(MAP_TYPE.MAP);
 
   useEffect(() => {
     const type = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY) || MAP_TYPE.MAP;
     setCurrentType(type);
-  }, [view?._id]);
+  }, [viewID]);
 
   const onChange = useCallback((type) => {
     if (currentType === type) return;
@@ -27,9 +27,7 @@ const MapTypeSetter = ({ view }) => {
 };
 
 MapTypeSetter.propTypes = {
-  view: PropTypes.shape({
-    _id: PropTypes.string
-  })
+  viewID: PropTypes.string,
 };
 
 export default MapTypeSetter;

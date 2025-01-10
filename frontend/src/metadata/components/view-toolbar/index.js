@@ -115,7 +115,7 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
         <MapViewToolBar
           readOnly={readOnly}
           isCustomPermission={isCustomPermission}
-          viewID={view._id}
+          view={view}
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           onToggleDetail={onToggleDetail}
