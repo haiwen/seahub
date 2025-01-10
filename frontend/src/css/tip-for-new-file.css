@@ -1,3 +1,9 @@
+.tip-for-new-file-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
 .tip-for-new-file {
   margin: 0 auto;
   padding: 2em 1em;
