@@ -17,6 +17,7 @@ export default class PageDropdownMenu extends Component {
     toggleInsertSiblingPage: PropTypes.func,
     duplicatePage: PropTypes.func,
     onDeletePage: PropTypes.func,
+    exportPage: PropTypes.func,
     isOnlyOnePage: PropTypes.bool,
   };
 
@@ -61,8 +62,22 @@ export default class PageDropdownMenu extends Component {
     this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
   };
 
+  exportPageToSdoc = () => {
+    const { page } = this.props;
+    this.props.exportPage({ pageId: page.id, exportType: 'sdoc' }, () => {}, this.exportPageFailure);
+  };
+
+  exportPageToMarkdown = () => {
+    const { page } = this.props;
+    this.props.exportPage({ pageId: page.id, exportType: 'markdown' }, () => {}, this.exportPageFailure);
+  };
+
   duplicatePageFailure = () => {
     toaster.danger(gettext('Failed to duplicate page'));
+  };
+
+  exportPageFailure = () => {
+    toaster.danger(gettext('Failed to export page'));
   };
 
   handleCopyLink = () => {
@@ -119,6 +134,14 @@ export default class PageDropdownMenu extends Component {
           <DropdownItem onClick={this.duplicatePage}>
             <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
             <span className="item-text">{gettext('Duplicate page')}</span>
+          </DropdownItem>
+          <DropdownItem onClick={this.exportPageToSdoc}>
+            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
+            <span className="item-text">{gettext('Export as sdoc')}</span>
+          </DropdownItem>
+          <DropdownItem onClick={this.exportPageToMarkdown}>
+            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
+            <span className="item-text">{gettext('Export as Markdown')}</span>
           </DropdownItem>
           {(isOnlyOnePage || pagesLength === 1) ? '' : (
             <DropdownItem onClick={this.onDeletePage}>

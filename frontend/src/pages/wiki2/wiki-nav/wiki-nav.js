@@ -85,6 +85,7 @@ class WikiNav extends Component {
         pages={pages}
         pageIndex={index}
         duplicatePage={this.props.duplicatePage}
+        exportPage={this.props.exportPage}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}

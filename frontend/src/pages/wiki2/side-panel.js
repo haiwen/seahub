@@ -105,6 +105,13 @@ class SidePanel extends PureComponent {
     });
   };
 
+  exportPage = async (fromPageConfig) => {
+    const { pageId, exportType } = fromPageConfig;
+    const serviceUrl = window.app.config.serviceURL;
+    let exportPageUrl = serviceUrl + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/export/?exportType=' + exportType;
+    window.location.href = exportPageUrl;
+  };
+
   addPage = (page, parent_id, successCallback, errorCallback, jumpToNewPage = true) => {
     const { config } = this.props;
     const navigation = config.navigation;
@@ -159,6 +166,7 @@ class SidePanel extends PureComponent {
             updateWikiConfig={this.props.updateWikiConfig}
             onAddNewPage={this.onAddNewPage}
             duplicatePage={this.duplicatePage}
+            exportPage={this.exportPage}
             getCurrentPageId={this.props.getCurrentPageId}
             addPageInside={this.addPageInside}
             toggleTrashDialog={this.toggleTrashDialog}

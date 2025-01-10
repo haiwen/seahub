@@ -263,6 +263,7 @@ class PageItem extends Component {
                       toggleNameEditor={this.toggleNameEditor}
                       duplicatePage={this.props.duplicatePage}
                       onDeletePage={this.props.onDeletePage.bind(this, page.id)}
+                      exportPage={this.props.exportPage}
                       toggleInsertSiblingPage={this.toggleInsertSiblingPage}
                     />
                   }
@@ -352,6 +353,7 @@ PageItem.propTypes = {
   connectDragPreview: PropTypes.func,
   connectDropTarget: PropTypes.func,
   duplicatePage: PropTypes.func,
+  exportPage: PropTypes.func,
   setCurrentPage: PropTypes.func,
   onUpdatePage: PropTypes.func,
   onDeletePage: PropTypes.func,
