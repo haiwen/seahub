@@ -15,7 +15,7 @@ import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
 import { useMetadataStatus } from '../../../../hooks';
-import People from './people';
+import People from '../../people';
 
 import './index.css';
 

@@ -5,12 +5,21 @@ import Title from './title';
 
 import './index.css';
 
+<<<<<<< HEAD
+const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} }) => {
+  const { isShowControl, closeIcon } = component;
+  return (
+    <div className="detail-header">
+      <Title title={title} icon={icon} iconSize={iconSize} />
+      {isShowControl && (
+=======
 const Header = ({ title, icon, iconSize = 32, onClose, children, component = {}, withinPreviewer }) => {
   const { closeIcon } = component;
   return (
     <div className="detail-header">
       <Title title={title} icon={icon} iconSize={iconSize} />
       {!withinPreviewer && (
+>>>>>>> 45ce3539d (show people in sidepanel)
         <div className="detail-control-container">
           {children}
           <div className="detail-control" onClick={onClose}>
@@ -22,6 +31,12 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {},
   );
 };
 
+Header.defaultProps = {
+  component: {
+    isShowControl: true,
+  }
+};
+
 Header.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
@@ -29,7 +44,11 @@ Header.propTypes = {
   component: PropTypes.object,
   children: PropTypes.any,
   onClose: PropTypes.func.isRequired,
+<<<<<<< HEAD
+  isShowControl: PropTypes.bool,
+=======
   withinPreviewer: PropTypes.bool,
+>>>>>>> 45ce3539d (show people in sidepanel)
 };
 
 export default Header;

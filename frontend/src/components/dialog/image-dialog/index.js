@@ -1,10 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { SYSTEM_FOLDERS } from '../../../constants';
+import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { Utils } from '../../../utils/utils';
+<<<<<<< HEAD
+import Icon from '../../icon';
+
+import '@seafile/react-image-lightbox/style.css';
+import './index.css';
+
+const SIDE_PANEL_COLLAPSED_WIDTH = 10;
+const SIDE_PANEL_EXPANDED_WIDTH = 300;
+
+const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
+  const [expanded, setExpanded] = useState(false);
+
+=======
 import { Dirent } from '../../../models';
 import { seafileAPI } from '../../../utils/seafile-api';
 import DirentDetails from '../../dirent-detail/dirent-details';
@@ -14,6 +28,7 @@ import './index.css';
 
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isShared }) => {
   const [direntDetail, setDirentDetail] = useState(null);
+>>>>>>> 45ce3539d (show people in sidepanel)
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
   useEffect(() => {
@@ -30,6 +45,10 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
   const onViewOriginal = useCallback(() => {
     window.open(imageItems[imageIndex].url, '_blank');
   }, [imageItems, imageIndex]);
+
+  const onToggleSidePanel = useCallback(() => {
+    setExpanded(!expanded);
+  }, [expanded]);
 
   const imageItemsLength = imageItems.length;
   if (imageItemsLength === 0) return null;
@@ -53,6 +72,36 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
   }
 
   const renderSidePanel = () => {
+<<<<<<< HEAD
+    const dirent = { id, name, type: 'file' };
+    const path = Utils.joinPath(mainImg.parentDir, name);
+
+    return (
+      <div
+        className="lightbox-side-panel"
+        style={{ width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px` }}
+        aria-expanded={expanded}
+      >
+        <div className="side-panel-controller" onClick={onToggleSidePanel}>
+          <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
+        </div>
+        {expanded && (
+          <EmbeddedFileDetails
+            repoID={repoID}
+            repoInfo={repoInfo}
+            path={path}
+            dirent={dirent}
+            onClose={() => {}}
+            component={{
+              headerComponent: {
+                isShowControl: false,
+              }
+            }}
+          />
+        )}
+      </div>
+
+=======
     const dirent = new Dirent({ id, name, type: 'file' });
 
     return (
@@ -68,6 +117,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
         onFileTagChanged={() => {}}
         withinPreviewer={true}
       />
+>>>>>>> 45ce3539d (show people in sidepanel)
     );
   };
 
@@ -96,7 +146,14 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       onOCR={onOCR}
       OCRLabel={gettext('OCR')}
+<<<<<<< HEAD
+      sidePanel={!isCustomPermission ? {
+        render: renderSidePanel,
+        width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px`,
+      } : null}
+=======
       onRenderSidePanel={!isShared ? renderSidePanel : null}
+>>>>>>> 45ce3539d (show people in sidepanel)
     />
   );
 };
@@ -116,11 +173,16 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
+<<<<<<< HEAD
+  isCustomPermission: PropTypes.bool,
+=======
   isShared: PropTypes.bool,
+>>>>>>> 45ce3539d (show people in sidepanel)
 };
 
 ImageDialog.defaultProps = {
   enableRotate: true,
+  isCustomPermission: false,
 };
 
 export default ImageDialog;

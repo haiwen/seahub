@@ -848,12 +848,12 @@ class DirentGridView extends React.Component {
     const { encrypted: repoEncrypted } = currentRepoInfo;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
 
     let canModifyFile = false;
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
       canModifyFile = true;
     } else {
-      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
       if (isCustomPermission) {
         const { modify } = customPermission.permission;
         canModifyFile = modify;
@@ -1040,6 +1040,7 @@ class DirentGridView extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={canModifyFile}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}
