@@ -9,8 +9,6 @@ import { lang, serviceURL } from '../../../../utils/constants';
 import { LONG_TEXT_EXCEED_LIMIT_MESSAGE, LONG_TEXT_EXCEED_LIMIT_SUGGEST } from '../../../constants';
 import i18n from '../../../../_i18n/i18n-seafile-editor';
 
-import './index.css';
-
 class LongTextEditor extends React.PureComponent {
 
   constructor(props) {

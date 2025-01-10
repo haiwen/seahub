@@ -23,16 +23,13 @@ const People = ({ repoID, record }) => {
   if (!images.length) return null;
 
   return (
-    <>
-      {images.length > 0 && <div className="dirent-detail-divider"></div>}
-      <div className="dirent-detail-people">
-        {images.map(img => (
-          <div className="dirent-detail-people-item" key={img.row_id} title={img.display_value || gettext('Unknown people')}>
-            <img src={img.url} alt={img.display_value || gettext('Unknown people')} onError={onImgLoadError} height={32} width={32} />
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="dirent-detail-people">
+      {images.map(img => (
+        <div className="dirent-detail-people-item" key={img.row_id} title={img.display_value || gettext('Unknown people')}>
+          <img src={img.url} alt={img.display_value || gettext('Unknown people')} onError={onImgLoadError} height={32} width={32} />
+        </div>
+      ))}
+    </div>
   );
 };
 

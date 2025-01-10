@@ -1,27 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { SYSTEM_FOLDERS } from '../../../constants';
-import { Utils } from '../../../utils/utils';
 import { Dirent } from '../../../models';
-import { seafileAPI } from '../../../utils/seafile-api';
 import DirentDetails from '../../dirent-detail/dirent-details';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
 
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isShared }) => {
-  const [direntDetail, setDirentDetail] = useState(null);
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
-
-  useEffect(() => {
-    const path = Utils.joinPath(imageItems[imageIndex].parentDir, imageItems[imageIndex].name);
-    seafileAPI.getFileInfo(repoID, path).then(res => {
-      setDirentDetail(res.data);
-    });
-  }, [imageIndex, imageItems, repoID, repoInfo]);
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -61,7 +51,6 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
         currentRepoInfo={repoInfo}
         path={mainImg.parentDir}
         dirent={dirent}
-        direntDetail={direntDetail}
         onClose={() => {}}
         repoTags={[]}
         fileTags={[]}

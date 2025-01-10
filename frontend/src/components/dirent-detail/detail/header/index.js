@@ -5,7 +5,7 @@ import Title from './title';
 
 import './index.css';
 
-const Header = ({ title, icon, iconSize = 32, onClose, children, component = {}, withinPreviewer }) => {
+const Header = ({ title, icon, iconSize = 32, onClose, children, component = {}, withinPreviewer = false }) => {
   const { closeIcon } = component;
   return (
     <div className="detail-header">

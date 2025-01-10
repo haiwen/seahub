@@ -9,7 +9,6 @@
   background-color: #333;
   border: 1px solid #666;
   transition: width 0.3s ease;
-  z-index: 1052;
 }
 
 .lightbox-side-panel.expanded {
@@ -25,7 +24,7 @@
   border-left: 1px solid #666;
 }
 
-.side-panel-controller {
+.lightbox-side-panel-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,15 +43,15 @@
   cursor: pointer;
 }
 
-.side-panel-controller .expand-button {
+.lightbox-side-panel-button-container .switch-button {
   width: 32px;
   height: 32px;
-  transform: scale(0.67);
+  transform: scale(0.6875);
   opacity: 0.7;
   border: none;
 }
 
-.side-panel-controller:hover .expand-button {
+.lightbox-side-panel-button-container:hover .switch-button {
   opacity: 1;
 }
 
@@ -101,8 +100,6 @@
   background-color: #666;
 }
 
-.lightbox-side-panel .dirent-detail-divider {
-  height: 1px;
-  background-color: #999;
-  margin-bottom: 20px;
+.lightbox-side-panel .dirent-detail-people {
+  border-top: 1px solid #999;
 }

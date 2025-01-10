@@ -3,6 +3,8 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 
 .dirent-detail-people .dirent-detail-people-item {
@@ -10,10 +12,4 @@
   height: 32px;
   border-radius: 50%;
   overflow: hidden;
-}
-
-.dirent-detail-divider {
-  height: 1px;
-  background-color: #eee;
-  margin-bottom: 20px;
 }
