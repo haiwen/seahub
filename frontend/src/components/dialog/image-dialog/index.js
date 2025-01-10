@@ -6,7 +6,6 @@ import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { SYSTEM_FOLDERS } from '../../../constants';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { Utils } from '../../../utils/utils';
-<<<<<<< HEAD
 import Icon from '../../icon';
 
 import '@seafile/react-image-lightbox/style.css';
@@ -18,25 +17,7 @@ const SIDE_PANEL_EXPANDED_WIDTH = 300;
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
   const [expanded, setExpanded] = useState(false);
 
-=======
-import { Dirent } from '../../../models';
-import { seafileAPI } from '../../../utils/seafile-api';
-import DirentDetails from '../../dirent-detail/dirent-details';
-
-import '@seafile/react-image-lightbox/style.css';
-import './index.css';
-
-const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isShared }) => {
-  const [direntDetail, setDirentDetail] = useState(null);
->>>>>>> 45ce3539d (show people in sidepanel)
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
-
-  useEffect(() => {
-    const path = Utils.joinPath(imageItems[imageIndex].parentDir, imageItems[imageIndex].name);
-    seafileAPI.getFileInfo(repoID, path).then(res => {
-      setDirentDetail(res.data);
-    });
-  }, [imageIndex, imageItems, repoID, repoInfo]);
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -72,7 +53,6 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
   }
 
   const renderSidePanel = () => {
-<<<<<<< HEAD
     const dirent = { id, name, type: 'file' };
     const path = Utils.joinPath(mainImg.parentDir, name);
 
@@ -101,23 +81,6 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
         )}
       </div>
 
-=======
-    const dirent = new Dirent({ id, name, type: 'file' });
-
-    return (
-      <DirentDetails
-        repoID={repoID}
-        currentRepoInfo={repoInfo}
-        path={mainImg.parentDir}
-        dirent={dirent}
-        direntDetail={direntDetail}
-        onClose={() => {}}
-        repoTags={[]}
-        fileTags={[]}
-        onFileTagChanged={() => {}}
-        withinPreviewer={true}
-      />
->>>>>>> 45ce3539d (show people in sidepanel)
     );
   };
 
@@ -146,20 +109,12 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       onOCR={onOCR}
       OCRLabel={gettext('OCR')}
-<<<<<<< HEAD
       sidePanel={!isCustomPermission ? {
         render: renderSidePanel,
         width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px`,
       } : null}
-=======
-      onRenderSidePanel={!isShared ? renderSidePanel : null}
->>>>>>> 45ce3539d (show people in sidepanel)
     />
   );
-};
-
-ImageDialog.defaultProps = {
-  isShared: false,
 };
 
 ImageDialog.propTypes = {
@@ -173,11 +128,7 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
-<<<<<<< HEAD
   isCustomPermission: PropTypes.bool,
-=======
-  isShared: PropTypes.bool,
->>>>>>> 45ce3539d (show people in sidepanel)
 };
 
 ImageDialog.defaultProps = {
