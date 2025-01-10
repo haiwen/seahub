@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
-import SeahubModalHeader from '../common/seahub-modal-header';
+import { Button, Modal, ModalBody, ModalFooter, TabContent, TabPane, ModalHeader} from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
@@ -91,9 +90,9 @@ class OfficeSuiteDialog extends React.Component {
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} className="repo-office-suite-dialog">
-        <SeahubModalHeader toggle={this.props.toggleDialog}>
+        <ModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-        </SeahubModalHeader>
+        </ModalHeader>
         <ModalBody className="repo-office-suite-dialog-content" role="tablist">
           {this.renderOfficeSuiteContent()}
         </ModalBody>
