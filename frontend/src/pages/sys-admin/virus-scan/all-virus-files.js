@@ -9,6 +9,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './nav';
+import dayjs from 'dayjs';
 
 const virusFileItemPropTypes = {
   virusFile: PropTypes.object.isRequired,
@@ -95,6 +96,9 @@ class VirusFileItem extends Component {
         <td>{virusFile.file_path}</td>
         <td>{fileStatus}</td>
         <td>
+          {`${virusFile.timestamp ? dayjs(virusFile.timestamp).format('YYYY-MM-DD HH:mm') : '--'}`}
+        </td>
+        <td>
           {fileOpList.length > 0 && this.state.isOpIconShown &&
             <OpMenu
               operations={fileOpList}
@@ -166,10 +170,11 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="27%">{gettext('Library')}</th>
-                <th width="25%">{gettext('Owner')}</th>
-                <th width="28%">{gettext('Virus File')}</th>
-                <th width="15%">{gettext('Status')}</th>
+                <th width="25%">{gettext('Library')}</th>
+                <th width="23%">{gettext('Owner')}</th>
+                <th width="26%">{gettext('Virus File')}</th>
+                <th width="13%">{gettext('Status')}</th>
+                <th width="8%">{gettext('Time')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>

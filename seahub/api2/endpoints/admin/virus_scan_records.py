@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.utils import get_virus_files, get_virus_file_by_vid, delete_virus_file, operate_virus_file
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,7 @@ class AdminVirusFilesView(APIView):
                 record["has_deleted"] = virus_file.has_deleted
                 record["has_ignored"] = virus_file.has_ignored
                 record["virus_id"] = virus_file.vid
+                record['timestamp'] = virus_file.timestamp and utc_datetime_to_isoformat_timestr(virus_file.timestamp) or ''
                 virus_file_list.append(record)
 
         return Response({"virus_file_list": virus_file_list, "has_next_page": has_next_page}, status=status.HTTP_200_OK)
@@ -156,6 +158,7 @@ class AdminVirusFileView(APIView):
         res["has_deleted"] = virus_file.has_deleted
         res["has_ignored"] = virus_file.has_ignored
         res["virus_id"] = virus_file.vid
+        res['timestamp'] = virus_file.timestamp and utc_datetime_to_isoformat_timestr(virus_file.timestamp) or ''
 
         return Response({"virus_file": res}, status=status.HTTP_200_OK)
 
