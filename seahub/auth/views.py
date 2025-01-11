@@ -287,6 +287,19 @@ def logout(request, next_page=None,
         response.delete_cookie('seahub_auth')
         return response
 
+    # Logout for OAuth user (terminate OAuth session)
+    oauth_logout_url = getattr(settings, 'OAUTH_END_SESSION_URL', '')
+    state_session_has_been_ended = 'openidprovider-done' # This string is arbitrarily chosen
+    if getattr(settings, 'ENABLE_OAUTH', False) and oauth_logout_url:
+        state = request.GET.get('state', '')
+        if state != state_session_has_been_ended:
+            #FIXME When the connection seafile-nginx is http but the connect nginx-user is https, this incorrectly uses 'http'
+            http_or_https = request.is_secure() and 'https' or 'http'
+            seafile_logout_url = http_or_https + '://' + get_current_site(request).domain + settings.SITE_ROOT + getattr(settings, 'LOGOUT_URL', '')
+            oauth_logout_url += '?state=%s&post_logout_redirect_uri=%s' % (urlquote(state_session_has_been_ended, safe = ''), urlquote(seafile_logout_url, safe = ''))
+            response = HttpResponseRedirect(oauth_logout_url)
+            return response
+        
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
         response = HttpResponseRedirect(reverse('cas_ng_logout'))
