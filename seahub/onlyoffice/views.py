@@ -5,6 +5,7 @@ import json
 import logging
 import requests
 import posixpath
+import time
 import email.utils
 import urllib.parse
 
@@ -433,6 +434,7 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
         payload['key'] = obj_id
         payload['url'] = full_url
         payload['version'] = obj_id
+        payload['exp'] = int(time.time()) + 3 * 24 * 3600
 
         jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
         payload['token'] = jwt_token
