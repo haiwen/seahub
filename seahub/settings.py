@@ -310,6 +310,17 @@ AUTHENTICATION_BACKENDS = (
 
 ENABLE_CAS = False
 
+ENABLE_PHONE_LOGIN = False
+USE_PHONE_REGISTRATION_BY_DEFAULT = False
+
+# aliyun sms config
+ALIYUN_SMS_CONFIG = {}
+SEND_SMS_ATTEMPT_LIMIT = 5
+SEND_SMS_ATTEMPT_TIMEOUT = 60 * 60  # 1h
+ENABLE_SLIDE_CAPTCHA = False
+SLIDE_CAPTCHA_IMAGE_URL = ''
+
+
 ENABLE_ADFS_LOGIN = False
 
 ENABLE_MULTI_ADFS = False
@@ -552,6 +563,8 @@ REST_FRAMEWORK = {
         'ping': '3000/minute',
         'anon': '60/minute',
         'user': '3000/minute',
+        'sms_verify': '1/minute',
+        'org_register': '3/day',
         'share_link_zip_task': '10/minute'
     },
     # https://github.com/tomchristie/django-rest-framework/issues/2891

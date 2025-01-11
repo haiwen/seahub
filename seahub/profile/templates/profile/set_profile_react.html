@@ -95,6 +95,7 @@ window.app.pageOptions = {
   orgSamlConnected: {% if org_saml_connected %} true {% else %} false {% endif %},
   socialNextPage: "{{ social_next_page|escapejs }}",
   {% endif %}
+  enablePhoneLogin: {% if enable_phone_login %} true {% else %} false {% endif %},
 
   orgID: "{{ org_id }}",
 

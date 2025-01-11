@@ -1,0 +1,440 @@
+{% extends "registration/login.html" %}
+{% load i18n %}
+{% block sub_title %}{% trans "Signup" %} - {% endblock %}
+{% block extra_style %}{{block.super}}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.popover.min.css" />
+{% endblock %}
+
+{% block private_style %}
+.login-panel-outer-container {
+    margin-top: 150px;
+}
+.show-password-toggle {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    cursor: pointer;
+    color: #999;
+}
+.show-password-toggle:hover {
+    color: #666;
+}
+.sms-org-register {
+    position: relative;
+}
+.sms-org-register #sms-send-form {
+    position: absolute;
+    top: 305px;
+    margin-right: 60px;
+}
+#captcha-modal {
+    overflow: hidden;
+    height: 310px;
+    width: 350px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 6px;
+}
+#captcha-modal .modal-title {
+    font-size: 14px;
+    line-height: 20px;
+}
+#captcha-modal .modal-header .close {
+    padding: 0.5rem 1rem;
+    background: #fff;
+}
+#captcha-modal .modal-body {
+    position: relative;
+}
+.modal-backdrop {
+    z-index: 1040 !important;
+    opacity: 0.5 !important;
+}
+.sms-org-register .btn-primary {
+    color: #fff;
+    background-color: #ED7109;
+    border-color: #ED7109;
+    cursor: pointer;
+    font-size: 0.8125rem;
+}
+.sms-org-register .btn-primary.hover,
+.sms-org-register .btn-primary:hover {
+    color: #fff;
+    background-color: #d96d00;
+    border-color: #c60;
+}
+.sms-org-register .btn-primary:not(:disabled):not(.disabled):active,
+.sms-org-register .btn-primary:not(:disabled):not(.disabled).active {
+    color: #fff;
+    background-color: #c60;
+    border-color: #bf6000;
+}
+.sms-org-register .btn-primary.focus,
+.sms-org-register .btn-primary:focus {
+    color: #fff;
+    background-color: #d96d00;
+    border-color: #cc6600;
+    box-shadow: 0 0 0 2px rgba(255, 128, 0, 0.5);
+}
+.sms-org-register .btn-primary.disabled, .sms-org-register .btn-primary:disabled {
+    color: #fff;
+    background-color: #ED7109;
+    border-color: #ED7109;
+    opacity: 0.65;
+}
+.sms-org-register .error {
+    font-size: 0.875rem;
+    margin: 0;
+}
+.sms-org-register a {
+    color: #ED7109;
+    text-decoration: none;
+    font-weight: normal;
+}
+.sms-org-register a:hover {
+  color: #ED7109;
+  text-decoration: underline;
+}
+
+#captcha-modal-inner,
+#captcha-modal-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    margin: 14px 18px 34px 18px;
+    padding-top: 70px;
+}
+
+#captcha-modal-mask {
+    opacity: 0.5;
+    transition: opacity .15s linear;
+    background-color: #fff;
+}
+
+#captcha-modal-mask-success {
+    text-align: center;
+    color: rgb(94, 204, 60);
+    font-size: 30px;
+    font-weight: 500;
+}
+
+#captcha-modal-mask-success .dtable-icon-check-circle {
+    font-size: 30px;
+}
+
+#send_sms_code {
+    width: 110px;
+    margin: 0px 0 12px;
+    height: 40px;
+}
+
+#send_sms_code_phone, #id_sms_code {
+    margin: 0;
+    border: 1px solid #cdcdcd;
+    padding: 2px 10px;
+    height: 34px;
+    width: 264px;
+    font-size: 13px;
+    border-radius: 2px !important;
+}
+
+.SlideCaptcha__refreshIcon--1SQk5 {
+    z-index: 1;
+}
+{% endblock %}
+
+{% block main_content %}
+<div class="login-panel-outer-container">
+    <div class="login-panel sms-org-register">
+        <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
+        {% if request.user.is_authenticated %}
+        <p>{% trans "Welcome back, you are already signed in." %}</p>
+        {% else %}
+        <form action="" method="post" id="sms-send-form">{% csrf_token %}
+            <div class="position-relative justify-content-between row m-0">
+                <input id="send_sms_code_phone" type="text" name="phone" placeholder="请输入手机号" {% if phone %}value={{ phone }}{% else %}{% endif %} autocomplete="off" class="input name-input" style="height: 40px; max-width: calc(100% - 120px); box-sizing: border-box;" />
+                <!-- Button to trigger captcha modal -->
+                {% if ENABLE_SLIDE_CAPTCHA %}
+                <button id="send_sms_code" href="#captcha-modal" data-toggle="modal" type="button" class="submit btn btn-primary btn-block ml-2" style="width: 110px;">发送验证码</button>
+                {% else %}
+                <button id="send_sms_code" type="button" class="submit btn btn-primary btn-block ml-2" style="width: 110px">发送验证码</button>
+                {% endif %}
+            </div>
+        </form>
+        <form action="" method="post" id="signup-form">{% csrf_token %}
+
+            <input id="org_name" type="text" name="org_name"  placeholder="{% trans "Organization Name" %}" value="{{ form.org_name.value|default_if_none:"" }}" class="input" />
+            {{ form.org_name.errors }}
+
+            <input id="name" type="text" name="name" placeholder="{% trans "Admin name" %}" value="{{ form.name.value|default_if_none:"" }}" class="input" maxlength="255"/>
+            {{ form.name.errors }}
+            <input id="email" type="text" name="email" placeholder="{% trans "Admin email" %}" value="{{ form.email.value|default_if_none:"" }}" class="input" maxlength="255"/>
+            {{ form.email.errors }}
+
+            <div class="position-relative" id="password-input1">
+                <input id="password1" type="password" placeholder="{% trans "Password" %}" name="password1" value="" class="input" />
+                {{ form.password1.errors }}
+                <span class="show-password-toggle dtable-font dtable-icon-eye-slash"></span>
+            </div>
+            <div class="position-relative" id="password-input2">
+                <input id="password2" type="password" placeholder="{% trans "Confirm password" %}" name="password2" value="" class="input" />
+                {{ form.password2.errors }}
+            </div>
+
+            <!-- for sms-send-form -->
+            <div style="height: 50px"></div>
+            <input id="id_sms_code" type="text" name="sms_code" placeholder="请输入短信验证码" value="" class="input name-input w-100" style="height: 40px; box-sizing: border-box;" autocomplete="off" />
+            <p class="error">{{ error_msg }}</p>
+            {{ form.non_field_errors }}
+            <button id="sms-org-register-submit" type="submit" class="submit btn btn-primary btn-block">{% trans "Submit" %}</button>
+        </form>
+        <div class="login-panel-bottom-container">
+            {# language will be shown here #}
+        </div>
+        {% endif %}
+    </div>
+    <!-- captcha modal -->
+    {% if ENABLE_SLIDE_CAPTCHA %}
+    <div id="captcha-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="captchaLabel" aria-hidden="true">
+        <div class="modal-header">
+            <h5 id="captchaLabel" class="modal-title">安全验证</h5>
+            <button id="close-button" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="margin-top: -10px;">×</button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="post" id="signup-form">{% csrf_token %}
+                <div id="slide-captcha" style="display: none"></div>
+            </form>
+            <div id="captcha-modal-mask" class="hide"></div>
+            <div id="captcha-modal-inner" class="hide">
+                <span id="captcha-modal-mask-loading" class="loading-icon loading-tip"></span>
+                <span id="captcha-modal-mask-success" class="hide">
+                    <i class="dtable-font dtable-icon-check-circle"></i>
+                    验证成功 !
+                </span>
+            </div>
+        </div>
+    </div>
+    <div id="modal-backdrop" class="modal-backdrop hide"></div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.login-panel-bottom-container').append($('#lang').removeClass('fright'));
+{% include "snippets/password_strength_js.html" %}
+
+$('#sms-org-register-submit').on('click', function(event) {
+    var orgName = $.trim($('input[name="org_name"]').val());
+    var adminName = $.trim($('input[name="name"]').val());
+    var pwd1 = $.trim($('input[name="password1"]').val());
+    var pwd2 = $.trim($('input[name="password2"]').val());
+    if (!orgName || !adminName) {
+        $('.error').html("{% trans "Name cannot be blank" %}").removeClass('hide');
+        return false;
+    }
+    if (!pwd1) {
+        $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
+        return false;
+    }
+    if (!pwd2) {
+        $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
+        return false;
+    }
+    if (pwd1 != pwd2) {
+        $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
+        return false;
+    }
+    if (!checkPasswordStrength(pwd1, {% if strong_pwd_required %} true {% else %} false {% endif %})) {
+        $('.error').html(passwd_tip).removeClass('hide');
+        return false;
+    }
+});
+
+$("body").on('click', '.show-password-toggle', function(){
+    var $pass1 = document.getElementById("password1");
+    var $pass2 = document.getElementById("password2");
+    var toggle = $(this).toggleClass("dtable-icon-eye-slash dtable-icon-eye");
+    [$pass1, $pass2].forEach(function($passwords) {
+        if ($passwords.type === "password") {
+            $passwords.type = "text";
+            toggle.toggleClass()
+        } else {
+            $passwords.type = "password";
+        }
+    })
+});
+
+$('#lang-context').on('click', function() {
+    var langTop = $('#lang').offset().top;
+    var langSelectorTop;
+    var langSelectorHeight = $('#lang-context-selector .sf-popover-con').outerHeight();
+    if (langSelectorHeight > langTop) {
+        langSelectorTop = '-' + (langTop - 5) + 'px';
+    } else {
+        langSelectorTop = '-' + (langSelectorHeight + 5) + 'px';
+    }
+    $('#lang-context-selector').css({
+        'top': langSelectorTop,
+        'right': 0
+    });
+    $('#lang-context-selector .sf-popover-con').css({
+        'max-height': $('#lang').offset().top - 10
+    });
+});
+
+$(function () {
+    setupPasswordField("password1", passwd_tip, template);
+});
+
+// for refresh page
+if (window.history.replaceState) {
+    window.history.replaceState( null, null, window.location.href );
+}
+
+</script>
+
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
+
+{% if ENABLE_SLIDE_CAPTCHA %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/SlideCaptcha.min.js" ></script>
+
+<script type="text/javascript">
+
+function resetMask() {
+    $("#captcha-modal-mask").removeClass("show").addClass("hide");
+    $("#captcha-modal-inner").removeClass("show").addClass("hide");
+    $("#captcha-modal-mask-success").removeClass("show").addClass("hide");
+    $("#captcha-modal-mask-loading").removeClass("hide").addClass("show");
+}
+
+function changeButtonText() {
+    var init = 60;
+    $("#send_sms_code_phone").attr('readonly', 'readonly');
+    $("#send_sms_code").attr('disabled', 'disabled');
+    $("#send_sms_code").text(init + 's 重新获取');
+    this.timer = setInterval(() => {
+        init = init - 1;
+        if (init <= 0) {
+            clearInterval(this.timer);
+            this.timer = null;
+            document.getElementById('send_sms_code_phone').readOnly = false;
+            document.getElementById('send_sms_code').removeAttribute('disabled');
+            $("#send_sms_code").text('发送验证码');
+        } else {
+            $("#send_sms_code").text(init + 's 重新获取');
+        }
+    }, 1000);
+}
+
+$('#send_sms_code').on('click', function() {
+    $('.error').text('').removeClass('show').addClass('hide');
+    $('#captcha-modal').removeClass('hide').addClass('show');
+    $('#modal-backdrop').removeClass('hide').addClass('show');
+    setTimeout(() => {
+        $('.modal-backdrop').on('click', function() {
+            $('#captcha-modal').removeClass('show').addClass('hide');
+            $('#modal-backdrop').removeClass('show').addClass('hide');
+        });
+    }, 100);
+    $('#close-button').on('click', function() {
+        $('#captcha-modal').removeClass('show').addClass('hide');
+        $('#modal-backdrop').removeClass('show').addClass('hide');
+    });
+});
+
+window.SlideCaptcha.init({
+    el: document.getElementById('slide-captcha'),
+    onSuccess: function () {
+        $("#captcha-modal-mask").removeClass("hide").addClass("show");
+        $("#captcha-modal-inner").removeClass("hide").addClass("show");
+        var that = this;
+        $.ajax({
+            type: 'post',
+            url: '/org/sms-register/',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token }}'
+            },
+            data: {
+                phone: $("#send_sms_code_phone").val(),
+            },
+            success: function(result) {
+                if (result.success === true) {
+                    $("#captcha-modal-mask-success").removeClass("hide").addClass('show');
+                    $("#captcha-modal-mask-loading").removeClass("show").addClass("hide");
+                    setTimeout(function() {
+                        $('#captcha-modal').removeClass('show').addClass('hide');
+                        $('#modal-backdrop').removeClass('show').addClass('hide');
+                        changeButtonText();
+                    }, 500);
+                } else {
+                    if (result && result.error) {
+                        $('.error').text(String(result.error)).removeClass('hide');
+                    } else {
+                        $('.error').text('网络错误，请重试！').removeClass('hide');
+                    }
+                    $('#captcha-modal').removeClass('show').addClass('hide');
+                    $('#modal-backdrop').removeClass('show').addClass('hide');
+                    resetMask();
+                    that.reset();
+                }
+            },
+            error: function(result) {
+                $('.error').text('网络错误，请重试！').removeClass('hide');
+                $('#captcha-modal').removeClass('show').addClass('hide');
+                $('#modal-backdrop').removeClass('show').addClass('hide');
+                resetMask();
+                that.reset();
+            },
+        });
+    },
+})
+$("#slide-captcha").show();
+
+</script>
+{% else %}
+<script type="text/javascript">
+    $('#send_sms_code').on('click', function() {
+        $.ajax({
+            type: 'post',
+            url: '/org/sms-register/',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token }}'
+            },
+            data: {
+                phone: $("#send_sms_code_phone").val(),
+            },
+            success: function(result) {
+                console.log(result)
+                if (result.success === true) {
+                    changeButtonText();
+                } else {
+                    if (result && result.error) {
+                        $('.error').text(String(result.error)).removeClass('hide');
+                    } else {
+                        $('.error').text('网络错误，请重试！').removeClass('hide');
+                    }
+                }
+            },
+            error: function(result) {
+                console.log(result)
+                $('.error').text('网络错误，请重试！').removeClass('hide');
+            },
+        });
+    });
+</script>
+{% endif %}
+
+{% endblock %}
