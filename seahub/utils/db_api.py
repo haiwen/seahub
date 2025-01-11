@@ -2,6 +2,8 @@ import os
 import configparser
 from django.db import connection
 
+from seahub.utils.ccnet_db import get_ccnet_db_name
+
 
 class RepoTrash(object):
 
@@ -13,7 +15,9 @@ class RepoTrash(object):
         self.size = kwargs.get('size')
         self.del_time = kwargs.get('del_time')
 
+
 class WikiInfo(object):
+
     def __init__(self, **kwargs):
         self.repo_id = kwargs.get('repo_id')
         self.wiki_name = kwargs.get('wiki_name')
@@ -25,12 +29,12 @@ class WikiInfo(object):
         self.last_modified = kwargs.get('last_modified')
 
 
-
 class SeafileDB:
 
     def __init__(self):
 
         self.db_name = self._get_seafile_db_name()
+        self.ccnet_db_name = get_ccnet_db_name()
 
     def _get_seafile_db_name(self):
 
@@ -390,7 +394,7 @@ class SeafileDB:
                 for item in cursor.fetchall():
                     repo_id = item[0]
                     repo_ids.append(repo_id)
-            except:
+            except Exception:
                 return repo_ids
 
         return repo_ids
@@ -452,7 +456,6 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
 
-
     def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
         repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
@@ -467,14 +470,13 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
 
-
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
           DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
           """
         with connection.cursor() as cursor:
             cursor.execute(sql)
-    
+
     def get_all_wikis(self, start, limit, order_by):
         order_by_size_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
@@ -516,12 +518,12 @@ class SeafileDB:
                 i.type = 'wiki'
             LIMIT {limit} OFFSET {start}
         """
-        
+
         with connection.cursor() as cursor:
             wikis = []
             if order_by == 'size':
                 cursor.execute(order_by_size_sql)
-                
+
             elif order_by == 'file_count':
                 cursor.execute(order_by_filecount_sql)
             else:
@@ -548,3 +550,55 @@ class SeafileDB:
                 wiki_info = WikiInfo(**params)
                 wikis.append(wiki_info)
             return wikis
+
+    def get_orgs_with_quota_usage(self, offset=1, per_page=25, direction='asc'):
+
+        sql = f"""
+        SELECT
+            o.org_id,
+            o.org_name,
+            o.url_prefix,
+            o.creator,
+            o.ctime,
+            SUM(rs.size) AS quota_usage
+        FROM
+            `{self.ccnet_db_name}`.`Organization` o
+        LEFT JOIN
+            `{self.db_name}`.`OrgRepo` orp ON o.org_id = orp.org_id
+        LEFT JOIN
+            `{self.db_name}`.`RepoSize` rs ON orp.repo_id = rs.repo_id
+        LEFT JOIN
+            `{self.db_name}`.`VirtualRepo` vr ON rs.repo_id = vr.repo_id
+        WHERE
+            vr.repo_id IS NULL
+        GROUP BY
+            o.org_id, o.org_name
+        ORDER BY
+            quota_usage {direction}
+        LIMIT {per_page} OFFSET {offset};
+        """
+
+        org_list = []
+        with connection.cursor() as cursor:
+
+            cursor.execute(sql)
+            for item in cursor.fetchall():
+
+                org_id = item[0]
+                org_name = item[1]
+                url_prefix = item[2]
+                creator = item[3]
+                ctime = item[4]
+                quota_usage = item[5]
+
+                org_info = {
+                    'org_id': org_id,
+                    'org_name': org_name,
+                    'url_prefix': url_prefix,
+                    'creator': creator,
+                    'ctime': ctime,
+                    'quota_usage': quota_usage
+                }
+                org_list.append(org_info)
+
+        return org_list
