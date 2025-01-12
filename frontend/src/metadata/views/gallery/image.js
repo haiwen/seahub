@@ -25,9 +25,9 @@ const Image = ({
         'metadata-gallery-image-item-selected': isSelected,
       })}
       style={{ width: size, height: size, background, ...style }}
-      onClick={onClick}
-      onDoubleClick={onDoubleClick}
-      onContextMenu={onContextMenu}
+      onClick={(e) => onClick(e, img)}
+      onDoubleClick={(e) => onDoubleClick(e, img)}
+      onContextMenu={(e) => onContextMenu(e, img)}
     >
       <img
         className="metadata-gallery-grid-image"
@@ -44,6 +44,7 @@ Image.propTypes = {
   isSelected: PropTypes.bool,
   img: PropTypes.object,
   size: PropTypes.number,
+  style: PropTypes.object,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,
   onContextMenu: PropTypes.func,

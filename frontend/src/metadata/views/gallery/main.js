@@ -8,10 +8,12 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
+import { getColumns, getImageSize, getRowHeight } from './utils';
+import ObjectUtils from '../../utils/object-utils';
 
 import './index.css';
 
@@ -30,76 +32,24 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const containerRef = useRef(null);
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
-  const repoID = window.sfMetadataContext.getSetting('repoID');
-  const { updateCurrentDirent } = useMetadataView();
+  const { repoID, updateCurrentDirent } = useMetadataView();
 
-  useEffect(() => {
-    updateCurrentDirent();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Number of images per row
-  const columns = useMemo(() => {
-    switch (mode) {
-      case GALLERY_DATE_MODE.YEAR:
-        return 2;
-      case GALLERY_DATE_MODE.MONTH:
-        return 3;
-      case GALLERY_DATE_MODE.DAY:
-        return 12;
-      default:
-        return 8 - zoomGear;
-    }
-  }, [mode, zoomGear]);
-
-  const imageSize = useMemo(() => {
-    const baseWidth = containerWidth * 0.8;
-    switch (mode) {
-      case GALLERY_DATE_MODE.YEAR:
-        return (baseWidth - GALLERY_YEAR_MODE_GRID_GAP) / 2;
-      case GALLERY_DATE_MODE.MONTH:
-        return (baseWidth - GALLERY_YEAR_MODE_GRID_GAP * 2) / 3;
-      case GALLERY_DATE_MODE.DAY:
-        return (baseWidth - GALLERY_DEFAULT_GRID_GAP * 5) / 2;
-      default:
-        return (containerWidth - (columns - 1) * GALLERY_DEFAULT_GRID_GAP - 32) / columns;
-    }
-  }, [containerWidth, columns, mode]);
-
-  const rowHeight = useMemo(() => {
-    switch (mode) {
-      case GALLERY_DATE_MODE.ALL:
-        return imageSize + GALLERY_DEFAULT_GRID_GAP;
-      default:
-        return imageSize;
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, containerWidth, imageSize]);
-
-  const dateMode = useMemo(() => {
-    switch (mode) {
-      case GALLERY_DATE_MODE.YEAR:
-        return 'YYYY';
-      case GALLERY_DATE_MODE.MONTH:
-        return 'YYYY-MM';
-      case GALLERY_DATE_MODE.DAY:
-        return 'YYYY-MM-DD';
-      default:
-        return 'YYYY-MM-DD';
-    }
-  }, [mode]);
-
-  const groups = useMemo(() => {
+  const images = useMemo(() => {
     if (isFirstLoading) return [];
+    if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.filter(row => Utils.imageCheck(getFileNameFromRecord(row)))
-      .reduce((_init, record) => {
+    return metadata.rows
+      .filter(record => Utils.imageCheck(getFileNameFromRecord(record)))
+      .map(record => {
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
-        const img = {
+        const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
+        const year = date.slice(0, 4);
+        const month = date.slice(0, -3);
+        const day = date.slice(-2,);
+        return {
           id,
           name: fileName,
           parentDir,
@@ -107,15 +57,31 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
-          date: date,
+          year,
+          month,
+          day,
+          date,
         };
-        let _group = _init.find(g => g.name === date);
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFirstLoading, repoID, metadata, metadata.recordsCount]);
+  const columns = useMemo(() => getColumns(mode, zoomGear), [mode, zoomGear]);
+  const imageSize = useMemo(() => getImageSize(containerWidth, columns, mode), [containerWidth, columns, mode]);
+  const rowHeight = useMemo(() => getRowHeight(imageSize, mode), [mode, imageSize]);
+  const groups = useMemo(() => {
+    let init = images
+      .reduce((_init, image) => {
+        let name = '';
+        if (mode === GALLERY_DATE_MODE.YEAR) name = image.year;
+        if (mode === GALLERY_DATE_MODE.MONTH) name = image.month;
+        if (mode === GALLERY_DATE_MODE.DAY) name = image.date;
+        let _group = _init.find(g => g.name === name);
         if (_group) {
-          _group.children.push(img);
+          _group.children.push(image);
         } else {
           _init.push({
-            name: date,
-            children: [img],
+            name,
+            children: [image],
           });
         }
         return _init;
@@ -127,6 +93,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       const { children, ...__init } = _init;
       let top = 0;
       let rows = [];
+      let displayChildren = [];
       if (index > 0) {
         const lastGroup = _groups[index - 1];
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
@@ -140,97 +107,25 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         rows[rowIndex].children.push(child);
       });
 
-      const height = rowHeight + paddingTop;
+      if (mode === GALLERY_DATE_MODE.YEAR) displayChildren = rows.slice(0, 1);
+      if (mode === GALLERY_DATE_MODE.MONTH) displayChildren = rows.slice(0, 1);
+      if (mode === GALLERY_DATE_MODE.DAY) displayChildren = [{ top: rows[0].top, children: rows.flatMap(r => r.children) }];
+      if (mode === GALLERY_DATE_MODE.ALL) displayChildren = rows;
       _groups.push({
         ...__init,
         top,
-        height,
+        height: displayChildren.length * rowHeight + paddingTop,
         paddingTop,
+        displayChildren,
         children: rows
       });
     });
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, mode, containerWidth]);
-
-  useEffect(() => {
-    const gear = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0) || 0;
-    setZoomGear(gear);
-
-    const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.YEAR) || GALLERY_DATE_MODE.YEAR;
-    setMode(mode);
-
-    const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
-      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
-      (mode) => {
-        setMode(mode);
-        window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, mode);
-      }
-    );
-
-    const container = containerRef.current;
-    if (container) {
-      const { offsetWidth, clientHeight } = container;
-      setContainerWidth(offsetWidth);
-
-      // Calculate initial overScan information
-      setOverScan({ top: 0, bottom: clientHeight + rowHeight * OVER_SCAN_ROWS });
-    }
-    setFirstLoading(false);
-
-    // resize
-    const handleResize = () => {
-      if (!container) return;
-      setContainerWidth(container.offsetWidth);
-    };
-    const resizeObserver = new ResizeObserver(handleResize);
-    container && resizeObserver.observe(container);
-
-    // op
-    const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
-      window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, zoomGear);
-      setZoomGear(zoomGear);
-    });
-
-    return () => {
-      container && resizeObserver.unobserve(container);
-      modifyGalleryZoomGearSubscribe();
-      switchGalleryModeSubscribe();
-    };
-  }, [rowHeight]);
-
-  useEffect(() => {
-    if (!imageSize || imageSize < 0) return;
-    if (imageSize === lastState.current.imageSize) return;
-    const perImageOffset = imageSize - lastState.current.imageSize;
-    const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
-    const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
-      if (currentIndex < groupIndex) {
-        return previousValue + current.children.length;
-      }
-      return previousValue;
-    }, 0) + rowIndex;
-    const topOffset = rowOffset * perImageOffset;
-    containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
-    lastState.current = { ...lastState.current, imageSize };
-
-    const { scrollTargetId } = lastState.current;
-    if (scrollTargetId) {
-      if (mode === GALLERY_DATE_MODE.ALL) {
-        const targetImage = imageItems.find(img => img.id === scrollTargetId);
-        if (targetImage) {
-          containerRef.current.scrollTop = targetImage.rowIndex * rowHeight;
-        }
-      } else {
-        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === scrollTargetId)));
-        if (targetGroup) {
-          containerRef.current.scrollTop = targetGroup.top;
-        }
-      }
-      lastState.current = { ...lastState.current, scrollTargetId: null };
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageSize, groups, mode]);
+  }, [isFirstLoading, images, repoID, columns, mode, containerWidth]);
+  const containerHeight = useMemo(() => {
+    return groups.reduce((cur, g) => cur + g.height, 0);
+  }, [groups]);
 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
@@ -262,10 +157,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     }
   }, [rowHeight, onLoadMore, groups]);
 
-  const imageItems = useMemo(() => {
-    return groups.flatMap(group => group.children.flatMap(row => row.children));
-  }, [groups]);
-
   const updateSelectedImage = useCallback((image = null) => {
     const imageInfo = image ? getRowById(metadata, image.id) : null;
     if (!imageInfo) {
@@ -287,57 +178,61 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         prev.includes(image) ? prev.filter(img => img !== image) : [...prev, image]
       );
       updateSelectedImage(image);
-    } else if (event.shiftKey && selectedImages.length > 0) {
+      return;
+    }
+    if (event.shiftKey && selectedImages.length > 0) {
       const lastSelected = selectedImages[selectedImages.length - 1];
-      const start = imageItems.indexOf(lastSelected);
-      const end = imageItems.indexOf(image);
-      const range = imageItems.slice(Math.min(start, end), Math.max(start, end) + 1);
+      const start = images.findIndex(image => image.id === lastSelected.id);
+      const end = images.findIndex(image => image.id === lastSelected.id);
+      const range = images.slice(Math.min(start, end), Math.max(start, end) + 1);
       setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
       updateSelectedImage(null);
-    } else {
-      setSelectedImages([image]);
-      updateSelectedImage(image);
+      return;
     }
-  }, [imageItems, selectedImages, updateSelectedImage]);
+    setSelectedImages([image]);
+    updateSelectedImage(image);
+  }, [images, selectedImages, updateSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
     if (mode === GALLERY_DATE_MODE.YEAR) {
+      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.MONTH);
     } else if (mode === GALLERY_DATE_MODE.MONTH) {
+      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
     } else if (mode === GALLERY_DATE_MODE.DAY) {
+      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.ALL);
     } else {
-      const index = imageItems.findIndex(item => item.id === image.id);
+      const index = images.findIndex(item => item.id === image.id);
       setImageIndex(index);
       setIsImagePopupOpen(true);
     }
 
-    const scrollTargetId = image.id;
-    lastState.current = { ...lastState.current, scrollTargetId };
+    lastState.current = { ...lastState.current, clickTargetId: image.id };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageItems]);
+  }, [images]);
 
   const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();
-    const index = imageItems.findIndex(item => item.id === image.id);
+    const index = images.findIndex(item => item.id === image.id);
     if (isNaN(index) || index === -1) return;
 
     setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
-  }, [imageItems]);
+  }, [images]);
 
   const moveToPrevImage = useCallback(() => {
-    const imageItemsLength = imageItems.length;
+    const imageItemsLength = images.length;
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
-    setSelectedImages([imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength]]);
-  }, [imageItems, imageIndex]);
+    setSelectedImages([images[(imageIndex + imageItemsLength - 1) % imageItemsLength]]);
+  }, [images, imageIndex]);
 
   const moveToNextImage = useCallback(() => {
-    const imageItemsLength = imageItems.length;
+    const imageItemsLength = images.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
-    setSelectedImages([imageItems[(imageIndex + 1) % imageItemsLength]]);
-  }, [imageItems, imageIndex]);
+    setSelectedImages([images[(imageIndex + 1) % imageItemsLength]]);
+  }, [images, imageIndex]);
 
   const handleImageSelection = useCallback((selectedImages) => {
     setSelectedImages(selectedImages);
@@ -377,10 +272,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const deleteImage = useCallback(() => {
     const image = selectedImages[0];
-    const index = imageItems.findIndex(item => item.id === image.id);
+    const index = images.findIndex(item => item.id === image.id);
     onDelete(selectedImages);
 
-    const newImageItems = imageItems.filter(item => item.id !== image.id);
+    const newImageItems = images.filter(item => item.id !== image.id);
     let newSelectedImage;
 
     if (newImageItems.length === 0) {
@@ -395,9 +290,103 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
     setSelectedImages(newSelectedImage ? [newSelectedImage] : []);
     updateSelectedImage(newSelectedImage);
-  }, [selectedImages, imageItems, onDelete, updateSelectedImage]);
+  }, [selectedImages, images, onDelete, updateSelectedImage]);
 
-  const selectedImageIds = useMemo(() => selectedImages.map(img => img?.id || []), [selectedImages]);
+  useEffect(() => {
+    updateCurrentDirent();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const gear = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0) || 0;
+    setZoomGear(gear);
+
+    const mode = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    setMode(mode);
+    lastState.current = { ...lastState.current, mode };
+
+    const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
+      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
+      (mode) => {
+        setMode(mode);
+        lastState.current = { ...lastState.current, mode };
+        window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, mode);
+      }
+    );
+
+    const container = containerRef.current;
+    if (container) {
+      const { offsetWidth, clientHeight } = container;
+      setContainerWidth(offsetWidth);
+
+      // Calculate initial overScan information
+      setOverScan({ top: 0, bottom: clientHeight + rowHeight * OVER_SCAN_ROWS });
+    }
+    setFirstLoading(false);
+
+    // resize
+    const handleResize = () => {
+      if (!container) return;
+      setContainerWidth(container.offsetWidth);
+    };
+    const resizeObserver = new ResizeObserver(handleResize);
+    container && resizeObserver.observe(container);
+
+    // op
+    const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
+      window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, zoomGear);
+      setZoomGear(zoomGear);
+    });
+
+    return () => {
+      container && resizeObserver.unobserve(container);
+      modifyGalleryZoomGearSubscribe();
+      switchGalleryModeSubscribe();
+    };
+  }, [rowHeight]);
+
+  useEffect(() => {
+    if (!imageSize || imageSize?.large < 0) return;
+    if (lastState.current?.mode === mode && mode === GALLERY_DATE_MODE.ALL && !ObjectUtils.isSameObject(imageSize, lastState.current.imageSize)) {
+      const perImageOffset = imageSize.large - (lastState.current.imageSize?.large || 0);
+      const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
+      const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
+        if (currentIndex < groupIndex) {
+          return previousValue + current.children.length;
+        }
+        return previousValue;
+      }, 0) + rowIndex;
+      const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
+      containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
+      lastState.current = { ...lastState.current, imageSize, mode };
+    }
+  }, [mode, imageSize, groups]);
+
+  useEffect(() => {
+    if (containerHeight < window.innerHeight) {
+      onLoadMore && onLoadMore();
+    }
+  }, [containerHeight, onLoadMore]);
+
+  useEffect(() => {
+    if (!imageSize || imageSize?.large < 0) return;
+    const { clickTargetId } = lastState.current;
+    if (clickTargetId) {
+      if (mode === GALLERY_DATE_MODE.ALL) {
+        const targetImage = images.find(img => img.id === clickTargetId);
+        if (targetImage) {
+          containerRef.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
+        }
+      } else {
+        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === clickTargetId)));
+        if (targetGroup) {
+          containerRef.current.scrollTop = targetGroup.top;
+        }
+      }
+      lastState.current = { ...lastState.current, scrollTargetId: null, mode };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageSize, groups, mode]);
 
   return (
     <>
@@ -415,7 +404,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
               columns={columns}
               overScan={overScan}
               mode={mode}
-              selectedImageIds={selectedImageIds}
+              rowHeight={rowHeight}
+              selectedImages={selectedImages}
               onImageSelect={handleImageSelection}
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
@@ -440,7 +430,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       {isImagePopupOpen && (
         <ModalPortal>
           <ImageDialog
-            imageItems={imageItems}
+            imageItems={images}
             imageIndex={imageIndex}
             closeImagePopup={closeImagePopup}
             moveToPrevImage={moveToPrevImage}

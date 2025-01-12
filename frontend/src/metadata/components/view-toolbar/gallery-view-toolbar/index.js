@@ -38,8 +38,8 @@ const GalleryViewToolbar = ({
   }, [currentMode]);
 
   useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.YEAR);
-    setCurrentMode(savedValue || GALLERY_DATE_MODE.YEAR);
+    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.DAY);
+    setCurrentMode(savedValue || GALLERY_DATE_MODE.DAY);
   }, [view?._id]);
 
   return (

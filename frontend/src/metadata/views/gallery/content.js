@@ -1,30 +1,32 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
-import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP } from '../../constants';
+import { GALLERY_DATE_MODE } from '../../constants';
 import Image from './image';
-import ImageGrid from './imageGrid';
+import DayImages from './day-images';
 
 const Content = ({
   groups,
   overScan,
   columns,
   size,
+  rowHeight,
   mode,
-  selectedImageIds,
+  selectedImages,
   onImageSelect,
   onImageClick,
   onImageDoubleClick,
   onContextMenu
 }) => {
   const animationFrameRef = useRef(null);
+  const containerRef = useRef(null);
 
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState(null);
 
-  const middleGridSize = (size - GALLERY_DEFAULT_GRID_GAP * 2) * 2 / 3 + GALLERY_DEFAULT_GRID_GAP;
-  const smallGridSize = (size - GALLERY_DEFAULT_GRID_GAP * 2) / 3;
+  const selectedImageIds = useMemo(() => selectedImages.map(img => img.id), [selectedImages]);
 
   const handleMouseDown = useCallback((e) => {
     if (e.button !== 0) return;
@@ -49,7 +51,7 @@ const Content = ({
       const selected = [];
 
       groups.forEach(group => {
-        group.children.forEach((row) => {
+        group.displayChildren.forEach((row) => {
           row.children.forEach((img) => {
             const imgElement = document.getElementById(img.id);
             if (imgElement) {
@@ -79,80 +81,9 @@ const Content = ({
     setIsSelecting(false);
   }, []);
 
-  const renderSingleImage = useCallback((image, size, style = {}) => {
-    const isSelected = selectedImageIds.includes(image.id);
-    return (
-      <Image
-        key={image.id}
-        img={image}
-        size={size}
-        isSelected={isSelected}
-        style={style}
-        onClick={(e) => onImageClick(e, image)}
-        onDoubleClick={(e) => onImageDoubleClick(e, image)}
-        onContextMenu={(e) => onContextMenu(e, image)}
-      />
-    );
-  }, [selectedImageIds, onImageClick, onImageDoubleClick, onContextMenu]);
-
-  const renderImageGrid = useCallback((images) => (
-    <ImageGrid
-      images={images}
-      size={size}
-      smallGridSize={smallGridSize}
-      middleGridSize={middleGridSize}
-      renderSingleImage={renderSingleImage}
-    />
-  ), [renderSingleImage, size, smallGridSize, middleGridSize]);
-
-  const renderByDay = useCallback((images) => {
-    const imagesCount = images.length;
-    if (imagesCount === 1) {
-      return renderSingleImage(images[0], size, { width: (size * 2 + GALLERY_DEFAULT_GRID_GAP), height: size });
-    }
-    if (imagesCount < 7) {
-      return images.slice(0, 2).map((image) => renderSingleImage(image, size));
-    }
-    if (imagesCount < 12) {
-      return (
-        <>
-          {renderSingleImage(images[0], size)}
-          {renderImageGrid(images.slice(1, 7))}
-        </>
-      );
-    }
-    return (
-      <>
-        {renderImageGrid(images.slice(0, 6))}
-        {renderImageGrid(images.slice(6, 12))}
-      </>
-    );
-  }, [renderSingleImage, renderImageGrid, size]);
-
-  const renderImageList = useCallback((group, childrenStartIndex, childrenEndIndex, style = {}) => (
-    <div
-      key={group.name}
-      className={`metadata-gallery-${mode}-list`}
-      style={style}
-    >
-      {group.children.slice(childrenStartIndex, childrenEndIndex + 1).map((row, rowIndex) => {
-        if (mode === GALLERY_DATE_MODE.DAY) {
-          return (
-            <div key={group.name + rowIndex} className="metadata-gallery-day-group">
-              {renderByDay(row.children)}
-            </div>
-          );
-        }
-        return row.children.map((img) => {
-          return renderSingleImage(img, size);
-        });
-      })}
-    </div>
-  ), [mode, size, renderSingleImage, renderByDay]);
-
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
-    const { name, children, height, top, paddingTop } = group;
+    const { name, displayChildren: children, height, top, paddingTop } = group;
 
     // group not in rendering area, return empty div
     if (top >= overScanBottom || top + height <= overScanTop) {
@@ -169,27 +100,39 @@ const Content = ({
     }
 
     childrenStartIndex = Math.max(childrenStartIndex, 0);
-    if (childrenEndIndex === -1) {
-      childrenEndIndex = children.length;
+    if (childrenEndIndex === -1) childrenEndIndex = children.length;
+    if (childrenEndIndex > 0) childrenEndIndex = childrenEndIndex - 1;
+    if (mode === GALLERY_DATE_MODE.DAY) {
+      childrenStartIndex = 0;
+      childrenEndIndex = children.length - 1;
     }
-    if (childrenEndIndex > 0) {
-      childrenEndIndex = childrenEndIndex - 1;
-    }
-
-    const renderByMode = () => {
-      switch (mode) {
-        case GALLERY_DATE_MODE.YEAR:
-        case GALLERY_DATE_MODE.MONTH:
-        case GALLERY_DATE_MODE.DAY:
-          return renderImageList(group, 0, 0);
-        default:
-          const style = {
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            paddingTop: childrenStartIndex * size,
-            paddingBottom: (group.children.length - 1 - childrenEndIndex) * size,
-          };
-          return renderImageList(group, childrenStartIndex, childrenEndIndex, style);
+    let listStyle = {
+      display: 'grid',
+      gridTemplateColumns: `repeat(${columns}, 1fr)`,
+      paddingTop: childrenStartIndex * rowHeight,
+      paddingBottom: (children.length - 1 - childrenEndIndex) * rowHeight,
+    };
+    let newChildren = children;
+    if ([GALLERY_DATE_MODE.YEAR, GALLERY_DATE_MODE.MONTH].includes(mode)) {
+      newChildren = children.flatMap(row => row.children);
+      if (newChildren.length === 1) {
+        listStyle['gridTemplateColumns'] = '1fr';
       }
+    } else if (mode === GALLERY_DATE_MODE.DAY) {
+      newChildren = children.flatMap(row => row.children);
+      if (newChildren.length === 1) {
+        listStyle['gridTemplateColumns'] = '1fr';
+      } else if (newChildren.length < 7) {
+        listStyle['gridTemplateColumns'] = '1fr 1fr';
+      } else {
+        delete listStyle['gridTemplateColumns'];
+        listStyle['display'] = 'flex';
+      }
+    }
+    const imgEvents = {
+      'onClick': onImageClick,
+      'onDoubleClick': onImageDoubleClick,
+      'onContextMenu': onContextMenu,
     };
 
     return (
@@ -201,17 +144,41 @@ const Content = ({
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
           <div className="metadata-gallery-date-tag" style={{ height: paddingTop }}>{name || gettext('Empty')}</div>
         )}
-        {renderByMode()}
+        <div
+          className={classNames('metadata-gallery-image-list', `metadata-gallery-${mode}-image-list`)}
+          style={listStyle}
+        >
+          {mode !== GALLERY_DATE_MODE.DAY ? (
+            <>
+              {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
+                return row.children.map((img) => {
+                  const isSelected = selectedImageIds.includes(img.id);
+                  return (
+                    <Image
+                      key={img.id}
+                      isSelected={isSelected}
+                      img={img}
+                      size={size.large}
+                      style={mode !== GALLERY_DATE_MODE.ALL && newChildren.length === 1 ? { width: '100%' } : {}}
+                      { ...imgEvents }
+                    />
+                  );
+                });
+              })}
+            </>
+          ) : (
+            <DayImages size={size} images={newChildren} imgEvents={imgEvents} />
+          )}
+        </div>
       </div>
     );
-  }, [overScan, columns, size, mode, renderImageList]);
+  }, [overScan, mode, columns, rowHeight, onImageClick, onImageDoubleClick, onContextMenu, size, selectedImageIds]);
 
-  if (!Array.isArray(groups) || groups.length === 0) {
-    return <EmptyTip text={gettext('No record')}/>;
-  }
+  if (!Array.isArray(groups) || groups.length === 0) return (<EmptyTip text={gettext('No record')}/>);
 
   return (
     <div
+      ref={containerRef}
       className="metadata-gallery-main"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -227,6 +194,10 @@ const Content = ({
 Content.propTypes = {
   groups: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
+    top: PropTypes.number.isRequired,
+    paddingTop: PropTypes.number.isRequired,
+    displayChildren: PropTypes.array,
     children: PropTypes.arrayOf(PropTypes.shape({
       top: PropTypes.number.isRequired,
       children: PropTypes.arrayOf(PropTypes.shape({
@@ -234,18 +205,15 @@ Content.propTypes = {
         name: PropTypes.string.isRequired,
       })).isRequired,
     })).isRequired,
-    height: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired,
-    paddingTop: PropTypes.number.isRequired,
   })),
   overScan: PropTypes.shape({
     top: PropTypes.number.isRequired,
     bottom: PropTypes.number.isRequired,
   }).isRequired,
   columns: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
+  size: PropTypes.object,
   mode: PropTypes.string,
-  selectedImageIds: PropTypes.array.isRequired,
+  selectedImages: PropTypes.array.isRequired,
   onImageSelect: PropTypes.func.isRequired,
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,

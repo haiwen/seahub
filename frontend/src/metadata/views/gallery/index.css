@@ -1,6 +1,7 @@
 .sf-metadata-gallery-container {
   height: 100%;
-  padding: 0 16px 54px;
+  padding-top: 0;
+  padding-bottom: 16px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -9,10 +10,13 @@
   align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
+  padding-left: calc(100% / 9);
+  padding-right: calc(100% / 9);
 }
 
 .sf-metadata-gallery-container-all {
-  padding-top: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .metadata-gallery-date-group {
@@ -36,25 +40,16 @@
 
 .metadata-gallery-main {
   flex: 1;
+  width: 100%;
 }
 
-.metadata-gallery-year-list,
-.metadata-gallery-month-list {
-  display: flex;
+.metadata-gallery-year-image-list,
+.metadata-gallery-month-image-list {
   gap: 18px;
 }
 
-.metadata-gallery-day-group {
-  display: flex;
+.metadata-gallery-all-image-list {
   gap: 2px;
-}
-
-.metadata-gallery-all-list {
-  display: grid;
-  gap: 2px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .metadata-gallery-image-item {
@@ -64,8 +59,8 @@
   overflow: hidden;
 }
 
-.metadata-gallery-year-list .metadata-gallery-image-item,
-.metadata-gallery-month-list .metadata-gallery-image-item {
+.metadata-gallery-year-image-list .metadata-gallery-image-item,
+.metadata-gallery-month-image-list .metadata-gallery-image-item {
   border-radius: 6px;
   box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
 }
