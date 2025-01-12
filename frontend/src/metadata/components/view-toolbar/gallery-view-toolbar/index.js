@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, SortSetter } from '../../data-process-setter';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, PRIVATE_COLUMN_KEY, STORAGE_GALLERY_DATE_MODE_KEY } from '../../../constants';
+import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../../data-process-setter';
+import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 
 const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,
   modifyFilters, modifySorts, onToggleDetail,
 }) => {
-  const [currentMode, setCurrentMode] = useState(GALLERY_DATE_MODE.YEAR);
-
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
     if (!view) return [];
@@ -20,33 +18,10 @@ const GalleryViewToolbar = ({
     return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);
   }, [viewColumns]);
 
-  const handleGroupByChange = useCallback((newMode) => {
-    if (newMode === currentMode) return;
-    window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, newMode);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, newMode);
-  }, [currentMode]);
-
-  useEffect(() => {
-    const unsubscribeGalleryGroupBy = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, (newMode) => {
-      if (newMode === currentMode) return;
-      setCurrentMode(newMode);
-    });
-
-    return () => {
-      unsubscribeGalleryGroupBy();
-    };
-  }, [currentMode]);
-
-  useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_DATE_MODE_KEY, GALLERY_DATE_MODE.DAY);
-    setCurrentMode(savedValue || GALLERY_DATE_MODE.DAY);
-  }, [view?._id]);
-
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <GalleryGroupBySetter mode={currentMode} onChange={handleGroupByChange} />
-        {currentMode === GALLERY_DATE_MODE.ALL && <GallerySliderSetter view={view} />}
+        <GalleryGroupBySetter viewID={view._id} />
         <FilterSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"

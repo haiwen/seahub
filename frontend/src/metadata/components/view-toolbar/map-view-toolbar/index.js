@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../constants';
-import { FilterSetter, GalleryGroupBySetter, GallerySliderSetter, MapTypeSetter, SortSetter } from '../../data-process-setter';
+import { FilterSetter, GalleryGroupBySetter, MapTypeSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
 
 const MapViewToolBar = ({
@@ -52,8 +52,7 @@ const MapViewToolBar = ({
     return (
       <>
         <div className="sf-metadata-tool-left-operations">
-          <GalleryGroupBySetter view={{ _id: viewID }} />
-          <GallerySliderSetter view={{ _id: viewID }} />
+          <GalleryGroupBySetter viewID={viewID} />
           <SortSetter
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
             target="sf-metadata-sort-popover"

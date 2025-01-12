@@ -6,7 +6,7 @@ import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_G
 
 import './index.css';
 
-const GallerySliderSetter = ({ view }) => {
+const GallerySliderSetter = ({ viewID }) => {
   const [sliderValue, setSliderValue] = useState(() => {
     const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0);
     return savedValue || 0;
@@ -15,7 +15,7 @@ const GallerySliderSetter = ({ view }) => {
   useEffect(() => {
     const savedValue = window.sfMetadataContext.localStorage.getItem(STORAGE_GALLERY_ZOOM_GEAR_KEY, 0);
     setSliderValue(savedValue || 0);
-  }, [view?._id]);
+  }, [viewID]);
 
   const handleGalleryColumnsChange = useCallback((e) => {
     const adjust = parseInt(e.target.value, 10);
@@ -61,7 +61,7 @@ const GallerySliderSetter = ({ view }) => {
 };
 
 GallerySliderSetter.propTypes = {
-  view: PropTypes.object,
+  viewID: PropTypes.string,
 };
 
 export default GallerySliderSetter;
