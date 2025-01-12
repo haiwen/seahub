@@ -31,9 +31,9 @@ export const getImageSize = (containerWidth, columns, mode) => {
     }
     case GALLERY_DATE_MODE.DAY: {
       const imagesWidth = contentWidth - GALLERY_DEFAULT_GRID_GAP * gapCount;
-      const large = imagesWidth / 2 + GALLERY_DEFAULT_GRID_GAP * 2;
-      const middle = imagesWidth / 3 + GALLERY_DEFAULT_GRID_GAP;
       const small = imagesWidth / 6;
+      const large = small * 3 + GALLERY_DEFAULT_GRID_GAP * 2;
+      const middle = small * 2 + GALLERY_DEFAULT_GRID_GAP;
       return { large, middle, small };
     }
     default: {
