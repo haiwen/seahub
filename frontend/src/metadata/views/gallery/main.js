@@ -208,8 +208,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     }
 
     lastState.current = { ...lastState.current, clickTargetId: image.id };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
+  }, [mode, images]);
 
   const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();

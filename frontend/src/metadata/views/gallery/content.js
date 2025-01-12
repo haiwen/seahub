@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
-import { GALLERY_DATE_MODE } from '../../constants';
+import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP } from '../../constants';
 import Image from './image';
 import DayImages from './day-images';
 
@@ -111,10 +111,12 @@ const Content = ({
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
       paddingTop: childrenStartIndex * rowHeight,
       paddingBottom: (children.length - 1 - childrenEndIndex) * rowHeight,
+      gap: GALLERY_DEFAULT_GRID_GAP
     };
     let newChildren = children;
     if ([GALLERY_DATE_MODE.YEAR, GALLERY_DATE_MODE.MONTH].includes(mode)) {
       newChildren = children.flatMap(row => row.children);
+      listStyle['gap'] = GALLERY_YEAR_MODE_GRID_GAP;
       if (newChildren.length === 1) {
         listStyle['gridTemplateColumns'] = '1fr';
       }

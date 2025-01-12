@@ -43,15 +43,6 @@
   width: 100%;
 }
 
-.metadata-gallery-year-image-list,
-.metadata-gallery-month-image-list {
-  gap: 18px;
-}
-
-.metadata-gallery-all-image-list {
-  gap: 2px;
-}
-
 .metadata-gallery-image-item {
   display: flex;
   justify-content: center;
