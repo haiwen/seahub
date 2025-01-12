@@ -196,13 +196,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
     if (mode === GALLERY_DATE_MODE.YEAR) {
-      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.MONTH);
     } else if (mode === GALLERY_DATE_MODE.MONTH) {
-      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
     } else if (mode === GALLERY_DATE_MODE.DAY) {
-      setSelectedImages([]);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.ALL);
     } else {
       const index = images.findIndex(item => item.id === image.id);
@@ -308,6 +305,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
       EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
       (mode) => {
+        setSelectedImages([]);
         setMode(mode);
         lastState.current = { ...lastState.current, mode };
         window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, mode);
