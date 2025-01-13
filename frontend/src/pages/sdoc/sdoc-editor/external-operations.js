@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactDom from 'react-dom';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
@@ -7,6 +8,7 @@ import toaster from '../../../components/toast';
 import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
+import TldrawEditor from '../../tldraw-editor';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -48,6 +50,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_WHITEBOARD_FILE, this.onCreateWhiteboardFile);
+    this.unsubscribeWhiteboardEditor = eventBus.subscribe(EXTERNAL_EVENT.TLDRAW_EDITOR, this.renderWhiteboard);
   }
 
   componentWillUnmount() {
@@ -61,7 +64,15 @@ class ExternalOperations extends React.Component {
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
     this.unsubscribeCreateSdocFile();
+    this.unsubscribeWhiteboardEditor();
   }
+
+  renderWhiteboard = ({ containerId, props }) => {
+    const container = containerId && document.getElementById(containerId);
+    if (container) {
+      ReactDom.render(<TldrawEditor {...props} />, container);
+    }
+  };
 
   onInternalLinkToggle = (options) => {
     if (options && options.internalLink) {
@@ -170,8 +181,12 @@ class ExternalOperations extends React.Component {
     let repoID = this.props.repoID;
     const { insertWhiteboard, insertSdocFileLink, editor } = this.state;
     seafileAPI.createFile(repoID, filePath).then((res) => {
-      if ((insertWhiteboard || insertSdocFileLink) && editor) {
+      if (insertSdocFileLink && editor) {
         insertSdocFileLink(editor, res.data.obj_name, res.data.doc_uuid);
+      }
+      if (insertWhiteboard && editor) {
+        const whiteboardFilePath = '/' + res.data.obj_name
+        insertWhiteboard(editor, res.data.obj_name, whiteboardFilePath);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

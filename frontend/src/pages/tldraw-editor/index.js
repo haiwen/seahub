@@ -1,24 +1,24 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { SimpleEditor } from '@seafile/stldraw-editor';
-import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
 import isHotkey from 'is-hotkey';
 import editorApi from './editor-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
 
-const TldrawEditor = () => {
+const TldrawEditor = (props) => {
+  const { repoID, filePath, readOnly } = props;
   const editorRef = useRef(null);
   const isChangedRef = useRef(false);
   const [fileContent, setFileContent] = useState({});
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
-    editorApi.getFileContent().then(res => {
+    editorApi.getFileContent(repoID, filePath).then(res => {
       setFileContent(res.data);
       setIsFetching(false);
     });
-  }, []);
+  }, [repoID, filePath]);
 
   const saveDocument = useCallback(async () => {
     if (isChangedRef.current) {
@@ -33,6 +33,7 @@ const TldrawEditor = () => {
   }, []);
 
   useEffect(() => {
+    if (readOnly) return;
     const handleHotkeySave = (event) => {
       if (isHotkey('mod+s')(event)) {
         event.preventDefault();
@@ -43,9 +44,10 @@ const TldrawEditor = () => {
     return () => {
       document.removeEventListener('keydown', handleHotkeySave);
     };
-  }, [saveDocument]);
+  }, [saveDocument, readOnly]);
 
   useEffect(() => {
+    if (readOnly) return;
     const saveInterval = setInterval(() => {
       if (isChangedRef.current) {
         editorApi.saveContent(JSON.stringify(editorRef.current)).then(res => {
@@ -66,7 +68,7 @@ const TldrawEditor = () => {
       clearInterval(saveInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [saveDocument]);
+  }, [saveDocument, readOnly]);
 
   const onContentChanged = useCallback((docContent) => {
     editorRef.current = docContent;
@@ -80,14 +82,12 @@ const TldrawEditor = () => {
   return (
     <SimpleEditor
       isFetching={isFetching}
+      readOnly={readOnly}
       document={fileContent}
       onContentChanged={onContentChanged}
       onSave={onSave}
     />
   );
 };
-
-const eventBus = EventBus.getInstance();
-eventBus.dispatch(EXTERNAL_EVENT.REFRESH_DOCUMENT, TldrawEditor);
 
 export default TldrawEditor;
