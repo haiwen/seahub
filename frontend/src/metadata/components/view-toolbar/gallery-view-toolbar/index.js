@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, SortSetter } from '../../data-process-setter';
+import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../../data-process-setter';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 
@@ -21,8 +21,7 @@ const GalleryViewToolbar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <GalleryGroupBySetter view={view} />
-        <GallerySliderSetter view={view} />
+        <GalleryGroupBySetter viewID={view._id} />
         <FilterSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"

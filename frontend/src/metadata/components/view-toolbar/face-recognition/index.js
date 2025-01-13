@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, GallerySliderSetter, SortSetter } from '../../data-process-setter';
+import { GalleryGroupBySetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../../../constants';
 
@@ -40,8 +40,7 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
       <div className="sf-metadata-tool-left-operations">
         {isShow && (
           <>
-            <GalleryGroupBySetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
-            <GallerySliderSetter view={{ _id: FACE_RECOGNITION_VIEW_ID }} />
+            <GalleryGroupBySetter viewID={FACE_RECOGNITION_VIEW_ID} />
             <SortSetter
               isNeedSubmit={true}
               wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"

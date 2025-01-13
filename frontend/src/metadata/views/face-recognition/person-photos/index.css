@@ -12,7 +12,3 @@
   background-color: #EFEFEF;
   cursor: pointer;
 }
-
-.sf-metadata-people-photos-container .sf-metadata-gallery-container {
-  height: calc(100% - 48px);
-}

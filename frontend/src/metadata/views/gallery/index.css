@@ -1,6 +1,7 @@
 .sf-metadata-gallery-container {
   height: 100%;
-  padding: 0 16px;
+  padding-top: 0;
+  padding-bottom: 16px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -8,10 +9,14 @@
   justify-content: left;
   align-items: center;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: calc(100% / 9);
+  padding-right: calc(100% / 9);
 }
 
 .sf-metadata-gallery-container-all {
-  padding-top: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .metadata-gallery-date-group {
@@ -20,7 +25,6 @@
 }
 
 .metadata-gallery-date-tag {
-  height: 2.75rem;
   position: absolute;
   top: 0;
   left: 0;
@@ -31,18 +35,12 @@
   font-weight: 500;
   z-index: 1;
   user-select: none;
+  padding-top: 8px;
 }
 
 .metadata-gallery-main {
   flex: 1;
-}
-
-.metadata-gallery-image-list {
-  display: grid;
-  gap: 2px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  width: 100%;
 }
 
 .metadata-gallery-image-item {
@@ -50,6 +48,12 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.metadata-gallery-year-image-list .metadata-gallery-image-item,
+.metadata-gallery-month-image-list .metadata-gallery-image-item {
+  border-radius: 6px;
+  box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
 .metadata-gallery-image-item-selected {
