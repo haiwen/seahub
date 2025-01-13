@@ -31,12 +31,14 @@ class DeleteRepoDialog extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.getRepoFolderShareInfo(this.props.repo.id).then((res) => {
-      this.setState({
-        sharedToUserCount: res.data['shared_user_emails'].length,
-        sharedToGroupCount: res.data['shared_group_ids'].length,
+    if (this.props.isGetShare) {
+      seafileAPI.getRepoFolderShareInfo(this.props.repo.repo_id).then((res) => {
+        this.setState({
+          sharedToUserCount: res.data['shared_user_emails'].length,
+          sharedToGroupCount: res.data['shared_group_ids'].length,
+        });
       });
-    });
+    }
   }
 
   onDeleteRepo = () => {

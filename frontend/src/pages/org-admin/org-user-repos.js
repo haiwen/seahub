@@ -176,6 +176,7 @@ class Item extends Component {
             isRepoDeleted={this.state.isRepoDeleted}
             onDeleteRepo={this.deleteRepo}
             toggle={this.toggleDeleteRepoDialog}
+            isGetShare={false}
           />
         )}
       </Fragment>

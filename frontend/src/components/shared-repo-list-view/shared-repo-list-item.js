@@ -771,6 +771,7 @@ class SharedRepoListItem extends React.Component {
               isRepoDeleted={this.state.isRepoDeleted}
               onDeleteRepo={this.onItemDelete}
               toggle={this.onItemDeleteToggle}
+              isGetShare={true}
             />
           </ModalPortal>
         }

@@ -371,6 +371,7 @@ class Item extends Component {
               isRepoDeleted={this.state.isRepoDeleted}
               onDeleteRepo={this.onDeleteRepo}
               toggle={this.toggleDeleteDialog}
+              isGetShare={false}
             />
           </ModalPortal>
         }
