@@ -72,15 +72,15 @@ class DepartmentDetailDialog extends React.Component {
         this.onError(error);
       });
     }
-  }
+  };
 
   onError = (error) => {
     let errMsg = Utils.getErrorMsg(error, true);
     if (!error.response || error.response.status !== 403) {
       toaster.danger(errMsg);
     }
-  }
-  
+  };
+
   initDepartments(departments) {
     const parentIdMap = {};
     for (let i = 0; i < departments.length; i++) {
@@ -127,11 +127,11 @@ class DepartmentDetailDialog extends React.Component {
     }).catch(error => {
       this.onError(error);
     });
-  }
+  };
 
   resetCurrentPage = () => {
     this.setState({ currentMemberPage: 1, hasMore: true });
-  }
+  };
 
   getOrgMembers = async () => {
     const orgID = window.app.pageOptions.orgID;
@@ -154,28 +154,28 @@ class DepartmentDetailDialog extends React.Component {
         toaster.danger(errMsg);
       }
     });
-  }
+  };
 
-   getMoreOrgMembers = async () => {
-     const orgID = window.app.pageOptions.orgID;
-     let currentMemberPage = this.state.currentMemberPage;
-     seafileAPI.getOrganizationMembers(orgID, currentMemberPage).then((res) => {
-       let members = res.data.members;
-       this.setState({
-         departmentMembers: [...this.state.departmentMembers, ...members],
-         currentMemberPage: currentMemberPage + 1,
-         hasMore: members.length >= 20
-       });
-     }).catch(error => {
-       this.setState({
-         errorMsg: Utils.getErrorMsg(error),
-       });
-     });
-   }
+  getMoreOrgMembers = async () => {
+    const orgID = window.app.pageOptions.orgID;
+    let currentMemberPage = this.state.currentMemberPage;
+    seafileAPI.getOrganizationMembers(orgID, currentMemberPage).then((res) => {
+      let members = res.data.members;
+      this.setState({
+        departmentMembers: [...this.state.departmentMembers, ...members],
+        currentMemberPage: currentMemberPage + 1,
+        hasMore: members.length >= 20
+      });
+    }).catch(error => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error),
+      });
+    });
+  };
 
   toggle = () => {
     this.props.toggleDepartmentDetailDialog();
-  }
+  };
 
   onMemberChecked = (member) => {
     if (this.state.departmentMembers.indexOf(member) !== -1) {
@@ -198,21 +198,21 @@ class DepartmentDetailDialog extends React.Component {
     }).catch(error => {
       this.onError(error);
     });
-  }
+  };
 
   addUserShares = () => {
     this.props.addUserShares(this.state.newMembersTempObj);
-  }
+  };
 
   removeSelectedMember = (email) => {
     let newMembersTempObj = this.state.newMembersTempObj;
     delete newMembersTempObj[email];
     this.setState({ newMembersTempObj: newMembersTempObj });
-  }
+  };
 
   setCurrent = (department) => {
     this.setState({ currentDepartment: department });
-  }
+  };
 
   selectAll = (members) => {
     let { newMembersTempObj, selectedMemberMap } = this.state;
@@ -223,12 +223,12 @@ class DepartmentDetailDialog extends React.Component {
       newMembersTempObj[member.email] = member;
     }
     this.setState({ newMembersTempObj: newMembersTempObj });
-  }
+  };
 
   renderHeader = () => {
     const title = this.props.usedFor === 'add_group_member' ? gettext('Select group members') : gettext('Select shared users');
     return <ModalHeader toggle={this.toggle}>{title}</ModalHeader>;
-  }
+  };
 
   render() {
     let { departmentsLoading, departments } = this.state;
@@ -255,7 +255,7 @@ class DepartmentDetailDialog extends React.Component {
     );
 
     const details = (
-      <Modal isOpen={true} toggle={this.toggle} className="department-dialog" style={{maxWidth: '900px'}}>
+      <Modal isOpen={true} toggle={this.toggle} className="department-dialog" style={{ maxWidth: '900px' }}>
         {this.renderHeader()}
         <ModalBody className="department-dialog-content">
           <DepartmentGroup

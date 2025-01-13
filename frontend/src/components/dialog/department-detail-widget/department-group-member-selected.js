@@ -18,15 +18,15 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({ highlight: true });
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({ highlight: false });
-  }
+  };
 
   removeSelectedMember = (email) => {
     this.props.removeSelectedMember(email);
-  }
+  };
 
   render() {
     const { member } = this.props;
@@ -68,7 +68,7 @@ class DepartmentGroupMemberSelected extends Component {
     const { members, usedFor } = this.props;
     return (
       <div className="department-dialog-member-selected pt-4">
-        <div style={{height: 'calc(100% - 70px)'}}>
+        <div style={{ height: 'calc(100% - 70px)' }}>
           <div className='department-dialog-member-head px-4'>
             <div className='department-name'>{gettext('Selected')}</div>
           </div>

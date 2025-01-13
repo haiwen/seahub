@@ -204,11 +204,11 @@ class ShareToUser extends React.Component {
       if (res.data.length !== 0) {
         let tmpUserList = res.data.map(item => {
           return {
-            "email": item.user_info.name,
-            "name": item.user_info.nickname,
-            "avatar_url": item.user_info.avatar_url,
-            "contact_email": item.user_info.contact_email,
-            "permission": item.permission
+            'email': item.user_info.name,
+            'name': item.user_info.nickname,
+            'avatar_url': item.user_info.avatar_url,
+            'contact_email': item.user_info.contact_email,
+            'permission': item.permission
           };
         });
         this.setState({ sharedItems: res.data, tmpUserList: tmpUserList });
@@ -356,7 +356,7 @@ class ShareToUser extends React.Component {
 
   toggleDepartmentDetailDialog = () => {
     this.setState({ isShowDepartmentDetailDialog: !this.state.isShowDepartmentDetailDialog });
-  }
+  };
 
   addUserShares = (membersSelectedObj) => {
     let path = this.props.itemPath;
@@ -374,7 +374,7 @@ class ShareToUser extends React.Component {
         // todo modify api
         let items = res.data.success.map(item => {
           let sharedItem = {
-            'user_info': { 'nickname': item.user_name, 'name': item.user_email},
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email },
             'permission': item.permission,
             'share_type': 'user',
           };
@@ -426,7 +426,7 @@ class ShareToUser extends React.Component {
       });
     }
     this.toggleDepartmentDetailDialog();
-  }
+  };
 
   render() {
     let showDeptBtn = true;
@@ -457,7 +457,7 @@ class ShareToUser extends React.Component {
                   <UserSelect
                     ref="userSelect"
                     isMulti={true}
-                    className={classnames('reviewer-select', {'user-select-right-btn': showDeptBtn})}
+                    className={classnames('reviewer-select', { 'user-select-right-btn': showDeptBtn })}
                     placeholder={gettext('Search users...')}
                     onSelectChange={this.handleSelectChange}
                     excludeCurrentUser={false}

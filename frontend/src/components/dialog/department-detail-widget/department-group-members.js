@@ -25,20 +25,20 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({ highlight: true });
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({ highlight: false });
-  }
+  };
 
   onChange = (e) => {
     const { member } = this.props;
     this.props.onUserChecked(member);
-  }
+  };
 
   toggleTooltip = () => {
     this.setState({ tooltipOpen: !this.state.tooltipOpen });
-  }
+  };
 
   render() {
     const { member, memberSelected, isMemberSelected, index, tip } = this.props;
@@ -56,7 +56,7 @@ class Item extends Component {
           <td width="60%">{member.name}</td>
           <td width="16%" className={this.state.highlight ? 'visible' : 'invisible' }>
             <i className="dtable-font dtable-icon-use-help" id={`no-select-${index}`}></i>
-            <Tooltip placement='bottom' isOpen={this.state.tooltipOpen} toggle={this.toggleTooltip} target={`no-select-${index}`} delay={{show: 0, hide: 0 }} fade={false}>
+            <Tooltip placement='bottom' isOpen={this.state.tooltipOpen} toggle={this.toggleTooltip} target={`no-select-${index}`} delay={{ show: 0, hide: 0 }} fade={false}>
               {tip}
             </Tooltip>
           </td>
@@ -68,7 +68,7 @@ class Item extends Component {
         className={this.state.highlight ? 'tr-highlight group-item' : 'group-item'}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
-      > 
+      >
         <td width="13%">
           <input
             type="checkbox"
@@ -112,7 +112,7 @@ class DepartmentGroupMembers extends Component {
   selectAll = () => {
     const { members } = this.props;
     this.props.selectAll(members);
-  }
+  };
 
   handleScroll = (event) => {
     if (!this.state.isLoadingMore && this.props.hasMore) {
@@ -121,14 +121,14 @@ class DepartmentGroupMembers extends Component {
       const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) {
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.props.getMoreOrgMembers().then(() => {
-            this.setState({isLoadingMore: false});
+            this.setState({ isLoadingMore: false });
           });
         });
       }
     }
-  }
+  };
 
   render() {
     const { members, memberSelected, loading, selectedMemberMap, currentDepartment, usedFor } = this.props;

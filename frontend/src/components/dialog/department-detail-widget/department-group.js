@@ -20,17 +20,17 @@ class Item extends Component {
     const { department } = this.props;
     this.props.getMembers(department.id);
     this.props.setCurrent(department);
-  }
+  };
 
   toggleExpanded = (e) => {
     e.stopPropagation();
     this.props.toggleExpanded(this.props.department.id, !this.props.department.isExpanded);
-  }
+  };
 
   renderSubDepartments = () => {
     const { departments } = this.props;
     return (
-      <div style={{paddingLeft: '10px'}}>
+      <div style={{ paddingLeft: '10px' }}>
         {departments.map((department, index) => {
           if (department.parent_group_id !== this.props.department.id) return null;
           return (
@@ -48,7 +48,7 @@ class Item extends Component {
         })}
       </div>
     );
-  }
+  };
 
   render() {
     const { department, currentDepartment, allMembersClick } = this.props;
@@ -61,11 +61,11 @@ class Item extends Component {
             <span
               className={`dtable-font dtable-icon-${isExpanded ? 'drop-down' : 'right-slide'} pr-2`}
               onClick={this.toggleExpanded}
-              style={{color: isCurrent ? '#fff' : '#999', fontSize: '12px'}}
+              style={{ color: isCurrent ? '#fff' : '#999', fontSize: '12px' }}
             >
             </span>
           }
-          <span style={hasChild ? {} : {paddingLeft: '20px'}}>{department.name}</span>
+          <span style={hasChild ? {} : { paddingLeft: '20px' }}>{department.name}</span>
         </div>
         {(isExpanded && hasChild) && this.renderSubDepartments()}
       </>
@@ -100,19 +100,19 @@ class DepartmentGroup extends Component {
     let index = departments.findIndex(item => item.id === id);
     departments[index].isExpanded = state;
     this.setState({ departments });
-  }
+  };
 
   getMembers = (department_id) => {
     this.props.getMembers(department_id);
-    this.setState({allMembersClick: false});
-  }
-  
+    this.setState({ allMembersClick: false });
+  };
+
   getOrgMembers = () => {
     this.props.getOrgMembers();
     this.setState({
       allMembersClick: true
     });
-  }
+  };
 
   render() {
     const { loading } = this.props;
@@ -128,7 +128,7 @@ class DepartmentGroup extends Component {
             <div className={allMembersClick ? 'tr-highlight group-item' : 'group-item'} onClick={this.getOrgMembers}>
               <span
                 className={'dtable-font pr-2'}
-                style={{color: allMembersClick ? '#fff' : '#999', fontSize: '12px'}}
+                style={{ color: allMembersClick ? '#fff' : '#999', fontSize: '12px' }}
               />
               <span>{gettext('All users')}</span>
             </div>
