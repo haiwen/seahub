@@ -51,7 +51,7 @@ const Content = ({
       const selected = [];
 
       groups.forEach(group => {
-        group.displayChildren.forEach((row) => {
+        group.children.forEach((row) => {
           row.children.forEach((img) => {
             const imgElement = document.getElementById(img.id);
             if (imgElement) {
@@ -83,7 +83,7 @@ const Content = ({
 
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
-    const { name, displayChildren: children, height, top, paddingTop } = group;
+    const { name, children, height, top, paddingTop } = group;
 
     // group not in rendering area, return empty div
     if (top >= overScanBottom || top + height <= overScanTop) {
@@ -117,9 +117,7 @@ const Content = ({
     if ([GALLERY_DATE_MODE.YEAR, GALLERY_DATE_MODE.MONTH].includes(mode)) {
       newChildren = children.flatMap(row => row.children);
       listStyle['gap'] = GALLERY_YEAR_MODE_GRID_GAP;
-      if (newChildren.length === 1) {
-        listStyle['gridTemplateColumns'] = '1fr';
-      }
+      if (newChildren.length === 1) listStyle['gridTemplateColumns'] = '1fr';
     } else if (mode === GALLERY_DATE_MODE.DAY) {
       newChildren = children.flatMap(row => row.children);
       if (newChildren.length === 1) {
@@ -127,8 +125,8 @@ const Content = ({
       } else if (newChildren.length < 7) {
         listStyle['gridTemplateColumns'] = '1fr 1fr';
       } else {
-        delete listStyle['gridTemplateColumns'];
-        listStyle['display'] = 'flex';
+        listStyle['gridTemplateColumns'] = `repeat(${columns}, ${size.small}px)`;
+        listStyle['gridTemplateRows'] = `repeat(3, ${size.small}px)`;
       }
     }
     const imgEvents = {
@@ -169,7 +167,7 @@ const Content = ({
               })}
             </>
           ) : (
-            <DayImages size={size} images={newChildren} imgEvents={imgEvents} />
+            <DayImages size={size} selectedImageIds={selectedImageIds} images={newChildren} imgEvents={imgEvents} />
           )}
         </div>
       </div>
@@ -199,7 +197,6 @@ Content.propTypes = {
     height: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
     paddingTop: PropTypes.number.isRequired,
-    displayChildren: PropTypes.array,
     children: PropTypes.arrayOf(PropTypes.shape({
       top: PropTypes.number.isRequired,
       children: PropTypes.arrayOf(PropTypes.shape({

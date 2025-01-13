@@ -93,7 +93,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       const { children, ...__init } = _init;
       let top = 0;
       let rows = [];
-      let displayChildren = [];
       if (index > 0) {
         const lastGroup = _groups[index - 1];
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
@@ -107,16 +106,14 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         rows[rowIndex].children.push(child);
       });
 
-      if (mode === GALLERY_DATE_MODE.YEAR) displayChildren = rows.slice(0, 1);
-      if (mode === GALLERY_DATE_MODE.MONTH) displayChildren = rows.slice(0, 1);
-      if (mode === GALLERY_DATE_MODE.DAY) displayChildren = [{ top: rows[0].top, children: rows.flatMap(r => r.children) }];
-      if (mode === GALLERY_DATE_MODE.ALL) displayChildren = rows;
+      if (mode === GALLERY_DATE_MODE.YEAR) rows = rows.slice(0, 1);
+      if (mode === GALLERY_DATE_MODE.MONTH) rows = rows.slice(0, 1);
+      if (mode === GALLERY_DATE_MODE.DAY) rows = [{ top: rows[0].top, children: rows.slice(0, 2).flatMap(r => r.children) }];
       _groups.push({
         ...__init,
         top,
-        height: displayChildren.length * rowHeight + paddingTop,
+        height: rows.length * rowHeight + paddingTop,
         paddingTop,
-        displayChildren,
         children: rows
       });
     });
