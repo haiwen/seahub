@@ -30,7 +30,7 @@ class Worker(Thread):
                     break
                 self.do_work(task)
             except Exception as e:
-                self.pool.exit_code = 1
+                self.pool.exit_code = 2
                 self.pool.exception = e
                 logging.warning('Failed to execute task: %s' % e)
             finally:
@@ -40,6 +40,7 @@ class ThreadPool(object):
     def __init__(self, do_work, nworker=20):
         self.do_work = do_work
         self.nworker = nworker
+        # The pool's exit_code and exception will be set when an exception occurs in the worker processing the migration object.
         self.exit_code = 0
         self.exception = None
         self.task_queue = queue.Queue(maxsize = 2000)
@@ -138,6 +139,8 @@ class ObjMigrateWorker(Thread):
         self.thread_pool.start()
         self.migrate()
         self.thread_pool.join()
+        self.exit_code = self.thread_pool.exit_code
+        self.exception = self.thread_pool.exception
         if self.object_list_file_path:
             self.fd.close()
         logging.info('Complete migrate [%s] object' % self.dtype)
