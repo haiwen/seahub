@@ -5,11 +5,14 @@ import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { MetadataDetails } from '../../../metadata';
+import { MetadataDetails, useMetadata, useMetadataDetails } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
+import People from '../people';
 
-const FileDetails = ({ direntDetail }) => {
-  const { enableMetadata } = useMetadataStatus();
+const FileDetails = ({ repoID, dirent, direntDetail, withinImageDialog }) => {
+  const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
+  const { enableFaceRecognition } = useMetadata();
+  const { record } = useMetadataDetails();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
@@ -36,13 +39,18 @@ const FileDetails = ({ direntDetail }) => {
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
       {enableMetadata && (
-        <MetadataDetails />
+        <MetadataDetails withinImageDialog={withinImageDialog} />
+      )}
+      {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
+        <People repoID={repoID} record={record} />
       )}
     </>
   );
 };
 
 FileDetails.propTypes = {
+  repoID: PropTypes.string,
+  dirent: PropTypes.object,
   direntDetail: PropTypes.object,
 };
 

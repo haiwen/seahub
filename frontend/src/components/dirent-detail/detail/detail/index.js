@@ -6,7 +6,7 @@ import { DRAG_HANDLER_HEIGHT } from '../../../resize-bar/constants';
 
 import './index.css';
 
-const Detail = ({ children, className, withinPreviewer }) => {
+const Detail = ({ children, className }) => {
   const [width, setWidth] = useState(300);
   const [isResizing, setResizing] = useState(false);
   const resizeBarRef = useRef(null);
@@ -57,16 +57,14 @@ const Detail = ({ children, className, withinPreviewer }) => {
       style={{ width }}
     >
       {children}
-      {!withinPreviewer && (
-        <ResizeBar
-          resizeBarRef={resizeBarRef}
-          dragHandlerRef={dragHandlerRef}
-          resizeBarStyle={{ left: -1 }}
-          dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
-          onResizeMouseDown={onResizeMouseDown}
-          onResizeMouseOver={onResizeMouseOver}
-        />
-      )}
+      <ResizeBar
+        resizeBarRef={resizeBarRef}
+        dragHandlerRef={dragHandlerRef}
+        resizeBarStyle={{ left: -1 }}
+        dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+        onResizeMouseDown={onResizeMouseDown}
+        onResizeMouseOver={onResizeMouseOver}
+      />
     </div>
   );
 
@@ -75,7 +73,6 @@ const Detail = ({ children, className, withinPreviewer }) => {
 Detail.propTypes = {
   className: PropTypes.string,
   children: PropTypes.any,
-  withinPreviewer: PropTypes.bool,
 };
 
 export default Detail;

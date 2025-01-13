@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
@@ -14,7 +15,7 @@ import Settings from './settings';
 
 import './index.css';
 
-const MetadataDetails = () => {
+const MetadataDetails = ({ withinImageDialog }) => {
   const { isLoading, canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
@@ -32,7 +33,7 @@ const MetadataDetails = () => {
       {displayColumns.map(field => {
         const value = getCellValueByColumn(record, field);
         if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage && value) {
-          return (<Location key={field.key} position={value} />);
+          return (<Location key={field.key} position={value} withinImageDialog={withinImageDialog} />);
         }
 
         let canEdit = canModifyRecord && field.editable;
@@ -61,6 +62,10 @@ const MetadataDetails = () => {
       })}
     </>
   );
+};
+
+MetadataDetails.propTypes = {
+  withinImageDialog: PropTypes.bool,
 };
 
 export default MetadataDetails;

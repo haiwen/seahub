@@ -844,9 +844,10 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    let { direntList, selectedDirentList, path } = this.props;
+    let { direntList, selectedDirentList, path, userPerm } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
@@ -1029,6 +1030,7 @@ class DirentGridView extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={!repoEncrypted}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}

@@ -12,21 +12,25 @@ import { AI, Settings } from '../../../metadata/components/metadata-details';
 
 import './index.css';
 
-const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
+const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {}, withinImageDialog }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
 
   useEffect(() => {
-    // init context
-    const context = new MetadataContext();
-    window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ repoID, repoInfo });
     seafileAPI.getFileInfo(repoID, path).then(res => {
       setDirentDetail(res.data);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }, [repoID, path]);
+
+  useEffect(() => {
+    if (withinImageDialog) return;
+    // init context
+    const context = new MetadataContext();
+    window.sfMetadataContext = context;
+    window.sfMetadataContext.init({ repoID, repoInfo });
 
     return () => {
       if (window.sfMetadataContext) {
@@ -60,13 +64,17 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         <Body>
           {dirent && direntDetail && (
             <div className="detail-content">
-              <FileDetails direntDetail={direntDetail} />
+              <FileDetails repoID={repoID} dirent={dirent} direntDetail={direntDetail} withinImageDialog={withinImageDialog} />
             </div>
           )}
         </Body>
       </div>
     </MetadataDetailsProvider>
   );
+};
+
+EmbeddedFileDetails.defaultProps = {
+  withinImageDialog: false,
 };
 
 EmbeddedFileDetails.propTypes = {
@@ -76,6 +84,7 @@ EmbeddedFileDetails.propTypes = {
   repoInfo: PropTypes.object.isRequired,
   component: PropTypes.object,
   onClose: PropTypes.func.isRequired,
+  withinImageDialog: PropTypes.bool,
 };
 
 export default EmbeddedFileDetails;

@@ -603,7 +603,7 @@ class SharedDirView extends React.Component {
             moveToPrevImage={this.moveToPrevImage}
             moveToNextImage={this.moveToNextImage}
             enableRotate={false}
-            isShared={true}
+            isCustomPermission={true}
           />
         </ModalPortal>
         }

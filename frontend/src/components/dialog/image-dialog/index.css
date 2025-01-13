@@ -3,7 +3,10 @@
   height: calc(100% - 100px);
   display: flex;
   flex-direction: column;
-  position: relative;
+  top: 50px;
+  right: 0;
+  bottom: 50px;
+  position: absolute;
   font-size: 1rem;
   color: #fff;
   background-color: #333;
@@ -11,20 +14,12 @@
   transition: width 0.3s ease;
 }
 
-.lightbox-side-panel.expanded {
-  width: 300px;
-}
-
-.lightbox-side-panel.collapsed {
-  width: 10px;
-}
-
 .lightbox-side-panel .cur-view-detail {
   background-color: #333;
   border-left: 1px solid #666;
 }
 
-.lightbox-side-panel-button-container {
+.lightbox-side-panel .side-panel-controller {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,15 +38,14 @@
   cursor: pointer;
 }
 
-.lightbox-side-panel-button-container .switch-button {
+.lightbox-side-panel .side-panel-controller .expand-button {
   width: 32px;
   height: 32px;
-  transform: scale(0.6875);
   opacity: 0.7;
   border: none;
 }
 
-.lightbox-side-panel-button-container:hover .switch-button {
+.lightbox-side-panel .side-panel-controller:hover .expand-button {
   opacity: 1;
 }
 
