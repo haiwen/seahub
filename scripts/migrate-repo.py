@@ -186,7 +186,7 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
         sys.exit(1)
     
     for w in workers:
-        if w.exit_code == 1 or w.exit_code == 2:
+        if w.exception:
             logging.warning(w.exception)
             api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
             sys.exit(1)
@@ -233,13 +233,8 @@ def migrate_repos(orig_storage_id, dest_storage_id):
             sys.exit(1)
         
         for w in workers:
-            if w.exit_code == 1:
+            if w.exception:
                 logging.warning(w.exception)
-                api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
-                sys.exit(1)
-            # If the exception is caused by the migration worker, the migration can continue.
-            if w.exit_code == 2:
-                logging.warning(w.thread_pool.exception)
                 pending_repos[repo_id] = repo_id
 
         if repo_id in pending_repos:
