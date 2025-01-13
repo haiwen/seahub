@@ -121,10 +121,6 @@ try:
 except ImportError:
     ORG_MEMBER_QUOTA_DEFAULT = None
 
-try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
-except ImportError:
-    ENABLE_OFFICE_WEB_APP = False
     
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED

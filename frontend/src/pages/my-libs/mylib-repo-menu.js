@@ -126,7 +126,7 @@ class MylibRepoMenu extends React.Component {
     if (enableSeaTableIntegration) {
       operations.push('SeaTable integration');
     }
-    if (enableMultipleOfficeSuite) {
+    if (enableMultipleOfficeSuite && isPro) {
       operations.push('Office Suite');
     }
     return operations;
