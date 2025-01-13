@@ -10,20 +10,23 @@ import '../../css/manage-members-dialog.css';
 const propTypes = {
   groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
-  toggleManageMembersDialog: PropTypes.func.isRequired
+  toggleManageMembersDialog: PropTypes.func,
+  toggleDepartmentDetailDialog: PropTypes.func,
 };
 
 class ManageMembersDialog extends React.Component {
 
   render() {
-    const { groupID, isOwner, toggleManageMembersDialog: toggle } = this.props;
+    const { groupID, isOwner } = this.props;
     return (
-      <Modal isOpen={true} toggle={toggle} className="group-manage-members-dialog">
-        <SeahubModalHeader toggle={toggle}>{gettext('Manage group members')}</SeahubModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleManageMembersDialog} className="group-manage-members-dialog">
+        <SeahubModalHeader toggle={this.props.toggleManageMembersDialog}>{gettext('Manage group members')}</SeahubModalHeader>
         <ModalBody className="pb-0">
           <ListAndAddGroupMembers
             groupID={groupID}
             isOwner={isOwner}
+            toggleManageMembersDialog={this.props.toggleManageMembersDialog}
+            toggleDepartmentDetailDialog={this.props.toggleDepartmentDetailDialog}
           />
         </ModalBody>
       </Modal>

@@ -17,6 +17,7 @@ import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
 import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
+import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -56,6 +57,7 @@ class GroupView extends React.Component {
       libraryType: 'group',
       isCreateRepoDialogShow: false,
       isDepartmentGroup: false,
+      isShowDepartmentDetailDialog: false,
       showGroupDropdown: false,
       showGroupMembersPopover: false,
       showRenameGroupDialog: false,
@@ -406,6 +408,12 @@ class GroupView extends React.Component {
     });
   };
 
+  toggleDepartmentDetailDialog = () => {
+    this.setState({
+      isShowDepartmentDetailDialog: !this.state.isShowDepartmentDetailDialog
+    });
+  };
+
   render() {
     const {
       isLoading, repoList, errMessage, emptyTip,
@@ -557,6 +565,16 @@ class GroupView extends React.Component {
             toggleManageMembersDialog={this.toggleManageMembersDialog}
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
+            isOwner={this.state.isOwner}
+            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
+          />
+        }
+        {this.state.isShowDepartmentDetailDialog &&
+          <DepartmentDetailDialog
+            usedFor='add_group_member'
+            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
+            toggleManageMembersDialog={this.toggleManageMembersDialog}
+            groupID={this.props.groupID}
             isOwner={this.state.isOwner}
           />
         }
