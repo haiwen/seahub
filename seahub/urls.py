@@ -200,6 +200,7 @@ from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
+from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
 
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
@@ -446,6 +447,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/$', RepoUploadLinks.as_view(), name='api-v2.1-repo-upload-links'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
 
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
@@ -961,7 +963,7 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_AD
         path('saml2/complete/', auth_complete, name='saml2_complete'),
     ]
 
-if getattr(settings, 'ENABLE_ONLYOFFICE', False):
+if getattr(settings, 'ENABLE_ONLYOFFICE', False) or getattr(settings, 'ENABLE_MULTIPLE_OFFICE_SUITE', False):
     urlpatterns += [
         path('onlyoffice/', include('seahub.onlyoffice.urls')),
         path('onlyoffice-api/', include('seahub.onlyoffice.api_urls')),

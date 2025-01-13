@@ -22,7 +22,9 @@ import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoSeaTableIntegrationDialog from '../../components/dialog/repo-seatable-integration-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
+import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import { userAPI } from '../../utils/user-api';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -57,6 +59,7 @@ class MylibRepoListItem extends React.Component {
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isOldFilesAutoDelDialogOpen: false,
+      isOfficeSuiteDialogShow: false,
     };
   }
 
@@ -136,6 +139,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'SeaTable integration':
         this.onSeaTableIntegrationToggle();
+        break;
+      case 'Office Suite':
+        this.onOfficeSuiteToggle();
         break;
       default:
         break;
@@ -249,6 +255,10 @@ class MylibRepoListItem extends React.Component {
     this.setState({isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow});
   };
 
+  onOfficeSuiteToggle = () => {
+    this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
+  };
+
   toggleRepoShareAdminDialog = () => {
     this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
   };
@@ -296,6 +306,21 @@ class MylibRepoListItem extends React.Component {
       }
     });
     this.onTransferToggle();
+  };
+
+  onOfficeSuiteChange = (suiteID) => {
+    let repoID = this.props.repo.repo_id;
+    userAPI.setOfficeSuite(repoID, suiteID).then(res => {
+      let message = gettext('Successfully change office suite.');
+      toaster.success(message);
+    }).catch(error => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
+      }
+    });
+    this.onOfficeSuiteToggle();
   };
 
   onDeleteRepo = (repo) => {
@@ -540,6 +565,17 @@ class MylibRepoListItem extends React.Component {
             <LibOldFilesAutoDelDialog
               repoID={repo.repo_id}
               toggleDialog={this.toggleOldFilesAutoDelDialog}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isOfficeSuiteDialogShow && (
+          <ModalPortal>
+            <OfficeSuiteDialog
+              repoID={repo.repo_id}
+              itemName={repo.repo_name}
+              submit={this.onOfficeSuiteChange}
+              toggleDialog={this.onOfficeSuiteToggle}
             />
           </ModalPortal>
         )}

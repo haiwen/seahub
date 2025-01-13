@@ -1,0 +1,28 @@
+.repo-office-suite-dialog .repo-office-suite-dialog-content {
+  padding: 0;
+  min-height: 5.5rem;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+  
+@media (min-width: 268px) {
+  .repo-office-suite-dialog .repo-office-suite-dialog-content {
+      flex-direction: column;
+    }
+}
+  
+.repo-office-suite-dialog-content .repo-office-suite-dialog-main {
+  display: flex;
+  flex-basis: 48%;
+  padding: 1rem;
+}
+
+.repo-office-suite-dialog-content .repo-office-suite-dialog-main .tab-content {
+  flex: 1;
+}
+
+
+.repo-office-suite-dialog-content .repo-office-suite-dialog-main .repo-select-office-suite {
+  padding: 8px 0;
+}
