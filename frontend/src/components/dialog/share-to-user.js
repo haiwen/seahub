@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext, isPro, cloudMode, isOrgContext } from '../../utils/constants';
@@ -52,7 +52,7 @@ class UserItem extends React.Component {
     let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen } = this.state;
     return (
-      <tr onMouseEnter={ this.onMouseEnter } onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
           <div className="position-relative d-flex align-items-center">
             <img
@@ -447,7 +447,7 @@ class ShareToUser extends React.Component {
       </thead>
     );
     return (
-      <Fragment>
+      <div className="share-link-container">
         <table className="w-xs-200">
           {thead}
           <tbody>
@@ -463,10 +463,10 @@ class ShareToUser extends React.Component {
                     excludeCurrentUser={false}
                   />
                   {showDeptBtn &&
-                  <span
-                    onClick={this.toggleDepartmentDetailDialog}
-                    className="toggle-detail-btn">Button
-                  </span>
+                    <span
+                      onClick={this.toggleDepartmentDetailDialog}
+                      className="sf3-font sf3-font-invite-visitors toggle-detail-btn">
+                    </span>
                   }
                 </div>
               </td>
@@ -524,7 +524,7 @@ class ShareToUser extends React.Component {
           />
           }
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

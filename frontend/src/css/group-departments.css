@@ -113,6 +113,10 @@
   height: 36px;
 }
 
+.department-dialog-member-table .sf3-font-help {
+  color: #999;
+}
+
 .department-dialog-member .empty-tip {
   border: none;
   background-color: transparent;

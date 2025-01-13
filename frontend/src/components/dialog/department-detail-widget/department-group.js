@@ -59,13 +59,13 @@ class Item extends Component {
         <div className={isCurrent ? 'tr-highlight group-item' : 'group-item'} onClick={this.getMembers}>
           {hasChild &&
             <span
-              className={`dtable-font dtable-icon-${isExpanded ? 'drop-down' : 'right-slide'} pr-2`}
+              className={`sf3-font sf3-font-down ${isExpanded ? '' : 'rotate-270'} d-inline-block`}
               onClick={this.toggleExpanded}
               style={{ color: isCurrent ? '#fff' : '#999', fontSize: '12px' }}
             >
             </span>
           }
-          <span style={hasChild ? {} : { paddingLeft: '20px' }}>{department.name}</span>
+          <span style={hasChild ? { paddingLeft: '8px' } : { paddingLeft: '20px' }}>{department.name}</span>
         </div>
         {(isExpanded && hasChild) && this.renderSubDepartments()}
       </>
@@ -82,7 +82,6 @@ const DepartmentGroupPropTypes = {
   setCurrent: PropTypes.func.isRequired,
   currentDepartment: PropTypes.object.isRequired,
   loading: PropTypes.bool,
-  getOrgMembers: PropTypes.func,
   departmentsTree: PropTypes.array,
 };
 
@@ -107,13 +106,6 @@ class DepartmentGroup extends Component {
     this.setState({ allMembersClick: false });
   };
 
-  getOrgMembers = () => {
-    this.props.getOrgMembers();
-    this.setState({
-      allMembersClick: true
-    });
-  };
-
   render() {
     const { loading } = this.props;
     let departments = this.props.departmentsTree;
@@ -125,9 +117,9 @@ class DepartmentGroup extends Component {
       <div className="department-dialog-group">
         <div>
           {isOrgContext &&
-            <div className={allMembersClick ? 'tr-highlight group-item' : 'group-item'} onClick={this.getOrgMembers}>
+            <div className={allMembersClick ? 'tr-highlight group-item' : 'group-item'}>
               <span
-                className={'dtable-font pr-2'}
+                className={'pr-2'}
                 style={{ color: allMembersClick ? '#fff' : '#999', fontSize: '12px' }}
               />
               <span>{gettext('All users')}</span>

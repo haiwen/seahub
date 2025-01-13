@@ -16,3 +16,42 @@
   font-size: 1rem;
   font-weight: 500;
 }
+
+.share-link-container .share-user-avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.share-link-container .share-link-tip {
+  background-color: #f6eddf;
+  margin: -1rem -1.5rem 1rem;
+  padding: 0.5rem 1rem;
+}
+
+
+.share-link-container .add-members {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.share-link-container .add-members .reviewer-select {
+  width: 300px;
+  max-width: calc(100% - 10px);
+}
+
+.share-link-container .add-members .toggle-detail-btn {
+  position: absolute;
+  top: 6px;
+  right: 20px;
+  border-left: 1px solid #ccc;
+  padding-left: 9px;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+}
+
+.user-select.user-select-right-btn .true__value-container {
+  padding-right: 40px;
+}

@@ -55,7 +55,7 @@ class Item extends Component {
           <td width="11%"><img className="avatar" src={member.avatar_url} alt=""/></td>
           <td width="60%">{member.name}</td>
           <td width="16%" className={this.state.highlight ? 'visible' : 'invisible' }>
-            <i className="dtable-font dtable-icon-use-help" id={`no-select-${index}`}></i>
+            <i className="sf3-font-help sf3-font" id={`no-select-${index}`}></i>
             <Tooltip placement='bottom' isOpen={this.state.tooltipOpen} toggle={this.toggleTooltip} target={`no-select-${index}`} delay={{ show: 0, hide: 0 }} fade={false}>
               {tip}
             </Tooltip>
@@ -95,39 +95,14 @@ const DepartmentGroupMembersPropTypes = {
   selectedMemberMap: PropTypes.object,
   selectAll: PropTypes.func.isRequired,
   loading: PropTypes.bool,
-  hasMore: PropTypes.bool,
-  getMoreOrgMembers: PropTypes.func,
   usedFor: PropTypes.oneOf(['add_group_member', 'add_user_share']),
 };
 
 class DepartmentGroupMembers extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoadingMore: false
-    };
-  }
-
   selectAll = () => {
     const { members } = this.props;
     this.props.selectAll(members);
-  };
-
-  handleScroll = (event) => {
-    if (!this.state.isLoadingMore && this.props.hasMore) {
-      const clientHeight = event.target.clientHeight;
-      const scrollHeight = event.target.scrollHeight;
-      const scrollTop = event.target.scrollTop;
-      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-      if (isBottom) {
-        this.setState({ isLoadingMore: true }, () => {
-          this.props.getMoreOrgMembers().then(() => {
-            this.setState({ isLoadingMore: false });
-          });
-        });
-      }
-    }
   };
 
   render() {
@@ -138,7 +113,6 @@ class DepartmentGroupMembers extends Component {
     } else {
       headerTitle = currentDepartment.name + ' ' + gettext('members');
     }
-    const { isLoadingMore } = this.state;
     if (loading) {
       return (
         <div className="department-dialog-member pt-4">
@@ -151,10 +125,10 @@ class DepartmentGroupMembers extends Component {
       );
     }
     const enableSelectAll = Object.keys(memberSelected).length < members.length;
-    const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('Base is already shared to user');
+    const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('It is already shared to user');
     return (
       <div className="department-dialog-member pt-4">
-        <div className="w-100" onScroll={this.handleScroll}>
+        <div className="w-100">
           <div className='department-dialog-member-head px-4'>
             <div className='department-name'>
               {headerTitle}
@@ -184,7 +158,6 @@ class DepartmentGroupMembers extends Component {
                   })}
                 </tbody>
               </table>
-              {isLoadingMore ? <Loading /> : ''}
             </Fragment>
             :
             <EmptyTip tipSrc={`${mediaUrl}img/no-users-tip.png`}>

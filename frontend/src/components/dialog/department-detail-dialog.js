@@ -1,13 +1,14 @@
 import React, { Fragment, } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isOrgContext, username } from '../../utils/constants';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import Department from '../../models/department';
+import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
@@ -39,8 +40,6 @@ class DepartmentDetailDialog extends React.Component {
       membersLoading: true,
       selectedMemberMap: {},
       departmentsTree: [],
-      currentMemberPage: 1,
-      hasMore: true,
     };
   }
 
@@ -107,11 +106,7 @@ class DepartmentDetailDialog extends React.Component {
         departmentsLoading: false,
         departmentsTree: departmentsTree
       });
-      if (isOrgContext) {
-        this.getOrgMembers();
-      } else if (Object.keys(currentDepartment).length > 0) {
-        this.getMembers(currentDepartment.id);
-      }
+      this.getMembers(currentDepartment.id);
     }).catch(error => {
       this.onError(error);
     });
@@ -126,50 +121,6 @@ class DepartmentDetailDialog extends React.Component {
       });
     }).catch(error => {
       this.onError(error);
-    });
-  };
-
-  resetCurrentPage = () => {
-    this.setState({ currentMemberPage: 1, hasMore: true });
-  };
-
-  getOrgMembers = async () => {
-    const orgID = window.app.pageOptions.orgID;
-    await this.resetCurrentPage();
-    this.setState({ membersLoading: true });
-    let currentMemberPage = this.state.currentMemberPage;
-    seafileAPI.getOrganizationMembers(orgID, currentMemberPage).then((res) => {
-      this.setState({
-        departmentMembers: res.data.members,
-        membersLoading: false,
-        currentMemberPage: currentMemberPage + 1,
-        currentDepartment: {
-          'name': gettext('All users'),
-          'id': -1
-        }
-      });
-    }).catch(error => {
-      let errMsg = Utils.getErrorMsg(error, true);
-      if (!error.response || error.response.status !== 403) {
-        toaster.danger(errMsg);
-      }
-    });
-  };
-
-  getMoreOrgMembers = async () => {
-    const orgID = window.app.pageOptions.orgID;
-    let currentMemberPage = this.state.currentMemberPage;
-    seafileAPI.getOrganizationMembers(orgID, currentMemberPage).then((res) => {
-      let members = res.data.members;
-      this.setState({
-        departmentMembers: [...this.state.departmentMembers, ...members],
-        currentMemberPage: currentMemberPage + 1,
-        hasMore: members.length >= 20
-      });
-    }).catch(error => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error),
-      });
     });
   };
 
@@ -227,7 +178,7 @@ class DepartmentDetailDialog extends React.Component {
 
   renderHeader = () => {
     const title = this.props.usedFor === 'add_group_member' ? gettext('Select group members') : gettext('Select shared users');
-    return <ModalHeader toggle={this.toggle}>{title}</ModalHeader>;
+    return <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>;
   };
 
   render() {
@@ -264,7 +215,6 @@ class DepartmentDetailDialog extends React.Component {
             setCurrent={this.setCurrent}
             currentDepartment={this.state.currentDepartment}
             loading={this.state.departmentsLoading}
-            getOrgMembers={this.getOrgMembers}
             departmentsTree={this.state.departmentsTree}
           />
           <DepartmentGroupMembers
@@ -275,9 +225,7 @@ class DepartmentDetailDialog extends React.Component {
             selectAll={this.selectAll}
             loading={this.state.membersLoading}
             selectedMemberMap={this.state.selectedMemberMap}
-            hasMore={this.state.hasMore}
             isLoadingMore={this.state.isLoadingMore}
-            getMoreOrgMembers={this.getMoreOrgMembers}
             usedFor={this.props.usedFor}
           />
           <DepartmentGroupMemberSelected
