@@ -16,12 +16,10 @@ import '../../css/manage-members-dialog.css';
 import '../../css/group-departments.css';
 
 const propTypes = {
-  groupID: PropTypes.number,
+  groupID: PropTypes.any,
   toggleManageMembersDialog: PropTypes.func,
   toggleDepartmentDetailDialog: PropTypes.func,
   isOwner: PropTypes.bool,
-  isAdmin: PropTypes.bool,
-  loadWorkspaceList: PropTypes.func,
   addUserShares: PropTypes.func,
   usedFor: PropTypes.oneOf(['add_group_member', 'add_user_share']),
   userList: PropTypes.array,
@@ -143,7 +141,6 @@ class DepartmentDetailDialog extends React.Component {
   addGroupMember = () => {
     let emails = Object.keys(this.state.newMembersTempObj);
     seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
-      this.props.loadWorkspaceList();
       this.toggle();
       this.props.toggleManageMembersDialog();
     }).catch(error => {

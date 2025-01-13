@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, InputGroup, InputGroupText, Input } from 'reactstrap';
 import { Utils } from '../utils/utils';
-import { gettext } from '../utils/constants';
+import { gettext, cloudMode, isOrgContext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import UserSelect from './user-select';
 import toaster from './toast';
@@ -10,6 +10,8 @@ import Loading from './loading';
 import GroupMembers from './group-members';
 
 const propTypes = {
+  toggleManageMembersDialog: PropTypes.func,
+  toggleDepartmentDetailDialog: PropTypes.func,
   groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired
 };
@@ -159,12 +161,24 @@ class ManageMembersDialog extends React.Component {
     });
   };
 
+  onClickDeptBtn = () => {
+    this.props.toggleManageMembersDialog();
+    this.props.toggleDepartmentDetailDialog();
+  };
+
   render() {
     const {
       isLoading, hasNextPage, groupMembers,
       keyword, membersFound,
       searchActive
     } = this.state;
+    let showDeptBtn = true;
+    if (window.app.config.lang !== 'zh-cn') {
+      showDeptBtn = false;
+    }
+    if (cloudMode && !isOrgContext) {
+      showDeptBtn = false;
+    }
     return (
       <Fragment>
         <p className="mb-2">{gettext('Add group member')}</p>
@@ -176,6 +190,9 @@ class ManageMembersDialog extends React.Component {
             isMulti={true}
             className="add-members-select"
           />
+          {showDeptBtn &&
+            <span onClick={this.onClickDeptBtn} className="sf3-font sf3-font-invite-visitors toggle-detail-btn"></span>
+          }
           {this.state.selectedOption ?
             <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
             <Button color="primary" disabled>{gettext('Submit')}</Button>
