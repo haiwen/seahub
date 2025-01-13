@@ -37,6 +37,12 @@ class CcnetGroup(object):
         self.timestamp = kwargs.get('timestamp')
         self.parent_group_id = kwargs.get('parent_group_id')
 
+class CcnetUserRole(object):
+    
+    def __init__(self, **kwargs):
+        self.role = kwargs.get('role')
+        self.is_manual_set = kwargs.get('is_manual_set')
+
 class CcnetDB:
 
     def __init__(self):
@@ -75,3 +81,25 @@ class CcnetDB:
                 group_obj = CcnetGroup(**params)
                 groups.append(group_obj)
         return groups
+
+    
+    def get_user_role_from_db(self, email):
+
+        sql = f"""
+        SELECT `role`, `is_manual_set` FROM `{self.db_name}`.`UserRole` WHERE email = '{email}';
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            row = cursor.fetchone()
+            if not row:
+                role = None
+                is_manual_set = False
+            else:
+                role = row[0]
+                is_manual_set = row[1]
+
+        params = {
+            'role': role,
+            'is_manual_set': is_manual_set
+        }
+        return CcnetUserRole(**params)
