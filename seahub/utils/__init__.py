@@ -1248,6 +1248,8 @@ if EVENTS_CONFIG_FILE:
 
     HAS_FILE_SEARCH = check_search_enabled()
     HAS_FILE_SEASEARCH = check_seasearch_enabled()
+    if HAS_FILE_SEARCH and HAS_FILE_SEASEARCH:
+        raise Exception('ES and seasearch cannot be configured simultaneously.')
 
 # repo auto delete related
 ENABLE_REPO_AUTO_DEL = False

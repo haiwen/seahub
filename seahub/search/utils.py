@@ -14,12 +14,15 @@ from seahub.utils import get_user_repos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
 from seahub.constants import REPO_TYPE_WIKI
+from seahub.utils import HAS_FILE_SEARCH
 
 import seaserv
 from seaserv import seafile_api
 
 os.environ['EVENTS_CONFIG_FILE'] = EVENTS_CONFIG_FILE
-from seafes import es_search, es_wiki_search
+
+if HAS_FILE_SEARCH:
+    from seafes import es_search, es_wiki_search
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
