@@ -606,5 +606,8 @@
   "Ask_AI": "KI fragen",
   "Enter_reply": "Enter reply",
   "Processing_content_cannot_be_empty": "Processing content cannot be empty",
-  "AI_error_message": "Request error, please try again"
+  "AI_error_message": "Request error, please try again",
+  "Whiteboard": "Whiteboard",
+  "Upload_local_whiteboard": "Upload local whiteboard",
+  "Create_new_whiteboard": "Create new whiteboard"
 }

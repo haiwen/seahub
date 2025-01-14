@@ -606,5 +606,8 @@
   "Ask_AI": "Спросить ИИ",
   "Enter_reply": "Введите ответ",
   "Processing_content_cannot_be_empty": "Содержимое обработки не может быть пустым",
-  "AI_error_message": "Ошибка запроса, попробуйте еще раз"
+  "AI_error_message": "Ошибка запроса, попробуйте еще раз",
+  "Whiteboard": "Доска",
+  "Upload_local_whiteboard": "Загрузить локальную доску",
+  "Create_new_whiteboard": "Создать новую доску"
 }

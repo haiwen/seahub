@@ -606,5 +606,8 @@
   "Ask_AI": "询问 AI",
   "Enter_reply": "输入回复",
   "Processing_content_cannot_be_empty": "处理内容不能为空",
-  "AI_error_message": "请求错误，请重试"
+  "AI_error_message": "请求错误，请重试",
+  "Whiteboard": "Whiteboard",
+  "Upload_local_whiteboard": "Upload local whiteboard",
+  "Create_new_whiteboard": "Create new whiteboard"
 }
