@@ -44,6 +44,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
+        const size = mode === GALLERY_DATE_MODE.YEAR ? thumbnailSizeForOriginal : thumbnailSizeForGrid;
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
         const year = date.slice(0, 4);
@@ -54,7 +55,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
           name: fileName,
           parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          src: `${siteRoot}thumbnail/${repoID}/${size}${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           year,
