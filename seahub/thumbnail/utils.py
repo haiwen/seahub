@@ -293,7 +293,8 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     save_type = THUMBNAIL_EXTENSION
     if image.mode in ['RGBA', 'P']:
         save_type = 'png'
-    image.save(thumbnail_file, save_type)
+    icc_profile = image.info.get('icc_profile')
+    image.save(thumbnail_file, save_type, icc_profile=icc_profile)
     return (True, 200)
 
 def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
