@@ -505,6 +505,7 @@ class MylibRepoListItem extends React.Component {
               isRepoDeleted={this.state.isRepoDeleted}
               onDeleteRepo={this.onDeleteRepo}
               toggle={this.onDeleteToggle}
+              isGetShare={true}
             />
           </ModalPortal>
         )}
