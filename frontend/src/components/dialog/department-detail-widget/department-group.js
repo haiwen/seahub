@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../../components/loading';
-import { gettext, isOrgContext } from '../../../utils/constants';
+import { isOrgContext } from '../../../utils/constants';
 
 const ItemPropTypes = {
   department: PropTypes.object,
@@ -112,19 +112,9 @@ class DepartmentGroup extends Component {
     if (loading) {
       return (<Loading/>);
     }
-    const { allMembersClick } = this.state;
     return (
       <div className="department-dialog-group">
         <div>
-          {isOrgContext &&
-            <div className={allMembersClick ? 'tr-highlight group-item' : 'group-item'}>
-              <span
-                className={'pr-2'}
-                style={{ color: allMembersClick ? '#fff' : '#999', fontSize: '12px' }}
-              />
-              <span>{gettext('All users')}</span>
-            </div>
-          }
           {departments.length > 0 && departments.map((department, index) => {
             if (department.parent_group_id !== -1) return null;
             return (
