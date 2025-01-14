@@ -127,31 +127,34 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    const newOverScan = {
+      top: Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS),
+      bottom: scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS
+    };
+
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       onLoadMore && onLoadMore();
-    } else {
-      const { scrollTop, clientHeight } = containerRef.current;
-      const overScanTop = Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS);
-      const overScanBottom = scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS;
-      let groupIndex = 0;
-      let rowIndex = 0;
-      let flag = false;
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        for (let j = 0; j < group.children.length; j++) {
-          const row = group.children[j];
-          if (row.top >= scrollTop) {
-            groupIndex = i;
-            rowIndex = j;
-            flag = true;
-          }
-          if (flag) break;
-        }
-        if (flag) break;
-      }
-      lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
-      setOverScan({ top: overScanTop, bottom: overScanBottom });
     }
+
+    let groupIndex = 0;
+    let rowIndex = 0;
+    let flag = false;
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      for (let j = 0; j < group.children.length; j++) {
+        const row = group.children[j];
+        if (row.top >= scrollTop) {
+          groupIndex = i;
+          rowIndex = j;
+          flag = true;
+          break;
+        }
+      }
+      if (flag) break;
+    }
+
+    lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+    setOverScan(newOverScan);
   }, [rowHeight, onLoadMore, groups]);
 
   const updateSelectedImage = useCallback((image = null) => {
@@ -377,7 +380,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
           containerRef.current.scrollTop = targetGroup.top;
         }
       }
-      lastState.current = { ...lastState.current, scrollTargetId: null, mode };
+      lastState.current = { ...lastState.current, clickTargetId: null, mode };
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSize, groups, mode]);
