@@ -61,9 +61,8 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
         className="lightbox-side-panel"
         style={{ width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px` }}
         aria-expanded={expanded}
-        onClick={onToggleSidePanel}
       >
-        <div className="side-panel-controller">
+        <div className="side-panel-controller" onClick={onToggleSidePanel}>
           <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
         </div>
         {expanded && (
