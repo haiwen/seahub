@@ -30,7 +30,7 @@ isPublished: {% if is_published %}true{% else %}false{% endif %},
 revisionCreatedAt: '{{ revision_created_at }}',
 revisionUpdatedAt: '{{ revision_updated_at }}',
 isFreezed: {% if is_freezed %}true{% else %}false{% endif %},
-lang: '{{ lang }}',
+lang: '{{ LANGUAGE_CODE }}',
 enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
 {% endblock %}
 
