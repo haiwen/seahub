@@ -12,7 +12,7 @@ i18n
   .use(initReactI18next)
   .init({
     lng: lang,
-    fallbackLng: 'zh-CN',
+    fallbackLng: 'en',
     ns: ['sdoc-editor', 'seafile-editor'],
     defaultNS: 'sdoc-editor',
 
