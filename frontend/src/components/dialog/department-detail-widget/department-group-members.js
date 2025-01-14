@@ -107,12 +107,7 @@ class DepartmentGroupMembers extends Component {
 
   render() {
     const { members, memberSelected, loading, selectedMemberMap, currentDepartment, usedFor } = this.props;
-    let headerTitle;
-    if (currentDepartment.id === -1) {
-      headerTitle = gettext('All users');
-    } else {
-      headerTitle = currentDepartment.name + ' ' + gettext('members');
-    }
+    let headerTitle = (currentDepartment.name || '') + ' ' + gettext('members');
     if (loading) {
       return (
         <div className="department-dialog-member pt-4">
