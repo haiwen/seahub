@@ -50,8 +50,8 @@ const getCurrentPageConfig = (pages, pageId) => {
 const getWikPageLink = (pageId) => {
   let { origin, pathname } = window.location;
   let pathArr = pathname.split('/');
-  // pathname is like `/wikis/${wikiId}/{pageId}/`
-  pathArr[3] = pageId;
+  // pathname is like `xxx/xxx/wikis/${wikiId}/{pageId}/`
+  pathArr[pathArr.length - 2] = pageId;
   pathname = pathArr.join('/');
   return `${origin}${pathname}`;
 };

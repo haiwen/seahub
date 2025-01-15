@@ -48,4 +48,18 @@ describe('getWikPageLink', () => {
     // Restore original window.location
     window.location = originalLocation;
   });
+  it('returns the correct URL', () => {
+    const originalLocation = window.location;
+    // Mock window.location
+    delete window.location;
+    window.location = {
+      origin: 'https://cloud.seafile.com',
+      pathname: '/seahub/wikis/6cbbded99bd272796a2/7Lj3/'
+    };
+    const pageId = 'y4Jw';
+    const expectedUrl = 'https://cloud.seafile.com/seahub/wikis/6cbbded99bd272796a2/y4Jw/';
+    expect(getWikPageLink(pageId)).toBe(expectedUrl);
+    // Restore original window.location
+    window.location = originalLocation;
+  });
 });
