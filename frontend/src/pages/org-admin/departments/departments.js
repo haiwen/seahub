@@ -4,7 +4,6 @@ import { Utils } from '../../../utils/utils';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import toaster from '../../../components/toast';
-import Account from '../../../components/common/account';
 import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
 import AddDepartMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
 import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
@@ -14,6 +13,7 @@ import Loading from '../../../components/loading';
 import DepartmentNode from './department-node';
 import DepartmentsTreePanel from './departments-tree-panel';
 import Department from './department';
+import MainPanelTopbar from '../main-panel-topbar';
 
 import '../../../css/system-departments-v2.css';
 
@@ -292,23 +292,12 @@ class Departments extends React.Component {
       isDeleteDepartmentDialogShow, sortBy, sortOrder } = this.state;
     return (
       <Fragment>
-
-        <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-            <div className="operation">
-              <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={() => {this.toggleAddDepartment(null);}}>{gettext('New Department')}
-              </button>
-            </div>
-          </div>
-          <div className="common-toolbar">
-            <Account isAdminPanel={true}/>
-          </div>
-        </div>
-
+        <MainPanelTopbar />
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <h2 className="heading">{gettext('Departments')}</h2>
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Departments')}</h3>
+            </div>
             <div className="cur-view-content d-flex flex-row p-0">
               {isTopDepartmentLoading && <Loading/>}
               {(!isTopDepartmentLoading && rootNodes.length > 0) &&

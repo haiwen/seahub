@@ -86,7 +86,6 @@ import AbuseReports from './abuse-reports';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
-import '../../css/admin-common.css';
 
 class SysAdmin extends React.Component {
   constructor(props) {

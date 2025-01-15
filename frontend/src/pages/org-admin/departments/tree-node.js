@@ -110,8 +110,8 @@ class DepartmentsV2TreeNode extends Component {
     const { node, checkedDepartmentId } = this.props;
     const { isChildrenShow, dropdownOpen, active } = this.state;
     let nodeInnerClass = classNames({
-      'departments-v2-tree-item': true,
-      'departments-v2-hight-light': checkedDepartmentId === node.id
+      'tree-node': true,
+      'active': checkedDepartmentId === node.id
     });
     return (
       <Fragment>
@@ -134,17 +134,17 @@ class DepartmentsV2TreeNode extends Component {
               isOpen={dropdownOpen}
               toggle={(e) => this.dropdownToggle(e)}
               direction="down"
-              className="department-dropdown-menu"
+              className="mr-2"
             >
               <DropdownToggle
                 tag='span'
                 role="button"
-                className='department-action-icon'
+                className='right-icon'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               >
-                <i className="sf3-font sf3-font-more mr-1"></i>
+                <i className="sf3-font sf3-font-more"></i>
               </DropdownToggle>
               <DepartmentNodeMenu
                 node={node}
@@ -158,7 +158,7 @@ class DepartmentsV2TreeNode extends Component {
           }
         </div>
         {this.state.isChildrenShow &&
-          <div className="department-children">
+          <div className="tree-node-children">
             {node.children && this.renderTreeNodes(node.children)}
           </div>
         }

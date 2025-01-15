@@ -47,7 +47,7 @@ class OrgInfo extends Component {
     download_traffic = download_traffic ? download_traffic : 0;
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

@@ -6,7 +6,6 @@ import { gettext } from '../../../utils/constants';
 function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers, toggleAddDepartment, toggleAddLibrary }) {
   return (
     <DropdownMenu
-      right={true}
       modifiers={{ preventOverflow: { boundariesElement: document.body } }}
       positionFixed={true}
     >
