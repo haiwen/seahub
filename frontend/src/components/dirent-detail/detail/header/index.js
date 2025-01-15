@@ -6,18 +6,26 @@ import Title from './title';
 import './index.css';
 
 const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} }) => {
-  const { closeIcon } = component;
+  const { isShowControl, closeIcon } = component;
   return (
     <div className="detail-header">
       <Title title={title} icon={icon} iconSize={iconSize} />
-      <div className="detail-control-container">
-        {children}
-        <div className="detail-control" onClick={onClose}>
-          {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+      {isShowControl && (
+        <div className="detail-control-container">
+          {children}
+          <div className="detail-control" onClick={onClose}>
+            {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
+};
+
+Header.defaultProps = {
+  component: {
+    isShowControl: true,
+  }
 };
 
 Header.propTypes = {
@@ -27,6 +35,7 @@ Header.propTypes = {
   component: PropTypes.object,
   children: PropTypes.any,
   onClose: PropTypes.func.isRequired,
+  isShowControl: PropTypes.bool,
 };
 
 export default Header;

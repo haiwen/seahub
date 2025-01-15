@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
-import ImageDialog from '../../components/dialog/image-dialog';
+import ImageDialog from '../dialog/image-dialog';
 import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
@@ -608,6 +608,7 @@ class DirentGridView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
@@ -843,9 +844,10 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    let { direntList, selectedDirentList, path } = this.props;
+    let { direntList, selectedDirentList, path, userPerm } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
@@ -1018,6 +1020,8 @@ class DirentGridView extends React.Component {
         {this.state.isImagePopupOpen && this.state.imageItems.length && (
           <ModalPortal>
             <ImageDialog
+              repoID={this.props.repoID}
+              repoInfo={this.props.currentRepoInfo}
               imageItems={this.state.imageItems}
               imageIndex={this.state.imageIndex}
               closeImagePopup={this.closeImagePopup}
@@ -1026,6 +1030,7 @@ class DirentGridView extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={!repoEncrypted}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}

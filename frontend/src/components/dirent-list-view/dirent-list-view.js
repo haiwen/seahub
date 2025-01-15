@@ -205,6 +205,7 @@ class DirentListView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
@@ -749,10 +750,11 @@ class DirentListView extends React.Component {
   };
 
   render() {
-    const { direntList } = this.props;
+    const { direntList, userPerm } = this.props;
 
     const isDesktop = Utils.isDesktop();
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     return (
       <div
@@ -849,6 +851,8 @@ class DirentListView extends React.Component {
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog
+                repoID={this.props.repoID}
+                repoInfo={this.props.currentRepoInfo}
                 imageItems={this.state.imageItems}
                 imageIndex={this.state.imageIndex}
                 closeImagePopup={this.closeImagePopup}
@@ -857,6 +861,7 @@ class DirentListView extends React.Component {
                 onDeleteImage={this.deleteImage}
                 onRotateImage={this.rotateImage}
                 enableRotate={!repoEncrypted}
+                isCustomPermission={isCustomPermission}
               />
             </ModalPortal>
           )}

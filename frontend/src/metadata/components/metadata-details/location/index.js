@@ -106,7 +106,8 @@ class Location extends React.Component {
       const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
       const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
       const { lng, lat } = bdPosition;
-      this.map = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
+      const containerId = this.props.withinImageDialog ? 'sf-geolocation-map-container-within-image-dialog' : 'sf-geolocation-map-container';
+      this.map = new window.BMapGL.Map(containerId, { enableMapClick: false });
       const point = new window.BMapGL.Point(lng, lat);
       this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
@@ -155,7 +156,7 @@ class Location extends React.Component {
 
   render() {
     const { isLoading, address } = this.state;
-    const { position } = this.props;
+    const { position, withinImageDialog } = this.props;
     const isValid = isValidPosition(position?.lng, position?.lat);
     return (
       <>
@@ -176,7 +177,7 @@ class Location extends React.Component {
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
           <div className={classnames('dirent-detail-item dirent-detail-item-value-map', { 'd-none': !isValid })}>
-            <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
+            <div className="w-100 h-100" ref={ref => this.ref = ref} id={withinImageDialog ? 'sf-geolocation-map-container-within-image-dialog' : 'sf-geolocation-map-container'}></div>
           </div>
         )}
       </>
@@ -187,6 +188,7 @@ class Location extends React.Component {
 
 Location.propTypes = {
   location: PropTypes.object,
+  withinImageDialog: PropTypes.bool,
 };
 
 export default Location;

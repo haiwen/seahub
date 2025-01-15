@@ -257,6 +257,7 @@ class DirFiles extends React.Component {
         thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
       }
       return {
+        id: item.object.id,
         name,
         parentDir: node.parentNode.path,
         src,
@@ -362,8 +363,9 @@ class DirFiles extends React.Component {
   };
 
   render() {
-    const { repoID, currentRepoInfo } = this.props;
+    const { repoID, currentRepoInfo, userPerm } = this.props;
     const repoEncrypted = currentRepoInfo.encrypted;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
     return (
       <>
         <TreeSection
@@ -449,6 +451,8 @@ class DirFiles extends React.Component {
         {this.state.isNodeImagePopupOpen && (
           <ModalPortal>
             <ImageDialog
+              repoID={repoID}
+              repoInfo={currentRepoInfo}
               imageItems={this.state.imageNodeItems}
               imageIndex={this.state.imageIndex}
               closeImagePopup={this.closeNodeImagePopup}
@@ -457,6 +461,7 @@ class DirFiles extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={!repoEncrypted}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}
