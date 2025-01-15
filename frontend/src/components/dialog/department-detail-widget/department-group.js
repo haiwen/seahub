@@ -30,7 +30,7 @@ class Item extends Component {
   renderSubDepartments = () => {
     const { departments } = this.props;
     return (
-      <div style={{ paddingLeft: '10px' }}>
+      <div>
         {departments.map((department, index) => {
           if (department.parent_group_id !== this.props.department.id) return null;
           return (
@@ -43,6 +43,7 @@ class Item extends Component {
               toggleExpanded={this.props.toggleExpanded}
               currentDepartment={this.props.currentDepartment}
               allMembersClick={this.props.allMembersClick}
+              padding={this.props.padding + 10}
             />
           );
         })}
@@ -56,12 +57,12 @@ class Item extends Component {
     const { hasChild, isExpanded } = department;
     return (
       <>
-        <div className={isCurrent ? 'tr-highlight group-item' : 'group-item'} onClick={this.getMembers}>
+        <div className={isCurrent ? 'tr-highlight group-item' : 'group-item'} onClick={this.getMembers} style={{ paddingLeft: `${this.props.padding}px` }}>
           {hasChild &&
             <span
               className={`sf3-font sf3-font-down ${isExpanded ? '' : 'rotate-270'} d-inline-block`}
               onClick={this.toggleExpanded}
-              style={{ color: isCurrent ? '#fff' : '#999', fontSize: '12px' }}
+              style={{ color: '#666' }}
             >
             </span>
           }
@@ -127,6 +128,7 @@ class DepartmentGroup extends Component {
                 toggleExpanded={this.toggleExpanded}
                 currentDepartment={this.props.currentDepartment}
                 allMembersClick={this.state.allMembersClick}
+                padding={10}
               />
             );
           })}
