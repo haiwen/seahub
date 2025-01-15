@@ -977,7 +977,7 @@ class GridItem extends React.Component {
       return (
         <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <a href={folderURL} className="grid-file-img-link d-block">
-            <img src={Utils.getFolderIconUrl(false, 192)} alt="" width="96" height="96" />
+            <img src={Utils.getFolderIconUrl(false, 192)} alt="" width="80" height="80" />
           </a>
           <a href={folderURL} className="grid-file-name grid-file-name-link">{item.folder_name}</a>
           {showDownloadIcon &&
@@ -994,7 +994,7 @@ class GridItem extends React.Component {
           <a href={fileURL} className="grid-file-img-link d-block" onClick={this.handleFileClick}>
             {thumbnailURL ?
               <img className="thumbnail" src={thumbnailURL} alt="" /> :
-              <img src={Utils.getFileIconUrl(item.file_name)} alt="" width="96" height="96" />
+              <img src={Utils.getFileIconUrl(item.file_name)} alt="" width="80" height="80" />
             }
           </a>
           <a href={fileURL} className="grid-file-name grid-file-name-link" onClick={this.handleFileClick}>{item.file_name}</a>
