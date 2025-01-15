@@ -68,6 +68,17 @@ export const MetadataAIOperationsProvider = ({
     });
   }, [repoID]);
 
+  const genDualLayerPDF = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
+    const filePath = Utils.joinPath(parentDir, fileName);
+    const inProgressToaster = toaster.notifyInProgress(gettext('Making PDF searchable by AI...'), { duration: null });
+    metadataAPI.genDualLayerPDF(repoID, filePath).then(res => {inProgressToaster.close();}).catch(error => {
+      inProgressToaster.close();
+      const errorMessage = gettext('Failed to make PDF searchable');
+      toaster.danger(errorMessage);
+      fail_callback && fail_callback();
+    });
+  }, [repoID]);
+
   const extractFilesDetails = useCallback((objIds, { success_callback, fail_callback } = {}) => {
     const inProgressToaster = toaster.notifyInProgress(gettext('Extracting file details by AI...'), { duration: null });
     metadataAPI.extractFileDetails(repoID, objIds).then(res => {
@@ -102,6 +113,7 @@ export const MetadataAIOperationsProvider = ({
       onOCR,
       OCRSuccessCallBack,
       generateDescription,
+      genDualLayerPDF,
       extractFilesDetails,
       extractFileDetails,
     }}>
