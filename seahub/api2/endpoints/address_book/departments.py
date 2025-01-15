@@ -92,12 +92,7 @@ class AddressBookDepartmentMembers(APIView):
         '''
         check if the department belongs to the org
         '''
-        # TODO
-        # owner = "%s@seafile_group" % department_id
-        # ws = Workspaces.objects.get_workspace_by_owner(owner)
-        # if ws and ws.org_id == org_id:
-        #     return True
-        return False
+        return org_id == ccnet_api.get_org_id_by_group(department_id)
 
     def get(self, request, department_id):
         """ List members of a group in address book.
@@ -118,7 +113,6 @@ class AddressBookDepartmentMembers(APIView):
             members = ccnet_api.get_group_members(department_id)
             for m in members:
                 member_info = get_address_book_group_memeber_info(m)
-                # filter empty-user from bug that made an empty-group-owner when creating department
                 if m.user_name == '':
                     continue
                 return_results.append(member_info)

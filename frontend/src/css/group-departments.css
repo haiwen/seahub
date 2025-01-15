@@ -9,7 +9,7 @@
   flex-direction: row;
 }
 
-.department-dialog .department-dialog-content>div {
+.department-dialog .department-dialog-content > div {
   max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
@@ -18,16 +18,6 @@
   flex: 0 0 30%;
   padding: 1rem;
   border-right: 1px solid #eee;
-}
-
-.department-dialog-content .department-dialog-group .tr-highlight .dtable-icon-groups {
-  padding-right: 10px;
-  color: #ffffff;
-}
-
-.department-dialog-content .department-dialog-group .dtable-icon-groups {
-  padding-right: 10px;
-  color: #9c9c9c;
 }
 
 .department-dialog-content .department-dialog-member {
@@ -48,9 +38,9 @@
   border-top: none;
 }
 
-.department-dialog-content .department-dialog-member-selected .dtable-icon-cancel {
+.department-dialog-content .department-dialog-member-selected .sf3-font-close {
   cursor: pointer;
-  color: #959595;
+  color: #666;
 }
 
 .department-dialog-content .department-dialog-group .group-item {
@@ -65,8 +55,22 @@
 
 .department-dialog-content .department-dialog-group .group-item.tr-highlight:hover,
 .department-dialog-content .department-dialog-group .tr-highlight {
-  background-color: #FF8000;
-  color: #ffffff;
+  background-color: #f0f0f0;
+  color: inherit;
+  position: relative;
+}
+
+.department-dialog-content .department-dialog-group .group-item.tr-highlight::before {
+  content: '';
+  display: block;
+  width: 4px;
+  background-color: #ff9800;
+  border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: -8px;
+  z-index: 0;
 }
 
 .department-dialog-member-head {
@@ -77,13 +81,13 @@
 
 .department-dialog-member-head .department-name {
   font-size: 0.8125rem;
-  color: #9c9c9c;
+  color: #666;
 }
 
 .department-dialog-member-head .select-all {
   cursor: pointer;
   font-size: 0.8125rem;
-  color: #ea7500;;
+  color: #ED7109;
 }
 
 .department-dialog-member-head .select-all-disable {
@@ -104,6 +108,7 @@
   max-height: calc(100% - 32px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 30px;
 }
 
 .department-dialog-member-table tr {
@@ -115,6 +120,13 @@
 
 .department-dialog-member-table .sf3-font-help {
   color: #999;
+  padding-right: 16px;
+  float: right;
+}
+
+.department-dialog-member-table .sf3-font-help:hover {
+  color: #666;
+  cursor: pointer;
 }
 
 .department-dialog-member .empty-tip {
@@ -127,7 +139,7 @@
 }
 
 .department-dialog-member .empty-tip h2 {
-  color: #999;
+  color: #666;
   font-weight: normal;
   font-size: 1rem;
 }
@@ -146,20 +158,18 @@
   padding-bottom: 2px;
 }
 
-.department-dialog-member-table tr td .dtable-icon-use-help {
-  color: #bdbdbd;
-}
-
-.department-dialog-member-table tr td .dtable-icon-use-help:hover {
-  color: #888;
-}
-
 .tooltip-inner {
   font-size: 13px;
   font-weight: lighter;
   text-align: justify;
-  color: #FFF;
+  color: #fff;
   background-color: #303133;
+}
+
+.bs-tooltip-top .arrow::before,
+.bs-tooltip-auto[x-placement^="bottom"] .arrow::before,
+.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+  border-top-color: #303133;
 }
 
 .department-dialog-member-selected tr td:last-child {
