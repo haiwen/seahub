@@ -325,12 +325,12 @@ class Departments extends React.Component {
       isDeleteDepartmentDialogShow, sortBy, sortOrder } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props}>
-          <button className='btn btn-secondary operation-item' title={gettext('New Department')} onClick={() => {this.toggleAddDepartment(null);}}>{gettext('New Department')}</button>
-        </MainPanelTopbar>
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <h2 className="heading">{gettext('Departments')}</h2>
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Departments')}</h3>
+            </div>
             <div className="cur-view-content d-flex flex-row p-0">
               {isTopDepartmentLoading && <Loading/>}
               {(!isTopDepartmentLoading && rootNodes.length > 0) &&

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '../../../utils/constants';
 import DepartmentTreeNode from './tree-node';
 
 const DepartmentsTreePanelPropTypes = {
@@ -18,7 +19,7 @@ class DepartmentsTreePanel extends Component {
   render() {
     const { rootNodes, checkedDepartmentId } = this.props;
     return (
-      <div className="departments-tree-panel">
+      <div className="departments-tree-panel p-4">
         {rootNodes.map(rootNode => {
           return (
             <DepartmentTreeNode
@@ -35,6 +36,13 @@ class DepartmentsTreePanel extends Component {
             />
           );
         })}
+        <button
+          className='btn btn-secondary btn-block text-left border-0 font-weight-normal new-dept-btn shadow-none'
+          onClick={() => {this.props.toggleAddDepartment(null);}}
+        >
+          <i className="sf3-font sf3-font-new mr-2 new-dept-btn-icon"></i>
+          {gettext('New Department')}
+        </button>
       </div>
     );
   }

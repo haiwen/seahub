@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Dropdown, DropdownToggle } from 'reactstrap';
+import { Dropdown, DropdownToggle } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
 import Paginator from '../../../components/paginator';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
-
-import { gettext } from '../../../utils/constants';
-import MemberItem from './member-item';
-import RepoItem from './repo-item';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import MemberItem from './member-item';
+import RepoItem from './repo-item';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -137,8 +136,8 @@ class Department extends React.Component {
 
     return (
       <div className="department-content-main d-flex flex-column">
-        <div className="department-content-main-name">
-          {currentDepartment.name}
+        <div className="cur-view-path justify-content-start">
+          <h4 className="sf-heading">{currentDepartment.name}</h4>
           <Dropdown
             isOpen={this.state.dropdownOpen}
             toggle={(e) => this.dropdownToggle(e)}
@@ -183,7 +182,7 @@ class Department extends React.Component {
                 ? <EmptyTip text={gettext('No members')} />
                 : (
                   <div className="w-xs-250">
-                    <Table>
+                    <table>
                       <thead>
                         <tr>
                           <th width="10%"></th>
@@ -208,7 +207,7 @@ class Department extends React.Component {
                           );
                         })}
                       </tbody>
-                    </Table>
+                    </table>
                     {this.props.currentPageInfo &&
                     <Paginator
                       gotoPreviousPage={this.props.getPreviousPageList}

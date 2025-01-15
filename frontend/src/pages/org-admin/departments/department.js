@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Dropdown, DropdownToggle } from 'reactstrap';
+import { Dropdown, DropdownToggle } from 'reactstrap';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
@@ -113,8 +113,8 @@ class Department extends React.Component {
 
     return (
       <div className="department-content-main d-flex flex-column">
-        <div className="department-content-main-name">
-          {currentDepartment.name}
+        <div className="cur-view-path justify-content-start">
+          <h4 className="sf-heading">{currentDepartment.name}</h4>
           <Dropdown
             isOpen={this.state.dropdownOpen}
             toggle={(e) => this.dropdownToggle(e)}
@@ -156,7 +156,7 @@ class Department extends React.Component {
             {isMembersListLoading && <Loading />}
             {!isMembersListLoading && membersList.length > 0 &&
               <div className='cur-view-content'>
-                <Table>
+                <table>
                   <thead>
                     <tr>
                       <th width="60px"></th>
@@ -181,7 +181,7 @@ class Department extends React.Component {
                       );
                     })}
                   </tbody>
-                </Table>
+                </table>
               </div>
             }
             {!isMembersListLoading && membersList.length === 0 &&

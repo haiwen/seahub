@@ -40,7 +40,6 @@ import OrgSubscription from './org-subscription';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
-import '../../css/admin-common.css';
 
 class Org extends React.Component {
   constructor(props) {
