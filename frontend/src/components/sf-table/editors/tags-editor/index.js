@@ -6,7 +6,7 @@ import DeleteTags from './delete-tags';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
-import { getTagColor, getTagId, getTagName, getTagsByNameOrColor } from '../../../../tag/utils/cell/core';
+import { getTagColor, getTagId, getTagName, getTagsByNameOrColor } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
 import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
 import { getRowById } from '../../utils/table';

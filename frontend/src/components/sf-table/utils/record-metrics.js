@@ -42,7 +42,7 @@ function isSelectedAll(recordIds, recordMetrics) {
   return recordIds.every(recordId => isRecordSelected(recordId, recordMetrics));
 }
 
-const recordMetrics = {
+export const RecordMetrics = {
   selectRecord,
   selectRecordsById,
   deselectRecord,
@@ -52,5 +52,3 @@ const recordMetrics = {
   hasSelectedRecords,
   isSelectedAll,
 };
-
-export default recordMetrics;

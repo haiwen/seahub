@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import TableMain from './table-main';
 
 import './index.css';
+import './tree.css';
 
 const SFTable = ({
   table,
@@ -14,6 +15,10 @@ const SFTable = ({
   groups,
   showSequenceColumn,
   isGroupView,
+  showRecordAsTree,
+  recordsTree,
+  treeNodeKeyRecordIdMap,
+  keyTreeNodeFoldedMap,
   noRecordsTipsText,
   isLoadingMoreRecords,
   hasMoreRecords,
@@ -46,10 +51,22 @@ const SFTable = ({
     return recordId && recordGetterById(recordId);
   }, [recordGetterById]);
 
+  const getTreeNodeByIndex = useCallback((nodeIndex) => {
+    if (!window.sfTableBody || !window.sfTableBody.getTreeNodeByIndex) return null;
+    return window.sfTableBody.getTreeNodeByIndex(nodeIndex);
+  }, []);
+
+  const treeRecordGetter = useCallback((nodeIndex) => {
+    const node = getTreeNodeByIndex(nodeIndex);
+    const recordId = node && node._id;
+    return recordId && recordGetterById(recordId);
+  }, [getTreeNodeByIndex, recordGetterById]);
+
   const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
+    if (showRecordAsTree) return treeRecordGetter(recordIndex);
     if (isGroupView) return groupRecordGetter(groupRecordIndex);
     return recordGetter(recordIndex);
-  }, [groupRecordGetter, recordGetter]);
+  }, [showRecordAsTree, groupRecordGetter, treeRecordGetter, recordGetter]);
 
   const beforeUnloadHandler = useCallback(() => {
     if (window.sfTableBody) {
@@ -71,17 +88,21 @@ const SFTable = ({
         recordsIds={recordsIds}
         groupbys={groupbys}
         groups={groups}
+        recordsTree={recordsTree}
+        keyTreeNodeFoldedMap={keyTreeNodeFoldedMap}
         showSequenceColumn={showSequenceColumn}
         isGroupView={isGroupView}
         noRecordsTipsText={noRecordsTipsText}
         hasMoreRecords={hasMoreRecords}
         isLoadingMoreRecords={isLoadingMoreRecords}
         showGridFooter={showGridFooter}
+        showRecordAsTree={showRecordAsTree}
         loadMore={loadMore}
         loadAll={loadAll}
         getTableContentRect={getTableContentRect}
         onGridKeyDown={onGridKeyDown}
         onGridKeyUp={onGridKeyUp}
+        getTreeNodeByIndex={getTreeNodeByIndex}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
       />
@@ -121,6 +142,16 @@ SFTable.propTypes = {
   supportCut: PropTypes.bool,
   supportPaste: PropTypes.bool,
   supportDragFill: PropTypes.bool,
+  showRecordAsTree: PropTypes.bool,
+  /**
+   * recordsTree: [
+  *  { _id, node_depth, node_index, node_key, ... }
+  *    ...
+   * ]
+   * keyTreeNodeFoldedMap: { [node_key]: true, ... }
+   */
+  recordsTree: PropTypes.array,
+  keyTreeNodeFoldedMap: PropTypes.object,
   checkCanModifyRecord: PropTypes.func,
   checkCellValueChanged: PropTypes.func, // for complex cell value compare
   onGridKeyDown: PropTypes.func,
@@ -134,6 +165,7 @@ SFTable.defaultProps = {
   groupbys: [],
   groups: [],
   isGroupView: false,
+  showRecordAsTree: false,
   showSequenceColumn: true,
   hasMoreRecords: false,
   isLoadingMoreRecords: false,

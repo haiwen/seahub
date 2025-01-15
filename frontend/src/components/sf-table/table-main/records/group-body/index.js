@@ -6,7 +6,7 @@ import InteractionMasks from '../../../masks/interaction-masks';
 import GroupContainer from './group-container';
 import Record from '../record';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
-import RecordMetrics from '../../../utils/record-metrics';
+import { RecordMetrics } from '../../../utils/record-metrics';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body-utils';
 import { addClassName, removeClassName } from '../../../utils';
 import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../utils/group-metrics';
@@ -53,7 +53,7 @@ class GroupBody extends Component {
     this.rowVisibleStart = startRenderIndex;
     this.rowVisibleEnd = endRenderIndex;
     this.columnVisibleStart = 0;
-    this.columnVisibleEnd = this.setColumnVisibleEnd();
+    this.columnVisibleEnd = this.props.getColumnVisibleEnd();
     this.disabledAnimation = false;
     this.nextPathFoldedGroupMap = null;
   }
@@ -189,22 +189,6 @@ class GroupBody extends Component {
 
   setRightScrollbar = (ref) => {
     this.rightScrollbar = ref;
-  };
-
-  setColumnVisibleEnd = () => {
-    const { columns, getScrollLeft, getTableContentRect } = this.props;
-    const { width: tableContentWidth } = getTableContentRect();
-    let columnVisibleEnd = 0;
-    const contentScrollLeft = getScrollLeft();
-    let endColumnWidth = tableContentWidth + contentScrollLeft;
-    for (let i = 0; i < columns.length; i++) {
-      const { width } = columns[i];
-      endColumnWidth = endColumnWidth - width;
-      if (endColumnWidth < 0) {
-        return columnVisibleEnd = i;
-      }
-    }
-    return columnVisibleEnd;
   };
 
   getScrollTop = () => {
@@ -974,6 +958,7 @@ GroupBody.propTypes = {
   searchResult: PropTypes.object,
   editorPortalTarget: PropTypes.instanceOf(Element),
   onRef: PropTypes.func,
+  getColumnVisibleEnd: PropTypes.func,
   getScrollLeft: PropTypes.func,
   setRecordsScrollLeft: PropTypes.func,
   storeScrollPosition: PropTypes.func,

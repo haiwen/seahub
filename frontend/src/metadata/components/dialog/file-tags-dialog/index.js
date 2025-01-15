@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../components/toast';
+import EmptyTip from '../../../../components/empty-tip';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
-import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord
-} from '../../../utils/cell';
-import toaster from '../../../../components/toast';
-import classNames from 'classnames';
-import { getTagByName, getTagId } from '../../../../tag/utils';
+import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
+import { getTagByName } from '../../../../tag/utils/row';
+import { getTagId } from '../../../../tag/utils/cell';
 import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { useTags } from '../../../../tag/hooks';
-import EmptyTip from '../../../../components/empty-tip';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import './index.css';
 

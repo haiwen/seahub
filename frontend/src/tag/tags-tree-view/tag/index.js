@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getTagColor, getTagName, getTagFilesCount } from '../../utils';
+import { getTagColor, getTagName, getTagFilesCount } from '../../utils/cell';
 
 import './index.css';
 

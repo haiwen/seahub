@@ -6,7 +6,7 @@ import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../../tag/hooks';
-import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell/core';
+import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../utils/table';
 import { SELECT_OPTION_COLORS } from '../../../constants';

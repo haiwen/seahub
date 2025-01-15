@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, FormGroup, Input, Button, Alert, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../../utils/constants';
-import { getTagColor, getTagId, getTagName } from '../../../utils/cell/core';
-import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
-import { isEnter } from '../../../../metadata/utils/hotkey';
-import { isValidTagName } from '../../../utils';
-import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import toaster from '../../../../components/toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { gettext } from '../../../../utils/constants';
+import { getTagColor, getTagId, getTagName } from '../../../utils/cell';
+import { isValidTagName } from '../../../utils/validate/tag';
+import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
+import { isEnter } from '../../../../metadata/utils/hotkey';
+import { PRIVATE_COLUMN_KEY } from '../../../constants';
 
 import './index.css';
 

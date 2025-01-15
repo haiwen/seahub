@@ -1,4 +1,4 @@
-import { getTagName } from '../../../../tag/utils';
+import { getTagName } from '../../../../tag/utils/cell';
 import { getRowById } from '../../table';
 
 export const getTagsDisplayString = (tagsData, cellValue) => {

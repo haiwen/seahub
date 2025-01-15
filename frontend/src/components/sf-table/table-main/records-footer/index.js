@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Loading } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../toast';
 import LoadAllTip from '../load-all-tip';
-import RecordMetrics from '../../utils/record-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
+import { TreeMetrics } from '../../utils/tree-metrics';
 import { gettext } from '../../../../utils/constants';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GRID_FOOTER as Z_INDEX_GRID_FOOTER } from '../../constants/z-index';
@@ -108,9 +109,14 @@ class RecordsFooter extends React.Component {
   };
 
   getRecord = () => {
-    const { hasMoreRecords, hasSelectedRecord, recordMetrics, selectedRange, recordsCount } = this.props;
+    const { hasMoreRecords, hasSelectedRecord, recordMetrics, selectedRange, recordsCount, showRecordAsTree, treeMetrics } = this.props;
     if (hasSelectedRecord) {
-      const selectedRecordsCount = RecordMetrics.getSelectedIds(recordMetrics).length;
+      let selectedRecordsCount = 1;
+      if (showRecordAsTree) {
+        selectedRecordsCount = TreeMetrics.getSelectedTreeNodesKeys(treeMetrics).length;
+      } else {
+        selectedRecordsCount = RecordMetrics.getSelectedIds(recordMetrics).length;
+      }
       return selectedRecordsCount > 1 ? gettext('xxx records selected').replace('xxx', selectedRecordsCount) : gettext('1 record selected');
     }
     const selectedCellsCount = this.getSelectedCellsCount(selectedRange);
@@ -173,6 +179,8 @@ RecordsFooter.propTypes = {
   sequenceColumnWidth: PropTypes.number,
   groupOffsetLeft: PropTypes.number,
   recordMetrics: PropTypes.object,
+  showRecordAsTree: PropTypes.bool,
+  treeMetrics: PropTypes.object,
   selectedRange: PropTypes.object,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,

@@ -1,4 +1,4 @@
-import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
+import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../constants';
 
 /**
  * @param {object} record eg: { [column_key]: value, [column_name]: value }

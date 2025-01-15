@@ -8,7 +8,7 @@ import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../metadata/constants';
 import { Utils } from '../../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { getRowById } from '../../../components/sf-table/utils/table';
-import { getTagName } from '../../utils';
+import { getTagName } from '../../utils/cell';
 import { ALL_TAGS_ID } from '../../constants';
 
 import './index.css';
@@ -62,7 +62,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     }
   }, [isLoading, isReloading, onChangeDisplayTag]);
 
-  if (isLoading || isReloading) return (<CenteredLoading />);
+  if (isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
     return (

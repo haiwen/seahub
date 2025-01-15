@@ -71,6 +71,7 @@ class PopupEditorContainer extends React.Component {
       editorContainer: document.body,
       modifyColumnData,
       editorPosition,
+      editingRowId: this.editingRowId,
       record,
       height,
       columns,

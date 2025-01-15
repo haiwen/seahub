@@ -8,14 +8,23 @@
 }
 
 .sf-table-tag-name-formatter {
+  position: relative;
   display: flex;
   align-items: center;
 }
 
 .sf-table-tag-name-formatter .sf-table-tag-color {
+  position: absolute;
+  left: 0;
+  top: 50%;
   display: inline-block;
   height: 12px;
   width: 12px;
   border-radius: 50%;
-  margin-right: 8px;
+  transform: translateY(-50%);
+}
+
+.sf-table-tag-name-formatter .sf-table-tag-name {
+  flex: 1;
+  padding-left: 20px;
 }

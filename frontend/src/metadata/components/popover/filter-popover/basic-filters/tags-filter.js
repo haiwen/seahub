@@ -4,7 +4,7 @@ import { CustomizeSelect, Icon, FileTagsFormatter } from '@seafile/sf-metadata-u
 import { gettext } from '../../../../../utils/constants';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
-import { getTagId, getTagName, getTagColor } from '../../../../../tag/utils';
+import { getTagId, getTagName, getTagColor } from '../../../../../tag/utils/cell';
 import { getRowById } from '../../../../utils/table';
 
 const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {

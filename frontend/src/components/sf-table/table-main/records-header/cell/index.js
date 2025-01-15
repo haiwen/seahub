@@ -8,14 +8,16 @@ import HeaderDropdownMenu from '../dropdown-menu';
 import EventBus from '../../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
 import { checkIsNameColumn } from '../../../utils/column';
+import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
+import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';
 
 import './index.css';
-import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 
 const Cell = ({
   frozen,
   moveable,
   resizable,
+  showRecordAsTree,
   groupOffsetLeft,
   isLastFrozenCell,
   height,
@@ -150,16 +152,10 @@ const Cell = ({
 
   const { key, display_name, icon_name, icon_tooltip } = column;
   const isNameColumn = checkIsNameColumn(column);
-  const cell = (
-    <div
-      className={classnames('sf-table-cell column', { 'table-last--frozen': isLastFrozenCell, 'name-column': isNameColumn })}
-      ref={headerCellRef}
-      style={style}
-      id={`sf-metadata-column-${key}`}
-      onClick={() => handleHeaderCellClick(column, frozen)}
-      onContextMenu={onContextMenu}
-    >
-      <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">
+
+  const cellName = useMemo(() => {
+    return (
+      <>
         <span className="mr-2" id={`header-icon-${key}`}>
           {icon_name && <Icon iconName={icon_name} className="sf-table-column-icon" />}
         </span>
@@ -171,11 +167,42 @@ const Cell = ({
         <div className="header-name d-flex">
           <span title={display_name} className={classnames('header-name-text', { 'double': height === 56 })}>{display_name}</span>
         </div>
+      </>
+    );
+  }, [icon_name, display_name, height, icon_tooltip, key]);
+
+  const cellContent = useMemo(() => {
+    if (showRecordAsTree && isNameColumn) {
+      return (
+        <div className="sf-table-cell-tree-node">
+          <span className="sf-table-record-tree-expand-icon" style={{ left: NODE_ICON_LEFT_INDENT }}></span>
+          <div className="sf-table-cell-tree-node-content text-truncate"style={{ paddingLeft: NODE_CONTENT_LEFT_INDENT }}>
+            {cellName}
+          </div>
+        </div>
+      );
+    }
+    return cellName;
+  }, [cellName, isNameColumn, showRecordAsTree]);
+
+  const cell = useMemo(() => {
+    return (
+      <div
+        className={classnames('sf-table-cell column', { 'table-last--frozen': isLastFrozenCell, 'name-column': isNameColumn })}
+        ref={headerCellRef}
+        style={style}
+        id={`sf-metadata-column-${key}`}
+        onClick={() => handleHeaderCellClick(column, frozen)}
+        onContextMenu={onContextMenu}
+      >
+        <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">
+          {cellContent}
+        </div>
+        {isValidElement(ColumnDropdownMenu) && <HeaderDropdownMenu ColumnDropdownMenu={ColumnDropdownMenu} column={column} setDisableDragColumn={setDisableDragColumn} />}
+        {resizable && <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />}
       </div>
-      {isValidElement(ColumnDropdownMenu) && <HeaderDropdownMenu ColumnDropdownMenu={ColumnDropdownMenu} column={column} setDisableDragColumn={setDisableDragColumn} />}
-      {resizable && <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />}
-    </div>
-  );
+    );
+  }, [ColumnDropdownMenu, cellContent, key, column, style, frozen, resizable, isLastFrozenCell, isNameColumn, handleDragEndColumnWidth, handleHeaderCellClick, onContextMenu, onDraggingColumnWidth]);
 
   if (!moveable || isNameColumn) {
     return (

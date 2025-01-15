@@ -1,4 +1,4 @@
-import { getTagName } from '../cell';
+import { getTagName } from './cell';
 
 export const getTagByName = (tagsData, tagName) => {
   if (!tagsData || !tagName) return null;

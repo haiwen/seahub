@@ -9,6 +9,7 @@ import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useTags } from '../../../hooks';
 import EventBus from '../../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
+import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 
 import './index.css';
 
@@ -74,6 +75,22 @@ const TagsTable = ({
     return table.row_ids || [];
   }, [table]);
 
+  const recordsTree = useMemo(() => {
+    return table.rows_tree || [];
+  }, [table]);
+
+  const keyTreeNodeFoldedMap = useMemo(() => {
+    const strKeyTreeNodeFoldedMap = window.sfTagsDataContext.localStorage.getItem(LOCAL_KEY_TREE_NODE_FOLDED);
+    if (strKeyTreeNodeFoldedMap) {
+      try {
+        return JSON.parse(strKeyTreeNodeFoldedMap);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  }, []);
+
   const gridScroll = useMemo(() => {
     const strScroll = window.sfTagsDataContext.localStorage.getItem(KEY_STORE_SCROLL);
     let scroll = null;
@@ -94,6 +111,10 @@ const TagsTable = ({
   }, []);
 
   const storeFoldedGroups = useCallback(() => {}, []);
+
+  const storeFoldedTreeNodes = useCallback((key, keyFoldedTreeNodesMap) => {
+    window.sfTagsDataContext.localStorage.setItem(key, JSON.stringify(keyFoldedTreeNodesMap));
+  }, []);
 
   const modifyColumnWidth = useCallback((column, newWidth) => {
     modifyColumnWidthAPI(column.key, newWidth);
@@ -130,8 +151,11 @@ const TagsTable = ({
     <>
       <SFTable
         key={`sf-table-${table._id}`}
+        showRecordAsTree
         table={table}
         recordsIds={recordsIds}
+        recordsTree={recordsTree}
+        keyTreeNodeFoldedMap={keyTreeNodeFoldedMap}
         canModifyTags={canModifyTags}
         foldedGroups={foldedGroups}
         gridScroll={gridScroll}
@@ -145,6 +169,7 @@ const TagsTable = ({
         createContextMenuOptions={createTagContextMenuOptions}
         storeGridScroll={storeGridScroll}
         storeFoldedGroups={storeFoldedGroups}
+        storeFoldedTreeNodes={storeFoldedTreeNodes}
         checkCanModifyRecord={checkCanModifyTag}
         checkCellValueChanged={checkCellValueChanged}
         modifyColumnWidth={modifyColumnWidth}

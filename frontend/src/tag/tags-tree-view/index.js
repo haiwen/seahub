@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useTags } from '../hooks';
-import Tag from './tag';
-import { getTagId } from '../utils';
-import { PRIVATE_FILE_TYPE } from '../../constants';
 import AllTags from './all-tags';
+import Tag from './tag';
+import { useTags } from '../hooks';
+import { getTagId } from '../utils/cell';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 import './index.css';
 

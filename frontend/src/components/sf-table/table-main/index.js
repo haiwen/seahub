@@ -8,6 +8,7 @@ import { GROUP_VIEW_OFFSET } from '../constants/group';
 import { SEQUENCE_COLUMN_WIDTH } from '../constants/grid';
 import { getCellValueByColumn } from '../utils/cell';
 import GridUtils from '../utils/grid-utils';
+import { generateKeyTreeNodeRowIdMap } from '../utils/tree';
 
 const TableMain = ({
   table,
@@ -21,8 +22,11 @@ const TableMain = ({
   hasMoreRecords,
   isLoadingMoreRecords,
   showGridFooter,
+  recordsTree,
+  showRecordAsTree,
   loadMore,
   loadAll,
+  getTreeNodeByIndex,
   recordGetterByIndex,
   recordGetterById,
   getClientCellValueDisplayString,
@@ -43,6 +47,15 @@ const TableMain = ({
   const recordsCount = useMemo(() => {
     return recordsIds.length;
   }, [recordsIds]);
+
+  const treeNodesCount = useMemo(() => {
+    return recordsTree.length;
+  }, [recordsTree]);
+
+  const treeNodeKeyRecordIdMap = useMemo(() => {
+    // treeNodeKeyRecordIdMap: { [node_key]: _id, ... }
+    return generateKeyTreeNodeRowIdMap(recordsTree);
+  }, [recordsTree]);
 
   const hasNoRecords = useMemo(() => {
     return recordsCount === 0 && !hasMoreRecords;
@@ -76,7 +89,7 @@ const TableMain = ({
   }, [getClientCellValueDisplayString]);
 
   return (
-    <div className={classnames('sf-table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0 })}>
+    <div className={classnames('sf-table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0, 'sf-table-tree': showRecordAsTree })}>
       {hasNoRecords && <EmptyTip text={noRecordsTipsText || gettext('No record')} />}
       {!hasNoRecords &&
         <Records
@@ -94,8 +107,13 @@ const TableMain = ({
           sequenceColumnWidth={sequenceColumnWidth}
           hasMoreRecords={hasMoreRecords}
           showGridFooter={showGridFooter}
+          showRecordAsTree={showRecordAsTree}
+          recordsTree={recordsTree}
+          treeNodesCount={treeNodesCount}
+          treeNodeKeyRecordIdMap={treeNodeKeyRecordIdMap}
           scrollToLoadMore={loadMore}
           loadAll={loadAll}
+          getTreeNodeByIndex={getTreeNodeByIndex}
           recordGetterById={recordGetterById}
           recordGetterByIndex={recordGetterByIndex}
           getClientCellValueDisplayString={getInternalClientCellValueDisplayString}
@@ -116,6 +134,8 @@ TableMain.propTypes = {
   groupbys: PropTypes.array,
   groups: PropTypes.array,
   noRecordsTipsText: PropTypes.string,
+  recordsTree: PropTypes.array,
+  showRecordAsTree: PropTypes.bool,
   modifyRecords: PropTypes.func,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
