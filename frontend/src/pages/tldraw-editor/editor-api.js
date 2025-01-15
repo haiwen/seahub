@@ -13,8 +13,8 @@ class EditorApi {
     });
   }
 
-  getFileContent = () => {
-    return seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
+  getFileContent = (transferredRepoID = repoID, transferredFilePath = filePath) => {
+    return seafileAPI.getFileDownloadLink(transferredRepoID, transferredFilePath).then(res => {
       const downLoadUrl = res.data;
       return seafileAPI.getFileContent(downLoadUrl);
     });
