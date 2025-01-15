@@ -154,7 +154,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
         <div className="children">
-          {navigation.map((item, index) => {
+          {Array.isArray(navigation) && navigation.length > 0 && navigation.map((item, index) => {
             if (item.type === VIEWS_TYPE_FOLDER) {
               return renderFolder(item, index);
             }
