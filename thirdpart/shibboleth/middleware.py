@@ -19,6 +19,7 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
+from seahub.utils.ccnet_db import CcnetDB
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -106,14 +107,20 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # call make profile.
             self.make_profile(user, shib_meta)
 
-            if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
-                user_role = custom_shibboleth_get_user_role(shib_meta)
-                if user_role:
-                    ccnet_api.update_role_emailuser(user.email, user_role)
-                else:
-                    user_role = self.update_user_role(user, shib_meta)
+            db_api = CcnetDB()
+            db_user_role =  db_api.get_user_role_from_db(user.email)
+            if db_user_role.is_manual_set:
+                user_role = db_user_role.role
+            
             else:
-                user_role = self.update_user_role(user, shib_meta)
+                if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
+                    user_role = custom_shibboleth_get_user_role(shib_meta)
+                    if user_role:
+                        ccnet_api.update_role_emailuser(user.email, user_role, False)
+                    else:
+                        user_role = self.update_user_role(user, shib_meta, False)
+                else:
+                    user_role = self.update_user_role(user, shib_meta, False)
 
             if user_role:
                 self.update_user_quota(user, user_role)
@@ -208,7 +215,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         return None
 
-    def update_user_role(self, user, shib_meta):
+    def update_user_role(self, user, shib_meta, is_manual_set):
         affiliation = shib_meta.get('affiliation', '')
         if not affiliation:
             return
@@ -216,7 +223,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         for e in affiliation.split(';'):
             role = self._get_role_by_affiliation(e)
             if role:
-                User.objects.update_role(user.email, role)
+                User.objects.update_role(user.email, role, is_manual_set)
                 return role
 
     def update_user_quota(self, user, user_role):

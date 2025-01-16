@@ -28,6 +28,11 @@ class CcnetUsers(object):
         self.role = kwargs.get('role')
         self.passwd = kwargs.get('passwd')
 
+class CcnetUserRole(object):
+    
+    def __init__(self, **kwargs):
+        self.role = kwargs.get('role')
+        self.is_manual_set = kwargs.get('is_manual_set')
 
 class CcnetDB:
 
@@ -211,3 +216,24 @@ class CcnetDB:
             cursor.execute(sql)
             user_count = cursor.fetchone()[0]
         return user_count
+    
+    def get_user_role_from_db(self, email):
+
+        sql = f"""
+        SELECT `role`, `is_manual_set` FROM `{self.db_name}`.`UserRole` WHERE email = '{email}';
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            row = cursor.fetchone()
+            if not row:
+                role = None
+                is_manual_set = False
+            else:
+                role = row[0]
+                is_manual_set = row[1]
+
+        params = {
+            'role': role,
+            'is_manual_set': is_manual_set
+        }
+        return CcnetUserRole(**params)

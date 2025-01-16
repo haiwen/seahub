@@ -111,11 +111,11 @@ class UserManager(object):
 
         return self.get(email=virtual_id)
 
-    def update_role(self, email, role):
+    def update_role(self, email, role, is_manual_set=True):
         """
         If user has a role, update it; or create a role for user.
         """
-        ccnet_api.update_role_emailuser(email, role)
+        ccnet_api.update_role_emailuser(email, role, is_manual_set=is_manual_set)
         return self.get(email=email)
 
     def create_oauth_user(self, email=None, password=None, is_staff=False, is_active=False):
