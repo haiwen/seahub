@@ -17,7 +17,7 @@ class OrgAdminGroupNav extends React.Component {
       <div className="cur-view-path org-admin-user-nav">
         <ul className="nav">
           <li className="nav-item">
-            <Link to={urlBase} className={`nav-link${currentItem == 'info' ? ' active' : ''}`}>{gettext('Group Info')}</Link>
+            <Link to={urlBase} className={`nav-link${currentItem == 'info' ? ' active' : ''}`}>{gettext('Group info')}</Link>
           </li>
           <li className="nav-item">
             <Link to={`${urlBase}repos/`} className={`nav-link${currentItem == 'repos' ? ' active' : ''}`}>{gettext('Libraries')}</Link>
