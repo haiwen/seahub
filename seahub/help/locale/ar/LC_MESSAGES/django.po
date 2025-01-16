@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Amr Mothana <amrusud@gmail.com>, 2024
-# malnaim <malnaim@safedecision.com.sa>, 2024
+# malnaim <malnaim@safedecision.com.sa>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2024\n"
+"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2025\n"
 "Language-Team: Arabic (https://app.transifex.com/haiwen/teams/5086/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1758,7 +1758,7 @@ msgstr ""
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr "وضع علامات على الملفات والمستندات ذات الصلة"
+msgstr "وضع وسوم على الملفات والمستندات ذات الصلة"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1767,16 +1767,16 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
-"يعد وضع علامات على الملفات ميزة مهمة لإدارة المعرفة. يسمح سيفايل للمستخدمين "
-"بتحديد العلامات لكل مكتبة وتطبيق العلامات على الملفات. يمكن إدارة العلامات "
-"من الشريط الجانبي لمحرر ماركداون ، أو من واجهة متصفح الملفات."
+"يعد وضع وسم على الملفات الميزة المهمة لإدارة المعرفة. يسمح سيفايل للمستخدمين"
+" بتحديد الوسوم لكل مكتبة وتطبيق الوسوم على الملفات. يمكن إدارة الوسوم من "
+"الشريط الجانبي لمحرر ماركداون ، أو من واجهة متصفح الملفات."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
-"توفر واجهة مستعرض الملفات ملخصا لجميع علامات الملفات في المكتبة الحالية."
+"توفر واجهة مستعرض الملفات ملخصا لجميع وسوم الملفات في المكتبة الحالية."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
