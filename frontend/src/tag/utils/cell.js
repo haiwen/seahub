@@ -28,13 +28,8 @@ export const getParentLinks = (tag) => {
   return (tag && tag[PRIVATE_COLUMN_KEY.PARENT_LINKS]) || [];
 };
 
-export const getSubLinks = (tag) => {
+export const getChildLinks = (tag) => {
   return (tag && tag[PRIVATE_COLUMN_KEY.SUB_LINKS]) || [];
-};
-
-export const getSubTagsCount = (tag) => {
-  const subLinks = getSubLinks(tag);
-  return subLinks.length;
 };
 
 export const getTagFilesCount = (tag) => {

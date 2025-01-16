@@ -22,7 +22,7 @@ export const checkCellValueChanged = (oldVal, newVal) => {
 export const cellCompare = (props, nextProps) => {
   const {
     record: oldRecord, column, isCellSelected, isLastCell, highlightClassName, height, bgColor,
-    showRecordAsTree, nodeDepth, hasSubNodes, isFoldedNode,
+    showRecordAsTree, nodeDepth, hasChildNodes, isFoldedNode,
   } = props;
   const {
     record: newRecord, highlightClassName: newHighlightClassName, height: newHeight, column: newColumn, bgColor: newBgColor,
@@ -50,7 +50,7 @@ export const cellCompare = (props, nextProps) => {
     bgColor !== newBgColor ||
     showRecordAsTree !== nextProps.showRecordAsTree ||
     nodeDepth !== nextProps.nodeDepth ||
-    hasSubNodes !== nextProps.hasSubNodes ||
+    hasChildNodes !== nextProps.hasChildNodes ||
     isFoldedNode !== nextProps.isFoldedNode ||
     props.groupRecordIndex !== nextProps.groupRecordIndex ||
     props.recordIndex !== nextProps.recordIndex

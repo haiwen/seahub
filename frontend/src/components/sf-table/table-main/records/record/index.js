@@ -38,7 +38,7 @@ class Record extends React.Component {
       nextProps.showRecordAsTree !== this.props.showRecordAsTree ||
       nextProps.nodeKey !== this.props.nodeKey ||
       nextProps.nodeDepth !== this.props.nodeDepth ||
-      nextProps.hasSubNodes !== this.props.hasSubNodes ||
+      nextProps.hasChildNodes !== this.props.hasChildNodes ||
       nextProps.treeNodeDisplayIndex !== this.props.treeNodeDisplayIndex ||
       nextProps.isFoldedNode !== this.props.isFoldedNode
     );
@@ -117,7 +117,7 @@ class Record extends React.Component {
           bgColor={bgColor}
           showRecordAsTree={this.props.showRecordAsTree}
           nodeDepth={this.props.nodeDepth}
-          hasSubNodes={this.props.hasSubNodes}
+          hasChildNodes={this.props.hasChildNodes}
           isFoldedNode={this.props.isFoldedNode}
           toggleExpandNode={this.props.toggleExpandNode}
         />
@@ -184,7 +184,7 @@ class Record extends React.Component {
           bgColor={bgColor}
           showRecordAsTree={this.props.showRecordAsTree}
           nodeDepth={this.props.nodeDepth}
-          hasSubNodes={this.props.hasSubNodes}
+          hasChildNodes={this.props.hasChildNodes}
           isFoldedNode={this.props.isFoldedNode}
           toggleExpandNode={this.props.toggleExpandNode}
         />
@@ -318,7 +318,7 @@ Record.propTypes = {
   showRecordAsTree: PropTypes.bool,
   nodeKey: PropTypes.string,
   nodeDepth: PropTypes.number,
-  hasSubNodes: PropTypes.bool,
+  hasChildNodes: PropTypes.bool,
   treeNodeDisplayIndex: PropTypes.number,
   isFoldedNode: PropTypes.bool,
   toggleExpandNode: PropTypes.func,

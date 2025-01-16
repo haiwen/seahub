@@ -250,6 +250,19 @@ class Store {
     this.applyOperation(operation);
   }
 
+  addChildTag(tagData, parentTagId, { fail_callback, success_callback } = {}) {
+    const type = OPERATION_TYPE.ADD_CHILD_TAG;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      tag_data: tagData,
+      parent_tag_id: parentTagId,
+      fail_callback,
+      success_callback,
+    });
+    this.applyOperation(operation);
+  }
+
   modifyTags(row_ids, id_row_updates, id_original_row_updates, id_old_row_data, id_original_old_row_data, { fail_callback, success_callback }) {
     const originalRows = getRowsByIds(this.data, row_ids);
     let valid_row_ids = [];

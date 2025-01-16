@@ -6,7 +6,10 @@ import { OPERATION_TYPE } from './operations';
 import { buildTagsTree } from '../utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import { TREE_NODE_KEY } from '../../components/sf-table/constants/tree';
-import { createTreeNode } from '../../components/sf-table/utils/tree';
+import {
+  addTreeChildNode, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
+  resetTreeHasChildNodesStatus,
+} from '../../components/sf-table/utils/tree';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -27,7 +30,7 @@ class DataProcessor {
     let updated_rows_tree = [...rows_tree];
     tags.forEach((tag) => {
       const tagId = getRecordIdFromRecord(tag);
-      const nodeKey = tagId;
+      const nodeKey = generateNodeKey('', tagId);
       const node = createTreeNode(tagId, nodeKey, 0, false);
       updated_rows_tree.push(node);
     });
@@ -38,20 +41,23 @@ class DataProcessor {
     if (!Array.isArray(deletedTagsIds) || deletedTagsIds.length === 0) return;
     const { rows_tree } = table;
     const idTagDeletedMap = deletedTagsIds.reduce((currIdTagDeletedMap, tagId) => ({ ...currIdTagDeletedMap, [tagId]: true }), {});
-    const hasDeletedParentNode = rows_tree.some((node) => idTagDeletedMap[node[TREE_NODE_KEY.ID]] && node[TREE_NODE_KEY.HAS_SUB_NODES]);
+    const hasDeletedParentNode = rows_tree.some((node) => idTagDeletedMap[node[TREE_NODE_KEY.ID]] && node[TREE_NODE_KEY.HAS_CHILD_NODES]);
     if (hasDeletedParentNode) {
       // need re-build tree if some parent nodes deleted
       this.buildTagsTree(table.rows, table);
       return;
     }
 
-    // remove the nodes which has no sub nodes directly
+    // remove the nodes which has no child nodes directly
     let updated_rows_tree = [];
     rows_tree.forEach((node) => {
       if (!idTagDeletedMap[node[TREE_NODE_KEY.ID]]) {
         updated_rows_tree.push(node);
       }
     });
+
+    // update has_child_nodes status(all child nodes may be deleted)
+    resetTreeHasChildNodesStatus(updated_rows_tree);
     table.rows_tree = updated_rows_tree;
   }
 
@@ -196,6 +202,23 @@ class DataProcessor {
       case OPERATION_TYPE.ADD_RECORDS: {
         const { tags } = operation;
         this.updateTagsTreeWithNewTags(tags, table);
+        break;
+      }
+      case OPERATION_TYPE.ADD_CHILD_TAG: {
+        const { tag, parent_tag_id } = operation;
+        const tagId = getRecordIdFromRecord(tag);
+        if (!tagId || !parent_tag_id) return;
+        const { rows_tree } = table;
+        rows_tree.forEach((node) => {
+          const nodeId = getTreeNodeId(node);
+          if (nodeId === parent_tag_id) {
+            const parentNodeKey = getTreeNodeKey(node);
+            const parentNodeDepth = getTreeNodeDepth(node);
+            const subNodeKey = generateNodeKey(parentNodeKey, tagId);
+            const childNode = createTreeNode(tagId, subNodeKey, parentNodeDepth + 1, false);
+            addTreeChildNode(childNode, node, rows_tree);
+          }
+        });
         break;
       }
       case OPERATION_TYPE.ADD_TAG_LINKS:

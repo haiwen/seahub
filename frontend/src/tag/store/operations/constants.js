@@ -1,5 +1,6 @@
 export const OPERATION_TYPE = {
   ADD_RECORDS: 'add_records',
+  ADD_CHILD_TAG: 'add_child_tag',
   MODIFY_RECORDS: 'modify_records',
   DELETE_RECORDS: 'delete_records',
   RESTORE_RECORDS: 'restore_records',
@@ -14,6 +15,7 @@ export const OPERATION_TYPE = {
 
 export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.ADD_RECORDS]: ['repo_id', 'rows', 'tags'],
+  [OPERATION_TYPE.ADD_CHILD_TAG]: ['repo_id', 'tag_data', 'parent_tag_id'],
   [OPERATION_TYPE.MODIFY_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
   [OPERATION_TYPE.DELETE_RECORDS]: ['repo_id', 'tag_ids', 'deleted_tags'],
   [OPERATION_TYPE.RESTORE_RECORDS]: ['repo_id', 'rows_data', 'original_rows', 'link_infos', 'upper_row_ids'],
@@ -38,6 +40,7 @@ export const LOCAL_APPLY_OPERATION_TYPE = [
 // apply operation after exec operation on the server
 export const NEED_APPLY_AFTER_SERVER_OPERATION = [
   OPERATION_TYPE.ADD_RECORDS,
+  OPERATION_TYPE.ADD_CHILD_TAG,
 ];
 
 export const VIEW_OPERATION = [

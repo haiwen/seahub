@@ -13,7 +13,7 @@ const KEY_COLUMN_ICON_NAME = {
 const KEY_COLUMN_DISPLAY_NAME = {
   [PRIVATE_COLUMN_KEY.TAG_NAME]: gettext('Tag'),
   [PRIVATE_COLUMN_KEY.PARENT_LINKS]: gettext('Parent tags'),
-  [PRIVATE_COLUMN_KEY.SUB_LINKS]: gettext('Sub tags count'),
+  [PRIVATE_COLUMN_KEY.SUB_LINKS]: gettext('Child tags count'),
   [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: gettext('File count'),
 };
 

@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
+import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
 import CellOperationBtn from './cell-operation';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
@@ -34,14 +35,32 @@ const TagsTable = ({
   setDisplayTag,
   loadMore,
 }) => {
-  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks } = useTags();
+  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, addChildTag } = useTags();
 
-  const handleDeleteTags = useCallback((tagsIds) => {
+  const [isShowNewSubTagDialog, setIsShowNewSubTagDialog] = useState(false);
+
+  const parentTagIdRef = useRef(null);
+
+  const onDeleteTags = useCallback((tagsIds) => {
     deleteTags(tagsIds);
 
     const eventBus = EventBus.getInstance();
     eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, [deleteTags]);
+
+  const onNewSubTag = useCallback((parentTagId) => {
+    parentTagIdRef.current = parentTagId;
+    setIsShowNewSubTagDialog(true);
+  }, []);
+
+  const closeNewSubTagDialog = useCallback(() => {
+    parentTagIdRef.current = null;
+    setIsShowNewSubTagDialog(false);
+  }, []);
+
+  const handelAddChildTag = useCallback((tagData, callback) => {
+    addChildTag(tagData, parentTagIdRef.current, callback);
+  }, [addChildTag]);
 
   const table = useMemo(() => {
     if (!tagsData) {
@@ -128,9 +147,10 @@ const TagsTable = ({
     return createContextMenuOptions({
       ...tableProps,
       context,
-      onDeleteTags: handleDeleteTags,
+      onDeleteTags,
+      onNewSubTag,
     });
-  }, [context, handleDeleteTags]);
+  }, [context, onDeleteTags, onNewSubTag]);
 
   const checkCanModifyTag = useCallback((tag) => {
     return context.canModifyTag(tag);
@@ -175,6 +195,9 @@ const TagsTable = ({
         modifyColumnWidth={modifyColumnWidth}
         loadMore={loadMore}
       />
+      {isShowNewSubTagDialog && (
+        <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />
+      )}
     </>
   );
 };

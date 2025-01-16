@@ -2,6 +2,7 @@ import { gettext } from '../../utils/constants';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../../metadata/utils/column';
 import ObjectUtils from '../../metadata/utils/object-utils';
+import { PRIVATE_COLUMN_KEY } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -20,6 +21,27 @@ class ServerOperator {
         this.context.addTags(rows).then(res => {
           const tags = res?.data?.tags || [];
           operation.tags = tags;
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to add tags') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.ADD_CHILD_TAG: {
+        const { tag_data, parent_tag_id } = operation;
+        this.context.addTags([tag_data]).then(res => {
+          const tags = res?.data?.tags || [];
+          const childTag = tags[0];
+          if (!childTag) {
+            callback({ error: gettext('Failed to add tags') });
+            return;
+          }
+
+          operation.tag = childTag;
+
+          // set parent tag for new child tag
+          const id_linked_rows_ids_map = { [childTag._id]: [parent_tag_id] };
+          this.context.addTagLinks(PRIVATE_COLUMN_KEY.PARENT_LINKS, id_linked_rows_ids_map);
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to add tags') });
