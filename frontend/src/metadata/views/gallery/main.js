@@ -128,10 +128,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    const newOverScan = {
-      top: Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS),
-      bottom: scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS
-    };
 
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       onLoadMore && onLoadMore();
@@ -153,8 +149,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       }
       if (flag) break;
     }
-
     lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+
+    const newOverScan = {
+      top: Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS),
+      bottom: scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS
+    };
     setOverScan(newOverScan);
   }, [rowHeight, onLoadMore, groups]);
 
@@ -196,20 +196,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
-    if (mode === GALLERY_DATE_MODE.YEAR) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.MONTH);
-    } else if (mode === GALLERY_DATE_MODE.MONTH) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
-    } else if (mode === GALLERY_DATE_MODE.DAY) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.ALL);
-    } else {
-      const index = images.findIndex(item => item.id === image.id);
-      setImageIndex(index);
-      setIsImagePopupOpen(true);
-    }
-
-    lastState.current = { ...lastState.current, clickTargetId: image.id };
-  }, [mode, images]);
+    const index = images.findIndex(item => item.id === image.id);
+    setImageIndex(index);
+    setIsImagePopupOpen(true);
+  }, [images]);
 
   const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();
@@ -221,15 +211,19 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const moveToPrevImage = useCallback(() => {
     const imageItemsLength = images.length;
+    const selectedImage = images[(imageIndex + imageItemsLength - 1) % imageItemsLength];
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
-    setSelectedImages([images[(imageIndex + imageItemsLength - 1) % imageItemsLength]]);
-  }, [images, imageIndex]);
+    setSelectedImages([selectedImage]);
+    updateSelectedImage(selectedImage);
+  }, [images, imageIndex, updateSelectedImage]);
 
   const moveToNextImage = useCallback(() => {
     const imageItemsLength = images.length;
+    const selectedImage = images[(imageIndex + 1) % imageItemsLength];
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
-    setSelectedImages([images[(imageIndex + 1) % imageItemsLength]]);
-  }, [images, imageIndex]);
+    setSelectedImages([selectedImage]);
+    updateSelectedImage(selectedImage);
+  }, [images, imageIndex, updateSelectedImage]);
 
   const handleImageSelection = useCallback((selectedImages) => {
     setSelectedImages(selectedImages);
@@ -288,6 +282,15 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     setSelectedImages(newSelectedImage ? [newSelectedImage] : []);
     updateSelectedImage(newSelectedImage);
   }, [selectedImages, images, onDelete, updateSelectedImage]);
+
+  const handleDateTagClick = useCallback((event, groupName) => {
+    event.preventDefault();
+    const image = groups.find(group => group.name === groupName)?.children[0]?.children[0];
+    if (image) {
+      lastState.current = { ...lastState.current, targetGroupFirstImageId: image.id };
+    }
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
+  }, [groups]);
 
   useEffect(() => {
     updateCurrentDirent();
@@ -368,20 +371,20 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   useEffect(() => {
     if (!imageSize || imageSize?.large < 0) return;
-    const { clickTargetId } = lastState.current;
-    if (clickTargetId) {
+    const { targetGroupFirstImageId: imageId } = lastState.current;
+    if (imageId) {
       if (mode === GALLERY_DATE_MODE.ALL) {
-        const targetImage = images.find(img => img.id === clickTargetId);
+        const targetImage = images.find(img => img.id === imageId);
         if (targetImage) {
           containerRef.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
         }
       } else {
-        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === clickTargetId)));
+        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
         if (targetGroup) {
           containerRef.current.scrollTop = targetGroup.top;
         }
       }
-      lastState.current = { ...lastState.current, clickTargetId: null, mode };
+      lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSize, groups, mode]);
@@ -408,6 +411,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onContextMenu={handleContextMenu}
+              onDateTagClick={handleDateTagClick}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
