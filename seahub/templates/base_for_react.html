@@ -150,7 +150,7 @@
             canSetExProps: {% if can_set_ex_props %} true {% else %} false {% endif %},
             enableSeaTableIntegration: {% if enable_seatable_integration %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
-            enableMultipleOfficeSuite: {% if user.permissions.can_use_office_suite %} true {% else %} false {% endif %},
+            enableMultipleOfficeSuite: {% if user.permissions.can_choose_office_suite %} true {% else %} false {% endif %},
         }
      };
 </script>

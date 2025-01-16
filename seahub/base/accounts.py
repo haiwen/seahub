@@ -447,10 +447,10 @@ class UserPermissions(object):
 
         return self._get_perm_by_roles('can_publish_repo')
     
-    def can_use_office_suite(self):
+    def can_choose_office_suite(self):
         if not settings.ENABLE_MULTIPLE_OFFICE_SUITE:
             return False
-        return self._get_perm_by_roles('can_use_office_suite')
+        return self._get_perm_by_roles('can_choose_office_suite')
 
 
 class AdminPermissions(object):
