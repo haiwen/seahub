@@ -59,6 +59,7 @@ def get_org_info(org):
     org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
     org_info['org_url_prefix'] = org.url_prefix
     org_info['role'] = OrgSettings.objects.get_role_by_org(org)
+    org_info['is_active'] = OrgSettings.objects.get_is_active_by_org(org)
 
     creator = org.creator
     org_info['creator_email'] = creator
@@ -404,6 +405,15 @@ class AdminOrganization(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             OrgSettings.objects.add_or_update(org, role)
+
+        is_active = request.data.get('is_active', None)
+        if is_active:
+            is_active = is_active.lower()
+            if is_active not in ('true', 'false'):
+                error_msg = 'is_active invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            OrgSettings.objects.add_or_update(org, is_active=is_active=='true')
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)

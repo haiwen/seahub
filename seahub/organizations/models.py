@@ -18,7 +18,9 @@ FORCE_ADFS_LOGIN = 'force_adfs_login'
 DISABLE_ORG_USER_CLEAN_TRASH = 'disable_org_user_clean_trash'
 DISABLE_ORG_ENCRYPTED_LIBRARY = 'disable_org_encrypted_library'
 
+
 class OrgMemberQuotaManager(models.Manager):
+
     def get_quota(self, org_id):
         try:
             return self.get(org_id=org_id).quota
@@ -43,6 +45,7 @@ class OrgMemberQuota(models.Model):
 
 
 class OrgSettingsManager(models.Manager):
+
     def get_by_orgs(self, orgs):
         org_ids = [x.org_id for x in orgs]
         return self.filter(org_id__in=org_ids)
@@ -63,7 +66,15 @@ class OrgSettingsManager(models.Manager):
                 logger.warning('Role %s is not valid' % role)
                 return DEFAULT_ORG
 
-    def add_or_update(self, org, role=None):
+    def get_is_active_by_org(self, org):
+        org_id = org.org_id
+        try:
+            is_active = self.get(org_id=org_id).is_active
+            return is_active
+        except OrgSettings.DoesNotExist:
+            return True
+
+    def add_or_update(self, org, role=None, is_active=None):
         org_id = org.org_id
         try:
             settings = self.get(org_id=org_id)
@@ -76,6 +87,9 @@ class OrgSettingsManager(models.Manager):
             else:
                 logger.warning('Role %s is not valid' % role)
 
+        if is_active is not None:
+            settings.is_active = is_active
+
         settings.save(using=self._db)
         return settings
 
@@ -83,11 +97,13 @@ class OrgSettingsManager(models.Manager):
 class OrgSettings(models.Model):
     org_id = models.IntegerField(unique=True)
     role = models.CharField(max_length=100, null=True, blank=True)
+    is_active = models.BooleanField(default=False, db_index=True)
 
     objects = OrgSettingsManager()
 
 
 class OrgSAMLConfigManager(models.Manager):
+
     def get_config_by_org_id(self, org_id):
         try:
             config = self.get(org_id=org_id)
