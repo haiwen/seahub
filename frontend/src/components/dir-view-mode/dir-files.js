@@ -362,8 +362,20 @@ class DirFiles extends React.Component {
   };
 
   render() {
-    const { repoID, currentRepoInfo } = this.props;
-    const repoEncrypted = currentRepoInfo.encrypted;
+    const { repoID, currentRepoInfo, userPerm } = this.props;
+    const { encrypted: repoEncrypted } = currentRepoInfo;
+
+    let canModifyFile = false;
+    if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
+      canModifyFile = true;
+    } else {
+      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+      if (isCustomPermission) {
+        const { modify } = customPermission.permission;
+        canModifyFile = modify;
+      }
+    }
+
     return (
       <>
         <TreeSection
@@ -456,7 +468,7 @@ class DirFiles extends React.Component {
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
-              enableRotate={!repoEncrypted}
+              enableRotate={canModifyFile}
             />
           </ModalPortal>
         )}
