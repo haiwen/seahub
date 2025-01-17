@@ -30,6 +30,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const [selectedImages, setSelectedImages] = useState([]);
 
   const containerRef = useRef(null);
+  const scrollContainer = useRef(null);
   const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
 
   const { repoID, updateCurrentDirent } = useMetadataView();
@@ -126,8 +127,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [groups]);
 
   const handleScroll = useCallback(() => {
-    if (!containerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    if (!scrollContainer.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer.current;
 
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       onLoadMore && onLoadMore();
@@ -360,7 +361,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         return previousValue;
       }, 0) + rowIndex;
       const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
-      containerRef.current.scrollTop = containerRef.current.scrollTop + topOffset;
+      scrollContainer.current.scrollTop = scrollContainer.current.scrollTop + topOffset;
       lastState.current = { ...lastState.current, imageSize, mode };
     }
   }, [mode, imageSize, groups]);
@@ -378,12 +379,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       if (mode === GALLERY_DATE_MODE.ALL) {
         const targetImage = images.find(img => img.id === imageId);
         if (targetImage) {
-          containerRef.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
+          scrollContainer.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
         }
       } else {
         const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
         if (targetGroup) {
-          containerRef.current.scrollTop = targetGroup.top;
+          scrollContainer.current.scrollTop = targetGroup.top;
         }
       }
       lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
@@ -392,11 +393,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [imageSize, groups, mode]);
 
   return (
-    <>
+    <div className="sf-metadata-gallery-scroll-container" ref={scrollContainer} onScroll={handleScroll}>
       <div
         className={`sf-metadata-gallery-container sf-metadata-gallery-container-${mode}`}
         ref={containerRef}
-        onScroll={handleScroll}
         onMouseDown={handleClickOutside}
       >
         {!isFirstLoading && (
@@ -443,7 +443,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
           />
         </ModalPortal>
       )}
-    </>
+    </div>
   );
 };
 
