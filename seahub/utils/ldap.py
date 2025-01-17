@@ -14,6 +14,7 @@ LDAP_LOGIN_ATTR = getattr(settings, 'LDAP_LOGIN_ATTR', '')
 
 LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 LDAP_USER_OBJECT_CLASS = getattr(settings, 'LDAP_USER_OBJECT_CLASS', 'person')
+LDAP_FOLLOW_REFERRALS = getattr(settings, 'LDAP_FOLLOW_REFERRALS', True)
 
 # multi ldap
 ENABLE_MULTI_LDAP = getattr(settings, 'ENABLE_MULTI_LDAP', False)
@@ -28,6 +29,7 @@ MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
 MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
 MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
 MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+MULTI_LDAP_1_FOLLOW_REFERRALS = getattr(settings, 'MULTI_LDAP_1_FOLLOW_REFERRALS', True)
 
 MULTI_LDAP_1_CONTACT_EMAIL_ATTR = getattr(settings, 'MULTI_LDAP_1_CONTACT_EMAIL_ATTR', '')
 MULTI_LDAP_1_USER_ROLE_ATTR = getattr(settings, 'MULTI_LDAP_1_USER_ROLE_ATTR', '')

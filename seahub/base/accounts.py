@@ -54,7 +54,8 @@ from seahub.utils.ldap import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_
     MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, \
     MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, MULTI_LDAP_1_CONTACT_EMAIL_ATTR, \
     MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, \
-    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, LDAP_UPDATE_USER_WHEN_LOGIN
+    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, LDAP_UPDATE_USER_WHEN_LOGIN, \
+    LDAP_FOLLOW_REFERRALS, MULTI_LDAP_1_FOLLOW_REFERRALS
 
 logger = logging.getLogger(__name__)
 
@@ -884,11 +885,11 @@ class CustomLDAPBackend(object):
             user = None
         return user
 
-    def ldap_bind(self, server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
+    def ldap_bind(self, server_url, dn, authc_id, password, enable_sasl, sasl_mechanism, follow_referrals):
         bind_conn = ldap.initialize(server_url)
 
         try:
-            bind_conn.set_option(ldap.OPT_REFERRALS, 0)
+            bind_conn.set_option(ldap.OPT_REFERRALS, 1 if follow_referrals else 0)
         except Exception as e:
             raise Exception('Failed to set referrals option: %s' % e)
 
@@ -912,9 +913,9 @@ class CustomLDAPBackend(object):
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
-                    contact_email_attr, role_attr):
+                    contact_email_attr, role_attr, follow_referrals):
         try:
-            admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
+            admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 
@@ -949,7 +950,7 @@ class CustomLDAPBackend(object):
             raise Exception('parse ldap result failed: %s' % e)
 
         try:
-            user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism)
+            user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 
@@ -971,7 +972,7 @@ class CustomLDAPBackend(object):
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
                 SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
-                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR)
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, LDAP_FOLLOW_REFERRALS)
             ldap_provider = LDAP_PROVIDER
         except Exception as e:
             if ENABLE_MULTI_LDAP:
@@ -986,7 +987,7 @@ class CustomLDAPBackend(object):
                         MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
                         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
                         MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
-                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR)
+                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_FOLLOW_REFERRALS)
                     ldap_provider = MULTI_LDAP_1_PROVIDER
                 except Exception as e:
                     logger.error(e)
