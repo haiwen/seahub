@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { Router } from '@gatsbyjs/reach-router';
+import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
 import { I18nextProvider } from 'react-i18next';
 import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -287,9 +287,11 @@ class SysAdmin extends React.Component {
   }
 }
 
-ReactDom.render(
+const root = createRoot(document.getElementById('wrapper'));
+root.render(
   <I18nextProvider value={i18n}>
-    <SysAdmin />
-  </I18nextProvider>,
-  document.getElementById('wrapper')
+    <LocationProvider history={globalHistory}>
+      <SysAdmin />
+    </LocationProvider>
+  </I18nextProvider>
 );

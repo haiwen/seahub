@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
@@ -262,4 +262,5 @@ PlainMarkdownEditor.propTypes = propTypes;
 
 export default PlainMarkdownEditor;
 
-ReactDom.render(<PlainMarkdownEditor />, document.getElementById('root'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<PlainMarkdownEditor />);

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 
 class CellMask extends React.PureComponent {
@@ -7,7 +7,7 @@ class CellMask extends React.PureComponent {
   componentDidUpdate() {
     // Scrolling left and right causes the interface to re-render,
     // and the style of CellMask is reset and needs to be fixed
-    const dom = ReactDOM.findDOMNode(this);
+    const dom = findDOMNode(this);
     if (dom.style.position === 'fixed') {
       dom.style.transform = 'none';
     }

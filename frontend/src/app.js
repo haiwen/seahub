@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
-import { Router, navigate } from '@gatsbyjs/reach-router';
+import { createRoot } from 'react-dom/client';
+import { Router, navigate, LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from './utils/constants';
@@ -374,4 +374,9 @@ class App extends Component {
   }
 }
 
-ReactDom.render(<App />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(
+  <LocationProvider history={globalHistory}>
+    <App />
+  </LocationProvider>
+);

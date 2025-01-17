@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import SidePanel from './side-panel';
@@ -29,4 +29,5 @@ export default function Institutions() {
   );
 }
 
-ReactDom.render(<Institutions />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<Institutions />);
