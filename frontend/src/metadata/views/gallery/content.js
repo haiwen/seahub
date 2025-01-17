@@ -143,7 +143,11 @@ const Content = ({
         style={{ height, paddingTop }}
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
-          <div className="metadata-gallery-date-tag" style={{ height: paddingTop }} onClick={(event) => onDateTagClick(event, name)}>
+          <div
+            className={classNames('metadata-gallery-date-tag', { 'hover': mode === GALLERY_DATE_MODE.MONTH })}
+            style={{ height: paddingTop }}
+            onClick={(event) => onDateTagClick(event, name)}
+          >
             {name || gettext('Empty')}
             {mode === GALLERY_DATE_MODE.MONTH && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}
           </div>

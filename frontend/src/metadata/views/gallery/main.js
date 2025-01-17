@@ -285,12 +285,14 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handleDateTagClick = useCallback((event, groupName) => {
     event.preventDefault();
-    const image = groups.find(group => group.name === groupName)?.children[0]?.children[0];
-    if (image) {
-      lastState.current = { ...lastState.current, targetGroupFirstImageId: image.id };
+    if (mode === GALLERY_DATE_MODE.MONTH) {
+      const image = groups.find(group => group.name === groupName)?.children[0]?.children[0];
+      if (image) {
+        lastState.current = { ...lastState.current, targetGroupFirstImageId: image.id };
+      }
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
     }
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
-  }, [groups]);
+  }, [mode, groups]);
 
   useEffect(() => {
     updateCurrentDirent();

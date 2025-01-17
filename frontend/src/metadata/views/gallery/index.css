@@ -38,6 +38,10 @@
   padding-top: 8px;
 }
 
+.metadata-gallery-date-tag.hover {
+  cursor: pointer;
+}
+
 .metadata-gallery-date-tag-arrow {
   font-size: 1rem !important;
   margin-left: 6px;
