@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion, additionalAboutDialogLinks, aboutDialogCustomHtml } from '../../utils/constants';
+import '../../css/seahub-modal-header.css';
 
 const propTypes = {
   onCloseAboutDialog: PropTypes.func.isRequired,
@@ -27,7 +28,11 @@ class AboutDialog extends React.Component {
       return (
         <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close" onClick={toggleDialog}><span aria-hidden="true">×</span></button>
+            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} onClick={toggleDialog}>
+              <span className="seahub-modal-btn-inner">
+                <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+              </span>
+            </button>
             <div className="about-content" dangerouslySetInnerHTML={{ __html: aboutDialogCustomHtml }}></div>
           </ModalBody>
         </Modal>
@@ -36,7 +41,11 @@ class AboutDialog extends React.Component {
       return (
         <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close" onClick={toggleDialog}><span aria-hidden="true">×</span></button>
+            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} onClick={toggleDialog}>
+              <span className="seahub-modal-btn-inner">
+                <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+              </span>
+            </button>
             <div className="about-content">
               <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
               <p>{gettext('Server Version: ')}{seafileVersion}<br />© {(new Date()).getFullYear()} {gettext('Seafile')}</p>
