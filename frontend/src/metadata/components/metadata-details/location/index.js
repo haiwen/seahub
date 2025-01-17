@@ -176,7 +176,7 @@ class Location extends React.Component {
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
           <div className={classnames('dirent-detail-item dirent-detail-item-value-map', { 'd-none': !isValid })}>
-            <div className="w-100 h-100" ref={ref => this.ref = ref}></div>
+            <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
           </div>
         )}
       </>

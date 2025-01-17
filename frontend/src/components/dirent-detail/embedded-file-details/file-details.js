@@ -5,13 +5,12 @@ import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { MetadataDetails, useMetadata, useMetadataDetails } from '../../../metadata';
+import { MetadataDetails, useMetadataDetails } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 import People from '../people';
 
-const FileDetails = ({ repoID, dirent, direntDetail }) => {
+const FileDetails = ({ repoID, dirent, direntDetail, enableFaceRecognition }) => {
   const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
-  const { enableFaceRecognition } = useMetadata();
   const { record } = useMetadataDetails();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
@@ -41,7 +40,7 @@ const FileDetails = ({ repoID, dirent, direntDetail }) => {
       {enableMetadata && (
         <MetadataDetails />
       )}
-      {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
+      {Utils.imageCheck(dirent.name) && enableMetadataManagement && enableMetadata && enableFaceRecognition && (
         <People repoID={repoID} record={record} />
       )}
     </>

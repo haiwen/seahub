@@ -142,7 +142,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
             })}
           </Collapse>
         )}
-        {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
+        {Utils.imageCheck(dirent.name) && enableMetadataManagement && enableMetadata && enableFaceRecognition && (
           <People repoID={repoID} record={record} />
         )}
       </>
