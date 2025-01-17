@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 import { KeyCodes } from '../../../../constants';
 import { CellValueType } from './constants';
@@ -105,7 +105,7 @@ class SimpleTextEditor extends Component {
   };
 
   getInputNode = () => {
-    const domNode = ReactDOM.findDOMNode(this.input);
+    const domNode = findDOMNode(this.input);
     if (domNode.tagName === 'INPUT') {
       return domNode;
     }
