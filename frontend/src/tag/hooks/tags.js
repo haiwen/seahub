@@ -95,7 +95,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   const handelSelectTag = useCallback((tag, isSelected) => {
     if (isSelected) return;
     const id = getTagId(tag);
-    setReloading(id === ALL_TAGS_ID);
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + id,
@@ -259,6 +258,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       isLoading,
       isReloading,
       tagsData,
+      currentPath,
       store: storeRef.current,
       context: contextRef.current,
       deleteFilesCallback: params.deleteFilesCallback,

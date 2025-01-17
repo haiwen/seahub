@@ -24,7 +24,12 @@
   transform: translateY(-50%);
 }
 
-.sf-table-tag-name-formatter .sf-table-tag-name {
+.sf-table-tag-name-formatter .sf-table-tag-name-wrapper {
   flex: 1;
   padding-left: 20px;
+
+}
+
+.sf-table-cell.cell-selected .sf-table-tag-name-formatter .sf-table-tag-name:hover {
+  text-decoration: underline;
 }

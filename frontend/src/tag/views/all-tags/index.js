@@ -17,7 +17,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
   const [isLoadingMore, setLoadingMore] = useState(false);
 
-  const { isLoading, isReloading, tagsData, store, context } = useTags();
+  const { isLoading, isReloading, tagsData, store, context, currentPath } = useTags();
 
   useEffect(() => {
     const eventBus = context.eventBus;
@@ -25,6 +25,16 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!currentPath) return;
+    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
+    const pathList = currentPath.split('/');
+    const [, , currentTagId, children] = pathList;
+    if (currentTagId === ALL_TAGS_ID && !children) {
+      setDisplayTag('');
+    }
+  }, [currentPath]);
 
   const onChangeDisplayTag = useCallback((tagID = '') => {
     if (displayTag === tagID) return;
@@ -58,9 +68,9 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
 
   useEffect(() => {
     if (isLoading || isReloading) {
-      onChangeDisplayTag();
+      setDisplayTag('');
     }
-  }, [isLoading, isReloading, onChangeDisplayTag]);
+  }, [isLoading, isReloading]);
 
   if (isReloading) return (<CenteredLoading />);
 

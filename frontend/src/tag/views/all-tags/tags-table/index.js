@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
-import CellOperationBtn from './cell-operation';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
@@ -73,12 +72,13 @@ const TagsTable = ({
       _id: TABLE_ID,
       ...tagsData,
       columns: createTableColumns(tagsData.columns, {
+        setDisplayTag,
         updateTag,
         addTagLinks,
         deleteTagLinks,
       }),
     };
-  }, [tagsData, updateTag, addTagLinks, deleteTagLinks]);
+  }, [tagsData, setDisplayTag, updateTag, addTagLinks, deleteTagLinks]);
 
   const visibleColumns = useMemo(() => {
     const keyColumnMap = table.columns.reduce((currKeyColumnMap, column) => ({ ...currKeyColumnMap, [column.key]: column }), {});
@@ -139,10 +139,6 @@ const TagsTable = ({
     modifyColumnWidthAPI(column.key, newWidth);
   }, [modifyColumnWidthAPI]);
 
-  const TagTableCellOperationBtn = useMemo(() => {
-    return (<CellOperationBtn setDisplayTag={setDisplayTag} />);
-  }, [setDisplayTag]);
-
   const createTagContextMenuOptions = useCallback((tableProps) => {
     return createContextMenuOptions({
       ...tableProps,
@@ -185,7 +181,6 @@ const TagsTable = ({
         isLoadingMoreRecords={isLoadingMoreRecords}
         hasMoreRecords={table.hasMore}
         showGridFooter={false}
-        CellOperationBtn={TagTableCellOperationBtn}
         createContextMenuOptions={createTagContextMenuOptions}
         storeGridScroll={storeGridScroll}
         storeFoldedGroups={storeFoldedGroups}
