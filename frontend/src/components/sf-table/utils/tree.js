@@ -1,11 +1,15 @@
 import { TREE_NODE_KEY } from '../constants/tree';
 
-export const createTreeNode = (nodeId, nodeKey, depth, hasSubNodes) => {
+export const generateNodeKey = (parentKey, currentNodeId) => {
+  return `${parentKey ? parentKey + '_' : ''}${currentNodeId}`;
+};
+
+export const createTreeNode = (nodeId, nodeKey, depth, hasChildNodes) => {
   return {
     [TREE_NODE_KEY.ID]: nodeId,
     [TREE_NODE_KEY.KEY]: nodeKey,
     [TREE_NODE_KEY.DEPTH]: depth,
-    [TREE_NODE_KEY.HAS_SUB_NODES]: hasSubNodes,
+    [TREE_NODE_KEY.HAS_CHILD_NODES]: hasChildNodes,
   };
 };
 
@@ -73,4 +77,57 @@ export const getTreeNodeId = (node) => {
 
 export const getTreeNodeKey = (node) => {
   return node ? node[TREE_NODE_KEY.KEY] : '';
+};
+
+export const getTreeNodeDepth = (node) => {
+  return node ? node[TREE_NODE_KEY.DEPTH] : 0;
+};
+
+export const checkTreeNodeHasChildNodes = (node) => {
+  return node ? node[TREE_NODE_KEY.HAS_CHILD_NODES] : false;
+};
+
+export const resetTreeHasChildNodesStatus = (tree) => {
+  if (!Array.isArray(tree) || tree.length === 0) {
+    return;
+  }
+  tree.forEach((node, index) => {
+    const nextNode = tree[index + 1];
+    const nextNodeKey = getTreeNodeKey(nextNode);
+    const currentNodeKey = getTreeNodeKey(node);
+    if (nextNode && checkTreeNodeHasChildNodes(node) && !nextNodeKey.includes(currentNodeKey)) {
+      tree[index][TREE_NODE_KEY.HAS_CHILD_NODES] = false;
+    }
+  });
+};
+
+export const addTreeChildNode = (newChildNode, parentNode, tree) => {
+  if (!parentNode || !Array.isArray(tree) || tree.length === 0) {
+    return;
+  }
+  const parentNodeKey = getTreeNodeKey(parentNode);
+  const parentNodeDepth = getTreeNodeDepth(parentNode);
+  const parentNodeIndex = tree.findIndex((node) => getTreeNodeKey(node) === parentNodeKey);
+  if (parentNodeIndex < 0) {
+    return;
+  }
+
+  if (!checkTreeNodeHasChildNodes(parentNode)) {
+    tree[parentNodeIndex] = { ...parentNode, [TREE_NODE_KEY.HAS_CHILD_NODES]: true };
+  }
+
+  const childNodeDepth = parentNodeDepth + 1;
+  let lastChildNodeIndex = parentNodeIndex;
+  for (let i = parentNodeIndex + 1, len = tree.length; i < len; i++) {
+    const currentNode = tree[i];
+    if (!getTreeNodeKey(currentNode).includes(parentNodeKey)) {
+      break;
+    }
+
+    // insert new child tag behind the last child tag
+    if (getTreeNodeDepth(currentNode) === childNodeDepth) {
+      lastChildNodeIndex = i;
+    }
+  }
+  tree.splice(lastChildNodeIndex + 1, 0, newChildNode);
 };

@@ -1,6 +1,6 @@
 import ParentTagsFormatter from './parent-tags';
 import TagNameFormatter from './tag-name';
-import SubTagsFormatter from './sub-tags';
+import ChildTagsFormatter from './child-tags';
 import TagFilesFormatter from './tag-files';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
 
@@ -13,7 +13,7 @@ export const createColumnFormatter = ({ column }) => {
       return <ParentTagsFormatter />;
     }
     case PRIVATE_COLUMN_KEY.SUB_LINKS: {
-      return <SubTagsFormatter />;
+      return <ChildTagsFormatter />;
     }
     case PRIVATE_COLUMN_KEY.TAG_FILE_LINKS: {
       return <TagFilesFormatter />;

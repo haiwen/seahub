@@ -5,6 +5,7 @@ import { OPERATION_TYPE } from './constants';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { username } from '../../../utils/constants';
 import { addRowLinks, removeRowLinks } from '../../utils/link';
+import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 
 dayjs.extend(utc);
 
@@ -27,6 +28,34 @@ export default function apply(data, operation) {
           updatedRows[rowIndex] = tag;
         }
       });
+      data.rows = updatedRows;
+      return data;
+    }
+    case OPERATION_TYPE.ADD_CHILD_TAG: {
+      const { tag, parent_tag_id } = operation;
+      const tagId = getRecordIdFromRecord(tag);
+      if (!tagId || !parent_tag_id) {
+        return data;
+      }
+
+      const { rows } = data;
+      const updatedRows = [...rows];
+
+      // add parent link
+      const updatedTag = addRowLinks(tag, PRIVATE_COLUMN_KEY.PARENT_LINKS, [parent_tag_id]);
+
+      // add child link
+      const parentTagIndex = rows.findIndex((tag) => getRecordIdFromRecord(tag) === parent_tag_id);
+      if (parentTagIndex > -1) {
+        const parentTag = updatedRows[parentTagIndex];
+        const updatedParentTag = addRowLinks(parentTag, PRIVATE_COLUMN_KEY.SUB_LINKS, [tagId]);
+        updatedRows[parentTagIndex] = updatedParentTag;
+        data.id_row_map[parent_tag_id] = updatedParentTag;
+      }
+
+      updatedRows.push(updatedTag);
+      data.row_ids.push(tagId);
+      data.id_row_map[tagId] = updatedTag;
       data.rows = updatedRows;
       return data;
     }
@@ -129,7 +158,7 @@ export default function apply(data, operation) {
             data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
-            // add current tag as sub tag to related tags
+            // add current tag as child tag to related tags
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
             data.rows[index] = updatedRow;
             data.id_row_map[currentRowId] = updatedRow;
@@ -140,7 +169,7 @@ export default function apply(data, operation) {
           const currentRowId = row._id;
           let updatedRow = { ...row };
           if (currentRowId === row_id) {
-            // add sub tags to current tag
+            // add child tags to current tag
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
             data.rows[index] = updatedRow;
             data.id_row_map[currentRowId] = updatedRow;
@@ -169,7 +198,7 @@ export default function apply(data, operation) {
             data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
-            // remove current tag as sub tag from related tags
+            // remove current tag as child tag from related tags
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
             data.rows[index] = updatedRow;
             data.id_row_map[currentRowId] = updatedRow;
@@ -180,7 +209,7 @@ export default function apply(data, operation) {
           const currentRowId = row._id;
           let updatedRow = { ...row };
           if (currentRowId === row_id) {
-            // remove sub tags from current tag
+            // remove child tags from current tag
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
             data.rows[index] = updatedRow;
             data.id_row_map[currentRowId] = updatedRow;

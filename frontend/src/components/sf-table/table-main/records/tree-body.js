@@ -6,7 +6,7 @@ import InteractionMasks from '../../masks/interaction-masks';
 import Record from './record';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
-import { checkIsTreeNodeShown, getTreeNodeId, getTreeNodeKey, getValidKeyTreeNodeFoldedMap } from '../../utils/tree';
+import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey, getValidKeyTreeNodeFoldedMap } from '../../utils/tree';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
@@ -535,7 +535,8 @@ class TreeBody extends Component {
     const rowHeight = this.getRowHeight();
     const cellMetaData = this.getCellMetaData();
     let shownNodes = visibleNodes.map((node, index) => {
-      const { _id: recordId, node_key, node_depth, has_sub_nodes, node_display_index } = node;
+      const { _id: recordId, node_key, node_depth, node_display_index } = node;
+      const hasChildNodes = checkTreeNodeHasChildNodes(node);
       const record = this.props.recordGetterById(recordId);
       const isSelected = TreeMetrics.checkIsTreeNodeSelected(node_key, treeMetrics);
       const recordIndex = startRenderIndex + index;
@@ -568,7 +569,7 @@ class TreeBody extends Component {
           searchResult={this.props.searchResult}
           nodeKey={node_key}
           nodeDepth={node_depth}
-          hasSubNodes={has_sub_nodes}
+          hasChildNodes={hasChildNodes}
           isFoldedNode={isFoldedNode}
           checkCanModifyRecord={this.props.checkCanModifyRecord}
           checkCellValueChanged={this.props.checkCellValueChanged}

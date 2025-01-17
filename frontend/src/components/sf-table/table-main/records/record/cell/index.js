@@ -25,7 +25,7 @@ const Cell = React.memo(({
   height,
   showRecordAsTree,
   nodeDepth,
-  hasSubNodes,
+  hasChildNodes,
   isFoldedNode,
   checkCanModifyRecord,
   toggleExpandNode,
@@ -172,7 +172,7 @@ const Cell = React.memo(({
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">
-          {hasSubNodes && <span className="sf-table-record-tree-expand-icon" style={{ left: nodeDepth * NODE_ICON_LEFT_INDENT }} onClick={toggleExpandNode}><i className={classnames('sf3-font sf3-font-down', { 'rotate-270': isFoldedNode })}></i></span>}
+          {hasChildNodes && <span className="sf-table-record-tree-expand-icon" style={{ left: nodeDepth * NODE_ICON_LEFT_INDENT }} onClick={toggleExpandNode}><i className={classnames('sf3-font sf3-font-down', { 'rotate-270': isFoldedNode })}></i></span>}
           <div className="sf-table-cell-tree-node-content" style={{ paddingLeft: NODE_CONTENT_LEFT_INDENT + nodeDepth * NODE_ICON_LEFT_INDENT }}>
             {columnFormatter}
           </div>
@@ -180,7 +180,7 @@ const Cell = React.memo(({
       );
     }
     return columnFormatter;
-  }, [isNameColumn, column, isCellSelected, cellValue, record, showRecordAsTree, nodeDepth, hasSubNodes, isFoldedNode, modifyRecord, toggleExpandNode]);
+  }, [isNameColumn, column, isCellSelected, cellValue, record, showRecordAsTree, nodeDepth, hasChildNodes, isFoldedNode, modifyRecord, toggleExpandNode]);
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
@@ -213,7 +213,7 @@ Cell.propTypes = {
   bgColor: PropTypes.string,
   showRecordAsTree: PropTypes.bool,
   nodeDepth: PropTypes.number,
-  hasSubNodes: PropTypes.bool,
+  hasChildNodes: PropTypes.bool,
   isFoldedNode: PropTypes.bool,
   toggleExpandNode: PropTypes.func,
 };

@@ -12,6 +12,7 @@ const OPERATION = {
   SET_SUB_TAGS: 'set_sub_tags',
   DELETE_TAG: 'delete_tag',
   DELETE_TAGS: 'delete_tags',
+  NEW_SUB_TAG: 'new_sub_tag',
 };
 
 export const createContextMenuOptions = ({
@@ -28,8 +29,10 @@ export const createContextMenuOptions = ({
   recordGetterByIndex,
   recordGetterById,
   onDeleteTags,
+  onNewSubTag,
 }) => {
   const canDeleteTag = context.checkCanDeleteTag();
+  const canAddTag = context.canAddTag();
   const eventBus = EventBus.getInstance();
 
   const onClickMenuItem = (event, option) => {
@@ -48,7 +51,10 @@ export const createContextMenuOptions = ({
         onDeleteTags(option.tagsIds);
         break;
       }
-
+      case OPERATION.NEW_SUB_TAG: {
+        onNewSubTag(option.parentTagId);
+        break;
+      }
       default: {
         break;
       }
@@ -118,7 +124,8 @@ export const createContextMenuOptions = ({
     const tag = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
     const column = getColumnByIndex(idx, columns);
     if (!tag || !tag._id || !column) return options;
-    if (checkIsNameColumn(column)) {
+    const isNameColumn = checkIsNameColumn(column);
+    if (isNameColumn) {
       options.push({
         label: gettext('Edit tag'),
         value: OPERATION.EDIT_TAG,
@@ -127,7 +134,7 @@ export const createContextMenuOptions = ({
 
     if (column.key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
       options.push({
-        label: gettext('Set sub tags'),
+        label: gettext('Set child tags'),
         value: OPERATION.SET_SUB_TAGS,
       });
     }
@@ -140,6 +147,13 @@ export const createContextMenuOptions = ({
       });
     }
 
+    if (isNameColumn && canAddTag) {
+      options.push({
+        label: gettext('New child tag'),
+        value: OPERATION.NEW_SUB_TAG,
+        parentTagId: tag._id,
+      });
+    }
     return options;
   };
 
