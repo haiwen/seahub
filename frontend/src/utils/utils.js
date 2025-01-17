@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -640,7 +640,7 @@ export const Utils = {
       list.push(HISTORY);
     }
 
-    if (permission == 'rw' && enableOnlyoffice &&
+    if (permission == 'rw' && currentRepoInfo.enable_onlyoffice &&
       onlyofficeConverterExtensions.includes(this.getFileExtension(dirent.name, false))) {
       list.push(ONLYOFFICE_CONVERT);
     }

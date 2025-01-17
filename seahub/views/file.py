@@ -34,15 +34,16 @@ from django.template.defaultfilters import filesizeformat
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
-    seafserv_threaded_rpc
+    seafserv_threaded_rpc, get_org_id_by_repo_id
 
 from seahub.settings import SITE_ROOT
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
+from seahub.onlyoffice.models import RepoExtraConfig, REPO_OFFICE_CONFIG
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
-from seahub.base.accounts import ANONYMOUS_EMAIL
+from seahub.base.accounts import ANONYMOUS_EMAIL, User
 from seahub.base.templatetags.seahub_tags import file_icon_filter
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
@@ -67,6 +68,7 @@ from seahub.utils.http import json_response, \
         BadRequestException
 from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
+from seahub.utils.user_permissions import get_user_role
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner, parse_repo_perm
@@ -89,33 +91,34 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
+    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST
 
 
 # wopi
 try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
+    from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 except ImportError:
     ENABLE_OFFICE_WEB_APP = False
 
 try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP_EDIT
+    from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP_EDIT
 except ImportError:
     ENABLE_OFFICE_WEB_APP_EDIT = False
 
 try:
-    from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
+    from seahub.wopi.settings import OFFICE_WEB_APP_FILE_EXTENSION
 except ImportError:
     OFFICE_WEB_APP_FILE_EXTENSION = ()
 
 try:
-    from seahub.settings import OFFICE_WEB_APP_EDIT_FILE_EXTENSION
+    from seahub.wopi.settings import OFFICE_WEB_APP_EDIT_FILE_EXTENSION
 except ImportError:
     OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ()
 
 # onlyoffice
 try:
-    from seahub.settings import ENABLE_ONLYOFFICE
+    from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
 except ImportError:
     ENABLE_ONLYOFFICE = False
 
@@ -138,9 +141,61 @@ from seahub.bisheng_office.settings import BISHENG_OFFICE_FILE_EXTENSION
 from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
+from seahub.settings import ROLES_DEFAULT_OFFCICE_SUITE
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+def _check_feature(repo_id):
+    office_suite = RepoExtraConfig.objects.filter(repo_id=repo_id, config_type=REPO_OFFICE_CONFIG).first()
+    if office_suite:
+        repo_config_details = json.loads(office_suite.config_details)
+        office_config = repo_config_details.get('office_suite')
+        return office_config.get('suite_id') if office_config else None
+    return None
+
+def get_office_feature_by_repo(repo):
+    enable_onlyoffice, enable_office_app = False, False
+    if not ENABLE_MULTIPLE_OFFICE_SUITE:
+        return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
+    
+    if not OFFICE_SUITE_LIST:
+        return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
+    
+    org_id = get_org_id_by_repo_id(repo.repo_id)
+    if org_id > 0:
+        repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.repo_id)
+    if '@seafile_group' in repo_owner:
+        repo_feature = None
+    else:
+        repo_feature = _check_feature(repo.repo_id)
+
+    if not repo_feature and '@seafile_group' not in repo_owner:
+        user = User.objects.get(email=repo_owner)
+        role = get_user_role(user)
+        repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get(role)
+
+    if not repo_feature:
+        default_suite = {}
+        for s in OFFICE_SUITE_LIST:
+            if s.get('is_default'):
+                default_suite = s
+                break
+        if default_suite.get('id') == 'onlyoffice':
+            enable_onlyoffice = True
+        if default_suite.get('id') == 'collabora':
+            enable_office_app = True
+    else:
+        if repo_feature == 'onlyoffice':
+            enable_onlyoffice = True
+        if repo_feature == 'collabora':
+            enable_office_app = True
+
+    return enable_onlyoffice,  enable_office_app
+
 
 def gen_path_link(path, repo_name):
     """
@@ -335,6 +390,8 @@ def can_preview_file(file_name, file_size, repo):
 
     filetype, fileext = get_file_type_and_ext(file_name)
 
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
+
     # Seafile defines 10 kinds of filetype:
     # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
     if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
@@ -389,7 +446,7 @@ def can_edit_file(file_name, file_size, repo):
     """Check whether Seafile supports edit file.
     Returns (True, None) if Yes, otherwise (False, error_msg).
     """
-
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
     can_preview, err_msg = can_preview_file(file_name, file_size, repo)
     if not can_preview:
         return False, err_msg
@@ -486,6 +543,8 @@ def view_lib_file(request, repo_id, path):
     file_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not file_id:
         return render_error(request, _('File does not exist'))
+    
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
     username = request.user.username
@@ -938,6 +997,8 @@ def view_history_file_common(request, repo_id, ret_dict):
     path = request.GET.get('p', '/')
     path = normalize_file_path(path)
 
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
+
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
         raise Http404
@@ -1177,6 +1238,8 @@ def view_shared_file(request, fileshare):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _('File does not exist'))
+    
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
     shared_by = fileshare.username
@@ -1410,6 +1473,8 @@ def view_file_via_shared_dir(request, fileshare):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # recourse check
     # Get file path from frontend, and construct request file path

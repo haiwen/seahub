@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
+from seahub.settings import ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, OFFICE_SUITE_ENABLED_FILE_TYPES, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
 
 ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
@@ -44,3 +45,21 @@ EXT_DOCUMENT = [
     ".html", ".htm", ".mht", ".xml",
     ".pdf", ".djvu", ".fb2", ".epub", ".xps"
 ]
+
+
+if ENABLE_MULTIPLE_OFFICE_SUITE:
+    OFFICE_SUITE_ONLY_OFFICE = 'onlyoffice'
+    office_info = {}
+    for s in OFFICE_SUITE_LIST:
+        if s.get('id') == OFFICE_SUITE_ONLY_OFFICE:
+            office_info = s
+            break
+    ONLYOFFICE_APIJS_URL = office_info.get('ONLYOFFICE_APIJS_URL')
+    ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL and ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/documents/api.js", "/ConvertService.ashx")
+    ONLYOFFICE_FORCE_SAVE = office_info.get('ONLYOFFICE_FORCE_SAVE', False)
+    ONLYOFFICE_JWT_SECRET = office_info.get('ONLYOFFICE_JWT_SECRET', '')
+    ONLYOFFICE_JWT_HEADER = office_info.get('ONLYOFFICE_JWT_HEADER', 'Authorization')
+    ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT = office_info.get('ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT', 'AscDesktopEditor')
+    VERIFY_ONLYOFFICE_CERTIFICATE = office_info.get('VERIFY_ONLYOFFICE_CERTIFICATE', True)
+    ONLYOFFICE_FILE_EXTENSION = OFFICE_SUITE_ENABLED_FILE_TYPES
+    ONLYOFFICE_EDIT_FILE_EXTENSION = OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES

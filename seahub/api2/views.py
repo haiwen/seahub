@@ -106,6 +106,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 from seahub.subscription.utils import subscription_check
+from seahub.views.file import get_office_feature_by_repo
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -120,10 +121,6 @@ try:
 except ImportError:
     ORG_MEMBER_QUOTA_DEFAULT = None
 
-try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
-except ImportError:
-    ENABLE_OFFICE_WEB_APP = False
     
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -2725,6 +2722,8 @@ class OwaFileView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        _, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
         action = request.GET.get('action', 'view')
         if action not in ('view', 'edit'):

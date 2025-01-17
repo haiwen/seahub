@@ -46,6 +46,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_repo': True,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
+        'can_choose_office_suite': True,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -68,6 +69,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_repo': False,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
+        'can_choose_office_suite': False,
     },
 }
 

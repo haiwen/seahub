@@ -29,6 +29,7 @@ from seahub.utils.repo import get_repo_owner, is_repo_admin, \
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
 from seaserv import seafile_api
+from seahub.views.file import get_office_feature_by_repo
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +114,8 @@ class ReposView(APIView):
                 # do not return virtual repos
                 if r.is_virtual:
                     continue
-
+                enable_onlyoffice, _ = get_office_feature_by_repo(r)
+                
                 repo_info = {
                     "type": "mine",
                     "repo_id": r.id,
@@ -132,6 +134,7 @@ class ReposView(APIView):
                     "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "enable_onlyoffice": enable_onlyoffice
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -183,6 +186,8 @@ class ReposView(APIView):
                 owner_name = group_name if is_group_owned_repo else nickname_dict.get(owner_email, '')
                 owner_contact_email = '' if is_group_owned_repo else contact_email_dict.get(owner_email, '')
 
+                enable_onlyoffice, _ = get_office_feature_by_repo(r)
+
                 repo_info = {
                     "type": "shared",
                     "repo_id": r.repo_id,
@@ -201,6 +206,7 @@ class ReposView(APIView):
                     "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "enable_onlyoffice": enable_onlyoffice
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -238,6 +244,7 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             for r in group_repos:
+                enable_onlyoffice, _ = get_office_feature_by_repo(r)
                 repo_info = {
                     "type": "group",
                     "group_id": r.group_id,
@@ -255,6 +262,7 @@ class ReposView(APIView):
                     "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "enable_onlyoffice": enable_onlyoffice
                 }
                 repo_info_list.append(repo_info)
 
@@ -283,6 +291,7 @@ class ReposView(APIView):
 
             for r in public_repos:
                 repo_owner = repo_id_owner_dict[r.repo_id]
+                enable_onlyoffice, _ = get_office_feature_by_repo(r)
                 repo_info = {
                     "type": "public",
                     "repo_id": r.repo_id,
@@ -300,6 +309,7 @@ class ReposView(APIView):
                     "starred": r.repo_id in starred_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "enable_onlyoffice": enable_onlyoffice
                 }
                 repo_info_list.append(repo_info)
 
@@ -340,6 +350,7 @@ class RepoView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
+        enable_onlyoffice, _ = get_office_feature_by_repo(repo)
 
         lib_need_decrypt = False
         if repo.encrypted \
@@ -374,6 +385,7 @@ class RepoView(APIView):
             "lib_need_decrypt": lib_need_decrypt,
             "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
             "status": normalize_repo_status_code(repo.status),
+            "enable_onlyoffice": enable_onlyoffice
         }
 
         return Response(result)
