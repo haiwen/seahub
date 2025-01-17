@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';

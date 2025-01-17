@@ -44,9 +44,6 @@ const FileDetails = ({ repoID, dirent, direntDetail }) => {
       {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
         <People repoID={repoID} record={record} />
       )}
-      {enableMetadataManagement && enableMetadata && enableFaceRecognition && Utils.imageCheck(dirent.name) && (
-        <People repoID={repoID} record={record} />
-      )}
     </>
   );
 };

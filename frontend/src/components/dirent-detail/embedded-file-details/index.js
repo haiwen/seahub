@@ -37,10 +37,12 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
 
   useEffect(() => {
     if (isView || isTag) return;
-    // init context
-    const context = new MetadataContext();
-    window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ repoID, repoInfo });
+
+    if (!window.sfMetadataContext) {
+      const context = new MetadataContext();
+      window.sfMetadataContext = context;
+      window.sfMetadataContext.init({ repoID, repoInfo });
+    }
 
     return () => {
       if (window.sfMetadataContext) {

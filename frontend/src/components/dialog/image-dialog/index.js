@@ -59,7 +59,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
     return (
       <div
         className="lightbox-side-panel"
-        style={{ width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px` }}
+        style={{ width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH }}
         aria-expanded={expanded}
       >
         <div className="side-panel-controller" onClick={onToggleSidePanel}>
@@ -111,7 +111,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
       OCRLabel={gettext('OCR')}
       sidePanel={!isCustomPermission ? {
         render: renderSidePanel,
-        width: expanded ? `${SIDE_PANEL_EXPANDED_WIDTH}px` : `${SIDE_PANEL_COLLAPSED_WIDTH}px`,
+        width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH,
       } : null}
     />
   );
