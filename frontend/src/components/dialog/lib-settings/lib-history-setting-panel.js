@@ -48,11 +48,9 @@ class LibHistorySetting extends React.Component {
       days = this.state.expireDays;
     }
     let repoID = this.props.repoID;
-    let reg = /^-?\d+$/;
-    let flag = reg.test(days);
-    if (flag) {
+    if (Number(days) > 0) {
       let message = gettext('Successfully set library history.');
-      seafileAPI.setRepoHistoryLimit(repoID, days).then(res => {
+      seafileAPI.setRepoHistoryLimit(repoID, parseInt(days)).then(res => {
         toaster.success(message);
         this.setState({ keepDays: res.data.keep_days });
         this.props.toggleDialog();
