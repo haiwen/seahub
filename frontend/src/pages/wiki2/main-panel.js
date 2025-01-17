@@ -52,6 +52,7 @@ class MainPanel extends Component {
       serviceUrl: appConfig.serviceURL,
       assets_url: appConfig.assetsUrl,
       isWiki: true,
+      isOpenSocket: true,
       publishUrl,
     };
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
