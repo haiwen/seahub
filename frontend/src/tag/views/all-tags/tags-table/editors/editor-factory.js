@@ -1,3 +1,4 @@
+import React from 'react';
 import ParentTagsEditor from './parent-tags';
 import ChildTagsEditor from './child-tags';
 import TagNameEditor from './tag-name';
