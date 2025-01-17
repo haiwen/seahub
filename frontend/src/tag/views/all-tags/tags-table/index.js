@@ -168,6 +168,7 @@ const TagsTable = ({
       <SFTable
         key={`sf-table-${table._id}`}
         showRecordAsTree
+        showSequenceColumn
         table={table}
         recordsIds={recordsIds}
         recordsTree={recordsTree}
@@ -176,7 +177,6 @@ const TagsTable = ({
         foldedGroups={foldedGroups}
         gridScroll={gridScroll}
         visibleColumns={visibleColumns}
-        showSequenceColumn={false}
         noRecordsTipsText={gettext('No tags')}
         isLoadingMoreRecords={isLoadingMoreRecords}
         hasMoreRecords={table.hasMore}

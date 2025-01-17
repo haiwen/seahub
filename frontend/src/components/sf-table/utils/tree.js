@@ -54,7 +54,7 @@ export const getRecordsIdsByTreeNodeKeys = (nodesKeys, treeNodeKeyRecordIdMap) =
   nodesKeys.forEach((nodeKey) => {
     const selectedId = treeNodeKeyRecordIdMap[nodeKey];
     if (selectedId && !idExistMap[selectedId]) {
-      selectedIds.push(nodeKey);
+      selectedIds.push(selectedId);
       idExistMap[selectedId] = true;
     }
   });

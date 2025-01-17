@@ -68,9 +68,9 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
 
   useEffect(() => {
     if (isLoading || isReloading) {
-      setDisplayTag('');
+      onChangeDisplayTag();
     }
-  }, [isLoading, isReloading]);
+  }, [isLoading, isReloading, onChangeDisplayTag]);
 
   if (isReloading) return (<CenteredLoading />);
 
