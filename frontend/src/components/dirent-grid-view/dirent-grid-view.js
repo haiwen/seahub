@@ -843,14 +843,25 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    let { direntList, selectedDirentList, path } = this.props;
+    const { direntList, selectedDirentList, path, currentRepoInfo, userPerm } = this.props;
+    const { encrypted: repoEncrypted } = currentRepoInfo;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
+
+    let canModifyFile = false;
+    if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
+      canModifyFile = true;
+    } else {
+      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+      if (isCustomPermission) {
+        const { modify } = customPermission.permission;
+        canModifyFile = modify;
+      }
+    }
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
-    const repoEncrypted = this.props.currentRepoInfo.encrypted;
 
     return (
       <Fragment>
@@ -1025,7 +1036,7 @@ class DirentGridView extends React.Component {
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
-              enableRotate={!repoEncrypted}
+              enableRotate={canModifyFile}
             />
           </ModalPortal>
         )}

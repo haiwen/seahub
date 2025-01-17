@@ -162,31 +162,36 @@ class DirentNoneView extends React.Component {
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
-    const { currentRepoInfo } = this.props;
+    const { currentRepoInfo, userPerm } = this.props;
+    let canCreateFile = false;
+    if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
+      canCreateFile = true;
+    } else {
+      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+      if (isCustomPermission) {
+        const { create } = customPermission.permission;
+        canCreateFile = create;
+      }
+    }
 
     return (
       <div className="tip-for-new-file-container" onContextMenu={this.onContainerContextMenu}>
         <div className="tip-for-new-file">
           <p className="text-secondary text-center">{gettext('This folder has no content at this time.')}</p>
-          <p className="text-secondary text-center">{gettext('You can create files quickly')}{' +'}</p>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-            {'+ Markdown'}
-          </button>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>
-            {'+ PPT'}
-          </button>
-          <br />
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>
-            {'+ Word'}
-          </button>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>
-            {'+ Excel'}
-          </button>
-          <br />
-          {enableSeadoc && !currentRepoInfo.encrypted &&
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>
-            {'+ SeaDoc'}
-          </button>}
+          {canCreateFile && (
+            <>
+              <p className="text-secondary text-center">{gettext('You can create files quickly')}{' +'}</p>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>{'+ Markdown'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>{'+ PPT'}</button>
+              <br />
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>{'+ Word'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>{'+ Excel'}</button>
+              <br />
+              {enableSeadoc && !currentRepoInfo.encrypted &&
+                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>{'+ SeaDoc'}</button>
+              }
+            </>
+          )}
         </div>
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
