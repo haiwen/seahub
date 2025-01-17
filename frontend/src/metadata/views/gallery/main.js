@@ -286,11 +286,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handleDateTagClick = useCallback((event, groupName) => {
     event.preventDefault();
-    if (mode === GALLERY_DATE_MODE.MONTH) {
-      const image = groups.find(group => group.name === groupName)?.children[0]?.children[0];
-      if (image) {
-        lastState.current = { ...lastState.current, targetGroupFirstImageId: image.id };
-      }
+    const image = groups.find(group => group.name === groupName)?.children[0]?.children[0];
+    if (image) {
+      lastState.current = { ...lastState.current, targetGroupFirstImageId: image.id };
+    }
+    if (mode === GALLERY_DATE_MODE.YEAR) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.MONTH);
+    } else if (mode === GALLERY_DATE_MODE.MONTH) {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY, GALLERY_DATE_MODE.DAY);
     }
   }, [mode, groups]);

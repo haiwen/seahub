@@ -136,6 +136,8 @@ const Content = ({
       'onContextMenu': onContextMenu,
     };
 
+    const isDateTagClickable = mode === GALLERY_DATE_MODE.MONTH || mode === GALLERY_DATE_MODE.YEAR;
+
     return (
       <div
         key={name}
@@ -144,12 +146,12 @@ const Content = ({
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
           <div
-            className={classNames('metadata-gallery-date-tag', { 'hover': mode === GALLERY_DATE_MODE.MONTH })}
+            className={classNames('metadata-gallery-date-tag', { 'hover': isDateTagClickable })}
             style={{ height: paddingTop }}
             onClick={(event) => onDateTagClick(event, name)}
           >
             {name || gettext('Empty')}
-            {mode === GALLERY_DATE_MODE.MONTH && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}
+            {isDateTagClickable && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}
           </div>
         )}
         <div
