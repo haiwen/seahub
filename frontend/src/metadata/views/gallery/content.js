@@ -18,7 +18,8 @@ const Content = ({
   onImageSelect,
   onImageClick,
   onImageDoubleClick,
-  onContextMenu
+  onContextMenu,
+  onDateTagClick,
 }) => {
   const animationFrameRef = useRef(null);
   const containerRef = useRef(null);
@@ -142,7 +143,14 @@ const Content = ({
         style={{ height, paddingTop }}
       >
         {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
-          <div className="metadata-gallery-date-tag" style={{ height: paddingTop }}>{name || gettext('Empty')}</div>
+          <div
+            className={classNames('metadata-gallery-date-tag', { 'hover': mode === GALLERY_DATE_MODE.MONTH })}
+            style={{ height: paddingTop }}
+            onClick={(event) => onDateTagClick(event, name)}
+          >
+            {name || gettext('Empty')}
+            {mode === GALLERY_DATE_MODE.MONTH && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}
+          </div>
         )}
         <div
           className={classNames('metadata-gallery-image-list', `metadata-gallery-${mode}-image-list`)}
@@ -172,7 +180,7 @@ const Content = ({
         </div>
       </div>
     );
-  }, [overScan, mode, columns, rowHeight, onImageClick, onImageDoubleClick, onContextMenu, size, selectedImageIds]);
+  }, [overScan, mode, columns, rowHeight, onImageClick, onImageDoubleClick, onContextMenu, size, selectedImageIds, onDateTagClick]);
 
   if (!Array.isArray(groups) || groups.length === 0) return (<EmptyTip text={gettext('No record')}/>);
 
@@ -217,6 +225,7 @@ Content.propTypes = {
   onImageClick: PropTypes.func.isRequired,
   onImageDoubleClick: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
+  onDateTagClick: PropTypes.func.isRequired,
 };
 
 export default Content;
