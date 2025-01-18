@@ -2,7 +2,6 @@ import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
-import URLDecorator from '../../utils/url-decorator';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
