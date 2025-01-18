@@ -422,7 +422,7 @@ class MarkdownEditor extends React.Component {
           lockedByMe={this.state.lockedByMe}
           toggleLockFile={this.toggleLockFile}
         />
-        <div className='sf-md-viewer-content'>
+        <div className={`sf-md-viewer-content ${isLocked ? 'locked' : ''}`}>
           {!isLocked && (
             <SeafileMarkdownEditor
               ref={this.editorRef}
