@@ -2,16 +2,11 @@ import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
 import ModalPortal from '../../../../components/modal-portal';
-import toaster from '../../../../components/toast';
-import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
 import PeoplesDialog from '../../../components/dialog/peoples-dialog';
-import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { downloadFile } from '../../../utils/file';
-import metadataAPI from '../../../api';
-import { Utils } from '../../../../utils/utils';
+import { gettext } from '../../../../utils/constants';
 import { Dirent } from '../../../../models';
+import { useDownloadFile } from '../../../../hooks/download-file';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
@@ -22,10 +17,11 @@ const CONTEXT_MENU_KEY = {
   ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
-  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
+
+  const { handelDownload: handelDownloadAPI } = useDownloadFile();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
@@ -54,10 +50,6 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
     return validOptions;
   }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
 
-  const closeZipDialog = () => {
-    setIsZipDialogOpen(false);
-  };
-
   const toggleCopyDialog = useCallback(() => {
     setIsCopyDialogOpen(!isCopyDialogOpen);
   }, [isCopyDialogOpen]);
@@ -69,28 +61,12 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
 
   const handleDownload = useCallback(() => {
     if (!selectedImages.length) return;
-    if (selectedImages.length === 1) {
-      const image = selectedImages[0];
-      const record = getRowById(metadata, image.id);
-      downloadFile(repoID, record);
-      return;
-    }
-    if (!useGoFileserver) {
-      setIsZipDialogOpen(true);
-      return;
-    }
-    const dirents = selectedImages.map(image => {
-      const value = image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`;
-      return value;
+    const direntList = selectedImages.map(image => {
+      const name = image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`;
+      return { name };
     });
-    metadataAPI.zipDownload(repoID, '/', dirents).then((res) => {
-      const zipToken = res.data['zip_token'];
-      location.href = `${fileServerRoot}zip/${zipToken}`;
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }, [repoID, metadata, selectedImages]);
+    handelDownloadAPI('/', direntList);
+  }, [handelDownloadAPI, selectedImages]);
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {
@@ -135,16 +111,6 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
         ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
         onOptionClick={handleOptionClick}
       />
-      {isZipDialogOpen && (
-        <ModalPortal>
-          <ZipDownloadDialog
-            repoID={repoID}
-            path="/"
-            target={selectedImages.map(image => image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`)}
-            toggleDialog={closeZipDialog}
-          />
-        </ModalPortal>
-      )}
       {isCopyDialogOpen && (
         <ModalPortal>
           <CopyDirent

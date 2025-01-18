@@ -4,13 +4,11 @@ import classnames from 'classnames';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, useGoFileserver, enableExcalidraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
-import URLDecorator from '../../utils/url-decorator';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import ImageDialog from '../dialog/image-dialog';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
@@ -22,6 +20,7 @@ import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import FixedWidthTable from '../common/fixed-width-table';
+import { Dirent } from '../../models';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -76,7 +75,6 @@ class DirentListView extends React.Component {
       isCreateFolderDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
-      isProgressDialogShow: false,
       downloadItems: [],
       isMultipleOperation: true,
       activeDirent: null,
@@ -329,38 +327,9 @@ class DirentListView extends React.Component {
   };
 
   onItemsDownload = () => {
-    let { path, repoID, selectedDirentList } = this.props;
-    if (selectedDirentList.length) {
-      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
-        let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
-        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-        location.href = url;
-        return;
-      }
-
-      let selectedDirentNames = selectedDirentList.map(dirent => {
-        return dirent.name;
-      });
-
-      if (useGoFileserver) {
-        seafileAPI.zipDownload(repoID, path, selectedDirentNames).then((res) => {
-          const zipToken = res.data['zip_token'];
-          location.href = `${fileServerRoot}zip/${zipToken}`;
-        }).catch((error) => {
-          let errorMsg = Utils.getErrorMsg(error);
-          toaster.danger(errorMsg);
-        });
-      } else {
-        this.setState({
-          isProgressDialogShow: true,
-          downloadItems: selectedDirentNames
-        });
-      }
-    }
-  };
-
-  onCloseZipDownloadDialog = () => {
-    this.setState({ isProgressDialogShow: false });
+    const { path, selectedDirentList, eventBus } = this.props;
+    const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
   // common contextmenu handle
@@ -813,6 +782,7 @@ class DirentListView extends React.Component {
                   path={this.props.path}
                   repoID={this.props.repoID}
                   currentRepoInfo={this.props.currentRepoInfo}
+                  eventBus={this.props.eventBus}
                   isAdmin={this.isAdmin}
                   isRepoOwner={this.isRepoOwner}
                   repoEncrypted={this.repoEncrypted}
@@ -939,14 +909,6 @@ class DirentListView extends React.Component {
               onItemsCopy={this.props.onItemsCopy}
               onCancelCopy={this.onCopyToggle}
               onAddFolder={this.props.onAddFolder}
-            />
-          }
-          {this.state.isProgressDialogShow &&
-            <ZipDownloadDialog
-              repoID={this.props.repoID}
-              path={this.props.path}
-              target={this.state.downloadItems}
-              toggleDialog={this.onCloseZipDownloadDialog}
             />
           }
         </Fragment>

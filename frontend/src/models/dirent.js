@@ -65,6 +65,7 @@ class Dirent {
       name: this.name,
       mtime: this.mtime,
       type: this.type,
+      is_dir: this.type !== 'file',
       size: this.size,
       modifier_name: this.modifier_name,
       modifier_email: this.modifier_email,
