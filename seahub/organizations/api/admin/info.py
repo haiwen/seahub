@@ -18,14 +18,13 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
 from seahub.utils import get_org_traffic_by_month
-from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.file_size import get_file_size_unit, get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.models import OrgAdminSettings, \
         OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
-        DISABLE_ORG_USER_CLEAN_TRASH
+        DISABLE_ORG_USER_CLEAN_TRASH, OrgSettings
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
 
@@ -94,12 +93,11 @@ def get_org_info(request, org_id):
     info['traffic_this_month'] = get_org_traffic_by_month(org_id, current_date)
 
     info['traffic_limit'] = ''
-    role_perm_dict = get_enabled_role_permissions_by_role()
+    org_role = OrgSettings.objects.get_role_by_org(request.user.org)
+    role_perm_dict = get_enabled_role_permissions_by_role(org_role)
     monthly_rate_limit_per_user = role_perm_dict.get('monthly_rate_limit_per_user', '')
     if monthly_rate_limit_per_user:
-        ccnet_db = CcnetDB()
-        user_count = ccnet_db.get_org_user_count(org_id)
-        traffic_limit = get_quota_from_string(monthly_rate_limit_per_user) * user_count
+        traffic_limit = get_quota_from_string(monthly_rate_limit_per_user) * member_quota
         info['traffic_limit'] = traffic_limit
 
     info['storage_quota'] = storage_quota
