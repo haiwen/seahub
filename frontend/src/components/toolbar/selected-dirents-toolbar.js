@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
+import { gettext, siteRoot, name } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import Rename from '../dialog/rename-dirent';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
