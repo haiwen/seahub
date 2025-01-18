@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard,
+  useGoFileserver,
+} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -482,13 +484,28 @@ class DirentGridView extends React.Component {
       return;
     }
 
-    let selectedDirentNames = selectedDirentList.map(dirent => {
-      return dirent.name;
-    });
+    if (!useGoFileserver) {
+      let selectedDirentNames = selectedDirentList.map(dirent => {
+        return dirent.name;
+      });
 
-    this.setState({
-      isZipDialogOpen: true,
-      downloadItems: selectedDirentNames
+      this.setState({
+        isZipDialogOpen: true,
+        downloadItems: selectedDirentNames
+      });
+      return;
+    }
+
+    const target = this.props.selectedDirentList.map(dirent => dirent.name);
+    seafileAPI.zipDownload(repoID, path, target).then((res) => {
+      const zipToken = res.data['zip_token'];
+      location.href = `${fileServerRoot}zip/${zipToken}`;
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      this.setState({
+        isLoading: false,
+        errorMsg: errorMsg
+      });
     });
   };
 
