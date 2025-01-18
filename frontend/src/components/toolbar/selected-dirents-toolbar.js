@@ -15,6 +15,8 @@ import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
 import FileAccessLog from '../dialog/file-access-log';
+import { Dirent } from '../../models';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -25,6 +27,7 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   repoTags: PropTypes.array.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  eventBus: PropTypes.object.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
@@ -47,7 +50,6 @@ class SelectedDirentsToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isZipDialogOpen: false,
       isFileAccessLogDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
@@ -75,38 +77,9 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   onItemsDownload = () => {
-    let { path, repoID, selectedDirentList } = this.props;
-    if (selectedDirentList.length) {
-      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
-        let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
-        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-        location.href = url;
-        return;
-      }
-      if (!useGoFileserver) {
-        this.setState({
-          isZipDialogOpen: true
-        });
-      } else {
-        const target = this.props.selectedDirentList.map(dirent => dirent.name);
-        seafileAPI.zipDownload(repoID, path, target).then((res) => {
-          const zipToken = res.data['zip_token'];
-          location.href = `${fileServerRoot}zip/${zipToken}`;
-        }).catch((error) => {
-          let errorMsg = Utils.getErrorMsg(error);
-          this.setState({
-            isLoading: false,
-            errorMsg: errorMsg
-          });
-        });
-      }
-    }
-  };
-
-  closeZipDialog = () => {
-    this.setState({
-      isZipDialogOpen: false
-    });
+    const { path, selectedDirentList, eventBus } = this.props;
+    const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
   checkDuplicatedName = (newName) => {
@@ -431,16 +404,6 @@ class SelectedDirentsToolbar extends React.Component {
             onCancelCopy={this.onCopyToggle}
             onAddFolder={this.props.onAddFolder}
           />
-        }
-        {this.state.isZipDialogOpen &&
-        <ModalPortal>
-          <ZipDownloadDialog
-            repoID={this.props.repoID}
-            path={this.props.path}
-            target={this.props.selectedDirentList.map(dirent => dirent.name)}
-            toggleDialog={this.closeZipDialog}
-          />
-        </ModalPortal>
         }
         {this.state.showLibContentViewDialogs && (
           <Fragment>

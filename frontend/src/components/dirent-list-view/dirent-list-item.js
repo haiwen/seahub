@@ -5,7 +5,7 @@ import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -16,13 +16,14 @@ import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { Dirent } from '../../models';
 
 import '../../css/dirent-list-item.css';
 
@@ -31,6 +32,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
+  eventBus: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   freezeItem: PropTypes.func.isRequired,
   unfreezeItem: PropTypes.func.isRequired,
@@ -84,7 +86,6 @@ class DirentListItem extends React.Component {
       dirent,
       isOperationShow: false,
       highlight: false,
-      isZipDialogOpen: false,
       isFileAccessLogDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
@@ -539,36 +540,10 @@ class DirentListItem extends React.Component {
   onItemDownload = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
-    let dirent = this.state.dirent;
-    let repoID = this.props.repoID;
-    let direntPath = this.getDirentPath(dirent);
-    if (dirent.type === 'dir') {
-      if (!useGoFileserver) {
-        this.setState({
-          isZipDialogOpen: true
-        });
-      } else {
-        seafileAPI.zipDownload(repoID, this.props.path, this.state.dirent.name).then((res) => {
-          const zipToken = res.data['zip_token'];
-          location.href = `${fileServerRoot}zip/${zipToken}`;
-        }).catch((error) => {
-          let errorMsg = Utils.getErrorMsg(error);
-          this.setState({
-            isLoading: false,
-            errorMsg: errorMsg
-          });
-        });
-      }
-    } else {
-      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-      location.href = url;
-    }
-  };
-
-  closeZipDialog = () => {
-    this.setState({
-      isZipDialogOpen: false
-    });
+    const { path, eventBus } = this.props;
+    const { dirent } = this.state;
+    const direntList = dirent instanceof Dirent ? [dirent.toJson()] : [dirent];
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
   getDirentPath = (dirent) => {
@@ -1027,16 +1002,6 @@ class DirentListItem extends React.Component {
             />
           }
         </MediaQuery>
-        {this.state.isZipDialogOpen &&
-          <ModalPortal>
-            <ZipDownloadDialog
-              repoID={this.props.repoID}
-              path={this.props.path}
-              target={this.state.dirent.name}
-              toggleDialog={this.closeZipDialog}
-            />
-          </ModalPortal>
-        }
         {this.state.isShareDialogShow &&
           <ModalPortal>
             <ShareDialog
