@@ -97,6 +97,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MERGE_TAGS: {
+        const { target_tag_id, merged_tags_ids } = operation;
+        this.context.mergeTags(target_tag_id, merged_tags_ids).then((res) => {
+          callback({ operation });
+        }).catch((error) => {
+          callback({ error: gettext('Failed to merge tags') });
+        });
+        break;
+      }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { repo_id, rows_data } = operation;
         if (!Array.isArray(rows_data) || rows_data.length === 0) {

@@ -83,8 +83,8 @@ const ContextMenu = ({
 
   const options = useMemo(() => {
     if (!visible || !createContextMenuOptions) return [];
-    return createContextMenuOptions({ ...customProps, hideMenu: setVisible });
-  }, [customProps, visible, createContextMenuOptions]);
+    return createContextMenuOptions({ ...customProps, hideMenu: setVisible, menuPosition: position });
+  }, [customProps, visible, createContextMenuOptions, position]);
 
 
   if (!Array.isArray(options) || options.length === 0) return null;

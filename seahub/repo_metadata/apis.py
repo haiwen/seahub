@@ -1996,7 +1996,7 @@ class MetadataTags(APIView):
         tags_table_id = tags_table['id']
 
         try:
-            resp = metadata_server_api.delete_rows(tags_table_id, tag_ids)
+            metadata_server_api.delete_rows(tags_table_id, tag_ids)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2066,7 +2066,7 @@ class MetadataTagsLinks(APIView):
             if link_column_key == TAGS_TABLE.columns.parent_links.key or link_column_key == TAGS_TABLE.columns.sub_links.key:
                 try:
                     init_tag_self_link_columns(metadata_server_api, tags_table_id)
-                    link_id = TAGS_TABLE.self_link_id;
+                    link_id = TAGS_TABLE.self_link_id
                     is_linked_back = link_column_key == TAGS_TABLE.columns.sub_links.key if True else False
                 except Exception as e:
                     logger.error(e)
@@ -2322,3 +2322,142 @@ class MetadataTagFiles(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(tag_files_query)
+
+
+class MetadataMergeTags(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        target_tag_id = request.data.get('target_tag_id')
+        merged_tags_ids = request.data.get('merged_tags_ids')
+
+        if not target_tag_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'target_tag_id invalid')
+
+        if not merged_tags_ids:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'merged_tags_ids invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        try:
+            metadata = metadata_server_api.get_metadata()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        tables = metadata.get('tables', [])
+        tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
+        tags_table_id = tags_table_id[0] if tags_table_id else None
+        if not tags_table_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags not be used')
+
+        try:
+            columns_data = metadata_server_api.list_columns(tags_table_id)
+            columns = columns_data.get('columns', [])
+
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        op_tags_ids = [target_tag_id] + merged_tags_ids
+        op_tags_ids_str = ', '.join([f'"{id}"' for id in op_tags_ids])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({op_tags_ids_str})'
+        try:
+            query_new_rows = metadata_server_api.query_rows(sql)
+            op_tags = query_new_rows.get('results', [])
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not op_tags:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'tags not found')
+
+        target_tag = next((tag for tag in op_tags if tag.get(TAGS_TABLE.columns.id.name) == target_tag_id), None)
+        if not target_tag:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'target_tag_id invalid')
+
+        merged_tags = [tag for tag in op_tags if  tag[TAGS_TABLE.columns.id.name] in merged_tags_ids]
+        if not merged_tags:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'merged_tags_ids invalid')
+
+        # get unique parent/child/file links from merged tags which not exist in target tag
+        exist_parent_tags_ids = [link['row_id'] for link in target_tag.get(TAGS_TABLE.columns.parent_links.key, [])]
+        exist_child_tags_ids = [link['row_id'] for link in target_tag.get(TAGS_TABLE.columns.sub_links.key, [])]
+        exist_files_ids = [link['row_id'] for link in target_tag.get(TAGS_TABLE.columns.file_links.key, [])]
+        new_parent_tags_ids = []
+        new_child_tags_ids = []
+        new_files_ids = []
+        for merged_tag in merged_tags:
+            merged_parent_tags_ids = [link['row_id'] for link in merged_tag.get(TAGS_TABLE.columns.parent_links.key, [])]
+            merged_child_tags_ids = [link['row_id'] for link in merged_tag.get(TAGS_TABLE.columns.sub_links.key, [])]
+            merged_files_ids = [link['row_id'] for link in merged_tag.get(TAGS_TABLE.columns.file_links.key, [])]
+            for merged_parent_tag_id in merged_parent_tags_ids:
+                if merged_parent_tag_id not in op_tags_ids and merged_parent_tag_id not in exist_parent_tags_ids:
+                    new_parent_tags_ids.append(merged_parent_tag_id)
+                    exist_parent_tags_ids.append(merged_parent_tag_id)
+
+            for merged_child_tag_id in merged_child_tags_ids:
+                if merged_child_tag_id not in op_tags_ids and merged_child_tag_id not in exist_child_tags_ids:
+                    new_child_tags_ids.append(merged_child_tag_id)
+                    exist_child_tags_ids.append(merged_child_tag_id)
+
+            for merged_file_id in merged_files_ids:
+                if merged_file_id not in exist_files_ids:
+                    new_files_ids.append(merged_file_id)
+                    exist_files_ids.append(merged_file_id)
+
+        parent_link_column = [column for column in columns if column['key'] == TAGS_TABLE.columns.parent_links.key and column['type'] == 'link']
+        parent_link_column = parent_link_column[0] if parent_link_column else None
+
+        # add new parent tags
+        if new_parent_tags_ids:
+            try:
+                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, { target_tag_id: new_parent_tags_ids })
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        # add new child tags
+        if new_child_tags_ids:
+            try:
+                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, { target_tag_id: new_child_tags_ids }, True)
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        # add new tag files
+        if new_files_ids:
+            try:
+                metadata_server_api.insert_link(TAGS_TABLE.file_link_id, tags_table_id, { target_tag_id: new_files_ids })
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+
+        # remove merge tags
+        try:
+            metadata_server_api.delete_rows(tags_table_id, merged_tags_ids)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})

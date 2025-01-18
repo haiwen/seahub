@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../components/toast';
 import TagsTable from './tags-table';
@@ -16,6 +16,8 @@ import './index.css';
 const AllTags = ({ updateCurrentPath, ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
   const [isLoadingMore, setLoadingMore] = useState(false);
+
+  const tagsTableWrapperRef = useRef(null);
 
   const { isLoading, isReloading, tagsData, store, context, currentPath } = useTags();
 
@@ -72,6 +74,11 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     }
   }, [isLoading, isReloading, onChangeDisplayTag]);
 
+  const getTagsTableWrapperOffsets = useCallback(() => {
+    if (!tagsTableWrapperRef.current) return {};
+    return tagsTableWrapperRef.current.getBoundingClientRect();
+  }, []);
+
   if (isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
@@ -85,7 +92,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
   }
 
   return (
-    <div className="sf-metadata-tags-wrapper sf-metadata-all-tags-wrapper">
+    <div className="sf-metadata-tags-wrapper sf-metadata-all-tags-wrapper" ref={tagsTableWrapperRef}>
       <TagsTable
         context={context}
         tagsData={tagsData}
@@ -93,6 +100,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
         setDisplayTag={onChangeDisplayTag}
         isLoadingMoreRecords={isLoadingMore}
         loadMore={loadMore}
+        getTagsTableWrapperOffsets={getTagsTableWrapperOffsets}
       />
     </div>
   );

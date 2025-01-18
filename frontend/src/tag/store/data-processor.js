@@ -222,7 +222,8 @@ class DataProcessor {
         break;
       }
       case OPERATION_TYPE.ADD_TAG_LINKS:
-      case OPERATION_TYPE.DELETE_TAG_LINKS: {
+      case OPERATION_TYPE.DELETE_TAG_LINKS:
+      case OPERATION_TYPE.MERGE_TAGS: {
         this.buildTagsTree(table.rows, table);
         break;
       }

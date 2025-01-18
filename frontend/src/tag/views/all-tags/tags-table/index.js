@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
+import MergeTagsSelector from '../../../components/merge-tags-selector';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
@@ -33,33 +34,15 @@ const TagsTable = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   setDisplayTag,
   loadMore,
+  getTagsTableWrapperOffsets,
 }) => {
-  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, addChildTag } = useTags();
+  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, addChildTag, mergeTags } = useTags();
 
   const [isShowNewSubTagDialog, setIsShowNewSubTagDialog] = useState(false);
+  const [isShowMergeTagsSelector, setIsShowMergeTagsSelector] = useState(false);
 
   const parentTagIdRef = useRef(null);
-
-  const onDeleteTags = useCallback((tagsIds) => {
-    deleteTags(tagsIds);
-
-    const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-  }, [deleteTags]);
-
-  const onNewSubTag = useCallback((parentTagId) => {
-    parentTagIdRef.current = parentTagId;
-    setIsShowNewSubTagDialog(true);
-  }, []);
-
-  const closeNewSubTagDialog = useCallback(() => {
-    parentTagIdRef.current = null;
-    setIsShowNewSubTagDialog(false);
-  }, []);
-
-  const handelAddChildTag = useCallback((tagData, callback) => {
-    addChildTag(tagData, parentTagIdRef.current, callback);
-  }, [addChildTag]);
+  const mergeTagsSelectorProps = useRef({});
 
   const table = useMemo(() => {
     if (!tagsData) {
@@ -121,12 +104,44 @@ const TagsTable = ({
     return scroll || {};
   }, []);
 
-  const storeGridScroll = useCallback((gridScroll) => {
-    window.sfTagsDataContext.localStorage.setItem(KEY_STORE_SCROLL, JSON.stringify(gridScroll));
+  const onDeleteTags = useCallback((tagsIds) => {
+    deleteTags(tagsIds);
+
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+  }, [deleteTags]);
+
+  const onNewSubTag = useCallback((parentTagId) => {
+    parentTagIdRef.current = parentTagId;
+    setIsShowNewSubTagDialog(true);
   }, []);
 
-  const foldedGroups = useMemo(() => {
-    return {};
+  const closeNewSubTagDialog = useCallback(() => {
+    parentTagIdRef.current = null;
+    setIsShowNewSubTagDialog(false);
+  }, []);
+
+  const onMergeTags = useCallback((tagsIds, menuPosition) => {
+    const { left, top } = getTagsTableWrapperOffsets();
+    mergeTagsSelectorProps.current.mergeTagsIds = tagsIds;
+    mergeTagsSelectorProps.current.position = {
+      left: (menuPosition.left || 0) + (left || 0),
+      top: (menuPosition.top || 0) + (top || 0),
+    };
+    setIsShowMergeTagsSelector(true);
+  }, [getTagsTableWrapperOffsets]);
+
+  const closeMergeTagsSelector = useCallback(() => {
+    mergeTagsSelectorProps.current = {};
+    setIsShowMergeTagsSelector(false);
+  }, []);
+
+  const handelAddChildTag = useCallback((tagData, callback) => {
+    addChildTag(tagData, parentTagIdRef.current, callback);
+  }, [addChildTag]);
+
+  const storeGridScroll = useCallback((gridScroll) => {
+    window.sfTagsDataContext.localStorage.setItem(KEY_STORE_SCROLL, JSON.stringify(gridScroll));
   }, []);
 
   const storeFoldedGroups = useCallback(() => {}, []);
@@ -145,8 +160,9 @@ const TagsTable = ({
       context,
       onDeleteTags,
       onNewSubTag,
+      onMergeTags,
     });
-  }, [context, onDeleteTags, onNewSubTag]);
+  }, [context, onDeleteTags, onNewSubTag, onMergeTags]);
 
   const checkCanModifyTag = useCallback((tag) => {
     return context.canModifyTag(tag);
@@ -174,7 +190,6 @@ const TagsTable = ({
         recordsTree={recordsTree}
         keyTreeNodeFoldedMap={keyTreeNodeFoldedMap}
         canModifyTags={canModifyTags}
-        foldedGroups={foldedGroups}
         gridScroll={gridScroll}
         visibleColumns={visibleColumns}
         noRecordsTipsText={gettext('No tags')}
@@ -192,6 +207,9 @@ const TagsTable = ({
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />
+      )}
+      {isShowMergeTagsSelector && (
+        <MergeTagsSelector {...mergeTagsSelectorProps.current} closeSelector={closeMergeTagsSelector} mergeTags={mergeTags} />
       )}
     </>
   );

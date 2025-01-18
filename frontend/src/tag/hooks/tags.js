@@ -198,6 +198,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
   }, []);
 
+  const mergeTags = useCallback((target_tag_id, merged_tags_ids, { success_callback, fail_callback } = {}) => {
+    storeRef.current.mergeTags(target_tag_id, merged_tags_ids, success_callback, fail_callback);
+  }, []);
+
   const modifyColumnWidth = useCallback((columnKey, newWidth) => {
     storeRef.current.modifyColumnWidth(columnKey, newWidth);
   }, [storeRef]);
@@ -273,6 +277,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateTag,
       addTagLinks,
       deleteTagLinks,
+      mergeTags,
       updateLocalTag,
       selectTag: handelSelectTag,
       modifyColumnWidth,
