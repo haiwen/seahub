@@ -82,3 +82,7 @@ html, body, #root {
   min-height: 0;
   min-width: 0;
 }
+
+.sf-md-viewer-content.locked .sf-editor-outline-wrapper {
+  top: 66px;
+}
