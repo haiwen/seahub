@@ -28,7 +28,7 @@ from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
-from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, \
+from seahub.utils.file_types import SEADOC, \
         MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
         DOCX_SUPPORT_CONVERT_TYPES
 from seahub.tags.models import FileUUIDMap
@@ -181,7 +181,8 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+            if parse_repo_perm(check_folder_permission(request, repo_id,
+                                                       parent_dir)).can_create is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
