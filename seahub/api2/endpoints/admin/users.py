@@ -73,7 +73,8 @@ from seahub.utils.ldap import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHAN
     MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, \
     MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, \
     MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_USER_OBJECT_CLASS, \
-    MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM
+    MULTI_LDAP_1_PROVIDER, MULTI_LDAP_1_FILTER, MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, \
+    LDAP_FOLLOW_REFERRALS, MULTI_LDAP_1_FOLLOW_REFERRALS
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -111,11 +112,11 @@ def get_user_objs_from_ccnet(email_list):
     return user_objs, None
 
 
-def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
+def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism, follow_referrals):
     bind_conn = ldap.initialize(server_url)
 
     try:
-        bind_conn.set_option(ldap.OPT_REFERRALS, 0)
+        bind_conn.set_option(ldap.OPT_REFERRALS, 1 if follow_referrals else 0)
     except Exception as e:
         raise Exception('Failed to set referrals option: %s' % e)
 
@@ -139,9 +140,9 @@ def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
 
 
 def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism, base_dn,
-                   login_attr, serch_filter, object_class):
+                   login_attr, serch_filter, object_class, follow_referrals):
     try:
-        admin_bind = ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
+        admin_bind = ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism, follow_referrals)
     except Exception as e:
         raise Exception(e)
 
@@ -940,7 +941,7 @@ class AdminLDAPUsers(APIView):
         try:
             ldap_users = get_ldap_users(LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD,
                                         ENABLE_SASL, SASL_MECHANISM, LDAP_BASE_DN, LDAP_LOGIN_ATTR,
-                                        LDAP_FILTER, LDAP_USER_OBJECT_CLASS)
+                                        LDAP_FILTER, LDAP_USER_OBJECT_CLASS, LDAP_FOLLOW_REFERRALS)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -953,7 +954,7 @@ class AdminLDAPUsers(APIView):
                                                   MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_ENABLE_SASL,
                                                   MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_BASE_DN,
                                                   MULTI_LDAP_1_LOGIN_ATTR, MULTI_LDAP_1_FILTER,
-                                                  MULTI_LDAP_1_USER_OBJECT_CLASS)
+                                                  MULTI_LDAP_1_USER_OBJECT_CLASS, MULTI_LDAP_1_FOLLOW_REFERRALS)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
