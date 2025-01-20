@@ -29,6 +29,8 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
     ENABLE_SEARCH_FROM_LDAP_DIRECTLY, ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER
 
+from seahub.constants import GUEST_USER
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -257,7 +259,7 @@ def search_user_when_global_address_book_disabled(request, q):
     email_list = []
     username = request.user.username
     current_user = User.objects.get(email=username)
-    if current_user.role.lower() != 'guest':
+    if current_user.role != GUEST_USER:
 
         if is_valid_email(q):
 
