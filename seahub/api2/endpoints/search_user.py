@@ -29,6 +29,8 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
     ENABLE_SEARCH_FROM_LDAP_DIRECTLY, ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER
 
+from seahub.constants import GUEST_USER
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -255,19 +257,23 @@ def search_user_when_global_address_book_disabled(request, q):
     """
 
     email_list = []
-    if is_valid_email(q):
+    username = request.user.username
+    current_user = User.objects.get(email=username)
+    if current_user.role != GUEST_USER:
 
-        # if `q` is a valid email
-        email_list.append(q)
+        if is_valid_email(q):
 
-        # get user whose `contact_email` is `q`
-        users = Profile.objects.filter(contact_email=q).values('user')
-        for user in users:
-            email_list.append(user['user'])
+            # if `q` is a valid email
+            email_list.append(q)
 
-    # get user whose `login_id` is `q`
-    username_by_login_id = Profile.objects.get_username_by_login_id(q)
-    if username_by_login_id:
-        email_list.append(username_by_login_id)
+            # get user whose `contact_email` is `q`
+            users = Profile.objects.filter(contact_email=q).values('user')
+            for user in users:
+                email_list.append(user['user'])
+
+        # get user whose `login_id` is `q`
+        username_by_login_id = Profile.objects.get_username_by_login_id(q)
+        if username_by_login_id:
+            email_list.append(username_by_login_id)
 
     return email_list
