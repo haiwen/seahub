@@ -255,23 +255,19 @@ def search_user_when_global_address_book_disabled(request, q):
     """
 
     email_list = []
-    username = request.user.username
-    current_user = User.objects.get(email=username)
-    if current_user.role.lower() != 'guest':
+    if is_valid_email(q):
 
-        if is_valid_email(q):
+        # if `q` is a valid email
+        email_list.append(q)
 
-            # if `q` is a valid email
-            email_list.append(q)
+        # get user whose `contact_email` is `q`
+        users = Profile.objects.filter(contact_email=q).values('user')
+        for user in users:
+            email_list.append(user['user'])
 
-            # get user whose `contact_email` is `q`
-            users = Profile.objects.filter(contact_email=q).values('user')
-            for user in users:
-                email_list.append(user['user'])
-
-        # get user whose `login_id` is `q`
-        username_by_login_id = Profile.objects.get_username_by_login_id(q)
-        if username_by_login_id:
-            email_list.append(username_by_login_id)
+    # get user whose `login_id` is `q`
+    username_by_login_id = Profile.objects.get_username_by_login_id(q)
+    if username_by_login_id:
+        email_list.append(username_by_login_id)
 
     return email_list

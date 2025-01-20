@@ -96,7 +96,6 @@ class AdminAdminRole(APIView):
             error_msg = 'role invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        role = role.lower()
         available_roles = get_available_admin_roles()
         if role not in available_roles:
             error_msg = 'role must be in %s.' % str(available_roles)
@@ -168,7 +167,6 @@ class AdminAdminRole(APIView):
             error_msg = 'role invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        role = role.lower()
         available_roles = get_available_admin_roles()
         if role not in available_roles:
             error_msg = 'role must be in %s.' % str(available_roles)
