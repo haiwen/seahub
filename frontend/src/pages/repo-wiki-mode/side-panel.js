@@ -171,7 +171,7 @@ class SidePanel extends Component {
                     aria-expanded={this.state.isHeaderMenuShow}
                     onClick={this.onDropdownToggleClick}
                   />
-                  <DropdownMenu right>
+                  <DropdownMenu>
                     <DropdownItem onClick={this.onAddFolderToggle.bind(this, 'root')}>{gettext('New Folder')}</DropdownItem>
                     <DropdownItem onClick={this.onAddFileToggle.bind(this, 'root')}>{gettext('New File')}</DropdownItem>
                   </DropdownMenu>

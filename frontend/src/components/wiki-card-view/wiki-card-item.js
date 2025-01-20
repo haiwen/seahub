@@ -235,7 +235,7 @@ class WikiCardItem extends Component {
                   aria-haspopup={true}
                   style={{ 'minWidth': '0' }}
                 />
-                <DropdownMenu right={true} className="dtable-dropdown-menu">
+                <DropdownMenu className="dtable-dropdown-menu">
                   {showRename &&
                     <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
                   {showPublish && canPublishWiki &&

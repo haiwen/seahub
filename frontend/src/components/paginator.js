@@ -102,6 +102,7 @@ class Paginator extends Component {
 
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
+            tag="span"
             data-toggle="dropdown"
             aria-expanded={this.state.isMenuShow}
             onClick={this.toggleOperationMenu}

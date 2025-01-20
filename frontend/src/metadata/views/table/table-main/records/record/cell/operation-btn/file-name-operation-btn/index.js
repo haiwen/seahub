@@ -38,7 +38,7 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
         placement="bottom"
         fade={false}
         delay={{ show: 0, hide: 0 }}
-        modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+        modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
         className="sf-metadata-tooltip"
       >
         {isDir ? gettext('Open folder') : gettext('Open file')}

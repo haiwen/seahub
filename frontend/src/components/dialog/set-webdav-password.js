@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Alert, Button, Input, InputGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -74,14 +74,12 @@ class SetWebdavPassword extends Component {
         <ModalBody>
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
-            <InputGroupAddon addonType="append">
-              <Button onClick={this.togglePasswordVisible}>
-                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : 'slash'}`}></i>
-              </Button>
-              <Button onClick={this.generatePassword}>
-                <i className="sf3-font sf3-font-magic"></i>
-              </Button>
-            </InputGroupAddon>
+            <Button onClick={this.togglePasswordVisible}>
+              <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : 'slash'}`}></i>
+            </Button>
+            <Button onClick={this.generatePassword}>
+              <i className="sf3-font sf3-font-magic"></i>
+            </Button>
           </InputGroup>
           <p className="form-text text-muted m-0">{passwordTip}</p>
           {this.state.errMsg && <Alert color="danger" className="m-0 mt-2">{gettext(this.state.errMsg)}</Alert>}

@@ -118,7 +118,7 @@ class DepartmentsV2MembersItem extends React.Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               />
-              <DropdownMenu right={true}>
+              <DropdownMenu>
                 <DropdownItem key='delete' onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>

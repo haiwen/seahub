@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
@@ -66,9 +66,7 @@ class SetOrgUserDefaultQuota extends React.Component {
           <React.Fragment>
             <InputGroup>
               <input type="text" className="form-control" value={inputValue} onChange={this.handleInputChange} />
-              <InputGroupAddon addonType="append">
-                <InputGroupText>MB</InputGroupText>
-              </InputGroupAddon>
+              <InputGroupText>MB</InputGroupText>
             </InputGroup>
             <p className="small text-secondary mt-2 mb-2">{gettext('Tip: 0 means default limit')}</p>
             {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}

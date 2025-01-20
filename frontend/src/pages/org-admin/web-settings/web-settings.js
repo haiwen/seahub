@@ -8,7 +8,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
-import { InputGroupAddon, InputGroupText } from 'reactstrap';
+import { InputGroupText } from 'reactstrap';
 
 import '../../../css/system-admin-web-settings.css';
 import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
@@ -192,9 +192,7 @@ class OrgWebSettings extends Component {
                       value={user_default_quota}
                       helpTip={gettext('Tip: 0 means default limit, the unit is MB')}
                       inputAddon={
-                        <InputGroupAddon addonType="append">
-                          <InputGroupText>MB</InputGroupText>
-                        </InputGroupAddon>
+                        <InputGroupText>MB</InputGroupText>
                       }
                       valueFixed={1}
                     />

@@ -154,6 +154,7 @@ class ItemDropdownMenu extends React.Component {
       return (
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
+            tag="span"
             className={this.props.toggleClass}
             data-toggle="dropdown"
             title={gettext('More operations')}
@@ -180,7 +181,7 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown direction='down' isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown tag="span" direction='down' isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
@@ -199,7 +200,7 @@ class ItemDropdownMenu extends React.Component {
             className={this.props.menuClassname}
             positionFixed
             flip={false}
-            modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+            modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
           >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
@@ -215,7 +216,7 @@ class ItemDropdownMenu extends React.Component {
                     onMouseMove={(e) => {e.stopPropagation();}}
                   >
                     <DropdownToggle
-                      tag='div'
+                      tag='span'
                       className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
@@ -225,7 +226,7 @@ class ItemDropdownMenu extends React.Component {
                     <DropdownMenu
                       positionFixed
                       flip={false}
-                      modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+                      modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
                     >
                       {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}
                       {menuItem.subOpList.map((item, index) => {

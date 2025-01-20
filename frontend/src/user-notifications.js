@@ -116,7 +116,7 @@ class UserNotificationsDialog extends React.Component {
               </span>
             </button>
           </DropdownToggle>
-          <DropdownMenu right={true} className="dtable-dropdown-menu large">
+          <DropdownMenu className="dtable-dropdown-menu large">
             <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
             <DropdownItem onClick={this.clearAll}>{gettext('Clear')}</DropdownItem>
           </DropdownMenu>

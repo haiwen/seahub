@@ -228,7 +228,7 @@ class ContextMenu extends React.Component {
                 onMouseMove={(e) => {e.stopPropagation();}}
               >
                 <DropdownToggle
-                  tag='div'
+                  tag='span'
                   className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                   onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                 >

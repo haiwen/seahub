@@ -142,7 +142,7 @@ class DirTool extends React.Component {
               aria-expanded={isDropdownMenuOpen}
             >
             </DropdownToggle>
-            <DropdownMenu right={true}>
+            <DropdownMenu>
               {menuItems.map((menuItem, index) => {
                 if (menuItem === 'Divider') {
                   return <DropdownItem key={index} divider />;

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, FormText } from 'reactstrap';
+import { FormGroup, Label, Input, InputGroup, InputGroupText, FormText } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import DateTimePicker from './date-and-time-picker';
@@ -85,9 +85,7 @@ class SetLinkExpiration extends React.Component {
             <Fragment>
               <InputGroup style={{ width: inputWidth }}>
                 <Input type="text" value={expireDays} onChange={onExpireDaysChanged} />
-                <InputGroupAddon addonType="append">
-                  <InputGroupText>{gettext('days')}</InputGroupText>
-                </InputGroupAddon>
+                <InputGroupText>{gettext('days')}</InputGroupText>
               </InputGroup>
               {!this.isExpireDaysNoLimit && (
                 <FormText color="muted">{this.expirationLimitTip}</FormText>
