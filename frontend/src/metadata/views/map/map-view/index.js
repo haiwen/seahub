@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import loadBMap, { initMapInfo } from '../../../../utils/map-utils';
 import { appAvatarURL, baiduMapKey, googleMapKey, mediaUrl } from '../../../../utils/constants';
@@ -10,6 +10,8 @@ import { createBMapGeolocationControl, createBMapZoomControl } from './control';
 import { customAvatarOverlay, customImageOverlay } from './overlay';
 
 import './index.css';
+import ModalPortal from '../../../../components/modal-portal';
+import ImageDialog from '../../../../components/dialog/image-dialog';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -17,12 +19,20 @@ const BATCH_SIZE = 500;
 const MAX_ZOOM = 21;
 const MIN_ZOOM = 3;
 
-const MapView = ({ images, onOpenCluster }) => {
+const MapView = ({ images, onDeleteRecords }) => {
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [clusterImageIds, setClusterImageIds] = useState([]);
+
   const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
+  const imageCluster = useMemo(() => {
+    return images.filter(image => clusterImageIds.includes(image.id));
+  }, [images, clusterImageIds]);
 
   const mapRef = useRef(null);
   const clusterRef = useRef(null);
   const batchIndexRef = useRef(0);
+  const markersMapRef = useRef({});
 
   const saveMapState = useCallback(() => {
     if (!mapRef.current) return;
@@ -71,8 +81,10 @@ const MapView = ({ images, onOpenCluster }) => {
   const onClickMarker = useCallback((e, markers) => {
     saveMapState();
     const imageIds = markers.map(marker => marker._id);
-    onOpenCluster(imageIds);
-  }, [onOpenCluster, saveMapState]);
+    // onOpenCluster(imageIds);
+    setClusterImageIds(imageIds);
+    setIsImagePopupOpen(true);
+  }, [saveMapState]);
 
   const renderMarkersBatch = useCallback(() => {
     if (!images.length || !clusterRef.current) return;
@@ -89,6 +101,7 @@ const MapView = ({ images, onOpenCluster }) => {
         callback: (e, markers) => onClickMarker(e, markers)
       });
       batchMarkers.push(marker);
+      markersMapRef.current[image.id] = marker;
     }
     clusterRef.current.addMarkers(batchMarkers);
 
@@ -144,6 +157,30 @@ const MapView = ({ images, onOpenCluster }) => {
     renderMarkersBatch();
   }, [addMapController, initializeCluster, initializeUserMarker, renderMarkersBatch, getBMapType, loadMapState]);
 
+  const closeCluster = useCallback(() => {
+    setIsImagePopupOpen(false);
+  }, []);
+
+  const moveToPrevImage = useCallback(() => {
+    setImageIndex((imageIndex + imageCluster.length - 1) % imageCluster.length);
+  }, [imageIndex, imageCluster.length]);
+
+  const moveToNextImage = useCallback(() => {
+    setImageIndex((imageIndex + 1) % imageCluster.length);
+  }, [imageIndex, imageCluster.length]);
+
+  const handelDelete = useCallback(() => {
+    const image = imageCluster[imageIndex];
+    if (!image) return;
+    onDeleteRecords([image.id]);
+
+    const marker = markersMapRef.current[image.id];
+    if (marker) {
+      clusterRef.current.removeMarker(marker);
+      delete markersMapRef.current[image.id];
+    }
+  }, [imageCluster, imageIndex, onDeleteRecords]);
+
   useEffect(() => {
     const modifyMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, (newType) => {
       window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
@@ -172,6 +209,18 @@ const MapView = ({ images, onOpenCluster }) => {
   return (
     <div className="sf-metadata-view-map">
       <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
+      {isImagePopupOpen && (
+        <ModalPortal>
+          <ImageDialog
+            imageItems={imageCluster}
+            imageIndex={imageIndex}
+            closeImagePopup={closeCluster}
+            moveToPrevImage={moveToPrevImage}
+            moveToNextImage={moveToNextImage}
+            onDeleteImage={handelDelete}
+          />
+        </ModalPortal>
+      )}
     </div>
   );
 };

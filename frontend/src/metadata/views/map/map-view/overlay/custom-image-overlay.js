@@ -18,7 +18,7 @@ const customImageOverlay = (center, image, callback) => {
       map.getPanes().markerPane.appendChild(div);
       this._div = div;
 
-      const imageElement = `<img src=${this._URL} />`;
+      const imageElement = `<img src=${this._URL} style="width: 80px; height: 80px;" />`;
       const htmlString =
         `
           <div class="custom-image-container">
