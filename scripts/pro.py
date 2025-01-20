@@ -639,12 +639,59 @@ def do_setup(args):
     pro_config.config()
     pro_config.generate()
 
+
+def parse_bool(v):
+    if isinstance(v, bool):
+        return v
+
+    v = str(v).lower()
+
+    if v == '1' or v == 'true':
+        return True
+    else:
+        return False
+
+
+def get_opt_from_conf_or_env(config, section, key, env_key=None, default=None):
+    """Get option value from events.conf. If not specified in events.conf, check the environment variable.
+    """
+    try:
+        return config.get(section, key)
+    except configparser.Error:
+        if env_key is None:
+            return default
+        else:
+            return os.environ.get(env_key.upper(), default)
+
+
 def handle_search_commands(args):
     '''provide search related utility'''
+    events_conf = os.path.join(env_mgr.central_config_dir, 'seafevents.conf')
+    config = Utils.read_config(events_conf)
+
+    es_section_name = 'INDEX FILES'
+    seasearch_section_name = 'SEASEARCH'
+    key_enabled = 'enabled'
+
+    es_enabled = get_opt_from_conf_or_env(config, es_section_name, key_enabled, default=False)
+    seaseach_enabled = get_opt_from_conf_or_env(config, seasearch_section_name, key_enabled, default=False)
+
+    es_enabled = parse_bool(es_enabled)
+    seaseach_enabled = parse_bool(seaseach_enabled)
+
+    if es_enabled and seaseach_enabled:
+        raise Exception('ES and seasearch cannot be configured simultaneously.')
+
     if args.update:
-        update_search_index()
+        if seaseach_enabled:
+            update_seasearch_index()
+        elif es_enabled:
+            update_search_index()
     elif args.clear:
-        delete_search_index()
+        if seaseach_enabled:
+            delete_seasearch_index()
+        elif es_enabled:
+            delete_search_index()
 
 def get_seafes_env():
     env = env_mgr.get_seahub_env()
@@ -722,6 +769,77 @@ def delete_wiki_search_index():
     Utils.info('\nDelete wiki index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
+
+
+def update_seasearch_index():
+    update_file_seasearch_index()
+    update_wiki_seasearch_index()
+
+
+def update_file_seasearch_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '--loglevel', 'debug',
+        'update',
+    ]
+
+    Utils.info('\nUpdating seasearch filename index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
+
+def update_wiki_seasearch_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafevents.seasearch.script.wiki_index_local',
+        '--loglevel', 'debug',
+        'update',
+    ]
+
+    Utils.info('\nUpdating seasearch wiki index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
+
+def delete_seasearch_index():
+    choice = None
+    while choice not in ('y', 'n', ''):
+        prompt = 'Delete seafile search index ([y]/n)? '
+        choice = input(prompt).strip()
+
+    if choice == 'n':
+        return
+
+    delete_file_seasearch_index()
+    delete_wiki_seasearch_index()
+
+
+def delete_file_seasearch_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '--loglevel', 'debug',
+        'clear',
+    ]
+
+    Utils.info('\nDelete seasearch filename index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
+
+def delete_wiki_seasearch_index():
+    argv = [
+        Utils.get_python_executable(),
+        '-m', 'seafevents.seasearch.script.wiki_index_local',
+        '--loglevel', 'debug',
+        'clear',
+    ]
+
+    Utils.info('\nDelete seasearch wiki index, this may take a while...\n')
+
+    Utils.run_argv(argv, env=get_seafes_env())
+
 
 def handle_ldap_sync_commands(args):
     if args.test:
