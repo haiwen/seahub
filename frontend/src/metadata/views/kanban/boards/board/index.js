@@ -75,7 +75,7 @@ const Board = ({
         onDrop={e => onDragEnd(boardIndex, e)}
         onDragEnter={() => setDraggingOver(true)}
         onDragLeave={() => setDraggingOver(false)}
-        shouldAcceptDrop={() => true}
+        shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
         getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
         dropPlaceholder={{
           animationDuration: 300,
