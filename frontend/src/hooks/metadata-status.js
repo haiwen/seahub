@@ -21,6 +21,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
   const [enableOCR, setEnableOCR] = useState(false);
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
+  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
 
   const cancelMetadataURL = useCallback((isSetRoot = false) => {
     // If attribute extension is turned off, unmark the URL
@@ -39,6 +40,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
     setEnableMetadata(false);
     setEnableTags(false);
     setEnableOCR(false);
+    setEnableFaceRecognition(false);
     setDetailsSettings({});
     setIsBeingBuilt(false);
     if (!enableMetadataManagement) {
@@ -52,7 +54,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
         tags_enabled: enableTags,
         tags_lang: tagsLang,
         details_settings: detailsSettings,
-        ocr_enabled: enableOCR
+        ocr_enabled: enableOCR,
+        face_recognition_enabled: enableFaceRecognition,
       } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
@@ -61,6 +64,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
       setEnableOCR(enableOCR);
+      setEnableFaceRecognition(enableFaceRecognition);
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -97,6 +101,11 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
     setEnableOCR(newValue);
   }, [enableOCR]);
 
+  const updateEnableFaceRecognition = useCallback((newValue) => {
+    if (newValue === enableFaceRecognition) return;
+    setEnableFaceRecognition(newValue);
+  }, [enableFaceRecognition]);
+
   const modifyDetailsSettings = useCallback((update) => {
     metadataAPI.modifyMetadataDetailsSettings(repoID, update).then(res => {
       const newDetailsSettings = { ...detailsSettings, ...update };
@@ -122,6 +131,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
         modifyDetailsSettings,
         enableOCR,
         updateEnableOCR,
+        enableFaceRecognition,
+        updateEnableFaceRecognition,
       }}
     >
       {!isLoading && (

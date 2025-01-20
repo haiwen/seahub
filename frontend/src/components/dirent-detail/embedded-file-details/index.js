@@ -12,7 +12,7 @@ import { AI, Settings } from '../../../metadata/components/metadata-details';
 
 import './index.css';
 
-const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {}, enableFaceRecognition = false }) => {
+const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
 
@@ -38,16 +38,16 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   useEffect(() => {
     if (isView || isTag) return;
 
-    let isNewContext = false;
+    let isExistContext = true;
     if (!window.sfMetadataContext) {
       const context = new MetadataContext();
       window.sfMetadataContext = context;
       window.sfMetadataContext.init({ repoID, repoInfo });
-      isNewContext = true;
+      isExistContext = false;
     }
 
     return () => {
-      if (window.sfMetadataContext && isNewContext) {
+      if (window.sfMetadataContext && !isExistContext) {
         window.sfMetadataContext.destroy();
         delete window['sfMetadataContext'];
       }
@@ -71,14 +71,18 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         })}
         style={{ width }}
       >
-        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} >
-          <AI />
-          <Settings />
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>
+          {onClose && (
+            <>
+              <AI />
+              <Settings />
+            </>
+          )}
         </Header>
         <Body>
           {dirent && direntDetail && (
             <div className="detail-content">
-              <FileDetails repoID={repoID} dirent={dirent} direntDetail={direntDetail} enableFaceRecognition={enableFaceRecognition} />
+              <FileDetails repoID={repoID} dirent={dirent} direntDetail={direntDetail} />
             </div>
           )}
         </Body>
@@ -93,8 +97,7 @@ EmbeddedFileDetails.propTypes = {
   path: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
   component: PropTypes.object,
-  onClose: PropTypes.func.isRequired,
-  enableFaceRecognition: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default EmbeddedFileDetails;

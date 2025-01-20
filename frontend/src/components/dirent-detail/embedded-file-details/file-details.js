@@ -9,8 +9,8 @@ import { MetadataDetails, useMetadataDetails } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 import People from '../people';
 
-const FileDetails = ({ repoID, dirent, direntDetail, enableFaceRecognition }) => {
-  const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
+const FileDetails = ({ repoID, dirent, direntDetail }) => {
+  const { enableMetadataManagement, enableMetadata, enableFaceRecognition } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);

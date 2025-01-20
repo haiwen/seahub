@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
@@ -7,8 +7,6 @@ import { SYSTEM_FOLDERS } from '../../../constants';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
-import { metadataAPI } from '../../../metadata';
-import toaster from '../../toast';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
@@ -18,7 +16,6 @@ const SIDE_PANEL_EXPANDED_WIDTH = 300;
 
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
   const [expanded, setExpanded] = useState(false);
-  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
 
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
@@ -33,15 +30,6 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
   const onToggleSidePanel = useCallback(() => {
     setExpanded(!expanded);
   }, [expanded]);
-
-  useEffect(() => {
-    metadataAPI.getFaceRecognitionStatus(repoID).then(res => {
-      setEnableFaceRecognition(res.data.enabled);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }, [repoID]);
 
   const imageItemsLength = imageItems.length;
   if (imageItemsLength === 0) return null;
@@ -77,21 +65,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate, imageIte
         <div className="side-panel-controller" onClick={onToggleSidePanel}>
           <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
         </div>
-        {expanded && (
-          <EmbeddedFileDetails
-            repoID={repoID}
-            repoInfo={repoInfo}
-            path={path}
-            dirent={dirent}
-            onClose={() => {}}
-            component={{
-              headerComponent: {
-                isShowControl: false,
-              }
-            }}
-            enableFaceRecognition={enableFaceRecognition}
-          />
-        )}
+        {expanded && (<EmbeddedFileDetails repoID={repoID} repoInfo={repoInfo} path={path} dirent={dirent} />)}
       </div>
 
     );
