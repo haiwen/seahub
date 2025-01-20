@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import toaster from './toast';
-import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupText, Input, Button } from 'reactstrap';
 import { gettext, serviceURL } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import { subscriptionAPI } from '../utils/subscription-api';
@@ -184,9 +184,7 @@ class Plans extends Component {
           {'¥ '}<span className="price-version-plan-price">{currentPlan.price}</span>{' ' + currentPlan.description}
         </span>
         <InputGroup style={{ marginBottom: '5px' }} className='user-numbers'>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>{operationIntro}</InputGroupText>
-          </InputGroupAddon>
+          <InputGroupText>{operationIntro}</InputGroupText>
           <Input
             className="py-2"
             placeholder={operationIntro}
@@ -225,9 +223,7 @@ class Plans extends Component {
           {'¥ '}<span className="price-version-plan-price">{currentPlan.asset_quota_price}</span>{' ' + currentPlan.asset_quota_description}
         </span>
         <InputGroup style={{ marginBottom: '5px' }} className='space-quota'>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText><span className="font-500">{operationIntro}</span></InputGroupText>
-          </InputGroupAddon>
+          <InputGroupText><span className="font-500">{operationIntro}</span></InputGroupText>
           <Input
             className="py-2"
             placeholder={operationIntro}
@@ -239,9 +235,7 @@ class Plans extends Component {
             disabled={!currentPlan.can_custom_asset_quota}
             onChange={this.onAssetQuotaUnitCountInputChange}
           />
-          <InputGroupAddon addonType='append'>
-            <InputGroupText><span className="font-500">{' x ' + currentPlan.asset_quota_unit + 'GB'}</span></InputGroupText>
-          </InputGroupAddon>
+          <InputGroupText><span className="font-500">{' x ' + currentPlan.asset_quota_unit + 'GB'}</span></InputGroupText>
         </InputGroup>
         <span className='py-4 text-orange mb-0 font-500 price-version-plan-whole-price text-center'>
           {'总价 ¥ ' + totalAmount}

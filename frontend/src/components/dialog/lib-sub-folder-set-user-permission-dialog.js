@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Input, InputGroup } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
@@ -288,7 +288,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                 <td>
                   <InputGroup>
                     <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
-                    <InputGroupAddon addonType="append"><Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button></InputGroupAddon>
+                    <Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button>
                   </InputGroup>
                 </td>
               }

@@ -63,7 +63,7 @@ class UploadProgressDialog extends React.Component {
       <Fragment>
         <div className="text-center">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle color="primary" caret onKeyDown={this.onDropdownToggleKeyDown}>{gettext('Upload')}</DropdownToggle>
+            <DropdownToggle tag="span" color="primary" caret onKeyDown={this.onDropdownToggleKeyDown}>{gettext('Upload')}</DropdownToggle>
             <DropdownMenu>
               <DropdownItem onClick={this.props.onFileUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Files')}</DropdownItem>
               <DropdownItem onClick={this.props.onFolderUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Folder')}</DropdownItem>

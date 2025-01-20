@@ -18,7 +18,7 @@ class CollabUsersButton extends React.PureComponent {
   render() {
     return (
       <Dropdown className={this.props.className} isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle}>
-        <DropdownToggle id={this.props.id}>
+        <DropdownToggle tag="span" id={this.props.id}>
           <i className="iconfont icon-users"></i> {this.props.users.length}
         </DropdownToggle>
         <DropdownMenu className={'drop-list'}>
