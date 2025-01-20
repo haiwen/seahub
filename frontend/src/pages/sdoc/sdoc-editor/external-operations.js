@@ -7,6 +7,7 @@ import toaster from '../../../components/toast';
 import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
+import AddVideoLink from '../../../components/dialog/add-video-link-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -33,6 +34,8 @@ class ExternalOperations extends React.Component {
       fileType: '.sdoc',
       editor: null,
       insertSdocFileLink: null,
+      isShowAddVideoLinkDialog: false,
+      insertVideo: null
     };
   }
 
@@ -46,6 +49,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
+    this.unsubscribeAddVideoLink = eventBus.subscribe(EXTERNAL_EVENT.ADD_VIDEO_LINK, this.onAddVideoLink);
   }
 
   componentWillUnmount() {
@@ -58,7 +62,17 @@ class ExternalOperations extends React.Component {
     this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
+    this.unsubscribeAddVideoLink();
   }
+
+  onAddVideoLink = (params) => {
+    if (params?.editor && params?.insertVideo) {
+      this.setState({ editor: params.editor, insertVideo: params.insertVideo });
+    }
+    this.setState({
+      isShowAddVideoLinkDialog: !this.state.isShowAddVideoLinkDialog
+    });
+  };
 
   onInternalLinkToggle = (options) => {
     if (options && options.internalLink) {
@@ -164,9 +178,16 @@ class ExternalOperations extends React.Component {
     });
   };
 
+  onAddLink = (videoLink) => {
+    const { insertVideo, editor } = this.state;
+    if (insertVideo && editor) {
+      insertVideo(editor, [{ isEmbeddableLink: true }], [videoLink]);
+    }
+  };
+
   render() {
     const { repoID, docPath, docName, docPerm, dirPath } = this.props;
-    const { isShowInternalLinkDialog, isShowShareDialog, internalLink, isShowCreateFileDialog, fileType } = this.state;
+    const { isShowInternalLinkDialog, isShowShareDialog, internalLink, isShowCreateFileDialog, fileType, isShowAddVideoLinkDialog } = this.state;
     return (
       <>
         {isShowInternalLinkDialog && (
@@ -194,6 +215,12 @@ class ExternalOperations extends React.Component {
             onAddFile={this.onAddFile}
             checkDuplicatedName={this.checkDuplicatedName}
             toggleDialog={this.onCreateSdocFile}
+          />
+        )}
+        {isShowAddVideoLinkDialog && (
+          <AddVideoLink
+            onAddLink={this.onAddLink}
+            toggleDialog={this.onAddVideoLink}
           />
         )}
       </>
