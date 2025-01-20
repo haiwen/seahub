@@ -26,6 +26,16 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
       const { startContainer, startOffset, endContainer, endOffset } = selectionRef.current;
       // modify pageName by side panel
       if (pageName.length < startOffset) return;
+
+      if (pageName.length === 1 && startOffset === 1) {
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(contentEditableRef.current);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return;
+      }
       const range = window.document.createRange();
       range.setStart(startContainer, startOffset);
       range.setEnd(endContainer, endOffset);
@@ -34,7 +44,7 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
       selection.removeAllRanges();
       selection.addRange(range);
     }
-  }, [pageName.length]);
+  }, [pageName]);
 
   const onKeyDown = (event) => {
     if (event.keyCode === 13) {
