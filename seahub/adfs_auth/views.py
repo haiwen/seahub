@@ -334,7 +334,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
             admins = User.objects.get_superusers()
             for admin in admins:
                 saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-            return render_error(request, internal_server_error_msg)
+            return render_error(request, _("The number of users exceeds the limit."))
 
         # check user number limit by org member quota
         if org:
@@ -350,7 +350,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
                     for org_admin in org_admins:
                         saml_sso_failed.send(sender=None, to_user=org_admin.email,
                                              error_msg=error_msg)
-                    return render_error(request, internal_server_error_msg)
+                    return render_error(request, _("The number of users exceeds the limit."))
 
     # authenticate the remote user
     logger.debug('Trying to authenticate the user')
