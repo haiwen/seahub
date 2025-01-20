@@ -69,8 +69,8 @@
   padding: 0 16px 8px;
 }
 
-.lightbox-side-panel .file-details-collapse {
-  margin-bottom: 20px;
+.lightbox-side-panel .file-details-collapse+.dirent-detail-people {
+  margin-top: 20px;
 }
 
 .lightbox-side-panel .sf-metadata-ui.collaborator-item,

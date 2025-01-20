@@ -5,10 +5,10 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import { Header, Body } from '../detail';
-import FileDetails from './file-details';
 import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { AI, Settings } from '../../../metadata/components/metadata-details';
+import FileDetails from '../dirent-details/file-details';
 
 import './index.css';
 
@@ -82,7 +82,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         <Body>
           {dirent && direntDetail && (
             <div className="detail-content">
-              <FileDetails repoID={repoID} dirent={dirent} direntDetail={direntDetail} />
+              <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
             </div>
           )}
         </Body>

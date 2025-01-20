@@ -1,21 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuidV4 } from 'uuid';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
-import classnames from 'classnames';
-import { getDirentPath } from '../utils';
 import DetailItem from '../../detail-item';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import { gettext } from '../../../../utils/constants';
-import EditFileTagPopover from '../../../popover/edit-filetag-popover';
-import FileTagList from '../../../file-tag-list';
 import { Utils } from '../../../../utils/utils';
-import { MetadataDetails, useMetadata, useMetadataDetails } from '../../../../metadata';
+import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
 import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
 import { useMetadataStatus } from '../../../../hooks';
 import People from '../../people';
+import FileTag from './file-tag';
 
 import './index.css';
 
@@ -58,26 +54,14 @@ const getImageInfoValue = (key, value) => {
   }
 };
 
-const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
-  const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
-  const { enableFaceRecognition } = useMetadata();
+const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepoTags = true, repoTags, fileTagList, onFileTagChanged }) => {
+  const { enableFaceRecognition, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
-  const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
-  const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
-
-  const onEditFileTagToggle = useCallback(() => {
-    setEditFileTagShow(!isEditFileTagShow);
-  }, [isEditFileTagShow]);
-
-  const fileTagChanged = useCallback(() => {
-    onFileTagChanged(dirent, direntPath);
-  }, [dirent, direntPath, onFileTagChanged]);
 
   const dom = (
     <>
@@ -99,22 +83,12 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
-      {window.app.pageOptions.enableFileTags && !enableMetadata && (
+      {isShowRepoTags && window.app.pageOptions.enableFileTags && !enableMetadata && (
         <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
-          <div
-            className={classnames('sf-metadata-property-detail-tags', { 'tags-empty': !Array.isArray(fileTagList) || fileTagList.length === 0 })}
-            id={tagListTitleID}
-            onClick={onEditFileTagToggle}
-          >
-            {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
-              <FileTagList fileTagList={fileTagList} />
-            ) : (
-              <span className="empty-tip-text">{gettext('Empty')}</span>
-            )}
-          </div>
+          <FileTag repoID={repoID} dirent={dirent} path={path} repoTags={repoTags} fileTagList={fileTagList} onFileTagChanged={onFileTagChanged} />
         </DetailItem>
       )}
-      {enableMetadataManagement && enableMetadata && (
+      {enableMetadata && (
         <MetadataDetails />
       )}
     </>
@@ -142,9 +116,6 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
             })}
           </Collapse>
         )}
-        {Utils.imageCheck(dirent.name) && enableMetadataManagement && enableMetadata && enableFaceRecognition && (
-          <People repoID={repoID} record={record} />
-        )}
       </>
     );
   }
@@ -152,22 +123,15 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
   return (
     <>
       {component}
-      {isEditFileTagShow &&
-        <EditFileTagPopover
-          repoID={repoID}
-          repoTags={repoTags}
-          filePath={direntPath}
-          fileTagList={fileTagList}
-          toggleCancel={onEditFileTagToggle}
-          onFileTagChanged={fileTagChanged}
-          target={tagListTitleID}
-        />
-      }
+      {enableFaceRecognition && Utils.imageCheck(dirent.name) && (
+        <People repoID={repoID} record={record} />
+      )}
     </>
   );
 }, (props, nextProps) => {
-  const { repoID, repoInfo, dirent, path, direntDetail, repoTags, fileTagList } = props;
+  const { repoID, repoInfo, dirent, path, direntDetail, isShowRepoTags, repoTags, fileTagList } = props;
   const isChanged = (
+    isShowRepoTags !== nextProps.isShowRepoTags ||
     repoID !== nextProps.repoID ||
     path !== nextProps.path ||
     !ObjectUtils.isSameObject(repoInfo, nextProps.repoInfo) ||
@@ -180,6 +144,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
 });
 
 FileDetails.propTypes = {
+  isShowRepoTags: PropTypes.bool,
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   dirent: PropTypes.object,
