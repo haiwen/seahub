@@ -117,6 +117,9 @@ class Context {
     return this.api.deleteTagLinks(this.repoId, link_column_key, row_id_map);
   };
 
+  mergeTags = (target_tag_id, merged_tags_ids) => {
+    return this.api.mergeTags(this.repoId, target_tag_id, merged_tags_ids);
+  };
 }
 
 export default Context;

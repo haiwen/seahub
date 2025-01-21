@@ -6,6 +6,8 @@ import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { username } from '../../../utils/constants';
 import { addRowLinks, removeRowLinks } from '../../utils/link';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
+import { getRowById, getRowsByIds } from '../../../metadata/utils/table';
+import { getChildLinks, getParentLinks, getTagFileLinks } from '../../utils/cell';
 
 dayjs.extend(utc);
 
@@ -154,15 +156,13 @@ export default function apply(data, operation) {
           if (currentRowId === row_id) {
             // add parent tags to current tag
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // add current tag as child tag to related tags
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
         });
       } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
         data.rows.forEach((row, index) => {
@@ -171,15 +171,14 @@ export default function apply(data, operation) {
           if (currentRowId === row_id) {
             // add child tags to current tag
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
+
           }
           if (other_rows_ids.includes(currentRowId)) {
             // add current tag as parent tag to related tags
             updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
         });
       }
       return data;
@@ -194,15 +193,13 @@ export default function apply(data, operation) {
           if (currentRowId === row_id) {
             // remove parent tags from current tag
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // remove current tag as child tag from related tags
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [row_id]);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
         });
       } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
         data.rows.forEach((row, index) => {
@@ -211,17 +208,114 @@ export default function apply(data, operation) {
           if (currentRowId === row_id) {
             // remove child tags from current tag
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
           if (other_rows_ids.includes(currentRowId)) {
             // remove current tag as parent tag from related tags
             updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [row_id]);
-            data.rows[index] = updatedRow;
-            data.id_row_map[currentRowId] = updatedRow;
           }
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
         });
       }
+      return data;
+    }
+    case OPERATION_TYPE.MERGE_TAGS: {
+      const { target_tag_id, merged_tags_ids } = operation;
+      const targetTag = getRowById(data, target_tag_id);
+      const mergedTags = getRowsByIds(data, merged_tags_ids);
+      if (!targetTag || mergedTags.length === 0) {
+        return data;
+      }
+      const opTagsIds = [target_tag_id, ...merged_tags_ids];
+      const parentLinks = getParentLinks(targetTag);
+      const childLinks = getChildLinks(targetTag);
+      const fileLinks = getTagFileLinks(targetTag);
+      const idParentLinkExistMap = parentLinks.reduce((currIdParentLinkExist, link) => ({ ...currIdParentLinkExist, [link.row_id]: true }), {});
+      const idChildLinkExistMap = childLinks.reduce((currIdChildLinkExist, link) => ({ ...currIdChildLinkExist, [link.row_id]: true }), {});
+      const idFileLinkExistMap = fileLinks.reduce((currIdFileLinkExistMap, link) => ({ ...currIdFileLinkExistMap, [link.row_id]: true }), {});
+
+      // 1. get unique parent/child/file links from merged tags which not exist in target tag
+      let newParentTagsIds = [];
+      let newChildTagsIds = [];
+      let newFilesIds = [];
+      mergedTags.forEach((mergedTag) => {
+        const currParentLinks = getParentLinks(mergedTag);
+        const currChildLinks = getChildLinks(mergedTag);
+        const currFileLinks = getTagFileLinks(mergedTag);
+        currParentLinks.forEach((parentLink) => {
+          const parentLinkedTagId = parentLink.row_id;
+          if (!opTagsIds.includes(parentLinkedTagId) && !idParentLinkExistMap[parentLinkedTagId]) {
+            newParentTagsIds.push(parentLinkedTagId);
+            idParentLinkExistMap[parentLinkedTagId] = true;
+          }
+        });
+        currChildLinks.forEach((childLink) => {
+          const childLinkedTagId = childLink.row_id;
+          if (!opTagsIds.includes(childLinkedTagId) && !idChildLinkExistMap[childLinkedTagId]) {
+            newChildTagsIds.push(childLinkedTagId);
+            idChildLinkExistMap[childLinkedTagId] = true;
+          }
+        });
+        currFileLinks.forEach((fileLink) => {
+          const linkedFileId = fileLink.row_id;
+          if (!idFileLinkExistMap[linkedFileId]) {
+            newFilesIds.push(linkedFileId);
+            idFileLinkExistMap[linkedFileId] = true;
+          }
+        });
+      });
+
+      // 2. delete merged tags
+      const idTagMergedMap = mergedTags.reduce((currIdTagMergedMap, tag) => ({ ...currIdTagMergedMap, [tag._id]: true }), {});
+      let updatedRows = [];
+      data.rows.forEach((tag) => {
+        const currentTagId = tag._id;
+        if (idTagMergedMap[currentTagId]) {
+          delete data.id_row_map[currentTagId];
+        } else {
+          updatedRows.push(tag);
+        }
+      });
+
+      // 3. merge parent links into target tag
+      // 4. merge child links into target tag
+      // 5. merge file links into target tag
+      const hasNewParentLinks = newParentTagsIds.length > 0;
+      const hasNewChildLinks = newChildTagsIds.length > 0;
+      const hasNewFileLinks = newFilesIds.length > 0;
+      if (hasNewParentLinks || hasNewChildLinks || hasNewFileLinks) {
+        updatedRows.forEach((row, index) => {
+          const currentRowId = row._id;
+          let updatedRow = { ...row };
+          if (currentRowId === target_tag_id) {
+            if (hasNewParentLinks) {
+              // add parent links
+              updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, newParentTagsIds);
+            }
+            if (hasNewChildLinks) {
+              // add child links
+              updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, newChildTagsIds);
+            }
+            if (hasNewFileLinks) {
+              // add file links
+              updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.TAG_FILE_LINKS, newFilesIds);
+            }
+          }
+
+          if (newParentTagsIds.includes(currentRowId)) {
+            // add target tag as child tag to related tags
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [target_tag_id]);
+          }
+          if (newChildTagsIds.includes(currentRowId)) {
+            // add target tag as parent tag to related tags
+            updatedRow = addRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [target_tag_id]);
+          }
+          updatedRows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
+        });
+      }
+
+      data.rows = updatedRows;
       return data;
     }
     case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {

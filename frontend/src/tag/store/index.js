@@ -386,14 +386,27 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifyColumnWidth = (columnKey, newWidth) => {
+  mergeTags(target_tag_id, merged_tags_ids, success_callback, fail_callback) {
+    const type = OPERATION_TYPE.MERGE_TAGS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      target_tag_id,
+      merged_tags_ids,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  modifyColumnWidth(columnKey, newWidth) {
     const type = OPERATION_TYPE.MODIFY_COLUMN_WIDTH;
     const column = getColumnByKey(this.data.columns, columnKey);
     const operation = this.createOperation({
       type, repo_id: this.repoId, column_key: columnKey, new_width: newWidth, old_width: column.width
     });
     this.applyOperation(operation);
-  };
+  }
 }
 
 export default Store;

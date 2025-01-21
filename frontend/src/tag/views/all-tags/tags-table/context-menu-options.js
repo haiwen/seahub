@@ -13,6 +13,7 @@ const OPERATION = {
   DELETE_TAG: 'delete_tag',
   DELETE_TAGS: 'delete_tags',
   NEW_SUB_TAG: 'new_sub_tag',
+  MERGE_TAGS: 'merge_tags',
 };
 
 export const createContextMenuOptions = ({
@@ -25,11 +26,13 @@ export const createContextMenuOptions = ({
   showRecordAsTree,
   treeMetrics,
   treeNodeKeyRecordIdMap,
+  menuPosition,
   hideMenu,
   recordGetterByIndex,
   recordGetterById,
   onDeleteTags,
   onNewSubTag,
+  onMergeTags,
 }) => {
   const canDeleteTag = context.checkCanDeleteTag();
   const canAddTag = context.canAddTag();
@@ -53,6 +56,10 @@ export const createContextMenuOptions = ({
       }
       case OPERATION.NEW_SUB_TAG: {
         onNewSubTag(option.parentTagId);
+        break;
+      }
+      case OPERATION.MERGE_TAGS: {
+        onMergeTags(option.tagsIds, menuPosition);
         break;
       }
       default: {
@@ -112,6 +119,13 @@ export const createContextMenuOptions = ({
         options.push({
           label: gettext('Delete tags'),
           value: OPERATION.DELETE_TAGS,
+          tagsIds,
+        });
+      }
+      if (tagsIds.length > 1) {
+        options.push({
+          label: gettext('Merge tags'),
+          value: OPERATION.MERGE_TAGS,
           tagsIds,
         });
       }

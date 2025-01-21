@@ -123,6 +123,15 @@ class TagsManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
+  mergeTags = (repoID, target_tag_id, merged_tags_ids) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/merge-tags/';
+    const params = {
+      target_tag_id,
+      merged_tags_ids,
+    };
+    return this.req.post(url, params);
+  };
+
 }
 
 const tagsAPI = new TagsManagerAPI();
