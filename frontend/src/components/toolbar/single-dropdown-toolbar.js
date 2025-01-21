@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import '../../css/single-dropdown-toolbar.css';
-
 const propTypes = {
   opList: PropTypes.array.isRequired
 };
@@ -34,23 +32,19 @@ class SingleDropdownToolbar extends React.Component {
   };
 
   render() {
-    const { opList, withPlusIcon = false } = this.props;
+    const { opList } = this.props;
 
     return (
       <Fragment>
         <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
           <DropdownToggle
-            tag="span"
+            tag="i"
             role="button"
-            className={withPlusIcon ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}
+            className="sf3-font-down sf3-font ml-1 sf-dropdown-toggle"
             onClick={this.toggleDropdownMenu}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
           >
-            {withPlusIcon
-              ? (<><i className="sf3-font-new sf3-font main-icon"></i><i className="sf3-font-down sf3-font"></i></>)
-              : <i className="sf3-font-down sf3-font"></i>
-            }
           </DropdownToggle>
           <DropdownMenu>
             {opList.map((item, index) => {

@@ -368,7 +368,6 @@ class GroupView extends React.Component {
     const opList = [];
     if ((!isDepartmentGroup && canAddRepo) ||
       (isDepartmentGroup && isStaff)) {
-      this.newLibraryEnalbed = true;
       opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle }, 'Divider');
     }
     opList.push({ 'text': gettext('Members'), 'onClick': this.toggleMembersDialog });
@@ -440,10 +439,7 @@ class GroupView extends React.Component {
                     <span className="sf3-font-department sf3-font nav-icon" title={gettext('This is a special group representing a department.')}></span>
                     }
                     <span>{currentGroup.name}</span>
-                    <SingleDropdownToolbar
-                      withPlusIcon={this.newLibraryEnalbed}
-                      opList={opList}
-                    />
+                    <SingleDropdownToolbar opList={opList} />
                   </div>
                   <div className="path-tool d-flex align-items-center">
                     {isDepartmentGroup && (
