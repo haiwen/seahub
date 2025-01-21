@@ -60,7 +60,7 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const [isCpatureInfoShow, setCaptureInfoShow] = useState(false);
+  const [isCaptureInfoShow, setCaptureInfoShow] = useState(false);
   const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
@@ -136,7 +136,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
           {dom}
         </Collapse>
         {Object.keys(fileDetailsJson).length > 0 && (
-          <Collapse title={gettext('Capture information')} isShow={isCpatureInfoShow}>
+          <Collapse title={gettext('Capture information')} isShow={isCaptureInfoShow}>
             {Object.entries(fileDetailsJson).map(item => {
               return (
                 <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={item[0]}>
