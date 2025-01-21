@@ -12,7 +12,7 @@ const Table = ({ repoID, renderFolder, data }) => {
     { isFixed: false, width: 0.4, children: gettext('Original path') },
     { isFixed: false, width: 0.12, children: gettext('Delete Time') },
     { isFixed: false, width: 0.13, children: gettext('Size') },
-    { isFixed: false, width: 0.1, children: gettext('Size') },
+    { isFixed: false, width: 0.1, children: '' },
   ], []);
 
   const { items, showFolder, commitID, baseDir, folderPath, folderItems } = data;
