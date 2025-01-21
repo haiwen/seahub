@@ -11,7 +11,6 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
   const downloadImage = useCallback((url) => {
-    console.log('download image:', url);
     location.href = url;
   }, []);
 
