@@ -21,9 +21,8 @@ class AddVideoLink extends React.Component {
   }
 
   isValidVideoLink = (link) => {
-    // const videoRegex = /\.(mp4|mov|avi|mkv|webm|ogv)$/i;
-    // return videoRegex.test(link);
-    return link;
+    const videoRegex = /v\.qq\.com|youtube\.com/i;
+    return videoRegex.test(link);
   };
 
   handleChange = (e) => {
@@ -37,7 +36,7 @@ class AddVideoLink extends React.Component {
     this.setState({
       videoLink: videoLink,
       isSubmitBtnActive: isValid,
-      errMessage: isValid ? '' : gettext('Please enter a valid video URL ending in .mp4, .mov, etc.'),
+      errMessage: isValid ? '' : gettext('Please enter a valid Youtube or Tencent video URL.'),
     });
 
   };
@@ -79,6 +78,7 @@ class AddVideoLink extends React.Component {
               />
             </FormGroup>
           </Form>
+          <div style={{ textAlign: 'center', fontSize: '12px', color: '#787774' }}>{gettext('Support Youtube and Tencent video link')}</div>
           {this.state.errMessage && <Alert color='danger' className='mt-2'>{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>

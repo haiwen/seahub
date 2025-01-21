@@ -2533,6 +2533,8 @@ class SeadocDirView(APIView):
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
                     entry["file_uuid"] = dirent_file_uuid
+                elif file_type == 'video' and filetype == VIDEO:
+                    entry["file_uuid"] = dirent_file_uuid
                 else:
                     continue
             entry["type"] = dtype
@@ -2925,6 +2927,8 @@ class SeadocSearchFilenameView(APIView):
             suffixes = ['sdoc',]
         if search_type == 'file':
             suffixes = get_non_sdoc_file_exts()
+        if search_type == 'video':
+            suffixes = ['mp4', 'ogv', 'webm', 'mov',]
         if not suffixes:
             error_msg = 'search_type is not valid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
