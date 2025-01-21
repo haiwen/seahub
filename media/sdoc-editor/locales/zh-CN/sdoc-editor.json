@@ -607,7 +607,7 @@
   "Enter_reply": "输入回复",
   "Processing_content_cannot_be_empty": "处理内容不能为空",
   "AI_error_message": "请求错误，请重试",
-  "Whiteboard": "白板",
-  "Upload_local_whiteboard": "上传本地白板",
-  "Create_new_whiteboard": "创建新白板"
+  "Add_video_link": "添加视频链接",
+  "Link_Seafile_video_file": "链接Seafile视频文件",
+  "Select_video_file": "选择视频文件"
 }
