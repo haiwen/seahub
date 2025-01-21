@@ -64,8 +64,9 @@ def parse_repo_perm(perm):
             if CUSTOM_PERMISSION_PREFIX in perm:
                 perm = perm.split('-')[1]
             custom_perm_obj = CustomSharePermissions.objects.get(id=int(perm)).to_dict()
-            RP.can_download = to_python_boolean(str(custom_perm_obj['permission'].get('download', False)))
             RP.can_upload = to_python_boolean(str(custom_perm_obj['permission'].get('upload', False)))
+            RP.can_download = to_python_boolean(str(custom_perm_obj['permission'].get('download', False)))
+            RP.can_create = to_python_boolean(str(custom_perm_obj['permission'].get('create', False)))
             RP.can_edit_on_web = to_python_boolean(str(custom_perm_obj['permission'].get('modify', False)))
             RP.can_copy = to_python_boolean(str(custom_perm_obj['permission'].get('copy', False)))
             RP.can_delete = to_python_boolean(str(custom_perm_obj['permission'].get('delete', False)))
@@ -76,10 +77,12 @@ def parse_repo_perm(perm):
         except Exception as e:
             logger.warning(e)
 
-    RP.can_download = True if perm in [
-        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
     RP.can_upload = True if perm in [
         PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT] else False
+    RP.can_download = True if perm in [
+        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
+    RP.can_create = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
     RP.can_edit_on_web = True if perm in [
         PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
     ] else False
