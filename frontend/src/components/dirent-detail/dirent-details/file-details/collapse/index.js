@@ -1,14 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { CAPTURE_INFO_SHOW_KEY } from '../../../../../constants';
 
 import './index.css';
 
-const Collapse = ({ className, title, children, isCollapse = true }) => {
-  const [showChildren, setShowChildren] = useState(isCollapse);
+const Collapse = ({ className, title, children, isShow = true }) => {
+  const [showChildren, setShowChildren] = useState(isShow);
 
   const toggleShowChildren = useCallback(() => {
     setShowChildren(!showChildren);
+    window.sfMetadataContext.localStorage.setItem(CAPTURE_INFO_SHOW_KEY, !showChildren);
   }, [showChildren]);
 
   return (
@@ -29,7 +31,7 @@ const Collapse = ({ className, title, children, isCollapse = true }) => {
 };
 
 Collapse.propTypes = {
-  isCollapse: PropTypes.bool,
+  isShow: PropTypes.bool,
   className: PropTypes.string,
   title: PropTypes.string,
   children: PropTypes.any,

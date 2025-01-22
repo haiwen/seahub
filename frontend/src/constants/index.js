@@ -46,6 +46,8 @@ export const SYSTEM_FOLDERS = [
 
 export const DIRENT_DETAIL_SHOW_KEY = 'sf_dirent_detail_show';
 
+export const CAPTURE_INFO_SHOW_KEY = 'sf_capture_info_show';
+
 export const TREE_PANEL_STATE_KEY = 'sf_dir_view_tree_panel_open';
 
 export const TREE_PANEL_SECTION_STATE_KEY = 'sf_dir_view_tree_panel_section_state';

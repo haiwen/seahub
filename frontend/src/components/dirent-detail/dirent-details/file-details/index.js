@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
@@ -15,6 +15,7 @@ import ObjectUtils from '../../../../metadata/utils/object-utils';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import Collapse from './collapse';
 import { useMetadataStatus } from '../../../../hooks';
+import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 
 import './index.css';
 
@@ -59,6 +60,7 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
+  const [isCaptureInfoShow, setCaptureInfoShow] = useState(false);
   const { enableMetadataManagement, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
@@ -68,6 +70,11 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
+
+  useEffect(() => {
+    const savedValue = window.sfMetadataContext.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) || false;
+    setCaptureInfoShow(savedValue);
+  }, []);
 
   const onEditFileTagToggle = useCallback(() => {
     setEditFileTagShow(!isEditFileTagShow);
@@ -129,7 +136,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
           {dom}
         </Collapse>
         {Object.keys(fileDetailsJson).length > 0 && (
-          <Collapse title={gettext('Capture information')}>
+          <Collapse title={gettext('Capture information')} isShow={isCaptureInfoShow}>
             {Object.entries(fileDetailsJson).map(item => {
               return (
                 <div className="dirent-detail-item sf-metadata-property-detail-capture-information-item" key={item[0]}>
