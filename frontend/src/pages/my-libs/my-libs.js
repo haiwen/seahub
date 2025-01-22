@@ -10,6 +10,7 @@ import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
 import ViewModes from '../../components/view-modes';
+import AddRepos from '../../components/add-repos';
 import ReposSortMenu from '../../components/sort-menu';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -174,9 +175,8 @@ class MyLibraries extends Component {
               </h3>
               {isDesktop ? (
                 <div className="d-flex align-items-center">
-                  <div className="mr-2">
-                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
-                  </div>
+                  <AddRepos className="mr-2" onAddRepo={this.toggleCreateRepoDialog} />
+                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} className="mr-2" />
                   <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
                 </div>
               ) : (
