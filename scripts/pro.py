@@ -533,65 +533,6 @@ suffix = md,txt,doc,docx,xls,xlsx,ppt,pptx,sdoc
         with open(self.seafevents_conf, 'w') as fp:
             fp.write(template % dict(db_config_text=db_config_text))
 
-class MigratingProfessionalConfigurator(ProfessionalConfigurator):
-    '''This scripts is used standalone to migrate from community version to
-    professional version
-
-    '''
-    def __init__(self, args):
-        ProfessionalConfigurator.__init__(self, args, migrate=True)
-
-    def check_pre_condition(self):
-        pass
-
-    def config(self):
-        self.detect_db_type()
-        self.update_avatars_link()
-
-    def detect_db_type(self):
-        '''Read database info from seahub_settings.py'''
-        sys.path.insert(0, env_mgr.central_config_dir)
-        try:
-            from seahub_settings import DATABASES # pylint: disable=F0401
-        except ImportError:
-            print('Failed to import "DATABASES" from seahub_settings.py, assuming sqlite3')
-            self.db_config = SQLiteDBConf()
-            return
-
-        try:
-            default_config = DATABASES['default']
-            if default_config['ENGINE'] == 'django.db.backends.mysql':
-                db_config = MySQLDBConf()
-                db_config.mysql_host = default_config.get('HOST', '')
-                db_config.mysql_port = default_config.get('PORT', '')
-                db_config.mysql_user = default_config.get('USER', '')
-                db_config.mysql_password = default_config.get('PASSWORD', '')
-                db_config.mysql_db = default_config['NAME']
-
-                if db_config.mysql_port:
-                    db_config.mysql_port = int(db_config.mysql_port)
-
-                print('Your seafile server is using mysql')
-
-                self.db_config = db_config
-            else:
-                print('Your seafile server is using sqlite3')
-                self.db_config = SQLiteDBConf()
-
-        except KeyError:
-            Utils.error('Error in your config %s' % \
-                        os.path.join(env_mgr.top_dir, 'seahub_settings.py'))
-
-    def update_avatars_link(self):
-        minor_upgrade_script = os.path.join(env_mgr.install_path, 'upgrade', 'minor-upgrade.sh')
-        argv = [
-            minor_upgrade_script
-        ]
-
-        if Utils.run_argv(argv) != 0:
-            Utils.error('failed to update avatars folder')
-
-
 class SetupProfessionalConfigurator(ProfessionalConfigurator):
     '''This script is invokded by setup-seafile.sh/setup-seafile-mysql.sh to
     generate seafile pro related conf
@@ -630,10 +571,7 @@ class SetupProfessionalConfigurator(ProfessionalConfigurator):
 def do_setup(args):
     global pro_config
 
-    if args.migrate:
-        pro_config = MigratingProfessionalConfigurator(args)
-    else:
-        pro_config = SetupProfessionalConfigurator(args)
+    pro_config = SetupProfessionalConfigurator(args)
 
     pro_config.check_pre_condition()
     pro_config.config()
@@ -881,7 +819,6 @@ def main():
     # setup
     parser_setup = subparsers.add_parser('setup', help='Setup extra components of seafile pro')
     parser_setup.set_defaults(func=do_setup)
-    parser_setup.add_argument('--migrate', help='migrate from community version', action='store_true')
 
     # for non-migreate setup
     parser_setup.add_argument('--mysql', help='use mysql', action='store_true')
