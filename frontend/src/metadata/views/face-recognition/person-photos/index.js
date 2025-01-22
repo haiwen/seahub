@@ -22,7 +22,7 @@ import '../../gallery/index.css';
 
 dayjs.extend(utc);
 
-const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeoplePhotos }) => {
+const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeoplePhotos, onRemovePeoplePhotos }) => {
   const [isLoading, setLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [metadata, setMetadata] = useState({ rows: [] });
@@ -128,6 +128,26 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
     });
   }, [people, deletedByIds, onRemovePeoplePhotos]);
 
+  const handelAdd = useCallback((peopleId, addedImages, { success_callback, fail_callback }) => {
+    if (!addedImages.length) return;
+    let recordIds = [];
+    addedImages.forEach((record) => {
+      const { id, parentDir, name } = record || {};
+      if (parentDir && name) {
+        recordIds.push(id);
+      }
+    });
+    onAddPeoplePhotos(peopleId, people._id, recordIds, {
+      success_callback: () => {
+        deletedByIds(recordIds, false);
+        success_callback && success_callback();
+      },
+      fail_callback: () => {
+        fail_callback && fail_callback();
+      }
+    });
+  }, [people, onAddPeoplePhotos, deletedByIds]);
+
   const loadData = useCallback((view) => {
     setLoading(true);
     metadataAPI.getPeoplePhotos(repoID, people._id, 0, PER_LOAD_NUMBER).then(res => {
@@ -218,7 +238,14 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onRemovePeo
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-people-photos-container">
-      <Gallery metadata={metadata} isLoadingMore={isLoadingMore} onLoadMore={onLoadMore} onDelete={handelDelete} onRemoveImage={handelRemove} />
+      <Gallery
+        metadata={metadata}
+        isLoadingMore={isLoadingMore}
+        onLoadMore={onLoadMore}
+        onDelete={handelDelete}
+        onRemoveImage={people._is_someone ? handelRemove : null}
+        onAddImage={!people._is_someone ? handelAdd : null}
+      />
     </div>
   );
 };

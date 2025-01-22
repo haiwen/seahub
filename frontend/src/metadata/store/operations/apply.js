@@ -289,6 +289,32 @@ export default function apply(data, operation) {
       data.recordsCount = updatedRows.length;
       return data;
     }
+    case OPERATION_TYPE.ADD_PEOPLE_PHOTOS: {
+      const { people_id, old_people_id, added_photos } = operation;
+      const { rows } = data;
+      const idNeedDeletedMap = added_photos.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
+      let updatedRows = [...rows];
+      rows.forEach((row, index) => {
+        const { _id: rowId, _photo_links: photoLinks } = row;
+        if (rowId === old_people_id) {
+          const updatedRow = Object.assign({}, row, { _photo_links: photoLinks.filter(p => !idNeedDeletedMap[p.row_id]) });
+          if (updatedRow._photo_links.length === 0) {
+            updatedRows.splice(index, 1);
+            delete data.id_row_map[rowId];
+          } else {
+            updatedRows[index] = updatedRow;
+            data.id_row_map[rowId] = updatedRow;
+          }
+        } else if (rowId === people_id) {
+          const updatedRow = Object.assign({}, row, { _photo_links: [...photoLinks, ...added_photos.map(rowId => ({ row_id: rowId, display_name: '' }))] });
+          updatedRows[index] = updatedRow;
+          data.id_row_map[rowId] = updatedRow;
+        }
+      });
+      data.rows = updatedRows;
+      data.recordsCount = updatedRows.length;
+      return data;
+    }
     case OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS: {
       const { people_id, removed_photos } = operation;
       const { rows } = data;

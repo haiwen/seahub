@@ -174,6 +174,11 @@ class Context {
     return viewId === FACE_RECOGNITION_VIEW_ID;
   };
 
+  canAddPhotoToPeople = () => {
+    const viewId = this.getSetting('viewID');
+    return viewId === FACE_RECOGNITION_VIEW_ID;
+  };
+
   restoreRows = () => {
     // todo
   };
@@ -265,6 +270,11 @@ class Context {
   getPeoplePhotos = (recordId, start, limit) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
+  };
+
+  addPeoplePhotos = (peopleId, recordIds) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.addPeoplePhotos(repoID, peopleId, recordIds);
   };
 
   removePeoplePhotos = (recordId, photoIds) => {

@@ -31,6 +31,7 @@ export const OPERATION_TYPE = {
   RENAME_PEOPLE_NAME: 'rename_people_name',
   DELETE_PEOPLE_PHOTOS: 'delete_people_photos',
   REMOVE_PEOPLE_PHOTOS: 'remove_people_photos',
+  ADD_PEOPLE_PHOTOS: 'add_people_photos',
 
   // tag
   UPDATE_FILE_TAGS: 'update_file_tags',
@@ -70,6 +71,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'removed_photos', 'success_callback'],
+  [OPERATION_TYPE.ADD_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'old_people_id', 'added_photos', 'success_callback'],
 
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
 
