@@ -99,7 +99,14 @@ class Rename extends React.Component {
         <SeahubModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</SeahubModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext('New file name') : gettext('New folder name')}</p>
-          <Input onKeyDown={this.handleKeyDown} innerRef={this.newInput} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          <Input
+            onKeyDown={this.handleKeyDown}
+            innerRef={this.newInput}
+            placeholder="newName"
+            value={this.state.newName}
+            onChange={this.handleChange}
+            name={type === 'file' ? 'new-file-name' : 'new-folder-name'}
+          />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>

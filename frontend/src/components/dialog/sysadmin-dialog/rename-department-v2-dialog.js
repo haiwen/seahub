@@ -72,6 +72,7 @@ class RenameDepartmentV2Dialog extends React.Component {
               <Label for="departmentName">{gettext('Name')}</Label>
               <Input
                 id="departmentName"
+                name="department-name"
                 onKeyDown={this.onKeyDown}
                 value={this.state.departName}
                 onChange={this.handleChange}

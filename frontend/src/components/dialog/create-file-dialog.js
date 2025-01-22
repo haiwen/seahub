@@ -96,6 +96,7 @@ class CreateFile extends React.Component {
               <Label for="fileName">{gettext('Name')}</Label>
               <Input
                 id="fileName"
+                name="file-name"
                 onKeyDown={this.handleKeyDown}
                 innerRef={this.newInput}
                 value={this.state.childName}

@@ -111,6 +111,7 @@ class InvitePeopleDialog extends React.Component {
           <Input
             type="text"
             id="emails"
+            name="emails"
             placeholder={gettext('Emails, separated by \',\'')}
             value={this.state.emails}
             onChange={this.handleInputChange}

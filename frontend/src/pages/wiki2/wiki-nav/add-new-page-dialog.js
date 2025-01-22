@@ -108,9 +108,11 @@ class AddNewPageDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false} className='add-new-page-dialog'>
         <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody className='pr-4'>
-          <Label>{gettext('Page name')}</Label>
+          <Label for="wiki-nav-page-name">{gettext('Page name')}</Label>
           <Input
             className="mb-4"
+            id="wiki-nav-page-name"
+            name="wiki-nav-page-name"
             value={this.state.pageName}
             onChange={this.handleChange}
             autoFocus={true}

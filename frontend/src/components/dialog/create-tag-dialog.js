@@ -78,7 +78,13 @@ class CreateTagDialog extends React.Component {
           <div role="form" className="tag-create">
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
-              <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.tagName} onChange={this.inputNewName}/>
+              <Input
+                name="tag-name"
+                onKeyDown={this.handleKeyDown}
+                autoFocus={true}
+                value={this.state.tagName}
+                onChange={this.inputNewName}
+              />
               <div className="mt-2"><span className="error">{this.state.errorMsg}</span></div>
             </div>
             <div className="form-group">
