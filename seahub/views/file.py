@@ -494,7 +494,8 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 
     path = normalize_file_path(path)
     username = request.user.username
-    converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+    is_org = is_org_context(request) or False
+    converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username, is_org)
     if not converted_repo_path:
         return render_permission_error(request, _('Unable to view file'))
 
