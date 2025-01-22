@@ -74,6 +74,7 @@ class AddDepartmentDialog extends React.Component {
               <Label for="departmentName">{gettext('Name')}</Label>
               <Input
                 id="departmentName"
+                name="department-name"
                 onKeyDown={this.handleKeyDown}
                 value={this.state.departmentName}
                 onChange={this.handleChange}

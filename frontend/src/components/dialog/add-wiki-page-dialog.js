@@ -62,6 +62,7 @@ class AddWikiPageDialog extends React.Component {
               <Label for="pageName">{gettext('Name')}</Label>
               <Input
                 id="pageName"
+                name="wiki-page-name"
                 onKeyDown={this.handleKeyDown}
                 innerRef={this.inputRef}
                 value={this.state.wikiPageName}

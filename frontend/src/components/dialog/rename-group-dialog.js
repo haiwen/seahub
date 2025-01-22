@@ -60,8 +60,14 @@ class RenameGroupDialog extends React.Component {
         <SeahubModalHeader>{gettext('Rename Group')}</SeahubModalHeader>
         <ModalBody>
           <label htmlFor="newGroupName">{gettext('Rename group to')}</label>
-          <Input type="text" id="newGroupName" value={this.state.newGroupName}
-            onChange={this.handleGroupNameChange} onKeyDown={this.handleKeyDown}/>
+          <Input
+            type="text"
+            id="newGroupName"
+            name="new-group-name"
+            value={this.state.newGroupName}
+            onChange={this.handleGroupNameChange}
+            onKeyDown={this.handleKeyDown}
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleRenameGroupDialog}>{gettext('Cancel')}</Button>

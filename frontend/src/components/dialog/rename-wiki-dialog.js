@@ -75,6 +75,8 @@ class RenameWikiDialog extends React.Component {
             onKeyDown={this.handleKeyDown}
             innerRef={this.newInput}
             placeholder="newName"
+            name="new-wiki-name"
+            id="new-wiki-name"
             value={this.state.newName}
             onChange={this.handleChange}
           />

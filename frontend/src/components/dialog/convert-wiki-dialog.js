@@ -82,7 +82,13 @@ class ConvertWikiDialog extends React.Component {
         <SeahubModalHeader toggle={this.toggle}>{gettext('Convert Wiki')}</SeahubModalHeader>
         <ModalBody>
           <Label>{gettext('Name')}</Label>
-          <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
+          <Input
+            name="wiki-name"
+            onKeyDown={this.handleKeyDown}
+            autoFocus={true}
+            value={this.state.name}
+            onChange={this.inputNewName}
+          />
           {isPro &&
             <>
               <Label className='mt-4'>{gettext('Wiki owner')} ({gettext('Optional')})</Label>

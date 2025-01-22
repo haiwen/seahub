@@ -72,6 +72,7 @@ class CreateGroupDialog extends React.Component {
           <Input
             type="text"
             id="groupName"
+            name="group-name"
             value={this.state.groupName}
             onChange={this.handleGroupChange}
             onKeyDown={this.handleKeyDown}

@@ -45,6 +45,7 @@ class SysAdminAddInstitutionDialog extends React.Component {
             <p>{gettext('Name')}</p>
             <FormGroup>
               <Input
+                name="institution-name"
                 value={this.state.value}
                 onChange={this.handleChange}
               />

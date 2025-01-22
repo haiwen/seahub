@@ -189,6 +189,7 @@ class CreateRepoDialog extends React.Component {
               <Label for="repoName">{gettext('Name')}</Label>
               <Input
                 id="repoName"
+                name="repo-name"
                 onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
