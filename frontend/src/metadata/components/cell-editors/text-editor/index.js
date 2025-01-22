@@ -118,11 +118,6 @@ class SimpleTextEditor extends Component {
     return this.input;
   };
 
-  onSaveQRCodeValue = (value) => {
-    this.setState({ value });
-    this.props.onCommit();
-  };
-
   render() {
     const { column, readOnly, className, placeholder } = this.props;
     const { value } = this.state;
