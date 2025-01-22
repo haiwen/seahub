@@ -609,5 +609,6 @@
   "AI_error_message": "Request error, please try again",
   "Add_video_link": "Add video link",
   "Link_Seafile_video_file": "Link Seafile video file",
-  "Select_video_file": "Select video file"
+  "Select_video_file": "Select video file",
+  "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more"
 }

@@ -609,5 +609,6 @@
   "AI_error_message": "请求错误，请重试",
   "Add_video_link": "添加视频链接",
   "Link_Seafile_video_file": "链接Seafile视频文件",
-  "Select_video_file": "选择视频文件"
+  "Select_video_file": "选择视频文件",
+  "Support_Youtube_Tencent_Bilibili_and_more": "支持Youtube，腾讯视频，B站及其他平台"
 }
