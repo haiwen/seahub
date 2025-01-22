@@ -10,7 +10,7 @@ import { CollaboratorsProvider } from './metadata';
 import { TagsProvider } from './tag/hooks';
 import { SimpleViewer } from '@seafile/sdoc-editor';
 
-const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
+const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro, fileServerRoot } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, repoEncrypted, parentDir, filePerm,
@@ -54,6 +54,7 @@ window.seafile = {
   isPro: isPro === 'True' ? true : false,
   mobileLogin,
   enableSeafileAI,
+  fileServerRoot,
 };
 
 const repoInfo = { encrypted: repoEncrypted, permission: filePerm, is_admin: isRepoAdmin };
