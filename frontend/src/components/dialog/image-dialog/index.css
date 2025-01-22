@@ -1,0 +1,101 @@
+.lightbox-side-panel {
+  width: 10px;
+  height: calc(100% - 100px);
+  display: flex;
+  flex-direction: column;
+  top: 50px;
+  right: 0;
+  position: absolute;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #333;
+  border: 1px solid #666;
+  transition: width 0.3s ease;
+}
+
+.lightbox-side-panel .cur-view-detail {
+  background-color: inherit;
+  border: none;
+}
+
+.lightbox-side-panel .side-panel-controller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 30px;
+  left: -40px;
+  width: 40px;
+  height: 48px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #666;
+  border-right: none;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+  margin-right: -1px;
+  cursor: pointer;
+}
+
+.lightbox-side-panel .side-panel-controller .expand-button {
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+  border: none;
+}
+
+.lightbox-side-panel .side-panel-controller:hover .expand-button {
+  opacity: 1;
+}
+
+.lightbox-side-panel .detail-header {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  padding: 26px 16px;
+  border: none;
+  font-size: 1rem;
+}
+
+.lightbox-side-panel .detail-header .detail-title .name,
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-name,
+.lightbox-side-panel .sf-metadata-number-property-detail-editor {
+  color: #fff;
+}
+
+.lightbox-side-panel .detail-body {
+  scrollbar-color: #666 #333;
+  padding: 0 16px 8px;
+}
+
+.lightbox-side-panel .file-details-collapse+.dirent-detail-people {
+  margin-top: 20px;
+}
+
+.lightbox-side-panel .sf-metadata-ui.collaborator-item,
+.lightbox-side-panel .sf-metadata-text-property-detail-editor:not(.formatter),
+.lightbox-side-panel .sf-metadata-number-property-detail-editor:focus {
+  color: #212529;
+}
+
+.lightbox-side-panel .sf-metadata-text-property-detail-editor:not(.formatter) {
+  cursor: text;
+}
+
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before,
+.lightbox-side-panel .sf-metadata-property-detail-editor:empty::before,
+.lightbox-side-panel .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .sf3-font-down,
+.lightbox-side-panel .sf-metadata-number-property-detail-editor::placeholder {
+  color: #999;
+}
+
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:hover {
+  background-color: #666;
+}
+
+.lightbox-side-panel .dirent-detail-people {
+  border-top: 1px solid #999;
+}
