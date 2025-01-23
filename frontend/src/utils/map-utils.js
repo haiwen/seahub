@@ -31,9 +31,12 @@ export const loadMapSource = (type, key, callback) => {
 
 export default function loadBMap(ak) {
   return new Promise((resolve, reject) => {
+    if (typeof window.BMapGL !== 'undefined' && document.querySelector(`script[src*="${mediaUrl}js/map/cluster.js"]`)) {
+      resolve(true);
+      return;
+    }
     asyncLoadBaiduJs(ak)
-      .then(() => asyncLoadJs(`${mediaUrl}/js/map/text-icon-overlay.js?v=${STATIC_RESOURCE_VERSION}`))
-      .then(() => asyncLoadJs(`${mediaUrl}/js/map/marker-cluster.js?v=${STATIC_RESOURCE_VERSION}`))
+      .then(() => asyncLoadJs(`${mediaUrl}js/map/cluster.js`))
       .then(() => resolve(true))
       .catch((err) => reject(err));
   });
