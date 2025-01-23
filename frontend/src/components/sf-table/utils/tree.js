@@ -27,7 +27,6 @@ export const generateKeyTreeNodeRowIdMap = (tree) => {
   return tree_node_key_row_id_map;
 };
 
-
 export const getValidKeyTreeNodeFoldedMap = (keyTreeNodeFoldedMap, treeNodeKeyRecordIdMap) => {
   if (!keyTreeNodeFoldedMap) return {};
 
@@ -71,6 +70,21 @@ export const checkIsTreeNodeShown = (nodeKey, keyFoldedNodeMap) => {
   return !foldedNodeKeys.some((foldedNodeKey) => nodeKey !== foldedNodeKey && nodeKey.includes(foldedNodeKey));
 };
 
+export const updatedKeyTreeNodeMap = (nodeKey, node, keyTreeNodeMap) => {
+  if (!nodeKey || !node || !keyTreeNodeMap) return;
+  keyTreeNodeMap[nodeKey] = node;
+};
+
+export const getTreeNodeByKey = (nodeKey, keyTreeNodeMap) => {
+  if (!nodeKey || !keyTreeNodeMap) return null;
+  return keyTreeNodeMap[nodeKey];
+};
+
+export const getTreeNodeById = (nodeId, tree) => {
+  if (!nodeId || !Array.isArray(tree) || tree.length === 0) return null;
+  return tree.find((node) => getTreeNodeId(node) === nodeId);
+};
+
 export const getTreeNodeId = (node) => {
   return node ? node[TREE_NODE_KEY.ID] : '';
 };
@@ -95,7 +109,7 @@ export const resetTreeHasChildNodesStatus = (tree) => {
     const nextNode = tree[index + 1];
     const nextNodeKey = getTreeNodeKey(nextNode);
     const currentNodeKey = getTreeNodeKey(node);
-    if (nextNode && checkTreeNodeHasChildNodes(node) && !nextNodeKey.includes(currentNodeKey)) {
+    if (checkTreeNodeHasChildNodes(node) && (!nextNode || !nextNodeKey.includes(currentNodeKey))) {
       tree[index][TREE_NODE_KEY.HAS_CHILD_NODES] = false;
     }
   });
@@ -130,4 +144,21 @@ export const addTreeChildNode = (newChildNode, parentNode, tree) => {
     }
   }
   tree.splice(lastChildNodeIndex + 1, 0, newChildNode);
+};
+
+export const getAllSubTreeNodes = (nodeIndex, tree) => {
+  const treeLen = Array.isArray(tree) ? tree.length : 0;
+  const parentNode = tree[nodeIndex];
+  const parentNodeKey = getTreeNodeKey(parentNode);
+  if (!parentNodeKey || nodeIndex === treeLen - 1) return [];
+
+  let subNodes = [];
+  for (let i = nodeIndex + 1, len = treeLen; i < len; i++) {
+    const currNodeKey = getTreeNodeKey(tree[i]);
+    if (!currNodeKey || !currNodeKey.includes(parentNodeKey)) {
+      break;
+    }
+    subNodes.push(tree[i]);
+  }
+  return subNodes;
 };

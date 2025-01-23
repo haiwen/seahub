@@ -3,12 +3,12 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import { getGroupRows } from '../../metadata/utils/group';
 import { getRowsByIds } from '../../metadata/utils/table';
 import { OPERATION_TYPE } from './operations';
-import { buildTagsTree } from '../utils/tree';
+import { buildTagsTree, setNodeAllChildTagsIds } from '../utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { TREE_NODE_KEY } from '../../components/sf-table/constants/tree';
 import {
-  addTreeChildNode, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
+  addTreeChildNode, checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
   resetTreeHasChildNodesStatus,
+  updatedKeyTreeNodeMap,
 } from '../../components/sf-table/utils/tree';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
@@ -21,7 +21,9 @@ import {
 class DataProcessor {
 
   static buildTagsTree(rows, table) {
-    table.rows_tree = buildTagsTree(rows, table);
+    const { tree, key_tree_node_map } = buildTagsTree(rows, table);
+    table.rows_tree = tree;
+    table.key_tree_node_map = key_tree_node_map;
   }
 
   static updateTagsTreeWithNewTags(tags, table) {
@@ -33,6 +35,7 @@ class DataProcessor {
       const nodeKey = generateNodeKey('', tagId);
       const node = createTreeNode(tagId, nodeKey, 0, false);
       updated_rows_tree.push(node);
+      updatedKeyTreeNodeMap(nodeKey, node, table.key_tree_node_map);
     });
     table.rows_tree = updated_rows_tree;
   }
@@ -41,7 +44,7 @@ class DataProcessor {
     if (!Array.isArray(deletedTagsIds) || deletedTagsIds.length === 0) return;
     const { rows_tree } = table;
     const idTagDeletedMap = deletedTagsIds.reduce((currIdTagDeletedMap, tagId) => ({ ...currIdTagDeletedMap, [tagId]: true }), {});
-    const hasDeletedParentNode = rows_tree.some((node) => idTagDeletedMap[node[TREE_NODE_KEY.ID]] && node[TREE_NODE_KEY.HAS_CHILD_NODES]);
+    const hasDeletedParentNode = rows_tree.some((node) => idTagDeletedMap[getTreeNodeId(node)] && checkTreeNodeHasChildNodes(node));
     if (hasDeletedParentNode) {
       // need re-build tree if some parent nodes deleted
       this.buildTagsTree(table.rows, table);
@@ -51,13 +54,21 @@ class DataProcessor {
     // remove the nodes which has no child nodes directly
     let updated_rows_tree = [];
     rows_tree.forEach((node) => {
-      if (!idTagDeletedMap[node[TREE_NODE_KEY.ID]]) {
+      if (!idTagDeletedMap[getTreeNodeId(node)]) {
         updated_rows_tree.push(node);
       }
     });
 
     // update has_child_nodes status(all child nodes may be deleted)
     resetTreeHasChildNodesStatus(updated_rows_tree);
+
+    // update tag all files links
+    setNodeAllChildTagsIds(updated_rows_tree);
+
+    table.key_tree_node_map = {};
+    updated_rows_tree.forEach((node) => {
+      updatedKeyTreeNodeMap(getTreeNodeKey(node), node, table.key_tree_node_map);
+    });
     table.rows_tree = updated_rows_tree;
   }
 
@@ -131,6 +142,7 @@ class DataProcessor {
       }
     });
 
+    this.buildTagsTree(table.rows, table);
     this.updateDataWithModifyRecords();
     this.updateSummaries();
   }
@@ -149,6 +161,7 @@ class DataProcessor {
     });
     table.rows = table.rows.filter((record) => !idRecordNotExistMap[record._id]);
 
+    this.buildTagsTree(table.rows, table);
     this.updateSummaries();
   }
 
@@ -217,6 +230,7 @@ class DataProcessor {
             const subNodeKey = generateNodeKey(parentNodeKey, tagId);
             const childNode = createTreeNode(tagId, subNodeKey, parentNodeDepth + 1, false);
             addTreeChildNode(childNode, node, rows_tree);
+            updatedKeyTreeNodeMap(subNodeKey, childNode, table.key_tree_node_map);
           }
         });
         break;

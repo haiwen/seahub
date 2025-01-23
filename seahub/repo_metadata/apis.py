@@ -2324,6 +2324,70 @@ class MetadataTagFiles(APIView):
         return Response(tag_files_query)
 
 
+class MetadataTagsFiles(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        tags_ids = request.data.get('tags_ids', None)
+
+        if not tags_ids:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'tags_ids is invalid.')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+
+        tags_ids_str = ', '.join([f'"{id}"' for id in tags_ids])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({tags_ids_str})'
+        try:
+            query_new_rows = metadata_server_api.query_rows(sql)
+            found_tags = query_new_rows.get('results', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not found_tags:
+            return Response([])
+
+        tags_files_ids = []
+        for tag in found_tags:
+            tags_files_ids.extend(tag.get(TAGS_TABLE.columns.file_links.name, []))
+
+        if not tags_files_ids:
+            return Response([])
+
+        tags_files_sql = 'SELECT `%s`, `%s`, `%s`, `%s`, `%s`, `%s` FROM %s WHERE `%s` IN (%s)' % (METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, \
+                                                                                    METADATA_TABLE.columns.parent_dir.name, METADATA_TABLE.columns.size.name, \
+                                                                                    METADATA_TABLE.columns.file_mtime.name, METADATA_TABLE.columns.tags.name, \
+                                                                                    METADATA_TABLE.name, METADATA_TABLE.columns.id.name, \
+                                                                                    ', '.join(["'%s'" % id.get('row_id') for id in tags_files_ids]))
+        try:
+            tags_files_query = metadata_server_api.query_rows(tags_files_sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(tags_files_query)
+
+
 class MetadataMergeTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)

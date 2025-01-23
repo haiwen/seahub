@@ -7,7 +7,7 @@ import { username } from '../../../utils/constants';
 import { addRowLinks, removeRowLinks } from '../../utils/link';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import { getRowById, getRowsByIds } from '../../../metadata/utils/table';
-import { getChildLinks, getParentLinks, getTagFileLinks } from '../../utils/cell';
+import { getChildLinks, getParentLinks, getTagFilesLinks } from '../../utils/cell';
 
 dayjs.extend(utc);
 
@@ -229,7 +229,7 @@ export default function apply(data, operation) {
       const opTagsIds = [target_tag_id, ...merged_tags_ids];
       const parentLinks = getParentLinks(targetTag);
       const childLinks = getChildLinks(targetTag);
-      const fileLinks = getTagFileLinks(targetTag);
+      const fileLinks = getTagFilesLinks(targetTag);
       const idParentLinkExistMap = parentLinks.reduce((currIdParentLinkExist, link) => ({ ...currIdParentLinkExist, [link.row_id]: true }), {});
       const idChildLinkExistMap = childLinks.reduce((currIdChildLinkExist, link) => ({ ...currIdChildLinkExist, [link.row_id]: true }), {});
       const idFileLinkExistMap = fileLinks.reduce((currIdFileLinkExistMap, link) => ({ ...currIdFileLinkExistMap, [link.row_id]: true }), {});
@@ -241,7 +241,7 @@ export default function apply(data, operation) {
       mergedTags.forEach((mergedTag) => {
         const currParentLinks = getParentLinks(mergedTag);
         const currChildLinks = getChildLinks(mergedTag);
-        const currFileLinks = getTagFileLinks(mergedTag);
+        const currFileLinks = getTagFilesLinks(mergedTag);
         currParentLinks.forEach((parentLink) => {
           const parentLinkedTagId = parentLink.row_id;
           if (!opTagsIds.includes(parentLinkedTagId) && !idParentLinkExistMap[parentLinkedTagId]) {

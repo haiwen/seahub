@@ -32,14 +32,15 @@ export const getChildLinks = (tag) => {
   return (tag && tag[PRIVATE_COLUMN_KEY.SUB_LINKS]) || [];
 };
 
-export const getTagFileLinks = (tag) => {
+export const getTagFilesLinks = (tag) => {
   return (tag && tag[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]) || [];
 };
 
 export const getTagFilesCount = (tag) => {
-  const links = getTagFileLinks(tag);
+  const links = getTagFilesLinks(tag);
   return Array.isArray(links) ? links.length : 0;
 };
+
 export const getTagsByNameOrColor = (tags, nameOrColor) => {
   if (!Array.isArray(tags) || tags.length === 0) return [];
   if (!nameOrColor) return tags;

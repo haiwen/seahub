@@ -36,11 +36,11 @@ class Record extends React.Component {
       nextProps.searchResult !== this.props.searchResult ||
       nextProps.columnColor !== this.props.columnColor ||
       nextProps.showRecordAsTree !== this.props.showRecordAsTree ||
-      nextProps.nodeKey !== this.props.nodeKey ||
-      nextProps.nodeDepth !== this.props.nodeDepth ||
+      nextProps.treeNodeIndex !== this.props.treeNodeIndex ||
+      nextProps.treeNodeKey !== this.props.treeNodeKey ||
+      nextProps.treeNodeDepth !== this.props.treeNodeDepth ||
       nextProps.hasChildNodes !== this.props.hasChildNodes ||
-      nextProps.treeNodeDisplayIndex !== this.props.treeNodeDisplayIndex ||
-      nextProps.isFoldedNode !== this.props.isFoldedNode
+      nextProps.isFoldedTreeNode !== this.props.isFoldedTreeNode
     );
   }
 
@@ -116,10 +116,11 @@ class Record extends React.Component {
           highlightClassName={highlightClassName}
           bgColor={bgColor}
           showRecordAsTree={this.props.showRecordAsTree}
-          nodeDepth={this.props.nodeDepth}
+          treeNodeIndex={this.props.treeNodeIndex}
+          treeNodeDepth={this.props.treeNodeDepth}
           hasChildNodes={this.props.hasChildNodes}
-          isFoldedNode={this.props.isFoldedNode}
-          toggleExpandNode={this.props.toggleExpandNode}
+          isFoldedTreeNode={this.props.isFoldedTreeNode}
+          toggleExpandTreeNode={this.props.toggleExpandTreeNode}
         />
       );
     });
@@ -183,10 +184,11 @@ class Record extends React.Component {
           highlightClassName={highlightClassName}
           bgColor={bgColor}
           showRecordAsTree={this.props.showRecordAsTree}
-          nodeDepth={this.props.nodeDepth}
+          treeNodeIndex={this.props.treeNodeIndex}
+          treeNodeDepth={this.props.treeNodeDepth}
           hasChildNodes={this.props.hasChildNodes}
-          isFoldedNode={this.props.isFoldedNode}
-          toggleExpandNode={this.props.toggleExpandNode}
+          isFoldedTreeNode={this.props.isFoldedTreeNode}
+          toggleExpandTreeNode={this.props.toggleExpandTreeNode}
         />
       );
     });
@@ -273,7 +275,7 @@ class Record extends React.Component {
               recordId={record._id}
               index={index}
               showRecordAsTree={this.props.showRecordAsTree}
-              treeNodeDisplayIndex={this.props.treeNodeDisplayIndex}
+              treeNodeIndex={this.props.treeNodeIndex}
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
               height={cellHeight}
@@ -316,12 +318,12 @@ Record.propTypes = {
   searchResult: PropTypes.object,
   columnColor: PropTypes.object,
   showRecordAsTree: PropTypes.bool,
-  nodeKey: PropTypes.string,
-  nodeDepth: PropTypes.number,
+  treeNodeIndex: PropTypes.number,
+  treeNodeKey: PropTypes.string,
+  treeNodeDepth: PropTypes.number,
   hasChildNodes: PropTypes.bool,
-  treeNodeDisplayIndex: PropTypes.number,
-  isFoldedNode: PropTypes.bool,
-  toggleExpandNode: PropTypes.func,
+  isFoldedTreeNode: PropTypes.bool,
+  toggleExpandTreeNode: PropTypes.func,
 };
 
 export default Record;

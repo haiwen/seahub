@@ -52,10 +52,7 @@ class ActionsCell extends Component {
   };
 
   getRecordNo = () => {
-    if (this.props.showRecordAsTree) {
-      return this.props.treeNodeDisplayIndex;
-    }
-    return this.props.index + 1;
+    return (this.props.showRecordAsTree ? this.props.treeNodeIndex : this.props.index) + 1;
   };
 
   render() {

@@ -96,6 +96,12 @@ class TagsManagerAPI {
     return this.req.get(url);
   };
 
+  getTagsFiles = (repoID, tags_ids) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-files/';
+    const params = { tags_ids };
+    return this.req.post(url, params);
+  };
+
   // file tags
   updateFileTags = (repoID, data) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
