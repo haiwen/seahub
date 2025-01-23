@@ -1,5 +1,6 @@
 import logging
 import os.path
+import json
 
 from pysearpc import SearpcError
 from seahub.repo_metadata.models import RepoMetadata
@@ -15,7 +16,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, generate_file_tags, ocr
+from seahub.ai.utils import image_caption, translate, writing_assistant, \
+    verify_ai_config, generate_summary, generate_file_tags, ocr, generate_dual_layer_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -337,6 +339,75 @@ class WritingAssistant(APIView):
 
         try:
             resp = writing_assistant(params)
+            resp_json = resp.json()
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)
+
+
+class GenDualLayerPDF(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
+        repo_id = request.data.get('repo_id')
+        path = request.data.get('path')
+        force = request.data.get('force')
+        username = request.user.username
+
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, os.path.dirname(path))
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(
+                status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error'
+            )
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, f"File {path} not found")
+
+        download_token = seafile_api.get_fileserver_access_token(
+            repo_id, file_id, 'download', username, use_onetime=True
+        )
+        parent_dir = os.path.dirname(path)
+        obj_id = json.dumps({'parent_dir': parent_dir})
+        upload_token = seafile_api.get_fileserver_access_token(
+            repo_id, obj_id, 'upload-link', username, use_onetime=True
+        )
+        if not (download_token and upload_token):
+            error_msg = 'Internal Server Error, '
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        params = {
+            'path': path,
+            'download_token': download_token,
+            'upload_token': upload_token,
+            'repo_id': repo_id,
+            'force': force,
+        }
+        try:
+            resp = generate_dual_layer_pdf(params)
             resp_json = resp.json()
         except Exception as e:
             error_msg = 'Internal Server Error'

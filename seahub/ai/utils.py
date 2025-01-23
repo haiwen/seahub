@@ -35,6 +35,13 @@ def generate_summary(params):
     return resp
 
 
+def generate_dual_layer_pdf(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/pdf/generate-text-layer/')
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
+
+
 def generate_file_tags(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-file-tags/')
