@@ -299,7 +299,6 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
         'dst_type': dst_type,
     }
     url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-export-to-md/'
-    url = 'http://127.0.0.1:8888/api/v1/sdoc-export-to-md/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
 
     return resp
