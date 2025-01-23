@@ -1,8 +1,6 @@
 import { MAP_TYPE } from '../constants';
 import { mediaUrl } from './constants';
 
-const STATIC_RESOURCE_VERSION = 0.1;
-
 export const initMapInfo = ({ baiduMapKey, googleMapKey, mineMapKey }) => {
   if (baiduMapKey) return { type: MAP_TYPE.B_MAP, key: baiduMapKey };
   if (googleMapKey) return { type: MAP_TYPE.G_MAP, key: googleMapKey };
