@@ -440,6 +440,7 @@ class Libraries extends Component {
                           <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                           {gettext('My Libraries')}
                           <SingleDropdownToolbar
+                            withPlusIcon={true}
                             opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
                           />
                         </h4>
