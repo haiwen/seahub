@@ -1,7 +1,26 @@
-import { createTreeNode, generateNodeKey } from '../../components/sf-table/utils/tree';
+import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import { getRowsByIds } from '../../metadata/utils/table';
 import { getParentLinks, getChildLinks } from './cell';
+
+const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';
+
+const findAllChildTagIds = (nodeIndex, tree) => {
+  const targetNode = tree[nodeIndex];
+  if (!checkTreeNodeHasChildNodes(targetNode)) {
+    return [];
+  }
+
+  let allChildTagsIds = [];
+  const allSubNodes = getAllSubTreeNodes(nodeIndex, tree);
+  allSubNodes.forEach((subNode) => {
+    const nodeId = getTreeNodeId(subNode);
+    if (!allChildTagsIds.includes(nodeId)) {
+      allChildTagsIds.push(nodeId);
+    }
+  });
+  return allChildTagsIds;
+};
 
 const setChildNodes = (row, parentDepth, parentKey, idNodeInCurrentTreeMap, idNodeCreatedMap, tree, table) => {
   const nodeId = getRecordIdFromRecord(row);
@@ -26,6 +45,12 @@ const setChildNodes = (row, parentDepth, parentKey, idNodeInCurrentTreeMap, idNo
   }
 
   delete idNodeInCurrentTreeMap[nodeId];
+};
+
+export const setNodeAllChildTagsIds = (tree) => {
+  tree.forEach((node, nodeIndex) => {
+    node[KEY_ALL_CHILD_TAGS_IDS] = findAllChildTagIds(nodeIndex, tree);
+  });
 };
 
 /**
@@ -57,5 +82,17 @@ export const buildTagsTree = (rows, table) => {
     }
   });
 
-  return tree;
+  // set node all file links
+  setNodeAllChildTagsIds(tree);
+
+  let key_tree_node_map = {};
+  tree.forEach((node) => {
+    key_tree_node_map[getTreeNodeKey(node)] = node;
+  });
+
+  return { tree, key_tree_node_map };
+};
+
+export const getAllChildTagsIdsFromNode = (node) => {
+  return (node && node[KEY_ALL_CHILD_TAGS_IDS]) || [];
 };

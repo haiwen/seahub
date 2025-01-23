@@ -24,11 +24,12 @@ const Cell = React.memo(({
   frozen,
   height,
   showRecordAsTree,
-  nodeDepth,
+  treeNodeIndex,
+  treeNodeDepth,
   hasChildNodes,
-  isFoldedNode,
+  isFoldedTreeNode,
   checkCanModifyRecord,
-  toggleExpandNode,
+  toggleExpandTreeNode,
 }) => {
   const cellEditable = useMemo(() => {
     return checkIsColumnEditable(column) && checkCanModifyRecord && checkCanModifyRecord(record);
@@ -168,19 +169,19 @@ const Cell = React.memo(({
   };
 
   const renderCellContent = useCallback(() => {
-    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, column, record, onChange: modifyRecord });
+    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">
-          {hasChildNodes && <span className="sf-table-record-tree-expand-icon" style={{ left: nodeDepth * NODE_ICON_LEFT_INDENT }} onClick={toggleExpandNode}><i className={classnames('sf3-font sf3-font-down', { 'rotate-270': isFoldedNode })}></i></span>}
-          <div className="sf-table-cell-tree-node-content" style={{ paddingLeft: NODE_CONTENT_LEFT_INDENT + nodeDepth * NODE_ICON_LEFT_INDENT }}>
+          {hasChildNodes && <span className="sf-table-record-tree-expand-icon" style={{ left: treeNodeDepth * NODE_ICON_LEFT_INDENT }} onClick={toggleExpandTreeNode}><i className={classnames('sf3-font sf3-font-down', { 'rotate-270': isFoldedTreeNode })}></i></span>}
+          <div className="sf-table-cell-tree-node-content" style={{ paddingLeft: NODE_CONTENT_LEFT_INDENT + treeNodeDepth * NODE_ICON_LEFT_INDENT }}>
             {columnFormatter}
           </div>
         </div>
       );
     }
     return columnFormatter;
-  }, [isNameColumn, column, isCellSelected, cellValue, record, showRecordAsTree, nodeDepth, hasChildNodes, isFoldedNode, modifyRecord, toggleExpandNode]);
+  }, [isNameColumn, column, isCellSelected, cellValue, record, showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode, modifyRecord, toggleExpandTreeNode]);
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
@@ -208,14 +209,15 @@ Cell.propTypes = {
   column: PropTypes.object.isRequired,
   height: PropTypes.number,
   needBindEvents: PropTypes.bool,
-  modifyRecord: PropTypes.func,
   highlightClassName: PropTypes.string,
   bgColor: PropTypes.string,
   showRecordAsTree: PropTypes.bool,
-  nodeDepth: PropTypes.number,
+  treeNodeIndex: PropTypes.number,
+  treeNodeDepth: PropTypes.number,
   hasChildNodes: PropTypes.bool,
-  isFoldedNode: PropTypes.bool,
-  toggleExpandNode: PropTypes.func,
+  isFoldedTreeNode: PropTypes.bool,
+  modifyRecord: PropTypes.func,
+  toggleExpandTreeNode: PropTypes.func,
 };
 
 export default Cell;

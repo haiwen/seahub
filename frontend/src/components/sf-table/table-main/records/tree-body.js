@@ -99,7 +99,7 @@ class TreeBody extends Component {
       if (row && checkIsTreeNodeShown(nodeKey, keyNodeFoldedMap)) {
         shownNodes.push({
           ...node,
-          node_display_index: index + 1,
+          node_index: index,
         });
       }
     });
@@ -535,7 +535,7 @@ class TreeBody extends Component {
     const rowHeight = this.getRowHeight();
     const cellMetaData = this.getCellMetaData();
     let shownNodes = visibleNodes.map((node, index) => {
-      const { _id: recordId, node_key, node_depth, node_display_index } = node;
+      const { _id: recordId, node_key, node_depth, node_index } = node;
       const hasChildNodes = checkTreeNodeHasChildNodes(node);
       const record = this.props.recordGetterById(recordId);
       const isSelected = TreeMetrics.checkIsTreeNodeSelected(node_key, treeMetrics);
@@ -553,7 +553,6 @@ class TreeBody extends Component {
           }}
           isSelected={isSelected}
           index={recordIndex}
-          treeNodeDisplayIndex={node_display_index}
           isLastRecord={isLastRecord}
           showSequenceColumn={this.props.showSequenceColumn}
           record={record}
@@ -567,17 +566,18 @@ class TreeBody extends Component {
           cellMetaData={cellMetaData}
           columnColor={columnColor}
           searchResult={this.props.searchResult}
-          nodeKey={node_key}
-          nodeDepth={node_depth}
+          treeNodeIndex={node_index}
+          treeNodeKey={node_key}
+          treeNodeDepth={node_depth}
           hasChildNodes={hasChildNodes}
-          isFoldedNode={isFoldedNode}
+          isFoldedTreeNode={isFoldedNode}
           checkCanModifyRecord={this.props.checkCanModifyRecord}
           checkCellValueChanged={this.props.checkCellValueChanged}
           hasSelectedCell={hasSelectedCell}
           selectedPosition={selectedPosition}
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
-          toggleExpandNode={() => this.toggleExpandNode(node_key)}
+          toggleExpandTreeNode={() => this.toggleExpandNode(node_key)}
         />
       );
     });

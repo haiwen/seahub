@@ -21,6 +21,8 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
 
   const { isLoading, isReloading, tagsData, store, context, currentPath } = useTags();
 
+  const displayNodeKey = useRef('');
+
   useEffect(() => {
     const eventBus = context.eventBus;
     eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
@@ -34,11 +36,11 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     const pathList = currentPath.split('/');
     const [, , currentTagId, children] = pathList;
     if (currentTagId === ALL_TAGS_ID && !children) {
-      setDisplayTag('');
+      setDisplayTag();
     }
   }, [currentPath]);
 
-  const onChangeDisplayTag = useCallback((tagID = '') => {
+  const onChangeDisplayTag = useCallback((tagID = '', nodeKey = '') => {
     if (displayTag === tagID) return;
 
     const tag = tagID && getRowById(tagsData, tagID);
@@ -46,6 +48,8 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     if (tag) {
       path += `/${getTagName(tag)}`;
     }
+
+    displayNodeKey.current = nodeKey || '';
     updateCurrentPath(path);
 
     setDisplayTag(tagID);
@@ -84,7 +88,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
   if (displayTag) {
     return (
       <div className="sf-metadata-all-tags-tag-files">
-        <TagViewProvider { ...params } tagID={displayTag} updateCurrentPath={updateCurrentPath} >
+        <TagViewProvider { ...params } tagID={displayTag} nodeKey={displayNodeKey.current} updateCurrentPath={updateCurrentPath} >
           <View />
         </TagViewProvider>
       </div>
