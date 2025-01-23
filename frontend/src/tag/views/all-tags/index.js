@@ -19,7 +19,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
 
   const tagsTableWrapperRef = useRef(null);
 
-  const { isLoading, isReloading, tagsData, store, context, currentPath } = useTags();
+  const { isLoading, isReloading, tagsData, store, context, currentPath, modifyColumnWidth } = useTags();
 
   const displayNodeKey = useRef('');
 
@@ -100,7 +100,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
       <TagsTable
         context={context}
         tagsData={tagsData}
-        modifyColumnWidth={store.modifyColumnWidth}
+        modifyColumnWidth={modifyColumnWidth}
         setDisplayTag={onChangeDisplayTag}
         isLoadingMoreRecords={isLoadingMore}
         loadMore={loadMore}
