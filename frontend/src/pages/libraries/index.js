@@ -9,7 +9,6 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
-import AddRepos from '../../components/add-repos';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
@@ -408,8 +407,9 @@ class Libraries extends Component {
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
               {isDesktop &&
               <div className="d-flex align-items-center">
-                <AddRepos className="mr-2" onAddRepo={this.toggleCreateRepoDialog} />
-                <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} className="mr-2" />
+                <div className="mr-2">
+                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                </div>
                 <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
               </div>
               }

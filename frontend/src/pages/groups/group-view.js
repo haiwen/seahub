@@ -23,7 +23,6 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ViewModes from '../../components/view-modes';
-import AddRepos from '../../components/add-repos';
 import ReposSortMenu from '../../components/sort-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
@@ -461,8 +460,9 @@ class GroupView extends React.Component {
                     )}
                     {Utils.isDesktop() && (
                       <div className="d-flex align-items-center">
-                        <AddRepos className="mr-2" onAddRepo={this.onCreateRepoToggle} />
-                        <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} className="mr-2" />
+                        <div className="mr-2">
+                          <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                        </div>
                         <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
                       </div>
                     )}

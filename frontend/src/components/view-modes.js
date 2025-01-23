@@ -8,7 +8,6 @@ import { GRID_MODE, LIST_MODE } from './dir-view-mode/constants';
 import '../css/view-modes.css';
 
 const propTypes = {
-  className: PropTypes.string,
   currentViewMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired
 };
@@ -48,7 +47,7 @@ class ViewModes extends React.Component {
 
   render() {
     const { isDropdownMenuOpen } = this.state;
-    const { currentViewMode, className = '' } = this.props;
+    const { currentViewMode } = this.props;
     const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
     const options = [
       { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': `${shortcutMain} 1` },
@@ -59,7 +58,6 @@ class ViewModes extends React.Component {
         isOpen={isDropdownMenuOpen}
         toggle={this.toggleDropdownMenu}
         id="cur-view-change-mode-dropdown"
-        className={className}
       >
         <DropdownToggle
           tag="div"
