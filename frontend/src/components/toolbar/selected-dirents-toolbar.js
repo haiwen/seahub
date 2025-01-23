@@ -83,11 +83,7 @@ class SelectedDirentsToolbar extends React.Component {
         location.href = url;
         return;
       }
-      if (!useGoFileserver) {
-        this.setState({
-          isZipDialogOpen: true
-        });
-      } else {
+      if (useGoFileserver) {
         const target = this.props.selectedDirentList.map(dirent => dirent.name);
         seafileAPI.zipDownload(repoID, path, target).then((res) => {
           const zipToken = res.data['zip_token'];
@@ -98,6 +94,10 @@ class SelectedDirentsToolbar extends React.Component {
             isLoading: false,
             errorMsg: errorMsg
           });
+        });
+      } else {
+        this.setState({
+          isZipDialogOpen: true
         });
       }
     }

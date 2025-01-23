@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, useGoFileserver } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -486,10 +486,20 @@ class DirentGridView extends React.Component {
       return dirent.name;
     });
 
-    this.setState({
-      isZipDialogOpen: true,
-      downloadItems: selectedDirentNames
-    });
+    if (useGoFileserver) {
+      seafileAPI.zipDownload(repoID, path, selectedDirentNames).then((res) => {
+        const zipToken = res.data['zip_token'];
+        location.href = `${fileServerRoot}zip/${zipToken}`;
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+      });
+    } else {
+      this.setState({
+        isZipDialogOpen: true,
+        downloadItems: selectedDirentNames
+      });
+    }
   };
 
   onCreateFolderToggle = () => {
