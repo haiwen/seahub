@@ -39,8 +39,8 @@ const GalleryGroupBySetter = ({ viewID }) => {
 
   return (
     <>
-      <RadioGroup value={currentMode} options={DATE_MODES} onChange={handleGroupByChange} />
       {currentMode === GALLERY_DATE_MODE.ALL && <GallerySliderSetter viewID={viewID} />}
+      <RadioGroup value={currentMode} options={DATE_MODES} onChange={handleGroupByChange} />
     </>
   );
 };
