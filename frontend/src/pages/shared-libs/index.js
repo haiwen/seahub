@@ -142,7 +142,9 @@ class SharedLibraries extends Component {
                 <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
                 {Utils.isDesktop() && (
                   <div className="d-flex align-items-center">
-                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} className="mr-2" />
+                    <div className="mr-2">
+                      <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                    </div>
                     <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
                   </div>
                 )}
