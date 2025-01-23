@@ -86,68 +86,56 @@ class AdminGroupOwnedLibraries(APIView):
             error_msg = 'No group quota.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        group_id = int(group_id)
+
+        org_id = -1
         if is_org_context(request):
             # request called by org admin
             org_id = request.user.org.org_id
-        else:
-            org_id = -1
 
         # create group owned repo
-        group_id = int(group_id)
-        if is_pro_version() and ENABLE_STORAGE_CLASSES:
+        if org_id and org_id > 0:
 
-            if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
+            repo_id = seafile_api.org_add_group_owned_repo(
+                org_id, group_id, repo_name, permission, password,
+                enc_version=ENCRYPTED_LIBRARY_VERSION,
+                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if storage_id and storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        elif is_pro_version() and ENABLE_STORAGE_CLASSES and \
+                STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
 
-                repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                        permission, password, enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
-                        storage_id=storage_id)
-            else:
-                # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
-                if org_id and org_id > 0:
-                    repo_id = seafile_api.org_add_group_owned_repo(
-                        org_id, group_id, repo_name, permission, password,
-                        enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
-                else:
-                    repo_id = seafile_api.add_group_owned_repo(
-                        group_id, repo_name, permission, password,
-                        enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
+            storages = get_library_storages(request)
+            storage_id = request.data.get("storage_id", None)
+            if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                error_msg = 'storage_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            repo_id = seafile_api.add_group_owned_repo(
+                group_id, repo_name, permission, password,
+                enc_version=ENCRYPTED_LIBRARY_VERSION,
+                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
+                storage_id=storage_id)
         else:
-            if org_id and org_id > 0:
-                repo_id = seafile_api.org_add_group_owned_repo(
-                    org_id, group_id, repo_name, permission, password,
-                    enc_version=ENCRYPTED_LIBRARY_VERSION,
-                    pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
-                    pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
-            else:
-                repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
-                                                           permission, password,
-                                                           enc_version=ENCRYPTED_LIBRARY_VERSION,
-                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
-                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
+            repo_id = seafile_api.add_group_owned_repo(
+                group_id, repo_name, permission, password,
+                enc_version=ENCRYPTED_LIBRARY_VERSION,
+                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
 
         # for activities
         username = request.user.username
         library_template = request.data.get("library_template", '')
         repo_created.send(sender=None, org_id=org_id, creator=username,
-                repo_id=repo_id, repo_name=repo_name,
-                library_template=library_template)
+                          repo_id=repo_id, repo_name=repo_name,
+                          library_template=library_template)
 
         # for notification
         repo = seafile_api.get_repo(repo_id)
         share_repo_to_group_successful.send(sender=None, from_user=username,
-                group_id=group_id, repo=repo, path='/', org_id=org_id)
+                                            group_id=group_id, repo=repo,
+                                            path='/', org_id=org_id)
 
         info = get_group_owned_repo_info(request, repo_id)
         # TODO
