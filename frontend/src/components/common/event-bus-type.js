@@ -10,4 +10,7 @@ export const EVENT_BUS_TYPE = {
 
   RESTORE_IMAGE: 'restore_image',
   OPEN_MARKDOWN: 'open_markdown',
+
+  // download file
+  DOWNLOAD_FILE: 'download_file',
 };

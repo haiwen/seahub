@@ -5,15 +5,12 @@ import ContextMenu from '../../../components/context-menu';
 import { getRowById } from '../../../utils/table';
 import { checkIsDir } from '../../../utils/row';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
-import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
-import { openInNewTab, openParentFolder, downloadFile } from '../../../utils/file';
+import { gettext } from '../../../../utils/constants';
+import { openInNewTab, openParentFolder } from '../../../utils/file';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import RenameDialog from '../../../components/dialog/rename-dialog';
-import { Utils } from '../../../../utils/utils';
-import toaster from '../../../../components/toast';
-import metadataAPI from '../../../api';
-import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
+import { useDownloadFile } from '../../../../hooks/download-file';
 
 const CONTEXT_MENU_KEY = {
   OPEN_IN_NEW_TAB: 'open_in_new_tab',
@@ -25,9 +22,9 @@ const CONTEXT_MENU_KEY = {
 
 const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
-  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
 
   const { metadata } = useMetadataView();
+  const { handelDownload: handelDownloadAPI } = useDownloadFile();
 
   const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
   const isDir = useMemo(() => checkIsDir(selectedRecord), [selectedRecord]);
@@ -54,10 +51,6 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
     return validOptions;
   }, [isDir, checkCanDeleteRow, canModifyRow]);
 
-  const closeZipDialog = useCallback(() => {
-    setIsZipDialogOpen(false);
-  }, []);
-
   const openRenameDialog = useCallback(() => {
     setIsRenameDialogShow(true);
   }, []);
@@ -75,24 +68,9 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
     });
   }, [metadata, selectedCard, onRename]);
 
-  const handelDownload = useCallback((record) => {
-    if (!isDir) {
-      downloadFile(repoID, record);
-      return;
-    }
-    if (!useGoFileserver) {
-      setIsZipDialogOpen(true);
-      return;
-    }
-    const fileName = getFileNameFromRecord(record);
-    metadataAPI.zipDownload(repoID, parentDir, [fileName]).then((res) => {
-      const zipToken = res.data['zip_token'];
-      location.href = `${fileServerRoot}zip/${zipToken}`;
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }, [repoID, isDir, parentDir]);
+  const handelDownload = useCallback(() => {
+    handelDownloadAPI(parentDir, [{ name: oldName, is_dir: isDir }]);
+  }, [handelDownloadAPI, parentDir, oldName, isDir]);
 
   const handleOptionClick = useCallback((option) => {
     if (!selectedCard) return;
@@ -141,11 +119,6 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
             onSubmit={handleRename}
             onCancel={() => setIsRenameDialogShow(false)}
           />
-        </ModalPortal>
-      )}
-      {isZipDialogOpen && (
-        <ModalPortal>
-          <ZipDownloadDialog repoID={repoID} path={parentDir} target={[oldName]} toggleDialog={closeZipDialog}/>
         </ModalPortal>
       )}
     </>

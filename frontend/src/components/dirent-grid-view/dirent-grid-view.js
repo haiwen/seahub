@@ -14,7 +14,6 @@ import TextTranslation from '../../utils/text-translation';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
@@ -25,6 +24,7 @@ import imageAPI from '../../utils/image-api';
 import FileAccessLog from '../dialog/file-access-log';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
+import { Dirent } from '../../models';
 
 import '../../css/grid-view.css';
 
@@ -81,7 +81,6 @@ class DirentGridView extends React.Component {
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isEditFileTagShow: false,
-      isZipDialogOpen: false,
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
       isCreateFileDialogShow: false,
@@ -467,29 +466,10 @@ class DirentGridView extends React.Component {
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   };
 
-  closeZipDialog = () => {
-    this.setState({
-      isZipDialogOpen: false
-    });
-  };
-
   onItemsDownload = () => {
-    let { path, repoID, selectedDirentList } = this.props;
-    if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
-      let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
-      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-      location.href = url;
-      return;
-    }
-
-    let selectedDirentNames = selectedDirentList.map(dirent => {
-      return dirent.name;
-    });
-
-    this.setState({
-      isZipDialogOpen: true,
-      downloadItems: selectedDirentNames
-    });
+    const { path, selectedDirentList, eventBus } = this.props;
+    const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
   onCreateFolderToggle = () => {
@@ -957,16 +937,6 @@ class DirentGridView extends React.Component {
             dirent={this.state.activeDirent}
             onAddFolder={this.props.onAddFolder}
           />
-        }
-        {this.state.isZipDialogOpen &&
-          <ModalPortal>
-            <ZipDownloadDialog
-              repoID={this.props.repoID}
-              path={this.props.path}
-              target={this.state.downloadItems}
-              toggleDialog={this.closeZipDialog}
-            />
-          </ModalPortal>
         }
         {this.state.isCopyDialogShow &&
           <CopyDirentDialog
