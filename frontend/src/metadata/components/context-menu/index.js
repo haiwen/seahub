@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './index.css';
@@ -93,15 +94,21 @@ const ContextMenu = ({
       className="dropdown-menu sf-metadata-contextmenu"
       style={position}
     >
-      {options.map((option, index) => (
-        <button
-          key={index}
-          className="dropdown-item sf-metadata-contextmenu-item"
-          onClick={(event) => handleOptionClick(event, option)}
-        >
-          {option.label}
-        </button>
-      ))}
+      {options.map((option, index) => {
+        if (option === 'Divider') {
+          return <DropdownItem key="divider-item" divider />;
+        } else {
+          return (
+            <button
+              key={index}
+              className="dropdown-item sf-metadata-contextmenu-item"
+              onClick={(event) => handleOptionClick(event, option)}
+            >
+              {option.label}
+            </button>
+          );
+        }
+      })}
     </div>
   );
 };

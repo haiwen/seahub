@@ -166,44 +166,57 @@ const ContextMenu = ({
     const isFolder = checkIsDir(record);
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab'), record });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
-    const fileName = getFileNameFromRecord(record);
+
+    const modifyOptions = [];
+
+    if (canModifyRow && column && isNameColumn(column)) {
+      modifyOptions.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
+    }
+
+    if (canModifyRow) {
+      modifyOptions.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
+    }
+
+    if (canDeleteRow) {
+      modifyOptions.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
+    }
+
+    if (modifyOptions.length > 0) {
+      list.push('Divider');
+      list.push(...modifyOptions);
+    }
 
     if (!isFolder && canModifyRow) {
+      const fileName = getFileNameFromRecord(record);
       const isDescribableFile = checkIsDescribableFile(record);
       const isImage = Utils.imageCheck(fileName);
       const isVideo = Utils.videoCheck(fileName);
+      const aiOptions = [];
+
+      if (isImage || isVideo) {
+        aiOptions.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+      }
+
       if (descriptionColumn && isDescribableFile) {
-        list.push({
+        aiOptions.push({
           value: OPERATION.GENERATE_DESCRIPTION,
           label: gettext('Generate description'),
           record
         });
       }
 
-      if (enableOCR && isImage) {
-        list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
-      }
-
-      if (isImage || isVideo) {
-        list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
-      }
-
       if (tagsColumn && isDescribableFile && !isVideo) {
-        list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
+        aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
       }
-    }
 
-    // handle delete folder/file
-    if (canDeleteRow) {
-      list.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
-    }
+      if (enableOCR && isImage) {
+        aiOptions.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
+      }
 
-    if (canModifyRow && column && isNameColumn(column)) {
-      list.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
-    }
-
-    if (canModifyRow) {
-      list.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
+      if (aiOptions.length > 0) {
+        list.push('Divider');
+        list.push(...aiOptions);
+      }
     }
 
     return list;
