@@ -167,6 +167,7 @@ class MyLibraries extends Component {
               <h3 className="sf-heading m-0">
                 {gettext('My Libraries')}
                 <SingleDropdownToolbar
+                  withPlusIcon={true}
                   opList={[
                     { 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog },
                     { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }

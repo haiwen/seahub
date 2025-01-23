@@ -1,0 +1,14 @@
+.sf-dropdown-combined-toggle {
+  color: #666;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.sf-dropdown-combined-toggle:hover {
+  background: #efefef;
+}
+
+.sf-dropdown-combined-toggle .main-icon {
+  margin-right: 2px;
+}
+
