@@ -163,7 +163,7 @@ class MyLibraries extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">
+              <h3 className="sf-heading m-0 d-flex align-items-center">
                 {gettext('My Libraries')}
                 <SingleDropdownToolbar
                   withPlusIcon={true}
