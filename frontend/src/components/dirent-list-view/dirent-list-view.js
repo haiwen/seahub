@@ -346,10 +346,7 @@ class DirentListView extends React.Component {
           location.href = `${fileServerRoot}zip/${zipToken}`;
         }).catch((error) => {
           let errorMsg = Utils.getErrorMsg(error);
-          this.setState({
-            isLoading: false,
-            errorMsg: errorMsg
-          });
+          toaster.danger(errorMsg);
         });
       } else {
         this.setState({
