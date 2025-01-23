@@ -213,6 +213,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File rate');
     case PRIVATE_COLUMN_KEY.TAGS:
       return gettext('Tags');
+    case PRIVATE_COLUMN_KEY.SUFFIX:
+      return gettext('File suffix');
     default:
       return name;
   }
@@ -258,6 +260,7 @@ export const getNormalizedColumnType = (key, type) => {
     case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
       return CellType.DATE;
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
+    case PRIVATE_COLUMN_KEY.SUFFIX:
       return CellType.TEXT;
     case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION:
       return CellType.LONG_TEXT;
