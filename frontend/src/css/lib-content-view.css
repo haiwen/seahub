@@ -301,9 +301,10 @@
 
 .dir-view-path .path-item-dropdown-toggle {
   color: #666;
+  margin-top: 2px;
 }
 
-.dir-view-path .path-item-drop{
+.dir-view-path .path-item-drop {
   background-color: #FFEFB2;
 }
 
