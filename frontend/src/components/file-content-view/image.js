@@ -64,7 +64,16 @@ class FileContent extends React.Component {
     // for xmind file
     const xmindSrc = xmindImageSrc ? `${siteRoot}${xmindImageSrc}` : '';
 
-    const { scale } = this.props;
+    const { scale, angle } = this.props;
+    let style = {};
+    if (scale && angle != undefined) {
+      style = { transform: `scale(${scale}) rotate(${angle}deg)` };
+    } else if (scale) {
+      style = { transform: `scale(${scale})` };
+    } else if (angle != undefined) {
+      style = { transform: `rotate(${angle}deg)` };
+    }
+
 
     return (
       <div className="file-view-content flex-1 image-file-view">
@@ -74,14 +83,16 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
         )}
-        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ scale ? { transform: `scale(${scale})` } : {}} />
+        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ style } />
       </div>
     );
   }
 }
 
 FileContent.propTypes = {
-  tip: PropTypes.string.isRequired,
+  tip: PropTypes.object.isRequired,
+  scale: PropTypes.number,
+  angle: PropTypes.number
 };
 
 export default FileContent;

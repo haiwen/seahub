@@ -19,7 +19,8 @@ const propTypes = {
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired,
-  setImageScale: PropTypes.func
+  setImageScale: PropTypes.func,
+  rotateImage: PropTypes.func
 };
 
 const {
@@ -128,7 +129,7 @@ class FileToolbar extends React.Component {
                 id="rotate-image"
                 icon="rotate"
                 text={gettext('Rotate')}
-                onClick={this.props.toggleLockFile}
+                onClick={this.props.rotateImage}
               />
             </>
           )}

@@ -26,6 +26,7 @@ const propTypes = {
   needSave: PropTypes.bool,
   isOnlyofficeFile: PropTypes.bool,
   setImageScale: PropTypes.func,
+  rotateImage: PropTypes.func
 };
 
 const { isStarred, isLocked, lockedByMe,
@@ -143,6 +144,7 @@ class FileView extends React.Component {
                   toggleLockFile={this.toggleLockFile}
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   setImageScale={this.props.setImageScale}
+                  rotateImage={this.props.rotateImage}
                 />
               }
             </div>
