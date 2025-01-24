@@ -49,3 +49,7 @@
 #img-next:hover {
   color: #212529;
 }
+
+.image-zoomer {
+  height: 24px;
+}

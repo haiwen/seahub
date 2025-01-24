@@ -25,8 +25,7 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   isOnlyofficeFile: PropTypes.bool,
-  participants: PropTypes.array,
-  onParticipantsChange: PropTypes.func
+  setImageScale: PropTypes.func,
 };
 
 const { isStarred, isLocked, lockedByMe,
@@ -143,6 +142,7 @@ class FileView extends React.Component {
                   needSave={this.props.needSave}
                   toggleLockFile={this.toggleLockFile}
                   toggleDetailsPanel={this.toggleDetailsPanel}
+                  setImageScale={this.props.setImageScale}
                 />
               }
             </div>

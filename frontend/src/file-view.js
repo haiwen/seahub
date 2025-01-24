@@ -13,6 +13,18 @@ const {
 } = window.app.pageOptions;
 
 class InnerFileView extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      imageScale: 1
+    };
+  }
+
+  setImageScale = (scale) => {
+    this.setState({
+      imageScale: scale
+    });
+  };
 
   render() {
     if (err) {
@@ -21,10 +33,11 @@ class InnerFileView extends React.Component {
       );
     }
 
+    const { imageScale } = this.state;
     let content;
     switch (fileType) {
       case 'Image':
-        content = <Image tip={<FileViewTip />} />;
+        content = <Image tip={<FileViewTip />} scale={imageScale} />;
         break;
       case 'XMind':
         content = <Image tip={<FileViewTip />} />;
@@ -46,7 +59,7 @@ class InnerFileView extends React.Component {
     }
 
     return (
-      <FileView content={content} />
+      <FileView content={content} setImageScale={this.setImageScale} />
     );
   }
 }
