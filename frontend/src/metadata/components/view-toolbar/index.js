@@ -114,11 +114,9 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
       {viewType === VIEW_TYPE.MAP && (
         <MapViewToolBar
           readOnly={readOnly}
-          isCustomPermission={isCustomPermission}
           view={view}
           collaborators={collaborators}
           modifyFilters={modifyFilters}
-          onToggleDetail={onToggleDetail}
         />
       )}
     </div>
