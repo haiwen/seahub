@@ -162,3 +162,26 @@ export const getAllSubTreeNodes = (nodeIndex, tree) => {
   }
   return subNodes;
 };
+
+export const getTreeChildNodes = (parentNode, tree) => {
+  const parentNodeKey = getTreeNodeKey(parentNode);
+  const parentNodeIndex = tree.findIndex((node) => getTreeNodeKey(node) === parentNodeKey);
+  if (parentNodeIndex < 0) {
+    return [];
+  }
+
+  const parentNodeDepth = getTreeNodeDepth(parentNode);
+  const childNodeDepth = parentNodeDepth + 1;
+  let childNodes = [];
+  for (let i = parentNodeIndex + 1, len = tree.length; i < len; i++) {
+    const currentNode = tree[i];
+    if (!getTreeNodeKey(currentNode).includes(parentNodeKey)) {
+      break;
+    }
+
+    if (getTreeNodeDepth(currentNode) === childNodeDepth) {
+      childNodes.push({ ...currentNode });
+    }
+  }
+  return childNodes;
+};

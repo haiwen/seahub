@@ -21,6 +21,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   const [isLoading, setLoading] = useState(true);
   const [isReloading, setReloading] = useState(false);
   const [tagsData, setTagsData] = useState(null);
+  const [displayNodeKey, setDisplayNodeKey] = useState('');
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
@@ -92,7 +93,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableMetadata, enableTags]);
 
-  const handelSelectTag = useCallback((tag, isSelected) => {
+  const handleSelectTag = useCallback((tag, nodeKey, isSelected) => {
     if (isSelected) return;
     const id = getTagId(tag);
     const node = {
@@ -111,21 +112,22 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       key: repoID,
       tag_id: id,
     };
+    setDisplayNodeKey(nodeKey || '');
     selectTagsView(node);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectTagsView]);
 
   const addTag = useCallback((row, callback) => {
     return storeRef.current.addTags([row], callback);
-  }, []);
+  }, [storeRef]);
 
   const addTags = useCallback((rows, callback) => {
     return storeRef.current.addTags(rows, callback);
-  }, []);
+  }, [storeRef]);
 
   const addChildTag = useCallback((tagData, parentTagId, callback = {}) => {
     return storeRef.current.addChildTag(tagData, parentTagId, callback);
-  }, []);
+  }, [storeRef]);
 
   const modifyTags = useCallback((tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback }) => {
     storeRef.current.modifyTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
@@ -149,10 +151,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     addTag(newTag, {
       success_callback: (operation) => {
         const copiedTag = operation.tags[0];
-        handelSelectTag(copiedTag);
+        handleSelectTag(copiedTag);
       }
     });
-  }, [tagsData, addTag, handelSelectTag]);
+  }, [tagsData, addTag, handleSelectTag]);
 
   const updateTag = useCallback((tagId, update, { success_callback, fail_callback } = { }) => {
     const tag = getRowById(tagsData, tagId);
@@ -192,22 +194,22 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
 
   const addTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
     storeRef.current.addTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
-  }, []);
+  }, [storeRef]);
 
   const deleteTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
     storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
-  }, []);
+  }, [storeRef]);
 
   const mergeTags = useCallback((target_tag_id, merged_tags_ids, { success_callback, fail_callback } = {}) => {
     storeRef.current.mergeTags(target_tag_id, merged_tags_ids, success_callback, fail_callback);
-  }, []);
+  }, [storeRef]);
 
   const modifyColumnWidth = useCallback((columnKey, newWidth) => {
     storeRef.current.modifyColumnWidth(columnKey, newWidth);
   }, [storeRef]);
 
   useEffect(() => {
-    if (!handelSelectTag) return;
+    if (!handleSelectTag) return;
     if (isLoading) return;
     const { search } = window.location;
     const urlParams = new URLSearchParams(search);
@@ -215,17 +217,17 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     const tagId = urlParams.get('tag');
     if (tagId) {
       if (tagId === ALL_TAGS_ID) {
-        handelSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
+        handleSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
         return;
       }
 
       const lastOpenedTag = getRowById(tagsData, tagId);
       if (lastOpenedTag) {
-        handelSelectTag(lastOpenedTag);
+        handleSelectTag(lastOpenedTag);
         return;
       }
 
-      handelSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
+      handleSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
@@ -262,6 +264,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       isLoading,
       isReloading,
       tagsData,
+      displayNodeKey,
       currentPath,
       store: storeRef.current,
       context: contextRef.current,
@@ -279,7 +282,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteTagLinks,
       mergeTags,
       updateLocalTag,
-      selectTag: handelSelectTag,
+      selectTag: handleSelectTag,
       modifyColumnWidth,
     }}>
       {children}

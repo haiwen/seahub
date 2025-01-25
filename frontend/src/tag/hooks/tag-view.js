@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Utils } from '../../utils/utils';
 import tagsAPI from '../api';
 import { useTags } from './tags';
-import { getTreeNodeByKey } from '../../components/sf-table/utils/tree';
+import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
 import { getAllChildTagsIdsFromNode } from '../utils/tree';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
@@ -15,15 +15,20 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, ...params })
 
   const { tagsData } = useTags();
 
-  const getChildTagsIds = useCallback((nodeKey) => {
-    if (!nodeKey) return [];
-    const displayNode = getTreeNodeByKey(nodeKey, tagsData.key_tree_node_map);
+  const getChildTagsIds = useCallback((tagID, nodeKey) => {
+    let displayNode = null;
+    if (nodeKey) {
+      displayNode = getTreeNodeByKey(nodeKey, tagsData.key_tree_node_map);
+    }
+    if (!displayNode) {
+      displayNode = getTreeNodeById(tagID, tagsData.rows_tree);
+    }
     return getAllChildTagsIdsFromNode(displayNode);
   }, [tagsData]);
 
   useEffect(() => {
     setLoading(true);
-    const childTagsIds = getChildTagsIds(nodeKey);
+    const childTagsIds = getChildTagsIds(tagID, nodeKey);
     let tagsIds = [tagID];
     if (Array.isArray(childTagsIds) && childTagsIds.length > 0) {
       tagsIds.push(...childTagsIds);
