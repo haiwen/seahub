@@ -122,7 +122,7 @@ class FileToolbar extends React.Component {
     return (
       <Fragment>
         <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
-          {fileType == 'Image' && (
+          {(fileType == 'Image' && !err) && (
             <>
               <ImageZoomer setImageScale={this.props.setImageScale} />
               <IconButton
