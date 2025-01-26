@@ -1,17 +1,6 @@
-.metadata-tree-view-tag .tree-node-inner .left-icon {
-  top: 5px;
-  padding-left: 8px;
-}
-
-.metadata-tree-view-tag .tree-node-inner .tree-node-text {
-  padding-left: 28px;
-}
-
 .metadata-tree-view-tag .tree-node-icon {
-  height: 100%;
-  line-height: 1.5;
+  height: 26px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(1px);
 }

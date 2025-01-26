@@ -1,0 +1,1 @@
+export const SIDEBAR_INIT_LEFT_INDENT = 40;

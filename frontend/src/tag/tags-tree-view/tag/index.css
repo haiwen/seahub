@@ -2,7 +2,6 @@
   height: 12px;
   width: 12px;
   border-radius: 50%;
-  transform: translateY(2px);
 }
 
 .tag-tree-node .tag-tree-node-text {

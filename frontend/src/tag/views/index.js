@@ -6,7 +6,7 @@ import AllTags from './all-tags';
 import { ALL_TAGS_ID } from '../constants';
 
 const Views = ({ ...params }) => {
-  const { isLoading } = useTags();
+  const { isLoading, displayNodeKey } = useTags();
   if (isLoading) return (<CenteredLoading />);
 
   if (params.tagID === ALL_TAGS_ID) {
@@ -14,7 +14,7 @@ const Views = ({ ...params }) => {
   }
 
   return (
-    <TagViewProvider { ...params }>
+    <TagViewProvider { ...params } nodeKey={displayNodeKey}>
       <View />
     </TagViewProvider>
   );

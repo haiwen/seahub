@@ -2,23 +2,19 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../../constants';
-import { useTags } from '../../hooks';
+import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
-const AllTags = ({ currentPath }) => {
-  const { selectTag } = useTags();
-
+const AllTags = ({ currentPath, selectAllTags }) => {
   const path = useMemo(() => '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + ALL_TAGS_ID, []);
   const isSelected = useMemo(() => currentPath === path, [currentPath, path]);
 
   const handelClick = useCallback(() => {
-    selectTag({
-      [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID,
-    }, isSelected);
-  }, [isSelected, selectTag]);
+    selectAllTags(isSelected);
+
+  }, [isSelected, selectAllTags]);
 
   return (
     <div
