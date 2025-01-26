@@ -35,6 +35,7 @@
   background: #fff;
   border-radius: 100%;
   line-height: 50px;
+  z-index: 1;
 }
 
 #img-prev {
