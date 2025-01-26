@@ -26,7 +26,6 @@ const Map = () => {
 
   const mapRef = useRef(null);
   const clusterRef = useRef(null);
-  const batchIndexRef = useRef(0);
   const clickTimeoutRef = useRef(null);
   const { metadata, viewID, updateCurrentPath } = useMetadataView();
 
@@ -73,11 +72,6 @@ const Map = () => {
       })
       .filter(Boolean);
   }, [repoID, repoInfo.encrypted, metadata]);
-
-  useEffect(() => {
-    updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const mapInfo = useMemo(() => initMapInfo({ baiduMapKey, googleMapKey }), []);
   const clusterLeaves = useMemo(() => images.filter(image => clusterLeaveIds.includes(image.id)), [images, clusterLeaveIds]);
@@ -157,8 +151,7 @@ const Map = () => {
       },
     });
 
-    const points = getPoints();
-    clusterRef.current.setData(points);
+    clusterRef.current.setData(getPoints());
 
     clusterRef.current.on(window.Cluster.ClusterEvent.CLICK, (element) => {
       if (clickTimeoutRef.current) {
@@ -178,10 +171,11 @@ const Map = () => {
         }, 300);
       }
     });
+    window.BMapCluster = clusterRef.current;
   }, [getPoints]);
 
   const renderBaiduMap = useCallback(() => {
-    if (!mapRef.current || !window.BMapGL.Map) return;
+    if (!window.BMapGL.Map) return;
     let { center, zoom } = loadMapState();
     let userPosition = { lng: 116.40396418840683, lat: 39.915106021711345 };
     // ask for user location
@@ -196,25 +190,35 @@ const Map = () => {
       });
     }
     const mapTypeValue = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY);
-    mapRef.current = new window.BMapGL.Map('sf-metadata-map-container', {
-      enableMapClick: false,
-      minZoom: MIN_ZOOM,
-      maxZoom: MAX_ZOOM,
-      mapType: getBMapType(mapTypeValue),
-    });
 
-    if (isValidPosition(center?.lng, center?.lat)) {
-      mapRef.current.centerAndZoom(center, zoom);
+    if (!window.BMapInstance) {
+      mapRef.current = new window.BMapGL.Map('sf-metadata-map-container', {
+        enableMapClick: false,
+        minZoom: MIN_ZOOM,
+        maxZoom: MAX_ZOOM,
+        mapType: getBMapType(mapTypeValue),
+      });
+      window.BMapInstance = mapRef.current;
+
+      if (isValidPosition(center?.lng, center?.lat)) {
+        mapRef.current.centerAndZoom(center, zoom);
+      }
+
+      mapRef.current.enableScrollWheelZoom(true);
+      addMapController();
+
+      initializeUserMarker(userPosition);
+      initializeCluster();
+    } else {
+      const viewDom = document.getElementById('sf-metadata-view-map');
+      const container = window.BMapInstance.getContainer();
+      viewDom.replaceChild(container, mapRef.current);
+
+      mapRef.current = window.BMapInstance;
+      clusterRef.current = window.BMapCluster;
+      clusterRef.current.setData(getPoints());
     }
-
-    mapRef.current.enableScrollWheelZoom(true);
-    addMapController();
-
-    initializeUserMarker(userPosition);
-    initializeCluster();
-
-    batchIndexRef.current = 0;
-  }, [addMapController, initializeCluster, initializeUserMarker, getBMapType, loadMapState]);
+  }, [addMapController, initializeCluster, initializeUserMarker, getBMapType, loadMapState, getPoints]);
 
   const handleClose = useCallback(() => {
     setImageIndex(0);
@@ -230,10 +234,16 @@ const Map = () => {
   }, [imageIndex, clusterLeaves.length]);
 
   useEffect(() => {
+    updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const modifyMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, (newType) => {
       window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
       const mapType = getBMapType(newType);
       mapRef.current && mapRef.current.setMapType(mapType);
+      mapRef.current.setCenter(mapRef.current.getCenter());
     });
 
     return () => {
@@ -255,8 +265,8 @@ const Map = () => {
   }, []);
 
   return (
-    <div className="sf-metadata-view-map">
-      <div className="sf-metadata-map-container" ref={mapRef} id="sf-metadata-map-container"></div>
+    <div className="sf-metadata-view-map" id="sf-metadata-view-map">
+      <div ref={mapRef} className="sf-metadata-map-container" id="sf-metadata-map-container"></div>
       {clusterLeaveIds.length > 0 && (
         <ModalPortal>
           <ImageDialog
