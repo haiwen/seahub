@@ -1,12 +1,12 @@
 import classnames from 'classnames';
-import { Utils } from '../../../../../../utils/utils';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
 
 export function createBMapZoomControl(BMapGL, { maxZoom, minZoom }, callback) {
   function ZoomControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMapGL.Size(80, Utils.isDesktop() ? 30 : 90);
+    this.defaultOffset = new BMapGL.Size(66, Utils.isDesktop() ? 30 : 90);
   }
   ZoomControl.prototype = new BMapGL.Control();
   ZoomControl.prototype.initialize = function (map) {

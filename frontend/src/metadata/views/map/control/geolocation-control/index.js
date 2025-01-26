@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Utils } from '../../../../../../utils/utils';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
 
