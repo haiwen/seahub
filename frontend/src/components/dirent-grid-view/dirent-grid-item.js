@@ -324,7 +324,7 @@ class DirentGridItem extends React.Component {
           >
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}`} className="thumbnail" onClick={this.onItemClick} alt=""/> :
-              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' />
+              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' style={{ pointerEvents: 'none' }} />
             }
             {is_locked &&
               <img

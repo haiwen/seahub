@@ -29,6 +29,7 @@ const ViewsFolder = ({
   const [isRenaming, setRenaming] = useState(false);
   const [newView, setNewView] = useState(null);
   const [isDropShow, setDropShow] = useState(false);
+  const [isSortShow, setSortShow] = useState(false);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -131,19 +132,19 @@ const ViewsFolder = ({
   }, [canDrop, folderId, setDragMode]);
 
   const onDragEnter = useCallback((event) => {
-    if (!canDrop) {
+    const dragMode = getDragMode();
+    if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER) {
       // not allowed drag folder into folder
-      return false;
-    }
-    if (!canDrop) {
+      setSortShow(true);
       return false;
     }
     setDropShow(true);
-  }, [canDrop]);
+  }, [canDrop, folderId, getDragMode]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
     setDropShow(false);
+    setSortShow(false);
   }, [canDrop]);
 
   const onDragMove = useCallback((event) => {
@@ -156,6 +157,7 @@ const ViewsFolder = ({
     if (!canDrop) return false;
     event.stopPropagation();
     setDropShow(false);
+    setSortShow(false);
 
     let dragData = event.dataTransfer.getData(METADATA_VIEWS_DRAG_DATA_KEY);
     if (!dragData) return;
@@ -240,7 +242,7 @@ const ViewsFolder = ({
   return (
     <div className="tree-node views-folder-wrapper">
       <div
-        className={classnames('tree-node-inner views-folder-main text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-drop': isDropShow })}
+        className={classnames('tree-node-inner views-folder-main text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-drop': isDropShow, 'tree-node-sort': isSortShow })}
         type="dir"
         title={folderName}
         onMouseEnter={onMouseEnter}

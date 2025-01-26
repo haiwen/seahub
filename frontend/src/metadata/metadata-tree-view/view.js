@@ -31,7 +31,7 @@ const ViewItem = ({
   const { _id: viewId, name: viewName } = view;
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
-  const [isDropShow, setDropShow] = useState(false);
+  const [isSortShow, setSortShow] = useState(false);
   const [isRenaming, setRenaming] = useState(false);
 
   const { idViewMap, moveView } = useMetadata();
@@ -150,12 +150,12 @@ const ViewItem = ({
       // not allowed drag folder into folder
       return false;
     }
-    setDropShow(true);
+    setSortShow(true);
   }, [canDrop, folderId, getDragMode]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
-    setDropShow(false);
+    setSortShow(false);
   }, [canDrop]);
 
   const onDragMove = useCallback((event) => {
@@ -168,7 +168,7 @@ const ViewItem = ({
     const dragMode = getDragMode();
     if (!canDrop || (folderId && dragMode === VIEWS_TYPE_FOLDER)) return false;
     event.stopPropagation();
-    setDropShow(false);
+    setSortShow(false);
 
     let dragData = event.dataTransfer.getData(METADATA_VIEWS_DRAG_DATA_KEY);
     if (!dragData) return;
@@ -196,7 +196,7 @@ const ViewItem = ({
   return (
     <div className="tree-node">
       <div
-        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-drop': isDropShow })}
+        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-sort': isSortShow })}
         title={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
