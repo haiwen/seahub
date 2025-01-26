@@ -18,10 +18,11 @@ const CONTEXT_MENU_KEY = {
   DELETE: 'delete',
   DUPLICATE: 'duplicate',
   REMOVE: 'remove',
+  SET_PEOPLE_PHOTO: 'set_people_photo',
   ADD_PHOTO_TO_GROUP: 'add_photo_to_group',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
@@ -31,6 +32,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
   const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
   const canAddPhotoToPeople = window.sfMetadataContext.canAddPhotoToPeople();
+  const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
@@ -46,8 +48,11 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
     if (onAddImage && canAddPhotoToPeople) {
       validOptions.push({ value: CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP, label: gettext('Add to group') });
     }
+    if (onSetPeoplePhoto && canSetPeoplePhoto) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO, label: gettext('Set as cover photo') });
+    }
     return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage]);
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -104,8 +109,13 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
       case CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP:
         setPeoplesDialogShow(true);
         break;
+      case CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO:
+        onSetPeoplePhoto(selectedImages[0]);
+        break;
+      default:
+        break;
     }
-  }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
+  }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage, onSetPeoplePhoto]);
 
   const closePeoplesDialog = useCallback(() => {
     setPeoplesDialogShow(false);

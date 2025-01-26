@@ -369,6 +369,14 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  setPeoplePhoto = (repoID, peopleId, recordId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-cover-photo/' + peopleId + '/';
+    const params = {
+      record_id: recordId
+    };
+    return this.req.put(url, params);
+  };
+
   // ocr
   openOCR = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ocr/';

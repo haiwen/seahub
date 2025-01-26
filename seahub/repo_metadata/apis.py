@@ -17,7 +17,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, in
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
-    remove_ocr_column, get_update_record
+    remove_ocr_column, get_update_record, update_people_cover_photo
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
@@ -2631,5 +2631,70 @@ class MetadataMergeTags(APIView):
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
+
+
+class PeopleCoverPhoto(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, repo_id, people_id):
+        record_id = request.data.get('record_id')
+        if not record_id:
+            error_msg = 'record_id invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if (
+            not metadata
+            or not metadata.enabled
+            or not metadata.face_recognition_enabled
+        ):
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        sql = f'SELECT {METADATA_TABLE.columns.obj_id.name} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` = "{record_id}"'
+
+        try:
+            query_result = metadata_server_api.query_rows(sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        obj_id = query_result.get('results', [dict()])[0].get(
+            METADATA_TABLE.columns.obj_id.name, ''
+        )
+        if not obj_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'obj_id not found')
+
+        params = {
+            'repo_id': repo_id,
+            'obj_id': obj_id,
+            'people_id': people_id,
+        }
+
+        try:
+            update_people_cover_photo(params)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})

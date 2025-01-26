@@ -3,7 +3,7 @@ from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataReco
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
-    MetadataOCRManageView
+    MetadataOCRManageView, PeopleCoverPhoto
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -23,6 +23,7 @@ urlpatterns = [
     re_path(r'^face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
     re_path(r'^people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos'),
     re_path(r'^face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
+    re_path(r'^people-cover-photo/(?P<people_id>.+)/$', PeopleCoverPhoto.as_view(), name='api-v2.1-metadata-people-cover-photo'),
 
     re_path(r'^extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
 

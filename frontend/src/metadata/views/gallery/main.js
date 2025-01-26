@@ -19,7 +19,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage, onAddImage }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -237,6 +237,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
   }, [onRemoveImage, updateCurrentDirent]);
 
+  const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
+    onSetPeoplePhoto(selectedImage, () => {
+      updateCurrentDirent();
+      setSelectedImages([]);
+    });
+  }, [onSetPeoplePhoto, updateCurrentDirent]);
+
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);
     const isClickInsideImage = className.includes('metadata-gallery-image-item') || className.includes('metadata-gallery-grid-image');
@@ -401,6 +408,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         addFolder={onAddFolder}
         onRemoveImage={onRemoveImage ? handelRemoveSelectedImages : null}
         onAddImage={onAddImage}
+        onSetPeoplePhoto={handleMakeSelectedAsCoverPhoto}
       />
       {isImagePopupOpen && (
         <ModalPortal>
