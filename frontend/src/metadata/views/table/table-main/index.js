@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Records from './records';
 import GridUtils from '../utils/grid-utils';
-import { GROUP_VIEW_OFFSET } from '../../../constants';
+import { GROUP_VIEW_OFFSET, TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../../constants';
 
 import './index.css';
 
@@ -35,7 +35,7 @@ const TableMain = ({
 
   const columns = useMemo(() => {
     const { columns, hidden_columns } = metadata.view;
-    return columns.filter(column => !hidden_columns.includes(column.key));
+    return columns.filter(column => !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   }, [metadata]);
 
   const getCopiedRecordsAndColumnsFromRange = useCallback(({ type, copied, isGroupView }) => {
