@@ -1,4 +1,4 @@
-import { CellType } from '../column';
+import { CellType, PRIVATE_COLUMN_KEY } from '../column';
 
 export const CELL_NAVIGATION_MODE = {
   NONE: 'none',
@@ -46,6 +46,10 @@ export const TABLE_SUPPORT_EDIT_TYPE_MAP = {
   [CellType.LINK]: true,
   [CellType.TAGS]: true,
 };
+
+export const TABLE_NOT_DISPLAY_COLUMN_KEYS = [
+  PRIVATE_COLUMN_KEY.SUFFIX,
+];
 
 export const TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP = {
   [CellType.TEXT]: true,

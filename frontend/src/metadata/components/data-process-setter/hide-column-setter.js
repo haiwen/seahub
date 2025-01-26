@@ -5,9 +5,12 @@ import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { HideColumnPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
+import { TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
 
 const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
   const [isShowSetter, setShowSetter] = useState(false);
+
+  const validColumns = useMemo(() => columns.filter(column => !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key)), [columns]);
 
   const validHiddenColumns = useMemo(() => {
     return hiddenColumns.filter(key => columns.find(column => column.key === key));
@@ -54,7 +57,7 @@ const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColum
           hiddenColumns={validHiddenColumns}
           target={target}
           placement="bottom-end"
-          columns={columns}
+          columns={validColumns}
           hidePopover={onSetterToggle}
           onChange={onChange}
           modifyColumnOrder={modifyColumnOrder}
