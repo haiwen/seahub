@@ -1407,7 +1407,7 @@ class PeoplePhotos(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
-        sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}`, `{FACES_TABLE.columns.included_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1482,7 +1482,7 @@ class PeoplePhotos(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not can_read_metadata(request, repo_id):
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1558,7 +1558,7 @@ class PeoplePhotos(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not can_read_metadata(request, repo_id):
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1575,7 +1575,7 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
         faces_table_id = faces_table['id']
 
-        sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+        sql = f'SELECT `{FACES_TABLE.columns.included_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
         try:
             query_result = metadata_server_api.query_rows(sql).get('results')
         except Exception as e:
