@@ -27,7 +27,7 @@ const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, cl
 
   // The backend server does not support rotating HEIC images
   let enableRotate = oldEnableRotate;
-  const suffix = mainImg.src.slice(mainImg.src.lastIndexOf('.') + 1, mainImg.src.lastIndexOf('?')).toLowerCase();
+  const suffix = mainImg.name.substring(mainImg.name.lastIndexOf('.') + 1).toLowerCase();
   if (suffix === 'heic') {
     enableRotate = false;
   }
