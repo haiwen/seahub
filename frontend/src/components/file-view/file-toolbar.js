@@ -26,7 +26,7 @@ const propTypes = {
 const {
   canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
-  fileType,
+  fileType, fileExt,
   fileName,
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
@@ -125,12 +125,14 @@ class FileToolbar extends React.Component {
           {(fileType == 'Image' && !err) && (
             <>
               <ImageZoomer setImageScale={this.props.setImageScale} />
-              <IconButton
-                id="rotate-image"
-                icon="rotate"
-                text={gettext('Rotate')}
-                onClick={this.props.rotateImage}
-              />
+              {['psd', 'heic'].indexOf(fileExt) == -1 && (
+                <IconButton
+                  id="rotate-image"
+                  icon="rotate"
+                  text={gettext('Rotate')}
+                  onClick={this.props.rotateImage}
+                />
+              )}
             </>
           )}
           {fileType == 'PDF' && (

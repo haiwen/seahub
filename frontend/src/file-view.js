@@ -39,7 +39,7 @@ class InnerFileView extends React.Component {
       // const angleClockwise = this.state.imageAngle + 360; // keep this line for the moment
       const angleClockwise = 270; // the API only accept clockwise angles
       ImageAPI.rotateImage(repoID, filePath, 360 - angleClockwise).then((res) => {
-        toaster.success(gettext('Image saved'), {'id': 'image-saved-tip'});
+        toaster.success(gettext('Image saved'), { 'id': 'image-saved-tip' });
       }).catch(error => {
         toaster.danger(Utils.getErrorMsg(error));
       });
