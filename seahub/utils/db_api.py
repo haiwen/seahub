@@ -357,3 +357,86 @@ class SeafileDB:
             """
             with connection.cursor() as cursor:
                 cursor.execute(sql)
+                
+    
+    def get_repo_ids_in_repo(self, repo_id):
+        repo_ids_sql = f"""
+                SELECT repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{repo_id}"
+                """
+        repo_ids = [repo_id, ]
+        with connection.cursor() as cursor:
+            cursor.execute(repo_ids_sql)
+            for item in cursor.fetchall():
+                repo_id = item[0]
+                repo_ids.append(repo_id)
+        
+        return repo_ids
+    
+    def set_repo_owner(self, repo_id, new_owner, org_id=None):
+        # transfert repo to user
+        repo_ids = self.get_repo_ids_in_repo(repo_id)
+        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if org_id:
+            sql = f"""
+            UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id IN ({repo_ids_str})
+            """
+        else:
+            sql = f"""
+            UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+            """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            
+    def set_repo_group_owner(self, repo_id, group_id, org_id=None):
+        # transfer repo to department
+        group_username = "%s@seafile_group" % group_id
+        if org_id:
+            sql = f"""
+            INSERT INTO `{self.db_name}`.`OrgGroupRepo` (org_id, repo_id, group_id, owner, permission) VALUES ({org_id}, "{repo_id}", {group_id}, "{group_username}", "rw")
+            ON DUPLICATE KEY UPDATE owner="{group_username}"
+            """
+        else:
+            sql = f"""
+            INSERT INTO `{self.db_name}`.`RepoGroup` (repo_id, group_id, user_name, permission) VALUES ("{repo_id}", {group_id}, "{group_username}", "rw")
+            ON DUPLICATE KEY UPDATE user_name="{group_username}"
+            """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+        
+        self.set_repo_owner(repo_id, group_username, org_id)
+        
+    def update_repo_user_shares(self, repo_id, new_owner, org_id=None):
+        repo_ids = self.get_repo_ids_in_repo(repo_id)
+        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if org_id:
+            sql = f"""
+            UPDATE `{self.db_name}`.`OrgSharedRepo` SET from_email="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+            """
+        else:
+            sql = f"""
+            UPDATE `{self.db_name}`.`SharedRepo` SET from_email="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+            """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            
+    def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
+        repo_ids = self.get_repo_ids_in_repo(repo_id)
+        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if org_id:
+            sql = f"""
+            UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
+            """
+        else:
+            sql = f"""
+            UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
+            """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            
+    def delete_repo_user_token(self, repo_id, owner):
+        sql = f"""
+        DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+        
