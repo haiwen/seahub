@@ -1319,6 +1319,9 @@ class LibContentView extends React.Component {
       }, () => {
         this.getAsyncCopyMoveProgress();
       });
+      if (byDialog) {
+        this.updateRecentlyUsedList(targetRepo, copyToDirentPath);
+      }
       return;
     }
 
