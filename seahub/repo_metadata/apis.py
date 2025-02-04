@@ -1152,6 +1152,7 @@ class MetadataViewsMoveView(APIView):
         source_folder_id = request.data.get('source_folder_id')
         target_view_id = request.data.get('target_view_id')
         target_folder_id = request.data.get('target_folder_id')
+        is_above_folder = request.data.get('is_above_folder', False)
 
         # must drag view or folder
         if not source_view_id and not source_folder_id:
@@ -1204,7 +1205,7 @@ class MetadataViewsMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'target_folder_id %s does not exists.' % target_folder_id)
 
         try:
-            results = RepoMetadataViews.objects.move_view(repo_id, source_view_id, source_folder_id, target_view_id, target_folder_id)
+            results = RepoMetadataViews.objects.move_view(repo_id, source_view_id, source_folder_id, target_view_id, target_folder_id, is_above_folder)
             if not results:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'move view or folder failed')
         except Exception as e:

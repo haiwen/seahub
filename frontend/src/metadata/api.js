@@ -200,13 +200,14 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
-  moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id) => {
+  moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id, is_above_folder) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/move-views/';
     const params = {
       source_view_id,
       source_folder_id,
       target_view_id,
       target_folder_id,
+      is_above_folder,
     };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };

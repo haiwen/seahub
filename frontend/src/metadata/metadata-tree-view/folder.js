@@ -41,6 +41,10 @@ const ViewsFolder = ({
     return true;
   }, [canUpdate]);
 
+  const isValid = useCallback((event) => {
+    return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);
+  }, []);
+
   const folderMoreOperationMenus = useMemo(() => {
     let menus = [];
     if (canUpdate) {
@@ -124,6 +128,7 @@ const ViewsFolder = ({
   }, [prepareAddView, folderId, deleteFolder]);
 
   const onDragStart = useCallback((event) => {
+    event.stopPropagation();
     if (!canDrop) return false;
     const dragData = JSON.stringify({ type: METADATA_VIEWS_KEY, folder_id: folderId, mode: VIEWS_TYPE_FOLDER });
     event.dataTransfer.effectAllowed = 'move';
@@ -132,14 +137,23 @@ const ViewsFolder = ({
   }, [canDrop, folderId, setDragMode]);
 
   const onDragEnter = useCallback((event) => {
+    if (!canDrop || !isValid(event)) return false;
+
     const dragMode = getDragMode();
     if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER) {
       // not allowed drag folder into folder
       setSortShow(true);
       return false;
     }
-    setDropShow(true);
-  }, [canDrop, folderId, getDragMode]);
+
+    const targetRect = event.target.getBoundingClientRect();
+    const pointerPosition = event.clientY - targetRect.top;
+    if (pointerPosition <= 4) {
+      setSortShow(true);
+    } else {
+      setDropShow(true);
+    }
+  }, [canDrop, folderId, getDragMode, isValid]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
@@ -148,10 +162,19 @@ const ViewsFolder = ({
   }, [canDrop]);
 
   const onDragMove = useCallback((event) => {
-    if (!canDrop) return false;
+    if (!canDrop || !isValid(event)) return false;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-  }, [canDrop]);
+    const targetRect = event.target.getBoundingClientRect();
+    const pointerPosition = event.clientY - targetRect.top;
+    if (pointerPosition <= 4) {
+      setSortShow(true);
+      setDropShow(false);
+    } else {
+      setDropShow(true);
+      setSortShow(false);
+    }
+  }, [canDrop, isValid]);
 
   const onDrop = useCallback((event) => {
     if (!canDrop) return false;
@@ -168,8 +191,8 @@ const ViewsFolder = ({
     if ((dragMode === VIEWS_TYPE_VIEW && !sourceViewId)) {
       return;
     }
-    moveView({ sourceViewId, sourceFolderId, targetFolderId: folderId });
-  }, [canDrop, folderId, getDragMode, moveView]);
+    moveView({ sourceViewId, sourceFolderId, targetFolderId: folderId, isAboveFolder: isSortShow });
+  }, [canDrop, folderId, getDragMode, moveView, isSortShow]);
 
   const onConfirmRename = useCallback((name) => {
     const foldersNames = getFoldersNames();

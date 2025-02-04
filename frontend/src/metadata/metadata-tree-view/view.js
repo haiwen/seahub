@@ -131,8 +131,13 @@ const ViewItem = ({
     });
   }, [isSelected, onUpdate, viewId, viewName]);
 
+  const isValid = useCallback((event) => {
+    return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);
+  }, []);
+
   const onDragStart = useCallback((event) => {
-    if (!canDrop) return false;
+    event.stopPropagation();
+    if (!canDrop || freeze) return false;
     const dragData = JSON.stringify({
       type: METADATA_VIEWS_KEY,
       mode: VIEWS_TYPE_VIEW,
@@ -142,16 +147,16 @@ const ViewItem = ({
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData(METADATA_VIEWS_DRAG_DATA_KEY, dragData);
     setDragMode(VIEWS_TYPE_VIEW);
-  }, [canDrop, viewId, folderId, setDragMode]);
+  }, [canDrop, viewId, folderId, setDragMode, freeze]);
 
   const onDragEnter = useCallback((event) => {
     const dragMode = getDragMode();
-    if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER) {
+    if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER || freeze || !isValid(event)) {
       // not allowed drag folder into folder
       return false;
     }
     setSortShow(true);
-  }, [canDrop, folderId, getDragMode]);
+  }, [canDrop, folderId, getDragMode, freeze, isValid]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
@@ -159,14 +164,14 @@ const ViewItem = ({
   }, [canDrop]);
 
   const onDragMove = useCallback((event) => {
-    if (!canDrop) return false;
+    if (!canDrop || freeze) return false;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-  }, [canDrop]);
+  }, [canDrop, freeze]);
 
   const onDrop = useCallback((event) => {
     const dragMode = getDragMode();
-    if (!canDrop || (folderId && dragMode === VIEWS_TYPE_FOLDER)) return false;
+    if (!canDrop || (folderId && dragMode === VIEWS_TYPE_FOLDER) || freeze) return false;
     event.stopPropagation();
     setSortShow(false);
 
@@ -178,7 +183,7 @@ const ViewItem = ({
       return;
     }
     moveView({ sourceViewId, sourceFolderId, targetViewId: viewId, targetFolderId: folderId });
-  }, [canDrop, folderId, viewId, getDragMode, moveView]);
+  }, [canDrop, folderId, viewId, getDragMode, moveView, freeze]);
 
   const handleSubmit = useCallback((name) => {
     const { isValid, message } = validateName(name, otherViewsName);
@@ -194,9 +199,9 @@ const ViewItem = ({
   }, [viewName, otherViewsName, renameView]);
 
   return (
-    <div className="tree-node">
+    <div className={classnames('tree-node', { 'tree-node-sort': isSortShow })}>
       <div
-        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-sort': isSortShow })}
+        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
         title={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
