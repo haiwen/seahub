@@ -76,7 +76,7 @@ function validate_seafile_data_dir () {
 }
 
 function validate_already_running () {
-    if pid=$(pgrep -f "seaf-fuse" 2>/dev/null); then
+    if pid=$(pgrep -f "bin/seaf-fuse" 2>/dev/null); then
         echo "seaf-fuse is already running, pid $pid"
         echo
         exit 1;
@@ -111,7 +111,7 @@ function start_seaf_fuse () {
     sleep 2
 
     # check if seaf-fuse started successfully
-    if ! pgrep -f "seaf-fuse" 2>/dev/null 1>&2; then
+    if ! pgrep -f "bin/seaf-fuse" 2>/dev/null 1>&2; then
         echo "Failed to start seaf-fuse"
         exit 1;
     fi
@@ -121,7 +121,7 @@ function start_seaf_fuse () {
 }
 
 function stop_seaf_fuse() {
-    if ! pgrep -f "seaf-fuse" 2>/dev/null 1>&2; then
+    if ! pgrep -f "bin/seaf-fuse" 2>/dev/null 1>&2; then
         echo "seaf-fuse not running yet"
         return 1;
     fi
