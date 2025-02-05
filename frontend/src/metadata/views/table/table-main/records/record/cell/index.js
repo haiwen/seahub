@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
-import CellOperationBtn from './operation-btn';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../utils/object-utils';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
@@ -159,7 +158,6 @@ const Cell = React.memo(({
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
       <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} />
-      {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
     </div>
   );
 }, (props, nextProps) => {
