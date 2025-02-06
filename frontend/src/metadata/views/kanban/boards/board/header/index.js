@@ -7,7 +7,7 @@ import { CellType } from '../../../../../constants';
 
 import './index.css';
 
-const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed }) => {
+const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
   const [active, setActive] = useState(false);
 
   const onMouseEnter = useCallback(() => {
@@ -41,8 +41,13 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
         )}
         <span className="cards-quantity">{cardsQuantity}</span>
       </div>
-      {value && !readonly && active && (
-        <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
+      {active && (
+        <div className="board-header-operation-btn">
+          {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />}
+          <div className="board-collapse-btn" title={isCollapsed ? gettext('Expand') : gettext('Collapse')} onClick={onCollapse}>
+            <i className={`sf3-font sf3-font-down ${isCollapsed ? 'rotate-90' : ''}`}></i>
+          </div>
+        </div>
       )}
     </div>
   );

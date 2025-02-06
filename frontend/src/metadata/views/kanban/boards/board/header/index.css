@@ -27,3 +27,32 @@
   color: #666666;
   margin-left: 12px;
 }
+
+.sf-metadata-view-kanban-board-header .board-header-operation-btn {
+  height: 22px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.board-header-operation-btn .dropdown {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.board-header-operation-btn .board-collapse-btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.board-header-operation-btn .board-collapse-btn:hover .sf3-font-down {
+  color: #212529;
+}
+
+.board-header-operation-btn .board-collapse-btn .sf3-font-down {
+  color: #999999;
+}
