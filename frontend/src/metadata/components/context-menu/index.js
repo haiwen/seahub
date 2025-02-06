@@ -119,7 +119,7 @@ ContextMenu.propTypes = {
       value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
     }),
-    PropTypes.string
+    PropTypes.string,
   ])).isRequired,
   boundaryCoordinates: PropTypes.object,
   ignoredTriggerElements: PropTypes.array,
