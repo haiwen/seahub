@@ -731,22 +731,18 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateRecentlyUsedRepos = (repo, destPath) => {
+  updateRecentlyUsedList = (repo, destPath) => {
     const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
-    const updatedRecentlyUsed = [{ repo_id: repo.repo_id, path: destPath }, ...recentlyUsed.filter(item => item.path !== destPath)];
+    const updatedRecentlyUsed = [{ repo_id: repo.repo_id, path: destPath }, ...recentlyUsed];
 
-    const seen = new Set();
-    const filteredRecentlyUsed = updatedRecentlyUsed.filter(item => {
-      if (seen.has(item.path)) {
-        return false;
-      } else {
-        seen.add(item.path);
-        return true;
-      }
-    });
+    const filteredRecentlyUsed = updatedRecentlyUsed.filter((item, index, self) =>
+      index === self.findIndex(t => (
+        t.repo_id === item.repo_id && t.path === item.path
+      ))
+    );
 
     if (filteredRecentlyUsed.length > 10) {
-      updatedRecentlyUsed.pop(); // Limit to 10 recent directories
+      filteredRecentlyUsed.pop(); // Limit to 10 recent directories
     }
 
     localStorage.setItem('recently-used-list', JSON.stringify(filteredRecentlyUsed));
@@ -792,7 +788,7 @@ class LibContentView extends React.Component {
       }
 
       if (byDialog) {
-        this.updateRecentlyUsedRepos(destRepo, destDirentPath);
+        this.updateRecentlyUsedList(destRepo, destDirentPath);
       }
 
     }).catch((error) => {
@@ -842,10 +838,10 @@ class LibContentView extends React.Component {
         // show tip message if copy to current repo
         let message = Utils.getCopySuccessfulMessage(dirNames);
         toaster.success(message);
+      }
 
-        if (byDialog) {
-          this.updateRecentlyUsedRepos(destRepo, destDirentPath);
-        }
+      if (byDialog) {
+        this.updateRecentlyUsedList(destRepo, destDirentPath);
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1277,7 +1273,7 @@ class LibContentView extends React.Component {
     }
 
     if (byDialog) {
-      this.updateRecentlyUsedRepos(targetRepo, moveToDirentPath);
+      this.updateRecentlyUsedList(targetRepo, moveToDirentPath);
     }
   };
 
@@ -1323,6 +1319,9 @@ class LibContentView extends React.Component {
       }, () => {
         this.getAsyncCopyMoveProgress();
       });
+      if (byDialog) {
+        this.updateRecentlyUsedList(targetRepo, copyToDirentPath);
+      }
       return;
     }
 
@@ -1340,7 +1339,7 @@ class LibContentView extends React.Component {
     toaster.success(message);
 
     if (byDialog) {
-      this.updateRecentlyUsedRepos(targetRepo, copyToDirentPath);
+      this.updateRecentlyUsedList(targetRepo, copyToDirentPath);
     }
   };
 
