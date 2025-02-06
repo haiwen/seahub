@@ -3,6 +3,7 @@ import logging
 import os
 from datetime import datetime
 
+import requests
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,14 +18,14 @@ from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, in
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
-    remove_ocr_column, get_update_record, update_people_cover_photo
+    remove_ocr_column, get_update_record, update_people_cover_photo, get_location_from_map_service
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
-
 logger = logging.getLogger(__name__)
+
 
 
 class MetadataManage(APIView):
@@ -2432,6 +2433,7 @@ class MetadataTagFiles(APIView):
         return Response(tag_files_query)
 
 
+
 class MetadataTagsFiles(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -2677,7 +2679,7 @@ class PeopleCoverPhoto(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        
         obj_id = query_result.get('results', [dict()])[0].get(
             METADATA_TABLE.columns.obj_id.name, ''
         )
@@ -2698,3 +2700,70 @@ class PeopleCoverPhoto(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class MetadataLocation(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+        
+    def post(self, request, repo_id):
+        record_id = request.data.get('record_id')
+        
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}`=?;'
+        parameters = [record_id]
+
+        try:
+            query_result = metadata_server_api.query_rows(sql, parameters)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        rows = query_result.get('results')
+        if not rows:
+            error_msg = 'Record not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        record = rows[0]
+        try:
+            lat = record.get('_location')['lat']
+            lng = record.get('_location')['lng']
+            lat = float(lat)
+            lng = float(lng)
+        except ValueError:
+            error_msg = 'lat or lng is not a number'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        _location_info = record.get('_location_info')
+        if _location_info:
+            return Response(_location_info)
+        
+        point_key = f"{lat},{lng}"
+        try:
+            location_info = get_location_from_map_service(point_key)
+            update_data = {'_location_info':location_info}
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Failed to get location name'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        record_id = record.get('_id')
+        update_data[METADATA_TABLE.columns.id.name] = record_id
+        update_records = [update_data]
+        if update_records:
+            try:
+                metadata_server_api.update_rows(METADATA_TABLE.id, update_records)
+            except Exception as e:
+                logger.exception(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        return Response(location_info)
