@@ -23,7 +23,7 @@ const HeaderDropdownMenu = ({ column, ColumnDropdownMenu, customProps }) => {
       <DropdownMenu
         positionFixed
         flip={false}
-        modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+        modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
         className="sf-table-dropdown-menu"
       >
         {cloneElement(ColumnDropdownMenu, { column, ...customProps })}

@@ -97,7 +97,7 @@ export default class PageDropdownMenu extends Component {
         <DropdownMenu
           className="page-operation-dropdown-menu dtable-dropdown-menu large"
           flip={false}
-          modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+          modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
           positionFixed={true}
         >
           <DropdownItem onClick={this.handleCopyLink}>

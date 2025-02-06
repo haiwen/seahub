@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
@@ -442,4 +442,6 @@ FolderItem.propTypes = {
   renderFolder: PropTypes.func.isRequired,
 };
 
-ReactDom.render(<RepoFolderTrash />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<RepoFolderTrash />);
+

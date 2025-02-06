@@ -122,7 +122,7 @@ class MoreMenu extends React.PureComponent {
           aria-expanded={this.state.dropdownOpen}
         >
         </DropdownToggle>
-        <DropdownMenu className="drop-list" right={true}>
+        <DropdownMenu className="drop-list">
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>

@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Wiki from './pages/wiki';
 
-ReactDom.render(<Wiki />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<Wiki />);

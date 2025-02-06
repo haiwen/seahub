@@ -51,12 +51,12 @@ class MoreMenu extends React.PureComponent {
     const isSmall = this.props.isSmallScreen;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
-        <DropdownToggle id="moreButton" aria-label={gettext('More operations')}>
+        <DropdownToggle tag="span" id="moreButton" aria-label={gettext('More operations')}>
           <Icon symbol="more-vertical" />
           <Tooltip toggle={this.tooltipToggle} delay={{ show: 0, hide: 0 }} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
           </Tooltip>
         </DropdownToggle>
-        <DropdownMenu className="drop-list" right={true}>
+        <DropdownMenu className="drop-list">
           {(!this.props.readOnly && editorMode === 'rich') &&
             <DropdownItem onClick={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
           {(!this.props.readOnly && editorMode === 'plain') &&

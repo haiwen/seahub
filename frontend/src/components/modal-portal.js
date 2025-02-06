@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -23,7 +23,7 @@ class ModalPortal extends React.Component {
   }
 
   render() {
-    return ReactDOM.createPortal(
+    return createPortal(
       this.props.children,
       this.el,
     );

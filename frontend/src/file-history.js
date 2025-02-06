@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import { fileName, historyRepoID } from './utils/constants';
 import SidePanel from './pages/file-history/side-panel';
@@ -69,4 +69,5 @@ class FileHistory extends React.Component {
   }
 }
 
-ReactDom.render(<FileHistory />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<FileHistory />);

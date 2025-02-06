@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 
@@ -30,4 +30,5 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDom.render(<ViewFileOnlyoffice />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<ViewFileOnlyoffice />);

@@ -149,7 +149,7 @@ class ViewFileToolbar extends React.Component {
         {opList.length > 0 &&
         <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className="view-file-toolbar-dropdown">
           <DropdownToggle
-            tag="div"
+            tag="span"
             role="button"
             className="path-item"
             onClick={this.toggleDropdownMenu}
@@ -174,6 +174,7 @@ class ViewFileToolbar extends React.Component {
                     onMouseMove={(e) => {e.stopPropagation();}}
                   >
                     <DropdownToggle
+                      tag="span"
                       className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                     >
