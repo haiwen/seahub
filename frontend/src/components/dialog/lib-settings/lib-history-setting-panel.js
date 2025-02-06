@@ -110,9 +110,7 @@ class LibHistorySetting extends React.Component {
         <ModalBody>
           <Form>
             {!enableRepoHistorySetting &&
-              <FormGroup>
-                <Label className="error">{gettext('Setting library history is disabled by Admin.')}</Label>
-              </FormGroup>
+              <p className="tip">{gettext('Setting library history is disabled by Admin.')}</p>
             }
             <FormGroup check>
               <Input type="radio" name="radio1" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('allHistory');}}/>{' '}
