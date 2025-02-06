@@ -582,11 +582,11 @@ class RepoImageRotateView(APIView):
         if permission is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        username = request.user.username
         # get token
         try:
             token = seafile_api.get_fileserver_access_token(
-                repo_id, asset_id, 'view', '', use_onetime=False
+                repo_id, asset_id, 'view', username, use_onetime=False
             )
         except Exception as e:
             logger.error('get view token error: %s', e)
@@ -612,7 +612,7 @@ class RepoImageRotateView(APIView):
         obj_id = json.dumps({'parent_dir': parent_dir})
         try:
             token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload',
-                                                            '', use_onetime=False)
+                                                            username, use_onetime=False)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
