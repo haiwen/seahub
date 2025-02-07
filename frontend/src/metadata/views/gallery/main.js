@@ -31,7 +31,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const containerRef = useRef(null);
   const scrollContainer = useRef(null);
-  const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
+  const lastState = useRef({ scrollPos: 0 });
 
   const { repoID, updateCurrentDirent } = useMetadataView();
 
@@ -134,30 +134,15 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       onLoadMore && onLoadMore();
     }
 
-    let groupIndex = 0;
-    let rowIndex = 0;
-    let flag = false;
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      for (let j = 0; j < group.children.length; j++) {
-        const row = group.children[j];
-        if (row.top >= scrollTop) {
-          groupIndex = i;
-          rowIndex = j;
-          flag = true;
-          break;
-        }
-      }
-      if (flag) break;
-    }
-    lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+    const scrollPos = (scrollTop + clientHeight / 2) / scrollHeight;
+    lastState.current = { ...lastState.current, scrollPos };
 
     const newOverScan = {
       top: Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS),
       bottom: scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS
     };
     setOverScan(newOverScan);
-  }, [rowHeight, onLoadMore, groups]);
+  }, [rowHeight, onLoadMore]);
 
   const updateSelectedImage = useCallback((image = null) => {
     const imageInfo = image ? getRowById(metadata, image.id) : null;
@@ -349,22 +334,25 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
     };
-  }, [rowHeight]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!imageSize || imageSize?.large < 0) return;
     if (lastState.current?.mode === mode && mode === GALLERY_DATE_MODE.ALL && !ObjectUtils.isSameObject(imageSize, lastState.current.imageSize)) {
-      const perImageOffset = imageSize.large - (lastState.current.imageSize?.large || 0);
-      const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
-      const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
-        if (currentIndex < groupIndex) {
-          return previousValue + current.children.length;
-        }
-        return previousValue;
-      }, 0) + rowIndex;
-      const topOffset = rowOffset * perImageOffset + groupIndex * DATE_TAG_HEIGHT;
-      scrollContainer.current.scrollTop = scrollContainer.current.scrollTop + topOffset;
+      const { scrollHeight, clientHeight } = scrollContainer.current;
+      const { scrollPos } = lastState.current;
+      scrollContainer.current.scrollTop = scrollHeight * scrollPos - clientHeight / 2;
       lastState.current = { ...lastState.current, imageSize, mode };
+    } else {
+      const { targetGroupFirstImageId: imageId } = lastState.current;
+      if (imageId) {
+        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
+        if (targetGroup) {
+          scrollContainer.current.scrollTop = targetGroup.top;
+        }
+        lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
+      }
     }
   }, [mode, imageSize, groups]);
 
@@ -373,18 +361,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       onLoadMore && onLoadMore();
     }
   }, [containerHeight, onLoadMore]);
-
-  useEffect(() => {
-    if (!imageSize || imageSize?.large < 0) return;
-    const { targetGroupFirstImageId: imageId } = lastState.current;
-    if (imageId) {
-      const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
-      if (targetGroup) {
-        scrollContainer.current.scrollTop = targetGroup.top;
-      }
-      lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
-    }
-  }, [imageSize, groups, mode]);
 
   return (
     <div className="sf-metadata-gallery-scroll-container" ref={scrollContainer} onScroll={handleScroll}>
