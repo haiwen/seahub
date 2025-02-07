@@ -144,7 +144,7 @@ const Content = ({
         className="metadata-gallery-date-group"
         style={{ height, paddingTop }}
       >
-        {mode !== GALLERY_DATE_MODE.ALL && childrenStartIndex === 0 && (
+        {childrenStartIndex === 0 && (
           <div
             className={classNames('metadata-gallery-date-tag', { 'hover': isDateTagClickable })}
             style={{ height: paddingTop }}
