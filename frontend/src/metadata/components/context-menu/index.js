@@ -96,7 +96,7 @@ const ContextMenu = ({
     >
       {options.map((option, index) => {
         if (option === 'Divider') {
-          return <DropdownItem key="divider-item" divider />;
+          return <DropdownItem key={index} divider />;
         } else {
           return (
             <button
@@ -114,10 +114,13 @@ const ContextMenu = ({
 };
 
 ContextMenu.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  })).isRequired,
+  options: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+    PropTypes.string
+  ])).isRequired,
   boundaryCoordinates: PropTypes.object,
   ignoredTriggerElements: PropTypes.array,
   onOptionClick: PropTypes.func.isRequired,

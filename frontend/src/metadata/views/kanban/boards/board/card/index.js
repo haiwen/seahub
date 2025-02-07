@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import Formatter from '../formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 import { CellType } from '../../../../../constants';
-import { getEventClassName } from '../../../../../utils/common';
 
 import './index.css';
 
@@ -28,10 +27,8 @@ const Card = ({
     onSelectCard(record);
   }, [record, onSelectCard]);
 
-  const handleClickFilename = useCallback((event) => {
+  const handleFilenameClick = useCallback((event) => {
     if (titleColumn?.type !== CellType.FILE_NAME) return;
-    const eventName = getEventClassName(event);
-    if (eventName !== 'sf-metadata-file-name') return;
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     onOpenFile(record);
@@ -45,8 +42,8 @@ const Card = ({
       onContextMenu={onContextMenu}
     >
       {titleColumn && (
-        <div className="sf-metadata-kanban-card-header" onClick={handleClickFilename}>
-          <Formatter value={titleValue} column={titleColumn} record={record}/>
+        <div className="sf-metadata-kanban-card-header">
+          <Formatter value={titleValue} column={titleColumn} record={record} onFileNameClick={handleFilenameClick} />
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">

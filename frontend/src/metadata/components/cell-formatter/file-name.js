@@ -7,7 +7,7 @@ import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getParentDirFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
 
-const FileName = ({ record, className: propsClassName, value, ...params }) => {
+const FileName = ({ record, className: propsClassName, value, onFileNameClick, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
   const className = useMemo(() => {
@@ -30,7 +30,7 @@ const FileName = ({ record, className: propsClassName, value, ...params }) => {
     return { iconUrl: defaultIconUrl, defaultIconUrl };
   }, [isDir, value, parentDir]);
 
-  return (<FileNameFormatter { ...params } className={className} value={value} { ...iconUrl } />);
+  return (<FileNameFormatter { ...params } className={className} value={value} onClickName={onFileNameClick} { ...iconUrl } />);
 
 };
 
@@ -38,6 +38,7 @@ FileName.propTypes = {
   value: PropTypes.string,
   record: PropTypes.object.isRequired,
   className: PropTypes.string,
+  onFileNameClick: PropTypes.func,
 };
 
 export default FileName;
