@@ -46,7 +46,6 @@
   display: flex;
   align-items: center;
   margin-left: 0.5rem;
-  cursor: pointer;
 }
 
 .board-header-operation-btn .board-collapse-btn:hover .sf3-font-down {
