@@ -1702,17 +1702,17 @@ msgstr "حذف مكتبة"
 #: frontend/src/components/dialog/department-detail-dialog.js:177
 #| msgid "Search groups"
 msgid "Select group members"
-msgstr ""
+msgstr "إختيار أعضاء المجموعة"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:177
 #| msgid "Select a user"
 msgid "Select shared users"
-msgstr ""
+msgstr "إختيار المستخدمين المشتركين"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:73
 #| msgid "selected"
 msgid "Selected"
-msgstr ""
+msgstr "مختار"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:94
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:97
@@ -1724,22 +1724,22 @@ msgstr "إضافة"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:110
 #| msgid "Members"
 msgid "members"
-msgstr ""
+msgstr "اﻷعضاء"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 #| msgid "No libraries shared with this group"
 msgid "User is already in this group"
-msgstr ""
+msgstr "المستخدم موجود بالفعل في هذه المجموعة"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 msgid "It is already shared to user"
-msgstr ""
+msgstr "تمت مشاركته بالفعل مع المستخدم"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:132
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:134
 #| msgid "Select all"
 msgid "Select All"
-msgstr ""
+msgstr "حدد الكل"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:159
 #: frontend/src/pages/org-admin/departments/department.js:188
@@ -1989,7 +1989,7 @@ msgstr "يقوم {site_name_placeholder} بتنظيم الملفات في الم
 
 #: frontend/src/components/dialog/image-dialog.js:52
 msgid "The image could not be previewed."
-msgstr ""
+msgstr "تعذر معاينة الصورة."
 
 #: frontend/src/components/dialog/image-dialog.js:53
 msgid "Previous (Left arrow key)"
@@ -5564,7 +5564,7 @@ msgstr "إخفاء الخصائص"
 
 #: frontend/src/metadata/components/data-process-setter/map-type-setter.js:9
 msgid "Satellite"
-msgstr ""
+msgstr "القمرالصناعي"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:46
 msgid "Preset hide properties"
@@ -6424,7 +6424,7 @@ msgstr "مضغوط"
 
 #: frontend/src/metadata/utils/column/index.js:289
 msgid "Diagram"
-msgstr ""
+msgstr "مخطط"
 
 #: frontend/src/metadata/utils/column/index.js:316
 msgid "In progress"

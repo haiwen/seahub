@@ -573,7 +573,7 @@
   "Five_column": "5 columns",
   "Full_width_mode": "Full width mode",
   "Video": "Video",
-  "Upload_local_video": "Upload local video",
+  "Upload_local_video": "Upload_local_video",
   "The_current_version_does_not_support_>5MB_video_file": "The_current_version_does_not_support_>5MB_video_file",
   "Token_expired_Please_refresh_the_page": "Token expired. Please refresh the page.",
   "Link_to_page": "Link to page",
@@ -607,8 +607,6 @@
   "Enter_reply": "Enter reply",
   "Processing_content_cannot_be_empty": "Processing content cannot be empty",
   "AI_error_message": "Request error, please try again",
-  "Add_video_link": "Add video link",
-  "Link_Seafile_video_file": "Link Seafile video file",
-  "Select_video_file": "Select video file",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more"
+  "Image_cannot_be_copied_Please_download_the_source_image": "Image cannot be copied. Please download the source image,",
+  "And_select_insert_-_image_to_upload": "and select 「insert」 - 「image」 to upload."
 }

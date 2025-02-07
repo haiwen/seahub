@@ -607,8 +607,6 @@
   "Enter_reply": "输入回复",
   "Processing_content_cannot_be_empty": "处理内容不能为空",
   "AI_error_message": "请求错误，请重试",
-  "Add_video_link": "添加视频链接",
-  "Link_Seafile_video_file": "链接Seafile视频文件",
-  "Select_video_file": "选择视频文件",
-  "Support_Youtube_Tencent_Bilibili_and_more": "支持Youtube，腾讯视频，B站及其他平台"
+  "Image_cannot_be_copied_Please_download_the_source_image": "此照片不支持复制，请下载原图",
+  "And_select_insert_-_image_to_upload": "后点击工具栏「插入」- 「照片」上传"
 }

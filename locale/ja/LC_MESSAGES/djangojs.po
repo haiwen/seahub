@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Translators:
+# Seafile Info <info@seafile.com>, 2025
 # 鑫 王 <wangxin@oneby.com.cn>, 2020,2022
 msgid ""
 msgstr ""
@@ -11,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 10:07+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020,2022\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1710,7 +1711,7 @@ msgstr ""
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:73
 #| msgid "selected"
 msgid "Selected"
-msgstr ""
+msgstr "選択済み"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:94
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:97
@@ -1722,28 +1723,28 @@ msgstr "追加"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:110
 #| msgid "Members"
 msgid "members"
-msgstr ""
+msgstr "メンバー"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 #| msgid "No libraries shared with this group"
 msgid "User is already in this group"
-msgstr ""
+msgstr "ユーザーは既にこのグループに所属しています"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 msgid "It is already shared to user"
-msgstr ""
+msgstr "すでにユーザーに共有されています"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:132
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:134
 #| msgid "Select all"
 msgid "Select All"
-msgstr ""
+msgstr "すべて選択"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:159
 #: frontend/src/pages/org-admin/departments/department.js:188
 #: frontend/src/pages/sys-admin/departments/department.js:182
 msgid "No members"
-msgstr ""
+msgstr "メンバーなし"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:29
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:107
@@ -1858,14 +1859,14 @@ msgstr ""
 #: frontend/src/components/dialog/set-webdav-password.js:30
 #: frontend/src/components/share-link-panel/link-creation.js:187
 msgid "Please enter a password."
-msgstr ""
+msgstr "パスワードを入力してください。"
 
 #: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/reset-webdav-password.js:34
 #: frontend/src/components/dialog/set-webdav-password.js:34
 #: frontend/src/components/share-link-panel/link-creation.js:191
 msgid "The password is too short."
-msgstr ""
+msgstr "パスワードが短すぎます。"
 
 #: frontend/src/components/dialog/generate-upload-link.js:154
 #: frontend/src/components/dialog/reset-webdav-password.js:39
@@ -1879,7 +1880,7 @@ msgstr ""
 #: frontend/src/components/dialog/generate-upload-link.js:162
 #: frontend/src/components/share-link-panel/link-creation.js:207
 msgid "Please select an expiration time"
-msgstr ""
+msgstr "有効期限を選択してください"
 
 #: frontend/src/components/dialog/generate-upload-link.js:170
 #: frontend/src/components/share-link-panel/link-creation.js:216
@@ -2202,7 +2203,7 @@ msgstr ""
 #: frontend/src/components/dialog/lib-settings.js:90
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:73
 msgid "Face recognition"
-msgstr ""
+msgstr "顔認識"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:54
@@ -2211,7 +2212,7 @@ msgstr "ライブラリ履歴を正常に設定しました"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:116
 msgid "Setting library history is disabled by Admin."
-msgstr ""
+msgstr "ライブラリ履歴の設定は管理者によって無効にされています。"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:120
@@ -2292,7 +2293,7 @@ msgstr "フォルダ"
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
-msgstr ""
+msgstr "フォルダー権限は、ライブラリがユーザーまたはグループに共有された後にのみ有効になります。サブフォルダー権限を微調整するために使用されます。"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:322
 #: frontend/src/components/dialog/share-to-group.js:376
@@ -2532,14 +2533,14 @@ msgstr ""
 msgid ""
 "You can enter multiple emails. An invitation link will be sent to each of "
 "them."
-msgstr ""
+msgstr "複数のメールアドレスを入力できます。各メールアドレスに招待リンクが送信されます。"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:65
 msgid ""
 "Failed to export. Please check whether the size of table attachments exceeds"
 " the limit."
-msgstr ""
+msgstr "エクスポートに失敗しました。テーブル添付ファイルのサイズが制限を超えていないか確認してください。"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:116
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:120
@@ -2792,7 +2793,7 @@ msgstr ""
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification."
-msgstr ""
+msgstr "ヒント: 変更後にスナップショットが生成され、変更後のライブラリの状態が記録されます。"
 
 #: frontend/src/components/dialog/repo-history.js:106
 #: frontend/src/components/dialog/repo-history.js:113
@@ -5127,18 +5128,18 @@ msgstr ""
 #: frontend/src/components/user-settings/email-notice.js:71
 msgid ""
 "The list of added, deleted and modified files will be sent to your mailbox."
-msgstr ""
+msgstr "追加、削除、変更されたファイルのリストがメールボックスに送信されます。"
 
 #: frontend/src/components/user-settings/email-notice.js:81
 #| msgid "Notifications of file changes"
 msgid "Notifications of collaboration"
-msgstr ""
+msgstr "コラボレーションの通知"
 
 #: frontend/src/components/user-settings/email-notice.js:82
 msgid ""
 "Whether the notifications of collaboration such as sharing library or "
 "joining group should be sent to your mailbox."
-msgstr ""
+msgstr "ライブラリの共有やグループへの参加などのコラボレーションの通知をメールボックスに送信するかどうか。"
 
 #: frontend/src/components/user-settings/language-setting.js:26
 msgid "Language Setting"
@@ -5149,7 +5150,7 @@ msgid ""
 "No linked devices. You have not accessed your files with any client (desktop"
 " or mobile) yet. Configure clients on your devices to access your data more "
 "comfortably."
-msgstr ""
+msgstr "リンクされたデバイスがありません。まだどのクライアント (デスクトップまたはモバイル) でもファイルにアクセスしていません。デバイス上のクライアントを構成して、より快適にデータにアクセスできるようにします。"
 
 #: frontend/src/components/user-settings/linked-devices.js:31
 #: frontend/src/pages/linked-devices/linked-devices.js:35
@@ -9531,25 +9532,25 @@ msgstr ""
 
 #: frontend/src/utils/utils.js:873
 msgid "User can read, write, upload, download and sync files."
-msgstr ""
+msgstr "ユーザーはファイルの読み取り、書き込み、アップロード、ダウンロード、同期を行うことができます。"
 
 #: frontend/src/utils/utils.js:876
 msgid "User can read, download and sync files."
-msgstr ""
+msgstr "ユーザーはファイルを読み取り、ダウンロード、同期できます。"
 
 #: frontend/src/utils/utils.js:879
 msgid "Besides Write permission, user can also share the library."
-msgstr ""
+msgstr "書き込み権限に加えて、ユーザーはライブラリを共有することもできます。"
 
 #: frontend/src/utils/utils.js:882
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
-msgstr ""
+msgstr "ユーザーはブラウザ経由でオンラインでファイルを表示および編集できます。ファイルをダウンロードすることはできません。"
 
 #: frontend/src/utils/utils.js:885
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
-msgstr ""
+msgstr "ユーザーはブラウザ経由でのみファイルをオンラインで表示できます。ファイルをダウンロードすることはできません。"
 
 #: frontend/src/utils/utils.js:888
 msgid "User can not see this folder."

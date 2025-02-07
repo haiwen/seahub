@@ -52,7 +52,7 @@
 # Mark Ziegler <mark.ziegler@rakekniven.de>, 2017
 # Martin Lablans, 2024
 # Matthias Hub <coding@matthiashub.de>, 2013
-# Moritz Schlarb <moschlar@metalabs.de>, 2017-2018
+# Moritz Schlarb <moschlar@metalabs.de>, 2017-2018,2025
 # viirus <viirus@pherth.net>, 2013
 # pieceofsoul <sascha@pieceofsoul.de>, 2014
 # Ralf Dyllick <rdb@datamate.org>, 2021-2024
@@ -82,7 +82,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 10:07+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Elias Schneuwly <elias.schneuwly@speicherbox.ch>, 2024\n"
+"Last-Translator: Moritz Schlarb <moschlar@metalabs.de>, 2017-2018,2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -839,7 +839,7 @@ msgstr "Ordner"
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Ein Ordner wurde für Sie freigegeben auf %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -921,7 +921,7 @@ msgstr "Sie haben bereits %(nb_avatars)d Avatare. Maximal sind %(nb_max_avatars)
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "Die Länge des WebDAV-Passworts sollte kürzer als 30 Zeichen sein."
 
 #: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1408
 #: seahub/api2/endpoints/wikis.py:219
@@ -1608,7 +1608,7 @@ msgstr "%s ist gelöscht."
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr "Sie wurden eingeladen,  %(site_name)sbeizutreten."
+msgstr "Sie wurden eingeladen, %(site_name)s beizutreten."
 
 #: seahub/invitations/models.py:98
 #, python-brace-format
@@ -1641,14 +1641,14 @@ msgstr "Guten Tag,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr "Sie wurden eingeladen, dem Team  %(org_name)s beizutreten. Klicken Sie den Link unten."
+msgstr "Sie wurden eingeladen, dem Team %(org_name)s beizutreten. Bitte klicken Sie dazu auf diesen Link:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr "%(inviter_name)s hat Sie eingeladen,  %(site_name)sbeizutreten. Klicken Sie auf den Link unten:"
+msgstr "%(inviter_name)s hat Sie eingeladen, %(site_name)sbeizutreten. Bitte klicken Sie dazu auf diesen Link:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -1781,19 +1781,19 @@ msgstr "Die Datei <a href='%(file_link)s'>%(file_name)s</a> wurde in <a href='%(
 #: seahub/notifications/models.py:566
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Eine Datei mit dem Namen <strong>%(file_name)s</strong> wurde hochgeladen"
 
 #: seahub/notifications/models.py:601
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Ein Ordner mit dem Namen <a href='%(folder_link)s'>%(folder_name)s</a> wurde nach <a href='%(link)s'>%(name)s</a> hochgeladen"
 
 #: seahub/notifications/models.py:608
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Ein Ordner mit dem Namen <strong>%(folder_name)s</strong> wurde hochgeladen"
 
 #: seahub/notifications/models.py:742
 #, python-format
@@ -1958,7 +1958,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Ein Ordner mit den Namen <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> wurde in Ihren Ordner <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a> hochgeladen."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
