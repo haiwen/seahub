@@ -76,7 +76,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         let name = '';
         if (mode === GALLERY_DATE_MODE.YEAR) name = image.year;
         if (mode === GALLERY_DATE_MODE.MONTH) name = image.month;
-        if (mode === GALLERY_DATE_MODE.DAY) name = image.date;
+        if (mode === GALLERY_DATE_MODE.DAY || mode === GALLERY_DATE_MODE.ALL) name = image.date;
         let _group = _init.find(g => g.name === name);
         if (_group) {
           _group.children.push(image);
@@ -90,7 +90,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       }, []);
 
     let _groups = [];
-    const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+    const paddingTop = DATE_TAG_HEIGHT;
     init.forEach((_init, index) => {
       const { children, ...__init } = _init;
       let top = 0;
@@ -362,7 +362,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         }
         return previousValue;
       }, 0) + rowIndex;
-      const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
+      const topOffset = rowOffset * perImageOffset + groupIndex * DATE_TAG_HEIGHT;
       scrollContainer.current.scrollTop = scrollContainer.current.scrollTop + topOffset;
       lastState.current = { ...lastState.current, imageSize, mode };
     }
@@ -378,20 +378,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     if (!imageSize || imageSize?.large < 0) return;
     const { targetGroupFirstImageId: imageId } = lastState.current;
     if (imageId) {
-      if (mode === GALLERY_DATE_MODE.ALL) {
-        const targetImage = images.find(img => img.id === imageId);
-        if (targetImage) {
-          scrollContainer.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
-        }
-      } else {
-        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
-        if (targetGroup) {
-          scrollContainer.current.scrollTop = targetGroup.top;
-        }
+      const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
+      if (targetGroup) {
+        scrollContainer.current.scrollTop = targetGroup.top;
       }
       lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSize, groups, mode]);
 
   return (
