@@ -29,6 +29,7 @@ const ViewsFolder = ({
   const [isRenaming, setRenaming] = useState(false);
   const [newView, setNewView] = useState(null);
   const [isDropShow, setDropShow] = useState(false);
+  const [isSortShow, setSortShow] = useState(false);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -39,6 +40,10 @@ const ViewsFolder = ({
     if (Utils.isIEBrowser() || !canUpdate) return false;
     return true;
   }, [canUpdate]);
+
+  const isValid = useCallback((event) => {
+    return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);
+  }, []);
 
   const folderMoreOperationMenus = useMemo(() => {
     let menus = [];
@@ -123,6 +128,7 @@ const ViewsFolder = ({
   }, [prepareAddView, folderId, deleteFolder]);
 
   const onDragStart = useCallback((event) => {
+    event.stopPropagation();
     if (!canDrop) return false;
     const dragData = JSON.stringify({ type: METADATA_VIEWS_KEY, folder_id: folderId, mode: VIEWS_TYPE_FOLDER });
     event.dataTransfer.effectAllowed = 'move';
@@ -131,31 +137,50 @@ const ViewsFolder = ({
   }, [canDrop, folderId, setDragMode]);
 
   const onDragEnter = useCallback((event) => {
-    if (!canDrop) {
+    if (!canDrop || !isValid(event)) return false;
+
+    const dragMode = getDragMode();
+    if (!canDrop || folderId && dragMode === VIEWS_TYPE_FOLDER) {
       // not allowed drag folder into folder
+      setSortShow(true);
       return false;
     }
-    if (!canDrop) {
-      return false;
+
+    const targetRect = event.target.getBoundingClientRect();
+    const pointerPosition = event.clientY - targetRect.top;
+    if (pointerPosition <= 4) {
+      setSortShow(true);
+    } else {
+      setDropShow(true);
     }
-    setDropShow(true);
-  }, [canDrop]);
+  }, [canDrop, folderId, getDragMode, isValid]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
     setDropShow(false);
+    setSortShow(false);
   }, [canDrop]);
 
   const onDragMove = useCallback((event) => {
-    if (!canDrop) return false;
+    if (!canDrop || !isValid(event)) return false;
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-  }, [canDrop]);
+    const targetRect = event.target.getBoundingClientRect();
+    const pointerPosition = event.clientY - targetRect.top;
+    if (pointerPosition <= 4) {
+      setSortShow(true);
+      setDropShow(false);
+    } else {
+      setDropShow(true);
+      setSortShow(false);
+    }
+  }, [canDrop, isValid]);
 
   const onDrop = useCallback((event) => {
     if (!canDrop) return false;
     event.stopPropagation();
     setDropShow(false);
+    setSortShow(false);
 
     let dragData = event.dataTransfer.getData(METADATA_VIEWS_DRAG_DATA_KEY);
     if (!dragData) return;
@@ -166,8 +191,8 @@ const ViewsFolder = ({
     if ((dragMode === VIEWS_TYPE_VIEW && !sourceViewId)) {
       return;
     }
-    moveView({ sourceViewId, sourceFolderId, targetFolderId: folderId });
-  }, [canDrop, folderId, getDragMode, moveView]);
+    moveView({ sourceViewId, sourceFolderId, targetFolderId: folderId, isAboveFolder: isSortShow });
+  }, [canDrop, folderId, getDragMode, moveView, isSortShow]);
 
   const onConfirmRename = useCallback((name) => {
     const foldersNames = getFoldersNames();
@@ -240,7 +265,7 @@ const ViewsFolder = ({
   return (
     <div className="tree-node views-folder-wrapper">
       <div
-        className={classnames('tree-node-inner views-folder-main text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-drop': isDropShow })}
+        className={classnames('tree-node-inner views-folder-main text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-drop': isDropShow, 'tree-node-sort': isSortShow })}
         type="dir"
         title={folderName}
         onMouseEnter={onMouseEnter}

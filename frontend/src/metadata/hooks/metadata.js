@@ -290,7 +290,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     });
   }, [repoID, idViewMap, addViewIntoMap]);
 
-  const moveView = useCallback(({ sourceViewId, sourceFolderId, targetViewId, targetFolderId }) => {
+  const moveView = useCallback(({ sourceViewId, sourceFolderId, targetViewId, targetFolderId, isAboveFolder }) => {
     if (
       (!sourceViewId && !sourceFolderId) // must drag view or folder
       || (!targetViewId && !targetFolderId) // must move above to view/folder or move view into folder
@@ -299,7 +299,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     ) {
       return;
     }
-    metadataAPI.moveView(repoID, sourceViewId, sourceFolderId, targetViewId, targetFolderId).then(res => {
+    metadataAPI.moveView(repoID, sourceViewId, sourceFolderId, targetViewId, targetFolderId, isAboveFolder).then(res => {
       let newNavigation = [...navigation];
 
       // remove folder/view from old position
@@ -336,7 +336,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
 
       // insert folder/view into new position
       let updatedTargetNavList = newNavigation;
-      if (targetFolderId && sourceViewId) {
+      if (targetFolderId && sourceViewId && !isAboveFolder) {
         // move view into folder
         let targetFolder = newNavigation.find((folder) => folder._id === targetFolderId);
         if (!Array.isArray(targetFolder.children)) {
@@ -347,15 +347,15 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
 
       let targetNavIndex = -1;
       if (targetViewId) {
-        // move folder/view above to view
+        // move folder/view above view
         targetNavIndex = updatedTargetNavList.findIndex((nav) => nav._id === targetViewId);
-      } else if (!sourceViewId && targetFolderId) {
-        // move folder above to folder
+      } else if (targetFolderId) {
+        // move view/folder above folder
         targetNavIndex = updatedTargetNavList.findIndex((nav) => nav._id === targetFolderId);
       }
 
       if (targetNavIndex > -1) {
-        updatedTargetNavList.splice(targetNavIndex, 0, movedNav); // move above to the target folder/view
+        updatedTargetNavList.splice(targetNavIndex, 0, movedNav); // move above target folder/view
       } else {
         updatedTargetNavList.push(movedNav); // move into navigation or folder
       }

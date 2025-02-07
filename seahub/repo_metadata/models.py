@@ -303,7 +303,7 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views.save()
         return json.loads(metadata_views.details)
 
-    def move_view(self, repo_id, source_view_id, source_folder_id, target_view_id, target_folder_id):
+    def move_view(self, repo_id, source_view_id, source_folder_id, target_view_id, target_folder_id, is_above_folder):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_details = json.loads(metadata_views.details)
         navigation = view_details.get('navigation', [])
@@ -337,7 +337,7 @@ class RepoMetadataViewsManager(models.Manager):
 
         # find drop target
         updated_target_nav_list = navigation
-        if target_folder_id and source_view_id:
+        if target_folder_id and source_view_id and not is_above_folder:
             target_folder = next((folder for folder in navigation if folder.get('_id') == target_folder_id), None)
             if target_folder:
                 updated_target_nav_list = target_folder.get('children', [])
@@ -350,10 +350,10 @@ class RepoMetadataViewsManager(models.Manager):
         # drop drag source to the target position
         target_nav = None
         if target_view_id:
-            # move folder/view above to view
+            # move folder/view above view
             target_nav = next((nav for nav in updated_target_nav_list if nav.get('_id') == target_view_id), None)
-        elif not source_view_id and target_folder_id:
-            # move folder above to folder
+        elif target_folder_id:
+            # move folder/view above folder
             target_nav = next((nav for nav in updated_target_nav_list if nav.get('_id') == target_folder_id), None)
 
         insert_index = -1
