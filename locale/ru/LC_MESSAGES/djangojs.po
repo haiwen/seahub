@@ -1702,17 +1702,17 @@ msgstr "Удалить библиотеку"
 #: frontend/src/components/dialog/department-detail-dialog.js:177
 #| msgid "Search groups"
 msgid "Select group members"
-msgstr ""
+msgstr "Выбрать участников группы"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:177
 #| msgid "Select a user"
 msgid "Select shared users"
-msgstr ""
+msgstr "Выбрать общих пользователей"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:73
 #| msgid "selected"
 msgid "Selected"
-msgstr ""
+msgstr "Выбрано"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:94
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:97
@@ -1724,22 +1724,22 @@ msgstr "Добавить"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:110
 #| msgid "Members"
 msgid "members"
-msgstr ""
+msgstr "участники"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 #| msgid "No libraries shared with this group"
 msgid "User is already in this group"
-msgstr ""
+msgstr "Пользователь уже состоит в этой группе"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:123
 msgid "It is already shared to user"
-msgstr ""
+msgstr "Он уже доступен пользователю"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:132
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:134
 #| msgid "Select all"
 msgid "Select All"
-msgstr ""
+msgstr "Выбрать все"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:159
 #: frontend/src/pages/org-admin/departments/department.js:188
@@ -1989,7 +1989,7 @@ msgstr "{site_name_placeholder} организует хранение ваших
 
 #: frontend/src/components/dialog/image-dialog.js:52
 msgid "The image could not be previewed."
-msgstr ""
+msgstr "Изображение не удалось просмотреть."
 
 #: frontend/src/components/dialog/image-dialog.js:53
 msgid "Previous (Left arrow key)"
@@ -5564,7 +5564,7 @@ msgstr "Скрыть свойства"
 
 #: frontend/src/metadata/components/data-process-setter/map-type-setter.js:9
 msgid "Satellite"
-msgstr ""
+msgstr "Спутник"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:46
 msgid "Preset hide properties"
@@ -6424,7 +6424,7 @@ msgstr "Сжатый"
 
 #: frontend/src/metadata/utils/column/index.js:289
 msgid "Diagram"
-msgstr ""
+msgstr "Диаграмма"
 
 #: frontend/src/metadata/utils/column/index.js:316
 msgid "In progress"

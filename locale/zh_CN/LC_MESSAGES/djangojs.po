@@ -5166,7 +5166,7 @@ msgid ""
 "No linked devices. You have not accessed your files with any client (desktop"
 " or mobile) yet. Configure clients on your devices to access your data more "
 "comfortably."
-msgstr "没有链接的设备。你尚未使用任何客户端（台式机或移动设备）访问你的文件。在你的设备上配置客户端，以便更舒适地访问你的数据。"
+msgstr "没有连接的设备。你尚未使用任何客户端（台式机或移动设备）访问你的文件。在你的设备上配置客户端，以便更舒适地访问你的数据。"
 
 #: frontend/src/components/user-settings/linked-devices.js:31
 #: frontend/src/pages/linked-devices/linked-devices.js:35
@@ -9331,7 +9331,7 @@ msgstr "导入用户"
 
 #: frontend/src/translate.js:9
 msgid "No connected devices"
-msgstr "没有链接的客户端"
+msgstr "没有连接的客户端"
 
 #: frontend/src/translate.js:10
 msgid "No sync errors"

@@ -15,7 +15,7 @@
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # Marcus Müller <info@yoursecurecloud.de>, 2020
 # 3Stadt <matthieu@3-stadt.de>, 2017
-# Moritz Schlarb <moschlar@metalabs.de>, 2017
+# Moritz Schlarb <moschlar@metalabs.de>, 2017,2025
 # pieceofsoul <sascha@pieceofsoul.de>, 2015
 # Ralf Dyllick <rdb@datamate.org>, 2021-2024
 # pieceofsoul <sascha@pieceofsoul.de>, 2015
@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-16 10:07+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2022,2024\n"
+"Last-Translator: Moritz Schlarb <moschlar@metalabs.de>, 2017,2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -873,7 +873,7 @@ msgstr ""
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:128
 msgid "New page"
-msgstr ""
+msgstr "Neue Seite"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
@@ -2325,7 +2325,7 @@ msgstr "Gruppen suchen"
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:189
 #: frontend/src/metadata/components/popover/sort-popover/index.js:213
 msgid "No results"
-msgstr ""
+msgstr "Keine Ergebnisse"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:282
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:62
@@ -5503,7 +5503,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:459
 #: frontend/src/metadata/components/popover/options-popover/index.js:203
 msgid "Search option"
-msgstr ""
+msgstr "Option suchen"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:266
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:261
@@ -5513,7 +5513,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
-msgstr ""
+msgstr "1 Filter"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "Filters"
@@ -5521,7 +5521,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:9
 msgid "Year"
@@ -5596,15 +5596,15 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
-msgstr ""
+msgstr "1 Sortierung"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:21
 msgid "sorts"
-msgstr ""
+msgstr "Sortierungen"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:22
 msgid "Sort"
-msgstr ""
+msgstr "Sortieren"
 
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:12
 msgid "Are you sure to delete "
@@ -5756,7 +5756,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:53
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:89
 msgid "Max"
@@ -5839,20 +5839,20 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:68
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:81
 msgid "And"
-msgstr ""
+msgstr "Und"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:72
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:86
 msgid "Or"
-msgstr ""
+msgstr "Oder"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/collaborator-filter/index.js:86
 msgid "Search collaborator"
-msgstr ""
+msgstr "Mitarbeiter suchen"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:345
 msgid "Select option(s)"
-msgstr ""
+msgstr "Option(en) auswählen"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:440
 msgid "deleted option"
@@ -5860,7 +5860,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:457
 msgid "Select an option"
-msgstr ""
+msgstr "Option wählen"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:475
 msgid "Select collaborators"
@@ -5874,7 +5874,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:552
 msgid "Invalid filter"
-msgstr ""
+msgstr "Ungültiger Filter"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:594
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:188
@@ -5918,23 +5918,23 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:155
 msgid "No filters"
-msgstr ""
+msgstr "Keine Filter"
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:171
 #| msgid "1 filter"
 msgid "Add filter"
-msgstr ""
+msgstr "Filter hinzufügen"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:93
 #: frontend/src/metadata/components/popover/sort-popover/index.js:18
 #: frontend/src/metadata/components/popover/sort-popover/index.js:189
 msgid "Up"
-msgstr ""
+msgstr "Aufsteigend"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:96
 #: frontend/src/metadata/components/popover/sort-popover/index.js:21
 msgid "Down"
-msgstr ""
+msgstr "Absteigend"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:107
 msgid "By day"
@@ -5979,12 +5979,12 @@ msgstr ""
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:111
 #: frontend/src/metadata/views/kanban/settings/index.js:155
 msgid "Hide all"
-msgstr ""
+msgstr "Alle ausblenden"
 
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:112
 #: frontend/src/metadata/views/kanban/settings/index.js:156
 msgid "Show all"
-msgstr ""
+msgstr "Alle anzeigen"
 
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:38
 #: frontend/src/metadata/components/popover/options-popover/index.js:55
@@ -6041,12 +6041,12 @@ msgstr ""
 #: frontend/src/metadata/components/popover/sort-popover/index.js:250
 #| msgid "sorts"
 msgid "No sorts"
-msgstr ""
+msgstr "Keine Sortierungen"
 
 #: frontend/src/metadata/components/popover/sort-popover/index.js:257
 #| msgid "Add User"
 msgid "Add sort"
-msgstr ""
+msgstr "Sortierung hinzufügen"
 
 #: frontend/src/metadata/components/view-details/index.js:31
 msgid "There is no information to display."
@@ -6159,27 +6159,27 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:32
 msgid "contains"
-msgstr ""
+msgstr "enthält"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:33
 msgid "does not contain"
-msgstr ""
+msgstr "enthält nicht"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:34
 msgid "is"
-msgstr ""
+msgstr "ist gleich"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:35
 msgid "is not"
-msgstr ""
+msgstr "ist ungleich"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:42
 msgid "is empty"
-msgstr ""
+msgstr "ist leer"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:43
 msgid "is not empty"
-msgstr ""
+msgstr "ist nicht leer"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:44
 msgid "is within..."
@@ -6223,7 +6223,7 @@ msgstr "ist die aktuelle Benutzer-ID"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:54
 msgid "include the current user"
-msgstr ""
+msgstr "ist der aktuelle Benutzer"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:55
 msgid "is any of..."
@@ -6361,7 +6361,7 @@ msgstr "Fehler beim Umbenennen von {name}"
 
 #: frontend/src/metadata/utils/column/index.js:168
 msgid "Created time"
-msgstr ""
+msgstr "Erstellt"
 
 #: frontend/src/metadata/utils/column/index.js:181
 msgid "Parent folder"
@@ -7742,7 +7742,7 @@ msgstr "%s wurde hinzugefügt."
 #: frontend/src/pages/org-admin/org-users-users.js:222
 #, javascript-format
 msgid "successfully sent email to %s."
-msgstr "Eine E-Mail wurde an  %s versendet."
+msgstr "Eine E-Mail wurde an %s versendet."
 
 #: frontend/src/pages/org-admin/org-users-users.js:270
 msgid "Import users"
@@ -8910,7 +8910,7 @@ msgid ""
 "The level(1-4) of a share/upload link password's strength. For example, '3' "
 "means password must have at least 3 of the following: num, upper letter, "
 "lower letter and other symbols"
-msgstr "Die Verwendung unterschiedlicher Zeichentypen wie Zahlen, Großbuchstaben, Kleinbuchstaben und Sonderzeichen macht die  Stärke eines Passworts aus. Die Angabe für die Stärke (1-4) legt fest, wie viele dieser Zeichentypen verwendet werden müssen. (Beispiel: 4 bedeutet, dass Passwörter alle vier Zeichentypen enthalten müssen.)"
+msgstr "Die Verwendung unterschiedlicher Zeichentypen wie Zahlen, Großbuchstaben, Kleinbuchstaben und Sonderzeichen macht die Stärke eines Passworts aus. Die Angabe für die Stärke (1-4) legt fest, wie viele dieser Zeichentypen verwendet werden müssen. (Beispiel: 4 bedeutet, dass Passwörter alle vier Zeichentypen enthalten müssen.)"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:292
 #| msgid "Allow user to clean library trash"
