@@ -287,14 +287,7 @@ class GroupItem extends React.Component {
   };
 
   renderGroupHref = (group) => {
-    let groupInfoHref;
-    if (group.creatorName == 'system admin') {
-      groupInfoHref = siteRoot + 'org/departmentadmin/groups/' + group.id + '/';
-    } else {
-      groupInfoHref = siteRoot + 'org/groupadmin/' + group.id + '/';
-    }
-
-    return groupInfoHref;
+    return siteRoot + 'org/groupadmin/' + group.id + '/';
   };
 
   renderGroupCreator = (group) => {

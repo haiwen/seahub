@@ -220,9 +220,7 @@ class Item extends Component {
     let groupName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', groupName);
 
-    const groupUrl = item.parent_group_id == 0 ?
-      `${siteRoot}sys/groups/${item.id}/libraries/` :
-      `${siteRoot}sys/departments/${item.id}/`;
+    const groupUrl = `${siteRoot}sys/groups/${item.id}/libraries/`;
 
     let operations = [];
     if (isPro) {
