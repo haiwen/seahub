@@ -329,6 +329,40 @@ export default function apply(data, operation) {
       data.columns = updatedColumns;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS: {
+      const { file_id, tags_ids } = operation;
+      const { rows } = data;
+      const updatedRows = [...rows];
+
+      if (file_id) {
+        // remove file link from related tags
+        updatedRows.forEach((tag, index) => {
+          const tagFilesLinks = getTagFilesLinks(tag);
+          if (Array.isArray(tagFilesLinks) && tagFilesLinks.length > 0 && tagFilesLinks.findIndex((link) => link.row_id === file_id) > -1) {
+            let updatedTag = { ...tag };
+            updatedTag = removeRowLinks(updatedTag, PRIVATE_COLUMN_KEY.TAG_FILE_LINKS, [file_id]);
+            updatedRows[index] = updatedTag;
+            data.id_row_map[tag._id] = updatedTag;
+          }
+        });
+      }
+
+      if (Array.isArray(tags_ids) && tags_ids.length > 0) {
+        // add new file link to related tags
+        const idUpdatedTagMap = tags_ids.reduce((currIdUpdatedTagMap, tagId) => ({ ...currIdUpdatedTagMap, [tagId]: true }), {});
+        updatedRows.forEach((tag, index) => {
+          if (idUpdatedTagMap[tag._id]) {
+            let updatedTag = { ...tag };
+            updatedTag = addRowLinks(updatedTag, PRIVATE_COLUMN_KEY.TAG_FILE_LINKS, [file_id]);
+            updatedRows[index] = updatedTag;
+            data.id_row_map[tag._id] = updatedTag;
+          }
+        });
+      }
+
+      data.rows = updatedRows;
+      return data;
+    }
     default: {
       return data;
     }

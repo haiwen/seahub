@@ -10,6 +10,7 @@ export const OPERATION_TYPE = {
   MERGE_TAGS: 'merge_tags',
 
   MODIFY_LOCAL_RECORDS: 'modify_local_records',
+  MODIFY_LOCAL_FILE_TAGS: 'modify_local_file_tags',
 
   MODIFY_COLUMN_WIDTH: 'modify_column_width',
 };
@@ -25,6 +26,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.DELETE_TAG_LINKS]: ['repo_id', 'column_key', 'row_id', 'other_rows_ids'],
   [OPERATION_TYPE.MERGE_TAGS]: ['repo_id', 'target_tag_id', 'merged_tags_ids'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
+  [OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS]: ['file_id', 'tags_ids'],
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
 };
 
@@ -36,6 +38,7 @@ export const UNDO_OPERATION_TYPE = [
 // only apply operation on the local
 export const LOCAL_APPLY_OPERATION_TYPE = [
   OPERATION_TYPE.MODIFY_LOCAL_RECORDS,
+  OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS,
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
 ];
 

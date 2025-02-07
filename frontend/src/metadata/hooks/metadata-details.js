@@ -9,6 +9,7 @@ import { normalizeFields } from '../components/metadata-details/utils';
 import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../constants';
 import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord, getServerOptions } from '../utils/cell';
 import tagsAPI from '../../tag/api';
+import { useTags } from '../../tag/hooks';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../utils/object-utils';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
@@ -17,6 +18,7 @@ const MetadataDetailsContext = React.createContext(null);
 
 export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, direntDetail, direntType, children }) => {
   const { enableMetadata, detailsSettings, modifyDetailsSettings } = useMetadataStatus();
+  const { modifyLocalFileTags } = useTags();
 
   const [isLoading, setLoading] = useState(true);
   const [record, setRecord] = useState(null);
@@ -123,6 +125,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const newValue = tags ? tags.map(id => ({ row_id: id, display_value: id })) : [];
       const update = { [PRIVATE_COLUMN_KEY.TAGS]: newValue };
       setRecord({ ...record, ...update });
+      modifyLocalFileTags(record_id, tags);
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record_id }, update);
       }
@@ -130,7 +133,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, [repoID, record]);
+  }, [repoID, record, modifyLocalFileTags]);
 
   const saveColumns = useCallback((columns) => {
     modifyDetailsSettings({ columns: columns.map(c => ({ key: c.key, shown: c.shown })) });
