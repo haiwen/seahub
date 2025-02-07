@@ -6,7 +6,7 @@ import RateEditor from '../../../../../../components/cell-editors/rate-editor';
 import { canEditCell } from '../../../../../../utils/column';
 import { CellType } from '../../../../../../constants';
 
-const Formatter = ({ isCellSelected, field, value, onChange, record }) => {
+const Formatter = ({ isCellSelected, field, value, onChange, record, ...params }) => {
   const { type } = field;
   const cellEditAble = canEditCell(field, record, true);
   if (type === CellType.CHECKBOX && cellEditAble) {
@@ -16,7 +16,7 @@ const Formatter = ({ isCellSelected, field, value, onChange, record }) => {
     return (<RateEditor isCellSelected={isCellSelected} value={value} field={field} onChange={onChange} />);
   }
 
-  return (<CellFormatter readonly={true} isCellSelected={isCellSelected} value={value} field={field} record={record} />);
+  return (<CellFormatter { ...params } readonly={true} value={value} field={field} record={record} />);
 };
 
 Formatter.propTypes = {

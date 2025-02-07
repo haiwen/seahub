@@ -14,7 +14,7 @@ const SPECIAL_FILE_ICON = [
   'word.png',
 ];
 
-const Formatter = ({ value, column, record }) => {
+const Formatter = ({ value, column, record, ...params }) => {
   let className = '';
 
   if (column.type === CellType.FILE_NAME && value) {
@@ -24,7 +24,7 @@ const Formatter = ({ value, column, record }) => {
     }
   }
 
-  return (<CellFormatter readonly={true} className={className} value={value} field={column} record={record} />);
+  return (<CellFormatter { ...params } readonly={true} className={className} value={value} field={column} record={record} />);
 };
 
 Formatter.propTypes = {

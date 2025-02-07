@@ -2,11 +2,13 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
+import CellOperationBtn from './operation-btn';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../utils/object-utils';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
-import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
 import { checkIsDir } from '../../../../../../utils/row';
+import { openFile } from '../../../../../../utils/file';
 
 import './index.css';
 
@@ -147,6 +149,16 @@ const Cell = React.memo(({
     cellMetaData.modifyRecord({ rowId, cellKey: columnKey, updates, originalUpdates: updated, oldRowData, originalOldRowData });
   }, [cellMetaData, record, column, getOldRowData]);
 
+  const onFileNameClick = useCallback((event) => {
+    event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
+    if (!isCellSelected) return;
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    openFile(repoID, record, () => {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
+  }, [isCellSelected, record]);
+
   const cellValue = getCellValueByColumn(record, column);
   const cellEvents = needBindEvents && getEvents();
   const containerProps = {
@@ -157,7 +169,8 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
-      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} />
+      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} onFileNameClick={onFileNameClick} />
+      {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
     </div>
   );
 }, (props, nextProps) => {
