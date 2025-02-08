@@ -13,7 +13,8 @@ const {
   xmindImageSrc // for xmind file
 } = window.app.pageOptions;
 
-let previousImageUrl; let nextImageUrl;
+let previousImageUrl;
+let nextImageUrl;
 if (previousImage) {
   previousImageUrl = `${siteRoot}lib/${repoID}/file${Utils.encodePath(previousImage)}`;
 }
@@ -55,13 +56,24 @@ class FileContent extends React.Component {
     // request thumbnails for some files
     // only for 'file view'. not for 'history/trash file view'
     let thumbnailURL = '';
-    const fileExtList = ['tif', 'tiff', 'psd'];
+    const fileExtList = ['tif', 'tiff', 'psd', 'heic'];
     if (!repoEncrypted && fileExtList.includes(fileExt)) {
       thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
     }
 
     // for xmind file
     const xmindSrc = xmindImageSrc ? `${siteRoot}${xmindImageSrc}` : '';
+
+    const { scale, angle } = this.props;
+    let style = {};
+    if (scale && angle != undefined) {
+      style = { transform: `scale(${scale}) rotate(${angle}deg)` };
+    } else if (scale) {
+      style = { transform: `scale(${scale})` };
+    } else if (angle != undefined) {
+      style = { transform: `rotate(${angle}deg)` };
+    }
+
 
     return (
       <div className="file-view-content flex-1 image-file-view">
@@ -71,14 +83,16 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
         )}
-        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} />
+        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ style } />
       </div>
     );
   }
 }
 
 FileContent.propTypes = {
-  tip: PropTypes.string.isRequired,
+  tip: PropTypes.object.isRequired,
+  scale: PropTypes.number,
+  angle: PropTypes.number
 };
 
 export default FileContent;

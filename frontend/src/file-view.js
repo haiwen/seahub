@@ -7,12 +7,44 @@ import SVG from './components/file-content-view/svg';
 import PDF from './components/file-content-view/pdf';
 import Video from './components/file-content-view/video';
 import Audio from './components/file-content-view/audio';
+import { Utils } from './utils/utils';
+import { gettext } from './utils/constants';
+import ImageAPI from './utils/image-api';
+import toaster from './components/toast';
 
 const {
+  repoID, filePath,
   fileType, err
 } = window.app.pageOptions;
 
 class InnerFileView extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      imageScale: 1,
+      imageAngle: 0
+    };
+  }
+
+  setImageScale = (scale) => {
+    this.setState({
+      imageScale: scale
+    });
+  };
+
+  rotateImage = () => {
+    this.setState({
+      imageAngle: (this.state.imageAngle - 90) % 360 // counter-clockwise
+    }, () => {
+      // const angleClockwise = this.state.imageAngle + 360; // keep this line for the moment
+      const angleClockwise = 270; // the API only accept clockwise angles
+      ImageAPI.rotateImage(repoID, filePath, 360 - angleClockwise).then((res) => {
+        toaster.success(gettext('Image saved'), { 'id': 'image-saved-tip' });
+      }).catch(error => {
+        toaster.danger(Utils.getErrorMsg(error));
+      });
+    });
+  };
 
   render() {
     if (err) {
@@ -21,10 +53,11 @@ class InnerFileView extends React.Component {
       );
     }
 
+    const { imageScale, imageAngle } = this.state;
     let content;
     switch (fileType) {
       case 'Image':
-        content = <Image tip={<FileViewTip />} />;
+        content = <Image tip={<FileViewTip />} scale={imageScale} angle={imageAngle} />;
         break;
       case 'XMind':
         content = <Image tip={<FileViewTip />} />;
@@ -46,7 +79,11 @@ class InnerFileView extends React.Component {
     }
 
     return (
-      <FileView content={content} />
+      <FileView
+        content={content}
+        setImageScale={this.setImageScale}
+        rotateImage={this.rotateImage}
+      />
     );
   }
 }
