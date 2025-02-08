@@ -308,7 +308,6 @@
 .sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell {
   padding-top: 4px;
   padding-bottom: 4px;
-  cursor: pointer;
 }
 
 .sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-ui.cell-formatter-container {
@@ -317,4 +316,8 @@
 
 .sf-metadata-result-table-file-name-cell .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon {
   transform: translateY(-1px);
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-file-name {
+  cursor: pointer;
 }
