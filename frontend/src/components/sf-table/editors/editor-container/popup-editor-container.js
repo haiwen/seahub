@@ -55,7 +55,7 @@ class PopupEditorContainer extends React.Component {
   };
 
   createEditor = () => {
-    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, readOnly } = this.props;
+    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, readOnly, operation } = this.props;
     const value = this.getInitialValue();
 
     let editorProps = {
@@ -78,6 +78,7 @@ class PopupEditorContainer extends React.Component {
       column,
       readOnly,
       onPressTab,
+      operation,
     };
 
     return (
