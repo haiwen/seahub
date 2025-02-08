@@ -24,8 +24,7 @@ from seahub.utils import (get_site_name, get_user_activities_by_timestamp,
 from seahub.utils.timeutils import utc_to_local
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
-
+logger = logging.getLogger('file_updates_sender')
 
 # Utility Functions
 def td(con):
@@ -65,10 +64,11 @@ class Command(BaseCommand):
     label = "notifications_send_file_updates"
 
     def handle(self, *args, **options):
-        logger.debug('Start sending file updates emails...')
+        logger.info('Start sending file updates emails...')
+
         self.stdout.write('[%s] Start sending file updates emails...' % str(datetime.now()))
         self.do_action()
-        logger.debug('Finish sending file updates emails.\n')
+        logger.info('Finish sending file updates emails.\n')
         self.stdout.write('[%s] Finish sending file updates emails.\n\n' % str(datetime.now()))
 
     def get_avatar(self, username):
@@ -192,7 +192,7 @@ class Command(BaseCommand):
                 emails.append(ele.email)
             except Exception as e:
                 logger.error(e)
-                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
+                self.stderr.write('[%s] [INFO]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 continue
 
         user_last_emailed_time_dict = {}
@@ -204,7 +204,7 @@ class Command(BaseCommand):
                     ele.option_val, "%Y-%m-%d %H:%M:%S")
             except Exception as e:
                 logger.error(e)
-                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
+                self.stderr.write('[%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 continue
 
         for (username, interval_val) in user_file_updates_email_intervals:
@@ -214,10 +214,11 @@ class Command(BaseCommand):
             # get and active user language
             user_language = self.get_user_language(username)
             translation.activate(user_language)
-            logger.debug('Set language code to %s for user: %s' % (
+            logger.info('Set language code to %s for user: %s' % (
                 user_language, username))
-            self.stdout.write('[%s] Set language code to %s for user: %s' % (
-                str(datetime.now()), user_language, username))
+
+            self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
+                str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, username))
 
             # get last_emailed_time if any, defaults to today 00:00:00
             last_emailed_time = user_last_emailed_time_dict.get(username, None)
@@ -255,13 +256,14 @@ class Command(BaseCommand):
                     ele.op_user_link = a_tag(email2nickname(ele.op_user),
                                              user_info_url(ele.op_user))
                     ele.operation, ele.op_details = self.format_file_operation(ele)
+                    raise
             except Exception as e:
                 logger.error('Failed to format mail content for user: %s' %
                              username)
                 logger.error(e, exc_info=True)
-                self.stderr.write('[%s] Failed to format mail content for user: %s' %
-                                  (str(datetime.now()), username))
-                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
+                self.stderr.write('[%s] [ERROR] Failed to format mail content for user: %s' %
+                                    (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), username))
+                self.stderr.write('[%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 continue
 
             nickname = email2nickname(username)
@@ -279,13 +281,13 @@ class Command(BaseCommand):
                                 None, [contact_email])
                 # set new last_emailed_time
                 UserOptions.objects.set_file_updates_last_emailed_time(username, now)
-                self.stdout.write('[%s] Successful to send email to %s' %
-                                  (str(datetime.now()), contact_email))
+                self.stdout.write('[%s] [INFO] Successful to send email to %s' %
+                                    (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' %
                              (contact_email, e))
-                self.stderr.write('[%s] Failed to send email to %s, error '
-                                  'detail: %s' % (str(datetime.now()), contact_email, e))
+                self.stderr.write('[%s] [ERROR] Failed to send email to %s, error '
+                                    'detail: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
             finally:
                 # reset lang
                 translation.activate(cur_language)
