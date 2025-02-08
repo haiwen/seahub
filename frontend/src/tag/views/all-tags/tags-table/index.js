@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
@@ -6,11 +6,13 @@ import MergeTagsSelector from '../../../components/merge-tags-selector';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
-import { PRIVATE_COLUMN_KEY } from '../../../constants';
+import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
 import EventBus from '../../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
+import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
+import { isNumber } from '../../../../utils/number';
 
 import './index.css';
 
@@ -24,10 +26,6 @@ const DEFAULT_TABLE_DATA = {
 
 const KEY_STORE_SCROLL = 'table_scroll';
 
-const VISIBLE_COLUMNS_KEYS = [
-  PRIVATE_COLUMN_KEY.TAG_NAME, PRIVATE_COLUMN_KEY.PARENT_LINKS, PRIVATE_COLUMN_KEY.SUB_LINKS, PRIVATE_COLUMN_KEY.TAG_FILE_LINKS,
-];
-
 const TagsTable = ({
   context,
   isLoadingMoreRecords,
@@ -40,6 +38,7 @@ const TagsTable = ({
 
   const [isShowNewSubTagDialog, setIsShowNewSubTagDialog] = useState(false);
   const [isShowMergeTagsSelector, setIsShowMergeTagsSelector] = useState(false);
+  const [searchResult, setSearchResult] = useState(null);
 
   const parentTagIdRef = useRef(null);
   const mergeTagsSelectorProps = useRef({});
@@ -108,7 +107,7 @@ const TagsTable = ({
     deleteTags(tagsIds);
 
     const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+    eventBus.dispatch(TABLE_EVENT_BUS_TYPE.SELECT_NONE);
   }, [deleteTags]);
 
   const onNewSubTag = useCallback((parentTagId) => {
@@ -179,6 +178,44 @@ const TagsTable = ({
     return false;
   }, []);
 
+  const scrollToCurrentSelectedCell = useCallback((searchResult, currentSelectIndex) => {
+    if (!window.sfTableBody) {
+      return;
+    }
+    const cell = searchResult.matchedCells[currentSelectIndex];
+    if (!cell) {
+      return;
+    }
+    const { column: cellColumn, rowIndex: focusRowIndex } = cell;
+    const { rowVisibleStart, rowVisibleEnd, columnVisibleStart, columnVisibleEnd } = window.sfTableBody;
+    if (focusRowIndex < rowVisibleStart) {
+      window.sfTableBody.jumpToRow(focusRowIndex - 1);
+    } else if (focusRowIndex >= rowVisibleEnd) {
+      window.sfTableBody.jumpToRow(focusRowIndex);
+    }
+
+    const focusColumnIndex = visibleColumns.findIndex((column) => column.key === cellColumn);
+    if (columnVisibleStart >= focusColumnIndex || focusColumnIndex > columnVisibleEnd) {
+      window.sfTableBody.scrollToColumn(focusColumnIndex);
+    }
+  }, [visibleColumns]);
+
+  const updateSearchResult = useCallback((searchResult) => {
+    setSearchResult(searchResult);
+    const { currentSelectIndex } = searchResult || {};
+    if (searchResult && isNumber(currentSelectIndex)) {
+      scrollToCurrentSelectedCell(searchResult, currentSelectIndex);
+    }
+  }, [scrollToCurrentSelectedCell]);
+
+  useEffect(() => {
+    const eventBus = EventBus.getInstance();
+    const unsubscribeUpdateSearchResult = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, updateSearchResult);
+    return () => {
+      unsubscribeUpdateSearchResult();
+    };
+  }, [updateSearchResult]);
+
   return (
     <>
       <SFTable
@@ -196,6 +233,7 @@ const TagsTable = ({
         isLoadingMoreRecords={isLoadingMoreRecords}
         hasMoreRecords={table.hasMore}
         showGridFooter={false}
+        searchResult={searchResult}
         createContextMenuOptions={createTagContextMenuOptions}
         storeGridScroll={storeGridScroll}
         storeFoldedGroups={storeFoldedGroups}

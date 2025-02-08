@@ -13,6 +13,7 @@ import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByI
 import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';
 import { TreeMetrics } from '../../utils/tree-metrics';
+import { checkHasSearchResult } from '../../utils/search';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -36,6 +37,7 @@ class TreeBody extends Component {
       startRenderIndex: 0,
       endRenderIndex: this.getInitEndIndex(nodes),
       keyNodeFoldedMap: validKeyTreeNodeFoldedMap,
+      keyNodeFoldedMapForSearch: {},
       selectedPosition: null,
       isScrollingRightScrollbar: false,
     };
@@ -58,12 +60,19 @@ class TreeBody extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { recordsCount, recordIds, treeNodesCount, recordsTree } = nextProps;
+    const { recordsCount, recordIds, treeNodesCount, recordsTree, searchResult } = nextProps;
+    const searchResultChanged = searchResult !== this.props.searchResult;
     if (
       recordsCount !== this.props.recordsCount || recordIds !== this.props.recordIds ||
-      treeNodesCount !== this.props.treeNodesCount || recordsTree !== this.props.recordsTree
+      treeNodesCount !== this.props.treeNodesCount || recordsTree !== this.props.recordsTree ||
+      searchResultChanged
     ) {
-      this.recalculateRenderIndex(recordsTree);
+      const hasSearchResult = checkHasSearchResult(searchResult);
+      const keyNodeFoldedMap = hasSearchResult ? {} : this.state.keyNodeFoldedMap;
+      this.recalculateRenderIndex(recordsTree, keyNodeFoldedMap);
+      if (searchResultChanged) {
+        this.setState({ keyNodeFoldedMapForSearch: {} });
+      }
     }
   }
 
@@ -119,8 +128,8 @@ class TreeBody extends Component {
     return Math.min(Math.ceil((contentScrollTop + height) / ROW_HEIGHT) + RENDER_MORE_NUMBER, nodes.length);
   };
 
-  recalculateRenderIndex = (recordsTree) => {
-    const { startRenderIndex, endRenderIndex, keyNodeFoldedMap } = this.state;
+  recalculateRenderIndex = (recordsTree, keyNodeFoldedMap) => {
+    const { startRenderIndex, endRenderIndex } = this.state;
     const nodes = this.getShownNodes(recordsTree, keyNodeFoldedMap);
     const contentScrollTop = this.resultContentRef.scrollTop;
     const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
@@ -339,6 +348,14 @@ class TreeBody extends Component {
     this.columnVisibleEnd = columnVisibleEnd;
   };
 
+  jumpToRow = (scrollToRowIndex) => {
+    const { treeNodesCount } = this.props;
+    const rowHeight = this.getRowHeight();
+    const height = this.resultContentRef.offsetHeight;
+    const scrollTop = Math.min(scrollToRowIndex * rowHeight, treeNodesCount * rowHeight - height);
+    this.setScrollTop(scrollTop);
+  };
+
   scrollToColumn = (idx) => {
     const { columns, getTableContentRect } = this.props;
     const { width: tableContentWidth } = getTableContentRect();
@@ -496,13 +513,25 @@ class TreeBody extends Component {
   };
 
   toggleExpandNode = (nodeKey) => {
-    const { recordsTree } = this.props;
-    const { keyNodeFoldedMap, endRenderIndex } = this.state;
+    const { recordsTree, searchResult } = this.props;
+    const { keyNodeFoldedMap, keyNodeFoldedMapForSearch, endRenderIndex } = this.state;
+    const hasSearchResult = checkHasSearchResult(searchResult);
     let updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
-    if (updatedKeyNodeFoldedMap[nodeKey]) {
-      delete updatedKeyNodeFoldedMap[nodeKey];
+    let updatedKeyNodeFoldedMapForSearch = { ...keyNodeFoldedMapForSearch };
+    if (hasSearchResult) {
+      if (updatedKeyNodeFoldedMapForSearch[nodeKey]) {
+        delete updatedKeyNodeFoldedMapForSearch[nodeKey];
+        delete updatedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedKeyNodeFoldedMapForSearch[nodeKey] = true;
+        updatedKeyNodeFoldedMap[nodeKey] = true;
+      }
     } else {
-      updatedKeyNodeFoldedMap[nodeKey] = true;
+      if (updatedKeyNodeFoldedMap[nodeKey]) {
+        delete updatedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedKeyNodeFoldedMap[nodeKey] = true;
+      }
     }
 
     if (this.props.storeFoldedTreeNodes) {
@@ -510,8 +539,15 @@ class TreeBody extends Component {
       this.props.storeFoldedTreeNodes(LOCAL_KEY_TREE_NODE_FOLDED, updatedKeyNodeFoldedMap);
     }
 
-    const updatedNodes = this.getShownNodes(recordsTree, updatedKeyNodeFoldedMap);
-    let updates = { nodes: updatedNodes, keyNodeFoldedMap: updatedKeyNodeFoldedMap };
+    const updatedNodes = this.getShownNodes(recordsTree, hasSearchResult ? updatedKeyNodeFoldedMapForSearch : updatedKeyNodeFoldedMap);
+    let updates = {
+      nodes: updatedNodes,
+      keyNodeFoldedMap: updatedKeyNodeFoldedMap,
+    };
+    if (hasSearchResult) {
+      updates.keyNodeFoldedMapForSearch = updatedKeyNodeFoldedMapForSearch;
+    }
+
     const end = this.recalculateRenderEndIndex(updatedNodes);
     if (end !== endRenderIndex) {
       updates.endRenderIndex = end;
@@ -525,8 +561,8 @@ class TreeBody extends Component {
   };
 
   renderRecords = () => {
-    const { treeMetrics, showCellColoring, columnColors } = this.props;
-    const { nodes, keyNodeFoldedMap, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
+    const { treeMetrics, showCellColoring, columnColors, searchResult } = this.props;
+    const { nodes, keyNodeFoldedMap, keyNodeFoldedMapForSearch, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     this.initFrozenNodesRef();
     const visibleNodes = this.getVisibleNodesInRange();
     const nodesCount = nodes.length;
@@ -534,6 +570,7 @@ class TreeBody extends Component {
     const scrollLeft = this.props.getScrollLeft();
     const rowHeight = this.getRowHeight();
     const cellMetaData = this.getCellMetaData();
+    const hasSearchResult = checkHasSearchResult(searchResult);
     let shownNodes = visibleNodes.map((node, index) => {
       const { _id: recordId, node_key, node_depth, node_index } = node;
       const hasChildNodes = checkTreeNodeHasChildNodes(node);
@@ -543,7 +580,7 @@ class TreeBody extends Component {
       const isLastRecord = lastRecordIndex === recordIndex;
       const hasSelectedCell = this.props.hasSelectedCell({ recordIndex }, selectedPosition);
       const columnColor = showCellColoring ? columnColors[recordId] : {};
-      const isFoldedNode = !!keyNodeFoldedMap[node_key];
+      const isFoldedNode = hasSearchResult ? !!keyNodeFoldedMapForSearch[node_key] : !!keyNodeFoldedMap[node_key];
       return (
         <Record
           showRecordAsTree
@@ -565,7 +602,7 @@ class TreeBody extends Component {
           height={rowHeight}
           cellMetaData={cellMetaData}
           columnColor={columnColor}
-          searchResult={this.props.searchResult}
+          searchResult={searchResult}
           treeNodeIndex={node_index}
           treeNodeKey={node_key}
           treeNodeDepth={node_depth}
