@@ -6,15 +6,7 @@ import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { TreeMetrics } from '../../../../components/sf-table/utils/tree-metrics';
 import { RecordMetrics } from '../../../../components/sf-table/utils/record-metrics';
-
-const OPERATION = {
-  EDIT_TAG: 'edit_tag',
-  SET_SUB_TAGS: 'set_sub_tags',
-  DELETE_TAG: 'delete_tag',
-  DELETE_TAGS: 'delete_tags',
-  NEW_SUB_TAG: 'new_sub_tag',
-  MERGE_TAGS: 'merge_tags',
-};
+import { OPERATION } from '../../../../components/sf-table/constants/context-menu';
 
 export const createContextMenuOptions = ({
   context,
@@ -60,6 +52,10 @@ export const createContextMenuOptions = ({
       }
       case OPERATION.MERGE_TAGS: {
         onMergeTags(option.tagsIds, menuPosition);
+        break;
+      }
+      case OPERATION.ADD_CHILD_TAGS: {
+        eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, null, option.value);
         break;
       }
       default: {
@@ -160,13 +156,18 @@ export const createContextMenuOptions = ({
         tagsIds: [tag._id],
       });
     }
-
     if (isNameColumn && canAddTag) {
-      options.push({
-        label: gettext('New child tag'),
-        value: OPERATION.NEW_SUB_TAG,
-        parentTagId: tag._id,
-      });
+      options.push(
+        {
+          label: gettext('New child tag'),
+          value: OPERATION.NEW_SUB_TAG,
+          parentTagId: tag._id,
+        },
+        {
+          label: gettext('Add child tags'),
+          value: OPERATION.ADD_CHILD_TAGS,
+        }
+      );
     }
     return options;
   };

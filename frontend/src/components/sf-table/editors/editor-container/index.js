@@ -5,12 +5,13 @@ import PopupEditorContainer from './popup-editor-container';
 import PreviewEditorContainer from './preview-editor-container';
 import { checkIsColumnSupportPreview, checkIsPopupColumnEditor } from '../../utils/column';
 import { EDITOR_TYPE } from '../../constants/grid';
+import { POPUP_EDITOR_OPERATION_KEYS } from '../../constants/context-menu';
 
 const EditorContainer = (props) => {
-  const { column, openEditorMode } = props;
+  const { column, openEditorMode, operation } = props;
   if (!column || !isValidElement(column.editor)) return null;
 
-  if (checkIsPopupColumnEditor(column)) {
+  if (checkIsPopupColumnEditor(column) || POPUP_EDITOR_OPERATION_KEYS.includes(operation)) {
     return <PopupEditorContainer { ...props } />;
   }
   if (checkIsColumnSupportPreview(column) && openEditorMode === EDITOR_TYPE.PREVIEWER) {
