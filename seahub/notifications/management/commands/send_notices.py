@@ -31,9 +31,7 @@ from seahub.notifications.utils import gen_sdoc_smart_link
 from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
-
-SEAFILE_LOG_TO_STDOUT = os.getenv('SEAFILE_LOG_TO_STDOUT', 'false') == 'true'
+logger = logging.getLogger('seahub_email_sender')
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'
@@ -350,12 +348,6 @@ class Command(BaseCommand):
                 user_active_dict[to_user] = to_user_obj.is_active
 
         # save current language
-        if SEAFILE_LOG_TO_STDOUT:
-            self.stdout.write('[seahub] [%s] [INFO] Set language code to %s for user: %s' % (
-                str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), 'zh', 'to_user@auth.local'))
-        else:
-            self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
-                str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), 'zh', 'to_user@auth.local'))
         cur_language = translation.get_language()
         for (to_user, interval_val, notices, sdoc_notices, sdoc_queryset) in user_interval_notices:
 
@@ -384,14 +376,10 @@ class Command(BaseCommand):
             # get and active user language
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
-            logger.debug('Set language code to %s for user: %s' % (
+            logger.info('Set language code to %s for user: %s' % (
                 user_language, to_user))
-            if SEAFILE_LOG_TO_STDOUT:
-                self.stdout.write('[seahub] [%s] [INFO] Set language code to %s for user: %s' % (
-                    str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, to_user))
-            else:
-                self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
-                    str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, to_user))
+            self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
+                str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, to_user))
 
             # format mail content and send
             notices = []
@@ -476,16 +464,10 @@ class Command(BaseCommand):
                 # set new last_emailed_time
                 UserOptions.objects.set_collaborate_last_emailed_time(to_user, now)
                 logger.info('Successfully sent email to %s' % contact_email)
-                if SEAFILE_LOG_TO_STDOUT:
-                    self.stdout.write('[seahub] [%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
-                else:
-                    self.stdout.write('[%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
+                self.stdout.write('[%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' % (contact_email, e))
-                if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[seahub] [%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
-                else:
-                    self.stderr.write('[%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
+                self.stderr.write('[%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
 
             # restore current language
             translation.activate(cur_language)

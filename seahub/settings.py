@@ -694,6 +694,20 @@ if seafile_log_to_stdout:
                 'level': 'ERROR',
                 'filters': ['require_debug_false'],
                 'class': 'django.utils.log.AdminEmailHandler'
+            },
+            'file_updates_sender_handler': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'stream': sys.stdout,
+            },
+            'seahub_email_sender_handler': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+                'stream': sys.stdout,
             }
         },
         'loggers': {
@@ -717,6 +731,16 @@ if seafile_log_to_stdout:
                 'level': 'INFO',
                 'propagate': False
             },
+            'file_updates_sender': {
+                'handlers': ['file_updates_sender_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'seahub_email_sender': {
+                'handlers': ['seahub_email_sender_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            }
         }
     }
 else:
@@ -769,6 +793,22 @@ else:
                 'level': 'ERROR',
                 'filters': ['require_debug_false'],
                 'class': 'django.utils.log.AdminEmailHandler'
+            },
+            'file_updates_sender_handler': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(LOG_DIR, 'file_updates_sender.log'),
+                'maxBytes': 1024*1024*100,  # 100 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'seahub_email_sender_handler': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(LOG_DIR, 'seahub_email_sender.log'),
+                'maxBytes': 1024*1024*100,  # 100 MB
+                'backupCount': 5,
+                'formatter': 'standard',
             }
         },
         'loggers': {
@@ -792,6 +832,16 @@ else:
                 'level': 'INFO',
                 'propagate': False
             },
+            'file_updates_sender': {
+                'handlers': ['file_updates_sender_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            },
+            'seahub_email_sender': {
+                'handlers': ['seahub_email_sender_handler', ],
+                'level': 'INFO',
+                'propagate': False
+            }
         }
     }
 
