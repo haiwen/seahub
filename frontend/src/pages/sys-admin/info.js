@@ -108,7 +108,7 @@ class Info extends Component {
                   </dd> :
                   <dd className="info-item-content">
                     {gettext('Community Edition')}
-                    <a className="ml-1" href="https://download.seafile.com/published/seafile-manual/deploy_pro/migrate_from_seafile_community_server.md" target="_blank" rel="noreferrer">{gettext('Upgrade to Pro Edition')}</a>
+                    <a className="ml-1" href="https://manual.seafile.com/11.0/deploy_pro/migrate_from_seafile_community_server/" target="_blank" rel="noreferrer">{gettext('Upgrade to Pro Edition')}</a>
                   </dd>
                 }
 
