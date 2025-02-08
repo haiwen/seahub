@@ -69,7 +69,7 @@ class Content extends Component {
     }
 
     return (
-      <dl>
+      <dl className='mt-0'>
         <dt>{gettext('Name')}</dt>
         <dd>{group_name}</dd>
 
