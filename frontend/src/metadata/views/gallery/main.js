@@ -19,7 +19,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage, onAddImage }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -231,7 +231,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handelRemoveSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
-    onRemoveImage(selectedImages, () => {
+    onRemoveImage && onRemoveImage(selectedImages, () => {
       updateCurrentDirent();
       setSelectedImages([]);
     });
@@ -399,7 +399,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
         addFolder={onAddFolder}
-        onRemoveImage={handelRemoveSelectedImages}
+        onRemoveImage={onRemoveImage ? handelRemoveSelectedImages : null}
+        onAddImage={onAddImage}
       />
       {isImagePopupOpen && (
         <ModalPortal>

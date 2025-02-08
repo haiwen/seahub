@@ -11,22 +11,26 @@ import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
 import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
 import { Dirent } from '../../../../models';
+import PeoplesDialog from '../../../components/dialog/peoples-dialog';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
   DUPLICATE: 'duplicate',
   REMOVE: 'remove',
+  ADD_PHOTO_TO_GROUP: 'add_photo_to_group',
 };
 
-const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage }) => {
+const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage }) => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
+  const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
   const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
+  const canAddPhotoToPeople = window.sfMetadataContext.canAddPhotoToPeople();
 
   const options = useMemo(() => {
     let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
@@ -39,8 +43,11 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
     if (onRemoveImage && canRemovePhotoFromPeople) {
       validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: gettext('Remove from this group') });
     }
+    if (onAddImage && canAddPhotoToPeople) {
+      validOptions.push({ value: CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP, label: gettext('Add to group') });
+    }
     return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, selectedImages, onDuplicate, onDelete, onRemoveImage]);
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage]);
 
   const closeZipDialog = () => {
     setIsZipDialogOpen(false);
@@ -94,10 +101,19 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
       case CONTEXT_MENU_KEY.REMOVE:
         onRemoveImage(selectedImages);
         break;
-      default:
+      case CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP:
+        setPeoplesDialogShow(true);
         break;
     }
   }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage]);
+
+  const closePeoplesDialog = useCallback(() => {
+    setPeoplesDialogShow(false);
+  }, []);
+
+  const addPeople = useCallback((peopleId, addedImages, callback) => {
+    onAddImage(peopleId, addedImages, callback);
+  }, [onAddImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });
   const parentDir = selectedImages[0]?.parentDir;
@@ -131,6 +147,11 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
             onCancelCopy={toggleCopyDialog}
             onAddFolder={addFolder}
           />
+        </ModalPortal>
+      )}
+      {isPeoplesDialogShow && (
+        <ModalPortal>
+          <PeoplesDialog selectedImages={selectedImages} onToggle={closePeoplesDialog} onSubmit={addPeople} />
         </ModalPortal>
       )}
     </>

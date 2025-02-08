@@ -142,6 +142,16 @@ def init_faces(metadata_server_api):
         "display_column_key": METADATA_TABLE.columns.obj_id.key
     })
 
+    metadata_server_api.add_link_columns(FACES_TABLE.included_face_link_id, METADATA_TABLE.id, face_table_id, {
+        "key": METADATA_TABLE.columns.included_face_links.key,
+        "name": METADATA_TABLE.columns.included_face_links.name,
+        "display_column_key": FACES_TABLE.columns.name.key
+    }, {
+        "key": FACES_TABLE.columns.included_photo_links.key,
+        "name": FACES_TABLE.columns.included_photo_links.name,
+        "display_column_key": METADATA_TABLE.columns.obj_id.key
+    })
+
 
 def remove_faces_table(metadata_server_api):
     from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
@@ -154,7 +164,12 @@ def remove_faces_table(metadata_server_api):
         elif table['name'] == METADATA_TABLE.name:
             columns = table.get('columns', [])
             for column in columns:
-                if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key, METADATA_TABLE.columns.excluded_face_links.key]:
+                if column['key'] in [
+                    METADATA_TABLE.columns.face_vectors.key,
+                    METADATA_TABLE.columns.face_links.key,
+                    METADATA_TABLE.columns.excluded_face_links.key,
+                    METADATA_TABLE.columns.included_face_links.key
+                ]:
                     metadata_server_api.delete_column(table['id'], column['key'], True)
 
 

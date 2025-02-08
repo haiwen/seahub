@@ -225,6 +225,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.ADD_PEOPLE_PHOTOS: {
+        const { people_id, added_photos } = operation;
+        window.sfMetadataContext.addPeoplePhotos(people_id, added_photos).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to add people photos') });
+        });
+        break;
+      }
 
       // tags
       case OPERATION_TYPE.UPDATE_FILE_TAGS: {

@@ -1,0 +1,14 @@
+.sf-metadata-peoples-dialog .sf-metadata-option {
+  height: 30px;
+  padding-top: 5px;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-option.sf-metadata-option-active {
+  background-color: #f5f5f5;
+  color: unset;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-ui.collaborator-item {
+  background-color: inherit;
+  max-width: 100%;
+}

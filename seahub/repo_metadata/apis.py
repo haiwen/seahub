@@ -1258,7 +1258,7 @@ class FacesRecords(APIView):
 
         from seafevents.repo_metadata.constants import FACES_TABLE
         from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
-        sql = f'SELECT `{FACES_TABLE.columns.id.name}`, `{FACES_TABLE.columns.name.name}`, `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.photo_links.name}` IS NOT NULL LIMIT {start}, {limit}'
+        sql = f'SELECT * FROM `{FACES_TABLE.name}` LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1272,8 +1272,12 @@ class FacesRecords(APIView):
 
         valid_faces_records = []
         for record in faces_records:
-            deleted_photo_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
-            valid_photo_links = [item for item in record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_photo_ids]
+
+            excluded_photo_ids = [item['row_id'] for item in record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+            included_photo_links = record.get(FACES_TABLE.columns.included_photo_links.name, [])
+            valid_photo_links = [item for item in record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in excluded_photo_ids]
+            valid_photo_ids = [item['row_id'] for item in valid_photo_links]
+            valid_photo_links.extend([item for item in included_photo_links if item['row_id'] not in valid_photo_ids])
             if not valid_photo_links:
                 continue
 
@@ -1404,7 +1408,7 @@ class PeoplePhotos(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
-        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+        sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}`, `{FACES_TABLE.columns.included_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -1444,20 +1448,99 @@ class PeoplePhotos(APIView):
             select_columns = f'{select_columns}, `{capture_time_column_name}`'
 
         try:
-            deleted_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
-            record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in deleted_record_ids]
+            excluded_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+            included_record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.included_photo_links.name, [])]
+            record_ids = [item['row_id'] for item in faces_record.get(FACES_TABLE.columns.photo_links.name, []) if item['row_id'] not in excluded_record_ids]
+            record_ids.extend([item for item in included_record_ids if item not in record_ids])
+
             if not record_ids:
                 return Response({'metadata': [], 'results': []})
 
             record_ids_str = ', '.join(["'%s'" % id for id in record_ids])
             sql = f'SELECT {select_columns} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` IN ({record_ids_str}) {order_sql} LIMIT {start}, {limit}'
-            someone_photos_result = metadata_server_api.query_rows(sql)
+            people_photos = metadata_server_api.query_rows(sql)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(someone_photos_result)
+        return Response(people_photos)
+
+    def post(self, request, repo_id, people_id):
+        record_ids = request.data.get('record_ids')
+
+        if not record_ids or not isinstance(record_ids, list):
+            error_msg = 'record_ids invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        from seafevents.repo_metadata.constants import FACES_TABLE
+        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        try:
+            faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not faces_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
+        faces_table_id = faces_table['id']
+
+        sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}" OR `{FACES_TABLE.columns.name.name}` = "{UNKNOWN_PEOPLE_NAME}"'
+        try:
+            query_result = metadata_server_api.query_rows(sql).get('results', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        face_record = next((item for item in query_result if item[FACES_TABLE.columns.id.name] == people_id), None)
+        unknown_people_record = next((item for item in query_result if item.get(FACES_TABLE.columns.name.name) == UNKNOWN_PEOPLE_NAME), None)
+        if not face_record or face_record.get(FACES_TABLE.columns.name.name) == UNKNOWN_PEOPLE_NAME:
+            return api_error(status.HTTP_404_NOT_FOUND, 'people not found')
+
+        excluded_record_ids = [item['row_id'] for item in face_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+        duplicate_record_ids = [record_id for record_id in record_ids if record_id in excluded_record_ids]
+        if duplicate_record_ids:
+            try:
+                metadata_server_api.update_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
+                    people_id: [record_id for record_id in excluded_record_ids if record_id not in duplicate_record_ids]
+                })
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        unknown_people_record_id = unknown_people_record[FACES_TABLE.columns.id.name]
+        unknown_people_excluded_record_ids = [item['row_id'] for item in unknown_people_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+        try:
+            res = metadata_server_api.insert_link(FACES_TABLE.included_face_link_id, faces_table_id, {
+                people_id: record_ids
+            })
+            metadata_server_api.insert_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
+                unknown_people_record_id: [record_id for record_id in record_ids if record_id not in unknown_people_excluded_record_ids]
+            })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
     def delete(self, request, repo_id, people_id):
         record_ids = request.data.get('record_ids')
@@ -1476,7 +1559,7 @@ class PeoplePhotos(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not can_read_metadata(request, repo_id):
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1492,6 +1575,30 @@ class PeoplePhotos(APIView):
         if not faces_table:
             return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
         faces_table_id = faces_table['id']
+
+        sql = f'SELECT `{FACES_TABLE.columns.included_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
+        try:
+            query_result = metadata_server_api.query_rows(sql).get('results')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not query_result:
+            return api_error(status.HTTP_404_NOT_FOUND, 'people not found')
+
+        face_record = query_result[0]
+        included_record_ids = [item['row_id'] for item in face_record.get(FACES_TABLE.columns.included_photo_links.name, [])]
+        duplicate_record_ids = [record_id for record_id in record_ids if record_id in included_record_ids]
+        if duplicate_record_ids:
+            try:
+                metadata_server_api.update_link(FACES_TABLE.included_face_link_id, faces_table_id, {
+                    people_id: [record_id for record_id in included_record_ids if record_id not in duplicate_record_ids]
+                })
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
             metadata_server_api.insert_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {

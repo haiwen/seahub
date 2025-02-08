@@ -614,6 +614,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  addPeoplePhotos = (peopleId, oldPeopleId, addedPhotos, { success_callback, fail_callback }) => {
+    const type = OPERATION_TYPE.ADD_PEOPLE_PHOTOS;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, people_id: peopleId, old_people_id: oldPeopleId, added_photos: addedPhotos, success_callback, fail_callback
+    });
+    this.applyOperation(operation);
+  };
+
   // tag
   updateFileTags = (data) => {
     const type = OPERATION_TYPE.UPDATE_FILE_TAGS;
