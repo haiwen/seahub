@@ -9,8 +9,7 @@ const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
   const toggle = useCallback((event) => {
     event.stopPropagation();
     if (isShow) {
-      const isClickToggleBtn = event.target.className?.includes('kanban-more-operations-toggle');
-      onUnFreezed(isClickToggleBtn);
+      onUnFreezed(event);
     } else {
       onFreezed();
     }
@@ -35,7 +34,7 @@ const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
         tag="i"
         role="button"
         tabIndex="0"
-        className="sf-dropdown-toggle sf3-font-more sf3-font kanban-more-operations-toggle"
+        className="sf-dropdown-toggle sf3-font-more sf3-font kanban-header-op-btn kanban-more-operations-toggle"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"
