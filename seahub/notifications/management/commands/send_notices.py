@@ -351,7 +351,7 @@ class Command(BaseCommand):
 
         # save current language
         if SEAFILE_LOG_TO_STDOUT:
-            self.stdout.write('[send_notices] [%s] [INFO] Set language code to %s for user: %s' % (
+            self.stdout.write('[seahub] [%s] [INFO] Set language code to %s for user: %s' % (
                 str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), 'zh', 'to_user@auth.local'))
         else:
             self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
@@ -387,7 +387,7 @@ class Command(BaseCommand):
             logger.debug('Set language code to %s for user: %s' % (
                 user_language, to_user))
             if SEAFILE_LOG_TO_STDOUT:
-                self.stdout.write('[send_notices] [%s] [INFO] Set language code to %s for user: %s' % (
+                self.stdout.write('[seahub] [%s] [INFO] Set language code to %s for user: %s' % (
                     str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, to_user))
             else:
                 self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
@@ -477,13 +477,13 @@ class Command(BaseCommand):
                 UserOptions.objects.set_collaborate_last_emailed_time(to_user, now)
                 logger.info('Successfully sent email to %s' % contact_email)
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stdout.write('[send_notices] [%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
+                    self.stdout.write('[seahub] [%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
                 else:
                     self.stdout.write('[%s] [INFO] Successfully sent email to %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' % (contact_email, e))
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[send_notices] [%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
+                    self.stderr.write('[seahub] [%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
                 else:
                     self.stderr.write('[%s] [ERROR] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
 

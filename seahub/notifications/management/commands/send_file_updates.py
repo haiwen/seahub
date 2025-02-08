@@ -68,10 +68,10 @@ class Command(BaseCommand):
         logger.debug('Start sending file updates emails...')
 
         if SEAFILE_LOG_TO_STDOUT:
-            self.stdout.write('[file_updates_sender] [%s] [INFO] Start sending file updates emails...' % str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            self.stdout.write('[seahub] [%s] [INFO] Start sending file updates emails...' % str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
             self.do_action()
             logger.debug('Finish sending file updates emails.\n')
-            self.stdout.write('[file_updates_sender] [%s] [INFO] Finish sending file updates emails.\n\n' % str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            self.stdout.write('[seahub] [%s] [INFO] Finish sending file updates emails.\n\n' % str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         else:
             self.stdout.write('[%s] [INFO] Start sending file updates emails...' % str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
             self.do_action()
@@ -200,7 +200,7 @@ class Command(BaseCommand):
             except Exception as e:
                 logger.error(e)
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[file_updates_sender] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
+                    self.stderr.write('[seahub] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 else:
                     self.stderr.write('[%s] [INFO]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 continue
@@ -215,7 +215,7 @@ class Command(BaseCommand):
             except Exception as e:
                 logger.error(e)
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[file_updates_sender] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
+                    self.stderr.write('[seahub] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 else:
                     self.stderr.write('[%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 continue
@@ -231,7 +231,7 @@ class Command(BaseCommand):
                 user_language, username))
 
             if SEAFILE_LOG_TO_STDOUT:
-                self.stdout.write('[file_updates_sender] [%s] [INFO] Set language code to %s for user: %s' % (
+                self.stdout.write('[seahub] [%s] [INFO] Set language code to %s for user: %s' % (
                     str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), user_language, username))
             else:
                 self.stdout.write('[%s] [INFO] Set language code to %s for user: %s' % (
@@ -279,9 +279,9 @@ class Command(BaseCommand):
                              username)
                 logger.error(e, exc_info=True)
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[file_updates_sender] [%s] [ERROR] Failed to format mail content for user: %s' %
+                    self.stderr.write('[seahub] [%s] [ERROR] Failed to format mail content for user: %s' %
                                       (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), username))
-                    self.stderr.write('[file_updates_sender] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
+                    self.stderr.write('[seahub] [%s] [ERROR]: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), e))
                 else:
                     self.stderr.write('[%s] [ERROR] Failed to format mail content for user: %s' %
                                       (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), username))
@@ -304,7 +304,7 @@ class Command(BaseCommand):
                 # set new last_emailed_time
                 UserOptions.objects.set_file_updates_last_emailed_time(username, now)
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stdout.write('[file_updates_sender] [%s] [INFO] Successful to send email to %s' %
+                    self.stdout.write('[seahub] [%s] [INFO] Successful to send email to %s' %
                                     (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email))
                 else:
                     self.stdout.write('[%s] [INFO] Successful to send email to %s' %
@@ -313,7 +313,7 @@ class Command(BaseCommand):
                 logger.error('Failed to send email to %s, error detail: %s' %
                              (contact_email, e))
                 if SEAFILE_LOG_TO_STDOUT:
-                    self.stderr.write('[file_updates_sender] [%s] [ERROR] Failed to send email to %s, error '
+                    self.stderr.write('[seahub] [%s] [ERROR] Failed to send email to %s, error '
                                       'detail: %s' % (str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), contact_email, e))
                 else:
                     self.stderr.write('[%s] [ERROR] Failed to send email to %s, error '
