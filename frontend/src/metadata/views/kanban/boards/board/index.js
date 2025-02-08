@@ -31,6 +31,7 @@ const Board = ({
   onContextMenu,
 }) => {
   const [isDraggingOver, setDraggingOver] = useState(false);
+  const [isCollapsed, setCollapsed] = useState(false);
   const boardName = useMemo(() => `sf_metadata_kanban_board_${board.key}`, [board]);
   const cardsQuantity = useMemo(() => board.children.length, [board.children]);
 
@@ -54,6 +55,10 @@ const Board = ({
     setTimeout(() => updateDragging(false), 0);
   }, [isDraggingOver, onMove, updateDragging]);
 
+  const onCollapse = useCallback(() => {
+    setCollapsed(!isCollapsed);
+  }, [isCollapsed]);
+
   return (
     <section draggable={false} className="sf-metadata-view-kanban-board">
       <Header
@@ -65,55 +70,59 @@ const Board = ({
         onDelete={() => deleteOption(board.key)}
         onFreezed={onFreezed}
         onUnFreezed={onUnFreezed}
+        isCollapsed={isCollapsed}
+        onCollapse={onCollapse}
       />
-      <Container
-        orientation="vertical"
-        groupName={boardName}
-        dragClass="kanban-drag-card"
-        dropClass="kanban-drop-card"
-        onDragStart={onDragStart}
-        onDrop={e => onDragEnd(boardIndex, e)}
-        onDragEnter={() => setDraggingOver(true)}
-        onDragLeave={() => setDraggingOver(false)}
-        shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
-        getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
-        dropPlaceholder={{
-          animationDuration: 300,
-          showOnTop: true,
-          className: 'card-drop-preview',
-        }}
-        getGhostParent={() => {
+      {!isCollapsed && (
+        <Container
+          orientation="vertical"
+          groupName={boardName}
+          dragClass="kanban-drag-card"
+          dropClass="kanban-drop-card"
+          onDragStart={onDragStart}
+          onDrop={e => onDragEnd(boardIndex, e)}
+          onDragEnter={() => setDraggingOver(true)}
+          onDragLeave={() => setDraggingOver(false)}
+          shouldAcceptDrop={(sourceContainer) => sourceContainer.groupName !== boardName}
+          getChildPayload={(cardIndex) => ({ boardIndex, cardIndex })}
+          dropPlaceholder={{
+            animationDuration: 300,
+            showOnTop: true,
+            className: 'card-drop-preview',
+          }}
+          getGhostParent={() => {
           // return anchestor of container who doesn't have a transform property
-          return document.querySelector('.sf-metadata-main');
-        }}
-      >
-        {board.children.map((cardKey) => {
-          const record = getRowById(metadata, cardKey);
-          if (!record) return null;
-          const recordId = getRecordIdFromRecord(record);
-          const isSelected = selectedCard === recordId;
-          const CardElement = (
-            <Card
-              key={cardKey}
-              isSelected={isSelected}
-              displayEmptyValue={displayEmptyValue}
-              displayColumnName={displayColumnName}
-              record={record}
-              titleColumn={titleColumn}
-              displayColumns={displayColumns}
-              onOpenFile={onOpenFile}
-              onSelectCard={onSelectCard}
-              onContextMenu={(e) => onContextMenu(e, recordId)}
-            />
-          );
-          if (readonly) return CardElement;
-          return (
-            <Draggable key={`sf-metadata-kanban-card-${cardKey}`}>
-              {CardElement}
-            </Draggable>
-          );
-        })}
-      </Container>
+            return document.querySelector('.sf-metadata-main');
+          }}
+        >
+          {board.children.map((cardKey) => {
+            const record = getRowById(metadata, cardKey);
+            if (!record) return null;
+            const recordId = getRecordIdFromRecord(record);
+            const isSelected = selectedCard === recordId;
+            const CardElement = (
+              <Card
+                key={cardKey}
+                isSelected={isSelected}
+                displayEmptyValue={displayEmptyValue}
+                displayColumnName={displayColumnName}
+                record={record}
+                titleColumn={titleColumn}
+                displayColumns={displayColumns}
+                onOpenFile={onOpenFile}
+                onSelectCard={onSelectCard}
+                onContextMenu={(e) => onContextMenu(e, recordId)}
+              />
+            );
+            if (readonly) return CardElement;
+            return (
+              <Draggable key={`sf-metadata-kanban-card-${cardKey}`}>
+                {CardElement}
+              </Draggable>
+            );
+          })}
+        </Container>
+      )}
     </section>
   );
 };

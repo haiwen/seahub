@@ -27,3 +27,25 @@
   color: #666666;
   margin-left: 12px;
 }
+
+.sf-metadata-view-kanban-board-header .board-header-operation-btn {
+  display: flex;
+  align-items: flex-end;
+}
+
+.board-header-operation-btn .kanban-header-op-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5rem;
+  color: #666666;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.board-header-operation-btn .kanban-header-op-btn.kanban-header-collapse-btn:hover,
+.board-header-operation-btn .kanban-header-op-btn.kanban-more-operations-toggle:hover {
+  background-color: #EFEFEF;
+}
