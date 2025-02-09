@@ -30,6 +30,11 @@
 
 }
 
+.sf-metadata-all-tags-wrapper .sf-table-row .name-cell.cell-selected {
+  cursor: default;
+}
+
 .sf-table-cell.cell-selected .sf-table-tag-name-formatter .sf-table-tag-name:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
