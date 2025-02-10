@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 10:07+0800\n"
+"POT-Creation-Date: 2025-02-10 10:54+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015\n"
 "Language-Team: Spanish (http://app.transifex.com/haiwen/seahub/language/es/)\n"
@@ -56,6 +56,13 @@ msgstr ""
 msgid "Failed to bind SAML, please login first."
 msgstr ""
 
+#: seahub/adfs_auth/views.py:337 seahub/adfs_auth/views.py:353
+#: seahub/api2/endpoints/admin/users.py:785
+#: seahub/api2/endpoints/admin/users.py:1269 seahub/base/accounts.py:1238
+#: seahub/forms.py:30 seahub/institutions/api_views.py:202
+msgid "The number of users exceeds the limit."
+msgstr "La cantidad de usuarios excede el límite."
+
 #: seahub/adfs_auth/views.py:387
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
@@ -86,8 +93,8 @@ msgid "Login id can't be empty"
 msgstr "Login id no puede estar vacio"
 
 #: seahub/api2/endpoints/admin/account.py:227
-#: seahub/api2/endpoints/admin/users.py:869
-#: seahub/api2/endpoints/admin/users.py:1296
+#: seahub/api2/endpoints/admin/users.py:870
+#: seahub/api2/endpoints/admin/users.py:1297
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Login id %s ya existe."
@@ -101,10 +108,10 @@ msgid "Space quota can't be empty"
 msgstr "La cuota para almacenamiento no puede estar vacía"
 
 #: seahub/api2/endpoints/admin/account.py:256
-#: seahub/api2/endpoints/admin/users.py:1344
-#: seahub/api2/endpoints/admin/users.py:1348
-#: seahub/api2/endpoints/admin/users.py:1361
-#: seahub/api2/endpoints/admin/users.py:1365
+#: seahub/api2/endpoints/admin/users.py:1345
+#: seahub/api2/endpoints/admin/users.py:1349
+#: seahub/api2/endpoints/admin/users.py:1362
+#: seahub/api2/endpoints/admin/users.py:1366
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "Debe ser un número entero mayor o igual que 0."
@@ -281,7 +288,7 @@ msgstr "Email"
 msgid "Name"
 msgstr "Nombre"
 
-#: seahub/api2/endpoints/admin/statistics.py:445 seahub/auth/forms.py:298
+#: seahub/api2/endpoints/admin/statistics.py:445 seahub/auth/forms.py:313
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -310,101 +317,95 @@ msgstr "Uso de Espacio"
 msgid "Space Quota"
 msgstr "Cuota de Espacio"
 
-#: seahub/api2/endpoints/admin/users.py:647
-#: seahub/api2/endpoints/admin/users.py:684
+#: seahub/api2/endpoints/admin/users.py:648
+#: seahub/api2/endpoints/admin/users.py:685
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
 msgstr "Hay mas de 500 usuarios, y no se ofrece ordenar."
 
-#: seahub/api2/endpoints/admin/users.py:784
-#: seahub/api2/endpoints/admin/users.py:1268 seahub/base/accounts.py:1237
-#: seahub/forms.py:30 seahub/institutions/api_views.py:202
-msgid "The number of users exceeds the limit."
-msgstr "La cantidad de usuarios excede el límite."
-
-#: seahub/api2/endpoints/admin/users.py:883
+#: seahub/api2/endpoints/admin/users.py:884
 #, python-format
 msgid "Successfully added user %(user)s."
 msgstr "Usuario %(user)s agregado con éxito."
 
-#: seahub/api2/endpoints/admin/users.py:887
+#: seahub/api2/endpoints/admin/users.py:888
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:542
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Estás invitado a unirte a %s"
 
-#: seahub/api2/endpoints/admin/users.py:891
+#: seahub/api2/endpoints/admin/users.py:892
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
 msgstr "El usuario %(user)s fue agregado con éxito. Se ha enviado un correo de aviso."
 
-#: seahub/api2/endpoints/admin/users.py:894
+#: seahub/api2/endpoints/admin/users.py:895
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
 msgstr "El usuario%(user)s fue agregado con éxito. Pero el correo de notificación no pudo ser enviado, porque el servicio de correo no está configurado correctamente."
 
-#: seahub/api2/endpoints/admin/users.py:1404
+#: seahub/api2/endpoints/admin/users.py:1405
 msgid "Edit succeeded"
 msgstr "Editado con éxito"
 
-#: seahub/api2/endpoints/admin/users.py:1407 seahub/views/sysadmin.py:445
+#: seahub/api2/endpoints/admin/users.py:1408 seahub/views/sysadmin.py:445
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Tu cuenta en %s está activada."
 
-#: seahub/api2/endpoints/admin/users.py:1412
+#: seahub/api2/endpoints/admin/users.py:1413
 msgid "Edit succeeded, an email has been sent."
 msgstr "Editado con éxito, se envió un email."
 
-#: seahub/api2/endpoints/admin/users.py:1415
+#: seahub/api2/endpoints/admin/users.py:1416
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Edición exitosa, pero hubo un fallo al enviar el correo, revisa la configuración de email."
 
-#: seahub/api2/endpoints/admin/users.py:1483 seahub/auth/views.py:371
+#: seahub/api2/endpoints/admin/users.py:1484 seahub/auth/views.py:371
 msgid "Unable to reset password."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1509 seahub/auth/forms.py:201
+#: seahub/api2/endpoints/admin/users.py:1510 seahub/auth/forms.py:214
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
 msgstr "Reestablecer contraseña en %s"
 
-#: seahub/api2/endpoints/admin/users.py:1513
+#: seahub/api2/endpoints/admin/users.py:1514
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1531 seahub/views/sysadmin.py:486
+#: seahub/api2/endpoints/admin/users.py:1532 seahub/views/sysadmin.py:486
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "La contraseña ha sido reestablecida en %s"
 
-#: seahub/api2/endpoints/admin/users.py:1533
+#: seahub/api2/endpoints/admin/users.py:1534
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1537 seahub/views/sysadmin.py:516
+#: seahub/api2/endpoints/admin/users.py:1538 seahub/views/sysadmin.py:516
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Contraseña restablecida a %(passwd)s, pero hubo un fallo al enviar el correo a %(user)s, revise su configuracion de email."
 
-#: seahub/api2/endpoints/admin/users.py:1540
+#: seahub/api2/endpoints/admin/users.py:1541
 #: seahub/organizations/api/admin/user_set_password.py:88
 #: seahub/views/sysadmin.py:520
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Contraseña de %(user)s restablecida a %(passwd)s con éxito."
 
-#: seahub/api2/endpoints/admin/users.py:1543 seahub/views/sysadmin.py:523
+#: seahub/api2/endpoints/admin/users.py:1544 seahub/views/sysadmin.py:523
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -441,7 +442,7 @@ msgstr "Archivo con virus no encontrado"
 #: seahub/notifications/models.py:731 seahub/notifications/models.py:761
 #: seahub/notifications/models.py:783 seahub/notifications/models.py:809
 #: seahub/notifications/models.py:826 seahub/notifications/models.py:843
-#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2762
+#: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2764
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:192 seahub/utils/__init__.py:1225
 #: seahub/views/__init__.py:819 seahub/views/ajax.py:401
@@ -470,7 +471,7 @@ msgstr "Ruta de destino inválida"
 #: seahub/api2/views.py:2180 seahub/api2/views.py:2593
 #: seahub/api2/views.py:2701 seahub/seadoc/apis.py:381
 #: seahub/seadoc/apis.py:499 seahub/seadoc/apis.py:591
-#: seahub/seadoc/apis.py:3102
+#: seahub/seadoc/apis.py:3106
 msgid "Out of quota."
 msgstr "Cuota agotada."
 
@@ -480,9 +481,9 @@ msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:316 seahub/api2/endpoints/file.py:393
-#: seahub/api2/endpoints/file.py:508 seahub/api2/endpoints/file.py:566
-#: seahub/api2/endpoints/file.py:717 seahub/api2/endpoints/file.py:830
+#: seahub/api2/endpoints/file.py:317 seahub/api2/endpoints/file.py:394
+#: seahub/api2/endpoints/file.py:509 seahub/api2/endpoints/file.py:567
+#: seahub/api2/endpoints/file.py:718 seahub/api2/endpoints/file.py:831
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
 #: seahub/api2/endpoints/wiki2.py:796
@@ -504,14 +505,14 @@ msgstr "nombre de usuario inválido"
 msgid "User %s not found."
 msgstr "Usuario %s no encontrado."
 
-#: seahub/api2/endpoints/file.py:201 seahub/api2/endpoints/upload_links.py:530
+#: seahub/api2/endpoints/file.py:202 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:850
 #: seahub/api2/endpoints/wiki2.py:594 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1987 seahub/seadoc/apis.py:3109
+#: seahub/api2/views.py:1987 seahub/seadoc/apis.py:3113
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:304
+#: seahub/api2/endpoints/file.py:305
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/share_links.py:570
@@ -521,7 +522,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:316
 #: seahub/api2/endpoints/wiki2.py:1393 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2746
+#: seahub/profile/views.py:272 seahub/seadoc/apis.py:2748
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -531,16 +532,16 @@ msgstr ""
 msgid "Permission denied."
 msgstr "Persmiso denegado."
 
-#: seahub/api2/endpoints/file.py:735 seahub/api2/endpoints/file.py:755
+#: seahub/api2/endpoints/file.py:736 seahub/api2/endpoints/file.py:756
 #: seahub/api2/endpoints/via_repo_token.py:1167
 msgid "File is not locked."
 msgstr "El archivo no está bloqueado."
 
-#: seahub/api2/endpoints/file.py:782 seahub/api2/endpoints/share_links.py:881
+#: seahub/api2/endpoints/file.py:783 seahub/api2/endpoints/share_links.py:881
 msgid "You can not refresh this file's lock."
 msgstr "No puede refrescar el bloqueo de este archivo."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2753
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2755
 msgid "The participant already exists."
 msgstr "El participante ya existe."
 
@@ -576,7 +577,7 @@ msgid "User %s is an organization user."
 msgstr "El usuario %s es un usuario de la organización."
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:518
+#: seahub/group/error_msg.py:23 seahub/views/file.py:519
 msgid "Group does not exist"
 msgstr "El grupo no existe"
 
@@ -611,7 +612,7 @@ msgstr "%s ya ha sido invitado."
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
 #: seahub/api2/endpoints/repo_share_invitations.py:173
-#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1248
+#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1249
 #: seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
@@ -620,7 +621,7 @@ msgstr "El usuario %s ya existe."
 #: seahub/api2/endpoints/invitations.py:154
 #: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:34
-#: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:165
+#: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:178
 #: seahub/organizations/api/admin/users.py:787
 msgid ""
 "Failed to send email, email service is not properly configured, please "
@@ -810,7 +811,7 @@ msgstr "El enlace de compartir %s ya existe."
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
 #: seahub/api2/endpoints/subscription.py:108
-#: seahub/organizations/api/admin/info.py:145
+#: seahub/organizations/api/admin/info.py:143
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
 #: seahub/subscription/views.py:40 seahub/weixin/views.py:40
@@ -902,8 +903,8 @@ msgstr "Por favor ingresar."
 msgid "Email or Username"
 msgstr "Email o Nombre de usuario"
 
-#: seahub/auth/forms.py:33 seahub/auth/forms.py:272
-#: seahub/base/accounts.py:1225
+#: seahub/auth/forms.py:33 seahub/auth/forms.py:287
+#: seahub/base/accounts.py:1226
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:41
 #: seahub/share/views.py:224 seahub/templates/decrypt_repo_form.html:10
@@ -927,57 +928,57 @@ msgid ""
 "are case-sensitive."
 msgstr "Por favor, ingresa un email/nombre de usuario y contraseña correctos. Notar que ambos datos son sensibles a mayúsculas y minúsculas."
 
-#: seahub/auth/forms.py:89 seahub/auth/forms.py:174
+#: seahub/auth/forms.py:89 seahub/auth/forms.py:187
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr "Esa dirección de correo no está asociada a ninguna cuenta de usuario. ¿Está seguro de que está registrado en el sistema?"
 
-#: seahub/auth/forms.py:136 seahub/auth/forms.py:137
+#: seahub/auth/forms.py:147 seahub/auth/forms.py:148
 #: seahub/templates/registration/login.html:61
 msgid "Please use Single Sign-On to login."
 msgstr ""
 
-#: seahub/auth/forms.py:142
+#: seahub/auth/forms.py:153
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr "Tu navegador no tiene habilitados las cookies. Las cookies son requeridas para autenticarse en el sitio."
 
-#: seahub/auth/forms.py:158
+#: seahub/auth/forms.py:171
 msgid "E-mail"
 msgstr "E-mail"
 
-#: seahub/auth/forms.py:177
+#: seahub/auth/forms.py:190
 msgid "Can not reset password, please contact LDAP admin."
 msgstr "No se puede restablecer la contraseña, por favor contacte al administrador de LDAP."
 
-#: seahub/auth/forms.py:210
+#: seahub/auth/forms.py:224
 msgid "New password"
 msgstr "Nueva contraseña"
 
-#: seahub/auth/forms.py:211
+#: seahub/auth/forms.py:225
 msgid "New password confirmation"
 msgstr "Confirmación de nueva contraseña"
 
-#: seahub/auth/forms.py:238 seahub/auth/forms.py:284
-#: seahub/base/accounts.py:1280 seahub/organizations/forms.py:71
+#: seahub/auth/forms.py:252 seahub/auth/forms.py:299
+#: seahub/base/accounts.py:1281 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
 msgstr "Las contraseñas no coinciden"
 
-#: seahub/auth/forms.py:252
+#: seahub/auth/forms.py:267
 msgid "Old password"
 msgstr "Contraseña anterior"
 
-#: seahub/auth/forms.py:260
+#: seahub/auth/forms.py:275
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "La contraseña anterior ingresada es incorrecta. Por favor, ingrésela nuevamente."
 
-#: seahub/auth/forms.py:273 seahub/base/accounts.py:1227
+#: seahub/auth/forms.py:288 seahub/base/accounts.py:1228
 msgid "Password (again)"
 msgstr "Contraseña (de nuevo)"
 
-#: seahub/auth/forms.py:304 seahub/forms.py:35 seahub/invitations/views.py:39
+#: seahub/auth/forms.py:319 seahub/forms.py:35 seahub/invitations/views.py:39
 #: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
 #: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
@@ -1016,44 +1017,44 @@ msgstr "Avatar actualizado con éxito."
 msgid "Successfully deleted the requested avatars."
 msgstr "Avatares borrados con éxito."
 
-#: seahub/base/accounts.py:704 seahub/base/accounts.py:735
+#: seahub/base/accounts.py:705 seahub/base/accounts.py:736
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "Cuenta %(account)s inmovilizada en %(site)s."
 
-#: seahub/base/accounts.py:1215
+#: seahub/base/accounts.py:1216
 msgid "Email address"
 msgstr "Dirección de correo"
 
-#: seahub/base/accounts.py:1221
+#: seahub/base/accounts.py:1222
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: seahub/base/accounts.py:1222
+#: seahub/base/accounts.py:1223
 msgid "This value must be of length 40"
 msgstr "Debe tener una longitud de 40"
 
-#: seahub/base/accounts.py:1241
+#: seahub/base/accounts.py:1242
 msgid "Enter a valid email address."
 msgstr "Ingresa una dirección de correo válida."
 
-#: seahub/base/accounts.py:1252
+#: seahub/base/accounts.py:1253
 msgid "Invalid user id."
 msgstr "ID de usuario inválido"
 
-#: seahub/base/accounts.py:1302
+#: seahub/base/accounts.py:1303
 msgid "name"
 msgstr "nombre"
 
-#: seahub/base/accounts.py:1305
+#: seahub/base/accounts.py:1306
 msgid "department"
 msgstr "departamento"
 
-#: seahub/base/accounts.py:1308
+#: seahub/base/accounts.py:1309
 msgid "telephone"
 msgstr "teléfono"
 
-#: seahub/base/accounts.py:1311
+#: seahub/base/accounts.py:1312
 msgid "note"
 msgstr "nota"
 
@@ -1512,9 +1513,9 @@ msgstr "El equipo de %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1246
-#: seahub/views/file.py:1273 seahub/views/file.py:1497
-#: seahub/views/file.py:1536 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1247
+#: seahub/views/file.py:1274 seahub/views/file.py:1498
+#: seahub/views/file.py:1537 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:411
 msgid "Permission denied"
@@ -1698,12 +1699,12 @@ msgstr "Carpeta eliminada"
 msgid "Restored folder"
 msgstr "Carpeta restaurada"
 
-#: seahub/notifications/management/commands/send_file_updates.py:277
+#: seahub/notifications/management/commands/send_file_updates.py:279
 #, python-format
 msgid "New file updates on %s"
 msgstr "Nuevas actualizaciones en %s"
 
-#: seahub/notifications/management/commands/send_notices.py:462
+#: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
 msgid "New notice on %s"
 msgstr "Nueva notificación en %s"
@@ -2962,12 +2963,12 @@ msgid "Disable"
 msgstr "Deshabilitar"
 
 #: seahub/utils/__init__.py:176 seahub/utils/__init__.py:191
-#: seahub/views/file.py:499 seahub/views/file.py:521 seahub/views/file.py:526
-#: seahub/views/file.py:579 seahub/views/file.py:868 seahub/views/file.py:1118
-#: seahub/views/file.py:1144 seahub/views/file.py:1174
-#: seahub/views/file.py:1317 seahub/views/file.py:1429
-#: seahub/views/file.py:1572 seahub/views/file.py:1690
-#: seahub/views/file.py:2161
+#: seahub/views/file.py:500 seahub/views/file.py:522 seahub/views/file.py:527
+#: seahub/views/file.py:580 seahub/views/file.py:869 seahub/views/file.py:1119
+#: seahub/views/file.py:1145 seahub/views/file.py:1175
+#: seahub/views/file.py:1318 seahub/views/file.py:1430
+#: seahub/views/file.py:1573 seahub/views/file.py:1691
+#: seahub/views/file.py:2162
 msgid "Unable to view file"
 msgstr "Imposible visualizar el archivo"
 
@@ -3025,10 +3026,10 @@ msgstr "repo id incorrecto"
 msgid "Bad upload link token."
 msgstr "Identificador del enlace de subida inválido."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:512 seahub/views/file.py:543
-#: seahub/views/file.py:1266 seahub/views/file.py:1531
-#: seahub/views/file.py:2197 seahub/views/file.py:2202
-#: seahub/views/file.py:2209
+#: seahub/views/ajax.py:338 seahub/views/file.py:513 seahub/views/file.py:544
+#: seahub/views/file.py:1267 seahub/views/file.py:1532
+#: seahub/views/file.py:2198 seahub/views/file.py:2203
+#: seahub/views/file.py:2210
 msgid "File does not exist"
 msgstr "El archivo no existe"
 
@@ -3056,49 +3057,49 @@ msgstr "La codificación elegida no es correcta."
 msgid "Unknown file encoding"
 msgstr "Codificación de archivo desconocida"
 
-#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:765
-#: seahub/views/file.py:878 seahub/views/file.py:979
+#: seahub/views/file.py:397 seahub/views/file.py:432 seahub/views/file.py:766
+#: seahub/views/file.py:879 seahub/views/file.py:980
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "El tamaño del archivo sobrepasa %s, no se puede abrir en línea."
 
-#: seahub/views/file.py:404 seahub/views/file.py:913
+#: seahub/views/file.py:404 seahub/views/file.py:914
 msgid "The library is encrypted, can not open file online."
 msgstr "La biblioteca está encriptada, no se puede abrir el archivo en línea."
 
-#: seahub/views/file.py:937 seahub/views/file.py:1062
-#: seahub/views/file.py:1388 seahub/views/file.py:1628
+#: seahub/views/file.py:938 seahub/views/file.py:1063
+#: seahub/views/file.py:1389 seahub/views/file.py:1629
 msgid "Error when prepare Office Online file preview page."
 msgstr "Error al preparar la página de la vista preliminar de archivo de Office Online."
 
-#: seahub/views/file.py:972 seahub/views/file.py:1078
-#: seahub/views/file.py:1408 seahub/views/file.py:1644
+#: seahub/views/file.py:973 seahub/views/file.py:1079
+#: seahub/views/file.py:1409 seahub/views/file.py:1645
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Error al preparar la página de la vista preliminar de archivo de OnlyOffice."
 
-#: seahub/views/file.py:1210
+#: seahub/views/file.py:1211
 msgid "Unable to download file, invalid file path"
 msgstr "No es posible descargar el archivo, ruta inválida"
 
-#: seahub/views/file.py:1219
+#: seahub/views/file.py:1220
 msgid "Unable to download file, wrong file path"
 msgstr "No es posible descargar el archivo, ruta errónea"
 
-#: seahub/views/file.py:1226
+#: seahub/views/file.py:1227
 msgid "Unable to download file."
 msgstr "Imposible descargar archivo."
 
-#: seahub/views/file.py:1444 seahub/views/file.py:1709
+#: seahub/views/file.py:1445 seahub/views/file.py:1710
 #: seahub/views/repo.py:349
 #, python-format
 msgid "Share link for %s."
 msgstr "Enlace de compartir para %s."
 
-#: seahub/views/file.py:1845 seahub/views/file.py:1850
+#: seahub/views/file.py:1846 seahub/views/file.py:1851
 msgid "Unable to download file"
 msgstr "Imposible descargar archivo"
 
-#: seahub/views/file.py:2190
+#: seahub/views/file.py:2191
 msgid "The original file does not exist"
 msgstr ""
 
