@@ -1010,6 +1010,8 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecord: PropTypes.func,
   addFolder: PropTypes.func,
+  createGhostElement: PropTypes.func,
+  onDrop: PropTypes.func,
 };
 
 export default Records;

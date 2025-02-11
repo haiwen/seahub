@@ -25,6 +25,6 @@
   background-color: #fff;
 }
 
-.sf-table-result-content .sf-table-row.cell-drop-tip .frozen-columns {
+.sf-table-result-content .sf-table-row.show-drop-tip .sf-table-cell {
   background-color: rgb(200, 220, 240) !important;
 }

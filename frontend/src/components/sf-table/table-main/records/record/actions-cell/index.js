@@ -64,7 +64,8 @@ class ActionsCell extends Component {
     };
     return (
       <div
-        className={classnames('sf-table-cell column actions-cell', { 'table-last--frozen': isLastFrozenCell })}
+        className={classnames('sf-table-cell column actions-cell', { 'table-last--frozen': isLastFrozenCell,
+          'tr-drag-effect': isSelected, })}
         id={`action-cell-${recordId}`}
         style={{ ...cellStyle }}
         onMouseEnter={this.onCellMouseEnter}
