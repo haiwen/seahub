@@ -128,6 +128,7 @@ class AuthenticationForm(forms.Form):
             # get social provider identifier
             enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
             enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
+            provider_identifier = ''
             if enable_adfs or enable_mul_adfs:
                 provider_identifier = getattr(settings,
                                               'SAML_PROVIDER_IDENTIFIER',
@@ -138,7 +139,8 @@ class AuthenticationForm(forms.Form):
                                               '')
 
             # check if disable password login
-            if disable_pwd_login and not is_admin:
+            if disable_pwd_login and not is_admin and \
+                    (enable_adfs or enable_mul_adfs or enable_oauth):
                 social_user = SocialAuthUser.objects.filter(
                     username=username,
                     provider=provider_identifier
