@@ -3,12 +3,24 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
-import { getFrozenColumns } from '../../../utils/column';
+import { getColumnByKey, getFrozenColumns } from '../../../utils/column';
 import { SEQUENCE_COLUMN as Z_INDEX_SEQUENCE_COLUMN, FROZEN_GROUP_CELL as Z_INDEX_FROZEN_GROUP_CELL } from '../../../constants/z-index';
+import { TreeMetrics } from '../../../utils/tree-metrics';
 
 import './index.css';
+import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
+import { getColumn } from '../../../utils/records-body-utils';
+import { PRIVATE_COLUMN_KEY } from '../../../../../tag/constants';
+import { SF_TABLE_TAGS_DRAG_KEY } from '../../../constants/transfer-types';
 
 class Record extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDropShow: false,
+      isDraggingOver: false,
+    };
+  }
 
   componentDidMount() {
     this.checkScroll();
@@ -222,23 +234,81 @@ class Record extends React.Component {
     return style;
   };
 
-  // handle drag copy
+  handleDragStart = (event) => {
+    event.stopPropagation();
+    if (!this.props.isSelected) return;
+    this.props.updateDraggingStatus(true);
+    const { treeMetrics, treeNodeKeyRecordIdMap } = this.props;
+    const selectedRecordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
+    const dragData = JSON.stringify({ recordIds: selectedRecordIds });
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData(SF_TABLE_TAGS_DRAG_KEY, dragData);
+    // set html elements who have row-selected class as drag image
+    const ghost = document.createElement('div');
+    ghost.style.display = 'flex';
+    ghost.style.flexDirection = 'column';
+    selectedRecordIds.forEach(id => {
+      const record = this.props.recordGetterById(id);
+      const tag = document.createElement('div');
+      tag.style.display = 'flex';
+      tag.style.alignItems = 'center';
+
+      const color = document.createElement('span');
+      color.style.display = 'inline-block';
+      color.style.width = '10px';
+      color.style.height = '10px';
+      color.style.borderRadius = '50%';
+      color.style.backgroundColor = record[PRIVATE_COLUMN_KEY.TAG_COLOR];
+
+      const name = document.createElement('span');
+      name.style.marginLeft = '8px';
+      name.textContent = record[PRIVATE_COLUMN_KEY.TAG_NAME];
+
+      tag.appendChild(color);
+      tag.appendChild(name);
+      ghost.appendChild(tag);
+    });
+
+    document.body.appendChild(ghost);
+    event.dataTransfer.setDragImage(ghost, -20, 0);
+  };
+
   handleDragEnter = (e) => {
-    // Prevent default to allow drop
     e.preventDefault();
+    const sourceIds = TreeMetrics.getSelectedIds(this.props.treeMetrics, this.props.treeNodeKeyRecordIdMap);
+    const targetId = getRecordIdFromRecord(this.props.record);
+    if (sourceIds.includes(targetId)) return;
+    if (this.props.isDragging) {
+      this.rowRef.classList.add('cell-drop-tip');
+      return;
+    }
     const { index, groupRecordIndex, cellMetaData: { onDragEnter } } = this.props;
     onDragEnter({ overRecordIdx: index, overGroupRecordIndex: groupRecordIndex });
   };
 
+  handleDragLeave = (e) => {
+    // check wheter the mouse still in current target's area horizontally and vertically
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = this.rowRef.getBoundingClientRect();
+    if (clientX > left && clientX < left + width && clientY > top && clientY < top + height - 2) return;
+    this.rowRef.classList.remove('cell-drop-tip');
+  };
+
   handleDragOver = (e) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    e.dataTransfer.dropEffect = this.props.isDragging ? 'move' : 'copy';
   };
 
   handleDrop = (e) => {
-    // The default in Firefox is to treat data in dataTransfer as a URL and perform navigation on it, even if the data type used is 'text'
-    // To bypass this, we need to capture and prevent the drop event.
     e.preventDefault();
+    e.stopPropagation();
+    this.rowRef.classList.remove('cell-drop-tip');
+    this.props.updateDraggingStatus(false);
+    const dragData = e.dataTransfer.getData(SF_TABLE_TAGS_DRAG_KEY);
+    const sourceIds = JSON.parse(dragData).recordIds;
+    const targetId = getRecordIdFromRecord(this.props.record);
+    if (!dragData || sourceIds.includes(targetId)) return;
+    this.props.addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetId, sourceIds);
   };
 
   render() {
@@ -253,13 +323,18 @@ class Record extends React.Component {
 
     return (
       <div
+        ref={rowRef => this.rowRef = rowRef}
         className={classnames('sf-table-row', {
           'sf-table-last-row': isLastRecord,
           'row-selected': isSelected,
-          'row-locked': isLocked
+          'row-locked': isLocked,
+          'cell-drop-tip': this.state.isDropShow,
         })}
         style={this.getRecordStyle()}
+        draggable={isSelected || this.props.isDragging}
+        onDragStart={this.handleDragStart}
         onDragEnter={this.handleDragEnter}
+        onDragLeave={this.handleDragLeave}
         onDragOver={this.handleDragOver}
         onDrop={this.handleDrop}
       >
@@ -325,6 +400,12 @@ Record.propTypes = {
   hasChildNodes: PropTypes.bool,
   isFoldedTreeNode: PropTypes.bool,
   toggleExpandTreeNode: PropTypes.func,
+  treeMetrics: PropTypes.object,
+  treeNodeKeyRecordIdMap: PropTypes.object,
+  isDragging: PropTypes.bool,
+  updateDraggingStatus: PropTypes.func,
+  addTagLinks: PropTypes.func,
+  recordGetterById: PropTypes.func,
 };
 
 export default Record;

@@ -242,6 +242,7 @@ const TagsTable = ({
         checkCellValueChanged={checkCellValueChanged}
         modifyColumnWidth={modifyColumnWidth}
         loadMore={loadMore}
+        addTagLinks={addTagLinks}
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />

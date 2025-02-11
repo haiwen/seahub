@@ -40,6 +40,7 @@ class TreeBody extends Component {
       keyNodeFoldedMapForSearch: {},
       selectedPosition: null,
       isScrollingRightScrollbar: false,
+      isDragging: false,
     };
     this.eventBus = EventBus.getInstance();
     this.resultContentRef = null;
@@ -437,6 +438,7 @@ class TreeBody extends Component {
   };
 
   onCellMouseDown = (cellPosition, event) => {
+    if (this.props.treeMetrics && Object.keys(this.props.treeMetrics.idSelectedNodeMap).length > 0) return;
     // onRangeSelectStart
     if (!isShiftKeyDown(event)) {
       this.selectCell(cellPosition);
@@ -560,8 +562,12 @@ class TreeBody extends Component {
     return nodes.slice(startRenderIndex, endRenderIndex);
   };
 
+  updateDraggingStatus = (isDragging) => {
+    this.setState({ isDragging });
+  };
+
   renderRecords = () => {
-    const { treeMetrics, showCellColoring, columnColors, searchResult } = this.props;
+    const { treeMetrics, showCellColoring, columnColors, searchResult, treeNodeKeyRecordIdMap } = this.props;
     const { nodes, keyNodeFoldedMap, keyNodeFoldedMapForSearch, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     this.initFrozenNodesRef();
     const visibleNodes = this.getVisibleNodesInRange();
@@ -615,6 +621,12 @@ class TreeBody extends Component {
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
           toggleExpandTreeNode={() => this.toggleExpandNode(node_key)}
+          treeMetrics={treeMetrics}
+          treeNodeKeyRecordIdMap={treeNodeKeyRecordIdMap}
+          isDragging={this.state.isDragging}
+          updateDraggingStatus={this.updateDraggingStatus}
+          addTagLinks={this.props.addTagLinks}
+          recordGetterById={this.props.recordGetterById}
         />
       );
     });

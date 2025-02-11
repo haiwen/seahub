@@ -24,3 +24,7 @@
 .frozen-columns {
   background-color: #fff;
 }
+
+.sf-table-result-content .sf-table-row.cell-drop-tip .frozen-columns {
+  background-color: rgb(200, 220, 240) !important;
+}
