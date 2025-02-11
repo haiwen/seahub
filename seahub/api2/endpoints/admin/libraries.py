@@ -17,6 +17,7 @@ from seahub.api2.utils import api_error
 from seahub.base.accounts import User
 from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
+from seahub.views.file import send_file_access_msg
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
@@ -423,6 +424,8 @@ class AdminLibrary(APIView):
             # transfer repo
             try:
                 transfer_repo(repo_id, new_owner, is_share)
+                # send stats message
+                send_file_access_msg(request, repo, '/', 'web')
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

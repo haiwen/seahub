@@ -1871,6 +1871,8 @@ class RepoOwner(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
+            # send stats message
+            send_file_access_msg(request, repo, '/', 'web')
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
