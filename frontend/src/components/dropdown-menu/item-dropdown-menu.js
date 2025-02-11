@@ -200,7 +200,7 @@ class ItemDropdownMenu extends React.Component {
             className={this.props.menuClassname}
             positionFixed
             flip={false}
-            modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
+            modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
           >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
@@ -226,7 +226,7 @@ class ItemDropdownMenu extends React.Component {
                     <DropdownMenu
                       positionFixed
                       flip={false}
-                      modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
+                      modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
                     >
                       {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}
                       {menuItem.subOpList.map((item, index) => {

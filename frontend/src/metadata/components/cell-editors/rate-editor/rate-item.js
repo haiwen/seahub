@@ -54,7 +54,7 @@ const RateItem = ({
         <Icon iconName={type || 'rate'} />
       </div>
       {enterIndex !== -1 && (
-        <UncontrolledTooltip placement='bottom' target={ref} modifiers={[{ preventOverflow: { boundariesElement: document.body } }]} className="sf-metadata-tooltip">
+        <UncontrolledTooltip placement='bottom' target={ref} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]} className="sf-metadata-tooltip">
           {enterIndex}
         </UncontrolledTooltip>
       )}

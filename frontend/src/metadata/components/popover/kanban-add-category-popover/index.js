@@ -48,7 +48,7 @@ const KanbanAddCategoryPopover = ({ target, options, onCancel, onSubmit }) => {
       className="sf-metadata-kanban-add-board-popover"
       hide={onCancel}
       hideWithEsc={onCancel}
-      modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
+      modifiers={[[{ name: 'preventOverflow', options: { boundary: document.body } }]]}
     >
       <div className="sf-metadata-kanban-add-board-popover-inner">
         <div className="kanban-popover-body">
