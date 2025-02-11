@@ -625,8 +625,9 @@ class TreeBody extends Component {
           treeNodeKeyRecordIdMap={treeNodeKeyRecordIdMap}
           isDragging={this.state.isDragging}
           updateDraggingStatus={this.updateDraggingStatus}
-          addTagLinks={this.props.addTagLinks}
+          onDrop={this.props.onDrop}
           recordGetterById={this.props.recordGetterById}
+          createGhostElement={this.props.createGhostElement}
         />
       );
     });
@@ -748,6 +749,8 @@ TreeBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   storeFoldedTreeNodes: PropTypes.func,
+  createGhostElement: PropTypes.func,
+  onDrop: PropTypes.func,
 };
 
 export default TreeBody;

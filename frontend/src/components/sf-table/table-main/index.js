@@ -139,6 +139,8 @@ TableMain.propTypes = {
   modifyRecords: PropTypes.func,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
+  onDrop: PropTypes.func,
+  createGhostElement: PropTypes.func,
 };
 
 export default TableMain;

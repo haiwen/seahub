@@ -13,6 +13,8 @@ import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 import { isNumber } from '../../../../utils/number';
+import { getParentLinks } from '../../../utils/cell';
+import { getTagById } from '../../../utils/row';
 
 import './index.css';
 
@@ -208,6 +210,91 @@ const TagsTable = ({
     }
   }, [scrollToCurrentSelectedCell]);
 
+  const createColor = (record, style = {}) => {
+    const color = document.createElement('span');
+    Object.assign(color.style, {
+      display: 'inline-block',
+      width: '12px',
+      height: '12px',
+      borderRadius: '50%',
+      backgroundColor: record[PRIVATE_COLUMN_KEY.TAG_COLOR],
+    }, style);
+    return color;
+  };
+
+  const createTagElement = useCallback((record) => {
+    const tag = document.createElement('div');
+    tag.style.minWidth = '80px';
+    tag.style.width = 'fit-content';
+    tag.style.display = 'flex';
+    tag.style.alignItems = 'center';
+    tag.style.paddingLeft = '12px';
+
+    const color = createColor(record);
+
+    const name = document.createElement('span');
+    name.style.marginLeft = '8px';
+    name.textContent = record[PRIVATE_COLUMN_KEY.TAG_NAME];
+
+    tag.appendChild(color);
+    tag.appendChild(name);
+    return tag;
+  }, []);
+
+  const createParentTagsElement = useCallback((record) => {
+    const ids = getParentLinks(record).map(t => t.row_id);
+    const container = document.createElement('span');
+    container.style.minWidth = '80px';
+    container.style.width = 'fit-content';
+    container.style.display = 'inline-flex';
+    container.style.alignItems = 'center';
+    container.style.paddingLeft = '12px';
+
+    ids.forEach((id => {
+      const record = table.id_row_map[id];
+      const color = createColor(record, { width: '16px', height: '16px', marginRight: '-6px', border: '2px solid #fff' });
+      container.appendChild(color);
+    }));
+    return container;
+  }, [table]);
+
+  const createGhostElement = useCallback((dragData) => {
+    const data = JSON.parse(dragData);
+    const { recordIds } = data;
+    const ghost = document.createElement('div');
+    ghost.style.width = 'fit-content';
+    ghost.style.display = 'flex';
+    ghost.style.flexDirection = 'column';
+    ghost.style.border = '1px solid #ccc';
+    ghost.style.backgroundColor = '#fff';
+
+    recordIds.forEach(recordId => {
+      const record = getTagById(tagsData, recordId);
+      if (record) {
+        const row = document.createElement('div');
+        row.style.width = 'fit-content';
+        row.style.display = 'flex';
+        row.style.padding = '4px 8px';
+        row.appendChild(createTagElement(record));
+        row.appendChild(createParentTagsElement(record));
+
+        ghost.appendChild(row);
+      }
+    });
+
+    return ghost;
+  }, [tagsData, createTagElement, createParentTagsElement]);
+
+  const onDrop = (sourceId, targetId, recordIds) => {
+    if (!sourceId) {
+      addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetId, recordIds);
+      return;
+    }
+    deleteTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, sourceId, recordIds, {
+      success_callback: addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetId, recordIds),
+    });
+  };
+
   useEffect(() => {
     const eventBus = EventBus.getInstance();
     const unsubscribeUpdateSearchResult = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, updateSearchResult);
@@ -242,7 +329,8 @@ const TagsTable = ({
         checkCellValueChanged={checkCellValueChanged}
         modifyColumnWidth={modifyColumnWidth}
         loadMore={loadMore}
-        addTagLinks={addTagLinks}
+        onDrop={onDrop}
+        createGhostElement={createGhostElement}
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />
