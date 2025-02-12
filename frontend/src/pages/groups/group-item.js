@@ -102,12 +102,12 @@ class GroupItem extends React.Component {
           <h4 className="sf-heading m-0 d-flex align-items-center">
             <span className={`${group.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
             <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
-            {isDeptAdmin && (
+            {isDeptAdmin &&
               <SingleDropdownToolbar
                 withPlusIcon={true}
                 opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
               />
-            )}
+            }
           </h4>
         </div>
         {group.repos.length === 0 ?
