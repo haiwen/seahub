@@ -102,6 +102,26 @@ class TagsManagerAPI {
     return this.req.post(url, params);
   };
 
+  batchDeleteFiles(repo_id, file_names) {
+    const url = this.server + '/api/v2.1/repos/batch-delete-folders-item/';
+    const data = {
+      repo_id,
+      file_names,
+    };
+    return this.req.delete(url, { data });
+  }
+
+  zipDownload(repoID, parent_dir, dirents) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
+    const form = new FormData();
+    form.append('parent_dir', parent_dir);
+    dirents.forEach(item => {
+      form.append('dirents', item);
+    });
+
+    return this._sendPostRequest(url, form);
+  }
+
   // file tags
   updateFileTags = (repoID, data) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/file-tags/';
