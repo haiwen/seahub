@@ -62,7 +62,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
 
   const handleSelected = useCallback((event) => {
     event.stopPropagation();
-    onSelectFile(fileId);
+    onSelectFile(event, fileId);
   }, [fileId, onSelectFile]);
 
   const onIconLoadError = useCallback(() => {
@@ -77,10 +77,16 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
   }, [repoID, file, openImagePreview]);
 
   const handelClick = useCallback((event) => {
+    event.stopPropagation();
     if (event.target.tagName == 'TD') {
-      reSelectFiles(fileId);
+      reSelectFiles([fileId]);
     }
   }, [fileId, reSelectFiles]);
+
+  const onContextMenu = useCallback((event) => {
+    event.preventDefault();
+    onSelectFile(event, fileId);
+  }, [fileId, onSelectFile]);
 
   return (
     <tr
@@ -91,6 +97,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
       onClick={handelClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onContextMenu={onContextMenu}
     >
       <td className="pl10 pr-2">
         <input
