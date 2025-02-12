@@ -334,12 +334,6 @@ img[src=""],img:not([src]) { /* for first loading img*/
   color: #444;
 }
 
-.path-container .add-wiki-dropdown .sf3-font-down {
-  color: #999;
-  cursor: pointer;
-  font-size: 12px;
-}
-
 .dir-tool>div {
   margin-left: 8px;
 }
