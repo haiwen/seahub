@@ -4,11 +4,13 @@ import tagsAPI from '../api';
 import { useTags } from './tags';
 import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
 import { getAllChildTagsIdsFromNode } from '../utils/tree';
+import { seafileAPI } from '../../utils/seafile-api';
+import { TAG_FILE_KEY } from '../constants/file';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
-export const TagViewProvider = ({ repoID, tagID, nodeKey, children, ...params }) => {
+export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, ...params }) => {
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -25,6 +27,30 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, ...params })
     }
     return getAllChildTagsIdsFromNode(displayNode);
   }, [tagsData]);
+
+  const moveTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+    seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+      moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+    });
+  }, [repoID, moveFileCallback]);
+
+  const copyTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+    seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+      copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+    });
+  }, [repoID, copyFileCallback]);
+
+  const deleteTagFiles = useCallback((paths, fileNames, fileIds) => {
+    tagsAPI.batchDeleteFiles(repoID, paths).then(() => {
+      deleteFilesCallback && deleteFilesCallback(paths, fileNames);
+      setTagFiles(prevTagFiles => ({
+        ...prevTagFiles,
+        rows: prevTagFiles.rows.filter(row => !fileIds.includes(row[TAG_FILE_KEY.ID]))
+      }));
+    });
+  }, [repoID, deleteFilesCallback]);
+
+  const zipDownloadTagFiles = useCallback
 
   useEffect(() => {
     setLoading(true);
@@ -53,9 +79,12 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, ...params })
       repoID,
       tagID,
       repoInfo: params.repoInfo,
-      deleteFilesCallback: params.deleteFilesCallback,
       renameFileCallback: params.renameFileCallback,
       updateCurrentDirent: params.updateCurrentDirent,
+      moveTagFile: moveTagFile,
+      copyTagFile: copyTagFile,
+      addFolder: addFolderCallback,
+      deleteTagFiles: deleteTagFiles,
     }}>
       {children}
     </TagViewContext.Provider>
