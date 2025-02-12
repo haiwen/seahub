@@ -181,6 +181,8 @@ def oauth_callback(request):
     oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
     if not oauth_user and SSO_LDAP_USE_SAME_UID:
         oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
+        if oauth_user:
+            SocialAuthUser.objects.add(oauth_user.username, OAUTH_PROVIDER, uid)
     if oauth_user:
         email = oauth_user.username
         is_new_user = False
