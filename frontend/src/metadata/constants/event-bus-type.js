@@ -78,4 +78,9 @@ export const EVENT_BUS_TYPE = {
   // map
   MODIFY_MAP_TYPE: 'modify_map_type',
   MAP_VIEW: 'map_view',
+
+  // tag file
+  RENAME_TAG_FILE: 'rename_tag_file',
+  DOWNLOAD_TAG_FILES: 'download_tag_files',
+  DELETE_TAG_FILES: 'delete_tag_files',
 };

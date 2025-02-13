@@ -2153,6 +2153,10 @@ class LibContentView extends React.Component {
     this.setState({ path });
   };
 
+  showDirentToolbar = (isDirentSelected) => {
+    this.setState({ isDirentSelected });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2224,7 +2228,7 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
-        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} showDirentToolbar={this.showDirentToolbar}>
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
