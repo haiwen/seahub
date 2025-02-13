@@ -224,8 +224,9 @@ class MetadataViewsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertIn('navigation', json_resp)
+        self.assertTrue(len(json_resp['navigation']) > 0)
 
-    def test_post_view(self):
+    def test_create_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
         data = {
             'name': 'test_view',
@@ -235,6 +236,14 @@ class MetadataViewsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertIn('view', json_resp)
+        self.assertEqual(json_resp['view']['name'], 'test_view')
+    
+    def test_get_view_detail(self):
+        url = reverse('api-v2.1-metadata-views-detail', args=[self.view_id])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(json_resp['view']['_id'], self.view_id)
 
     def test_put_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
@@ -267,3 +276,119 @@ class MetadataViewsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
+
+class MetadataViewsDuplicateViewTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        
+        views_url = reverse('api-v2.1-metadata-views')
+        resp = self.client.post(views_url, {
+            'name': 'test_view',
+            'type': 'table'
+        }, 'application/json')
+        self.view_id = json.loads(resp.content)['view']['_id']
+
+    def test_duplicate_view(self):
+        url = reverse('api-v2.1-metadata-view-duplicate')
+        data = {
+            'view_id': self.view_id
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('view', json_resp)
+        self.assertNotEqual(json_resp['view']['_id'], self.view_id)
+        self.assertTrue(json_resp['view']['name'].startswith('test_view'))
+
+
+class MetadataViewsMoveViewTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        
+        views_url = reverse('api-v2.1-metadata-views')
+        resp = self.client.post(views_url, {
+            'name': 'source_view',
+            'type': 'table'
+        }, 'application/json')
+        self.source_view_id = json.loads(resp.content)['view']['_id']
+        
+        resp = self.client.post(views_url, {
+            'name': 'target_view',
+            'type': 'table'
+        }, 'application/json')
+        self.target_view_id = json.loads(resp.content)['view']['_id']
+
+    def test_move_view(self):
+        url = reverse('api-v2.1-metadata-views-move')
+        data = {
+            'source_view_id': self.source_view_id,
+            'target_view_id': self.target_view_id
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('navigation', json_resp)
+
+
+class MetadataExtractFileDetailsTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+ 
+        self.file_name = 'test.txt'
+        self.create_file(repo_id=self.repo_id,
+                        parent_dir='/',
+                        filename=self.file_name,
+                        username=self.user.username)
+
+    def test_extract_file_details(self):
+        url = reverse('api-v2.1-metadata-extract-file-details')
+        
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+                             f'?parent_dir=/&file_name={self.file_name}')
+        obj_id = json.loads(resp.content)['_obj_id']
+        
+        data = {
+            'obj_ids': [obj_id]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('details', json_resp)
+
+    def test_extract_file_details_with_invalid_obj_ids(self):
+        url = reverse('api-v2.1-metadata-extract-file-details')
+        data = {
+            'obj_ids': []
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(400, resp.status_code)
