@@ -179,6 +179,14 @@ class Context {
     return viewId === FACE_RECOGNITION_VIEW_ID;
   };
 
+  canSetPeoplePhoto = () => {
+    const viewId = this.getSetting('viewID');
+    if (this.permission === 'r' || viewId !== FACE_RECOGNITION_VIEW_ID) {
+      return false;
+    }
+    return true;
+  };
+
   restoreRows = () => {
     // todo
   };
@@ -280,6 +288,11 @@ class Context {
   removePeoplePhotos = (recordId, photoIds) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.removePeoplePhotos(repoID, recordId, photoIds);
+  };
+
+  setPeoplePhoto = (recordId, photoId) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.setPeoplePhoto(repoID, recordId, photoId);
   };
 
   // file tag

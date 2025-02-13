@@ -31,6 +31,10 @@ const FaceRecognition = () => {
     store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
   }, [store]);
 
+  const onSetPeoplePhoto = useCallback((peopleId, peoplePhoto) => {
+    store.setPeoplePhoto(peopleId, peoplePhoto);
+  }, [store]);
+
   const openPeople = useCallback((people) => {
     peopleRef.current = people;
     const name = people._is_someone ? (people._name || gettext('Person image')) : gettext('Unknown people');
@@ -64,6 +68,7 @@ const FaceRecognition = () => {
           onAddPeoplePhotos={onAddPeoplePhotos}
           onRemovePeoplePhotos={onRemovePeoplePhotos}
           onDeletePeoplePhotos={onDeletePeoplePhotos}
+          onSetPeoplePhoto={onSetPeoplePhoto}
         />
       ) : (
         <Peoples peoples={peoples} onRename={onRename} onOpenPeople={openPeople} />

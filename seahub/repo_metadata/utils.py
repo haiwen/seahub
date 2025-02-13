@@ -41,6 +41,13 @@ def extract_file_details(params):
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
 
+def update_people_cover_photo(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-people-cover-photo')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return json.loads(resp.content)
 
 def generator_base64_code(length=4):
     possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'

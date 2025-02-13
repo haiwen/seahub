@@ -622,6 +622,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  setPeoplePhoto = (peopleId, selectedPhoto) => {
+    const type = OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, people_id: peopleId, selected_photo: selectedPhoto
+    });
+    this.applyOperation(operation);
+  };
+
   // tag
   updateFileTags = (data) => {
     const type = OPERATION_TYPE.UPDATE_FILE_TAGS;
