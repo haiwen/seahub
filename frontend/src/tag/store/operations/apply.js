@@ -84,7 +84,6 @@ export default function apply(data, operation) {
       });
 
       data.rows = updatedRows;
-      console.log('updatedRows:', updatedRows);
       return data;
     }
     case OPERATION_TYPE.DELETE_RECORDS: {

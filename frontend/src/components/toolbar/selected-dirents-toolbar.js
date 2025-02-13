@@ -17,6 +17,8 @@ import toaster from '../toast';
 import FileAccessLog from '../dialog/file-access-log';
 
 import '../../css/selected-dirents-toolbar.css';
+import { TAGS_MODE } from '../dir-view-mode/constants';
+import TagFilesToolbar from './tag-files-toolbar';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -371,7 +373,11 @@ class SelectedDirentsToolbar extends React.Component {
       canDownload = permission.download;
       canDelete = permission.delete;
     }
+    const isTagView = this.props.currentMode === TAGS_MODE;
 
+    if (isTagView) {
+      return <TagFilesToolbar />;
+    }
     return (
       <Fragment>
         <div className="selected-dirents-toolbar">

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
@@ -10,14 +10,18 @@ import { getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, g
 } from '../../../../metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
 import { openFile } from '../../../../metadata/utils/file';
+import Rename from '../../../../components/rename';
+import { TAG_FILE_KEY } from '../../../constants/file';
+import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 
 import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFiles, openImagePreview }) => {
+const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFiles, openImagePreview, onRenameFile }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
+  const [isRenameing, setIsRenaming] = useState(false);
 
   const fileId = useMemo(() => getRecordIdFromRecord(file), [file]);
   const parentDir = useMemo(() => getParentDirFromRecord(file), [file]);
@@ -71,22 +75,46 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
 
   const handelClickFileName = useCallback((event) => {
     event.preventDefault();
+    if (isRenameing) return;
     openFile(repoID, file, () => {
       openImagePreview(file);
     });
-  }, [repoID, file, openImagePreview]);
+  }, [repoID, file, openImagePreview, isRenameing]);
 
   const handelClick = useCallback((event) => {
     event.stopPropagation();
+    if (isRenameing) return;
     if (event.target.tagName == 'TD') {
       reSelectFiles([fileId]);
     }
-  }, [fileId, reSelectFiles]);
+  }, [fileId, reSelectFiles, isRenameing]);
 
   const onContextMenu = useCallback((event) => {
     event.preventDefault();
     onSelectFile(event, fileId);
   }, [fileId, onSelectFile]);
+
+  const onRenameCancel = useCallback(() => {
+    setIsRenaming(false);
+  }, []);
+
+  const onRenameConfirm = useCallback((newName) => {
+    onRenameFile(file, newName);
+    onRenameCancel();
+  }, [file, onRenameFile, onRenameCancel]);
+
+  const toggleRename = useCallback((id) => {
+    if (id === file[TAG_FILE_KEY.ID]) setIsRenaming(true);
+  }, [file]);
+
+  useEffect(() => {
+    if (!window.sfTagsDataContext) return;
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE, (id) => toggleRename(id));
+
+    return () => {
+      unsubscribeRenameTagFile && unsubscribeRenameTagFile();
+    };
+  }, [toggleRename]);
 
   return (
     <tr
@@ -116,7 +144,16 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
         </div>
       </td>
       <td className="name">
-        <a href={path} onClick={handelClickFileName}>{name}</a>
+        {isRenameing ? (
+          <Rename
+            hasSuffix={true}
+            name={file[TAG_FILE_KEY.NAME]}
+            onRenameConfirm={onRenameConfirm}
+            onRenameCancel={onRenameCancel}
+          />
+        ) : (
+          <a href={path} onClick={handelClickFileName}>{name}</a>
+        )}
       </td>
       <td className="tag-list-title">
         <FileTagsFormatter value={tags} tagsData={tagsData} className="sf-metadata-tags-formatter" />
@@ -136,6 +173,7 @@ TagFile.propTypes = {
   onSelectFile: PropTypes.func,
   openImagePreview: PropTypes.func,
   reSelectFiles: PropTypes.func,
+  onRenameFile: PropTypes.func,
 };
 
 export default TagFile;

@@ -1,4 +1,5 @@
-import React, { useCallback, useState, useRef, useMemo } from 'react';
+import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { useTagView, useTags } from '../../hooks';
 import { gettext } from '../../../utils/constants';
 import TagFile from './tag-file';
@@ -7,16 +8,22 @@ import EmptyTip from '../../../components/empty-tip';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
 import FixedWidthTable from '../../../components/common/fixed-width-table';
 import TagFilesContextMenu from './context-menu';
-import { PRIVATE_COLUMN_KEY } from '../../constants';
-import { getRowById } from '../../../metadata/utils/table';
-import { getTagFilesLinks } from '../../utils/cell';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { TAG_FILE_KEY } from '../../constants/file';
+import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
+import MoveDirent from '../../../components/dialog/move-dirent-dialog';
+import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
+import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
+import { getFileById } from '../../utils/file';
 
 import './index.css';
 
 const TagFiles = () => {
-  const { tagID, tagFiles, repoID, repoInfo, moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameFileCallback } = useTagView();
-  const { tagsData, updateLocalTag } = useTags();
-  const [selectedFileIds, setSelectedFileIds] = useState([]);
+  const { tagFiles, repoID, repoInfo,
+    isMoveDialogOpen, isCopyDialogOpen, isZipDialogOpen, toggleMoveDialog, toggleCopyDialog, toggleZipDialog,
+    moveTagFile, copyTagFile, addFolder, downloadTagFiles, deleteTagFiles, renameTagFile } = useTagView();
+  const { tagsData, selectedFileIds, updateSelectedFileIds } = useTags();
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
 
   const currentImageRef = useRef(null);
@@ -24,6 +31,20 @@ const TagFiles = () => {
   const isSelectedAll = useMemo(() => {
     return selectedFileIds ? selectedFileIds.length === tagFiles.rows.length : false;
   }, [selectedFileIds, tagFiles]);
+
+  const selectedFile = useMemo(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    return getFileById(tagFiles, selectedFileIds[0]);
+  }, [selectedFileIds, tagFiles]);
+
+  const getDownloadTarget = useCallback(() => {
+    if (!selectedFileIds.length) return [];
+    return selectedFileIds.map(id => {
+      const file = getFileById(tagFiles, id);
+      const path = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
+      return path;
+    });
+  }, [tagFiles, selectedFileIds]);
 
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
@@ -42,15 +63,15 @@ const TagFiles = () => {
 
   const onSelectedAll = useCallback(() => {
     if (isSelectedAll) {
-      setSelectedFileIds([]);
+      updateSelectedFileIds([]);
     } else {
       const allIds = tagFiles.rows.map(record => getRecordIdFromRecord(record));
-      setSelectedFileIds(allIds);
+      updateSelectedFileIds(allIds);
     }
-  }, [tagFiles, isSelectedAll]);
+  }, [tagFiles, isSelectedAll, updateSelectedFileIds]);
 
   const onContainerClick = (event) => {
-    if (selectedFileIds.length > 0) setSelectedFileIds([]);
+    if (selectedFileIds.length > 0) updateSelectedFileIds([]);
   };
 
   const onSelectFile = useCallback((event, fileId) => {
@@ -62,20 +83,20 @@ const TagFiles = () => {
         newSelectedFiles.push(fileId);
       }
       if (newSelectedFiles.length > 0) {
-        setSelectedFileIds(newSelectedFiles);
+        updateSelectedFileIds(newSelectedFiles);
       } else {
-        setSelectedFileIds([]);
+        updateSelectedFileIds([]);
       }
     } else if (event.button === 2) {
       if (selectedFileIds.length <= 1) {
-        setSelectedFileIds([fileId]);
+        updateSelectedFileIds([fileId]);
       }
     }
-  }, [selectedFileIds]);
+  }, [selectedFileIds, updateSelectedFileIds]);
 
   const reSelectFiles = useCallback((fileIds) => {
-    setSelectedFileIds(fileIds);
-  }, []);
+    updateSelectedFileIds(fileIds);
+  }, [updateSelectedFileIds]);
 
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
@@ -87,15 +108,26 @@ const TagFiles = () => {
     setImagePreviewerVisible(false);
   }, []);
 
-  const handleDeleteTagFiles = useCallback((paths, fileNames) => {
-    const row = getRowById(tagsData, tagID);
-    const oldTagFileLinks = getTagFilesLinks(row);
-    const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
-    const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
-    updateLocalTag(tagID, update);
-    deleteTagFiles && deleteTagFiles(paths, fileNames, selectedFileIds);
-    setSelectedFileIds([]);
-  }, [tagID, tagsData, selectedFileIds, deleteTagFiles, updateLocalTag]);
+  const handleDeleteTagFiles = useCallback(() => {
+    deleteTagFiles();
+    updateSelectedFileIds([]);
+  }, [deleteTagFiles, updateSelectedFileIds]);
+
+  const handleRenameTagFile = useCallback((file, newName) => {
+    const path = file[TAG_FILE_KEY.PARENT_DIR];
+    seafileAPI.listDir(repoID, path).then(res => {
+      const fileList = res.data.dirent_list.filter(dirent => dirent.type === 'file');
+      const isDuplicated = fileList.some(file => file.name === newName);
+      if (isDuplicated) {
+        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+        toaster.danger(errMessage);
+        return false;
+      }
+      const fullPath = Utils.joinPath(path, file[TAG_FILE_KEY.NAME]);
+      renameTagFile(file[TAG_FILE_KEY.ID], fullPath, newName);
+    });
+  }, [repoID, renameTagFile]);
 
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
@@ -164,6 +196,7 @@ const TagFiles = () => {
                 onSelectFile={onSelectFile}
                 reSelectFiles={reSelectFiles}
                 openImagePreview={openImagePreview}
+                onRenameFile={handleRenameTagFile}
               />);
           })}
         </FixedWidthTable>
@@ -183,11 +216,50 @@ const TagFiles = () => {
         tagFiles={tagFiles}
         selectedFileIds={selectedFileIds}
         reSelectFiles={reSelectFiles}
-        moveTagFile={moveTagFile}
-        copyTagFile={copyTagFile}
-        addFolder={addFolder}
+        downloadTagFiles={downloadTagFiles}
         deleteTagFiles={handleDeleteTagFiles}
+        toggleMoveDialog={toggleMoveDialog}
+        toggleCopyDialog={toggleCopyDialog}
+        toggleZipDialog={toggleZipDialog}
       />
+      {isMoveDialogOpen && (
+        <ModalPortal>
+          <MoveDirent
+            path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
+            repoID={repoID}
+            repoEncrypted={repoInfo.encrypted}
+            isMultipleOperation={false}
+            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
+            onItemMove={moveTagFile}
+            onCancelMove={toggleMoveDialog}
+            onAddFolder={addFolder}
+          />
+        </ModalPortal>
+      )}
+      {isCopyDialogOpen && (
+        <ModalPortal>
+          <CopyDirent
+            path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
+            repoID={repoID}
+            repoEncrypted={repoInfo.encrypted}
+            isMultipleOperation={false}
+            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
+            onItemCopy={copyTagFile}
+            onCancelCopy={toggleCopyDialog}
+            onAddFolder={addFolder}
+          />
+        </ModalPortal>
+      )}
+      {isZipDialogOpen && (
+        <ModalPortal>
+          <ZipDownloadDialog
+            repoID={repoID}
+            path="/"
+            target={getDownloadTarget()}
+            toggleDialog={toggleZipDialog}
+          />
+        </ModalPortal>
+      )}
     </>
   );
 };
