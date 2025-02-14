@@ -1,7 +1,7 @@
-import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useMemo } from 'react';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { useTagView, useTags } from '../../hooks';
-import { gettext } from '../../../utils/constants';
+import { gettext, username } from '../../../utils/constants';
 import TagFile from './tag-file';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import EmptyTip from '../../../components/empty-tip';
@@ -15,13 +15,16 @@ import { Utils } from '../../../utils/utils';
 import MoveDirent from '../../../components/dialog/move-dirent-dialog';
 import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
+import ShareDialog from '../../../components/dialog/share-dialog';
 import { getFileById } from '../../utils/file';
+import Rename from '../../../components/dialog/rename-dirent';
 
 import './index.css';
 
 const TagFiles = () => {
   const { tagFiles, repoID, repoInfo,
-    isMoveDialogOpen, isCopyDialogOpen, isZipDialogOpen, toggleMoveDialog, toggleCopyDialog, toggleZipDialog,
+    isMoveDialogOpen, isCopyDialogOpen, isZipDialogOpen, isShareDialogOpen, isRenameDialogOpen,
+    toggleMoveDialog, toggleCopyDialog, toggleZipDialog, toggleShareDialog, toggleRenameDialog,
     moveTagFile, copyTagFile, addFolder, downloadTagFiles, deleteTagFiles, renameTagFile } = useTagView();
   const { tagsData, selectedFileIds, updateSelectedFileIds } = useTags();
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
@@ -113,8 +116,8 @@ const TagFiles = () => {
     updateSelectedFileIds([]);
   }, [deleteTagFiles, updateSelectedFileIds]);
 
-  const handleRenameTagFile = useCallback((file, newName) => {
-    const path = file[TAG_FILE_KEY.PARENT_DIR];
+  const handleRenameTagFile = useCallback((newName) => {
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
     seafileAPI.listDir(repoID, path).then(res => {
       const fileList = res.data.dirent_list.filter(dirent => dirent.type === 'file');
       const isDuplicated = fileList.some(file => file.name === newName);
@@ -124,10 +127,10 @@ const TagFiles = () => {
         toaster.danger(errMessage);
         return false;
       }
-      const fullPath = Utils.joinPath(path, file[TAG_FILE_KEY.NAME]);
-      renameTagFile(file[TAG_FILE_KEY.ID], fullPath, newName);
+      const fullPath = Utils.joinPath(path, selectedFile[TAG_FILE_KEY.NAME]);
+      renameTagFile(selectedFile[TAG_FILE_KEY.ID], fullPath, newName);
     });
-  }, [repoID, renameTagFile]);
+  }, [repoID, selectedFile, renameTagFile]);
 
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
@@ -173,6 +176,14 @@ const TagFiles = () => {
     }
   ];
 
+  let enableDirPrivateShare = false;
+  let isRepoOwner = repoInfo.owner_email === username;
+  let isVirtual = repoInfo.is_virtual;
+  let isAdmin = repoInfo.is_admin;
+  if (!isVirtual && (isRepoOwner || isAdmin)) {
+    enableDirPrivateShare = true;
+  }
+  const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
   return (
     <>
       <div className="table-container" onClick={onContainerClick}>
@@ -221,6 +232,7 @@ const TagFiles = () => {
         toggleMoveDialog={toggleMoveDialog}
         toggleCopyDialog={toggleCopyDialog}
         toggleZipDialog={toggleZipDialog}
+        toggleShareDialog={toggleShareDialog}
       />
       {isMoveDialogOpen && (
         <ModalPortal>
@@ -260,6 +272,31 @@ const TagFiles = () => {
           />
         </ModalPortal>
       )}
+      {isShareDialogOpen &&
+        <ModalPortal>
+          <ShareDialog
+            itemType='file'
+            itemName={selectedFile[TAG_FILE_KEY.NAME]}
+            itemPath={Utils.joinPath(selectedFile[TAG_FILE_KEY.NAME], selectedFile[TAG_FILE_KEY.PARENT_DIR])}
+            userPerm={repoInfo.permission}
+            repoID={repoID}
+            repoEncrypted={repoInfo.repoEncrypted}
+            enableDirPrivateShare={enableDirPrivateShare}
+            isGroupOwnedRepo={isGroupOwnedRepo}
+            toggleDialog={toggleShareDialog}
+          />
+        </ModalPortal>
+      }
+      {isRenameDialogOpen &&
+        <ModalPortal>
+          <Rename
+            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME], type: 'file' }}
+            onRename={handleRenameTagFile}
+            checkDuplicatedName={() => {}}
+            toggleCancel={toggleRenameDialog}
+          />
+        </ModalPortal>
+      }
     </>
   );
 };

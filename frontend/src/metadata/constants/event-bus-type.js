@@ -80,7 +80,11 @@ export const EVENT_BUS_TYPE = {
   MAP_VIEW: 'map_view',
 
   // tag file
+  MOVE_TAG_FILE: 'move_tag_file',
+  COPY_TAG_FILE: 'copy_tag_file',
   RENAME_TAG_FILE: 'rename_tag_file',
+  TOGGLE_RENAME_DIALOG: 'toggle_rename_dialog',
   DOWNLOAD_TAG_FILES: 'download_tag_files',
   DELETE_TAG_FILES: 'delete_tag_files',
+  SHARE_TAG_FILE: 'share_tag_file',
 };

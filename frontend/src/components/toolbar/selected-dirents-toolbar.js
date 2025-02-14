@@ -15,10 +15,10 @@ import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
 import FileAccessLog from '../dialog/file-access-log';
-
-import '../../css/selected-dirents-toolbar.css';
 import { TAGS_MODE } from '../dir-view-mode/constants';
 import TagFilesToolbar from './tag-files-toolbar';
+
+import '../../css/selected-dirents-toolbar.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
