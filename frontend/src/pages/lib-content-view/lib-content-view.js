@@ -1337,7 +1337,7 @@ class LibContentView extends React.Component {
       this.updateMoveCopyTreeNode(copyToDirentPath);
     }
 
-    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
+    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE && this.state.currentMode !== TAGS_MODE) {
       this.loadDirentList(this.state.path);
     }
 
