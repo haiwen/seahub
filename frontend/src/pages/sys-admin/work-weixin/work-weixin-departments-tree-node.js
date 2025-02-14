@@ -123,7 +123,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
                 aria-expanded={this.state.dropdownOpen}
               >
               </DropdownToggle>
-              <DropdownMenu className="drop-list" right={true}>
+              <DropdownMenu className="drop-list">
                 <DropdownItem
                   onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}

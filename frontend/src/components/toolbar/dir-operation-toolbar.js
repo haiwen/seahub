@@ -285,7 +285,7 @@ class DirOperationToolbar extends React.Component {
         <Fragment>
           <Dropdown isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu}>
             <DropdownToggle
-              tag="div"
+              tag="span"
               role="button"
               className="path-item"
               onClick={this.toggleDesktopOpMenu}
@@ -310,7 +310,7 @@ class DirOperationToolbar extends React.Component {
                       onMouseMove={(e) => {e.stopPropagation();}}
                     >
                       <DropdownToggle
-                        tag='div'
+                        tag='span'
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
@@ -346,7 +346,7 @@ class DirOperationToolbar extends React.Component {
       content = (
         <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
           <DropdownToggle
-            tag="div"
+            tag="span"
             role="button"
             className="path-item"
           >

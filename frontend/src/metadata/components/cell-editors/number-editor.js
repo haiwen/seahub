@@ -1,5 +1,4 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../utils/cell';
@@ -72,7 +71,7 @@ const NumberEditor = forwardRef(({
       return { [key]: formatStringToNumber(value, data) };
     },
     getInputNode: () => {
-      const domNode = ReactDOM.findDOMNode(inputRef.current);
+      const domNode = inputRef.current;
       if (domNode.tagName === 'INPUT') return domNode;
       return domNode.querySelector('input:not([type=hidden])');
     },

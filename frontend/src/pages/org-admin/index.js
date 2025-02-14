@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Router } from '@gatsbyjs/reach-router';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import SidePanel from './side-panel';
@@ -135,4 +135,5 @@ class Org extends React.Component {
   }
 }
 
-ReactDom.render(<Org />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<Org />);

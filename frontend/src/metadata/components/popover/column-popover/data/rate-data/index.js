@@ -65,7 +65,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
               className="sf-metadata-rate-column-data-style-setting-popover"
               hide={closeStylePopover}
               hideWithEsc={closeStylePopover}
-              modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+              modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
             >
               <div className="rate-column-style-list">
                 {RATE_COLORS.map(color => {

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Input, InputGroup } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -198,14 +198,12 @@ class LinkDetails extends React.Component {
                     <Input type="text" readOnly={true} value={sharedLinkInfo.password} /> :
                     <Input type="text" readOnly={true} value={'***************'} />
                   }
-                  <InputGroupAddon addonType="append">
-                    <Button
-                      aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
-                      onClick={this.toggleStoredPasswordVisible}
-                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
-                    >
-                    </Button>
-                  </InputGroupAddon>
+                  <Button
+                    aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
+                    onClick={this.toggleStoredPasswordVisible}
+                    className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
+                  >
+                  </Button>
                 </InputGroup>
               </dd>
             </>
@@ -235,15 +233,13 @@ class LinkDetails extends React.Component {
                 ) : (
                   <InputGroup className="share-link-details-item">
                     <Input type="text" readOnly={true} value={dayjs(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        aria-label={gettext('Edit')}
-                        title={gettext('Edit')}
-                        className="link-operation-icon sf3-font sf3-font-rename"
-                        onClick={this.editingExpirationToggle}
-                      >
-                      </Button>
-                    </InputGroupAddon>
+                    <Button
+                      aria-label={gettext('Edit')}
+                      title={gettext('Edit')}
+                      className="link-operation-icon sf3-font sf3-font-rename"
+                      onClick={this.editingExpirationToggle}
+                    >
+                    </Button>
                   </InputGroup>
                 )}
               </dd>
