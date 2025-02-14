@@ -3,7 +3,6 @@ import logging
 import os
 from datetime import datetime
 
-import requests
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -24,8 +23,8 @@ from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 
 class MetadataManage(APIView):
@@ -2679,7 +2678,7 @@ class PeopleCoverPhoto(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         obj_id = query_result.get('results', [dict()])[0].get(
             METADATA_TABLE.columns.obj_id.name, ''
         )

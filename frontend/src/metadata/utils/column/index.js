@@ -201,8 +201,6 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File status');
     case PRIVATE_COLUMN_KEY.LOCATION:
       return gettext('Location');
-    case PRIVATE_COLUMN_KEY.LOCATION_INFO:
-      return gettext('Location info');
     case PRIVATE_COLUMN_KEY.SIZE:
       return gettext('Size');
     case PRIVATE_COLUMN_KEY.FILE_DETAILS:
