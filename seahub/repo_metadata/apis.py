@@ -22,6 +22,7 @@ from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_met
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
+from seahub.settings import BAIDU_MAP_KEY, GOOGLE_MAP_KEY
 
 
 logger = logging.getLogger(__name__)
@@ -2707,6 +2708,10 @@ class MetadataLocation(APIView):
     throttle_classes = (UserRateThrottle,)
         
     def post(self, request, repo_id):
+        if not BAIDU_MAP_KEY and not GOOGLE_MAP_KEY:
+            error_msg = 'Map service key not configured'
+            return api_error(status.HTTP_501_NOT_IMPLEMENTED, error_msg)
+        
         record_id = request.data.get('record_id')
         if not record_id:
             error_msg = 'record_id invalid'

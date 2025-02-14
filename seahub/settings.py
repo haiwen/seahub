@@ -1075,13 +1075,14 @@ if not os.path.exists(EVENTS_CONFIG_FILE):
 #####################
 #   Map settings    #
 #####################
-GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
-BAIDU_MAP_URL = 'https://api.map.baidu.com/reverse_geocoding/v3'
+
 # baidu map
 BAIDU_MAP_KEY = ''
+BAIDU_MAP_URL = ''
 
 # google map
 GOOGLE_MAP_KEY = ''
+GOOGLE_MAP_URL = ''
 GOOGLE_MAP_ID = ''
 
 
