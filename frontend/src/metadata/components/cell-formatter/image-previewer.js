@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
+import ModalPortal from '../../../components/modal-portal';
 import toaster from '../../../components/toast';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import imageAPI from '../../../utils/image-api';
@@ -12,6 +12,7 @@ import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } 
 const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
+  let rotateImageCacheBuster = useRef(new Date().getTime());
 
   useEffect(() => {
     const newImageItems = table.rows
@@ -30,7 +31,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
           id,
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?t=${rotateImageCacheBuster.current}`,
           src: src,
           parentDir,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
@@ -66,9 +67,9 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
         if (res.data?.success) {
           seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
             if (res.data?.encoded_thumbnail_src) {
-              const cacheBuster = new Date().getTime();
-              const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
-              imageItems[imageIndex].src = newThumbnailSrc;
+              rotateImageCacheBuster.current = new Date().getTime();
+              const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${rotateImageCacheBuster.current}`;
+              imageItems[imageIndex].thumbnail = newThumbnailSrc;
               setImageItems(imageItems);
             }
           }).catch(error => {
