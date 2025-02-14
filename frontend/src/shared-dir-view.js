@@ -25,6 +25,10 @@ import { MetadataAIOperationsProvider } from './hooks/metadata-ai-operation';
 import ViewModes from './components/view-modes';
 import SortMenu from './components/sort-menu';
 import { TreeHelper, TreeNode, TreeView } from './components/shared-dir-tree-view';
+import ResizeBar from './components/resize-bar';
+import {
+  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
+} from './components/resize-bar/constants';
 
 import './css/layout.css';
 import './css/header.css';
@@ -52,6 +56,10 @@ class SharedDirView extends React.Component {
     this.state = {
       isTreeDataLoading: true,
       treeData: TreeHelper.buildTree(),
+
+      // for resizing side/main panels
+      inResizing: false,
+      sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
 
       isLoading: true,
       errorMsg: '',
@@ -85,6 +93,9 @@ class SharedDirView extends React.Component {
       imageItems: [],
       imageIndex: 0
     };
+
+    this.resizeBarRef = React.createRef();
+    this.dragHandlerRef = React.createRef();
   }
 
   componentDidMount() {
@@ -663,10 +674,54 @@ class SharedDirView extends React.Component {
     location.href = `?p=${encodeURIComponent(node.path)}&mode=${this.state.currentMode}`;
   };
 
-  render() {
-    const { currentMode: mode, sortBy, sortOrder, isTreeDataLoading, treeData, path } = this.state;
-    const isDesktop = Utils.isDesktop();
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+    localStorage.setItem('sf_side_panel_rate', this.state.sidePanelRate);
+  };
 
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    });
+  };
+
+  onResizeMouseMove = (e) => {
+    let rate = e.nativeEvent.clientX / window.innerWidth;
+    this.setState({
+      sidePanelRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+    });
+  };
+
+  onResizeMouseOver = (event) => {
+    if (!this.dragHandlerRef.current) return;
+    const { top } = this.resizeBarRef.current.getBoundingClientRect();
+    const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerRefTop);
+  };
+
+  setDragHandlerTop = (top) => {
+    this.dragHandlerRef.current.style.top = top + 'px';
+  };
+
+  render() {
+    const { currentMode: mode, sortBy, sortOrder, isTreeDataLoading, treeData, path,
+      sidePanelRate, inResizing
+    } = this.state;
+
+    const mainPanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
+    };
+    const sidePanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
+    };
+
+    const isDesktop = Utils.isDesktop();
     const selectedItemsLength = this.state.items.filter(item => item.isSelected).length;
 
     return (
@@ -678,8 +733,12 @@ class SharedDirView extends React.Component {
             </a>
             {loginUser && <Account />}
           </div>
-          <div className="flex-fill d-flex o-hidden">
-            <div className="side-panel">
+          <div
+            className="flex-fill d-flex o-hidden position-relative"
+            onMouseMove={inResizing ? this.onResizeMouseMove : null}
+            onMouseUp={this.onResizeMouseUp}
+          >
+            <div className="side-panel" style={sidePanelStyle}>
               <div className="meta-info py-4 mx-4">
                 <h2 className="h3 text-truncate mb-4" title={dirName}>{dirName}</h2>
                 <p className="m-0">{gettext('Shared by: ')}{sharedBy}</p>
@@ -696,7 +755,17 @@ class SharedDirView extends React.Component {
                 )}
               </div>
             </div>
-            <div className="main-panel cur-view-container">
+            {isDesktop &&
+            <ResizeBar
+              resizeBarRef={this.resizeBarRef}
+              dragHandlerRef={this.dragHandlerRef}
+              resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
+              dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+              onResizeMouseDown={this.onResizeMouseDown}
+              onResizeMouseOver={this.onResizeMouseOver}
+            />
+            }
+            <div className="main-panel cur-view-container" style={mainPanelStyle}>
               <div className="cur-view-path d-flex justify-content-between align-items-center">
                 <div className="cur-view-path-left flex-fill o-hidden">
                   {(showDownloadIcon && this.state.items.some(item => item.isSelected))
