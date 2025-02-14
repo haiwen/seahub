@@ -226,6 +226,7 @@ class DirColumnView extends React.Component {
               updateCurrentDirent={this.props.updateCurrentDirent}
               updateCurrentPath={this.props.updateCurrentPath}
               moveFileCallback={this.props.moveFileCallback}
+              copyFileCallback={this.props.copyFileCallback}
               addFolderCallback={this.props.onAddFolder}
             />
           )}

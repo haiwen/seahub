@@ -104,7 +104,7 @@ const ContextMenu = ({
               className="dropdown-item sf-metadata-contextmenu-item"
               onClick={(event) => handleOptionClick(event, option)}
             >
-              {option.label}
+              {option.value}
             </button>
           );
         }
@@ -116,8 +116,8 @@ const ContextMenu = ({
 ContextMenu.propTypes = {
   options: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.shape({
+      key: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
     }),
     PropTypes.string,
   ])).isRequired,

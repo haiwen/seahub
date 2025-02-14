@@ -99,9 +99,9 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
   }, []);
 
   const onRenameConfirm = useCallback((newName) => {
-    onRenameFile(file, newName);
+    onRenameFile(newName);
     onRenameCancel();
-  }, [file, onRenameFile, onRenameCancel]);
+  }, [onRenameFile, onRenameCancel]);
 
   const toggleRename = useCallback((id) => {
     if (id === file[TAG_FILE_KEY.ID]) setIsRenaming(true);

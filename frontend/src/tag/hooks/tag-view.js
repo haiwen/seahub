@@ -25,6 +25,8 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
   const { tagsData, selectedFileIds, updateSelectedFileIds, updateLocalTag } = useTags();
 
@@ -51,17 +53,27 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     setIsZipDialogOpen(!isZipDialogOpen);
   }, [isZipDialogOpen]);
 
+  const toggleShareDialog = useCallback(() => {
+    setIsShareDialogOpen(!isShareDialogOpen);
+  }, [isShareDialogOpen]);
+
+  const toggleRenameDialog = useCallback(() => {
+    setIsRenameDialogOpen(!isRenameDialogOpen);
+  }, [isRenameDialogOpen]);
+
   const moveTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
     seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
       moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+      updateSelectedFileIds([]);
     });
-  }, [repoID, moveFileCallback]);
+  }, [repoID, moveFileCallback, updateSelectedFileIds]);
 
   const copyTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
     seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
       copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+      updateSelectedFileIds([]);
     });
-  }, [repoID, copyFileCallback]);
+  }, [repoID, copyFileCallback, updateSelectedFileIds]);
 
   const deleteTagFiles = useCallback(() => {
     const files = selectedFileIds.map(id => getFileById(tagFiles, id));
@@ -157,14 +169,22 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
 
+    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
+    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
     const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
     const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
+    const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, toggleShareDialog);
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
 
     return () => {
-      unsubscribeDeleteTagFiles && unsubscribeDeleteTagFiles();
-      unsubscribeDownloadTagFiles && unsubscribeDownloadTagFiles();
+      unsubScribeMoveTagFile();
+      unsubScribeCopyTagFile();
+      unsubscribeDeleteTagFiles();
+      unsubscribeDownloadTagFiles();
+      unsubscribeShareTagFile();
+      unsubscribeRenameTagFile();
     };
-  }, [deleteTagFiles, downloadTagFiles]);
+  }, [toggleMoveDialog, toggleCopyDialog, toggleShareDialog, deleteTagFiles, downloadTagFiles, renameTagFile, toggleRenameDialog]);
 
   return (
     <TagViewContext.Provider value={{
@@ -175,14 +195,18 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       tagID,
       repoInfo: params.repoInfo,
       updateCurrentDirent: params.updateCurrentDirent,
-      isMoveDialogOpen: isMoveDialogOpen,
-      isCopyDialogOpen: isCopyDialogOpen,
-      isZipDialogOpen: isZipDialogOpen,
-      toggleMoveDialog: toggleMoveDialog,
-      toggleCopyDialog: toggleCopyDialog,
-      toggleZipDialog: toggleZipDialog,
-      moveTagFile: moveTagFile,
-      copyTagFile: copyTagFile,
+      isMoveDialogOpen,
+      isCopyDialogOpen,
+      isZipDialogOpen,
+      isShareDialogOpen,
+      isRenameDialogOpen,
+      toggleMoveDialog,
+      toggleCopyDialog,
+      toggleZipDialog,
+      toggleShareDialog,
+      toggleRenameDialog,
+      moveTagFile,
+      copyTagFile,
       addFolder: addFolderCallback,
       deleteTagFiles: deleteTagFiles,
       downloadTagFiles: downloadTagFiles,
