@@ -19,7 +19,7 @@ const TagsTreeView = ({ currentPath }) => {
   const [keyTreeNodeExpandedMap, setKeyTreeNodeExpandedMap] = useState({});
 
   const recordsTree = useMemo(() => {
-    return tagsData.rows_tree || [];
+    return (tagsData && tagsData.rows_tree) || [];
   }, [tagsData]);
 
   const buildTree = useCallback((roots, tree) => {
@@ -40,6 +40,7 @@ const TagsTreeView = ({ currentPath }) => {
   }, [recordsTree, buildTree]);
 
   const getKeyTreeNodeExpandedMap = useCallback(() => {
+    if (!window.sfTagsDataContext || !window.sfTagsDataContext.localStorage) return {};
     const strKeyTreeNodeExpandedMap = window.sfTagsDataContext.localStorage.getItem(LOCAL_KEY_TREE_NODE_EXPANDED);
     if (strKeyTreeNodeExpandedMap) {
       try {
