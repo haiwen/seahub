@@ -2708,11 +2708,23 @@ class MetadataLocation(APIView):
         
     def post(self, request, repo_id):
         record_id = request.data.get('record_id')
+        if not record_id:
+            error_msg = 'record_id invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
@@ -2742,9 +2754,9 @@ class MetadataLocation(APIView):
             error_msg = 'lat or lng is not a number'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        _location_info = record.get('_location_info')
-        if _location_info:
-            return Response(_location_info)
+        location_info = record.get('_location_info')
+        if location_info:
+            return Response(location_info)
         
         point_key = f"{lat},{lng}"
         try:
