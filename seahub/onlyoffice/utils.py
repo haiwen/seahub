@@ -4,6 +4,7 @@ import logging
 import urllib.parse
 import posixpath
 import json
+import time
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 
@@ -197,7 +198,8 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "customization": {
                     "forcesave": ONLYOFFICE_FORCE_SAVE,
                 },
-            }
+            },
+            'exp': int(time.time()) + 3 * 24 * 3600
         }
 
         if request.user.is_authenticated:
