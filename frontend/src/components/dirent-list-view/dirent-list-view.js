@@ -102,6 +102,7 @@ class DirentListView extends React.Component {
       const { modify } = customPermission.permission;
       this.canDrop = modify;
     }
+    this.rotateImageCacheBuster = new Date().getTime();
   }
 
   componentDidMount() {
@@ -191,9 +192,9 @@ class DirentListView extends React.Component {
     let thumbnail = '';
     const isGIF = fileExt === 'gif';
     if (repoEncrypted || isGIF) {
-      thumbnail = `${siteRoot}repo/${repoID}/raw${path}`;
+      thumbnail = `${siteRoot}repo/${repoID}/raw${path}?t=${this.rotateImageCacheBuster}`;
     } else {
-      thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?t=${this.rotateImageCacheBuster}`;
     }
 
     let src = '';
@@ -271,11 +272,11 @@ class DirentListView extends React.Component {
       imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {
         seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
           // Generate a unique query parameter to bust the cache
-          const cacheBuster = new Date().getTime();
-          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+          this.rotateImageCacheBuster = new Date().getTime();
+          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${this.rotateImageCacheBuster}`;
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
-            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
             return { imageItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter
