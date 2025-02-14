@@ -40,7 +40,7 @@ from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url, \
     get_password_strength_level, is_valid_password, is_valid_email, string2list, gen_file_get_url_by_sharelink
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_types import IMAGE, VIDEO, XMIND, PDF
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
@@ -49,7 +49,7 @@ from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, THUMBNAIL_DEFAULT_SIZE, \
-        ENABLE_VIDEO_THUMBNAIL, \
+        ENABLE_VIDEO_THUMBNAIL, ENABLE_PDF_THUMBNAIL,\
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
@@ -990,7 +990,8 @@ class ShareLinkDirents(APIView):
 
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
                 if file_type in (IMAGE, XMIND) or \
-                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
+                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL) or \
+                        (file_type == PDF and ENABLE_PDF_THUMBNAIL):
 
                     if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
