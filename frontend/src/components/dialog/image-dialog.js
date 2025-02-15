@@ -7,7 +7,7 @@ import { SYSTEM_FOLDERS } from '../../constants';
 
 import '@seafile/react-image-lightbox/style.css';
 
-const ImageDialog = ({ enableRotate: oldEnableRotate, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage }) => {
+const ImageDialog = ({ enableRotate: oldEnableRotate = true, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage }) => {
   const { enableOCR, enableMetadata, canModify, onOCR: onOCRAPI, OCRSuccessCallBack } = useMetadataAIOperations();
 
   const downloadImage = useCallback((url) => {
@@ -77,10 +77,6 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
-};
-
-ImageDialog.defaultProps = {
-  enableRotate: true,
 };
 
 export default ImageDialog;

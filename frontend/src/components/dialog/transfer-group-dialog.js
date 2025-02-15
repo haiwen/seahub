@@ -25,6 +25,7 @@ class TransferGroupDialog extends React.Component {
       errMessage: '',
     };
     this.options = [];
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
@@ -63,7 +64,7 @@ class TransferGroupDialog extends React.Component {
         <ModalBody>
           <p>{gettext('Transfer group to')}</p>
           <UserSelect
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Please enter 1 or more character')}
             onSelectChange={this.handleSelectChange}

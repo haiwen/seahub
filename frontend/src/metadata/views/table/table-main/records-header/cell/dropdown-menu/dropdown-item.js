@@ -4,7 +4,16 @@ import { UncontrolledTooltip, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 
-const ColumnDropdownItem = ({ disabled, iconName, target, title, tip, className, onChange, onMouseEnter }) => {
+const ColumnDropdownItem = ({
+  disabled = false,
+  iconName,
+  target,
+  title,
+  tip,
+  className = '',
+  onChange = () => {},
+  onMouseEnter = () => {},
+}) => {
   const [isShowToolTip, setToolTipShow] = useState(false);
 
   useEffect(() => {
@@ -60,13 +69,6 @@ ColumnDropdownItem.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
-};
-
-ColumnDropdownItem.defaultProps = {
-  onChange: () => {},
-  onMouseEnter: () => {},
-  disabled: false,
-  className: '',
 };
 
 export default ColumnDropdownItem;

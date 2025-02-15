@@ -8,7 +8,14 @@ import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
 
-const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
+const GroupbySetter = ({
+  target = 'sf-metadata-groupby-popover',
+  columns: allColumns,
+  readOnly,
+  groupbys: propsGroupbys,
+  wrapperClass,
+  modifyGroupbys
+}) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const columns = useMemo(() => {
@@ -70,10 +77,6 @@ const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys,
     </>
   );
 
-};
-
-GroupbySetter.defaultProps = {
-  target: 'sf-metadata-groupby-popover',
 };
 
 GroupbySetter.propTypes = {

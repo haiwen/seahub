@@ -21,6 +21,7 @@ class UserItem extends React.Component {
       isOperationShow: false,
       isUserDetailsPopoverOpen: false
     };
+    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -255,7 +256,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
-        this.refs.userSelect.clearSelect();
+        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -281,7 +282,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
-        this.refs.userSelect.clearSelect();
+        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -386,7 +387,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
-        this.refs.userSelect.clearSelect();
+        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -412,7 +413,7 @@ class ShareToUser extends React.Component {
           selectedOption: null,
           permission: 'rw',
         });
-        this.refs.userSelect.clearSelect();
+        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -455,7 +456,7 @@ class ShareToUser extends React.Component {
               <td>
                 <div className='add-members'>
                   <UserSelect
-                    ref="userSelect"
+                    ref={this.userSelect}
                     isMulti={true}
                     className={classnames('reviewer-select', { 'user-select-right-btn': showDeptBtn })}
                     placeholder={gettext('Search users...')}
