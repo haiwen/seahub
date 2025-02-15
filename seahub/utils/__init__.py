@@ -1566,3 +1566,18 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
 
+
+SESSION_KEY_SLIDE_CAPTCHA_VERIFIED_TIME = 'slide-captcha-verified-time'
+
+
+def check_slide_captcha_verified_time(request):
+    import time
+    verified_time = request.session.get(SESSION_KEY_SLIDE_CAPTCHA_VERIFIED_TIME)
+    try:
+        del request.session[SESSION_KEY_SLIDE_CAPTCHA_VERIFIED_TIME]
+    except Exception:
+        pass
+    if not verified_time or verified_time + 30 < int(time.time()):
+        return False
+    else:
+        return True

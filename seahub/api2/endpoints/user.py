@@ -2,38 +2,40 @@
 import logging
 
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import gettext as _
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+
 from django.conf import settings
+from django.utils.translation import gettext as _
 
-from seahub.auth.models import SocialAuthUser
-from seahub.base.accounts import UNUSABLE_PASSWORD, LDAP_PROVIDER
-from seahub.constants import DEFAULT_ORG
-from seahub.organizations.models import OrgSettings
-from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
-from seahub.organizations.views import gen_org_url_prefix
-from seahub.password_session import update_session_auth_hash
-from seahub.utils import is_valid_email
-from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
-from seahub.base.templatetags.seahub_tags import email2nickname, \
-        email2contact_email
-from seahub.profile.models import Profile, DetailedProfile
-from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMAIL, ENABLE_CONVERT_TO_TEAM_ACCOUNT, \
-    ENABLE_USER_SET_NAME
-
-import seaserv
 from seaserv import ccnet_api, seafile_api
 
+from seahub.api2.utils import api_error
+from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.authentication import TokenAuthentication
+
+from seahub.base.accounts import UNUSABLE_PASSWORD
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils import is_valid_email
 from seahub.utils.db_api import SeafileDB
 from seahub.utils.password import is_password_strength_valid
 
+from seahub.auth.models import SocialAuthUser
+from seahub.constants import DEFAULT_ORG
+from seahub.organizations.models import OrgSettings
+from seahub.organizations.views import gen_org_url_prefix
+from seahub.password_session import update_session_auth_hash
+
+from seahub.profile.models import Profile
+from seahub.settings import ENABLE_UPDATE_USER_INFO, \
+        ENABLE_USER_SET_CONTACT_EMAIL, ENABLE_CONVERT_TO_TEAM_ACCOUNT, \
+        ENABLE_USER_SET_NAME
+
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
 
 class User(APIView):
     """ Query/update user info of myself.
@@ -44,16 +46,22 @@ class User(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def _get_user_info(self, email):
-        profile = Profile.objects.get_profile_by_user(email)
-        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
         info = {}
         info['email'] = email
-        info['name'] = profile.nickname if profile and profile.nickname else ''
-        info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
-        info['telephone'] = d_profile.telephone if d_profile else ''
-        info['login_id'] = profile.login_id if profile else ''
-        info['list_in_address_book'] = profile.list_in_address_book if profile else False
+        info['name'] = ''
+        info['contact_email'] = ''
+        info['login_id'] = ''
+        info['list_in_address_book'] = False
+        info['bind_phone'] = ''
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if profile:
+            info['name'] = profile.nickname or ''
+            info['contact_email'] = profile.contact_email or ''
+            info['login_id'] = profile.login_id or ''
+            info['phone'] = profile.phone or ''
+            info['list_in_address_book'] = profile.list_in_address_book or False
 
         return info
 
@@ -67,10 +75,6 @@ class User(APIView):
         if info_dict['contact_email']:
             Profile.objects.add_or_update(email, contact_email=info_dict['contact_email'])
             Profile.objects.filter(user=email).update(is_manually_set_contact_email=True)
-
-        # update account telephone
-        if info_dict['telephone']:
-            DetailedProfile.objects.add_or_update(email, department=None, telephone=info_dict['telephone'])
 
         # update user list_in_address_book
         if info_dict['list_in_address_book']:
@@ -107,7 +111,7 @@ class User(APIView):
         # argument check for contact_email
         contact_email = request.data.get("contact_email", None)
         if contact_email:
-            
+
             if not ENABLE_USER_SET_CONTACT_EMAIL:
                 error_msg = _('Feature disabled.')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -124,14 +128,6 @@ class User(APIView):
                 error_msg = 'contact_email invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # agrument check for telephone
-        telephone = request.data.get('telephone', None)
-        if telephone:
-            telephone = telephone.strip()
-            if len(telephone) > 100:
-                error_msg = _('telephone is too long (maximum is 100 characters).')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # argument check for list_in_address_book
         list_in_address_book = request.data.get("list_in_address_book", None)
         if list_in_address_book is not None:
@@ -142,7 +138,6 @@ class User(APIView):
         info_dict = {
             'name': name,
             'contact_email': contact_email,
-            'telephone': telephone,
             'list_in_address_book': list_in_address_book,
         }
 
@@ -158,22 +153,24 @@ class User(APIView):
         info = self._get_user_info(email)
         return Response(info)
 
+
 class UserConvertToTeamView(APIView):
+
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
-    
+
     def post(self, request):
         if not ENABLE_CONVERT_TO_TEAM_ACCOUNT:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         org_role = DEFAULT_ORG
-        
+
         if request.user.org:
             error_msg = 'User is already in team.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         url_prefix = gen_org_url_prefix(3)
         if url_prefix is None:
             error_msg = 'Internal Server Error'
@@ -189,7 +186,7 @@ class UserConvertToTeamView(APIView):
             else:
                 nickname_characters.append(character)
         org_name = ''.join(nickname_characters)
-        
+
         try:
             # 1. Create a new org, and add the current to org as a team admin
             #    by ccnet_api.create_org
@@ -209,7 +206,9 @@ class UserConvertToTeamView(APIView):
 
         return Response({'success': True})
 
+
 class ResetPasswordView(APIView):
+
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)

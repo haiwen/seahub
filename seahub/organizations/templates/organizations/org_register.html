@@ -87,7 +87,7 @@ $('#signup-form').on('submit', function(){
             $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
             return false;
         }
-        if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
+        if (!checkPasswordStrength(pwd1, {% if strong_pwd_required %} true {% else %} false {% endif %})) {
             $('.error').html(passwd_tip).removeClass('hide');
             return false;
         }

@@ -24,6 +24,7 @@ html, body, #wrapper { height:100%; }
 #lang-context-selector {
     text-align:left;
 }
+{% block private_style %} {% endblock %}
 </style>
 {% endblock %}
 
@@ -32,7 +33,11 @@ html, body, #wrapper { height:100%; }
 <div class="login-panel" id="log-in-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
     <form action="" method="post" id="login-form">{% csrf_token %}
+        {% if enable_phone_login %}
+        <input type="text" name="login" placeholder="{% trans "Phone number, email or username" %}" aria-label="{% trans "Phone number, email or username" %}" title="{% trans "Phone number, email or username" %}" value="" class="input mb-3" />
+        {% else %}
         <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" />
+        {% endif %}
         <div class="position-relative">
           <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
           <i id="toggle-show-password" class="sf3-font sf3-font-eye-slash"></i>

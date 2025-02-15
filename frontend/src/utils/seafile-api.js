@@ -2169,6 +2169,33 @@ class SeafileAPI {
     return this._sendPostRequest(url, formData);
   }
 
+  sendVerifyCode(phone, type) {
+    let url = this.server + '/api/v2.1/user/sms-verify/';
+    let data = {
+      phone: phone,
+      type: type
+    };
+    return this.req.post(url, data);
+  }
+
+  bindPhoneNumber(phone, code) {
+    let url = this.server + '/api/v2.1/user/bind-phone/';
+    let data = {
+      phone: phone,
+      code: code
+    };
+    return this.req.post(url, data);
+  }
+
+  unbindPhoneNumber(phone, code) {
+    let url = this.server + '/api/v2.1/user/unbind-phone/';
+    let data = {
+      phone: phone,
+      code: code
+    };
+    return this.req.post(url, data);
+  }
+
 }
 
 let seafileAPI = new SeafileAPI();

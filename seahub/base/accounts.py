@@ -67,8 +67,10 @@ UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 def default_ldap_role_mapping(role):
     return role
 
+
 def default_ldap_role_list_mapping(role_list):
     return role_list[0] if role_list else ''
+
 
 ldap_role_mapping = default_ldap_role_mapping
 ldap_role_list_mapping = default_ldap_role_list_mapping
@@ -81,14 +83,15 @@ if ENABLE_LDAP:
     try:
         from seahub_custom_functions import ldap_role_mapping
         ldap_role_mapping = ldap_role_mapping
-    except:
+    except Exception:
         pass
     try:
         from seahub_custom_functions import ldap_role_list_mapping
         ldap_role_list_mapping = ldap_role_list_mapping
         USE_LDAP_ROLE_LIST_MAPPING = True
-    except:
+    except Exception:
         pass
+
 
 class UserManager(object):
 
@@ -326,7 +329,7 @@ class UserPermissions(object):
     def _get_user_role(self):
         org_role = self.user.org_role
         if org_role is None:
-            return self.user.role
+            return self.user.role or DEFAULT_USER
 
         if self.user.role == '' or self.user.role == DEFAULT_USER:
             if org_role == DEFAULT_ORG:

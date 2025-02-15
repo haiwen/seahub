@@ -126,6 +126,10 @@ from seahub.ocm_via_webdav.ocm_api import OCMProviderView
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
 
+from seahub.api2.endpoints.verify import SmsVerifyCodeView
+from seahub.api2.endpoints.profile import BindPhoneView, UnbindPhoneView
+from seahub.api2.endpoints.slide_captcha import SlideCaptchaView
+
 # Admin
 from seahub.api2.endpoints.admin.logs_export import SysLogsExport, sys_log_export_excel
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
@@ -322,6 +326,10 @@ urlpatterns = [
 
     ## user
     re_path(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
+    re_path(r'^api/v2.1/user/sms-verify/$', SmsVerifyCodeView.as_view(), name="api-v2.1-user-sms-verify"),
+    re_path(r'^api/v2.1/user/bind-phone/$', BindPhoneView.as_view(), name="api-v2.1-user-phone-bind"),
+    re_path(r'^api/v2.1/user/unbind-phone/$', UnbindPhoneView.as_view(), name="api-v2.1-user-phone-unbind"),
+    re_path(r'^api/v2.1/slide-captcha/$', SlideCaptchaView.as_view(), name="api-v2.1-slide-captcha"),
 
     # user:convert to team account
     re_path(r'^api/v2.1/user/convert-to-team/$', UserConvertToTeamView.as_view(), name="api-v2.1-user-convert-to-team"),
