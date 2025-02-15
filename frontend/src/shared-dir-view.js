@@ -278,13 +278,16 @@ class SharedDirView extends React.Component {
               <DropdownToggle
                 tag="div"
                 role="button"
-                className="path-item"
+                className="path-item path-item-dropdown-toggle"
                 onClick={this.toggleDropdownMenu}
                 onKeyDown={this.onDropdownToggleKeyDown}
                 data-toggle="dropdown"
               >
                 <span title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
-                <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+                {canUpload
+                  ? <><i className="sf3-font-new sf3-font main-icon ml-2"></i><i className="sf3-font-down sf3-font"></i></>
+                  : <i className="sf3-font-down sf3-font ml-1"></i>
+                }
               </DropdownToggle>
               <DropdownMenu positionFixed={true}>
                 {opList.map((item, index) => {

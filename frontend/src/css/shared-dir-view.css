@@ -103,6 +103,14 @@ body {
   flex-shrink: 0;
 }
 
+#shared-dir-view .path-item-dropdown-toggle .sf3-font {
+  color: #666;
+}
+
+#shared-dir-view .path-item-dropdown-toggle .main-icon {
+  margin-right: 2px;
+}
+
 @keyframes displaySelectedToolbar {
   from {
     top: 24px;
