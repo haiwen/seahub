@@ -13,3 +13,5 @@ const TRANSFER_TYPES = {
 };
 
 export default TRANSFER_TYPES;
+
+export const SF_TABLE_TAGS_DRAG_KEY = 'application/sf-table-tags';
