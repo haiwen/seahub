@@ -17,11 +17,11 @@ const FilterSetter = ({
   isPre,
   collaborators,
   filtersClassName,
-  target,
+  target = 'sf-metadata-filter-popover',
   filterConjunction,
-  basicFilters,
+  basicFilters = [],
   modifyFilters,
-  viewType,
+  viewType = VIEW_TYPE.TABLE,
 }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
@@ -105,12 +105,6 @@ FilterSetter.propTypes = {
   isPre: PropTypes.bool,
   basicFilters: PropTypes.array,
   viewType: PropTypes.string,
-};
-
-FilterSetter.defaultProps = {
-  target: 'sf-metadata-filter-popover',
-  basicFilters: [],
-  viewType: VIEW_TYPE.TABLE,
 };
 
 export default FilterSetter;

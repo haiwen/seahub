@@ -14,7 +14,7 @@ const propTypes = {
   onChangeValue: PropTypes.func,
 };
 
-const PasswordInput = ({ value, labelValue, enableCheckStrength, onChangeValue }) => {
+const PasswordInput = ({ value, labelValue, enableCheckStrength = true, onChangeValue }) => {
   const [passwordValue, setPasswordValue] = useState(value || '');
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowChecker, setIsShowChecker] = useState(false);
@@ -62,9 +62,5 @@ const PasswordInput = ({ value, labelValue, enableCheckStrength, onChangeValue }
 };
 
 PasswordInput.propTypes = propTypes;
-
-PasswordInput.defaultProps = {
-  enableCheckStrength: true
-};
 
 export default PasswordInput;

@@ -50,6 +50,7 @@ class LinkCreation extends React.Component {
       selectedOption: null,
       inputEmails: ''
     };
+    this.userSelect = React.createRef();
   }
 
   setExpType = (e) => {
@@ -389,7 +390,7 @@ class LinkCreation extends React.Component {
                 </Label>
                 {this.state.currentScope === 'specific_users' &&
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}

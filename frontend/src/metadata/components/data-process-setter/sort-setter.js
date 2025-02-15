@@ -8,7 +8,7 @@ import { getValidSorts } from '../../utils/sort';
 import { EVENT_BUS_TYPE } from '../../constants';
 import { isEnter, isSpace } from '../../utils/hotkey';
 
-const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
+const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const sorts = useMemo(() => {
@@ -93,10 +93,5 @@ const propTypes = {
 };
 
 SortSetter.propTypes = propTypes;
-
-SortSetter.defaultProps = {
-  target: 'sf-metadata-sort-popover',
-  isNeedSubmit: false,
-};
 
 export default SortSetter;

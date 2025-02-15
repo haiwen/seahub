@@ -198,7 +198,7 @@ class ItemDropdownMenu extends React.Component {
           <DropdownMenu
             style={menuStyle}
             className={this.props.menuClassname}
-            positionFixed
+            positionFixed={true}
             flip={false}
             modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
           >
@@ -224,7 +224,7 @@ class ItemDropdownMenu extends React.Component {
                       <i className="sf3-font-down sf3-font rotate-270"></i>
                     </DropdownToggle>
                     <DropdownMenu
-                      positionFixed
+                      positionFixed={true}
                       flip={false}
                       modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
                     >

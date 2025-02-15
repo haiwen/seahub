@@ -101,6 +101,8 @@ class DirentListItem extends React.Component {
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
+    this.dragIconRef = null;
+    this.emptyContentRef = null;
   }
 
   componentDidMount() {
@@ -279,7 +281,7 @@ class DirentListItem extends React.Component {
   onItemClick = (e) => {
     e.preventDefault();
     const dirent = this.state.dirent;
-    if (this.state.isRenameing) {
+    if (this.state.isRenaming) {
       return;
     }
 
@@ -431,7 +433,7 @@ class DirentListItem extends React.Component {
     this.props.onItemRenameToggle(this.state.dirent);
     this.setState({
       isOperationShow: false,
-      isRenameing: true,
+      isRenaming: true,
       canDrag: false
     });
   };
@@ -443,7 +445,7 @@ class DirentListItem extends React.Component {
 
   onRenameCancel = () => {
     this.setState({
-      isRenameing: false,
+      isRenaming: false,
       canDrag: this.canDrag // set it back to the initial value
     });
     this.unfreezeItem();
@@ -593,7 +595,7 @@ class DirentListItem extends React.Component {
     let { selectedDirentList } = this.props;
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.state.dirent)) { // drag items and selectedDirentList include item
       this.props.onShowDirentsDraggablePreview();
-      e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0); // Show an empty content
+      e.dataTransfer.setDragImage(this.emptyContentRef, 0, 0); // Show an empty content
       let selectedList = selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
         let dragStartItemData = { nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
@@ -605,7 +607,7 @@ class DirentListItem extends React.Component {
     }
 
     if (e.dataTransfer && e.dataTransfer.setDragImage) {
-      e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
+      e.dataTransfer.setDragImage(this.dragIconRef, 15, 15);
     }
 
     let nodeRootPath = this.getDirentPath(this.state.dirent);
@@ -858,15 +860,15 @@ class DirentListItem extends React.Component {
             <td className="pl-2 pr-2">
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
-                  <img ref='drag_icon' src={iconUrl} width="24" alt='' />
+                  <img ref={ref => this.dragIconRef = ref} src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                  <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' />
                 }
                 {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-                <div ref="empty_content" className="empty-content"></div>
+                <div ref={ref => this.emptyContentRef = ref} className="empty-content"></div>
               </div>
             </td>
             <td className="name">
-              {this.state.isRenameing &&
+              {this.state.isRenaming &&
                 <Rename
                   hasSuffix={dirent.type !== 'dir'}
                   name={dirent.name}
@@ -874,7 +876,7 @@ class DirentListItem extends React.Component {
                   onRenameCancel={this.onRenameCancel}
                 />
               }
-              {!this.state.isRenameing && (
+              {!this.state.isRenaming && (
                 <>
                   {(!dirent.isDir() && !this.canPreview) ?
                     <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
@@ -913,7 +915,7 @@ class DirentListItem extends React.Component {
               </div>
             </td>
             <td onClick={this.onItemClick}>
-              {this.state.isRenameing &&
+              {this.state.isRenaming &&
                 <Rename
                   hasSuffix={dirent.type !== 'dir'}
                   name={dirent.name}
@@ -921,7 +923,7 @@ class DirentListItem extends React.Component {
                   onRenameCancel={this.onRenameCancel}
                 />
               }
-              {!this.state.isRenameing && (
+              {!this.state.isRenaming && (
                 <>
                   {(!dirent.isDir() && !this.canPreview) ?
                     <a className="sf-link">{dirent.name}</a> :

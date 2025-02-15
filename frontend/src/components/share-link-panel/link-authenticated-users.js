@@ -15,6 +15,7 @@ class UserItem extends React.Component {
       isHighlighted: false,
       isOperationShow: false
     };
+    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -131,7 +132,7 @@ class LinkAuthenticatedUsers extends React.Component {
         authUsers: success.concat(authUsers),
         selectedOption: null
       });
-      this.refs.userSelect.clearSelect();
+      this.userSelect.current.clearSelect();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -192,7 +193,7 @@ class LinkAuthenticatedUsers extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}

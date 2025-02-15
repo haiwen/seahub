@@ -20,6 +20,7 @@ class SysAdminTransferGroupDialog extends React.Component {
       selectedOptions: null,
       submitBtnDisabled: true
     };
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (options) => {
@@ -48,7 +49,7 @@ class SysAdminTransferGroupDialog extends React.Component {
         </SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Select a user')}
             onSelectChange={this.handleSelectChange}

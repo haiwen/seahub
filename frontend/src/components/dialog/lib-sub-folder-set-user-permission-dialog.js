@@ -16,6 +16,7 @@ class UserItem extends React.Component {
     this.state = {
       isOperationShow: false
     };
+    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -162,7 +163,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         permission: 'rw',
         folderPath: '',
       });
-      this.refs.userSelect.clearSelect();
+      this.userSelect.current.clearSelect();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -277,7 +278,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleUserSelectChange}
