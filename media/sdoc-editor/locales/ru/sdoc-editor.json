@@ -573,7 +573,7 @@
   "Five_column": "5 столбцов",
   "Full_width_mode": "Режим полной ширины",
   "Video": "Видео",
-  "Upload_local_video": "Загрузка_локального_видео",
+  "Upload_local_video": "Загрузить локального видео",
   "The_current_version_does_not_support_>5MB_video_file": "Текущая_версия_не_поддерживает_видео_файл_>5_МБ",
   "Token_expired_Please_refresh_the_page": "Срок действия токена истек. Обновите страницу.",
   "Link_to_page": "Ссылка на страницу",
@@ -607,6 +607,11 @@
   "Enter_reply": "Введите ответ",
   "Processing_content_cannot_be_empty": "Содержимое обработки не может быть пустым",
   "AI_error_message": "Ошибка запроса, попробуйте еще раз",
+  "Add_video_link": "Добавить ссылку на видео",
+  "Link_Seafile_video_file": "Ссылка на видео файл Seafile",
+  "Select_video_file": "Выбрать видео файл",
+  "Support_Youtube_Tencent_Bilibili_and_more": "Поддержка Youtube, Tencent, Bilibili и других",
   "Image_cannot_be_copied_Please_download_the_source_image": "Изображение не может быть скопировано. Скачайте исходное изображение,",
-  "And_select_insert_-_image_to_upload": "и выбрать 「вставить」 - 「изображение」 для загрузки."
+  "And_select_insert_-_image_to_upload": "и выбрать 「вставить」 - 「изображение」 для загрузки.",
+  "Image_copy_error": "Ошибка копирования изображения"
 }
