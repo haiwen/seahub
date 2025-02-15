@@ -1,7 +1,6 @@
 import { Utils } from '../../utils/utils';
 import Tree from './tree';
 import TreeNode from './tree-node';
-// import Dirent from '../../models/dirent';
 
 class TreeHelper {
 
@@ -139,7 +138,6 @@ class TreeHelper {
 
   buildTree() {
     let tree = new Tree();
-    // let object = new Dirent({ name: '/' });
     let object = { folder_path: '/', is_dir: true };
     let root = new TreeNode({ object, isLoaded: false, isExpanded: true });
     tree.setRoot(root);
