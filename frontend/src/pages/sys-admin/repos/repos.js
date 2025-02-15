@@ -333,6 +333,8 @@ class Item extends Component {
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.id}</td>
           <td>
+            {/* TODO: replace with user link */}
+            {/* const groupUrl = `${siteRoot}sys/groups/${item.group_id}/libraries/`; */}
             {isGroupOwnedRepo ?
               <Link to={`${siteRoot}sys/departments/${departmentID}/`}>{repo.owner_name}</Link> :
               <UserLink email={repo.owner_email} name={repo.owner_name} />
