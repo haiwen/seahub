@@ -42,7 +42,7 @@ let loginUser = window.app.pageOptions.name;
 let {
   token, dirName, dirPath, sharedBy,
   repoID, relativePath,
-  mode, thumbnailSize, zipped,
+  mode, thumbnailSize,
   trafficOverLimit, canDownload,
   noQuota, canUpload, enableVideoThumbnail, enablePDFThumbnail
 } = window.shared.pageOptions;
@@ -106,7 +106,7 @@ class SharedDirView extends React.Component {
     }
 
     this.loadTreePanel();
-    this.listItems(thumbnailSize);
+    this.listItems();
     this.getShareLinkRepoTags();
   }
 
@@ -149,8 +149,10 @@ class SharedDirView extends React.Component {
     node.addChildren(nodeList);
   };
 
-  listItems = (thumbnailSize) => {
-    seafileAPI.listSharedDir(token, relativePath, thumbnailSize).then((res) => {
+  listItems = () => {
+    const { path, currentMode } = this.state;
+    const thumbnailSize = currentMode == LIST_MODE ? thumbnailDefaultSize : thumbnailSizeForGrid;
+    seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'].map(item => {
         item.isSelected = false;
         return item;
@@ -168,6 +170,21 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
+
+    // update the URL
+    let normalizedPath = '';
+    if (path == '/') {
+      normalizedPath = path;
+    } else {
+      normalizedPath = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
+    }
+    let url = new URL(location.href);
+    let searchParams = new URLSearchParams(url.search);
+    searchParams.set('p', normalizedPath);
+    searchParams.set('mode', currentMode);
+    url.search = searchParams.toString();
+    url = url.toString();
+    window.history.pushState({ url: url, path: path }, path, url);
   };
 
   sortItems = (sortBy, sortOrder) => {
@@ -230,13 +247,21 @@ class SharedDirView extends React.Component {
     }
   };
 
+  visitFolder = (folderPath) => {
+    this.setState({
+      path: folderPath
+    }, () => {
+      this.listItems();
+    });
+  };
+
   renderPath = () => {
     let opList = [];
     if (showDownloadIcon) {
       opList.push({
         'icon': 'download1',
         'text': gettext('ZIP'),
-        'onClick': this.zipDownloadFolder.bind(this, relativePath)
+        'onClick': this.zipDownloadFolder.bind(this, this.state.path)
       });
 
       if (canDownload && loginUser && (loginUser !== sharedBy)) {
@@ -258,13 +283,35 @@ class SharedDirView extends React.Component {
       });
     }
 
+    const zipped = []; // be compatible with the old code
+    const rootItem = {
+      path: '/',
+      name: dirName
+    };
+    zipped.push(rootItem);
+    const { path } = this.state;
+    if (path != '/') {
+      const normalizedPath = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
+      const pathList = normalizedPath.split('/');
+      pathList.shift();
+      let itemPath = '';
+      const subItems = pathList.map((item, index) => {
+        itemPath += '/' + item;
+        return {
+          path: itemPath,
+          name: item
+        };
+      });
+      zipped.push(...subItems);
+    }
+
     return (
       <React.Fragment>
         {zipped.map((item, index) => {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`} className="path-item normal" title={item.name}>{item.name}</a>
+                <span className="path-item" title={item.name} role="button" onClick={this.visitFolder.bind(this, item.path)}>{item.name}</span>
                 <span className="path-split"> / </span>
               </React.Fragment>
             );
@@ -338,17 +385,18 @@ class SharedDirView extends React.Component {
   };
 
   zipDownloadSelectedItems = () => {
+    const { path } = this.state;
     if (!useGoFileserver) {
       this.setState({
         isZipDialogOpen: true,
-        zipFolderPath: relativePath,
+        zipFolderPath: path,
         selectedItems: this.state.items.filter(item => item.isSelected)
           .map(item => item.file_name || item.folder_name)
       });
     }
     else {
       let target = this.state.items.filter(item => item.isSelected).map(item => item.file_name || item.folder_name);
-      seafileAPI.getShareLinkDirentsZipTask(token, relativePath, target).then((res) => {
+      seafileAPI.getShareLinkDirentsZipTask(token, path, target).then((res) => {
         const zipToken = res.data['zip_token'];
         location.href = `${fileServerRoot}zip/${zipToken}`;
       }).catch((error) => {
@@ -422,10 +470,8 @@ class SharedDirView extends React.Component {
   };
 
   handleSaveSharedDir = (destRepoID, dstPath) => {
-
-    const itemsForSave = this.state.itemsForSave;
-
-    seafileAPI.saveSharedDir(destRepoID, dstPath, token, relativePath, itemsForSave).then((res) => {
+    const { path, itemsForSave } = this.state;
+    seafileAPI.saveSharedDir(destRepoID, dstPath, token, path, itemsForSave).then((res) => {
       this.setState({
         isSaveSharedDirDialogShow: false,
         itemsForSave: [],
@@ -562,11 +608,12 @@ class SharedDirView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
+    const { path } = this.state;
     const { name, size } = direntObject;
     const newItem = {
       isSelected: false,
       file_name: name,
-      file_path: Utils.joinPath(relativePath, name),
+      file_path: Utils.joinPath(path, name),
       is_dir: false,
       last_modified: dayjs().format(),
       size: size
@@ -580,6 +627,7 @@ class SharedDirView extends React.Component {
   };
 
   getShareLinkRepoTags = () => {
+    const { path } = this.state;
     seafileAPI.getShareLinkRepoTags(token).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -589,7 +637,7 @@ class SharedDirView extends React.Component {
         }
       });
       this.setState({ usedRepoTags: usedRepoTags });
-      if (Utils.isDesktop() && usedRepoTags.length != 0 && relativePath == '/') {
+      if (Utils.isDesktop() && usedRepoTags.length != 0 && path == '/') {
         this.setState({ isRepoInfoBarShow: true });
       }
     }).catch(error => {
@@ -607,8 +655,7 @@ class SharedDirView extends React.Component {
         currentMode: mode,
         isLoading: true
       }, () => {
-        const thumbnailSize = mode == LIST_MODE ? thumbnailDefaultSize : thumbnailSizeForGrid;
-        this.listItems(thumbnailSize);
+        this.listItems();
       });
     }
   };
@@ -668,13 +715,12 @@ class SharedDirView extends React.Component {
           toaster.danger(errMessage);
         });
       }
-    }
 
-    if (node.path === this.state.path) {
-      return;
+      if (node.path === this.state.path) {
+        return;
+      }
+      this.visitFolder(node.path);
     }
-
-    location.href = `?p=${encodeURIComponent(node.path)}&mode=${this.state.currentMode}`;
   };
 
   onResizeMouseUp = () => {
@@ -811,7 +857,7 @@ class SharedDirView extends React.Component {
                   dragAndDrop={false}
                   token={token}
                   path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, '')}
-                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, '')}
+                  relativePath={path === '/' ? path : path.replace(/\/+$/, '')}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
@@ -840,6 +886,7 @@ class SharedDirView extends React.Component {
                   isAllItemsSelected={this.state.isAllItemsSelected}
                   toggleAllSelected={this.toggleAllSelected}
                   toggleItemSelected={this.toggleItemSelected}
+                  visitFolder={this.visitFolder}
                   zipDownloadFolder={this.zipDownloadFolder}
                   showImagePopup={this.showImagePopup}
                 />
@@ -860,7 +907,7 @@ class SharedDirView extends React.Component {
         {this.state.isSaveSharedDirDialogShow &&
           <SaveSharedDirDialog
             sharedToken={token}
-            parentDir={relativePath}
+            parentDir={path}
             items={this.state.itemsForSave}
             toggleCancel={this.toggleSaveSharedDirCancel}
             handleSaveSharedDir={this.handleSaveSharedDir}
@@ -942,6 +989,7 @@ class Content extends React.Component {
             isDesktop={isDesktop}
             mode={mode}
             item={item}
+            visitFolder={this.props.visitFolder}
             zipDownloadFolder={this.props.zipDownloadFolder}
             showImagePopup={this.props.showImagePopup}
             toggleItemSelected={this.props.toggleItemSelected}
@@ -994,6 +1042,7 @@ class Content extends React.Component {
             key={index}
             mode={mode}
             item={item}
+            visitFolder={this.props.visitFolder}
             zipDownloadFolder={this.props.zipDownloadFolder}
             showImagePopup={this.props.showImagePopup}
           />;
@@ -1060,6 +1109,13 @@ class Item extends React.Component {
     this.props.toggleItemSelected(this.props.item, e.target.checked);
   };
 
+  onFolderItemClick = (e) => {
+    e.preventDefault();
+    const { item } = this.props;
+    const { folder_path } = item;
+    this.props.visitFolder(folder_path);
+  };
+
   render() {
     const { item, isDesktop, mode } = this.props;
     const { isIconShown } = this.state;
@@ -1081,7 +1137,7 @@ class Item extends React.Component {
           }
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
-            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
+            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`} onClick={this.onFolderItemClick}>{item.folder_name}</a>
           </td>
           <td></td>
           <td></td>
@@ -1097,7 +1153,7 @@ class Item extends React.Component {
         <tr>
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
-            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
+            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`} onClick={this.onFolderItemClick}>{item.folder_name}</a>
             <br />
             <span className="item-meta-info">{dayjs(item.last_modified).fromNow()}</span>
           </td>
@@ -1252,6 +1308,13 @@ class GridItem extends React.Component {
     this.props.showImagePopup(item);
   };
 
+  onFolderItemClick = (e) => {
+    e.preventDefault();
+    const { item } = this.props;
+    const { folder_path } = item;
+    this.props.visitFolder(folder_path);
+  };
+
   render() {
     const { item, mode } = this.props;
     const { isIconShown } = this.state;
@@ -1260,10 +1323,10 @@ class GridItem extends React.Component {
       const folderURL = `?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`;
       return (
         <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-          <a href={folderURL} className="grid-file-img-link d-block">
+          <a href={folderURL} className="grid-file-img-link d-block" onClick={this.onFolderItemClick}>
             <img src={Utils.getFolderIconUrl(false, 192)} alt="" width="80" height="80" />
           </a>
-          <a href={folderURL} className="grid-file-name grid-file-name-link">{item.folder_name}</a>
+          <a href={folderURL} className="grid-file-name grid-file-name-link" onClick={this.onFolderItemClick}>{item.folder_name}</a>
           {showDownloadIcon &&
             <a role="button" className={`action-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
             </a>
