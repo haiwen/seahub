@@ -14,6 +14,7 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
+from seahub.utils import normalize_file_path
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +147,7 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         file_path = request.data.get('path', '/')
+        file_path = normalize_file_path(file_path)
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)

@@ -20,6 +20,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_email, transfer_repo
 from seahub.signals import repo_deleted
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.views.file import send_file_access_msg
 
 from seahub.organizations.views import is_org_repo, org_user_exists
 
@@ -166,6 +167,8 @@ class OrgAdminRepo(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
+            # send stats message
+            send_file_access_msg(request, repo, '/', 'web')
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -182,9 +185,15 @@ class OrgAdminRepo(APIView):
             break
 
         repo_info = {}
+        
         repo_info['owner_email'] = new_owner
-        repo_info['owner_name'] = email2nickname(new_owner)
-        repo_info['encrypted'] = repo.encrypted
+        if '@seafile_group' in new_owner:
+            group_id = get_group_id_by_repo_owner(new_owner)
+            repo_info['group_name'] = group_id_to_name(group_id)
+            repo_info['owner_name'] = group_id_to_name(group_id)
+        else:
+            repo_info['owner_name'] = email2nickname(new_owner)
+        repo_info['encrypted'] = repo.encrypted 
         repo_info['repo_id'] = repo.repo_id
         repo_info['repo_name'] = repo.name
         repo_info['is_department_repo'] = False
