@@ -109,6 +109,7 @@ class MetadataRecordsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
 
+
 class MetadataRecordTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.user)
@@ -277,6 +278,7 @@ class MetadataViewsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
 
+
 class MetadataViewsDuplicateViewTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.user)
@@ -392,3 +394,537 @@ class MetadataExtractFileDetailsTest(BaseTestCase):
         }
         resp = self.client.post(url, data, 'application/json')
         self.assertEqual(400, resp.status_code)
+
+
+class MetadataFoldersTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+
+    def test_create_metadata_folders(self):
+        url = reverse('api-v2.1-metadata-folders', args=[self.repo_id])
+        data = {'name': 'test_folder'}
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('folder', json_resp)
+
+    def test_put_folder(self):
+        url = reverse('api-v2.1-metadata-folders', args=[self.repo_id])
+        resp = self.client.post(url, {'name': 'test_folder'}, 'application/json')
+        folder_id = json.loads(resp.content)['folder']['_id']
+        
+        data = {
+            'folder_id': folder_id,
+            'folder_data': {'name': 'new_name'}
+        }
+        resp = self.client.put(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+    def test_delete_folder(self):
+        url = reverse('api-v2.1-metadata-folders', args=[self.repo_id])
+        resp = self.client.post(url, {'name': 'test_folder'}, 'application/json')
+        folder_id = json.loads(resp.content)['folder']['_id']
+
+        data = {'folder_id': folder_id}
+        resp = self.client.delete(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+
+class FacesRecordsTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        url = reverse('api-v2.1-metadata-face-recognition')
+        self.client.post(url)
+
+    def test_get_face_records(self):
+        url = reverse('api-v2.1-metadata-face-records', args=[self.repo_id])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('metadata', json_resp)
+        self.assertIn('results', json_resp)
+
+
+class FaceRecognitionManageTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+
+    def test_enable_face_recognition(self):
+        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
+        resp = self.client.post(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('task_id', json_resp)
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        face_recognition_status = metadata.face_recognition_enabled
+        self.assertEqual(1, face_recognition_status)
+
+    def test_disable_face_recognition(self):
+        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
+        self.client.post(url)
+
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        face_recognition_status = metadata.face_recognition_enabled
+        self.assertEqual(0, face_recognition_status)
+
+
+class MetadataTagsStatusManageTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+
+    def test_enable_tags(self):
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
+        data = {
+            'lang': 'en'
+        }
+        resp = self.client.put(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        self.assertEqual(1, metadata.tags_enabled)
+        self.assertEqual('en', metadata.tags_lang)
+
+    def test_disable_tags(self):
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+        
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        self.assertEqual(0, metadata.tags_enabled)
+
+
+class MetadataTagsTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+
+    def test_create_and_get_tags(self):
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
+        tag_name = 'test_tag'
+        data = {
+                "tags_data": [
+                    {
+                        "_tag_color": "#FFFCB5",
+                        "_tag_name": tag_name
+                    }
+                ]
+            }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertIn('tags', json_resp)
+        self.assertEqual(tag_name, json_resp['tags'].get('_tag_name'))
+
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(1, len(json_resp['results']))
+
+    def test_update_and_delete_tags(self):
+        # add tag
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
+        tag_name = 'test_tag'
+        data = {
+                "tags_data": [
+                    {
+                        "_tag_color": "#FFFCB5",
+                        "_tag_name": tag_name
+                    }
+                ]
+            }
+        resp = self.client.post(url, data, 'application/json')
+        json_resp = json.loads(resp.content)
+
+        # update tag
+        tag_id = json_resp['tags'][0].get('_id')
+        data = {
+                "tags_data": [
+                    {
+                        "tag_id": tag_id,
+                        "tag": {
+                            "_tag_color": "#FFFCB5",
+                            "_tag_name": "new_tag"
+                        }
+                    }
+                ]
+            }
+        resp = self.client.put(url, data, 'application/json')
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+        # delete tag
+        data = {
+            "tag_ids": [
+                tag_id
+            ]
+        }
+        resp = self.client.delete(url, data, 'application/json')
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+
+class MetadataTagsLinksTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        
+        url = reverse('api-v2.1-metadata-tags-status')
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+
+        url = reverse('api-v2.1-metadata-tags')
+        data = {
+            "tags_data": [
+                {
+                    "_tag_color": "#FFFCB5",
+                    "_tag_name": "parent_tag"
+                },
+                {
+                    "_tag_color": "#FFFCB5", 
+                    "_tag_name": "child_tag"
+                }
+            ]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        tags = json.loads(resp.content)['tags']
+        self.parent_tag_id = tags[0]['_id']
+        self.child_tag_id = tags[1]['_id']
+
+    def test_create_parent_child_link(self):
+        url = reverse('api-v2.1-metadata-tags-links')
+        data = {
+            'link_column_key': '_tag_sub_links',
+            'row_id_map': {
+                self.parent_tag_id: [self.child_tag_id]
+            }
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+    
+    def test_update_parent_child_link(self):
+        url = reverse('api-v2.1-metadata-tags-links')
+        
+        data = {
+            'link_column_key': '_tag_sub_links',
+            'row_id_map': {
+                self.parent_tag_id: [self.child_tag_id]
+            }
+        }
+        self.client.post(url, data, 'application/json')
+        
+        data = {
+            'link_column_key': '_tag_sub_links',
+            'row_id_map': {
+                self.parent_tag_id: [] 
+            }
+        }
+        resp = self.client.put(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+    
+    def test_delete_parent_child_link(self):
+        url = reverse('api-v2.1-metadata-tags-links')
+        data = {
+            'link_column_key': '_tag_sub_links',
+            'row_id_map': {
+                self.parent_tag_id: [self.child_tag_id]
+            }
+        }
+        self.client.post(url, data, 'application/json')
+        data = {
+            'link_column_key': 'sub_links',
+            'row_id_map': {
+                self.parent_tag_id: [self.child_tag_id]
+            }
+        }
+        resp = self.client.delete(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+
+class MetadataFileTagsTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        
+        url = reverse('api-v2.1-metadata-tags-status')
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+
+        self.file_name = 'test.txt'
+        self.create_file(repo_id=self.repo_id,
+                        parent_dir='/',
+                        filename=self.file_name,
+                        username=self.user.username)
+
+        url = reverse('api-v2.1-metadata-tags')
+        data = {
+            "tags_data": [
+                {
+                    "_tag_color": "#FFFCB5",
+                    "_tag_name": "test_tag"
+                }
+            ]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.tag = json.loads(resp.content)['tags'][0]
+
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+                             f'?parent_dir=/&file_name={self.file_name}')
+        self.record_id = json.loads(resp.content)['_id']
+
+    def test_update_file_tags(self):
+        url = reverse('api-v2.1-metadata-file-tags')
+        data = {
+            'file_tags_data': [{
+                'record_id': self.record_id,
+                'tags': [self.tag['_id']]
+            }]
+        }
+        resp = self.client.put(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual([self.record_id], json_resp['success'])
+        self.assertEqual([], json_resp['fail'])
+
+
+class MetadataTagFilesTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+        
+        url = reverse('api-v2.1-metadata-tags-status')
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+
+        self.file_name = 'test.txt'
+        self.create_file(repo_id=self.repo_id,
+                        parent_dir='/',
+                        filename=self.file_name,
+                        username=self.user.username)
+
+        url = reverse('api-v2.1-metadata-tags')
+        data = {
+            "tags_data": [
+                {
+                    "_tag_color": "#FFFCB5",
+                    "_tag_name": "test_tag"
+                }
+            ]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.tag = json.loads(resp.content)['tags'][0]
+        
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+                             f'?parent_dir=/&file_name={self.file_name}')
+        self.record_id = json.loads(resp.content)['_id']
+        
+        url = reverse('api-v2.1-metadata-file-tags')
+        data = {
+            'file_tags_data': [{
+                'record_id': self.record_id,
+                'tags': [self.tag['_id']]
+            }]
+        }
+        self.client.put(url, data, 'application/json')
+
+    def test_get_tag_files(self):
+        url = reverse('api-v2.1-metadata-tag-files', args=[self.repo_id, self.tag['_id']])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(1, len(json_resp['results']))
+        self.assertEqual(self.file_name, json_resp['results'][0]['_name'])
+    
+
+class MetadataMergeTagsTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata')
+        self.client.put(url)
+
+        url = reverse('api-v2.1-metadata-tags-status')
+        self.client.put(url, {'lang': 'en'}, 'application/json')
+
+        url = reverse('api-v2.1-metadata-tags')
+        data = {
+            "tags_data": [
+                {
+                    "_tag_color": "#FFFCB5",
+                    "_tag_name": "target_tag"
+                },
+                {
+                    "_tag_color": "#FFFCB5",
+                    "_tag_name": "merge_tag"
+                }
+            ]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        tags = json.loads(resp.content)['tags']
+        self.target_tag_id = tags[0]['_id']
+        self.merge_tag_id = tags[1]['_id']
+
+    def test_merge_tags(self):
+        url = reverse('api-v2.1-metadata-merge-tags')
+        data = {
+            'target_tag_id': self.target_tag_id,
+            'merged_tags_ids': [self.merge_tag_id]
+        }
+        resp = self.client.post(url, data, 'application/json')
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+        url = reverse('api-v2.1-metadata-tags')
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        tag_ids = [tag['_id'] for tag in json_resp['results']]
+        self.assertIn(self.target_tag_id, tag_ids)
+        self.assertNotIn(self.merge_tag_id, tag_ids)
+
+
+class MetadataOCRManageViewTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo = seafile_api.get_repo(self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None
+        ))
+        self.repo_id = self.repo.id
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+
+    def test_enable_ocr(self):
+        url = reverse('api-v2.1-metadata-ocr', args=[self.repo_id])
+        resp = self.client.put(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        self.assertTrue(metadata.ocr_enabled)
+    
+    def test_disable_ocr(self):
+        url = reverse('api-v2.1-metadata-ocr', args=[self.repo_id])
+        self.client.put(url)
+
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertTrue(json_resp['success'])
+
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        self.assertFalse(metadata.ocr_enabled)
+
+    def test_enable_ocr_without_metadata(self):
+        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
+        metadata.enabled = False
+        metadata.save()
+
+        url = reverse('api-v2.1-metadata-ocr', args=[self.repo_id])
+        resp = self.client.put(url)
+        self.assertEqual(404, resp.status_code)
+
