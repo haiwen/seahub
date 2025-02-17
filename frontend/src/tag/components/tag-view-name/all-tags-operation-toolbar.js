@@ -54,7 +54,7 @@ const AllTagsOperationToolbar = ({ children }) => {
             {children}
             <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu positionFixed={true}>
+          <DropdownMenu className='position-fixed'>
             <DropdownItem onClick={openAddTag}>
               <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon"></i>
               {gettext('New tag')}

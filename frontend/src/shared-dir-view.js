@@ -335,7 +335,7 @@ class SharedDirView extends React.Component {
                   : <i className="sf3-font-down sf3-font ml-1"></i>
                 }
               </DropdownToggle>
-              <DropdownMenu positionFixed={true}>
+              <DropdownMenu className='position-fixed'>
                 {opList.map((item, index) => {
                   if (item == 'Divider') {
                     return <DropdownItem key={index} divider />;

@@ -7,7 +7,7 @@ function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers
   return (
     <DropdownMenu
       modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
-      positionFixed={true}
+      className="position-fixed"
     >
       <DropdownItem key={`${node.id}-add-department`} onClick={() => toggleAddDepartment(node)}>
         {gettext('Add sub-department')}
