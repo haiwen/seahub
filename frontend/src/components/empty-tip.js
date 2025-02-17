@@ -17,7 +17,7 @@ function EmptyTip({ className = '', title, text, children }) {
 EmptyTip.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
-  text: PropTypes.string,
+  text: PropTypes.any,
   children: PropTypes.any,
 };
 
