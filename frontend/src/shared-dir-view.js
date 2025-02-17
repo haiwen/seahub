@@ -79,7 +79,6 @@ class SharedDirView extends React.Component {
       zipFolderPath: '',
 
       usedRepoTags: [],
-      isRepoInfoBarShow: false,
 
       isSaveSharedDirDialogShow: false,
       itemsForSave: [],
@@ -298,7 +297,7 @@ class SharedDirView extends React.Component {
       const subItems = pathList.map((item, index) => {
         itemPath += '/' + item;
         return {
-          path: itemPath,
+          path: itemPath + '/', // the ending '/' is necessary
           name: item
         };
       });
@@ -627,7 +626,6 @@ class SharedDirView extends React.Component {
   };
 
   getShareLinkRepoTags = () => {
-    const { path } = this.state;
     seafileAPI.getShareLinkRepoTags(token).then(res => {
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
@@ -637,9 +635,6 @@ class SharedDirView extends React.Component {
         }
       });
       this.setState({ usedRepoTags: usedRepoTags });
-      if (Utils.isDesktop() && usedRepoTags.length != 0 && path == '/') {
-        this.setState({ isRepoInfoBarShow: true });
-      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -757,7 +752,9 @@ class SharedDirView extends React.Component {
   };
 
   render() {
-    const { currentMode: mode, sortBy, sortOrder, isTreeDataLoading, treeData, path,
+    const {
+      usedRepoTags, currentMode: mode,
+      sortBy, sortOrder, isTreeDataLoading, treeData, path,
       sidePanelRate, inResizing
     } = this.state;
 
@@ -772,6 +769,7 @@ class SharedDirView extends React.Component {
 
     const isDesktop = Utils.isDesktop();
     const selectedItemsLength = this.state.items.filter(item => item.isSelected).length;
+    const isRepoInfoBarShown = isDesktop && path == '/' && usedRepoTags.length != 0;
 
     return (
       <MetadataAIOperationsProvider repoID={repoID} enableMetadata={false} enableOCR={false} repoInfo={{ permission: 'r' }} >
@@ -864,7 +862,7 @@ class SharedDirView extends React.Component {
               )}
 
               <div className="cur-view-content p-0">
-                {this.state.isRepoInfoBarShow && (
+                {isRepoInfoBarShown && (
                   <RepoInfoBar
                     repoID={repoID}
                     currentPath={'/'}
@@ -1066,6 +1064,7 @@ Content.propTypes = {
   toggleItemSelected: PropTypes.func,
   zipDownloadFolder: PropTypes.func,
   showImagePopup: PropTypes.func,
+  visitFolder: PropTypes.func.isRequired
 };
 
 class Item extends React.Component {
@@ -1274,6 +1273,7 @@ Item.propTypes = {
   toggleItemSelected: PropTypes.func,
   zipDownloadFolder: PropTypes.func,
   showImagePopup: PropTypes.func,
+  visitFolder: PropTypes.func.isRequired
 };
 
 class GridItem extends React.Component {
@@ -1360,6 +1360,7 @@ GridItem.propTypes = {
   item: PropTypes.object,
   zipDownloadFolder: PropTypes.func,
   showImagePopup: PropTypes.func,
+  visitFolder: PropTypes.func.isRequired
 };
 
 ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));
