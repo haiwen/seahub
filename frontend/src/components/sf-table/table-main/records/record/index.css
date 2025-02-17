@@ -29,16 +29,13 @@
   background-color: rgb(200, 220, 240) !important;
 }
 
-.sf-table-row.show-drag-tip::before {
-  content: '';
+.sf-table-row .drag-handler {
   width: 8px;
   position: relative;
+  left: 0;
   background-image: url(../../../../../../../media/img/grippy_large.png);
   background-repeat: no-repeat;
   background-position: 0px;
   z-index: 3;
-}
-
-.sf-table-row.show-drag-tip:hover::before {
   cursor: grab;
 }

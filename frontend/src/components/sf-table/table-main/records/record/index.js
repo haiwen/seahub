@@ -53,7 +53,8 @@ class Record extends React.Component {
       nextProps.treeNodeDepth !== this.props.treeNodeDepth ||
       nextProps.hasChildNodes !== this.props.hasChildNodes ||
       nextProps.isFoldedTreeNode !== this.props.isFoldedTreeNode ||
-      nextState.showDropTip !== this.state.showDropTip
+      nextState.showDropTip !== this.state.showDropTip ||
+      nextState.showDragTip !== this.state.showDragTip
     );
   }
 
@@ -242,15 +243,35 @@ class Record extends React.Component {
     setTimeout(() => document.body.removeChild(ghost), 0);
   };
 
-  handleDragStart = (event) => {
+  handleMouseEnter = (event) => {
     event.stopPropagation();
-    if (!this.props.isSelected) return;
+    this.setState({ showDragTip: true });
+  };
+
+  handleMouseLeave = (event) => {
+    event.stopPropagation();
+    if (this.state.isSelected) return;
+    const { left, top, width, height } = this.rowRef.getBoundingClientRect();
+    const { clientX, clientY } = event;
+    if (clientX >= left && clientX <= left + width && clientY > top && clientY < top + height - 2) return;
+    this.setState({ showDragTip: false });
+  };
+
+  handleDragStart = (event, id) => {
+    event.stopPropagation();
     this.props.updateDraggingStatus(true);
     const { treeNodeKey, treeMetrics, treeNodeKeyRecordIdMap } = this.props;
-    const recordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
+    let recordIds = [];
+    let nodeIds = [];
+    if (this.props.isSelected) {
+      recordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
+      nodeIds = Object.keys(treeMetrics.idSelectedNodeMap);
+    } else {
+      recordIds = [id];
+      nodeIds = [treeNodeKey];
+    }
     const parentNodeKey = getParentNodeKey(treeNodeKey);
     const sourceId = parentNodeKey ? getRecordIdByTreeNodeKey(parentNodeKey, treeNodeKeyRecordIdMap) : null;
-    const nodeIds = Object.keys(treeMetrics.idSelectedNodeMap);
     const dragData = JSON.stringify({ sourceId, recordIds, nodeIds });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData(SF_TABLE_TAGS_DRAG_KEY, dragData);
@@ -313,12 +334,13 @@ class Record extends React.Component {
           'sf-table-last-row': isLastRecord,
           'row-selected': isSelected,
           'row-locked': isLocked,
-          'show-drag-tip': isSelected,
           'show-drop-tip': this.state.showDropTip,
         })}
         style={this.getRecordStyle()}
         draggable={isSelected || this.props.isDragging}
-        onDragStart={this.handleDragStart}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+        onDragStart={(e) => {e.preventDefault();}}
         onDragEnter={this.handleDragEnter}
         onDragLeave={this.handleDragLeave}
         onDragOver={this.handleDragOver}
@@ -347,6 +369,14 @@ class Record extends React.Component {
         </div>
         {/* scroll */}
         {columnCells}
+        {this.state.showDragTip &&
+          <div
+            className="drag-handler"
+            draggable={true}
+            onDragStart={(e) => this.handleDragStart(e, record._id)}
+          >
+          </div>
+        }
       </div>
     );
   }
