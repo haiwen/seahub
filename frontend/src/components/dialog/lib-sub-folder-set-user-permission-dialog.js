@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Input, InputGroup } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
@@ -16,6 +16,7 @@ class UserItem extends React.Component {
     this.state = {
       isOperationShow: false
     };
+    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -162,7 +163,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         permission: 'rw',
         folderPath: '',
       });
-      this.refs.userSelect.clearSelect();
+      this.userSelect.current.clearSelect();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -277,7 +278,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleUserSelectChange}
@@ -288,7 +289,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                 <td>
                   <InputGroup>
                     <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
-                    <InputGroupAddon addonType="append"><Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button></InputGroupAddon>
+                    <Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button>
                   </InputGroup>
                 </td>
               }

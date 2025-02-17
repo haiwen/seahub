@@ -10,7 +10,7 @@ import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../con
 import './index.css';
 
 const Cell = React.memo(({
-  needBindEvents,
+  needBindEvents = true,
   column,
   record,
   groupRecordIndex,
@@ -192,10 +192,6 @@ const Cell = React.memo(({
 }, (props, nextProps) => {
   return !cellCompare(props, nextProps);
 });
-
-Cell.defaultProps = {
-  needBindEvents: true
-};
 
 Cell.propTypes = {
   frozen: PropTypes.bool,

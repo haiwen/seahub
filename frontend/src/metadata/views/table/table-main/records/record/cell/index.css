@@ -317,3 +317,7 @@
 .sf-metadata-result-table-file-name-cell .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon {
   transform: translateY(-1px);
 }
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-file-name {
+  cursor: pointer;
+}

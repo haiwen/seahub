@@ -3791,7 +3791,8 @@ class DirView(APIView):
                     error_msg = 'Folder %s not found.' % parent_dir
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-                if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+                if parse_repo_perm(check_folder_permission(request, repo_id,
+                                                           parent_dir)).can_create is False:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -3811,7 +3812,8 @@ class DirView(APIView):
                             return api_error(HTTP_520_OPERATION_FAILED,
                                          'Failed to make directory.')
             else:
-                if parse_repo_perm(check_folder_permission(request, repo_id, '/')).can_edit_on_web is False:
+                if parse_repo_perm(check_folder_permission(request, repo_id,
+                                                           '/')).can_create is False:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

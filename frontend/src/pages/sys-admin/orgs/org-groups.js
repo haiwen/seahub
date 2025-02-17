@@ -105,9 +105,7 @@ class Item extends Component {
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.group_name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
-    const groupUrl = item.parent_group_id == 0 ?
-      `${siteRoot}sys/groups/${item.group_id}/libraries/` :
-      `${siteRoot}sys/departments/${item.group_id}/`;
+    const groupUrl = `${siteRoot}sys/groups/${item.group_id}/libraries/`;
 
     return (
       <Fragment>

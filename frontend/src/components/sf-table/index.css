@@ -1,3 +1,97 @@
+.sf-table-searcher-container {
+  margin-left: 15px;
+}
+
+.sf-table-searcher-btn {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 3px;
+  height: 22px;
+  padding: 0 .5rem;
+  transition: all .1s ease-in;
+}
+
+.sf-table-searcher-btn:hover {
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.sf-table-searcher-btn .sf3-font-search {
+  display: inline-block;
+  color: #666;
+}
+
+.sf-table-searcher-input-wrapper {
+  position: relative;
+}
+
+.sf-table-searcher-input {
+  padding-left: 30px;
+  padding-right: 60px;
+  height: 30px;
+  width: 260px;
+}
+
+.sf-table-searcher-input-wrapper .btn-close-searcher-wrapper {
+  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sf-table-searcher-input-wrapper .btn-close-searcher {
+  font-size: 14px;
+}
+
+.sf-table-searcher-input-wrapper .btn-close-searcher-wrapper:hover {
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.sf-table-searcher-input-wrapper .input-icon-addon.search-poll-button {
+  display: flex;
+  font-size: 12px;
+  height: 30px;
+  left: auto;
+  line-height: 30px;
+  min-width: 35px;
+  pointer-events: all;
+  right: 28px;
+  text-align: center;
+}
+
+.sf-table-searcher-input-wrapper .search-upward,
+.sf-table-searcher-input-wrapper .search-backward {
+  color: #666;
+  font-size: 12px;
+  background-color: #efefef;
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
+}
+
+.sf-table-searcher-input-wrapper .search-upward:hover,
+.sf-table-searcher-input-wrapper .search-backward:hover {
+  cursor: pointer;
+  background-color: #DBDBDB;
+}
+
+.sf-table-searcher-input-wrapper .search-upward {
+  margin-left: 8px;
+  border-radius: 2px 0 0 2px;
+}
+
+.sf-table-searcher-input-wrapper .search-backward {
+  border-radius: 0 2px 2px 0;
+}
+
 .sf-table-wrapper {
   height: 100%;
   width: 100%;

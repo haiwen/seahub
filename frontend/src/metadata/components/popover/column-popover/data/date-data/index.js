@@ -30,10 +30,22 @@ const DateData = ({ value, column, onChange }) => {
   const options = useMemo(() => {
     const timeUnit = isShootingTime ? 'HH:mm:ss' : '';
     return [
-      { label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', timeUnit))})`, value: classnames('YYYY-MM-DD', timeUnit) },
-      { label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', timeUnit))})`, value: classnames('M/D/YYYY', timeUnit) },
-      { label: `${gettext('European')} (${getDateDisplayString(today, classnames('DD/MM/YYYY', timeUnit))})`, value: classnames('DD/MM/YYYY', timeUnit) },
-      { label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, classnames('DD.MM.YYYY', timeUnit))})`, value: classnames('DD.MM.YYYY', timeUnit) }
+      {
+        label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', timeUnit))})`,
+        value: classnames('YYYY-MM-DD', timeUnit)
+      },
+      {
+        label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', timeUnit))})`,
+        value: classnames('M/D/YYYY', timeUnit)
+      },
+      {
+        label: `${gettext('European')} (${getDateDisplayString(today, classnames('DD/MM/YYYY', timeUnit))})`,
+        value: classnames('DD/MM/YYYY', timeUnit)
+      },
+      {
+        label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, classnames('DD.MM.YYYY', timeUnit))})`,
+        value: classnames('DD.MM.YYYY', timeUnit)
+      }
     ];
   }, [isShootingTime, today]);
 
@@ -55,7 +67,8 @@ const DateData = ({ value, column, onChange }) => {
   //   onChange({ format: newFormat });
   // }, [format, onChange]);
 
-  const selectedValue = options.find(o => o.value === format) || options[0];
+  const yearFormat = (typeof format === 'string') ? format.split(' ')[0] : 'YYYY-MM-DD';
+  const selectedValue = options.find(o => o.value === yearFormat) || options[0];
   const showMinute = format ? format.indexOf('HH:mm') > -1 : false;
 
   return (

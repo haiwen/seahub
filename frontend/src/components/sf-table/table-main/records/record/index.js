@@ -82,15 +82,15 @@ class Record extends React.Component {
   getFrozenCells = () => {
     const {
       columns, sequenceColumnWidth, lastFrozenColumnKey, groupRecordIndex, index: recordIndex, record,
-      cellMetaData, isGroupView, height, columnColor
+      cellMetaData, isGroupView, height, columnColor, treeNodeKey,
     } = this.props;
     const frozenColumns = getFrozenColumns(columns);
     if (frozenColumns.length === 0) return null;
     const recordId = record._id;
     return frozenColumns.map((column, index) => {
       const { key } = column;
-      const isCellHighlight = this.checkIsCellHighlight(key, recordId);
-      const isCurrentCellHighlight = this.checkIsCurrentCellHighlight(key, recordId);
+      const isCellHighlight = this.checkIsCellHighlight(key, recordId, treeNodeKey);
+      const isCurrentCellHighlight = this.checkIsCurrentCellHighlight(key, recordId, treeNodeKey);
       const highlightClassName = isCurrentCellHighlight ? 'cell-current-highlight' : isCellHighlight ? 'cell-highlight' : null;
       const isCellSelected = this.checkIsCellSelected(index);
       const isLastCell = this.checkIsLastCell(columns, key);
@@ -126,10 +126,10 @@ class Record extends React.Component {
     });
   };
 
-  checkIsCellHighlight = (columnKey, rowId) => {
+  checkIsCellHighlight = (columnKey, rowId, treeNodeKey) => {
     const { searchResult } = this.props;
     if (searchResult) {
-      const matchedColumns = searchResult.matchedRows[rowId];
+      const matchedColumns = this.props.showRecordAsTree ? searchResult.matchedRows[treeNodeKey] : searchResult.matchedRows[rowId];
       if (matchedColumns && matchedColumns.includes(columnKey)) {
         return true;
       }
@@ -137,14 +137,15 @@ class Record extends React.Component {
     return false;
   };
 
-  checkIsCurrentCellHighlight = (columnKey, rowId) => {
+  checkIsCurrentCellHighlight = (columnKey, rowId, treeNodeKey) => {
     const { searchResult } = this.props;
     if (searchResult) {
       const { currentSelectIndex } = searchResult;
       if (typeof(currentSelectIndex) !== 'number') return false;
       const currentSelectCell = searchResult.matchedCells[currentSelectIndex];
       if (!currentSelectCell) return false;
-      if (currentSelectCell.row === rowId && currentSelectCell.column === columnKey) return true;
+      const isCurrentRow = this.props.showRecordAsTree ? currentSelectCell.nodeKey === treeNodeKey : currentSelectCell.row === rowId;
+      return isCurrentRow && currentSelectCell.column === columnKey;
     }
     return false;
   };
@@ -152,7 +153,7 @@ class Record extends React.Component {
   getColumnCells = () => {
     const {
       columns, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, groupRecordIndex, index: recordIndex,
-      record, cellMetaData, isGroupView, height, columnColor,
+      record, cellMetaData, isGroupView, height, columnColor, treeNodeKey,
     } = this.props;
     const recordId = record._id;
     const rendererColumns = columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -160,8 +161,8 @@ class Record extends React.Component {
       const { key, frozen } = column;
       const needBindEvents = !frozen;
       const isCellSelected = this.checkIsCellSelected(columns.findIndex(col => col.key === column.key));
-      const isCellHighlight = this.checkIsCellHighlight(key, recordId);
-      const isCurrentCellHighlight = this.checkIsCurrentCellHighlight(key, recordId);
+      const isCellHighlight = this.checkIsCellHighlight(key, recordId, treeNodeKey);
+      const isCurrentCellHighlight = this.checkIsCurrentCellHighlight(key, recordId, treeNodeKey);
       const highlightClassName = isCurrentCellHighlight ? 'cell-current-highlight' : isCellHighlight ? 'cell-highlight' : null;
       const isLastCell = this.checkIsLastCell(columns, key);
       const bgColor = columnColor && columnColor[key];

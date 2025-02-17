@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
@@ -36,7 +36,7 @@ class Account extends Component {
   }
 
   getContainer = () => {
-    return ReactDOM.findDOMNode(this);
+    return findDOMNode(this);
   };
 
   handleProps = () => {

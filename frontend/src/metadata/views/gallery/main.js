@@ -19,7 +19,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -31,7 +31,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const containerRef = useRef(null);
   const scrollContainer = useRef(null);
-  const lastState = useRef({ visibleAreaFirstImage: { groupIndex: 0, rowIndex: 0 } });
+  const lastState = useRef({ scrollPos: 0 });
 
   const { repoID, updateCurrentDirent } = useMetadataView();
 
@@ -76,7 +76,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         let name = '';
         if (mode === GALLERY_DATE_MODE.YEAR) name = image.year;
         if (mode === GALLERY_DATE_MODE.MONTH) name = image.month;
-        if (mode === GALLERY_DATE_MODE.DAY) name = image.date;
+        if (mode === GALLERY_DATE_MODE.DAY || mode === GALLERY_DATE_MODE.ALL) name = image.date;
         let _group = _init.find(g => g.name === name);
         if (_group) {
           _group.children.push(image);
@@ -90,7 +90,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       }, []);
 
     let _groups = [];
-    const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+    const paddingTop = DATE_TAG_HEIGHT;
     init.forEach((_init, index) => {
       const { children, ...__init } = _init;
       let top = 0;
@@ -134,30 +134,15 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       onLoadMore && onLoadMore();
     }
 
-    let groupIndex = 0;
-    let rowIndex = 0;
-    let flag = false;
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      for (let j = 0; j < group.children.length; j++) {
-        const row = group.children[j];
-        if (row.top >= scrollTop) {
-          groupIndex = i;
-          rowIndex = j;
-          flag = true;
-          break;
-        }
-      }
-      if (flag) break;
-    }
-    lastState.current = { ...lastState.current, visibleAreaFirstImage: { groupIndex, rowIndex } };
+    const scrollPos = (scrollTop + clientHeight / 2) / scrollHeight;
+    lastState.current = { ...lastState.current, scrollPos };
 
     const newOverScan = {
       top: Math.max(0, scrollTop - rowHeight * OVER_SCAN_ROWS),
       bottom: scrollTop + clientHeight + rowHeight * OVER_SCAN_ROWS
     };
     setOverScan(newOverScan);
-  }, [rowHeight, onLoadMore, groups]);
+  }, [rowHeight, onLoadMore]);
 
   const updateSelectedImage = useCallback((image = null) => {
     const imageInfo = image ? getRowById(metadata, image.id) : null;
@@ -246,11 +231,18 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handelRemoveSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
-    onRemoveImage(selectedImages, () => {
+    onRemoveImage && onRemoveImage(selectedImages, () => {
       updateCurrentDirent();
       setSelectedImages([]);
     });
   }, [onRemoveImage, updateCurrentDirent]);
+
+  const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
+    onSetPeoplePhoto(selectedImage, () => {
+      updateCurrentDirent();
+      setSelectedImages([]);
+    });
+  }, [onSetPeoplePhoto, updateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);
@@ -349,22 +341,25 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
     };
-  }, [rowHeight]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!imageSize || imageSize?.large < 0) return;
     if (lastState.current?.mode === mode && mode === GALLERY_DATE_MODE.ALL && !ObjectUtils.isSameObject(imageSize, lastState.current.imageSize)) {
-      const perImageOffset = imageSize.large - (lastState.current.imageSize?.large || 0);
-      const { groupIndex, rowIndex } = lastState.current.visibleAreaFirstImage;
-      const rowOffset = groups.reduce((previousValue, current, currentIndex) => {
-        if (currentIndex < groupIndex) {
-          return previousValue + current.children.length;
-        }
-        return previousValue;
-      }, 0) + rowIndex;
-      const topOffset = rowOffset * perImageOffset + groupIndex * (mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT);
-      scrollContainer.current.scrollTop = scrollContainer.current.scrollTop + topOffset;
+      const { scrollHeight, clientHeight } = scrollContainer.current;
+      const { scrollPos } = lastState.current;
+      scrollContainer.current.scrollTop = scrollHeight * scrollPos - clientHeight / 2;
       lastState.current = { ...lastState.current, imageSize, mode };
+    } else {
+      const { targetGroupFirstImageId: imageId } = lastState.current;
+      if (imageId) {
+        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
+        if (targetGroup) {
+          scrollContainer.current.scrollTop = targetGroup.top;
+        }
+        lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
+      }
     }
   }, [mode, imageSize, groups]);
 
@@ -373,26 +368,6 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       onLoadMore && onLoadMore();
     }
   }, [containerHeight, onLoadMore]);
-
-  useEffect(() => {
-    if (!imageSize || imageSize?.large < 0) return;
-    const { targetGroupFirstImageId: imageId } = lastState.current;
-    if (imageId) {
-      if (mode === GALLERY_DATE_MODE.ALL) {
-        const targetImage = images.find(img => img.id === imageId);
-        if (targetImage) {
-          scrollContainer.current.scrollTop = targetImage.rowIndex * rowHeight - 60;
-        }
-      } else {
-        const targetGroup = groups.find(group => group.children.some(row => row.children.some(img => img.id === imageId)));
-        if (targetGroup) {
-          scrollContainer.current.scrollTop = targetGroup.top;
-        }
-      }
-      lastState.current = { ...lastState.current, targetGroupFirstImageId: null, mode };
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageSize, groups, mode]);
 
   return (
     <div className="sf-metadata-gallery-scroll-container" ref={scrollContainer} onScroll={handleScroll}>
@@ -431,7 +406,9 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
         addFolder={onAddFolder}
-        onRemoveImage={handelRemoveSelectedImages}
+        onRemoveImage={onRemoveImage ? handelRemoveSelectedImages : null}
+        onAddImage={onAddImage}
+        onSetPeoplePhoto={handleMakeSelectedAsCoverPhoto}
       />
       {isImagePopupOpen && (
         <ModalPortal>

@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import CellFormatter from '../../../../../components/cell-formatter';
 import { gettext } from '../../../../../../utils/constants';
 import OpMenu from './op-menu';
@@ -7,8 +8,10 @@ import { CellType } from '../../../../../constants';
 
 import './index.css';
 
-const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed }) => {
+const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
   const [active, setActive] = useState(false);
+
+  const headerRef = useRef();
 
   const onMouseEnter = useCallback(() => {
     if (haveFreezed) return;
@@ -20,10 +23,14 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
     setActive(false);
   }, [haveFreezed]);
 
-  const handelUnFreezed = useCallback((keepActive) => {
+  const keepActive = useCallback((event) => {
+    return event.target.className?.includes('kanban-header-op-btn') || event.target === headerRef.current;
+  }, []);
+
+  const handelUnFreezed = useCallback((event) => {
     onUnFreezed();
-    !keepActive && setActive(false);
-  }, [onUnFreezed]);
+    !keepActive(event) && setActive(false);
+  }, [onUnFreezed, keepActive]);
 
   const titleValue = useMemo(() => {
     if (!value || !groupByColumn) return null;
@@ -31,9 +38,14 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
     return value;
   }, [value, groupByColumn]);
 
+  const handleCollapse = useCallback((event) => {
+    onCollapse();
+    !keepActive(event) && setActive(false);
+  }, [onCollapse, keepActive]);
+
   return (
     <div className="sf-metadata-view-kanban-board-header" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div className="sf-metadata-view-kanban-board-header-title">
+      <div className="sf-metadata-view-kanban-board-header-title" ref={headerRef}>
         {value ? (
           <CellFormatter value={titleValue} field={groupByColumn} readonly={true} />
         ) : (
@@ -41,8 +53,15 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
         )}
         <span className="cards-quantity">{cardsQuantity}</span>
       </div>
-      {value && !readonly && active && (
-        <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
+      {active && (
+        <div className="board-header-operation-btn">
+          {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />}
+          <i
+            className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
+            title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
+            onClick={handleCollapse}>
+          </i>
+        </div>
       )}
     </div>
   );

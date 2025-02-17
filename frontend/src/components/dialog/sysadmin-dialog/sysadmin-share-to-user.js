@@ -15,6 +15,7 @@ class UserItem extends React.Component {
     this.state = {
       isOperationShow: false
     };
+    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -169,7 +170,7 @@ class SysAdminShareToUser extends React.Component {
         selectedOption: null,
         permission: 'rw',
       });
-      this.refs.userSelect.clearSelect();
+      this.userSelect.current.clearSelect();
     }).catch(error => {
       if (error.response) {
         let message = gettext('Library can not be shared to owner.');
@@ -235,7 +236,7 @@ class SysAdminShareToUser extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}

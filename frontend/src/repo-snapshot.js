@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
@@ -319,4 +319,5 @@ FolderItem.propTypes = {
   renderFolder: PropTypes.func.isRequired,
 };
 
-ReactDom.render(<RepoSnapshot />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<RepoSnapshot />);

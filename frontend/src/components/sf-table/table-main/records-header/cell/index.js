@@ -24,7 +24,7 @@ const Cell = ({
   ColumnDropdownMenu,
   column,
   columnIndex,
-  style: propsStyle,
+  style: propsStyle = null,
   draggingColumnKey,
   draggingColumnIndex,
   dragOverColumnKey,
@@ -231,10 +231,6 @@ const Cell = ({
       </div>
     </div>
   );
-};
-
-Cell.defaultProps = {
-  style: null,
 };
 
 Cell.propTypes = {

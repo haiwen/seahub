@@ -610,5 +610,8 @@
   "Add_video_link": "Add video link",
   "Link_Seafile_video_file": "Link Seafile video file",
   "Select_video_file": "Select video file",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more"
+  "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more",
+  "Image_cannot_be_copied_Please_download_the_source_image": "Image cannot be copied. Please download the source image,",
+  "And_select_insert_-_image_to_upload": "and select 「insert」 - 「image」 to upload.",
+  "Image_copy_error": "Image copy error"
 }

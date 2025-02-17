@@ -41,6 +41,13 @@ def extract_file_details(params):
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
 
+def update_people_cover_photo(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-people-cover-photo')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return json.loads(resp.content)
 
 def generator_base64_code(length=4):
     possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'
@@ -142,6 +149,16 @@ def init_faces(metadata_server_api):
         "display_column_key": METADATA_TABLE.columns.obj_id.key
     })
 
+    metadata_server_api.add_link_columns(FACES_TABLE.included_face_link_id, METADATA_TABLE.id, face_table_id, {
+        "key": METADATA_TABLE.columns.included_face_links.key,
+        "name": METADATA_TABLE.columns.included_face_links.name,
+        "display_column_key": FACES_TABLE.columns.name.key
+    }, {
+        "key": FACES_TABLE.columns.included_photo_links.key,
+        "name": FACES_TABLE.columns.included_photo_links.name,
+        "display_column_key": METADATA_TABLE.columns.obj_id.key
+    })
+
 
 def remove_faces_table(metadata_server_api):
     from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
@@ -154,7 +171,12 @@ def remove_faces_table(metadata_server_api):
         elif table['name'] == METADATA_TABLE.name:
             columns = table.get('columns', [])
             for column in columns:
-                if column['key'] in [METADATA_TABLE.columns.face_vectors.key, METADATA_TABLE.columns.face_links.key, METADATA_TABLE.columns.excluded_face_links.key]:
+                if column['key'] in [
+                    METADATA_TABLE.columns.face_vectors.key,
+                    METADATA_TABLE.columns.face_links.key,
+                    METADATA_TABLE.columns.excluded_face_links.key,
+                    METADATA_TABLE.columns.included_face_links.key
+                ]:
                     metadata_server_api.delete_column(table['id'], column['key'], True)
 
 

@@ -225,6 +225,24 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.ADD_PEOPLE_PHOTOS: {
+        const { people_id, added_photos } = operation;
+        window.sfMetadataContext.addPeoplePhotos(people_id, added_photos).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to add people photos') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO: {
+        const { people_id, selected_photo } = operation;
+        window.sfMetadataContext.setPeoplePhoto(people_id, selected_photo).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to set people cover photo') });
+        });
+        break;
+      }
 
       // tags
       case OPERATION_TYPE.UPDATE_FILE_TAGS: {

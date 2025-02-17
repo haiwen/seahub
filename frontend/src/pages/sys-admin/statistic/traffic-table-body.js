@@ -21,7 +21,12 @@ class TrafficTableBody extends React.Component {
         }
         return (<span>{'--'}</span>);
       case 'org':
-        return (<span>{userTrafficItem.org_name}</span>);
+        if (userTrafficItem.org_name) {
+          return (
+            <a href={siteRoot + 'sys/organizations/' + userTrafficItem.org_id + '/info/'}>{userTrafficItem.org_name}</a>
+          );
+        }
+        return (<span>{'--'}</span>);
     }
   };
 

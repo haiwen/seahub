@@ -62,6 +62,7 @@ body {
   window.shared = {
     pageOptions: {
       repoID: '{{ repo.id }}',
+      repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
       filePath: '{{ path|escapejs }}',
       sharedToken: '{{ shared_token }}',
       trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},

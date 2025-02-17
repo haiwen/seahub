@@ -174,6 +174,19 @@ class Context {
     return viewId === FACE_RECOGNITION_VIEW_ID;
   };
 
+  canAddPhotoToPeople = () => {
+    const viewId = this.getSetting('viewID');
+    return viewId === FACE_RECOGNITION_VIEW_ID;
+  };
+
+  canSetPeoplePhoto = () => {
+    const viewId = this.getSetting('viewID');
+    if (this.permission === 'r' || viewId !== FACE_RECOGNITION_VIEW_ID) {
+      return false;
+    }
+    return true;
+  };
+
   restoreRows = () => {
     // todo
   };
@@ -267,9 +280,19 @@ class Context {
     return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
   };
 
+  addPeoplePhotos = (peopleId, recordIds) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.addPeoplePhotos(repoID, peopleId, recordIds);
+  };
+
   removePeoplePhotos = (recordId, photoIds) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.removePeoplePhotos(repoID, recordId, photoIds);
+  };
+
+  setPeoplePhoto = (recordId, photoId) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.setPeoplePhoto(repoID, recordId, photoId);
   };
 
   // file tag

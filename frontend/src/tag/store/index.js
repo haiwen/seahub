@@ -407,6 +407,12 @@ class Store {
     });
     this.applyOperation(operation);
   }
+
+  modifyLocalFileTags(file_id, tags_ids) {
+    const type = OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS;
+    const operation = this.createOperation({ type, file_id, tags_ids });
+    this.applyOperation(operation);
+  }
 }
 
 export default Store;

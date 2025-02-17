@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledTooltip } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -1363,4 +1363,5 @@ GridItem.propTypes = {
   visitFolder: PropTypes.func.isRequired
 };
 
-ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SharedDirView />);

@@ -35,7 +35,7 @@
 }
 
 .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover {
-  background-color: #DBDBDB;
+  background-color: #EFEFEF;
   cursor: pointer;
   border-radius: 3px;
 }

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block extra_data %}
-actionURL: '{{action_url}}',
+actionURL: '{{action_url|safe}}',
 accessToken: '{{access_token}}',
 accessTokenTtl: '{{access_token_ttl}}',
 {% endblock %}

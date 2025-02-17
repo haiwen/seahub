@@ -11,6 +11,7 @@ import { getRowById } from '../utils/table';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';
+import { useTags } from '../../tag/hooks';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -24,6 +25,7 @@ export const MetadataViewProvider = ({
   copyFileCallback,
   ...params
 }) => {
+  const { modifyLocalFileTags } = useTags();
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
@@ -277,8 +279,10 @@ export const MetadataViewProvider = ({
   }, [storeRef]);
 
   const updateFileTags = useCallback((data) => {
+    const { record_id, tags } = data[0];
+    modifyLocalFileTags(record_id, tags);
     storeRef.current.updateFileTags(data);
-  }, [storeRef]);
+  }, [storeRef, modifyLocalFileTags]);
 
   // init
   useEffect(() => {

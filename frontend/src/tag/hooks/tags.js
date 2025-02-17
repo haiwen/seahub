@@ -208,6 +208,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     storeRef.current.modifyColumnWidth(columnKey, newWidth);
   }, [storeRef]);
 
+  const modifyLocalFileTags = useCallback((fileId, tagsIds) => {
+    storeRef.current.modifyLocalFileTags(fileId, tagsIds);
+  }, [storeRef]);
+
   useEffect(() => {
     if (!handleSelectTag) return;
     if (isLoading) return;
@@ -284,6 +288,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateLocalTag,
       selectTag: handleSelectTag,
       modifyColumnWidth,
+      modifyLocalFileTags,
     }}>
       {children}
     </TagsContext.Provider>

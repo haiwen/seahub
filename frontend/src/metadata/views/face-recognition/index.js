@@ -23,8 +23,16 @@ const FaceRecognition = () => {
     store.deletePeoplePhotos(peopleId, peoplePhotos);
   }, [store]);
 
+  const onAddPeoplePhotos = useCallback((peopleId, oldPeopleId, peoplePhotos, { success_callback, fail_callback }) => {
+    store.addPeoplePhotos(peopleId, oldPeopleId, peoplePhotos, { success_callback, fail_callback });
+  }, [store]);
+
   const onRemovePeoplePhotos = useCallback((peopleId, peoplePhotos, { success_callback }) => {
     store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
+  }, [store]);
+
+  const onSetPeoplePhoto = useCallback((peopleId, peoplePhoto) => {
+    store.setPeoplePhoto(peopleId, peoplePhoto);
   }, [store]);
 
   const openPeople = useCallback((people) => {
@@ -57,8 +65,10 @@ const FaceRecognition = () => {
           people={peopleRef.current}
           view={metadata.view}
           onClose={closePeople}
-          onDeletePeoplePhotos={onDeletePeoplePhotos}
+          onAddPeoplePhotos={onAddPeoplePhotos}
           onRemovePeoplePhotos={onRemovePeoplePhotos}
+          onDeletePeoplePhotos={onDeletePeoplePhotos}
+          onSetPeoplePhoto={onSetPeoplePhoto}
         />
       ) : (
         <Peoples peoples={peoples} onRename={onRename} onOpenPeople={openPeople} />

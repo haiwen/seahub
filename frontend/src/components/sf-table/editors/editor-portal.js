@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 class EditorPortal extends React.Component {
@@ -32,7 +32,7 @@ class EditorPortal extends React.Component {
       return null;
     }
 
-    return ReactDOM.createPortal(
+    return createPortal(
       this.props.children,
       this.el,
     );

@@ -200,13 +200,14 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
-  moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id) => {
+  moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id, is_above_folder) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/move-views/';
     const params = {
       source_view_id,
       source_folder_id,
       target_view_id,
       target_folder_id,
+      is_above_folder,
     };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
@@ -358,6 +359,22 @@ class MetadataManagerAPI {
       record_ids: recordIds
     };
     return this.req.delete(url, { data: params });
+  };
+
+  addPeoplePhotos = (repoID, peopleId, recordIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/';
+    const params = {
+      record_ids: recordIds
+    };
+    return this.req.post(url, params);
+  };
+
+  setPeoplePhoto = (repoID, peopleId, recordId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-cover-photo/' + peopleId + '/';
+    const params = {
+      record_id: recordId
+    };
+    return this.req.put(url, params);
   };
 
   // ocr

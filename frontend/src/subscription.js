@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import SideNav from './components/user-settings/side-nav';
 import Account from './components/common/account';
@@ -66,7 +66,5 @@ class UserSubscription extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <UserSubscription />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<UserSubscription />);

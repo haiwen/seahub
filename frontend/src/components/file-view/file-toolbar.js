@@ -9,6 +9,7 @@ import ShareDialog from '../dialog/share-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import Icon from '../../components/icon';
+import ImageZoomer from './image-zoomer';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -17,13 +18,15 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
-  toggleDetailsPanel: PropTypes.func.isRequired
+  toggleDetailsPanel: PropTypes.func.isRequired,
+  setImageScale: PropTypes.func,
+  rotateImage: PropTypes.func
 };
 
 const {
   canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
-  fileType,
+  fileType, fileExt,
   fileName,
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
@@ -119,6 +122,19 @@ class FileToolbar extends React.Component {
     return (
       <Fragment>
         <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
+          {(fileType == 'Image' && !err) && (
+            <>
+              <ImageZoomer setImageScale={this.props.setImageScale} />
+              {['psd', 'heic'].indexOf(fileExt) == -1 && (
+                <IconButton
+                  id="rotate-image"
+                  icon="rotate"
+                  text={gettext('Rotate')}
+                  onClick={this.props.rotateImage}
+                />
+              )}
+            </>
+          )}
           {fileType == 'PDF' && (
             <IconButton
               id="seafile-pdf-find"
@@ -195,11 +211,11 @@ class FileToolbar extends React.Component {
               className="file-toolbar-btn"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
-              tag="div"
+              tag="span"
             >
               <Icon symbol="more-vertical" />
             </DropdownToggle>
-            <DropdownMenu right={true}>
+            <DropdownMenu>
               {filePerm == 'rw' && (
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                   {gettext('History')}
@@ -233,11 +249,10 @@ class FileToolbar extends React.Component {
                     </button>
                   ))}
           </ButtonGroup>
-
-          <DropdownToggle className="mx-1" aria-label={gettext('More operations')}>
+          <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
             <Icon symbol="more-vertical" />
           </DropdownToggle>
-          <DropdownMenu right={true}>
+          <DropdownMenu>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
                 {gettext('Open parent folder')}

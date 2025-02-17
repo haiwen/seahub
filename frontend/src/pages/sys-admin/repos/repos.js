@@ -80,7 +80,7 @@ class Content extends Component {
                       <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' ? sortIcon : initialSortIcon}</a>{' / '}
                       <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' ? sortIcon : initialSortIcon}</a>
                     </Fragment> :
-                    gettext('Files') / gettext('Size')
+                    <>{gettext('Files')}{' / '}{gettext('Size')}</>
                   }
                 </th>
                 <Fragment>

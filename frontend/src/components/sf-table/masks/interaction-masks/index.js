@@ -121,8 +121,8 @@ class InteractionMasks extends React.Component {
     });
   };
 
-  onOpenEditorEvent = (mode) => {
-    this.setState({ openEditorMode: mode }, () => {
+  onOpenEditorEvent = (mode, op) => {
+    this.setState({ openEditorMode: mode, selectedOperation: op }, () => {
       this.openEditor(null);
     });
   };
@@ -206,7 +206,6 @@ class InteractionMasks extends React.Component {
     const { isEditorEnabled, selectedPosition, openEditorMode } = this.state;
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
-
     // how to open editors?
     // 1. editor is closed
     // 2. record-cell is editable or open editor with preview mode
@@ -1031,7 +1030,7 @@ class InteractionMasks extends React.Component {
   };
 
   render() {
-    const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition } = this.state;
+    const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition, selectedOperation } = this.state;
     const { columns, isGroupView, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
@@ -1066,6 +1065,7 @@ class InteractionMasks extends React.Component {
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
+              operation={selectedOperation}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),
                 ...this.state.editorPosition

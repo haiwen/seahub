@@ -9,6 +9,7 @@ import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
 import SortMenu from '../../components/sort-menu';
 import MetadataViewToolBar from '../../metadata/components/view-toolbar';
+import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-searcher';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
@@ -116,6 +117,7 @@ class DirTool extends React.Component {
     if (isTagView) {
       return (
         <div className="dir-tool">
+          <TagsTableSearcher />
         </div>
       );
     }
@@ -142,7 +144,7 @@ class DirTool extends React.Component {
               aria-expanded={isDropdownMenuOpen}
             >
             </DropdownToggle>
-            <DropdownMenu right={true}>
+            <DropdownMenu>
               {menuItems.map((menuItem, index) => {
                 if (menuItem === 'Divider') {
                   return <DropdownItem key={index} divider />;

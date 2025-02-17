@@ -20,7 +20,7 @@ const TagsEditor = ({
   record,
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
-  canAddTag,
+  canAddTag = true,
   onPressTab,
   addNewTag,
   selectTag,
@@ -266,10 +266,6 @@ TagsEditor.propTypes = {
   addNewTag: PropTypes.func,
   selectTag: PropTypes.func,
   deselectTag: PropTypes.func,
-};
-
-TagsEditor.defaultProps = {
-  canAddTag: false,
 };
 
 export default TagsEditor;

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/sdoc-editor';
 import { gettext } from '../../utils/constants';
@@ -133,4 +133,5 @@ class SdocRevision extends React.Component {
   }
 }
 
-ReactDom.render(<SdocRevision />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SdocRevision />);

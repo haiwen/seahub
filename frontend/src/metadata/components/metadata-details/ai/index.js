@@ -157,7 +157,7 @@ const AI = () => {
         {isMenuShow && (
           <ModalPortal>
             <div className="sf-metadata-ai-dropdown-menu large">
-              <DropdownMenu right={true}>
+              <DropdownMenu>
                 {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
               </DropdownMenu>
             </div>

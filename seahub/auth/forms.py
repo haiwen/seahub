@@ -19,9 +19,9 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
 from captcha.fields import CaptchaField
-from constance import config
 
-from seahub.utils.password import get_password_strength_requirements, is_password_strength_valid
+from seahub.utils.password import get_password_strength_requirements, \
+        is_password_strength_valid
 
 
 class AuthenticationForm(forms.Form):
@@ -29,7 +29,7 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    login = forms.CharField(label=_("Email or Username") )
+    login = forms.CharField(label=_("Email or Username"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
@@ -50,14 +50,14 @@ class AuthenticationForm(forms.Form):
     def clean(self):
         username = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
-        
+
         if username and password:
             # First check the account length for validation.
             if len(username) > 255:
                 self.errors['invalid_input'] = "The login name is too long."
                 self.db_record = False
                 raise forms.ValidationError("The login name is too long.")
-            
+
             # Check user account active or not
             email = Profile.objects.convert_login_str_to_username(username)
             try:
@@ -67,7 +67,7 @@ class AuthenticationForm(forms.Form):
                     raise forms.ValidationError(_("This account is inactive."))
             except User.DoesNotExist:
                 pass
-            
+
             # Second check the password correct or not
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
@@ -105,36 +105,49 @@ class AuthenticationForm(forms.Form):
                     raise forms.ValidationError(_("This account is inactive."))
 
             # Non administrators can only log in with single sign on
-            saml_provider_identifier = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
-            enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
-            enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
-            disable_pwd_login = False
-            is_admin = False
-            username = self.user_cache.username
-
             org_id = -1
+            username = self.user_cache.username
             orgs = ccnet_api.get_orgs_by_user(username)
+
+            # check if user is admin
             if orgs:
                 org_id = orgs[0].org_id
-                
-            if org_id > 0 and enable_mul_adfs:
                 is_admin = ccnet_api.is_org_staff(org_id, username)
-                org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
-                if org_settings:
-                    disable_pwd_login = int(org_settings.value)
-            elif enable_adfs:
-                disable_pwd_login = settings.DISABLE_ADFS_USER_PWD_LOGIN
+            else:
                 is_admin = self.user_cache.is_staff
 
-            if disable_pwd_login:
-                if not is_admin:
-                    adfs_user = SocialAuthUser.objects.filter(
-                        username=username,
-                        provider=saml_provider_identifier
-                    )
-                    if adfs_user.exists():
-                        self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
-                        raise forms.ValidationError(_('Please use Single Sign-On to login.'))
+            # get disable password login setting
+            disable_pwd_login = settings.DISABLE_ADFS_USER_PWD_LOGIN
+            enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
+            if org_id > 0 and enable_mul_adfs:
+                org_settings = OrgAdminSettings.objects.filter(org_id=org_id,
+                                                               key=FORCE_ADFS_LOGIN).first()
+                if org_settings:
+                    disable_pwd_login = int(org_settings.value)
+
+            # get social provider identifier
+            enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+            enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
+            provider_identifier = ''
+            if enable_adfs or enable_mul_adfs:
+                provider_identifier = getattr(settings,
+                                              'SAML_PROVIDER_IDENTIFIER',
+                                              'saml')
+            elif enable_oauth:
+                provider_identifier = getattr(settings,
+                                              'OAUTH_PROVIDER_DOMAIN',
+                                              '')
+
+            # check if disable password login
+            if disable_pwd_login and not is_admin and \
+                    (enable_adfs or enable_mul_adfs or enable_oauth):
+                social_user = SocialAuthUser.objects.filter(
+                    username=username,
+                    provider=provider_identifier
+                )
+                if social_user.exists():
+                    self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
+                    raise forms.ValidationError(_('Please use Single Sign-On to login.'))
 
         # TODO: determine whether this should move to its own method.
         if self.request:
@@ -151,8 +164,10 @@ class AuthenticationForm(forms.Form):
     def get_user(self):
         return self.user_cache
 
+
 class CaptchaAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField()
+
 
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label=_("E-mail"), max_length=255)
@@ -202,6 +217,7 @@ class PasswordResetForm(forms.Form):
                         email_template_name, c, None,
                         [email2contact_email(user.username)])
 
+
 class SetPasswordForm(forms.Form):
     """
     A form that lets a user change set his/her password without
@@ -243,6 +259,7 @@ class SetPasswordForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
 
 class PasswordChangeForm(SetPasswordForm):
     """
