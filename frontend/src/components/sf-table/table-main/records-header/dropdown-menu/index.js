@@ -21,10 +21,9 @@ const HeaderDropdownMenu = ({ column, ColumnDropdownMenu, customProps }) => {
   const renderDropdownMenu = useCallback(() => {
     return (
       <DropdownMenu
-        positionFixed={true}
         flip={false}
         modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
-        className="sf-table-dropdown-menu"
+        className="sf-table-dropdown-menu position-fixed"
       >
         {cloneElement(ColumnDropdownMenu, { column, ...customProps })}
       </DropdownMenu>

@@ -197,8 +197,7 @@ class ItemDropdownMenu extends React.Component {
         <ModalPortal>
           <DropdownMenu
             style={menuStyle}
-            className={this.props.menuClassname}
-            positionFixed={true}
+            className={`${this.props.menuClassname} position-fixed`}
             flip={false}
             modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
           >
@@ -224,7 +223,7 @@ class ItemDropdownMenu extends React.Component {
                       <i className="sf3-font-down sf3-font rotate-270"></i>
                     </DropdownToggle>
                     <DropdownMenu
-                      positionFixed={true}
+                      className="position-fixed"
                       flip={false}
                       modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
                     >

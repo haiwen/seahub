@@ -95,10 +95,9 @@ export default class PageDropdownMenu extends Component {
       >
         <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
         <DropdownMenu
-          className="page-operation-dropdown-menu dtable-dropdown-menu large"
+          className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
           flip={false}
           modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
-          positionFixed={true}
         >
           <DropdownItem onClick={this.handleCopyLink}>
             <i className="sf3-font sf3-font-link" aria-hidden="true" />
