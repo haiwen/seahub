@@ -1,0 +1,40 @@
+.group-invite-members th,
+.group-invite-members td {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.group-invite-members .no-link-tip {
+  line-height: 24px;
+  color: #999;
+}
+
+.invite-link-item {
+  display: flex;
+  margin: 1rem 0 2.5rem;
+}
+
+.invite-link-item .form-item {
+  width: calc(100% - 120px);
+  padding-left: 10px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+
+.invite-link-item .invite-link-copy {
+  width: 72px;
+}
+
+.invite-link-item .invite-link-copy-btn {
+  width: 72px;
+  height: 40px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.invite-link-item .delete-link-btn {
+  color: #999;
+  width: 40px;
+}

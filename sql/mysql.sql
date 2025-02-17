@@ -1587,4 +1587,15 @@ CREATE TABLE `RepoTransfer` (
   PRIMARY KEY (`id`),
   KEY `idx_file_transfer_org_id` (`org_id`),
   KEY `idx_file_transfer_timestamp` (`timestamp`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `group_invite_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(40) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_invite_link_group_id` (`group_id`),
+  KEY `group_invite_link_token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

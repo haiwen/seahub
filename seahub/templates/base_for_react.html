@@ -158,6 +158,7 @@
             enableWhiteboard: {% if enable_whiteboard %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
             enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
+            isMultiTenacy: {% if multi_tenancy %} true {% else %} false {% endif %},
             enableFileTags: {% if enable_file_tags %} true {% else %} false {% endif %},
             enableShowAbout: {% if enable_show_about %} true {% else %} false {% endif %},
             enableMultipleOfficeSuite: {% if user.permissions.can_choose_office_suite %} true {% else %} false {% endif %},

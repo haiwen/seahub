@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import classnames from 'classnames';
-import { gettext, username, canAddRepo } from '../../utils/constants';
+import { gettext, username, canAddRepo, isMultiTenancy } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -21,6 +21,7 @@ import DepartmentDetailDialog from '../../components/dialog/department-detail-di
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import GroupInviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
@@ -65,6 +66,7 @@ class GroupView extends React.Component {
       showTransferGroupDialog: false,
       showImportMembersDialog: false,
       showManageMembersDialog: false,
+      showInviteMembersDialog: false,
       isLeaveGroupDialogOpen: false,
       isMembersDialogOpen: false
     };
@@ -287,6 +289,13 @@ class GroupView extends React.Component {
     });
   };
 
+  toggleInviteMembersDialog = () => {
+    this.setState({
+      showInviteMembersDialog: !this.state.showInviteMembersDialog,
+      showGroupDropdown: false,
+    });
+  };
+
   importMembersInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
@@ -365,6 +374,7 @@ class GroupView extends React.Component {
 
   getOpList = () => {
     const { currentGroup, isDepartmentGroup, isStaff, isOwner } = this.state;
+    // const isGroup = this.state.currentGroup.owner !== 'system admin';
     const opList = [];
     if ((!isDepartmentGroup && canAddRepo) ||
       (isDepartmentGroup && isStaff)) {
@@ -388,6 +398,10 @@ class GroupView extends React.Component {
 
       if (!isOwner && !isDepartmentGroup) {
         opList.push({ 'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog });
+      }
+
+      if (isOwner && this.state.currentGroup.owner !== 'system admin' && !isMultiTenancy) {
+        opList.push({ 'text': gettext('Invite Members'), 'onClick': this.toggleInviteMembersDialog });
       }
     }
 
@@ -588,6 +602,12 @@ class GroupView extends React.Component {
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
           />
+        }
+        {this.state.showInviteMembersDialog &&
+          <GroupInviteMembersDialog
+            groupID={this.props.groupID}
+            onGroupChanged={this.props.onGroupChanged}
+            toggleGroupInviteDialog={this.toggleInviteMembersDialog}/>
         }
       </Fragment>
     );
