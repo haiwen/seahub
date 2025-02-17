@@ -15,7 +15,7 @@ const TagsTableSearcher = () => {
   const [searchResult, setSearchResult] = useState(null);
 
   const recordsTree = useMemo(() => {
-    return tagsData.rows_tree || [];
+    return (tagsData && tagsData.rows_tree) || [];
   }, [tagsData]);
 
   const recordsCount = useMemo(() => {

@@ -22,7 +22,7 @@ import '../../gallery/index.css';
 
 dayjs.extend(utc);
 
-const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeoplePhotos, onRemovePeoplePhotos }) => {
+const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeoplePhotos, onSetPeoplePhoto, onRemovePeoplePhotos }) => {
   const [isLoading, setLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [metadata, setMetadata] = useState({ rows: [] });
@@ -148,6 +148,11 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, onAddPeoplePhotos, deletedByIds]);
 
+  const handleSetPeoplePhoto = useCallback((selectedImage) => {
+    const { id } = selectedImage;
+    onSetPeoplePhoto(people._id, id);
+  }, [people, onSetPeoplePhoto]);
+
   const loadData = useCallback((view) => {
     setLoading(true);
     metadataAPI.getPeoplePhotos(repoID, people._id, 0, PER_LOAD_NUMBER).then(res => {
@@ -245,6 +250,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         onDelete={handelDelete}
         onRemoveImage={people._is_someone ? handelRemove : null}
         onAddImage={!people._is_someone ? handelAdd : null}
+        onSetPeoplePhoto={handleSetPeoplePhoto}
       />
     </div>
   );

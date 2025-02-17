@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canCreateWiki } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -12,6 +11,7 @@ import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 
 const propTypes = {
@@ -30,7 +30,6 @@ class Wikis extends Component {
       groupWikis: [],
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
-      isDropdownMenuShown: false,
       isShowConvertStatusDialog: false,
     };
   }
@@ -308,13 +307,6 @@ class Wikis extends Component {
     });
   };
 
-  toggleDropdownMenu = (e) => {
-    e.stopPropagation();
-    this.setState({
-      isDropdownMenuShown: !this.state.isDropdownMenuShown
-    });
-  };
-
   render() {
     return (
       <Fragment>
@@ -338,20 +330,10 @@ class Wikis extends Component {
               <div className="path-container">
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
                 {canCreateWiki &&
-                  <Dropdown
-                    direction="down"
-                    className="add-wiki-dropdown"
-                    isOpen={this.state.isDropdownMenuShown}
-                    toggle={this.toggleDropdownMenu}
-                    onMouseMove={(e) => {e.stopPropagation();}}
-                  >
-                    <DropdownToggle tag="i" className="px-1">
-                      <span className="sf3-font sf3-font-down" aria-hidden="true"></span>
-                    </DropdownToggle>
-                    <DropdownMenu positionFixed={true}>
-                      <DropdownItem onClick={() => {this.toggleAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <SingleDropdownToolbar
+                    withPlusIcon={true}
+                    opList={[{ 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() }]}
+                  />
                 }
               </div>
             </div>

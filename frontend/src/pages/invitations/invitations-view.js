@@ -277,6 +277,7 @@ class InvitationsView extends React.Component {
               <div className="d-flex">
                 <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
                 <SingleDropdownToolbar
+                  withPlusIcon={true}
                   opList={[{ 'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog }]}
                 />
               </div>

@@ -62,6 +62,8 @@ class Saml2Backend(ModelBackend):
         saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
         if not saml_user and SSO_LDAP_USE_SAME_UID:
             saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+            if saml_user:
+                SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
         if saml_user:
             user = self.get_user(saml_user.username)
             if not user:
