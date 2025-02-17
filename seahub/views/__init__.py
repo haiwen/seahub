@@ -58,7 +58,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP
+    SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP, MULTI_TENANCY
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
@@ -1148,7 +1148,8 @@ def react_fake_view(request, **kwargs):
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
-        'enable_show_about': settings.ENABLE_SHOW_ABOUT
+        'enable_show_about': settings.ENABLE_SHOW_ABOUT,
+        'multi_tenancy': MULTI_TENANCY,
     }
 
     if ENABLE_METADATA_MANAGEMENT:

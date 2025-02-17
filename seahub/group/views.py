@@ -18,9 +18,10 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError, is_group_member
-from seahub.settings import SITE_ROOT
+from seahub.group.models import GroupInviteLinkModel
+from seahub.settings import SITE_ROOT, SERVICE_URL, MULTI_TENANCY
 from seahub.utils import send_html_email, is_org_context, \
-    get_site_name
+    get_site_name, render_error
 from seahub.share.models import ExtraGroupsSharePermission
 
 
@@ -170,3 +171,33 @@ def send_group_member_add_mail(request, group, from_user, to_user):
 
     subject = _('You are invited to join a group on %s') % get_site_name()
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
+
+@login_required
+def group_invite(request, token):
+    """
+    registered user add to group
+    """
+    if MULTI_TENANCY:
+        return render_error(request, _('Feature disabled.'))
+
+    email = request.user.username
+    next_url = request.GET.get('next', '/')
+    redirect_to = SERVICE_URL.rstrip('/') + '/' + next_url.lstrip('/')
+    group_invite_link = GroupInviteLinkModel.objects.filter(token=token).first()
+    if not group_invite_link:
+        return render_error(request, _('Group invite link does not exist'))
+
+    if is_group_member(group_invite_link.group_id, email):
+
+        return HttpResponseRedirect(redirect_to)
+
+    if not group_invite_link.created_by:
+        return render_error(request, _('Group invite link broken'))
+
+    try:
+        ccnet_api.group_add_member(group_invite_link.group_id, group_invite_link.created_by, email)
+    except Exception as e:
+        logger.error(f'group invite add user failed. {e}')
+        return render_error(request, 'Internal Server Error')
+
+    return HttpResponseRedirect(redirect_to)

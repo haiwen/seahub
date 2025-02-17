@@ -1575,3 +1575,15 @@ CREATE TABLE `wiki_wiki2_publish` (
   UNIQUE KEY `publish_url` (`publish_url`),
   KEY `ix_wiki2_publish_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `group_invite_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(40) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_invite_link_group_id_4b619114` (`group_id`),
+  KEY `group_invite_link_token_7f96850` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
