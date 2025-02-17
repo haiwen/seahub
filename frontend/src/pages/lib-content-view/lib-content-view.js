@@ -844,6 +844,8 @@ class LibContentView extends React.Component {
       if (byDialog) {
         this.updateRecentlyUsedList(destRepo, destDirentPath);
       }
+
+      this.setState({ isDirentSelected: false, selectedDirentList: [], isAllDirentSelected: false });
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
@@ -1354,6 +1356,7 @@ class LibContentView extends React.Component {
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       this.copyItemsAjaxCallback(repoID, destRepo, dirent, copyToDirentPath, nodeParentPath, res.data.task_id || null, byDialog);
+      this.setState({ isDirentSelected: false, selectedDirentList: [], isAllDirentSelected: false });
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
