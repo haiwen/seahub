@@ -1997,6 +1997,7 @@ class LibContentView extends React.Component {
   };
 
   resetSelected = (node) => {
+    if (node.object?.type === 'file') return;
     const currentModel = this.state.currentMode;
     const path = node.path || '';
     let nextModel = cookie.load('seafile_view_mode') || LIST_MODE;
