@@ -185,9 +185,15 @@ class OrgAdminRepo(APIView):
             break
 
         repo_info = {}
+        
         repo_info['owner_email'] = new_owner
-        repo_info['owner_name'] = email2nickname(new_owner)
-        repo_info['encrypted'] = repo.encrypted
+        if '@seafile_group' in new_owner:
+            group_id = get_group_id_by_repo_owner(new_owner)
+            repo_info['group_name'] = group_id_to_name(group_id)
+            repo_info['owner_name'] = group_id_to_name(group_id)
+        else:
+            repo_info['owner_name'] = email2nickname(new_owner)
+        repo_info['encrypted'] = repo.encrypted 
         repo_info['repo_id'] = repo.repo_id
         repo_info['repo_name'] = repo.name
         repo_info['is_department_repo'] = False
