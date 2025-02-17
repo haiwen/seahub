@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 
+import '../css/item-dropdown-menu.css';
+
 const propTypes = {
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,

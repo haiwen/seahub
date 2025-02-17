@@ -296,16 +296,6 @@ def view_shared_dir(request, fileshare):
     else:
         dir_name = os.path.basename(real_path[:-1])
 
-    current_commit = seaserv.get_commits(repo_id, 0, 1)[0]
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
-                                                        current_commit, real_path)
-
-    # generate dir navigator
-    if fileshare.path == '/':
-        zipped = gen_path_link(req_path, repo.name)
-    else:
-        zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
-
     if req_path == '/':  # When user view the root of shared dir..
         # increase shared link view_cnt,
         fileshare = FileShare.objects.get(token=token)
@@ -319,20 +309,6 @@ def view_shared_dir(request, fileshare):
     if mode != 'list':
         mode = 'grid'
     thumbnail_size = THUMBNAIL_DEFAULT_SIZE if mode == 'list' else THUMBNAIL_SIZE_FOR_GRID
-
-    for f in file_list:
-        file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
-            f.is_img = True
-        if file_type == VIDEO:
-            f.is_video = True
-
-        if file_type in (IMAGE, XMIND) or \
-                (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
-                req_image_path = posixpath.join(req_path, f.obj_name)
-                src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                f.encoded_thumbnail_src = quote(src)
 
     # for 'upload file'
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
@@ -355,9 +331,6 @@ def view_shared_dir(request, fileshare):
         'username': username,
         'dir_name': dir_name,
         'dir_path': real_path,
-        'file_list': file_list,
-        'dir_list': dir_list,
-        'zipped': zipped,
         'traffic_over_limit': False,
         'max_upload_file_size': max_upload_file_size,
         'no_quota': no_quota,
