@@ -250,7 +250,8 @@ class Record extends React.Component {
     const recordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
     const parentNodeKey = getParentNodeKey(treeNodeKey);
     const sourceId = parentNodeKey ? getRecordIdByTreeNodeKey(parentNodeKey, treeNodeKeyRecordIdMap) : null;
-    const dragData = JSON.stringify({ sourceId, recordIds });
+    const nodeIds = Object.keys(treeMetrics.idSelectedNodeMap);
+    const dragData = JSON.stringify({ sourceId, recordIds, nodeIds });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData(SF_TABLE_TAGS_DRAG_KEY, dragData);
     this.setCustomDragImage(event, dragData);
@@ -312,6 +313,7 @@ class Record extends React.Component {
           'sf-table-last-row': isLastRecord,
           'row-selected': isSelected,
           'row-locked': isLocked,
+          'show-drag-tip': isSelected,
           'show-drop-tip': this.state.showDropTip,
         })}
         style={this.getRecordStyle()}
