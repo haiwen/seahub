@@ -116,6 +116,7 @@ ImagePreviewer.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   closeImagePopup: PropTypes.func,
+  deleteRecords: PropTypes.func,
 };
 
 export default ImagePreviewer;
