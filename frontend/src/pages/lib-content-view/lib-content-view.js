@@ -570,23 +570,24 @@ class LibContentView extends React.Component {
         path,
         isSessionExpired: false,
         currentDirent: null,
+      }, () => {
+        if (this.state.currentRepoInfo.is_admin) {
+          if (this.foldersSharedOut) {
+            this.identifyFoldersSharedOut();
+          } else {
+            this.foldersSharedOut = [];
+            seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
+              res.data.share_info_list.forEach(item => {
+                if (this.foldersSharedOut.indexOf(item.path) === -1) {
+                  this.foldersSharedOut.push(item.path);
+                }
+              });
+              this.identifyFoldersSharedOut();
+            });
+          }
+        }
       });
 
-      if (this.state.currentRepoInfo.is_admin) {
-        if (this.foldersSharedOut) {
-          this.identifyFoldersSharedOut();
-        } else {
-          this.foldersSharedOut = [];
-          seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
-            res.data.share_info_list.forEach(item => {
-              if (this.foldersSharedOut.indexOf(item.path) === -1) {
-                this.foldersSharedOut.push(item.path);
-              }
-            });
-            this.identifyFoldersSharedOut();
-          });
-        }
-      }
     }).catch((err) => {
       Utils.getErrorMsg(err, true);
       if (err.response && err.response.status === 403) {
