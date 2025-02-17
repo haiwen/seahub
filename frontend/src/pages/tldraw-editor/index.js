@@ -79,7 +79,7 @@ const TldrawEditor = () => {
   return (
     <SimpleEditor
       isFetching={isFetching}
-      document={fileContent}
+      document={fileContent || { document: null }}
       onContentChanged={onContentChanged}
       onSave={onSave}
     />
