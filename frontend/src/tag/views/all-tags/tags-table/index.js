@@ -17,6 +17,7 @@ import { getParentLinks } from '../../../utils/cell';
 import { getTagById } from '../../../utils/row';
 
 import './index.css';
+import { flattenTree } from '../../../utils/tree';
 
 const TABLE_ID = 'metadata_tas';
 const DEFAULT_TABLE_DATA = {
@@ -260,7 +261,10 @@ const TagsTable = ({
 
   const createGhostElement = useCallback((dragData) => {
     const data = JSON.parse(dragData);
-    const { recordIds } = data;
+    const { nodeIds } = data;
+    const orderedKeys = Object.keys(tagsData.key_tree_node_map);
+    const orderedNodeIds = orderedKeys.filter(key => nodeIds.includes(key));
+    const recordIds = orderedNodeIds.map(id => tagsData.key_tree_node_map[id]._id);
     const ghost = document.createElement('div');
     ghost.style.width = 'fit-content';
     ghost.style.display = 'flex';
