@@ -1170,6 +1170,7 @@ class InteractionMasks extends React.Component {
               modifyColumnData={this.props.modifyColumnData}
               updateFileTags={this.props.updateFileTags}
               editorPosition={editorPosition}
+              deleteRecords={this.props.deleteRecords}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),
                 ...this.state.editorPosition
