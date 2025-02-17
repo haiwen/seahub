@@ -40,6 +40,7 @@ class TransferDialog extends React.Component {
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
     this.options = [];
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
@@ -156,7 +157,7 @@ class TransferDialog extends React.Component {
               <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
                 <Label className='transfer-repo-label'>{gettext('Users')}</Label>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={false}
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}

@@ -13,7 +13,7 @@ import { openFile } from '../../../../../../utils/file';
 import './index.css';
 
 const Cell = React.memo(({
-  needBindEvents,
+  needBindEvents = true,
   column,
   record,
   groupRecordIndex,
@@ -197,10 +197,6 @@ const Cell = React.memo(({
   );
   return !isChanged;
 });
-
-Cell.defaultProps = {
-  needBindEvents: true
-};
 
 Cell.propTypes = {
   frozen: PropTypes.bool,

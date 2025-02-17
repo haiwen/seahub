@@ -10,7 +10,7 @@ import Loading from '../loading';
 
 const RepoListWrapper = (props) => {
   const {
-    mode, isShowFile, fileSuffixes, currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
+    mode, isShowFile = true, fileSuffixes = [], currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
     searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName, initToShowChildren
   } = props;
@@ -186,11 +186,6 @@ RepoListWrapper.propTypes = {
   selectedSearchedRepo: PropTypes.object,
   newFolderName: PropTypes.string,
   initToShowChildren: PropTypes.bool,
-};
-
-RepoListWrapper.defaultProps = {
-  isShowFile: false,
-  fileSuffixes: [],
 };
 
 export default RepoListWrapper;
