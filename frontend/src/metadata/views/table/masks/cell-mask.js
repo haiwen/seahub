@@ -1,5 +1,4 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 
 class CellMask extends React.PureComponent {
@@ -7,9 +6,8 @@ class CellMask extends React.PureComponent {
   componentDidUpdate() {
     // Scrolling left and right causes the interface to re-render,
     // and the style of CellMask is reset and needs to be fixed
-    const dom = findDOMNode(this);
-    if (dom.style.position === 'fixed') {
-      dom.style.transform = 'none';
+    if (this.cellMaskNode && this.cellMaskNode.style.position === 'fixed') {
+      this.cellMaskNode.style.transform = 'none';
     }
   }
 
@@ -27,6 +25,11 @@ class CellMask extends React.PureComponent {
     };
   };
 
+  setNode = (node) => {
+    this.cellMaskNode = node;
+    this.props.innerRef && this.props.innerRef(node);
+  };
+
   render() {
     const { width, height, top, left, zIndex, children, innerRef, ...rest } = this.props;
     const style = this.getMaskStyle();
@@ -34,7 +37,7 @@ class CellMask extends React.PureComponent {
       <div
         style={style}
         data-test="cell-mask"
-        ref={innerRef}
+        ref={this.setNode}
         {...rest}
       >
         {children}
