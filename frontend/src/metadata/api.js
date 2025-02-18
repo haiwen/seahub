@@ -397,6 +397,14 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  getLocation(repoID, recordId) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/location/';
+    const data = {
+      record_id: recordId
+    };
+    return this.req.post(url, data);
+  }
+
 }
 
 const metadataAPI = new MetadataManagerAPI();

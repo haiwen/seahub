@@ -6,7 +6,7 @@ import random
 from urllib.parse import urljoin
 from datetime import datetime
 
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL, BAIDU_MAP_KEY, BAIDU_MAP_URL, GOOGLE_MAP_KEY, GOOGLE_MAP_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -336,3 +336,75 @@ def get_update_record(update={}, columns=[], unmodifiable_column_names=[]):
                 pass
 
     return update_record
+
+
+def get_location_from_map_service(point_key):
+    if BAIDU_MAP_KEY:
+        params = {
+            'ak': BAIDU_MAP_KEY,
+            'output': 'json',
+            'location': point_key,
+            "coordtype": "bd09ll",
+            'extensions_poi': '0'
+        }
+
+        try:
+            response = requests.get(BAIDU_MAP_URL, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                if data['status'] == 0:
+                    return {
+                        'address': data['result']['formatted_address'],
+                        'country': data['result']['addressComponent']['country'],
+                        'province': data['result']['addressComponent']['province'],
+                        'city': data['result']['addressComponent']['city'],
+                        'district': data['result']['addressComponent']['district']
+                    }
+            else:
+              raise ValueError(f"Baidu Map Service Request Failed: {str(e)}")
+        except Exception as e:
+            raise e
+
+    if GOOGLE_MAP_KEY:
+        params = {
+            'latlng': point_key,
+            'key': GOOGLE_MAP_KEY
+        }
+        try:
+            response = requests.get(GOOGLE_MAP_URL, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                if data['status'] == 'OK' and data['results']:
+                    result = data['results'][0]
+                    address_components = {
+                        'country': '',
+                        'province': '',
+                        'city': '',
+                        'district': ''
+                    }
+                    
+                    for component in result['address_components']:
+                        types = component['types']
+                        
+                        if 'country' in types:
+                            address_components['country'] = component['long_name']
+                        elif 'administrative_area_level_1' in types:
+                            address_components['province'] = component['long_name']
+                        elif 'locality' in types or 'administrative_area_level_2' in types:
+                            address_components['city'] = component['long_name']
+                        elif 'sublocality' in types or 'administrative_area_level_3' in types or 'sublocality_level_1' in types:
+                            address_components['district'] = component['long_name']
+
+                    return {
+                        'address': result['formatted_address'],
+                        'country': address_components['country'],
+                        'province': address_components['province'],
+                        'city': address_components['city'],
+                        'district': address_components['district'],
+                    }
+            else:
+              raise ValueError(f"Google Map Service Request Failed: {str(e)}")
+        except Exception as e:
+            raise e
+        
+    raise ValueError("Baidu map key or Google map key not configured.")
