@@ -1,6 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Router } from '@gatsbyjs/reach-router';
+import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../_i18n/i18n-seafile-editor';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import SidePanel from './side-panel';
 
@@ -136,4 +138,11 @@ class Org extends React.Component {
 }
 
 const root = createRoot(document.getElementById('wrapper'));
-root.render(<Org />);
+
+root.render(
+  <I18nextProvider value={i18n}>
+    <LocationProvider history={globalHistory}>
+      <Org />
+    </LocationProvider>
+  </I18nextProvider>
+);
