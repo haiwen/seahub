@@ -691,7 +691,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/logs/file-access-logs/$', AdminLogsFileAccessLogs.as_view(), name='api-v2.1-admin-logs-file-access-logs'),
     re_path(r'^api/v2.1/admin/logs/file-update-logs/$', AdminLogsFileUpdateLogs.as_view(), name='api-v2.1-admin-logs-file-update-logs'),
     re_path(r'^api/v2.1/admin/logs/share-permission-logs/$', AdminLogsSharePermissionLogs.as_view(), name='api-v2.1-admin-logs-share-permission-logs'),
-    re_path(r'^api/v2.1/admin/logs/file-transfer-logs/$', AdminLogsFileTransferLogs.as_view(), name='api-v2.1-admin-logsfile-transfer-logs'),
+    re_path(r'^api/v2.1/admin/logs/file-transfer-logs/$', AdminLogsFileTransferLogs.as_view(), name='api-v2.1-admin-logs-file-transfer-logs'),
 
     ## admin::admin logs
     re_path(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),

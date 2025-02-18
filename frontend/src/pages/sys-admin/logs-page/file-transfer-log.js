@@ -130,7 +130,7 @@ class Item extends Component {
       default:
         return gettext('Deleted');
     }
-  }
+  };
 
   render() {
     let { item } = this.props;
