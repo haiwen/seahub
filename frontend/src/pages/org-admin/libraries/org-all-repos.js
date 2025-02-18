@@ -215,7 +215,7 @@ class RepoItem extends React.Component {
   onTransferRepo = (email, reshare) => {
     let repo = this.props.repo;
     orgAdminAPI.orgAdminTransferOrgRepo(orgID, repo.repoID, email, reshare).then(res => {
-      const { owner_name, owner_email } = res;
+      const { owner_name, owner_email } = res.data;
       this.props.transferRepoItem(repo.repoID, owner_name, owner_email);
       let msg = gettext('Successfully transferred the library.');
       toaster.success(msg);
