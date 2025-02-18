@@ -5,6 +5,9 @@ import editorApi from './editor-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
+import { Utils } from '../../utils/utils';
+
+import './index.css';
 
 const TldrawEditor = () => {
   const editorRef = useRef(null);
@@ -12,11 +15,19 @@ const TldrawEditor = () => {
   const [fileContent, setFileContent] = useState({});
   const [isFetching, setIsFetching] = useState(true);
 
+  const onSetFavicon = useCallback((suffix) => {
+    let { docName } = window.app.pageOptions;
+    const fileIcon = Utils.getFileIconUrl(docName);
+    document.getElementById('favicon').href = fileIcon;
+  }, []);
+
   useEffect(() => {
     editorApi.getFileContent().then(res => {
       setFileContent(res.data);
       setIsFetching(false);
     });
+    onSetFavicon();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const saveDocument = useCallback(async () => {

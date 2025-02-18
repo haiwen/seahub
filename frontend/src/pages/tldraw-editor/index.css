@@ -1,0 +1,4 @@
+/* rewrite kbd css */
+kbd.tlui-kbd {
+  background-color: transparent;
+}
