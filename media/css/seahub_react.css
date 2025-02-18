@@ -1730,3 +1730,10 @@ a.table-sort-op:hover {
 .visually-hidden {
   display: none !important;
 }
+
+.form-label {
+  display: inline-block;
+  margin-bottom: .5rem;
+  font-weight: 400;
+  font-size: 15px;
+}
