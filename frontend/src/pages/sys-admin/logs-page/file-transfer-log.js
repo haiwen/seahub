@@ -107,25 +107,36 @@ class Item extends Component {
   };
 
   getTransferTo = (item) => {
-    switch (item.transfer_type) {
+    switch (item.to_type) {
       case 'user':
         return <UserLink email={item.to_user_email} name={item.to_user_name} />;
       case 'group':
         return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
       case 'department':
         return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>;
-      case 'all':
-        return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>;
       default:
         return gettext('Deleted');
     }
   };
 
+  getTransferFrom = (item) => {
+    switch (item.from_type) {
+      case 'user':
+        return <UserLink email={item.from_user_email} name={item.from_user_name} />;
+      case 'group':
+        return <Link to={`${siteRoot}sys/groups/${item.from_group_id}/libraries/`}>{item.from_group_name}</Link>;
+      case 'department':
+        return <Link to={`${siteRoot}sys/departments/${item.from_group_id}/`}>{item.from_group_name}</Link>;
+      default:
+        return gettext('Deleted');
+    }
+  }
+
   render() {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><UserLink email={item.from_user_email} name={item.from_user_name} /></td>
+        <td>{this.getTransferFrom(item)}</td>
         <td>{this.getTransferTo(item)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
         <td>{dayjs(item.date).fromNow()}</td>

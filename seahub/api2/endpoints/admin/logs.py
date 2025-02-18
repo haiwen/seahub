@@ -469,57 +469,69 @@ class AdminLogsFileTransferLogs(APIView):
             has_next_page = False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
-        from_nickname_dict = {}
-        from_contact_email_dict = {}
-        to_nickname_dict = {}
-        to_contact_email_dict = {}
+        nickname_dict = {}
+        contact_email_dict = {}
         repo_dict = {}
-        to_group_name_dict = {}
+        group_name_dict = {}
 
-        from_user_email_set = set()
-        to_user_email_set = set()
+        user_email_set = set()
         repo_id_set = set()
-        to_group_id_set = set()
+        group_id_set = set()
+
         for event in events:
-
-            from_user_email_set.add(event.from_user)
             repo_id_set.add(event.repo_id)
-
+            if is_valid_email(event.from_user):
+                user_email_set.add(event.from_user)
             if is_valid_email(event.to):
-                to_user_email_set.add(event.to)
+                user_email_set.add(event.to)
             if '@seafile_group' in event.to:
-                to_group_id = int(event.to.split('@')[0])
-                to_group_id_set.add(to_group_id)
+                group_id = int(event.to.split('@')[0])
+                group_id_set.add(group_id)
+            if '@seafile_group' in event.from_user:
+                group_id = int(event.from_user.split('@')[0])
+                group_id_set.add(group_id)
 
-        for e in from_user_email_set:
-            if e not in from_nickname_dict:
-                from_nickname_dict[e] = email2nickname(e)
-            if e not in from_contact_email_dict:
-                from_contact_email_dict[e] = email2contact_email(e)
-
-        for e in to_user_email_set:
-            if e not in to_nickname_dict:
-                to_nickname_dict[e] = email2nickname(e)
-            if e not in to_contact_email_dict:
-                to_contact_email_dict[e] = email2contact_email(e)
-
+        for e in user_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
         for e in repo_id_set:
             if e not in repo_dict:
                 repo_dict[e] = seafile_api.get_repo(e)
 
-        for group_id in to_group_id_set:
-            if group_id not in to_group_name_dict:
+        for group_id in group_id_set:
+            if group_id not in group_name_dict:
                 group = ccnet_api.get_group(int(group_id))
                 if group:
-                    to_group_name_dict[group_id] = group.group_name
+                    group_name_dict[group_id] = group.group_name
                     
         events_info = []
         for ev in events:
-            data = {}
+            data = {
+                'from_user_email': '',
+                'from_user_name': '',
+                'from_user_contact_email': '',
+                'from_group_id': '',
+                'from_group_name': '',
+                'to_user_email': '',
+                'to_user_name': '',
+                'to_user_contact_email': '',
+                'to_group_id': '',
+                'to_group_name': ''
+            }
             from_user_email = ev.from_user
             data['from_user_email'] = from_user_email
-            data['from_user_name'] = from_nickname_dict.get(from_user_email, '')
-            data['from_user_contact_email'] = from_contact_email_dict.get(from_user_email, '')
+            data['from_user_name'] = nickname_dict.get(from_user_email, '')
+            data['from_user_contact_email'] = contact_email_dict.get(from_user_email, '')
+
+            if is_valid_email(from_user_email):
+                data['from_type'] = 'user'
+            if '@seafile_group' in from_user_email:
+                from_group_id = int(from_user_email.split('@')[0])
+                data['from_group_id'] = from_group_id
+                data['from_group_name'] = group_name_dict.get(from_group_id, '')
+                data['from_type'] = 'group'
 
             repo_id = ev.repo_id
             data['repo_id'] = repo_id
@@ -527,24 +539,17 @@ class AdminLogsFileTransferLogs(APIView):
             data['repo_name'] = repo.name if repo else ''
             data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
 
-            data['to_user_email'] = ''
-            data['to_user_name'] = ''
-            data['to_user_contact_email'] = ''
-            data['to_group_id'] = ''
-            data['to_group_name'] = ''
-
             if is_valid_email(ev.to):
                 to_user_email = ev.to
                 data['to_user_email'] = to_user_email
-                data['to_user_name'] = to_nickname_dict.get(to_user_email, '')
-                data['to_user_contact_email'] = to_contact_email_dict.get(to_user_email, '')
-                data['transfer_type'] = 'user'
-
+                data['to_user_name'] = nickname_dict.get(to_user_email, '')
+                data['to_user_contact_email'] = contact_email_dict.get(to_user_email, '')
+                data['to_type'] = 'user'
             if '@seafile_group' in ev.to:
                 to_group_id = int(ev.to.split('@')[0])
                 data['to_group_id'] = to_group_id
-                data['to_group_name'] = to_group_name_dict.get(to_group_id, '')
-                data['transfer_type'] = 'group'
+                data['to_group_name'] = group_name_dict.get(to_group_id, '')
+                data['to_type'] = 'group'
 
             events_info.append(data)
 
