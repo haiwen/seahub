@@ -8,10 +8,18 @@ import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
 import { Utils, isMobile } from '../../utils/utils';
 import { useMetadata } from '../hooks';
-import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_TYPE, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { validateName } from '../utils/validate';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
+const CONVERT_TO_VIEW_PREFIX = 'convert_to_view_';
+
+const VIEW_TYPE_LABEL = {
+  [VIEW_TYPE.GALLERY]: gettext('Gallery'),
+  [VIEW_TYPE.TABLE]: gettext('Table'),
+  [VIEW_TYPE.KANBAN]: gettext('Kanban'),
+  [VIEW_TYPE.MAP]: gettext('Map'),
+};
 
 const ViewItem = ({
   leftIndent,
@@ -28,13 +36,13 @@ const ViewItem = ({
   onCopy,
   onUpdate,
 }) => {
-  const { _id: viewId, name: viewName } = view;
+  const { _id: viewId, name: viewName, type: viewType } = view;
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [isSortShow, setSortShow] = useState(false);
   const [isRenaming, setRenaming] = useState(false);
 
-  const { idViewMap, moveView } = useMetadata();
+  const { idViewMap, moveView, modifyViewType } = useMetadata();
 
   const otherViewsName = Object.values(idViewMap).filter(v => v._id !== view._id).map(v => v.name);
 
@@ -66,11 +74,23 @@ const ViewItem = ({
         subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <i className="sf3-font sf3-font-folder"></i> })),
       });
     }
+    const convertableViews = Object.values(VIEW_TYPE).filter(type => type !== viewType && type !== VIEW_TYPE.FACE_RECOGNITION);
+    value.push({
+      key: 'convert',
+      value: gettext('Convert to'),
+      subOpList: convertableViews.map((type) => {
+        return {
+          key: `${CONVERT_TO_VIEW_PREFIX}${type}`,
+          value: VIEW_TYPE_LABEL[type],
+          icon_dom: <Icon symbol={VIEW_TYPE_ICON[type]} className="metadata-view-icon" />,
+        };
+      })
+    });
     if (canDelete) {
       value.push({ key: 'delete', value: gettext('Delete') });
     }
     return value;
-  }, [folderId, viewId, canUpdate, canDelete, getMoveableFolders]);
+  }, [folderId, viewId, viewType, canUpdate, canDelete, getMoveableFolders]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
@@ -117,7 +137,16 @@ const ViewItem = ({
       onDelete(viewId, isSelected);
       return;
     }
-  }, [folderId, viewId, isSelected, onDelete, onCopy, moveView]);
+
+    if (operationKey.startsWith(CONVERT_TO_VIEW_PREFIX)) {
+      const targetType = operationKey.split(CONVERT_TO_VIEW_PREFIX)[1];
+      modifyViewType(viewId, targetType);
+      if (isSelected && window.sfMetadataStore) {
+        window.sfMetadataStore.modifyViewType(viewId, targetType);
+      }
+      return;
+    }
+  }, [folderId, viewId, isSelected, onDelete, onCopy, moveView, modifyViewType]);
 
   const renameView = useCallback((name, failCallback) => {
     onUpdate(viewId, { name }, () => {

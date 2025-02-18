@@ -8,7 +8,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
 import GalleryContextmenu from './context-menu';
@@ -38,7 +38,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const images = useMemo(() => {
     if (isFirstLoading) return [];
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
-    const firstSort = metadata.view.sorts[0];
+    const firstSort = metadata.view.sorts[0] || VIEW_TYPE_DEFAULT_SORTS[VIEW_TYPE.GALLERY];
     return metadata.rows
       .filter(record => Utils.imageCheck(getFileNameFromRecord(record)))
       .map(record => {

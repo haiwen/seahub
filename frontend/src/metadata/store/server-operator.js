@@ -205,6 +205,10 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_VIEW_TYPE: {
+        callback({ operation });
+        break;
+      }
 
       // face table op
       case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
