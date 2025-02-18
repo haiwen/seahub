@@ -124,7 +124,7 @@ class PopupEditorContainer extends React.Component {
   // The input area in the interface loses focus. Use this.getEditor().getValue() to get data.
   commit = (closeEditor) => {
     const { record } = this.props;
-    if (!record._id) return;
+    if (!record || !record._id) return;
     const updated = (this.getEditor() && this.getEditor().getValue()) || {};
     this.commitData(updated, closeEditor);
   };
