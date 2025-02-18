@@ -1575,3 +1575,12 @@ CREATE TABLE `wiki_wiki2_publish` (
   UNIQUE KEY `publish_url` (`publish_url`),
   KEY `ix_wiki2_publish_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `FileTransfer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `from_user` varchar(255) NOT NULL,
+  `to` varchar(255) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

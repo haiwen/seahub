@@ -20,6 +20,7 @@ from seahub.utils import get_file_audit_events, generate_file_audit_event_type, 
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
+from seahub.base.models import FileTransfer
 
 logger = logging.getLogger(__name__)
 
@@ -416,6 +417,139 @@ class AdminLogsSharePermissionLogs(APIView):
 
         resp = {
             'share_permission_log_list': events_info,
+            'has_next_page': has_next_page,
+        }
+
+        return Response(resp)
+
+
+class AdminLogsFileTransferLogs(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all transfer repo logs.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.can_view_user_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        repo_id_selected = request.GET.get('repo_id', None)
+        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
+            error_msg = 'repo_id %s invalid.' % repo_id_selected
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        start = per_page * (current_page - 1)
+        limit = per_page
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        events = FileTransfer.objects.all().order_by('-timestamp')[start:start+limit+1]
+        if len(events) > limit:
+            has_next_page = True
+            events = events[:limit]
+        else:
+            has_next_page = False
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        from_nickname_dict = {}
+        from_contact_email_dict = {}
+        to_nickname_dict = {}
+        to_contact_email_dict = {}
+        repo_dict = {}
+        to_group_name_dict = {}
+
+        from_user_email_set = set()
+        to_user_email_set = set()
+        repo_id_set = set()
+        to_group_id_set = set()
+        for event in events:
+
+            from_user_email_set.add(event.from_user)
+            repo_id_set.add(event.repo_id)
+
+            if is_valid_email(event.to):
+                to_user_email_set.add(event.to)
+            if '@seafile_group' in event.to:
+                to_group_id = int(event.to.split('@')[0])
+                to_group_id_set.add(to_group_id)
+
+        for e in from_user_email_set:
+            if e not in from_nickname_dict:
+                from_nickname_dict[e] = email2nickname(e)
+            if e not in from_contact_email_dict:
+                from_contact_email_dict[e] = email2contact_email(e)
+
+        for e in to_user_email_set:
+            if e not in to_nickname_dict:
+                to_nickname_dict[e] = email2nickname(e)
+            if e not in to_contact_email_dict:
+                to_contact_email_dict[e] = email2contact_email(e)
+
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
+
+        for group_id in to_group_id_set:
+            if group_id not in to_group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                if group:
+                    to_group_name_dict[group_id] = group.group_name
+                    
+        events_info = []
+        for ev in events:
+            data = {}
+            from_user_email = ev.from_user
+            data['from_user_email'] = from_user_email
+            data['from_user_name'] = from_nickname_dict.get(from_user_email, '')
+            data['from_user_contact_email'] = from_contact_email_dict.get(from_user_email, '')
+
+            repo_id = ev.repo_id
+            data['repo_id'] = repo_id
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
+            data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
+
+            data['to_user_email'] = ''
+            data['to_user_name'] = ''
+            data['to_user_contact_email'] = ''
+            data['to_group_id'] = ''
+            data['to_group_name'] = ''
+
+            if is_valid_email(ev.to):
+                to_user_email = ev.to
+                data['to_user_email'] = to_user_email
+                data['to_user_name'] = to_nickname_dict.get(to_user_email, '')
+                data['to_user_contact_email'] = to_contact_email_dict.get(to_user_email, '')
+                data['transfer_type'] = 'user'
+
+            if '@seafile_group' in ev.to:
+                to_group_id = int(ev.to.split('@')[0])
+                data['to_group_id'] = to_group_id
+                data['to_group_name'] = to_group_name_dict.get(to_group_id, '')
+                data['transfer_type'] = 'group'
+
+            events_info.append(data)
+
+        resp = {
+            'file_transfer_log_list': events_info,
             'has_next_page': has_next_page,
         }
 

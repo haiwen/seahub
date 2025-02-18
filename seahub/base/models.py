@@ -451,3 +451,13 @@ class ClientSSOToken(models.Model):
         if not self.token:
             self.token = self.gen_token()
         return super(ClientSSOToken, self).save(*args, **kwargs)
+
+
+class FileTransfer(models.Model):
+    timestamp = models.DateTimeField(default=timezone.now)
+    from_user = models.CharField(max_length=255)
+    to = models.CharField(max_length=255)
+    repo_id = models.CharField(max_length=36)
+
+    class Meta:
+        db_table = 'FileTransfer'
