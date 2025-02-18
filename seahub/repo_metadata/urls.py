@@ -43,5 +43,5 @@ urlpatterns = [
     re_path(r'^tags-files/$', MetadataTagsFiles.as_view(), name='api-v2.1-metadata-tags-files'),
 
     # map
-    re_path(r'^location/$', MetadataLocation.as_view(), name='api-v2.1-image-location'),
+    re_path(r'^location/$', MetadataLocation.as_view(), name='api-v2.1-metadata-location'),
 ]
