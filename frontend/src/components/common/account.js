@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
@@ -35,10 +34,6 @@ class Account extends Component {
     this.handleProps();
   }
 
-  getContainer = () => {
-    return findDOMNode(this);
-  };
-
   handleProps = () => {
     if (this.state.showInfo) {
       this.addEvents();
@@ -61,9 +56,7 @@ class Account extends Component {
 
   handleDocumentClick = (e) => {
     if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== Utils.keyCodes.tab))) return;
-    const container = this.getContainer();
-
-    if (container.contains(e.target) && container !== e.target && (e.type !== 'keyup' || e.which === Utils.keyCodes.tab)) {
+    if (this.accountDOM && this.accountDOM.contains(e.target) && this.accountDOM !== e.target && (e.type !== 'keyup' || e.which === Utils.keyCodes.tab)) {
       return;
     }
 
@@ -148,7 +141,7 @@ class Account extends Component {
 
   render() {
     return (
-      <div id="account">
+      <div id="account" ref={ref => this.accountDOM = ref}>
         <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
           {this.renderAvatar()}
         </a>
