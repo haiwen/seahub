@@ -399,14 +399,19 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
 
   const modifyViewType = useCallback((viewId, viewType) => {
     const update = {
-      ...idViewMap[viewId],
       type: viewType,
     };
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
       setIdViewMap({
         ...idViewMap,
-        [viewId]: update
+        [viewId]: {
+          ...idViewMap[viewId],
+          type: viewType,
+        }
       });
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
     });
   }, [repoID, idViewMap]);
 

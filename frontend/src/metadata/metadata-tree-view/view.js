@@ -12,7 +12,7 @@ import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_
 import { validateName } from '../utils/validate';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
-const CONVERT_TO_VIEW_PREFIX = 'convert_to_view_';
+const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
 
 const VIEW_TYPE_LABEL = {
   [VIEW_TYPE.GALLERY]: gettext('Gallery'),
@@ -76,11 +76,12 @@ const ViewItem = ({
     }
     const convertableViews = Object.values(VIEW_TYPE).filter(type => type !== viewType && type !== VIEW_TYPE.FACE_RECOGNITION);
     value.push({
-      key: 'convert',
-      value: gettext('Convert to'),
+      key: 'turn',
+      value: gettext('Turn into'),
+      subOpListHeader: gettext('Other view'),
       subOpList: convertableViews.map((type) => {
         return {
-          key: `${CONVERT_TO_VIEW_PREFIX}${type}`,
+          key: `${TURN_VIEW_INTO_PREFIX}${type}`,
           value: VIEW_TYPE_LABEL[type],
           icon_dom: <Icon symbol={VIEW_TYPE_ICON[type]} className="metadata-view-icon" />,
         };
@@ -138,8 +139,8 @@ const ViewItem = ({
       return;
     }
 
-    if (operationKey.startsWith(CONVERT_TO_VIEW_PREFIX)) {
-      const targetType = operationKey.split(CONVERT_TO_VIEW_PREFIX)[1];
+    if (operationKey.startsWith(TURN_VIEW_INTO_PREFIX)) {
+      const targetType = operationKey.split(TURN_VIEW_INTO_PREFIX)[1];
       modifyViewType(viewId, targetType);
       if (isSelected && window.sfMetadataStore) {
         window.sfMetadataStore.modifyViewType(viewId, targetType);
