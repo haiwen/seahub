@@ -7,7 +7,7 @@ import ModalPortal from '../../../components/modal-portal';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
@@ -45,7 +45,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
-        const size = mode === GALLERY_DATE_MODE.YEAR ? thumbnailSizeForOriginal : thumbnailSizeForGrid;
+        let size = thumbnailDefaultSize;
+        if (mode === GALLERY_DATE_MODE.YEAR) {
+          size = thumbnailSizeForOriginal;
+        } else if (mode === GALLERY_DATE_MODE.MONTH || mode === GALLERY_DATE_MODE.DAY) {
+          size = thumbnailSizeForGrid;
+        }
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
         const year = date.slice(0, 4);
