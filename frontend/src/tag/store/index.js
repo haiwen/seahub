@@ -386,6 +386,19 @@ class Store {
     this.applyOperation(operation);
   }
 
+  deleteTagsLinks(column_key, id_linked_rows_ids_map, success_callback, fail_callback) {
+    const type = OPERATION_TYPE.DELETE_TAGS_LINKS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      column_key,
+      id_linked_rows_ids_map,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
   mergeTags(target_tag_id, merged_tags_ids, success_callback, fail_callback) {
     const type = OPERATION_TYPE.MERGE_TAGS;
     const operation = this.createOperation({

@@ -598,6 +598,9 @@ class TreeBody extends Component {
           colOverScanStartIdx={this.props.colOverScanStartIdx}
           colOverScanEndIdx={this.props.colOverScanEndIdx}
           lastFrozenColumnKey={this.props.lastFrozenColumnKey}
+          recordDraggable={this.props.recordDraggable}
+          recordDragDropEvents={this.props.recordDragDropEvents}
+          draggingRecordSource={this.props.draggingRecordSource}
           scrollLeft={scrollLeft}
           height={rowHeight}
           cellMetaData={cellMetaData}
@@ -693,6 +696,9 @@ TreeBody.propTypes = {
   treeNodeKeyRecordIdMap: PropTypes.object,
   keyTreeNodeFoldedMap: PropTypes.object,
   treeMetrics: PropTypes.object,
+  recordDraggable: PropTypes.bool,
+  recordDragDropEvents: PropTypes.object,
+  draggingRecordSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
   CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
@@ -727,7 +733,6 @@ TreeBody.propTypes = {
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
   reloadRecords: PropTypes.func,
-  appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,
   columnColors: PropTypes.object,
   onFillingDragRows: PropTypes.func,

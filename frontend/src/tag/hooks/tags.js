@@ -200,6 +200,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
   }, [storeRef]);
 
+  const deleteTagsLinks = useCallback((columnKey, tagId, idLinkedRowsIdsMap, { success_callback, fail_callback } = {}) => {
+    storeRef.current.deleteTagsLinks(columnKey, tagId, idLinkedRowsIdsMap, success_callback, fail_callback);
+  }, [storeRef]);
+
   const mergeTags = useCallback((target_tag_id, merged_tags_ids, { success_callback, fail_callback } = {}) => {
     storeRef.current.mergeTags(target_tag_id, merged_tags_ids, success_callback, fail_callback);
   }, [storeRef]);
@@ -284,6 +288,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateTag,
       addTagLinks,
       deleteTagLinks,
+      deleteTagsLinks,
       mergeTags,
       updateLocalTag,
       selectTag: handleSelectTag,

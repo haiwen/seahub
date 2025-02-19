@@ -42,6 +42,14 @@ function isSelectedAll(recordIds, recordMetrics) {
   return recordIds.every(recordId => isRecordSelected(recordId, recordMetrics));
 }
 
+function getDraggedRecordsIds(draggingRecordId, recordMetrics) {
+  const selectedRecordIds = getSelectedIds(recordMetrics);
+  if (selectedRecordIds.includes(draggingRecordId)) {
+    return selectedRecordIds;
+  }
+  return [draggingRecordId];
+}
+
 export const RecordMetrics = {
   selectRecord,
   selectRecordsById,
@@ -51,4 +59,5 @@ export const RecordMetrics = {
   getSelectedIds,
   hasSelectedRecords,
   isSelectedAll,
+  getDraggedRecordsIds,
 };

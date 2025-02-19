@@ -10,11 +10,18 @@ import './index.css';
 
 class Record extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      canDropTip: false,
+    };
+  }
+
   componentDidMount() {
     this.checkScroll();
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     return (
       nextProps.isGroupView !== this.props.isGroupView ||
       nextProps.hasSelectedCell !== this.props.hasSelectedCell ||
@@ -40,7 +47,8 @@ class Record extends React.Component {
       nextProps.treeNodeKey !== this.props.treeNodeKey ||
       nextProps.treeNodeDepth !== this.props.treeNodeDepth ||
       nextProps.hasChildNodes !== this.props.hasChildNodes ||
-      nextProps.isFoldedTreeNode !== this.props.isFoldedTreeNode
+      nextProps.isFoldedTreeNode !== this.props.isFoldedTreeNode ||
+      nextState.canDropTip !== this.state.canDropTip
     );
   }
 
@@ -222,23 +230,67 @@ class Record extends React.Component {
     return style;
   };
 
-  // handle drag copy
+  handleDragStart = (event) => {
+    event.stopPropagation();
+    if (!this.props.recordDraggable) return;
+    const { record, treeNodeKey } = this.props;
+    const draggingRecordSource = { draggingRecordId: record._id, draggingTreeNodeKey: treeNodeKey };
+    event.dataTransfer.effectAllowed = 'move';
+    this.props.recordDragDropEvents.onDragStart(event, draggingRecordSource);
+  };
+
+  checkHasDraggedRecord = () => {
+    return !!this.props.draggingRecordSource;
+  };
+
+  checkOverDraggingRecord = () => {
+    const { draggingRecordSource, record, treeNodeKey, showRecordAsTree } = this.props;
+    if (!this.checkHasDraggedRecord()) return false;
+
+    const { draggingRecordId, draggingTreeNodeKey } = draggingRecordSource;
+    if (showRecordAsTree) {
+      return draggingTreeNodeKey === treeNodeKey;
+    }
+    return draggingRecordId === record._id;
+  };
+
   handleDragEnter = (e) => {
-    // Prevent default to allow drop
     e.preventDefault();
-    const { index, groupRecordIndex, cellMetaData: { onDragEnter } } = this.props;
-    onDragEnter({ overRecordIdx: index, overGroupRecordIndex: groupRecordIndex });
+    if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
+      this.setState({ canDropTip: true });
+    }
+  };
+
+  handleDragLeave = (e) => {
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = this.rowRef.getBoundingClientRect();
+    if (clientX > left && clientX < left + width && clientY > top && clientY < top + height - 2) return;
+    this.setState({ canDropTip: false });
   };
 
   handleDragOver = (e) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    e.dataTransfer.dropEffect = this.checkHasDraggedRecord() ? 'move' : 'copy';
+    if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
+      this.setState({ canDropTip: true });
+    }
   };
 
   handleDrop = (e) => {
-    // The default in Firefox is to treat data in dataTransfer as a URL and perform navigation on it, even if the data type used is 'text'
-    // To bypass this, we need to capture and prevent the drop event.
     e.preventDefault();
+    e.stopPropagation();
+    this.setState({ canDropTip: false });
+    if (!this.checkHasDraggedRecord() || this.checkOverDraggingRecord()) {
+      this.props.recordDragDropEvents.onDragEnd();
+      return;
+    }
+    const { record, treeNodeKey } = this.props;
+    const dropTarget = { dropRecordId: record._id, dropTreeNodeKey: treeNodeKey };
+    this.props.recordDragDropEvents.onDrop(dropTarget);
+  };
+
+  onDragEnd = () => {
+    this.props.recordDragDropEvents.onDragEnd();
   };
 
   render() {
@@ -253,15 +305,19 @@ class Record extends React.Component {
 
     return (
       <div
+        ref={rowRef => this.rowRef = rowRef}
         className={classnames('sf-table-row', {
           'sf-table-last-row': isLastRecord,
           'row-selected': isSelected,
-          'row-locked': isLocked
+          'row-locked': isLocked,
+          'can-drop-tip': this.state.canDropTip,
         })}
         style={this.getRecordStyle()}
         onDragEnter={this.handleDragEnter}
+        onDragLeave={this.handleDragLeave}
         onDragOver={this.handleDragOver}
         onDrop={this.handleDrop}
+        onDragEnd={this.onDragEnd}
       >
         {/* frozen */}
         <div
@@ -280,6 +336,8 @@ class Record extends React.Component {
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
               height={cellHeight}
+              recordDraggable={this.props.recordDraggable}
+              handleDragStart={this.handleDragStart}
             />
           }
           {frozenCells}
@@ -311,6 +369,7 @@ Record.propTypes = {
   top: PropTypes.number,
   left: PropTypes.number,
   height: PropTypes.number,
+  recordDraggable: PropTypes.bool,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
   checkCanModifyRecord: PropTypes.func,

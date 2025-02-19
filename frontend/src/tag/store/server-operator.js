@@ -97,6 +97,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.DELETE_TAGS_LINKS: {
+        const { column_key, id_linked_rows_ids_map } = operation;
+        this.context.deleteTagLinks(column_key, id_linked_rows_ids_map).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to delete linked tags') });
+        });
+        break;
+      }
       case OPERATION_TYPE.MERGE_TAGS: {
         const { target_tag_id, merged_tags_ids } = operation;
         this.context.mergeTags(target_tag_id, merged_tags_ids).then((res) => {
