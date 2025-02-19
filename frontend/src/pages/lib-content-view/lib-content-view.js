@@ -820,6 +820,7 @@ class LibContentView extends React.Component {
 
     let dirNames = this.getSelectedDirentNames();
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      this.onSelectedDirentListUpdate([]);
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
@@ -1315,6 +1316,7 @@ class LibContentView extends React.Component {
   };
 
   copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false) => {
+    this.onSelectedDirentListUpdate([]);
     if (repoID !== targetRepo.repo_id) {
       this.setState({
         asyncCopyMoveTaskId: taskId,
@@ -1495,6 +1497,7 @@ class LibContentView extends React.Component {
       isDirentSelected: newSelectedDirentList.length > 0,
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
+      isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
     });
   };
 
