@@ -170,9 +170,14 @@ class LibContentView extends React.Component {
     const { repoID } = props;
 
     const { path, viewId, tagId } = this.getInfoFromLocation(repoID);
-    let currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
-    if (viewId) currentMode = METADATA_MODE;
-    if (tagId) currentMode = TAGS_MODE;
+    let currentMode;
+    if (tagId) {
+      currentMode = TAGS_MODE;
+    } else if (viewId) {
+      currentMode = METADATA_MODE;
+    } else {
+      currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
+    }
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -1997,20 +2002,22 @@ class LibContentView extends React.Component {
   };
 
   resetSelected = (node) => {
-    const currentModel = this.state.currentMode;
+    if (node.object?.type === 'file') return;
     const path = node.path || '';
-    let nextModel = cookie.load('seafile_view_mode') || LIST_MODE;
-    if (currentModel === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
-      nextModel = METADATA_MODE;
-    }
-    if (currentModel === TAGS_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) {
-      nextModel = TAGS_MODE;
+    const currentMode = this.state.currentMode;
+    let nextMode;
+    if (currentMode === TAGS_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) {
+      nextMode = TAGS_MODE;
+    } else if (currentMode === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
+      nextMode = METADATA_MODE;
+    } else {
+      nextMode = cookie.load('seafile_view_mode') || LIST_MODE;
     }
 
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
-      currentMode: nextModel,
+      currentMode: nextMode,
       currentDirent: null,
     });
   };
