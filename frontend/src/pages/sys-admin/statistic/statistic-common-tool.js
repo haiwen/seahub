@@ -125,7 +125,7 @@ class StatisticCommonTool extends React.Component {
               value={endValue}
               onChange={this.onChange.bind(this, 'endValue')}
             />
-            <Button color="primary" className="operation-item system-statistic-button" onClick={this.onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" size="sm" className="system-statistic-button" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           </div>
         </div>
       </Fragment>
