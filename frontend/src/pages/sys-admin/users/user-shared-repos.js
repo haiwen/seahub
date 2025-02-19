@@ -24,27 +24,25 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const table = (
-        <Fragment>
-          <table className="table-hover">
-            <thead>
-              <tr>
-                <th width="5%"></th>
-                <th width="35%">{gettext('Name')}</th>
-                <th width="20%">{gettext('Share From')}</th>
-                <th width="20%">{gettext('Size')}</th>
-                <th width="20%">{gettext('Last Update')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                />);
-              })}
-            </tbody>
-          </table>
-        </Fragment>
+        <table className="table-hover">
+          <thead>
+            <tr>
+              <th width="5%"></th>
+              <th width="35%">{gettext('Name')}</th>
+              <th width="20%">{gettext('Share From')}</th>
+              <th width="20%">{gettext('Size')}</th>
+              <th width="20%">{gettext('Last Update')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              return (<Item
+                key={index}
+                item={item}
+              />);
+            })}
+          </tbody>
+        </table>
       );
       return items.length ? table : <EmptyTip text={gettext('No libraries')} />;
     }
@@ -82,7 +80,7 @@ class Item extends Component {
       link = <UserLink email={item.owner_email} name={item.owner_name} />;
     } else {
       const groupID = item.owner_email.substring(0, index);
-      link = <Link to={`${siteRoot}sys/departments/${groupID}/`}>{item.owner_name}</Link>;
+      link = <Link to={`${siteRoot}sys/groups/${groupID}/libraries/`}>{item.owner_name}</Link>;
     }
     return link;
   };
@@ -92,15 +90,13 @@ class Item extends Component {
     const iconUrl = Utils.getLibIconUrl(item);
     const iconTitle = Utils.getLibIconTitle(item);
     return (
-      <Fragment>
-        <tr>
-          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>{this.renderRepoName()}</td>
-          <td>{this.getOwnerLink()}</td>
-          <td>{Utils.bytesToSize(item.size)}</td>
-          <td>{dayjs(item.last_modify).fromNow()}</td>
-        </tr>
-      </Fragment>
+      <tr>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td>{this.renderRepoName()}</td>
+        <td>{this.getOwnerLink()}</td>
+        <td>{Utils.bytesToSize(item.size)}</td>
+        <td>{dayjs(item.last_modify).fromNow()}</td>
+      </tr>
     );
   }
 }

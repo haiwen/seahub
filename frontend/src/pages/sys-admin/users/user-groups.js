@@ -79,7 +79,6 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpIconShown: false,
       highlight: false,
     };
   }
@@ -87,7 +86,6 @@ class Item extends Component {
   handleMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isOpIconShown: true,
         highlight: true
       });
     }
@@ -96,7 +94,6 @@ class Item extends Component {
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isOpIconShown: false,
         highlight: false
       });
     }
@@ -129,9 +126,7 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const url = item.parent_group_id == 0 ?
-      `${siteRoot}sys/groups/${item.id}/libraries/` :
-      `${siteRoot}sys/departments/${item.id}/`;
+    const url = `${siteRoot}sys/groups/${item.id}/libraries/`;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
