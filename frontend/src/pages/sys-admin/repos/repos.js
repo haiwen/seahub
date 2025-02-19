@@ -334,7 +334,7 @@ class Item extends Component {
           <td>{repo.id}</td>
           <td>
             {isGroupOwnedRepo ?
-              <Link to={`${siteRoot}sys/departments/${departmentID}/`}>{repo.owner_name}</Link> :
+              <Link to={`${siteRoot}sys/groups/${departmentID}/libraries/`}>{repo.owner_name}</Link> :
               <UserLink email={repo.owner_email} name={repo.owner_name} />
             }
           </td>

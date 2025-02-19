@@ -136,3 +136,7 @@ body {
   border-radius: 3px;
   margin: 0;
 }
+
+.sf-save-file .file-chooser-scroll-wrapper .file-chooser-list-view-header {
+  display: none;
+}
