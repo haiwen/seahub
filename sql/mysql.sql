@@ -1579,6 +1579,7 @@ CREATE TABLE `wiki_wiki2_publish` (
 CREATE TABLE `FileTransfer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
+  `org_id` int(11) NOT NULL,
   `from_user` varchar(255) NOT NULL,
   `to` varchar(255) NOT NULL,
   `timestamp` datetime NOT NULL,

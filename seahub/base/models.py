@@ -454,10 +454,11 @@ class ClientSSOToken(models.Model):
 
 
 class FileTransfer(models.Model):
-    timestamp = models.DateTimeField(default=timezone.now)
+    repo_id = models.CharField(max_length=36)
+    org_id = models.IntegerField()
     from_user = models.CharField(max_length=255)
     to = models.CharField(max_length=255)
-    repo_id = models.CharField(max_length=36)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = 'FileTransfer'

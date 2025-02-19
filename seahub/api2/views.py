@@ -1871,9 +1871,11 @@ class RepoOwner(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
+            org_id = seaserv.get_org_id_by_repo_id(repo_id)
             FileTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
-                                        repo_id=repo_id)
+                                        repo_id=repo_id,
+                                        org_id=org_id)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

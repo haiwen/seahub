@@ -169,7 +169,8 @@ class OrgAdminRepo(APIView):
             transfer_repo(repo_id, new_owner, is_share, org_id)
             FileTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
-                                        repo_id=repo_id)
+                                        repo_id=repo_id,
+                                        org_id=org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

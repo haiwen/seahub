@@ -112,8 +112,6 @@ class Item extends Component {
         return <UserLink email={item.to_user_email} name={item.to_user_name} />;
       case 'group':
         return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
-      case 'department':
-        return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>;
       default:
         return gettext('Deleted');
     }
@@ -125,8 +123,6 @@ class Item extends Component {
         return <UserLink email={item.from_user_email} name={item.from_user_name} />;
       case 'group':
         return <Link to={`${siteRoot}sys/groups/${item.from_group_id}/libraries/`}>{item.from_group_name}</Link>;
-      case 'department':
-        return <Link to={`${siteRoot}sys/departments/${item.from_group_id}/`}>{item.from_group_name}</Link>;
       default:
         return gettext('Deleted');
     }

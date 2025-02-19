@@ -445,11 +445,6 @@ class AdminLogsFileTransferLogs(APIView):
             current_page = 1
             per_page = 100
 
-        repo_id_selected = request.GET.get('repo_id', None)
-        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
-            error_msg = 'repo_id %s invalid.' % repo_id_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         start = per_page * (current_page - 1)
         limit = per_page
 

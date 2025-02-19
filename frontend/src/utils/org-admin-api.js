@@ -481,6 +481,14 @@ class OrgAdminAPI {
   }
 
   // org admin logs
+  orgAdminListFileTransfer(page) {
+    let url = this.server + '/api/v2.1/org/admin/logs/file-transfer/';
+    let params = {
+      page: page
+    };
+    return this.req.get(url, { params: params });
+  }
+
   orgAdminListFileAudit(email, repoID, page) {
     let url = this.server + '/api/v2.1/org/admin/logs/file-access/?page=' + page;
     if (email) {
