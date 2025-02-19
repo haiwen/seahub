@@ -95,6 +95,8 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     }
   };
 
+  const canDelete = window.sfMetadataContext.checkCanDeleteRow();
+
   return (
     <ModalPortal>
       <ImageDialog
@@ -104,7 +106,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
         moveToPrevImage={moveToPrevImage}
         moveToNextImage={moveToNextImage}
         onRotateImage={rotateImage}
-        onDeleteImage={deleteImage}
+        onDeleteImage={canDelete ? deleteImage : null}
       />
     </ModalPortal>
   );
