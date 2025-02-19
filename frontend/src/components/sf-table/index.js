@@ -158,8 +158,8 @@ SFTable.propTypes = {
   onGridKeyUp: PropTypes.func,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
-  onDrop: PropTypes.func,
-  createGhostElement: PropTypes.func,
+  moveRecords: PropTypes.func,
+  renderCustomDraggedRows: PropTypes.func,
 };
 
 export default SFTable;

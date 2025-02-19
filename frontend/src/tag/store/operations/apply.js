@@ -219,6 +219,56 @@ export default function apply(data, operation) {
       }
       return data;
     }
+    case OPERATION_TYPE.DELETE_TAGS_LINKS: {
+      const { column_key, id_linked_rows_ids_map } = operation;
+      const operatedIds = id_linked_rows_ids_map && Object.keys(id_linked_rows_ids_map);
+      if (!operatedIds || operatedIds.length === 0) {
+        return data;
+      }
+      data.rows = [...data.rows];
+      if (column_key === PRIVATE_COLUMN_KEY.PARENT_LINKS) {
+        data.rows.forEach((row, index) => {
+          const currentRowId = row._id;
+          const other_rows_ids = id_linked_rows_ids_map[currentRowId];
+          let updatedRow = { ...row };
+          if (other_rows_ids) {
+            // remove parent tags from current tag
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, other_rows_ids);
+          }
+
+          // remove current tag as child tag from related tags
+          operatedIds.forEach((operatedId) => {
+            const other_rows_ids = id_linked_rows_ids_map[operatedId];
+            if (other_rows_ids && other_rows_ids.includes(currentRowId)) {
+              updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, [operatedId]);
+            }
+          });
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
+        });
+      } else if (column_key === PRIVATE_COLUMN_KEY.SUB_LINKS) {
+        data.rows.forEach((row, index) => {
+          const currentRowId = row._id;
+          const other_rows_ids = id_linked_rows_ids_map[currentRowId];
+          let updatedRow = { ...row };
+          if (other_rows_ids) {
+            // remove child tags from current tag
+            updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.SUB_LINKS, other_rows_ids);
+          }
+
+          // remove current tag as parent tag from related tags
+          operatedIds.forEach((operatedId) => {
+            const other_rows_ids = id_linked_rows_ids_map[operatedId];
+            if (other_rows_ids && other_rows_ids.includes(currentRowId)) {
+              updatedRow = removeRowLinks(updatedRow, PRIVATE_COLUMN_KEY.PARENT_LINKS, [operatedId]);
+            }
+          });
+          data.rows[index] = updatedRow;
+          data.id_row_map[currentRowId] = updatedRow;
+        });
+      }
+      return data;
+    }
     case OPERATION_TYPE.MERGE_TAGS: {
       const { target_tag_id, merged_tags_ids } = operation;
       const targetTag = getRowById(data, target_tag_id);

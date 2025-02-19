@@ -5,10 +5,6 @@ import Cell from './cell';
 import ActionsCell from './actions-cell';
 import { getFrozenColumns } from '../../../utils/column';
 import { SEQUENCE_COLUMN as Z_INDEX_SEQUENCE_COLUMN, FROZEN_GROUP_CELL as Z_INDEX_FROZEN_GROUP_CELL } from '../../../constants/z-index';
-import { TreeMetrics } from '../../../utils/tree-metrics';
-import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
-import { SF_TABLE_TAGS_DRAG_KEY } from '../../../constants/transfer-types';
-import { getParentNodeKey, getRecordIdByTreeNodeKey } from '../../../utils/tree';
 
 import './index.css';
 
@@ -17,8 +13,7 @@ class Record extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDragTip: false,
-      showDropTip: false,
+      canDropTip: false,
     };
   }
 
@@ -53,8 +48,7 @@ class Record extends React.Component {
       nextProps.treeNodeDepth !== this.props.treeNodeDepth ||
       nextProps.hasChildNodes !== this.props.hasChildNodes ||
       nextProps.isFoldedTreeNode !== this.props.isFoldedTreeNode ||
-      nextState.showDropTip !== this.state.showDropTip ||
-      nextState.showDragTip !== this.state.showDragTip
+      nextState.canDropTip !== this.state.canDropTip
     );
   }
 
@@ -236,85 +230,67 @@ class Record extends React.Component {
     return style;
   };
 
-  setCustomDragImage = (event, dragData) => {
-    const ghost = this.props.createGhostElement(dragData);
-    document.body.appendChild(ghost);
-    event.dataTransfer.setDragImage(ghost, 0, 0);
-    setTimeout(() => document.body.removeChild(ghost), 0);
-  };
-
-  handleMouseEnter = (event) => {
+  handleDragStart = (event) => {
     event.stopPropagation();
-    this.setState({ showDragTip: true });
-  };
-
-  handleMouseLeave = (event) => {
-    event.stopPropagation();
-    if (this.state.isSelected) return;
-    const { left, top, width, height } = this.rowRef.getBoundingClientRect();
-    const { clientX, clientY } = event;
-    if (clientX >= left && clientX <= left + width && clientY > top && clientY < top + height - 2) return;
-    this.setState({ showDragTip: false });
-  };
-
-  handleDragStart = (event, id) => {
-    event.stopPropagation();
-    this.props.updateDraggingStatus(true);
-    const { treeNodeKey, treeMetrics, treeNodeKeyRecordIdMap } = this.props;
-    let recordIds = [];
-    let nodeIds = [];
-    if (this.props.isSelected) {
-      recordIds = TreeMetrics.getSelectedIds(treeMetrics, treeNodeKeyRecordIdMap);
-      nodeIds = Object.keys(treeMetrics.idSelectedNodeMap);
-    } else {
-      recordIds = [id];
-      nodeIds = [treeNodeKey];
-    }
-    const parentNodeKey = getParentNodeKey(treeNodeKey);
-    const sourceId = parentNodeKey ? getRecordIdByTreeNodeKey(parentNodeKey, treeNodeKeyRecordIdMap) : null;
-    const dragData = JSON.stringify({ sourceId, recordIds, nodeIds });
+    if (!this.props.recordDraggable) return;
+    const { record, treeNodeKey } = this.props;
+    const draggingRecordSource = { draggingRecordId: record._id, draggingTreeNodeKey: treeNodeKey };
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData(SF_TABLE_TAGS_DRAG_KEY, dragData);
-    this.setCustomDragImage(event, dragData);
+    this.props.recordDragDropEvents.onDragStart(event, draggingRecordSource);
+  };
+
+  checkHasDraggedRecord = () => {
+    return !!this.props.draggingRecordSource;
+  };
+
+  checkOverDraggingRecord = () => {
+    const { draggingRecordSource, record, treeNodeKey, showRecordAsTree } = this.props;
+    if (!this.checkHasDraggedRecord()) return false;
+
+    const { draggingRecordId, draggingTreeNodeKey } = draggingRecordSource;
+    if (showRecordAsTree) {
+      return draggingTreeNodeKey === treeNodeKey;
+    }
+    return draggingRecordId === record._id;
   };
 
   handleDragEnter = (e) => {
     e.preventDefault();
-    const sourceIds = TreeMetrics.getSelectedIds(this.props.treeMetrics, this.props.treeNodeKeyRecordIdMap);
-    const targetId = getRecordIdFromRecord(this.props.record);
-    if (sourceIds.includes(targetId)) return;
-    if (this.props.isDragging) {
-      this.setState({ showDropTip: true });
-      return;
+    if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
+      this.setState({ canDropTip: true });
     }
-    const { index, groupRecordIndex, cellMetaData: { onDragEnter } } = this.props;
-    onDragEnter({ overRecordIdx: index, overGroupRecordIndex: groupRecordIndex });
   };
 
   handleDragLeave = (e) => {
     const { clientX, clientY } = e;
     const { left, top, width, height } = this.rowRef.getBoundingClientRect();
     if (clientX > left && clientX < left + width && clientY > top && clientY < top + height - 2) return;
-    this.setState({ showDropTip: false });
+    this.setState({ canDropTip: false });
   };
 
   handleDragOver = (e) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = this.props.isDragging ? 'move' : 'copy';
+    e.dataTransfer.dropEffect = this.checkHasDraggedRecord() ? 'move' : 'copy';
+    if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
+      this.setState({ canDropTip: true });
+    }
   };
 
   handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ showDropTip: false });
-    this.props.updateDraggingStatus(false);
-    const dragData = e.dataTransfer.getData(SF_TABLE_TAGS_DRAG_KEY);
-    const data = JSON.parse(dragData);
-    const sourceId = data.sourceId;
-    const recordIds = data.recordIds;
-    const targetId = getRecordIdFromRecord(this.props.record);
-    if (!dragData || recordIds.includes(targetId)) return;
-    this.props.onDrop(sourceId, targetId, recordIds);
+    this.setState({ canDropTip: false });
+    if (!this.checkHasDraggedRecord() || this.checkOverDraggingRecord()) {
+      this.props.recordDragDropEvents.onDragEnd();
+      return;
+    }
+    const { record, treeNodeKey } = this.props;
+    const dropTarget = { dropRecordId: record._id, dropTreeNodeKey: treeNodeKey };
+    this.props.recordDragDropEvents.onDrop(dropTarget);
+  };
+
+  onDragEnd = () => {
+    this.props.recordDragDropEvents.onDragEnd();
   };
 
   render() {
@@ -334,17 +310,14 @@ class Record extends React.Component {
           'sf-table-last-row': isLastRecord,
           'row-selected': isSelected,
           'row-locked': isLocked,
-          'show-drop-tip': this.state.showDropTip,
+          'can-drop-tip': this.state.canDropTip,
         })}
         style={this.getRecordStyle()}
-        draggable={isSelected || this.props.isDragging}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
-        onDragStart={(e) => {e.preventDefault();}}
         onDragEnter={this.handleDragEnter}
         onDragLeave={this.handleDragLeave}
         onDragOver={this.handleDragOver}
         onDrop={this.handleDrop}
+        onDragEnd={this.onDragEnd}
       >
         {/* frozen */}
         <div
@@ -363,20 +336,14 @@ class Record extends React.Component {
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
               height={cellHeight}
+              recordDraggable={this.props.recordDraggable}
+              handleDragStart={this.handleDragStart}
             />
           }
           {frozenCells}
         </div>
         {/* scroll */}
         {columnCells}
-        {this.state.showDragTip &&
-          <div
-            className="drag-handler"
-            draggable={true}
-            onDragStart={(e) => this.handleDragStart(e, record._id)}
-          >
-          </div>
-        }
       </div>
     );
   }
@@ -402,6 +369,7 @@ Record.propTypes = {
   top: PropTypes.number,
   left: PropTypes.number,
   height: PropTypes.number,
+  recordDraggable: PropTypes.bool,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
   checkCanModifyRecord: PropTypes.func,
@@ -416,13 +384,6 @@ Record.propTypes = {
   hasChildNodes: PropTypes.bool,
   isFoldedTreeNode: PropTypes.bool,
   toggleExpandTreeNode: PropTypes.func,
-  treeMetrics: PropTypes.object,
-  treeNodeKeyRecordIdMap: PropTypes.object,
-  isDragging: PropTypes.bool,
-  updateDraggingStatus: PropTypes.func,
-  recordGetterById: PropTypes.func,
-  createGhostElement: PropTypes.func,
-  onDrop: PropTypes.func,
 };
 
 export default Record;

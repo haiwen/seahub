@@ -25,17 +25,61 @@
   background-color: #fff;
 }
 
-.sf-table-result-content .sf-table-row.show-drop-tip .sf-table-cell {
+.sf-table-result-content .sf-table-row.can-drop-tip .sf-table-cell {
   background-color: rgb(200, 220, 240) !important;
 }
 
-.sf-table-row .drag-handler {
-  width: 8px;
-  position: relative;
+.sf-table-result-container.record-draggable .sf-table-row .drag-handler {
+  position: absolute;
   left: 0;
+  top: 1px;
+  height: 30px;
+  width: 12px;
+}
+
+.sf-table-result-container.record-draggable .sf-table-row:hover .drag-handler {
   background-image: url(../../../../../../../media/img/grippy_large.png);
   background-repeat: no-repeat;
-  background-position: 0px;
-  z-index: 3;
   cursor: grab;
+}
+
+.sf-table-record-drag-layer {
+  position: fixed;
+  z-index: -1;
+  left: -9999;
+  top: 0;
+  pointer-events: none;
+  cursor: grabbing;
+}
+
+.sf-table-record-drag-layer .record-drag-layer-table {
+  width: auto;
+}
+
+.sf-table-record-drag-layer .rdg-dragged-record {
+  display: flex;
+  min-height: 32px;
+  height: auto;
+  padding: 0 1rem;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.sf-table-record-drag-layer .rdg-dragged-record:first-child {
+  border-top: 1px solid #ddd;
+}
+
+.sf-table-record-drag-layer .rdg-dragged-record .rdg-dragged-record-cell {
+  display: flex;
+  align-items: center;
+  min-width: 80px;
+  height: 32px;
+  padding: 8px;
+  border-bottom: none;
+}
+
+.sf-table-record-drag-layer .rdg-dragged-record .rdg-dragged-record-cell:last-child {
+  border-right: none;
 }

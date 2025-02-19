@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
 import MergeTagsSelector from '../../../components/merge-tags-selector';
+import DraggedTagsLayer from './dragged-tags-layer';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
@@ -13,11 +14,11 @@ import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 import { isNumber } from '../../../../utils/number';
+import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getParentLinks } from '../../../utils/cell';
-import { getTagById } from '../../../utils/row';
 
 import './index.css';
-import { flattenTree } from '../../../utils/tree';
 
 const TABLE_ID = 'metadata_tas';
 const DEFAULT_TABLE_DATA = {
@@ -37,7 +38,7 @@ const TagsTable = ({
   loadMore,
   getTagsTableWrapperOffsets,
 }) => {
-  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, addChildTag, mergeTags } = useTags();
+  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, deleteTagsLinks, addChildTag, mergeTags } = useTags();
 
   const [isShowNewSubTagDialog, setIsShowNewSubTagDialog] = useState(false);
   const [isShowMergeTagsSelector, setIsShowMergeTagsSelector] = useState(false);
@@ -211,93 +212,55 @@ const TagsTable = ({
     }
   }, [scrollToCurrentSelectedCell]);
 
-  const createColor = (record, style = {}) => {
-    const color = document.createElement('span');
-    Object.assign(color.style, {
-      display: 'inline-block',
-      width: '12px',
-      height: '12px',
-      borderRadius: '50%',
-      backgroundColor: record[PRIVATE_COLUMN_KEY.TAG_COLOR],
-    }, style);
-    return color;
-  };
-
-  const createTagElement = useCallback((record) => {
-    const tag = document.createElement('div');
-    tag.style.minWidth = '80px';
-    tag.style.width = 'fit-content';
-    tag.style.display = 'flex';
-    tag.style.alignItems = 'center';
-    tag.style.paddingLeft = '12px';
-
-    const color = createColor(record);
-
-    const name = document.createElement('span');
-    name.style.marginLeft = '8px';
-    name.textContent = record[PRIVATE_COLUMN_KEY.TAG_NAME];
-
-    tag.appendChild(color);
-    tag.appendChild(name);
-    return tag;
+  const renderCustomDraggedRows = useCallback((draggedNodesKeys) => {
+    if (!Array.isArray(draggedNodesKeys) || draggedNodesKeys.length === 0) return null;
+    return (
+      <DraggedTagsLayer draggedNodesKeys={draggedNodesKeys} />
+    );
   }, []);
 
-  const createParentTagsElement = useCallback((record) => {
-    const ids = getParentLinks(record).map(t => t.row_id);
-    const container = document.createElement('span');
-    container.style.minWidth = '80px';
-    container.style.width = 'fit-content';
-    container.style.display = 'inline-flex';
-    container.style.alignItems = 'center';
-    container.style.paddingLeft = '12px';
+  const moveTags = useCallback(({ draggingSource, dropTarget }) => {
+    const targetNode = getTreeNodeByKey(dropTarget, table.key_tree_node_map);
+    if (!Array.isArray(draggingSource) || draggingSource.length === 0 || !targetNode) return;
+    let draggingTagsIds = [];
+    let idNeedDeleteChildIds = {}; // { [parent_tag._id]: [child_tag._id] }
+    draggingSource.forEach((nodeKey) => {
+      const node = getTreeNodeByKey(nodeKey, table.key_tree_node_map);
+      const nodeId = getTreeNodeId(node);
+      const tag = getRowById(table, nodeId);
 
-    ids.forEach((id => {
-      const record = table.id_row_map[id];
-      const color = createColor(record, { width: '16px', height: '16px', marginRight: '-6px', border: '2px solid #fff' });
-      container.appendChild(color);
-    }));
-    return container;
-  }, [table]);
+      // find the child tags to delete which related to dragging tags
+      const parentLinks = getParentLinks(tag);
+      if (Array.isArray(parentLinks) && parentLinks.length > 0) {
+        parentLinks.forEach((link) => {
+          const parentTagId = link.row_id;
+          if (nodeKey.includes(parentTagId)) {
+            if (!idNeedDeleteChildIds[parentTagId]) {
+              idNeedDeleteChildIds[parentTagId] = [nodeId];
+            } else if (!idNeedDeleteChildIds[parentTagId].includes(nodeId)) {
+              idNeedDeleteChildIds[parentTagId].push(nodeId);
+            }
+          }
+        });
+      }
 
-  const createGhostElement = useCallback((dragData) => {
-    const data = JSON.parse(dragData);
-    const { nodeIds } = data;
-    const orderedKeys = Object.keys(tagsData.key_tree_node_map);
-    const orderedNodeIds = orderedKeys.filter(key => nodeIds.includes(key));
-    const recordIds = orderedNodeIds.map(id => tagsData.key_tree_node_map[id]._id);
-    const ghost = document.createElement('div');
-    ghost.style.width = 'fit-content';
-    ghost.style.display = 'flex';
-    ghost.style.flexDirection = 'column';
-    ghost.style.border = '1px solid #ccc';
-    ghost.style.backgroundColor = '#fff';
-
-    recordIds.forEach(recordId => {
-      const record = getTagById(tagsData, recordId);
-      if (record) {
-        const row = document.createElement('div');
-        row.style.width = 'fit-content';
-        row.style.display = 'flex';
-        row.style.padding = '4px 8px';
-        row.appendChild(createTagElement(record));
-        row.appendChild(createParentTagsElement(record));
-
-        ghost.appendChild(row);
+      // get none-repeat dragging tags ids
+      if (!draggingTagsIds.includes(nodeId)) {
+        draggingTagsIds.push(nodeId);
       }
     });
+    if (draggingTagsIds.length === 0) return;
 
-    return ghost;
-  }, [tagsData, createTagElement, createParentTagsElement]);
-
-  const onDrop = (sourceId, targetId, recordIds) => {
-    if (!sourceId) {
-      addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetId, recordIds);
-      return;
+    const targetTagId = getTreeNodeId(targetNode);
+    if (Object.keys(idNeedDeleteChildIds).length > 0) {
+      // need to delete child tags first
+      deleteTagsLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, idNeedDeleteChildIds, () => {
+        addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetTagId, draggingTagsIds);
+      });
+    } else {
+      addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetTagId, draggingTagsIds);
     }
-    deleteTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, sourceId, recordIds, {
-      success_callback: addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetId, recordIds),
-    });
-  };
+  }, [table, addTagLinks, deleteTagsLinks]);
 
   useEffect(() => {
     const eventBus = EventBus.getInstance();
@@ -333,8 +296,8 @@ const TagsTable = ({
         checkCellValueChanged={checkCellValueChanged}
         modifyColumnWidth={modifyColumnWidth}
         loadMore={loadMore}
-        onDrop={onDrop}
-        createGhostElement={createGhostElement}
+        renderCustomDraggedRows={renderCustomDraggedRows}
+        moveRecords={moveTags}
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />

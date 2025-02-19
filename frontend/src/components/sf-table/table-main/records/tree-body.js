@@ -40,7 +40,6 @@ class TreeBody extends Component {
       keyNodeFoldedMapForSearch: {},
       selectedPosition: null,
       isScrollingRightScrollbar: false,
-      isDragging: false,
     };
     this.eventBus = EventBus.getInstance();
     this.resultContentRef = null;
@@ -438,7 +437,6 @@ class TreeBody extends Component {
   };
 
   onCellMouseDown = (cellPosition, event) => {
-    if (this.props.treeMetrics && Object.keys(this.props.treeMetrics.idSelectedNodeMap).length > 0) return;
     // onRangeSelectStart
     if (!isShiftKeyDown(event)) {
       this.selectCell(cellPosition);
@@ -562,12 +560,8 @@ class TreeBody extends Component {
     return nodes.slice(startRenderIndex, endRenderIndex);
   };
 
-  updateDraggingStatus = (isDragging) => {
-    this.setState({ isDragging });
-  };
-
   renderRecords = () => {
-    const { treeMetrics, showCellColoring, columnColors, searchResult, treeNodeKeyRecordIdMap } = this.props;
+    const { treeMetrics, showCellColoring, columnColors, searchResult } = this.props;
     const { nodes, keyNodeFoldedMap, keyNodeFoldedMapForSearch, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     this.initFrozenNodesRef();
     const visibleNodes = this.getVisibleNodesInRange();
@@ -604,6 +598,9 @@ class TreeBody extends Component {
           colOverScanStartIdx={this.props.colOverScanStartIdx}
           colOverScanEndIdx={this.props.colOverScanEndIdx}
           lastFrozenColumnKey={this.props.lastFrozenColumnKey}
+          recordDraggable={this.props.recordDraggable}
+          recordDragDropEvents={this.props.recordDragDropEvents}
+          draggingRecordSource={this.props.draggingRecordSource}
           scrollLeft={scrollLeft}
           height={rowHeight}
           cellMetaData={cellMetaData}
@@ -621,13 +618,6 @@ class TreeBody extends Component {
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
           toggleExpandTreeNode={() => this.toggleExpandNode(node_key)}
-          treeMetrics={treeMetrics}
-          treeNodeKeyRecordIdMap={treeNodeKeyRecordIdMap}
-          isDragging={this.state.isDragging}
-          updateDraggingStatus={this.updateDraggingStatus}
-          onDrop={this.props.onDrop}
-          recordGetterById={this.props.recordGetterById}
-          createGhostElement={this.props.createGhostElement}
         />
       );
     });
@@ -706,6 +696,9 @@ TreeBody.propTypes = {
   treeNodeKeyRecordIdMap: PropTypes.object,
   keyTreeNodeFoldedMap: PropTypes.object,
   treeMetrics: PropTypes.object,
+  recordDraggable: PropTypes.bool,
+  recordDragDropEvents: PropTypes.object,
+  draggingRecordSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
   CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
@@ -740,7 +733,6 @@ TreeBody.propTypes = {
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
   reloadRecords: PropTypes.func,
-  appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,
   columnColors: PropTypes.object,
   onFillingDragRows: PropTypes.func,
@@ -749,8 +741,6 @@ TreeBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   storeFoldedTreeNodes: PropTypes.func,
-  createGhostElement: PropTypes.func,
-  onDrop: PropTypes.func,
 };
 
 export default TreeBody;

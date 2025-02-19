@@ -185,11 +185,3 @@ export const getTreeChildNodes = (parentNode, tree) => {
   }
   return childNodes;
 };
-
-export const getParentNodeKey = (nodeKey) => {
-  if (!nodeKey) return null;
-  const keyParts = nodeKey.split('_');
-  if (keyParts.length <= 1) return null;
-  keyParts.pop();
-  return keyParts.join('_');
-};

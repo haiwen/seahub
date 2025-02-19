@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { HorizontalScrollbar } from '../../scrollbar';
 import RecordsHeader from '../records-header';
 import Body from './body';
@@ -7,6 +8,7 @@ import TreeBody from './tree-body';
 import GroupBody from './group-body';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
+import RecordDragLayer from './record-drag-layer';
 import { RecordMetrics } from '../../utils/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { recalculate } from '../../utils/column';
@@ -43,6 +45,7 @@ class Records extends Component {
     const { width: tableContentWidth } = props.getTableContentRect();
     const initHorizontalScrollState = this.getHorizontalScrollState({ gridWidth: tableContentWidth, columnMetrics, scrollLeft: 0 });
     this.state = {
+      draggingRecordSource: null,
       columnMetrics,
       recordMetrics: this.createRowMetrics(),
       treeMetrics: this.createTreeMetrics(),
@@ -832,13 +835,66 @@ class Records extends Component {
     return columnVisibleEnd;
   };
 
-  renderRecordsBody = ({ containerWidth }) => {
-    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
+  handleDragRecordsEnd = () => {
+    this.setState({ draggingRecordSource: null });
+  };
+
+  handleDragRecordStart = (event, { draggingRecordId, draggingTreeNodeKey }) => {
+    this.setState({
+      draggingRecordSource: {
+        event,
+        draggingRecordId,
+        draggingTreeNodeKey
+      }
+    });
+  };
+
+  handleDropRecords = ({ dropRecordId, dropTreeNodeKey } = {}) => {
+    const { showRecordAsTree } = this.props;
+    const { draggingRecordSource, treeMetrics, recordMetrics } = this.state;
+    const dropTarget = showRecordAsTree ? dropTreeNodeKey : dropRecordId;
+    if (!dropTarget) return;
+
+    const { draggingRecordId, draggingTreeNodeKey } = draggingRecordSource;
+    const draggingSource = showRecordAsTree ? TreeMetrics.getDraggedTreeNodesKeys(draggingTreeNodeKey, treeMetrics) : RecordMetrics.getDraggedRecordsIds(draggingRecordId, recordMetrics);
+    this.props.moveRecords({ draggingSource, dropTarget });
+    this.handleDragRecordsEnd();
+  };
+
+  getRecordDragDropEvents = () => {
+    if (!this.props.moveRecords) return null;
+    if (!this.recordDragDropEvents) {
+      this.recordDragDropEvents = {
+        onDragStart: this.handleDragRecordStart,
+        onDrop: this.handleDropRecords,
+        onDragEnd: this.handleDragRecordsEnd,
+      };
+    }
+    return this.recordDragDropEvents;
+  };
+
+  createRecordsDragLayer = () => {
+    const { draggingRecordSource, recordMetrics, treeMetrics } = this.state;
+    if (!draggingRecordSource) return null;
+    return (
+      <RecordDragLayer
+        showRecordAsTree={this.props.showRecordAsTree}
+        draggingRecordSource={draggingRecordSource}
+        recordMetrics={recordMetrics}
+        treeMetrics={treeMetrics}
+        renderCustomDraggedRows={this.props.renderCustomDraggedRows}
+      />
+    );
+  };
+
+  renderRecordsBody = ({ containerWidth, recordDraggable }) => {
+    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
+    const recordDragDropEvents = this.getRecordDragDropEvents();
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
-      recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
+      recordMetrics, colOverScanStartIdx, colOverScanEndIdx, recordDraggable, recordDragDropEvents, draggingRecordSource,
       contextMenu: (
         <ContextMenu
           {...this.props}
@@ -900,11 +956,12 @@ class Records extends Component {
     const containerWidth = this.getContainerWidth();
     const hasSelectedRecord = this.checkHasSelectedRecord();
     const isSelectedAll = this.checkIsSelectAll();
+    const recordDraggable = !!this.props.moveRecords;
 
     return (
       <>
         <div
-          className={`sf-table-result-container ${this.isWindows ? 'windows-browser' : ''}`}
+          className={classnames('sf-table-result-container', { 'windows-browser': this.isWindows, 'record-draggable': recordDraggable })}
           ref={this.setResultContainerRef}
           onScroll={this.onContentScroll}
           onClick={this.onClickContainer}
@@ -933,9 +990,10 @@ class Records extends Component {
               modifyColumnWidth={this.props.modifyColumnWidth}
               insertColumn={this.props.insertColumn}
             />
-            {this.renderRecordsBody({ containerWidth })}
+            {this.renderRecordsBody({ containerWidth, recordDraggable })}
           </div>
         </div>
+        {this.createRecordsDragLayer()}
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar
             ref={this.setHorizontalScrollbarRef}
@@ -1010,8 +1068,7 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecord: PropTypes.func,
   addFolder: PropTypes.func,
-  createGhostElement: PropTypes.func,
-  onDrop: PropTypes.func,
+  moveRecords: PropTypes.func,
 };
 
 export default Records;
