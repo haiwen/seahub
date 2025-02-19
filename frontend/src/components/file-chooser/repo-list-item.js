@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TreeListView from './tree-list-view';
 import TreeNode from '../../components/tree-view/tree-node';
-import Dirent from '../../models/dirent';
-import { seafileAPI } from '../../utils/seafile-api';
 import treeHelper from '../../components/tree-view/tree-helper';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import Dirent from '../../models/dirent';
 import toaster from '../toast';
 
 const propTypes = {
@@ -54,7 +54,7 @@ class RepoListItem extends React.Component {
       return;
     }
 
-    if (repo && repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
+    if (this.props.selectedRepo && repo && repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
       this.loadRepoDirentList(repo);
       this.loadRepoTimer = setTimeout(() => {
         const repoID = repo.repo_id;
@@ -69,7 +69,7 @@ class RepoListItem extends React.Component {
   componentDidUpdate(prevProps) {
     const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
     // create new folder in selected repo or folder
-    if (repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
+    if (repo && selectedRepo && repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
       seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
         if (!this.isComponentMounted) return;
         const direntData = res.data.dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
