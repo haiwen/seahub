@@ -372,8 +372,8 @@
   "No_changes": "Keine Änderungen",
   "Title": "Titel",
   "Subtitle": "Untertitel",
-  "Link_sdoc": "SDOC-Dokument verlinken",
-  "Link_file": "Datei verlinken",
+  "Link_sdoc": "Link zu SDOC-Dokument",
+  "Link_file": "Link zu Datei",
   "Keep_my_modification": "Meine Änderungen behalten",
   "Keep_other_modification": "Andere Änderungen behalten",
   "Keep_both_modification": "Beide Änderungen behalten",
@@ -613,5 +613,6 @@
   "Support_Youtube_Tencent_Bilibili_and_more": "Unterstützt Youtube, Tencent, Bilibili und andere",
   "Image_cannot_be_copied_Please_download_the_source_image": "Das Bild kann nicht kopiert werden. Laden Sie das Bild herunter.",
   "And_select_insert_-_image_to_upload": "und wählen Sie 「insert」 - 「image」 für den Upload.",
-  "Image_copy_error": "Fehler beim Kopieren des Bildes"
+  "Image_copy_error": "Fehler beim Kopieren des Bildes",
+  "Image_is_uploading": "Image is uploading..."
 }
