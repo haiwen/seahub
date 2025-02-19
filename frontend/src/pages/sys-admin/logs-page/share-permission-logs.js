@@ -93,25 +93,6 @@ Content.propTypes = {
 
 class Item extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpIconShown: false,
-    };
-  }
-
-  handleMouseOver = () => {
-    this.setState({
-      isOpIconShown: true
-    });
-  };
-
-  handleMouseOut = () => {
-    this.setState({
-      isOpIconShown: false
-    });
-  };
-
   getActionTextByEType = (etype) => {
     if (etype.indexOf('add') != -1) {
       return gettext('Add');
@@ -129,9 +110,8 @@ class Item extends Component {
       case 'user':
         return <UserLink email={item.to_user_email} name={item.to_user_name} />;
       case 'group':
-        return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
       case 'department':
-        return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>;
+        return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
       case 'all':
         return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>;
       default:
@@ -142,7 +122,7 @@ class Item extends Component {
   render() {
     let { item } = this.props;
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr>
         <td><UserLink email={item.from_user_email} name={item.from_user_name} /></td>
         <td>{this.getShareTo(item)}</td>
         <td>{this.getActionTextByEType(item.etype)}</td>
