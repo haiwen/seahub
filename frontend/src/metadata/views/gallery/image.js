@@ -6,6 +6,7 @@ const Image = ({
   isSelected,
   img,
   size,
+  useOriginalThumbnail,
   style,
   onClick,
   onDoubleClick,
@@ -31,7 +32,7 @@ const Image = ({
     >
       <img
         className="metadata-gallery-grid-image"
-        src={img.src}
+        src={useOriginalThumbnail ? img.thumbnail : img.src}
         alt={img.name}
         draggable="false"
         onLoad={onLoad}
@@ -45,6 +46,7 @@ Image.propTypes = {
   img: PropTypes.object,
   size: PropTypes.number,
   style: PropTypes.object,
+  useOriginalThumbnail: PropTypes.bool,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,
   onContextMenu: PropTypes.func,

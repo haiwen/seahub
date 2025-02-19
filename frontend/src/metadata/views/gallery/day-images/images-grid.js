@@ -55,8 +55,8 @@ const ImagesGrid = ({ images, selectedImageIds, size, imgEvents }) => {
 
     return (
       <>
-        <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.large} style={{ gridRow: 1 / 3, gridColumn: `${1 + firstImgOffset} / ${3 + firstImgOffset}` }} {...imgEvents} />
-        <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} style={style[0]} {...imgEvents} />
+        <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.large} useOriginalThumbnail={true} style={{ gridRow: 1 / 3, gridColumn: `${1 + firstImgOffset} / ${3 + firstImgOffset}` }} {...imgEvents} />
+        <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} useOriginalThumbnail={true} style={style[0]} {...imgEvents} />
         {others.slice(0, 5).map((image, index) => {
           return (<Image key={image.id} isSelected={selectedImageIds.includes(image.id)} img={image} size={size.small} style={style[index + 1] || {}} {...imgEvents} />);
         })}
@@ -194,8 +194,8 @@ const ImagesGrid = ({ images, selectedImageIds, size, imgEvents }) => {
 
   return (
     <>
-      <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.middle} style={style[0]} {...imgEvents} />
-      <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} style={style[1]} {...imgEvents} />
+      <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.middle} useOriginalThumbnail={true} style={style[0]} {...imgEvents} />
+      <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} useOriginalThumbnail={true} style={style[1]} {...imgEvents} />
       {others.slice(0, 10).map((image, index) => {
         return (<Image key={image.id} isSelected={selectedImageIds.includes(image.id)} img={image} size={size.small} style={style[index + 2] || {}} {...imgEvents} />);
       })}
