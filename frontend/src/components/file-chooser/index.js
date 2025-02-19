@@ -19,7 +19,7 @@ const propTypes = {
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
-  mode: PropTypes.isRequired,
+  mode: PropTypes.string,
   fileSuffixes: PropTypes.arrayOf(PropTypes.string),
   currentPath: PropTypes.string,
   searchResults: PropTypes.array,
