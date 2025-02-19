@@ -18,6 +18,7 @@ class OrgLogsFileTransfer extends React.Component {
     super(props);
     this.state = {
       page: 1,
+      perPage: 25,
       pageNext: false,
       eventList: [],
       isItemFreezed: false
@@ -26,11 +27,12 @@ class OrgLogsFileTransfer extends React.Component {
 
   componentDidMount() {
     let page = this.state.page;
-    this.initData(page);
+    let perPage = this.state.perPage;
+    this.initData(page, perPage);
   }
 
-  initData = (page) => {
-    orgAdminAPI.orgAdminListFileTransfer(page).then(res => {
+  initData = (page, perPage) => {
+    orgAdminAPI.orgAdminListFileTransfer(page, perPage).then(res => {
       let eventList = res.data.log_list.map(item => {
         return new OrgLogsFileTransferEvent(item);
       });
@@ -50,13 +52,13 @@ class OrgLogsFileTransfer extends React.Component {
   onChangePageNum = (e, num) => {
     e.preventDefault();
     let page = this.state.page;
-
+    let perPage = this.state.perPage;
     if (num == 1) {
       page = page + 1;
     } else {
       page = page - 1;
     }
-    this.initData(page);
+    this.initData(page, perPage);
   };
 
   render() {
