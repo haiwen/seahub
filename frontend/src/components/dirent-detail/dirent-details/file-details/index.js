@@ -120,9 +120,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, onFileTagC
         </DetailItem>
       )}
       {enableMetadataManagement && enableMetadata && (
-        <MetadataDetails
-          repoID={repoID}
-        />
+        <MetadataDetails />
       )}
     </>
   );

@@ -9,11 +9,9 @@ import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../uti
 import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
 import { isValidPosition } from '../../../utils/validate';
-import toaster from '../../../../components/toast';
 import ObjectUtils from '../../../utils/object-utils';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
-import metadataAPI from '../../../../metadata/api';
 import './index.css';
 
 class Location extends React.Component {
@@ -111,17 +109,9 @@ class Location extends React.Component {
       this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
       this.addMarkerByPosition(lng, lat);
-      let location_info = this.props.record._location_info;
-      if (location_info) {
-        this.setState({ address: location_info.address });
-      }
-      else {
-        metadataAPI.getLocation(this.props.repoID, this.props.record._id).then((res) => {
-          const address = res.data.address;
-          this.setState({ address });
-        }).catch(error => {
-          toaster.warning(gettext('No address found for the given coordinates.'));
-        });
+      let location_translated = this.props.record._location_translated;
+      if (location_translated) {
+        this.setState({ address: location_translated.address });
       }
     });
   };
@@ -145,17 +135,9 @@ class Location extends React.Component {
       });
       this.addMarkerByPosition(lng, lat);
       this.map.setCenter(gcPosition);
-      let location_info = this.props.record._location_info;
-      if (location_info) {
-        this.setState({ address: location_info.address });
-      }
-      else {
-        metadataAPI.getLocation(this.props.repoID, this.props.record._id).then((res) => {
-          const address = res.data.address;
-          this.setState({ address });
-        }).catch(error => {
-          toaster.warning(gettext('No address found for the given coordinates.'));
-        });
+      let location_translated = this.props.record._location_translated;
+      if (location_translated) {
+        this.setState({ address: location_translated.address });
       }
     });
   };
