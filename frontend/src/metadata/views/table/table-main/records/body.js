@@ -563,6 +563,7 @@ class RecordsBody extends Component {
             modifyColumnData={this.props.modifyColumnData}
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
             updateFileTags={this.props.updateFileTags}
+            deleteRecords={this.props.deleteRecords}
           />
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}

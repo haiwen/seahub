@@ -9,7 +9,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
-const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) => {
+const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
 
@@ -81,6 +81,22 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
     }
   };
 
+  const deleteImage = () => {
+    const image = imageItems[imageIndex];
+    deleteRecords([image.id]);
+
+    const newImageItems = imageItems.filter(item => item.id !== image.id);
+    if (newImageItems.length === 0) {
+      setImageIndex(0);
+      closeImagePopup();
+    } else {
+      const newIndex = imageIndex >= newImageItems.length ? 0 : imageIndex;
+      setImageIndex(newIndex);
+    }
+  };
+
+  const canDelete = window.sfMetadataContext.checkCanDeleteRow();
+
   return (
     <ModalPortal>
       <ImageDialog
@@ -90,6 +106,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
         moveToPrevImage={moveToPrevImage}
         moveToNextImage={moveToNextImage}
         onRotateImage={rotateImage}
+        onDeleteImage={canDelete ? deleteImage : null}
       />
     </ModalPortal>
   );
@@ -101,6 +118,7 @@ ImagePreviewer.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   closeImagePopup: PropTypes.func,
+  deleteRecords: PropTypes.func,
 };
 
 export default ImagePreviewer;

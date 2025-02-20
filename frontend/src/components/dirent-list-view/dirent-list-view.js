@@ -764,13 +764,16 @@ class DirentListView extends React.Component {
     const isDesktop = Utils.isDesktop();
 
     let canModifyFile = false;
+    let canDeleteFile = false;
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
       canModifyFile = true;
+      canDeleteFile = true;
     } else {
       const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
       if (isCustomPermission) {
-        const { modify } = customPermission.permission;
+        const { modify, delete: canDelete } = customPermission.permission;
         canModifyFile = modify;
+        canDeleteFile = canDelete;
       }
     }
 
@@ -874,7 +877,7 @@ class DirentListView extends React.Component {
                 closeImagePopup={this.closeImagePopup}
                 moveToPrevImage={this.moveToPrevImage}
                 moveToNextImage={this.moveToNextImage}
-                onDeleteImage={this.deleteImage}
+                onDeleteImage={(canDeleteFile && this.deleteImage) ? this.deleteImage : null}
                 onRotateImage={this.rotateImage}
                 enableRotate={canModifyFile}
               />
