@@ -1,7 +1,8 @@
 import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
+import { SearchInput, CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
@@ -228,7 +229,7 @@ const TagsEditor = forwardRef(({
               <div className="sf-metadata-tag-name">{tagName}</div>
             </div>
             <div className="sf-metadata-tags-editor-tag-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
             </div>
           </div>
         </div>

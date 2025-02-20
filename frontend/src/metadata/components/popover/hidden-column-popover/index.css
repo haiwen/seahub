@@ -103,7 +103,7 @@
   left: 12px;
 }
 
-.sf-metadata-hide-columns-popover .hide-column-item .sf-metadata-icon {
+.sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
   font-size: 12px;
   margin-right: 10px;
   fill: #aaa;
@@ -137,7 +137,7 @@
   margin-right: 10px;
 }
 
-.sf-metadata-hide-columns-popover .hide-column-item .drag-hide-column-handle .sf-metadata-icon {
+.sf-metadata-hide-columns-popover .hide-column-item .drag-hide-column-handle .seafile-multicolor-icon {
   margin-right: 0px;
 }
 

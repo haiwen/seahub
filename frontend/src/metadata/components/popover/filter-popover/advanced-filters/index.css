@@ -43,7 +43,7 @@
   max-width: 300px;
 }
 
-.sf-metadata-filters-list .filter-item .filter-term .sf-metadata-option-group-content .option.option-active .sf-metadata-icon {
+.sf-metadata-filters-list .filter-item .filter-term .sf-metadata-option-group-content .option.option-active .seafile-multicolor-icon {
   color: #666;
 }
 
@@ -76,7 +76,7 @@
   line-height: 1.5;
 }
 
-.sf-metadata-filters-list .sf-metadata-select .sf-metadata-icon-drop-down {
+.sf-metadata-filters-list .sf-metadata-select .sseafile-multicolor-icon-drop-down {
   margin-left: 0.5rem;
 }
 
@@ -207,13 +207,13 @@
   cursor: pointer;
 }
 
-.delete-filter .sf-metadata-icon-fork-number {
+.delete-filter .seafile-multicolor-icon-fork-number {
   display: inline-block;
   font-size: 12px;
   fill: #999;
 }
 
-.delete-filter .sf-metadata-icon-fork-number:hover {
+.delete-filter .seafile-multicolor-icon-fork-number:hover {
   fill: #666;
 }
 
@@ -231,8 +231,8 @@
   text-align: center;
 }
 
-.sf-metadata-filters-list .multiple-check-icon .sf-metadata-icon-check-mark,
-.sf-metadata-filters-list .collaborator-check-icon .sf-metadata-icon-check-mark {
+.sf-metadata-filters-list .multiple-check-icon .seafile-multicolor-icon-check-mark,
+.sf-metadata-filters-list .collaborator-check-icon .seafile-multicolor-icon-check-mark {
   fill: #666 !important;
   font-size: 12px;
 }
@@ -316,19 +316,19 @@
   margin-left: -0.3125rem;
 }
 
-.sf-metadata-filter-header-icon .sf-metadata-icon,
-.sf-metadata-select-icon .sf-metadata-icon {
+.sf-metadata-filter-header-icon .seafile-multicolor-icon,
+.sf-metadata-select-icon .seafile-multicolor-icon {
   font-size: 14px;
   fill: #aaa;
   cursor: default;
 }
 
-.sf-metadata-option:hover .sf-metadata-filter-header-icon .sf-metadata-icon,
-.sf-metadata-option.sf-metadata-option-active .sf-metadata-filter-header-icon .sf-metadata-icon,
-.sf-metadata-setting-selector__menu .sf-metadata-setting-selector__option--is-selected .sf-metadata-icon {
+.sf-metadata-option:hover .sf-metadata-filter-header-icon .seafile-multicolor-icon,
+.sf-metadata-option.sf-metadata-option-active .sf-metadata-filter-header-icon .seafile-multicolor-icon,
+.sf-metadata-setting-selector__menu .sf-metadata-setting-selector__option--is-selected .seafile-multicolor-icon {
   fill: #fff;
 }
 
-.sf-metadata-option:not(.sf-metadata-option-active):hover .sf-metadata-filter-header-icon .sf-metadata-icon {
+.sf-metadata-option:not(.sf-metadata-option-active):hover .sf-metadata-filter-header-icon .seafile-multicolor-icon {
   fill: #aaa;
 }

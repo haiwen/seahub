@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect, Icon, FileTagsFormatter } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect, FileTagsFormatter } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
@@ -38,7 +39,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
               <div className="sf-metadata-tag-name">{tagName}</div>
             </div>
             <div className="select-basic-filter-option-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon symbol="check-mark" />)}
             </div>
           </div>
         )

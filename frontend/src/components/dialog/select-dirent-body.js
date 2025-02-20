@@ -6,7 +6,6 @@ import { MODE_TYPE_MAP } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { RepoInfo } from '../../models';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import CreateFolder from '../dialog/create-folder-dialog';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
@@ -193,14 +192,12 @@ class SelectDirentBody extends React.Component {
           </ModalFooter>
         </Col>
         {this.state.showCreateFolderDialog && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.selectedPath}
-              onAddFolder={this.createFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onToggleCreateFolder}
-            />
-          </ModalPortal>
+          <CreateFolder
+            parentPath={this.props.selectedPath}
+            onAddFolder={this.createFolder}
+            checkDuplicatedName={this.checkDuplicatedName}
+            addFolderCancel={this.onToggleCreateFolder}
+          />
         )}
       </Row>
     );

@@ -7,7 +7,7 @@ import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { repoShareAdminAPI } from '../../../utils/repo-share-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
-import Loading from '../../../components/loading';
+import Loading from '../../loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';

@@ -4,7 +4,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import Loading from '../../components/loading';
+import Loading from '../loading';
 
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
