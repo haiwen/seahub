@@ -1,4 +1,6 @@
+import os
 import json
+import time
 from django.urls import reverse
 
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
@@ -120,11 +122,13 @@ class MetadataRecordTest(BaseTestCase):
             passwd=None
         ))
         self.repo_id = self.repo.id
-        name, furl = self.create_file(repo_id=self.repo_id, parent_dir='/',
-                            filename='test.txt', username=self.user.username)
-        self.file_name = name
+        file_path = self.create_file(repo_id=self.repo_id, parent_dir='/',
+            filename='test.txt', username=self.user.username)
+        self.file_name = os.path.basename(file_path)
+
         url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
+        time.sleep(0.2)
     
     def test_get_record(self):
         url = reverse('api-v2.1-metadata-record-info', args=[self.repo_id])
@@ -155,11 +159,12 @@ class MetadataColumnsTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        name, furl = self.create_file(repo_id=self.repo_id, parent_dir='/',
+        file_path = self.create_file(repo_id=self.repo_id, parent_dir='/',
                             filename='test.txt', username=self.user.username)
-        self.file_name = name
+        self.file_name = os.path.basename(file_path)
         url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
+        time.sleep(0.2)
 
     def test_post_column(self):
         url = reverse('api-v2.1-metadata-columns', args=[self.repo_id])
@@ -247,7 +252,7 @@ class MetadataViewsTest(BaseTestCase):
         }, 'application/json')
         view_id = json.loads(resp.content)['view']['_id']
 
-        url = reverse('api-v2.1-metadata-views-detail', args=[view_id])
+        url = reverse('api-v2.1-metadata-views-detail', args=[self.repo_id, view_id])
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
@@ -369,22 +374,21 @@ class MetadataExtractFileDetailsTest(BaseTestCase):
             passwd=None
         ))
         self.repo_id = self.repo.id
-        
-        url = reverse('api-v2.1-metadata', args=[self.repo_id])
-        self.client.put(url)
- 
         self.file_name = 'test.txt'
         self.create_file(repo_id=self.repo_id,
                         parent_dir='/',
                         filename=self.file_name,
                         username=self.user.username)
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+        time.sleep(0.2)
 
     def test_extract_file_details(self):
         url = reverse('api-v2.1-metadata-extract-file-details', args=[self.repo_id])
         
         resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
-        obj_id = json.loads(resp.content)['_obj_id']
+        obj_id = json.loads(resp.content)['results'][0]['_obj_id']
         
         data = {
             'obj_ids': [obj_id]
@@ -735,18 +739,19 @@ class MetadataFileTagsTest(BaseTestCase):
             passwd=None
         ))
         self.repo_id = self.repo.id
-        
-        url = reverse('api-v2.1-metadata', args=[self.repo_id])
-        self.client.put(url)
-        
-        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
 
         self.file_name = 'test.txt'
         self.create_file(repo_id=self.repo_id,
                         parent_dir='/',
                         filename=self.file_name,
                         username=self.user.username)
+        
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
+        self.client.put(url)
+        time.sleep(0.2)
+
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
+        self.client.put(url, {'lang': 'en'}, 'application/json')
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
@@ -762,7 +767,7 @@ class MetadataFileTagsTest(BaseTestCase):
 
         resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
-        self.record_id = json.loads(resp.content)['_id']
+        self.record_id = json.loads(resp.content)['results'][0]['_id']
 
     def test_update_file_tags(self):
         url = reverse('api-v2.1-metadata-file-tags', args=[self.repo_id])
@@ -789,18 +794,17 @@ class MetadataTagFilesTest(BaseTestCase):
             passwd=None
         ))
         self.repo_id = self.repo.id
+        self.file_name = 'test.txt'
+        self.create_file(repo_id=self.repo_id,
+                        parent_dir='/',
+                        filename=self.file_name,
+                        username=self.user.username)
         
         url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
         self.client.put(url, {'lang': 'en'}, 'application/json')
-
-        self.file_name = 'test.txt'
-        self.create_file(repo_id=self.repo_id,
-                        parent_dir='/',
-                        filename=self.file_name,
-                        username=self.user.username)
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
@@ -813,10 +817,13 @@ class MetadataTagFilesTest(BaseTestCase):
         }
         resp = self.client.post(url, data, 'application/json')
         self.tag = json.loads(resp.content)['tags'][0]
-        
         resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
-        self.record_id = json.loads(resp.content)['_id']
+        if resp.status_code != 200:
+            time.sleep(0.2)
+            resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
+                             f'?parent_dir=/&file_name={self.file_name}')
+        self.record_id = json.loads(resp.content)['results'][0]['_id']
         
         url = reverse('api-v2.1-metadata-file-tags', args=[self.repo_id])
         data = {
