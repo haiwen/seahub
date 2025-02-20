@@ -48,7 +48,6 @@ function check_component_running() {
     fi
 }
 
-<<'COMMENT'
 function validate_already_running () {
     if pid=$(pgrep -f "seafile-monitor.sh" 2>/dev/null); then
         echo "seafile server is still running, stop it by \"seafile.sh stop\""
@@ -59,7 +58,6 @@ function validate_already_running () {
     check_component_running "seaf-server" "seaf-server"
     check_component_running "seafdav" "wsgidav.server.server_cli"
 }
-COMMENT
 
 function run_seaf_import () {
     validate_seafile_data_dir;
