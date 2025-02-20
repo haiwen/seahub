@@ -33,7 +33,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip text={gettext('No permission logs')}>
+        <EmptyTip text={gettext('No transfer logs')}>
         </EmptyTip>
       );
       const table = (
