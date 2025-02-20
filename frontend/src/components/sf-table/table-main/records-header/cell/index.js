@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useMemo, isValidElement, useState } from 'r
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../icon';
 import ResizeColumnHandle from '../resize-column-handle';
 import HeaderDropdownMenu from '../dropdown-menu';
 import EventBus from '../../../../common/event-bus';
@@ -157,7 +157,7 @@ const Cell = ({
     return (
       <>
         <span className="mr-2" id={`header-icon-${key}`}>
-          {icon_name && <Icon iconName={icon_name} className="sf-table-column-icon" />}
+          {icon_name && <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />}
         </span>
         {icon_tooltip &&
           <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-table-tooltip">

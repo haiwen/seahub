@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import CenteredLoading from '../../../../components/centered-loading';
 import toaster from '../../../../components/toast';
 import EmptyTip from '../../../../components/empty-tip';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 
 class PreHideColumnSetter extends React.Component {
@@ -54,7 +54,7 @@ class PreHideColumnSetter extends React.Component {
     return (
       <div className={`setting-item ${settingClass ? '' : 'mb-1'}`}>
         <div className="mr-2 filters-setting-btn" onClick={this.onHideColumnToggle} id="sf-metadata-hidden-column-popover">
-          <Icon iconName="hide" />
+          <Icon symbol="hide" />
           <span>{message}</span>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../../components/icon';
 import ResizeColumnHandle from './resize-column-handle';
 import DropdownMenu from './dropdown-menu';
 import { gettext } from '../../../../../../utils/constants';
@@ -156,7 +156,7 @@ const Cell = ({
     >
       <div className="sf-metadata-result-column-content sf-metadata-record-header-cell-left d-flex align-items-center text-truncate">
         <span className="mr-2" id={`header-icon-${key}`}>
-          <Icon iconName={COLUMNS_ICON_CONFIG[type]} className="sf-metadata-column-icon" />
+          <Icon symbol={COLUMNS_ICON_CONFIG[type]} className="sf-metadata-icon sf-metadata-column-icon" />
         </span>
         <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-metadata-tooltip">
           {gettext(headerIconTooltip)}

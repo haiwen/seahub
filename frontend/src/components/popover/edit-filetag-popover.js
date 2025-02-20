@@ -5,7 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import CommonAddTool from '../common/common-add-tool';
-import SearchInput from '../common/search-input';
+import SearchInput from '../search-input';
 import SeahubPopover from '../common/seahub-popover';
 import TagItem from './tag-item';
 import { KeyCodes, TAG_COLORS } from '../../constants';

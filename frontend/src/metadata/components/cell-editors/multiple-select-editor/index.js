@@ -1,7 +1,9 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
+import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import SearchInput from '../../../../components/search-input';
+import Icon from '../../../../components/icon';
 import DeleteOption from './delete-options';
 import { Utils } from '../../../../utils/utils';
 import { getColumnOptionIdsByNames } from '../../../utils/cell';
@@ -236,7 +238,7 @@ const MultipleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Icon, Switch } from '@seafile/sf-metadata-ui-component';
+import Switch from '../../../../../components/switch';
+import Icon from '../../../../../components/icon';
 import { COLUMNS_ICON_CONFIG } from '../../../../constants';
 
 const HideColumnItem = ({
@@ -84,20 +85,20 @@ const HideColumnItem = ({
     >
       {!readOnly && (
         <div className="drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
-          <Icon iconName="drag" />
+          <Icon symbol="drag" />
         </div>
       )}
       <Switch
+        className="hide-column-item-switch"
         disabled={readOnly}
         checked={isHidden}
         placeholder={(
           <>
-            <Icon iconName={COLUMNS_ICON_CONFIG[column.type]} />
+            <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[column.type]} />
             <span className="text-truncate">{column.name}</span>
           </>
         )}
         onChange={update}
-        switchClassName="hide-column-item-switch"
       />
     </div>
   );

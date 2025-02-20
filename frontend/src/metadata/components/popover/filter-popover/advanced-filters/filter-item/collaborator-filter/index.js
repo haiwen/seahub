@@ -1,6 +1,7 @@
 import React, { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../../../components/icon';
 import { gettext } from '../../../../../../../utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
 
@@ -44,7 +45,7 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
                 </div>
               </div>
               <div className='collaborator-check-icon'>
-                {isSelected && (<Icon iconName="check-mark" />)}
+                {isSelected && (<Icon symbol="check-mark" />)}
               </div>
             </div>
           </Fragment>

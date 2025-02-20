@@ -2,7 +2,8 @@ import React, { createRef, useState, useCallback, useMemo, forwardRef, useImpera
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem as DefaultDropdownItem } from 'reactstrap';
 import classnames from 'classnames';
-import { ModalPortal, Icon } from '@seafile/sf-metadata-ui-component';
+import ModalPortal from '../../../../../../../components/modal-portal';
+import Icon from '../../../../../../../components/icon';
 import { RenamePopover, OptionsPopover } from '../../../../../../components/popover';
 import DropdownItem from './dropdown-item';
 import { gettext } from '../../../../../../../utils/constants';
@@ -139,7 +140,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           disabled
           caret
         >
-          <Icon iconName="set-up" />
+          <Icon symbol="set-up" />
           <span className="item-text">{gettext('Edit format settings')}</span>
         </DropdownToggle>
         <DropdownMenu style={{ marginLeft: '-16px', transform: 'none' }}>

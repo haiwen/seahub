@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../../../../../components/icon-btn';
 import { canEditCell } from '../../../../../../../../utils/column';
 
 import './index.css';
@@ -20,7 +20,7 @@ const LinkOperationBtn = ({ record, column }) => {
       id="sf-metadata-cell-expand-btn"
       className="sf-metadata-cell-operation-btn sf-metadata-cell-expand-operation-btn"
       size={12}
-      iconName="expand"
+      symbol="expand"
       onClick={openEditor}
     />
   );
@@ -32,4 +32,3 @@ LinkOperationBtn.propTypes = {
 };
 
 export default LinkOperationBtn;
-

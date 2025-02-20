@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -14,7 +14,7 @@ const CheckboxEditor = ({ value, onChange: onChangeAPI }) => {
   return (
     <div className="sf-metadata-property-detail-editor sf-metadata-checkbox-property-detail-editor">
       <div className="sf-metadata-checkbox-property-detail-editor-content" onClick={onChange}>
-        {value && (<Icon iconName="check-mark" />)}
+        {value && (<Icon symbol="check-mark" />)}
       </div>
     </div>
   );

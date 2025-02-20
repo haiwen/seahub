@@ -28,6 +28,6 @@
   display: none;
 }
 
-.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-container:not(.selected) .sf-metadata-icon-check-mark {
+.sf-metadata-tags-edit-dialog .sf-metadata-edit-tag-color-container:not(.selected) .seafile-multicolor-icon-check-mark {
   display: none;
 }

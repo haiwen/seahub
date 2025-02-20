@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 
 class SelectAll extends Component {
@@ -45,7 +45,7 @@ class SelectAll extends Component {
         {isMobile ?
           <label className='mobile-select-all-container'>
             {isSelectedParts ?
-              (<Icon iconName="partially-selected" />) :
+              (<Icon symbol="partially-selected" />) :
               (
                 <>
                   <input
@@ -62,7 +62,7 @@ class SelectAll extends Component {
           </label> :
           <>
             {isSelectedParts ?
-              (<Icon iconName="partially-selected" />) :
+              (<Icon symbol="partially-selected" />) :
               (
                 <input
                   id="select-all-checkbox"

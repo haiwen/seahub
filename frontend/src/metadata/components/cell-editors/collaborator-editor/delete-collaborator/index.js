@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../components/icon-btn';
 import { useCollaborators } from '../../../../hooks';
 
 import './index.css';
@@ -20,7 +20,7 @@ const DeleteCollaborator = ({ value, onDelete }) => {
               <img className="collaborator-avatar m-0" alt={name} src={avatar_url} />
             </span>
             <span className="collaborator-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <IconBtn className="collaborator-remove" onClick={(event) => onDelete(email, event)} iconName="x-01" />
+            <IconBtn className="collaborator-remove" onClick={(event) => onDelete(email, event)} symbol="x-01" />
           </div>
         );
       })}

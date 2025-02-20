@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import { SeahubSelect } from '../common/select';
-import Switch from '../common/switch';
+import Switch from '../switch';
 import '../../css/transfer-dialog.css';
 
 const propTypes = {

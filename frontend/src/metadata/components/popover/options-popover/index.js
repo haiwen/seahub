@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
+import { CustomizeAddTool, CustomizePopover } from '@seafile/sf-metadata-ui-component';
+import SearchInput from '../../../../components/search-input';
 import toaster from '../../../../components/toast';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import OptionsContainer from './options-container';

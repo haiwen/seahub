@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../components/icon-btn';
 import { gettext } from '../../../../../utils/constants';
 import { DELETED_OPTION_TIPS, DELETED_OPTION_BACKGROUND_COLOR } from '../../../../constants';
 
@@ -41,7 +41,7 @@ const DeleteOption = ({ value, options, onDelete }) => {
         return (
           <div key={id} className="sf-metadata-delete-select-option" style={style}>
             <span className="sf-metadata-delete-select-option-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(id, event)} iconName="x-01" />
+            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(id, event)} symbol="x-01" />
           </div>
         );
       })}
