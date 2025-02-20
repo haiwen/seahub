@@ -34,7 +34,8 @@
   left: 0;
   top: 1px;
   height: 30px;
-  width: 12px;
+  width: 16px;
+  z-index: 1;
 }
 
 .sf-table-result-container.record-draggable .sf-table-row:hover .drag-handler {
