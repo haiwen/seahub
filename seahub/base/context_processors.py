@@ -159,7 +159,7 @@ def base(request):
         'onlyoffice_edit_file_extension': list(ONLYOFFICE_EDIT_FILE_EXTENSION),
         'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
         'office_web_app_edit_file_extension': list(OFFICE_WEB_APP_EDIT_FILE_EXTENSION),
-        'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
+        'onlyoffice_converter_extensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'thumbnail_size_for_grid': THUMBNAIL_SIZE_FOR_GRID,
         'thumbnail_default_size': THUMBNAIL_DEFAULT_SIZE,
