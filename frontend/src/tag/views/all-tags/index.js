@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import CenteredLoading from '../../../components/centered-loading';
 import toaster from '../../../components/toast';
 import TagsTable from './tags-table';
 import View from '../view';

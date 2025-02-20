@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { CenteredLoading, Loading } from '@seafile/sf-metadata-ui-component';
+import Loading from '../../components/loading';
+import CenteredLoading from '../../components/centered-loading';
 import Table from './table';
 import Gallery from './gallery';
 import FaceRecognition from './face-recognition';
@@ -40,7 +41,7 @@ const View = () => {
     if (isBeingBuilt) {
       return (
         <div className="sf-metadata-loading-wrapper">
-          <Loading />
+          <Loading className="sf-metadata-loading-tip center" />
           <span className="sf-metadata-loading-tip">{gettext('Extended properties are being built.')}</span>
         </div>
       );

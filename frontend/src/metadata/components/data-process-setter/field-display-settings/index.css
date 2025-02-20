@@ -1,0 +1,84 @@
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ccc;
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(.645,.045,.355,1);
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn:hover {
+  color: #3a2121;
+  cursor: pointer;
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-banner .show-all-button {
+  color: #FF8000;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-item-container {
+  position: relative;
+  display: flex;
+  font-size: 14px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 4px;
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-item-container:hover {
+  background-color: #f0f0f0;
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-dragbar {
+  color: #c2c2c2;
+  cursor: grab;
+  margin-right: 8px;
+}
+
+.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-dragbar .seafile-multicolor-icon-drag {
+  vertical-align: -0.15em;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch.custom-switch {
+  width: 100%;
+  padding-left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .seafile-multicolor-icon {
+  fill: #666;
+  transform: scale(0.8);
+  font-size: 16px;
+  margin-right: 8px;
+  vertical-align: -0.15em;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-description {
+  margin-left: 0;
+  padding-right: 5px;
+  flex: 1;
+  color: #212529;
+  transition: .3s color;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
+  width: 22px;
+  height: 12px;
+  border-radius: 6px;
+  margin-right: .25rem;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator::before {
+  height: 8px;
+  width: 8px;
+}
+
+.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
+  left: 12px;
+}

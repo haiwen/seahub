@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { FormGroup, Label } from 'reactstrap';
-import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
-import Switch from '../../../../../../components/common/switch';
+import CustomizeSelect from '../../../../../../components/customize-select';
+import Switch from '../../../../../../components/switch';
 import { gettext } from '../../../../../../utils/constants';
 import { getDateDisplayString } from '../../../../../utils/cell';
 import { DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../../constants';
@@ -79,11 +79,6 @@ const DateData = ({ value, column, onChange }) => {
           value={selectedValue}
           options={options}
           onSelectOption={onFormatChange}
-          component={{
-            DropDownIcon: (
-              <i className="sf3-font sf3-font-down"></i>
-            )
-          }}
         />
       </FormGroup>
       {!isShootingTime && (

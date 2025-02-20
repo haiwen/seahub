@@ -6,7 +6,7 @@ import { useTags } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
-import { getRowById } from '../../metadata/utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../constants/sidebar-tree';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 

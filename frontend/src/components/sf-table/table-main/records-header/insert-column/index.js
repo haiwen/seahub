@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, cloneElement } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../icon';
 import { isEnter } from '../../../../../utils/hotkey';
 
 import './index.css';
@@ -45,7 +45,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, NewColumnComponent,
     <>
       <div className="sf-table-header-cell">
         <div className="sf-table-cell column insert-column" style={style} id={id} ref={ref}>
-          <Icon iconName="add-table" />
+          <Icon symbol="add-table" />
         </div>
       </div>
       {cloneElement(NewColumnComponent, { target: id, onChange: insertColumn })}

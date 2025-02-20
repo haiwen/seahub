@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../../components/icon';
 import ModalPortal from '../../../../../../components/modal-portal';
 import { gettext } from '../../../../../../utils/constants';
-import { getEventClassName } from '../../../../../utils/common';
+import { getEventClassName } from '../../../../../../utils/dom';
 
 import './index.css';
 
@@ -114,7 +114,7 @@ const ColumnTypes = ({
                         key={item.key}
                         onClick={(event) => onSelectColumn(event, item)}
                       >
-                        <Icon iconName={item.icon} />
+                        <Icon symbol={item.icon} />
                         <span>{item.name}</span>
                       </div>
                     );
@@ -131,7 +131,7 @@ const ColumnTypes = ({
                         key={item.key}
                         onClick={(event) => onSelectColumn(event, item)}
                       >
-                        <Icon iconName={item.icon} />
+                        <Icon symbol={item.icon} />
                         <span>{item.name}</span>
                       </div>
                     );

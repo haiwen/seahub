@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
-import ObjectUtils from '../../../utils/object-utils';
+import ObjectUtils from '../../../../utils/object';
 import { getDefaultFileStatusOptions } from '../../../utils/column';
 import { ValidateColumnFormFields } from './utils';
 import { COMMON_FORM_FIELD_TYPE } from './constants';

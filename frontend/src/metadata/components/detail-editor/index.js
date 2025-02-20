@@ -6,7 +6,7 @@ import NumberEditor from './number-editor';
 import SingleSelectEditor from './single-select-editor';
 import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
-import DateEditor from './date-editor';
+import DetailDateEditor from './date-editor';
 import LongTextEditor from './long-text-editor';
 import RateEditor from './rate-editor';
 import TagsEditor from './tags-editor';
@@ -31,7 +31,7 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
       return (<NumberEditor { ...props } field={field} onChange={onChange} />);
     }
     case CellType.DATE: {
-      return (<DateEditor { ...props } field={field} onChange={onChange} lang={lang} />);
+      return (<DetailDateEditor { ...props } field={field} onChange={onChange} lang={lang} />);
     }
     case CellType.SINGLE_SELECT: {
       return (<SingleSelectEditor { ...props } field={field} onChange={onChange} />);

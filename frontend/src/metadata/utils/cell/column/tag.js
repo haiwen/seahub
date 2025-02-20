@@ -1,5 +1,5 @@
 import { getTagName } from '../../../../tag/utils/cell';
-import { getRowById } from '../../table';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 
 export const getTagsDisplayString = (tagsData, cellValue) => {
   if (!tagsData) return '';

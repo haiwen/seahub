@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { FileTagsFormatter } from '@seafile/sf-metadata-ui-component';
+import FileTagsFormatter from '../../../../../metadata/components/cell-formatter/file-tags';
 import { useTags } from '../../../../hooks';
 
 const ParentTagsFormatter = ({ record, column }) => {

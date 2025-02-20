@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import { FormGroup, Label, UncontrolledPopover } from 'reactstrap';
-import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import CommonAddTool from '../../../../components/common-add-tool';
 import AdvancedFilters from './advanced-filters';
 import BasicFilters from './basic-filters';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, FILTER_COLUMN_OPTIONS } from '../../../constants';
 import { getValidFilters, getFilterByColumn } from '../../../utils/filter';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 
@@ -165,7 +165,7 @@ class FilterPopover extends Component {
             </FormGroup>
             {!readOnly && (
               <div className="sf-metadata-filter-popover-add-btns">
-                <CustomizeAddTool
+                <CommonAddTool
                   className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
                   callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
                   footerName={gettext('Add filter')}

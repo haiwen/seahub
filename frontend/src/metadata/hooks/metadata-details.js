@@ -11,7 +11,7 @@ import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameByI
 import tagsAPI from '../../tag/api';
 import { useTags } from '../../tag/hooks';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
-import ObjectUtils from '../utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
 
 const MetadataDetailsContext = React.createContext(null);

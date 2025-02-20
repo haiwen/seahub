@@ -6,9 +6,8 @@ import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar'
 import MetadataViewName from '../../metadata/components/metadata-view-name';
 import TagViewName from '../../tag/components/tag-view-name';
 import { siteRoot, gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { debounce } from '../../metadata/utils/common';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 

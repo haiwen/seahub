@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
 import ColumnPopover from '../../../../../components/popover/column-popover';
-import { isEnter } from '../../../../../utils/hotkey';
+import Icon from '../../../../../../components/icon';
+import { isEnter } from '../../../../../../utils/hotkey';
 
 import './index.css';
 
@@ -46,7 +46,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     <>
       <div className="sf-metadata-record-header-cell">
         <div className="sf-metadata-result-table-cell column insert-column" style={style} id={id} ref={ref}>
-          <Icon iconName="add-table" />
+          <Icon symbol="add-table" />
         </div>
       </div>
       <ColumnPopover target={id} onChange={insertColumn} />

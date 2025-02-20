@@ -1,6 +1,6 @@
 import React from './index';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../icon-btn';
 import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
 import { getRowById } from '../../../utils/table';
 
@@ -18,7 +18,7 @@ const DeleteTag = ({ value, tagsTable, onDelete }) => {
           <div className="sf-metadata-delete-select-tag" key={tagId}>
             <div className="sf-metadata-delete-select-tag-color" style={{ backgroundColor: tagColor }}></div>
             <div className="sf-metadata-delete-select-tag-name">{tagName}</div>
-            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(tagId, event)} iconName="x-01" />
+            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(tagId, event)} symbol="x-01" />
           </div>
         );
       })}

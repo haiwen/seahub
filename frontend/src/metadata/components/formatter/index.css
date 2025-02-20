@@ -1,0 +1,18 @@
+/* cell formatter */
+.sf-metadata-record-cell .sf-metadata-ui.cell-formatter-container {
+  height: 100%;
+  width: 100%;
+  line-height: 32px;
+}
+
+.sf-metadata-record-cell .sf-metadata-text-formatter {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-metadata-record-cell .sf-metadata-creator-formatter,
+.sf-metadata-record-cell .sf-metadata-last-modifier-formatter {
+  display: flex;
+  align-items: center;
+}

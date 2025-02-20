@@ -9,7 +9,7 @@ import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../uti
 import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
 import { isValidPosition } from '../../../utils/validate';
-import ObjectUtils from '../../../utils/object-utils';
+import ObjectUtils from '../../../../utils/object';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
 import './index.css';

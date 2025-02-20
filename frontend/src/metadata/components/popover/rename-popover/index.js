@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Input, PopoverBody } from 'reactstrap';
-import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
+import CustomizePopover from '../../../../components/customize-popover';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
@@ -55,7 +55,7 @@ const RenamePopover = ({ value: oldValue, target, onToggle, onSubmit }) => {
   }, [onHotKey]);
 
   return (
-    <CustomizePopover target={target} className="sf-metadata-rename-column-popover" hide={handleSubmit} hideWithEsc={onToggle}>
+    <CustomizePopover target={target} popoverClassName="sf-metadata-rename-column-popover" hidePopover={handleSubmit} hidePopoverWithEsc={onToggle}>
       <PopoverBody className='p-4'>
         <Input value={value} innerRef={inputRef} onClick={onClick} onChange={onChange} />
       </PopoverBody>

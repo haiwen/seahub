@@ -4,7 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, enableFileTags } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
-import SeahubPopover from '../common/seahub-popover';
+import CustomizePopover from '../customize-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
 import SortMenu from '../../components/sort-menu';
@@ -164,12 +164,11 @@ class DirTool extends React.Component {
           }
         </div>
         {this.state.isRepoTagDialogOpen &&
-        <SeahubPopover
+        <CustomizePopover
           popoverClassName="list-tag-popover"
           target="cur-folder-more-op-toggle"
-          hideSeahubPopover={this.hidePopover}
-          hideSeahubPopoverWithEsc={this.hidePopover}
-          canHideSeahubPopover={true}
+          hidePopover={this.hidePopover}
+          hidePopoverWithEsc={this.hidePopover}
           boundariesElement={document.body}
           placement={'bottom-end'}
         >
@@ -177,7 +176,7 @@ class DirTool extends React.Component {
             repoID={repoID}
             onListTagCancel={this.toggleCancel}
           />
-        </SeahubPopover>
+        </CustomizePopover>
         }
       </React.Fragment>
     );

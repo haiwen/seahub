@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState, useCallback, useRef, 
 import PropTypes from 'prop-types';
 import { FormGroup, FormFeedback, Label } from 'reactstrap';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY,
   DEFAULT_RATE_DATA,
@@ -205,7 +205,7 @@ const Type = forwardRef(({ parentWidth, column, onChange }, ref) => {
           onClick={toggle}
         >
           <div className="sf-metadata-column-type-info">
-            <Icon iconName={column.icon} className="mr-2" />
+            <Icon symbol={column.icon} className="mr-2" />
             <span>{column.name}</span>
           </div>
           <i className='sf3-font sf3-font-down' aria-hidden="true"></i>

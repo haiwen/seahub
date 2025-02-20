@@ -1,21 +1,21 @@
-.sf-metadata-peoples-dialog .sf-metadata-select.custom-select {
+.sf-metadata-peoples-dialog .seafile-customize-select.custom-select {
   min-height: 2.375rem;
   height: fit-content;
 }
 
-.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .selected-option-show {
+.sf-metadata-peoples-dialog .seafile-customize-select.custom-select .selected-option-show {
   padding: 8px;
   overflow: hidden;
   text-overflow: unset;
   white-space: unset;
 }
 
-.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item  {
+.sf-metadata-peoples-dialog .seafile-customize-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item  {
   background-color: #eaeaea;
   border-radius: 10px;
 }
 
-.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item .collaborator-remove .sf-metadata-icon-x-01 {
+.sf-metadata-peoples-dialog .seafile-customize-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item .collaborator-remove .seafile-multicolor-icon-x-01 {
   color: #666;
   font-size: 12px;
   transform: none;
@@ -26,7 +26,7 @@
   padding-top: 5px;
 }
 
-.sf-metadata-peoples-dialog .sf-metadata-option.sf-metadata-option-active {
+.sf-metadata-peoples-dialog .seafile-select-option.seafile-select-option-active {
   background-color: #f5f5f5;
   color: unset;
 }
@@ -54,6 +54,6 @@
   font-size: 12px;
 }
 
-.sf-metadata-option.sf-metadata-option-active .people-check-icon .sf-metadata-icon-check-mark {
+.sf-metadata-option.sf-metadata-option-active .people-check-icon .seafile-multicolor-icon-check-mark {
   filL: #666 !important;
 }

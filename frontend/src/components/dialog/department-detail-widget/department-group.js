@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../../components/loading';
+import Loading from '../../loading';
 import { isOrgContext } from '../../../utils/constants';
 
 const ItemPropTypes = {

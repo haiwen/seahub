@@ -1,7 +1,3 @@
-export const getType = (value) => {
-  return Object.prototype.toString.call(value).slice(8, -1);
-};
-
 export const base64ToFile = (data, fileName) => {
   const parts = data.split(';base64,');
   const contentType = parts[0].split(':')[1];
@@ -59,53 +55,12 @@ export const isEmptyObject = (obj) => {
   return true;
 };
 
-export const debounce = (fn, delay, immediate) => {
-  let timer = null;
-  return (...params) => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    if (immediate && !timer) {
-      fn.call(this, ...params);
-    } else {
-      timer = setTimeout(() => {
-        timer = null;
-        fn.call(this, ...params);
-      }, delay);
-    }
-  };
-};
-
-export const throttle = (func, delay) => {
-  let timer = null;
-  let startTime = Date.now();
-  return function () {
-    let curTime = Date.now();
-    let remaining = delay - (curTime - startTime);
-    let context = this;
-    let args = arguments;
-    clearTimeout(timer);
-    if (remaining <= 0) {
-      func.apply(context, args);
-      startTime = Date.now();
-    } else {
-      timer = setTimeout(func, remaining);
-    }
-  };
-};
-
 export const isRegExpression = (value) => {
   try {
     return !!new RegExp(value);
   } catch (e) {
     return false;
   }
-};
-
-export const getEventClassName = (e) => {
-  // svg mouseEvent event.target.className is an object
-  if (!e || !e.target) return '';
-  return e.target.getAttribute('class') || '';
 };
 
 export const getTrimmedString = (value) => {

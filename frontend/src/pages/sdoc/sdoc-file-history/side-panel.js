@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
 import Loading from '../../../components/loading';
+import Switch from '../../../components/switch';
 import { gettext, historyRepoID, PER_PAGE } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import editUtilities from '../../../utils/editor-utilities';
 import toaster from '../../../components/toast';
 import HistoryVersion from './history-version';
-import Switch from '../../../components/common/switch';
 import { getCurrentAndLastVersion, getLastVersion } from './helper';
 
 dayjs.locale(window.app.config.lang);

@@ -56,13 +56,13 @@
   padding: 0.25rem 0.25rem 0.25rem 0;
 }
 
-.delete-sort .sf-metadata-icon-fork-number {
+.delete-sort .seafile-multicolor-icon-fork-number {
   display: inline-block;
   font-size: 12px;
   fill: #999;
   cursor: pointer;
 }
 
-.sorts-list .delete-sort .sf-metadata-icon-fork-number:hover {
+.sorts-list .delete-sort .seafile-multicolor-icon-fork-number:hover {
   fill: #666666;
 }

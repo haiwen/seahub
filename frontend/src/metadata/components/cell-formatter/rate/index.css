@@ -1,0 +1,20 @@
+.sf-metadata-ui.rate-formatter {
+  line-height: 1;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-ui.rate-formatter .sf-metadata-rate-item {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-metadata-ui.rate-formatter .sf-metadata-rate-item .seafile-multicolor-icon {
+  fill: inherit;
+  font-size: 16px;
+}

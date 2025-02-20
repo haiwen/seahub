@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ClickOutside, SfCalendar } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
+import DateEditor from '../../cell-editors/date-editor';
+import ClickOutside from '../../../../components/click-outside';
 import { getDateDisplayString, isCellValueChanged } from '../../../utils/cell';
 import { CellType, DEFAULT_DATE_FORMAT } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 
-const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
+const DetailDateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
   const [showEditor, setShowEditor] = useState(false);
   const format = useMemo(() => field?.data?.format || DEFAULT_DATE_FORMAT, [field]);
   const newValue = useRef(value);
@@ -55,18 +56,18 @@ const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
       </div>
       {showEditor && (
         <ClickOutside onClickOutside={onClickOutside}>
-          <SfCalendar lang={lang} format={format} value={value} onChange={onChange} onClose={closeEditor} onClear={onClear} onBlur={onBlur} />
+          <DateEditor lang={lang} format={format} value={value} onChange={onChange} onClose={closeEditor} onClear={onClear} onBlur={onBlur} />
         </ClickOutside>
       )}
     </>
   );
 };
 
-DateEditor.propTypes = {
+DetailDateEditor.propTypes = {
   value: PropTypes.string,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   lang: PropTypes.string,
 };
 
-export default DateEditor;
+export default DetailDateEditor;

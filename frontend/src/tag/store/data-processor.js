@@ -1,7 +1,7 @@
 import { isTableRows } from '../../metadata/utils/row';
 import { getColumnByKey } from '../../metadata/utils/column';
 import { getGroupRows } from '../../metadata/utils/group';
-import { getRowsByIds } from '../../metadata/utils/table';
+import { getRowsByIds } from '../../components/sf-table/utils/table';
 import { OPERATION_TYPE } from './operations';
 import { buildTagsTree, setNodeAllChildTagsIds } from '../utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';

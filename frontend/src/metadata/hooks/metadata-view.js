@@ -7,7 +7,7 @@ import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constant
 import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
-import { getRowById } from '../utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';

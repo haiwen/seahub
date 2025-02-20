@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTags } from '../../hooks';
-import { getRowById } from '../../../metadata/utils/table';
+import { getRowById } from '../../../components/sf-table/utils/table';
 import { getTagName } from '../../utils/cell';
 import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
+import ModalPortal from '../../../../modal-portal';
 import { gettext } from '../../../../../utils/constants';
 import { isMobile } from '../../../../../utils/utils';
 

@@ -1,17 +1,19 @@
 import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
+import CommonAddTool from '../../../../components/common-add-tool';
+import SearchInput from '../../../../components/search-input';
+import Icon from '../../../../components/icon';
+import DeleteTags from './delete-tags';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../../tag/hooks';
 import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../utils/cell';
-import { getRowById } from '../../../utils/table';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
-import DeleteTags from './delete-tags';
 
 import './index.css';
 
@@ -228,7 +230,7 @@ const TagsEditor = forwardRef(({
               <div className="sf-metadata-tag-name">{tagName}</div>
             </div>
             <div className="sf-metadata-tags-editor-tag-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
             </div>
           </div>
         </div>
@@ -253,7 +255,7 @@ const TagsEditor = forwardRef(({
         {renderOptions()}
       </div>
       {isShowCreateBtn && (
-        <CustomizeAddTool
+        <CommonAddTool
           callBack={createTag}
           footerName={`${gettext('Add tag')} ${searchValue}`}
           className="add-search-result"

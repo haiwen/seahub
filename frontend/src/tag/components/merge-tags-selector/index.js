@@ -1,7 +1,8 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside, ModalPortal } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../components/click-outside';
+import ModalPortal from '../../../components/modal-portal';
 import { KeyCodes } from '../../../constants';
 import { gettext } from '../../../utils/constants';
 import { getRowsByIds } from '../../../components/sf-table/utils/table';

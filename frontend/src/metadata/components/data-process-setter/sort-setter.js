@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../components/icon-btn';
 import { SortPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { getValidSorts } from '../../utils/sort';
 import { EVENT_BUS_TYPE } from '../../constants';
-import { isEnter, isSpace } from '../../utils/hotkey';
+import { isEnter, isSpace } from '../../../utils/hotkey';
 
 const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -54,7 +54,7 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
   return (
     <>
       <IconBtn
-        iconName="sort"
+        symbol="sort"
         size={24}
         className={className}
         onClick={onSetterToggle}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getTagColor, getTagName, getTagFilesLinks } from '../../utils/cell';
 import { checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey } from '../../../components/sf-table/utils/tree';
-import { getRowById } from '../../../metadata/utils/table';
+import { getRowById } from '../../../components/sf-table/utils/table';
 import { useTags } from '../../hooks';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
 import { getAllChildTagsIdsFromNode } from '../../utils/tree';

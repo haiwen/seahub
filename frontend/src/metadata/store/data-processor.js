@@ -3,12 +3,13 @@ import { getColumnByKey, getColumnOriginName } from '../utils/column';
 import { getFilteredRows } from '../utils/filter';
 import { getGroupRows } from '../utils/group';
 import { sortTableRows } from '../utils/sort';
-import { getRowsByIds } from '../utils/table';
+import { getRowsByIds } from '../../components/sf-table/utils/table';
 import { isGroupView } from '../utils/view';
 import { username } from '../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE, OPERATION_TYPE } from './operations';
 import { CellType } from '../constants';
-import { getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
+import {
+  getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,
   getColumnOptionNamesByIds, getRecordIdFromRecord,
 } from '../utils/cell';
 

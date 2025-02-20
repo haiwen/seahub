@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../components/icon-btn';
 import { HideColumnPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
-import { isEnter, isSpace } from '../../utils/hotkey';
+import { isEnter, isSpace } from '../../../utils/hotkey';
 import { TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
 
 const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
@@ -40,7 +40,7 @@ const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColum
   return (
     <>
       <IconBtn
-        iconName="hide"
+        symbol="hide"
         size={24}
         className={className}
         onClick={onSetterToggle}

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { FileNameFormatter } from '@seafile/sf-metadata-ui-component';
+import FileNameFormatter from './file-name-formatter';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getParentDirFromRecord } from '../../utils/cell';

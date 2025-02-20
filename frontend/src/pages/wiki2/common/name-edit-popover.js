@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { PopoverBody } from 'reactstrap';
-import SeahubPopover from '../../../components/common/seahub-popover';
+import CustomizePopover from '../../../components/customize-popover';
 import { gettext } from '../../../utils/constants';
 
 import '../css/name-edit-popover.css';
@@ -37,13 +37,12 @@ class NameEditPopover extends Component {
 
   render() {
     return (
-      <SeahubPopover
+      <CustomizePopover
         placement='bottom-end'
         target={this.props.targetId}
-        hideSeahubPopover={this.props.toggleEditor}
-        hideSeahubPopoverWithEsc={this.props.toggleEditor}
+        hidePopover={this.props.toggleEditor}
+        hidePopoverWithEsc={this.props.toggleEditor}
         onEnter={this.onEnter}
-        hideArrow={true}
         popoverClassName="name-edit-popover"
         boundariesElement={document.body}
       >
@@ -63,7 +62,7 @@ class NameEditPopover extends Component {
             />
           </div>
         </PopoverBody>
-      </SeahubPopover>
+      </CustomizePopover>
     );
   }
 }

@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Loading } from '@seafile/sf-metadata-ui-component';
+import Loading from '../../../../../components/loading';
 import { RightScrollbar } from '../../../../components/scrollbar';
 import Record from './record';
 import InteractionMasks from '../../masks/interaction-masks';
 import { EVENT_BUS_TYPE, SEQUENCE_COLUMN_WIDTH } from '../../../../constants';
-import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
+import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column';
 import { isSelectedCellSupportOpenEditor } from '../../utils/selected-cell-utils';
 import RecordMetrics from '../../utils/record-metrics';
@@ -503,13 +503,13 @@ class RecordsBody extends Component {
     // add top placeholder
     if (upperHeight > 0) {
       const style = { height: upperHeight, width: '100%' };
-      const upperRow = <div key="upper-placeholder" className="d-flex align-items-end" style={style}><Loading /></div>;
+      const upperRow = <div key="upper-placeholder" className="d-flex align-items-end" style={style}><Loading className="sf-metadata-loading-tip center" /></div>;
       shownRecords.unshift(upperRow);
     }
     // add bottom placeholder
     if (belowHeight > 0) {
       const style = { height: belowHeight, width: '100%' };
-      const belowRow = <div key="below-placeholder" style={style}><Loading /></div>;
+      const belowRow = <div key="below-placeholder" style={style}><Loading className="sf-metadata-loading-tip center" /></div>;
       shownRecords.push(belowRow);
     }
 

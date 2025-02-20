@@ -4,9 +4,9 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import CommonAddTool from '../common/common-add-tool';
-import SearchInput from '../common/search-input';
-import SeahubPopover from '../common/seahub-popover';
+import CommonAddTool from '../common-add-tool';
+import SearchInput from '../search-input';
+import CustomizePopover from '../customize-popover';
 import TagItem from './tag-item';
 import { KeyCodes, TAG_COLORS } from '../../constants';
 
@@ -147,12 +147,11 @@ class EditFileTagPopover extends React.Component {
     }
 
     return (
-      <SeahubPopover
+      <CustomizePopover
         popoverClassName="edit-filetag-popover"
         target={this.props.target}
-        hideSeahubPopover={this.props.toggleCancel}
-        hideSeahubPopoverWithEsc={this.props.toggleCancel}
-        canHideSeahubPopover={true}
+        hidePopover={this.props.toggleCancel}
+        hidePopoverWithEsc={this.props.toggleCancel}
       >
         <SearchInput
           className="edit-filetag-popover-input"
@@ -187,7 +186,7 @@ class EditFileTagPopover extends React.Component {
             footerName={`${gettext('Create a new tag')} '${searchText}'`}
           />
         }
-      </SeahubPopover>
+      </CustomizePopover>
     );
   }
 }

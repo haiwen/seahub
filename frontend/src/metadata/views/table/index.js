@@ -4,7 +4,7 @@ import toaster from '../../../components/toast';
 import TableMain from './table-main';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
-import { isModZ, isModShiftZ } from '../../utils/hotkey';
+import { isModZ, isModShiftZ } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 

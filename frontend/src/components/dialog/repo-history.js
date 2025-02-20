@@ -5,7 +5,7 @@ import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, enableRepoSnapshotLabel as showLabel } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Loading from '../../components/loading';
+import Loading from '../loading';
 import Paginator from '../../components/paginator';
 import ModalPortal from '../../components/modal-portal';
 import CommitDetails from '../../components/dialog/commit-details';

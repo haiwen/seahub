@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { gettext, mediaUrl } from '../../../utils/constants';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
+import EmptyTip from '../../empty-tip';
+import Loading from '../../loading';
 
 const ItemPropTypes = {
   member: PropTypes.object,

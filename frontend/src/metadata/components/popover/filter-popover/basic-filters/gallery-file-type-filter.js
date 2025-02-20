@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../../components/customize-select';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
@@ -20,7 +21,7 @@ const GalleryFileTypeFilter = ({ readOnly, value = 'picture', onChange: onChange
           <div className="select-basic-filter-option">
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
             <div className="select-basic-filter-option-check-icon">
-              {value === o.value && (<Icon iconName="check-mark" />)}
+              {value === o.value && (<Icon symbol="check-mark" />)}
             </div>
           </div>
         )
@@ -51,11 +52,6 @@ const GalleryFileTypeFilter = ({ readOnly, value = 'picture', onChange: onChange
       value={displayValue}
       options={options}
       onSelectOption={onChange}
-      component={{
-        DropDownIcon: (
-          <i className="sf3-font sf3-font-down"></i>
-        )
-      }}
     />
   );
 };

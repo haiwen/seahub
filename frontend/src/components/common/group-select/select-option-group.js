@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SearchInput from '../search-input';
+import SearchInput from '../../search-input';
+import ClickOutside from '../../click-outside';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
-import ClickOutside from './click-outside';
 
 import './select-option-group.css';
 

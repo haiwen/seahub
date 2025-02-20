@@ -246,31 +246,6 @@
   color: #666666;
 }
 
-.add-item-btn {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 500;
-  border-top: 1px solid #dedede;
-  background: #fff;
-  padding: 0 1rem;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-
-.add-item-btn:hover {
-  cursor: pointer;
-  background: #f5f5f5;
-}
-
-.add-item-btn .sf-metadata-icon-add-table {
-  margin-right: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  transform: translateY(1px);
-}
-
 .formula-formatter-content-item {
   margin-right: 10px;
   font-size: 13px;

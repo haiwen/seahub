@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import toaster from '../../../../../components/toast';
 import { EditorPortal, EditorContainer } from '../../../../components/cell-editors';
-import DragHandler from '../drag-handler';
-import DragMask from '../drag-mask';
-import SelectionRangeMask from '../selection-range-mask';
-import SelectionMask from '../selection-mask';
+import DragHandler from '../../../../../components/sf-table/masks/drag-handler';
+import DragMask from '../../../../../components/sf-table/masks/drag-mask';
+import SelectionRangeMask from '../../../../../components/sf-table/masks/selection-range-mask';
+import SelectionMask from '../../../../../components/sf-table/masks/selection-mask';
 import { gettext } from '../../../../../utils/constants';
 import { KeyCodes } from '../../../../../constants';
 import { Utils } from '../../../../../utils/utils';
 import { isEmptyObject } from '../../../../utils/common';
 import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../../../utils/cell';
-import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
+import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../../utils/keyboard-utils';
+import { isSpace } from '../../../../../utils/hotkey';
 import { getFormatRecordData } from '../../../../utils/cell/cell-format-utils';
 import {
   CellType, EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE, GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT,
@@ -28,7 +29,6 @@ import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
 import { getGroupRecordByIndex } from '../../utils/group-metrics';
 import { isNameColumn } from '../../../../utils/column';
-import { isSpace } from '../../../../utils/hotkey';
 import { openFile } from '../../../../utils/file';
 
 import './index.css';

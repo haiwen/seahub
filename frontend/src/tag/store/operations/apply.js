@@ -6,7 +6,7 @@ import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { username } from '../../../utils/constants';
 import { addRowLinks, removeRowLinks } from '../../utils/link';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
-import { getRowById, getRowsByIds } from '../../../metadata/utils/table';
+import { getRowById, getRowsByIds } from '../../../components/sf-table/utils/table';
 import { getChildLinks, getParentLinks, getTagFilesLinks } from '../../utils/cell';
 
 dayjs.extend(utc);

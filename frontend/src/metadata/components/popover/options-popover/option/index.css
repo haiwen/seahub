@@ -18,7 +18,7 @@
   cursor: grab;
 }
 
-.sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container .sf-metadata-icon-drag {
+.sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container .seafile-multicolor-icon-drag {
   fill: #c2c2c2;
 }
 
@@ -40,12 +40,12 @@
   justify-content: center;
 }
 
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item .sf-metadata-icon-delete {
+.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item .seafile-multicolor-icon-delete {
   fill: #666;
   font-size: 14px;;
 }
 
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item:hover .sf-metadata-icon-delete {
+.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item:hover .seafile-multicolor-icon-delete {
   fill: #212529;
 }
 

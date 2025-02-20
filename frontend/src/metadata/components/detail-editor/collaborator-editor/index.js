@@ -6,7 +6,7 @@ import DeleteCollaborator from '../../cell-editors/collaborator-editor/delete-co
 import { gettext } from '../../../../utils/constants';
 import { useCollaborators } from '../../../hooks';
 import { KeyCodes } from '../../../../constants';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 

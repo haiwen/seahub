@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../../../components/icon-btn';
 import CellFormatter from '../../../../../../components/cell-formatter';
 import { gettext } from '../../../../../../../utils/constants';
 import { getOption } from '../../../../../../utils/cell';
@@ -73,7 +73,7 @@ const GroupTitle = ({ column, cellValue, originalCellValue }) => {
         let rateList = [];
         for (let i = 0; i < cellValue; i++) {
           rateList.push(
-            <IconBtn key={i} style={{ fill: color, height: 16, width: 16 }} iconName={rateShowType} className="sf-metadata-group-title-rate-item" />
+            <IconBtn key={i} style={{ fill: color, height: 16, width: 16 }} symbol={rateShowType} className="sf-metadata-group-title-rate-item" />
           );
         }
         return rateList;

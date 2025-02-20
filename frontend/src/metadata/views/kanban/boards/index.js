@@ -17,7 +17,7 @@ import EmptyTip from '../../../../components/empty-tip';
 import Board from './board';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import ContextMenu from '../context-menu';
-import { getRowById } from '../../../utils/table';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 
 import './index.css';
 

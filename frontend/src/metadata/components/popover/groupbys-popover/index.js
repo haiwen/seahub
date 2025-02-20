@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import CommonAddTool from '../../../../components/common-add-tool';
 import Groupbys from './groupbys';
 import { gettext } from '../../../../utils/constants';
 import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
 
 import './index.css';
@@ -114,7 +114,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onCha
       <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-groupbys">
         <Groupbys readOnly={readOnly} groupbys={groupbys} columns={columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
         {!readOnly && (groupbys.length < MAX_GROUP_LEVEL) && (
-          <CustomizeAddTool
+          <CommonAddTool
             className="popover-add-tool"
             callBack={addGroupby}
             footerName={gettext('Add group')}

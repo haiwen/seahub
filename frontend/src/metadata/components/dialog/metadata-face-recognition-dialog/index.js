@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalFooter, Button } from 'reactstrap';
 import classnames from 'classnames';
-import Switch from '../../../../components/common/switch';
+import Switch from '../../../../components/switch';
 import { gettext } from '../../../../utils/constants';
 import metadataAPI from '../../../api';
 import toaster from '../../../../components/toast';
