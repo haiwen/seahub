@@ -32,7 +32,7 @@ const MetadataDetails = () => {
       {displayColumns.map(field => {
         const value = getCellValueByColumn(record, field);
         if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage && value) {
-          return (<Location key={field.key} position={value} />);
+          return (<Location key={field.key} position={value} record={record} />);
         }
 
         let canEdit = canModifyRecord && field.editable;
