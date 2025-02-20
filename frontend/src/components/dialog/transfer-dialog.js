@@ -32,6 +32,7 @@ class TransferDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      options: [],
       selectedOption: null,
       errorMsg: [],
       transferToUser: true,
@@ -39,7 +40,6 @@ class TransferDialog extends React.Component {
       reshare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
-    this.options = [];
   }
 
   handleSelectChange = (option) => {
@@ -82,7 +82,7 @@ class TransferDialog extends React.Component {
   }
 
   updateOptions = (departmentsRes) => {
-    this.options = departmentsRes.data.map(item => {
+    const options = departmentsRes.data.map(item => {
       let option = {
         value: item.name,
         email: item.email,
@@ -90,6 +90,7 @@ class TransferDialog extends React.Component {
       };
       return option;
     });
+    this.setState({ options });
   };
 
   onClick = () => {
@@ -181,7 +182,7 @@ class TransferDialog extends React.Component {
                   hideSelectedOptions={true}
                   components={makeAnimated()}
                   placeholder={gettext('Select a department')}
-                  options={this.options}
+                  options={this.state.options}
                   onChange={this.handleSelectChange}
                   value={this.state.selectedOption}
                   className="transfer-repo-select-department"
