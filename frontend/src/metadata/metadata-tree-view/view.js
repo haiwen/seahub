@@ -8,7 +8,7 @@ import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
 import { Utils, isMobile } from '../../utils/utils';
 import { useMetadata } from '../hooks';
-import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_TYPE, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_DEFAULT_SETTINGS, VIEW_INCOMPATIBLE_PROPERTIES, VIEW_PROPERTY_KEYS, VIEW_TYPE, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { validateName } from '../utils/validate';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
@@ -141,9 +141,17 @@ const ViewItem = ({
 
     if (operationKey.startsWith(TURN_VIEW_INTO_PREFIX)) {
       const targetType = operationKey.split(TURN_VIEW_INTO_PREFIX)[1];
-      modifyViewType(viewId, targetType);
+      const update = { type: targetType };
+      VIEW_INCOMPATIBLE_PROPERTIES.forEach(key => {
+        if (key === VIEW_PROPERTY_KEYS.SETTINGS) {
+          update[key] = VIEW_DEFAULT_SETTINGS[targetType];
+          return;
+        }
+        update[key] = [];
+      });
+      modifyViewType(viewId, update);
       if (isSelected && window.sfMetadataStore) {
-        window.sfMetadataStore.modifyViewType(viewId, targetType);
+        window.sfMetadataStore.modifyViewType(viewId, update);
       }
       return;
     }

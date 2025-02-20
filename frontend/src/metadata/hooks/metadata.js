@@ -397,17 +397,14 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     setEnableFaceRecognition(newValue);
   }, [enableFaceRecognition, currentPath, idViewMap, navigation, addView, deleteView]);
 
-  const modifyViewType = useCallback((viewId, viewType) => {
-    const update = {
-      type: viewType,
-    };
+  const modifyViewType = useCallback((viewId, update) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
       setIdViewMap({
         ...idViewMap,
         [viewId]: {
           ...idViewMap[viewId],
-          type: viewType,
-        }
+          ...update,
+        },
       });
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

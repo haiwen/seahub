@@ -173,8 +173,8 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.MODIFY_VIEW_TYPE: {
-      const { view_type } = operation;
-      data.view.type = view_type;
+      const { update } = operation;
+      data.view = { ...data.view, ...update };
       return data;
     }
     case OPERATION_TYPE.INSERT_COLUMN: {

@@ -518,10 +518,10 @@ class Store {
     this.applyOperation(operation);
   };
 
-  modifyViewType(viewId, viewType) {
+  modifyViewType(viewId, update) {
     const type = OPERATION_TYPE.MODIFY_VIEW_TYPE;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, view_id: viewId, view_type: viewType
+      type, repo_id: this.repoId, view_id: viewId, update
     });
     this.applyOperation(operation);
   }
