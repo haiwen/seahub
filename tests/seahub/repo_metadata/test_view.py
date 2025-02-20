@@ -16,7 +16,7 @@ class MetadataManagerTest(BaseTestCase):
             username=self.user.username,
             passwd=None))
         self.repo_id = self.repo.id
-        self.management_url = reverse('api-v2.1-metadata')
+        self.management_url = reverse('api-v2.1-metadata', args=[self.repo_id])
 
     def test_get_metadata_manage(self):
         resp = self.client.get(self.management_url)
@@ -57,7 +57,7 @@ class MetadataDetailSettingsTest(BaseTestCase):
         self.client.put(url)
     
     def test_put_details_settings(self):
-        url = reverse('api-v2.1-metadata-details-settings')
+        url = reverse('api-v2.1-metadata-details-settings', args=[self.repo_id])
         settings = {'test_key': 'test_value'}
         resp = self.client.put(url, {
             'settings': settings
@@ -240,11 +240,18 @@ class MetadataViewsTest(BaseTestCase):
         self.assertEqual(json_resp['view']['name'], 'test_view')
     
     def test_get_view_detail(self):
-        url = reverse('api-v2.1-metadata-views-detail', args=[self.view_id])
+        url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
+        resp = self.client.post(url, {
+            'name': 'test_view',
+            'type': 'table'
+        }, 'application/json')
+        view_id = json.loads(resp.content)['view']['_id']
+
+        url = reverse('api-v2.1-metadata-views-detail', args=[view_id])
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        self.assertEqual(json_resp['view']['_id'], self.view_id)
+        self.assertEqual(json_resp['view']['_id'], view_id)
 
     def test_put_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
@@ -290,10 +297,10 @@ class MetadataViewsDuplicateViewTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
-        views_url = reverse('api-v2.1-metadata-views')
+        views_url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
         resp = self.client.post(views_url, {
             'name': 'test_view',
             'type': 'table'
@@ -301,7 +308,7 @@ class MetadataViewsDuplicateViewTest(BaseTestCase):
         self.view_id = json.loads(resp.content)['view']['_id']
 
     def test_duplicate_view(self):
-        url = reverse('api-v2.1-metadata-view-duplicate')
+        url = reverse('api-v2.1-metadata-view-duplicate', args=[self.repo_id])
         data = {
             'view_id': self.view_id
         }
@@ -324,10 +331,10 @@ class MetadataViewsMoveViewTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
 
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
-        views_url = reverse('api-v2.1-metadata-views')
+        views_url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
         resp = self.client.post(views_url, {
             'name': 'source_view',
             'type': 'table'
@@ -341,7 +348,7 @@ class MetadataViewsMoveViewTest(BaseTestCase):
         self.target_view_id = json.loads(resp.content)['view']['_id']
 
     def test_move_view(self):
-        url = reverse('api-v2.1-metadata-views-move')
+        url = reverse('api-v2.1-metadata-views-move', args=[self.repo_id])
         data = {
             'source_view_id': self.source_view_id,
             'target_view_id': self.target_view_id
@@ -363,7 +370,7 @@ class MetadataExtractFileDetailsTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
  
         self.file_name = 'test.txt'
@@ -373,9 +380,9 @@ class MetadataExtractFileDetailsTest(BaseTestCase):
                         username=self.user.username)
 
     def test_extract_file_details(self):
-        url = reverse('api-v2.1-metadata-extract-file-details')
+        url = reverse('api-v2.1-metadata-extract-file-details', args=[self.repo_id])
         
-        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
         obj_id = json.loads(resp.content)['_obj_id']
         
@@ -388,7 +395,7 @@ class MetadataExtractFileDetailsTest(BaseTestCase):
         self.assertIn('details', json_resp)
 
     def test_extract_file_details_with_invalid_obj_ids(self):
-        url = reverse('api-v2.1-metadata-extract-file-details')
+        url = reverse('api-v2.1-metadata-extract-file-details', args=[self.repo_id])
         data = {
             'obj_ids': []
         }
@@ -455,9 +462,9 @@ class FacesRecordsTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
-        url = reverse('api-v2.1-metadata-face-recognition')
+        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
         self.client.post(url)
 
     def test_get_face_records(self):
@@ -576,7 +583,7 @@ class MetadataTagsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertIn('tags', json_resp)
-        self.assertEqual(tag_name, json_resp['tags'].get('_tag_name'))
+        self.assertEqual(tag_name, json_resp['tags'][0].get('_tag_name'))
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         resp = self.client.get(url)
@@ -638,13 +645,13 @@ class MetadataTagsLinksTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
-        url = reverse('api-v2.1-metadata-tags-status')
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
         self.client.put(url, {'lang': 'en'}, 'application/json')
 
-        url = reverse('api-v2.1-metadata-tags')
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
             "tags_data": [
                 {
@@ -663,7 +670,7 @@ class MetadataTagsLinksTest(BaseTestCase):
         self.child_tag_id = tags[1]['_id']
 
     def test_create_parent_child_link(self):
-        url = reverse('api-v2.1-metadata-tags-links')
+        url = reverse('api-v2.1-metadata-tags-links', args=[self.repo_id])
         data = {
             'link_column_key': '_tag_sub_links',
             'row_id_map': {
@@ -676,7 +683,7 @@ class MetadataTagsLinksTest(BaseTestCase):
         self.assertTrue(json_resp['success'])
     
     def test_update_parent_child_link(self):
-        url = reverse('api-v2.1-metadata-tags-links')
+        url = reverse('api-v2.1-metadata-tags-links', args=[self.repo_id])
         
         data = {
             'link_column_key': '_tag_sub_links',
@@ -698,7 +705,7 @@ class MetadataTagsLinksTest(BaseTestCase):
         self.assertTrue(json_resp['success'])
     
     def test_delete_parent_child_link(self):
-        url = reverse('api-v2.1-metadata-tags-links')
+        url = reverse('api-v2.1-metadata-tags-links', args=[self.repo_id])
         data = {
             'link_column_key': '_tag_sub_links',
             'row_id_map': {
@@ -707,7 +714,7 @@ class MetadataTagsLinksTest(BaseTestCase):
         }
         self.client.post(url, data, 'application/json')
         data = {
-            'link_column_key': 'sub_links',
+            'link_column_key': '_tag_sub_links',
             'row_id_map': {
                 self.parent_tag_id: [self.child_tag_id]
             }
@@ -729,10 +736,10 @@ class MetadataFileTagsTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
-        url = reverse('api-v2.1-metadata-tags-status')
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
         self.client.put(url, {'lang': 'en'}, 'application/json')
 
         self.file_name = 'test.txt'
@@ -741,7 +748,7 @@ class MetadataFileTagsTest(BaseTestCase):
                         filename=self.file_name,
                         username=self.user.username)
 
-        url = reverse('api-v2.1-metadata-tags')
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
             "tags_data": [
                 {
@@ -753,12 +760,12 @@ class MetadataFileTagsTest(BaseTestCase):
         resp = self.client.post(url, data, 'application/json')
         self.tag = json.loads(resp.content)['tags'][0]
 
-        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
         self.record_id = json.loads(resp.content)['_id']
 
     def test_update_file_tags(self):
-        url = reverse('api-v2.1-metadata-file-tags')
+        url = reverse('api-v2.1-metadata-file-tags', args=[self.repo_id])
         data = {
             'file_tags_data': [{
                 'record_id': self.record_id,
@@ -783,10 +790,10 @@ class MetadataTagFilesTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         
-        url = reverse('api-v2.1-metadata-tags-status')
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
         self.client.put(url, {'lang': 'en'}, 'application/json')
 
         self.file_name = 'test.txt'
@@ -795,7 +802,7 @@ class MetadataTagFilesTest(BaseTestCase):
                         filename=self.file_name,
                         username=self.user.username)
 
-        url = reverse('api-v2.1-metadata-tags')
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
             "tags_data": [
                 {
@@ -807,11 +814,11 @@ class MetadataTagFilesTest(BaseTestCase):
         resp = self.client.post(url, data, 'application/json')
         self.tag = json.loads(resp.content)['tags'][0]
         
-        resp = self.client.get(reverse('api-v2.1-metadata-record-info') + 
+        resp = self.client.get(reverse('api-v2.1-metadata-record-info', args=[self.repo_id]) + 
                              f'?parent_dir=/&file_name={self.file_name}')
         self.record_id = json.loads(resp.content)['_id']
         
-        url = reverse('api-v2.1-metadata-file-tags')
+        url = reverse('api-v2.1-metadata-file-tags', args=[self.repo_id])
         data = {
             'file_tags_data': [{
                 'record_id': self.record_id,
@@ -840,13 +847,13 @@ class MetadataMergeTagsTest(BaseTestCase):
         ))
         self.repo_id = self.repo.id
         
-        url = reverse('api-v2.1-metadata')
+        url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
 
-        url = reverse('api-v2.1-metadata-tags-status')
+        url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
         self.client.put(url, {'lang': 'en'}, 'application/json')
 
-        url = reverse('api-v2.1-metadata-tags')
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
             "tags_data": [
                 {
@@ -865,7 +872,7 @@ class MetadataMergeTagsTest(BaseTestCase):
         self.merge_tag_id = tags[1]['_id']
 
     def test_merge_tags(self):
-        url = reverse('api-v2.1-metadata-merge-tags')
+        url = reverse('api-v2.1-metadata-merge-tags', args=[self.repo_id])
         data = {
             'target_tag_id': self.target_tag_id,
             'merged_tags_ids': [self.merge_tag_id]
@@ -875,7 +882,7 @@ class MetadataMergeTagsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
 
-        url = reverse('api-v2.1-metadata-tags')
+        url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
         tag_ids = [tag['_id'] for tag in json_resp['results']]
