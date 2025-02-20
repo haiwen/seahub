@@ -1583,5 +1583,7 @@ CREATE TABLE `FileTransfer` (
   `from_user` varchar(255) NOT NULL,
   `to` varchar(255) NOT NULL,
   `timestamp` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_file_transfer_org_id` (`org_id`),
+  KEY `idx_file_transfer_timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
