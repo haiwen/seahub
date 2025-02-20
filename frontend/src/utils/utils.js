@@ -1,5 +1,7 @@
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableFileTags, enableRepoSnapshotLabel,
-  enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff } from './constants';
+  enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
+  enableOnlyoffice, onlyofficeEditFileExtension,
+  enableOfficeWebApp, officeWebAppEditFileExtension } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -209,7 +211,14 @@ export const Utils = {
       return false;
     }
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    return ['docx', 'pptx', 'xlsx'].includes(file_ext);
+
+    if (enableOnlyoffice) {
+        return onlyofficeEditFileExtension.includes(file_ext);
+    } else if (enableOfficeWebApp) {
+        return officeWebAppEditFileExtension.includes(file_ext);
+    } else {
+        return false;
+    }
   },
 
   // check if a file is a video

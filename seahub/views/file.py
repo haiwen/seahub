@@ -398,7 +398,9 @@ def can_preview_file(file_name, file_size, repo):
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             return False, error_msg
 
-    elif filetype in (DOCUMENT, SPREADSHEET):
+    elif filetype in (DOCUMENT, SPREADSHEET) or \
+            fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
+            fileext in ONLYOFFICE_FILE_EXTENSION:
 
         if repo.encrypted:
             error_msg = _('The library is encrypted, can not open file online.')
