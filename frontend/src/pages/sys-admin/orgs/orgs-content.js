@@ -36,8 +36,20 @@ class Content extends Component {
     this.props.getListByPage(this.props.currentPage + 1);
   };
 
+  sortByQuotaUsage = (e) => {
+    e.preventDefault();
+    this.props.sortByQuotaUsage();
+  };
+
   render() {
-    const { loading, errorMsg, items } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
+    let sortIcon;
+    if (sortBy == '') {
+      // initial sort icon
+      sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
+    } else {
+      sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
+    }
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -54,8 +66,10 @@ class Content extends Component {
               <tr>
                 <th width="20%">{gettext('Name')}</th>
                 <th width="20%">{gettext('Creator')}</th>
-                <th width="20%">{gettext('Role')}</th>
-                <th width="15%">{gettext('Space Used')}</th>
+                <th width="15%">{gettext('Role')}</th>
+                <th width="20%">
+                  <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
+                </th>
                 <th width="20%">{gettext('Created At')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
@@ -94,6 +108,9 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   getListByPage: PropTypes.func.isRequired,
+  sortByQuotaUsage: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
   currentPage: PropTypes.number,
   items: PropTypes.array.isRequired,
   updateRole: PropTypes.func.isRequired,
