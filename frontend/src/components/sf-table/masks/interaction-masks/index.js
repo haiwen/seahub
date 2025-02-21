@@ -265,7 +265,7 @@ class InteractionMasks extends React.Component {
         this.props.onCellRangeSelectionUpdated(this.state.selectedRange);
       }
       if (Utils.isFunction(callback)) {
-        callback(this.state.selectedRange);
+        callback(selectedRange);
       }
     });
   };
