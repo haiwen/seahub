@@ -72,7 +72,7 @@ class OrgLogs extends Component {
                 <li className="nav-item" onClick={() => this.tabItemClick('repo-transfer')}>
                   <Link
                     className={`nav-link ${this.props.currentTab === 'repo-transfer' ? 'active' : ''}`}
-                    to={siteRoot + 'org/logadmin/repo-transfer/'} title={gettext('File Transfer')}>{gettext('File Transfer')}
+                    to={siteRoot + 'org/logadmin/repo-transfer/'} title={gettext('Repo Transfer')}>{gettext('Repo Transfer')}
                   </Link>
                 </li>
               </ul>
