@@ -397,6 +397,21 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     setEnableFaceRecognition(newValue);
   }, [enableFaceRecognition, currentPath, idViewMap, navigation, addView, deleteView]);
 
+  const modifyViewType = useCallback((viewId, update) => {
+    metadataAPI.modifyView(repoID, viewId, update).then(res => {
+      setIdViewMap({
+        ...idViewMap,
+        [viewId]: {
+          ...idViewMap[viewId],
+          ...update,
+        },
+      });
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID, idViewMap]);
+
   useEffect(() => {
     if (isLoading) return;
     if (isBeingBuilt) {
@@ -461,6 +476,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
       deleteView,
       updateView,
       moveView,
+      modifyViewType,
     }}>
       {children}
     </MetadataContext.Provider>

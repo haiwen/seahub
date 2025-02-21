@@ -518,6 +518,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  modifyViewType(viewId, update) {
+    const type = OPERATION_TYPE.MODIFY_VIEW_TYPE;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: viewId, update
+    });
+    this.applyOperation(operation);
+  }
+
   // column
   insertColumn = (name, columnType, { key, data }) => {
     const operationType = OPERATION_TYPE.INSERT_COLUMN;
