@@ -1583,6 +1583,7 @@ CREATE TABLE `FileTransfer` (
   `from_user` varchar(255) NOT NULL,
   `to` varchar(255) NOT NULL,
   `timestamp` datetime NOT NULL,
+  `operator` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_file_transfer_org_id` (`org_id`),
   KEY `idx_file_transfer_timestamp` (`timestamp`)
