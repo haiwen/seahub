@@ -121,8 +121,8 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
     setPeoplesDialogShow(false);
   }, []);
 
-  const addPeople = useCallback((peopleId, addedImages, callback) => {
-    onAddImage(peopleId, addedImages, callback);
+  const addPeople = useCallback((peopleIds, addedImages, callback) => {
+    onAddImage(peopleIds, addedImages, callback);
   }, [onAddImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });

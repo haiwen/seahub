@@ -361,10 +361,11 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
-  addPeoplePhotos = (repoID, peopleId, recordIds) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/';
+  addPeoplePhotos = (repoID, peopleIds, recordIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/';
     const params = {
-      record_ids: recordIds
+      record_ids: recordIds,
+      people_ids: peopleIds,
     };
     return this.req.post(url, params);
   };

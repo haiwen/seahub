@@ -37,7 +37,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
     return Array.isArray(selectedPeopleIds) && selectedPeopleIds.length > 0 && selectedPeopleIds.map(id => {
       const people = metadata.rows.find(people => people._id === id);
       if (!people) return null;
-      return <People people={people} />;
+      return <People key={id} people={people} />;
     });
   }, [selectedPeopleIds, metadata]);
 

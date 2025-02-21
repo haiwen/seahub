@@ -23,8 +23,8 @@ const FaceRecognition = () => {
     store.deletePeoplePhotos(peopleId, peoplePhotos);
   }, [store]);
 
-  const onAddPeoplePhotos = useCallback((peopleId, oldPeopleId, peoplePhotos, { success_callback, fail_callback }) => {
-    store.addPeoplePhotos(peopleId, oldPeopleId, peoplePhotos, { success_callback, fail_callback });
+  const onAddPeoplePhotos = useCallback((peopleIds, oldPeopleId, peoplePhotos, { success_callback, fail_callback }) => {
+    store.addPeoplePhotos(peopleIds, oldPeopleId, peoplePhotos, { success_callback, fail_callback });
   }, [store]);
 
   const onRemovePeoplePhotos = useCallback((peopleId, peoplePhotos, { success_callback }) => {
