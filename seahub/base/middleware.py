@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import re
 
+from rest_framework import status
 from django.urls import reverse
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
@@ -9,10 +10,12 @@ from django.utils.deprecation import MiddlewareMixin
 
 from seaserv import ccnet_api
 
+from seahub.auth import logout
 from seahub.utils import render_error
 from seahub.organizations.models import OrgSettings
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
+from seahub.api2.utils import api_error
 
 from seahub.settings import SITE_ROOT
 try:
@@ -44,7 +47,11 @@ class BaseMiddleware(MiddlewareMixin):
                     if not OrgSettings.objects.get_is_active_by_org(request.user.org):
                         org_name = request.user.org.org_name
                         error_msg = _(f"Organization {org_name} is inactive.")
+                        logout(request)
+                        if "api2/" in request.path or "api/v2.1/" in request.path:
+                            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                         return render_error(request, error_msg)
+
         else:
             request.cloud_mode = False
 
