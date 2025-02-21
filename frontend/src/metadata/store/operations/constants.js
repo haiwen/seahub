@@ -74,7 +74,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'removed_photos', 'success_callback'],
-  [OPERATION_TYPE.ADD_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'old_people_id', 'added_photos', 'success_callback'],
+  [OPERATION_TYPE.ADD_PEOPLE_PHOTOS]: ['repo_id', 'people_ids', 'old_people_id', 'added_photos', 'success_callback'],
   [OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO]: ['repo_id', 'people_id', 'selected_photo'],
 
   [OPERATION_TYPE.MODIFY_SETTINGS]: ['repo_id', 'view_id', 'settings'],
