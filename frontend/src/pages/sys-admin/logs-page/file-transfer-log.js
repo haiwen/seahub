@@ -181,7 +181,7 @@ class FIleTransferLogs extends Component {
     let { perPage } = this.state;
     seafileAPI.sysAdminListFileTransferLogs(page, perPage).then((res) => {
       this.setState({
-        logList: res.data.file_transfer_log_list,
+        logList: res.data.repo_transfer_log_list,
         loading: false,
         currentPage: page,
         hasNextPage: res.data.has_next_page,

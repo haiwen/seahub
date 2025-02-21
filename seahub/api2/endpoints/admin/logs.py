@@ -559,7 +559,7 @@ class AdminLogsFileTransferLogs(APIView):
             events_info.append(data)
 
         resp = {
-            'file_transfer_log_list': events_info,
+            'repo_transfer_log_list': events_info,
             'has_next_page': has_next_page,
         }
 
