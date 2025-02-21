@@ -208,7 +208,7 @@ const Type = forwardRef(({ parentWidth, column, onChange }, ref) => {
             <Icon iconName={column.icon} className="mr-2" />
             <span>{column.name}</span>
           </div>
-          <Icon iconName="drop-down" />
+          <i className='sf3-font sf3-font-down' aria-hidden="true"></i>
         </div>
         {error && (<FormFeedback>{error}</FormFeedback>)}
       </FormGroup>

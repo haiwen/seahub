@@ -304,7 +304,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           aria-label={gettext('More operations')}
           tabIndex={0}
         >
-          <Icon iconName="drop-down" />
+          <i className='sf3-font sf3-font-down' aria-hidden="true"></i>
         </DropdownToggle>
         {isMenuShow && !isMobile &&
           <ModalPortal>

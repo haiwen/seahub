@@ -2,8 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
-.sf-metadata-record-header-cell .sf-metadata-result-table-cell.insert-column:hover {
-  cursor: pointer;
+.sf-metadata-record-header-cell .sf-metadata-result-table-cell.insert-column:hover .sf-metadata-icon {
+  fill: #555;
 }
