@@ -444,4 +444,3 @@ FolderItem.propTypes = {
 
 const root = createRoot(document.getElementById('wrapper'));
 root.render(<RepoFolderTrash />);
-

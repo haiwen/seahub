@@ -1,16 +1,36 @@
 .trash-dialog {
-  max-width: 1100px;
-  height: calc(100% - 56px);
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 
 .trash-dialog .modal-content {
   height: 100%;
   overflow: hidden;
+  border: none;
+  border-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .trash-dialog {
+    max-width: 1100px;
+    height: calc(100% - 56px);
+    overflow: hidden;
+    margin: 1.75rem auto;
+  }
+
+  .trash-dialog .modal-content {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
 }
 
 .trash-dialog .modal-header {
   align-items: center;
+}
+
+.trash-dialog .back-icon {
+  color: #999;
 }
 
 .trash-dialog .modal-header .button-control {
@@ -43,6 +63,19 @@
 .trash-dialog .modal-body .more:hover {
   color: #000;
   background: #dfdfdf;
+}
+
+.trash-dialog .path-container {
+  border-bottom: 1px solid #eee;
+  height: 40px;
+  padding: 0 .5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .trash-dialog .path-container {
+    border-bottom: none;
+    padding: 0 0 1rem;
+  }
 }
 
 @media (max-width: 768px) {

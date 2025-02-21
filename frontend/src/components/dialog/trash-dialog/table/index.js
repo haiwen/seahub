@@ -4,8 +4,9 @@ import { gettext } from '../../../../utils/constants';
 import FolderRecords from './folder-records';
 import FileRecords from './file-records';
 import FixedWidthTable from '../../../common/fixed-width-table';
+import LibsMobileThead from '../../../../components/libs-mobile-thead';
 
-const Table = ({ repoID, renderFolder, data }) => {
+const Table = ({ repoID, renderFolder, data, isDesktop }) => {
   const headers = useMemo(() => [
     { isFixed: true, width: 40, className: 'pl-2 pr-2' },
     { isFixed: false, width: 0.25, children: gettext('Name') },
@@ -17,15 +18,33 @@ const Table = ({ repoID, renderFolder, data }) => {
 
   const { items, showFolder, commitID, baseDir, folderPath, folderItems } = data;
 
+  const tbodyContent = (
+    <>
+      {showFolder ? (
+        <FolderRecords records={folderItems} repoID={repoID} commitID={commitID} baseDir={baseDir} folderPath={folderPath} renderFolder={renderFolder} isDesktop={isDesktop} />
+      ) : (
+        <FileRecords records={items} repoID={repoID} renderFolder={renderFolder} isDesktop={isDesktop} />
+      )}
+    </>
+  );
+
   return (
     <div className="table-container p-0">
-      <FixedWidthTable className="table-hover" headers={headers}>
-        {showFolder ? (
-          <FolderRecords records={folderItems} repoID={repoID} commitID={commitID} baseDir={baseDir} folderPath={folderPath} renderFolder={renderFolder} />
-        ) : (
-          <FileRecords records={items} repoID={repoID} renderFolder={renderFolder} />
-        )}
-      </FixedWidthTable>
+      {isDesktop
+        ? (
+          <FixedWidthTable className="table-hover" headers={headers}>
+            {tbodyContent}
+          </FixedWidthTable>
+        )
+        : (
+          <table className="table-thead-hidden">
+            <LibsMobileThead />
+            <tbody>
+              {tbodyContent}
+            </tbody>
+          </table>
+        )
+      }
     </div>
   );
 };
