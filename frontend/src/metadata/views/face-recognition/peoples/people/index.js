@@ -77,7 +77,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       onClick={handelClick}
     >
       <div className="sf-metadata-people-info-img">
-        <img src={defaultURL || similarPhotoURL} alt={name} onError={onImgLoadError} height={60} width={60} />
+        <img src={`${defaultURL || similarPhotoURL}?t=${new Date().getTime()}`} alt={name} onError={onImgLoadError} height={60} width={60} />
       </div>
       <div className={classNames('sf-metadata-people-info-name-count', { 'o-hidden': !renaming })}>
         <div className="sf-metadata-people-info-name">
