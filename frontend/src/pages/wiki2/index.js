@@ -49,7 +49,7 @@ class Wiki extends Component {
 
       // for resizing side/main panels
       inResizing: false,
-      sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
+      sidePanelRate: parseFloat(localStorage.getItem('sf_wiki_side_panel_rate') || INIT_SIDE_PANEL_RATE),
     };
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
@@ -331,7 +331,7 @@ class Wiki extends Component {
         inResizing: false
       });
     }
-    localStorage.setItem('sf_side_panel_rate', this.state.sidePanelRate);
+    localStorage.setItem('sf_wiki_side_panel_rate', this.state.sidePanelRate);
   };
 
   onResizeMouseDown = () => {
