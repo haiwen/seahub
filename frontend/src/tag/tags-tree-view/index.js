@@ -93,6 +93,9 @@ const TagsTreeView = ({ currentPath }) => {
       const nextSelectedNodeKey = getTreeNodeKey(selectedNode);
       setCurrSelectedNodeKey(nextSelectedNodeKey);
     }
+    if (!currentPath.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
+      setCurrSelectedNodeKey('');
+    }
   }, [currentPath, currSelectedNodeKey, recordsTree]);
 
   useEffect(() => {
