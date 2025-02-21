@@ -1576,7 +1576,7 @@ CREATE TABLE `wiki_wiki2_publish` (
   KEY `ix_wiki2_publish_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `FileTransfer` (
+CREATE TABLE `RepoTransfer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
   `org_id` int(11) NOT NULL,
