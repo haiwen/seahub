@@ -8,6 +8,7 @@ import { checkIsDir } from '../utils/row';
 import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
 import ObjectUtils from '../utils/object-utils';
 import { CellType } from '../constants';
+import toaster from '../../components/toast';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -237,6 +238,7 @@ class ServerOperator {
       case OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO: {
         const { people_id, selected_photo } = operation;
         window.sfMetadataContext.setPeoplePhoto(people_id, selected_photo).then(res => {
+          toaster.success(gettext('Successfully set people cover photo'));
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to set people cover photo') });
