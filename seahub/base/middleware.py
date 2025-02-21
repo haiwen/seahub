@@ -1,17 +1,23 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import re
 
-from django.utils.deprecation import MiddlewareMixin
-from django.core.cache import cache
+from rest_framework import status
 from django.urls import reverse
+from django.core.cache import cache
 from django.http import HttpResponseRedirect
+from django.utils.translation import gettext as _
+from django.utils.deprecation import MiddlewareMixin
 
 from seaserv import ccnet_api
 
+from seahub.auth import logout
+from seahub.utils import render_error
+from seahub.organizations.models import OrgSettings
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
-from seahub.constants import DEFAULT_ADMIN
+from seahub.api2.utils import api_error
 
+from seahub.settings import SITE_ROOT
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -20,7 +26,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-from seahub.settings import SITE_ROOT
+
 
 class BaseMiddleware(MiddlewareMixin):
     """
@@ -38,6 +44,14 @@ class BaseMiddleware(MiddlewareMixin):
                 orgs = ccnet_api.get_orgs_by_user(username)
                 if orgs:
                     request.user.org = orgs[0]
+                    if not OrgSettings.objects.get_is_active_by_org(request.user.org):
+                        org_name = request.user.org.org_name
+                        error_msg = _(f"Organization {org_name} is inactive.")
+                        logout(request)
+                        if "api2/" in request.path or "api/v2.1/" in request.path:
+                            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                        return render_error(request, error_msg)
+
         else:
             request.cloud_mode = False
 
@@ -45,6 +59,7 @@ class BaseMiddleware(MiddlewareMixin):
 
     def process_response(self, request, response):
         return response
+
 
 class InfobarMiddleware(MiddlewareMixin):
     """Query info bar close status, and store into request."""
@@ -99,6 +114,7 @@ class ForcePasswdChangeMiddleware(MiddlewareMixin):
             if self._request_in_black_list(request):
                 return HttpResponseRedirect(reverse('auth_password_change'))
 
+
 class UserAgentMiddleWare(MiddlewareMixin):
     user_agents_test_match = (
         "w3c ", "acs-", "alav", "alca", "amoi", "audi",
@@ -151,7 +167,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
 
             # Test common mobile values.
             if self.user_agents_test_search_regex.search(user_agent) and \
-                not self.user_agents_exception_search_regex.search(user_agent):
+                    not self.user_agents_exception_search_regex.search(user_agent):
                 is_mobile = True
             else:
                 # Nokia like test for WAP browsers.

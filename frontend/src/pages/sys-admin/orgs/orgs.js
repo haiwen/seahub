@@ -19,6 +19,8 @@ class Orgs extends Component {
       loading: true,
       errorMsg: '',
       orgList: [],
+      sortBy: '',
+      sortOrder: 'asc',
       currentPage: 1,
       perPage: 100,
       hasNextPage: false,
@@ -38,8 +40,8 @@ class Orgs extends Component {
   }
 
   getItemsByPage = (page) => {
-    const { perPage } = this.state;
-    systemAdminAPI.sysAdminListOrgs(page, perPage).then((res) => {
+    const { perPage, sortBy, sortOrder } = this.state;
+    systemAdminAPI.sysAdminListOrgs(page, perPage, sortBy, sortOrder).then((res) => {
       this.setState({
         loading: false,
         orgList: res.data.organizations,
@@ -64,6 +66,24 @@ class Orgs extends Component {
 
   toggleAddOrgDialog = () => {
     this.setState({ isAddOrgDialogOpen: !this.state.isAddOrgDialogOpen });
+  };
+
+  updateStatus = (orgID, isActive) => {
+    let orgInfo = {};
+    orgInfo.isActive = isActive;
+    systemAdminAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
+      let newOrgList = this.state.orgList.map(org => {
+        if (org.org_id == orgID) {
+          org.is_active = isActive;
+        }
+        return org;
+      });
+      this.setState({ orgList: newOrgList });
+      toaster.success(gettext('Edit succeeded'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   updateRole = (orgID, role) => {
@@ -120,6 +140,24 @@ class Orgs extends Component {
     navigate(`${siteRoot}sys/search-organizations/?query=${encodeURIComponent(keyword)}`);
   };
 
+  sortByQuotaUsage = () => {
+    this.setState({
+      sortBy: 'quota_usage',
+      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc',
+      currentPage: 1
+    }, () => {
+      let url = new URL(location.href);
+      let searchParams = new URLSearchParams(url.search);
+      const { currentPage, sortBy, sortOrder } = this.state;
+      searchParams.set('page', currentPage);
+      searchParams.set('order_by', sortBy);
+      searchParams.set('direction', sortOrder);
+      url.search = searchParams.toString();
+      navigate(url.toString());
+      this.getItemsByPage(1);
+    });
+  };
+
   render() {
     const { isAddOrgDialogOpen } = this.state;
     return (
@@ -142,7 +180,11 @@ class Orgs extends Component {
                 curPerPage={this.state.perPage}
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getItemsByPage}
+                sortByQuotaUsage={this.sortByQuotaUsage}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
                 updateRole={this.updateRole}
+                updateStatus={this.updateStatus}
                 deleteOrg={this.deleteOrg}
               />
             </div>

@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from types import SimpleNamespace
 
 from django.utils.crypto import get_random_string
 
@@ -14,6 +15,7 @@ from seaserv import ccnet_api, seafile_api
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
 from seahub.utils import is_valid_email
+from seahub.utils.db_api import SeafileDB
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -29,7 +31,7 @@ from seahub.organizations.models import OrgSAMLConfig
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
 except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED= False
+    ORG_MEMBER_QUOTA_ENABLED = False
 
 if ORG_MEMBER_QUOTA_ENABLED:
     from seahub.organizations.models import OrgMemberQuota
@@ -47,6 +49,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 def get_org_info(org):
     org_id = org.org_id
 
@@ -56,6 +59,7 @@ def get_org_info(org):
     org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
     org_info['org_url_prefix'] = org.url_prefix
     org_info['role'] = OrgSettings.objects.get_role_by_org(org)
+    org_info['is_active'] = OrgSettings.objects.get_is_active_by_org(org)
 
     creator = org.creator
     org_info['creator_email'] = creator
@@ -69,6 +73,7 @@ def get_org_info(org):
         org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
 
     return org_info
+
 
 def get_org_detailed_info(org):
     org_id = org.org_id
@@ -98,6 +103,7 @@ def get_org_detailed_info(org):
             org_info['domain'] = org_saml_config.domain
 
     return org_info
+
 
 def gen_org_url_prefix(max_trial=None, length=20):
     """Generate organization url prefix automatically.
@@ -163,19 +169,36 @@ class AdminOrganizations(APIView):
 
         start = (page - 1) * per_page
 
-        try:
-            orgs = ccnet_api.get_all_orgs(start, per_page)
-            total_count = ccnet_api.count_orgs()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if not order_by:
+            try:
+                orgs = ccnet_api.get_all_orgs(start, per_page)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        else:
+            if order_by not in ('quota_usage'):
+                error_msg = 'order_by invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            direction = request.GET.get('direction', 'desc').lower().strip()
+            if direction not in ('asc', 'desc'):
+                error_msg = 'direction invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            seafile_db = SeafileDB()
+            org_dict_list = seafile_db.get_orgs_with_quota_usage(start, per_page, direction)
+            orgs = []
+            for org_dict in org_dict_list:
+                orgs.append(SimpleNamespace(**org_dict))
 
         result = []
         for org in orgs:
             org_info = get_org_info(org)
             result.append(org_info)
 
+        total_count = ccnet_api.count_orgs()
         return Response({'organizations': result, 'total_count': total_count})
 
     def post(self, request):
@@ -234,7 +257,7 @@ class AdminOrganizations(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         quota = request.data.get('quota', None)
         if quota:
             try:
@@ -244,7 +267,7 @@ class AdminOrganizations(APIView):
             except ValueError as e:
                 logger.error(e)
                 return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
-            
+
         if ORG_MEMBER_QUOTA_ENABLED:
             member_limit = request.data.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
             OrgMemberQuota.objects.set_quota(org_id, member_limit)
@@ -367,7 +390,6 @@ class AdminOrganization(APIView):
                 error_msg = 'quota invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-
             quota = quota_mb * get_file_size_unit('MB')
             try:
                 seafile_api.set_org_quota(org_id, quota)
@@ -383,6 +405,15 @@ class AdminOrganization(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             OrgSettings.objects.add_or_update(org, role)
+
+        is_active = request.data.get('is_active', None)
+        if is_active:
+            is_active = is_active.lower()
+            if is_active not in ('true', 'false'):
+                error_msg = 'is_active invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            OrgSettings.objects.add_or_update(org, is_active=is_active=='true')
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
@@ -493,14 +524,14 @@ class AdminOrganizationsBaseInfo(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        org_ids = request.GET.getlist('org_ids',[])
+        org_ids = request.GET.getlist('org_ids', [])
         orgs = []
         for org_id in org_ids:
             try:
                 org = ccnet_api.get_org_by_id(int(org_id))
                 if not org:
                     continue
-            except:
+            except Exception:
                 continue
             base_info = {'org_id': org.org_id, 'org_name': org.org_name}
             orgs.append(base_info)

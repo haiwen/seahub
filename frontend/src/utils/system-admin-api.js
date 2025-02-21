@@ -571,12 +571,16 @@ class SystemAdminAPI {
     return this.req.delete(url);
   }
 
-  sysAdminListOrgs(page, perPage) {
+  sysAdminListOrgs(page, perPage, sortBy, sortOrder) {
     const url = this.server + '/api/v2.1/admin/organizations/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (sortBy) {
+      params.order_by = sortBy;
+      params.direction = sortOrder;
+    }
     return this.req.get(url, { params: params });
   }
 
@@ -607,6 +611,9 @@ class SystemAdminAPI {
     }
     if (orgInfo.role) {
       formData.append('role', orgInfo.role);
+    }
+    if (orgInfo.isActive != undefined) {
+      formData.append('is_active', orgInfo.isActive);
     }
     return this.req.put(url, formData);
   }
