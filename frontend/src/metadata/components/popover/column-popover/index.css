@@ -11,7 +11,6 @@
 .sf-metadata-column-popover .sf-metadata-column-popover-inner {
   max-height: calc(100vh - 170px);
   min-width: 350px;
-  /* overflow: auto; */
 }
 
 .sf-metadata-column-popover .sf-metadata-column-popover-inner>div:first-child {
@@ -61,8 +60,9 @@
   text-overflow: ellipsis;
 }
 
-.sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-icon-drop-down {
-  transform: rotate(-90deg);
+.sf-metadata-column-popover .sf-metadata-column-type .sf3-font-down {
+  transform: rotate(270deg);
+  color: #aaa;
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-icon {
