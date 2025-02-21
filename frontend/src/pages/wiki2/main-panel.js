@@ -23,6 +23,7 @@ const propTypes = {
   isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
   onAddWikiPage: PropTypes.func,
+  style: PropTypes.object.isRequired,
   mobileOpenSidePanel: PropTypes.func.isRequired
 };
 
@@ -64,12 +65,12 @@ class MainPanel extends Component {
   };
 
   render() {
-    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide } = this.props;
+    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style } = this.props;
     const { currentPageConfig = {} } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = !(permission === 'rw');
     return (
-      <div className="wiki2-main-panel">
+      <div className="wiki2-main-panel" style={style}>
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
             <div className='wiki2-main-panel-north-content'>
@@ -86,7 +87,9 @@ class MainPanel extends Component {
                 currentPageConfig={currentPageConfig}
                 setCurrentPage={this.props.setCurrentPage}
               />
-              <DocInfo key={this.props.currentPageId} initContext={true}/>
+              {isViewingFile &&
+                <DocInfo key={this.props.currentPageId} initContext={true} />
+              }
             </div>
           </div>
           <div className='d-flex align-items-center'>

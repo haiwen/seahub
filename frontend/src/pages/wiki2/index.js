@@ -15,6 +15,10 @@ import LocalStorage from '../../utils/local-storage-utils';
 import { DEFAULT_PAGE_NAME } from './constant';
 import { eventBus } from '../../components/common/event-bus';
 import { throttle, getNamePaths } from './utils';
+import ResizeBar from '../../components/resize-bar';
+import {
+  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
+} from '../../components/resize-bar/constants';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -42,7 +46,13 @@ class Wiki extends Component {
       assets_url: '',
       wikiRepoId: null,
       isUpdateBySide: false,
+
+      // for resizing side/main panels
+      inResizing: false,
+      sidePanelRate: parseFloat(localStorage.getItem('sf_wiki_side_panel_rate') || INIT_SIDE_PANEL_RATE),
     };
+    this.resizeBarRef = React.createRef();
+    this.dragHandlerRef = React.createRef();
   }
 
   UNSAFE_componentWillMount() {
@@ -315,9 +325,56 @@ class Wiki extends Component {
     document.title = newTitle;
   };
 
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+    localStorage.setItem('sf_wiki_side_panel_rate', this.state.sidePanelRate);
+  };
+
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    });
+  };
+
+  onResizeMouseMove = (e) => {
+    let rate = e.nativeEvent.clientX / window.innerWidth;
+    this.setState({
+      sidePanelRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+    });
+  };
+
+  onResizeMouseOver = (event) => {
+    if (!this.dragHandlerRef.current) return;
+    const { top } = this.resizeBarRef.current.getBoundingClientRect();
+    const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerRefTop);
+  };
+
+  setDragHandlerTop = (top) => {
+    this.dragHandlerRef.current.style.top = top + 'px';
+  };
+
   render() {
+    const isDesktop = Utils.isDesktop();
+    const { sidePanelRate, inResizing } = this.state;
+    const mainPanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
+    };
+    const sidePanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
+    };
+
     return (
-      <div id="main" className="wiki-main">
+      <div id="main" className="wiki-main position-relative"
+        onMouseMove={inResizing ? this.onResizeMouseMove : null}
+        onMouseUp={this.onResizeMouseUp}
+      >
         <SidePanel
           isLoading={this.state.isConfigLoading}
           isSidePanelOpen={this.state.isSidePanelOpen}
@@ -327,7 +384,18 @@ class Wiki extends Component {
           setCurrentPage={this.setCurrentPage}
           getCurrentPageId={this.getCurrentPageId}
           onUpdatePage={this.onUpdatePage}
+          style={sidePanelStyle}
         />
+        {isDesktop &&
+        <ResizeBar
+          resizeBarRef={this.resizeBarRef}
+          dragHandlerRef={this.dragHandlerRef}
+          resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
+          dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+          onResizeMouseDown={this.onResizeMouseDown}
+          onResizeMouseOver={this.onResizeMouseOver}
+        />
+        }
         <MainPanel
           mobileOpenSidePanel={this.mobileOpenSidePanel}
           path={this.state.path}
@@ -342,6 +410,7 @@ class Wiki extends Component {
           onUpdatePage={this.onUpdatePage}
           setCurrentPage={this.setCurrentPage}
           isUpdateBySide={this.state.isUpdateBySide}
+          style={mainPanelStyle}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal
