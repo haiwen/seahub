@@ -12,3 +12,30 @@
   background-color: inherit;
   max-width: 100%;
 }
+
+.sf-metadata-peoples-dialog .sf-metadata-option .select-option-people {
+  position: relative;
+  padding: 0 1.5rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-option .people-check-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #666;
+  font-size: 12px;
+}
+
+.sf-metadata-option.sf-metadata-option-active .people-check-icon .sf-metadata-icon-check-mark {
+  filL: #666 !important;
+}
