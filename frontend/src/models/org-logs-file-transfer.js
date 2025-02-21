@@ -19,6 +19,9 @@ class OrgLogsFileTransferEvent {
     this.to_user_contact_email = object.to_user_contact_email;
     this.to_user_email = object.to_user_email;
     this.to_user_name = object.to_user_name;
+    this.operator_email = object.operator_email;
+    this.operator_name = object.operator_name;
+    this.operator_contact_email = object.operator_contact_email;
     this.time = dayjs(object.date).format('YYYY-MM-DD HH:mm:ss');
   }
 }

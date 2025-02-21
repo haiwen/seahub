@@ -317,6 +317,8 @@ class OrgAdminLogsFileTransfer(APIView):
                 user_email_set.add(event.from_user)
             if is_valid_email(event.to):
                 user_email_set.add(event.to)
+            if is_valid_email(event.operator):
+                user_email_set.add(event.operator)
             if '@seafile_group' in event.to:
                 group_id = int(event.to.split('@')[0])
                 group_id_set.add(group_id)
@@ -351,12 +353,20 @@ class OrgAdminLogsFileTransfer(APIView):
                 'to_user_name': '',
                 'to_user_contact_email': '',
                 'to_group_id': '',
-                'to_group_name': ''
+                'to_group_name': '',
+                'operator_email': '',
+                'operator_name': '',
+                'operator_contact_email': '',
             }
             from_user_email = ev.from_user
             data['from_user_email'] = from_user_email
             data['from_user_name'] = nickname_dict.get(from_user_email, '')
             data['from_user_contact_email'] = contact_email_dict.get(from_user_email, '')
+
+            operator_email = ev.operator
+            data['operator_email'] = operator_email
+            data['operator_name'] = nickname_dict.get(operator_email, '')
+            data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
 
             if is_valid_email(from_user_email):
                 data['from_type'] = 'user'

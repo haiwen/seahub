@@ -1875,6 +1875,7 @@ class RepoOwner(APIView):
             FileTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
                                         repo_id=repo_id,
+                                        operator=username,
                                         org_id=org_id)
         except SearpcError as e:
             logger.error(e)

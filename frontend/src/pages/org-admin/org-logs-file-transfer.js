@@ -68,9 +68,10 @@ class OrgLogsFileTransfer extends React.Component {
         <table>
           <thead>
             <tr>
-              <th width="25%">{gettext('Transfer From')}</th>
-              <th width="25%">{gettext('Transfer To')}</th>
-              <th width="35%">{gettext('Library')}</th>
+              <th width="20%">{gettext('Transfer From')}</th>
+              <th width="20%">{gettext('Transfer To')}</th>
+              <th width="20%">{gettext('Operator')}</th>
+              <th width="25%">{gettext('Library')}</th>
               <th width="15%">{gettext('Date')}</th>
             </tr>
           </thead>
@@ -153,6 +154,10 @@ class FileTransferItem extends React.Component {
     }
   };
 
+  getOperator = (item) => {
+    return <UserLink email={item.operator_email} name={item.operator_name} />;
+  };
+
   render() {
     let { fileEvent } = this.props;
     return (
@@ -160,6 +165,7 @@ class FileTransferItem extends React.Component {
         onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>{this.getTransferFrom(fileEvent)}</td>
         <td>{this.getTransferTo(fileEvent)}</td>
+        <td>{this.getOperator(fileEvent)}</td>
         <td>{fileEvent.repo_name ? fileEvent.repo_name : gettext('Deleted')}</td>
         <td>{dayjs(fileEvent.time).fromNow()}</td>
       </tr>

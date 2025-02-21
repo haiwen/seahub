@@ -41,9 +41,10 @@ class Content extends Component {
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="25%">{gettext('Transfer From')}</th>
-                <th width="25%">{gettext('Transfer To')}</th>
-                <th width="35%">{gettext('Library')}</th>
+                <th width="20%">{gettext('Transfer From')}</th>
+                <th width="20%">{gettext('Transfer To')}</th>
+                <th width="20%">{gettext('Operator')}</th>
+                <th width="25%">{gettext('Library')}</th>
                 <th width="15%">{gettext('Date')}</th>
               </tr>
             </thead>
@@ -128,12 +129,17 @@ class Item extends Component {
     }
   };
 
+  getOperator = (item) => {
+    return <UserLink email={item.operator_email} name={item.operator_name} />;
+  };
+
   render() {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td>{this.getTransferFrom(item)}</td>
         <td>{this.getTransferTo(item)}</td>
+        <td>{this.getOperator(item)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
         <td>{dayjs(item.date).fromNow()}</td>
       </tr>

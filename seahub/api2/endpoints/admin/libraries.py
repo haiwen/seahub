@@ -427,7 +427,8 @@ class AdminLibrary(APIView):
                 FileTransfer.objects.create(from_user=repo_owner,
                                             to=new_owner,
                                             repo_id=repo_id,
-                                            org_id=-1)
+                                            org_id=-1,
+                                            operator=request.user.username)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
