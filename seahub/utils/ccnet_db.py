@@ -4,7 +4,7 @@ from django.db import connection
 
 
 def get_ccnet_db_name():
-    return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
+    return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'SYSDBA'
 
 
 class CcnetGroup(object):
@@ -40,9 +40,9 @@ class CcnetDB:
         SELECT
             g.group_id, group_name, creator_name, timestamp, type, parent_group_id
         FROM
-            `{self.db_name}`.`OrgGroup` o
+            {self.db_name}.OrgGroup o
         LEFT JOIN
-            `{self.db_name}`.`Group` g
+            {self.db_name}.Group g
         ON o.group_id=g.group_id
         WHERE
           org_id={org_id} AND parent_group_id<>0;
@@ -75,12 +75,12 @@ class CcnetDB:
 
         def is_role(role):
             if role == 'default':
-                return 'AND (t2.role is null or t2.role = "default") '
+                return "AND (t2.role is null or t2.role = 'default') "
             else:
-                return f'AND t2.role = "{role}" '
+                return f"AND t2.role = '{role}' "
 
         def search(q):
-            return f'AND t1.email LIKE "%{q}%" '
+            return f"AND t1.email LIKE '%{q}%' "
 
         search_clause = ''
         if is_active:
@@ -93,9 +93,9 @@ class CcnetDB:
         count_sql = f"""
         SELECT count(1)
         FROM
-            `{self.db_name}`.`EmailUser` t1
+            {self.db_name}.EmailUser t1
         LEFT JOIN
-            `{self.db_name}`.`UserRole` t2
+            {self.db_name}.UserRole t2
         ON
             t1.email = t2.email
         WHERE
@@ -106,9 +106,9 @@ class CcnetDB:
         sql = f"""
         SELECT t1.id, t1.email, t1.is_staff, t1.is_active, t1.ctime, t2.role, t1.passwd
         FROM
-            `{self.db_name}`.`EmailUser` t1
+            {self.db_name}.EmailUser t1
         LEFT JOIN
-            `{self.db_name}`.`UserRole` t2
+            {self.db_name}.UserRole t2
         ON
             t1.email = t2.email
         WHERE
@@ -152,7 +152,7 @@ class CcnetDB:
         sql = f"""
         SELECT user_name, group_id
         FROM
-            `{self.db_name}`.`GroupUser`
+            {self.db_name}.GroupUser
         WHERE
             group_id IN ({group_ids_str}) AND is_staff = 1
         """
@@ -168,7 +168,7 @@ class CcnetDB:
 
     def change_groups_into_departments(self, group_id):
         sql = f"""
-        UPDATE `{self.db_name}`.`Group` g
+        UPDATE {self.db_name}.Group g
         SET
             g.creator_name = 'system admin',
             g.parent_group_id = -1
@@ -176,7 +176,7 @@ class CcnetDB:
             g.group_id = {group_id}
         """
         structure_sql = f"""
-        INSERT INTO `{self.db_name}`.`GroupStructure` (group_id, path)
+        INSERT INTO {self.db_name}.GroupStructure (group_id, path)
         VALUES ('{group_id}', '{group_id}')
         """
 
@@ -190,8 +190,8 @@ class CcnetDB:
         user_list_str = ','.join(["'%s'" % str(user) for user in user_list])
         active_users = []
         sql = f"""
-        SELECT `email`
-        FROM `{self.db_name}`.`EmailUser`
+        SELECT email
+        FROM {self.db_name}.EmailUser
         WHERE
             email IN ({user_list_str}) AND is_active = 1 AND email NOT LIKE '%%@seafile_group'
         """
@@ -204,7 +204,7 @@ class CcnetDB:
 
     def get_org_user_count(self, org_id):
         sql = f"""
-        SELECT COUNT(1) FROM `{self.db_name}`.`OrgUser` WHERE org_id={org_id}
+        SELECT COUNT(1) FROM {self.db_name}.OrgUser WHERE org_id={org_id}
         """
         user_count = 0
         with connection.cursor() as cursor:
