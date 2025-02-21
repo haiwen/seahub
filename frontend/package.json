@@ -11,7 +11,7 @@
     "@gatsbyjs/reach-router": "2.0.1",
     "@seafile/react-image-lightbox": "4.0.0",
     "@seafile/resumablejs": "1.1.16",
-    "@seafile/sdoc-editor": "2.0.2",
+    "@seafile/sdoc-editor": "^2.0.8",
     "@seafile/seafile-calendar": "0.0.28",
     "@seafile/seafile-editor": "2.0.0",
     "@seafile/sf-metadata-ui-component": "^1.0.1",
