@@ -20,7 +20,7 @@ from .api.admin.trash_libraries import OrgAdminTrashLibraries, OrgAdminTrashLibr
 from .api.admin.info import OrgAdminInfo
 from .api.admin.links import OrgAdminLinks, OrgAdminLink
 from .api.admin.web_settings import OrgAdminWebSettings
-from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgAdminLogsPermAudit
+from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgAdminLogsPermAudit, OrgAdminLogsFileTransfer
 from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
 from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
@@ -102,6 +102,7 @@ urlpatterns = [
     path('admin/logs/file-access/', OrgAdminLogsFileAccess.as_view(), name='api-v2.1-org-admin-logs-file-access'),
     path('admin/logs/file-update/', OrgAdminLogsFileUpdate.as_view(), name='api-v2.1-org-admin-logs-file-update'),
     path('admin/logs/repo-permission/', OrgAdminLogsPermAudit.as_view(), name='api-v2.1-org-admin-logs-repo-permission'),
+    path('admin/logs/repo-transfer/', OrgAdminLogsFileTransfer.as_view(), name='api-v2.1-org-admin-logs-repo-transfer'),
     path('<int:org_id>/admin/departments/', OrgAdminDepartments.as_view(), name='api-v2.1-org-admin-departments'),
     path('<int:org_id>/admin/logs/export-excel/', OrgLogsExport.as_view(), name='api-v2.1-org-logs-export-excel'),
     path('admin/log/export-excel/', org_log_export_excel, name='org_log_export_excel'),

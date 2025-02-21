@@ -17,7 +17,8 @@ from seahub.api2.endpoints.utils import get_user_name_dict, \
     get_user_contact_email_dict, get_repo_dict, get_group_dict
 
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.utils import EVENTS_ENABLED, get_file_audit_events, get_file_update_events, get_perm_audit_events
+from seahub.base.models import RepoTransfer
+from seahub.utils import EVENTS_ENABLED, get_file_audit_events, get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
 from seahub.organizations.api.permissions import IsOrgAdmin
@@ -257,6 +258,143 @@ class OrgAdminLogsPermAudit(APIView):
             event_list.append(event)
 
         page_next = True if len(events) == per_page else False
+
+        return Response({
+                'log_list': event_list,
+                'page': page,
+                'page_next': page_next,
+                })
+
+
+class OrgAdminLogsFileTransfer(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdmin)
+
+    def get(self, request):
+        """List organization file transfer in logs
+        """
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+
+        start = per_page * (page - 1)
+        limit = per_page
+
+        org_id = request.user.org.org_id
+        events = RepoTransfer.objects.filter(org_id=org_id).all().order_by('-timestamp')[start:start+limit+1]
+        if len(events) > limit:
+            page_next = True
+            events = events[:limit]
+        else:
+            page_next = False
+
+        event_list = []
+        if not events:
+            return Response({
+                'log_list': event_list,
+                'page': page,
+                'page_next': False
+                })
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        repo_dict = {}
+        group_name_dict = {}
+
+        user_email_set = set()
+        repo_id_set = set()
+        group_id_set = set()
+
+        for event in events:
+            repo_id_set.add(event.repo_id)
+            if is_valid_email(event.from_user):
+                user_email_set.add(event.from_user)
+            if is_valid_email(event.to):
+                user_email_set.add(event.to)
+            if is_valid_email(event.operator):
+                user_email_set.add(event.operator)
+            if '@seafile_group' in event.to:
+                group_id = int(event.to.split('@')[0])
+                group_id_set.add(group_id)
+            if '@seafile_group' in event.from_user:
+                group_id = int(event.from_user.split('@')[0])
+                group_id_set.add(group_id)
+
+        for e in user_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
+
+        for group_id in group_id_set:
+            if group_id not in group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                if group:
+                    group_name_dict[group_id] = group.group_name
+
+        event_list = []
+        for ev in events:
+            data = {
+                'from_user_email': '',
+                'from_user_name': '',
+                'from_user_contact_email': '',
+                'from_group_id': '',
+                'from_group_name': '',
+                'to_user_email': '',
+                'to_user_name': '',
+                'to_user_contact_email': '',
+                'to_group_id': '',
+                'to_group_name': '',
+                'operator_email': '',
+                'operator_name': '',
+                'operator_contact_email': '',
+            }
+            from_user_email = ev.from_user
+            data['from_user_email'] = from_user_email
+            data['from_user_name'] = nickname_dict.get(from_user_email, '')
+            data['from_user_contact_email'] = contact_email_dict.get(from_user_email, '')
+
+            operator_email = ev.operator
+            data['operator_email'] = operator_email
+            data['operator_name'] = nickname_dict.get(operator_email, '')
+            data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
+
+            if is_valid_email(from_user_email):
+                data['from_type'] = 'user'
+            if '@seafile_group' in from_user_email:
+                from_group_id = int(from_user_email.split('@')[0])
+                data['from_group_id'] = from_group_id
+                data['from_group_name'] = group_name_dict.get(from_group_id, '')
+                data['from_type'] = 'group'
+
+            repo_id = ev.repo_id
+            data['repo_id'] = repo_id
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
+            data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
+
+            if is_valid_email(ev.to):
+                to_user_email = ev.to
+                data['to_user_email'] = to_user_email
+                data['to_user_name'] = nickname_dict.get(to_user_email, '')
+                data['to_user_contact_email'] = contact_email_dict.get(to_user_email, '')
+                data['to_type'] = 'user'
+            if '@seafile_group' in ev.to:
+                to_group_id = int(ev.to.split('@')[0])
+                data['to_group_id'] = to_group_id
+                data['to_group_name'] = group_name_dict.get(to_group_id, '')
+                data['to_type'] = 'group'
+
+            event_list.append(data)
 
         return Response({
                 'log_list': event_list,

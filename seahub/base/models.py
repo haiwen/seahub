@@ -451,3 +451,15 @@ class ClientSSOToken(models.Model):
         if not self.token:
             self.token = self.gen_token()
         return super(ClientSSOToken, self).save(*args, **kwargs)
+
+
+class RepoTransfer(models.Model):
+    repo_id = models.CharField(max_length=36)
+    org_id = models.IntegerField(db_index=True)
+    from_user = models.CharField(max_length=255)
+    to = models.CharField(max_length=255)
+    operator = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        db_table = 'RepoTransfer'

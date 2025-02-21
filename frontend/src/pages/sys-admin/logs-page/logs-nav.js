@@ -16,6 +16,7 @@ class Nav extends React.Component {
       { name: 'fileAccessLogs', urlPart: 'logs/file-access', text: gettext('File Access') },
       { name: 'fileUpdateLogs', urlPart: 'logs/file-update', text: gettext('File Update') },
       { name: 'sharePermissionLogs', urlPart: 'logs/share-permission', text: gettext('Permission') },
+      { name: 'fileTransfer', urlPart: 'logs/repo-transfer', text: gettext('Repo Transfer') },
     ];
   }
 

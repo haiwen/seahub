@@ -20,6 +20,7 @@ from seahub.utils import get_file_audit_events, generate_file_audit_event_type, 
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
+from seahub.base.models import RepoTransfer
 
 logger = logging.getLogger(__name__)
 
@@ -416,6 +417,149 @@ class AdminLogsSharePermissionLogs(APIView):
 
         resp = {
             'share_permission_log_list': events_info,
+            'has_next_page': has_next_page,
+        }
+
+        return Response(resp)
+
+
+class AdminLogsFileTransferLogs(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all transfer repo logs.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.can_view_user_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = per_page * (current_page - 1)
+        limit = per_page
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        events = RepoTransfer.objects.all().order_by('-timestamp')[start:start+limit+1]
+        if len(events) > limit:
+            has_next_page = True
+            events = events[:limit]
+        else:
+            has_next_page = False
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        repo_dict = {}
+        group_name_dict = {}
+
+        user_email_set = set()
+        repo_id_set = set()
+        group_id_set = set()
+
+        for event in events:
+            repo_id_set.add(event.repo_id)
+            if is_valid_email(event.from_user):
+                user_email_set.add(event.from_user)
+            if is_valid_email(event.to):
+                user_email_set.add(event.to)
+            if is_valid_email(event.operator):
+                user_email_set.add(event.operator)
+            if '@seafile_group' in event.to:
+                group_id = int(event.to.split('@')[0])
+                group_id_set.add(group_id)
+            if '@seafile_group' in event.from_user:
+                group_id = int(event.from_user.split('@')[0])
+                group_id_set.add(group_id)
+
+        for e in user_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+        for e in repo_id_set:
+            if e not in repo_dict:
+                repo_dict[e] = seafile_api.get_repo(e)
+
+        for group_id in group_id_set:
+            if group_id not in group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                if group:
+                    group_name_dict[group_id] = group.group_name
+                    
+        events_info = []
+        for ev in events:
+            data = {
+                'from_user_email': '',
+                'from_user_name': '',
+                'from_user_contact_email': '',
+                'from_group_id': '',
+                'from_group_name': '',
+                'to_user_email': '',
+                'to_user_name': '',
+                'to_user_contact_email': '',
+                'to_group_id': '',
+                'to_group_name': '',
+                'operator_email': '',
+                'operator_name': '',
+                'operator_contact_email': '',
+            }
+            from_user_email = ev.from_user
+            data['from_user_email'] = from_user_email
+            data['from_user_name'] = nickname_dict.get(from_user_email, '')
+            data['from_user_contact_email'] = contact_email_dict.get(from_user_email, '')
+
+            operator_email = ev.operator
+            data['operator_email'] = operator_email
+            data['operator_name'] = nickname_dict.get(operator_email, '')
+            data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
+
+            if is_valid_email(from_user_email):
+                data['from_type'] = 'user'
+            if '@seafile_group' in from_user_email:
+                from_group_id = int(from_user_email.split('@')[0])
+                data['from_group_id'] = from_group_id
+                data['from_group_name'] = group_name_dict.get(from_group_id, '')
+                data['from_type'] = 'group'
+
+            repo_id = ev.repo_id
+            data['repo_id'] = repo_id
+            repo = repo_dict.get(repo_id, None)
+            data['repo_name'] = repo.name if repo else ''
+            data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
+
+            if is_valid_email(ev.to):
+                to_user_email = ev.to
+                data['to_user_email'] = to_user_email
+                data['to_user_name'] = nickname_dict.get(to_user_email, '')
+                data['to_user_contact_email'] = contact_email_dict.get(to_user_email, '')
+                data['to_type'] = 'user'
+            if '@seafile_group' in ev.to:
+                to_group_id = int(ev.to.split('@')[0])
+                data['to_group_id'] = to_group_id
+                data['to_group_name'] = group_name_dict.get(to_group_id, '')
+                data['to_type'] = 'group'
+
+            events_info.append(data)
+
+        resp = {
+            'repo_transfer_log_list': events_info,
             'has_next_page': has_next_page,
         }
 
