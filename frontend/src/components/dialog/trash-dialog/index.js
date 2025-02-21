@@ -188,25 +188,38 @@ class TrashDialog extends React.Component {
     let title = gettext('{placeholder} Trash');
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mr-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
 
+    const isDesktop = Utils.isDesktop();
     return (
       <>
         <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
           <ModalHeader
             close={
               <div className="button-control">
-                <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
+                {isDesktop && <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>}
                 {(enableUserCleanTrash && !showFolder && isRepoAdmin) &&
                   <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                 }
-                <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={toggleTrashDialog}>
-                  <span className="seahub-modal-btn-inner">
-                    <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
-                  </span>
-                </button>
+                {isDesktop && (
+                  <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={toggleTrashDialog}>
+                    <span className="seahub-modal-btn-inner">
+                      <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                )}
               </div>
             }
           >
-            <div dangerouslySetInnerHTML={{ __html: title }}></div>
+            {!isDesktop &&
+              <span
+                role="button"
+                className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon mr-2"
+                title={gettext('Back')}
+                aria-label={gettext('Back')}
+                onClick={toggleTrashDialog}
+              >
+              </span>
+            }
+            <span dangerouslySetInnerHTML={{ __html: title }}></span>
           </ModalHeader>
           <ModalBody>
             {isLoading && <Loading />}
@@ -214,15 +227,15 @@ class TrashDialog extends React.Component {
               <EmptyTip text={gettext('No file')} className="m-0" />
             }
             {!isLoading && items.length > 0 &&
-              <div>
-                <div className="path-container dir-view-path mb-2">
+              <>
+                <div className="path-container dir-view-path mw-100 pb-2">
                   <span className="path-label mr-1">{gettext('Current path: ')}</span>
                   {showFolder ?
                     this.renderFolderPath() :
                     <span className="last-path-item" title={repoFolderName}>{repoFolderName}</span>
                   }
                 </div>
-                <Table repoID={repoID} data={this.state} renderFolder={this.renderFolder} />
+                <Table repoID={repoID} data={this.state} renderFolder={this.renderFolder} isDesktop={isDesktop} />
                 <Paginator
                   gotoPreviousPage={this.getPreviousPage}
                   gotoNextPage={this.getNextPage}
@@ -232,7 +245,7 @@ class TrashDialog extends React.Component {
                   resetPerPage={this.resetPerPage}
                   noURLUpdate={true}
                 />
-              </div>
+              </>
             }
           </ModalBody>
         </Modal>

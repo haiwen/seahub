@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FolderRecord from './folder-record';
 
-const FolderRecords = ({ records, repoID, commitID, baseDir, folderPath, renderFolder }) => {
+const FolderRecords = ({ records, repoID, commitID, baseDir, folderPath, renderFolder, isDesktop }) => {
   if (!Array.isArray(records) || records.length === 0) return null;
   return records.map((record, index) => {
     return (
@@ -14,6 +14,7 @@ const FolderRecords = ({ records, repoID, commitID, baseDir, folderPath, renderF
         baseDir={baseDir}
         folderPath={folderPath}
         renderFolder={renderFolder}
+        isDesktop={isDesktop}
       />
     );
   });
