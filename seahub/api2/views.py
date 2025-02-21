@@ -46,7 +46,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
-from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey, FileComment, FileTransfer
+from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey, FileComment, RepoTransfer
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, normalize_custom_permission_name
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -1871,8 +1871,8 @@ class RepoOwner(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
-            org_id = seaserv.get_org_id_by_repo_id(repo_id)
-            FileTransfer.objects.create(from_user=repo_owner,
+            org_id = seafile_api.get_org_id_by_repo_id(repo_id)
+            RepoTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
                                         repo_id=repo_id,
                                         operator=username,

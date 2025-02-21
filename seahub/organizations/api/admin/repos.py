@@ -15,7 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.base.models import FileTransfer
+from seahub.base.models import RepoTransfer
 from seahub.group.utils import group_id_to_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_valid_email, transfer_repo
@@ -167,7 +167,7 @@ class OrgAdminRepo(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
-            FileTransfer.objects.create(from_user=repo_owner,
+            RepoTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
                                         repo_id=repo_id,
                                         org_id=org_id,

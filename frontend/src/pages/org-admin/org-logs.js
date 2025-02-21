@@ -40,7 +40,7 @@ class OrgLogs extends Component {
     const { isExportExcelDialogOpen, logType } = this.state;
     return (
       <Fragment>
-        {this.props.currentTab === 'file-transfer' ?
+        {this.props.currentTab === 'repo-transfer' ?
           <MainPanelTopbar />
           :
           <MainPanelTopbar>
@@ -69,10 +69,10 @@ class OrgLogs extends Component {
                     to={siteRoot + 'org/logadmin/perm-audit/'} title={gettext('Permission')}>{gettext('Permission')}
                   </Link>
                 </li>
-                <li className="nav-item" onClick={() => this.tabItemClick('file-transfer')}>
+                <li className="nav-item" onClick={() => this.tabItemClick('repo-transfer')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'file-transfer' ? 'active' : ''}`}
-                    to={siteRoot + 'org/logadmin/file-transfer/'} title={gettext('File Transfer')}>{gettext('File Transfer')}
+                    className={`nav-link ${this.props.currentTab === 'repo-transfer' ? 'active' : ''}`}
+                    to={siteRoot + 'org/logadmin/repo-transfer/'} title={gettext('File Transfer')}>{gettext('File Transfer')}
                   </Link>
                 </li>
               </ul>

@@ -17,7 +17,7 @@ from seahub.api2.endpoints.utils import get_user_name_dict, \
     get_user_contact_email_dict, get_repo_dict, get_group_dict
 
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.base.models import FileTransfer
+from seahub.base.models import RepoTransfer
 from seahub.utils import EVENTS_ENABLED, get_file_audit_events, get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
@@ -286,7 +286,7 @@ class OrgAdminLogsFileTransfer(APIView):
         limit = per_page
 
         org_id = request.user.org.org_id
-        events = FileTransfer.objects.filter(org_id=org_id).all().order_by('-timestamp')[start:start+limit+1]
+        events = RepoTransfer.objects.filter(org_id=org_id).all().order_by('-timestamp')[start:start+limit+1]
         if len(events) > limit:
             page_next = True
             events = events[:limit]

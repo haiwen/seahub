@@ -2170,7 +2170,7 @@ class SeafileAPI {
   }
 
   sysAdminListFileTransferLogs(page, perPage) {
-    const url = this.server + '/api/v2.1/admin/logs/file-transfer-logs/';
+    const url = this.server + '/api/v2.1/admin/logs/repo-transfer-logs/';
     let params = {
       page: page,
       per_page: perPage

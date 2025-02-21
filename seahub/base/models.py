@@ -453,7 +453,7 @@ class ClientSSOToken(models.Model):
         return super(ClientSSOToken, self).save(*args, **kwargs)
 
 
-class FileTransfer(models.Model):
+class RepoTransfer(models.Model):
     repo_id = models.CharField(max_length=36)
     org_id = models.IntegerField(db_index=True)
     from_user = models.CharField(max_length=255)
@@ -462,4 +462,4 @@ class FileTransfer(models.Model):
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     class Meta:
-        db_table = 'FileTransfer'
+        db_table = 'RepoTransfer'

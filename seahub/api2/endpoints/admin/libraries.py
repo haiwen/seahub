@@ -28,7 +28,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.base.models import FileTransfer
+from seahub.base.models import RepoTransfer
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -424,7 +424,7 @@ class AdminLibrary(APIView):
             # transfer repo
             try:
                 transfer_repo(repo_id, new_owner, is_share)
-                FileTransfer.objects.create(from_user=repo_owner,
+                RepoTransfer.objects.create(from_user=repo_owner,
                                             to=new_owner,
                                             repo_id=repo_id,
                                             org_id=-1,
