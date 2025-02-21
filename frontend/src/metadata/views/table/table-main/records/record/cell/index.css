@@ -203,7 +203,7 @@
   flex-shrink: 0;
 }
 
-.sf-metadata-result-table-cell .select-all-checkbox-container .sf-metadata-icon-partially-selected {
+.sf-metadata-result-table-cell .select-all-checkbox-container .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
   font-size: 12px;
   fill: #2b76f6;
@@ -252,7 +252,7 @@
   transform: rotate(45deg);
 }
 
-.sf-metadata-result-table-cell .mobile-select-all-container .sf-metadata-icon-partially-selected {
+.sf-metadata-result-table-cell .mobile-select-all-container .seafile-multicolor-icon-partially-selected {
   font-size: 14px;
   line-height: 1;
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
+import ModalPortal from '../../../../components/modal-portal';
 import Icon from '../../../../components/icon';
 import { useMetadataDetails } from '../../../hooks';
 import { useMetadataStatus } from '../../../../hooks';

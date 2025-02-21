@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../../../../../components/icon-btn';
 import { gettext } from '../../../../../../../../../utils/constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../../constants';
 import { checkIsDir } from '../../../../../../../../utils/row';
@@ -31,7 +31,7 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
 
   return (
     <>
-      <IconBtn id="sf-metadata-cell-open-file-btn" className="sf-metadata-cell-operation-btn" size={20} iconName="open-file" onClick={handelClick} />
+      <IconBtn id="sf-metadata-cell-open-file-btn" className="sf-metadata-cell-operation-btn" size={20} symbol="open-file" onClick={handelClick} />
       <UncontrolledTooltip
         hideArrow
         target="sf-metadata-cell-open-file-btn"

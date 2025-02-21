@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot, isPro, username } from '../../../utils/constants';
-import Loading from '../../../components/loading';
+import Loading from '../../loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';

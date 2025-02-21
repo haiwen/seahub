@@ -1,7 +1,8 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
+import { SearchInput, CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
@@ -232,7 +233,7 @@ const SingleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
             </div>
           </div>
         </div>

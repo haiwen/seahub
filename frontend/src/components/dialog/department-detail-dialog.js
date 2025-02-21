@@ -1,12 +1,12 @@
 import React, { Fragment, } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, isOrgContext, username } from '../../utils/constants';
 import { Modal, ModalBody } from 'reactstrap';
+import { gettext, isOrgContext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
-import Loading from '../../components/loading';
+import toaster from '../toast';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
 import Department from '../../models/department';
 import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';

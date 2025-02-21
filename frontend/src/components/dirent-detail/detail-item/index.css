@@ -20,14 +20,14 @@
   cursor: default;
 }
 
-.dirent-detail-item .dirent-detail-item-name .sf-metadata-icon {
+.dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
   margin-right: 6px;
   font-size: 14px;
   fill: #999;
   flex-shrink: 0;
 }
 
-.dirent-detail-item .dirent-detail-item-name .sf-metadata-icon-tag {
+.dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon-tag {
   position: relative;
   top: 1px;
 }

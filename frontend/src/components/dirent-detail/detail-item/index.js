@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../icon';
 import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/constants';
 
 import './index.css';
@@ -15,7 +15,7 @@ const DetailItem = ({ readonly = true, field, className, children }) => {
   return (
     <div className={classnames('dirent-detail-item', className)}>
       <div className="dirent-detail-item-name d-flex">
-        <div><Icon iconName={icon} /></div>
+        <div><Icon className="sf-metadata-icon" symbol={icon} /></div>
         <span className="dirent-detail-item-name-value">{field.name}</span>
       </div>
       <div className={classnames('dirent-detail-item-value', { 'editable': !readonly })} >

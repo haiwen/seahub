@@ -1,7 +1,8 @@
 import React, { useState, useCallback, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { ModalPortal, Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../icon';
+import ModalPortal from '../../../../modal-portal';
 import { gettext } from '../../../../../utils/constants';
 import { isMobile } from '../../../../../utils/utils';
 
@@ -41,7 +42,7 @@ const HeaderDropdownMenu = ({ column, ColumnDropdownMenu, customProps }) => {
         aria-label={gettext('More operations')}
         tabIndex={0}
       >
-        <Icon iconName="drop-down" />
+        <Icon className="sf-metadata-icon" symbol="drop-down" />
       </DropdownToggle>
       {isMenuShow && !isMobile &&
         <ModalPortal>

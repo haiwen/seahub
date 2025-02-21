@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../components/icon-btn';
 import { GroupbysPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
@@ -52,7 +52,7 @@ const GroupbySetter = ({
   return (
     <>
       <IconBtn
-        iconName="group"
+        symbol="group"
         size={24}
         className={className}
         onClick={onSetterToggle}

@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { CustomizePopover, IconBtn } from '@seafile/sf-metadata-ui-component';
+import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
 import { SELECT_OPTION_COLORS } from '../../../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
 import './index.css';
+import IconBtn from '../../../../../../components/icon-btn';
 
 const Color = ({ option, isViewing, isPredefined, onChange }) => {
   const target = useMemo(() => `option-color-${option.id}`, [option]);
@@ -46,7 +47,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
         className="sf-metadata-edit-option-color"
         id={target}
         style={{ backgroundColor: option?.color || null }}
-        iconName="drop-down"
+        symbol="drop-down"
         iconStyle={{ fill: option?.textColor || '#666' }}
         onClick={openPopover}
       />
@@ -69,7 +70,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
                       className={classnames('sf-metadata-edit-option-color-item-container', { 'selected': isSelected })}
                       id={target}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      iconName="check-mark"
+                      symbol="check-mark"
                       iconStyle={{ fill: textColor || '#666' }}
                     />
                   </label>
