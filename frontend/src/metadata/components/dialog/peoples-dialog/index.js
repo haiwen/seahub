@@ -9,7 +9,6 @@ import People from './people';
 
 import './index.css';
 
-
 const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
   const [selectedPeopleIds, setSelectedPeopleIds] = useState([]);
   const [isSubmitting, setSubmitting] = useState(false);
@@ -23,23 +22,15 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
         value: people._id,
         label: (
           <div className="select-option-people">
-            <div className='people-check-icon'>
+            <People people={people} />
+            <div className="people-check-icon">
               {isSelected && (<Icon iconName="check-mark" />)}
             </div>
-            <People people={people} />
           </div>
         ),
       };
     });
   }, [metadata, selectedPeopleIds]);
-
-  const selectedValue = useMemo(() => {
-    return Array.isArray(selectedPeopleIds) && selectedPeopleIds.length > 0 && selectedPeopleIds.map(id => {
-      const people = metadata.rows.find(people => people._id === id);
-      if (!people) return null;
-      return <People key={id} people={people} />;
-    });
-  }, [selectedPeopleIds, metadata]);
 
   const onSelectPeople = useCallback((value) => {
     if (selectedPeopleIds.some(id => id === value)) {
@@ -57,6 +48,23 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
     });
   }, [selectedImages, selectedPeopleIds, onToggle, onSubmit]);
 
+  const onDelete = useCallback((event, people) => {
+    event.stopPropagation();
+    setSelectedPeopleIds(selectedPeopleIds.filter(id => id !== people._id));
+  }, [selectedPeopleIds]);
+
+  const selectedValue = useMemo(() => {
+    return (
+      <div className="sf-metadata-delete-people">
+        {Array.isArray(selectedPeopleIds) && selectedPeopleIds.length > 0 && selectedPeopleIds.map(id => {
+          const people = metadata.rows.find(people => people._id === id);
+          if (!people) return null;
+          return <People key={id} people={people} isCancellable={true} onDelete={onDelete} />;
+        })}
+      </div>
+    );
+  }, [selectedPeopleIds, metadata, onDelete]);
+
   return (
     <Modal isOpen={true} toggle={() => onToggle()} className="sf-metadata-peoples-dialog">
       <SeahubModalHeader toggle={() => onToggle()}>{gettext('People')}</SeahubModalHeader>
@@ -68,6 +76,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
             options={peopleOptions}
             onSelectOption={onSelectPeople}
             supportMultipleSelect={true}
+            searchable={true}
           />
         </FormGroup>
       </ModalBody>
@@ -82,6 +91,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
 PeoplesDialog.propTypes = {
   onToggle: PropTypes.func,
   selectedImages: PropTypes.array,
+  onSubmit: PropTypes.func,
 };
 
 export default PeoplesDialog;
