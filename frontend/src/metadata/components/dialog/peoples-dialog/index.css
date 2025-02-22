@@ -1,3 +1,26 @@
+.sf-metadata-peoples-dialog .sf-metadata-select.custom-select {
+  min-height: 2.375rem;
+  height: fit-content;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .selected-option-show {
+  padding: 8px;
+  overflow: hidden;
+  text-overflow: unset;
+  white-space: unset;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item  {
+  background-color: #eaeaea;
+  border-radius: 10px;
+}
+
+.sf-metadata-peoples-dialog .sf-metadata-select.custom-select .sf-metadata-delete-people .sf-metadata-ui.collaborator-item .collaborator-remove .sf-metadata-icon-x-01 {
+  color: #666;
+  font-size: 12px;
+  transform: none;
+}
+
 .sf-metadata-peoples-dialog .sf-metadata-option {
   height: 30px;
   padding-top: 5px;
@@ -14,21 +37,16 @@
 }
 
 .sf-metadata-peoples-dialog .sf-metadata-option .select-option-people {
-  position: relative;
-  padding: 0 1.5rem;
-  width: 100%;
+  flex: 1;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .sf-metadata-peoples-dialog .sf-metadata-option .people-check-icon {
   width: 20px;
   height: 20px;
-  position: absolute;
-  left: 0;
-  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
