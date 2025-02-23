@@ -9,7 +9,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
-const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords }) => {
+const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords, canDelete }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
 
@@ -95,8 +95,6 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     }
   };
 
-  const canDelete = window.sfMetadataContext.checkCanDeleteRow();
-
   return (
     <ModalPortal>
       <ImageDialog
@@ -119,6 +117,7 @@ ImagePreviewer.propTypes = {
   repoInfo: PropTypes.object,
   closeImagePopup: PropTypes.func,
   deleteRecords: PropTypes.func,
+  canDelete: PropTypes.bool,
 };
 
 export default ImagePreviewer;

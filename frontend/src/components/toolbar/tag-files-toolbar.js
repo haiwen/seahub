@@ -1,19 +1,19 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { useTags } from '../../tag/hooks';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import ModalPortal from '../modal-portal';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 
 const TagFilesToolbar = () => {
+  const [selectedFileIds, setSelectedFileIds] = useState([]);
   const [isDropdownMenuShow, setIsDropdownMenuShow] = useState(false);
-  const { selectedFileIds, updateSelectedFileIds } = useTags();
 
   const unSelect = useCallback(() => {
-    updateSelectedFileIds([]);
-  }, [updateSelectedFileIds]);
+    setSelectedFileIds([]);
+    window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.UNSELECT_TAG_FILES);
+  }, []);
 
   const moveTagFile = useCallback(() => {
     window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.MOVE_TAG_FILE);
@@ -55,6 +55,16 @@ const TagFilesToolbar = () => {
     setIsDropdownMenuShow(!isDropdownMenuShow);
   }, [isDropdownMenuShow]);
 
+  useEffect(() => {
+    const unsubscribeSelectedFileIds = window.sfTagsDataContext && window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECTED_TAG_FILE_IDS, (ids) => {
+      setSelectedFileIds(ids);
+    });
+
+    return () => {
+      unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
+    };
+  }, []);
+
   return (
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>
@@ -87,9 +97,9 @@ const TagFilesToolbar = () => {
         />
         <ModalPortal>
           <DropdownMenu
-            positionFixed
+            className="position-fixed"
             flip={false}
-            modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+            modifiers={[{ preventOverflow: { boundariesElement: document.body } }]}
           >
             {menuList.map((item, index) => {
               if (item === 'Divider') {

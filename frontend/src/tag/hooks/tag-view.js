@@ -14,11 +14,12 @@ import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import URLDecorator from '../../utils/url-decorator';
 import { fileServerRoot, useGoFileserver } from '../../utils/constants';
+import { metadataAPI } from '../../metadata';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
-export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, renameFileCallback, ...params }) => {
+export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, renameFileCallback, showDirentToolbar, ...params }) => {
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -27,8 +28,9 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [selectedFileIds, setSelectedFileIds] = useState([]);
 
-  const { tagsData, selectedFileIds, updateSelectedFileIds, updateLocalTag } = useTags();
+  const { tagsData, updateLocalTag } = useTags();
 
   const getChildTagsIds = useCallback((tagID, nodeKey) => {
     let displayNode = null;
@@ -61,6 +63,14 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     setIsRenameDialogOpen(!isRenameDialogOpen);
   }, [isRenameDialogOpen]);
 
+  const updateSelectedFileIds = useCallback((ids) => {
+    showDirentToolbar(ids.length > 0);
+    setSelectedFileIds(ids);
+    setTimeout(() => {
+      window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECTED_TAG_FILE_IDS, ids);
+    }, 0);
+  }, [setSelectedFileIds, showDirentToolbar]);
+
   const moveTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
     seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
       moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
@@ -79,12 +89,19 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     const files = selectedFileIds.map(id => getFileById(tagFiles, id));
     const paths = files.map(f => Utils.joinPath(f[TAG_FILE_KEY.PARENT_DIR], f[TAG_FILE_KEY.NAME]));
     const fileNames = files.map(f => f[TAG_FILE_KEY.NAME]);
-    tagsAPI.batchDeleteFiles(repoID, paths).then(() => {
-      const row = getRowById(tagsData, tagID);
-      const oldTagFileLinks = getTagFilesLinks(row);
-      const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
-      const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
-      updateLocalTag(tagID, update);
+    metadataAPI.batchDeleteFiles(repoID, paths).then(() => {
+      const updatedTags = new Set();
+      files.forEach(file => {
+        file._tags.forEach(tag => updatedTags.add(tag.row_id));
+      });
+
+      updatedTags.forEach(tagID => {
+        const row = getRowById(tagsData, tagID);
+        const oldTagFileLinks = getTagFilesLinks(row);
+        const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
+        const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
+        updateLocalTag(tagID, update);
+      });
 
       deleteFilesCallback && deleteFilesCallback(paths, fileNames);
 
@@ -94,7 +111,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       }));
       updateSelectedFileIds([]);
     });
-  }, [repoID, tagID, tagsData, tagFiles, selectedFileIds, updateLocalTag, deleteFilesCallback, updateSelectedFileIds]);
+  }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTag, deleteFilesCallback, updateSelectedFileIds]);
 
   const getDownloadTarget = useCallback(() => {
     if (!selectedFileIds.length) return [];
@@ -120,7 +137,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     }
 
     const target = getDownloadTarget();
-    tagsAPI.zipDownload(repoID, '/', target).then(res => {
+    metadataAPI.zipDownload(repoID, '/', target).then(res => {
       const zipToken = res.data['zip_token'];
       location.href = `${fileServerRoot}zip/${zipToken}`;
     }).catch(error => {
@@ -143,7 +160,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       }));
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
-      toaster(errMessage);
+      toaster.danger(errMessage);
     });
   }, [repoID, renameFileCallback]);
 
@@ -169,6 +186,9 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
 
+    const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => {
+      setSelectedFileIds([]);
+    });
     const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
     const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
     const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
@@ -177,6 +197,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
 
     return () => {
+      unsubscribeUnselectFiles();
       unsubScribeMoveTagFile();
       unsubScribeCopyTagFile();
       unsubscribeDeleteTagFiles();
@@ -195,6 +216,8 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       tagID,
       repoInfo: params.repoInfo,
       updateCurrentDirent: params.updateCurrentDirent,
+      selectedFileIds,
+      updateSelectedFileIds,
       isMoveDialogOpen,
       isCopyDialogOpen,
       isZipDialogOpen,

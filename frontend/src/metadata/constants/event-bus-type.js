@@ -87,4 +87,6 @@ export const EVENT_BUS_TYPE = {
   DOWNLOAD_TAG_FILES: 'download_tag_files',
   DELETE_TAG_FILES: 'delete_tag_files',
   SHARE_TAG_FILE: 'share_tag_file',
+  SELECTED_TAG_FILE_IDS: 'selected_tag_file_ids',
+  UNSELECT_TAG_FILES: 'unselect_tag_files',
 };

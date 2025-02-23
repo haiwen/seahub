@@ -16,13 +16,12 @@ import { getColumnOriginName } from '../../metadata/utils/column';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagsContext = React.createContext(null);
 
-export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, showDirentToolbar, ...params }) => {
+export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ...params }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [isReloading, setReloading] = useState(false);
   const [tagsData, setTagsData] = useState(null);
   const [displayNodeKey, setDisplayNodeKey] = useState('');
-  const [selectedFileIds, setSelectedFileIds] = useState([]);
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
@@ -41,10 +40,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, sh
   const updateTags = useCallback((data) => {
     setTagsData(data);
   }, []);
-
-  const updateSelectedFileIds = useCallback((ids) => {
-    setSelectedFileIds(ids);
-  }, [setSelectedFileIds]);
 
   const reloadTags = useCallback(() => {
     setReloading(true);
@@ -272,14 +267,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, sh
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath, tagsData]);
 
-  useEffect(() => {
-    if (selectedFileIds.length > 0) {
-      showDirentToolbar(true);
-    } else {
-      showDirentToolbar(false);
-    }
-  }, [selectedFileIds, showDirentToolbar]);
-
   return (
     <TagsContext.Provider value={{
       isLoading,
@@ -306,9 +293,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, sh
       updateLocalTag,
       selectTag: handleSelectTag,
       modifyColumnWidth,
-      modifyLocalFileTags,
-      selectedFileIds,
-      updateSelectedFileIds,
+      modifyLocalFileTags
     }}>
       {children}
     </TagsContext.Provider>
