@@ -373,11 +373,7 @@ class SelectedDirentsToolbar extends React.Component {
       canDownload = permission.download;
       canDelete = permission.delete;
     }
-    const isTagView = this.props.currentMode === TAGS_MODE;
 
-    if (isTagView) {
-      return <TagFilesToolbar />;
-    }
     return (
       <Fragment>
         <div className="selected-dirents-toolbar">

@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useRef, useMemo } from 'react';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { useTagView, useTags } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
 import TagFile from './tag-file';
@@ -7,7 +6,6 @@ import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import EmptyTip from '../../../components/empty-tip';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
 import FixedWidthTable from '../../../components/common/fixed-width-table';
-import TagFilesContextMenu from './context-menu';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../../constants/file';
 import toaster from '../../../components/toast';
@@ -18,15 +16,22 @@ import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import { getFileById } from '../../utils/file';
 import Rename from '../../../components/dialog/rename-dirent';
+import ContextMenu from '../../../components/context-menu/context-menu';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { hideMenu, showMenu } from '../../../components/context-menu/actions';
+import TextTranslation from '../../../utils/text-translation';
 
 import './index.css';
 
+const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
+
 const TagFiles = () => {
-  const { tagFiles, repoID, repoInfo,
+  const { tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
     isMoveDialogOpen, isCopyDialogOpen, isZipDialogOpen, isShareDialogOpen, isRenameDialogOpen,
     toggleMoveDialog, toggleCopyDialog, toggleZipDialog, toggleShareDialog, toggleRenameDialog,
     moveTagFile, copyTagFile, addFolder, downloadTagFiles, deleteTagFiles, renameTagFile } = useTagView();
-  const { tagsData, selectedFileIds, updateSelectedFileIds } = useTags();
+  const { tagsData } = useTags();
+
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
 
   const currentImageRef = useRef(null);
@@ -74,32 +79,20 @@ const TagFiles = () => {
   }, [tagFiles, isSelectedAll, updateSelectedFileIds]);
 
   const onContainerClick = (event) => {
+    hideMenu();
     if (selectedFileIds.length > 0) updateSelectedFileIds([]);
   };
 
   const onSelectFile = useCallback((event, fileId) => {
-    if (event.button === 0) {
-      let newSelectedFiles = selectedFileIds ? selectedFileIds.slice(0) : [];
-      if (newSelectedFiles.includes(fileId)) {
-        newSelectedFiles = newSelectedFiles.filter(item => item !== fileId);
-      } else {
-        newSelectedFiles.push(fileId);
-      }
-      if (newSelectedFiles.length > 0) {
-        updateSelectedFileIds(newSelectedFiles);
-      } else {
-        updateSelectedFileIds([]);
-      }
-    } else if (event.button === 2) {
-      if (selectedFileIds.length <= 1) {
-        updateSelectedFileIds([fileId]);
-      }
+    if (event.target.tagName === 'TD') {
+      updateSelectedFileIds([fileId]);
+      return;
     }
+    const newSelectedFileIds = selectedFileIds.includes(fileId)
+      ? selectedFileIds.filter(id => id !== fileId)
+      : [...selectedFileIds, fileId];
+    updateSelectedFileIds(newSelectedFileIds);
   }, [selectedFileIds, updateSelectedFileIds]);
-
-  const reSelectFiles = useCallback((fileIds) => {
-    updateSelectedFileIds(fileIds);
-  }, [updateSelectedFileIds]);
 
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
@@ -118,19 +111,90 @@ const TagFiles = () => {
 
   const handleRenameTagFile = useCallback((newName) => {
     const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-    seafileAPI.listDir(repoID, path).then(res => {
-      const fileList = res.data.dirent_list.filter(dirent => dirent.type === 'file');
-      const isDuplicated = fileList.some(file => file.name === newName);
-      if (isDuplicated) {
-        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-        errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+    const newPath = Utils.joinPath(path, newName);
+    seafileAPI.getFileInfo(repoID, newPath).then(() => {
+      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      toaster.danger(errMessage);
+    }).catch(error => {
+      if (error.response && error.response.status === 404) {
+        const fullPath = Utils.joinPath(path, selectedFile[TAG_FILE_KEY.NAME]);
+        renameTagFile(selectedFile[TAG_FILE_KEY.ID], fullPath, newName);
+      } else {
+        const errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-        return false;
       }
-      const fullPath = Utils.joinPath(path, selectedFile[TAG_FILE_KEY.NAME]);
-      renameTagFile(selectedFile[TAG_FILE_KEY.ID], fullPath, newName);
     });
   }, [repoID, selectedFile, renameTagFile]);
+
+  const onGetMenuContainerSize = useCallback(() => {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  }, []);
+
+  const menuList = useMemo(() => {
+    const { DOWNLOAD, SHARE, DELETE, RENAME, MOVE, COPY } = TextTranslation;
+    if (selectedFileIds.length > 1) {
+      return [DOWNLOAD, DELETE];
+    } else {
+      return [DOWNLOAD, SHARE, DELETE, 'Divider', RENAME, MOVE, COPY];
+    }
+  }, [selectedFileIds]);
+
+  const onMenuItemClick = useCallback((option) => {
+    if (!option) return;
+    switch (option) {
+      case 'Move':
+        toggleMoveDialog();
+        break;
+      case 'Copy':
+        toggleCopyDialog();
+        break;
+      case 'Delete':
+        handleDeleteTagFiles();
+        break;
+      case 'Share':
+        toggleShareDialog();
+        break;
+      case 'Download':
+        downloadTagFiles();
+        break;
+      case 'Rename':
+        window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+        break;
+      default:
+        break;
+    }
+    hideMenu();
+  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, toggleShareDialog]);
+
+  const onTagFileContextMenu = useCallback((event, file) => {
+    if (selectedFileIds.length <= 1) {
+      const fileId = getRecordIdFromRecord(file);
+      updateSelectedFileIds([fileId]);
+    }
+    const id = TAG_FILE_CONTEXT_MENU_ID;
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    hideMenu();
+
+    let showMenuConfig = {
+      id: id,
+      position: { x, y },
+      target: event.target,
+      currentObject: file,
+      menuList: menuList,
+    };
+
+    if (menuList.length === 0) {
+      return;
+    }
+
+    showMenu(showMenuConfig);
+  }, [selectedFileIds, menuList, updateSelectedFileIds]);
 
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
@@ -184,6 +248,7 @@ const TagFiles = () => {
     enableDirPrivateShare = true;
   }
   const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
+  const canDelete = window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag();
   return (
     <>
       <div className="table-container" onClick={onContainerClick}>
@@ -205,9 +270,9 @@ const TagFiles = () => {
                 file={file}
                 tagsData={tagsData}
                 onSelectFile={onSelectFile}
-                reSelectFiles={reSelectFiles}
                 openImagePreview={openImagePreview}
                 onRenameFile={handleRenameTagFile}
+                onContextMenu={onTagFileContextMenu}
               />);
           })}
         </FixedWidthTable>
@@ -219,83 +284,66 @@ const TagFiles = () => {
           record={currentImageRef.current}
           table={tagFiles}
           closeImagePopup={closeImagePreviewer}
+          canDelete={canDelete}
         />
       )}
-      <TagFilesContextMenu
-        repoID={repoID}
-        repoInfo={repoInfo}
-        tagFiles={tagFiles}
-        selectedFileIds={selectedFileIds}
-        reSelectFiles={reSelectFiles}
-        downloadTagFiles={downloadTagFiles}
-        deleteTagFiles={handleDeleteTagFiles}
-        toggleMoveDialog={toggleMoveDialog}
-        toggleCopyDialog={toggleCopyDialog}
-        toggleZipDialog={toggleZipDialog}
-        toggleShareDialog={toggleShareDialog}
+      <ContextMenu
+        id={TAG_FILE_CONTEXT_MENU_ID}
+        onMenuItemClick={onMenuItemClick}
+        getMenuContainerSize={onGetMenuContainerSize}
       />
       {isMoveDialogOpen && (
-        <ModalPortal>
-          <MoveDirent
-            path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
-            repoID={repoID}
-            repoEncrypted={repoInfo.encrypted}
-            isMultipleOperation={false}
-            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
-            onItemMove={moveTagFile}
-            onCancelMove={toggleMoveDialog}
-            onAddFolder={addFolder}
-          />
-        </ModalPortal>
+        <MoveDirent
+          path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
+          repoID={repoID}
+          repoEncrypted={repoInfo.encrypted}
+          isMultipleOperation={false}
+          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
+          onItemMove={moveTagFile}
+          onCancelMove={toggleMoveDialog}
+          onAddFolder={addFolder}
+        />
       )}
       {isCopyDialogOpen && (
-        <ModalPortal>
-          <CopyDirent
-            path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
-            repoID={repoID}
-            repoEncrypted={repoInfo.encrypted}
-            isMultipleOperation={false}
-            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
-            onItemCopy={copyTagFile}
-            onCancelCopy={toggleCopyDialog}
-            onAddFolder={addFolder}
-          />
-        </ModalPortal>
+        <CopyDirent
+          path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
+          repoID={repoID}
+          repoEncrypted={repoInfo.encrypted}
+          isMultipleOperation={false}
+          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
+          onItemCopy={copyTagFile}
+          onCancelCopy={toggleCopyDialog}
+          onAddFolder={addFolder}
+        />
       )}
       {isZipDialogOpen && (
-        <ModalPortal>
-          <ZipDownloadDialog
-            repoID={repoID}
-            path="/"
-            target={getDownloadTarget()}
-            toggleDialog={toggleZipDialog}
-          />
-        </ModalPortal>
+        <ZipDownloadDialog
+          repoID={repoID}
+          path="/"
+          target={getDownloadTarget()}
+          toggleDialog={toggleZipDialog}
+        />
       )}
       {isShareDialogOpen &&
-        <ModalPortal>
-          <ShareDialog
-            itemType='file'
-            itemName={selectedFile[TAG_FILE_KEY.NAME]}
-            itemPath={Utils.joinPath(selectedFile[TAG_FILE_KEY.NAME], selectedFile[TAG_FILE_KEY.PARENT_DIR])}
-            userPerm={repoInfo.permission}
-            repoID={repoID}
-            repoEncrypted={repoInfo.repoEncrypted}
-            enableDirPrivateShare={enableDirPrivateShare}
-            isGroupOwnedRepo={isGroupOwnedRepo}
-            toggleDialog={toggleShareDialog}
-          />
-        </ModalPortal>
+        <ShareDialog
+          itemType='file'
+          itemName={selectedFile[TAG_FILE_KEY.NAME]}
+          itemPath={Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME])}
+          userPerm={repoInfo.permission}
+          repoID={repoID}
+          repoEncrypted={repoInfo.repoEncrypted}
+          enableDirPrivateShare={enableDirPrivateShare}
+          isGroupOwnedRepo={isGroupOwnedRepo}
+          toggleDialog={toggleShareDialog}
+        />
       }
       {isRenameDialogOpen &&
-        <ModalPortal>
-          <Rename
-            dirent={{ name: selectedFile[TAG_FILE_KEY.NAME], type: 'file' }}
-            onRename={handleRenameTagFile}
-            checkDuplicatedName={() => {}}
-            toggleCancel={toggleRenameDialog}
-          />
-        </ModalPortal>
+        <Rename
+          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME], type: 'file' }}
+          onRename={handleRenameTagFile}
+          checkDuplicatedName={() => {}}
+          toggleCancel={toggleRenameDialog}
+        />
       }
     </>
   );

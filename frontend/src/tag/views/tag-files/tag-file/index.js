@@ -18,7 +18,7 @@ import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFiles, openImagePreview, onRenameFile }) => {
+const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePreview, onRenameFile, onContextMenu }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
   const [isRenameing, setIsRenaming] = useState(false);
@@ -84,15 +84,8 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
   const handelClick = useCallback((event) => {
     event.stopPropagation();
     if (isRenameing) return;
-    if (event.target.tagName == 'TD') {
-      reSelectFiles([fileId]);
-    }
-  }, [fileId, reSelectFiles, isRenameing]);
-
-  const onContextMenu = useCallback((event) => {
-    event.preventDefault();
     onSelectFile(event, fileId);
-  }, [fileId, onSelectFile]);
+  }, [fileId, onSelectFile, isRenameing]);
 
   const onRenameCancel = useCallback(() => {
     setIsRenaming(false);
@@ -106,6 +99,12 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
   const toggleRename = useCallback((id) => {
     if (id === file[TAG_FILE_KEY.ID]) setIsRenaming(true);
   }, [file]);
+
+  const handleContextMenu = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onContextMenu(event, file);
+  }, [file, onContextMenu]);
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
@@ -125,7 +124,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, reSelectFil
       onClick={handelClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onContextMenu={onContextMenu}
+      onContextMenu={handleContextMenu}
     >
       <td className="pl10 pr-2">
         <input
