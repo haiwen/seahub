@@ -163,7 +163,6 @@ class ManageMembersDialog extends React.Component {
   };
 
   onClickDeptBtn = () => {
-    this.props.toggleManageMembersDialog();
     this.props.toggleDepartmentDetailDialog();
   };
 
