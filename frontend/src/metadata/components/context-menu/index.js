@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
+import ModalPortal from '../../../components/modal-portal';
 
 import './index.css';
 
@@ -25,7 +26,27 @@ const ContextMenu = ({
       top: y,
       left: x
     };
-    if (!menuRef.current) return menuStyles;
+    if (!menuRef.current) {
+      const indent = 10;
+      const menuMargin = 20;
+      const menuDefaultWidth = 200;
+      const dividerHeight = 16;
+      const optionHeight = 32;
+      const menuDefaultHeight = options.reduce((total, option) => {
+        if (option === 'Divider') {
+          return total + dividerHeight;
+        } else {
+          return total + optionHeight;
+        }
+      }, menuMargin + indent);
+      if (menuStyles.left + menuDefaultWidth + indent > window.innerWidth) {
+        menuStyles.left = window.innerWidth - menuDefaultWidth - indent;
+      }
+      if (menuStyles.top + menuDefaultHeight > window.innerHeight) {
+        menuStyles.top = window.innerHeight - menuDefaultHeight;
+      }
+      return menuStyles;
+    }
     const rect = menuRef.current.getBoundingClientRect();
     const { top: boundaryTop, right: boundaryRight, bottom: boundaryBottom, left: boundaryLeft } = boundaryCoordinates || {};
     menuStyles.top = menuStyles.top - boundaryTop;
@@ -44,7 +65,7 @@ const ContextMenu = ({
       menuStyles.left = rect.width < boundaryRight ? (boundaryRight - rect.width) / 2 : 0;
     }
     return menuStyles;
-  }, [boundaryCoordinates]);
+  }, [boundaryCoordinates, options]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
@@ -89,27 +110,25 @@ const ContextMenu = ({
   if (options.length === 0) return null;
 
   return (
-    <div
-      ref={menuRef}
-      className="dropdown-menu sf-metadata-contextmenu"
-      style={position}
-    >
-      {options.map((option, index) => {
-        if (option === 'Divider') {
-          return <DropdownItem key={index} divider />;
-        } else {
-          return (
-            <button
-              key={index}
-              className="dropdown-item sf-metadata-contextmenu-item"
-              onClick={(event) => handleOptionClick(event, option)}
-            >
-              {option.label}
-            </button>
-          );
-        }
-      })}
-    </div>
+    <ModalPortal>
+      <div className="dropdown-menu sf-metadata-contextmenu" style={position} ref={menuRef}>
+        {options.map((option, index) => {
+          if (option === 'Divider') {
+            return <DropdownItem key={index} divider />;
+          } else {
+            return (
+              <button
+                key={index}
+                className="dropdown-item"
+                onClick={(event) => handleOptionClick(event, option)}
+              >
+                {option.label}
+              </button>
+            );
+          }
+        })}
+      </div>
+    </ModalPortal>
   );
 };
 
