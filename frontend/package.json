@@ -9,7 +9,7 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@gatsbyjs/reach-router": "2.0.1",
-    "@seafile/react-image-lightbox": "4.0.0",
+    "@seafile/react-image-lightbox": "4.0.1",
     "@seafile/resumablejs": "1.1.16",
     "@seafile/sdoc-editor": "^2.0.8",
     "@seafile/seafile-calendar": "0.0.28",
