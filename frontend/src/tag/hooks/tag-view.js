@@ -12,9 +12,9 @@ import { getFileById } from '../utils/file';
 import { getRowById } from '../../metadata/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
+import { metadataAPI } from '../../metadata';
 import URLDecorator from '../../utils/url-decorator';
 import { fileServerRoot, useGoFileserver } from '../../utils/constants';
-import { metadataAPI } from '../../metadata';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
@@ -23,11 +23,6 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
-  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [selectedFileIds, setSelectedFileIds] = useState([]);
 
   const { tagsData, updateLocalTag } = useTags();
@@ -42,26 +37,6 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     }
     return getAllChildTagsIdsFromNode(displayNode);
   }, [tagsData]);
-
-  const toggleMoveDialog = useCallback(() => {
-    setIsMoveDialogOpen(!isMoveDialogOpen);
-  }, [isMoveDialogOpen]);
-
-  const toggleCopyDialog = useCallback(() => {
-    setIsCopyDialogOpen(!isCopyDialogOpen);
-  }, [isCopyDialogOpen]);
-
-  const toggleZipDialog = useCallback(() => {
-    setIsZipDialogOpen(!isZipDialogOpen);
-  }, [isZipDialogOpen]);
-
-  const toggleShareDialog = useCallback(() => {
-    setIsShareDialogOpen(!isShareDialogOpen);
-  }, [isShareDialogOpen]);
-
-  const toggleRenameDialog = useCallback(() => {
-    setIsRenameDialogOpen(!isRenameDialogOpen);
-  }, [isRenameDialogOpen]);
 
   const updateSelectedFileIds = useCallback((ids) => {
     showDirentToolbar(ids.length > 0);
@@ -132,7 +107,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       return;
     }
     if (!useGoFileserver) {
-      toggleZipDialog();
+      window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_ZIP_DIALOG);
       return;
     }
 
@@ -144,7 +119,7 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, tagFiles, selectedFileIds, getDownloadTarget, toggleZipDialog]);
+  }, [repoID, tagFiles, selectedFileIds, getDownloadTarget]);
 
   const renameTagFile = useCallback((id, path, newName) => {
     seafileAPI.renameFile(repoID, path, newName).then(res => {
@@ -187,25 +162,15 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     if (!window.sfTagsDataContext) return;
 
     const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => {
-      setSelectedFileIds([]);
+      updateSelectedFileIds([]);
     });
-    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
-    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
     const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
-    const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
-    const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, toggleShareDialog);
-    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
 
     return () => {
       unsubscribeUnselectFiles();
-      unsubScribeMoveTagFile();
-      unsubScribeCopyTagFile();
       unsubscribeDeleteTagFiles();
-      unsubscribeDownloadTagFiles();
-      unsubscribeShareTagFile();
-      unsubscribeRenameTagFile();
     };
-  }, [toggleMoveDialog, toggleCopyDialog, toggleShareDialog, deleteTagFiles, downloadTagFiles, renameTagFile, toggleRenameDialog]);
+  }, [deleteTagFiles, renameTagFile, updateSelectedFileIds]);
 
   return (
     <TagViewContext.Provider value={{
@@ -218,22 +183,12 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       updateCurrentDirent: params.updateCurrentDirent,
       selectedFileIds,
       updateSelectedFileIds,
-      isMoveDialogOpen,
-      isCopyDialogOpen,
-      isZipDialogOpen,
-      isShareDialogOpen,
-      isRenameDialogOpen,
-      toggleMoveDialog,
-      toggleCopyDialog,
-      toggleZipDialog,
-      toggleShareDialog,
-      toggleRenameDialog,
       moveTagFile,
       copyTagFile,
       addFolder: addFolderCallback,
-      deleteTagFiles: deleteTagFiles,
-      downloadTagFiles: downloadTagFiles,
-      renameTagFile: renameTagFile,
+      deleteTagFiles,
+      downloadTagFiles,
+      renameTagFile,
     }}>
       {children}
     </TagViewContext.Provider>
