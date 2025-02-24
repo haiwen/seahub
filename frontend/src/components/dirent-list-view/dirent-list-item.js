@@ -307,9 +307,7 @@ class DirentListItem extends React.Component {
     this.props.onItemDelete(this.state.dirent);
   };
 
-  onItemShare = (e) => {
-    e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation(); // for document event
+  onItemShare = () => {
     this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
@@ -344,7 +342,7 @@ class DirentListItem extends React.Component {
         this.onItemDownload(event);
         break;
       case 'Share':
-        this.onItemShare(event);
+        this.onItemShare();
         break;
       case 'Delete':
         this.onItemDelete(event);
@@ -723,7 +721,7 @@ class DirentListItem extends React.Component {
   };
 
   renderItemOperation = () => {
-    let { currentRepoInfo, selectedDirentList } = this.props;
+    let { selectedDirentList } = this.props;
     let dirent = this.state.dirent;
     let canDownload = true;
     let canDelete = true;
@@ -734,9 +732,6 @@ class DirentListItem extends React.Component {
       canDelete = permission.delete;
     }
 
-    // https://dev.seafile.com/seahub/lib/d6f300e7-bb2b-4722-b83e-cf45e370bfbc/file/seaf-server%20%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3/%E8%B5%84%E6%96%99%E5%BA%93%E6%9D%83%E9%99%90%E8%A7%84%E8%8C%83.md
-    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
-
     return (
       <>
         {selectedDirentList.length > 1 ?
@@ -745,9 +740,6 @@ class DirentListItem extends React.Component {
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
-                )}
-                {showShareBtn && (
-                  <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
@@ -768,9 +760,6 @@ class DirentListItem extends React.Component {
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
-                )}
-                {showShareBtn && (
-                  <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
