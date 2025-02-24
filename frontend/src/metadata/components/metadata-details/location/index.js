@@ -9,11 +9,9 @@ import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../uti
 import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
 import { isValidPosition } from '../../../utils/validate';
-import toaster from '../../../../components/toast';
 import ObjectUtils from '../../../utils/object-utils';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
-
 import './index.css';
 
 class Location extends React.Component {
@@ -111,11 +109,10 @@ class Location extends React.Component {
       this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
       this.addMarkerByPosition(lng, lat);
-      const geocoder = new window.BMapGL.Geocoder();
-      geocoder.getLocation(point, (res) => {
-        const address = res.address;
-        this.setState({ address });
-      });
+      let location_translated = this.props.record._location_translated;
+      if (location_translated) {
+        this.setState({ address: location_translated.address });
+      }
     });
   };
 
@@ -138,18 +135,10 @@ class Location extends React.Component {
       });
       this.addMarkerByPosition(lng, lat);
       this.map.setCenter(gcPosition);
-      var geocoder = new window.google.maps.Geocoder();
-      var latLng = new window.google.maps.LatLng(lat, lng);
-      geocoder.geocode({ 'location': latLng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            var address = results[0].formatted_address.split(' ')[1];
-            this.setState({ address });
-          } else {
-            toaster.warning(gettext('No address found for the given coordinates.'));
-          }
-        }
-      });
+      let location_translated = this.props.record._location_translated;
+      if (location_translated) {
+        this.setState({ address: location_translated.address });
+      }
     });
   };
 

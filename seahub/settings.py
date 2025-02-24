@@ -1080,9 +1080,11 @@ if not os.path.exists(EVENTS_CONFIG_FILE):
 
 # baidu map
 BAIDU_MAP_KEY = ''
+BAIDU_MAP_URL = ''
 
 # google map
 GOOGLE_MAP_KEY = ''
+GOOGLE_MAP_URL = ''
 GOOGLE_MAP_ID = ''
 
 
