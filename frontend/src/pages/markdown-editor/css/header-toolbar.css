@@ -43,7 +43,7 @@
   color: #eb8205;
 }
 
-.sf-md-viewer-topbar .btn:focus, 
+.sf-md-viewer-topbar .btn:focus,
 .sf-md-viewer-topbar .btn:active {
   box-shadow: none !important;
   background-color: #EFEFEF;
@@ -64,5 +64,11 @@
   cursor: default;
 }
 
-
-
+.sf-md-viewer-topbar .sf-md-header-more-tool {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
