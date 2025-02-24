@@ -711,7 +711,12 @@ def view_lib_file(request, repo_id, path):
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
-
+    
+    if 'url' == str(filetype): # If the file extension is .url and the file content starts with an http domain name, then when opening the file, it will redirect to the domain name specified in the file content.
+        error_msg, file_content, encoding = get_file_content(filetype, inner_path, 'auto')
+        if str(file_content).startswith('http'):
+            return HttpResponseRedirect(str(file_content))
+            
     if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_new(repo_id, path)
 
