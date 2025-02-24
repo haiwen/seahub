@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../../components/click-outside';
 import Editor from '../editor';
 import { Utils } from '../../../../utils/utils';
 import { isCellValueChanged, getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds } from '../../../utils/cell';

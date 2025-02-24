@@ -1,9 +1,10 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
-import Content from './content';
+import CenteredLoading from '../../../components/centered-loading';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ModalPortal from '../../../components/modal-portal';
+import Content from './content';
+import GalleryContextmenu from './context-menu';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
@@ -11,7 +12,6 @@ import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOrigina
 import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
 import { getRowById } from '../../utils/table';
 import { getEventClassName } from '../../utils/common';
-import GalleryContextmenu from './context-menu';
 import { getColumns, getImageSize, getRowHeight } from './utils';
 import ObjectUtils from '../../utils/object-utils';
 

@@ -2,7 +2,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 import classnames from 'classnames';
-import { CustomizeSelect, CustomizePopover, Icon, IconBtn } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect, CustomizePopover } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../../components/icon';
+import IconBtn from '../../../../../../components/icon-btn';
 import { gettext } from '../../../../../../utils/constants';
 import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_DATA } from '../../../../../constants';
 
@@ -56,8 +58,8 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
             id="sf-metadata-rate-column-data-style-setting-wrapper"
             onClick={openStylePopover}
           >
-            <div className="selected-option" style={{ fill: color }}><Icon iconName={type} /></div>
-            <Icon iconName="drop-down" />
+            <div className="selected-option" style={{ fill: color }}><Icon symbol={type} /></div>
+            <Icon symbol="drop-down" />
           </div>
           {isShowStylePopover && (
             <CustomizePopover
@@ -73,7 +75,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
                     return (
                       <IconBtn
                         key={type + 'color' + color}
-                        iconName={type}
+                        symbol={type}
                         onClick={() => onRateStyleChange(color, type)}
                         style={{ fill: color }}
                         className="rate-column-data-style-item"

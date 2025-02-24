@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ClickOutside, SfCalendar } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
+import { SfCalendar } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../../components/click-outside';
 import { getDateDisplayString, isCellValueChanged } from '../../../utils/cell';
 import { CellType, DEFAULT_DATE_FORMAT } from '../../../constants';
 import { gettext } from '../../../../utils/constants';

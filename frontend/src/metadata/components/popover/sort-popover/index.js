@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import { UncontrolledPopover } from 'reactstrap';
-import { CustomizeAddTool, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import { CustomizeAddTool, CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { getColumnByKey } from '../../../utils/column';
 import { getEventClassName } from '../../../utils/common';
@@ -145,7 +146,7 @@ class SortPopover extends Component {
         value: { column },
         label: (
           <Fragment>
-            <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+            <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
             <span className=''>{name}</span>
           </Fragment>
         )
@@ -177,7 +178,7 @@ class SortPopover extends Component {
     const selectedColumn = {
       label: (
         <Fragment>
-          <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+          <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
           <span className="select-option-name" title={name} aria-label={name}>{name}</span>
         </Fragment>
       )
@@ -198,7 +199,7 @@ class SortPopover extends Component {
       <div key={'sort-item-' + index} className="sort-item">
         {!readOnly &&
           <div className="delete-sort" onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
-            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon iconName="fork-number"/>}
+            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="fork-number"/>}
           </div>
         }
         <div className="condition">

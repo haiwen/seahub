@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { DragSource, DropTarget } from 'react-dnd';
 import classnames from 'classnames';
-import { IconBtn, Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../components/icon';
+import IconBtn from '../../../../../components/icon-btn';
 import Color from './color';
 import Name from './name';
 
@@ -84,7 +85,7 @@ const Option = ({
       >
         {connectDragSource(
           <div className="sf-metadata-edit-option-drag-container">
-            <Icon iconName="drag" />
+            <Icon symbol="drag" />
           </div>
         )}
         <div className="sf-metadata-edit-option-content">
@@ -101,7 +102,7 @@ const Option = ({
         </div>
         <div id={`sf-metadata-edit-option-more-operation-${option.id}`} className="sf-metadata-edit-option-more-operations">
           {(isViewing || isDeleting) && (
-            <IconBtn className="sf-metadata-edit-option-operation-item" onClick={onDelete} iconName="delete" />
+            <IconBtn className="sf-metadata-edit-option-operation-item" onClick={onDelete} symbol="delete" />
           )}
         </div>
       </div>

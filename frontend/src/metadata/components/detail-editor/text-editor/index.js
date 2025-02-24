@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../../components/click-outside';
 import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
 import { isCellValueChanged } from '../../../utils/cell';
