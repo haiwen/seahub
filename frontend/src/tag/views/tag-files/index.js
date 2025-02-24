@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useMemo } from 'react';
+import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
 import { useTagView, useTags } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
 import TagFile from './tag-file';
@@ -20,6 +20,7 @@ import ContextMenu from '../../../components/context-menu/context-menu';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import TextTranslation from '../../../utils/text-translation';
+import URLDecorator from '../../../utils/url-decorator';
 
 import './index.css';
 
@@ -27,11 +28,14 @@ const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
 
 const TagFiles = () => {
   const { tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    isMoveDialogOpen, isCopyDialogOpen, isZipDialogOpen, isShareDialogOpen, isRenameDialogOpen,
-    toggleMoveDialog, toggleCopyDialog, toggleZipDialog, toggleShareDialog, toggleRenameDialog,
-    moveTagFile, copyTagFile, addFolder, downloadTagFiles, deleteTagFiles, renameTagFile } = useTagView();
+    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, downloadTagFiles } = useTagView();
   const { tagsData } = useTags();
 
+  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
+  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
 
   const currentImageRef = useRef(null);
@@ -94,6 +98,26 @@ const TagFiles = () => {
     updateSelectedFileIds(newSelectedFileIds);
   }, [selectedFileIds, updateSelectedFileIds]);
 
+  const toggleMoveDialog = useCallback(() => {
+    setIsMoveDialogOpen(!isMoveDialogOpen);
+  }, [isMoveDialogOpen]);
+
+  const toggleCopyDialog = useCallback(() => {
+    setIsCopyDialogOpen(!isCopyDialogOpen);
+  }, [isCopyDialogOpen]);
+
+  const toggleZipDialog = useCallback(() => {
+    setIsZipDialogOpen(!isZipDialogOpen);
+  }, [isZipDialogOpen]);
+
+  const toggleShareDialog = useCallback(() => {
+    setIsShareDialogOpen(!isShareDialogOpen);
+  }, [isShareDialogOpen]);
+
+  const toggleRenameDialog = useCallback(() => {
+    setIsRenameDialogOpen(!isRenameDialogOpen);
+  }, [isRenameDialogOpen]);
+
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
     setImagePreviewerVisible(true);
@@ -127,6 +151,12 @@ const TagFiles = () => {
     });
   }, [repoID, selectedFile, renameTagFile]);
 
+  const openViaClient = useCallback(() => {
+    const filePath = Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME]);
+    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID, filePath });
+    location.href = url;
+  }, [repoID, selectedFile]);
+
   const onGetMenuContainerSize = useCallback(() => {
     return {
       width: window.innerWidth,
@@ -135,11 +165,20 @@ const TagFiles = () => {
   }, []);
 
   const menuList = useMemo(() => {
-    const { DOWNLOAD, SHARE, DELETE, RENAME, MOVE, COPY } = TextTranslation;
+    const { DOWNLOAD, SHARE, DELETE, RENAME, MOVE, COPY, OPEN_VIA_CLIENT } = TextTranslation;
     if (selectedFileIds.length > 1) {
       return [DOWNLOAD, DELETE];
     } else {
-      return [DOWNLOAD, SHARE, DELETE, 'Divider', RENAME, MOVE, COPY];
+      const canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
+      const menuList = [DOWNLOAD, SHARE];
+      if (canModify) {
+        menuList.push(DELETE, 'Divider', RENAME);
+      }
+      menuList.push(MOVE, COPY);
+      if (canModify) {
+        menuList.push('Divider', OPEN_VIA_CLIENT);
+      }
+      return menuList;
     }
   }, [selectedFileIds]);
 
@@ -164,11 +203,14 @@ const TagFiles = () => {
       case 'Rename':
         window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
         break;
+      case 'Open via Client':
+        openViaClient();
+        break;
       default:
         break;
     }
     hideMenu();
-  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, toggleShareDialog]);
+  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, toggleShareDialog, openViaClient]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
     if (selectedFileIds.length <= 1) {
@@ -195,6 +237,22 @@ const TagFiles = () => {
 
     showMenu(showMenuConfig);
   }, [selectedFileIds, menuList, updateSelectedFileIds]);
+
+  useEffect(() => {
+    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
+    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
+    const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, toggleShareDialog);
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
+    const unsubscribeZipDownload = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_ZIP_DIALOG, toggleZipDialog);
+
+    return () => {
+      unsubScribeMoveTagFile();
+      unsubScribeCopyTagFile();
+      unsubscribeShareTagFile();
+      unsubscribeRenameTagFile();
+      unsubscribeZipDownload();
+    };
+  });
 
   if (tagFiles.rows.length === 0) {
     return (<EmptyTip text={gettext('No files')} />);
