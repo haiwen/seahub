@@ -293,7 +293,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateLocalTag,
       selectTag: handleSelectTag,
       modifyColumnWidth,
-      modifyLocalFileTags,
+      modifyLocalFileTags
     }}>
       {children}
     </TagsContext.Provider>

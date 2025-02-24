@@ -84,6 +84,7 @@ const propTypes = {
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
+  showDirentToolbar: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -225,6 +226,10 @@ class DirColumnView extends React.Component {
               renameFileCallback={this.props.renameFileCallback}
               updateCurrentDirent={this.props.updateCurrentDirent}
               updateCurrentPath={this.props.updateCurrentPath}
+              moveFileCallback={this.props.moveFileCallback}
+              copyFileCallback={this.props.copyFileCallback}
+              addFolderCallback={this.props.onAddFolder}
+              showDirentToolbar={this.props.showDirentToolbar}
             />
           )}
           {currentMode === LIST_MODE && (

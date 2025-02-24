@@ -78,4 +78,16 @@ export const EVENT_BUS_TYPE = {
   // map
   MODIFY_MAP_TYPE: 'modify_map_type',
   MAP_VIEW: 'map_view',
+
+  // tag file
+  MOVE_TAG_FILE: 'move_tag_file',
+  COPY_TAG_FILE: 'copy_tag_file',
+  RENAME_TAG_FILE: 'rename_tag_file',
+  TOGGLE_RENAME_DIALOG: 'toggle_rename_dialog',
+  TOGGLE_ZIP_DIALOG: 'toggle_zip_dialog',
+  DOWNLOAD_TAG_FILES: 'download_tag_files',
+  DELETE_TAG_FILES: 'delete_tag_files',
+  SHARE_TAG_FILE: 'share_tag_file',
+  SELECTED_TAG_FILE_IDS: 'selected_tag_file_ids',
+  UNSELECT_TAG_FILES: 'unselect_tag_files',
 };

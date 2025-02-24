@@ -30,6 +30,7 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
+import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -1337,7 +1338,7 @@ class LibContentView extends React.Component {
       this.updateMoveCopyTreeNode(copyToDirentPath);
     }
 
-    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
+    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE && this.state.currentMode !== TAGS_MODE) {
       this.loadDirentList(this.state.path);
     }
 
@@ -2164,6 +2165,10 @@ class LibContentView extends React.Component {
     this.setState({ path });
   };
 
+  showDirentToolbar = (isDirentSelected) => {
+    this.setState({ isDirentSelected });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2235,7 +2240,7 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
-        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
@@ -2251,33 +2256,36 @@ class LibContentView extends React.Component {
                         'w-100': !isDesktop,
                         'animation-children': isDirentSelected
                       })}>
-                      {isDirentSelected ?
-                        <SelectedDirentsToolbar
-                          repoID={this.props.repoID}
-                          path={this.state.path}
-                          userPerm={userPerm}
-                          repoEncrypted={this.state.repoEncrypted}
-                          repoTags={this.state.repoTags}
-                          selectedDirentList={this.state.selectedDirentList}
-                          direntList={direntItemsList}
-                          onItemsMove={this.onMoveItems}
-                          onItemsCopy={this.onCopyItems}
-                          onItemsDelete={this.onDeleteItems}
-                          onItemRename={this.onMainPanelItemRename}
-                          isRepoOwner={isRepoOwner}
-                          currentRepoInfo={this.state.currentRepoInfo}
-                          enableDirPrivateShare={enableDirPrivateShare}
-                          updateDirent={this.updateDirent}
-                          unSelectDirent={this.unSelectDirent}
-                          onFilesTagChanged={this.onFileTagChanged}
-                          showShareBtn={showShareBtn}
-                          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                          showDirentDetail={this.showDirentDetail}
-                          currentMode={this.state.currentMode}
-                          onItemConvert={this.onConvertItem}
-                          onAddFolder={this.onAddFolder}
-                        />
-                        :
+                      {isDirentSelected ? (
+                        this.state.currentMode === TAGS_MODE ?
+                          <TagFilesToolbar />
+                          :
+                          <SelectedDirentsToolbar
+                            repoID={this.props.repoID}
+                            path={this.state.path}
+                            userPerm={userPerm}
+                            repoEncrypted={this.state.repoEncrypted}
+                            repoTags={this.state.repoTags}
+                            selectedDirentList={this.state.selectedDirentList}
+                            direntList={direntItemsList}
+                            onItemsMove={this.onMoveItems}
+                            onItemsCopy={this.onCopyItems}
+                            onItemsDelete={this.onDeleteItems}
+                            onItemRename={this.onMainPanelItemRename}
+                            isRepoOwner={isRepoOwner}
+                            currentRepoInfo={this.state.currentRepoInfo}
+                            enableDirPrivateShare={enableDirPrivateShare}
+                            updateDirent={this.updateDirent}
+                            unSelectDirent={this.unSelectDirent}
+                            onFilesTagChanged={this.onFileTagChanged}
+                            showShareBtn={showShareBtn}
+                            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                            showDirentDetail={this.showDirentDetail}
+                            currentMode={this.state.currentMode}
+                            onItemConvert={this.onConvertItem}
+                            onAddFolder={this.onAddFolder}
+                          />
+                      ) : (
                         <CurDirPath
                           currentRepoInfo={this.state.currentRepoInfo}
                           repoID={this.props.repoID}
@@ -2310,7 +2318,7 @@ class LibContentView extends React.Component {
                           loadDirentList={this.loadDirentList}
                           onAddFolderNode={this.onAddFolder}
                         />
-                      }
+                      )}
                     </div>
                     {isDesktop &&
                       <div className="cur-view-path-right py-1">
@@ -2405,6 +2413,7 @@ class LibContentView extends React.Component {
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
+                        showDirentToolbar={this.showDirentToolbar}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>
