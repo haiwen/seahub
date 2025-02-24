@@ -84,10 +84,18 @@ export const EVENT_BUS_TYPE = {
   COPY_TAG_FILE: 'copy_tag_file',
   RENAME_TAG_FILE: 'rename_tag_file',
   TOGGLE_RENAME_DIALOG: 'toggle_rename_dialog',
+  SHARE_TAG_FILE: 'share_tag_file',
   TOGGLE_ZIP_DIALOG: 'toggle_zip_dialog',
   DOWNLOAD_TAG_FILES: 'download_tag_files',
   DELETE_TAG_FILES: 'delete_tag_files',
-  SHARE_TAG_FILE: 'share_tag_file',
-  SELECTED_TAG_FILE_IDS: 'selected_tag_file_ids',
+  SELECT_TAG_FILES: 'select_tag_files',
   UNSELECT_TAG_FILES: 'unselect_tag_files',
+
+  // file
+  FILE_HISTORY: 'file_history',
+  FILE_ACCESS_LOG: 'file_access_log',
+  OPEN_VIA_CLIENT: 'open_via_client',
+  CONVERT_FILE: 'convert_file',
+  EXPORT_DOCX: 'export_docx',
+  EXPORT_SDOC: 'export_sdoc',
 };

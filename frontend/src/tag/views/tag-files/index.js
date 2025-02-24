@@ -1,25 +1,26 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
 import { useTagView, useTags } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
-import TagFile from './tag-file';
-import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import EmptyTip from '../../../components/empty-tip';
-import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
-import FixedWidthTable from '../../../components/common/fixed-width-table';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { TAG_FILE_KEY } from '../../constants/file';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
+import ContextMenu from '../../../components/context-menu/context-menu';
 import MoveDirent from '../../../components/dialog/move-dirent-dialog';
 import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
-import { getFileById } from '../../utils/file';
+import FileAccessLog from '../../../components/dialog/file-access-log';
 import Rename from '../../../components/dialog/rename-dirent';
-import ContextMenu from '../../../components/context-menu/context-menu';
+import FixedWidthTable from '../../../components/common/fixed-width-table';
+import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
+import TagFile from './tag-file';
+import TextTranslation from '../../../utils/text-translation';
+import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { TAG_FILE_KEY } from '../../constants/file';
+import { Utils } from '../../../utils/utils';
+import { getFileById, getFileName, getFileParentDir, getTagFileOperationList } from '../../utils/file';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { hideMenu, showMenu } from '../../../components/context-menu/actions';
-import TextTranslation from '../../../utils/text-translation';
 import URLDecorator from '../../../utils/url-decorator';
 
 import './index.css';
@@ -27,9 +28,11 @@ import './index.css';
 const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
 
 const TagFiles = () => {
-  const { tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, downloadTagFiles } = useTagView();
   const { tagsData } = useTags();
+  const {
+    tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
+    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile,
+  } = useTagView();
 
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
@@ -37,6 +40,7 @@ const TagFiles = () => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
+  const [isFileAccessLogDialogOpen, setIsFileAccessLogDialogOpen] = useState(false);
 
   const currentImageRef = useRef(null);
 
@@ -44,19 +48,20 @@ const TagFiles = () => {
     return selectedFileIds ? selectedFileIds.length === tagFiles.rows.length : false;
   }, [selectedFileIds, tagFiles]);
 
+  // selectedFile
   const selectedFile = useMemo(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     return getFileById(tagFiles, selectedFileIds[0]);
   }, [selectedFileIds, tagFiles]);
-
-  const getDownloadTarget = useCallback(() => {
-    if (!selectedFileIds.length) return [];
-    return selectedFileIds.map(id => {
-      const file = getFileById(tagFiles, id);
-      const path = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
-      return path;
-    });
-  }, [tagFiles, selectedFileIds]);
+  const selectedFileParentDir = useMemo(() => {
+    return getFileParentDir(selectedFile);
+  }, [selectedFile]);
+  const selectedFileName = useMemo(() => {
+    return getFileName(selectedFile);
+  }, [selectedFile]);
+  const selectedFilePath = useMemo(() => {
+    return selectedFileParentDir && selectedFileName ? Utils.joinPath(selectedFileParentDir, selectedFileName) : '';
+  }, [selectedFileParentDir, selectedFileName]);
 
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
@@ -141,7 +146,7 @@ const TagFiles = () => {
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       toaster.danger(errMessage);
     }).catch(error => {
-      if (error.response && error.response.status === 404) {
+      if (error && error.response && error.response.status === 404) {
         const fullPath = Utils.joinPath(path, selectedFile[TAG_FILE_KEY.NAME]);
         renameTagFile(selectedFile[TAG_FILE_KEY.ID], fullPath, newName);
       } else {
@@ -152,70 +157,116 @@ const TagFiles = () => {
   }, [repoID, selectedFile, renameTagFile]);
 
   const openViaClient = useCallback(() => {
-    const filePath = Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME]);
-    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID, filePath });
+    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID, selectedFilePath });
     location.href = url;
-  }, [repoID, selectedFile]);
+  }, [repoID, selectedFilePath]);
 
-  const onGetMenuContainerSize = useCallback(() => {
+  const onHistory = useCallback(() => {
+    let url = URLDecorator.getUrl({
+      type: 'file_revisions',
+      repoID: repoID,
+      filePath: selectedFilePath,
+    });
+    location.href = url;
+  }, [repoID, selectedFilePath]);
+
+  const onConvertFile = useCallback((dstType) => {
+    toaster.notifyInProgress(gettext('Converting, please wait...'), { 'id': 'conversion' });
+    convertFile(selectedFilePath, dstType);
+  }, [selectedFilePath, convertFile]);
+
+  const exportDocx = useCallback((dirent) => {
+    const serviceUrl = window.app.config.serviceURL;
+    const exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + selectedFilePath;
+    window.location.href = exportToDocxUrl;
+  }, [repoID, selectedFilePath]);
+
+  const exportSdoc = useCallback((dirent) => {
+    const serviceUrl = window.app.config.serviceURL;
+    const exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + selectedFilePath + '?dl=1';
+    window.location.href = exportToSdocUrl;
+  }, [repoID, selectedFilePath]);
+
+  const getMenuContainerSize = useCallback(() => {
     return {
       width: window.innerWidth,
       height: window.innerHeight,
     };
   }, []);
 
-  const menuList = useMemo(() => {
-    const { DOWNLOAD, SHARE, DELETE, RENAME, MOVE, COPY, OPEN_VIA_CLIENT } = TextTranslation;
+  const getMenuList = useCallback((file) => {
+    const { DOWNLOAD, DELETE } = TextTranslation;
     if (selectedFileIds.length > 1) {
       return [DOWNLOAD, DELETE];
-    } else {
-      const canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
-      const menuList = [DOWNLOAD, SHARE];
-      if (canModify) {
-        menuList.push(DELETE, 'Divider', RENAME);
-      }
-      menuList.push(MOVE, COPY);
-      if (canModify) {
-        menuList.push('Divider', OPEN_VIA_CLIENT);
-      }
-      return menuList;
     }
-  }, [selectedFileIds]);
+    const canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
+    const fileName = file ? getFileName(file) : selectedFileName;
+    return getTagFileOperationList(fileName, repoInfo, canModify);
+  }, [selectedFileIds, selectedFileName, repoInfo]);
 
   const onMenuItemClick = useCallback((option) => {
     if (!option) return;
     switch (option) {
-      case 'Move':
+      case TextTranslation.MOVE.key:
         toggleMoveDialog();
         break;
-      case 'Copy':
+      case TextTranslation.COPY.key:
         toggleCopyDialog();
         break;
-      case 'Delete':
+      case TextTranslation.DELETE.key:
         handleDeleteTagFiles();
         break;
-      case 'Share':
+      case TextTranslation.SHARE.key:
         toggleShareDialog();
         break;
-      case 'Download':
+      case TextTranslation.DOWNLOAD.key:
         downloadTagFiles();
         break;
-      case 'Rename':
+      case TextTranslation.RENAME.key:
         window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
         break;
-      case 'Open via Client':
+      case TextTranslation.CONVERT_TO_SDOC.key:
+        onConvertFile('sdoc');
+        break;
+      case TextTranslation.CONVERT_TO_MARKDOWN.key: {
+        onConvertFile('markdown');
+        break;
+      }
+      case TextTranslation.CONVERT_TO_DOCX.key: {
+        onConvertFile('docx');
+        break;
+      }
+      case TextTranslation.EXPORT_DOCX.key: {
+        exportDocx();
+        break;
+      }
+      case TextTranslation.EXPORT_SDOC.key: {
+        exportSdoc();
+        break;
+      }
+      case TextTranslation.HISTORY.key:
+        onHistory();
+        break;
+      case TextTranslation.ACCESS_LOG.key:
+        setIsFileAccessLogDialogOpen(true);
+        break;
+      case TextTranslation.OPEN_VIA_CLIENT.key:
         openViaClient();
         break;
       default:
         break;
     }
     hideMenu();
-  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, toggleShareDialog, openViaClient]);
+  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
+    let menuList = [];
     if (selectedFileIds.length <= 1) {
       const fileId = getRecordIdFromRecord(file);
       updateSelectedFileIds([fileId]);
+      menuList = getMenuList(file);
+    } else {
+      menuList = getMenuList();
     }
     const id = TAG_FILE_CONTEXT_MENU_ID;
     let x = event.clientX || (event.touches && event.touches[0].pageX);
@@ -236,21 +287,40 @@ const TagFiles = () => {
     }
 
     showMenu(showMenuConfig);
-  }, [selectedFileIds, menuList, updateSelectedFileIds]);
+  }, [selectedFileIds, updateSelectedFileIds, getMenuList]);
 
   useEffect(() => {
+    if (!window.sfTagsDataContext) return;
+    const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => updateSelectedFileIds([]));
+    const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
     const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
     const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
     const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, toggleShareDialog);
     const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
+    const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
     const unsubscribeZipDownload = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_ZIP_DIALOG, toggleZipDialog);
+    const unsubscribeFileHistory = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_HISTORY, onHistory);
+    const unsubscribeFileAccessLog = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, () => setIsFileAccessLogDialogOpen(true));
+    const unsubscribeOpenViaClient = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_VIA_CLIENT, openViaClient);
+    const unsubscribeConvertFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.CONVERT_FILE, onConvertFile);
+    const unsubscribeExportDocx = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.EXPORT_DOCX, exportDocx);
+    const unsubscribeExportSDoc = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.EXPORT_SDOC, exportSdoc);
 
     return () => {
+      unsubscribeUnselectFiles();
+      unsubscribeDeleteTagFiles();
       unsubScribeMoveTagFile();
       unsubScribeCopyTagFile();
       unsubscribeShareTagFile();
       unsubscribeRenameTagFile();
+      unsubscribeDownloadTagFiles();
       unsubscribeZipDownload();
+      unsubscribeFileHistory();
+      unsubscribeFileAccessLog();
+      unsubscribeOpenViaClient();
+      unsubscribeConvertFile();
+      unsubscribeExportDocx();
+      unsubscribeExportSDoc();
     };
   });
 
@@ -348,7 +418,7 @@ const TagFiles = () => {
       <ContextMenu
         id={TAG_FILE_CONTEXT_MENU_ID}
         onMenuItemClick={onMenuItemClick}
-        getMenuContainerSize={onGetMenuContainerSize}
+        getMenuContainerSize={getMenuContainerSize}
       />
       {isMoveDialogOpen && (
         <MoveDirent
@@ -401,6 +471,14 @@ const TagFiles = () => {
           onRename={handleRenameTagFile}
           checkDuplicatedName={() => {}}
           toggleCancel={toggleRenameDialog}
+        />
+      }
+      {isFileAccessLogDialogOpen &&
+        <FileAccessLog
+          repoID={repoID}
+          filePath={Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME])}
+          fileName={selectedFile[TAG_FILE_KEY.NAME]}
+          toggleDialog={() => setIsFileAccessLogDialogOpen(false)}
         />
       }
     </>

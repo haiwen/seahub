@@ -1,31 +1,34 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
+import { metadataAPI } from '../../metadata';
 import tagsAPI from '../api';
 import { useTags } from './tags';
 import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
 import { getAllChildTagsIdsFromNode } from '../utils/tree';
 import { seafileAPI } from '../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../constants/file';
-import toaster from '../../components/toast';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { getFileById } from '../utils/file';
 import { getRowById } from '../../metadata/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
-import { metadataAPI } from '../../metadata';
 import URLDecorator from '../../utils/url-decorator';
 import { fileServerRoot, useGoFileserver } from '../../utils/constants';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
-export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, renameFileCallback, showDirentToolbar, ...params }) => {
+export const TagViewProvider = ({
+  repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
+  toggleShowDirentToolbar, ...params
+}) => {
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedFileIds, setSelectedFileIds] = useState([]);
 
-  const { tagsData, updateLocalTag } = useTags();
+  const { tagsData, updateLocalTags } = useTags();
 
   const getChildTagsIds = useCallback((tagID, nodeKey) => {
     let displayNode = null;
@@ -39,12 +42,12 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   }, [tagsData]);
 
   const updateSelectedFileIds = useCallback((ids) => {
-    showDirentToolbar(ids.length > 0);
+    toggleShowDirentToolbar(ids.length > 0);
     setSelectedFileIds(ids);
     setTimeout(() => {
-      window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECTED_TAG_FILE_IDS, ids);
+      window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TAG_FILES, ids, tagFiles);
     }, 0);
-  }, [setSelectedFileIds, showDirentToolbar]);
+  }, [setSelectedFileIds, tagFiles, toggleShowDirentToolbar]);
 
   const moveTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
     seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
@@ -70,23 +73,27 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
         file._tags.forEach(tag => updatedTags.add(tag.row_id));
       });
 
+      let idTagUpdates = {};
       updatedTags.forEach(tagID => {
         const row = getRowById(tagsData, tagID);
         const oldTagFileLinks = getTagFilesLinks(row);
-        const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
-        const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
-        updateLocalTag(tagID, update);
+        if (Array.isArray(oldTagFileLinks) && oldTagFileLinks.length > 0) {
+          const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
+          const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
+          idTagUpdates[tagID] = update;
+        }
       });
-
-      deleteFilesCallback && deleteFilesCallback(paths, fileNames);
+      updateLocalTags([...updatedTags], idTagUpdates);
 
       setTagFiles(prevTagFiles => ({
         ...prevTagFiles,
-        rows: prevTagFiles.rows.filter(row => !selectedFileIds.includes(row[TAG_FILE_KEY.ID]))
+        rows: prevTagFiles.rows.filter(row => !selectedFileIds.includes(row[TAG_FILE_KEY.ID])),
       }));
+
+      deleteFilesCallback && deleteFilesCallback(paths, fileNames);
       updateSelectedFileIds([]);
     });
-  }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTag, deleteFilesCallback, updateSelectedFileIds]);
+  }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTags, deleteFilesCallback, updateSelectedFileIds]);
 
   const getDownloadTarget = useCallback(() => {
     if (!selectedFileIds.length) return [];
@@ -139,6 +146,16 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
     });
   }, [repoID, renameFileCallback]);
 
+  const convertFile = useCallback((path, dstType) => {
+    seafileAPI.convertFile(repoID, path, dstType).then((res) => {
+      const newFileName = res.data.obj_name;
+      const parentDir = res.data.parent_dir;
+      convertFileCallback({ newName: newFileName, parentDir, size: res.data.size });
+    }).catch((error) => {
+      convertFileCallback({ path, error });
+    });
+  }, [repoID, convertFileCallback]);
+
   useEffect(() => {
     setLoading(true);
     const childTagsIds = getChildTagsIds(tagID, nodeKey);
@@ -158,20 +175,6 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, tagID, nodeKey]);
 
-  useEffect(() => {
-    if (!window.sfTagsDataContext) return;
-
-    const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => {
-      updateSelectedFileIds([]);
-    });
-    const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
-
-    return () => {
-      unsubscribeUnselectFiles();
-      unsubscribeDeleteTagFiles();
-    };
-  }, [deleteTagFiles, renameTagFile, updateSelectedFileIds]);
-
   return (
     <TagViewContext.Provider value={{
       isLoading,
@@ -187,8 +190,10 @@ export const TagViewProvider = ({ repoID, tagID, nodeKey, children, moveFileCall
       copyTagFile,
       addFolder: addFolderCallback,
       deleteTagFiles,
+      getDownloadTarget,
       downloadTagFiles,
       renameTagFile,
+      convertFile,
     }}>
       {children}
     </TagViewContext.Provider>

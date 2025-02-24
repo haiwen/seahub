@@ -1383,31 +1383,36 @@ class LibContentView extends React.Component {
     });
   };
 
+  convertFileAjaxCallback = ({ newName, parentDir, size, path, error }) => {
+    if (error) {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        const name = Utils.getFileName(path);
+        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage, { 'id': 'conversion' });
+      return;
+    }
+    const new_path = parentDir + '/' + newName;
+    const parentPath = Utils.getDirName(new_path);
+    if (this.state.isTreePanelShown) {
+      this.addNodeToTree(newName, parentPath, 'file');
+    }
+    this.addDirent(newName, 'file', size);
+    const message = gettext('Successfully converted the file.');
+    toaster.success(message, { 'id': 'conversion' });
+  };
+
   onConvertItem = (dirent, dstType) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     let repoID = this.props.repoID;
     toaster.notifyInProgress(gettext('Converting, please wait...'), { 'id': 'conversion' });
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
-      let newFileName = res.data.obj_name;
-      let parentDir = res.data.parent_dir;
-      let new_path = parentDir + '/' + newFileName;
-      let parentPath = Utils.getDirName(new_path);
-
-      if (this.state.isTreePanelShown) {
-        this.addNodeToTree(newFileName, parentPath, 'file');
-      }
-
-      this.addDirent(newFileName, 'file', res.data.size);
-      let message = gettext('Successfully converted the file.');
-      toaster.success(message, { 'id': 'conversion' });
-
+      const newFileName = res.data.obj_name;
+      const parentDir = res.data.parent_dir;
+      this.convertFileAjaxCallback({ newName: newFileName, parentDir, size: res.data.size });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        let name = Utils.getFileName(path);
-        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
-      }
-      toaster.danger(errMessage, { 'id': 'conversion' });
+      this.convertFileAjaxCallback({ path, error });
     });
 
   };
@@ -2165,7 +2170,7 @@ class LibContentView extends React.Component {
     this.setState({ path });
   };
 
-  showDirentToolbar = (isDirentSelected) => {
+  toggleShowDirentToolbar = (isDirentSelected) => {
     this.setState({ isDirentSelected });
   };
 
@@ -2258,7 +2263,7 @@ class LibContentView extends React.Component {
                       })}>
                       {isDirentSelected ? (
                         this.state.currentMode === TAGS_MODE ?
-                          <TagFilesToolbar />
+                          <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
                           :
                           <SelectedDirentsToolbar
                             repoID={this.props.repoID}
@@ -2397,6 +2402,7 @@ class LibContentView extends React.Component {
                         moveFileCallback={this.moveItemsAjaxCallback}
                         onItemCopy={this.onCopyItem}
                         copyFileCallback={this.copyItemsAjaxCallback}
+                        convertFileCallback={this.convertFileAjaxCallback}
                         onItemConvert={this.onConvertItem}
                         onDirentClick={this.onDirentClick}
                         updateDirent={this.updateDirent}
@@ -2413,7 +2419,7 @@ class LibContentView extends React.Component {
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
-                        showDirentToolbar={this.showDirentToolbar}
+                        toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>

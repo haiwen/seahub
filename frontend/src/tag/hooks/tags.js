@@ -192,6 +192,29 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyLocalTags]);
 
+  const updateLocalTags = useCallback((tagIds, idTagUpdates, { success_callback, fail_callback } = { }) => {
+    if (!Array.isArray(tagIds) || tagIds.length === 0) {
+      return;
+    }
+    let idOriginalRowUpdates = {};
+    let idOldRowData = {};
+    let idOriginalOldRowData = {};
+    tagIds.forEach((tagId) => {
+      const tag = getRowById(tagsData, tagId);
+      const tagUpdates = idTagUpdates[tagId];
+      if (tagUpdates) {
+        Object.keys(tagUpdates).forEach((key) => {
+          const column = tagsData.key_column_map[key];
+          const columnName = getColumnOriginName(column);
+          idOriginalRowUpdates[tagId] = Object.assign({}, idOriginalRowUpdates[tagId], { [key]: tagUpdates[key] });
+          idOldRowData[tagId] = Object.assign({}, idOldRowData[tagId], { [key]: getCellValueByColumn(tag, column) });
+          idOriginalOldRowData[tagId] = Object.assign({}, idOriginalOldRowData[tagId], { [columnName]: getCellValueByColumn(tag, column) });
+        });
+      }
+    });
+    modifyLocalTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
+  }, [tagsData, modifyLocalTags]);
+
   const addTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
     storeRef.current.addTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
   }, [storeRef]);
@@ -291,6 +314,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       deleteTagsLinks,
       mergeTags,
       updateLocalTag,
+      updateLocalTags,
       selectTag: handleSelectTag,
       modifyColumnWidth,
       modifyLocalFileTags
