@@ -36,7 +36,6 @@ const TagsTable = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   setDisplayTag,
   loadMore,
-  getTagsTableWrapperOffsets,
 }) => {
   const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, deleteTagsLinks, addChildTag, mergeTags } = useTags();
 
@@ -125,14 +124,13 @@ const TagsTable = ({
   }, []);
 
   const onMergeTags = useCallback((tagsIds, menuPosition) => {
-    const { left, top } = getTagsTableWrapperOffsets();
     mergeTagsSelectorProps.current.mergeTagsIds = tagsIds;
     mergeTagsSelectorProps.current.position = {
-      left: (menuPosition.left || 0) + (left || 0),
-      top: (menuPosition.top || 0) + (top || 0),
+      left: (menuPosition.left || 0),
+      top: (menuPosition.top || 0),
     };
     setIsShowMergeTagsSelector(true);
-  }, [getTagsTableWrapperOffsets]);
+  }, []);
 
   const closeMergeTagsSelector = useCallback(() => {
     mergeTagsSelectorProps.current = {};

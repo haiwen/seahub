@@ -78,11 +78,6 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     }
   }, [isLoading, isReloading, onChangeDisplayTag]);
 
-  const getTagsTableWrapperOffsets = useCallback(() => {
-    if (!tagsTableWrapperRef.current) return {};
-    return tagsTableWrapperRef.current.getBoundingClientRect();
-  }, []);
-
   if (isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
@@ -104,7 +99,6 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
         setDisplayTag={onChangeDisplayTag}
         isLoadingMoreRecords={isLoadingMore}
         loadMore={loadMore}
-        getTagsTableWrapperOffsets={getTagsTableWrapperOffsets}
       />
     </div>
   );
