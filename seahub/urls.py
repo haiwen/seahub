@@ -91,7 +91,7 @@ from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchV
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.repo_share_invitations import RepoShareInvitationsView, RepoShareInvitationsBatchView
 from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
-from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
+from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, AllNotificationsView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -522,6 +522,9 @@ urlpatterns = [
 
     re_path(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     re_path(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
+    re_path(r'^api/v2.1/sdoc-notifications/$', SdocNotificationsView.as_view(), name='api-v2.1-sdoc-notifications'),
+    re_path(r'^api/v2.1/sdoc-notification/$', SdocNotificationView.as_view(), name='api-v2.1-notification'),
+    re_path(r'^api/v2.1/all-notifications/$', AllNotificationsView.as_view(), name='api-v2.1-all-notification'),
 
     ## user::invitations
     re_path(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
