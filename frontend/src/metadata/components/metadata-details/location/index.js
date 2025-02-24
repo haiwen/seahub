@@ -151,13 +151,11 @@ class Location extends React.Component {
         <DetailItem field={{ key: PRIVATE_COLUMN_KEY.LOCATION, type: CellType.GEOLOCATION, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION) }} readonly={true}>
           {isValid ? (
             <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter">
-              {!isLoading && this.mapType && address && (
-                <>
-                  <span>{address}</span>
-                  <br />
-                </>
+              {!isLoading && this.mapType && address ? (
+                <span>{address}</span>
+              ) : (
+                <span>{getGeolocationDisplayString(position, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
               )}
-              <span>{getGeolocationDisplayString(position, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
             </div>
           ) : (
             <div className="sf-metadata-record-cell-empty" placeholder={gettext('Empty')}></div>
