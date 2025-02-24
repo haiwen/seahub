@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { SeahubSelect } from '../common/select';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -24,6 +25,12 @@ class AddAbuseReportDialog extends React.Component {
       reporter: this.props.contactEmail,
       errMessage: '',
     };
+    this.typeOptions = [
+      { value: 'copyright', label: gettext('Copyright Infringement') },
+      { value: 'virus', label: gettext('Virus') },
+      { value: 'abuse_content', label: gettext('Abuse Content') },
+      { value: 'other', label: gettext('Other') },
+    ];
   }
 
   onAbuseReport = () => {
@@ -45,8 +52,8 @@ class AddAbuseReportDialog extends React.Component {
     });
   };
 
-  onAbuseTypeChange = (event) => {
-    let type = event.target.value;
+  onAbuseTypeChange = (option) => {
+    let type = option.value;
     if (type === this.state.abuseType) {
       return;
     }
@@ -70,13 +77,14 @@ class AddAbuseReportDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="abuse-type-select">{gettext('Abuse Type')}</Label>
-              <Input type="select" id="abuse-type-select" onChange={(event) => this.onAbuseTypeChange(event)}>
-                <option value='copyright'>{gettext('Copyright Infringement')}</option>
-                <option value='virus'>{gettext('Virus')}</option>
-                <option value='abuse_content'>{gettext('Abuse Content')}</option>
-                <option value='other'>{gettext('Other')}</option>
-              </Input>
+              <Label>{gettext('Abuse Type')}</Label>
+              <SeahubSelect
+                id="abuse-type-select"
+                options={this.typeOptions}
+                value={this.typeOptions.find(opt => opt.value === this.state.abuseType) || this.typeOptions[0]}
+                onChange={this.onAbuseTypeChange}
+                isClearable={false}
+              />
             </FormGroup>
             <FormGroup>
               <Label>{gettext('Contact Information')}</Label>
