@@ -111,12 +111,16 @@ const AI = () => {
             }
             const fileDetails = detail[PRIVATE_COLUMN_KEY.FILE_DETAILS];
             const location = detail[PRIVATE_COLUMN_KEY.LOCATION];
+            const address = detail[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
             let update = {};
             if (fileDetails) {
               update[PRIVATE_COLUMN_KEY.FILE_DETAILS] = fileDetails;
             }
             if (location) {
               update[PRIVATE_COLUMN_KEY.LOCATION] = location;
+            }
+            if (address) {
+              update[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = address;
             }
             Object.keys(update).length > 0 && onLocalRecordChange(recordId, update);
           },
