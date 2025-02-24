@@ -111,17 +111,17 @@ export const createContextMenuOptions = ({
         }
       });
 
-      if (canDeleteTag && tagsIds.length > 0) {
-        options.push({
-          label: gettext('Delete tags'),
-          value: OPERATION.DELETE_TAGS,
-          tagsIds,
-        });
-      }
       if (tagsIds.length > 1) {
         options.push({
           label: gettext('Merge tags'),
           value: OPERATION.MERGE_TAGS,
+          tagsIds,
+        });
+      }
+      if (canDeleteTag && tagsIds.length > 0) {
+        options.push({
+          label: gettext('Delete tags'),
+          value: OPERATION.DELETE_TAGS,
           tagsIds,
         });
       }

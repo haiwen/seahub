@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, ClickOutside, ModalPortal } from '@seafile/sf-metadata-ui-component';
+import { ClickOutside, ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { KeyCodes } from '../../../constants';
 import { gettext } from '../../../utils/constants';
 import { getRowsByIds } from '../../../components/sf-table/utils/table';
-import { getTagColor, getTagId, getTagName, getTagsByNameOrColor } from '../../utils/cell';
+import { getTagColor, getTagId, getTagName } from '../../utils/cell';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../../components/sf-table/constants/z-index';
 import { useTags } from '../../hooks';
 
@@ -25,7 +25,6 @@ const MergeTagsSelector = ({
   mergeTags,
 }) => {
   const { tagsData } = useTags();
-  const [searchValue, setSearchValue] = useState('');
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);
   const itemHeight = 30;
@@ -34,12 +33,7 @@ const MergeTagsSelector = ({
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
 
-  const displayTags = useMemo(() => getTagsByNameOrColor(allTagsRef.current, searchValue), [searchValue, allTagsRef]);
-
-  const onChangeSearch = useCallback((newSearchValue) => {
-    if (searchValue === newSearchValue) return;
-    setSearchValue(newSearchValue);
-  }, [searchValue]);
+  const displayTags = useMemo(() => allTagsRef.current, [allTagsRef]);
 
   const onSelectTag = useCallback((targetTagId) => {
     const mergedTagsIds = mergeTagsIds.filter((tagId) => tagId !== targetTagId);
@@ -107,17 +101,6 @@ const MergeTagsSelector = ({
     }
   }, [onEnter, onUpArrow, onDownArrow]);
 
-  const onKeyDown = useCallback((event) => {
-    if (
-      event.keyCode === KeyCodes.ChineseInputMethod ||
-      event.keyCode === KeyCodes.Enter ||
-      event.keyCode === KeyCodes.LeftArrow ||
-      event.keyCode === KeyCodes.RightArrow
-    ) {
-      event.stopPropagation();
-    }
-  }, []);
-
   useEffect(() => {
     if (editorRef.current) {
       const { bottom } = editorRef.current.getBoundingClientRect();
@@ -143,11 +126,6 @@ const MergeTagsSelector = ({
   }, [displayTags]);
 
   const renderOptions = useCallback(() => {
-    if (displayTags.length === 0) {
-      const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
-      return (<span className="none-search-result">{noOptionsTip}</span>);
-    }
-
     return displayTags.map((tag, i) => {
       const tagId = getTagId(tag);
       const tagName = getTagName(tag);
@@ -169,21 +147,13 @@ const MergeTagsSelector = ({
       );
     });
 
-  }, [displayTags, searchValue, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectTag]);
+  }, [displayTags, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectTag]);
 
   return (
     <ModalPortal>
       <ClickOutside onClickOutside={closeSelector}>
         <div className="sf-metadata-merge-tags-selector" style={{ ...position, position: 'fixed', width: 300, zIndex: Z_INDEX_EDITOR_CONTAINER }} ref={editorRef}>
-          <div className="sf-metadata-search-tags-container">
-            <SearchInput
-              autoFocus
-              placeholder={gettext('Merge tags to:')}
-              onKeyDown={onKeyDown}
-              onChange={onChangeSearch}
-              className="sf-metadata-search-tags"
-            />
-          </div>
+          <div className="sf-metadata-merge-tags-selector-header">{gettext('Merge tags to')}</div>
           <div className="sf-metadata-merge-tags-selector-container" ref={editorContainerRef}>
             {renderOptions()}
           </div>
@@ -194,6 +164,7 @@ const MergeTagsSelector = ({
 };
 
 MergeTagsSelector.propTypes = {
+  mergeTagsIds: PropTypes.array.isRequired,
   tagsTable: PropTypes.object,
   tags: PropTypes.array,
   position: PropTypes.object,
