@@ -1,0 +1,134 @@
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/*!
+	Copyright (c) 2018 Jed Watson.
+	Licensed under the MIT License (MIT), see
+	http://jedwatson.github.io/classnames
+*/
+
+/*!
+ * Author: excalidraw
+ * MIT License: https://github.com/excalidraw/excalidraw/blob/master/LICENSE
+ * https://github.com/excalidraw/excalidraw/blob/48c3465b19f10ec755b3eb84e21a01a468e96e43/packages/excalidraw/utils.ts#L600
+ */
+
+/*!
+ * MIT License
+ * Adapted (mostly copied) the work of https://github.com/fregante/text-field-edit
+ * Copyright (c) Federico Brigante <opensource@bfred.it> (bfred.it)
+ */
+
+/*!
+ * MIT License
+ * Modified code originally from <https://github.com/qzb/is-animated>
+ * Copyright (c) 2016 Józef Sokołowski <j.k.sokolowski@gmail.com>
+ */
+
+/*!
+ * MIT License: https://github.com/ai/nanoid/blob/main/LICENSE
+ * Modified code originally from <https://github.com/ai/nanoid>
+ * Copyright 2017 Andrey Sitnik <andrey@sitnik.ru>
+ *
+ * `nanoid` is currently only distributed as an ES module. Some tools (jest, playwright) don't
+ * properly support ESM-only code yet, and tldraw itself is distributed as both an ES module and a
+ * CommonJS module. By including nanoid here, we can make sure it works well in every environment
+ * where tldraw is used. We can also remove some unused features like custom alphabets.
+ */
+
+/*!
+ * MIT License: https://github.com/alexgorbatchev/crc/blob/master/LICENSE
+ * Copyright: 2014 Alex Gorbatchev
+ * Code: crc32, https://github.com/alexgorbatchev/crc/blob/master/src/calculators/crc32.ts
+ */
+
+/*!
+ * MIT License: https://github.com/sindresorhus/is-webp/blob/main/license
+ * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+ */
+
+/*!
+ * MIT License: https://github.com/vHeemstra/is-apng/blob/main/license
+ * Copyright (c) Philip van Heemstra
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * canvas-size
+ * v1.2.6
+ * https://github.com/jhildenbiddle/canvas-size
+ * (c) 2015-2023 John Hildenbiddle <http://hildenbiddle.com>
+ * MIT license
+ */
+
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+/**
+ * @license React
+ * react-dom.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * react-jsx-runtime.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * react.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * scheduler.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**! 
+ * hotkeys-js v3.13.9 
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies. 
+ * 
+ * Copyright (c) 2024 kenny wong <wowohoo@qq.com> 
+ * https://github.com/jaywcjlove/hotkeys-js.git 
+ * 
+ * @website: https://jaywcjlove.github.io/hotkeys-js
+ 
+ * Licensed under the MIT license 
+ */
