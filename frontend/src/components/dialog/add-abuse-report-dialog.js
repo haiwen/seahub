@@ -79,9 +79,8 @@ class AddAbuseReportDialog extends React.Component {
             <FormGroup>
               <Label>{gettext('Abuse Type')}</Label>
               <SeahubSelect
-                id="abuse-type-select"
                 options={this.typeOptions}
-                value={this.typeOptions.find(opt => opt.value === this.state.abuseType) || this.typeOptions[0]}
+                value={this.typeOptions.find(option => option.value === this.state.abuseType) || this.typeOptions[0]}
                 onChange={this.onAbuseTypeChange}
                 isClearable={false}
               />
