@@ -181,12 +181,11 @@ def group_invite(request, token):
         return render_error(request, _('Feature disabled.'))
 
     email = request.user.username
-    next_url = request.GET.get('next', '/')
-    redirect_to = SERVICE_URL.rstrip('/') + '/' + next_url.lstrip('/')
     group_invite_link = GroupInviteLinkModel.objects.filter(token=token).first()
     if not group_invite_link:
         return render_error(request, _('Group invite link does not exist'))
 
+    redirect_to = reverse('group', args=[group_invite_link.group_id])
     if is_group_member(group_invite_link.group_id, email):
 
         return HttpResponseRedirect(redirect_to)
