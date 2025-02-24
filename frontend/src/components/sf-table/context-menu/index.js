@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import ModalPortal from '../../modal-portal';
 
 import './index.css';
 
@@ -10,6 +11,11 @@ const ContextMenu = ({
 
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  const options = useMemo(() => {
+    if (!visible || !createContextMenuOptions) return [];
+    return createContextMenuOptions({ ...customProps, hideMenu: setVisible, menuPosition: position });
+  }, [customProps, visible, createContextMenuOptions, position]);
 
   const handleHide = useCallback((event) => {
     if (!menuRef.current && visible) {
@@ -27,7 +33,27 @@ const ContextMenu = ({
       top: y,
       left: x
     };
-    if (!menuRef.current) return menuStyles;
+    if (!menuRef.current) {
+      const indent = 10;
+      const menuMargin = 20;
+      const menuDefaultWidth = 200;
+      const dividerHeight = 16;
+      const optionHeight = 32;
+      const menuDefaultHeight = options.reduce((total, option) => {
+        if (option === 'Divider') {
+          return total + dividerHeight;
+        } else {
+          return total + optionHeight;
+        }
+      }, menuMargin + indent);
+      if (menuStyles.left + menuDefaultWidth + indent > window.innerWidth) {
+        menuStyles.left = window.innerWidth - menuDefaultWidth - indent;
+      }
+      if (menuStyles.top + menuDefaultHeight > window.innerHeight) {
+        menuStyles.top = window.innerHeight - menuDefaultHeight;
+      }
+      return menuStyles;
+    }
     const rect = menuRef.current.getBoundingClientRect();
     const tableCanvasContainerRect = getTableCanvasContainerRect();
     const tableContentRect = getTableContentRect();
@@ -48,7 +74,7 @@ const ContextMenu = ({
       menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
     }
     return menuStyles;
-  }, [getTableContentRect, getTableCanvasContainerRect]);
+  }, [getTableContentRect, getTableCanvasContainerRect, options]);
 
   const handleShow = useCallback((event) => {
     event.preventDefault();
@@ -81,22 +107,18 @@ const ContextMenu = ({
     };
   }, [visible, handleHide]);
 
-  const options = useMemo(() => {
-    if (!visible || !createContextMenuOptions) return [];
-    return createContextMenuOptions({ ...customProps, hideMenu: setVisible, menuPosition: position });
-  }, [customProps, visible, createContextMenuOptions, position]);
-
-
   if (!Array.isArray(options) || options.length === 0) return null;
 
   return (
-    <div
-      ref={menuRef}
-      className='dropdown-menu sf-table-context-menu'
-      style={position}
-    >
-      {options}
-    </div>
+    <ModalPortal>
+      <div
+        ref={menuRef}
+        className='dropdown-menu sf-table-context-menu'
+        style={position}
+      >
+        {options}
+      </div>
+    </ModalPortal>
   );
 };
 
