@@ -65,6 +65,10 @@
   overflow: hidden;
 }
 
+.metadata-gallery-image-item:focus {
+  outline: none;
+}
+
 .metadata-gallery-year-image-list .metadata-gallery-image-item,
 .metadata-gallery-month-image-list .metadata-gallery-image-item {
   border-radius: 6px;
