@@ -280,6 +280,10 @@
   align-items: center;
 }
 
+.dir-view-path .dir-operation.dir-operation-no-dropdown {
+  margin-left: 6px;
+}
+
 .dir-view-path .dir-operation .path-item {
   display: inline-flex;
   align-items: center;
