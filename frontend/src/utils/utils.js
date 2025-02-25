@@ -213,11 +213,11 @@ export const Utils = {
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
 
     if (enableOnlyoffice) {
-        return onlyofficeEditFileExtension.includes(file_ext);
+      return onlyofficeEditFileExtension.includes(file_ext);
     } else if (enableOfficeWebApp) {
-        return officeWebAppEditFileExtension.includes(file_ext);
+      return officeWebAppEditFileExtension.includes(file_ext);
     } else {
-        return false;
+      return false;
     }
   },
 

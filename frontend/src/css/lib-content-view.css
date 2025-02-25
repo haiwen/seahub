@@ -316,9 +316,14 @@
   display: inline-block;
 }
 
+.dir-view-path .sf3-font-new,
 .dir-view-path .path-item-dropdown-toggle {
   color: #666;
+}
+
+.dir-view-path .path-item-dropdown-toggle {
   margin-top: 2px;
+  margin-left: 2px;
 }
 
 .dir-view-path .path-item-drop {
