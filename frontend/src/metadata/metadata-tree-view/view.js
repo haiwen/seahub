@@ -77,8 +77,7 @@ const ViewItem = ({
     const convertableViews = Object.values(VIEW_TYPE).filter(type => type !== viewType && type !== VIEW_TYPE.FACE_RECOGNITION);
     value.push({
       key: 'turn',
-      value: gettext('Turn into'),
-      subOpListHeader: gettext('Other view'),
+      value: gettext('Change view type'),
       subOpList: convertableViews.map((type) => {
         return {
           key: `${TURN_VIEW_INTO_PREFIX}${type}`,
