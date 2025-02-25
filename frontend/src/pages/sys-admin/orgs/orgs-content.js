@@ -8,7 +8,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import RoleSelector from '../../../components/single-selector';
+import Selector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
 import toaster from '../../../components/toast';
@@ -64,8 +64,9 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="20%">{gettext('Name')}</th>
-                <th width="20%">{gettext('Creator')}</th>
+                <th width="15%">{gettext('Name')}</th>
+                <th width="15%">{gettext('Creator')}</th>
+                <th width="10%">{gettext('Status')}</th>
                 <th width="15%">{gettext('Role')}</th>
                 <th width="20%">
                   <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
@@ -80,6 +81,7 @@ class Content extends Component {
                   key={index}
                   item={item}
                   updateRole={this.props.updateRole}
+                  updateStatus={this.props.updateStatus}
                   deleteOrg={this.props.deleteOrg}
                   isItemFreezed={this.state.isItemFreezed}
                   toggleItemFreezed={this.toggleItemFreezed}
@@ -114,6 +116,7 @@ Content.propTypes = {
   currentPage: PropTypes.number,
   items: PropTypes.array.isRequired,
   updateRole: PropTypes.func.isRequired,
+  updateStatus: PropTypes.func.isRequired,
   deleteOrg: PropTypes.func.isRequired,
   hasNextPage: PropTypes.bool,
   resetPerPage: PropTypes.func,
@@ -128,6 +131,7 @@ class Item extends Component {
       highlighted: false,
       isDeleteDialogOpen: false,
       deleteDialogMsg: '',
+      isConfirmInactiveDialogOpen: false
     };
   }
 
@@ -165,6 +169,19 @@ class Item extends Component {
     });
   };
 
+  toggleConfirmInactiveDialog = () => {
+    this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
+  };
+
+  translateStatus = (status) => {
+    switch (status) {
+      case 'active':
+        return gettext('Active');
+      case 'inactive':
+        return gettext('Inactive');
+    }
+  };
+
   translateRole = (role) => {
     switch (role) {
       case 'default':
@@ -174,6 +191,18 @@ class Item extends Component {
       default:
         return role;
     }
+  };
+
+  updateStatus = (statusOption) => {
+    const isActive = statusOption.value == 'active';
+    if (isActive) {
+      toaster.notify(gettext('It may take some time, please wait.'));
+    }
+    this.props.updateStatus(this.props.item.org_id, isActive);
+  };
+
+  setOrgInactive = () => {
+    this.props.updateStatus(this.props.item.org_id, false);
   };
 
   updateRole = (roleOption) => {
@@ -187,8 +216,14 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { highlighted, isDeleteDialogOpen, deleteDialogMsg } = this.state;
+    const {
+      highlighted,
+      isDeleteDialogOpen,
+      deleteDialogMsg,
+      isConfirmInactiveDialogOpen
+    } = this.state;
 
+    // edit role
     const { role: curRole } = item;
     this.roleOptions = availableRoles.map(item => {
       return {
@@ -199,6 +234,18 @@ class Item extends Component {
     });
     const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
 
+    // edit status
+    const curStatus = item.is_active ? 'active' : 'inactive';
+    this.statusOptions = ['active', 'inactive'].map(item => {
+      return {
+        value: item,
+        text: this.translateStatus(item),
+        isSelected: item == curStatus
+      };
+    });
+    const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
+    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', item.org_name);
+
     return (
       <Fragment>
         <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
@@ -207,7 +254,17 @@ class Item extends Component {
             <UserLink email={item.creator_email} name={item.creator_name} />
           </td>
           <td>
-            <RoleSelector
+            <Selector
+              isDropdownToggleShown={highlighted}
+              currentSelectedOption={currentSelectedStatusOption}
+              options={this.statusOptions}
+              selectOption={this.updateStatus}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+              operationBeforeSelect={item.is_active ? this.toggleConfirmInactiveDialog : undefined}
+            />
+          </td>
+          <td>
+            <Selector
               isDropdownToggleShown={highlighted}
               currentSelectedOption={currentSelectedOption}
               options={this.roleOptions}
@@ -230,6 +287,15 @@ class Item extends Component {
             toggleDialog={this.toggleDeleteDialog}
           />
         }
+        {isConfirmInactiveDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Set organization inactive')}
+            message={confirmSetUserInactiveMsg}
+            executeOperation={this.setOrgInactive}
+            confirmBtnText={gettext('Set')}
+            toggleDialog={this.toggleConfirmInactiveDialog}
+          />
+        }
       </Fragment>
     );
   }
@@ -238,6 +304,7 @@ class Item extends Component {
 Item.propTypes = {
   item: PropTypes.object.isRequired,
   updateRole: PropTypes.func.isRequired,
+  updateStatus: PropTypes.func.isRequired,
   deleteOrg: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired
