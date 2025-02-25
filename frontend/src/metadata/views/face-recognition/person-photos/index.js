@@ -152,7 +152,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     const { id } = selectedImage;
     onSetPeoplePhoto(people._id, id, {
       success_callback: () => {
-        toaster.success(gettext('Successfully set people cover photo'));
+        toaster.success(gettext('Cover photo set'));
         success_callback && success_callback();
       }
     });
