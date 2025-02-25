@@ -31,8 +31,8 @@ const FaceRecognition = () => {
     store.removePeoplePhotos(peopleId, peoplePhotos, { success_callback });
   }, [store]);
 
-  const onSetPeoplePhoto = useCallback((peopleId, peoplePhoto) => {
-    store.setPeoplePhoto(peopleId, peoplePhoto);
+  const onSetPeoplePhoto = useCallback((peopleId, peoplePhoto, { success_callback }) => {
+    store.setPeoplePhoto(peopleId, peoplePhoto, { success_callback });
   }, [store]);
 
   const openPeople = useCallback((people) => {

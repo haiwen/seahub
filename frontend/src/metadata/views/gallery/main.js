@@ -243,9 +243,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [onRemoveImage, updateCurrentDirent]);
 
   const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
-    onSetPeoplePhoto(selectedImage, () => {
-      updateCurrentDirent();
-      setSelectedImages([]);
+    onSetPeoplePhoto(selectedImage, {
+      success_callback: () => {
+        updateCurrentDirent();
+        setSelectedImages([]);
+      }
     });
   }, [onSetPeoplePhoto, updateCurrentDirent]);
 
