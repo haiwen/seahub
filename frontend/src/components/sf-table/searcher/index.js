@@ -38,7 +38,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     }
   };
 
-  const renderSearchPollButton = () => {
+  const renderSearchButtons = () => {
     return (
       <span className="input-icon-addon search-poll-button">
         {hasSearchValue &&
@@ -50,12 +50,20 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
         }
         {hasSearchResult &&
           <>
-            <i className="sf3-font sf3-font-down rotate-180 search-upward"
-              onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => {}}>
-            </i>
-            <i className="sf3-font sf3-font-down search-backward"
-              onClick={focusNextMatchedCell ? focusNextMatchedCell : () => {}}>
-            </i>
+            <span
+              className='toolbar-search-btn'
+              role="button"
+              onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => {}}
+            >
+              <i aria-hidden="true" className="sf3-font sf3-font-down rotate-180"></i>
+            </span>
+            <span
+              role="button"
+              className='toolbar-search-btn'
+              onClick={focusNextMatchedCell ? focusNextMatchedCell : () => {}}
+            >
+              <i aria-hidden="true" className="sf3-font sf3-font-down"></i>
+            </span>
           </>
         }
       </span>
@@ -74,12 +82,12 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
           aria-label={gettext('Search')}
           tabIndex={0}
         >
-          <i className='active-search m-0 sf3-font sf3-font-search'></i>
+          <i className='active-search m-0 sf3-font sf3-font-search' aria-hidden="true" ></i>
         </span>
       )}
       {isSearchActive && (
         <div className='sf-table-searcher-input-wrapper'>
-          <i className='input-icon-addon sf3-font sf3-font-search' />
+          <i className='input-icon-addon sf3-font sf3-font-search' aria-hidden="true" />
           <SFTableSearcherInput
             recordsCount={recordsCount}
             columnsCount={columnsCount}
@@ -87,9 +95,9 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
             setHasSearchValue={setHasSearchValue}
             searchCells={searchCells}
           />
-          {renderSearchPollButton()}
-          <span className="btn-close-searcher-wrapper input-icon-addon" onClick={handleCloseSearcher}>
-            <i className='btn-close-searcher sf3-font sf3-font-x-01'></i>
+          {renderSearchButtons()}
+          <span className="btn-close-searcher-wrapper input-icon-addon" onClick={handleCloseSearcher} role="button">
+            <i className='btn-close-searcher sf3-font sf3-font-x-01' aria-hidden="true"></i>
           </span>
         </div>
       )}
