@@ -46,7 +46,7 @@ const AllTagsOperationToolbar = ({ children }) => {
       <div className="dir-operation">
         <Dropdown isOpen={isMenuOpen} toggle={toggleMenuOpen}>
           <DropdownToggle
-            tag="i"
+            tag="span"
             role="button"
             className="path-item all-tags-operation-toggle"
             onClick={toggleMenuOpen}
