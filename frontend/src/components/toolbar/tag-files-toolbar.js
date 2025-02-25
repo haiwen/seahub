@@ -100,7 +100,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
     };
-  }, []);
+  }, [eventBus]);
 
   return (
     <div className="selected-dirents-toolbar">
