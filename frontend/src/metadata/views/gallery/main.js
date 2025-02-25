@@ -28,6 +28,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [lastSelectedImage, setLastSelectedImage] = useState(null);
 
   const containerRef = useRef(null);
   const scrollContainer = useRef(null);
@@ -172,18 +173,20 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       updateSelectedImage(image);
       return;
     }
-    if (event.shiftKey && selectedImages.length > 0) {
-      const lastSelected = selectedImages[selectedImages.length - 1];
-      const start = images.findIndex(image => image.id === lastSelected.id);
-      const end = images.findIndex(image => image.id === lastSelected.id);
-      const range = images.slice(Math.min(start, end), Math.max(start, end) + 1);
+    if (event.shiftKey && lastSelectedImage) {
+      const lastSelectedIndex = images.findIndex(img => img.id === lastSelectedImage.id);
+      const currentIndex = images.findIndex(img => img.id === image.id);
+      const start = Math.min(lastSelectedIndex, currentIndex);
+      const end = Math.max(lastSelectedIndex, currentIndex);
+      const range = images.slice(start, end + 1);
       setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
       updateSelectedImage(null);
       return;
     }
     setSelectedImages([image]);
     updateSelectedImage(image);
-  }, [images, selectedImages, updateSelectedImage]);
+    setLastSelectedImage(image);
+  }, [images, updateSelectedImage, lastSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
@@ -258,6 +261,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     if (!isClickInsideImage && containerRef.current.contains(event.target)) {
       handleImageSelection([]);
       updateSelectedImage();
+      setLastSelectedImage(null);
     }
   }, [handleImageSelection, updateSelectedImage]);
 
