@@ -293,7 +293,8 @@ class DirOperationToolbar extends React.Component {
               data-toggle="dropdown"
             >
               {this.props.children}
-              <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+              <i className="sf3-font-new sf3-font ml-2"></i>
+              <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} positionFixed={true}>
               {opList.map((item, index) => {
@@ -351,7 +352,8 @@ class DirOperationToolbar extends React.Component {
             className="path-item"
           >
             {this.props.children}
-            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+            <i className="sf3-font-new sf3-font ml-2"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu positionFixed={true}>
             {canUpload && (
