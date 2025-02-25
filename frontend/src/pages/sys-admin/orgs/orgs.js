@@ -66,6 +66,24 @@ class Orgs extends Component {
     this.setState({ isAddOrgDialogOpen: !this.state.isAddOrgDialogOpen });
   };
 
+  updateStatus = (orgID, isActive) => {
+    let orgInfo = {};
+    orgInfo.isActive = isActive;
+    systemAdminAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
+      let newOrgList = this.state.orgList.map(org => {
+        if (org.org_id == orgID) {
+          org.is_active = isActive;
+        }
+        return org;
+      });
+      this.setState({ orgList: newOrgList });
+      toaster.success(gettext('Edit succeeded'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
@@ -143,6 +161,7 @@ class Orgs extends Component {
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getItemsByPage}
                 updateRole={this.updateRole}
+                updateStatus={this.updateStatus}
                 deleteOrg={this.deleteOrg}
               />
             </div>
