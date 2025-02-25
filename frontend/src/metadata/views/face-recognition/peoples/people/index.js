@@ -7,13 +7,14 @@ import Rename from '../../../../../components/rename';
 
 import './index.css';
 
-const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFreezed }) => {
+const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFreezed, peopleTimeMap }) => {
   const [defaultURL, setDefaultURL] = useState('');
 
-  const similarPhotoURL = useMemo(() => {
+  const coverPhotoURL = useMemo(() => {
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg`;
-  }, [people]);
+    const timeStamp = peopleTimeMap[people._id];
+    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}${encodeURIComponent(`?t=${timeStamp}`)}.jpg`;
+  }, [people, peopleTimeMap]);
 
   const onImgLoadError = useCallback(() => {
     setDefaultURL(`${mediaUrl}avatars/default.png`);
@@ -77,7 +78,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       onClick={handelClick}
     >
       <div className="sf-metadata-people-info-img">
-        <img src={`${defaultURL || similarPhotoURL}?t=${new Date().getTime()}`} alt={name} onError={onImgLoadError} height={60} width={60} />
+        <img src={defaultURL || coverPhotoURL} alt={name} onError={onImgLoadError} height={60} width={60} />
       </div>
       <div className={classNames('sf-metadata-people-info-name-count', { 'o-hidden': !renaming })}>
         <div className="sf-metadata-people-info-name">
@@ -108,6 +109,7 @@ People.propTypes = {
   onOpenPeople: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,
+  peopleTimeMap: PropTypes.object,
 };
 
 export default People;
