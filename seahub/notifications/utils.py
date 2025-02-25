@@ -2,6 +2,7 @@
 import os
 import json
 import logging
+import posixpath
 from django.core.cache import cache
 from django.utils.html import escape
 from django.utils.translation import gettext as _
@@ -10,6 +11,7 @@ from seaserv import ccnet_api, seafile_api
 
 from seahub.constants import CUSTOM_PERMISSION_PREFIX
 from seahub.notifications.models import Notification
+from seahub.tags.models import FileUUIDMap
 from seahub.notifications.settings import NOTIFICATION_CACHE_TIMEOUT
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
@@ -399,6 +401,46 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
+    return notices
+
+
+def update_sdoc_notice_detail(notices):
+    doc_uuid_set = set()
+    for notice in notices:
+        doc_uuid_set.add(notice.doc_uuid)
+    uuid_doc_map = {}
+    uuids = FileUUIDMap.objects.get_fileuuidmap_in_uuids(doc_uuid_set)
+    for uuid in uuids:
+        if uuid not in uuid_doc_map:
+            origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
+            uuid_doc_map[str(uuid.uuid)] = (origin_file_path, uuid.filename, uuid.repo_id)
+    
+    for notice in notices:
+        doc = uuid_doc_map.get(notice.doc_uuid) or None
+        if not doc:
+            continue
+        if notice.is_comment():
+            try:
+                d = json.loads(notice.detail)
+                url, _, _ = api_avatar_url(d['author'])
+                d['avatar_url'] = url
+                d['sdoc_path'] = doc[0]
+                d['sdoc_name'] = doc[1]
+                d['repo_id'] = doc[2]
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
+        elif notice.is_reply():
+            try:
+                d = json.loads(notice.detail)
+                url, _, _ = api_avatar_url(d['author'])
+                d['avatar_url'] = url
+                d['sdoc_path'] = doc[0]
+                d['sdoc_name'] = doc[1]
+                d['repo_id'] = doc[2]
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
     return notices
 
 
