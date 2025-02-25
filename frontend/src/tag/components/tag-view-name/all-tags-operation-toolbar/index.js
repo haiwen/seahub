@@ -1,10 +1,12 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { isEnter, isSpace } from '../../../metadata/utils/hotkey';
-import { gettext } from '../../../utils/constants';
-import { useTags } from '../../hooks';
-import EditTagDialog from '../dialog/edit-tag-dialog';
+import { isEnter, isSpace } from '../../../../metadata/utils/hotkey';
+import { gettext } from '../../../../utils/constants';
+import { useTags } from '../../../hooks';
+import EditTagDialog from '../../dialog/edit-tag-dialog';
+
+import './index.css';
 
 const AllTagsOperationToolbar = ({ children }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -46,13 +48,14 @@ const AllTagsOperationToolbar = ({ children }) => {
           <DropdownToggle
             tag="i"
             role="button"
-            className="path-item"
+            className="path-item all-tags-operation-toggle"
             onClick={toggleMenuOpen}
             onKeyDown={onDropdownKeyDown}
             data-toggle="dropdown"
           >
             {children}
-            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+            <i className="ml-1 sf3-font-new sf3-font path-item-new-toggle"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             <DropdownItem onClick={openAddTag}>
