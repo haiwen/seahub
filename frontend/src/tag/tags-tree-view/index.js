@@ -8,6 +8,7 @@ import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
 import { getRowById } from '../../metadata/utils/table';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../constants/sidebar-tree';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
 
 import './index.css';
 
@@ -77,6 +78,7 @@ const TagsTreeView = ({ currentPath }) => {
     const nodeKey = getTreeNodeKey(node);
     selectTag(tag, nodeKey);
     setCurrSelectedNodeKey(nodeKey);
+    window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.UNSELECT_TAG_FILES);
   }, [tagsData, selectTag]);
 
   const selectAllTags = useCallback((isSelected) => {

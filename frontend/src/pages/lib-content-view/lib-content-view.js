@@ -30,6 +30,7 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
+import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -1337,7 +1338,7 @@ class LibContentView extends React.Component {
       this.updateMoveCopyTreeNode(copyToDirentPath);
     }
 
-    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
+    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE && this.state.currentMode !== TAGS_MODE) {
       this.loadDirentList(this.state.path);
     }
 
@@ -1382,31 +1383,36 @@ class LibContentView extends React.Component {
     });
   };
 
+  convertFileAjaxCallback = ({ newName, parentDir, size, path, error }) => {
+    if (error) {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        const name = Utils.getFileName(path);
+        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage, { 'id': 'conversion' });
+      return;
+    }
+    const new_path = parentDir + '/' + newName;
+    const parentPath = Utils.getDirName(new_path);
+    if (this.state.isTreePanelShown) {
+      this.addNodeToTree(newName, parentPath, 'file');
+    }
+    this.addDirent(newName, 'file', size);
+    const message = gettext('Successfully converted the file.');
+    toaster.success(message, { 'id': 'conversion' });
+  };
+
   onConvertItem = (dirent, dstType) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     let repoID = this.props.repoID;
     toaster.notifyInProgress(gettext('Converting, please wait...'), { 'id': 'conversion' });
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
-      let newFileName = res.data.obj_name;
-      let parentDir = res.data.parent_dir;
-      let new_path = parentDir + '/' + newFileName;
-      let parentPath = Utils.getDirName(new_path);
-
-      if (this.state.isTreePanelShown) {
-        this.addNodeToTree(newFileName, parentPath, 'file');
-      }
-
-      this.addDirent(newFileName, 'file', res.data.size);
-      let message = gettext('Successfully converted the file.');
-      toaster.success(message, { 'id': 'conversion' });
-
+      const newFileName = res.data.obj_name;
+      const parentDir = res.data.parent_dir;
+      this.convertFileAjaxCallback({ newName: newFileName, parentDir, size: res.data.size });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        let name = Utils.getFileName(path);
-        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
-      }
-      toaster.danger(errMessage, { 'id': 'conversion' });
+      this.convertFileAjaxCallback({ path, error });
     });
 
   };
@@ -2164,6 +2170,10 @@ class LibContentView extends React.Component {
     this.setState({ path });
   };
 
+  toggleShowDirentToolbar = (isDirentSelected) => {
+    this.setState({ isDirentSelected });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2235,7 +2245,7 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
-        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
@@ -2251,33 +2261,36 @@ class LibContentView extends React.Component {
                         'w-100': !isDesktop,
                         'animation-children': isDirentSelected
                       })}>
-                      {isDirentSelected ?
-                        <SelectedDirentsToolbar
-                          repoID={this.props.repoID}
-                          path={this.state.path}
-                          userPerm={userPerm}
-                          repoEncrypted={this.state.repoEncrypted}
-                          repoTags={this.state.repoTags}
-                          selectedDirentList={this.state.selectedDirentList}
-                          direntList={direntItemsList}
-                          onItemsMove={this.onMoveItems}
-                          onItemsCopy={this.onCopyItems}
-                          onItemsDelete={this.onDeleteItems}
-                          onItemRename={this.onMainPanelItemRename}
-                          isRepoOwner={isRepoOwner}
-                          currentRepoInfo={this.state.currentRepoInfo}
-                          enableDirPrivateShare={enableDirPrivateShare}
-                          updateDirent={this.updateDirent}
-                          unSelectDirent={this.unSelectDirent}
-                          onFilesTagChanged={this.onFileTagChanged}
-                          showShareBtn={showShareBtn}
-                          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                          showDirentDetail={this.showDirentDetail}
-                          currentMode={this.state.currentMode}
-                          onItemConvert={this.onConvertItem}
-                          onAddFolder={this.onAddFolder}
-                        />
-                        :
+                      {isDirentSelected ? (
+                        this.state.currentMode === TAGS_MODE ?
+                          <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
+                          :
+                          <SelectedDirentsToolbar
+                            repoID={this.props.repoID}
+                            path={this.state.path}
+                            userPerm={userPerm}
+                            repoEncrypted={this.state.repoEncrypted}
+                            repoTags={this.state.repoTags}
+                            selectedDirentList={this.state.selectedDirentList}
+                            direntList={direntItemsList}
+                            onItemsMove={this.onMoveItems}
+                            onItemsCopy={this.onCopyItems}
+                            onItemsDelete={this.onDeleteItems}
+                            onItemRename={this.onMainPanelItemRename}
+                            isRepoOwner={isRepoOwner}
+                            currentRepoInfo={this.state.currentRepoInfo}
+                            enableDirPrivateShare={enableDirPrivateShare}
+                            updateDirent={this.updateDirent}
+                            unSelectDirent={this.unSelectDirent}
+                            onFilesTagChanged={this.onFileTagChanged}
+                            showShareBtn={showShareBtn}
+                            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                            showDirentDetail={this.showDirentDetail}
+                            currentMode={this.state.currentMode}
+                            onItemConvert={this.onConvertItem}
+                            onAddFolder={this.onAddFolder}
+                          />
+                      ) : (
                         <CurDirPath
                           currentRepoInfo={this.state.currentRepoInfo}
                           repoID={this.props.repoID}
@@ -2310,7 +2323,7 @@ class LibContentView extends React.Component {
                           loadDirentList={this.loadDirentList}
                           onAddFolderNode={this.onAddFolder}
                         />
-                      }
+                      )}
                     </div>
                     {isDesktop &&
                       <div className="cur-view-path-right py-1">
@@ -2389,6 +2402,7 @@ class LibContentView extends React.Component {
                         moveFileCallback={this.moveItemsAjaxCallback}
                         onItemCopy={this.onCopyItem}
                         copyFileCallback={this.copyItemsAjaxCallback}
+                        convertFileCallback={this.convertFileAjaxCallback}
                         onItemConvert={this.onConvertItem}
                         onDirentClick={this.onDirentClick}
                         updateDirent={this.updateDirent}
@@ -2405,6 +2419,7 @@ class LibContentView extends React.Component {
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
+                        toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>

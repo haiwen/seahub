@@ -1,3 +1,5 @@
 .sf-metadata-tag-files-wrapper .sf-metadata-tags-main {
+  display: flex;
+  flex-direction: column;
   overflow: auto !important;
 }
