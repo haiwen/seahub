@@ -630,10 +630,10 @@ class Store {
     this.applyOperation(operation);
   };
 
-  setPeoplePhoto = (peopleId, selectedPhoto) => {
+  setPeoplePhoto = (peopleId, selectedPhoto, { success_callback }) => {
     const type = OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, people_id: peopleId, selected_photo: selectedPhoto
+      type, repo_id: this.repoId, people_id: peopleId, selected_photo: selectedPhoto, success_callback
     });
     this.applyOperation(operation);
   };

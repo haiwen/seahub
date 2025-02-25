@@ -148,9 +148,14 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, onAddPeoplePhotos, deletedByIds]);
 
-  const handleSetPeoplePhoto = useCallback((selectedImage) => {
+  const handleSetPeoplePhoto = useCallback((selectedImage, { success_callback }) => {
     const { id } = selectedImage;
-    onSetPeoplePhoto(people._id, id);
+    onSetPeoplePhoto(people._id, id, {
+      success_callback: () => {
+        toaster.success(gettext('Successfully set people cover photo'));
+        success_callback && success_callback();
+      }
+    });
   }, [people, onSetPeoplePhoto]);
 
   const loadData = useCallback((view) => {
