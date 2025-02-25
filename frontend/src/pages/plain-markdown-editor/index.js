@@ -87,6 +87,7 @@ const PlainMarkdownEditor = (props) => {
     });
   }, [options, setContent]);
 
+  // 注意：useLayoutEffect 在浏览器绘制 DOM 之后执行，而 useEffect 在浏览器绘制 DOM 之前执行。
   useLayoutEffect(() => {
     updateOptions({ fileName, filePath, repoID });
     // eslint-disable-next-line react-hooks/exhaustive-deps
