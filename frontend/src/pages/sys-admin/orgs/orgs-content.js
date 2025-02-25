@@ -269,6 +269,15 @@ class Item extends Component {
             toggleDialog={this.toggleDeleteDialog}
           />
         }
+        {isConfirmInactiveDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Set organization inactive')}
+            message={confirmSetUserInactiveMsg}
+            executeOperation={this.setOrgInactive}
+            confirmBtnText={gettext('Set')}
+            toggleDialog={this.toggleConfirmInactiveDialog}
+          />
+        }
       </Fragment>
     );
   }
