@@ -29,7 +29,10 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
-from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_CONVERTER_EXTENSIONS
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, \
+        ONLYOFFICE_CONVERTER_EXTENSIONS, ONLYOFFICE_EDIT_FILE_EXTENSION
+from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP, \
+        OFFICE_WEB_APP_EDIT_FILE_EXTENSION
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -152,8 +155,11 @@ def base(request):
         'FILE_SERVER_ROOT': file_server_root,
         'USE_GO_FILESERVER': seaserv.USE_GO_FILESERVER if hasattr(seaserv, 'USE_GO_FILESERVER') else False,
         'LOGIN_URL': dj_settings.LOGIN_URL,
-        'enableOnlyoffice': ENABLE_ONLYOFFICE,
-        'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
+        'enable_onlyoffice': ENABLE_ONLYOFFICE,
+        'onlyoffice_edit_file_extension': list(ONLYOFFICE_EDIT_FILE_EXTENSION),
+        'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
+        'office_web_app_edit_file_extension': list(OFFICE_WEB_APP_EDIT_FILE_EXTENSION),
+        'onlyoffice_converter_extensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'thumbnail_size_for_grid': THUMBNAIL_SIZE_FOR_GRID,
         'thumbnail_default_size': THUMBNAIL_DEFAULT_SIZE,

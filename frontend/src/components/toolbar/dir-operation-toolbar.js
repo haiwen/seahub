@@ -203,11 +203,19 @@ class DirOperationToolbar extends React.Component {
 
   render() {
     let { path, repoName, userPerm } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    const isShowDropdownMenu = (userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission);
+    if (!isShowDropdownMenu) {
+      return (
+        <div className="dir-operation dir-operation-no-dropdown">
+          {this.props.children}
+        </div>
+      );
+    }
 
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canUpload = true;
     let canCreate = true;
     if (isCustomPermission) {
@@ -293,7 +301,8 @@ class DirOperationToolbar extends React.Component {
               data-toggle="dropdown"
             >
               {this.props.children}
-              <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+              <i className="sf3-font-new sf3-font ml-2"></i>
+              <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
               {opList.map((item, index) => {
@@ -351,7 +360,8 @@ class DirOperationToolbar extends React.Component {
             className="path-item"
           >
             {this.props.children}
-            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+            <i className="sf3-font-new sf3-font ml-2"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             {canUpload && (
@@ -370,7 +380,7 @@ class DirOperationToolbar extends React.Component {
 
     return (
       <Fragment>
-        {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission) && (
+        {isShowDropdownMenu && (
           <div className="dir-operation">
             {content}
           </div>

@@ -109,7 +109,10 @@ export const enableTC = window.app.pageOptions.enableTC;
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
 
+export const enableOfficeWebApp = window.app.pageOptions.enableOfficeWebApp || false;
+export const officeWebAppEditFileExtension = window.app.pageOptions.officeWebAppEditFileExtension || [];
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
+export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
 export const enableFileTags = window.app.pageOptions.enableFileTags || false;

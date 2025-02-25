@@ -13,7 +13,7 @@ OFFICE_WEB_APP_FILE_EXTENSION = getattr(settings, 'OFFICE_WEB_APP_FILE_EXTENSION
 ENABLE_OFFICE_WEB_APP_EDIT = getattr(settings, 'ENABLE_OFFICE_WEB_APP_EDIT', False)
 OFFICE_WEB_APP_EDIT_FILE_EXTENSION = getattr(settings, 'OFFICE_WEB_APP_EDIT_FILE_EXTENSION', ())
 
-## Client certificates ##
+# Client certificates ##
 
 # path to client.cert when use client authentication
 OFFICE_WEB_APP_CLIENT_CERT = getattr(settings, 'OFFICE_WEB_APP_CLIENT_CERT', '')
@@ -24,7 +24,7 @@ OFFICE_WEB_APP_CLIENT_KEY = getattr(settings, 'OFFICE_WEB_APP_CLIENT_KEY', '')
 OFFICE_WEB_APP_CLIENT_PEM = getattr(settings, 'OFFICE_WEB_APP_CLIENT_PEM', '')
 
 
-## Server certificates ##
+# Server certificates ##
 # Path to a CA_BUNDLE file or directory with certificates of trusted CAs
 OFFICE_WEB_APP_SERVER_CA = getattr(settings, 'OFFICE_WEB_APP_SERVER_CA', True)
 
@@ -46,5 +46,3 @@ if settings.ENABLE_MULTIPLE_OFFICE_SUITE:
     ENABLE_OFFICE_WEB_APP_EDIT = office_info.get('ENABLE_OFFICE_WEB_APP_EDIT', False)
     OFFICE_WEB_APP_FILE_EXTENSION = settings.OFFICE_SUITE_ENABLED_FILE_TYPES
     OFFICE_WEB_APP_EDIT_FILE_EXTENSION = settings.OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
-    
-
