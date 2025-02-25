@@ -203,11 +203,19 @@ class DirOperationToolbar extends React.Component {
 
   render() {
     let { path, repoName, userPerm } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    const isShowDropdownMenu = (userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission);
+    if (!isShowDropdownMenu) {
+      return (
+        <div className="dir-operation dir-operation-no-dropdown">
+          {this.props.children}
+        </div>
+      );
+    }
 
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canUpload = true;
     let canCreate = true;
     if (isCustomPermission) {
@@ -372,7 +380,7 @@ class DirOperationToolbar extends React.Component {
 
     return (
       <Fragment>
-        {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission) && (
+        {isShowDropdownMenu && (
           <div className="dir-operation">
             {content}
           </div>
