@@ -18,6 +18,7 @@ from seahub.utils import is_pro_version
 
 from seahub.base.models import UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.api2.endpoints.utils import delete_user_monitored_cache
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +76,8 @@ class MonitoredRepos(APIView):
         item_info['user_contact_email'] = email2contact_email(email)
         item_info['repo_id'] = repo_id
 
-        cache.delete('{}_monitor_users'.format(repo_id))
+        params = {'repo_id': repo_id}
+        delete_user_monitored_cache(params)
 
         return Response(item_info)
 
@@ -118,6 +120,7 @@ class MonitoredRepo(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        cache.delete('{}_monitor_users'.format(repo_id))
+        params = {'repo_id': repo_id}
+        delete_user_monitored_cache(params)
 
         return Response({'success': True})
