@@ -87,8 +87,8 @@ class GroupInviteMembersDialog extends React.Component {
                 <div className="invite-link-copy">
                   <Button color="primary" onClick={this.copyLink} className="invite-link-copy-btn text-truncate">{gettext('Copy')}</Button>
                 </div>
-                <Button color="secondary" onClick={this.deleteLink.bind(this, link.token)} className="delete-link-btn ml-2">
-                  <i className="sf2-icon-delete"></i>
+                <Button color="primary" outline onClick={this.deleteLink.bind(this, link.token)} className="delete-link-btn ml-2">
+                  <i className="sf3-font-delete1 sf3-font"></i>
                 </Button>
               </div>
             </>

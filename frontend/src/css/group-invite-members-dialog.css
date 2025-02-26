@@ -30,5 +30,15 @@
 }
 
 .invite-link-item .delete-link-btn {
-  color: #999;
+  border-color: #ff9800;
+  color: #ff9800;
+  font-size: 16px;
+  padding: 0;
+}
+
+.invite-link-item .delete-link-btn:hover {
+  background-color: #d98100;
+  border-color: #d98100;
+  box-shadow: none;
+  color: #fff;
 }
