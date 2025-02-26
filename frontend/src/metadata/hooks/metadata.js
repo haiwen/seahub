@@ -17,14 +17,13 @@ const MetadataContext = React.createContext(null);
 
 export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadataView, children }) => {
   const [isLoading, setLoading] = useState(true);
-  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
   const [navigation, setNavigation] = useState([]);
   const [idViewMap, setIdViewMap] = useState({});
 
   const collapsedFoldersIds = useRef([]);
   const originalTitleRef = useRef(document.title);
 
-  const { enableMetadata, isBeingBuilt, setIsBeingBuilt } = useMetadataStatus();
+  const { enableMetadata, enableFaceRecognition, isBeingBuilt, setIsBeingBuilt, updateEnableFaceRecognition: updateEnableFaceRecognitionAPI } = useMetadataStatus();
 
   const getCollapsedFolders = useCallback(() => {
     const strFoldedFolders = window.localStorage.getItem(`${CACHED_COLLAPSED_FOLDERS_PREFIX}-${repoID}`);
@@ -70,24 +69,9 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
       });
       return;
     }
-    setEnableFaceRecognition(false);
     setNavigation([]);
     setIdViewMap({});
     setLoading(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enableMetadata]);
-
-  useEffect(() => {
-    if (!enableMetadata) {
-      setEnableFaceRecognition(false);
-      return;
-    }
-    metadataAPI.getFaceRecognitionStatus(repoID).then(res => {
-      setEnableFaceRecognition(res.data.enabled);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableMetadata]);
 
@@ -394,8 +378,8 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
         deleteView({ folderId, viewId: FACE_RECOGNITION_VIEW_ID, isSelected });
       }
     }
-    setEnableFaceRecognition(newValue);
-  }, [enableFaceRecognition, currentPath, idViewMap, navigation, addView, deleteView]);
+    updateEnableFaceRecognitionAPI(newValue);
+  }, [enableFaceRecognition, currentPath, idViewMap, navigation, addView, deleteView, updateEnableFaceRecognitionAPI]);
 
   const modifyViewType = useCallback((viewId, update) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {

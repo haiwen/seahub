@@ -52,6 +52,7 @@ class MetadataManage(APIView):
         tags_lang = ''
         details_settings = '{}'
         is_ocr_enabled = False
+        face_recognition_enabled = False
 
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -65,6 +66,8 @@ class MetadataManage(APIView):
                     tags_lang = record.tags_lang
                 if record.ocr_enabled:
                     is_ocr_enabled = True
+                if record.face_recognition_enabled:
+                    face_recognition_enabled = True
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -73,9 +76,10 @@ class MetadataManage(APIView):
         return Response({
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
+            'ocr_enabled': is_ocr_enabled,
+            'face_recognition_enabled': face_recognition_enabled,
             'tags_lang': tags_lang,
             'details_settings': details_settings,
-            'ocr_enabled': is_ocr_enabled
         })
 
     def put(self, request, repo_id):
