@@ -17,7 +17,7 @@ from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
 from seahub.api2.utils import api_error
 
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, SUPPORT_EMAIL
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -46,11 +46,13 @@ class BaseMiddleware(MiddlewareMixin):
                     request.user.org = orgs[0]
                     if not OrgSettings.objects.get_is_active_by_org(request.user.org):
                         org_name = request.user.org.org_name
-                        error_msg = _(f"Organization {org_name} is inactive.")
+                        error_msg = _(f"Team {org_name} is inactive.")
+                        if SUPPORT_EMAIL:
+                            error_msg += " " + _(f"Please contact {SUPPORT_EMAIL} if you want to activate the team.")
                         logout(request)
                         if "api2/" in request.path or "api/v2.1/" in request.path:
                             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-                        return render_error(request, error_msg)
+                        return render_error(request, error_msg, {"organization_inactive": True})
 
         else:
             request.cloud_mode = False

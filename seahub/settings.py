@@ -504,6 +504,7 @@ ENABLE_SHOW_ABOUT = True
 
 # enable show wechat support
 SHOW_WECHAT_SUPPORT_GROUP = False
+SUPPORT_EMAIL = ''
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
