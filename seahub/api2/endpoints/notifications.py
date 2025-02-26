@@ -7,13 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from django.core.cache import cache
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
-from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
 from seahub.seadoc.models import SeadocNotification
@@ -66,16 +64,8 @@ class NotificationsView(APIView):
 
                 notification_list.append(notice)
 
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        unseen_count_from_cache = cache.get(cache_key, None)
-
-        # for case of count value is `0`
-        if unseen_count_from_cache is not None:
-            result['unseen_count'] = unseen_count_from_cache
-        else:
-            unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
-            result['unseen_count'] = unseen_count
-            cache.set(cache_key, unseen_count)
+        unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
+        result['unseen_count'] = unseen_count
 
         total_count = UserNotification.objects.filter(to_user=username).count()
 
@@ -98,9 +88,6 @@ class NotificationsView(APIView):
             notice.seen = True
             notice.save()
 
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        cache.delete(cache_key)
-
         return Response({'success': True})
 
     def delete(self, request):
@@ -112,9 +99,6 @@ class NotificationsView(APIView):
         username = request.user.username
 
         UserNotification.objects.remove_user_notifications(username)
-
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
 
@@ -159,9 +143,6 @@ class NotificationView(APIView):
         if not notice.seen:
             notice.seen = True
             notice.save()
-
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
 
@@ -310,10 +291,10 @@ class AllNotificationsView(APIView):
         username = request.user.username
 
         try:
-            per_page = int(request.GET.get('per_page', ''))
-            page = int(request.GET.get('page', ''))
+            per_page = int(request.GET.get('per_page', '25'))
+            page = int(request.GET.get('page', '1'))
         except ValueError:
-            per_page = 5
+            per_page = 25
             page = 1
 
         if page < 1:
@@ -353,16 +334,8 @@ class AllNotificationsView(APIView):
 
                 sdoc_notification_list.append(notice)
 
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        unseen_count_from_cache = cache.get(cache_key, None)
-
-        # for case of count value is `0`
-        if unseen_count_from_cache is not None:
-            result['general']['unseen_count'] = unseen_count_from_cache
-        else:
-            unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
-            result['general']['unseen_count'] = unseen_count
-            cache.set(cache_key, unseen_count)
+        unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
+        result['general']['unseen_count'] = unseen_count
 
         sdoc_unseen_count = SeadocNotification.objects.filter(username=username, seen=False).count()
         result['discussion']['unseen_count'] = sdoc_unseen_count
@@ -374,6 +347,7 @@ class AllNotificationsView(APIView):
         result['discussion']['notification_list'] = sdoc_notification_list
         result['general']['count'] = total_count
         result['discussion']['count'] = sdoc_total_count
+        result['total_unseen_count'] = result['general']['unseen_count'] + result['discussion']['unseen_count']
 
         return Response(result)
     
@@ -394,7 +368,5 @@ class AllNotificationsView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        cache.delete(cache_key)
 
         return Response({'success': True})
