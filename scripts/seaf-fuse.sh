@@ -127,7 +127,7 @@ function stop_seaf_fuse() {
     fi
 
     echo "Stopping seaf-fuse ..."
-    pkill -SIGTERM -f "seaf-fuse"
+    pkill -SIGTERM -f "bin/seaf-fuse"
     return 0
 }
 
