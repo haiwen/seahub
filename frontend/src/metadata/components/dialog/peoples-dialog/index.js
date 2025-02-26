@@ -1,56 +1,88 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
-import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
+import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils/constants';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { useMetadataView } from '../../../hooks/metadata-view';
 import People from './people';
 
 import './index.css';
-import { useMetadataView } from '../../../hooks/metadata-view';
-
 
 const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
-  const [selectedPeople, setSelectedPeople] = useState(null);
+  const [selectedPeopleIds, setSelectedPeopleIds] = useState([]);
   const [isSubmitting, setSubmitting] = useState(false);
 
   const { metadata } = useMetadataView();
 
   const peopleOptions = useMemo(() => {
     return metadata.rows.filter(people => people._is_someone).map(people => {
+      const isSelected = selectedPeopleIds.some(id => id === people._id);
       return {
         value: people._id,
-        label: (<People people={people} />),
+        label: (
+          <div className="select-option-people">
+            <People people={people} />
+            <div className="people-check-icon">
+              {isSelected && (<Icon iconName="check-mark" />)}
+            </div>
+          </div>
+        ),
       };
     });
-  }, [metadata]);
+  }, [metadata, selectedPeopleIds]);
 
-  const onSelectPeople = useCallback((o) => {
-    if (o === selectedPeople) return;
-    setSelectedPeople(o);
-  }, [selectedPeople]);
+  const onSelectPeople = useCallback((value) => {
+    if (selectedPeopleIds.some(id => id === value)) {
+      setSelectedPeopleIds(selectedPeopleIds.filter(id => id !== value));
+    } else {
+      setSelectedPeopleIds([...selectedPeopleIds, value]);
+    }
+  }, [selectedPeopleIds]);
 
   const handelSubmit = useCallback(() => {
     setSubmitting(true);
-    onSubmit(selectedPeople, selectedImages, {
+    onSubmit(selectedPeopleIds, selectedImages, {
       success_callback: onToggle,
       fail_callback: () => setSubmitting(false),
     });
-  }, [selectedImages, selectedPeople, onToggle, onSubmit]);
+  }, [selectedImages, selectedPeopleIds, onToggle, onSubmit]);
 
-  const selectedValue = peopleOptions.find(o => o.value === selectedPeople);
+  const onDelete = useCallback((event, people) => {
+    event.stopPropagation();
+    setSelectedPeopleIds(selectedPeopleIds.filter(id => id !== people._id));
+  }, [selectedPeopleIds]);
+
+  const selectedValue = useMemo(() => {
+    return (
+      <div className="sf-metadata-delete-people">
+        {Array.isArray(selectedPeopleIds) && selectedPeopleIds.length > 0 && selectedPeopleIds.map(id => {
+          const people = metadata.rows.find(people => people._id === id);
+          if (!people) return null;
+          return <People key={id} people={people} isCancellable={true} onDelete={onDelete} />;
+        })}
+      </div>
+    );
+  }, [selectedPeopleIds, metadata, onDelete]);
 
   return (
     <Modal isOpen={true} toggle={() => onToggle()} className="sf-metadata-peoples-dialog">
-      <ModalHeader toggle={() => onToggle()}>{gettext('People')}</ModalHeader>
+      <SeahubModalHeader toggle={() => onToggle()}>{gettext('People')}</SeahubModalHeader>
       <ModalBody>
         <FormGroup className="">
           <Label>{gettext('People')}</Label>
-          <CustomizeSelect value={selectedValue} options={peopleOptions} onSelectOption={onSelectPeople} />
+          <CustomizeSelect
+            value={selectedValue ? { label: selectedValue } : {}}
+            options={peopleOptions}
+            onSelectOption={onSelectPeople}
+            supportMultipleSelect={true}
+            searchable={true}
+          />
         </FormGroup>
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={() => onToggle()}>{gettext('Cancel')}</Button>
-        <Button color="primary" disabled={isSubmitting || !selectedPeople} onClick={handelSubmit}>{gettext('Submit')}</Button>
+        <Button color="primary" disabled={isSubmitting || !selectedPeopleIds.length} onClick={handelSubmit}>{gettext('Submit')}</Button>
       </ModalFooter>
     </Modal>
   );
@@ -59,6 +91,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
 PeoplesDialog.propTypes = {
   onToggle: PropTypes.func,
   selectedImages: PropTypes.array,
+  onSubmit: PropTypes.func,
 };
 
 export default PeoplesDialog;

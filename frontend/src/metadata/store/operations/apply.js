@@ -295,7 +295,7 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.ADD_PEOPLE_PHOTOS: {
-      const { people_id, old_people_id, added_photos } = operation;
+      const { people_ids, old_people_id, added_photos } = operation;
       const { rows } = data;
       const idNeedDeletedMap = added_photos.reduce((currIdNeedDeletedMap, rowId) => ({ ...currIdNeedDeletedMap, [rowId]: true }), {});
       let updatedRows = [...rows];
@@ -310,7 +310,7 @@ export default function apply(data, operation) {
             updatedRows[index] = updatedRow;
             data.id_row_map[rowId] = updatedRow;
           }
-        } else if (rowId === people_id) {
+        } else if (people_ids.includes(rowId)) {
           const updatedRow = Object.assign({}, row, { _photo_links: [...photoLinks, ...added_photos.map(rowId => ({ row_id: rowId, display_name: '' }))] });
           updatedRows[index] = updatedRow;
           data.id_row_map[rowId] = updatedRow;

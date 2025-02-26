@@ -19,7 +19,7 @@ const CONTEXT_MENU_KEY = {
   DUPLICATE: 'duplicate',
   REMOVE: 'remove',
   SET_PEOPLE_PHOTO: 'set_people_photo',
-  ADD_PHOTO_TO_GROUP: 'add_photo_to_group',
+  ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
 };
 
 const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
@@ -46,7 +46,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
       validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: gettext('Remove from this group') });
     }
     if (onAddImage && canAddPhotoToPeople) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP, label: gettext('Add to group') });
+      validOptions.push({ value: CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUPS, label: gettext('Add to groups') });
     }
     if (onSetPeoplePhoto && canSetPeoplePhoto) {
       validOptions.push({ value: CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO, label: gettext('Set as cover photo') });
@@ -106,7 +106,7 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
       case CONTEXT_MENU_KEY.REMOVE:
         onRemoveImage(selectedImages);
         break;
-      case CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUP:
+      case CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUPS:
         setPeoplesDialogShow(true);
         break;
       case CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO:
@@ -121,8 +121,8 @@ const GalleryContextMenu = ({ metadata, selectedImages, onDelete, onDuplicate, a
     setPeoplesDialogShow(false);
   }, []);
 
-  const addPeople = useCallback((peopleId, addedImages, callback) => {
-    onAddImage(peopleId, addedImages, callback);
+  const addPeople = useCallback((peopleIds, addedImages, callback) => {
+    onAddImage(peopleIds, addedImages, callback);
   }, [onAddImage]);
 
   const dirent = new Dirent({ name: selectedImages[0]?.name });

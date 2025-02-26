@@ -128,8 +128,8 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, deletedByIds, onRemovePeoplePhotos]);
 
-  const handelAdd = useCallback((peopleId, addedImages, { success_callback, fail_callback }) => {
-    if (!addedImages.length) return;
+  const handelAdd = useCallback((peopleIds, addedImages, { success_callback, fail_callback }) => {
+    if (!addedImages.length || !peopleIds.length) return;
     let recordIds = [];
     addedImages.forEach((record) => {
       const { id, parentDir, name } = record || {};
@@ -137,7 +137,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         recordIds.push(id);
       }
     });
-    onAddPeoplePhotos(peopleId, people._id, recordIds, {
+    onAddPeoplePhotos(peopleIds, people._id, recordIds, {
       success_callback: () => {
         deletedByIds(recordIds, false);
         success_callback && success_callback();
