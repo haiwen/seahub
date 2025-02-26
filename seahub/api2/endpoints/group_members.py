@@ -3,7 +3,7 @@ import logging
 from io import BytesIO
 from openpyxl import load_workbook
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext as _
 
 from rest_framework.authentication import SessionAuthentication
@@ -19,16 +19,18 @@ from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import is_org_user
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import string2list, is_org_context, get_file_type_and_ext
+from seahub.group.models import GroupInviteLinkModel
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.base.accounts import User
 from seahub.group.signals import add_user_to_group
+from seahub.group.views import group_invite
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 from seahub.profile.models import Profile
+from seahub.settings import MULTI_TENANCY
 
 from .utils import api_check_group
 
@@ -541,3 +543,96 @@ class GroupMembersImportExample(APIView):
         wb.save(response)
 
         return response
+
+
+class GroupInviteLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    @api_check_group
+    def get(self, request, group_id):
+        """
+        Get invitation link
+        """
+        group_id = int(group_id)
+        email = request.user.username
+
+        if MULTI_TENANCY:
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_group_admin_or_owner(group_id, email):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            invite_link_query_set = GroupInviteLinkModel.objects.filter(group_id=group_id)
+        except Exception as e:
+            logger.error(f'query group invite links failed. {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'group_invite_link_list': [group_invite_link.to_dict() for group_invite_link in
+                                                    invite_link_query_set]})
+
+    @api_check_group
+    def post(self, request, group_id):
+        group_id = int(group_id)
+        email = request.user.username
+        if MULTI_TENANCY:
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_group_admin_or_owner(group_id, email):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            invite_link = GroupInviteLinkModel.objects.create_link(group_id, email)
+        except Exception as e:
+            logger.error(f'create group invite links failed. {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(invite_link.to_dict())
+
+
+class GroupInviteLink(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    @api_check_group
+    def delete(self, request, group_id, token):
+        group_id = int(group_id)
+        email = request.user.username
+
+        if MULTI_TENANCY:
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_group_admin_or_owner(group_id, email):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            GroupInviteLinkModel.objects.filter(token=token, group_id=group_id).delete()
+        except Exception as e:
+            logger.error(f'delete group invite links failed. {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})

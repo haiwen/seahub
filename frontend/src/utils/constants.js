@@ -115,6 +115,7 @@ export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false
 export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
+export const isMultiTenancy = window.app.pageOptions.isMultiTenacy;
 export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 
 export const enableShowAbout = window.app.pageOptions.enableShowAbout || false;
