@@ -72,6 +72,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, update);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, recordId, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

@@ -10,12 +10,16 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
   return (
     <div className="detail-header">
       <Title title={title} icon={icon} iconSize={iconSize} />
-      <div className="detail-control-container">
-        {children}
-        <div className="detail-control" onClick={onClose}>
-          {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+      {(children || onClose) && (
+        <div className="detail-control-container">
+          {children}
+          {onClose && (
+            <div className="detail-control" onClick={onClose}>
+              {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -26,7 +30,7 @@ Header.propTypes = {
   iconSize: PropTypes.number,
   component: PropTypes.object,
   children: PropTypes.any,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
 export default Header;

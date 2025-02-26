@@ -205,6 +205,7 @@ class DirentListView extends React.Component {
     }
 
     return {
+      id: item.id,
       name,
       thumbnail,
       src,
@@ -765,11 +766,11 @@ class DirentListView extends React.Component {
 
     let canModifyFile = false;
     let canDeleteFile = false;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
       canModifyFile = true;
       canDeleteFile = true;
     } else {
-      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
       if (isCustomPermission) {
         const { modify, delete: canDelete } = customPermission.permission;
         canModifyFile = modify;
@@ -872,6 +873,8 @@ class DirentListView extends React.Component {
           {this.state.isImagePopupOpen && (
             <ModalPortal>
               <ImageDialog
+                repoID={this.props.repoID}
+                repoInfo={this.props.currentRepoInfo}
                 imageItems={this.state.imageItems}
                 imageIndex={this.state.imageIndex}
                 closeImagePopup={this.closeImagePopup}
@@ -880,6 +883,7 @@ class DirentListView extends React.Component {
                 onDeleteImage={(canDeleteFile && this.deleteImage) ? this.deleteImage : null}
                 onRotateImage={this.rotateImage}
                 enableRotate={canModifyFile}
+                isCustomPermission={isCustomPermission}
               />
             </ModalPortal>
           )}

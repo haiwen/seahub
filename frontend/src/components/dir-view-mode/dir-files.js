@@ -257,6 +257,7 @@ class DirFiles extends React.Component {
         thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
       }
       return {
+        id: item.object.id,
         name,
         parentDir: node.parentNode.path,
         src,
@@ -364,12 +365,11 @@ class DirFiles extends React.Component {
   render() {
     const { repoID, currentRepoInfo, userPerm } = this.props;
     const { encrypted: repoEncrypted } = currentRepoInfo;
-
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canModifyFile = false;
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
       canModifyFile = true;
     } else {
-      const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
       if (isCustomPermission) {
         const { modify } = customPermission.permission;
         canModifyFile = modify;
@@ -461,6 +461,8 @@ class DirFiles extends React.Component {
         {this.state.isNodeImagePopupOpen && (
           <ModalPortal>
             <ImageDialog
+              repoID={repoID}
+              repoInfo={currentRepoInfo}
               imageItems={this.state.imageNodeItems}
               imageIndex={this.state.imageIndex}
               closeImagePopup={this.closeNodeImagePopup}
@@ -469,6 +471,7 @@ class DirFiles extends React.Component {
               onDeleteImage={this.deleteImage}
               onRotateImage={this.rotateImage}
               enableRotate={canModifyFile}
+              isCustomPermission={isCustomPermission}
             />
           </ModalPortal>
         )}

@@ -922,12 +922,15 @@ class SharedDirView extends React.Component {
         {this.state.isImagePopupOpen &&
         <ModalPortal>
           <ImageDialog
+            repoID={repoID}
+            repoInfo={{ 'permission': 'r' }}
             imageItems={this.state.imageItems}
             imageIndex={this.state.imageIndex}
             closeImagePopup={this.closeImagePopup}
             moveToPrevImage={this.moveToPrevImage}
             moveToNextImage={this.moveToNextImage}
             enableRotate={false}
+            isCustomPermission={true}
           />
         </ModalPortal>
         }
