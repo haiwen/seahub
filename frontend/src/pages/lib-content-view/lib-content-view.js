@@ -20,7 +20,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY } from '../../constants';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
@@ -739,7 +739,7 @@ class LibContentView extends React.Component {
   };
 
   updateRecentlyUsedList = (repo, destPath) => {
-    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const recentlyUsed = JSON.parse(localStorage.getItem(RECENTLY_USED_LIST_KEY)) || [];
     const updatedRecentlyUsed = [{ repo_id: repo.repo_id, path: destPath }, ...recentlyUsed];
 
     const filteredRecentlyUsed = updatedRecentlyUsed.filter((item, index, self) =>
@@ -752,7 +752,7 @@ class LibContentView extends React.Component {
       filteredRecentlyUsed.pop(); // Limit to 10 recent directories
     }
 
-    localStorage.setItem('recently-used-list', JSON.stringify(filteredRecentlyUsed));
+    localStorage.setItem(RECENTLY_USED_LIST_KEY, JSON.stringify(filteredRecentlyUsed));
   };
 
   // toolbar operations
@@ -955,11 +955,11 @@ class LibContentView extends React.Component {
   };
 
   removeFromRecentlyUsed = (repoID, path) => {
-    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const recentlyUsed = JSON.parse(localStorage.getItem(RECENTLY_USED_LIST_KEY)) || [];
     const updatedRecentlyUsed = recentlyUsed.filter(item =>
       !(item.repo_id === repoID && item.path === path)
     );
-    localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
+    localStorage.setItem(RECENTLY_USED_LIST_KEY, JSON.stringify(updatedRecentlyUsed));
   };
 
   onAddFolder = (dirPath, options = {}) => {
