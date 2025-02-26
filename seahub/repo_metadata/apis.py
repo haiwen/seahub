@@ -1510,41 +1510,52 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'faces table not found')
         faces_table_id = faces_table['id']
 
+        people_id_placeholders = ', '.join(['?' for _ in people_ids])
+        sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` IN ({people_id_placeholders}) OR `{FACES_TABLE.columns.name.name}` = "{UNKNOWN_PEOPLE_NAME}"'
+
+        try:
+            query_result = metadata_server_api.query_rows(sql, people_ids).get('results', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # build face record map
+        face_records = {record[FACES_TABLE.columns.id.name]: record for record in query_result if record[FACES_TABLE.columns.id.name] in people_ids}
+        unknown_people_record = next((item for item in query_result if item.get(FACES_TABLE.columns.name.name) == UNKNOWN_PEOPLE_NAME), None)
+
+        if not unknown_people_record:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unknown people not found')
+
         row_id_map = {}
+        update_link_map = {}
         for people_id in people_ids:
-            sql = f'SELECT * FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}" OR `{FACES_TABLE.columns.name.name}` = "{UNKNOWN_PEOPLE_NAME}"'
+            face_record = face_records.get(people_id)
+            if not face_record:
+                return api_error(status.HTTP_404_NOT_FOUND, f'people {people_id} not found')
+
+            excluded_record_ids = [item['row_id'] for item in face_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+            duplicate_record_ids = [record_id for record_id in record_ids if record_id in excluded_record_ids]
+            if duplicate_record_ids:
+                update_link_map[people_id] = [record_id for record_id in excluded_record_ids if record_id not in duplicate_record_ids]
+
+            row_id_map[people_id] = record_ids
+
+        # update links in batch
+        if update_link_map:
             try:
-                query_result = metadata_server_api.query_rows(sql).get('results', [])
+                metadata_server_api.update_link(FACES_TABLE.excluded_face_link_id, faces_table_id, update_link_map)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            face_record = next((item for item in query_result if item[FACES_TABLE.columns.id.name] == people_id), None)
-            unknown_people_record = next((item for item in query_result if item.get(FACES_TABLE.columns.name.name) == UNKNOWN_PEOPLE_NAME), None)
-            if not face_record or face_record.get(FACES_TABLE.columns.name.name) == UNKNOWN_PEOPLE_NAME:
-                return api_error(status.HTTP_404_NOT_FOUND, 'people not found')
-
-            excluded_record_ids = [item['row_id'] for item in face_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
-            duplicate_record_ids = [record_id for record_id in record_ids if record_id in excluded_record_ids]
-            if duplicate_record_ids:
-                try:
-                    metadata_server_api.update_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
-                        people_id: [record_id for record_id in excluded_record_ids if record_id not in duplicate_record_ids]
-                    })
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            row_id_map[people_id] = record_ids
-
-        unknown_people_record_id = unknown_people_record[FACES_TABLE.columns.id.name]
-        unknown_people_excluded_record_ids = [item['row_id'] for item in unknown_people_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]
+        # insert links in batch
         try:
-            res = metadata_server_api.insert_link(FACES_TABLE.included_face_link_id, faces_table_id, row_id_map)
+            metadata_server_api.insert_link(FACES_TABLE.included_face_link_id, faces_table_id, row_id_map)
+            unknown_people_record_id = unknown_people_record[FACES_TABLE.columns.id.name]
             metadata_server_api.insert_link(FACES_TABLE.excluded_face_link_id, faces_table_id, {
-                unknown_people_record_id: [record_id for record_id in record_ids if record_id not in unknown_people_excluded_record_ids]
+                unknown_people_record_id: [record_id for record_id in record_ids if record_id not in [item['row_id'] for item in unknown_people_record.get(FACES_TABLE.columns.excluded_photo_links.name, [])]]
             })
         except Exception as e:
             logger.error(e)
