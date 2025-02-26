@@ -374,7 +374,6 @@ class GroupView extends React.Component {
 
   getOpList = () => {
     const { currentGroup, isDepartmentGroup, isStaff, isOwner } = this.state;
-    // const isGroup = this.state.currentGroup.owner !== 'system admin';
     const opList = [];
     if ((!isDepartmentGroup && canAddRepo) ||
       (isDepartmentGroup && isStaff)) {
@@ -401,7 +400,7 @@ class GroupView extends React.Component {
       }
 
       if (isOwner && this.state.currentGroup.owner !== 'system admin' && !isMultiTenancy) {
-        opList.push({ 'text': gettext('Invite Members'), 'onClick': this.toggleInviteMembersDialog });
+        opList.push({ 'text': gettext('Invite members'), 'onClick': this.toggleInviteMembersDialog });
       }
     }
 
@@ -606,8 +605,8 @@ class GroupView extends React.Component {
         {this.state.showInviteMembersDialog &&
           <GroupInviteMembersDialog
             groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-            toggleGroupInviteDialog={this.toggleInviteMembersDialog}/>
+            toggleInviteMembersDialog={this.toggleInviteMembersDialog}
+          />
         }
       </Fragment>
     );

@@ -1,17 +1,12 @@
-.group-invite-members th,
-.group-invite-members td {
-  vertical-align: middle;
-  text-align: left;
-}
-
 .group-invite-members .no-link-tip {
   line-height: 24px;
-  color: #999;
+  color: #666;
+  font-size: 14px;
 }
 
 .invite-link-item {
   display: flex;
-  margin: 1rem 0 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .invite-link-item .form-item {
@@ -36,5 +31,4 @@
 
 .invite-link-item .delete-link-btn {
   color: #999;
-  width: 40px;
 }

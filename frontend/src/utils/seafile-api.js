@@ -304,18 +304,18 @@ class SeafileAPI {
   }
 
   deleteGroupInviteLinks(groupID, token) {
-    const url = this.server + '/api/v2.1/groups/' + groupID + '/invite-links/' + token + '/';
+    const url = `${this.server}/api/v2.1/groups/${groupID}/invite-links/${token}/`;
     return this.req.delete(url);
   }
 
   addGroupInviteLinks(groupID) {
-    const url = this.server + '/api/v2.1/groups/' + groupID + '/invite-links/';
+    const url = `${this.server}/api/v2.1/groups/${groupID}/invite-links/`;
     let formData = new FormData();
     return this._sendPostRequest(url, formData);
   }
 
   getGroupInviteLinks(groupID) {
-    const url = this.server + '/api/v2.1/groups/' + groupID + '/invite-links/';
+    const url = `${this.server}/api/v2.1/groups/${groupID}/invite-links/`;
     return this.req.get(url);
   }
 

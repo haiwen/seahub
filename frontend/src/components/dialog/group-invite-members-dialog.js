@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalBody, Label } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import copy from 'copy-to-clipboard';
 import toaster from '../toast';
@@ -12,7 +12,7 @@ import '../../css/group-invite-members-dialog.css';
 
 const propTypes = {
   groupID: PropTypes.string.isRequired,
-  toggleGroupInviteDialog: PropTypes.func.isRequired,
+  toggleInviteMembersDialog: PropTypes.func.isRequired,
 };
 
 class GroupInviteMembersDialog extends React.Component {
@@ -69,7 +69,7 @@ class GroupInviteMembersDialog extends React.Component {
   };
 
   toggle = () => {
-    this.props.toggleGroupInviteDialog();
+    this.props.toggleInviteMembersDialog();
   };
 
   render() {
@@ -81,9 +81,7 @@ class GroupInviteMembersDialog extends React.Component {
         <ModalBody>
           {link ?
             <>
-              <div>
-                <strong>{gettext('Group invitation link')}</strong>
-              </div>
+              <Label>{gettext('Group invitation link')}</Label>
               <div className="invite-link-item">
                 <div className="form-item text-truncate">{link.link}</div>
                 <div className="invite-link-copy">
