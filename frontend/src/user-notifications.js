@@ -101,6 +101,7 @@ class UserNotificationsDialog extends React.Component {
             return item;
           })
         });
+        this.props.updateTotalUnseenCount('general');
       }).catch((error) => {
         this.setState({
           isLoading: false,
@@ -115,6 +116,7 @@ class UserNotificationsDialog extends React.Component {
             return item;
           })
         });
+        this.props.updateTotalUnseenCount('discussion');
       }).catch((error) => {
         this.setState({
           isLoading: false,
@@ -131,6 +133,7 @@ class UserNotificationsDialog extends React.Component {
         this.setState({
           items: []
         });
+        this.props.updateTotalUnseenCount('general');
       }).catch((error) => {
         this.setState({
           isLoading: false,
@@ -142,6 +145,7 @@ class UserNotificationsDialog extends React.Component {
         this.setState({
           items: []
         });
+        this.props.updateTotalUnseenCount('discussion');
       }).catch((error) => {
         this.setState({
           isLoading: false,

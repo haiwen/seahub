@@ -157,6 +157,20 @@ class Notification extends React.Component {
     }
   };
 
+  updateTotalUnseenCount = (noticeType) => {
+    if (noticeType === 'general') {
+      this.setState({
+        generalNoticeListUnseen: 0,
+        totalUnseenCount: this.state.discussionNoticeListUnseen
+      });
+    } else if (noticeType === 'discussion') {
+      this.setState({
+        discussionNoticeListUnseen: 0,
+        totalUnseenCount: this.state.generalNoticeListUnseen
+      });
+    }
+  };
+
   render() {
     const { totalUnseenCount, currentTab, generalNoticeList, discussionNoticeList, generalNoticeListUnseen, discussionNoticeListUnseen } = this.state;
     return (
@@ -203,6 +217,7 @@ class Notification extends React.Component {
             onNotificationDialogToggle={this.onNotificationDialogToggle}
             generalNoticeListUnseen={generalNoticeListUnseen}
             discussionNoticeListUnseen={discussionNoticeListUnseen}
+            updateTotalUnseenCount={this.updateTotalUnseenCount}
           />
         }
       </div>
