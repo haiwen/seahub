@@ -126,10 +126,10 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
       onMouseLeave={onMouseLeave}
       onContextMenu={handleContextMenu}
     >
-      <td className="pl10 pr-2">
+      <td className="pl10 pr-2" role="button" onClick={handleSelected} aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}>
         <input
           type="checkbox"
-          className="vam"
+          className="vam cursor-pointer"
           style={{ position: 'relative', top: -1 }}
           onClick={handleSelected}
           onChange={() => {}}
