@@ -77,6 +77,11 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
             onSelectOption={onSelectPeople}
             supportMultipleSelect={true}
             searchable={true}
+            component={{
+              DropDownIcon: (
+                <i className="sf3-font sf3-font-down"></i>
+              )
+            }}
           />
         </FormGroup>
       </ModalBody>

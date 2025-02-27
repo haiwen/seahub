@@ -57,7 +57,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
             onClick={openStylePopover}
           >
             <div className="selected-option" style={{ fill: color }}><Icon iconName={type} /></div>
-            <Icon iconName="drop-down" />
+            <i className="sf3-font-down sf3-font"></i>
           </div>
           {isShowStylePopover && (
             <CustomizePopover
@@ -87,7 +87,16 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
         </FormGroup>
         <FormGroup className="rate-column-data-setting-item rate-column-data-max-setting">
           <Label>{gettext('Max')}</Label>
-          <CustomizeSelect value={selectedMaxOption} options={maxOptions} onSelectOption={onMaxChange} />
+          <CustomizeSelect
+            value={selectedMaxOption}
+            options={maxOptions}
+            onSelectOption={onMaxChange}
+            component={{
+              DropDownIcon: (
+                <i className="sf3-font sf3-font-down"></i>
+              )
+            }}
+          />
         </FormGroup>
       </div>
     </div>

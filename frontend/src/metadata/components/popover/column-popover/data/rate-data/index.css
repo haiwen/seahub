@@ -15,6 +15,15 @@
   fill: inherit;
 }
 
+.sf-metadata-rate-column-data-settings .rate-column-data-style-setting-wrapper>.sf3-font-down {
+  color: #999;
+}
+
+.sf-metadata-rate-column-data-settings .rate-column-data-style-setting-wrapper>.sf3-font-down:hover,
+.sf-metadata-rate-column-data-settings .sf-metadata-select .selected-option .custom-select-dropdown-icon:hover {
+  color: #555;
+}
+
 /* style popover */
 .sf-metadata-rate-column-data-style-setting-popover .rate-column-style-list {
   display: flex;

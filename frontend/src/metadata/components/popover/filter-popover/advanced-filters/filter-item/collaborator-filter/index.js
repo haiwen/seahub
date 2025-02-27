@@ -86,6 +86,11 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
       searchPlaceholder={gettext('Search collaborator')}
       isShowSelected={false}
       noOptionsPlaceholder={gettext('No collaborators')}
+      component={{
+        DropDownIcon: (
+          <i className="sf3-font sf3-font-down"></i>
+        )
+      }}
     />
   );
 };
