@@ -93,7 +93,7 @@ const TagFiles = () => {
   };
 
   const onSelectFile = useCallback((event, fileId) => {
-    if (event.target.tagName === 'TD') {
+    if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
       updateSelectedFileIds([fileId]);
       return;
     }
