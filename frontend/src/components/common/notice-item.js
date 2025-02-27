@@ -352,9 +352,16 @@ class NoticeItem extends React.Component {
         notice = String(vfile);
       });
       if (is_resolved) {
-        notice = 'Marked "' + detail.resolve_comment + '" as resolved in document ' + sdoc_link;
+        if (detail.resolve_comment && detail.resolve_comment !== '\u200B') {
+          notice = gettext('Marked "{resolve_comment}" as resolved in document {sdoc_link}');
+          notice = notice.replace('{resolve_comment}', detail.resolve_comment);
+          notice = notice.replace('{sdoc_link}', sdoc_link);
+        } else {
+          notice = gettext('Marked as resolved in document {sdoc_link}');
+          notice = notice.replace('{sdoc_link}', sdoc_link);
+        }
       } else {
-        notice = 'Added a new comment in document ' + sdoc_link + ':' + notice;
+        notice = gettext('Added a new comment in document {sdoc_link}:').replace('{sdoc_link}', sdoc_link) + notice;
       }
       return { avatar_url, username, notice };
     }
@@ -373,9 +380,16 @@ class NoticeItem extends React.Component {
         notice = String(vfile);
       });
       if (is_resolved) {
-        notice = 'Marked "' + detail.resolve_comment + '" as resolved in document ' + sdoc_link;
+        if (detail.resolve_comment && detail.resolve_comment !== '\u200B') {
+          notice = gettext('Marked "{resolve_comment}" as resolved in document {sdoc_link}');
+          notice = notice.replace('{resolve_comment}', detail.resolve_comment);
+          notice = notice.replace('{sdoc_link}', sdoc_link);
+        } else {
+          notice = gettext('Marked as resolved in document {sdoc_link}');
+          notice = notice.replace('{sdoc_link}', sdoc_link);
+        }
       } else {
-        notice = 'Added a new reply in document ' + sdoc_link + ':' + notice;
+        notice = gettext('Added a new reply in document {sdoc_link}:').replace('{sdoc_link}', sdoc_link) + notice;
       }
       return { avatar_url, username, notice };
     }
