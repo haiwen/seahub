@@ -300,8 +300,7 @@ class DirOperationToolbar extends React.Component {
               onKeyDown={this.onDropdownToggleKeyDown}
               data-toggle="dropdown"
             >
-              {this.props.children}
-              <i className="sf3-font-new sf3-font ml-2"></i>
+              <i className="sf3-font-new sf3-font"></i>
               <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
@@ -359,8 +358,7 @@ class DirOperationToolbar extends React.Component {
             role="button"
             className="path-item"
           >
-            {this.props.children}
-            <i className="sf3-font-new sf3-font ml-2"></i>
+            <i className="sf3-font-new sf3-font"></i>
             <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
@@ -382,6 +380,7 @@ class DirOperationToolbar extends React.Component {
       <Fragment>
         {isShowDropdownMenu && (
           <div className="dir-operation">
+            {this.props.children}
             {content}
           </div>
         )}

@@ -280,6 +280,11 @@
   align-items: center;
 }
 
+.dir-view-path .dir-operation>.path-repo-name,
+.dir-view-path .dir-operation>.path-file-name {
+  margin: 0 6px;
+}
+
 .dir-view-path .dir-operation.dir-operation-no-dropdown {
   margin-left: 6px;
 }
