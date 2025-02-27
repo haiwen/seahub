@@ -211,6 +211,11 @@ class SortPopover extends Component {
               searchable={true}
               searchPlaceholder={gettext('Search property')}
               noOptionsPlaceholder={gettext('No results')}
+              component={{
+                DropDownIcon: (
+                  <i className="sf3-font sf3-font-down"></i>
+                )
+              }}
             />
           </div>
           <div className="sort-predicate ml-2">
@@ -219,6 +224,11 @@ class SortPopover extends Component {
               value={selectedSortType}
               onSelectOption={(value) => this.onSelectSortType(value, index)}
               options={this.sortTypeOptions}
+              component={{
+                DropDownIcon: (
+                  <i className="sf3-font sf3-font-down"></i>
+                )
+              }}
             />
           </div>
         </div>

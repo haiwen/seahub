@@ -75,7 +75,16 @@ const DateData = ({ value, column, onChange }) => {
     <div className="sf-metadata-column-data-settings sf-metadata-date-column-data-settings">
       <FormGroup className="">
         <Label>{gettext('Format')}</Label>
-        <CustomizeSelect value={selectedValue} options={options} onSelectOption={onFormatChange} />
+        <CustomizeSelect
+          value={selectedValue}
+          options={options}
+          onSelectOption={onFormatChange}
+          component={{
+            DropDownIcon: (
+              <i className="sf3-font sf3-font-down"></i>
+            )
+          }}
+        />
       </FormGroup>
       {!isShootingTime && (
         <>

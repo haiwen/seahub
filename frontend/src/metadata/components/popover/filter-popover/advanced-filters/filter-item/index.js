@@ -281,6 +281,11 @@ class FilterItem extends React.Component {
             value={activeConjunction}
             options={conjunctionOptions}
             onSelectOption={this.onSelectConjunction}
+            component={{
+              DropDownIcon: (
+                <i className="sf3-font sf3-font-down"></i>
+              )
+            }}
           />
         );
       }
@@ -347,6 +352,11 @@ class FilterItem extends React.Component {
         searchPlaceholder={gettext('Search option')}
         noOptionsPlaceholder={gettext('No options available')}
         supportMultipleSelect={isSupportMultipleSelect}
+        component={{
+          DropDownIcon: (
+            <i className="sf3-font sf3-font-down"></i>
+          )
+        }}
       />
     );
   };
@@ -459,6 +469,11 @@ class FilterItem extends React.Component {
             searchPlaceholder={gettext('Search option')}
             noOptionsPlaceholder={gettext('No options available')}
             isInModal={this.props.isInModal}
+            component={{
+              DropDownIcon: (
+                <i className="sf3-font sf3-font-down"></i>
+              )
+            }}
           />
         );
       }
@@ -593,6 +608,11 @@ class FilterItem extends React.Component {
                 searchable={true}
                 searchPlaceholder={gettext('Search property')}
                 noOptionsPlaceholder={gettext('No results')}
+                component={{
+                  DropDownIcon: (
+                    <i className="sf3-font sf3-font-down"></i>
+                  )
+                }}
               />
             </div>
             <div className={`filter-predicate ml-2 ${_isCheckboxColumn ? 'filter-checkbox-predicate' : ''}`}>
@@ -601,6 +621,11 @@ class FilterItem extends React.Component {
                 value={activePredicate}
                 options={filterPredicateOptions}
                 onSelectOption={this.onSelectPredicate}
+                component={{
+                  DropDownIcon: (
+                    <i className="sf3-font sf3-font-down"></i>
+                  )
+                }}
               />
             </div>
             {isDateColumn(filterColumn) && isNeedShowTermModifier && (
@@ -610,6 +635,11 @@ class FilterItem extends React.Component {
                   value={activeTermModifier}
                   options={filterTermModifierOptions}
                   onSelectOption={this.onSelectTermModifier}
+                  component={{
+                    DropDownIcon: (
+                      <i className="sf3-font sf3-font-down"></i>
+                    )
+                  }}
                 />
               </div>
             )}

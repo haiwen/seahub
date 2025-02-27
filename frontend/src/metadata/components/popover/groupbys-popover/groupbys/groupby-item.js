@@ -187,6 +187,11 @@ const GroupbyItem = ({
               searchable={true}
               searchPlaceholder={gettext('Search property')}
               noOptionsPlaceholder={gettext('No results')}
+              component={{
+                DropDownIcon: (
+                  <i className="sf3-font sf3-font-down"></i>
+                )
+              }}
             />
           </div>
           {isShowGroupCountType(column) && (
@@ -196,6 +201,11 @@ const GroupbyItem = ({
                 value={selectedCountType}
                 onSelectOption={selectCountType}
                 options={countTypeOptions}
+                component={{
+                  DropDownIcon: (
+                    <i className="sf3-font sf3-font-down"></i>
+                  )
+                }}
               />
             </div>
           )}
@@ -206,6 +216,11 @@ const GroupbyItem = ({
                 value={selectedSortType}
                 options={sortOptions}
                 onSelectOption={selectSortType}
+                component={{
+                  DropDownIcon: (
+                    <i className="sf3-font sf3-font-down"></i>
+                  )
+                }}
               />
             )}
           </div>
