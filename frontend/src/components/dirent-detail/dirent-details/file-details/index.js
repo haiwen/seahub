@@ -66,7 +66,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
 
   useEffect(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) || false;
+    const savedValue = window.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) === 'true';
     setCaptureInfoShow(savedValue);
   }, []);
 

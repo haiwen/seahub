@@ -10,7 +10,7 @@ const Collapse = ({ className, title, children, isShow = true }) => {
 
   const toggleShowChildren = useCallback(() => {
     setShowChildren(!showChildren);
-    window.sfMetadataContext.localStorage.setItem(CAPTURE_INFO_SHOW_KEY, !showChildren);
+    window.localStorage.setItem(CAPTURE_INFO_SHOW_KEY, !showChildren);
   }, [showChildren]);
 
   return (
