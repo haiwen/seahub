@@ -155,8 +155,8 @@ class UserNotificationsDialog extends React.Component {
     this.props.onNotificationDialogToggle();
   };
 
-  tabItemClick = (e) => {
-    let tab = e.target.getAttribute('value');
+  tabItemClick = (tab) => {
+    if (tab === this.state.activeTab) return;
     this.setState({
       activeTab: tab,
       currentPage: 1
@@ -217,15 +217,25 @@ class UserNotificationsDialog extends React.Component {
         <div className="notice-dialog-side">
           <Nav pills className="flex-column w-100">
             <NavItem className="w-100" role="tab" aria-selected={activeTab === 'general'} aria-controls="general-notice-panel">
-              <NavLink className={classname('w-100', 'mr-0', { 'active': activeTab === 'general' })} onClick={this.tabItemClick} tabIndex="0" value="general">
+              <NavLink
+                className={classname('w-100 mr-0', { 'active': activeTab === 'general' })}
+                onClick={() => this.tabItemClick('general')}
+                tabIndex="0"
+                value="general"
+              >
                 {gettext('General')}
-                {generalNoticeListUnseen > 0 && <span>({generalNoticeListUnseen})</span>}
+                {generalNoticeListUnseen > 0 && <span className="pl-1">({generalNoticeListUnseen})</span>}
               </NavLink>
             </NavItem>
             <NavItem className="w-100" role="tab" aria-selected={activeTab === 'discussion'} aria-controls="discussion-notice-panel">
-              <NavLink className={classname('w-100', 'mr-0', { 'active': activeTab === 'discussion' })} onClick={this.tabItemClick} tabIndex="1" value="discussion">
+              <NavLink
+                className={classname('w-100 mr-0', { 'active': activeTab === 'discussion' })}
+                onClick={() => this.tabItemClick('discussion')}
+                tabIndex="1"
+                value="discussion"
+              >
                 {gettext('Discussion')}
-                {discussionNoticeListUnseen > 0 && <span>({discussionNoticeListUnseen})</span>}
+                {discussionNoticeListUnseen > 0 && <span className="pl-1">({discussionNoticeListUnseen})</span>}
               </NavLink>
             </NavItem>
           </Nav>
