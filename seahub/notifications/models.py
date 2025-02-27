@@ -81,7 +81,6 @@ MSG_TYPE_DELETED_FILES = 'deleted_files'
 MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
 MSG_TYPE_FACE_CLUSTER = 'face_cluster'
 
-USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     """Encode file uploaded message to json string.
@@ -156,11 +155,6 @@ def saml_sso_error_msg_to_json(error_msg):
     return json.dumps({'error_msg': error_msg})
 
 
-def get_cache_key_of_unseen_notifications(username):
-    return normalize_cache_key(username,
-            USER_NOTIFICATION_COUNT_CACHE_PREFIX)
-
-
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
         """Add generic user notification.
@@ -173,9 +167,6 @@ class UserNotificationManager(models.Manager):
         n = super(UserNotificationManager, self).create(
             to_user=to_user, msg_type=msg_type, detail=detail)
         n.save()
-
-        cache_key = get_cache_key_of_unseen_notifications(to_user)
-        cache.delete(cache_key)
 
         return n
 
