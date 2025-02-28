@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ResizeBar from '../../../resize-bar';
@@ -7,7 +7,8 @@ import { DRAG_HANDLER_HEIGHT } from '../../../resize-bar/constants';
 import './index.css';
 
 const Detail = ({ children, className }) => {
-  const [width, setWidth] = useState(300);
+  const lastSettingsValue = localStorage.getItem('sf_cur_view_detail_width');
+  const [width, setWidth] = useState(lastSettingsValue ? parseInt(lastSettingsValue) : 300);
   const [isResizing, setResizing] = useState(false);
   const resizeBarRef = useRef(null);
   const dragHandlerRef = useRef(null);
@@ -41,12 +42,6 @@ const Detail = ({ children, className }) => {
     const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
     setDragHandlerTop(dragHandlerRefTop);
   }, [setDragHandlerTop]);
-
-  useEffect(() => {
-    const lastSettingsValue = localStorage.getItem('sf_cur_view_detail_width');
-    const width = lastSettingsValue ? parseInt(lastSettingsValue) : 300;
-    setWidth(width);
-  }, []);
 
   return (
     <div
