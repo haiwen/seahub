@@ -8,12 +8,15 @@ import { PER_LOAD_NUMBER } from '../../../constants';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
 import People from './people';
+import { seafileAPI } from '../../../../utils/seafile-api';
 
 import './index.css';
 
 const Peoples = ({ peoples, onOpenPeople, onRename }) => {
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [haveFreezed, setHaveFreezed] = useState(false);
+  const [peopleTimeMap, setPeopleTimeMap] = useState({});
+  const repoID = window.sfMetadataContext.getSetting('repoID');
 
   const containerRef = useRef(null);
 
@@ -54,6 +57,30 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
   }, []);
 
   useEffect(() => {
+    const fetchDirList = async () => {
+      try {
+        const res = await seafileAPI.listDir(repoID, '/_Internal/Faces');
+
+        const map = {};
+        res.data.dirent_list.forEach(item => {
+          const [people, time] = item.name.split('?t=');
+          if (people && time) {
+            map[people] = parseFloat(time);
+          }
+        });
+        setPeopleTimeMap(map);
+      } catch (error) {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+    };
+
+    if (repoID) {
+      fetchDirList();
+    }
+  }, [repoID]);
+
+  useEffect(() => {
     const _localStorage = window.sfMetadataContext.localStorage;
     if (!containerRef.current) return;
     const scrollTop = _localStorage.getItem('scroll_top') || 0;
@@ -67,7 +94,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-peoples-container" ref={containerRef} onScroll={handleScroll}>
-      {peoples.length > 0 && peoples.map((people) => {
+      {peoples.length > 0 && Object.keys(peopleTimeMap).length > 0 && peoples.map((people) => {
         return (
           <People
             key={people._id}
@@ -77,6 +104,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
             onRename={onRename}
             onFreezed={onFreezed}
             onUnFreezed={onUnFreezed}
+            peopleTimeMap={peopleTimeMap}
           />
         );
       })}
