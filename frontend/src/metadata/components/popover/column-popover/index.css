@@ -18,16 +18,15 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type {
+  width: 100%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 38px;
-  padding: 0 .5rem;
   position: relative;
 }
 
@@ -42,11 +41,11 @@
 .sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-column-type-info {
   display: flex;
   align-items: center;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-  margin-right: 8px;
+  padding: 0 8px;
+  cursor: pointer;
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type-info .seafile-multicolor-icon {
@@ -62,7 +61,7 @@
 
 .sf-metadata-column-popover .sf-metadata-column-type .sf3-font-down {
   transform: rotate(270deg);
-  color: #aaa;
+  color: #666;
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon {

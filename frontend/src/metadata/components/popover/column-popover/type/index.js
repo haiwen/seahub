@@ -1,14 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useState, useCallback, useRef, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { FormGroup, FormFeedback, Label, Dropdown, DropdownToggle, DropdownMenu, Input, DropdownItem } from 'reactstrap';
+import { Icon } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
-import { FormGroup, FormFeedback, Label } from 'reactstrap';
 import classnames from 'classnames';
-import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
-import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY,
-  DEFAULT_RATE_DATA,
-} from '../../../../constants';
 import { getColumnDisplayName } from '../../../../utils/column';
-import ColumnTypes from './column-types';
+import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY, DEFAULT_RATE_DATA } from '../../../../constants';
 
 import './index.css';
 
@@ -47,14 +44,6 @@ const COLUMNS = [
     data: { format: DEFAULT_DATE_FORMAT },
     groupby: 'predefined'
   }, {
-  //   icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
-  //   type: CellType.TEXT,
-  //   name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS),
-  //   unique: true,
-  //   key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS,
-  //   canChangeName: false,
-  //   groupby: 'predefined'
-  // }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION),
@@ -63,14 +52,6 @@ const COLUMNS = [
     canChangeName: false,
     groupby: 'predefined'
   }, {
-  //   icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX],
-  //   type: CellType.CHECKBOX,
-  //   name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED),
-  //   unique: true,
-  //   key: PRIVATE_COLUMN_KEY.FILE_EXPIRED,
-  //   canChangeName: false,
-  //   groupby: 'predefined'
-  // }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],
     type: CellType.SINGLE_SELECT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS),
@@ -164,31 +145,72 @@ const COLUMNS = [
   },
 ];
 
-// eslint-disable-next-line react/display-name
-const Type = forwardRef(({ parentWidth, column, onChange }, ref) => {
+const Type = forwardRef(({ column, onChange }, ref) => {
   const [error, setError] = useState('');
-  const [isPopoverShow, setPopoverShow] = useState(false);
-  const targetRef = useRef(null);
+  const [searchValue, setSearchValue] = useState('');
+  const [isPredefinedPropertiesOpen, setPredefinedPropertiesOpen] = useState(false);
+  const [isCustomPropertiesOpen, setCustomPropertiesOpen] = useState(false);
+  const inputRef = useRef(null);
 
-  const toggle = useCallback((event) => {
-    event && event.stopPropagation();
-    event && event.nativeEvent.stopImmediatePropagation();
-    setPopoverShow(!isPopoverShow);
-  }, [isPopoverShow]);
+  const displayColumns = useMemo(() => {
+    const validValue = searchValue.trim().toLocaleLowerCase();
+    return COLUMNS.filter(item => {
+      const columnName = item.name.toLocaleLowerCase();
+      return columnName.indexOf(validValue) > -1;
+    });
+  }, [searchValue]);
 
-  const close = useCallback(() => {
-    setPopoverShow(false);
+  const basicsColumns = useMemo(() => {
+    return displayColumns.filter(item => item.groupby === 'basics');
+  }, [displayColumns]);
+
+  const predefinedColumns = useMemo(() => {
+    return displayColumns.filter(item => item.groupby === 'predefined');
+  }, [displayColumns]);
+
+  const togglePredefinedProperties = useCallback((e) => {
+    e?.stopPropagation();
+    setPredefinedPropertiesOpen(prev => !prev);
   }, []);
 
-  const onSelectColumn = useCallback((column) => {
+  const toggleCustomProperties = useCallback((e) => {
+    e?.stopPropagation();
+    setCustomPropertiesOpen(prev => !prev);
+    setSearchValue('');
+  }, []);
+
+  const onSelectPredefinedColumn = useCallback((column) => {
     onChange(column);
+    setSearchValue('');
   }, [onChange]);
+
+  const onSelectCustomColumn = useCallback((column) => {
+    onChange(column);
+    togglePredefinedProperties();
+  }, [onChange, togglePredefinedProperties]);
+
+  const onSearchColumn = useCallback((event) => {
+    const value = event.target.value;
+    if (value === searchValue) return;
+    setSearchValue(value);
+  }, [searchValue]);
+
+  const onSearchClick = useCallback((event) => {
+    event.stopPropagation();
+  }, []);
 
   useImperativeHandle(ref, () => ({
     setError: (error) => setError(error),
-    getIsPopoverShow: () => isPopoverShow,
-    setPopoverState: (state) => setPopoverShow(state),
-  }), [isPopoverShow]);
+    getIsPopoverShow: () => isPredefinedPropertiesOpen || isCustomPropertiesOpen,
+    setPopoverState: (state) => {
+      if (state) {
+        inputRef.current.focus();
+      } else {
+        setPredefinedPropertiesOpen(false);
+        setCustomPropertiesOpen(false);
+      }
+    },
+  }), [isPredefinedPropertiesOpen, isCustomPropertiesOpen]);
 
   useEffect(() => {
     onChange(COLUMNS.find(c => c.groupby === 'basics') || COLUMNS[0]);
@@ -199,29 +221,83 @@ const Type = forwardRef(({ parentWidth, column, onChange }, ref) => {
     <>
       <FormGroup className={classnames('sf-metadata-column-settings-item', { 'is-invalid': error })}>
         <Label>{gettext('Type')}</Label>
-        <div
-          className={classnames('sf-metadata-column-type', { 'sf-metadata-column-type-focus': isPopoverShow })}
-          ref={targetRef}
-          onClick={toggle}
+        <Dropdown
+          isOpen={isPredefinedPropertiesOpen}
+          direction="start"
+          toggle={togglePredefinedProperties}
+          className={classnames('sf-metadata-column-type', { 'sf-metadata-column-type-focus': isPredefinedPropertiesOpen })}
         >
-          <div className="sf-metadata-column-type-info">
-            <Icon symbol={column.icon} className="mr-2" />
-            <span>{column.name}</span>
-          </div>
-          <i className='sf3-font sf3-font-down' aria-hidden="true"></i>
-        </div>
+          <DropdownToggle
+            tag="span"
+            className="sf-metadata-column-type-info"
+          >
+            <Icon iconName={column.icon} className="mr-2" />
+            <span className="mr-auto">{column.name}</span>
+            <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+          </DropdownToggle>
+          <DropdownMenu
+            modifiers={[{
+              name: 'offset',
+              options: {
+                offset: [0, 17],
+              }
+            }]}>
+            <div className="search-column-container">
+              <Input onChange={onSearchColumn} placeholder={gettext('Search properties')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
+            </div>
+            {displayColumns.length > 0 && predefinedColumns.length > 0 && (
+              <>
+                {predefinedColumns.map(item => (
+                  <DropdownItem
+                    key={item.key}
+                    className={classnames('column-type-item text-truncate', { 'active': item.key === column.key })}
+                    onMouseEnter={() => setCustomPropertiesOpen(false)}
+                    onClick={() => onSelectPredefinedColumn(item)}
+                  >
+                    <Icon iconName={item.icon} />
+                    <span>{item.name}</span>
+                  </DropdownItem>
+                ))}
+                {basicsColumns.length > 0 && (
+                  <>
+                    <DropdownItem className="w-100" divider />
+                    <Dropdown
+                      className="w-100"
+                      direction="end"
+                      isOpen={isCustomPropertiesOpen}
+                      toggle={toggleCustomProperties}
+                      onMouseEnter={() => setCustomPropertiesOpen(true)}
+                      onMouseMove={(e) => {e.stopPropagation();}}
+                    >
+                      <DropdownToggle
+                        tag='span'
+                        className="column-type-item dropdown-item text-truncate"
+                      >
+                        <Icon iconName="edit" />
+                        <span className="mr-auto">{gettext('Custom properties')}</span>
+                        <i className="sf3-font-down sf3-font rotate-270"></i>
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        {basicsColumns.map((item, index) => (
+                          <DropdownItem
+                            key={index}
+                            className={classnames('column-type-item text-truncate', { 'active': item.key === column.key })}
+                            onClick={() => onSelectCustomColumn(item)}
+                          >
+                            <Icon iconName={item.icon} />
+                            <span>{item.name}</span>
+                          </DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </>
+                )}
+              </>
+            )}
+          </DropdownMenu>
+        </Dropdown>
         {error && (<FormFeedback>{error}</FormFeedback>)}
       </FormGroup>
-      {isPopoverShow && targetRef.current && (
-        <ColumnTypes
-          columns={COLUMNS}
-          column={column}
-          target={targetRef.current}
-          parentWidth={parentWidth}
-          onChange={onSelectColumn}
-          onToggle={close}
-        />
-      )}
     </>
   );
 });
