@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Tomáš Holan <mail@tomasholan.eu>, 2024
+# Tomáš Holan <tomas@holan.dev>, 2024
 # Pavel Borecki <pavel.borecki@gmail.com>, 2024
 # Tomáš Kubalík <tkubalik@ifrog.cz>, 2024
 # 
