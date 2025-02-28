@@ -27,18 +27,18 @@ export const getImageSize = (containerWidth, columns, mode) => {
     case GALLERY_DATE_MODE.YEAR:
     case GALLERY_DATE_MODE.MONTH: {
       const size = (contentWidth - GALLERY_YEAR_MODE_GRID_GAP * gapCount) / columns;
-      return { large: size, middle: size, small: size };
+      return { large: size, medium: size, small: size };
     }
     case GALLERY_DATE_MODE.DAY: {
       const imagesWidth = contentWidth - GALLERY_DEFAULT_GRID_GAP * gapCount;
       const small = imagesWidth / 6;
       const large = small * 3 + GALLERY_DEFAULT_GRID_GAP * 2;
-      const middle = small * 2 + GALLERY_DEFAULT_GRID_GAP;
-      return { large, middle, small };
+      const medium = small * 2 + GALLERY_DEFAULT_GRID_GAP;
+      return { large, medium, small };
     }
     default: {
       const size = (containerWidth - 32 - GALLERY_DEFAULT_GRID_GAP * gapCount) / columns;
-      return { large: size, middle: size, small: size };
+      return { large: size, medium: size, small: size };
     }
   }
 };

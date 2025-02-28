@@ -3,205 +3,177 @@ import PropTypes from 'prop-types';
 import Image from '../image';
 
 /*
-  small size: *
-  middle size: - -
-               - -
-  large size: . . .
-              . . .
-              . . .
+  small size:   *
+  medium size:  - -
+                - -
+  large size:   . . .
+                . . .
+                . . .
 */
-const ImagesGrid = ({ images, selectedImageIds, size, imgEvents }) => {
-  const imagesCount = useMemo(() => images.length, [images.length]);
-  const [firstImg, secondImg, ...others] = images;
-  const day = firstImg.day ? Number(firstImg.day) : 0;
+const getStyles = (imagesCount, size) => {
+  const { large, medium, small } = size;
 
   // One large image, one medium image, five small images
   if (imagesCount < 12) {
-    const i = imagesCount % 2;
-    const firstImgOffset = i === 0 ? 0 : 3;
-    const columnsOffset = i === 0 ? 3 : 0;
-    const styles = [
+    return [
       [
-        { gridRow: '1 / 2', gridColumn: `${1 + columnsOffset} / ${2 + columnsOffset}` },
-        { gridRow: 1, gridColumn: 3 + columnsOffset },
-        { gridRow: 2, gridColumn: 3 + columnsOffset },
-        { gridRow: 3, gridColumn: 1 + columnsOffset },
-        { gridRow: 3, gridColumn: 2 + columnsOffset },
-        { gridRow: 3, gridColumn: 3 + columnsOffset },
+        /*
+          · · · - - *
+          · · · - - *
+          · · · * * *
+        */
+        { size: large, gridRow: '1 / 3', gridColumn: '1 / 3' },
+        { size: medium, gridRow: '1 / 2', gridColumn: '4 / 5' },
+        { size: small, gridRow: 1, gridColumn: 6 },
+        { size: small, gridRow: 2, gridColumn: 6 },
+        { size: small, gridRow: 3, gridColumn: 4 },
+        { size: small, gridRow: 3, gridColumn: 5 },
+        { size: small, gridRow: 3, gridColumn: 6 },
       ], [
-        { gridRow: '1 / 2', gridColumn: `${2 + columnsOffset} / ${3 + columnsOffset}` },
-        { gridRow: 1, gridColumn: 1 + columnsOffset },
-        { gridRow: 2, gridColumn: 1 + columnsOffset },
-        { gridRow: 3, gridColumn: 1 + columnsOffset },
-        { gridRow: 3, gridColumn: 2 + columnsOffset },
-        { gridRow: 3, gridColumn: 3 + columnsOffset },
+        /*
+          · · · * - -
+          · · · * - -
+          · · · * * *
+        */
+        { size: large, gridRow: '1 / 3', gridColumn: '1 / 3' },
+        { size: small, gridRow: 1, gridColumn: 4 },
+        { size: small, gridRow: 2, gridColumn: 4 },
+        { size: medium, gridRow: '1 / 2', gridColumn: '5 / 6' },
+        { size: small, gridRow: 3, gridColumn: 4 },
+        { size: small, gridRow: 3, gridColumn: 5 },
+        { size: small, gridRow: 3, gridColumn: 6 },
       ], [
-        { gridRow: '2 / 3', gridColumn: `${1 + columnsOffset} / ${2 + columnsOffset}` },
-        { gridRow: 1, gridColumn: 1 + columnsOffset },
-        { gridRow: 1, gridColumn: 2 + columnsOffset },
-        { gridRow: 1, gridColumn: 3 + columnsOffset },
-        { gridRow: 2, gridColumn: 3 + columnsOffset },
-        { gridRow: 3, gridColumn: 3 + columnsOffset },
+        /*
+          - - * · · ·
+          - - * · · ·
+          * * * · · ·
+        */
+        { size: medium, gridRow: '1 / 2', gridColumn: '1 / 2' },
+        { size: small, gridRow: 1, gridColumn: 3 },
+        { size: small, gridRow: 2, gridColumn: 3 },
+        { size: small, gridRow: 3, gridColumn: 1 },
+        { size: small, gridRow: 3, gridColumn: 2 },
+        { size: small, gridRow: 3, gridColumn: 3 },
+        { size: large, gridRow: '1 / 3', gridColumn: '4 / 6' },
       ], [
-        { gridRow: '2 / 3', gridColumn: `${2 + columnsOffset} / ${3 + columnsOffset}` },
-        { gridRow: 1, gridColumn: 1 + columnsOffset },
-        { gridRow: 1, gridColumn: 2 + columnsOffset },
-        { gridRow: 1, gridColumn: 3 + columnsOffset },
-        { gridRow: 2, gridColumn: 1 + columnsOffset },
-        { gridRow: 3, gridColumn: 1 + columnsOffset },
+        /*
+          * - - · · ·
+          * - - · · ·
+          * * * · · ·
+        */
+        { size: small, gridRow: 1, gridColumn: 1 },
+        { size: small, gridRow: 2, gridColumn: 1 },
+        { size: medium, gridRow: '1 / 2', gridColumn: '2 / 3' },
+        { size: small, gridRow: 3, gridColumn: 1 },
+        { size: small, gridRow: 3, gridColumn: 2 },
+        { size: small, gridRow: 3, gridColumn: 3 },
+        { size: large, gridRow: '1 / 3', gridColumn: '4 / 6' },
       ]
     ];
-    const style = styles[day % styles.length];
-
-    return (
-      <>
-        <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.large} useOriginalThumbnail={true} style={{ gridRow: 1 / 3, gridColumn: `${1 + firstImgOffset} / ${3 + firstImgOffset}` }} {...imgEvents} />
-        <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} useOriginalThumbnail={true} style={style[0]} {...imgEvents} />
-        {others.slice(0, 5).map((image, index) => {
-          return (<Image key={image.id} isSelected={selectedImageIds.includes(image.id)} img={image} size={size.small} style={style[index + 1] || {}} {...imgEvents} />);
-        })}
-      </>
-    );
   }
 
-  // Three medium image, six small images
-  // if (imagesCount < 12) {
-  //   const styles = [
-  //     [
-  //       /*
-  //         - - * * - -
-  //         - - - - - -
-  //         * * - - * *
-  //       */
-  //       { gridRow: '1 / 2', gridColumn: '1 / 2' },
-  //       { gridRow: '1 / 2', gridColumn: '5 / 6' },
-  //       { gridRow: '2 / 3', gridColumn: '3 / 4' },
-  //       { gridRow: 1, gridColumn: 3 },
-  //       { gridRow: 1, gridColumn: 4 },
-  //       { gridRow: 3, gridColumn: 1 },
-  //       { gridRow: 3, gridColumn: 2 },
-  //       { gridRow: 3, gridColumn: 5 },
-  //       { gridRow: 3, gridColumn: 6 },
-  //     ], [
-  //       /*
-  //         * * - - * *
-  //         - - - - - -
-  //         - - * * - -
-  //       */
-  //       { gridRow: '1 / 2', gridColumn: '3 / 4' },
-  //       { gridRow: '2 / 3', gridColumn: '1 / 2' },
-  //       { gridRow: '2 / 3', gridColumn: '5 / 6' },
-  //       { gridRow: 1, gridColumn: 1 },
-  //       { gridRow: 1, gridColumn: 2 },
-  //       { gridRow: 1, gridColumn: 5 },
-  //       { gridRow: 1, gridColumn: 6 },
-  //       { gridRow: 3, gridColumn: 3 },
-  //       { gridRow: 3, gridColumn: 4 },
-  //     ]
-  //   ];
-
-  //   const style = styles[day % styles.length];
-
-  //   return (
-  //     <>
-  //       <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.middle} style={style[0]} {...imgEvents} />
-  //       <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} style={style[1]} {...imgEvents} />
-  //       <Image key={others[0].id} isSelected={selectedImageIds.includes(others[0].id)} img={others[0]} size={size.middle} style={style[2]} {...imgEvents} />
-  //       {others.slice(1, 7).map((image, index) => {
-  //         return (<Image key={image.id} isSelected={selectedImageIds.includes(image.id)} img={image} size={size.small} style={style[index + 3] || {}} {...imgEvents} />);
-  //       })}
-  //     </>
-  //   );
-  // }
-
-  // Two medium images, ten small images
-  const styles = [
+  return [
     [
       /*
         - - * * * *
         - - * * - -
         * * * * - -
       */
-      { gridRow: '1 / 2', gridColumn: '1 / 2' },
-      { gridRow: '2 / 3', gridColumn: '5 / 6' },
-      { gridRow: 1, gridColumn: 3 },
-      { gridRow: 1, gridColumn: 4 },
-      { gridRow: 1, gridColumn: 5 },
-      { gridRow: 1, gridColumn: 6 },
-      { gridRow: 2, gridColumn: 3 },
-      { gridRow: 2, gridColumn: 4 },
-      { gridRow: 3, gridColumn: 1 },
-      { gridRow: 3, gridColumn: 2 },
-      { gridRow: 3, gridColumn: 3 },
-      { gridRow: 3, gridColumn: 4 },
+      { size: medium, gridRow: '1 / 2', gridColumn: '1 / 2' },
+      { size: small, gridRow: 1, gridColumn: 3 },
+      { size: small, gridRow: 1, gridColumn: 4 },
+      { size: small, gridRow: 1, gridColumn: 5 },
+      { size: small, gridRow: 1, gridColumn: 6 },
+      { size: small, gridRow: 2, gridColumn: 3 },
+      { size: small, gridRow: 2, gridColumn: 4 },
+      { size: small, gridRow: 3, gridColumn: 1 },
+      { size: small, gridRow: 3, gridColumn: 2 },
+      { size: small, gridRow: 3, gridColumn: 3 },
+      { size: small, gridRow: 3, gridColumn: 4 },
+      { size: medium, gridRow: '2 / 3', gridColumn: '5 / 6' },
     ], [
-      /*
+    /*
         * * * * - -
         - - * * - -
         - - * * * *
       */
-      { gridRow: '1 / 2', gridColumn: '5 / 6' },
-      { gridRow: '2 / 3', gridColumn: '1 / 2' },
-      { gridRow: 1, gridColumn: 1 },
-      { gridRow: 1, gridColumn: 2 },
-      { gridRow: 1, gridColumn: 3 },
-      { gridRow: 1, gridColumn: 4 },
-      { gridRow: 2, gridColumn: 3 },
-      { gridRow: 2, gridColumn: 4 },
-      { gridRow: 3, gridColumn: 3 },
-      { gridRow: 3, gridColumn: 4 },
-      { gridRow: 3, gridColumn: 5 },
-      { gridRow: 3, gridColumn: 6 },
+      { size: small, gridRow: 1, gridColumn: 1 },
+      { size: small, gridRow: 1, gridColumn: 2 },
+      { size: small, gridRow: 1, gridColumn: 3 },
+      { size: small, gridRow: 1, gridColumn: 4 },
+      { size: medium, gridRow: '1 / 2', gridColumn: '5 / 6' },
+      { size: medium, gridRow: '2 / 3', gridColumn: '1 / 2' },
+      { size: small, gridRow: 2, gridColumn: 3 },
+      { size: small, gridRow: 2, gridColumn: 4 },
+      { size: small, gridRow: 3, gridColumn: 3 },
+      { size: small, gridRow: 3, gridColumn: 4 },
+      { size: small, gridRow: 3, gridColumn: 5 },
+      { size: small, gridRow: 3, gridColumn: 6 },
     ], [
-      /*
+    /*
         - - * - - *
         - - * - - *
         * * * * * *
       */
-      { gridRow: '1 / 2', gridColumn: '1 / 2' },
-      { gridRow: '1 / 2', gridColumn: '4 / 5' },
-      { gridRow: 1, gridColumn: 3 },
-      { gridRow: 1, gridColumn: 6 },
-      { gridRow: 2, gridColumn: 3 },
-      { gridRow: 2, gridColumn: 6 },
-      { gridRow: 3, gridColumn: 1 },
-      { gridRow: 3, gridColumn: 2 },
-      { gridRow: 3, gridColumn: 3 },
-      { gridRow: 3, gridColumn: 4 },
-      { gridRow: 3, gridColumn: 5 },
-      { gridRow: 3, gridColumn: 6 },
+      { size: medium, gridRow: '1 / 2', gridColumn: '1 / 2' },
+      { size: small, gridRow: 1, gridColumn: 3 },
+      { size: small, gridRow: 2, gridColumn: 3 },
+      { size: medium, gridRow: '1 / 2', gridColumn: '4 / 5' },
+      { size: small, gridRow: 1, gridColumn: 6 },
+      { size: small, gridRow: 2, gridColumn: 6 },
+      { size: small, gridRow: 3, gridColumn: 1 },
+      { size: small, gridRow: 3, gridColumn: 2 },
+      { size: small, gridRow: 3, gridColumn: 3 },
+      { size: small, gridRow: 3, gridColumn: 4 },
+      { size: small, gridRow: 3, gridColumn: 5 },
+      { size: small, gridRow: 3, gridColumn: 6 },
     ], [
-      /*
+    /*
         - - * * * *
         - - * - - *
         * * * - - *
       */
-      { gridRow: '1 / 2', gridColumn: '1 / 2' },
-      { gridRow: '2 / 3', gridColumn: '4 / 5' },
-      { gridRow: 1, gridColumn: 3 },
-      { gridRow: 1, gridColumn: 4 },
-      { gridRow: 1, gridColumn: 5 },
-      { gridRow: 1, gridColumn: 6 },
-      { gridRow: 2, gridColumn: 3 },
-      { gridRow: 2, gridColumn: 6 },
-      { gridRow: 3, gridColumn: 1 },
-      { gridRow: 3, gridColumn: 2 },
-      { gridRow: 3, gridColumn: 3 },
-      { gridRow: 3, gridColumn: 6 },
+      { size: medium, gridRow: '1 / 2', gridColumn: '1 / 2' },
+      { size: small, gridRow: 1, gridColumn: 3 },
+      { size: small, gridRow: 1, gridColumn: 4 },
+      { size: small, gridRow: 1, gridColumn: 5 },
+      { size: small, gridRow: 1, gridColumn: 6 },
+      { size: small, gridRow: 2, gridColumn: 3 },
+      { size: small, gridRow: 3, gridColumn: 1 },
+      { size: small, gridRow: 3, gridColumn: 2 },
+      { size: small, gridRow: 3, gridColumn: 3 },
+      { size: medium, gridRow: '2 / 3', gridColumn: '4 / 5' },
+      { size: small, gridRow: 2, gridColumn: 6 },
+      { size: small, gridRow: 3, gridColumn: 6 },
     ]
   ];
-  const style = styles[day % styles.length];
+};
+
+const ImagesGrid = ({ images, selectedImageIds, size, imgEvents }) => {
+  const imagesCount = useMemo(() => images.length, [images.length]);
+  const day = images[0].day ? Number(images[0].day) : 0;
+
+  const styles = useMemo(() => getStyles(imagesCount, size), [imagesCount, size]);
+  const count = imagesCount < 12 ? 7 : 12;
 
   return (
     <>
-      <Image key={firstImg.id} isSelected={selectedImageIds.includes(firstImg.id)} img={firstImg} size={size.middle} useOriginalThumbnail={true} style={style[0]} {...imgEvents} />
-      <Image key={secondImg.id} isSelected={selectedImageIds.includes(secondImg.id)} img={secondImg} size={size.middle} useOriginalThumbnail={true} style={style[1]} {...imgEvents} />
-      {others.slice(0, 10).map((image, index) => {
-        return (<Image key={image.id} isSelected={selectedImageIds.includes(image.id)} img={image} size={size.small} style={style[index + 2] || {}} {...imgEvents} />);
+      {images.slice(0, count).map((image, index) => {
+        const styleInfo = styles[day % styles.length][index];
+        return (
+          <Image
+            key={image.id}
+            isSelected={selectedImageIds.includes(image.id)}
+            img={image}
+            size={styleInfo.size}
+            useOriginalThumbnail={styleInfo.size > size.small}
+            style={{ gridRow: styleInfo.gridRow, gridColumn: styleInfo.gridColumn }}
+            {...imgEvents}
+          />
+        );
       })}
     </>
   );
-
 };
 
 ImagesGrid.propTypes = {
