@@ -1274,6 +1274,12 @@ class FacesRecords(APIView):
         faces_records = query_result.get('results', [])
         metadata_columns = query_result.get('metadata', [])
 
+        dirents = seafile_api.list_dir_by_path(repo_id, '/_Internal/Faces')
+        file_name_to_mtime_dict = {}
+        for dirent in dirents:
+            file_name, ext = os.path.splitext(dirent.obj_name)
+            file_name_to_mtime_dict[file_name] = dirent.mtime
+
         valid_faces_records = []
         for record in faces_records:
 
@@ -1290,6 +1296,7 @@ class FacesRecords(APIView):
                 FACES_TABLE.columns.name.name: record.get(FACES_TABLE.columns.name.name),
                 FACES_TABLE.columns.photo_links.name: valid_photo_links,
                 '_is_someone': record.get(FACES_TABLE.columns.name.name) != UNKNOWN_PEOPLE_NAME,
+                'file_mtime': file_name_to_mtime_dict.get(record.get(FACES_TABLE.columns.id.name))
             })
 
         return Response({
