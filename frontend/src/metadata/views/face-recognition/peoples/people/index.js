@@ -12,7 +12,11 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
 
   const similarPhotoURL = useMemo(() => {
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg`;
+    let photoURL = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg`;
+    if (people._name === '_Unknown_people') {
+      return photoURL;
+    }
+    return `${photoURL}?t=${people.file_mtime}`;
   }, [people]);
 
   const onImgLoadError = useCallback(() => {
