@@ -1,7 +1,7 @@
 import { gettext } from '../../utils/constants';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../../metadata/utils/column';
-import ObjectUtils from '../../metadata/utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;

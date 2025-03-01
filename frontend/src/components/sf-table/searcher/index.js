@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
-import { isModG, isModShiftG } from '../../../metadata/utils/hotkey';
+import { isModG, isModShiftG } from '../../../utils/hotkey';
 import SFTableSearcherInput from './searcher-input';
 import { checkHasSearchResult } from '../utils/search';
 

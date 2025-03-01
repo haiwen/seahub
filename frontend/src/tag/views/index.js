@@ -1,8 +1,8 @@
 import React from 'react';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
-import { TagViewProvider, useTags } from '../hooks';
+import CenteredLoading from '../../components/centered-loading';
 import View from './view';
 import AllTags from './all-tags';
+import { TagViewProvider, useTags } from '../hooks';
 import { ALL_TAGS_ID } from '../constants';
 
 const Views = ({ ...params }) => {

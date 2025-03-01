@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../components/icon-btn';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { FilterSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
@@ -61,7 +61,7 @@ const KanbanViewToolBar = ({
           modifySorts={modifySorts}
         />
         <IconBtn
-          iconName="set-up"
+          symbol="set-up"
           className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
           size={24}
           role="button"

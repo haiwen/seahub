@@ -2,11 +2,11 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import deepCopy from 'deep-copy';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../components/icon-btn';
 import { FilterPopover } from '../popover';
 import { getValidFilters } from '../../utils/filter';
 import { gettext } from '../../../utils/constants';
-import { isEnter, isSpace } from '../../utils/hotkey';
+import { isEnter, isSpace } from '../../../utils/hotkey';
 import { VIEW_TYPE } from '../../constants';
 
 const FilterSetter = ({
@@ -59,7 +59,7 @@ const FilterSetter = ({
   return (
     <>
       <IconBtn
-        iconName="filter"
+        symbol="filter"
         size={24}
         className={className}
         onClick={onSetterToggle}

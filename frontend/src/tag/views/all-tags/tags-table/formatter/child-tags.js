@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { NumberFormatter } from '@seafile/sf-metadata-ui-component';
+import NumberFormatter from '../../../../../metadata/components/cell-formatter/number';
 import { useTags } from '../../../../hooks';
 import { getRowsByIds } from '../../../../../components/sf-table/utils/table';
 

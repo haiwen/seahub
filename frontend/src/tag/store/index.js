@@ -1,6 +1,6 @@
 import deepCopy from 'deep-copy';
 import dayjs from 'dayjs';
-import { getRowById, getRowsByIds } from '../../metadata/utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
 } from './operations';

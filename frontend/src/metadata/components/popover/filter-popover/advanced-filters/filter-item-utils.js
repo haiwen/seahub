@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { COLUMNS_ICON_CONFIG, FILTER_PREDICATE_SHOW, FILTER_TERM_MODIFIER_SHOW } from '../../../../constants';
 
@@ -12,7 +12,7 @@ class FilterItemUtils {
       value: { column },
       label: (
         <Fragment>
-          <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+          <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
           <span className="select-option-name">{name}</span>
         </Fragment>
       )
@@ -40,7 +40,7 @@ class FilterItemUtils {
         <div className="select-option-name single-option-name">
           <div className="single-select-option" style={{ background: option.color, color: option.textColor || null }} title={option.name} aria-label={option.name}>{option.name}</div>
           <div className="single-check-icon">
-            {selectedOption?.id === option.id && (<Icon iconName="check-mark" />)}
+            {selectedOption?.id === option.id && (<Icon symbol="check-mark" />)}
           </div>
         </div>
       )
@@ -54,7 +54,7 @@ class FilterItemUtils {
         <div className="select-option-name multiple-option-name">
           <div className="multiple-select-option" style={{ background: option.color, color: option.textColor }} title={option.name} aria-label={option.name}>{option.name}</div>
           <div className="multiple-check-icon">
-            {filterTerm.indexOf(option.id) > -1 && (<Icon iconName="check-mark" />)}
+            {filterTerm.indexOf(option.id) > -1 && (<Icon symbol="check-mark" />)}
           </div>
         </div>
       )

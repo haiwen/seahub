@@ -1,13 +1,13 @@
-.sf-metadata-selector-collaborator.sf-metadata-select .sf-metadata-option {
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option {
   line-height: 20px;
   padding: 5px 10px 5px 10px !important;
 }
 
-.sf-metadata-selector-collaborator.sf-metadata-select .sf-metadata-option:hover {
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option:hover {
   background-color: #f7f7f7;
   color: #212529;
 }
 
-.sf-metadata-selector-collaborator.sf-metadata-select .selected-option-show {
+.sf-metadata-selector-collaborator.seafile-customize-select .selected-option-show {
   text-overflow: clip;
 }

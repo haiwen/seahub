@@ -1,5 +1,5 @@
 import deepCopy from 'deep-copy';
-import { getRowById, getRowsByIds } from '../utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getColumnByKey, normalizeColumns } from '../utils/column';
 import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../click-outside';
 import Editor from './editor';
 import { Utils } from '../../../../utils/utils';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';

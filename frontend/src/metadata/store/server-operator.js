@@ -3,10 +3,10 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
-import { getRowById } from '../utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { checkIsDir } from '../utils/row';
 import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
-import ObjectUtils from '../utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { CellType } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;

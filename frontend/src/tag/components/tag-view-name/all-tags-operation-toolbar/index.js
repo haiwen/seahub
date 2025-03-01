@@ -1,10 +1,10 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { isEnter, isSpace } from '../../../../metadata/utils/hotkey';
+import EditTagDialog from '../../dialog/edit-tag-dialog';
+import { isEnter, isSpace } from '../../../../utils/hotkey';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../hooks';
-import EditTagDialog from '../../dialog/edit-tag-dialog';
 
 import './index.css';
 

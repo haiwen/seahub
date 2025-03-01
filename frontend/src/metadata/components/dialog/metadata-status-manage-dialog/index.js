@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ModalBody, ModalFooter, Button } from 'reactstrap';
-import Switch from '../../../../components/common/switch';
+import Switch from '../../../../components/switch';
 import toaster from '../../../../components/toast';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 import metadataAPI from '../../../api';

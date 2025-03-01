@@ -8,7 +8,7 @@ import { updateFavicon } from '../utils/favicon';
 import Context from '../context';
 import Store from '../store';
 import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
-import { getRowById } from '../../metadata/utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';

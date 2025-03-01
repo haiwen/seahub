@@ -6,12 +6,12 @@ import InteractionMasks from '../../../masks/interaction-masks';
 import GroupContainer from './group-container';
 import Record from '../record';
 import { isFrozen, isNameColumn, isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../../utils/column';
-import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
+import { isShiftKeyDown } from '../../../../../../utils/keyboard-utils';
 import { CellType, GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../../constants';
 import RecordMetrics from '../../../utils/record-metrics';
 import { isSelectedCellSupportOpenEditor } from '../../../utils/selected-cell-utils';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body-utils';
-import { addClassName, removeClassName } from '../../../utils';
+import { addClassName, removeClassName } from '../../../../../../utils/dom';
 import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../utils/group-metrics';
 
 const ROW_HEIGHT = 33;

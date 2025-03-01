@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
 import { DEFAULT_RATE_DATA } from '../../../constants';
 
 const RateItem = ({
@@ -51,7 +51,7 @@ const RateItem = ({
         className={classnames('sf-metadata-rate-item', { 'active': value >= index })}
         ref={ref}
       >
-        <Icon iconName={type || 'rate'} />
+        <Icon className="sf-metadata-icon" symbol={type || 'rate'} />
       </div>
       {enterIndex !== -1 && (
         <UncontrolledTooltip placement='bottom' target={ref} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]} className="sf-metadata-tooltip">

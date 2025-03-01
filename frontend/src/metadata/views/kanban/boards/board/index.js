@@ -2,10 +2,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Card from './card';
-import { useMetadataView } from '../../../../hooks/metadata-view';
-import { getRowById } from '../../../../utils/table';
 import Container from '../../dnd/container';
 import Draggable from '../../dnd/draggable';
+import { useMetadataView } from '../../../../hooks/metadata-view';
+import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
 
 import './index.css';

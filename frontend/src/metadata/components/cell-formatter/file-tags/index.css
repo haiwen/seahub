@@ -1,0 +1,45 @@
+.sf-metadata-ui.tags-formatter .sf-metadata-tags-operation-container {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-tags-operation-container .sf-metadata-tags-operation-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  background: #eceff4;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-tags-operation-container .sf-metadata-tags-operation-add-btn:hover {
+  background-color: #f2f2f2;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-tags-operation-add-btn .seafile-multicolor-icon-add-table {
+  font-size: 12px;
+  fill: #212519;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-height: 1rem;
+  position: relative;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: -6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  cursor: pointer;
+}

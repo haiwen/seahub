@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../components/icon-btn';
 import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize, } from '../../../../utils/constants';
 
 const People = ({ people, isCancellable, onDelete }) => {

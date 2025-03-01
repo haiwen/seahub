@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
-import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../../utils/constants';
+import Icon from '../../../../components/icon';
+import CustomizeSelect from '../../../../components/customize-select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
-import { useMetadataView } from '../../../hooks/metadata-view';
 import People from './people';
+import { gettext } from '../../../../utils/constants';
+import { useMetadataView } from '../../../hooks/metadata-view';
 
 import './index.css';
 
@@ -24,7 +25,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
           <div className="select-option-people">
             <People people={people} />
             <div className="people-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon symbol="check-mark" />)}
             </div>
           </div>
         ),
@@ -77,11 +78,6 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
             onSelectOption={onSelectPeople}
             supportMultipleSelect={true}
             searchable={true}
-            component={{
-              DropDownIcon: (
-                <i className="sf3-font sf3-font-down"></i>
-              )
-            }}
           />
         </FormGroup>
       </ModalBody>

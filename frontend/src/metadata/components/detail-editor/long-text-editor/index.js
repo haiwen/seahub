@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LongTextFormatter } from '@seafile/sf-metadata-ui-component';
+import LongTextFormatter from '../../cell-formatter/long-text';
 import Editor from '../../cell-editors/long-text-editor';
 import { gettext } from '../../../../utils/constants';
 

@@ -1,0 +1,46 @@
+.sf-metadata-long-text-preview {
+  width: 520px;
+  height: fit-content;
+  max-height: 450px;
+  border-radius: 3px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  top: 0;
+  overflow: hidden;
+  bottom: 20px;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  background-color: #ffffff; 
+  box-shadow: 0 0 5px #ccc;
+  background-clip: padding-box;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.sf-metadata-long-text-preview .sf-slate-viewer-scroll-container {
+  padding: 0;
+  overflow: hidden;
+}
+
+.sf-metadata-long-text-preview .sf-slate-viewer-scroll-container .sf-slate-viewer-article-container {
+  width: 100%;
+  margin: 0;
+}
+
+.sf-metadata-long-text-preview .sf-metadata-longtext-container .article {
+  padding: 10px 16px;
+  border: unset;
+}
+
+.sf-metadata-long-text-preview .longtext-container-scroll {
+  overflow-y: auto;
+  height: fit-content;
+}
+
+.sf-metadata-long-text-preview .sf-metadata-longtext-container-scroll {
+  overflow-y: scroll;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}

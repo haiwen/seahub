@@ -3,12 +3,12 @@
   overflow-y: hidden !important;
 }
 
-.sf-metadata-people-photos-container .sf-metadata-icon-btn {
+.sf-metadata-people-photos-container .seafile-multicolor-icon-btn {
   margin-left: -4px;
   border-radius: 3px;
 }
 
-.sf-metadata-people-photos-container .sf-metadata-icon-btn:hover {
+.sf-metadata-people-photos-container .seafile-multicolor-icon-btn:hover {
   background-color: #EFEFEF;
   cursor: pointer;
 }

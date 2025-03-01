@@ -1,7 +1,9 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
+import CommonAddTool from '../../../common-add-tool';
+import SearchInput from '../../../search-input';
+import Icon from '../../../icon';
 import DeleteTags from './delete-tags';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
@@ -219,7 +221,7 @@ const TagsEditor = ({
               <div className="sf-metadata-tag-name">{tagName}</div>
             </div>
             <div className="sf-metadata-tags-editor-tag-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
             </div>
           </div>
         </div>
@@ -244,7 +246,7 @@ const TagsEditor = ({
         {renderOptions()}
       </div>
       {isShowCreateBtn && (
-        <CustomizeAddTool
+        <CommonAddTool
           callBack={createTag}
           footerName={`${gettext('Add tag')} ${searchValue}`}
           className="add-search-result"

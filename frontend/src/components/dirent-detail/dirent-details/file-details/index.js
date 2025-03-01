@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Formatter } from '@seafile/sf-metadata-ui-component';
 import DetailItem from '../../detail-item';
+import Collapse from './collapse';
+import Formatter from '../../../../metadata/components/formatter';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
-import ObjectUtils from '../../../../metadata/utils/object-utils';
+import ObjectUtils from '../../../../utils/object';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
-import Collapse from './collapse';
 import { useMetadataStatus } from '../../../../hooks';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 import People from '../../people';

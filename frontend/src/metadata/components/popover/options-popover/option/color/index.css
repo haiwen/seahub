@@ -2,7 +2,7 @@
   border-radius: 3px;
 }
 
-.sf-metadata-edit-option-color .sf-metadata-icon-drop-down {
+.sf-metadata-edit-option-color .seafile-multicolor-icon-drop-down {
   font-size: 12px;
 }
 
@@ -39,6 +39,6 @@
   display: none;
 }
 
-.sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container:not(.selected) .sf-metadata-icon-check-mark {
+.sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container:not(.selected) .seafile-multicolor-icon-check-mark {
   display: none;
 }

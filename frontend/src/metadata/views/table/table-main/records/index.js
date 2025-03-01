@@ -8,15 +8,15 @@ import RecordsHeader from '../records-header';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
 import { recalculate } from '../../../../utils/column';
-import { getEventClassName } from '../../../../utils/common';
+import { addClassName, removeClassName, getEventClassName } from '../../../../../utils/dom';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 import { isMobile } from '../../../../../utils/utils';
-import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
+import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { gettext } from '../../../../../utils/constants';
 import RecordMetrics from '../../utils/record-metrics';
-import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
-import { isWindowsBrowser, isWebkitBrowser, addClassName, removeClassName } from '../../utils';
-import { getVisibleBoundaries } from '../../utils/viewport';
+import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../../components/sf-table/utils/grid';
+import { getVisibleBoundaries } from '../../../../../components/sf-table/utils/viewport';
+import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
 
 class Records extends Component {
 

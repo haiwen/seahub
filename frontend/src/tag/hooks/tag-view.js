@@ -10,7 +10,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../constants/file';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { getFileById } from '../utils/file';
-import { getRowById } from '../../metadata/utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import URLDecorator from '../../utils/url-decorator';

@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../../utils/constants';
+import Icon from '../../../../components/icon';
 import AddCategoryPopover from '../../../components/popover/kanban-add-category-popover';
+import { gettext } from '../../../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { useMetadataView } from '../../../hooks/metadata-view';
 
@@ -36,7 +36,7 @@ const AddBoard = ({ groupByColumn }) => {
   return (
     <div className="sf-metadata-kanban-add-board-wrapper">
       <div id={id} className="sf-metadata-kanban-add-board-button" onClick={handleButtonClick} title={gettext('New category')}>
-        <Icon iconName="add-table" />
+        <Icon symbol="add-table" />
         <span className="sf-metadata-kanban-add-board-title">{gettext('New category')}</span>
       </div>
       {isShowPopover && (

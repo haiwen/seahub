@@ -11,12 +11,12 @@
   background-color: #2d7ff9;
 }
 
-.sf-metadata-cell-expand-operation-btn .sf-metadata-icon-expand {
+.sf-metadata-cell-expand-operation-btn .seafile-multicolor-icon-expand {
   fill: #fff;
   font-size: 12px;
   transform: scale(.8);
 }
 
-.sf-metadata-cell-expand-operation-btn:hover .sf-metadata-icon-expand {
+.sf-metadata-cell-expand-operation-btn:hover .seafile-multicolor-icon-expand {
   fill: #fff;
 }

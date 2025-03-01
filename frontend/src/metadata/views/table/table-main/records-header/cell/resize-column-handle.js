@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from '../../../../../utils/common';
+import { debounce } from '../../../../../../utils/utils';
 
 class ResizeColumnHandle extends Component {
 
@@ -35,7 +35,6 @@ class ResizeColumnHandle extends Component {
     if (e.preventDefault) {
       e.preventDefault();
     }
-
     debounce(this.props.onDrag(e), 100);
   };
 

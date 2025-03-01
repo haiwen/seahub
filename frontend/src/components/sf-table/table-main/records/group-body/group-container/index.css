@@ -173,13 +173,13 @@
   cursor: pointer;
 }
 
-.canvas-groups-rows .group-toggle-btn .sf-metadata-icon-drop-down {
+.canvas-groups-rows .group-toggle-btn .seafile-multicolor-icon-drop-down {
   font-size: 12px;
   fill: #666666;
   transition: all .3s;
 }
 
-.canvas-groups-rows .group-toggle-btn.hide .sf-metadata-icon-drop-down {
+.canvas-groups-rows .group-toggle-btn.hide .seafile-multicolor-icon-drop-down {
   transform: rotate(-90deg);
 }
 
@@ -389,7 +389,7 @@
   -moz-transition-property: none;
 }
 
-.canvas-groups-rows .group-title .group-cell-value .sf-metadata-group-title-rate-item .sf-metadata-icon {
+.canvas-groups-rows .group-title .group-cell-value .sf-metadata-group-title-rate-item .seafile-multicolor-icon {
   font-size: 16px;
   fill: inherit;
 }

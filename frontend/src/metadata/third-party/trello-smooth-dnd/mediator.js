@@ -3,9 +3,8 @@ import * as Utils from './utils';
 import * as constants from './constants';
 import { addStyleToHead, addCursorStyleToBody, removeStyle } from './styles';
 import dragScroller from './dragscroller';
-import { isMobile } from '../../../utils/utils';
+import { debounce, isMobile } from '../../../utils/utils';
 import { defaultOptions } from './defaults';
-import { debounce } from '../../utils/common';
 
 const grabEvents = ['mousedown', 'touchstart'];
 const moveEvents = ['mousemove', 'touchmove'];

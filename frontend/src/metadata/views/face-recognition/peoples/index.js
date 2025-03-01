@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import CenteredLoading from '../../../../components/centered-loading';
 import EmptyTip from '../../../../components/empty-tip';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';

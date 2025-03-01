@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../components/toast';
+import CustomizePopover from '../../../../components/customize-popover';
 import Color from '../options-popover/option/color';
 import Name from '../options-popover/option/name';
 import { generateNewOption } from '../../../utils/column';
 import { gettext } from '../../../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
-import toaster from '../../../../components/toast';
 
 import './index.css';
 
@@ -45,9 +45,9 @@ const KanbanAddCategoryPopover = ({ target, options, onCancel, onSubmit }) => {
   return (
     <CustomizePopover
       target={target}
-      className="sf-metadata-kanban-add-board-popover"
-      hide={onCancel}
-      hideWithEsc={onCancel}
+      popoverClassName="sf-metadata-kanban-add-board-popover"
+      hidePopover={onCancel}
+      hidePopoverWithEsc={onCancel}
       modifiers={[[{ name: 'preventOverflow', options: { boundary: document.body } }]]}
     >
       <div className="sf-metadata-kanban-add-board-popover-inner">

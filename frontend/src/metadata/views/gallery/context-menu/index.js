@@ -1,17 +1,17 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
-import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
-import { getRowById } from '../../../utils/table';
-import { downloadFile } from '../../../utils/file';
-import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
-import metadataAPI from '../../../api';
-import toaster from '../../../../components/toast';
-import { Utils } from '../../../../utils/utils';
 import ModalPortal from '../../../../components/modal-portal';
+import toaster from '../../../../components/toast';
+import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
-import { Dirent } from '../../../../models';
 import PeoplesDialog from '../../../components/dialog/peoples-dialog';
+import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { downloadFile } from '../../../utils/file';
+import metadataAPI from '../../../api';
+import { Utils } from '../../../../utils/utils';
+import { Dirent } from '../../../../models';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',

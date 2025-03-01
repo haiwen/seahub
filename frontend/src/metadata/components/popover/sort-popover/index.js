@@ -2,10 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import { UncontrolledPopover } from 'reactstrap';
-import { CustomizeAddTool, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../components/customize-select';
+import CommonAddTool from '../../../../components/common-add-tool';
+import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { getColumnByKey } from '../../../utils/column';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 import {
   EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
 } from '../../../constants';
@@ -145,7 +147,7 @@ class SortPopover extends Component {
         value: { column },
         label: (
           <Fragment>
-            <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+            <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
             <span className=''>{name}</span>
           </Fragment>
         )
@@ -177,7 +179,7 @@ class SortPopover extends Component {
     const selectedColumn = {
       label: (
         <Fragment>
-          <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+          <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
           <span className="select-option-name" title={name} aria-label={name}>{name}</span>
         </Fragment>
       )
@@ -198,7 +200,7 @@ class SortPopover extends Component {
       <div key={'sort-item-' + index} className="sort-item">
         {!readOnly &&
           <div className="delete-sort" onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
-            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon iconName="fork-number"/>}
+            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="fork-number"/>}
           </div>
         }
         <div className="condition">
@@ -211,11 +213,6 @@ class SortPopover extends Component {
               searchable={true}
               searchPlaceholder={gettext('Search property')}
               noOptionsPlaceholder={gettext('No results')}
-              component={{
-                DropDownIcon: (
-                  <i className="sf3-font sf3-font-down"></i>
-                )
-              }}
             />
           </div>
           <div className="sort-predicate ml-2">
@@ -224,11 +221,6 @@ class SortPopover extends Component {
               value={selectedSortType}
               onSelectOption={(value) => this.onSelectSortType(value, index)}
               options={this.sortTypeOptions}
-              component={{
-                DropDownIcon: (
-                  <i className="sf3-font sf3-font-down"></i>
-                )
-              }}
             />
           </div>
         </div>
@@ -262,7 +254,7 @@ class SortPopover extends Component {
             }
           </div>
           {!readOnly &&
-            <CustomizeAddTool
+            <CommonAddTool
               callBack={this.addSort}
               footerName={gettext('Add sort')}
               className="popover-add-tool"

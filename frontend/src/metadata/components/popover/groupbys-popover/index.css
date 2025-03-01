@@ -53,12 +53,12 @@
   cursor: pointer;
 }
 
-.sf-metadata-groupbys-popover .delete-groupby .sf-metadata-icon-fork-number {
+.sf-metadata-groupbys-popover .delete-groupby .seafile-multicolor-icon-fork-number {
   fill: #999;
   font-size: 12px;
 }
 
-.sf-metadata-groupbys-popover .delete-groupby:hover .sf-metadata-icon-fork-number {
+.sf-metadata-groupbys-popover .delete-groupby:hover .seafile-multicolor-icon-fork-number {
   fill: #666;
 }
 
@@ -92,7 +92,7 @@
   margin-left: 14px;
 }
 
-.sf-metadata-groupbys-popover .groupby-drag .sf-metadata-icon-drag {
+.sf-metadata-groupbys-popover .groupby-drag .seafile-multicolor-icon-drag {
   fill: #999;
 }
 

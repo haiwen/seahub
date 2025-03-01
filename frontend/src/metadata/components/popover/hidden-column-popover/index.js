@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import { SearchInput } from '@seafile/sf-metadata-ui-component';
+import SearchInput from '../../../../components/search-input';
 import HiddenColumns from './hidden-columns';
 import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 

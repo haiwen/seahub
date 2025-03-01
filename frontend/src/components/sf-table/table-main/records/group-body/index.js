@@ -8,7 +8,7 @@ import Record from '../record';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { RecordMetrics } from '../../../utils/record-metrics';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body-utils';
-import { addClassName, removeClassName } from '../../../utils';
+import { addClassName, removeClassName } from '../../../../../utils/dom';
 import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../utils/group-metrics';
 import { checkIsColumnSupportDirectEdit, checkIsColumnFrozen, checkIsNameColumn, getColumnByIndex, checkIsColumnEditable } from '../../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../../utils/selected-cell-utils';

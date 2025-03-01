@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../../../../components/icon-btn';
 import GroupTitle from './group-title';
 import { gettext } from '../../../../../../../utils/constants';
 import { GROUP_HEADER_HEIGHT, metadataZIndexes } from '../../../../../../constants';
@@ -29,7 +29,7 @@ class GroupHeaderLeft extends Component {
       >
         <IconBtn
           className={classnames('group-toggle-btn', { 'hide': !isExpanded })}
-          iconName="drop-down"
+          symbol="drop-down"
           onClick={this.props.onExpandGroupToggle}
         />
         <GroupTitle

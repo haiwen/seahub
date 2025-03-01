@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../components/toast';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import imageAPI from '../../../utils/image-api';
@@ -96,19 +95,17 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
   };
 
   return (
-    <ModalPortal>
-      <ImageDialog
-        repoID={repoID}
-        repoInfo={repoInfo}
-        imageItems={imageItems}
-        imageIndex={imageIndex}
-        closeImagePopup={closeImagePopup}
-        moveToPrevImage={moveToPrevImage}
-        moveToNextImage={moveToNextImage}
-        onRotateImage={rotateImage}
-        onDeleteImage={canDelete ? deleteImage : null}
-      />
-    </ModalPortal>
+    <ImageDialog
+      repoID={repoID}
+      repoInfo={repoInfo}
+      imageItems={imageItems}
+      imageIndex={imageIndex}
+      closeImagePopup={closeImagePopup}
+      moveToPrevImage={moveToPrevImage}
+      moveToNextImage={moveToNextImage}
+      onRotateImage={rotateImage}
+      onDeleteImage={canDelete ? deleteImage : null}
+    />
   );
 };
 
