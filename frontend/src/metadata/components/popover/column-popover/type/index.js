@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { FormGroup, FormFeedback, Label, Dropdown, DropdownToggle, DropdownMenu, Input, DropdownItem } from 'reactstrap';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '@/components/icon';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../../../utils/constants';
