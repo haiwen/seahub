@@ -2669,24 +2669,33 @@ class PeopleCoverPhoto(APIView):
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-        sql = f'SELECT {METADATA_TABLE.columns.obj_id.name} FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` = "{record_id}"'
+        sql = f'SELECT `{METADATA_TABLE.columns.obj_id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` = "{record_id}"'
 
         try:
-            query_result = metadata_server_api.query_rows(sql)
+            query_result = metadata_server_api.query_rows(sql).get('results')
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        obj_id = query_result.get('results', [dict()])[0].get(
-            METADATA_TABLE.columns.obj_id.name, ''
-        )
-        if not obj_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'obj_id not found')
+        if not query_result:
+            return api_error(status.HTTP_404_NOT_FOUND, 'record not found')
+
+        row = query_result[0]
+        obj_id = row.get(METADATA_TABLE.columns.obj_id.name)
+        parent_dir = row.get(METADATA_TABLE.columns.parent_dir.name)
+        file_name = row.get(METADATA_TABLE.columns.file_name.name)
+        path = os.path.join(parent_dir, file_name)
+
+        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'download', request.user.username, use_onetime=True)
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         params = {
             'repo_id': repo_id,
-            'obj_id': obj_id,
+            'path': path,
+            'download_token': token,
             'people_id': people_id,
         }
 
