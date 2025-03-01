@@ -120,8 +120,9 @@ class Location extends React.Component {
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
       if (!isValidPosition(position?.lng, position?.lat)) return;
-      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
-      const { lng, lat } = gcPosition || {};
+      let gcPosition = wgs84_to_gcj02(position.lng, position.lat);
+      const { lng = position.lng, lat = position.lat } = gcPosition || {};
+      gcPosition = { lng, lat };
       this.map = new window.google.maps.Map(this.ref, {
         zoom: 16,
         center: gcPosition,
