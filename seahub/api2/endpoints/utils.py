@@ -321,3 +321,11 @@ def event_export_status(task_id):
     resp = requests.get(url, params=params, headers=headers)
 
     return resp
+
+def delete_user_monitored_cache(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-repo-monitored-user-cache')
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
