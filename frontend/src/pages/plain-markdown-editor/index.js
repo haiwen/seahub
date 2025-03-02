@@ -262,5 +262,5 @@ PlainMarkdownEditor.propTypes = propTypes;
 
 export default PlainMarkdownEditor;
 
-const root = createRoot(document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('root'));
 root.render(<PlainMarkdownEditor />);
