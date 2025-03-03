@@ -12,19 +12,14 @@ const WorkWeixinDepartmentsTreePanelPropTypes = {
 };
 
 class WorkWeixinDepartmentsTreePanel extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { departmentsTree } = this.props;
     return (
       <div className="dir-content-nav">
-        <div className="tree-view tree">
+        <div className="tree-view p-4">
           {this.props.isTreeLoading ?
             <Loading/> :
-            <div className="tree-node">
+            <>
               {departmentsTree.length > 0 && departmentsTree.map((department, index) => {
                 return (
                   <WorkWeixinDepartmentsTreeNode
@@ -38,7 +33,7 @@ class WorkWeixinDepartmentsTreePanel extends Component {
                   />
                 );
               })}
-            </div>
+            </>
           }
         </div>
       </div>
