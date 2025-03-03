@@ -1173,6 +1173,12 @@ sys.path.pop(0)
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
+if os.environ.get('ENABLE_SEAFILE_AI', ''):
+    ENABLE_SEAFILE_AI = os.environ.get('ENABLE_SEAFILE_AI', '').lower() == 'true'
+SEAFILE_AI_SECRET_KEY = os.environ.get('SEAFILE_AI_SECRET_KEY', '') or SEAFILE_AI_SECRET_KEY
+SEAFILE_AI_SERVER_URL = os.environ.get('SEAFILE_AI_SERVER_URL', '') or SEAFILE_AI_SERVER_URL
+
+
 SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
