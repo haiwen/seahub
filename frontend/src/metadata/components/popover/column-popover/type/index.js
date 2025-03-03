@@ -231,7 +231,7 @@ const Type = forwardRef(({ column, onChange }, ref) => {
             tag="span"
             className="sf-metadata-column-type-info"
           >
-            <Icon iconName={column.icon} className="mr-2" />
+            <Icon symbol={column.icon} className="sf-metadata-icon mr-2" />
             <span className="mr-auto">{column.name}</span>
             <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
           </DropdownToggle>
@@ -254,7 +254,7 @@ const Type = forwardRef(({ column, onChange }, ref) => {
                     onMouseEnter={() => setCustomPropertiesOpen(false)}
                     onClick={() => onSelectPredefinedColumn(item)}
                   >
-                    <Icon iconName={item.icon} />
+                    <Icon symbol={item.icon} className="sf-metadata-icon" />
                     <span>{item.name}</span>
                   </DropdownItem>
                 ))}
@@ -273,7 +273,7 @@ const Type = forwardRef(({ column, onChange }, ref) => {
                         tag='span'
                         className="column-type-item dropdown-item text-truncate"
                       >
-                        <Icon iconName="edit" />
+                        <Icon symbol="edit" className="sf-metadata-icon" />
                         <span className="mr-auto">{gettext('Custom properties')}</span>
                         <i className="sf3-font-down sf3-font rotate-270"></i>
                       </DropdownToggle>
@@ -284,7 +284,7 @@ const Type = forwardRef(({ column, onChange }, ref) => {
                             className={classnames('column-type-item text-truncate', { 'active': item.key === column.key })}
                             onClick={() => onSelectCustomColumn(item)}
                           >
-                            <Icon iconName={item.icon} />
+                            <Icon symbol={item.icon} className="sf-metadata-icon" />
                             <span>{item.name}</span>
                           </DropdownItem>
                         ))}
