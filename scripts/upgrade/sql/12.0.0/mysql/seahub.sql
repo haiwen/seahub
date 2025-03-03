@@ -89,9 +89,9 @@ CREATE TABLE IF NOT EXISTS `wiki_wiki2_publish` (
   KEY `ix_wiki2_publish_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `user_scope` varchar(225) DEFAULT 'all_users';
-ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `authed_details` LONGTEXT DEFAULT NULL;
-ALTER TABLE share_fileshare ADD INDEX IF NOT EXISTS `idx_ctime` (`ctime`);
-ALTER TABLE share_fileshare ADD INDEX IF NOT EXISTS `idx_view_cnt` (`view_cnt`);
+ALTER TABLE share_fileshare ADD COLUMN `user_scope` varchar(225) DEFAULT 'all_users';
+ALTER TABLE share_fileshare ADD COLUMN `authed_details` LONGTEXT DEFAULT NULL;
+ALTER TABLE share_fileshare ADD INDEX `idx_ctime` (`ctime`);
+ALTER TABLE share_fileshare ADD INDEX `idx_view_cnt` (`view_cnt`);
 
-ALTER TABLE profile_profile ADD COLUMN IF NOT EXISTS `is_manually_set_contact_email` tinyint(1) DEFAULT 0;
+ALTER TABLE profile_profile ADD COLUMN `is_manually_set_contact_email` tinyint(1) DEFAULT 0;

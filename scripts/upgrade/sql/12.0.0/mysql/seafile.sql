@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS OrgUploadRateLimit (
   UNIQUE INDEX(org_id)
 ) ENGINE=INNODB;
 
-ALTER TABLE RepoInfo ADD COLUMN IF NOT EXISTS type varchar(10);
-CREATE INDEX IF NOT EXISTS RepoInfoTypeIndex on RepoInfo (type);
+ALTER TABLE RepoInfo ADD COLUMN type varchar(10);
+CREATE INDEX RepoInfoTypeIndex on RepoInfo (type);
