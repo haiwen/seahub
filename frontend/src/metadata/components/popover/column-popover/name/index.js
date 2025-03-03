@@ -22,6 +22,7 @@ const Name = forwardRef(({ readOnly, value }, ref) => {
 
   useEffect(() => {
     setName(value);
+    setError('');
   }, [value]);
 
   return (

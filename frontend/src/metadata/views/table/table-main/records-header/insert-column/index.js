@@ -1,14 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dropdown, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ColumnPopover from '../../../../../components/popover/column-popover';
 import Icon from '../../../../../../components/icon';
-import { isEnter } from '../../../../../../utils/hotkey';
+import { getEventClassName } from '../../../../../../utils/dom';
+import CustomDropdownMenu from '../../../../../components/popover/column-popover/custom-dropdown-menu';
 
 import './index.css';
 
 const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
+  const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
+  const [isColumnPopoverShow, setColumnPopoverShow] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState(null);
+
   const id = useMemo(() => 'sf-metadata-add-column', []);
-  const ref = useRef(null);
+
   const style = useMemo(() => {
     return {
       height: height,
@@ -20,36 +26,73 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     };
   }, [lastColumn, height, groupOffsetLeft]);
 
-  const openPopover = useCallback(() => {
-    ref?.current?.click();
-  }, [ref]);
 
-  const insertColumn = useCallback((name, type, { key, data }) => {
+  const toggleAddColumn = useCallback(() => {
+    setColumnMenuOpen(!isColumnMenuOpen);
+  }, [isColumnMenuOpen]);
+
+  const handleCancel = useCallback(() => {
+    setColumnMenuOpen(false);
+    setColumnPopoverShow(false);
+    setSelectedColumn(null);
+  }, []);
+
+  const handleSubmit = useCallback((name, type, { key, data }) => {
     insertColumnAPI(name, type, { key, data });
+    setColumnPopoverShow(false);
   }, [insertColumnAPI]);
 
-  const onHotKey = useCallback((event) => {
-    if (isEnter(event) && document.activeElement && document.activeElement.id === id) {
-      openPopover();
-    }
-  }, [id, openPopover]);
+  const handleSelect = useCallback((column) => {
+    setSelectedColumn(column);
+    setColumnMenuOpen(false);
+    setColumnPopoverShow(true);
+  }, []);
+
+  const handleClickOutside = useCallback((event) => {
+    if (!isColumnPopoverShow) return;
+    if (!event.target) return;
+    const className = getEventClassName(event);
+    if (className.indexOf('column-type-item') > -1) return;
+    const popover = document.querySelector('.sf-metadata-column-popover');
+    if ((popover && popover.contains(event.target))) return;
+    setColumnPopoverShow(false);
+  }, [isColumnPopoverShow]);
 
   useEffect(() => {
-    document.addEventListener('keydown', onHotKey);
+    document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
-      document.removeEventListener('keydown', onHotKey);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <>
-      <div className="sf-metadata-record-header-cell">
-        <div className="sf-metadata-result-table-cell column insert-column" style={style} id={id} ref={ref}>
+      <Dropdown
+        id={id}
+        className="sf-metadata-record-header-cell sf-metadata-column-type"
+        isOpen={isColumnMenuOpen}
+        direction="down"
+        toggle={toggleAddColumn}
+        style={style}
+      >
+        <DropdownToggle
+          tag="span"
+          className="sf-metadata-result-table-cell column insert-column"
+        >
           <Icon symbol="add-table" />
-        </div>
-      </div>
-      <ColumnPopover target={id} onChange={insertColumn} />
+        </DropdownToggle>
+        <CustomDropdownMenu onSelect={handleSelect} />
+      </Dropdown>
+      {isColumnPopoverShow && !isColumnMenuOpen && (
+        <ColumnPopover
+          target={id}
+          column={selectedColumn}
+          onSelect={handleSelect}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
+      )}
     </>
   );
 };
