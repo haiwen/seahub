@@ -104,6 +104,7 @@ class WikiCardView extends Component {
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
         toggleAddWikiDialog={null}
+        noItemsTip={gettext('No shared Wikis')}
       />
     );
     for (let i = 0; i < groupWikis.length; i++) {

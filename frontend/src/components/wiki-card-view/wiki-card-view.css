@@ -2,6 +2,11 @@
   margin: 16px 0 10px;
 }
 
+.wiki-card-group .wiki-card-group-no-tip {
+  color: #666;
+  text-align: center;
+}
+
 .wiki-card-group-items {
   display: grid;
   gap: 16px 16px;
