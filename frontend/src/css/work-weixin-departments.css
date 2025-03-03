@@ -22,7 +22,7 @@
 .dir-content-nav {
   position: absolute;
   overflow: hidden;
-  width: 24%;
+  width: 25%;
 }
 
 .dir-content-nav:hover {
@@ -45,43 +45,45 @@
 .tree-node-inner {
   position: relative;
   display: flex;
-  padding-right: 1rem;
+  padding-right: 0.5rem;
 }
 
-.tree-node-inner i {
+.tree-node-inner .sf3-font-down {
   position: absolute;
-  top: 20%;
+  top: 15%;
   left: 0.3rem;
   color: #999;
 }
 
 .tree-node-inner-hover {
-  background-color: #FFEFB2;
+  background-color: #f0f0f0;
   border-radius: 0.25rem;
   cursor: pointer;
 }
 
 .tree-node-hight-light {
-  color: #fff;
   border-radius: 4px;
-  background-color: #feac74 !important;
+  background-color: #f5f5f5 !important;
 }
 
-.tree-node-hight-light i {
-  color: #fff;
+.tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  left: -8px;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 2px;
+  background-color: #ff9800;
+  z-index: 0;
 }
 
-.tree-node-hight-light .attr-action-icon,
-.tree-node-hight-light .attr-action-icon:focus,
-.tree-node-hight-light .attr-action-icon:hover {
-  color: #fff !important;
-}
-
-.tree-node-icon {
+.tree-view .tree-node-icon {
   padding-right: 1.5rem;
 }
 
-.tree-node-text {
+.tree-view .tree-node-text {
   width: calc(100% - 2.5rem);
   font-size: 14px;
   white-space: nowrap;
@@ -90,7 +92,18 @@
   line-height: 24px;
 }
 
-.tree-view {
-  padding: 12px 12px 12px 0;
-  flex: 1 1;
+.tree-view .dropdown .right-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  margin-top: 2px;
+}
+
+.tree-view .dropdown .right-icon:hover {
+  background-color: #dbdbdb;
 }
