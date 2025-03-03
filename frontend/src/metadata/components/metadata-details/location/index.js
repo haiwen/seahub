@@ -101,14 +101,15 @@ class Location extends React.Component {
     this.setState({ isLoading: false }, () => {
       if (!window.BMapGL.Map) return;
       if (!isValidPosition(position?.lng, position?.lat)) return;
-      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
-      const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
-      const { lng, lat } = bdPosition;
+      let gcPosition = wgs84_to_gcj02(position.lng, position.lat);
+      let { lng = position.lng, lat = position.lat } = gcPosition || {};
+      const bdPosition = gcj02_to_bd09(lng, lat);
+      const { lng: bdLng, lat: bdLat } = bdPosition;
       this.map = new window.BMapGL.Map(this.ref, { enableMapClick: false });
-      const point = new window.BMapGL.Point(lng, lat);
+      const point = new window.BMapGL.Point(bdLng, bdLat);
       this.map.centerAndZoom(point, 16);
       this.map.enableScrollWheelZoom(true);
-      this.addMarkerByPosition(lng, lat);
+      this.addMarkerByPosition(bdLng, bdLat);
       let location_translated = this.props.record._location_translated;
       if (location_translated) {
         this.setState({ address: location_translated.address });
