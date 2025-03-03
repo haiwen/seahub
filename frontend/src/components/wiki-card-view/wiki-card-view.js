@@ -127,21 +127,23 @@ class WikiCardView extends Component {
         );
       }
     }
-    wikiCardGroups.push(
-      <WikiCardGroup
-        key='old-Wikis'
-        deleteWiki={this.props.deleteWiki}
-        renameWiki={this.props.renameWiki}
-        unshareGroupWiki={this.props.unshareGroupWiki}
-        convertWiki={this.props.convertWiki}
-        isSidePanelFolded={isSidePanelFolded}
-        sidePanelRate={sidePanelRate}
-        wikis={v1Wikis}
-        title={gettext('Old Wikis')}
-        isDepartment={false}
-        isShowAvatar={true}
-      />
-    );
+    if (v1Wikis.length > 0) {
+      wikiCardGroups.push(
+        <WikiCardGroup
+          key='old-Wikis'
+          deleteWiki={this.props.deleteWiki}
+          renameWiki={this.props.renameWiki}
+          unshareGroupWiki={this.props.unshareGroupWiki}
+          convertWiki={this.props.convertWiki}
+          isSidePanelFolded={isSidePanelFolded}
+          sidePanelRate={sidePanelRate}
+          wikis={v1Wikis}
+          title={gettext('Old Wikis')}
+          isDepartment={false}
+          isShowAvatar={true}
+        />
+      );
+    }
     return wikiCardGroups;
   }
 }
