@@ -59,6 +59,10 @@ class WorkWeixinDepartments extends Component {
 
   getWorkWeixinDepartmentsList = (departmentID) => {
     systemAdminAPI.sysAdminListWorkWeixinDepartments(departmentID).then((res) => {
+      if (!res.data.department && res.data.errmsg) {
+        toaster.danger(res.data.errmsg);
+        return;
+      }
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -302,7 +306,7 @@ class WorkWeixinDepartments extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{'企业微信集成'}</h3>
             </div>
-            <div className="cur-view-content d-flex flex-row">
+            <div className="cur-view-content d-flex flex-row p-0">
               <WorkWeixinDepartmentsTreePanel
                 departmentsTree={this.state.departmentsTree}
                 isTreeLoading={this.state.isTreeLoading}

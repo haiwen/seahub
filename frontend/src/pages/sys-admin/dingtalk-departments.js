@@ -60,6 +60,10 @@ class DingtalkDepartments extends Component {
 
   getDingtalkDepartmentsList = (departmentID) => {
     systemAdminAPI.sysAdminListDingtalkDepartments(departmentID).then((res) => {
+      if (!res.data.department && res.data.errmsg) {
+        toaster.danger(res.data.errmsg);
+        return;
+      }
       if (!departmentID) {
         let departmentsTree = this.getDepartmentsTree(res.data.department);
         this.setState({
@@ -302,7 +306,7 @@ class DingtalkDepartments extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{'钉钉集成'}</h3>
             </div>
-            <div className="cur-view-content d-flex flex-row">
+            <div className="cur-view-content d-flex flex-row p-0">
               <DingtalkDepartmentsTreePanel
                 departmentsTree={this.state.departmentsTree}
                 isTreeLoading={this.state.isTreeLoading}

@@ -115,13 +115,14 @@ class WorkWeixinDepartmentsTreeNode extends Component {
               style={this.state.active ? {} : { opacity: 0 }}
             >
               <DropdownToggle
-                tag='i'
-                className='sf3-font sf3-font-more-vertical cursor-pointer attr-action-icon'
+                tag='span'
+                className='cursor-pointer right-icon'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.dropdownOpen}
               >
+                <i className="sf3-font sf3-font-more"></i>
               </DropdownToggle>
               <DropdownMenu className="drop-list">
                 <DropdownItem
