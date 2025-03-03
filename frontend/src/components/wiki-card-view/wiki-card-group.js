@@ -18,6 +18,7 @@ const propTypes = {
   toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
+  noItemsTip: PropTypes.string,
 };
 
 class WikiCardGroup extends Component {
@@ -51,7 +52,7 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment, toggleAddWikiDialog, group } = this.props;
+    const { wikis, title, isDepartment, toggleAddWikiDialog, group, noItemsTip } = this.props;
     const containerWidth = this.getContainerWidth();
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
@@ -67,6 +68,9 @@ class WikiCardGroup extends Component {
           <span className={`sf3-font nav-icon sf3-font-${(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'}`} aria-hidden="true"></span>
           {title}
         </h4>
+        {(wikis.length === 0 && noItemsTip) &&
+          <div className="wiki-card-group-no-tip my-4">{noItemsTip}</div>
+        }
         <div className='wiki-card-group-items' style={{ gridTemplateColumns: isMobile ? '48% 48%' : grids }} ref={this.groupItemsRef}>
           {wikis.map((wiki, index) => {
             return (isGroup ?
