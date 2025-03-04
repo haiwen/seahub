@@ -329,3 +329,11 @@ def delete_user_monitored_cache(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-repo-monitored-user-cache')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
+def get_seafevents_metrics():
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metrics')
+    resp = requests.get(url, headers=headers)
+    return resp

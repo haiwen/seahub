@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 from urllib.parse import quote
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel, event_export_status
+from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error

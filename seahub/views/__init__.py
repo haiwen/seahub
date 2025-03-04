@@ -52,6 +52,7 @@ from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_adm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.api2.endpoints.utils import get_seafevents_metrics
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
@@ -1180,8 +1181,8 @@ def check_metric_auth(auth_header):
 def get_metrics(request):
     if not ENABLE_METRIC:
         return Http404
-    auth_header = request.META.get('HTTP_AUTHORIZATION')
-    if not auth_header or not check_metric_auth(auth_header):
-        return HttpResponseForbidden('Invalid Authentication')
+    # auth_header = request.META.get('HTTP_AUTHORIZATION')
+    # if not auth_header or not check_metric_auth(auth_header):
+    #     return HttpResponseForbidden('Invalid Authentication')
     metrics = get_seafevents_metrics()
     return HttpResponse(metrics, content_type='text/plain')

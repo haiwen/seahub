@@ -863,10 +863,6 @@ if EVENTS_CONFIG_FILE:
     def get_file_history_suffix():
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
 
-    def get_seafevents_metrics():
-        return seafevents_api.format_metrics(redis_cache)
-
-
     def get_trash_records(repo_id, show_time, start, limit):
         with _get_seafevents_session() as session:
             res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
@@ -936,8 +932,6 @@ else:
     def get_user_activities_by_timestamp():
         pass
     def get_trash_records():
-        pass
-    def get_seafevents_metrics():
         pass
 
 
