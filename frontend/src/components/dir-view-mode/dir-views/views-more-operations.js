@@ -4,7 +4,8 @@ import TextTranslation from '../../../utils/text-translation';
 import { isMobile } from '../../../utils/utils';
 import EventBus from '../../common/event-bus';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../../metadata/constants';
-import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from './new-view-menu';
+import { getNewViewSubMenu, KEY_ADD_VIEW_MAP } from './new-view-menu';
+import Icon from '../../icon';
 
 const ViewsMoreOperations = ({ menuProps }) => {
   const eventBus = EventBus.getInstance();
@@ -43,8 +44,13 @@ const ViewsMoreOperations = ({ menuProps }) => {
 
   const getMoreOperationsMenus = useCallback(() => {
     return [
-      TextTranslation.ADD_FOLDER,
-      getNewViewMenuItem(),
+      {
+        key: KEY_ADD_VIEW_MAP.ADD_FOLDER,
+        value: TextTranslation.ADD_FOLDER.value,
+        icon_dom: <Icon symbol="folder" className="metadata-view-icon" />
+      },
+      'Divider',
+      ...getNewViewSubMenu(),
     ];
   }, []);
 
@@ -54,7 +60,7 @@ const ViewsMoreOperations = ({ menuProps }) => {
         {...menuProps}
         item={{ name: 'views' }}
         menuClassname="metadata-views-dropdown-menu"
-        toggleClass="sf3-font sf3-font-more"
+        toggleClass="sf3-font sf3-font-new"
         menuStyle={isMobile ? { zIndex: 1050 } : {}}
         getMenuList={getMoreOperationsMenus}
         onMenuItemClick={clickMenu}

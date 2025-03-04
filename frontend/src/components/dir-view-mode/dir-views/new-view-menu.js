@@ -46,7 +46,7 @@ const translateLabel = (type) => {
   }
 };
 
-const getNewViewSubMenus = () => {
+export const getNewViewSubMenu = () => {
   return ADD_VIEW_OPTIONS.map((option) => {
     const { key, type } = option;
     return {
@@ -61,6 +61,6 @@ export const getNewViewMenuItem = () => {
   return {
     ...TextTranslation.ADD_VIEW,
     subOpListHeader: gettext('New view'),
-    subOpList: getNewViewSubMenus(),
+    subOpList: getNewViewSubMenu(),
   };
 };
