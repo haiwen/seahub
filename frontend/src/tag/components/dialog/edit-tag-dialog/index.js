@@ -49,9 +49,9 @@ const EditTagDialog = ({ tags, tag, title, onSubmit, onToggle }) => {
   }, [tag, name, color, otherTagsName, onToggle, onSubmit]);
 
   const handleKeyDown = useCallback((event) => {
+    event.stopPropagation();
     if (isEnter(event)) {
       event.preventDefault();
-      event.stopPropagation();
       handleSubmit();
     }
   }, [handleSubmit]);
@@ -83,7 +83,7 @@ const EditTagDialog = ({ tags, tag, title, onSubmit, onToggle }) => {
               return (
                 <div key={colorItem.COLOR} className="col-auto">
                   <label className="color-select">
-                    <input name="color" type="radio" value={optionColor} className="sf-metadata-edit-tag-color-input" defaultChecked={isSelected} onClick={handelColorChange} />
+                    <input name="color" type="radio" value={optionColor} className="sf-metadata-edit-tag-color-input" defaultChecked={isSelected} onClick={handelColorChange} onKeyDown={handleKeyDown} />
                     <IconBtn
                       className={classnames('sf-metadata-edit-tag-color-container', { 'selected': isSelected })}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
