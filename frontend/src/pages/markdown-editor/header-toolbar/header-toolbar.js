@@ -72,10 +72,12 @@ class HeaderToolbar extends React.Component {
     this.helpInfoToggleSubscribe && this.helpInfoToggleSubscribe();
   }
 
+  // 点击帮助回调函数，不显示文件信息
   handleHelpClick = () => {
     this.isFileInfoShow = false;
   };
 
+  // 获取目录列表，获取当前的牡蛎 Dirent 信息
   getDirentList = () => {
     return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
       const direntList = res.data.dirent_list || [];
@@ -92,10 +94,12 @@ class HeaderToolbar extends React.Component {
     });
   };
 
+  // 切换信息面板时
   onArticleInfoToggle = () => {
     const repoInfo = { permission: this.currentDirent.permission, is_admin: isRepoAdmin, };
     const eventBus = EventBus.getInstance();
 
+    // 绑定事件
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {
       component: (props) => {
         return (
@@ -124,6 +128,7 @@ class HeaderToolbar extends React.Component {
   render() {
     let { contentChanged, saving, isLocked, lockedByMe } = this.props;
 
+    // 不同类型编辑器共用表头工具栏，按钮不同
     if (this.props.editorMode === 'rich') {
       return (
         <div className="sf-md-viewer-topbar">

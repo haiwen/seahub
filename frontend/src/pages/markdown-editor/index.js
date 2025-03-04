@@ -48,6 +48,7 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
+      // 初始化的协作人列表
       collabUsers: userInfo ?
         [{ user: userInfo, is_editing: false }] : [],
       value: null,
@@ -60,6 +61,7 @@ class MarkdownEditor extends React.Component {
       participants: [],
     };
 
+    // 废弃定时器
     this.timer = null;
 
     this.editorRef = React.createRef();
@@ -67,6 +69,7 @@ class MarkdownEditor extends React.Component {
     this.editorSelection = null;
   }
 
+  // 切换锁定
   toggleLockFile = () => {
     const { repoID, path } = this.state.fileInfo;
     if (this.state.isLocked) {
@@ -80,6 +83,7 @@ class MarkdownEditor extends React.Component {
     }
   };
 
+  // 废弃函数
   receiveUpdateData(data) {
     let currentTime = new Date();
     if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
@@ -98,6 +102,7 @@ class MarkdownEditor extends React.Component {
   }
 
 
+  // 废弃函数：原来应该支持 ws 协议进行多人协作，但是这部分没有写完
   receivePresenceData(data) {
     let collabUsers = [];
     let editingUsers = [];
@@ -150,11 +155,13 @@ class MarkdownEditor extends React.Component {
     });
   };
 
+  // 切换普通编辑器模式
   setEditorMode = (editorMode) => { // rich | plain
     const { origin, pathname } = window.location;
     window.location.href = origin + pathname + '?mode=plain';
   };
 
+  // 废弃函数
   clearTimer = () => {
     clearTimeout(this.timer);
     this.timer = null;
@@ -215,24 +222,27 @@ class MarkdownEditor extends React.Component {
       readOnly: !hasPermission,
     });
 
-    if (userInfo && this.socket) {
-      const { repoID, path } = this.state.fileInfo;
-      this.socket.emit('presence', {
-        request: 'join_room',
-        doc_id: CryptoJS.MD5(repoID + path).toString(),
-        user: userInfo
-      });
+    // 这部分是多人协同的逻辑，理论上可以删除
+    // if (userInfo && this.socket) {
+    //   const { repoID, path } = this.state.fileInfo;
+    //   this.socket.emit('presence', {
+    //     request: 'join_room',
+    //     // 使用 CryptoJS 提供的各种加密功能
+    //     doc_id: CryptoJS.MD5(repoID + path).toString(),
+    //     user: userInfo
+    //   });
 
-      this.socket.emit('repo_update', {
-        request: 'watch_update',
-        repo_id: editorApi.repoID,
-        user: {
-          name: editorApi.name,
-          username: editorApi.username,
-          contact_email: editorApi.contact_email,
-        },
-      });
-    }
+    //   this.socket.emit('repo_update', {
+    //     request: 'watch_update',
+    //     repo_id: editorApi.repoID,
+    //     user: {
+    //       name: editorApi.name,
+    //       username: editorApi.username,
+    //       contact_email: editorApi.contact_email,
+    //     },
+    //   });
+    // }
+    this.listFileTags();
 
     this.listFileParticipants();
     window.showParticipants = true;
@@ -250,18 +260,20 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onUnload);
     this.unsubscribeInsertSeafileImage();
-    if (!this.socket) return;
-    this.socket.emit('repo_update', {
-      request: 'unwatch_update',
-      repo_id: editorApi.repoID,
-      user: {
-        name: editorApi.name,
-        username: editorApi.username,
-        contact_email: editorApi.contact_email,
-      },
-    });
+    // 废弃的 ws 协同逻辑，理论上可以删除
+    // if (!this.socket) return;
+    // this.socket.emit('repo_update', {
+    //   request: 'unwatch_update',
+    //   repo_id: editorApi.repoID,
+    //   user: {
+    //     name: editorApi.name,
+    //     username: editorApi.username,
+    //     contact_email: editorApi.contact_email,
+    //   },
+    // });
   }
 
+  // 关闭页面时，提示是否保存
   onUnload = (event) => {
     const { contentChanged } = this.state;
     if (!contentChanged) return;
@@ -272,22 +284,41 @@ class MarkdownEditor extends React.Component {
     return confirmationMessage;
   };
 
+  // 获取文件标签
+  listFileTags = () => {
+    seafileAPI.listFileTags(repoID, filePath).then(res => {
+      let fileTagList = res.data.file_tags;
+      for (let i = 0; i < fileTagList.length; i++) {
+        fileTagList[i].id = fileTagList[i].file_tag_id;
+      }
+      this.setState({ fileTagList: fileTagList });
+    });
+  };
+
+  onFileTagChanged = () => {
+    this.listFileTags();
+  };
+
+  // 获取文件协同人员（废弃函数，可以删除）
   listFileParticipants = () => {
     editorApi.listFileParticipant().then((res) => {
       this.setState({ participants: res.data.participant_list });
     });
   };
 
+  // 废弃函数，可以删除
   onParticipantsChange = () => {
     this.listFileParticipants();
   };
 
+  // 设置文件更新时间
   setFileInfoMtime = (fileInfo) => {
     const { fileInfo: oldFileInfo } = this.state;
     const newFileInfo = Object.assign({}, oldFileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name });
     this.setState({ fileInfo: newFileInfo });
   };
 
+  // 切换星标
   toggleStar = () => {
     const { fileInfo } = this.state;
     const { starred } = fileInfo;
@@ -313,24 +344,33 @@ class MarkdownEditor extends React.Component {
     this.openDialogs('insert_file');
   };
 
+  // 打开文件历史
   toggleHistory = () => {
     window.location.href = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath);
   };
 
+  // 插入文件（需要获取插入链接）
   getInsertLink = (repoID, filePath) => {
     const selection = this.editorSelection;
     const fileName = Utils.getFileName(filePath);
     const suffix = fileName.slice(fileName.indexOf('.') + 1);
     const eventBus = EventBus.getInstance();
+    // 对于图片，需要加上 ?raw=1，这样 seafile-editor 在插入图片时
+    // 就会使用 raw 的 url，而不是 web 优化后的 url
+    // raw 的 url 是指完整的图片 url，而不是经过 web 优化后的 url
+    // 例如：https://example.com/media/lib/1234567890abcdef/file.jpg
+    // 而不是：https://example.com/media/lib/1234567890abcdef/file.jpg?img=1&v=1234567890abcdef
     if (IMAGE_SUFFIXES.includes(suffix)) {
       let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
       eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, isImage: true, selection });
       return;
     }
+    // 其他的不需要加 raw=1
     let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection });
   };
 
+  // 增加协作人（把当前的用户增加到协作人中）便于通知
   addParticipants = () => {
     if (this.isParticipant || !window.showParticipants) return;
     const { userName } = editorApi;
@@ -353,6 +393,7 @@ class MarkdownEditor extends React.Component {
     this.setState({ contentChanged: true });
   };
 
+  // 保存编辑器内容
   onSaveEditorContent = () => {
     this.setState({ saving: true });
     const content = this.editorRef.current.getValue();
@@ -387,6 +428,7 @@ class MarkdownEditor extends React.Component {
 
     return (
       <>
+        {/* 顶部状态栏 */}
         <HeaderToolbar
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
@@ -406,6 +448,7 @@ class MarkdownEditor extends React.Component {
           lockedByMe={this.state.lockedByMe}
           toggleLockFile={this.toggleLockFile}
         />
+        {/* 渲染md编辑器：如果未锁定渲染编辑器，如果锁定，渲染预览组件 */}
         <div className={`sf-md-viewer-content ${isLocked ? 'locked' : ''}`}>
           {(filePerm === 'rw' && !isLocked) ?
             <SeafileMarkdownEditor
@@ -429,6 +472,7 @@ class MarkdownEditor extends React.Component {
             />
           }
         </div>
+        {/* 这里没有必要套两层组件，应该直接渲染就可以 */}
         {this.state.showMarkdownEditorDialog && (
           <>
             {this.state.showInsertFileDialog &&
