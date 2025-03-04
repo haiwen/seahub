@@ -1,12 +1,10 @@
 import classnames from 'classnames';
-import { Utils } from '../../../../../utils/utils';
+import { Utils } from '../../../utils/utils';
 
-import './index.css';
-
-export function createBMapZoomControl(BMapGL, { maxZoom, minZoom }, callback) {
+export function createBMapZoomControl(BMapGL, { maxZoom, minZoom, offset }, callback) {
   function ZoomControl() {
     this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMapGL.Size(66, Utils.isDesktop() ? 30 : 90);
+    this.defaultOffset = new BMapGL.Size(offset.x, offset.y);
   }
   ZoomControl.prototype = new BMapGL.Control();
   ZoomControl.prototype.initialize = function (map) {
@@ -16,7 +14,7 @@ export function createBMapZoomControl(BMapGL, { maxZoom, minZoom }, callback) {
       'sf-map-control-container-mobile': !Utils.isDesktop()
     });
 
-    const buttonClassName = 'sf-map-control d-flex align-items-center justify-content-center';
+    const buttonClassName = 'sf-map-control  sf-map-zoom-control d-flex align-items-center justify-content-center';
     const zoomInButton = document.createElement('div');
     zoomInButton.className = classnames(buttonClassName, { 'disabled': zoomLevel >= maxZoom });
     zoomInButton.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>';

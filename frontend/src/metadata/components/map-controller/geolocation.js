@@ -1,7 +1,5 @@
 import classnames from 'classnames';
-import { Utils } from '../../../../../utils/utils';
-
-import './index.css';
+import { Utils } from '../../../utils/utils';
 
 export function createBMapGeolocationControl(BMapGL, callback) {
   function GeolocationControl() {
@@ -11,12 +9,12 @@ export function createBMapGeolocationControl(BMapGL, callback) {
   GeolocationControl.prototype = new BMapGL.Control();
   GeolocationControl.prototype.initialize = function (map) {
     const div = document.createElement('div');
-    let className = classnames('sf-map-control-container sf-map-geolocation-control d-flex align-items-center justify-content-center', {
+    let className = classnames('sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center', {
       'sf-map-geolocation-control-mobile': !Utils.isDesktop()
     });
 
     const locationButton = document.createElement('div');
-    locationButton.className = 'sf-map-control d-flex align-items-center justify-content-center';
+    locationButton.className = 'sf-map-control sf-map-geolocation-control d-flex align-items-center justify-content-center';
     locationButton.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-current-location"></i>';
     div.appendChild(locationButton);
 
