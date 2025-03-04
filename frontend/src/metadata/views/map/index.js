@@ -270,6 +270,8 @@ const Map = () => {
       {clusterLeaveIds.length > 0 && (
         <ModalPortal>
           <ImageDialog
+            repoID={repoID}
+            repoInfo={repoInfo}
             imageItems={clusterLeaves}
             imageIndex={imageIndex}
             closeImagePopup={handleClose}
