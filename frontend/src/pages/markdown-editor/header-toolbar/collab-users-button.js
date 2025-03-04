@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
+// 废弃组件
 class CollabUsersButton extends React.PureComponent {
 
   constructor(props) {

@@ -75,7 +75,7 @@ const entryFiles = {
 https://github.com/haiwen/seahub/pull/7273
 
 ├── tldraw-editor
-│   ├── editor-api.js 处理文件下载和上传
+│   ├── editor-api.js API 处理文件下载和上传
 │   └── index.js 画板编辑器的套壳，处理快捷键，保存内容等
 
 ## 02 markdown 普通字符编辑器（刘宏博 2024 重构）
@@ -84,31 +84,24 @@ https://github.com/haiwen/seahub/pull/5998
 
 ├── plain-markdown-editor
 │   ├── code-mirror.js codemirror 代码阅读器定制后效果
-│   ├── helper.js 获取文件信息的 API 封装后的函数
+│   ├── helper.js API 获取文件信息封装后的函数
 │   ├── index.js 普通文本编辑器入口，左侧是格式化编辑代码，右侧显示预览
 
-
-—————————————————————————————————————————————————没有查看—————————————————————————————————————————————————
-
-## markdown 富文本编辑器
+## markdown 03 富文本编辑器
 
 ├── markdown-editor
-│   ├── css
-│   │   ├── detail-list-view.css
-│   │   ├── header-toolbar.css
-│   │   └── markdown-editor.css
-│   ├── detail-list-view
-│   │   └── index.js
-│   ├── editor-api.js
+│   ├── detail-list-view：右侧栏（文件编辑标签和文件元信息）
+│   ├── editor-api.js：文本编辑器常用的 API 封装
 │   ├── header-toolbar
-│   │   ├── button-group.js
-│   │   ├── button-item.js
-│   │   ├── collab-users-button.js
-│   │   ├── file-info.js
-│   │   ├── header-toolbar.js
-│   │   ├── index.js
-│   │   └── more-menu.js
-│   └── index.js
+│   │   ├── button-group.js 封装的按钮组
+│   │   ├── button-item.js 封装的按钮
+│   │   ├── collab-users-button.js 废弃组件
+│   │   ├── file-info.js 文件左上角基本信息（名称，星标，内部链接）
+│   │   ├── header-toolbar.js 文件表头的工具栏（富文本和普通文本共同使用）
+│   │   └── more-menu.js 更多按钮，便于切换模式
+│   └── index.js markdown 富文本编辑器的外壳（实际有很多废弃代码，例如多人协同，协作人等变量）
+
+—————————————————————————————————————————————————没有查看—————————————————————————————————————————————————
 
 ## sdoc 编辑器
 
