@@ -12,13 +12,11 @@ const Data = forwardRef(({ column }, ref) => {
   const [value, setValue] = useState(column.data || {});
   const [popoverShow, setPopoverShow] = useState(false);
   const columnKey = useRef(null);
-  // const [error, setError] = useState('');
 
   useImperativeHandle(ref, () => ({
     getValue: () => value,
     setValue: (value) => setValue(value),
     getIsPopoverShow: () => popoverShow,
-    // setError: (error) => setError(error),
   }), [popoverShow, value]);
 
   const onChange = useCallback((value) => {
