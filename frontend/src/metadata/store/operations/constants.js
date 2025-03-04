@@ -7,6 +7,7 @@ export const OPERATION_TYPE = {
   MODIFY_SETTINGS: 'modify_settings',
   MODIFY_LOCAL_VIEW: 'modify_local_view',
   MODIFY_VIEW_TYPE: 'modify_view_type',
+  MODIFY_AVAILABLE_COLUMNS: 'modify_available_columns',
 
   // column
   INSERT_COLUMN: 'insert_column',
@@ -60,6 +61,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_SORTS]: ['repo_id', 'view_id', 'sorts'],
   [OPERATION_TYPE.MODIFY_GROUPBYS]: ['repo_id', 'view_id', 'groupbys'],
   [OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS]: ['repo_id', 'view_id', 'hidden_columns'],
+  [OPERATION_TYPE.MODIFY_AVAILABLE_COLUMNS]: ['repo_id', 'view_id', 'available_column_keys'],
   [OPERATION_TYPE.MODIFY_LOCAL_VIEW]: ['repo_id', 'view_id', 'update'],
   [OPERATION_TYPE.MODIFY_VIEW_TYPE]: ['repo_id', 'view_id', 'update'],
 

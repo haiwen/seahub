@@ -285,6 +285,11 @@ class DataProcessor {
         table.view.settings = settings;
         break;
       }
+      case OPERATION_TYPE.MODIFY_AVAILABLE_COLUMNS: {
+        const { available_column_keys } = operation;
+        table.view.available_columns = table.columns.filter(column => available_column_keys.includes(column.key));
+        break;
+      }
       default: {
         break;
       }

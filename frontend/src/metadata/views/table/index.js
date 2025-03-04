@@ -27,7 +27,8 @@ const Table = () => {
     insertColumn,
     updateFileTags,
     moveRecord,
-    addFolder
+    addFolder,
+    modifyAvailableColumns,
   } = useMetadataView();
   const containerRef = useRef(null);
 
@@ -176,6 +177,7 @@ const Table = () => {
         onGridKeyUp={onHotKeyUp}
         moveRecord={moveRecord}
         addFolder={addFolder}
+        modifyAvailableColumns={modifyAvailableColumns}
       />
     </div>
   );

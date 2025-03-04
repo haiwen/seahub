@@ -1,5 +1,5 @@
 import { getColumnByKey } from '../../utils/column';
-import { VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS, VIEW_DEFAULT_SETTINGS } from '../../constants';
+import { VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS, VIEW_DEFAULT_SETTINGS, VIEW_INIT_AVAILABLE_COLUMN_KEYS } from '../../constants';
 
 class View {
 
@@ -41,7 +41,8 @@ class View {
     this.rows = object.rows || [];
 
     // columns
-    this.available_columns = columns || [];
+    this.available_column_keys = object.available_column_keys && object.available_column_keys.length > 0 ? object.available_column_keys : VIEW_INIT_AVAILABLE_COLUMN_KEYS;
+    this.available_columns = columns.filter(column => this.available_column_keys.includes(column.key));
     this.display_available_columns = this.available_columns.filter(column => !VIEW_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
     this.columns = this.display_available_columns;
 

@@ -16,9 +16,10 @@ const CellFormatter = ({ readonly, value, field, record, ...params }) => {
       readonly,
       value,
       field,
+      record,
       queryUserAPI: queryUser,
     };
-  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser]);
+  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser, record]);
   const { tagsData } = useTags();
 
   if (field.type === CellType.FILE_NAME) {

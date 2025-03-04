@@ -44,6 +44,7 @@ const NOT_SUPPORT_EDIT_COLUMN_TYPE = [
   CellType.MTIME,
   CellType.CREATOR,
   CellType.LAST_MODIFIER,
+  CellType.GEOLOCATION,
 ];
 
 const NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP = {
@@ -51,6 +52,7 @@ const NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP = {
   [CellType.MTIME]: true,
   [CellType.CREATOR]: true,
   [CellType.LAST_MODIFIER]: true,
+  [CellType.GEOLOCATION]: true,
 };
 
 const MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP = {

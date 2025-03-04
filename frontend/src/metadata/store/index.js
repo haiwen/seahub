@@ -510,6 +510,14 @@ class Store {
     this.applyOperation(operation);
   }
 
+  modifyAvailableColumns(available_column_keys) {
+    const type = OPERATION_TYPE.MODIFY_AVAILABLE_COLUMNS;
+    const operation = this.createOperation({
+      type, available_column_keys, repo_id: this.repoId, view_id: this.viewId
+    });
+    this.applyOperation(operation);
+  }
+
   modifySettings = (settings) => {
     const type = OPERATION_TYPE.MODIFY_SETTINGS;
     const operation = this.createOperation({
