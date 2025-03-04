@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CustomDropdown from '../../../components/dropdown';
 
+// 废弃组件
 class CollabUsersButton extends React.PureComponent {
 
   render() {
