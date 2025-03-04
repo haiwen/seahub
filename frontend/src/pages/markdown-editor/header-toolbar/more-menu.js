@@ -19,6 +19,7 @@ const MoreMenuPropTypes = {
   toggleHistory: PropTypes.func,
 };
 
+// 更多按钮，支持切换不同的编辑器，帮助，历史，父节点
 class MoreMenu extends React.PureComponent {
 
   constructor(props) {

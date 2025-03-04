@@ -6,12 +6,19 @@ import InternalLinkOperation from '../../../components/operations/internal-link-
 
 const { repoID, filePath } = window.app.pageOptions;
 
+// 文件信息
 class FileInfo extends React.PureComponent {
 
   render() {
     const { fileInfo, isPro, isLocked, mediaUrl } = this.props;
+
+    // 星标提示
     const starTitle = fileInfo.starred ? gettext('starred') : gettext('unstarred');
+
+    // 星标类名
     const starIconClass = `iconfont ${fileInfo.starred ? 'icon-star1 star' : 'icon-star2'}`;
+
+    // 更改时间
     const modifyTime = dayjs(fileInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
 
     const lockedText = gettext('locked');
