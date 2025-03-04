@@ -8,7 +8,7 @@ import loadBMap, { initMapInfo } from '../../../utils/map-utils';
 import { appAvatarURL, baiduMapKey, fileServerRoot, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '../../../constants';
 import { EVENT_BUS_TYPE, MAP_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../constants';
-import { createBMapGeolocationControl, createBMapZoomControl } from './control';
+import { createBMapGeolocationControl, createBMapZoomControl } from '../../components/map-controller';
 import { customAvatarOverlay, customImageOverlay } from './overlay';
 import ModalPortal from '../../../components/modal-portal';
 import ImageDialog from '../../../components/dialog/image-dialog';
@@ -96,7 +96,8 @@ const Map = () => {
   }, []);
 
   const addMapController = useCallback(() => {
-    const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: MAX_ZOOM, minZoom: MIN_ZOOM }, saveMapState);
+    const offset = { x: 66, y: Utils.isDesktop() ? 30 : 90 };
+    const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: MAX_ZOOM, minZoom: MIN_ZOOM, offset }, saveMapState);
     const zoomControl = new ZoomControl();
     const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (point) => {
       point && mapRef.current && mapRef.current.setCenter(point);

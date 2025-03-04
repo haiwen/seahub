@@ -12,6 +12,9 @@ import { isValidPosition } from '../../../utils/validate';
 import ObjectUtils from '../../../../utils/object';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
+import { createBMapZoomControl } from '../../map-controller';
+import { Utils } from '../../../../utils/utils';
+
 import './index.css';
 
 class Location extends React.Component {
@@ -107,7 +110,12 @@ class Location extends React.Component {
       this.map = new window.BMapGL.Map(this.ref, { enableMapClick: false });
       const point = new window.BMapGL.Point(lng, lat);
       this.map.centerAndZoom(point, 16);
-      this.map.enableScrollWheelZoom(true);
+      this.map.disableScrollWheelZoom(true);
+
+      const offset = { x: 10, y: Utils.isDesktop() ? 16 : 40 };
+      const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: 21, minZoom: 3, offset });
+      const zoomControl = new ZoomControl();
+      this.map.addControl(zoomControl);
       this.addMarkerByPosition(lng, lat);
       let location_translated = this.props.record._location_translated;
       if (location_translated) {

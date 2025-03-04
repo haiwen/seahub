@@ -10,3 +10,20 @@
   height: auto;
   border-radius: 3px;
 }
+
+.dirent-detail-item-value-map .sf-map-control-container {
+  height: 22px;
+}
+
+.dirent-detail-item-value-map .sf-map-control-container .sf-map-control .sf-map-control-icon {
+  font-size: 12px;
+}
+
+.dirent-detail-item-value-map .sf-map-control-container.sf-map-zoom-control-container .sf-map-control {
+  width: 30px;
+  height: 22px;
+}
+
+.dirent-detail-item-value-map .sf-map-control-container .sf-map-control-divider::before {
+  height: 14px;
+}
