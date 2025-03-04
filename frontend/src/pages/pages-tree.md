@@ -78,19 +78,17 @@ https://github.com/haiwen/seahub/pull/7273
 │   ├── editor-api.js 处理文件下载和上传
 │   └── index.js 画板编辑器的套壳，处理快捷键，保存内容等
 
-
-—————————————————————————————————————————————————没有查看—————————————————————————————————————————————————
-
-## markdown 普通字符编辑器（刘宏博 2024）
+## 02 markdown 普通字符编辑器（刘宏博 2024 重构）
 
 https://github.com/haiwen/seahub/pull/5998
 
 ├── plain-markdown-editor
-│   ├── code-mirror.css
-│   ├── code-mirror.js
-│   ├── helper.js
-│   ├── index.js
-│   └── style.css
+│   ├── code-mirror.js codemirror 代码阅读器定制后效果
+│   ├── helper.js 获取文件信息的 API 封装后的函数
+│   ├── index.js 普通文本编辑器入口，左侧是格式化编辑代码，右侧显示预览
+
+
+—————————————————————————————————————————————————没有查看—————————————————————————————————————————————————
 
 ## markdown 富文本编辑器
 
