@@ -12,6 +12,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  height: fit-content !important;
+  align-content: flex-start;
   max-height: 100%;
 }
