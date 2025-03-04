@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { getFileNameFromRecord, getFileTypeFromRecord, getImageLocationFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getFileTypeFromRecord, getImageLocationFromRecord, getParentDirFromRecord,
+  getRecordIdFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { isValidPosition } from '../../utils/validate';
@@ -39,6 +40,7 @@ const Map = () => {
         if (recordType !== PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE) return null;
         const id = getRecordIdFromRecord(record);
         const name = getFileNameFromRecord(record);
+        const mtime = getFileMTimeFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
         const path = Utils.encodePath(Utils.joinPath(parentDir, name));
         const location = getImageLocationFromRecord(record);
@@ -56,13 +58,13 @@ const Map = () => {
         if (repoEncrypted || isGIF) {
           thumbnail = `${siteRoot}repo/${repoID}/raw${path}?t=${cacheBuster}`;
         } else {
-          thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+          thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
         }
 
         return {
           id,
           name,
-          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}?mtime=${mtime}`,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           thumbnail,

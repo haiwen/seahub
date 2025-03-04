@@ -121,18 +121,7 @@ class SharedDirView extends React.Component {
     }).catch(() => {
       this.setState({ isTreeDataLoading: false });
     });
-    /* keep it for now
-    if (relativePath == '/') {
-    } else {
-      this.loadNodeAndParentsByPath(relativePath);
-    }
-    */
   };
-
-  /*
-  loadNodeAndParentsByPath = (path) => {
-  };
-  */
 
   addResponseListToNode = (list, node) => {
     node.isLoaded = true;
@@ -510,13 +499,14 @@ class SharedDirView extends React.Component {
   // for image popup
   prepareImageItem = (item) => {
     const name = item.file_name;
+    const mtime = item.last_modified;
     const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
     const isGIF = fileExt == 'gif';
 
     let src;
     const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
     if (!isGIF) {
-      src = `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}`;
+      src = `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}?mtime=${mtime}`;
     } else {
       src = `${fileURL}&raw=1`;
     }
@@ -525,7 +515,7 @@ class SharedDirView extends React.Component {
       'name': name,
       'url': fileURL,
       'parentDir': item.file_path.slice(0, item.file_path.indexOf(name)),
-      'thumbnail': `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}`,
+      'thumbnail': `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}?mtime=${mtime}`,
       'src': src,
       'downloadURL': fileURL + '&dl=1',
     };
@@ -1183,7 +1173,7 @@ class Item extends React.Component {
       );
     } else {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
-      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
+      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}?mtime=${item.last_modified}` : '';
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           {showDownloadIcon &&
@@ -1338,7 +1328,7 @@ class GridItem extends React.Component {
       );
     } else {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
-      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
+      const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}?mtime=${item.last_modified}` : '';
       return (
         <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <a href={fileURL} className="grid-file-img-link d-block" onClick={this.handleFileClick}>

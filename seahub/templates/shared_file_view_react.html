@@ -67,6 +67,7 @@ body {
       sharedToken: '{{ shared_token }}',
       trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
       fileName: '{{ file_name|escapejs }}',
+      lastModified: '{{ last_modified }}',
       fileSize: {{ file_size }},
       rawPath: '{{ raw_path|escapejs }}',
       sharedBy: '{{ shared_by|email2nickname|escapejs }}',

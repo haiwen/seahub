@@ -10,6 +10,7 @@ const {
   fileExt, filePath, fileName,
   thumbnailSizeForOriginal,
   previousImage, nextImage, rawPath,
+  lastModificationTime,
   xmindImageSrc // for xmind file
 } = window.app.pageOptions;
 
@@ -58,7 +59,7 @@ class FileContent extends React.Component {
     let thumbnailURL = '';
     const fileExtList = ['tif', 'tiff', 'psd', 'heic'];
     if (!repoEncrypted && fileExtList.includes(fileExt)) {
-      thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
+      thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModificationTime}`;
     }
 
     // for xmind file

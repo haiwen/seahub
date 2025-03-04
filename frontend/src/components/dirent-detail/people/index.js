@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
 import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
-import { getCellValueByColumn } from '../../../metadata/utils/cell';
+import { getCellValueByColumn, getFileMTimeFromRecord } from '../../../metadata/utils/cell';
 
 import './index.css';
 
@@ -12,7 +12,7 @@ const People = ({ repoID, record }) => {
     if (!faceLinks) return [];
     return faceLinks.map(item => ({
       ...item,
-      url: `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${item.row_id}.jpg`
+      url: `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${item.row_id}.jpg?mtime=${getFileMTimeFromRecord(record)}`
     }));
   }, [repoID, record]);
 

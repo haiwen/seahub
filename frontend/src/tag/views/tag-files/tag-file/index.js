@@ -46,11 +46,11 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
     const defaultIconUrl = Utils.getFileIconUrl(name);
     if (Utils.imageCheck(name)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, name));
-      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`;
+      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(file)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [repoID, name, parentDir]);
+  }, [repoID, file, name, parentDir]);
 
   const displayIcon = useMemo(() => {
     if (!isIconLoadError) return displayIcons.iconUrl;
