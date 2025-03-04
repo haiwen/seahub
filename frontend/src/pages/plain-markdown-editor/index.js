@@ -56,16 +56,29 @@ const initOptions = {
 };
 
 const PlainMarkdownEditor = (props) => {
+  // 编辑器的值
   const [editorValue, setEditorValue] = useState('');
+  // 预览组件的值
   const [previewValue, setPreviewValue] = useState('');
+
+  // 判断鼠标在左侧还是在右侧面板内（决定其他快捷键交互等）
   const [isMouseInLeftSide, setIsMouseInLeftSide] = useState(false);
   const [isMouseInRightSide, setIsMouseInRightSide] = useState(false);
+
+  // 滚动位置（左右两个面板同步滚动）
   const [scrollPercentage, setScrollPercentage] = useState(0);
+
+  // 获取左右两个滚动面板的 DOM，进一步获取位置信息
   const leftPanelRef = useRef(null);
   const rightPanelRef = useRef(null);
+
+  // 编辑器属性（包括文档信息，编辑器模式等信息）
   const [options, setOptions] = useState(initOptions);
+
+  // 设置保存状态
   const [saving, setSaving] = useState(false);
 
+  // 保存时，设置编辑器信息（markdown格式），以及转换成 HTML 信息
   const setContent = useCallback((markdownContent) => {
     setEditorValue(markdownContent);
     processor.process(markdownContent, (error, vfile) => {
@@ -74,6 +87,7 @@ const PlainMarkdownEditor = (props) => {
     });
   }, []);
 
+  // 更新编辑器属性（界面初始化后，用全局变量更新具体的文档信息-获取文档信息，用户权限，文档下载链接等 API 操作，然后更新到当前状态）
   const updateOptions = useCallback(async ({ fileName, filePath, repoID }) => {
     const { markdownContent, hasPermission, fileInfo } = await getPlainOptions({ fileName, filePath, repoID });
     setContent(markdownContent);
@@ -88,11 +102,13 @@ const PlainMarkdownEditor = (props) => {
   }, [options, setContent]);
 
   // 注意：useLayoutEffect 在浏览器绘制 DOM 之后执行，而 useEffect 在浏览器绘制 DOM 之前执行。
+  // 这里确定首先加载编辑器基本骨架，然后网络请求获取内容，避免全部白屏Loading情况
   useLayoutEffect(() => {
     updateOptions({ fileName, filePath, repoID });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 离开页面前，询问是否保存
   const onUnload = useCallback((event) => {
     const { contentChanged } = options;
     if (!contentChanged) return;
@@ -102,6 +118,7 @@ const PlainMarkdownEditor = (props) => {
     return confirmationMessage;
   }, [options]);
 
+  // 离开页面前，询问是否保存
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
     return () => {
@@ -109,11 +126,13 @@ const PlainMarkdownEditor = (props) => {
     };
   }, [onUnload]);
 
+  // 在代码编辑器中，更新编辑器内容，这里是回调函数
   const updateCode = useCallback((newCode) => {
     setContent(String(newCode));
     !options.onContentChanged && setOptions({ ...options, contentChanged: true });
   }, [options, setContent]);
 
+  // 鼠标事件，滚动事件处理
   const onEnterLeftPanel = useCallback(() => {
     setIsMouseInLeftSide(true);
     setIsMouseInRightSide(false);
@@ -149,17 +168,21 @@ const PlainMarkdownEditor = (props) => {
     leftPanelElm.scrollTop = scrollPercentage * leftPanelElm.scrollHeight;
   }, [isMouseInRightSide, scrollPercentage]);
 
+  // 更新文件信息
   const updateFileInfoMtime = useCallback((fileInfo) => {
     const { fileInfo: oldFileInfo } = options;
     const newFileInfo = Object.assign({}, oldFileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name });
     return newFileInfo;
   }, [options]);
 
+  // 保存编辑器内容
   const onSaveEditorContent = useCallback(() => {
     setSaving(true);
     let fileInfo = options.fileInfo;
 
+    // 先保存内容
     editorApi.saveContent(editorValue).then(() => {
+      // 重新获取文件信息（例如上次保存事件）
       editorApi.getFileInfo().then((res) => {
         fileInfo = updateFileInfoMtime(res.data);
         setOptions({
@@ -178,6 +201,7 @@ const PlainMarkdownEditor = (props) => {
     });
   }, [editorValue, options, setOptions, updateFileInfoMtime]);
 
+  // 快捷键
   const onHotKey = useCallback((event) => {
     if (isHotkey('mod+s', event)) {
       event.preventDefault();
@@ -186,6 +210,7 @@ const PlainMarkdownEditor = (props) => {
     }
   }, [editorValue, onSaveEditorContent]);
 
+  // 切换收藏
   const toggleStar = useCallback(() => {
     const starred = options.fileInfo.starred;
     const newFileInfo = Object.assign({}, options.fileInfo, { starred: !starred });
@@ -201,17 +226,20 @@ const PlainMarkdownEditor = (props) => {
     });
   }, [options]);
 
+  // 切换到纯文本编辑器
   const setEditorMode = useCallback(() => {
     const { origin, pathname } = window.location;
     window.location.href = origin + pathname;
   }, []);
 
+  // 空回调函数
   const ignoreCallBack = useCallback(() => void 0, []);
 
   if (options.loading) return <CodeMirrorLoading />;
 
   return (
     <>
+      {/* 普通文本和富文本，公共的工具栏，包括保存，星标，历史入口，分享，锁定等功能 */}
       <HeaderToolbar
         editorApi={editorApi}
         collabUsers={options.collabUsers}
@@ -233,6 +261,7 @@ const PlainMarkdownEditor = (props) => {
       />
       <div className='sf-plain-editor'>
         <div className="sf-plain-editor-main d-flex" onKeyDown={onHotKey}>
+          {/* 编辑器内部，左侧是编辑器，右侧是预览 */}
           <div
             className="sf-plain-editor-left-panel"
             ref={leftPanelRef}
@@ -250,6 +279,7 @@ const PlainMarkdownEditor = (props) => {
             onScroll={onRightScroll}
           >
             <div className="preview">
+              {/* 预览 previewValue */}
               <div className="rendered-markdown article" dangerouslySetInnerHTML={{ __html: previewValue }}></div>
             </div>
           </div>
