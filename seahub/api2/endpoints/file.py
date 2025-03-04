@@ -324,6 +324,9 @@ class FileView(APIView):
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
+                if str(e) == 'File type is not allowed':
+                    error_msg = _('File extension is not in the whitelist')
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
