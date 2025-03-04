@@ -259,6 +259,7 @@ class ItemDropdownMenu extends React.Component {
                     {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
                       <i className="dropdown-item-tick sf2-icon-tick"></i>
                     )}
+                    {menuItem.icon_dom || null}
                     {menuItem.value}
                   </DropdownItem>
                 );
