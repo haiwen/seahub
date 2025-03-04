@@ -46,7 +46,7 @@ from seahub.utils import render_permission_error, render_error, \
     new_merge_with_no_conflict, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
-    normalize_file_path, normalize_dir_path, get_seafevents_metrics
+    normalize_file_path, normalize_dir_path
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_admin
 from seahub.utils.file_op import check_file_lock
@@ -1181,8 +1181,8 @@ def check_metric_auth(auth_header):
 def get_metrics(request):
     if not ENABLE_METRIC:
         return Http404
-    # auth_header = request.META.get('HTTP_AUTHORIZATION')
-    # if not auth_header or not check_metric_auth(auth_header):
-    #     return HttpResponseForbidden('Invalid Authentication')
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+    if not auth_header or not check_metric_auth(auth_header):
+        return HttpResponseForbidden('Invalid Authentication')
     metrics = get_seafevents_metrics()
     return HttpResponse(metrics, content_type='text/plain')
