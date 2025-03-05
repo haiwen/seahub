@@ -50,21 +50,25 @@ class SysAdminLibHistorySettingDialog extends React.Component {
       days = this.state.expireDays;
     }
     let repoID = this.props.repoID;
-    if (Number(days) > 0) {
-      let message = gettext('Successfully set library history.');
-      systemAdminAPI.sysAdminUpdateRepoHistorySetting(repoID, parseInt(days)).then(res => {
-        toaster.success(message);
-        this.setState({ keepDays: res.data.keep_days });
-        this.props.toggleDialog();
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
+    // If it's allHistory, days is always -1, no validation is needed;
+    // If it's noHistory, days is always 0, no validation is needed;
+    // If it's autoHistory, days needs to be validated to be greater than 0."
+    if (this.state.autoHistory && Number(days) <= 0) {
       this.setState({
         errorInfo: gettext('Please enter a non-negative integer'),
       });
+      return;
     }
+
+    let message = gettext('Successfully set library history.');
+    systemAdminAPI.sysAdminUpdateRepoHistorySetting(repoID, parseInt(days)).then(res => {
+      toaster.success(message);
+      this.setState({ keepDays: res.data.keep_days });
+      this.props.toggleDialog();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   handleKeyDown = (e) => {
