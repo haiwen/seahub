@@ -39,6 +39,8 @@ class ItemDropdownMenu extends React.Component {
       isSubMenuShown: false,
       currentItem: ''
     };
+    this.dropdownRef = React.createRef();
+    this.subMenuDirection = 'right';
   }
 
   componentDidMount() {
@@ -48,6 +50,11 @@ class ItemDropdownMenu extends React.Component {
     let { item } = this.props;
     let menuList = this.props.getMenuList(item);
     this.setState({ menuList: menuList });
+    setTimeout(() => {
+      if (this.dropdownRef.current) {
+        this.subMenuDirection = (window.innerWidth - this.dropdownRef.current.getBoundingClientRect().right < 400) ? 'left' : 'right';
+      }
+    }, 1);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) { // for toolbar item operation
@@ -161,7 +168,6 @@ class ItemDropdownMenu extends React.Component {
             aria-label={gettext('More operations')}
             aria-expanded={this.state.isItemMenuShow}
             onKeyDown={this.onDropdownToggleKeyDown}
-            // onClick={this.onDropdownToggleClick}
           >
             {toggleChildren}
           </DropdownToggle>
@@ -171,7 +177,14 @@ class ItemDropdownMenu extends React.Component {
                 return <DropdownItem key={index} divider />;
               } else {
                 return (
-                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
+                  <DropdownItem
+                    key={index}
+                    data-toggle={menuItem.key}
+                    onClick={this.onMenuItemClick}
+                    onKeyDown={this.onMenuItemKeyDown}
+                  >
+                    {menuItem.value}
+                  </DropdownItem>
                 );
               }
             })}
@@ -192,7 +205,7 @@ class ItemDropdownMenu extends React.Component {
           aria-expanded={this.state.isItemMenuShow}
           aria-label={gettext('More operations')}
           onKeyDown={this.onDropdownToggleKeyDown}
-          // onClick={this.onDropdownToggleClick}
+          innerRef={this.dropdownRef}
         />
         <ModalPortal>
           <DropdownMenu
@@ -208,7 +221,7 @@ class ItemDropdownMenu extends React.Component {
                 return (
                   <Dropdown
                     key={index}
-                    direction="right"
+                    direction={this.subMenuDirection}
                     className="w-100"
                     isOpen={this.state.isSubMenuShown && this.state.currentItem == menuItem.key}
                     toggle={this.toggleSubMenu}
