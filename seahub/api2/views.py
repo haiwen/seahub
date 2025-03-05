@@ -1840,7 +1840,7 @@ class RepoOwner(APIView):
         if '@seafile_group' in new_owner:
             group_id = get_group_id_by_repo_owner(new_owner)
             if not is_group_admin(group_id, username):
-                error_msg = 'Permission denied.'
+                error_msg = _('Permission error: you are not the admin of the department')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
             if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
