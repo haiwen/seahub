@@ -1137,7 +1137,7 @@ else:
     load_local_settings(seahub_settings)
     del seahub_settings
 
-# Ignore logs of component in INFO level, and set it to ERROR level
+# Add default handler when used custom LOGGING
 if 'default' not in LOGGING['handlers']:
     LOGGING['handlers']['default'] = {
         'level': 'INFO',
@@ -1147,6 +1147,7 @@ if 'default' not in LOGGING['handlers']:
         'backupCount': 5,
         'formatter': 'standard',
     }
+# Ignore logs of component in INFO level, and set it to ERROR level
 for module in LOGGING_IGNORE_MODULES:
     if module not in LOGGING['loggers']:
         LOGGING['loggers'][module] = {
