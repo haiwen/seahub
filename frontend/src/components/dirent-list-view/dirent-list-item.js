@@ -865,7 +865,13 @@ class DirentListItem extends React.Component {
             <td className="pl-2 pr-2">
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img ref={ref => this.dragIconRef = ref} src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                  <img
+                    ref={ref => this.dragIconRef = ref}
+                    src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
+                    className="thumbnail cursor-pointer"
+                    onClick={this.onItemClick}
+                    alt=""
+                  /> :
                   <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' />
                 }
                 {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}

@@ -16,7 +16,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
     if (people._name === '_Unknown_people') {
       return photoURL;
     }
-    return `${photoURL}?t=${people.file_mtime}`;
+    return `${photoURL}?mtime=${people.file_mtime}`;
   }, [people]);
 
   const onImgLoadError = useCallback(() => {

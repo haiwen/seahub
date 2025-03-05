@@ -62,6 +62,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW)
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException
@@ -1447,10 +1448,13 @@ def view_shared_file(request, fileshare):
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename)
 
+    file_obj = seafile_api.get_dirent_by_path(repo_id, path)
+
     data = {'repo': repo,
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
+            'last_modified': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
             'file_size': file_size,
             'shared_token': token,
             'access_token': access_token,
@@ -1705,18 +1709,20 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
 
-    #template = 'shared_file_view.html'
     template = 'shared_file_view_react.html'
 
     file_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename)
 
+    file_obj = seafile_api.get_dirent_by_path(repo_id, path)
+
     data = {'repo': repo,
             'obj_id': obj_id,
             'from_shared_dir': True,
             'path': req_path,
             'file_name': filename,
+            'last_modified': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
             'file_size': file_size,
             'shared_token': token,
             'access_token': access_token,

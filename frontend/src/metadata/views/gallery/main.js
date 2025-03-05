@@ -7,7 +7,7 @@ import Content from './content';
 import GalleryContextmenu from './context-menu';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
-import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import { getDateDisplayString, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
 import { getRowById } from '../../../components/sf-table/utils/table';
@@ -47,6 +47,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
+        const mtime = getFileMTimeFromRecord(record);
         let size = thumbnailDefaultSize;
         if (mode === GALLERY_DATE_MODE.YEAR) {
           size = thumbnailSizeForOriginal;
@@ -64,7 +65,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
           parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
           src: `${siteRoot}thumbnail/${repoID}/${size}${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           year,
           month,

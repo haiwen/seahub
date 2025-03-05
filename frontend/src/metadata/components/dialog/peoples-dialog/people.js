@@ -9,7 +9,7 @@ const People = ({ people, isCancellable, onDelete }) => {
 
   const similarPhotoURL = useMemo(() => {
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg`;
+    return `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}/_Internal/Faces/${people._id}.jpg?mtime=${people.file_mtime}`;
   }, [people]);
 
   const onImgLoadError = useCallback(() => {

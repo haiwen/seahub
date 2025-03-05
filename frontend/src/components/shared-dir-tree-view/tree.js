@@ -65,7 +65,7 @@ class Tree {
   }
 
   updateNode(node, keys, newValues) {
-    node.updateObjectParam(keys, newValues);
+    node.updateObjectProperties(keys, newValues);
   }
 
   moveNode(node, destNode) {

@@ -85,6 +85,7 @@ const propTypes = {
   updateCurrentDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
   toggleShowDirentToolbar: PropTypes.func,
+  updateTreeNode: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -183,6 +184,7 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}
+              updateTreeNode={this.props.updateTreeNode}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}
@@ -272,6 +274,7 @@ class DirColumnView extends React.Component {
               showDirentDetail={this.props.showDirentDetail}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
+              updateTreeNode={this.props.updateTreeNode}
             />
           )}
           {currentMode === GRID_MODE && (
@@ -309,6 +312,7 @@ class DirColumnView extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
+              updateTreeNode={this.props.updateTreeNode}
             />
           )}
         </div>

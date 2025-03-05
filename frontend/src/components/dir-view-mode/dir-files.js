@@ -245,7 +245,7 @@ class DirFiles extends React.Component {
     const repoEncrypted = this.props.currentRepoInfo.encrypted;
     const repoID = this.props.repoID;
     let prepareItem = (item) => {
-      const name = item.object.name;
+      const { name, mtime, id } = item.object;
       const path = Utils.encodePath(Utils.joinPath(node.parentNode.path, name));
       const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
       const isGIF = fileExt === 'gif';
@@ -254,10 +254,10 @@ class DirFiles extends React.Component {
       if (repoEncrypted || isGIF) {
         thumbnail = src;
       } else {
-        thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+        thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
       }
       return {
-        id: item.object.id,
+        id,
         name,
         parentDir: node.parentNode.path,
         src,
@@ -330,12 +330,13 @@ class DirFiles extends React.Component {
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageNodeItems];
-            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
             return { imageNodeItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter
           const item = this.props.direntList.find((item) => item.name === imageName);
-          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+          this.props.updateDirent(item, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
+          this.props.updateTreeNode(path, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
         }).catch(error => {
           this.handleError(error);
         });

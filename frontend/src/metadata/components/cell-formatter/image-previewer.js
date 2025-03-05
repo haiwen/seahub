@@ -6,7 +6,7 @@ import imageAPI from '../../../utils/image-api';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 
 const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords, canDelete }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -17,6 +17,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
       .filter((row) => Utils.imageCheck(getFileNameFromRecord(row)))
       .map((row) => {
         const id = getRecordIdFromRecord(row);
+        const mtime = getFileMTimeFromRecord(row);
         const fileName = getFileNameFromRecord(row);
         const parentDir = getParentDirFromRecord(row);
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
@@ -29,7 +30,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
           id,
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`,
           src: src,
           parentDir,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
@@ -67,8 +68,13 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
             if (res.data?.encoded_thumbnail_src) {
               const cacheBuster = new Date().getTime();
               const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
-              imageItems[imageIndex].src = newThumbnailSrc;
+              imageItems[imageIndex].thumbnail = newThumbnailSrc;
               setImageItems(imageItems);
+              table.rows.forEach(row => {
+                if (row.id === imageItem.id) {
+                  row._mtime = new Date().toISOString();
+                }
+              });
             }
           }).catch(error => {
             toaster.danger(Utils.getErrorMsg(error));

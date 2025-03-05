@@ -183,7 +183,7 @@ class DirentListView extends React.Component {
   // for image popup
   prepareImageItem = (item) => {
     const { path: parentDir, repoID, currentRepoInfo } = this.props;
-    const name = item.name;
+    const { name, mtime, id } = item;
     const repoEncrypted = currentRepoInfo.encrypted;
     const path = Utils.encodePath(Utils.joinPath(parentDir, name));
     const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
@@ -193,19 +193,19 @@ class DirentListView extends React.Component {
     if (repoEncrypted || isGIF) {
       thumbnail = `${siteRoot}repo/${repoID}/raw${path}`;
     } else {
-      thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
     }
 
     let src = '';
     const isTIFF = fileExt == 'tiff';
     if (isTIFF) {
-      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
     } else {
       src = `${siteRoot}repo/${repoID}/raw${path}`;
     }
 
     return {
-      id: item.id,
+      id,
       name,
       thumbnail,
       src,
@@ -276,12 +276,13 @@ class DirentListView extends React.Component {
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
-            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
             return { imageItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter
           const item = this.props.direntList.find((item) => item.name === imageName);
-          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+          this.props.updateDirent(item, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
+          this.props.updateTreeNode(path, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
         }).catch(error => {
           this.handleError(error);
         });

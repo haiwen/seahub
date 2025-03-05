@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import FileNameFormatter from './file-name-formatter';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
-import { getParentDirFromRecord } from '../../utils/cell';
+import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
 
 const FileName = ({ record, className: propsClassName, value, onFileNameClick, ...params }) => {
@@ -24,11 +24,11 @@ const FileName = ({ record, className: propsClassName, value, onFileNameClick, .
     if (Utils.imageCheck(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
       const repoID = window.sfMetadataStore.repoId;
-      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}`;
+      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [isDir, value, parentDir]);
+  }, [isDir, value, parentDir, record]);
 
   return (<FileNameFormatter { ...params } className={className} value={value} onClickName={onFileNameClick} { ...iconUrl } />);
 

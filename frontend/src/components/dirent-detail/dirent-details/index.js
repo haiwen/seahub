@@ -30,8 +30,7 @@ class DirentDetails extends React.Component {
       this.setState({ dirent: null, direntDetail: '' });
       return;
     }
-    const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
-    seafileAPI[apiName](repoID, direntPath).then(res => {
+    seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, direntPath).then(res => {
       this.setState(({
         direntDetail: res.data,
         dirent,
@@ -93,7 +92,7 @@ class DirentDetails extends React.Component {
     if (currentRepoInfo.encrypted) {
       src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     } else {
-      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`) + '?mtime=' + this.state.direntDetail.mtime;
     }
     return (
       <div className="detail-image">

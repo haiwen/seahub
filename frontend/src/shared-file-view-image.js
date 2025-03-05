@@ -7,7 +7,7 @@ import { gettext, siteRoot } from './utils/constants';
 
 import './css/image-file-view.css';
 
-const { fileName, rawPath, err, prevImgPath, nextImgPath, repoEncrypted, fileExt, filePath, sharedToken } = window.shared.pageOptions;
+const { fileName, rawPath, err, prevImgPath, nextImgPath, repoEncrypted, fileExt, filePath, sharedToken, lastModified } = window.shared.pageOptions;
 const { thumbnailSizeForOriginal } = window.app.pageOptions;
 
 const prevImgURL = `?p=${encodeURIComponent(prevImgPath)}`;
@@ -41,7 +41,7 @@ class FileContent extends React.Component {
     let thumbnailURL = '';
     const fileExtList = ['tif', 'tiff', 'psd', 'heic'];
     if (!repoEncrypted && fileExtList.includes(fileExt)) {
-      thumbnailURL = `${siteRoot}thumbnail/${sharedToken}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}`;
+      thumbnailURL = `${siteRoot}thumbnail/${sharedToken}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModified}`;
     }
 
     return (

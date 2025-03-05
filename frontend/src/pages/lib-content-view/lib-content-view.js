@@ -1779,11 +1779,26 @@ class LibContentView extends React.Component {
   updateDirent = (dirent, paramKey, paramValue) => {
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
-        item[paramKey] = paramValue;
+        if (typeof paramKey === 'string') {
+          item[paramKey] = paramValue;
+        } else if (Array.isArray(paramKey)) {
+          paramKey.forEach((key, index) => {
+            item[key] = paramValue[index];
+          });
+        }
       }
       return item;
     });
     this.setState({ direntList: newDirentList });
+  };
+
+  updateTreeNode = (path, keys, values) => {
+    let tree = this.state.treeData.clone();
+    let node = tree.getNodeByPath(path);
+    tree.updateNode(node, keys, values);
+    this.setState({
+      treeData: tree,
+    });
   };
 
   // tree operations
@@ -2420,6 +2435,7 @@ class LibContentView extends React.Component {
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
                         toggleShowDirentToolbar={this.toggleShowDirentToolbar}
+                        updateTreeNode={this.updateTreeNode}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>
