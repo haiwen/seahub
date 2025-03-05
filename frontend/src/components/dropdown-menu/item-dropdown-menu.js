@@ -47,9 +47,9 @@ class ItemDropdownMenu extends React.Component {
     if (this.props.isHandleContextMenuEvent) {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
-    let { item } = this.props;
-    let menuList = this.props.getMenuList(item);
-    this.setState({ menuList: menuList });
+    this.setState({
+      menuList: this.removeUselessDivider(this.props.getMenuList(this.props.item))
+    });
     setTimeout(() => {
       if (this.dropdownRef.current) {
         this.subMenuDirection = (window.innerWidth - this.dropdownRef.current.getBoundingClientRect().right < 400) ? 'left' : 'right';
@@ -58,9 +58,8 @@ class ItemDropdownMenu extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) { // for toolbar item operation
-    let { item } = nextProps;
-    const nextMenuList = nextProps.getMenuList(item);
-    if (item.name !== this.props.item.name || this.state.menuList !== nextMenuList) {
+    const nextMenuList = this.removeUselessDivider(nextProps.getMenuList(nextProps.item));
+    if (nextProps.item.name !== this.props.item.name || this.state.menuList !== nextMenuList) {
       this.setState({ menuList: nextMenuList });
     }
   }
@@ -70,6 +69,13 @@ class ItemDropdownMenu extends React.Component {
       listener.unregister(this.listenerId);
     }
   }
+
+  removeUselessDivider = (menuList) => {
+    while (menuList && menuList[0] === 'Divider') {
+      menuList.shift();
+    }
+    return menuList;
+  };
 
   onShowMenu = () => {
     // nothing todo
