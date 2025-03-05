@@ -65,7 +65,7 @@ class OTPMiddleware(MiddlewareMixin):
 class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
     def filter_request(self, request):
         path = request.path
-        black_list = (r'^%s$' % SITE_ROOT, r'sys/.+', r'repo/.+', r'lib/', )
+        black_list = (r'^%s$' % SITE_ROOT, r'sys/.+', r'repo/.+', r'lib/', r'profile/$')
 
         for patt in black_list:
             if re.search(patt, path) is not None:
