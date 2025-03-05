@@ -14,6 +14,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
+import LogFilter from '../../dashboard/log-filter';
 
 dayjs.extend(relativeTime);
 
@@ -138,6 +139,8 @@ class LoginLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
+      availableUsers: [],
+      selectedUsers: [],
     };
     this.initPage = 1;
   }
@@ -153,13 +156,28 @@ class LoginLogs extends Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
+      this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
     });
   }
 
+  getAvailableUsers = () => {
+    systemAdminAPI.sysAdminListUsers().then((res) => {
+      this.setState({
+        availableUsers: res.data.data
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
   getLogsByPage = (page) => {
-    let { perPage } = this.state;
-    systemAdminAPI.sysAdminListLoginLogs(page, perPage).then((res) => {
+    let { perPage, selectedUsers } = this.state;
+    let emails = selectedUsers.map(user => user.email);
+
+    systemAdminAPI.sysAdminListLoginLogs(page, perPage, emails).then((res) => {
       this.setState({
         logList: res.data.login_log_list,
         loading: false,
@@ -180,8 +198,33 @@ class LoginLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
+  handleUserFilter = (user, shouldFetchData = true) => {
+    const { selectedUsers } = this.state;
+    let newSelectedUsers;
+    
+    if (user === null) {
+      newSelectedUsers = selectedUsers;
+    } else {
+      const isSelected = selectedUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -191,16 +234,24 @@ class LoginLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="loginLogs" />
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
+              <Fragment>
+                <LogFilter
+                  label={gettext('User')}
+                  items={availableUsers}
+                  selectedItems={selectedUsers}
+                  onSelect={this.handleUserFilter}
+                />
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
+                />
+              </Fragment>
             </div>
           </div>
         </div>

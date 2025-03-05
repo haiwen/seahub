@@ -680,12 +680,15 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
-  sysAdminListLoginLogs(page, perPage) {
+  sysAdminListLoginLogs(page, perPage, emails) {
     const url = this.server + '/api/v2.1/admin/logs/login-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
     return this.req.get(url, { params: params });
   }
 

@@ -578,7 +578,6 @@ class AdminUsers(APIView):
 
             info['quota_usage'] = user.quota_usage
             info['quota_total'] = seafile_api.get_user_quota(user.email)
-
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
             if last_login_obj:
                 info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
@@ -721,9 +720,11 @@ class AdminUsers(APIView):
                 social_auth_user_dict[item.username] = [item]
 
         for user in users:
+            url, _, _ = api_avatar_url(user.email)
             profile = Profile.objects.get_profile_by_user(user.email)
 
             info = {}
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)

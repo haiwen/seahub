@@ -48,13 +48,18 @@ class AdminLogsLoginLogs(APIView):
         except ValueError:
             current_page = 1
             per_page = 100
-
+        emails = request.GET.get('emails', None)
         start = (current_page - 1) * per_page
         end = start + per_page
 
         from seahub.sysadmin_extra.models import UserLoginLog
-        logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
-        count = UserLoginLog.objects.all().count()
+        if emails:
+            emails = emails.split(',')
+            logs = UserLoginLog.objects.filter(username__in=emails).order_by('-login_date')[start:end]
+            count = UserLoginLog.objects.filter(username__in=emails).count()
+        else:
+            logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
+            count = UserLoginLog.objects.all().count()
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
