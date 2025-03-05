@@ -54,7 +54,7 @@ class ItemDropdownMenu extends React.Component {
       if (this.dropdownRef.current) {
         this.subMenuDirection = (window.innerWidth - this.dropdownRef.current.getBoundingClientRect().right < 400) ? 'left' : 'right';
       }
-    }, 1); 
+    }, 1);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) { // for toolbar item operation
