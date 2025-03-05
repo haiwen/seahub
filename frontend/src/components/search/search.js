@@ -280,6 +280,7 @@ class Search extends Component {
           }
           this.onItemClickHandler(item);
         }
+        return;
       }
     }
     if (!this.state.isResultGotten) {
