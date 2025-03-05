@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import CenteredLoading from '../../../../components/centered-loading';
+import toaster from '../../../../components/toast';
+import Gallery from '../../gallery/main';
 import metadataAPI from '../../../api';
 import Metadata from '../../../model/metadata';
 import { normalizeColumns } from '../../../utils/column';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
-import toaster from '../../../../components/toast';
-import Gallery from '../../gallery/main';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PER_LOAD_NUMBER, EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, UTC_FORMAT_DEFAULT } from '../../../constants';
 import { getRecordIdFromRecord, getParentDirFromRecord, getFileNameFromRecord } from '../../../utils/cell';
@@ -128,8 +128,8 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, deletedByIds, onRemovePeoplePhotos]);
 
-  const handelAdd = useCallback((peopleId, addedImages, { success_callback, fail_callback }) => {
-    if (!addedImages.length) return;
+  const handelAdd = useCallback((peopleIds, addedImages, { success_callback, fail_callback }) => {
+    if (!addedImages.length || !peopleIds.length) return;
     let recordIds = [];
     addedImages.forEach((record) => {
       const { id, parentDir, name } = record || {};
@@ -137,7 +137,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         recordIds.push(id);
       }
     });
-    onAddPeoplePhotos(peopleId, people._id, recordIds, {
+    onAddPeoplePhotos(peopleIds, people._id, recordIds, {
       success_callback: () => {
         deletedByIds(recordIds, false);
         success_callback && success_callback();
@@ -148,9 +148,14 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, onAddPeoplePhotos, deletedByIds]);
 
-  const handleSetPeoplePhoto = useCallback((selectedImage) => {
+  const handleSetPeoplePhoto = useCallback((selectedImage, { success_callback }) => {
     const { id } = selectedImage;
-    onSetPeoplePhoto(people._id, id);
+    onSetPeoplePhoto(people._id, id, {
+      success_callback: () => {
+        toaster.success(gettext('Cover photo set'));
+        success_callback && success_callback();
+      }
+    });
   }, [people, onSetPeoplePhoto]);
 
   const loadData = useCallback((view) => {

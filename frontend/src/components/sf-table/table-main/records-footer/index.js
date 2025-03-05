@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loading } from '@seafile/sf-metadata-ui-component';
+import Loading from '../../../loading';
 import toaster from '../../../toast';
 import LoadAllTip from '../load-all-tip';
 import { RecordMetrics } from '../../utils/record-metrics';
@@ -8,7 +8,7 @@ import { TreeMetrics } from '../../utils/tree-metrics';
 import { gettext } from '../../../../utils/constants';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GRID_FOOTER as Z_INDEX_GRID_FOOTER } from '../../constants/z-index';
-import { addClassName, removeClassName } from '../../utils';
+import { addClassName, removeClassName } from '../../../../utils/dom';
 import { getRecordsFromSelectedRange } from '../../utils/selected-cell-utils';
 
 import './index.css';
@@ -151,7 +151,7 @@ class RecordsFooter extends React.Component {
           {isLoadingMoreRecords &&
             <span className="loading-message ml-4">
               <span className="mr-2">{gettext('Loading')}</span>
-              <Loading />
+              <Loading className="sf-metadata-loading-tip center" />
             </span>
           }
         </div>

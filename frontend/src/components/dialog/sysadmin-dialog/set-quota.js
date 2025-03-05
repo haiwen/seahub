@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
@@ -59,9 +59,7 @@ class SetQuotaDialog extends React.Component {
                   onKeyDown={this.handleKeyDown}
                   onChange={this.handleQuotaChange}
                 />
-                <InputGroupAddon addonType="append">
-                  <InputGroupText>MB</InputGroupText>
-                </InputGroupAddon>
+                <InputGroupText>MB</InputGroupText>
               </InputGroup>
               <p className="small text-secondary mt-2 mb-2">
                 {gettext('An integer that is greater than or equal to 0.')}

@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
-import ObjectUtils from '../../../utils/object-utils';
+import ObjectUtils from '../../../../utils/object';
 import { getDefaultFileStatusOptions } from '../../../utils/column';
 import { ValidateColumnFormFields } from './utils';
 import { COMMON_FORM_FIELD_TYPE } from './constants';
@@ -98,7 +98,7 @@ const ColumnPopover = ({ target, onChange }) => {
       <div className="sf-metadata-column-popover-inner" ref={popoverInnerRef} style={{ width: popoverInnerWidth }}>
         <div>
           <Name ref={nameRef} readOnly={column?.unique} value={column?.unique ? column.name : ''} />
-          <Type ref={typeRef} column={column} onChange={onColumnChange} parentWidth={popoverInnerWidth} />
+          <Type ref={typeRef} column={column} onChange={onColumnChange} />
           <Data ref={dataRef} column={column} />
         </div>
         <div className={classnames('sf-metadata-column-popover-footer', { 'sf-metadata-number-column-popover-footer': column.type === CellType.NUMBER })}>

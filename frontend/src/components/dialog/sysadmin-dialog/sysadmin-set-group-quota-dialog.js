@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalBody, ModalFooter, Input, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Input, InputGroup, InputGroupText } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
@@ -66,7 +66,7 @@ class SetGroupQuotaDialog extends React.Component {
               onChange={this.handleChange}
               autoFocus={true}
             />
-            <InputGroupAddon addonType="append">{'MB'}</InputGroupAddon>
+            <InputGroupText>{'MB'}</InputGroupText>
           </InputGroup>
           <p className="tip">
             <br/><span>{gettext('An integer that is greater than 0 or equal to -2.')}</span><br/>

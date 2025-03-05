@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../click-outside';
 import Editor from './editor';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
 import { Utils } from '../../../../utils/utils';
-import { getEventClassName } from '../../utils';
+import { getEventClassName } from '../../../../utils/dom';
 import { checkCellValueChanged } from '../../utils/cell-comparer';
 import { getCellValueByColumn } from '../../utils/cell';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';

@@ -1,0 +1,61 @@
+.sf-metadata-ui.long-text-formatter {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* links */
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-links,
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-check-list {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #666;
+  height: 20px;
+  line-height: 20px;
+  margin: 0 4px;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-links .seafile-multicolor-icon,
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-check-list .seafile-multicolor-icon {
+  font-size: 12px;
+  margin-right: 4px;
+  fill: #666;
+  vertical-align: -0.1rem;
+}
+
+/* check list */
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-check-list.completed .seafile-multicolor-icon {
+  fill: #61bd4f;
+}
+
+/* images */
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-images {
+  margin-right: -10px;
+}
+
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-images img {
+  border: 1px solid #f0f0f0;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-top: -3px;
+  max-height: 28px;
+  max-width: 28px;
+}
+
+.sf-metadata-ui.long-text-formatter .sf-metadata-long-text-images .sf-metadata-image-number {
+  background-color: #999;
+  border-radius: 6px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 14px;
+  min-width: 14px;
+  padding: 0 3px;
+  transform: translate(-50%, 6px) scale(.8);
+}

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Input, InputGroup } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import ButtonQR from './btn-qr-code';
 
@@ -20,9 +20,7 @@ class SharedLink extends React.Component {
         <div className="d-flex">
           <InputGroup>
             <Input type="text" readOnly={true} value={link} />
-            <InputGroupAddon addonType="append">
-              <Button color="primary" onClick={copyLink} className="border-0">{gettext('Copy')}</Button>
-            </InputGroupAddon>
+            <Button color="primary" onClick={copyLink} className="border-0">{gettext('Copy')}</Button>
           </InputGroup>
           <ButtonQR link={link} />
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../click-outside';
 import Editor from './editor';
 import { Utils } from '../../../../utils/utils';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
@@ -124,7 +124,7 @@ class PopupEditorContainer extends React.Component {
   // The input area in the interface loses focus. Use this.getEditor().getValue() to get data.
   commit = (closeEditor) => {
     const { record } = this.props;
-    if (!record._id) return;
+    if (!record || !record._id) return;
     const updated = (this.getEditor() && this.getEditor().getValue()) || {};
     this.commitData(updated, closeEditor);
   };

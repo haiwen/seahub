@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { Row, Col, Label, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Row, Col, Label, Button, Input, InputGroup } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import MainPanelTopbar from './main-panel-topbar';
 import toaster from '../../components/toast';
@@ -114,9 +114,7 @@ class OrgSAMLConfig extends Component {
                         <Col md="5">
                           <InputGroup>
                             <Input type="text" readOnly={true} value={entityID} />
-                            <InputGroupAddon addonType="append">
-                              <Button color="primary" onClick={this.onCopyValue.bind(this, entityID)} className="border-0">{gettext('Copy')}</Button>
-                            </InputGroupAddon>
+                            <Button color="primary" onClick={this.onCopyValue.bind(this, entityID)} className="border-0">{gettext('Copy')}</Button>
                           </InputGroup>
                         </Col>
                       </Row>
@@ -128,9 +126,7 @@ class OrgSAMLConfig extends Component {
                         <Col md="5">
                           <InputGroup>
                             <Input type="text" readOnly={true} value={acsURL} />
-                            <InputGroupAddon addonType="append">
-                              <Button color="primary" onClick={this.onCopyValue.bind(this, acsURL)} className="border-0">{gettext('Copy')}</Button>
-                            </InputGroupAddon>
+                            <Button color="primary" onClick={this.onCopyValue.bind(this, acsURL)} className="border-0">{gettext('Copy')}</Button>
                           </InputGroup>
                         </Col>
                       </Row>
@@ -142,9 +138,7 @@ class OrgSAMLConfig extends Component {
                         <Col md="5">
                           <InputGroup>
                             <Input type="text" readOnly={true} value={serviceURL} />
-                            <InputGroupAddon addonType="append">
-                              <Button color="primary" onClick={this.onCopyValue.bind(this, serviceURL)} className="border-0">{gettext('Copy')}</Button>
-                            </InputGroupAddon>
+                            <Button color="primary" onClick={this.onCopyValue.bind(this, serviceURL)} className="border-0">{gettext('Copy')}</Button>
                           </InputGroup>
                         </Col>
                       </Row>
@@ -156,9 +150,7 @@ class OrgSAMLConfig extends Component {
                         <Col md="5">
                           <InputGroup>
                             <Input type="text" readOnly={true} value={logoutURL} />
-                            <InputGroupAddon addonType="append">
-                              <Button color="primary" onClick={this.onCopyValue.bind(this, logoutURL)} className="border-0">{gettext('Copy')}</Button>
-                            </InputGroupAddon>
+                            <Button color="primary" onClick={this.onCopyValue.bind(this, logoutURL)} className="border-0">{gettext('Copy')}</Button>
                           </InputGroup>
                         </Col>
                       </Row>
@@ -204,9 +196,7 @@ class OrgSAMLConfig extends Component {
                           <InputGroup>
                             <Input type="text" readOnly={true} value={dnsTxt}/>
                             {(dnsTxt && !domainVerified) &&
-                              <InputGroupAddon addonType="append">
-                                <Button color="primary" onClick={this.onCopyValue.bind(this, dnsTxt)} className="border-0">{gettext('Copy')}</Button>
-                              </InputGroupAddon>
+                            <Button color="primary" onClick={this.onCopyValue.bind(this, dnsTxt)} className="border-0">{gettext('Copy')}</Button>
                             }
                           </InputGroup>
                           {(dnsTxt && !domainVerified) &&

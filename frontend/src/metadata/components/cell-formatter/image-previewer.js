@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import toaster from '../../../components/toast';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import imageAPI from '../../../utils/image-api';
@@ -9,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 
-const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) => {
+const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords, canDelete }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
 
@@ -81,17 +80,32 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup }) =>
     }
   };
 
+  const deleteImage = () => {
+    const image = imageItems[imageIndex];
+    deleteRecords([image.id]);
+
+    const newImageItems = imageItems.filter(item => item.id !== image.id);
+    if (newImageItems.length === 0) {
+      setImageIndex(0);
+      closeImagePopup();
+    } else {
+      const newIndex = imageIndex >= newImageItems.length ? 0 : imageIndex;
+      setImageIndex(newIndex);
+    }
+  };
+
   return (
-    <ModalPortal>
-      <ImageDialog
-        imageItems={imageItems}
-        imageIndex={imageIndex}
-        closeImagePopup={closeImagePopup}
-        moveToPrevImage={moveToPrevImage}
-        moveToNextImage={moveToNextImage}
-        onRotateImage={rotateImage}
-      />
-    </ModalPortal>
+    <ImageDialog
+      repoID={repoID}
+      repoInfo={repoInfo}
+      imageItems={imageItems}
+      imageIndex={imageIndex}
+      closeImagePopup={closeImagePopup}
+      moveToPrevImage={moveToPrevImage}
+      moveToNextImage={moveToNextImage}
+      onRotateImage={rotateImage}
+      onDeleteImage={canDelete ? deleteImage : null}
+    />
   );
 };
 
@@ -101,6 +115,8 @@ ImagePreviewer.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   closeImagePopup: PropTypes.func,
+  deleteRecords: PropTypes.func,
+  canDelete: PropTypes.bool,
 };
 
 export default ImagePreviewer;

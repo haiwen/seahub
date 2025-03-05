@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Button, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { TAG_COLORS } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -77,7 +77,7 @@ class CreateTagDialog extends React.Component {
         <ModalBody>
           <div role="form" className="tag-create">
             <div className="form-group">
-              <label className="form-label">{gettext('Name')}</label>
+              <Label>{gettext('Name')}</Label>
               <Input
                 name="tag-name"
                 onKeyDown={this.handleKeyDown}
@@ -88,7 +88,7 @@ class CreateTagDialog extends React.Component {
               <div className="mt-2"><span className="error">{this.state.errorMsg}</span></div>
             </div>
             <div className="form-group">
-              <label className="form-label">{gettext('Select a color')}</label>
+              <Label>{gettext('Select a color')}</Label>
               <div className="d-flex justify-content-between">
                 {TAG_COLORS.map((item, index) => {
                   return (

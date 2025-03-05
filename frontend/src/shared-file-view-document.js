@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { seafileAPI } from './utils/seafile-api';
 import { gettext, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
@@ -103,4 +103,5 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDom.render(<SharedFileViewDocument />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SharedFileViewDocument />);

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { shareLinkAPI } from '../../utils/share-link-api';
@@ -50,6 +50,7 @@ class LinkCreation extends React.Component {
       selectedOption: null,
       inputEmails: ''
     };
+    this.userSelect = React.createRef();
   }
 
   setExpType = (e) => {
@@ -314,14 +315,12 @@ class LinkCreation extends React.Component {
                   <span className="tip">{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', shareLinkPasswordMinLength).replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)}</span>
                   <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                    <InputGroupAddon addonType="append">
-                      <Button onClick={this.togglePasswordVisible}>
-                        <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
-                      </Button>
-                      <Button onClick={this.generatePassword}>
-                        <i className="link-operation-icon sf3-font sf3-font-magic"></i>
-                      </Button>
-                    </InputGroupAddon>
+                    <Button onClick={this.togglePasswordVisible}>
+                      <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+                    </Button>
+                    <Button onClick={this.generatePassword}>
+                      <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                    </Button>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -391,7 +390,7 @@ class LinkCreation extends React.Component {
                 </Label>
                 {this.state.currentScope === 'specific_users' &&
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}

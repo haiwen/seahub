@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
@@ -71,4 +71,5 @@ class SharedUploadLink extends React.Component {
   }
 }
 
-ReactDom.render(<SharedUploadLink />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SharedUploadLink />);

@@ -124,7 +124,7 @@ class DingtalkDepartmentsTreeNode extends Component {
               >
                 <i className="sf3-font sf3-font-more"></i>
               </DropdownToggle>
-              <DropdownMenu className="drop-list" right={true}>
+              <DropdownMenu className="drop-list">
                 <DropdownItem
                   onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}

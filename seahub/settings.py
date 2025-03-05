@@ -504,6 +504,7 @@ ENABLE_SHOW_ABOUT = True
 
 # enable show wechat support
 SHOW_WECHAT_SUPPORT_GROUP = False
+SUPPORT_EMAIL = ''
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
@@ -1080,9 +1081,11 @@ if not os.path.exists(EVENTS_CONFIG_FILE):
 
 # baidu map
 BAIDU_MAP_KEY = ''
+BAIDU_MAP_URL = ''
 
 # google map
 GOOGLE_MAP_KEY = ''
+GOOGLE_MAP_URL = ''
 GOOGLE_MAP_ID = ''
 
 

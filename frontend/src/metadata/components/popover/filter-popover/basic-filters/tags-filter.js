@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect, Icon, FileTagsFormatter } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../../components/customize-select';
+import Icon from '../../../../../components/icon';
+import FileTagsFormatter from '../../../cell-formatter/file-tags';
 import { gettext } from '../../../../../utils/constants';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
 import { getTagId, getTagName, getTagColor } from '../../../../../tag/utils/cell';
-import { getRowById } from '../../../../utils/table';
+import { getRowById } from '../../../../../components/sf-table/utils/table';
 
 const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
 
@@ -38,7 +40,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
               <div className="sf-metadata-tag-name">{tagName}</div>
             </div>
             <div className="select-basic-filter-option-check-icon">
-              {isSelected && (<Icon iconName="check-mark" />)}
+              {isSelected && (<Icon symbol="check-mark" />)}
             </div>
           </div>
         )
@@ -90,11 +92,6 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
       onSelectOption={onChange}
       searchPlaceholder={gettext('Search tag')}
       noOptionsPlaceholder={gettext('No tags')}
-      component={{
-        DropDownIcon: (
-          <i className="sf3-font sf3-font-down"></i>
-        )
-      }}
     />
   );
 

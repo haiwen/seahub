@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { seafileAPI } from './utils/seafile-api';
 import { gettext, mediaUrl } from './utils/constants';
 import FileView from './components/file-view/file-view';
@@ -106,4 +106,5 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDom.render(<ViewFileDocument />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<ViewFileDocument />);

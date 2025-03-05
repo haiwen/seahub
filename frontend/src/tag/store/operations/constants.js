@@ -7,6 +7,7 @@ export const OPERATION_TYPE = {
   RELOAD_RECORDS: 'reload_records',
   ADD_TAG_LINKS: 'add_tag_links',
   DELETE_TAG_LINKS: 'delete_tag_links',
+  DELETE_TAGS_LINKS: 'delete_tags_links',
   MERGE_TAGS: 'merge_tags',
 
   MODIFY_LOCAL_RECORDS: 'modify_local_records',
@@ -24,6 +25,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
   [OPERATION_TYPE.ADD_TAG_LINKS]: ['repo_id', 'column_key', 'row_id', 'other_rows_ids'],
   [OPERATION_TYPE.DELETE_TAG_LINKS]: ['repo_id', 'column_key', 'row_id', 'other_rows_ids'],
+  [OPERATION_TYPE.DELETE_TAGS_LINKS]: ['repo_id', 'column_key', 'id_linked_rows_ids_map'],
   [OPERATION_TYPE.MERGE_TAGS]: ['repo_id', 'target_tag_id', 'merged_tags_ids'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
   [OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS]: ['file_id', 'tags_ids'],

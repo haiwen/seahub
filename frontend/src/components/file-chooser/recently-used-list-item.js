@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Utils } from '../../utils/utils';
 
 const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
@@ -9,12 +10,12 @@ const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
   const title = Utils.getFileName(item.path) || item.repo.repo_name;
 
   const handleItemClick = () => {
-    onItemClick(item.repo, item.path);
+    onItemClick(item);
   };
 
   return (
     <li>
-      <div className={`${isSelected ? 'item-active' : ''} item-info recently-used`} onClick={handleItemClick}>
+      <div className={classNames('item-info recently-used', { 'item-active': isSelected })} onClick={handleItemClick}>
         <div className="item-left-icon">
           <i className="tree-node-icon">
             <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>

@@ -169,6 +169,7 @@ const Content = ({
                       isSelected={isSelected}
                       img={img}
                       size={size.large}
+                      useOriginalThumbnail={children.length === 1}
                       style={mode !== GALLERY_DATE_MODE.ALL && newChildren.length === 1 ? { width: '100%' } : {}}
                       { ...imgEvents }
                     />

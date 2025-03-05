@@ -12,7 +12,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
-from seahub.notifications.models import get_cache_key_of_unseen_notifications
 from seahub.notifications.utils import update_notice_detail
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.api2.utils import api_error

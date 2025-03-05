@@ -49,6 +49,14 @@ const checkIsSelectedAll = (nodeKeys, treeMetrics) => {
   return nodeKeys.every(nodeKey => checkIsTreeNodeSelected(nodeKey, treeMetrics));
 };
 
+const getDraggedTreeNodesKeys = (draggingTreeNodeKey, treeMetrics) => {
+  const selectedNodeKeys = getSelectedTreeNodesKeys(treeMetrics);
+  if (selectedNodeKeys.includes(draggingTreeNodeKey)) {
+    return selectedNodeKeys;
+  }
+  return [draggingTreeNodeKey];
+};
+
 export const TreeMetrics = {
   checkIsTreeNodeSelected,
   selectTreeNode,
@@ -59,4 +67,5 @@ export const TreeMetrics = {
   getSelectedIds,
   checkHasSelectedTreeNodes,
   checkIsSelectedAll,
+  getDraggedTreeNodesKeys,
 };

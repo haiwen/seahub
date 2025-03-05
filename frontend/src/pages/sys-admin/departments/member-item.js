@@ -119,7 +119,7 @@ class MemberItem extends React.Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               />
-              <DropdownMenu right={true}>
+              <DropdownMenu>
                 <DropdownItem onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>

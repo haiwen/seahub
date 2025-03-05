@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
@@ -154,14 +154,12 @@ class SysAdminAddUserDialog extends React.Component {
               <Label>{gettext('Password')}</Label>
               <InputGroup>
                 <Input autoComplete="new-password" type={isPasswordVisible ? 'text' : 'password'} value={password || ''} onChange={this.inputPassword} />
-                <InputGroupAddon addonType="append">
-                  <Button className="mt-0" onClick={this.togglePasswordVisible}>
-                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
-                  </Button>
-                  <Button className="mt-0" onClick={this.generatePassword}>
-                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
-                  </Button>
-                </InputGroupAddon>
+                <Button className="mt-0" onClick={this.togglePasswordVisible}>
+                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+                </Button>
+                <Button className="mt-0" onClick={this.generatePassword}>
+                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                </Button>
               </InputGroup>
             </FormGroup>
             <FormGroup>

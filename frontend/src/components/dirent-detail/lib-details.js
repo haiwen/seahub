@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Formatter } from '@seafile/sf-metadata-ui-component';
+import toaster from '../toast';
+import Loading from '../loading';
+import { Detail, Header, Body } from './detail';
+import DetailItem from './detail-item';
+import Formatter from '../../metadata/components/formatter';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../toast';
-import { Detail, Header, Body } from './detail';
 import Repo from '../../models/repo';
-import Loading from '../loading';
-import DetailItem from './detail-item';
 import { CellType } from '../../metadata/constants';
 
 const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {

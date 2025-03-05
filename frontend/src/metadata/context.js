@@ -280,9 +280,9 @@ class Context {
     return this.metadataAPI.getPeoplePhotos(repoID, recordId, start, limit);
   };
 
-  addPeoplePhotos = (peopleId, recordIds) => {
+  addPeoplePhotos = (peopleIds, recordIds) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.addPeoplePhotos(repoID, peopleId, recordIds);
+    return this.metadataAPI.addPeoplePhotos(repoID, peopleIds, recordIds);
   };
 
   removePeoplePhotos = (recordId, photoIds) => {

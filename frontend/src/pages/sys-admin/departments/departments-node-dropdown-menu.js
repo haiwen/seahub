@@ -6,8 +6,8 @@ import { gettext } from '../../../utils/constants';
 function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers, toggleAddDepartment, toggleAddLibrary }) {
   return (
     <DropdownMenu
-      modifiers={{ preventOverflow: { boundariesElement: document.body } }}
-      positionFixed={true}
+      modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+      className="position-fixed"
     >
       <DropdownItem key={`${node.id}-add-department`} onClick={() => toggleAddDepartment(node)}>
         {gettext('Add sub-department')}

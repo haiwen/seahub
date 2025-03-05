@@ -51,3 +51,5 @@ export const CAPTURE_INFO_SHOW_KEY = 'sf_capture_info_show';
 export const TREE_PANEL_STATE_KEY = 'sf_dir_view_tree_panel_open';
 
 export const TREE_PANEL_SECTION_STATE_KEY = 'sf_dir_view_tree_panel_section_state';
+
+export const RECENTLY_USED_LIST_KEY = 'recently_used_list';

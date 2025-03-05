@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, InputGroup, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
@@ -146,14 +146,12 @@ class AddOrgUserDialog extends React.Component {
               <Label for="userPwd">{gettext('Password')}</Label>
               <InputGroup className="passwd">
                 <Input id="userPwd" innerRef={input => {this.passwdInput = input;}} value={this.state.password || ''} onChange={this.inputPassword} />
-                <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}>
-                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '-slash' : ''}`}></i>
-                  </Button>
-                  <Button onClick={this.generatePassword}>
-                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
-                  </Button>
-                </InputGroupAddon>
+                <Button onClick={this.togglePasswordVisible}>
+                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '-slash' : ''}`}></i>
+                </Button>
+                <Button onClick={this.generatePassword}>
+                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                </Button>
               </InputGroup>
             </FormGroup>
             <FormGroup>

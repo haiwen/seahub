@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { IconBtn, Icon, FieldDisplaySettings } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../components/icon';
+import IconBtn from '../../../../components/icon-btn';
+import Switch from '../../../../components/switch';
+import Selector from '../../../components/selector';
+import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
 import { gettext } from '../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS } from '../../../constants';
-import Switch from '../../../../components/common/switch';
-import Selector from '../../../components/selector';
 import { getColumnByKey } from '../../../utils/column';
 
 import './index.css';
@@ -23,7 +25,7 @@ const Settings = ({
         value: col.key,
         label: (
           <>
-            <span className="sf-metadata-select-icon"><Icon iconName={COLUMNS_ICON_CONFIG[col.type]} /></span>
+            <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
             <span>{col.name}</span>
           </>
         )
@@ -34,7 +36,7 @@ const Settings = ({
       value: col.key,
       label: (
         <>
-          <span className="sf-metadata-select-icon"><Icon iconName={COLUMNS_ICON_CONFIG[col.type]} /></span>
+          <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
           <span>{col.name}</span>
         </>
       )
@@ -92,7 +94,7 @@ const Settings = ({
         <h5 className="m-0">{gettext('Settings')}</h5>
         <IconBtn
           className="kanban-setting-close-icon"
-          iconName="close"
+          symbol="close"
           size={24}
           role="button"
           aria-label="close"

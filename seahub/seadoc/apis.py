@@ -1102,11 +1102,6 @@ class SeadocCommentsView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         comment = request.data.get('comment', '')
         detail = request.data.get('detail', '')
         author = request.data.get('author', '')
@@ -1171,11 +1166,6 @@ class SeadocCommentView(APIView):
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         try:

@@ -608,6 +608,9 @@ class SystemAdminAPI {
     if (orgInfo.role) {
       formData.append('role', orgInfo.role);
     }
+    if (orgInfo.isActive != undefined) {
+      formData.append('is_active', orgInfo.isActive);
+    }
     return this.req.put(url, formData);
   }
 

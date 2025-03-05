@@ -20,7 +20,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY } from '../../constants';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { MetadataStatusProvider } from '../../hooks';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
 import { TagsProvider } from '../../tag/hooks';
@@ -30,6 +30,7 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
+import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -170,9 +171,14 @@ class LibContentView extends React.Component {
     const { repoID } = props;
 
     const { path, viewId, tagId } = this.getInfoFromLocation(repoID);
-    let currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
-    if (viewId) currentMode = METADATA_MODE;
-    if (tagId) currentMode = TAGS_MODE;
+    let currentMode;
+    if (tagId) {
+      currentMode = TAGS_MODE;
+    } else if (viewId) {
+      currentMode = METADATA_MODE;
+    } else {
+      currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
+    }
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -570,23 +576,24 @@ class LibContentView extends React.Component {
         path,
         isSessionExpired: false,
         currentDirent: null,
+      }, () => {
+        if (this.state.currentRepoInfo.is_admin) {
+          if (this.foldersSharedOut) {
+            this.identifyFoldersSharedOut();
+          } else {
+            this.foldersSharedOut = [];
+            seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
+              res.data.share_info_list.forEach(item => {
+                if (this.foldersSharedOut.indexOf(item.path) === -1) {
+                  this.foldersSharedOut.push(item.path);
+                }
+              });
+              this.identifyFoldersSharedOut();
+            });
+          }
+        }
       });
 
-      if (this.state.currentRepoInfo.is_admin) {
-        if (this.foldersSharedOut) {
-          this.identifyFoldersSharedOut();
-        } else {
-          this.foldersSharedOut = [];
-          seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
-            res.data.share_info_list.forEach(item => {
-              if (this.foldersSharedOut.indexOf(item.path) === -1) {
-                this.foldersSharedOut.push(item.path);
-              }
-            });
-            this.identifyFoldersSharedOut();
-          });
-        }
-      }
     }).catch((err) => {
       Utils.getErrorMsg(err, true);
       if (err.response && err.response.status === 403) {
@@ -732,7 +739,7 @@ class LibContentView extends React.Component {
   };
 
   updateRecentlyUsedList = (repo, destPath) => {
-    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const recentlyUsed = JSON.parse(localStorage.getItem(RECENTLY_USED_LIST_KEY)) || [];
     const updatedRecentlyUsed = [{ repo_id: repo.repo_id, path: destPath }, ...recentlyUsed];
 
     const filteredRecentlyUsed = updatedRecentlyUsed.filter((item, index, self) =>
@@ -745,7 +752,7 @@ class LibContentView extends React.Component {
       filteredRecentlyUsed.pop(); // Limit to 10 recent directories
     }
 
-    localStorage.setItem('recently-used-list', JSON.stringify(filteredRecentlyUsed));
+    localStorage.setItem(RECENTLY_USED_LIST_KEY, JSON.stringify(filteredRecentlyUsed));
   };
 
   // toolbar operations
@@ -814,6 +821,7 @@ class LibContentView extends React.Component {
 
     let dirNames = this.getSelectedDirentNames();
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
+      this.onSelectedDirentListUpdate([]);
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
@@ -947,11 +955,11 @@ class LibContentView extends React.Component {
   };
 
   removeFromRecentlyUsed = (repoID, path) => {
-    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const recentlyUsed = JSON.parse(localStorage.getItem(RECENTLY_USED_LIST_KEY)) || [];
     const updatedRecentlyUsed = recentlyUsed.filter(item =>
       !(item.repo_id === repoID && item.path === path)
     );
-    localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
+    localStorage.setItem(RECENTLY_USED_LIST_KEY, JSON.stringify(updatedRecentlyUsed));
   };
 
   onAddFolder = (dirPath, options = {}) => {
@@ -1309,6 +1317,7 @@ class LibContentView extends React.Component {
   };
 
   copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false) => {
+    this.onSelectedDirentListUpdate([]);
     if (repoID !== targetRepo.repo_id) {
       this.setState({
         asyncCopyMoveTaskId: taskId,
@@ -1329,7 +1338,7 @@ class LibContentView extends React.Component {
       this.updateMoveCopyTreeNode(copyToDirentPath);
     }
 
-    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE) {
+    if (copyToDirentPath === nodeParentPath && this.state.currentMode !== METADATA_MODE && this.state.currentMode !== TAGS_MODE) {
       this.loadDirentList(this.state.path);
     }
 
@@ -1374,31 +1383,36 @@ class LibContentView extends React.Component {
     });
   };
 
+  convertFileAjaxCallback = ({ newName, parentDir, size, path, error }) => {
+    if (error) {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        const name = Utils.getFileName(path);
+        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage, { 'id': 'conversion' });
+      return;
+    }
+    const new_path = parentDir + '/' + newName;
+    const parentPath = Utils.getDirName(new_path);
+    if (this.state.isTreePanelShown) {
+      this.addNodeToTree(newName, parentPath, 'file');
+    }
+    this.addDirent(newName, 'file', size);
+    const message = gettext('Successfully converted the file.');
+    toaster.success(message, { 'id': 'conversion' });
+  };
+
   onConvertItem = (dirent, dstType) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     let repoID = this.props.repoID;
     toaster.notifyInProgress(gettext('Converting, please wait...'), { 'id': 'conversion' });
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
-      let newFileName = res.data.obj_name;
-      let parentDir = res.data.parent_dir;
-      let new_path = parentDir + '/' + newFileName;
-      let parentPath = Utils.getDirName(new_path);
-
-      if (this.state.isTreePanelShown) {
-        this.addNodeToTree(newFileName, parentPath, 'file');
-      }
-
-      this.addDirent(newFileName, 'file', res.data.size);
-      let message = gettext('Successfully converted the file.');
-      toaster.success(message, { 'id': 'conversion' });
-
+      const newFileName = res.data.obj_name;
+      const parentDir = res.data.parent_dir;
+      this.convertFileAjaxCallback({ newName: newFileName, parentDir, size: res.data.size });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        let name = Utils.getFileName(path);
-        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
-      }
-      toaster.danger(errMessage, { 'id': 'conversion' });
+      this.convertFileAjaxCallback({ path, error });
     });
 
   };
@@ -1489,6 +1503,7 @@ class LibContentView extends React.Component {
       isDirentSelected: newSelectedDirentList.length > 0,
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
+      isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
     });
   };
 
@@ -1996,20 +2011,22 @@ class LibContentView extends React.Component {
   };
 
   resetSelected = (node) => {
-    const currentModel = this.state.currentMode;
+    if (node.object?.type === 'file') return;
     const path = node.path || '';
-    let nextModel = cookie.load('seafile_view_mode') || LIST_MODE;
-    if (currentModel === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
-      nextModel = METADATA_MODE;
-    }
-    if (currentModel === TAGS_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) {
-      nextModel = TAGS_MODE;
+    const currentMode = this.state.currentMode;
+    let nextMode;
+    if (currentMode === TAGS_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) {
+      nextMode = TAGS_MODE;
+    } else if (currentMode === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
+      nextMode = METADATA_MODE;
+    } else {
+      nextMode = cookie.load('seafile_view_mode') || LIST_MODE;
     }
 
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
-      currentMode: nextModel,
+      currentMode: nextMode,
       currentDirent: null,
     });
   };
@@ -2153,6 +2170,10 @@ class LibContentView extends React.Component {
     this.setState({ path });
   };
 
+  toggleShowDirentToolbar = (isDirentSelected) => {
+    this.setState({ isDirentSelected });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2224,7 +2245,7 @@ class LibContentView extends React.Component {
 
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
-        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick}>
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">
@@ -2240,33 +2261,36 @@ class LibContentView extends React.Component {
                         'w-100': !isDesktop,
                         'animation-children': isDirentSelected
                       })}>
-                      {isDirentSelected ?
-                        <SelectedDirentsToolbar
-                          repoID={this.props.repoID}
-                          path={this.state.path}
-                          userPerm={userPerm}
-                          repoEncrypted={this.state.repoEncrypted}
-                          repoTags={this.state.repoTags}
-                          selectedDirentList={this.state.selectedDirentList}
-                          direntList={direntItemsList}
-                          onItemsMove={this.onMoveItems}
-                          onItemsCopy={this.onCopyItems}
-                          onItemsDelete={this.onDeleteItems}
-                          onItemRename={this.onMainPanelItemRename}
-                          isRepoOwner={isRepoOwner}
-                          currentRepoInfo={this.state.currentRepoInfo}
-                          enableDirPrivateShare={enableDirPrivateShare}
-                          updateDirent={this.updateDirent}
-                          unSelectDirent={this.unSelectDirent}
-                          onFilesTagChanged={this.onFileTagChanged}
-                          showShareBtn={showShareBtn}
-                          isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-                          showDirentDetail={this.showDirentDetail}
-                          currentMode={this.state.currentMode}
-                          onItemConvert={this.onConvertItem}
-                          onAddFolder={this.onAddFolder}
-                        />
-                        :
+                      {isDirentSelected ? (
+                        this.state.currentMode === TAGS_MODE ?
+                          <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
+                          :
+                          <SelectedDirentsToolbar
+                            repoID={this.props.repoID}
+                            path={this.state.path}
+                            userPerm={userPerm}
+                            repoEncrypted={this.state.repoEncrypted}
+                            repoTags={this.state.repoTags}
+                            selectedDirentList={this.state.selectedDirentList}
+                            direntList={direntItemsList}
+                            onItemsMove={this.onMoveItems}
+                            onItemsCopy={this.onCopyItems}
+                            onItemsDelete={this.onDeleteItems}
+                            onItemRename={this.onMainPanelItemRename}
+                            isRepoOwner={isRepoOwner}
+                            currentRepoInfo={this.state.currentRepoInfo}
+                            enableDirPrivateShare={enableDirPrivateShare}
+                            updateDirent={this.updateDirent}
+                            unSelectDirent={this.unSelectDirent}
+                            onFilesTagChanged={this.onFileTagChanged}
+                            showShareBtn={showShareBtn}
+                            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+                            showDirentDetail={this.showDirentDetail}
+                            currentMode={this.state.currentMode}
+                            onItemConvert={this.onConvertItem}
+                            onAddFolder={this.onAddFolder}
+                          />
+                      ) : (
                         <CurDirPath
                           currentRepoInfo={this.state.currentRepoInfo}
                           repoID={this.props.repoID}
@@ -2299,7 +2323,7 @@ class LibContentView extends React.Component {
                           loadDirentList={this.loadDirentList}
                           onAddFolderNode={this.onAddFolder}
                         />
-                      }
+                      )}
                     </div>
                     {isDesktop &&
                       <div className="cur-view-path-right py-1">
@@ -2378,6 +2402,7 @@ class LibContentView extends React.Component {
                         moveFileCallback={this.moveItemsAjaxCallback}
                         onItemCopy={this.onCopyItem}
                         copyFileCallback={this.copyItemsAjaxCallback}
+                        convertFileCallback={this.convertFileAjaxCallback}
                         onItemConvert={this.onConvertItem}
                         onDirentClick={this.onDirentClick}
                         updateDirent={this.updateDirent}
@@ -2394,6 +2419,7 @@ class LibContentView extends React.Component {
                         eventBus={this.props.eventBus}
                         updateCurrentDirent={this.updateCurrentDirent}
                         updateCurrentPath={this.updatePath}
+                        toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                       />
                       :
                       <div className="message err-tip">{gettext('Folder does not exist.')}</div>

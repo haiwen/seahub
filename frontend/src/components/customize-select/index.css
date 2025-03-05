@@ -1,0 +1,100 @@
+.seafile-customize-select {
+  position: relative;
+  display: flex;
+  padding: 0 10px;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  user-select: none;
+  text-align: left;
+  line-height: 1.5;
+  background-image: none;
+  font-size: 14px;
+  color: #212529;
+}
+
+.seafile-customize-select:focus,
+.seafile-customize-select.focus {
+  border-color: #1991eb !important;
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+}
+
+.seafile-customize-select.disabled:focus,
+.seafile-customize-select.focus.disabled,
+.seafile-customize-select.disabled:hover {
+  border-color: rgba(0, 40, 100, 0.12) !important;
+  box-shadow: unset;
+  cursor: default;
+}
+
+.seafile-customize-select:hover {
+  cursor: pointer;
+  border-color: rgb(179, 179, 179);
+}
+
+.seafile-customize-select .sf3-font-down {
+  color: #999;
+}
+
+.seafile-customize-select .selected-option {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+}
+
+.seafile-customize-select .selected-option .custom-select-dropdown-icon {
+  height: 12px;
+  width: 12px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.seafile-customize-select.selector-collaborator .seafile-option-group .seafile-option-group-content,
+.seafile-customize-select.selector-group .seafile-option-group .seafile-option-group-content {
+  padding: 10px;
+}
+
+.seafile-customize-select.selector-collaborator .seafile-option-group .seafile-option-group-content {
+  padding: 10px 0;
+}
+
+.seafile-customize-select.selector-collaborator .option {
+  padding: 5px 0 5px 10px !important;
+  line-height: 20px;
+}
+
+.seafile-customize-select.selector-group .option {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.seafile-customize-select.selector-group .select-group-option {
+  justify-content: space-between;
+}
+
+.seafile-customize-select.selector-group .selected-option .selected-group {
+  padding: 0 2px;
+  background: #eceff4;
+  border-radius: 3px;
+}
+
+.seafile-customize-select .selected-option-show {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seafile-customize-select .select-placeholder {
+  line-height: 1;
+  font-size: 14px;
+  white-space: nowrap;
+}

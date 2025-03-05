@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SFTable from '../../../../components/sf-table';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
 import MergeTagsSelector from '../../../components/merge-tags-selector';
+import DraggedTagsLayer from './dragged-tags-layer';
 import { createTableColumns } from './columns-factory';
 import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
@@ -13,6 +14,9 @@ import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 import { isNumber } from '../../../../utils/number';
+import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { getParentLinks } from '../../../utils/cell';
 
 import './index.css';
 
@@ -32,9 +36,8 @@ const TagsTable = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   setDisplayTag,
   loadMore,
-  getTagsTableWrapperOffsets,
 }) => {
-  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, addChildTag, mergeTags } = useTags();
+  const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, deleteTagsLinks, addChildTag, mergeTags } = useTags();
 
   const [isShowNewSubTagDialog, setIsShowNewSubTagDialog] = useState(false);
   const [isShowMergeTagsSelector, setIsShowMergeTagsSelector] = useState(false);
@@ -121,14 +124,13 @@ const TagsTable = ({
   }, []);
 
   const onMergeTags = useCallback((tagsIds, menuPosition) => {
-    const { left, top } = getTagsTableWrapperOffsets();
     mergeTagsSelectorProps.current.mergeTagsIds = tagsIds;
     mergeTagsSelectorProps.current.position = {
-      left: (menuPosition.left || 0) + (left || 0),
-      top: (menuPosition.top || 0) + (top || 0),
+      left: (menuPosition.left || 0),
+      top: (menuPosition.top || 0),
     };
     setIsShowMergeTagsSelector(true);
-  }, [getTagsTableWrapperOffsets]);
+  }, []);
 
   const closeMergeTagsSelector = useCallback(() => {
     mergeTagsSelectorProps.current = {};
@@ -208,6 +210,56 @@ const TagsTable = ({
     }
   }, [scrollToCurrentSelectedCell]);
 
+  const renderCustomDraggedRows = useCallback((draggedNodesKeys) => {
+    if (!Array.isArray(draggedNodesKeys) || draggedNodesKeys.length === 0) return null;
+    return (
+      <DraggedTagsLayer draggedNodesKeys={draggedNodesKeys} />
+    );
+  }, []);
+
+  const moveTags = useCallback(({ draggingSource, dropTarget }) => {
+    const targetNode = getTreeNodeByKey(dropTarget, table.key_tree_node_map);
+    if (!Array.isArray(draggingSource) || draggingSource.length === 0 || !targetNode) return;
+    let draggingTagsIds = [];
+    let idNeedDeleteChildIds = {}; // { [parent_tag._id]: [child_tag._id] }
+    draggingSource.forEach((nodeKey) => {
+      const node = getTreeNodeByKey(nodeKey, table.key_tree_node_map);
+      const nodeId = getTreeNodeId(node);
+      const tag = getRowById(table, nodeId);
+
+      // find the child tags to delete which related to dragging tags
+      const parentLinks = getParentLinks(tag);
+      if (Array.isArray(parentLinks) && parentLinks.length > 0) {
+        parentLinks.forEach((link) => {
+          const parentTagId = link.row_id;
+          if (nodeKey.includes(parentTagId)) {
+            if (!idNeedDeleteChildIds[parentTagId]) {
+              idNeedDeleteChildIds[parentTagId] = [nodeId];
+            } else if (!idNeedDeleteChildIds[parentTagId].includes(nodeId)) {
+              idNeedDeleteChildIds[parentTagId].push(nodeId);
+            }
+          }
+        });
+      }
+
+      // get none-repeat dragging tags ids
+      if (!draggingTagsIds.includes(nodeId)) {
+        draggingTagsIds.push(nodeId);
+      }
+    });
+    if (draggingTagsIds.length === 0) return;
+
+    const targetTagId = getTreeNodeId(targetNode);
+    if (Object.keys(idNeedDeleteChildIds).length > 0) {
+      // need to delete child tags first
+      deleteTagsLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, idNeedDeleteChildIds, () => {
+        addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetTagId, draggingTagsIds);
+      });
+    } else {
+      addTagLinks(PRIVATE_COLUMN_KEY.SUB_LINKS, targetTagId, draggingTagsIds);
+    }
+  }, [table, addTagLinks, deleteTagsLinks]);
+
   useEffect(() => {
     const eventBus = EventBus.getInstance();
     const unsubscribeUpdateSearchResult = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, updateSearchResult);
@@ -242,6 +294,8 @@ const TagsTable = ({
         checkCellValueChanged={checkCellValueChanged}
         modifyColumnWidth={modifyColumnWidth}
         loadMore={loadMore}
+        renderCustomDraggedRows={renderCustomDraggedRows}
+        moveRecords={moveTags}
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />

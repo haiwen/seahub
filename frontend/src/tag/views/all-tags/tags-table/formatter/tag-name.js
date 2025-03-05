@@ -4,6 +4,7 @@ import { useTags } from '../../../../hooks';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
 import { getTreeNodeKey } from '../../../../../components/sf-table/utils/tree';
+import { isNumber } from '../../../../../utils/number';
 
 const TagNameFormatter = ({ record, isCellSelected, setDisplayTag, treeNodeIndex }) => {
   const { tagsData } = useTags();
@@ -13,7 +14,7 @@ const TagNameFormatter = ({ record, isCellSelected, setDisplayTag, treeNodeIndex
   }, [tagsData]);
 
   const currentNode = useMemo(() => {
-    return tree[treeNodeIndex];
+    return isNumber(treeNodeIndex) ? tree[treeNodeIndex] : null;
   }, [tree, treeNodeIndex]);
 
   const tagColor = useMemo(() => {
@@ -28,7 +29,7 @@ const TagNameFormatter = ({ record, isCellSelected, setDisplayTag, treeNodeIndex
     if (!isCellSelected) return;
     const tagId = getRecordIdFromRecord(record);
     const nodeKey = getTreeNodeKey(currentNode);
-    setDisplayTag(tagId, nodeKey);
+    setDisplayTag && setDisplayTag(tagId, nodeKey);
   }, [isCellSelected, record, currentNode, setDisplayTag]);
 
   return (

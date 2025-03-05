@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { gettext } from './utils/constants';
 import Logo from './components/logo';
@@ -48,4 +48,5 @@ class TCAccept extends React.Component {
   }
 }
 
-ReactDom.render(<TCAccept />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<TCAccept />);

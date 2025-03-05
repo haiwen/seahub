@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
+import CustomizePopover from '../../../../components/customize-popover';
+import CommonAddTool from '../../../../components/common-add-tool';
+import SearchInput from '../../../../components/search-input';
 import toaster from '../../../../components/toast';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import OptionsContainer from './options-container';
@@ -156,6 +158,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     }
   }, [metadata, column, onDelete]);
 
+  const onPopoverToggle = useCallback((e) => {
+    if (e && e.target.className.includes('option-color-item')) return; // not close options-popover via change color
+    onToggle(e);
+  }, [onToggle]);
+
   const renderEmptyTip = useCallback(() => {
     if (displayOptions.length > 0) return null;
     if (searchValue) return (<div className="none-search-result mt-2">{gettext('No options available')}</div>);
@@ -191,10 +198,10 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     <>
       <CustomizePopover
         target={target}
-        className="sf-metadata-edit-column-options-popover"
-        canHide={!deletingOptionId && isValidEditingOption.current}
-        hide={onToggle}
-        hideWithEsc={onToggle}
+        popoverClassName="sf-metadata-edit-column-options-popover"
+        canHidePopover={!deletingOptionId && isValidEditingOption.current}
+        hidePopover={onPopoverToggle}
+        hidePopoverWithEsc={onPopoverToggle}
       >
         <div className="sf-metadata-edit-column-options-container">
           <div className="sf-metadata-edit-column-options-search-container">
@@ -212,7 +219,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             inputRef={ref}
           />
           {createOptionEnabled && (
-            <CustomizeAddTool
+            <CommonAddTool
               className="sf-metadata-add-option"
               callBack={onAdd}
               footerName={gettext('Add option')}

@@ -1,7 +1,7 @@
 import { gettext } from '../../utils/constants';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../../metadata/utils/column';
-import ObjectUtils from '../../metadata/utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;
@@ -90,6 +90,15 @@ class ServerOperator {
         const id_linked_rows_ids_map = {
           [row_id]: other_rows_ids,
         };
+        this.context.deleteTagLinks(column_key, id_linked_rows_ids_map).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to delete linked tags') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.DELETE_TAGS_LINKS: {
+        const { column_key, id_linked_rows_ids_map } = operation;
         this.context.deleteTagLinks(column_key, id_linked_rows_ids_map).then(res => {
           callback({ operation });
         }).catch(error => {

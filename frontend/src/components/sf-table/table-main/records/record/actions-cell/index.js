@@ -70,6 +70,14 @@ class ActionsCell extends Component {
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
+        {this.props.recordDraggable &&
+          <div
+            draggable
+            className="drag-handler"
+            onDragStart={this.props.handleDragStart}
+          >
+          </div>
+        }
         {!isSelected && <div className="sf-table-column-content row-index text-truncate">{this.getRecordNo()}</div>}
         <div className="sf-table-column-content actions-checkbox">
           <div className="select-cell-checkbox-container" onClick={this.props.onSelectRecord}>
@@ -100,10 +108,12 @@ ActionsCell.propTypes = {
   isLocked: PropTypes.bool,
   isSelected: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
+  recordDraggable: PropTypes.bool,
   recordId: PropTypes.string,
   index: PropTypes.number,
   height: PropTypes.number,
   onSelectRecord: PropTypes.func,
+  handleDragStart: PropTypes.func,
 };
 
 export default ActionsCell;

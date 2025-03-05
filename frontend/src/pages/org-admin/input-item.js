@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, InputGroup, InputGroupAddon, Button, Row, Col, Label } from 'reactstrap';
+import { Input, InputGroup, Button, Row, Col, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
@@ -67,11 +67,9 @@ class OrgSamlConfigInput extends Component {
           <Col md="5">
             <InputGroup>
               <Input type={inputType} value={value} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns}/>
-              {this.props.domainVerified &&
-                <InputGroupAddon addonType="append">
-                  <Button color="success" className="border-0">{gettext('Verified')}</Button>
-                </InputGroupAddon>
-              }
+              {this.props.domainVerified && (
+                <Button color="success" className="border-0">{gettext('Verified')}</Button>
+              )}
             </InputGroup>
             {this.props.isCertificate &&
               <p className="small text-secondary mt-1">

@@ -1,5 +1,5 @@
 import deepCopy from 'deep-copy';
-import { getRowById, getRowsByIds } from '../utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getColumnByKey, normalizeColumns } from '../utils/column';
 import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
@@ -518,6 +518,14 @@ class Store {
     this.applyOperation(operation);
   };
 
+  modifyViewType(viewId, update) {
+    const type = OPERATION_TYPE.MODIFY_VIEW_TYPE;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: viewId, update
+    });
+    this.applyOperation(operation);
+  }
+
   // column
   insertColumn = (name, columnType, { key, data }) => {
     const operationType = OPERATION_TYPE.INSERT_COLUMN;
@@ -614,18 +622,18 @@ class Store {
     this.applyOperation(operation);
   };
 
-  addPeoplePhotos = (peopleId, oldPeopleId, addedPhotos, { success_callback, fail_callback }) => {
+  addPeoplePhotos = (peopleIds, oldPeopleId, addedPhotos, { success_callback, fail_callback }) => {
     const type = OPERATION_TYPE.ADD_PEOPLE_PHOTOS;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, people_id: peopleId, old_people_id: oldPeopleId, added_photos: addedPhotos, success_callback, fail_callback
+      type, repo_id: this.repoId, people_ids: peopleIds, old_people_id: oldPeopleId, added_photos: addedPhotos, success_callback, fail_callback
     });
     this.applyOperation(operation);
   };
 
-  setPeoplePhoto = (peopleId, selectedPhoto) => {
+  setPeoplePhoto = (peopleId, selectedPhoto, { success_callback }) => {
     const type = OPERATION_TYPE.SET_PEOPLE_COVER_PHOTO;
     const operation = this.createOperation({
-      type, repo_id: this.repoId, people_id: peopleId, selected_photo: selectedPhoto
+      type, repo_id: this.repoId, people_id: peopleId, selected_photo: selectedPhoto, success_callback
     });
     this.applyOperation(operation);
   };

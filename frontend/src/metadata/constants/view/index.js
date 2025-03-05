@@ -141,4 +141,24 @@ export const VIEW_DEFAULT_SETTINGS = {
   }
 };
 
+export const VIEW_PROPERTY_KEYS = {
+  ID: '_id',
+  TABLE_ID: 'table_id',
+  NAME: 'name',
+  BASIC_FILTERS: 'basic_filters',
+  FILTERS: 'filters',
+  FILTER_CONJUNCTION: 'filter_conjunction',
+  SORTS: 'sorts',
+  GROUPBYS: 'groupbys',
+  HIDDEN_COLUMNS: 'hidden_columns',
+  TYPE: 'type',
+  SETTINGS: 'settings',
+};
+
+export const VIEW_INCOMPATIBLE_PROPERTIES = [
+  VIEW_PROPERTY_KEYS.GROUPBYS,
+  VIEW_PROPERTY_KEYS.HIDDEN_COLUMNS,
+  VIEW_PROPERTY_KEYS.SETTINGS,
+];
+
 export const VIEW_TYPES_SUPPORT_SHOW_DETAIL = [VIEW_TYPE.GALLERY, VIEW_TYPE.KANBAN, VIEW_TYPE.FACE_RECOGNITION];

@@ -6,7 +6,7 @@
   border-top: 1px solid #e9ecef;
 }
 
-.popover-add-tool.sf-metadata-ui.add-item-btn {
+.popover-add-tool.add-item-btn {
   border-top: none;
   color: #666666;
 }
@@ -16,21 +16,10 @@
   background: #fff;
 }
 
-.popover-add-tool .popover-add-icon {
-  fill: #666;
-  font-size: 14px;
-  margin-right: 14px;
-}
-
 .popover-add-tool.disabled .popover-add-icon {
   fill: #c2c2c2;
 }
 
 .sf-metadata-filter-popover .popover-add-tool.disabled {
   color: #c2c2c2;
-}
-
-.sf-metadata-select.custom-select {
-  font-size: 14px;
-  color: #212529;
 }

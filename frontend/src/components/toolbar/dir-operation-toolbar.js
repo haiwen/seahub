@@ -293,7 +293,7 @@ class DirOperationToolbar extends React.Component {
         <Fragment>
           <Dropdown isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu}>
             <DropdownToggle
-              tag="div"
+              tag="span"
               role="button"
               className="path-item"
               onClick={this.toggleDesktopOpMenu}
@@ -303,7 +303,7 @@ class DirOperationToolbar extends React.Component {
               <i className="sf3-font-new sf3-font"></i>
               <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
             </DropdownToggle>
-            <DropdownMenu onMouseMove={this.onDropDownMouseMove} positionFixed={true}>
+            <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
               {opList.map((item, index) => {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
@@ -318,7 +318,7 @@ class DirOperationToolbar extends React.Component {
                       onMouseMove={(e) => {e.stopPropagation();}}
                     >
                       <DropdownToggle
-                        tag='div'
+                        tag='span'
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
@@ -354,14 +354,14 @@ class DirOperationToolbar extends React.Component {
       content = (
         <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
           <DropdownToggle
-            tag="div"
+            tag="span"
             role="button"
             className="path-item"
           >
             <i className="sf3-font-new sf3-font"></i>
             <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu positionFixed={true}>
+          <DropdownMenu className='position-fixed'>
             {canUpload && (
               <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
             )}

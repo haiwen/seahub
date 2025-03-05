@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import Icon from '../../../../components/icon';
 import { useMetadataDetails } from '../../../hooks';
 import { useMetadataStatus } from '../../../../hooks';
@@ -12,8 +11,6 @@ import { PRIVATE_COLUMN_KEY } from '../constants';
 import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
 import FileTagsDialog from '../../dialog/file-tags-dialog';
 import { checkIsDir } from '../../../utils/row';
-
-import './index.css';
 
 const OPERATION = {
   GENERATE_DESCRIPTION: 'generate-description',
@@ -114,12 +111,16 @@ const AI = () => {
             }
             const fileDetails = detail[PRIVATE_COLUMN_KEY.FILE_DETAILS];
             const location = detail[PRIVATE_COLUMN_KEY.LOCATION];
+            const address = detail[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
             let update = {};
             if (fileDetails) {
               update[PRIVATE_COLUMN_KEY.FILE_DETAILS] = fileDetails;
             }
             if (location) {
               update[PRIVATE_COLUMN_KEY.LOCATION] = location;
+            }
+            if (address) {
+              update[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = address;
             }
             Object.keys(update).length > 0 && onLocalRecordChange(recordId, update);
           },
@@ -155,13 +156,11 @@ const AI = () => {
           </div>
         </DropdownToggle>
         {isMenuShow && (
-          <ModalPortal>
-            <div className="sf-metadata-ai-dropdown-menu large">
-              <DropdownMenu right={true}>
-                {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
-              </DropdownMenu>
-            </div>
-          </ModalPortal>
+          <div className="sf-metadata-ai-dropdown-menu large">
+            <DropdownMenu>
+              {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
+            </DropdownMenu>
+          </div>
         )}
       </Dropdown>
     );

@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { CustomizePopover, IconBtn } from '@seafile/sf-metadata-ui-component';
+import CustomizePopover from '../../../../../../components/customize-popover';
+import IconBtn from '../../../../../../components/icon-btn';
 import { SELECT_OPTION_COLORS } from '../../../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
@@ -46,16 +47,15 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
         className="sf-metadata-edit-option-color"
         id={target}
         style={{ backgroundColor: option?.color || null }}
-        iconName="drop-down"
-        iconStyle={{ fill: option?.textColor || '#666' }}
+        CustomIcon={<i className="sf3-font sf3-font-down" aria-hidden="true" style={{ color: option?.textColor || '#666' }}></i>}
         onClick={openPopover}
       />
       {isShowPopover && (
         <CustomizePopover
           target={target}
-          className="sf-metadata-edit-option-color-popover"
-          hide={closePopover}
-          hideWithEsc={closePopover}
+          popoverClassName="sf-metadata-edit-option-color-popover"
+          hidePopover={closePopover}
+          hidePopoverWithEsc={closePopover}
         >
           <div className="row gutters-xs" onClick={(e) => e && e.stopPropagation()}>
             {SELECT_OPTION_COLORS.map((colorItem, index) => {
@@ -69,7 +69,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
                       className={classnames('sf-metadata-edit-option-color-item-container', { 'selected': isSelected })}
                       id={target}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      iconName="check-mark"
+                      symbol="check-mark"
                       iconStyle={{ fill: textColor || '#666' }}
                     />
                   </label>

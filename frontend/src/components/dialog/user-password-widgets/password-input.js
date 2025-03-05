@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Label, InputGroup, Input, InputGroupAddon, Button } from 'reactstrap';
+import { FormGroup, Label, InputGroup, Input, Button } from 'reactstrap';
 import classnames from 'classnames';
 import PasswordStrengthChecker from './password-strength-checker';
 import { isMobile } from '../../../utils/utils';
@@ -14,7 +14,7 @@ const propTypes = {
   onChangeValue: PropTypes.func,
 };
 
-const PasswordInput = ({ value, labelValue, enableCheckStrength, onChangeValue }) => {
+const PasswordInput = ({ value, labelValue, enableCheckStrength = true, onChangeValue }) => {
   const [passwordValue, setPasswordValue] = useState(value || '');
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowChecker, setIsShowChecker] = useState(false);
@@ -53,20 +53,14 @@ const PasswordInput = ({ value, labelValue, enableCheckStrength, onChangeValue }
             passwordValue={passwordValue}
           />
         )}
-        <InputGroupAddon addonType="append">
-          <Button onClick={() => setIsShowPassword(!isShowPassword)}>
-            <i className={`password-icon sf3-font sf3-font-eye${isShowPassword ? '' : '-slash'}`} />
-          </Button>
-        </InputGroupAddon>
+        <Button onClick={() => setIsShowPassword(!isShowPassword)}>
+          <i className={`password-icon sf3-font sf3-font-eye${isShowPassword ? '' : '-slash'}`} />
+        </Button>
       </InputGroup>
     </FormGroup>
   );
 };
 
 PasswordInput.propTypes = propTypes;
-
-PasswordInput.defaultProps = {
-  enableCheckStrength: true
-};
 
 export default PasswordInput;

@@ -1,6 +1,6 @@
 import deepCopy from 'deep-copy';
 import dayjs from 'dayjs';
-import { getRowById, getRowsByIds } from '../../metadata/utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
 } from './operations';
@@ -380,6 +380,19 @@ class Store {
       column_key,
       row_id,
       other_rows_ids,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  deleteTagsLinks(column_key, id_linked_rows_ids_map, success_callback, fail_callback) {
+    const type = OPERATION_TYPE.DELETE_TAGS_LINKS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      column_key,
+      id_linked_rows_ids_map,
       success_callback,
       fail_callback,
     });

@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { FormGroup, Label } from 'reactstrap';
-import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
-import Switch from '../../../../../../components/common/switch';
+import CustomizeSelect from '../../../../../../components/customize-select';
+import Switch from '../../../../../../components/switch';
 import { gettext } from '../../../../../../utils/constants';
 import { getDateDisplayString } from '../../../../../utils/cell';
 import { DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../../constants';
@@ -75,7 +75,11 @@ const DateData = ({ value, column, onChange }) => {
     <div className="sf-metadata-column-data-settings sf-metadata-date-column-data-settings">
       <FormGroup className="">
         <Label>{gettext('Format')}</Label>
-        <CustomizeSelect value={selectedValue} options={options} onSelectOption={onFormatChange} />
+        <CustomizeSelect
+          value={selectedValue}
+          options={options}
+          onSelectOption={onFormatChange}
+        />
       </FormGroup>
       {!isShootingTime && (
         <>

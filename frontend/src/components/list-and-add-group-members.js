@@ -34,6 +34,7 @@ class ManageMembersDialog extends React.Component {
       keyword: '',
       membersFound: []
     };
+    this.userSelect = React.createRef();
   }
 
   componentDidMount() {
@@ -81,7 +82,7 @@ class ManageMembersDialog extends React.Component {
         groupMembers: [].concat(newMembers, this.state.groupMembers),
         selectedOption: null,
       });
-      this.refs.userSelect.clearSelect();
+      this.userSelect.current.clearSelect();
       if (res.data.failed.length > 0) {
         this.setState({
           errMessage: res.data.failed
@@ -162,7 +163,6 @@ class ManageMembersDialog extends React.Component {
   };
 
   onClickDeptBtn = () => {
-    this.props.toggleManageMembersDialog();
     this.props.toggleDepartmentDetailDialog();
   };
 
@@ -186,7 +186,7 @@ class ManageMembersDialog extends React.Component {
           <UserSelect
             placeholder={gettext('Search users')}
             onSelectChange={this.onSelectChange}
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={true}
             className="add-members-select"
           />

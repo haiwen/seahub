@@ -10,20 +10,6 @@ export const initScrollBar = () => {
   }
 };
 
-export const addClassName = (originClassName, targetClassName) => {
-  const originClassNames = originClassName.split(' ');
-  if (originClassNames.indexOf(targetClassName) > -1) return originClassName;
-  return originClassName + ' ' + targetClassName;
-};
-
-export const removeClassName = (originClassName, targetClassName) => {
-  let originClassNames = originClassName.split(' ');
-  const targetClassNameIndex = originClassNames.indexOf(targetClassName);
-  if (targetClassNameIndex < 0) return originClassName;
-  originClassNames.splice(targetClassNameIndex, 1);
-  return originClassNames.join(' ');
-};
-
 /* is weiXin built-in browser */
 export const isWeiXinBuiltInBrowser = () => {
   const agent = navigator.userAgent.toLowerCase();

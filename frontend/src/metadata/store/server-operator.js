@@ -3,10 +3,10 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../utils/column';
-import { getRowById } from '../utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { checkIsDir } from '../utils/row';
 import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
-import ObjectUtils from '../utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { CellType } from '../constants';
 
 const MAX_LOAD_RECORDS = 100;
@@ -205,6 +205,10 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_VIEW_TYPE: {
+        callback({ operation });
+        break;
+      }
 
       // face table op
       case OPERATION_TYPE.RENAME_PEOPLE_NAME: {
@@ -226,8 +230,8 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.ADD_PEOPLE_PHOTOS: {
-        const { people_id, added_photos } = operation;
-        window.sfMetadataContext.addPeoplePhotos(people_id, added_photos).then(res => {
+        const { people_ids, added_photos } = operation;
+        window.sfMetadataContext.addPeoplePhotos(people_ids, added_photos).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to add people photos') });

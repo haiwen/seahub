@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
 import { getColumnOptionIdsByNames } from '../../../utils/cell';
 import { getColumnOptions } from '../../../utils/column';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 

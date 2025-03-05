@@ -1,0 +1,44 @@
+.group-invite-members .no-link-tip {
+  line-height: 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.invite-link-item {
+  display: flex;
+  margin-bottom: 2.5rem;
+}
+
+.invite-link-item .form-item {
+  width: calc(100% - 120px);
+  padding-left: 10px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+
+.invite-link-item .invite-link-copy {
+  width: 72px;
+}
+
+.invite-link-item .invite-link-copy-btn {
+  width: 72px;
+  height: 40px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.invite-link-item .delete-link-btn {
+  border-color: #ff9800;
+  color: #ff9800;
+  font-size: 16px;
+  padding: 0;
+}
+
+.invite-link-item .delete-link-btn:hover {
+  background-color: #d98100;
+  border-color: #d98100;
+  box-shadow: none;
+  color: #fff;
+}

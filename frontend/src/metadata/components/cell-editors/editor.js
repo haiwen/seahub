@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SfCalendar } from '@seafile/sf-metadata-ui-component';
+import DateEditor from './date-editor';
 import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
 import NumberEditor from './number-editor';
@@ -23,7 +23,7 @@ const Editor = React.forwardRef((props, ref) => {
       return (<TextEditor ref={ref} { ...props } />);
     }
     case CellType.DATE: {
-      return (<SfCalendar ref={ref} { ...props } lang={lang} />);
+      return (<DateEditor ref={ref} { ...props } lang={lang} />);
     }
     case CellType.NUMBER: {
       return (<NumberEditor ref={ref} {...props} />);

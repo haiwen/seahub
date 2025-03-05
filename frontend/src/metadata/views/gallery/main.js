@@ -1,19 +1,19 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
-import Content from './content';
+import CenteredLoading from '../../../components/centered-loading';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import ModalPortal from '../../../components/modal-portal';
+import Content from './content';
+import GalleryContextmenu from './context-menu';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../constants';
-import { getRowById } from '../../utils/table';
-import { getEventClassName } from '../../utils/common';
-import GalleryContextmenu from './context-menu';
+import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
+import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
+import { getRowById } from '../../../components/sf-table/utils/table';
+import { getEventClassName } from '../../../utils/dom';
 import { getColumns, getImageSize, getRowHeight } from './utils';
-import ObjectUtils from '../../utils/object-utils';
+import ObjectUtils from '../../../utils/object';
 
 import './index.css';
 
@@ -28,24 +28,31 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [lastSelectedImage, setLastSelectedImage] = useState(null);
 
   const containerRef = useRef(null);
   const scrollContainer = useRef(null);
   const lastState = useRef({ scrollPos: 0 });
 
   const { repoID, updateCurrentDirent } = useMetadataView();
+  const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   const images = useMemo(() => {
     if (isFirstLoading) return [];
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
-    const firstSort = metadata.view.sorts[0];
+    const firstSort = metadata.view.sorts[0] || VIEW_TYPE_DEFAULT_SORTS[VIEW_TYPE.GALLERY];
     return metadata.rows
       .filter(record => Utils.imageCheck(getFileNameFromRecord(record)))
       .map(record => {
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
         const parentDir = getParentDirFromRecord(record);
-        const size = mode === GALLERY_DATE_MODE.YEAR ? thumbnailSizeForOriginal : thumbnailSizeForGrid;
+        let size = thumbnailDefaultSize;
+        if (mode === GALLERY_DATE_MODE.YEAR) {
+          size = thumbnailSizeForOriginal;
+        } else if (mode === GALLERY_DATE_MODE.MONTH || mode === GALLERY_DATE_MODE.DAY) {
+          size = thumbnailSizeForGrid;
+        }
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
         const year = date.slice(0, 4);
@@ -167,18 +174,20 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       updateSelectedImage(image);
       return;
     }
-    if (event.shiftKey && selectedImages.length > 0) {
-      const lastSelected = selectedImages[selectedImages.length - 1];
-      const start = images.findIndex(image => image.id === lastSelected.id);
-      const end = images.findIndex(image => image.id === lastSelected.id);
-      const range = images.slice(Math.min(start, end), Math.max(start, end) + 1);
+    if (event.shiftKey && lastSelectedImage) {
+      const lastSelectedIndex = images.findIndex(img => img.id === lastSelectedImage.id);
+      const currentIndex = images.findIndex(img => img.id === image.id);
+      const start = Math.min(lastSelectedIndex, currentIndex);
+      const end = Math.max(lastSelectedIndex, currentIndex);
+      const range = images.slice(start, end + 1);
       setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
       updateSelectedImage(null);
       return;
     }
     setSelectedImages([image]);
     updateSelectedImage(image);
-  }, [images, selectedImages, updateSelectedImage]);
+    setLastSelectedImage(image);
+  }, [images, updateSelectedImage, lastSelectedImage]);
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
@@ -238,9 +247,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   }, [onRemoveImage, updateCurrentDirent]);
 
   const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
-    onSetPeoplePhoto(selectedImage, () => {
-      updateCurrentDirent();
-      setSelectedImages([]);
+    onSetPeoplePhoto(selectedImage, {
+      success_callback: () => {
+        updateCurrentDirent();
+        setSelectedImages([]);
+      }
     });
   }, [onSetPeoplePhoto, updateCurrentDirent]);
 
@@ -251,6 +262,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     if (!isClickInsideImage && containerRef.current.contains(event.target)) {
       handleImageSelection([]);
       updateSelectedImage();
+      setLastSelectedImage(null);
     }
   }, [handleImageSelection, updateSelectedImage]);
 
@@ -413,6 +425,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       {isImagePopupOpen && (
         <ModalPortal>
           <ImageDialog
+            repoID={repoID}
+            repoInfo={repoInfo}
             imageItems={images}
             imageIndex={imageIndex}
             closeImagePopup={closeImagePopup}

@@ -1,6 +1,6 @@
 import { isEmptyObject } from '../common';
 import { CellType } from '../../constants';
-import ObjectUtils from '../object-utils';
+import ObjectUtils from '../../../utils/object';
 
 export const isCellValueChanged = (oldVal, newVal, columnType) => {
   if (oldVal === newVal) return false;

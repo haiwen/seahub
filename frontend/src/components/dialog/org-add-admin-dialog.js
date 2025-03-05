@@ -22,6 +22,7 @@ class AddOrgAdminDialog extends React.Component {
       errMessage: '',
     };
     this.options = [];
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
@@ -54,7 +55,7 @@ class AddOrgAdminDialog extends React.Component {
         <SeahubModalHeader toggle={this.toggle}>{gettext('Add Admins')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Select a user as admin')}
             onSelectChange={this.handleSelectChange}

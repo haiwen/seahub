@@ -50,14 +50,14 @@ class OnlyofficeFileToolbar extends React.Component {
           />
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
+              tag="span"
               className="file-toolbar-btn"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
-              tag="div"
             >
               <Icon symbol="more-vertical" />
             </DropdownToggle>
-            <DropdownMenu right={true}>
+            <DropdownMenu>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
                 {gettext('Open parent folder')}
               </a>
@@ -72,10 +72,10 @@ class OnlyofficeFileToolbar extends React.Component {
         </div>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
-          <DropdownToggle className="mx-1" aria-label={gettext('More operations')}>
+          <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
             <Icon symbol="more-vertical" />
           </DropdownToggle>
-          <DropdownMenu right={true}>
+          <DropdownMenu>
             <DropdownItem onClick={this.props.toggleHeader}>{gettext('Fold')}</DropdownItem>
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
             <DropdownItem>

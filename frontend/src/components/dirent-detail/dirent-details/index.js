@@ -8,7 +8,7 @@ import Dirent from '../../../models/dirent';
 import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
-import ObjectUtils from '../../../metadata/utils/object-utils';
+import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { Settings, AI } from '../../../metadata/components/metadata-details';
 import { getDirentPath } from './utils';

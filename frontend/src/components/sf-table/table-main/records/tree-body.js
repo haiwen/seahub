@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Loading } from '@seafile/sf-metadata-ui-component';
+import Loading from '../../../loading';
 import { RightScrollbar } from '../../scrollbar';
 import InteractionMasks from '../../masks/interaction-masks';
 import Record from './record';
@@ -598,6 +598,9 @@ class TreeBody extends Component {
           colOverScanStartIdx={this.props.colOverScanStartIdx}
           colOverScanEndIdx={this.props.colOverScanEndIdx}
           lastFrozenColumnKey={this.props.lastFrozenColumnKey}
+          recordDraggable={this.props.recordDraggable}
+          recordDragDropEvents={this.props.recordDragDropEvents}
+          draggingRecordSource={this.props.draggingRecordSource}
           scrollLeft={scrollLeft}
           height={rowHeight}
           cellMetaData={cellMetaData}
@@ -625,14 +628,14 @@ class TreeBody extends Component {
     // add top placeholder
     if (upperHeight > 0) {
       const style = { height: upperHeight, width: '100%' };
-      const upperRow = <div key="upper-placeholder" className="d-flex align-items-end" style={style}><Loading /></div>;
+      const upperRow = <div key="upper-placeholder" className="d-flex align-items-end" style={style}><Loading className="sf-metadata-loading-tip center" /></div>;
       shownNodes.unshift(upperRow);
     }
 
     // add bottom placeholder
     if (belowHeight > 0) {
       const style = { height: belowHeight, width: '100%' };
-      const belowRow = <div key="below-placeholder" style={style}><Loading /></div>;
+      const belowRow = <div key="below-placeholder" style={style}><Loading className="sf-metadata-loading-tip center" /></div>;
       shownNodes.push(belowRow);
     }
     return shownNodes;
@@ -693,6 +696,9 @@ TreeBody.propTypes = {
   treeNodeKeyRecordIdMap: PropTypes.object,
   keyTreeNodeFoldedMap: PropTypes.object,
   treeMetrics: PropTypes.object,
+  recordDraggable: PropTypes.bool,
+  recordDragDropEvents: PropTypes.object,
+  draggingRecordSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
   CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
@@ -727,7 +733,6 @@ TreeBody.propTypes = {
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
   reloadRecords: PropTypes.func,
-  appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,
   columnColors: PropTypes.object,
   onFillingDragRows: PropTypes.func,

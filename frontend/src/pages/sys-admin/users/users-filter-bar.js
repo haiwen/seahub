@@ -56,7 +56,7 @@ class UsersFilterBar extends Component {
       <div className="users-filter-bar mt-4 mb-2 d-flex">
         <Dropdown isOpen={this.state.isStatusOpen} toggle={this.toggleStatusDropdown}>
           <DropdownToggle
-            tag="div"
+            tag="span"
             data-toggle="dropdown"
             aria-expanded={this.state.isStatusOpen}
             className="users-filter-bar-dropdown-toggle"
@@ -78,7 +78,7 @@ class UsersFilterBar extends Component {
         </Dropdown>
         <Dropdown isOpen={this.state.isRoleOpen} toggle={this.toggleRoleDropdown} className="ml-4">
           <DropdownToggle
-            tag="div"
+            tag="span"
             data-toggle="dropdown"
             aria-expanded={this.state.isRoleOpen}
             className="users-filter-bar-dropdown-toggle"

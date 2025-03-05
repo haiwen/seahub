@@ -503,10 +503,6 @@ export const Utils = {
         list.push(DOWNLOAD);
       }
 
-      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
-        list.push(SHARE);
-      }
-
       if (permission == 'rw' || permission == 'cloud-edit') {
         list.push(DELETE, 'Divider');
       }
@@ -514,6 +510,10 @@ export const Utils = {
       if (isCustomPermission && customPermission.permission.delete) {
         list.push(DELETE, 'Divider');
       }
+    }
+
+    if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+      list.push(SHARE);
     }
 
     if (permission == 'rw' || permission == 'cloud-edit') {
@@ -570,10 +570,6 @@ export const Utils = {
         list.push(DOWNLOAD);
       }
 
-      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
-        list.push(SHARE);
-      }
-
       if (permission == 'rw' || permission == 'cloud-edit') {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
@@ -587,6 +583,10 @@ export const Utils = {
         }
         list.push('Divider');
       }
+    }
+
+    if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+      list.push(SHARE);
     }
 
     if (permission == 'rw' || permission == 'cloud-edit') {
@@ -1969,4 +1969,8 @@ export const throttle = (func, delay) => {
       timer = setTimeout(func, remaining);
     }
   };
+};
+
+export const getType = (value) => {
+  return Object.prototype.toString.call(value).slice(8, -1);
 };

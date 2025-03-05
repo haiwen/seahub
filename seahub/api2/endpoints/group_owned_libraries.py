@@ -50,6 +50,7 @@ from seahub.views import check_folder_permission
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
         ENCRYPTED_LIBRARY_VERSION, ENCRYPTED_LIBRARY_PWD_HASH_ALGO, \
         ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
+from seahub.base.models import RepoTransfer
 
 logger = logging.getLogger(__name__)
 
@@ -1497,6 +1498,12 @@ class GroupOwnedLibraryTransferView(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
+            org_id = seafile_api.get_org_id_by_repo_id(repo_id)
+            RepoTransfer.objects.create(from_user=repo_owner,
+                                        to=new_owner,
+                                        repo_id=repo_id,
+                                        org_id=org_id,
+                                        operator=request.user.username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

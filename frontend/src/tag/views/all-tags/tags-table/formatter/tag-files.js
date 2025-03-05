@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { NumberFormatter } from '@seafile/sf-metadata-ui-component';
+import NumberFormatter from '../../../../../metadata/components/cell-formatter/number';
 import { useTags } from '../../../../hooks';
 import { getTagFilesLinks } from '../../../../utils/cell';
 import { getAllChildTagsIdsFromNode } from '../../../../utils/tree';
-import { getRowById } from '../../../../../metadata/utils/table';
+import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getTreeNodeId } from '../../../../../components/sf-table/utils/tree';
 
 const TagFilesFormatter = ({ treeNodeIndex }) => {

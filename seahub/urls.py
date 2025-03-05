@@ -45,7 +45,8 @@ from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
 from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
-        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
+        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample, GroupInviteLinks, GroupInviteLink, \
+        group_invite
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
@@ -91,7 +92,7 @@ from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchV
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.repo_share_invitations import RepoShareInvitationsView, RepoShareInvitationsBatchView
 from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
-from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
+from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, AllNotificationsView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -193,7 +194,7 @@ from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
 from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
-    AdminLogsSharePermissionLogs
+    AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs
 from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
@@ -235,6 +236,7 @@ urlpatterns = [
 
     path('', react_fake_view, name='libraries'),
     re_path(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+    path('metrics/', get_metrics, name='metrics'),
 
     # revert repo
     re_path(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),
@@ -301,6 +303,7 @@ urlpatterns = [
     path('my-libs/', react_fake_view, name="my_libs"),
     path('groups/', react_fake_view, name="groups"),
     path('group/<int:group_id>/', react_fake_view, name="group"),
+    re_path(r'^group-invite/(?P<token>[-0-9a-f]{8})/$', group_invite, name='group_invite'),
     re_path(r'^library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
     re_path(r'^library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="lib_view"),
     re_path(r'^remote-library/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="remote_lib_view"),
@@ -367,7 +370,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/group-members-import-example/$', GroupMembersImportExample.as_view(), name='api-v2.1-group-members-import-example'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
     re_path(r'^api/v2.1/search-group/$', SearchGroup.as_view(), name='api-v2.1-search-group'),
-
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/invite-links/$', GroupInviteLinks.as_view(),name='api-v2.1-group-invite-links'),
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/invite-links/(?P<token>[-0-9a-f]{8})/$', GroupInviteLink.as_view(), name='api-v2.1-group-invite-link'),
     ## address book
     re_path(r'^api/v2.1/address-book/groups/(?P<group_id>\d+)/sub-groups/$', AddressBookGroupsSubGroups.as_view(), name='api-v2.1-address-book-groups-sub-groups'),
     re_path(r'^api/v2.1/address-book/groups/(?P<group_id>\d+)/search-member/$', AddressBookGroupsSearchMember.as_view(), name='api-v2.1-address-book-search-member'),
@@ -522,6 +526,9 @@ urlpatterns = [
 
     re_path(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     re_path(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
+    re_path(r'^api/v2.1/sdoc-notifications/$', SdocNotificationsView.as_view(), name='api-v2.1-sdoc-notifications'),
+    re_path(r'^api/v2.1/sdoc-notification/$', SdocNotificationView.as_view(), name='api-v2.1-notification'),
+    re_path(r'^api/v2.1/all-notifications/$', AllNotificationsView.as_view(), name='api-v2.1-all-notification'),
 
     ## user::invitations
     re_path(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
@@ -691,6 +698,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/logs/file-access-logs/$', AdminLogsFileAccessLogs.as_view(), name='api-v2.1-admin-logs-file-access-logs'),
     re_path(r'^api/v2.1/admin/logs/file-update-logs/$', AdminLogsFileUpdateLogs.as_view(), name='api-v2.1-admin-logs-file-update-logs'),
     re_path(r'^api/v2.1/admin/logs/share-permission-logs/$', AdminLogsSharePermissionLogs.as_view(), name='api-v2.1-admin-logs-share-permission-logs'),
+    re_path(r'^api/v2.1/admin/logs/repo-transfer-logs/$', AdminLogsFileTransferLogs.as_view(), name='api-v2.1-admin-logs-repo-transfer-logs'),
 
     ## admin::admin logs
     re_path(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
@@ -865,6 +873,7 @@ urlpatterns = [
     path('sys/logs/file-access/', sysadmin_react_fake_view, name="sys_logs_file_access"),
     path('sys/logs/file-update/', sysadmin_react_fake_view, name="sys_logs_file_update"),
     path('sys/logs/share-permission/', sysadmin_react_fake_view, name="sys_logs_share_permission"),
+    path('sys/logs/repo-transfer/', sysadmin_react_fake_view, name="sys_logs_file_transfer"),
     path('sys/admin-logs/operation/', sysadmin_react_fake_view, name="sys_admin_logs_operation"),
     path('sys/admin-logs/login/', sysadmin_react_fake_view, name="sys_admin_logs_login"),
     path('sys/organizations/', sysadmin_react_fake_view, name="sys_organizations"),

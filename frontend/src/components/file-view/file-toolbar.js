@@ -211,11 +211,11 @@ class FileToolbar extends React.Component {
               className="file-toolbar-btn"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
-              tag="div"
+              tag="span"
             >
               <Icon symbol="more-vertical" />
             </DropdownToggle>
-            <DropdownMenu right={true}>
+            <DropdownMenu>
               {filePerm == 'rw' && (
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                   {gettext('History')}
@@ -249,11 +249,10 @@ class FileToolbar extends React.Component {
                     </button>
                   ))}
           </ButtonGroup>
-
-          <DropdownToggle className="mx-1" aria-label={gettext('More operations')}>
+          <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
             <Icon symbol="more-vertical" />
           </DropdownToggle>
-          <DropdownMenu right={true}>
+          <DropdownMenu>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
                 {gettext('Open parent folder')}

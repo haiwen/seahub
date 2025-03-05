@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Formatter } from '@seafile/sf-metadata-ui-component';
+import Formatter from '../formatter';
+import FileName from './file-name';
 import { useCollaborators } from '../../hooks';
 import { CellType } from '../../constants';
-import FileName from './file-name';
 import { useTags } from '../../../tag/hooks';
 
 const CellFormatter = ({ readonly, value, field, record, ...params }) => {

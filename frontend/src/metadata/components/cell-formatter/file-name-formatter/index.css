@@ -1,0 +1,30 @@
+.sf-metadata-ui.file-name-formatter {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+.sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .sf-metadata-file-icon {
+  height: 24px;
+}
+
+.sf-metadata-ui.file-name-formatter .sf-metadata-file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: initial;
+}
+
+.sf-metadata-ui.file-name-formatter .sf-metadata-file-name:hover {
+  text-decoration: underline;
+}

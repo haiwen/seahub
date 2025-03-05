@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import { Header, Body } from '../detail';
-import FileDetails from './file-details';
+import FileDetails from '../dirent-details/file-details';
 import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { AI, Settings } from '../../../metadata/components/metadata-details';
@@ -16,20 +16,38 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
 
+  const isView = useMemo(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('view');
+  }, []);
+
+  const isTag = useMemo(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('tag');
+  }, []);
+
   useEffect(() => {
-    // init context
-    const context = new MetadataContext();
-    window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ repoID, repoInfo });
     seafileAPI.getFileInfo(repoID, path).then(res => {
       setDirentDetail(res.data);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }, [repoID, path]);
+
+  useEffect(() => {
+    if (isView || isTag) return;
+
+    let isExistContext = true;
+    if (!window.sfMetadataContext) {
+      const context = new MetadataContext();
+      window.sfMetadataContext = context;
+      window.sfMetadataContext.init({ repoID, repoInfo });
+      isExistContext = false;
+    }
 
     return () => {
-      if (window.sfMetadataContext) {
+      if (window.sfMetadataContext && !isExistContext) {
         window.sfMetadataContext.destroy();
         delete window['sfMetadataContext'];
       }
@@ -53,14 +71,18 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         })}
         style={{ width }}
       >
-        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} >
-          <AI />
-          <Settings />
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>
+          {onClose && (
+            <>
+              <AI />
+              <Settings />
+            </>
+          )}
         </Header>
         <Body>
           {dirent && direntDetail && (
             <div className="detail-content">
-              <FileDetails direntDetail={direntDetail} />
+              <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
             </div>
           )}
         </Body>
@@ -75,7 +97,7 @@ EmbeddedFileDetails.propTypes = {
   path: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
   component: PropTypes.object,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
 export default EmbeddedFileDetails;

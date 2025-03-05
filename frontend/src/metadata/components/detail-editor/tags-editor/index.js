@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
-import { getRowById } from '../../../utils/table';
+import Editor from '../../cell-editors/tags-editor';
+import DeleteTag from '../../cell-editors/tags-editor/delete-tags';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { gettext } from '../../../../utils/constants';
-import DeleteTag from '../../cell-editors/tags-editor/delete-tags';
 import { KeyCodes } from '../../../../constants';
-import { getEventClassName } from '../../../utils/common';
-import Editor from '../../cell-editors/tags-editor';
+import { getEventClassName } from '../../../../utils/dom';
 import { useTags } from '../../../../tag/hooks';
 
 import './index.css';

@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { Router } from '@gatsbyjs/reach-router';
+import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
 import { I18nextProvider } from 'react-i18next';
 import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -67,6 +67,7 @@ import LoginLogs from './logs-page/login-logs';
 import FileAccessLogs from './logs-page/file-access-logs';
 import FileUpdateLogs from './logs-page/file-update-logs';
 import SharePermissionLogs from './logs-page/share-permission-logs';
+import FIleTransferLogs from './logs-page/file-transfer-log';
 
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
@@ -251,6 +252,7 @@ class SysAdmin extends React.Component {
             <InstitutionAdmins path={siteRoot + 'sys/institutions/:institutionID/admins'} {...commonProps} />
             <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
             <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
+            <FIleTransferLogs path={siteRoot + 'sys/logs/repo-transfer'} {...commonProps} />
             <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />
@@ -287,9 +289,11 @@ class SysAdmin extends React.Component {
   }
 }
 
-ReactDom.render(
+const root = createRoot(document.getElementById('wrapper'));
+root.render(
   <I18nextProvider value={i18n}>
-    <SysAdmin />
-  </I18nextProvider>,
-  document.getElementById('wrapper')
+    <LocationProvider history={globalHistory}>
+      <SysAdmin />
+    </LocationProvider>
+  </I18nextProvider>
 );

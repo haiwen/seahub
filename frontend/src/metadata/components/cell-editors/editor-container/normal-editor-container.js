@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ClickOutside } from '@seafile/sf-metadata-ui-component';
+import ClickOutside from '../../../../components/click-outside';
 import Editor from '../editor';
 import { Utils } from '../../../../utils/utils';
-import { getEventClassName } from '../../../utils/common';
+import { getEventClassName } from '../../../../utils/dom';
 import { isCellValueChanged, getCellValueByColumn } from '../../../utils/cell';
 import { canEditCell } from '../../../utils/column';
-import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../utils/keyboard-utils';
+import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS, metadataZIndexes, CellType } from '../../../constants';
 
 class NormalEditorContainer extends React.Component {

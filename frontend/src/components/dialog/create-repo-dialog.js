@@ -117,8 +117,7 @@ class CreateRepoDialog extends React.Component {
     return true;
   }
 
-  onPermissionChange = (e) => {
-    let permission = e.target.value;
+  onPermissionChange = (permission) => {
     this.setState({ permission: permission });
   };
 
@@ -223,11 +222,19 @@ class CreateRepoDialog extends React.Component {
 
             {this.props.libraryType === 'group' && (
               <FormGroup>
-                <Label for="exampleSelect">{gettext('Permission')}</Label>
-                <Input type="select" name="select" id="exampleSelect" onChange={this.onPermissionChange} value={this.state.permission}>
-                  <option value='rw'>{gettext('Read-Write')}</option>
-                  <option value='r'>{gettext('Read-Only')}</option>
-                </Input>
+                <Label>{gettext('Permission')}</Label>
+                <SeahubSelect
+                  options={[
+                    { value: 'rw', label: gettext('Read-Write') },
+                    { value: 'r', label: gettext('Read-Only') }
+                  ]}
+                  onChange={selectedOption => this.onPermissionChange(selectedOption.value)}
+                  value={{
+                    value: this.state.permission,
+                    label: this.state.permission === 'rw' ? gettext('Read-Write') : gettext('Read-Only')
+                  }}
+                  isClearable={false}
+                />
               </FormGroup>
             )}
             {enableEncryptedLibrary &&

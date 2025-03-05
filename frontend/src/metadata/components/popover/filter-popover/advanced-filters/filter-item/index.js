@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
-import { CustomizeSelect, IconBtn, SearchInput, Icon } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../../../components/customize-select';
+import SearchInput from '../../../../../../components/search-input';
+import Icon from '../../../../../../components/icon';
+import IconBtn from '../../../../../../components/icon-btn';
 import CollaboratorFilter from './collaborator-filter';
 import FilterCalendar from '../filter-calendar';
 import RateItem from '../../../../cell-editors/rate-editor/rate-item';
@@ -526,7 +529,7 @@ class FilterItem extends React.Component {
     if (isRenderErrorTips) return null;
     return (
       <div className="ml-2" >
-        <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" iconStyle={{ fill: '#FFC92C' }} />
+        <IconBtn id={`filter-tool-tip-${filterColumn.key}`} symbol="exclamation-triangle" iconStyle={{ fill: '#FFC92C' }} />
         <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} fade={false} className="sf-metadata-tooltip">
           {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
         </UncontrolledTooltip>
@@ -541,7 +544,7 @@ class FilterItem extends React.Component {
     return (
       <div className="ml-2">
         <div ref={this.invalidFilterTip}>
-          <IconBtn iconName="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
+          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
         </div>
         <UncontrolledTooltip
           target={this.invalidFilterTip}
@@ -576,7 +579,7 @@ class FilterItem extends React.Component {
       <div className="filter-item">
         {!readOnly && (
           <div className="delete-filter" onClick={this.onDeleteFilter}>
-            <Icon iconName="fork-number"/>
+            <Icon className="sf-metadata-icon" symbol="fork-number"/>
           </div>
         )}
         <div className="condition">

@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, FormGroup, Input, Button, Alert, Label } from 'reactstrap';
 import classnames from 'classnames';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../../components/icon-btn';
 import toaster from '../../../../components/toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext } from '../../../../utils/constants';
 import { getTagColor, getTagId, getTagName } from '../../../utils/cell';
 import { isValidTagName } from '../../../utils/validate/tag';
 import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
-import { isEnter } from '../../../../metadata/utils/hotkey';
+import { isEnter } from '../../../../utils/hotkey';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 
 import './index.css';
@@ -87,7 +87,7 @@ const EditTagDialog = ({ tags, tag, title, onSubmit, onToggle }) => {
                     <IconBtn
                       className={classnames('sf-metadata-edit-tag-color-container', { 'selected': isSelected })}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      iconName="check-mark"
+                      symbol="check-mark"
                       iconStyle={{ fill: textColor || '#666' }}
                     />
                   </label>

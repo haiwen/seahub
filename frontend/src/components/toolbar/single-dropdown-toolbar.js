@@ -50,7 +50,7 @@ class SingleDropdownToolbar extends React.Component {
           {withPlusIcon && <i className="sf3-font-new sf3-font main-icon"></i>}
           <i className="sf3-font-down sf3-font"></i>
         </DropdownToggle>
-        <DropdownMenu positionFixed={true}>
+        <DropdownMenu className='position-fixed'>
           {opList.map((item, index) => {
             if (item == 'Divider') {
               return <DropdownItem key={index} divider />;

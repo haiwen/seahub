@@ -1,6 +1,6 @@
 import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
+import { getRowsByIds } from '../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { getRowsByIds } from '../../metadata/utils/table';
 import { getParentLinks, getChildLinks } from './cell';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';

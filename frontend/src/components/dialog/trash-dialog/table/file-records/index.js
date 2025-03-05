@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FileRecord from './file-record';
 
-const FileRecords = ({ records, repoID, renderFolder }) => {
+const FileRecords = ({ records, repoID, renderFolder, isDesktop }) => {
   if (!Array.isArray(records) || records.length === 0) return null;
   return records.map((record, index) => {
     return (
@@ -11,6 +11,7 @@ const FileRecords = ({ records, repoID, renderFolder }) => {
         record={record}
         repoID={repoID}
         renderFolder={renderFolder}
+        isDesktop={isDesktop}
       />
     );
   });

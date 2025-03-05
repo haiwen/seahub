@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
+import CenteredLoading from '../../../components/centered-loading';
 import toaster from '../../../components/toast';
 import TagsTable from './tags-table';
 import View from '../view';
@@ -78,11 +78,6 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
     }
   }, [isLoading, isReloading, onChangeDisplayTag]);
 
-  const getTagsTableWrapperOffsets = useCallback(() => {
-    if (!tagsTableWrapperRef.current) return {};
-    return tagsTableWrapperRef.current.getBoundingClientRect();
-  }, []);
-
   if (isReloading) return (<CenteredLoading />);
 
   if (displayTag) {
@@ -104,7 +99,6 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
         setDisplayTag={onChangeDisplayTag}
         isLoadingMoreRecords={isLoadingMore}
         loadMore={loadMore}
-        getTagsTableWrapperOffsets={getTagsTableWrapperOffsets}
       />
     </div>
   );

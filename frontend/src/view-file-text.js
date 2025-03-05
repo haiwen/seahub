@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import toaster from './components/toast';
 import { gettext } from './utils/constants';
@@ -151,4 +151,5 @@ class ViewFileText extends React.Component {
   }
 }
 
-ReactDom.render(<ViewFileText />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<ViewFileText />);

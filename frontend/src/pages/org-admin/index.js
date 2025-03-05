@@ -1,6 +1,8 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import { Router } from '@gatsbyjs/reach-router';
+import { createRoot } from 'react-dom/client';
+import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../_i18n/i18n-seafile-editor';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import SidePanel from './side-panel';
 
@@ -35,6 +37,7 @@ import OrgLogs from './org-logs';
 import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
+import OrgLogsFileTransfer from './org-logs-file-transfer';
 import OrgSAMLConfig from './org-saml-config';
 import OrgSubscription from './org-subscription';
 
@@ -124,6 +127,7 @@ class Org extends React.Component {
               <OrgLogsFileAudit path='/' />
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
+              <OrgLogsFileTransfer path='repo-transfer' />
             </OrgLogs>
             {enableMultiADFS &&
               <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
@@ -135,4 +139,12 @@ class Org extends React.Component {
   }
 }
 
-ReactDom.render(<Org />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+
+root.render(
+  <I18nextProvider value={i18n}>
+    <LocationProvider history={globalHistory}>
+      <Org />
+    </LocationProvider>
+  </I18nextProvider>
+);

@@ -1,0 +1,30 @@
+.add-item-btn {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  border-top: 1px solid #dedede;
+  background: #fff;
+  padding: 0 1rem;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  position: relative;
+}
+
+.add-item-btn:hover {
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
+.add-item-btn .seafile-multicolor-icon-add-table {
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transform: none;
+  fill: #666;
+}
+
+.add-item-btn .description {
+  flex: 1;
+}

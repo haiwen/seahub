@@ -8,7 +8,7 @@ import { updateFavicon } from '../utils/favicon';
 import Context from '../context';
 import Store from '../store';
 import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
-import { getRowById } from '../../metadata/utils/table';
+import { getRowById } from '../../components/sf-table/utils/table';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';
@@ -192,12 +192,39 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyLocalTags]);
 
+  const updateLocalTags = useCallback((tagIds, idTagUpdates, { success_callback, fail_callback } = { }) => {
+    if (!Array.isArray(tagIds) || tagIds.length === 0) {
+      return;
+    }
+    let idOriginalRowUpdates = {};
+    let idOldRowData = {};
+    let idOriginalOldRowData = {};
+    tagIds.forEach((tagId) => {
+      const tag = getRowById(tagsData, tagId);
+      const tagUpdates = idTagUpdates[tagId];
+      if (tagUpdates) {
+        Object.keys(tagUpdates).forEach((key) => {
+          const column = tagsData.key_column_map[key];
+          const columnName = getColumnOriginName(column);
+          idOriginalRowUpdates[tagId] = Object.assign({}, idOriginalRowUpdates[tagId], { [key]: tagUpdates[key] });
+          idOldRowData[tagId] = Object.assign({}, idOldRowData[tagId], { [key]: getCellValueByColumn(tag, column) });
+          idOriginalOldRowData[tagId] = Object.assign({}, idOriginalOldRowData[tagId], { [columnName]: getCellValueByColumn(tag, column) });
+        });
+      }
+    });
+    modifyLocalTags(tagIds, idTagUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, { success_callback, fail_callback });
+  }, [tagsData, modifyLocalTags]);
+
   const addTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
     storeRef.current.addTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
   }, [storeRef]);
 
   const deleteTagLinks = useCallback((columnKey, tagId, otherTagsIds, { success_callback, fail_callback } = {}) => {
     storeRef.current.deleteTagLinks(columnKey, tagId, otherTagsIds, success_callback, fail_callback);
+  }, [storeRef]);
+
+  const deleteTagsLinks = useCallback((columnKey, tagId, idLinkedRowsIdsMap, { success_callback, fail_callback } = {}) => {
+    storeRef.current.deleteTagsLinks(columnKey, tagId, idLinkedRowsIdsMap, success_callback, fail_callback);
   }, [storeRef]);
 
   const mergeTags = useCallback((target_tag_id, merged_tags_ids, { success_callback, fail_callback } = {}) => {
@@ -284,11 +311,13 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateTag,
       addTagLinks,
       deleteTagLinks,
+      deleteTagsLinks,
       mergeTags,
       updateLocalTag,
+      updateLocalTags,
       selectTag: handleSelectTag,
       modifyColumnWidth,
-      modifyLocalFileTags,
+      modifyLocalFileTags
     }}>
       {children}
     </TagsContext.Provider>

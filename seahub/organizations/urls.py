@@ -35,6 +35,7 @@ urlpatterns = [
     path('logadmin/', react_fake_view, name='org_log_file_audit'),
     path('logadmin/file-update/', react_fake_view, name='org_log_file_update'),
     path('logadmin/perm-audit/', react_fake_view, name='org_log_perm_audit'),
+    path('logadmin/repo-transfer/', react_fake_view, name='org_log_file_transfer'),
 
     path('info/', react_fake_view, name='org_info'),
     path('settings/', react_fake_view, name='org_settings'),

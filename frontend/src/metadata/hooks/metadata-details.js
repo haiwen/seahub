@@ -11,7 +11,7 @@ import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameByI
 import tagsAPI from '../../tag/api';
 import { useTags } from '../../tag/hooks';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
-import ObjectUtils from '../utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
 
 const MetadataDetailsContext = React.createContext(null);
@@ -72,6 +72,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, update);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, recordId, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

@@ -149,7 +149,7 @@ class ViewFileToolbar extends React.Component {
         {opList.length > 0 &&
         <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className="view-file-toolbar-dropdown">
           <DropdownToggle
-            tag="div"
+            tag="span"
             role="button"
             className="path-item"
             onClick={this.toggleDropdownMenu}
@@ -159,7 +159,7 @@ class ViewFileToolbar extends React.Component {
             {this.props.children}
             <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu positionFixed={true} onMouseMove={this.onDropDownMouseMove}>
+          <DropdownMenu className='position-fixed' onMouseMove={this.onDropDownMouseMove}>
             {opList.map((item, index) => {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
@@ -174,6 +174,7 @@ class ViewFileToolbar extends React.Component {
                     onMouseMove={(e) => {e.stopPropagation();}}
                   >
                     <DropdownToggle
+                      tag="span"
                       className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                     >

@@ -2,11 +2,11 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import deepCopy from 'deep-copy';
-import { IconBtn } from '@seafile/sf-metadata-ui-component';
+import IconBtn from '../../../components/icon-btn';
 import { FilterPopover } from '../popover';
 import { getValidFilters } from '../../utils/filter';
 import { gettext } from '../../../utils/constants';
-import { isEnter, isSpace } from '../../utils/hotkey';
+import { isEnter, isSpace } from '../../../utils/hotkey';
 import { VIEW_TYPE } from '../../constants';
 
 const FilterSetter = ({
@@ -17,11 +17,11 @@ const FilterSetter = ({
   isPre,
   collaborators,
   filtersClassName,
-  target,
+  target = 'sf-metadata-filter-popover',
   filterConjunction,
-  basicFilters,
+  basicFilters = [],
   modifyFilters,
-  viewType,
+  viewType = VIEW_TYPE.TABLE,
 }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
@@ -59,7 +59,7 @@ const FilterSetter = ({
   return (
     <>
       <IconBtn
-        iconName="filter"
+        symbol="filter"
         size={24}
         className={className}
         onClick={onSetterToggle}
@@ -105,12 +105,6 @@ FilterSetter.propTypes = {
   isPre: PropTypes.bool,
   basicFilters: PropTypes.array,
   viewType: PropTypes.string,
-};
-
-FilterSetter.defaultProps = {
-  target: 'sf-metadata-filter-popover',
-  basicFilters: [],
-  viewType: VIEW_TYPE.TABLE,
 };
 
 export default FilterSetter;

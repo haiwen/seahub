@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../../components/customize-select';
 import { gettext } from '../../../../../utils/constants';
 import { getFileTypeColumnOptions } from '../../../../utils/column';
 
@@ -59,11 +59,6 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
       options={options}
       onSelectOption={onChange}
       supportMultipleSelect={true}
-      component={{
-        DropDownIcon: (
-          <i className="sf3-font sf3-font-down"></i>
-        )
-      }}
     />
   );
 };

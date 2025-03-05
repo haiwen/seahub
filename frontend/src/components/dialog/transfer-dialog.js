@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import { SeahubSelect } from '../common/select';
-import Switch from '../common/switch';
+import Switch from '../switch';
 import '../../css/transfer-dialog.css';
 
 const propTypes = {
@@ -40,6 +40,7 @@ class TransferDialog extends React.Component {
       reshare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
@@ -157,7 +158,7 @@ class TransferDialog extends React.Component {
               <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
                 <Label className='transfer-repo-label'>{gettext('Users')}</Label>
                 <UserSelect
-                  ref="userSelect"
+                  ref={this.userSelect}
                   isMulti={false}
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}

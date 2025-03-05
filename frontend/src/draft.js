@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import './css/draft.css';
 
@@ -12,4 +12,5 @@ export default function Draft() {
   );
 }
 
-ReactDom.render(<Draft />, document.getElementById('wrapper'));
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<Draft />);

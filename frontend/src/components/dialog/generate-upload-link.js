@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
 import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -300,14 +300,12 @@ class GenerateUploadLink extends React.Component {
                       <Input type="text" readOnly={true} value={sharedUploadInfo.password} /> :
                       <Input type="text" readOnly={true} value={'***************'} />
                     }
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
-                        onClick={this.toggleStoredPasswordVisible}
-                        className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
-                      >
-                      </Button>
-                    </InputGroupAddon>
+                    <Button
+                      aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
+                      onClick={this.toggleStoredPasswordVisible}
+                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
+                    >
+                    </Button>
                   </InputGroup>
                 </dd>
               </>
@@ -338,15 +336,13 @@ class GenerateUploadLink extends React.Component {
                   ) : (
                     <InputGroup className="share-link-details-item">
                       <Input type="text" readOnly={true} value={dayjs(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
-                      <InputGroupAddon addonType="append">
-                        <Button
-                          aria-label={gettext('Edit')}
-                          title={gettext('Edit')}
-                          className="link-operation-icon sf3-font sf3-font-rename"
-                          onClick={this.editExpirationToggle}
-                        >
-                        </Button>
-                      </InputGroupAddon>
+                      <Button
+                        aria-label={gettext('Edit')}
+                        title={gettext('Edit')}
+                        className="link-operation-icon sf3-font sf3-font-rename"
+                        onClick={this.editExpirationToggle}
+                      >
+                      </Button>
                     </InputGroup>
                   )}
                 </dd>
@@ -389,14 +385,12 @@ class GenerateUploadLink extends React.Component {
               <span className="tip">{passwordLengthTip}</span>
               <InputGroup style={{ width: inputWidth }}>
                 <Input id="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}>
-                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.passwordVisible ? '' : '-slash'}`}></i>
-                  </Button>
-                  <Button onClick={this.generatePassword}>
-                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
-                  </Button>
-                </InputGroupAddon>
+                <Button onClick={this.togglePasswordVisible}>
+                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.passwordVisible ? '' : '-slash'}`}></i>
+                </Button>
+                <Button onClick={this.generatePassword}>
+                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                </Button>
               </InputGroup>
             </FormGroup>
             <FormGroup>

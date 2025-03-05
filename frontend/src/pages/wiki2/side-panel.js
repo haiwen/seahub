@@ -31,6 +31,7 @@ const propTypes = {
   setCurrentPage: PropTypes.func.isRequired,
   getCurrentPageId: PropTypes.func.isRequired,
   onUpdatePage: PropTypes.func.isRequired,
+  style: PropTypes.object.isRequired,
 };
 
 class SidePanel extends PureComponent {
@@ -220,9 +221,9 @@ class SidePanel extends PureComponent {
   };
 
   render() {
-    const { isLoading, config } = this.props;
+    const { isLoading, config, style } = this.props;
     return (
-      <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })}>
+      <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })} style={style}>
         <div className="wiki2-side-panel-top">
           <h1 className="h4 text-truncate ml-0 mb-0" title={repoName}>{repoName}</h1>
           {(wikiPermission === 'rw' && this.state.customUrl) &&

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
 import ViewDetails from '../../metadata/components/view-details';
-import ObjectUtils from '../../metadata/utils/object-utils';
+import ObjectUtils from '../../utils/object';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';

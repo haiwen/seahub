@@ -1,19 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import ContextMenu from '../../../components/context-menu';
-import { getRowById } from '../../../utils/table';
+import RenameDialog from '../../../components/dialog/rename-dialog';
+import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { checkIsDir } from '../../../utils/row';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { gettext, useGoFileserver, fileServerRoot } from '../../../../utils/constants';
 import { openInNewTab, openParentFolder, downloadFile } from '../../../utils/file';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import RenameDialog from '../../../components/dialog/rename-dialog';
 import { Utils } from '../../../../utils/utils';
 import toaster from '../../../../components/toast';
 import metadataAPI from '../../../api';
-import ZipDownloadDialog from '../../../../components/dialog/zip-download-dialog';
 
 const CONTEXT_MENU_KEY = {
   OPEN_IN_NEW_TAB: 'open_in_new_tab',
@@ -134,19 +133,15 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         ignoredTriggerElements={['.sf-metadata-kanban-card']}
       />
       {isRenameDialogShow && (
-        <ModalPortal>
-          <RenameDialog
-            isDir={isDir}
-            oldName={oldName}
-            onSubmit={handleRename}
-            onCancel={() => setIsRenameDialogShow(false)}
-          />
-        </ModalPortal>
+        <RenameDialog
+          isDir={isDir}
+          oldName={oldName}
+          onSubmit={handleRename}
+          onCancel={() => setIsRenameDialogShow(false)}
+        />
       )}
       {isZipDialogOpen && (
-        <ModalPortal>
-          <ZipDownloadDialog repoID={repoID} path={parentDir} target={[oldName]} toggleDialog={closeZipDialog}/>
-        </ModalPortal>
+        <ZipDownloadDialog repoID={repoID} path={parentDir} target={[oldName]} toggleDialog={closeZipDialog}/>
       )}
     </>
   );

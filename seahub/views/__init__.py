@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
+import base64
 import os
 import stat
 import json
@@ -18,7 +19,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 from django.http import HttpResponse, Http404, \
-    HttpResponseRedirect
+    HttpResponseRedirect, HttpResponseForbidden
 
 import seaserv
 from seaserv import get_repo, get_commits, \
@@ -45,7 +46,7 @@ from seahub.utils import render_permission_error, render_error, \
     new_merge_with_no_conflict, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
-    normalize_file_path, normalize_dir_path
+    normalize_file_path, normalize_dir_path, get_seafevents_metrics
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_admin
 from seahub.utils.file_op import check_file_lock
@@ -58,7 +59,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP
+    SEADOC_SERVER_URL, SHOW_WECHAT_SUPPORT_GROUP, MULTI_TENANCY
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
@@ -72,6 +73,10 @@ from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
+
+ENABLE_METRIC = getattr(settings, 'ENABLE_METRIC', False)
+METRIC_AUTH_USER = getattr(settings, 'METRIC_AUTH_USER', None)
+METRIC_AUTH_PWD = getattr(settings, 'METRIC_AUTH_PWD', None)
 
 
 # Get an instance of a logger
@@ -1148,7 +1153,8 @@ def react_fake_view(request, **kwargs):
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
-        'enable_show_about': settings.ENABLE_SHOW_ABOUT
+        'enable_show_about': settings.ENABLE_SHOW_ABOUT,
+        'multi_tenancy': MULTI_TENANCY,
     }
 
     if ENABLE_METADATA_MANAGEMENT:
@@ -1157,3 +1163,25 @@ def react_fake_view(request, **kwargs):
         return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
     
     return render(request, "react_app.html", return_dict)
+
+
+def check_metric_auth(auth_header):
+    try:
+        auth_decoded = base64.b64decode(auth_header.split(' ')[1]).decode('utf-8')
+        username, password = auth_decoded.split(':')
+        if username == METRIC_AUTH_USER and password == METRIC_AUTH_PWD:
+            return True
+    except Exception as e:
+        logger.error(e)
+        return False
+    return False
+
+
+def get_metrics(request):
+    if not ENABLE_METRIC:
+        return Http404
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+    if not auth_header or not check_metric_auth(auth_header):
+        return HttpResponseForbidden('Invalid Authentication')
+    metrics = get_seafevents_metrics()
+    return HttpResponse(metrics, content_type='text/plain')

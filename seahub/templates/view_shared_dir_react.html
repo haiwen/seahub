@@ -24,16 +24,6 @@
             sharedBy: '{{ username|email2nickname|escapejs }}',
             repoID: '{{repo.id}}',
             relativePath: '{{ path|escapejs }}',
-            zipped: (function() {
-              var list = [];
-              {% for name, path in zipped %}
-              list.push({
-                'name': '{{ name|escapejs }}',
-                'path': '{{ path|escapejs }}'
-              });
-              {% endfor %}
-              return list;
-            })(),
             token: '{{ token }}',
             mode: '{{ mode }}',
             thumbnailSize: {{ thumbnail_size }},

@@ -2,9 +2,18 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../../../../../../components/icon';
 
-const ColumnDropdownItem = ({ disabled, iconName, target, title, tip, className, onChange, onMouseEnter }) => {
+const ColumnDropdownItem = ({
+  disabled = false,
+  iconName,
+  target,
+  title,
+  tip,
+  className = '',
+  onChange = () => {},
+  onMouseEnter = () => {},
+}) => {
   const [isShowToolTip, setToolTipShow] = useState(false);
 
   useEffect(() => {
@@ -23,7 +32,7 @@ const ColumnDropdownItem = ({ disabled, iconName, target, title, tip, className,
   if (!disabled) {
     return (
       <DropdownItem id={target} onClick={onChange} onMouseEnter={onMouseEnter} className={className}>
-        <Icon iconName={iconName} />
+        <Icon className="sf-metadata-icon" symbol={iconName} />
         <span className="item-text">{title}</span>
       </DropdownItem>
     );
@@ -38,7 +47,7 @@ const ColumnDropdownItem = ({ disabled, iconName, target, title, tip, className,
         onMouseEnter={onMouseEnter}
         id={target}
       >
-        <Icon iconName={iconName} />
+        <Icon className="sf-metadata-icon" symbol={iconName} />
         <span className="item-text">{title}</span>
         {isShowToolTip && (
           <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-metadata-tooltip">
@@ -60,13 +69,6 @@ ColumnDropdownItem.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
-};
-
-ColumnDropdownItem.defaultProps = {
-  onChange: () => {},
-  onMouseEnter: () => {},
-  disabled: false,
-  className: '',
 };
 
 export default ColumnDropdownItem;

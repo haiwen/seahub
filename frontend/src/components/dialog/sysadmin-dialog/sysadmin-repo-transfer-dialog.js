@@ -18,6 +18,7 @@ class SysAdminRepoTransferDialog extends React.Component {
       selectedOption: null,
       errorMsg: [],
     };
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
@@ -41,7 +42,7 @@ class SysAdminRepoTransferDialog extends React.Component {
         </SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}

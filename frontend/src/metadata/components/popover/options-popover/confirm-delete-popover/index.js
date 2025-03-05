@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CustomizePopover, Loading } from '@seafile/sf-metadata-ui-component';
+import CustomizePopover from '../../../../../components/customize-popover';
+import Loading from '../../../../../components/loading';
 import { gettext } from '../../../../../utils/constants';
 
 import './index.css';
@@ -19,9 +20,9 @@ const ConfirmDeletePopover = ({ option, onToggle, onSubmit, deleteNumber }) => {
   return (
     <CustomizePopover
       target={`sf-metadata-edit-option-more-operation-${option.id}`}
-      className="sf-metadata-confirm-delete-option-popover"
-      hide={toggle}
-      hideWithEsc={toggle}
+      popoverClassName="sf-metadata-confirm-delete-option-popover"
+      hidePopover={toggle}
+      hidePopoverWithEsc={toggle}
     >
       <div className="sf-metadata-tip-default mt-2 mb-4">
         {gettext('{name} rows use this option.').replace('{name}', deleteNumber)}{' '}
@@ -29,7 +30,7 @@ const ConfirmDeletePopover = ({ option, onToggle, onSubmit, deleteNumber }) => {
       </div>
       <div className="d-flex justify-content-end">
         <button className="btn btn-secondary mr-2" onClick={toggle}>{gettext('Cancel')}</button>
-        <button className="btn btn-primary" disabled={isDeleting} onClick={isDeleting ? () => {} : submit}>{isDeleting ? <Loading /> : gettext('Delete')}</button>
+        <button className="btn btn-primary" disabled={isDeleting} onClick={isDeleting ? () => {} : submit}>{isDeleting ? <Loading className="sf-metadata-loading-tip center" /> : gettext('Delete')}</button>
       </div>
     </CustomizePopover>
   );

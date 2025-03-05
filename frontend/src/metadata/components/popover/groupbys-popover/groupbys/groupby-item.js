@@ -2,7 +2,8 @@ import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DragSource, DropTarget } from 'react-dnd';
-import { Icon, CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import CustomizeSelect from '../../../../../components/customize-select';
+import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { getColumnByKey } from '../../../../utils/column';
 import { COLUMNS_ICON_CONFIG, SORT_TYPE, SORT_COLUMN_OPTIONS } from '../../../../constants';
@@ -74,7 +75,7 @@ const GroupbyItem = ({
         value: { column },
         label: (
           <Fragment>
-            <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+            <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
             <span className="select-option-name">{name}</span>
           </Fragment>
         )
@@ -174,7 +175,7 @@ const GroupbyItem = ({
       >
         {!readOnly && (
           <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
-            <Icon iconName="fork-number"/>
+            <Icon className="sf-metadata-icon" symbol="fork-number"/>
           </div>
         )}
         <div className="condition">
@@ -212,7 +213,7 @@ const GroupbyItem = ({
         </div>
         {!readOnly && showDragBtn && connectDragSource(
           <div className="groupby-drag">
-            <Icon iconName="drag" />
+            <Icon symbol="drag" />
           </div>
         )}
       </div>

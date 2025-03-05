@@ -18,6 +18,7 @@ class SysAdminGroupAddMemberDialog extends React.Component {
       selectedOptions: null,
       isSubmitBtnDisabled: true
     };
+    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (options) => {
@@ -40,7 +41,7 @@ class SysAdminGroupAddMemberDialog extends React.Component {
         <SeahubModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref="userSelect"
+            ref={this.userSelect}
             isMulti={true}
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}

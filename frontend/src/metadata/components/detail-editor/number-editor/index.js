@@ -4,7 +4,7 @@ import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
 import { DEFAULT_NUMBER_FORMAT } from '../../../constants';
 import { Utils } from '../../../../utils/utils';
-import ObjectUtils from '../../../utils/object-utils';
+import ObjectUtils from '../../../../utils/object';
 import { isCellValueChanged, getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../../utils/cell';
 
 import './index.css';

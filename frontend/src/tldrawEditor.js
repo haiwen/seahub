@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import TldrawEditor from './pages/tldraw-editor';
 import Loading from './components/loading';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('wrapper'));
+root.render(
   <Suspense fallback={<Loading />}>
     <TldrawEditor />
-  </Suspense>,
-  document.getElementById('wrapper')
+  </Suspense>
 );

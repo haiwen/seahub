@@ -2,13 +2,12 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
-import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
+import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
 import TagViewName from '../../tag/components/tag-view-name';
 import { siteRoot, gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { debounce } from '../../metadata/utils/common';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 
@@ -182,7 +181,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <DirOperationToolBar
+            <DirOperationToolbar
               path={this.props.currentPath}
               repoID={this.props.repoID}
               repoName={this.props.repoName}
@@ -199,7 +198,7 @@ class DirPath extends React.Component {
               loadDirentList={this.props.loadDirentList}
             >
               <span className="path-file-name">{item}</span>
-            </DirOperationToolBar>
+            </DirOperationToolbar>
           </Fragment>
         );
       } else {
@@ -241,19 +240,19 @@ class DirPath extends React.Component {
           );
         })}
         {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
-          <Fragment>
+          <>
             <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
-          </Fragment>
+          </>
         )}
         {!this.props.pathPrefix && (
-          <Fragment>
+          <>
             <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
-          </Fragment>
+          </>
         )}
         {(currentPath === '/' || currentPath === '') ?
-          <DirOperationToolBar
+          <DirOperationToolbar
             path={this.props.currentPath}
             repoID={this.props.repoID}
             repoName={this.props.repoName}
@@ -270,7 +269,7 @@ class DirPath extends React.Component {
             loadDirentList={this.props.loadDirentList}
           >
             <span className="path-repo-name">{repoName}</span>
-          </DirOperationToolBar> :
+          </DirOperationToolbar> :
           <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
         }
         {pathElem}

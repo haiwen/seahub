@@ -613,5 +613,6 @@
   "Support_Youtube_Tencent_Bilibili_and_more": "Supporte Youtube, Tencent, Bilibili et autres",
   "Image_cannot_be_copied_Please_download_the_source_image": "L'image ne peut pas être copiée. Télécharger l'image.",
   "And_select_insert_-_image_to_upload": "et sélectionner 「insert」 - 「image」 pour importer.",
-  "Image_copy_error": "Erreur copie de l'image"
+  "Image_copy_error": "Erreur copie de l'image",
+  "Image_is_uploading": "Image is uploading..."
 }
