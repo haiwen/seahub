@@ -739,10 +739,26 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <a
+                    href="#"
+                    className="op-icon sf3-font sf3-font-download1"
+                    title={gettext('Download')}
+                    role="button"
+                    aria-label={gettext('Download')}
+                    onClick={this.onItemDownload}
+                  >
+                  </a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <a
+                    href="#"
+                    className="op-icon sf3-font-delete1 sf3-font"
+                    title={gettext('Delete')}
+                    role="button"
+                    aria-label={gettext('Delete')}
+                    onClick={this.onItemDelete}
+                  >
+                  </a>
                 )}
                 <ItemDropdownMenu
                   item={this.state.dirent}
