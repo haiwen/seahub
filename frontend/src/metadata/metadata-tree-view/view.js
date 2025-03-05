@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../utils/constants';
 import Icon from '../../components/icon';
-import ItemDropdownMenu from '../../components/dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../../components/dropdown-menu/metadata-item-dropdown-menu';
 import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
 import { Utils, isMobile } from '../../utils/utils';
