@@ -16,6 +16,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
 import LogUserSelector from '../../dashboard/log-user-selector';
+import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
 
@@ -154,6 +155,9 @@ class SharePermissionLogs extends Component {
       isExportExcelDialogOpen: false,
       availableUsers: [],
       selectedUsers: [],
+      availableRepos: [],
+      selectedRepos: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
@@ -174,9 +178,9 @@ class SharePermissionLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedUsers } = this.state;
+    let { perPage, selectedUsers, selectedRepos } = this.state;
     let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage, emails).then((res) => {
+    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage, emails, selectedRepos).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,
         loading: false,
@@ -222,8 +226,70 @@ class SharePermissionLogs extends Component {
     });
   };
 
+  getAvailableUsers = () => {
+    systemAdminAPI.sysAdminListUsers().then((res) => {
+      this.setState({
+        availableUsers: res.data.data
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
+  getAvailableRepos = () => {
+    systemAdminAPI.sysAdminListRepos().then((res) => {
+      this.setState({
+        availableRepos: res.data.repos
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleRepoFilter = (repo, shouldFetchData = true) => {
+    const { selectedRepos } = this.state;
+    let newSelectedRepos;
+
+    if (repo === null) {
+      newSelectedRepos = selectedRepos;
+    } else {
+      const isSelected = selectedRepos.find(item => item.id === repo.id);
+      if (isSelected) {
+        newSelectedRepos = selectedRepos.filter(item => item.id !== repo.id);
+      } else {
+        newSelectedRepos = [...selectedRepos, repo];
+      }
+    }
+
+    this.setState({
+      selectedRepos: newSelectedRepos,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -234,12 +300,23 @@ class SharePermissionLogs extends Component {
             <LogsNav currentItem="sharePermissionLogs" />
             <div className="cur-view-content">
               <Fragment>
-                <LogUserSelector
-                  label={gettext('User')}
-                  items={availableUsers}
-                  selectedItems={selectedUsers}
-                  onSelect={this.handleUserFilter}
-                />
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    items={availableUsers}
+                    selectedItems={selectedUsers} 
+                    onSelect={this.handleUserFilter}
+                    isOpen={this.state.openSelector === 'user'}
+                    onToggle={() => this.handleSelectorToggle('user')}
+                  />
+                  <div className="mx-3"></div>
+                  <LogRepoSelector
+                    items={availableRepos}
+                    selectedItems={selectedRepos}
+                    onSelect={this.handleRepoFilter}
+                    isOpen={this.state.openSelector === 'repo'}
+                    onToggle={() => this.handleSelectorToggle('repo')}
+                  />
+                </div>
                 <Content
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}

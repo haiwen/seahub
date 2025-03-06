@@ -707,7 +707,7 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileUpdateLogs(page, perPage, emails, repoID) {
+  sysAdminListFileUpdateLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/file-update-logs/';
     let params = {
       page: page,
@@ -716,13 +716,13 @@ class SystemAdminAPI {
     if (emails && emails.length) {
       params.emails = emails.join(',');
     }
-    if (repoID != undefined) {
-      params.repo_id = repoID;
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
     }
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListSharePermissionLogs(page, perPage, emails, repoID) {
+  sysAdminListSharePermissionLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/share-permission-logs/';
     let params = {
       page: page,
@@ -731,8 +731,8 @@ class SystemAdminAPI {
     if (emails && emails.length) {
       params.emails = emails.join(',');
     }
-    if (repoID != undefined) {
-      params.repo_id = repoID;
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
     }
     return this.req.get(url, { params: params });
   }
