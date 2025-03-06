@@ -17,6 +17,9 @@ REST_FRAMEWORK = {
     },
 }
 
+# test metadata
+ENABLE_METADATA_MANAGEMENT = True
+
 # Use static file storage instead of cached, since the cached need to run collect
 # command first.
 # admin roles for test
