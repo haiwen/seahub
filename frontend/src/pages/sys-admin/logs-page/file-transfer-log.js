@@ -207,7 +207,7 @@ class FIleTransferLogs extends Component {
   handleUserFilter = (user, shouldFetchData = true) => {
     const { selectedUsers } = this.state;
     let newSelectedUsers;
-    
+
     if (user === null) {
       newSelectedUsers = selectedUsers;
     } else {
@@ -239,12 +239,12 @@ class FIleTransferLogs extends Component {
             <LogsNav currentItem="fileTransfer" />
             <div className="cur-view-content">
               <Fragment>
-                  <LogUserSelector
-                    label={gettext('User')}
-                    items={availableUsers}
-                    selectedItems={selectedUsers}
-                    onSelect={this.handleUserFilter}
-                  />
+                <LogUserSelector
+                  label={gettext('User')}
+                  items={availableUsers}
+                  selectedItems={selectedUsers}
+                  onSelect={this.handleUserFilter}
+                />
                 <Content
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}

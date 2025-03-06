@@ -15,7 +15,7 @@ import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
 import CommitDetails from '../../../components/dialog/commit-details';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
-import LogUserSelector from '../../dashboard/log-user-selector'
+import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
 
@@ -224,7 +224,7 @@ class FileUpdateLogs extends Component {
   handleUserFilter = (user, shouldFetchData = true) => {
     const { selectedUsers } = this.state;
     let newSelectedUsers;
-    
+
     if (user === null) {
       newSelectedUsers = selectedUsers;
     } else {
@@ -259,10 +259,10 @@ class FileUpdateLogs extends Component {
             <div className="cur-view-content">
               <Fragment>
                 <LogUserSelector
-                    label={gettext('User')}
-                    items={availableUsers}
-                    selectedItems={selectedUsers}
-                    onSelect={this.handleUserFilter}
+                  label={gettext('User')}
+                  items={availableUsers}
+                  selectedItems={selectedUsers}
+                  onSelect={this.handleUserFilter}
                 />
                 <Content
                   loading={this.state.loading}

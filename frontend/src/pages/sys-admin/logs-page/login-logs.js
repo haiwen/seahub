@@ -141,6 +141,7 @@ class LoginLogs extends Component {
       isExportExcelDialogOpen: false,
       availableUsers: [],
       selectedUsers: [],
+      isUserSelectorOpen: false,
     };
     this.initPage = 1;
   }
@@ -198,10 +199,10 @@ class LoginLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
-  handleUserFilter = (user, shouldFetchData = true) => {
+  handleUserFilter = (user) => {
     const { selectedUsers } = this.state;
     let newSelectedUsers;
-    
+
     if (user === null) {
       newSelectedUsers = selectedUsers;
     } else {
@@ -216,8 +217,15 @@ class LoginLogs extends Component {
     this.setState({
       selectedUsers: newSelectedUsers,
       currentPage: 1
+    });
+  };
+
+  toggleUserSelector = () => {
+    const { isUserSelectorOpen } = this.state;
+    this.setState({
+      isUserSelectorOpen: !isUserSelectorOpen
     }, () => {
-      if (shouldFetchData) {
+      if (!this.state.isUserSelectorOpen) {
         this.getLogsByPage(1);
       }
     });
@@ -236,10 +244,11 @@ class LoginLogs extends Component {
             <div className="cur-view-content">
               <Fragment>
                 <LogUserSelector
-                  label={gettext('User')}
                   items={availableUsers}
                   selectedItems={selectedUsers}
                   onSelect={this.handleUserFilter}
+                  isOpen={this.state.isUserSelectorOpen}
+                  onToggle={this.toggleUserSelector}
                 />
                 <Content
                   loading={this.state.loading}

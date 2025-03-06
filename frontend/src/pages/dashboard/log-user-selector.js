@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import '../../css/log-filter.css';
-import { systemAdminAPI } from '../../utils/system-admin-api'
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 
@@ -12,7 +12,6 @@ class LogUserSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
       query: '',
       searchResults: [],
       isLoading: false
@@ -30,25 +29,14 @@ class LogUserSelector extends Component {
   }
 
   handleClickOutside = (e) => {
-    const { isOpen } = this.state;
-    if (isOpen && !this.userSelector.contains(e.target)) {
-      this.togglePopover();
+    if (this.props.isOpen && !this.userSelector.contains(e.target)) {
+      this.props.onToggle();
     }
-  };
-
-  togglePopover = () => {
-    const { isOpen } = this.state;
-    if (isOpen) {
-      this.props.onSelect(null, true);
-    }
-    this.setState({
-      isOpen: !isOpen
-    });
   };
 
   onToggleClick = (e) => {
     e.stopPropagation();
-    this.togglePopover();
+    this.props.onToggle();
   };
 
   onQueryChange = (e) => {
@@ -86,12 +74,12 @@ class LogUserSelector extends Component {
   };
 
   render() {
-    const { isOpen, query, searchResults, isLoading } = this.state;
-    const { selectedItems } = this.props;
+    const { query, isLoading, searchResults } = this.state;
+    const { selectedItems, isOpen } = this.props;
     const displayItems = query.trim() ? searchResults : this.props.items;
 
     return (
-      <div className="position-relative" ref={this.dropdownRef}>
+      <div className="position-relative d-inline-block ml-2" ref={this.dropdownRef}>
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {selectedItems.length > 0 ? (
             <>
@@ -133,8 +121,8 @@ class LogUserSelector extends Component {
                 displayItems.map((item, index) => {
                   const isSelected = selectedItems.some(selected => selected.email === item.email);
                   return (
-                    <li key={index} 
-                      className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center" 
+                    <li key={index}
+                      className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
                       onClick={(e) => {this.toggleSelectItem(e, item);}}
                     >
                       <div>
@@ -157,7 +145,9 @@ class LogUserSelector extends Component {
 LogUserSelector.propTypes = {
   items: PropTypes.array.isRequired,
   selectedItems: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired
 };
 
 export default LogUserSelector;
