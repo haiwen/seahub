@@ -13,11 +13,9 @@ import Paginator from '../../../components/paginator';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import LogsNav from './logs-nav';
-import FilterMenu from './file-access-item-menu';
-import ToggleFilter from './file-access-toggle-filter';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import LogUserSelector from '../../dashboard/log-user-selector'
+import LogUserSelector from '../../dashboard/log-user-selector';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
@@ -39,14 +37,6 @@ class Content extends Component {
     this.props.getLogsByPage(this.props.currentPage + 1);
   };
 
-  toggleFilterByUser = () => {
-    this.props.filterByUser(null);
-  };
-
-  toggleFilterByRepo = () => {
-    this.props.filterByRepo(null);
-  };
-
   toggleFreezeItem = (freezed) => {
     this.setState({
       isItemFreezed: freezed
@@ -56,7 +46,6 @@ class Content extends Component {
   render() {
     const {
       loading, errorMsg, items,
-      userFilteredBy, repoFilteredBy,
       perPage, currentPage, hasNextPage
     } = this.props;
     if (loading) {
@@ -70,20 +59,6 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <div>
-            {userFilteredBy && (
-              <ToggleFilter
-                filterBy={items[0].name}
-                toggleFilter={this.toggleFilterByUser}
-              />
-            )}
-            {repoFilteredBy && (
-              <ToggleFilter
-                filterBy={items[0].repo_name}
-                toggleFilter={this.toggleFilterByRepo}
-              />
-            )}
-          </div>
           <table>
             <thead>
               <tr>
@@ -103,10 +78,6 @@ class Content extends Component {
                     item={item}
                     isFreezed={this.state.isItemFreezed}
                     toggleFreezeItem={this.toggleFreezeItem}
-                    userFilteredBy={userFilteredBy}
-                    repoFilteredBy={repoFilteredBy}
-                    filterByUser={this.props.filterByUser}
-                    filterByRepo={this.props.filterByRepo}
                   />);
                 })}
               </tbody>
@@ -137,11 +108,7 @@ Content.propTypes = {
   perPage: PropTypes.number,
   pageInfo: PropTypes.object,
   hasNextPage: PropTypes.bool,
-  toggleFreezeItem: PropTypes.func,
-  userFilteredBy: PropTypes.string,
-  repoFilteredBy: PropTypes.string,
-  filterByUser: PropTypes.func,
-  filterByRepo: PropTypes.func,
+  toggleFreezeItem: PropTypes.func
 };
 
 
@@ -151,7 +118,6 @@ class Item extends Component {
     super(props);
     this.state = {
       isHighlighted: false,
-      isOpIconShown: false
     };
   }
 
@@ -159,7 +125,6 @@ class Item extends Component {
     if (!this.props.isFreezed) {
       this.setState({
         isHighlighted: true,
-        isOpIconShown: true
       });
     }
   };
@@ -168,19 +133,8 @@ class Item extends Component {
     if (!this.props.isFreezed) {
       this.setState({
         isHighlighted: false,
-        isOpIconShown: false
       });
     }
-  };
-
-  filterByUser = () => {
-    const { item } = this.props;
-    this.props.filterByUser(item.email);
-  };
-
-  filterByRepo = () => {
-    const { item } = this.props;
-    this.props.filterByRepo(item.repo_id);
   };
 
   toggleFreezeItem = (freezed) => {
@@ -188,38 +142,23 @@ class Item extends Component {
     if (!freezed) {
       this.setState({
         isHighlighted: false,
-        isOpIconShown: false
       });
     }
   };
 
   render() {
-    const { isHighlighted, isOpIconShown } = this.state;
-    const { item, userFilteredBy, repoFilteredBy } = this.props;
+    const { isHighlighted } = this.state;
+    const { item } = this.props;
     return (
       <tr className={isHighlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <td>
           <UserLink email={item.email} name={item.name} />
-          {isOpIconShown && !userFilteredBy && (
-            <FilterMenu
-              filterBy={item.name}
-              filterItems={this.filterByUser}
-              toggleFreezeItem={this.toggleFreezeItem}
-            />
-          )}
         </td>
         <td>{item.event_type}</td>
         <td>{item.ip}{' / '}{item.device || '--'}</td>
         <td>{dayjs(item.time).fromNow()}</td>
         <td>
           {item.repo_name ? item.repo_name : gettext('Deleted')}
-          {isOpIconShown && item.repo_name && !repoFilteredBy && (
-            <FilterMenu
-              filterBy={item.repo_name}
-              filterItems={this.filterByRepo}
-              toggleFreezeItem={this.toggleFreezeItem}
-            />
-          )}
         </td>
         <td>{item.file_or_dir_name}</td>
       </tr>
@@ -232,10 +171,6 @@ Item.propTypes = {
   item: PropTypes.object,
   isFreezed: PropTypes.bool,
   toggleFreezeItem: PropTypes.func,
-  userFilteredBy: PropTypes.string,
-  repoFilteredBy: PropTypes.string,
-  filterByUser: PropTypes.func,
-  filterByRepo: PropTypes.func,
 };
 
 class FileAccessLogs extends Component {
@@ -252,6 +187,9 @@ class FileAccessLogs extends Component {
       isExportExcelDialogOpen: false,
       availableUsers: [],
       selectedUsers: [],
+      availableRepos: [],
+      selectedRepos: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
@@ -266,8 +204,6 @@ class FileAccessLogs extends Component {
     this.setState({
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage),
-      userFilteredBy: urlParams.get('email'),
-      repoFilteredBy: urlParams.get('repo_id')
     }, () => {
       // this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
@@ -275,9 +211,9 @@ class FileAccessLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    const { perPage, userFilteredBy, repoFilteredBy, selectedUsers } = this.state;
+    const { perPage, selectedUsers, selectedRepos } = this.state;
     let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, emails, repoFilteredBy).then((res) => {
+    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, emails, selectedRepos).then((res) => {
       this.setState({
         logList: res.data.file_access_log_list,
         loading: false,
@@ -310,24 +246,6 @@ class FileAccessLogs extends Component {
     navigate(url.toString());
   };
 
-  filterByUser = (email) => {
-    this.setState({
-      userFilteredBy: email
-    }, () => {
-      this.getLogsByPage(this.initPage);
-      this.updateURL({ 'email': email });
-    });
-  };
-
-  filterByRepo = (repoID) => {
-    this.setState({
-      repoFilteredBy: repoID
-    }, () => {
-      this.getLogsByPage(this.initPage);
-      this.updateURL({ 'repo_id': repoID });
-    });
-  };
-
   getAvailableUsers = () => {
     systemAdminAPI.sysAdminListUsers().then((res) => {
       this.setState({
@@ -343,7 +261,7 @@ class FileAccessLogs extends Component {
   handleUserFilter = (user, shouldFetchData = true) => {
     const { selectedUsers } = this.state;
     let newSelectedUsers;
-    
+
     if (user === null) {
       newSelectedUsers = selectedUsers;
     } else {
@@ -365,14 +283,65 @@ class FileAccessLogs extends Component {
     });
   };
 
+  getAvailableRepos = () => {
+    systemAdminAPI.sysAdminListRepos().then((res) => {
+      this.setState({
+        availableRepos: res.data.repos
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
+  handleRepoFilter = (repo, shouldFetchData = true) => {
+    const { selectedRepos } = this.state;
+    let newSelectedRepos;
+
+    if (repo === null) {
+      newSelectedRepos = [];
+    } else {
+      const isSelected = selectedRepos.find(item => item.id === repo.id);
+      if (isSelected) {
+        newSelectedRepos = selectedRepos.filter(item => item.id !== repo.id);
+      } else {
+        newSelectedRepos = [...selectedRepos, repo];
+      }
+    }
+
+    this.setState({
+      selectedRepos: newSelectedRepos,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage();
+      }
+    });
+  };
+
   render() {
     const {
       logList,
-      userFilteredBy, repoFilteredBy,
       currentPage, perPage, hasNextPage,
       isExportExcelDialogOpen,
       availableUsers,
-      selectedUsers
+      selectedUsers,
+      availableRepos,
+      selectedRepos
     } = this.state;
     return (
       <Fragment>
@@ -384,25 +353,33 @@ class FileAccessLogs extends Component {
             <LogsNav currentItem="fileAccessLogs" />
             <div className="cur-view-content">
               <Fragment>
-                <LogUserSelector
-                  items={availableUsers}
-                  selectedItems={selectedUsers}
-                  onSelect={this.handleUserFilter}
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    items={availableUsers}
+                    selectedItems={selectedUsers}
+                    onSelect={this.handleUserFilter}
+                    isOpen={this.state.openSelector === 'user'}
+                    onToggle={() => this.handleSelectorToggle('user')}
+                  />
+                  <div className="mx-3"></div>
+                  <LogRepoSelector
+                    items={availableRepos}
+                    selectedItems={selectedRepos}
+                    onSelect={this.handleRepoFilter}
+                    isOpen={this.state.openSelector === 'repo'}
+                    onToggle={() => this.handleSelectorToggle('repo')}
+                  />
+                </div>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
                 />
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                userFilteredBy={userFilteredBy}
-                repoFilteredBy={repoFilteredBy}
-                filterByUser={this.filterByUser}
-                filterByRepo={this.filterByRepo}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
               </Fragment>
             </div>
           </div>

@@ -692,7 +692,7 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileAccessLogs(page, perPage, emails, repoID) {
+  sysAdminListFileAccessLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/file-access-logs/';
     let params = {
       page: page,
@@ -701,8 +701,8 @@ class SystemAdminAPI {
     if (emails && emails.length) {
       params.emails = emails.join(',');
     }
-    if (repoID != undefined) {
-      params.repo_id = repoID;
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
     }
     return this.req.get(url, { params: params });
   }

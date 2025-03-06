@@ -120,16 +120,17 @@ class AdminLogsFileAccessLogs(APIView):
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo_id_selected = request.GET.get('repo_id', None)
-        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
-            error_msg = 'repo_id %s invalid.' % repo_id_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        repos = request.GET.get('repos')
+        repos = repos.split(',') if repos else []
+        for repo_selected in repos:
+            if not is_valid_repo_id_format(repo_selected):
+                error_msg = 'repo_id %s invalid.' % repo_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
         limit = per_page + 1
 
-        events = get_log_events_by_type_users_repo('file_audit', emails, repo_id_selected, start, limit) or []
+        events = get_log_events_by_type_users_repo('file_audit', emails, repos, start, limit) or []
 
         if len(events) > per_page:
             events = events[:per_page]
