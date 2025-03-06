@@ -644,6 +644,7 @@ class Records extends Component {
           deleteRecords={this.props.deleteRecords}
           moveRecord={this.props.moveRecord}
           addFolder={this.props.addFolder}
+          selectNone={this.selectNone}
           updateRecordDetails={this.props.updateRecordDetails}
           updateRecordDescription={this.props.updateRecordDescription}
           ocr={this.props.ocr}
@@ -661,6 +662,8 @@ class Records extends Component {
       cacheScrollTop: this.storeScrollTop,
       onCellContextMenu: this.onCellContextMenu,
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
+      moveRecord: this.props.moveRecord,
+      addFolder: this.props.addFolder
     };
     if (this.props.isGroupView) {
       return (

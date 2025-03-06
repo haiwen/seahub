@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
@@ -222,6 +222,11 @@ const ContextMenu = ({
     setFileTagsRecord(record);
   }, []);
 
+  const handleMoveRecord = useCallback((...params) => {
+    selectNone();
+    moveRecord && moveRecord(...params);
+  }, [moveRecord, selectNone]);
+
   const handleOptionClick = useCallback((option, event) => {
     switch (option.value) {
       case OPERATION.OPEN_IN_NEW_TAB: {
@@ -311,6 +316,14 @@ const ContextMenu = ({
     }
   }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, toggleFileTagsRecord, toggleMoveDialog]);
 
+  useEffect(() => {
+    const unsubscribeToggleMoveDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, toggleMoveDialog);
+
+    return () => {
+      unsubscribeToggleMoveDialog();
+    };
+  }, [toggleMoveDialog]);
+
   const currentRecordId = getRecordIdFromRecord(currentRecord.current);
   const fileName = getFileNameFromRecord(currentRecord.current);
 
@@ -341,7 +354,7 @@ const ContextMenu = ({
           repoID={repoID}
           dirent={new Dirent({ name: fileName })}
           isMultipleOperation={false}
-          onItemMove={(...params) => moveRecord(currentRecordId, ...params)}
+          onItemMove={(...params) => handleMoveRecord(currentRecordId, ...params)}
           onCancelMove={toggleMoveDialog}
           onAddFolder={addFolder}
         />

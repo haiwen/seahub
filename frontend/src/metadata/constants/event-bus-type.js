@@ -40,6 +40,7 @@ export const EVENT_BUS_TYPE = {
   FOCUS_CANVAS: 'focus_canvas',
   UPDATE_SELECTED_RECORD_IDS: 'update_selected_record_ids',
   SELECT_RECORDS: 'select_records',
+  TOGGLE_MOVE_DIALOG: 'toggle_move_dialog',
   MOVE_RECORD: 'move_record',
   DELETE_RECORDS: 'delete_records',
   UPDATE_RECORD_DETAILS: 'update_record_details',

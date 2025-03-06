@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
@@ -7,24 +8,20 @@ import { getFileName } from '../../tag/utils/file';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
+import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { getColumnByKey } from '../../metadata/utils/column';
 import { useMetadataStatus } from '../../hooks';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import MoveDirent from '../dialog/move-dirent-dialog';
 
-const TableFilesToolbar = ({ repoID, onAddFolder }) => {
+const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
-  const [isMoveDialogOpen, setMoveDialogOpen] = useState(false);
   const metadataRef = useRef([]);
   const { enableOCR } = useMetadataStatus();
 
   const canModify = window.sfMetadataContext && window.sfMetadataContext.canModify();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
-  const selectedFilesLen = useMemo(() => {
-    return selectedRecordIds.length;
-  }, [selectedRecordIds]);
+  const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
@@ -40,22 +37,17 @@ const TableFilesToolbar = ({ repoID, onAddFolder }) => {
     });
   }, [eventBus, selectedRecordIds]);
 
-  const moveRecord = useCallback((...params) => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MOVE_RECORD, ...params);
-  }, [eventBus]);
-
   const toggleMoveDialog = useCallback(() => {
-    setMoveDialogOpen(!isMoveDialogOpen);
-  }, [isMoveDialogOpen]);
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records[0]);
+  }, [eventBus, records]);
 
   const checkCanModifyRow = (row) => window.sfMetadataContext.canModifyRow(row);
 
   const getMenuList = useCallback(() => {
     const { EXTRACT_FILE_DETAIL, EXTRACT_FILE_DETAILS, OPEN_FILE_IN_NEW_TAB, OPEN_FOLDER_IN_NEW_TAB, OPEN_PARENT_FOLDER, GENERATE_DESCRIPTION, OCR } = TextTranslation;
-    const records = selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean);
-
+    const length = selectedRecordIds.length;
     const list = [];
-    if (selectedFilesLen > 1) {
+    if (length > 1) {
       const imageOrVideoRecords = records.filter(record => {
         const isFolder = checkIsDir(record);
         if (isFolder) return false;
@@ -112,7 +104,7 @@ const TableFilesToolbar = ({ repoID, onAddFolder }) => {
       }
     }
     return list;
-  }, [selectedRecordIds, selectedFilesLen, enableOCR]);
+  }, [selectedRecordIds, records, enableOCR]);
 
   const onMenuItemClick = useCallback((operation) => {
     const records = selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean);
@@ -164,17 +156,17 @@ const TableFilesToolbar = ({ repoID, onAddFolder }) => {
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
     };
-  }, [eventBus]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const record = selectedRecordIds.length > 0 && RowUtils.getRecordById(selectedRecordIds[0], metadataRef.current);
-  const fileName = record && getFileNameFromRecord(record);
+  const length = selectedRecordIds.length;
   return (
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>
         <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
-        <span>{selectedFilesLen}{' '}{gettext('selected')}</span>
+        <span>{length}{' '}{gettext('selected')}</span>
       </span>
-      {(selectedFilesLen === 1 && canModify) &&
+      {(length === 1 && canModify) &&
         <>
           <span className="cur-view-path-btn" onClick={toggleMoveDialog}>
             <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
@@ -186,7 +178,7 @@ const TableFilesToolbar = ({ repoID, onAddFolder }) => {
           <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
         </span>
       }
-      {selectedFilesLen > 0 && (
+      {length > 0 && (
         <ItemDropdownMenu
           item={{}}
           toggleClass={'cur-view-path-btn sf3-font-more-vertical sf3-font'}
@@ -194,19 +186,12 @@ const TableFilesToolbar = ({ repoID, onAddFolder }) => {
           getMenuList={getMenuList}
         />
       )}
-      {isMoveDialogOpen && (
-        <MoveDirent
-          repoID={repoID}
-          path={getParentDirFromRecord(record)}
-          dirent={{ name: fileName }}
-          isMultipleOperation={false}
-          onItemMove={(...params) => moveRecord(selectedRecordIds[0], ...params)}
-          onCancelMove={toggleMoveDialog}
-          onAddFolder={onAddFolder}
-        />
-      )}
     </div>
   );
+};
+
+TableFilesToolbar.propTypes = {
+  repoID: PropTypes.string.isRequired,
 };
 
 export default TableFilesToolbar;
