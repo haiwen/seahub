@@ -28,7 +28,7 @@ SEAHUB_TESTSDIR=$(python -c "import os; print(os.path.dirname(os.path.realpath('
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 SEAFEVENTS_SRCDIR='/tmp/seafevents'
 
-export SEAHUB_LOG_DIR='/tmp/logs'
+export SEAHUB_LOG_DIR='/tmp'
 export PYTHONPATH="/usr/local/lib/python3.8/site-packages:/usr/local/lib/python3.8/dist-packages:/usr/lib/python3.8/site-packages:/usr/lib/python3.8/dist-packages:${SEAHUB_SRCDIR}/thirdpart:${SEAFEVENTS_SRCDIR}/:${PYTHONPATH}"
 cd "$SEAHUB_SRCDIR"
 set +x

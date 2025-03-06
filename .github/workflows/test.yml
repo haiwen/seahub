@@ -30,7 +30,6 @@ jobs:
         run: |
           git clone --depth=1 --branch=master https://github.com/haiwen/seafevents /tmp/seafevents
           git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
-          cd /tmp/seafevents && git fetch origin master:master && git checkout master
           cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
           export JWT_PRIVATE_KEY=qwertyuiop SITE_ROOT=/ SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub
           ./bootstrap.sh
