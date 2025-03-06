@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
+from django.db.models import Q
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -16,7 +16,7 @@ from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email, translate_commit_desc
-from seahub.utils import get_file_audit_events, generate_file_audit_event_type, \
+from seahub.utils import get_log_events_by_type_users_repo, generate_file_audit_event_type, \
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
@@ -114,10 +114,12 @@ class AdminLogsFileAccessLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        emails = request.GET.get('emails')
+        emails = emails.split(',') if emails else []
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id_selected = request.GET.get('repo_id', None)
         if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
@@ -127,18 +129,7 @@ class AdminLogsFileAccessLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page + 1
 
-        if user_selected:
-            org_id = -1
-            orgs = ccnet_api.get_orgs_by_user(user_selected)
-            if orgs:
-                org_id = orgs[0].org_id
-        elif repo_id_selected:
-            org_id = seafile_api.get_org_id_by_repo_id(repo_id_selected)
-        else:
-            org_id = 0
-
-        # org_id = 0, show all file audit
-        events = get_file_audit_events(user_selected, org_id, repo_id_selected, start, limit) or []
+        events = get_log_events_by_type_users_repo('file_audit', emails, repo_id_selected, start, limit) or []
 
         if len(events) > per_page:
             events = events[:per_page]
@@ -220,10 +211,12 @@ class AdminLogsFileUpdateLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        emails = request.GET.get('emails')
+        emails = emails.split(',') if emails else []
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id_selected = request.GET.get('repo_id', None)
         if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
@@ -233,8 +226,7 @@ class AdminLogsFileUpdateLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page
 
-        # org_id = 0, show all file audit
-        events = get_file_update_events(user_selected, 0, repo_id_selected, start, limit) or []
+        events = get_log_events_by_type_users_repo('file_update', emails, repo_id_selected, start, limit)
 
         has_next_page = True if len(events) == per_page else False
 
@@ -306,10 +298,12 @@ class AdminLogsSharePermissionLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        emails = request.GET.get('emails')
+        emails = emails.split(',') if emails else []
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id_selected = request.GET.get('repo_id', None)
         if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
@@ -319,9 +313,7 @@ class AdminLogsSharePermissionLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page
 
-        # org_id = 0, show all file audit
-        events = get_perm_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
-
+        events = get_log_events_by_type_users_repo('perm_audit', emails, repo_id_selected, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
@@ -461,7 +453,20 @@ class AdminLogsFileTransferLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        events = RepoTransfer.objects.all().order_by('-timestamp')[start:start+limit+1]
+        emails = request.GET.get('emails')
+        emails = emails.split(',') if emails else []
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if emails:
+            events = RepoTransfer.objects.filter(
+                Q(from_user__in=emails) |
+                Q(to__in=emails) |
+                Q(operator__in=emails)
+            ).order_by('-timestamp')[start:start+limit+1]
+        else:
+            events = RepoTransfer.objects.all().order_by('-timestamp')[start:start+limit+1]
         if len(events) > limit:
             has_next_page = True
             events = events[:limit]

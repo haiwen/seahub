@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import '../../css/log-filter.css';
+import { systemAdminAPI } from '../../utils/system-admin-api'
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
-class LogFilter extends Component {
+class LogUserSelector extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isOpen: false,
-      searchText: '',
-      query: ''
+      query: '',
+      searchResults: [],
+      isLoading: false
     };
     this.dropdownRef = React.createRef();
+    this.finalValue = '';
   }
 
   componentDidMount() {
@@ -46,12 +51,33 @@ class LogFilter extends Component {
     this.togglePopover();
   };
 
-  handleSearch = (e) => {
-    this.setState({ searchText: e.target.value });
+  onQueryChange = (e) => {
+    const value = e.target.value;
+    this.setState({ query: value });
+    this.searchUsers(value);
   };
 
-  onQueryChange = (e) => {
-    this.setState({ query: e.target.value });
+  searchUsers = (value) => {
+    this.finalValue = value;
+    if (value.length > 0) {
+      this.setState({ isLoading: true });
+      setTimeout(() => {
+        if (this.finalValue === value) {
+          systemAdminAPI.sysAdminSearchUsers(value).then((res) => {
+            this.setState({
+              searchResults: res.data.user_list,
+              isLoading: false
+            });
+          }).catch(error => {
+            this.setState({ isLoading: false });
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
+      }, 500);
+    } else {
+      this.setState({ searchResults: [] });
+    }
   };
 
   toggleSelectItem = (e, item) => {
@@ -60,16 +86,12 @@ class LogFilter extends Component {
   };
 
   render() {
-    const { isOpen, query } = this.state;
-    const { items, selectedItems } = this.props;
-    const filteredItems = query.trim() ? 
-      items.filter(item => 
-        item.email.toLowerCase().includes(query.trim().toLowerCase()) || 
-        item.name.toLowerCase().includes(query.trim().toLowerCase())
-      ) : items;
+    const { isOpen, query, searchResults, isLoading } = this.state;
+    const { selectedItems } = this.props;
+    const displayItems = query.trim() ? searchResults : this.props.items;
 
     return (
-      <div className="mt-4 position-relative" ref={this.dropdownRef}>
+      <div className="position-relative" ref={this.dropdownRef}>
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {selectedItems.length > 0 ? (
             <>
@@ -101,17 +123,29 @@ class LogFilter extends Component {
               />
             </div>
             <ul className="activity-user-list list-unstyled p-3 o-auto">
-              {filteredItems.map((item, index) => {
-                return (
-                  <li key={index} className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center" onClick={(e) => {this.toggleSelectItem(e, item);}}>
-                    <div>
-                      <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
-                      <span className="activity-user-name ml-2">{item.name}</span>
-                    </div>
-                    {item.isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
-                  </li>
-                );
-              })}
+              {isLoading ? (
+                <li className="text-center">{gettext('Loading...')}</li>
+              ) : displayItems.length === 0 ? (
+                <li className="text-center">
+                  {query ? gettext('User not found') : gettext('Enter characters to start searching')}
+                </li>
+              ) : (
+                displayItems.map((item, index) => {
+                  const isSelected = selectedItems.some(selected => selected.email === item.email);
+                  return (
+                    <li key={index} 
+                      className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center" 
+                      onClick={(e) => {this.toggleSelectItem(e, item);}}
+                    >
+                      <div>
+                        <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                        <span className="activity-user-name ml-2">{item.name}</span>
+                      </div>
+                      {isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+                    </li>
+                  );
+                })
+              )}
             </ul>
           </div>
         )}
@@ -120,10 +154,10 @@ class LogFilter extends Component {
   }
 }
 
-LogFilter.propTypes = {
+LogUserSelector.propTypes = {
   items: PropTypes.array.isRequired,
   selectedItems: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired
 };
 
-export default LogFilter;
+export default LogUserSelector;

@@ -15,6 +15,7 @@ import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
+import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
 
@@ -151,6 +152,8 @@ class SharePermissionLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
+      availableUsers: [],
+      selectedUsers: [],
     };
     this.initPage = 1;
   }
@@ -171,8 +174,9 @@ class SharePermissionLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage } = this.state;
-    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage).then((res) => {
+    let { perPage, selectedUsers } = this.state;
+    let emails = selectedUsers.map(user => user.email);
+    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage, emails).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,
         loading: false,
@@ -193,8 +197,33 @@ class SharePermissionLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
+  handleUserFilter = (user, shouldFetchData = true) => {
+    const { selectedUsers } = this.state;
+    let newSelectedUsers;
+    
+    if (user === null) {
+      newSelectedUsers = selectedUsers;
+    } else {
+      const isSelected = selectedUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -204,16 +233,24 @@ class SharePermissionLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="sharePermissionLogs" />
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
+              <Fragment>
+                  <LogUserSelector
+                    label={gettext('User')}
+                    items={availableUsers}
+                    selectedItems={selectedUsers}
+                    onSelect={this.handleUserFilter}
+                  />
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
+                />
+              </Fragment>
             </div>
           </div>
         </div>
