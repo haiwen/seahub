@@ -25,7 +25,10 @@ test_fn()
     return 1
 }
 
-FILES=`git diff --name-only HEAD~`
+git fetch origin $GITHUB_BASE_REF
+FILES=`git diff --name-only origin/$GITHUB_BASE_REF`
+echo $FILES
+
 for i in $FILES
 do
     test_fn $i
