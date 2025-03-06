@@ -692,14 +692,14 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileAccessLogs(page, perPage, email, repoID) {
+  sysAdminListFileAccessLogs(page, perPage, emails, repoID) {
     const url = this.server + '/api/v2.1/admin/logs/file-access-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
-    if (email != undefined) {
-      params.email = email;
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
     }
     if (repoID != undefined) {
       params.repo_id = repoID;
@@ -707,21 +707,48 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileUpdateLogs(page, perPage) {
+  sysAdminListFileUpdateLogs(page, perPage, emails, repoID) {
     const url = this.server + '/api/v2.1/admin/logs/file-update-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
+    if (repoID != undefined) {
+      params.repo_id = repoID;
+    }
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListSharePermissionLogs(page, perPage) {
+  sysAdminListSharePermissionLogs(page, perPage, emails, repoID) {
     const url = this.server + '/api/v2.1/admin/logs/share-permission-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
+    if (repoID != undefined) {
+      params.repo_id = repoID;
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  sysAdminListFileTransferLogs(page, perPage, emails, repoID) {
+    const url = this.server + '/api/v2.1/admin/logs/repo-transfer-logs/';
+    let params = {
+      page: page,
+      per_page: perPage
+    };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
+    if (repoID != undefined) {
+      params.repo_id = repoID;
+    }
     return this.req.get(url, { params: params });
   }
 

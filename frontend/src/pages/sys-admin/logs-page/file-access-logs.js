@@ -17,6 +17,8 @@ import FilterMenu from './file-access-item-menu';
 import ToggleFilter from './file-access-toggle-filter';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+import LogUserSelector from '../../dashboard/log-user-selector'
+import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
 
@@ -248,6 +250,8 @@ class FileAccessLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
+      availableUsers: [],
+      selectedUsers: [],
     };
     this.initPage = 1;
   }
@@ -265,13 +269,15 @@ class FileAccessLogs extends Component {
       userFilteredBy: urlParams.get('email'),
       repoFilteredBy: urlParams.get('repo_id')
     }, () => {
+      // this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
     });
   }
 
   getLogsByPage = (page) => {
-    const { perPage, userFilteredBy, repoFilteredBy } = this.state;
-    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, userFilteredBy, repoFilteredBy).then((res) => {
+    const { perPage, userFilteredBy, repoFilteredBy, selectedUsers } = this.state;
+    let emails = selectedUsers.map(user => user.email);
+    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, emails, repoFilteredBy).then((res) => {
       this.setState({
         logList: res.data.file_access_log_list,
         loading: false,
@@ -322,12 +328,51 @@ class FileAccessLogs extends Component {
     });
   };
 
+  getAvailableUsers = () => {
+    systemAdminAPI.sysAdminListUsers().then((res) => {
+      this.setState({
+        availableUsers: res.data.data
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
+  handleUserFilter = (user, shouldFetchData = true) => {
+    const { selectedUsers } = this.state;
+    let newSelectedUsers;
+    
+    if (user === null) {
+      newSelectedUsers = selectedUsers;
+    } else {
+      const isSelected = selectedUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
   render() {
     const {
       logList,
       userFilteredBy, repoFilteredBy,
       currentPage, perPage, hasNextPage,
-      isExportExcelDialogOpen
+      isExportExcelDialogOpen,
+      availableUsers,
+      selectedUsers
     } = this.state;
     return (
       <Fragment>
@@ -338,6 +383,12 @@ class FileAccessLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="fileAccessLogs" />
             <div className="cur-view-content">
+              <Fragment>
+                <LogUserSelector
+                  items={availableUsers}
+                  selectedItems={selectedUsers}
+                  onSelect={this.handleUserFilter}
+                />
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
@@ -352,6 +403,7 @@ class FileAccessLogs extends Component {
                 getLogsByPage={this.getLogsByPage}
                 resetPerPage={this.resetPerPage}
               />
+              </Fragment>
             </div>
           </div>
         </div>

@@ -1162,6 +1162,8 @@ class AdminSearchUser(APIView):
                 has_appended.append(user.email)
 
             info = {}
+            url, is_default, date_uploaded = api_avatar_url(user.email)
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)

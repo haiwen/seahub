@@ -14,7 +14,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
-import LogFilter from '../../dashboard/log-filter';
+import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
 
@@ -156,7 +156,7 @@ class LoginLogs extends Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
-      this.getAvailableUsers();
+      // this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
     });
   }
@@ -235,7 +235,7 @@ class LoginLogs extends Component {
             <LogsNav currentItem="loginLogs" />
             <div className="cur-view-content">
               <Fragment>
-                <LogFilter
+                <LogUserSelector
                   label={gettext('User')}
                   items={availableUsers}
                   selectedItems={selectedUsers}

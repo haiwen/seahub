@@ -1,7 +1,3 @@
-
-
-
-
   .activity-details {
     text-decoration: underline;
     cursor: pointer;
@@ -16,6 +12,7 @@
   
   .cur-activity-modifiers {
     margin-left: -0.5rem;
+    padding: 0.15rem 0;
   }
   
   .cur-activity-modifiers:hover {
