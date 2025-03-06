@@ -18,6 +18,7 @@ import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
 import { Dirent } from '../../../../models';
 import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
 import ContextMenuComponent from '../../../components/context-menu';
+import RowUtils from '../utils/row-utils';
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -158,7 +159,7 @@ const ContextMenu = ({
     if (!selectedPosition) return list;
     const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
     const column = columns[idx];
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) || RowUtils.getRecordById(selectedRecordsIds[0], metadata);
     if (!record) return list;
 
     const canModifyRow = checkCanModifyRow(record);
