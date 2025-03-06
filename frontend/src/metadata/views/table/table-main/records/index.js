@@ -487,6 +487,8 @@ class Records extends Component {
     this.setState({
       recordMetrics: updatedRecordMetrics,
     });
+    const ids = Object.keys(updatedRecordMetrics.idSelectedRecordMap);
+    this.props.updateSelectedRecordIds(ids);
   };
 
   selectRecordsById = (recordIds) => {
@@ -500,6 +502,7 @@ class Records extends Component {
     this.setState({
       recordMetrics: updatedRecordMetrics,
     });
+    this.props.updateSelectedRecordIds(recordIds);
   };
 
   deselectRecord = (recordId) => {
@@ -512,6 +515,8 @@ class Records extends Component {
     this.setState({
       recordMetrics: updatedRecordMetrics,
     });
+    const ids = Object.keys(updatedRecordMetrics.idSelectedRecordMap);
+    this.props.updateSelectedRecordIds(ids);
   };
 
   selectAllRecords = () => {
@@ -539,6 +544,7 @@ class Records extends Component {
     this.setState({
       recordMetrics: updatedRecordMetrics,
     });
+    this.props.updateSelectedRecordIds(selectedRowIds);
   };
 
   onDeselectAllRecords = () => {
@@ -552,6 +558,7 @@ class Records extends Component {
       recordMetrics: updatedRecordMetrics,
       lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
     });
+    this.props.updateSelectedRecordIds([]);
   };
 
   hasSelectedCell = ({ groupRecordIndex, recordIndex }, selectedPosition) => {
@@ -609,6 +616,7 @@ class Records extends Component {
     const recordId = record._id;
     if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
       this.setState({ recordMetrics: this.createRowMetrics() });
+      this.props.updateSelectedRecordIds([]);
     }
 
     // select cell when click out of selectRange
@@ -633,10 +641,12 @@ class Records extends Component {
         <ContextMenu
           isGroupView={isGroupView}
           recordGetterByIndex={this.props.recordGetterByIndex}
-          updateRecords={this.props.updateRecords}
           deleteRecords={this.props.deleteRecords}
           moveRecord={this.props.moveRecord}
           addFolder={this.props.addFolder}
+          updateRecordDetails={this.props.updateRecordDetails}
+          updateRecordDescription={this.props.updateRecordDescription}
+          ocr={this.props.ocr}
         />
       ),
       hasSelectedRecord: this.hasSelectedRecord(),
@@ -766,7 +776,6 @@ Records.propTypes = {
   getTableContentRect: PropTypes.func,
   scrollToLoadMore: PropTypes.func,
   updateRecord: PropTypes.func,
-  updateRecords: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,
@@ -779,6 +788,7 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecord: PropTypes.func,
   addFolder: PropTypes.func,
+  updateSelectedRecordIds: PropTypes.func,
 };
 
 export default Records;

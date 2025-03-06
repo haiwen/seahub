@@ -8,10 +8,12 @@ import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
 import { getRowById } from '../../components/sf-table/utils/table';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
+import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';
 import { useTags } from '../../tag/hooks';
+import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
+import { getColumnByKey } from '../utils/column';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -23,6 +25,7 @@ export const MetadataViewProvider = ({
   deleteFilesCallback,
   moveFileCallback,
   copyFileCallback,
+  toggleShowDirentToolbar,
   ...params
 }) => {
   const { modifyLocalFileTags } = useTags();
@@ -35,6 +38,7 @@ export const MetadataViewProvider = ({
 
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
+  const { onOCR, generateDescription, extractFilesDetails } = useMetadataAIOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -96,7 +100,7 @@ export const MetadataViewProvider = ({
     storeRef.current.modifyLocalColumnData(columnKey, newData, oldData);
   }, []);
 
-  const modifyRecords = (rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {
+  const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {
     const isRename = storeRef.current.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
     let newName = null;
     if (isRename) {
@@ -140,7 +144,7 @@ export const MetadataViewProvider = ({
         success_callback && success_callback();
       },
     });
-  };
+  }, [metadata, storeRef, renameFileCallback]);
 
   const deleteRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
     if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
@@ -284,6 +288,89 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
+  const updateSelectedRecordIds = useCallback((ids) => {
+    toggleShowDirentToolbar(ids.length > 0);
+    setTimeout(() => {
+      window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
+    }, 0);
+  }, [metadata, toggleShowDirentToolbar]);
+
+  const updateRecordDetails = useCallback((records) => {
+    const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
+    if (recordObjIds.length > 50) {
+      toaster.danger(gettext('Select up to 50 files'));
+      return;
+    }
+
+    const recordIds = records.map(record => getRecordIdFromRecord(record));
+    extractFilesDetails(recordObjIds, {
+      success_callback: ({ details }) => {
+        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+        if (!captureColumn) return;
+        let idOldRecordData = {};
+        let idOriginalOldRecordData = {};
+        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
+        records.forEach(record => {
+          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
+          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
+        });
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        details.forEach(detail => {
+          const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
+          idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+          idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+        });
+        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      }
+    });
+  }, [metadata, extractFilesDetails, modifyRecords]);
+
+  const updateRecordDescription = useCallback((record) => {
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    if (!fileName || !parentDir) return;
+    const checkIsDescribableFile = Utils.isDescriptionSupportedFile(fileName);
+    if (!checkIsDescribableFile) return;
+
+    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    generateDescription({ parentDir, fileName }, {
+      success_callback: ({ description }) => {
+        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+        const recordIds = [updateRecordId];
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
+        idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
+        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      }
+    });
+  }, [modifyRecords, generateDescription]);
+
+  const ocr = useCallback((record) => {
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    if (!Utils.imageCheck(fileName)) return;
+
+    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
+    onOCR({ parentDir, fileName }, {
+      success_callback: ({ ocrResult }) => {
+        if (!ocrResult) return;
+        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+        const recordIds = [updateRecordId];
+        let idRecordUpdates = {};
+        let idOriginalRecordUpdates = {};
+        idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+      },
+    });
+  }, [modifyRecords, onOCR]);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -316,6 +403,12 @@ export const MetadataViewProvider = ({
     const unsubscribeModifySettings = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SETTINGS, modifySettings);
     const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, updateLocalRecord);
     const unsubscribeLocalColumnChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, updateLocalColumnData);
+    const unsubscribeUpdateSelectedRecordIds = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, updateSelectedRecordIds);
+    const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
+    const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
+    const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
+    const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
+    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, ocr);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -335,6 +428,12 @@ export const MetadataViewProvider = ({
       unsubscribeModifySettings();
       unsubscribeLocalRecordChanged();
       unsubscribeLocalColumnChanged();
+      unsubscribeUpdateSelectedRecordIds();
+      unsubscribeMoveRecord();
+      unsubscribeDeleteRecords();
+      unsubscribeUpdateDetails();
+      unsubscribeUpdateDescription();
+      unsubscribeOCR();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -370,6 +469,10 @@ export const MetadataViewProvider = ({
         updateFileTags,
         addFolder: params.addFolder,
         updateCurrentPath: params.updateCurrentPath,
+        updateSelectedRecordIds,
+        updateRecordDetails,
+        updateRecordDescription,
+        ocr,
       }}
     >
       {children}

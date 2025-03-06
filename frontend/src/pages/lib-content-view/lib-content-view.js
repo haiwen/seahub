@@ -33,6 +33,7 @@ import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-to
 import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
 
 import '../../css/lib-content-view.css';
+import TableFilesToolbar from '../../components/toolbar/table-files-toolbar';
 
 dayjs.extend(relativeTime);
 
@@ -2277,9 +2278,11 @@ class LibContentView extends React.Component {
                         'animation-children': isDirentSelected
                       })}>
                       {isDirentSelected ? (
-                        this.state.currentMode === TAGS_MODE ?
+                        this.state.currentMode === TAGS_MODE ? (
                           <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
-                          :
+                        ) : this.state.currentMode === METADATA_MODE ? (
+                          <TableFilesToolbar repoID={this.props.repoID} currentRepoInfo={this.state.currentRepoInfo} onAddFolder={this.onAddFolder} />
+                        ) : (
                           <SelectedDirentsToolbar
                             repoID={this.props.repoID}
                             path={this.state.path}
@@ -2305,6 +2308,7 @@ class LibContentView extends React.Component {
                             onItemConvert={this.onConvertItem}
                             onAddFolder={this.onAddFolder}
                           />
+                        )
                       ) : (
                         <CurDirPath
                           currentRepoInfo={this.state.currentRepoInfo}

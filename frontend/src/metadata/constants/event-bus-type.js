@@ -38,6 +38,13 @@ export const EVENT_BUS_TYPE = {
   LOCAL_RECORD_DETAIL_CHANGED: 'local_record_detail_changed',
   LOCAL_COLUMN_DATA_CHANGED: 'local_column_data_changed',
   FOCUS_CANVAS: 'focus_canvas',
+  UPDATE_SELECTED_RECORD_IDS: 'update_selected_record_ids',
+  SELECT_RECORDS: 'select_records',
+  MOVE_RECORD: 'move_record',
+  DELETE_RECORDS: 'delete_records',
+  UPDATE_RECORD_DETAILS: 'update_record_details',
+  GENERATE_DESCRIPTION: 'generate_description',
+  OCR: 'ocr',
 
   // metadata
   RELOAD_DATA: 'reload_data',
