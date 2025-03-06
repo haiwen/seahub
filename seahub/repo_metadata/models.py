@@ -65,11 +65,11 @@ class RepoMetadata(models.Model):
     face_recognition_enabled = models.BooleanField(db_index=True, null=True)
     from_commit = models.CharField(max_length=40)
     to_commit = models.CharField(max_length=40)
-    tags_enabled = models.BooleanField(db_index=True)
+    tags_enabled = models.BooleanField(db_index=True, null=True)
     tags_lang = models.CharField(max_length=36)
     last_face_cluster_time = models.DateTimeField(db_index=True, blank=True, null=True)
     details_settings = models.TextField()
-    ocr_enabled = models.BooleanField(db_index=True)
+    ocr_enabled = models.BooleanField(db_index=True, null=True)
 
     objects = RepoMetadataManager()
 
