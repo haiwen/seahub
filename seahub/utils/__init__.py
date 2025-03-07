@@ -1565,4 +1565,3 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
-
