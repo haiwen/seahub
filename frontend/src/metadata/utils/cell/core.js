@@ -46,6 +46,10 @@ export const getImageLocationFromRecord = (record) => {
   return record ? record[PRIVATE_COLUMN_KEY.LOCATION] : null;
 };
 
+export const getTranslateLocationFromRecord = (record) => {
+  return record ? record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] : null;
+};
+
 export const getFileTypeFromRecord = (record) => {
   return record ? record[PRIVATE_COLUMN_KEY.FILE_TYPE] : null;
 };

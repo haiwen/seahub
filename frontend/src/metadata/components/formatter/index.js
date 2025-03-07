@@ -138,6 +138,7 @@ Formatter.propTypes = {
   field: PropTypes.object.isRequired,
   value: PropTypes.any,
   tagsData: PropTypes.object,
+  record: PropTypes.object,
 };
 
 export default Formatter;

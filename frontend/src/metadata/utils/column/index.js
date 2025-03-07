@@ -200,6 +200,7 @@ export const getColumnDisplayName = (key, name) => {
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
       return gettext('File status');
     case PRIVATE_COLUMN_KEY.LOCATION:
+    case PRIVATE_COLUMN_KEY.LOCATION_DISPLAY:
       return gettext('Location');
     case PRIVATE_COLUMN_KEY.SIZE:
       return gettext('Size');
@@ -271,6 +272,7 @@ export const getNormalizedColumnType = (key, type) => {
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
       return CellType.SINGLE_SELECT;
     case PRIVATE_COLUMN_KEY.LOCATION:
+    case PRIVATE_COLUMN_KEY.LOCATION_DISPLAY:
       return CellType.GEOLOCATION;
     case PRIVATE_COLUMN_KEY.OWNER:
       return CellType.COLLABORATOR;
