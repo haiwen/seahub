@@ -260,7 +260,10 @@ class MylibRepoMenu extends React.Component {
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
         />
-        <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
+        <DropdownMenu
+          container={document.body}
+          className="mobile-dropdown-menu"
+        >
           <div className="mobile-operation-menu-bg-layer"></div>
           <div className="mobile-operation-menu">
             {operations.map((item, index) => {
@@ -270,7 +273,7 @@ class MylibRepoMenu extends React.Component {
               return null;
             })}
           </div>
-        </div>
+        </DropdownMenu>
       </Dropdown>
     );
   }

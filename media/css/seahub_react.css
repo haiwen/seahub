@@ -1421,6 +1421,11 @@ a.table-sort-op:hover {
     font-size: 0.75rem;
   }
 
+  .mobile-dropdown-menu {
+    position: static!important;
+    transform: none!important;
+  }
+
   .mobile-operation-menu-bg-layer {
     position: fixed;
     left: 0;
