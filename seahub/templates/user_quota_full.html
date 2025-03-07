@@ -6,7 +6,7 @@
 
 {% autoescape off %}
 
-<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %} {{ email|email2nickname|escape }}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans %}Your quota is almost full on {{ site_name }}.{% endblocktrans %}
