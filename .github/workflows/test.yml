@@ -30,7 +30,7 @@ jobs:
         run: |
           git clone --depth=1 --branch=master https://github.com/haiwen/seafevents /tmp/seafevents
           git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
-          git clone --depth=1 --branch=master https://github.com/seafileltd/seaf-md-server /tmp/seaf-md-server
+          git clone --depth=1 --branch=main https://github.com/seafileltd/seaf-md-server /tmp/seaf-md-server
           cd /tmp/seaf-md-server/dep/seafile-pro-server/ && git submodule update --init --recursive && git pull --recurse-submodules
           cd /tmp/seafile-pro-server && go build -trimpath -tags noceph
           cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
@@ -65,6 +65,11 @@ jobs:
           cd $GITHUB_WORKSPACE
           pip install -r test-requirements.txt
           sudo rm -rf /usr/lib/python3/dist-packages/pytz/
+
+      - name: Start seaf-md-server
+        run: |
+          cd /tmp/seaf-md-server
+          ./seaf-md-server -c /tmp/seaf-md-server-conf/seaf-md-server.conf & sleep 5
 
       - name: run pytest
         run: |
