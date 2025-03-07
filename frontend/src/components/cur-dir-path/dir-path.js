@@ -128,15 +128,19 @@ class DirPath extends React.Component {
     return (
       <>
         <span className="path-split">/</span>
-        <span className="path-item">{gettext('Views')}</span>
+        <span className="path-item path-item-read-only">{gettext('Views')}</span>
         <span className="path-split">/</span>
-        <span className="path-item" role={children ? 'button' : null} onClick={children ? this.handleRefresh : () => {}}>
+        <span
+          className="path-item path-item-read-only"
+          role={children ? 'button' : null}
+          onClick={children ? this.handleRefresh : () => {}}
+        >
           <MetadataViewName id={viewId} />
         </span>
         {children && (
           <>
             <span className="path-split">/</span>
-            <span className="path-item">{children}</span>
+            <span className="path-item path-item-read-only">{children}</span>
           </>
         )}
         <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handleRefresh}>
@@ -156,13 +160,13 @@ class DirPath extends React.Component {
     return (
       <>
         <span className="path-split">/</span>
-        <span className="path-item">{gettext('Tags')}</span>
+        <span className="path-item path-item-read-only">{gettext('Tags')}</span>
         <span className="path-split">/</span>
         <TagViewName id={tagId} canSelectAllTags={canSelectAllTags} />
         {children && (
           <>
             <span className="path-split">/</span>
-            <span className="path-item">{children}</span>
+            <span className="path-item path-item-read-only">{children}</span>
           </>
         )}
       </>
@@ -172,8 +176,12 @@ class DirPath extends React.Component {
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     const pathList = path.split('/');
-    if (pathList.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) return this.turnViewPathToLink(pathList);
-    if (pathList.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) return this.turnTagPathToLink(pathList);
+    if (pathList.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+      return this.turnViewPathToLink(pathList);
+    }
+    if (pathList.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
+      return this.turnTagPathToLink(pathList);
+    }
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') return null;
