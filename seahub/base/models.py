@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
+import datetime
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -463,3 +464,29 @@ class RepoTransfer(models.Model):
 
     class Meta:
         db_table = 'RepoTransfer'
+
+
+class FullDiskEmailRecordManager(models.Manager):
+
+    def get_records_within_days(self, days=3):
+        today_now = datetime.datetime.now()
+        n_days_before = today_now - datetime.timedelta(days=days)
+        return self.filter(last_emailed_at__gt=n_days_before)
+    
+    def create_or_update(self, email):
+        obj = self.filter(email=email).first()
+        if not obj:
+            self.create(email=email)
+        else:
+            obj.last_emailed_at = datetime.datetime.now()
+            obj.save()
+        
+
+class FullDiskEmailRecord(models.Model):
+
+    email = models.CharField(max_length=255, db_index=True, unique=True)
+    last_emailed_at = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = FullDiskEmailRecordManager()
+
+    class Meta:
+        db_table = 'full_disk_email_record'
