@@ -30,9 +30,35 @@ jobs:
         run: |
           git clone --depth=1 --branch=master https://github.com/haiwen/seafevents /tmp/seafevents
           git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+          git clone --depth=1 --branch=master https://github.com/seafileltd/seaf-md-server /tmp/seaf-md-server
+          cd /tmp/seaf-md-server/dep/seafile-pro-server/ && git submodule update --init --recursive && git pull --recurse-submodules
+          cd /tmp/seafile-pro-server && go build -trimpath -tags noceph
           cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
           export JWT_PRIVATE_KEY=qwertyuiop SITE_ROOT=/ SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub
           ./bootstrap.sh
+      
+      - name: Generate seaf-md-server.conf
+        run: |
+          mkdir -p /tmp/seaf-md-server-conf/log
+          mkdir -p /tmp/seaf-md-server-conf/data
+          cat << EOF > /tmp/seaf-md-server-conf/seaf-md-server.conf
+          [general]
+          host = 0.0.0.0
+          port = 8084
+          log_dir = /tmp/seaf-md-server-conf/log
+          log_level = info
+
+          [server]
+          private_key = qwertyuiop
+
+          [storage]
+          max_cache_size = 1GB
+          data_dir = /tmp/seaf-md-server-conf/data
+
+          [redis]
+          server = 127.0.0.1
+          port = 6379
+          EOF
 
       - name: pip install
         run: |

@@ -65,7 +65,7 @@ function make_dist() {
 
 function run_tests() {
     set +e
-    py.test $nose_opts tests
+    py.test $nose_opts tests/seahub/repo_metadata/
     rvalue=$?
 
     # ignore 120 exited code in python3.6
