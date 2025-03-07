@@ -1258,7 +1258,8 @@ class AdminUser(APIView):
 
         is_active = request.data.get("is_active", None)
         if is_active:
-
+            keep_sharing = request.data.get("keep_sharing", None)
+            print(keep_sharing)
             try:
                 is_active = to_python_boolean(is_active)
             except ValueError:
