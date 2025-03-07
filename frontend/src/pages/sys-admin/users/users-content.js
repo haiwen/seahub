@@ -15,6 +15,8 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
+import UsersFilterBar from './users-filter-bar';
+import SysAdminInactiveSettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-inactive-setting-dialog';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -206,7 +208,7 @@ class Item extends Component {
       isDeleteUserDialogOpen: false,
       isResetUserPasswordDialogOpen: false,
       isRevokeAdminDialogOpen: false,
-      isConfirmInactiveDialogOpen: false
+      isConfirmInactiveDialogOpen: false,
     };
   }
 
@@ -268,9 +270,13 @@ class Item extends Component {
     this.props.updateUser(this.props.item.email, 'is_active', isActive);
   };
 
-  setUserInactive = () => {
-    this.props.updateUser(this.props.item.email, 'is_active', false);
+  setUserInactive = (keepSharing) => {
+    this.props.updateUser(this.props.item.email, 'is_active', false, {
+      keep_sharing: keepSharing
+    });
+    this.toggleConfirmInactiveDialog();
   };
+
 
   updateRole = (roleOption) => {
     this.props.updateUser(this.props.item.email, 'role', roleOption.value);
@@ -408,7 +414,6 @@ class Item extends Component {
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     const resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
     const revokeAdminDialogMsg = gettext('Are you sure you want to revoke the admin permission of {placeholder} ?').replace('{placeholder}', itemName);
-    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
 
     // for 'user status'
     const curStatus = item.is_active ? 'active' : 'inactive';
@@ -585,12 +590,9 @@ class Item extends Component {
           />
         }
         {isConfirmInactiveDialogOpen &&
-          <CommonOperationConfirmationDialog
-            title={gettext('Set user inactive')}
-            message={confirmSetUserInactiveMsg}
-            executeOperation={this.setUserInactive}
-            confirmBtnText={gettext('Set')}
+          <SysAdminInactiveSettingDialog
             toggleDialog={this.toggleConfirmInactiveDialog}
+            onSubmit={this.setUserInactive}
           />
         }
       </Fragment>

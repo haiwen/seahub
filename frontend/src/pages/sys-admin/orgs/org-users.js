@@ -16,6 +16,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import OrgNav from './org-nav';
+import SysAdminInactiveSettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-inactive-setting-dialog';
 
 dayjs.extend(relativeTime);
 
@@ -168,8 +169,8 @@ class Item extends Component {
     this.props.updateStatus(this.props.item.email, statusOption.value);
   };
 
-  setUserInactive = () => {
-    this.props.updateStatus(this.props.item.email, 'inactive');
+  setUserInactive = (keepSharing) => {
+    this.props.updateStatus(this.props.item.email, 'inactive', { keepSharing: keepSharing });
   };
 
   updateMembership = (membershipOption) => {
@@ -229,7 +230,6 @@ class Item extends Component {
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     let resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
-    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
 
     // for 'user status'
     const curStatus = item.active ? 'active' : 'inactive';
@@ -311,13 +311,10 @@ class Item extends Component {
           />
         }
         {isConfirmInactiveDialogOpen &&
-        <CommonOperationConfirmationDialog
-          title={gettext('Set user inactive')}
-          message={confirmSetUserInactiveMsg}
-          executeOperation={this.setUserInactive}
-          confirmBtnText={gettext('Set')}
-          toggleDialog={this.toggleConfirmInactiveDialog}
-        />
+          <SysAdminInactiveSettingDialog
+            toggleDialog={this.toggleConfirmInactiveDialog}
+            onSubmit={this.setUserInactive}
+          />
         }
       </Fragment>
     );
@@ -396,9 +393,9 @@ class OrgUsers extends Component {
     });
   };
 
-  updateStatus = (email, statusValue) => {
+  updateStatus = (email, statusValue, options = {}) => {
     const isActive = statusValue == 'active';
-    systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive).then(res => {
+    systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive, options).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item.active = res.data.active;

@@ -618,3 +618,59 @@ class SeafileDB:
                 wiki_info = WikiInfo(**params)
                 wikis.append(wiki_info)
             return wikis
+
+    def delete_all_received_shares(self, username, org_id=''):
+        if org_id:
+            delete_share_sql = f"""
+            DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email=%s AND org_id=%s
+            """
+        else:
+            delete_share_sql = f"""
+            DELETE FROM `{self.db_name}`.`SharedRepo` WHERE to_email=%s
+            """
+
+        with connection.cursor() as cursor:
+            cursor.execute(delete_share_sql, [username, org_id] if org_id else [username])
+
+
+    def delete_all_my_shares(self, username, org_id=''):
+        if org_id:
+            delete_not_virtual_repo_sql = f"""
+            DELETE s FROM `{self.db_name}`.`OrgSharedRepo` s
+            LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
+            WHERE s.from_email=%s AND s.org_id=%s AND v.repo_id IS NULL
+            """
+            delete_virtual_repo_sql = f"""
+            DELETE s, v, i, o, sz FROM `{self.db_name}`.`OrgSharedRepo` s 
+            LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i on v.repo_id = i.repo_id
+            LEFT JOIN `{self.db_name}`.`OrgRepo` o on v.repo_id = o.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoSize` sz on v.repo_id = sz.repo_id
+            WHERE s.from_email=%s AND s.org_id=%s
+            """
+            delete_group_share_sql = f"""
+            DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE owner=%s AND org_id=%s
+            """
+        else:
+            delete_not_virtual_repo_sql = f"""
+            DELETE s FROM `{self.db_name}`.`SharedRepo` s
+            LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
+            WHERE s.from_email=%s AND v.repo_id IS NULL
+            """
+
+            delete_virtual_repo_sql = f"""
+            DELETE i, sz, sh, v, o FROM `{self.db_name}`.`SharedRepo` sh 
+            LEFT JOIN `{self.db_name}`.`VirtualRepo` v on sh.repo_id = v.origin_repo
+            LEFT JOIN `{self.db_name}`.`RepoSize` sz on v.repo_id = sz.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i on v.repo_id = i.repo_id
+            LEFT JOIN `{self.db_name}`.`RepoOwner` o on v.repo_id = o.repo_id
+            WHERE sh.from_email = %s
+            """
+
+            delete_group_share_sql = f"""
+            DELETE FROM `{self.db_name}`.`RepoGroup` WHERE user_name=%s
+            """
+        with connection.cursor() as cursor:
+            cursor.execute(delete_not_virtual_repo_sql, [username, org_id] if org_id else [username])
+            cursor.execute(delete_virtual_repo_sql, [username, org_id] if org_id else [username])
+            cursor.execute(delete_group_share_sql, [username, org_id] if org_id else [username])

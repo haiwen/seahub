@@ -642,12 +642,15 @@ class SystemAdminAPI {
     return this._sendPostRequest(url, formData);
   }
 
-  sysAdminUpdateOrgUser(orgID, email, attribute, value) {
+  sysAdminUpdateOrgUser(orgID, email, attribute, value, options = {}) {
     const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/users/' + encodeURIComponent(email) + '/';
     let formData = new FormData();
     switch (attribute) {
       case 'active':
         formData.append('active', value);
+        if (options.keepSharing !== undefined) {
+          formData.append('keep_sharing', options.keepSharing);
+        }
         break;
       case 'is_org_staff':
         formData.append('is_org_staff', value);
@@ -957,7 +960,7 @@ class SystemAdminAPI {
     return this._sendPostRequest(url, formData);
   }
 
-  sysAdminUpdateUser(email, attribute, value) {
+  sysAdminUpdateUser(email, attribute, value, options = {}) {
     const url = this.server + '/api/v2.1/admin/users/' + encodeURIComponent(email) + '/';
     let formData = new FormData();
     switch (attribute) {
@@ -966,6 +969,9 @@ class SystemAdminAPI {
         break;
       case 'is_active':
         formData.append('is_active', value);
+        if (options.keep_sharing !== undefined) {
+          formData.append('keep_sharing', options.keep_sharing);
+        }
         break;
       case 'is_staff':
         formData.append('is_staff', value);
