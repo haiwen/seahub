@@ -1715,7 +1715,7 @@ def view_file_via_shared_dir(request, fileshare):
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename)
 
-    file_obj = seafile_api.get_dirent_by_path(repo_id, path)
+    file_obj = seafile_api.get_dirent_by_path(repo_id, req_path)
 
     data = {'repo': repo,
             'obj_id': obj_id,
