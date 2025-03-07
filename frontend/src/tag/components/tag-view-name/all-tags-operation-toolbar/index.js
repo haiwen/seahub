@@ -8,7 +8,7 @@ import { useTags } from '../../../hooks';
 
 import './index.css';
 
-const AllTagsOperationToolbar = ({ children }) => {
+const AllTagsOperationToolbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isShowEditTagDialog, setShowEditTagDialog] = useState(false);
 
@@ -44,6 +44,7 @@ const AllTagsOperationToolbar = ({ children }) => {
   return (
     <>
       <div className="dir-operation">
+        <span className="path-item path-item-read-only">{gettext('All tags')}</span>
         <Dropdown isOpen={isMenuOpen} toggle={toggleMenuOpen}>
           <DropdownToggle
             tag="span"
@@ -53,8 +54,7 @@ const AllTagsOperationToolbar = ({ children }) => {
             onKeyDown={onDropdownKeyDown}
             data-toggle="dropdown"
           >
-            {children}
-            <i className="ml-1 sf3-font-new sf3-font path-item-new-toggle"></i>
+            <i className="sf3-font-new sf3-font path-item-new-toggle"></i>
             <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>

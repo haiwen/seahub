@@ -299,6 +299,10 @@
   background: #efefef;
 }
 
+.dir-view-path .path-item.path-item-read-only:hover {
+  background: #fff;
+}
+
 .dir-view-path .path-item-refresh {
   height: 24px;
   width: 24px;

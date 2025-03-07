@@ -18,17 +18,27 @@ const TagViewName = ({ id, canSelectAllTags }) => {
   if (!id) return null;
   if (id === ALL_TAGS_ID) {
     if (canSelectAllTags) {
-      return (<span className="path-item" role="button" onClick={selectAllTags}>{gettext('All tags')}</span>);
+      return (
+        <span className="path-item" role="button" onClick={selectAllTags}>{gettext('All tags')}</span>
+      );
     }
 
     const canModify = context.canModify();
     const canAddTag = context.canAddTag();
-    if (!canModify || !canAddTag) return (<span className="path-item">{gettext('All tags')}</span>);
-    return (<AllTagsOperationToolbar>{gettext('All tags')}</AllTagsOperationToolbar>);
+    if (!canModify || !canAddTag) {
+      return (
+        <span className="path-item path-item-read-only">{gettext('All tags')}</span>
+      );
+    }
+    return (
+      <AllTagsOperationToolbar/>
+    );
   }
   const tag = getRowById(tagsData, id);
   if (!tag) return null;
-  return (<span className="path-item">{getTagName(tag)}</span>);
+  return (
+    <span className="path-item path-item-read-only">{getTagName(tag)}</span>
+  );
 };
 
 TagViewName.propTypes = {
