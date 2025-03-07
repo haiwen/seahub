@@ -44,7 +44,7 @@ class Command(BaseCommand):
         if not record:
             self.stdout.write('[%s] [%s]: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), msg_type.upper(), msg))
             return
-        if type == 'info':
+        if msg_type == 'info':
             logger.info(msg)
         else:
             logger.error(msg)
