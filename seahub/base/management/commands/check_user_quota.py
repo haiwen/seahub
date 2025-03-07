@@ -42,7 +42,7 @@ class Command(BaseCommand):
     
     def print_msg(self, msg, msg_type='info', record=False):
         if not record:
-            self.stderr.write('[%s] [%s]: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), msg_type.upper(), msg))
+            self.stdout.write('[%s] [%s]: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), msg_type.upper(), msg))
             return
         if type == 'info':
             logger.info(msg)
