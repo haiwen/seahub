@@ -40,6 +40,7 @@ const InsertColumn = ({ lastColumn, height, metadata, groupOffsetLeft, insertCol
 
   const handleSubmit = useCallback((name, type, { key, data }) => {
     setColumnPopoverShow(false);
+    // if column is already exist in base, add it to available columns
     const isExist = metadata.columns.some((column) => column.key === key);
     if (isExist) {
       const currentAvailableColumnKeys = metadata.view.available_columns.map((column) => column.key);

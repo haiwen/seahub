@@ -186,7 +186,7 @@ export default function apply(data, operation) {
     case OPERATION_TYPE.INSERT_COLUMN: {
       const { column } = operation;
       const newColumn = new Column(column);
-      data.view.available_column_keys = data.view.available_column_keys.concat(newColumn.key);
+      data.view.available_column_keys.push(newColumn.key);
       data.columns.push(newColumn);
       data.view = new View(data.view, data.columns);
       data.key_column_map[newColumn.key] = newColumn;

@@ -201,7 +201,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { available_column_keys }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: gettext('Failed to modify available properties') });
+          callback({ error: gettext('Failed to insert property') });
         });
         break;
       }
