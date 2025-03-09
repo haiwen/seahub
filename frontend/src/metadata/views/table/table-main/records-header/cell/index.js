@@ -144,12 +144,12 @@ const Cell = ({
 
   const handleDeleteColumn = useCallback((key, column) => {
     if (key === PRIVATE_COLUMN_KEY.LOCATION) {
-      const updated = view.available_column_keys.filter(item => item !== PRIVATE_COLUMN_KEY.LOCATION);
+      const updated = view.available_columns.map((column) => column.key).filter((key) => key !== PRIVATE_COLUMN_KEY.LOCATION);
       modifyAvailableColumns(updated);
       return;
     }
     deleteColumn(column.key);
-  }, [view, deleteColumn, modifyAvailableColumns]);
+  }, [deleteColumn, view, modifyAvailableColumns]);
 
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];

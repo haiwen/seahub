@@ -40,13 +40,15 @@ const InsertColumn = ({ lastColumn, height, metadata, groupOffsetLeft, insertCol
 
   const handleSubmit = useCallback((name, type, { key, data }) => {
     setColumnPopoverShow(false);
-    if (name === PRIVATE_COLUMN_KEY.LOCATION) {
-      const currentAvailableColumnKeys = metadata.view.available_column_keys;
-      modifyAvailableColumns([...currentAvailableColumnKeys, PRIVATE_COLUMN_KEY.LOCATION]);
+    const isExist = metadata.columns.some((column) => column.key === key);
+    if (isExist) {
+      const currentAvailableColumnKeys = metadata.view.available_columns.map((column) => column.key);
+      const updated = [...currentAvailableColumnKeys, key];
+      modifyAvailableColumns(updated);
       return;
     }
     insertColumnAPI(name, type, { key, data });
-  }, [metadata.view, insertColumnAPI, modifyAvailableColumns]);
+  }, [metadata, insertColumnAPI, modifyAvailableColumns]);
 
   const handleSelect = useCallback((column) => {
     setSelectedColumn(column);

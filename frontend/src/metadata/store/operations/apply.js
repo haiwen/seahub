@@ -170,6 +170,7 @@ export default function apply(data, operation) {
     case OPERATION_TYPE.MODIFY_AVAILABLE_COLUMNS: {
       const { available_column_keys } = operation;
       data.view.available_column_keys = available_column_keys;
+      data.view.available_columns = data.columns.filter(column => available_column_keys.includes(column.key));
       return data;
     }
     case OPERATION_TYPE.MODIFY_LOCAL_VIEW: {
@@ -185,6 +186,7 @@ export default function apply(data, operation) {
     case OPERATION_TYPE.INSERT_COLUMN: {
       const { column } = operation;
       const newColumn = new Column(column);
+      data.view.available_column_keys = data.view.available_column_keys.concat(newColumn.key);
       data.columns.push(newColumn);
       data.view = new View(data.view, data.columns);
       data.key_column_map[newColumn.key] = newColumn;
@@ -197,6 +199,7 @@ export default function apply(data, operation) {
       const deletedColumn = data.columns[columnIndex];
       if (columnIndex !== -1) {
         newColumns.splice(columnIndex, 1);
+        data.view.available_column_keys = data.view.available_column_keys.filter(key => key !== column_key);
         data.columns = newColumns;
         data.view = new View(data.view, data.columns);
 
