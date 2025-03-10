@@ -256,7 +256,6 @@ class Command(BaseCommand):
                     ele.op_user_link = a_tag(email2nickname(ele.op_user),
                                              user_info_url(ele.op_user))
                     ele.operation, ele.op_details = self.format_file_operation(ele)
-                    raise
             except Exception as e:
                 logger.error('Failed to format mail content for user: %s' %
                              username)
