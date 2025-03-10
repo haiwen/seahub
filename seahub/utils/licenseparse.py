@@ -7,8 +7,10 @@ from seaserv import ccnet_api
 
 logger = logging.getLogger(__name__)
 
+
 def get_license_path():
     return settings.LICENSE_PATH
+
 
 def parse_license():
     """Parse license file and return dict.
@@ -45,6 +47,7 @@ def parse_license():
 
     return ret
 
+
 def user_number_over_limit(new_users=0):
     logger = logging.getLogger(__name__)
     if is_pro_version():
@@ -54,10 +57,7 @@ def user_number_over_limit(new_users=0):
             max_users = int(license_dict.get('MaxUsers', 3))
 
             # get active user number
-            active_db_users = ccnet_api.count_emailusers('DB')
-            active_ldap_users = ccnet_api.count_emailusers('LDAP')
-            active_users = active_db_users + active_ldap_users if \
-                           active_ldap_users > 0 else active_db_users
+            active_users = ccnet_api.count_emailusers('DB')
 
             if new_users < 0:
                 logger.debug('`new_users` must be greater or equal to 0.')
