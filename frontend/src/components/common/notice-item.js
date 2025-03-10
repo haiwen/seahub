@@ -69,6 +69,7 @@ class NoticeItem extends React.Component {
       let groupLink = '<a href=' + groupHref + '>' + Utils.HTMLescape(groupName) + '</a>';
       notice = notice.replace('{user_link}', userLink);
       notice = notice.replace('{group_link}', groupLink);
+
       return { avatar_url, notice, username };
     }
 
@@ -364,8 +365,8 @@ class NoticeItem extends React.Component {
       let sdoc_name = detail.sdoc_name;
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
-      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + encodeURIComponent(sdoc_path);
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
@@ -392,8 +393,8 @@ class NoticeItem extends React.Component {
       let sdoc_name = detail.sdoc_name;
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
-      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + encodeURIComponent(sdoc_path);
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
