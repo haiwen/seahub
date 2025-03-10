@@ -197,7 +197,65 @@ const TextTranslation = {
   ADD_VIEW: {
     key: 'ADD_VIEW',
     value: gettext('Add view')
-  }
+  },
+
+  // table view
+  OPEN_FILE_IN_NEW_TAB: {
+    key: 'Open file in new tab',
+    value: gettext('Open file in new tab'),
+  },
+  OPEN_FOLDER_IN_NEW_TAB: {
+    key: 'Open folder in new tab',
+    value: gettext('Open folder in new tab'),
+  },
+  OPEN_PARENT_FOLDER: {
+    key: 'Open parent folder',
+    value: gettext('Open parent folder'),
+  },
+  EXTRACT_FILE_DETAIL: {
+    key: 'Extract file detail',
+    value: gettext('Extract file detail'),
+  },
+  EXTRACT_FILE_DETAILS: {
+    key: 'Extract file details',
+    value: gettext('Extract file details'),
+  },
+  DELETE_FILE: {
+    key: 'Delete file',
+    value: gettext('Delete file'),
+  },
+  DELETE_FOLDER: {
+    key: 'Delete folder',
+    value: gettext('Delete folder'),
+  },
+  MOVE_FILE: {
+    key: 'Move file',
+    value: gettext('Move file'),
+  },
+  MOVE_FOLDER: {
+    key: 'Move folder',
+    value: gettext('Move folder'),
+  },
+  RENAME_FILE: {
+    key: 'Rename file',
+    value: gettext('Rename file'),
+  },
+  RENAME_FOLDER: {
+    key: 'Rename folder',
+    value: gettext('Rename folder'),
+  },
+  GENERATE_DESCRIPTION: {
+    key: 'Generate description',
+    value: gettext('Generate description'),
+  },
+  GENERATE_TAGS: {
+    key: 'Generate tags',
+    value: gettext('Generate file tags'),
+  },
+  OCR: {
+    key: 'OCR',
+    value: gettext('OCR'),
+  },
 };
 
 export default TextTranslation;

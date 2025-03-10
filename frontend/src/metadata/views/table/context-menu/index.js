@@ -1,6 +1,5 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
@@ -8,15 +7,12 @@ import { useMetadataStatus } from '../../../../hooks';
 import { getColumnByKey, isNameColumn } from '../../../utils/column';
 import { checkIsDir } from '../../../utils/row';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
-import { getFileNameFromRecord, getParentDirFromRecord, getFileObjIdFromRecord,
-  getRecordIdFromRecord,
-} from '../../../utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
 import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
 import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
 import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
 import { Dirent } from '../../../../models';
-import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
 import ContextMenuComponent from '../../../components/context-menu';
 import RowUtils from '../utils/row-utils';
 
@@ -38,8 +34,9 @@ const OPERATION = {
 };
 
 const ContextMenu = ({
-  isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected, updateRecords,
-  getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder
+  isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
+  getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder, updateRecordDetails,
+  updateRecordDescription, ocr,
 }) => {
   const currentRecord = useRef(null);
 
@@ -49,7 +46,6 @@ const ContextMenu = ({
 
   const { metadata } = useMetadataView();
   const { enableOCR } = useMetadataStatus();
-  const { onOCR, generateDescription, extractFilesDetails } = useMetadataAIOperations();
 
   const repoID = window.sfMetadataStore.repoId;
 
@@ -223,87 +219,14 @@ const ContextMenu = ({
     return list;
   }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
 
-  const handelGenerateDescription = useCallback((record) => {
-    if (!checkCanModifyRow(record)) return;
-    const parentDir = getParentDirFromRecord(record);
-    const fileName = getFileNameFromRecord(record);
-    if (!fileName || !parentDir) return;
-    const checkIsDescribableFile = Utils.isDescriptionSupportedFile(fileName);
-    if (!checkIsDescribableFile) return;
-
-    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
-    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
-    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
-    generateDescription({ parentDir, fileName }, {
-      success_callback: ({ description }) => {
-        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
-        const recordIds = [updateRecordId];
-        let idRecordUpdates = {};
-        let idOriginalRecordUpdates = {};
-        idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
-        idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
-        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-      }
-    });
-  }, [updateRecords, generateDescription]);
-
   const toggleFileTagsRecord = useCallback((record = null) => {
     setFileTagsRecord(record);
   }, []);
 
-  const ocr = useCallback((record) => {
-    if (!checkCanModifyRow(record)) return;
-    const parentDir = getParentDirFromRecord(record);
-    const fileName = getFileNameFromRecord(record);
-    if (!Utils.imageCheck(fileName)) return;
-
-    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
-    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    onOCR({ parentDir, fileName }, {
-      success_callback: ({ ocrResult }) => {
-        if (!ocrResult) return;
-        const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
-        const recordIds = [updateRecordId];
-        let idRecordUpdates = {};
-        let idOriginalRecordUpdates = {};
-        idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-        idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-      },
-    });
-  }, [updateRecords, onOCR]);
-
-  const updateFileDetails = useCallback((records) => {
-    const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
-    if (recordObjIds.length > 50) {
-      toaster.danger(gettext('Select up to 50 files'));
-      return;
-    }
-
-    const recordIds = records.map(record => getRecordIdFromRecord(record));
-    extractFilesDetails(recordObjIds, {
-      success_callback: ({ details }) => {
-        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
-        if (!captureColumn) return;
-        let idOldRecordData = {};
-        let idOriginalOldRecordData = {};
-        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
-        records.forEach(record => {
-          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-        });
-        let idRecordUpdates = {};
-        let idOriginalRecordUpdates = {};
-        details.forEach(detail => {
-          const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
-          idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
-          idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
-        });
-        updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
-      }
-    });
-  }, [metadata, extractFilesDetails, updateRecords]);
+  const handleMoveRecord = useCallback((...params) => {
+    selectNone();
+    moveRecord && moveRecord(...params);
+  }, [moveRecord, selectNone]);
 
   const handleOptionClick = useCallback((option, event) => {
     switch (option.value) {
@@ -329,7 +252,7 @@ const ContextMenu = ({
       case OPERATION.GENERATE_DESCRIPTION: {
         const { record } = option;
         if (!record) break;
-        handelGenerateDescription(record);
+        updateRecordDescription(record);
         break;
       }
       case OPERATION.FILE_TAGS: {
@@ -374,12 +297,12 @@ const ContextMenu = ({
       }
       case OPERATION.FILE_DETAILS: {
         const { records } = option;
-        updateFileDetails(records);
+        updateRecordDetails(records);
         break;
       }
       case OPERATION.FILE_DETAIL: {
         const { record } = option;
-        updateFileDetails([record]);
+        updateRecordDetails([record]);
         break;
       }
       case OPERATION.MOVE: {
@@ -392,7 +315,15 @@ const ContextMenu = ({
         break;
       }
     }
-  }, [repoID, onCopySelected, onClearSelected, handelGenerateDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateFileDetails, toggleFileTagsRecord, toggleMoveDialog]);
+  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, toggleFileTagsRecord, toggleMoveDialog]);
+
+  useEffect(() => {
+    const unsubscribeToggleMoveDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, toggleMoveDialog);
+
+    return () => {
+      unsubscribeToggleMoveDialog();
+    };
+  }, [toggleMoveDialog]);
 
   const currentRecordId = getRecordIdFromRecord(currentRecord.current);
   const fileName = getFileNameFromRecord(currentRecord.current);
@@ -424,7 +355,7 @@ const ContextMenu = ({
           repoID={repoID}
           dirent={new Dirent({ name: fileName })}
           isMultipleOperation={false}
-          onItemMove={(...params) => moveRecord(currentRecordId, ...params)}
+          onItemMove={(...params) => handleMoveRecord(currentRecordId, ...params)}
           onCancelMove={toggleMoveDialog}
           onAddFolder={addFolder}
         />

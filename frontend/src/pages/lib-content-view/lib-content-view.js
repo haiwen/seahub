@@ -31,6 +31,7 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
+import TableFilesToolbar from '../../components/toolbar/table-files-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -2277,9 +2278,11 @@ class LibContentView extends React.Component {
                         'animation-children': isDirentSelected
                       })}>
                       {isDirentSelected ? (
-                        this.state.currentMode === TAGS_MODE ?
+                        this.state.currentMode === TAGS_MODE ? (
                           <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
-                          :
+                        ) : this.state.currentMode === METADATA_MODE ? (
+                          <TableFilesToolbar repoID={this.props.repoID} />
+                        ) : (
                           <SelectedDirentsToolbar
                             repoID={this.props.repoID}
                             path={this.state.path}
@@ -2305,6 +2308,7 @@ class LibContentView extends React.Component {
                             onItemConvert={this.onConvertItem}
                             onAddFolder={this.onAddFolder}
                           />
+                        )
                       ) : (
                         <CurDirPath
                           currentRepoInfo={this.state.currentRepoInfo}

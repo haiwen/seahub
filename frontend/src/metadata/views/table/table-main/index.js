@@ -46,10 +46,6 @@ const TableMain = ({
     modifyRecord && modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [modifyRecord]);
 
-  const updateRecords = useCallback(({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste = false }) => {
-    modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste);
-  }, [modifyRecords]);
-
   const handelInsertColumn = useCallback((name, type, { key, data }) => {
     insertColumn && insertColumn(name, type, { key, data });
   }, [insertColumn]);
@@ -74,7 +70,6 @@ const TableMain = ({
         paste={paste}
         groupOffsetLeft={groupOffset}
         modifyRecord={updateRecord}
-        updateRecords={updateRecords}
         deleteRecords={props.deleteRecords}
         getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
         recordGetterById={recordGetterById}
