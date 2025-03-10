@@ -1140,6 +1140,16 @@ else:
     load_local_settings(seahub_settings)
     del seahub_settings
 
+# Add default handler when used custom LOGGING
+if 'default' not in LOGGING['handlers']:
+    LOGGING['handlers']['default'] = {
+        'level': 'INFO',
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': os.path.join(LOG_DIR, 'seahub.log'),
+        'maxBytes': 1024*1024*100,  # 100 MB
+        'backupCount': 5,
+        'formatter': 'standard',
+    }
 # Ignore logs of component in INFO level, and set it to ERROR level
 for module in LOGGING_IGNORE_MODULES:
     if module not in LOGGING['loggers']:

@@ -239,7 +239,12 @@ def ai_search_wikis(params):
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/wiki-search')
     resp = requests.post(url, json=params, headers=headers)
-    return resp
+    if resp.status_code == 500:
+        raise Exception('search in wiki error status: %s body: %s', resp.status_code, resp.text)
+    resp_json = resp.json()
+    results = resp_json.get('results')
+    total = resp_json.get('total')
+    return results, total
 
 SEARCH_REPOS_LIMIT = 200
 RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
