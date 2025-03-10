@@ -160,8 +160,9 @@ class SharedDirView extends React.Component {
         isLoading: false,
         errorMsg: '',
         items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder)
+      }, () => {
+        this.getThumbnails(thumbnailSize);
       });
-      this.getThumbnails(thumbnailSize);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
