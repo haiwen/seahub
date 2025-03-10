@@ -1160,12 +1160,15 @@ class Item extends React.Component {
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <DropdownMenu
+                container={document.body}
+                className="mobile-dropdown-menu"
+              >
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
                   <DropdownItem className="mobile-menu-item" onClick={this.zipDownloadFolder}>{gettext('Download')}</DropdownItem>
                 </div>
-              </div>
+              </DropdownMenu>
             </Dropdown>
             }
           </td>
@@ -1240,12 +1243,15 @@ class Item extends React.Component {
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <DropdownMenu
+                container={document.body}
+                className="mobile-dropdown-menu"
+              >
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
                   <DropdownItem className="mobile-menu-item" tag="a" href={`${fileURL}&dl=1`}>{gettext('Download')}</DropdownItem>
                 </div>
-              </div>
+              </DropdownMenu>
             </Dropdown>
             }
           </td>
