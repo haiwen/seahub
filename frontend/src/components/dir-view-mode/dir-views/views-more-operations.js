@@ -16,7 +16,7 @@ const ViewsMoreOperations = ({ menuProps }) => {
 
   const clickMenu = (option) => {
     switch (option) {
-      case TextTranslation.ADD_FOLDER.key: {
+      case KEY_ADD_VIEW_MAP.ADD_FOLDER: {
         eventBus.dispatch(EVENT_BUS_TYPE.ADD_FOLDER);
         return;
       }

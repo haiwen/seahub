@@ -50,6 +50,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   }, [getFolders]);
 
   const prepareAddFolder = () => {
+    setNewView(null);
     setShowInput(true);
   };
 
