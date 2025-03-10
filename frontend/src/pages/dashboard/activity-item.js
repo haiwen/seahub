@@ -90,7 +90,7 @@ class ActivityItem extends Component {
       }
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
+      let fileLink = `<a href=${fileURL} target="_blank">${Utils.HTMLescape(item.name)}</a>`;
       let fileCount = item.createdFilesCount - 1;
       let firstLine = gettext('{file} and {n} other files')
         .replace('{file}', fileLink)
