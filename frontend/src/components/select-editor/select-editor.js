@@ -23,16 +23,10 @@ const propTypes = {
 
 class SelectEditor extends React.Component {
 
-  static defaultProps = {
-    enableAddCustomPermission: false,
-    isEditing: false,
-    autoFocus: false,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: props.isEditing,
+      isEditing: props.isEditing || false,
       options: []
     };
     this.options = [];
@@ -43,7 +37,7 @@ class SelectEditor extends React.Component {
   }
 
   setOptions = () => {
-    const { enableAddCustomPermission, options } = this.props;
+    const { enableAddCustomPermission = false, options } = this.props;
     this.options = [];
     for (let i = 0, length = options.length; i < length; i++) {
       let option = {};
@@ -112,7 +106,7 @@ class SelectEditor extends React.Component {
   };
 
   render() {
-    let { currentOption, isTextMode } = this.props;
+    let { currentOption, isTextMode, autoFocus = false } = this.props;
     return (
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
@@ -128,7 +122,7 @@ class SelectEditor extends React.Component {
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
             onMenuClose={this.onMenuClose}
-            autoFocus={this.props.autoFocus}
+            autoFocus={autoFocus}
             menuShouldScrollIntoView
           />
         }

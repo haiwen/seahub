@@ -94,8 +94,9 @@ class Account extends Component {
   renderMenu = () => {
     let data;
     const { isStaff, isOrgStaff, isInstAdmin } = this.state;
+    const { isAdminPanel = false } = this.props;
 
-    if (this.props.isAdminPanel) {
+    if (isAdminPanel) {
       if (isStaff) {
         data = {
           url: siteRoot,
@@ -172,10 +173,6 @@ class Account extends Component {
     );
   }
 }
-
-Account.defaultProps = {
-  isAdminPanel: false
-};
 
 Account.propTypes = propTypes;
 

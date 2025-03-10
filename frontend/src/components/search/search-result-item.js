@@ -12,16 +12,12 @@ const propTypes = {
 
 class SearchResultItem extends React.Component {
 
-  static defaultProps = {
-    setRef: () => {},
-  };
-
   onClickHandler = () => {
     this.props.onItemClickHandler(this.props.item);
   };
 
   render() {
-    let item = this.props.item;
+    const { item, setRef = (() => {}) } = this.props;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl();
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
     let showName = item.repo_name + '/' + item.link_content;
@@ -35,7 +31,7 @@ class SearchResultItem extends React.Component {
       <li
         className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
-        ref={ref => this.props.setRef(ref)}
+        ref={ref => setRef(ref)}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">

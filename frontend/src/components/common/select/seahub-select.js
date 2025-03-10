@@ -54,47 +54,17 @@ Option.propTypes = {
   }),
 };
 
-export default class SeahubSelect extends React.Component {
-
-  static propTypes = {
-    isMulti: PropTypes.bool,
-    options: PropTypes.array.isRequired,
-    value: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
-    isSearchable: PropTypes.bool,
-    isClearable: PropTypes.bool,
-    placeholder: PropTypes.string,
-    classNamePrefix: PropTypes.string,
-    className: PropTypes.string,
-    form: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    menuPortalTarget: PropTypes.string,
-    menuPosition: PropTypes.string,
-    noOptionsMessage: PropTypes.func,
-    innerRef: PropTypes.object,
-    isDisabled: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    options: [],
-    value: {},
-    isDisabled: false,
-    isSearchable: true,
-    isClearable: true,
-    placeholder: '',
-    isMulti: false,
-    menuPortalTarget: '.modal',
-    noOptionsMessage: () => {
-      return null;
-    },
-  };
+class SeahubSelect extends React.Component {
 
   getMenuPortalTarget = () => {
-    return document.querySelector(this.props.menuPortalTarget);
+    const { menuPortalTarget = '.modal' } = this.props;
+    return document.querySelector(menuPortalTarget);
   };
 
   render() {
-    const { options, onChange, value, isSearchable, placeholder, isMulti, menuPosition, isClearable, noOptionsMessage,
-      classNamePrefix, innerRef, isDisabled, form, className } = this.props;
+    const { options = [], onChange, value = {}, isSearchable = true, placeholder = '',
+      isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
+      classNamePrefix, innerRef, isDisabled = false, form, className } = this.props;
 
     return (
       <Select
@@ -121,3 +91,23 @@ export default class SeahubSelect extends React.Component {
     );
   }
 }
+
+SeahubSelect.propTypes = {
+  isMulti: PropTypes.bool,
+  options: PropTypes.array.isRequired,
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
+  isSearchable: PropTypes.bool,
+  isClearable: PropTypes.bool,
+  placeholder: PropTypes.string,
+  classNamePrefix: PropTypes.string,
+  className: PropTypes.string,
+  form: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  menuPortalTarget: PropTypes.string,
+  menuPosition: PropTypes.string,
+  noOptionsMessage: PropTypes.func,
+  innerRef: PropTypes.object,
+  isDisabled: PropTypes.bool,
+};
+
+export default SeahubSelect;

@@ -75,6 +75,7 @@ const Board = ({
       />
       {!isCollapsed && (
         <Container
+          className='react-trello-board'
           orientation="vertical"
           groupName={boardName}
           dragClass="kanban-drag-card"
@@ -90,6 +91,7 @@ const Board = ({
             showOnTop: true,
             className: 'card-drop-preview',
           }}
+          behaviour='move'
           getGhostParent={() => {
           // return anchestor of container who doesn't have a transform property
             return document.querySelector('.sf-metadata-main');

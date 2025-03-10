@@ -125,10 +125,4 @@ Container.propTypes = {
   ]),
 };
 
-Container.defaultProps = {
-  behaviour: 'move',
-  orientation: 'vertical',
-  className: 'react-trello-board',
-};
-
 export default Container;

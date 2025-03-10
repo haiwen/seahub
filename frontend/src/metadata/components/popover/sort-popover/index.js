@@ -37,10 +37,6 @@ const propTypes = {
 
 class SortPopover extends Component {
 
-  static defaultProps = {
-    readOnly: false,
-  };
-
   constructor(props) {
     super(props);
     const { sorts, columns, type } = this.props;
@@ -175,7 +171,7 @@ class SortPopover extends Component {
 
   renderSortItem = (column, sort, index) => {
     const { name, type } = column;
-    const { readOnly, type: viewType } = this.props;
+    const { readOnly = false, type: viewType } = this.props;
     const selectedColumn = {
       label: (
         <Fragment>
@@ -233,7 +229,7 @@ class SortPopover extends Component {
   };
 
   render() {
-    const { target, readOnly } = this.props;
+    const { target, readOnly = false } = this.props;
     const { sorts } = this.state;
     const isEmpty = isSortsEmpty(sorts);
     return (

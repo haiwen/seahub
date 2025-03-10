@@ -19,16 +19,12 @@ const propTypes = {
 
 class SeafileCodeMirror extends React.Component {
 
-  static defaultProps = {
-    readOnly: true,
-  };
-
   onChange = (value) => {
     this.props.onChange && this.props.onChange(value);
   };
 
   render() {
-    const { value, readOnly, fileExt } = this.props;
+    const { value, readOnly = true, fileExt } = this.props;
     const extensions = [...getLanguageExtensions(fileExt).filter(item => item !== null)];
     return (
       <div className='seafile-code-mirror-container'>

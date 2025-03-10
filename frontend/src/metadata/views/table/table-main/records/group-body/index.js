@@ -22,11 +22,6 @@ const { max, min } = Math;
 
 class GroupBody extends Component {
 
-  static defaultProps = {
-    editorPortalTarget: document.body,
-    scrollToRowIndex: 0,
-  };
-
   constructor(props) {
     super(props);
     const { groups, groupbys, allColumns } = props;
@@ -869,6 +864,7 @@ class GroupBody extends Component {
   };
 
   render() {
+    const { editorPortalTarget = document.body } = this.props;
     return (
       <Fragment>
         <div
@@ -898,7 +894,7 @@ class GroupBody extends Component {
             getMobileFloatIconStyle={this.props.getMobileFloatIconStyle}
             onToggleMobileMoreOperations={this.props.onToggleMobileMoreOperations}
             onToggleInsertRecordDialog={this.props.onToggleInsertRecordDialog}
-            editorPortalTarget={this.props.editorPortalTarget}
+            editorPortalTarget={editorPortalTarget}
             onCellRangeSelectionUpdated={this.onCellRangeSelectionUpdated}
             modifyRecord={this.props.modifyRecord}
             recordGetterByIndex={this.props.recordGetterByIndex}

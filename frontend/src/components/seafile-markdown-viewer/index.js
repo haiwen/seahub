@@ -108,7 +108,7 @@ class SeafileMarkdownViewer extends React.Component {
   };
 
   renderMarkdown = () => {
-    const { isTOCShow = true, isWiki, markdownContent } = this.props;
+    const { isTOCShow = true, isWiki = false, markdownContent } = this.props;
     const props = {
       isShowOutline: isTOCShow,
       mathJaxSource: `${mediaUrl}js/mathjax/tex-svg.js`,
@@ -129,7 +129,7 @@ class SeafileMarkdownViewer extends React.Component {
 
   render() {
     const { isMarkdownEditorRenderCompleted } = this.state;
-    const { isFileLoading, isWiki, containerClassName = '' } = this.props;
+    const { isFileLoading, isWiki = false, containerClassName = '' } = this.props;
 
     if (isFileLoading) {
       return <Loading />;
@@ -158,11 +158,6 @@ class SeafileMarkdownViewer extends React.Component {
   }
 }
 
-const defaultProps = {
-  isWiki: false,
-};
-
 SeafileMarkdownViewer.propTypes = propTypes;
-SeafileMarkdownViewer.defaultProps = defaultProps;
 
 export default SeafileMarkdownViewer;

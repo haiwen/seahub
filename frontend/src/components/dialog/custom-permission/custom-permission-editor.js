@@ -5,19 +5,7 @@ import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
 import OpIcon from '../../op-icon';
 
-const propTypes = {
-  mode: PropTypes.string,
-  permission: PropTypes.object,
-  onChangeMode: PropTypes.func.isRequired,
-  onUpdateCustomPermission: PropTypes.func.isRequired,
-};
-
 class CustomPermissionEditor extends React.Component {
-
-  static defaultProps = {
-    mode: 'add'
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +38,6 @@ class CustomPermissionEditor extends React.Component {
     } else {
       this.setState({ isLoading: false });
     }
-
   }
 
   onChangePermissionName = (evt) => {
@@ -108,12 +95,9 @@ class CustomPermissionEditor extends React.Component {
   };
 
   render() {
-
-    const { mode } = this.props;
+    const { mode = 'add' } = this.props;
     const title = mode === 'add' ? gettext('Add permission') : gettext('Edit permission');
-
     const { isLoading, permission_name, permission_desc, permission, errMessage } = this.state;
-
     return (
       <div className="custom-permission">
         <div className="permission-header">
@@ -212,6 +196,11 @@ class CustomPermissionEditor extends React.Component {
 
 }
 
-CustomPermissionEditor.propTypes = propTypes;
+CustomPermissionEditor.propTypes = {
+  mode: PropTypes.string,
+  permission: PropTypes.object,
+  onChangeMode: PropTypes.func.isRequired,
+  onUpdateCustomPermission: PropTypes.func.isRequired,
+};
 
 export default CustomPermissionEditor;

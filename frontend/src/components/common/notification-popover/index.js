@@ -5,28 +5,7 @@ import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
-export default class NotificationPopover extends React.Component {
-
-  static propTypes = {
-    headerText: PropTypes.string.isRequired,
-    bodyText: PropTypes.string.isRequired,
-    footerText: PropTypes.string.isRequired,
-    onNotificationListToggle: PropTypes.func,
-    onNotificationDialogToggle: PropTypes.func,
-    listNotifications: PropTypes.func,
-    onMarkAllNotifications: PropTypes.func,
-    tabItemClick: PropTypes.func,
-    children: PropTypes.any,
-    currentTab: PropTypes.string,
-    generalNoticeListUnseen: PropTypes.number,
-    discussionNoticeListUnseen: PropTypes.number,
-  };
-
-  static defaultProps = {
-    headerText: '',
-    bodyText: '',
-    footerText: '',
-  };
+class NotificationPopover extends React.Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleOutsideClick, true);
@@ -58,7 +37,7 @@ export default class NotificationPopover extends React.Component {
   };
 
   render() {
-    const { headerText, bodyText, footerText, currentTab, generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
+    const { headerText = '', bodyText = '', footerText = '', currentTab, generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
     return (
       <Popover
         className="notification-wrapper"
@@ -114,3 +93,20 @@ export default class NotificationPopover extends React.Component {
     );
   }
 }
+
+NotificationPopover.propTypes = {
+  headerText: PropTypes.string.isRequired,
+  bodyText: PropTypes.string.isRequired,
+  footerText: PropTypes.string.isRequired,
+  onNotificationListToggle: PropTypes.func,
+  onNotificationDialogToggle: PropTypes.func,
+  listNotifications: PropTypes.func,
+  onMarkAllNotifications: PropTypes.func,
+  tabItemClick: PropTypes.func,
+  children: PropTypes.any,
+  currentTab: PropTypes.string,
+  generalNoticeListUnseen: PropTypes.number,
+  discussionNoticeListUnseen: PropTypes.number,
+};
+
+export default NotificationPopover;

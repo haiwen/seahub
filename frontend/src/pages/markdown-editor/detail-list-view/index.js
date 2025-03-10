@@ -64,7 +64,7 @@ class DetailListView extends React.Component {
   };
 
   render() {
-    const { fileInfo } = this.props;
+    const { fileInfo, fileTagList = [] } = this.props;
     const { repoTags } = this.state;
     return (
       <Fragment>
@@ -80,7 +80,7 @@ class DetailListView extends React.Component {
               <tr className="file-tag-container">
                 <th>{gettext('Tags')}</th>
                 <td>
-                  <FileTagList fileTagList={this.props.fileTagList} />
+                  <FileTagList fileTagList={fileTagList} />
                   <span onClick={this.onEditFileTagToggle} id='file-tag-container-icon'><Icon symbol='tag' /></span>
                 </td>
               </tr>
@@ -92,7 +92,7 @@ class DetailListView extends React.Component {
             repoID={repoID}
             repoTags={repoTags}
             filePath={filePath}
-            fileTagList={this.props.fileTagList}
+            fileTagList={fileTagList}
             toggleCancel={this.onEditFileTagToggle}
             onFileTagChanged={this.props.onFileTagChanged}
             onNewRepoTagAdded={this.onNewRepoTagAdded}
@@ -104,10 +104,6 @@ class DetailListView extends React.Component {
     );
   }
 }
-
-DetailListView.defaultProps = {
-  fileTagList: [],
-};
 
 DetailListView.propTypes = propTypes;
 

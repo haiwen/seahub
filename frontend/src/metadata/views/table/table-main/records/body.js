@@ -18,11 +18,6 @@ const { max, min, ceil, round } = Math;
 
 class RecordsBody extends Component {
 
-  static defaultProps = {
-    editorPortalTarget: document.body,
-    scrollToRowIndex: 0,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -517,6 +512,7 @@ class RecordsBody extends Component {
   };
 
   render() {
+    const { editorPortalTarget = document.body } = this.props;
     return (
       <Fragment>
         <div
@@ -542,7 +538,7 @@ class RecordsBody extends Component {
             getTableContentRect={this.props.getTableContentRect}
             getMobileFloatIconStyle={this.props.getMobileFloatIconStyle}
             onToggleMobileMoreOperations={this.props.onToggleMobileMoreOperations}
-            editorPortalTarget={this.props.editorPortalTarget}
+            editorPortalTarget={editorPortalTarget}
             onCellRangeSelectionUpdated={this.onCellRangeSelectionUpdated}
             modifyRecord={this.props.modifyRecord}
             recordGetterByIndex={this.props.recordGetterByIndex}

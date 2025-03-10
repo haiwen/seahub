@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import toaster from '../toast';
@@ -15,44 +15,29 @@ import '../../css/file-chooser.css';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
-  hideLibraryName: PropTypes.bool,
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
   mode: PropTypes.string,
   fileSuffixes: PropTypes.arrayOf(PropTypes.string),
   currentPath: PropTypes.string,
-  searchResults: PropTypes.array,
   selectedSearchedItem: PropTypes.object,
   selectedRepo: PropTypes.object,
   selectedPath: PropTypes.string,
-};
-
-const defaultProps = {
-  isShowFile: false,
-  hideLibraryName: false,
-  repoID: '',
-  onDirentItemClick: () => {},
-  onRepoItemClick: () => {},
-  fileSuffixes: [],
-  currentPath: '',
-  searchResults: [],
-  selectedSearchedItem: {},
-  selectedRepo: null,
-  selectedPath: '',
 };
 
 class FileChooser extends React.Component {
 
   constructor(props) {
     super(props);
+    let currentPath = this.props.currentPath || '';
     this.state = {
       isCurrentRepoShow: true,
       isOtherRepoShow: false,
       repoList: [],
       currentRepoInfo: null,
       selectedRepo: null,
-      selectedPath: this.props.currentPath || '/',
+      selectedPath: currentPath || '/',
       isSearching: false,
       isResultGot: false,
       searchInfo: '',
@@ -67,8 +52,7 @@ class FileChooser extends React.Component {
   }
 
   async componentDidMount() {
-    const { repoID } = this.props;
-
+    const { repoID = '' } = this.props;
     const fetchRepoInfo = async (repoID) => {
       try {
         const res = await seafileAPI.getRepoInfo(repoID);
@@ -138,7 +122,8 @@ class FileChooser extends React.Component {
 
       repos.forEach(repo => {
         if (repo.permission !== 'rw') return;
-        if (this.props.repoID && repo.repo_name === this.state.currentRepoInfo.repo_name) return;
+        const { repoID = '' } = this.props;
+        if (repoID && repo.repo_name === this.state.currentRepoInfo.repo_name) return;
         if (repoIdList.includes(repo.repo_id)) return;
 
         repoList.push(repo);
@@ -162,7 +147,9 @@ class FileChooser extends React.Component {
   };
 
   onDirentItemClick = (repo, filePath, dirent) => {
-    this.props.onDirentItemClick(repo, filePath, dirent);
+    if (this.props.onDirentItemClick) {
+      this.props.onDirentItemClick(repo, filePath, dirent);
+    }
     this.setState({
       selectedRepo: repo,
       selectedPath: filePath
@@ -180,6 +167,7 @@ class FileChooser extends React.Component {
   };
 
   onCloseSearching = () => {
+    let currentPath = this.props.currentPath || '';
     this.setState({
       isSearching: false,
       isResultGot: false,
@@ -187,7 +175,7 @@ class FileChooser extends React.Component {
       browsingPath: '',
       searchInfo: '',
       searchResults: [],
-      selectedPath: this.props.currentPath,
+      selectedPath: currentPath,
       selectedItemInfo: {},
     });
     this.inputValue = '';
@@ -217,9 +205,7 @@ class FileChooser extends React.Component {
       return false;
     }
 
-    let repoID = this.props.repoID;
-    let isShowFile = this.props.isShowFile;
-    let mode = this.props.mode;
+    let { isShowFile = false, repoID = '', mode } = this.props;
     let searchRepo = mode === 'only_current_library' ? repoID : 'all';
 
     let queryData = {
@@ -272,9 +258,9 @@ class FileChooser extends React.Component {
   };
 
   getValueLength = (str) => {
-    var i = 0; var code; var len = 0;
-    for (; i < str.length; i++) {
-      code = str.charCodeAt(i);
+    let len = 0;
+    for (let i = 0; i < str.length; i++) {
+      let code = str.charCodeAt(i);
       if (code == 10) { // solve enter problem
         len += 2;
       } else if (code < 0x007f) {
@@ -306,9 +292,11 @@ class FileChooser extends React.Component {
   };
 
   onSearchedItemClick = (item) => {
-    item['type'] = item.is_dir ? 'dir' : 'file';
-    let repo = new RepoInfo(item);
-    this.props.onDirentItemClick(repo, item.path, item);
+    if (this.props.onDirentItemClick) {
+      item['type'] = item.is_dir ? 'dir' : 'file';
+      let repo = new RepoInfo(item);
+      this.props.onDirentItemClick(repo, item.path, item);
+    }
   };
 
   renderSearchedView = () => {
@@ -336,7 +324,7 @@ class FileChooser extends React.Component {
       return;
     }
 
-    const { repoID } = this.props;
+    const { repoID = '' } = this.props;
     const { currentRepoInfo } = this.state;
 
     const selectedItemInfo = {
@@ -424,7 +412,7 @@ class FileChooser extends React.Component {
   };
 
   renderRepoListView = () => {
-    const { mode, currentPath, isShowFile, fileSuffixes } = this.props;
+    const { mode, currentPath = '', isShowFile = false, fileSuffixes = [] } = this.props;
     const { isCurrentRepoShow, isOtherRepoShow, currentRepoInfo, repoList, selectedRepo, selectedPath, selectedItemInfo } = this.state;
     return (
       <RepoListWrapper
@@ -450,7 +438,7 @@ class FileChooser extends React.Component {
   };
 
   render() {
-    const { repoID, mode } = this.props;
+    const { repoID = '', mode } = this.props;
     const { selectedRepo, searchInfo, isSearching } = this.state;
 
     if (!selectedRepo && repoID) {
@@ -458,7 +446,7 @@ class FileChooser extends React.Component {
     }
 
     return (
-      <Fragment>
+      <>
         {(isPro && mode !== 'recently_used') && (
           <div className="file-chooser-search-input">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
@@ -474,12 +462,11 @@ class FileChooser extends React.Component {
         ) : (
           this.renderRepoListView()
         )}
-      </Fragment>
+      </>
     );
   }
 }
 
 FileChooser.propTypes = propTypes;
-FileChooser.defaultProps = defaultProps;
 
 export default FileChooser;

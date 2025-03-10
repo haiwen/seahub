@@ -18,12 +18,6 @@ const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
 
 class RecordsBody extends Component {
-
-  static defaultProps = {
-    editorPortalTarget: document.body,
-    scrollToRowIndex: 0,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -536,6 +530,7 @@ class RecordsBody extends Component {
   };
 
   render() {
+    const { editorPortalTarget = document.body } = this.props;
     return (
       <Fragment>
         <div
@@ -562,7 +557,7 @@ class RecordsBody extends Component {
             getTableContentRect={this.props.getTableContentRect}
             getMobileFloatIconStyle={this.props.getMobileFloatIconStyle}
             onToggleMobileMoreOperations={this.props.onToggleMobileMoreOperations}
-            editorPortalTarget={this.props.editorPortalTarget}
+            editorPortalTarget={editorPortalTarget}
             onCellRangeSelectionUpdated={this.onCellRangeSelectionUpdated}
             recordGetterByIndex={this.props.recordGetterByIndex}
             recordGetterById={this.props.recordGetterById}
@@ -634,7 +629,6 @@ RecordsBody.propTypes = {
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,
-  scrollToRowIndex: PropTypes.number,
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
   reloadRecords: PropTypes.func,

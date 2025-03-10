@@ -21,12 +21,6 @@ const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
 
 class TreeBody extends Component {
-
-  static defaultProps = {
-    editorPortalTarget: document.body,
-    scrollToRowIndex: 0,
-  };
-
   constructor(props) {
     super(props);
     const { recordsTree, treeNodeKeyRecordIdMap, keyTreeNodeFoldedMap } = props;
@@ -642,6 +636,7 @@ class TreeBody extends Component {
   };
 
   render() {
+    const { editorPortalTarget = document.body } = this.props;
     return (
       <>
         <div
@@ -654,6 +649,7 @@ class TreeBody extends Component {
         >
           <InteractionMasks
             {...this.props}
+            editorPortalTarget={editorPortalTarget}
             showRecordAsTree
             ref={this.setInteractionMaskRef}
             recordsCount={this.state.nodes.length}
@@ -718,7 +714,6 @@ TreeBody.propTypes = {
   getMobileFloatIconStyle: PropTypes.func,
   onToggleMobileMoreOperations: PropTypes.func,
   onToggleInsertRecordDialog: PropTypes.func,
-  editorPortalTarget: PropTypes.instanceOf(Element),
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
   modifyRecord: PropTypes.func,
@@ -729,7 +724,6 @@ TreeBody.propTypes = {
   checkCanModifyRecord: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,
-  scrollToRowIndex: PropTypes.number,
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
   reloadRecords: PropTypes.func,

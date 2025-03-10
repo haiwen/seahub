@@ -5,13 +5,6 @@ import { SimpleEditor } from '@seafile/seafile-editor';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
-const propTypes = {
-  title: PropTypes.string,
-  content: PropTypes.string,
-  onCommit: PropTypes.func.isRequired,
-  onCloseEditorDialog: PropTypes.func.isRequired,
-};
-
 class TermsEditorDialog extends React.Component {
 
   constructor(props) {
@@ -21,10 +14,6 @@ class TermsEditorDialog extends React.Component {
     };
     this.editorRef = React.createRef();
   }
-
-  static defaultProps = {
-    title: gettext('Terms'),
-  };
 
   onKeyDown = (event) => {
     event.stopPropagation();
@@ -52,7 +41,7 @@ class TermsEditorDialog extends React.Component {
   };
 
   render() {
-    let { content, title } = this.props;
+    let { content, title = gettext('Terms') } = this.props;
     return (
       <Modal
         isOpen={true}
@@ -77,6 +66,11 @@ class TermsEditorDialog extends React.Component {
   }
 }
 
-TermsEditorDialog.propTypes = propTypes;
+TermsEditorDialog.propTypes = {
+  title: PropTypes.string,
+  content: PropTypes.string,
+  onCommit: PropTypes.func.isRequired,
+  onCloseEditorDialog: PropTypes.func.isRequired,
+};
 
 export default TermsEditorDialog;

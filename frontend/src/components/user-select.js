@@ -104,7 +104,7 @@ class UserSelect extends React.Component {
         onChange={this.handleSelectChange}
         onInputChange={this.onInputChange}
         placeholder={this.props.placeholder}
-        className={`user-select ${this.props.className}`}
+        className={`user-select ${this.props.className || ''}`}
         value={this.props.value}
         ref={this.userSelect}
         styles={UserSelectStyle}
@@ -114,9 +114,5 @@ class UserSelect extends React.Component {
 }
 
 UserSelect.propTypes = propTypes;
-
-UserSelect.defaultProps = {
-  className: ''
-};
 
 export default UserSelect;

@@ -20,7 +20,6 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
-  hideLibraryName: PropTypes.bool,
   newFolderName: PropTypes.string,
 };
 
@@ -236,19 +235,17 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        {!this.props.hideLibraryName &&
-          <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
-            <div className="item-left-icon">
-              <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
-              <i className="tree-node-icon">
-                <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
-              </i>
-            </div>
-            <div className="item-text">
-              <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
-            </div>
+        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+          <div className="item-left-icon">
+            <span className={`item-toggle icon sf3-font sf3-font-down ${this.state.isShowChildren ? '' : 'rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
+            <i className="tree-node-icon">
+              <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
+            </i>
           </div>
-        }
+          <div className="item-text">
+            <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+          </div>
+        </div>
         {this.state.isShowChildren && (
           <TreeListView
             repo={this.props.repo}

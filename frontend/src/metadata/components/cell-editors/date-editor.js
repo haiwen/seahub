@@ -30,9 +30,10 @@ class DateEditor extends Component {
     this.state = {
       value: null,
     };
-    this.format = props.format || 'YYYY-MM-DD';
+    const { format = 'YYYY-MM-DD', lang = 'zh-cn' } = props;
+    this.format = format;
     this.calendarContainerRef = React.createRef();
-    const isZhcn = props.lang === 'zh-cn';
+    const isZhcn = lang === 'zh-cn';
     if (isZhcn) {
       now = now.locale('zh-cn');
     } else {
@@ -47,7 +48,7 @@ class DateEditor extends Component {
   }
 
   componentDidMount() {
-    const { lang, value } = this.props;
+    const { lang = 'zh-cn', value } = this.props;
     const isZhcn = lang === 'zh-cn';
     if (value && dayjs(value).isValid()) {
       if (typeof value === 'string' && value.length === 1 && !isNaN(Number(value, 10))) {
@@ -173,7 +174,7 @@ class DateEditor extends Component {
   };
 
   render() {
-    const { isReadOnly, lang } = this.props;
+    const { isReadOnly = false, lang = 'zh-cn' } = this.props;
     const state = this.state;
     if (isReadOnly) return (
       <input
@@ -241,12 +242,6 @@ DateEditor.propTypes = {
   lang: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-};
-
-DateEditor.defaultProps = {
-  format: 'YYYY-MM-DD',
-  lang: 'zh-cn',
-  isReadOnly: false,
 };
 
 export default DateEditor;

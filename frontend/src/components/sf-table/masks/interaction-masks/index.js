@@ -35,12 +35,6 @@ import './index.css';
 
 class InteractionMasks extends React.Component {
 
-  static defaultProps = {
-    enableCellSelect: true,
-    isGroupView: false,
-    groupOffsetLeft: 0,
-  };
-
   throttle = null;
 
   constructor(props) {
@@ -107,7 +101,7 @@ class InteractionMasks extends React.Component {
   }
 
   onColumnSelect = (column) => {
-    const { columns, isGroupView, recordsCount } = this.props;
+    const { columns, isGroupView = false, recordsCount } = this.props;
     if (isGroupView) return;
     const selectColumnIndex = getColumnIndexByKey(column.key, columns);
     this.setState({
@@ -311,7 +305,7 @@ class InteractionMasks extends React.Component {
   };
 
   checkIsSelectedCellEditable = () => {
-    const { enableCellSelect, columns, isGroupView, recordGetterByIndex, checkCanModifyRecord } = this.props;
+    const { enableCellSelect = true, columns, isGroupView = false, recordGetterByIndex, checkCanModifyRecord } = this.props;
     const { selectedPosition } = this.state;
     return checkIsSelectedCellEditable({ enableCellSelect, columns, isGroupView, selectedPosition, recordGetterByIndex, checkCanModifyRecord });
   };
@@ -321,7 +315,7 @@ class InteractionMasks extends React.Component {
   };
 
   getSelectedDimensions = (selectedPosition) => {
-    const { columns, rowHeight, isGroupView, groupOffsetLeft, getRowTop: getRecordTopFromRecordsBody } = this.props;
+    const { columns, rowHeight, isGroupView = false, groupOffsetLeft = 0, getRowTop: getRecordTopFromRecordsBody } = this.props;
     const scrollLeft = this.props.getScrollLeft();
     return {
       ...getSelectedDimensions({
@@ -331,7 +325,7 @@ class InteractionMasks extends React.Component {
   };
 
   getSelectedRangeDimensions = (selectedRange) => {
-    const { columns, rowHeight, isGroupView, groups, groupMetrics, groupOffsetLeft, getRowTop: getRecordTopFromRecordsBody } = this.props;
+    const { columns, rowHeight, isGroupView = false, groups, groupMetrics, groupOffsetLeft = 0, getRowTop: getRecordTopFromRecordsBody } = this.props;
     return {
       ...getSelectedRangeDimensions({
         selectedRange, columns, rowHeight, isGroupView, groups, groupMetrics, groupOffsetLeft, getRecordTopFromRecordsBody,
@@ -358,7 +352,7 @@ class InteractionMasks extends React.Component {
     if (mask) {
       const { idx, rowIdx, groupRecordIndex } = position;
       if (idx >= 0 && rowIdx >= 0) {
-        const { columns, getRowTop, isGroupView, groupOffsetLeft } = this.props;
+        const { columns, getRowTop, isGroupView = false, groupOffsetLeft = 0 } = this.props;
         const column = columns[idx];
         const frozen = !!column.frozen;
         if (frozen) {
@@ -430,7 +424,7 @@ class InteractionMasks extends React.Component {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     const { selectedPosition } = this.state;
-    const { isGroupView, recordGetterByIndex } = this.props;
+    const { isGroupView = false, recordGetterByIndex } = this.props;
     const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
     if (this.props.handleSpaceKeyDown) {
       this.props.handleSpaceKeyDown(record);
@@ -462,7 +456,7 @@ class InteractionMasks extends React.Component {
 
   handleSelectCellsDelete = () => {
     if (this.props.handleSelectCellsDelete) {
-      const { isGroupView, recordGetterByIndex, columns } = this.props;
+      const { isGroupView = false, recordGetterByIndex, columns } = this.props;
       const { selectedRange } = this.state;
       const { topLeft, bottomRight } = selectedRange;
       const recordsFromSelectedRange = getRecordsFromSelectedRange({ selectedRange, isGroupView, recordGetterByIndex });
@@ -519,7 +513,7 @@ class InteractionMasks extends React.Component {
   onPaste = (e) => {
     // when activeElement is not cellMask or has no permission, can't paste cell
     if (!this.isCellMaskActive() || !this.props.canModifyRecords) return;
-    const { columns, isGroupView } = this.props;
+    const { columns, isGroupView = false } = this.props;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
     if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
@@ -574,7 +568,7 @@ class InteractionMasks extends React.Component {
     const { idx, rowIdx } = selectedPosition;
     if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
     event.preventDefault();
-    const { tableId: copiedTableId, columns, isGroupView, recordGetterByIndex, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
+    const { tableId: copiedTableId, columns, isGroupView = false, recordGetterByIndex, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
     if (rowIdx < 0 || idx < 0) {
       return; // can not copy when no cell select
     }
@@ -615,7 +609,7 @@ class InteractionMasks extends React.Component {
   };
 
   copyRows = (event, selectedRecordIds) => {
-    const { tableId: copiedTableId, columns, recordGetterById, isGroupView, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
+    const { tableId: copiedTableId, columns, recordGetterById, isGroupView = false, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
     const copiedRowsCount = selectedRecordIds.length;
     toaster.success(
       copiedRowsCount > 1 ? gettext('xxx rows are copied.').replace('xxx', copiedRowsCount) : gettext('1 row is copied.')
@@ -639,7 +633,7 @@ class InteractionMasks extends React.Component {
   };
 
   onCopyCells = (event) => {
-    const { tableId: copiedTableId, columns, isGroupView, recordGetterByIndex, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
+    const { tableId: copiedTableId, columns, isGroupView = false, recordGetterByIndex, getCopiedRecordsAndColumnsFromRange, getClientCellValueDisplayString } = this.props;
     const { selectedPosition, selectedRange } = this.state;
     const { rowIdx, idx } = selectedPosition;
     if (rowIdx < 0 || idx < 0) {
@@ -732,7 +726,7 @@ class InteractionMasks extends React.Component {
   };
 
   getLeftInterval = () => {
-    const { isGroupView, columns, groupOffsetLeft, frozenColumnsWidth } = this.props;
+    const { isGroupView = false, columns, groupOffsetLeft = 0, frozenColumnsWidth } = this.props;
     const firstColumnFrozen = columns[0] ? columns[0].frozen : false;
     let leftInterval = 0;
     if (firstColumnFrozen) {
@@ -747,7 +741,7 @@ class InteractionMasks extends React.Component {
   };
 
   handleVerticalArrowAction = (current, actionType) => {
-    const { isGroupView, groupMetrics, rowHeight } = this.props;
+    const { isGroupView = false, groupMetrics, rowHeight } = this.props;
     const step = actionType === 'ArrowDown' ? 1 : -1;
     if (isGroupView) {
       const groupRows = groupMetrics.groupRows || [];
@@ -1031,7 +1025,7 @@ class InteractionMasks extends React.Component {
 
   render() {
     const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition, selectedOperation } = this.state;
-    const { columns, isGroupView, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
+    const { columns, isGroupView = false, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div

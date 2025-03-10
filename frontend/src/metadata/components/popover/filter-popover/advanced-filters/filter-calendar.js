@@ -103,7 +103,7 @@ class FilterCalendar extends Component {
   };
 
   render() {
-    const { isReadOnly, zIndex } = this.props;
+    const { isReadOnly = false, zIndex = 1061 } = this.props;
     const state = this.state;
     if (isReadOnly) return (
       <input
@@ -161,17 +161,10 @@ class FilterCalendar extends Component {
 
 FilterCalendar.propTypes = {
   isReadOnly: PropTypes.bool,
-  format: PropTypes.string,
   zIndex: PropTypes.number,
   filterColumn: PropTypes.object.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-};
-
-FilterCalendar.defaultProps = {
-  format: 'YYYY-MM-DD',
-  isReadOnly: false,
-  zIndex: 1061,
 };
 
 export default FilterCalendar;
