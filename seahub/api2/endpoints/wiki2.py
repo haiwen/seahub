@@ -202,7 +202,7 @@ class Wikis2View(APIView):
 
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
-        
+
         if not request.user.permissions.can_create_wiki():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
 
@@ -1346,20 +1346,15 @@ class WikiSearch(APIView):
                 results = search_wikis(search_wiki, query, count)
             except Exception as e:
                 logger.error(e)
-                results = []
-            finally:
-                return Response({"results": results})
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            return Response({"results": results})
         elif HAS_FILE_SEASEARCH:
             try:
-                resp = ai_search_wikis(params)
-                if resp.status_code == 500:
-                    logger.error('search in wiki error status: %s body: %s', resp.status_code, resp.text)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-                resp_json = resp.json()
+                results, total = ai_search_wikis(params)
             except Exception as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-            return Response(resp_json, resp.status_code)
+            return Response({"results": results})
 
 
 class WikiConvertView(APIView):
