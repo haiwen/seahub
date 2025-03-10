@@ -50,10 +50,6 @@ export default class Toast extends React.PureComponent {
     isShown: PropTypes.bool
   };
 
-  static defaultProps = {
-    intent: 'none'
-  };
-
   state = {
     isShown: true,
   };
@@ -145,7 +141,7 @@ export default class Toast extends React.PureComponent {
           >
             <div ref={this.onRef} style={{ padding: 8 }}>
               <Alert
-                intent={this.props.intent}
+                intent={this.props.intent || 'none'}
                 title={this.props.title}
                 children={this.props.children || ''}
                 isRemovable={this.props.hasCloseButton}

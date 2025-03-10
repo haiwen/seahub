@@ -79,7 +79,7 @@ class SdocWikiPageViewer extends React.Component {
   };
 
   renderMarkdown = () => {
-    let { isTOCShow, markdownContent } = this.props;
+    let { isTOCShow = true, markdownContent } = this.props;
     if (!markdownContent) return null;
 
     let document = JSON.parse(markdownContent);
@@ -120,7 +120,7 @@ class SdocWikiPageViewer extends React.Component {
       return <Loading />;
     }
 
-    const { isWiki, containerClassName = '' } = this.props;
+    const { isWiki = false, containerClassName = '' } = this.props;
     const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
@@ -139,12 +139,6 @@ class SdocWikiPageViewer extends React.Component {
   }
 }
 
-const defaultProps = {
-  isWiki: false,
-  isTOCShow: true,
-};
-
 SdocWikiPageViewer.propTypes = propTypes;
-SdocWikiPageViewer.defaultProps = defaultProps;
 
 export default SdocWikiPageViewer;

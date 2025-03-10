@@ -43,9 +43,9 @@ class DirColumnNav extends React.Component {
 
   render() {
     const {
-      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo,
+      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25
     } = this.props;
-    const flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
+    const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
     return (
       <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
@@ -83,10 +83,6 @@ class DirColumnNav extends React.Component {
     );
   }
 }
-
-DirColumnNav.defaultProps = {
-  navRate: 0.25
-};
 
 DirColumnNav.propTypes = propTypes;
 

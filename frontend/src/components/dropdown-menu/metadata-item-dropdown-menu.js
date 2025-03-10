@@ -25,12 +25,6 @@ const propTypes = {
 
 class ItemDropdownMenu extends React.Component {
 
-  static defaultProps = {
-    isHandleContextMenuEvent: true,
-    menuStyle: {},
-    toggleClass: 'sf3-font-more sf3-font'
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +38,8 @@ class ItemDropdownMenu extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.isHandleContextMenuEvent) {
+    const { isHandleContextMenuEvent = true } = this.props;
+    if (isHandleContextMenuEvent) {
       this.listenerId = listener.register(this.onShowMenu, this.onHideMenu);
     }
     this.setState({
@@ -65,7 +60,8 @@ class ItemDropdownMenu extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.props.isHandleContextMenuEvent && this.listenerId) {
+    const { isHandleContextMenuEvent = true } = this.props;
+    if (isHandleContextMenuEvent && this.listenerId) {
       listener.unregister(this.listenerId);
     }
   }
@@ -156,7 +152,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     let menuList = this.state.menuList;
-    let { toggleClass, toggleChildren, tagName, menuStyle } = this.props;
+    let { toggleClass = 'sf3-font-more sf3-font', toggleChildren, tagName, menuStyle = {} } = this.props;
     toggleClass = 'sf-dropdown-toggle ' + toggleClass;
 
     if (!menuList.length) {

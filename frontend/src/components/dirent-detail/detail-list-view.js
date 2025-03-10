@@ -71,7 +71,7 @@ class DetailListView extends React.Component {
   };
 
   renderTags = () => {
-    const { direntType, direntDetail } = this.props;
+    const { direntType, direntDetail, fileTagList = [] } = this.props;
     const position = this.getFileParent();
     if (direntType === 'dir') {
       return (
@@ -109,7 +109,7 @@ class DetailListView extends React.Component {
           <tr className="file-tag-container">
             <th>{gettext('Tags')}</th>
             <td>
-              <FileTagList fileTagList={this.props.fileTagList} />
+              <FileTagList fileTagList={fileTagList} />
               {enableFileTags &&
                 <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
               }
@@ -130,7 +130,7 @@ class DetailListView extends React.Component {
   };
 
   render() {
-    const { direntType, direntDetail, fileTagList } = this.props;
+    const { direntType, direntDetail, fileTagList = [] } = this.props;
     const direntPath = this.getDirentPath();
 
     return (
@@ -161,10 +161,6 @@ class DetailListView extends React.Component {
     );
   }
 }
-
-DetailListView.defaultProps = {
-  fileTagList: [],
-};
 
 DetailListView.propTypes = propTypes;
 

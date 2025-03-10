@@ -24,7 +24,7 @@ class SearchInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: props.value,
+      searchValue: props.value || '',
     };
     this.isInputtingChinese = false;
     this.timer = null;
@@ -57,7 +57,7 @@ class SearchInput extends Component {
 
   onChange = (e) => {
     this.timer && clearTimeout(this.timer);
-    const { onChange, wait } = this.props;
+    const { onChange, wait = 100 } = this.props;
     let text = e.target.value;
     this.setState({ searchValue: text || '' }, () => {
       if (this.isInputtingChinese) return;
@@ -104,7 +104,7 @@ class SearchInput extends Component {
   };
 
   render() {
-    const { placeholder, autoFocus, className, onKeyDown, disabled, style } = this.props;
+    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style } = this.props;
     const { searchValue } = this.state;
 
     return (
@@ -130,11 +130,5 @@ class SearchInput extends Component {
 }
 
 SearchInput.propTypes = propTypes;
-
-SearchInput.defaultProps = {
-  wait: 100,
-  disabled: false,
-  value: '',
-};
 
 export default SearchInput;

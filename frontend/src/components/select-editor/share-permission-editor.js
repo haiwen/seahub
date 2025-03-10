@@ -24,11 +24,6 @@ const propTypes = {
 
 class SharePermissionEditor extends React.Component {
 
-  static defaultProps = {
-    isEditing: false,
-    autoFocus: false,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -127,18 +122,17 @@ class SharePermissionEditor extends React.Component {
   };
 
   render() {
-
     const { isLoading } = this.state;
     if (isLoading) {
       return null;
     }
-
+    const { autoFocus = false, isEditing = false } = this.props;
     return (
       <SelectEditor
         isTextMode={this.props.isTextMode}
-        isEditing={this.props.isEditing}
+        isEditing={isEditing}
         isEditIconShow={this.props.isEditIconShow}
-        autoFocus={this.props.autoFocus}
+        autoFocus={autoFocus}
         options={this.getPermissions()}
         currentOption={this.props.currentPermission}
         onOptionChanged={this.props.onPermissionChanged}

@@ -30,10 +30,6 @@ const propTypes = {
 
 class FileUploader extends React.Component {
 
-  static defaultProps = {
-    isCustomPermission: false
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -179,7 +175,7 @@ class FileUploader extends React.Component {
   };
 
   onFileAdded = (resumableFile, files) => {
-    const { isCustomPermission } = this.props;
+    const { isCustomPermission = false } = this.props;
     let isFile = resumableFile.fileName === resumableFile.relativePath;
     // uploading is file and only upload one file
     if (isFile && files.length === 1) {

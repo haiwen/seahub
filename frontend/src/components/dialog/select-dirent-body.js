@@ -122,7 +122,7 @@ class SelectDirentBody extends React.Component {
   };
 
   render() {
-    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries, errMessage, searchStatus, searchResults, selectedSearchedRepo, selectedSearchedItem } = this.props;
+    const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries = true, errMessage, searchStatus, searchResults, selectedSearchedRepo, selectedSearchedItem } = this.props;
     let repoListWrapperKey = 'repo-list-wrapper';
     if (selectedSearchedItem && selectedSearchedItem.repoID) {
       repoListWrapperKey = `${repoListWrapperKey}-${selectedSearchedItem.repoID}`;
@@ -228,10 +228,6 @@ SelectDirentBody.propTypes = {
   initToShowChildren: PropTypes.bool,
   fetchRepoInfo: PropTypes.func,
   selectedSearchedItem: PropTypes.object,
-};
-
-SelectDirentBody.defaultProps = {
-  isSupportOtherLibraries: true,
 };
 
 export default SelectDirentBody;

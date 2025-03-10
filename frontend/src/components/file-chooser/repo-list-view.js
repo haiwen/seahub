@@ -19,22 +19,10 @@ const propTypes = {
   newFolderName: PropTypes.string,
 };
 
-const defaultProps = {
-  currentRepoInfo: null,
-  isShowFile: false,
-  repo: null,
-  repoList: [],
-  selectedRepo: null,
-  selectedPath: '',
-  fileSuffixes: [],
-  selectedItemInfo: null,
-  currentPath: '',
-};
-
 class RepoListView extends React.Component {
 
   render() {
-    let { currentRepoInfo, currentPath, repoList, selectedSearchedRepo, initToShowChildren } = this.props;
+    let { currentRepoInfo = null, isShowFile = false, currentPath = '', repoList = [], selectedSearchedRepo, initToShowChildren, selectedItemInfo = null, fileSuffixes = [], selectedPath = '', selectedRepo = null } = this.props;
     if (currentRepoInfo) {
       repoList = [];
       repoList.push(currentRepoInfo);
@@ -55,13 +43,13 @@ class RepoListView extends React.Component {
               currentPath={currentPath}
               repo={repoItem}
               initToShowChildren={initToShowChildren}
-              selectedRepo={this.props.selectedRepo}
-              selectedPath={this.props.selectedPath}
+              selectedRepo={selectedRepo}
+              selectedPath={selectedPath}
               onRepoItemClick={this.props.onRepoItemClick}
               onDirentItemClick={this.props.onDirentItemClick}
-              isShowFile={this.props.isShowFile}
-              fileSuffixes={this.props.fileSuffixes}
-              selectedItemInfo={this.props.selectedItemInfo}
+              isShowFile={isShowFile}
+              fileSuffixes={fileSuffixes}
+              selectedItemInfo={selectedItemInfo}
               newFolderName={this.props.newFolderName}
             />
           );
@@ -72,6 +60,5 @@ class RepoListView extends React.Component {
 }
 
 RepoListView.propTypes = propTypes;
-RepoListView.defaultProps = defaultProps;
 
 export default RepoListView;

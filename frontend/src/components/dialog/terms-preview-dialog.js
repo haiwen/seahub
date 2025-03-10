@@ -13,17 +13,12 @@ const propTypes = {
 
 class TermsPreviewDialog extends React.Component {
 
-  static defaultProps = {
-    title: gettext('Terms'),
-  };
-
-
   toggle = () => {
     this.props.onClosePreviewDialog();
   };
 
   render() {
-    let { title, content } = this.props;
+    let { title = gettext('Terms'), content } = this.props;
     return (
       <Modal
         isOpen={true}

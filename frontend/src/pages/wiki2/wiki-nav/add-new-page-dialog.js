@@ -74,7 +74,7 @@ class AddNewPageDialog extends React.Component {
   };
 
   createPage = (pageName) => {
-    const { insertPosition, page } = this.props;
+    const { insertPosition = INSERT_POSITION.INNER, page } = this.props;
     wikiAPI.createWiki2Page(wikiId, pageName, page.id, insertPosition).then(res => {
       const { page_id, obj_name, doc_uuid, parent_dir } = res.data.file_info;
       this.props.onAddNewPage({
@@ -132,9 +132,5 @@ class AddNewPageDialog extends React.Component {
 }
 
 AddNewPageDialog.propTypes = propTypes;
-
-AddNewPageDialog.defaultProps = {
-  insertPosition: INSERT_POSITION.INNER,
-};
 
 export default AddNewPageDialog;

@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import getPreviewContent from '../../../utils/markdown-utils';
 import AddOrUpdateTermDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog';
+import TermsPreviewDialog from '../../../components/dialog/terms-preview-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from '../../../components/dialog/op-menu';
 
@@ -23,7 +23,7 @@ class Item extends Component {
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
-      isTermsPerviewDialogOpen: false,
+      isTermsPreviewDialogOpen: false,
     };
   }
 
@@ -72,7 +72,7 @@ class Item extends Component {
   };
 
   toggleTermsContentDialog = (e) => {
-    this.setState({ isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen });
+    this.setState({ isTermsPreviewDialogOpen: !this.state.isTermsPreviewDialogOpen });
   };
 
   onMenuItemClick = (operation) => {
@@ -122,7 +122,7 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
-    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPerviewDialogOpen } = this.state;
+    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPreviewDialogOpen } = this.state;
     let previewContent = getPreviewContent(item.text);
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
@@ -169,9 +169,9 @@ class Item extends Component {
             />
           </ModalPortal>
         }
-        {isTermsPerviewDialogOpen &&
+        {isTermsPreviewDialogOpen &&
           <ModalPortal>
-            <TermsPerviewDialog
+            <TermsPreviewDialog
               content={item.text}
               onClosePreviewDialog={this.toggleTermsContentDialog}
             />

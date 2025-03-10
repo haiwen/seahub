@@ -22,11 +22,6 @@ import './index.css';
  */
 class FilterPopover extends Component {
 
-  static defaultProps = {
-    filtersClassName: '',
-    placement: 'auto-start',
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -129,7 +124,7 @@ class FilterPopover extends Component {
   };
 
   render() {
-    const { readOnly, target, columns, placement, viewType } = this.props;
+    const { readOnly, target, columns, placement = 'auto-start', viewType, filtersClassName = '' } = this.props;
     const { filters, filterConjunction, basicFilters } = this.state;
     const canAddFilter = columns.length > 0;
     return (
@@ -143,7 +138,7 @@ class FilterPopover extends Component {
         boundariesElement={document.body}
       >
         {({ update: scheduleUpdate }) => (
-          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
+          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={filtersClassName}>
             <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType}/>
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>

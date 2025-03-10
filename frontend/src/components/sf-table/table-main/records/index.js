@@ -27,13 +27,6 @@ import { getTreeNodeKey } from '../../utils/tree';
 
 class Records extends Component {
 
-  static defaultProps = {
-    gridScroll: {
-      scroll_left: 0,
-      scroll_top: 0,
-    },
-  };
-
   constructor(props) {
     super(props);
     this.scrollTop = 0;
@@ -120,7 +113,7 @@ class Records extends Component {
   }
 
   getNormalizedScroll = () => {
-    const { scroll_left, scroll_top } = this.props.gridScroll || {};
+    const { scroll_left, scroll_top } = this.props.gridScroll || { scroll_left: 0, scroll_top: 0 };
     return {
       scroll_left: isNumber(scroll_left) ? scroll_left : 0,
       scroll_top: isNumber(scroll_top) ? scroll_top : 0,
