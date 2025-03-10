@@ -38,6 +38,7 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items } = this.props;
+    const colCreatedText = `${gettext('Created At')} / ${gettext('Last Access')}`;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -57,7 +58,7 @@ class Content extends Component {
                 <th width="10%">{gettext('Status')}</th>
                 <th width="20%">{gettext('Role')}</th>
                 <th width="15%">{gettext('Space Used')}</th>
-                <th width="20%">{gettext('Created At')}</th>
+                <th width="20%">{colCreatedText}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -255,7 +256,11 @@ class Item extends Component {
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
-          <td>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>
+            {`${dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')} /`}
+            <br />
+            {`${item.last_activity_time ? dayjs(item.last_activity_time).fromNow() : '--'} `}
+          </td>
           <td>
             <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>

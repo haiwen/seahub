@@ -15,10 +15,11 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
 from seahub.utils import is_valid_email
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
+from seahub.base.models import OrgLastActivityTime
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -177,8 +178,16 @@ class AdminOrganizations(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = []
+        org_ids = [org.org_id for org in orgs]
+        orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
+        orgs_last_activity_dict = {org.org_id:org.timestamp for org in orgs_last_activity}
         for org in orgs:
             org_info = get_org_info(org)
+            org_id = org_info['org_id']
+            if org_id in orgs_last_activity_dict:
+                org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
+            else:
+                org_info['last_activity_time'] = None
             result.append(org_info)
 
         return Response({'organizations': result, 'total_count': total_count})
