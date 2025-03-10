@@ -29,11 +29,25 @@
   width: max-content;
   min-height: 1rem;
   position: relative;
+  cursor: pointer;
 }
 
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
+  height: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  font-size: 13px;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  margin-right: 6px;
+  padding: 0 6px 0 2px;
+  cursor: pointer;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
   position: relative;
-  top: 2px;
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -41,5 +55,4 @@
   border-radius: 50%;
   flex-shrink: 0;
   border: 2px solid #fff;
-  cursor: pointer;
 }
