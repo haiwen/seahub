@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import ItemDropdownMenu from '../../dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../../dropdown-menu/metadata-item-dropdown-menu';
 import TextTranslation from '../../../utils/text-translation';
 import { isMobile } from '../../../utils/utils';
 import EventBus from '../../common/event-bus';
@@ -16,7 +16,7 @@ const ViewsMoreOperations = ({ menuProps }) => {
 
   const clickMenu = (option) => {
     switch (option) {
-      case TextTranslation.ADD_FOLDER.key: {
+      case KEY_ADD_VIEW_MAP.ADD_FOLDER: {
         eventBus.dispatch(EVENT_BUS_TYPE.ADD_FOLDER);
         return;
       }
