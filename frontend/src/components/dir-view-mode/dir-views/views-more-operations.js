@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import ItemDropdownMenu from '../../dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../../dropdown-menu/metadata-item-dropdown-menu';
 import TextTranslation from '../../../utils/text-translation';
 import { isMobile } from '../../../utils/utils';
 import EventBus from '../../common/event-bus';

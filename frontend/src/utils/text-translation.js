@@ -192,7 +192,7 @@ const TextTranslation = {
   // metadata views
   ADD_FOLDER: {
     key: 'ADD_FOLDER',
-    value: gettext('Add Folder')
+    value: gettext('Folder')
   },
   ADD_VIEW: {
     key: 'ADD_VIEW',
