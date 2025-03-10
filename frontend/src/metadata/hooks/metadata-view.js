@@ -84,6 +84,10 @@ export const MetadataViewProvider = ({
     storeRef.current.modifyHiddenColumns(hiddenColumns);
   }, [storeRef]);
 
+  const modifyAvailableColumns = useCallback((availableColumns) => {
+    storeRef.current.modifyAvailableColumns(availableColumns);
+  }, [storeRef]);
+
   const modifySettings = useCallback((settings) => {
     storeRef.current.modifySettings(settings);
   }, [storeRef]);
@@ -370,6 +374,7 @@ export const MetadataViewProvider = ({
         updateFileTags,
         addFolder: params.addFolder,
         updateCurrentPath: params.updateCurrentPath,
+        modifyAvailableColumns,
       }}
     >
       {children}

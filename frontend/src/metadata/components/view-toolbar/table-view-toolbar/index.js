@@ -17,6 +17,11 @@ const TableViewToolbar = ({
     return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);
   }, [viewColumns]);
 
+  const hideColumns = useMemo(() => {
+    if (!view) return [];
+    return view.available_columns;
+  }, [view]);
+
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
@@ -54,7 +59,7 @@ const TableViewToolbar = ({
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
           target="sf-metadata-hide-column-popover"
           readOnly={readOnly}
-          columns={viewColumns.slice(1)}
+          columns={hideColumns}
           hiddenColumns={view.hidden_columns || []}
           modifyHiddenColumns={modifyHiddenColumns}
           modifyColumnOrder={modifyColumnOrder}

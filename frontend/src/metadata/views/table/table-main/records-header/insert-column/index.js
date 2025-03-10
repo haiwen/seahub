@@ -5,10 +5,11 @@ import ColumnPopover from '../../../../../components/popover/column-popover';
 import Icon from '../../../../../../components/icon';
 import { getEventClassName } from '../../../../../../utils/dom';
 import CustomDropdownMenu from '../../../../../components/popover/column-popover/custom-dropdown-menu';
+import { PRIVATE_COLUMN_KEY } from '../../../../../constants';
 
 import './index.css';
 
-const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
+const InsertColumn = ({ lastColumn, height, metadata, groupOffsetLeft, insertColumn: insertColumnAPI, modifyAvailableColumns }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
   const [isColumnPopoverShow, setColumnPopoverShow] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
@@ -38,9 +39,17 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
   }, []);
 
   const handleSubmit = useCallback((name, type, { key, data }) => {
-    insertColumnAPI(name, type, { key, data });
     setColumnPopoverShow(false);
-  }, [insertColumnAPI]);
+    // if column is already exist in base, add it to available columns
+    const isExist = metadata.columns.some((column) => column.key === key);
+    if (isExist) {
+      const currentAvailableColumnKeys = metadata.view.available_columns.map((column) => column.key);
+      const updated = [...currentAvailableColumnKeys, key];
+      modifyAvailableColumns(updated);
+      return;
+    }
+    insertColumnAPI(name, type, { key, data });
+  }, [metadata, insertColumnAPI, modifyAvailableColumns]);
 
   const handleSelect = useCallback((column) => {
     setSelectedColumn(column);

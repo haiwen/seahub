@@ -27,6 +27,7 @@ const RecordsHeader = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   modifyColumnOrder: modifyColumnOrderAPI,
   insertColumn,
+  modifyAvailableColumns,
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
@@ -160,6 +161,7 @@ const RecordsHeader = ({
               onMove={modifyColumnOrder}
               updateDraggingKey={updateDraggingKey}
               updateDragOverKey={updateDragOverKey}
+              modifyAvailableColumns={modifyAvailableColumns}
               {...props}
             />
           );
@@ -171,6 +173,7 @@ const RecordsHeader = ({
             height={height}
             metadata={table}
             insertColumn={insertColumn}
+            modifyAvailableColumns={modifyAvailableColumns}
           />
         )}
       </div>
@@ -193,6 +196,7 @@ RecordsHeader.propTypes = {
   selectNoneRecords: PropTypes.func,
   selectAllRecords: PropTypes.func,
   insertColumn: PropTypes.func,
+  modifyNotAvailableColumns: PropTypes.func,
 };
 
 export default RecordsHeader;

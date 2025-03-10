@@ -196,6 +196,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_AVAILABLE_COLUMNS: {
+        const { repo_id, view_id, available_column_keys } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { available_column_keys }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to insert property') });
+        });
+        break;
+      }
       case OPERATION_TYPE.MODIFY_SETTINGS: {
         const { repo_id, view_id, settings } = operation;
         window.sfMetadataContext.modifyView(repo_id, view_id, { settings }).then(res => {

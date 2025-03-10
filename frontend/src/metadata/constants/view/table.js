@@ -32,6 +32,7 @@ export const TABLE_NOT_SUPPORT_EDIT_TYPE_MAP = {
   [CellType.CTIME]: true,
   [CellType.MTIME]: true,
   [CellType.FILE_NAME]: true,
+  [CellType.GEOLOCATION]: true,
 };
 
 export const TABLE_SUPPORT_EDIT_TYPE_MAP = {

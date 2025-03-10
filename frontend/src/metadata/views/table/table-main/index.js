@@ -34,8 +34,8 @@ const TableMain = ({
   }, [groupbysCount]);
 
   const columns = useMemo(() => {
-    const { columns, hidden_columns } = metadata.view;
-    return columns.filter(column => !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
+    const { available_columns, hidden_columns } = metadata.view;
+    return available_columns.filter(column => !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   }, [metadata]);
 
   const getCopiedRecordsAndColumnsFromRange = useCallback(({ type, copied, isGroupView }) => {

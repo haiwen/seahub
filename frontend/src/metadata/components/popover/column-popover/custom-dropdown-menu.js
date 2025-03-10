@@ -76,6 +76,14 @@ const COLUMNS = [
     data: DEFAULT_RATE_DATA,
     groupby: 'predefined'
   }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.GEOLOCATION],
+    type: CellType.GEOLOCATION,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.LOCATION,
+    canChangeName: false,
+    groupby: 'predefined'
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: gettext('Text'),

@@ -115,6 +115,7 @@ class RepoView(object):
             "groupbys": [],
             "filter_conjunction": "And",
             "hidden_columns": [],
+            "available_column_keys": [],
             "type": self.type,
         }
         self.view_json.update(self.view_data)

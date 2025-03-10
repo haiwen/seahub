@@ -32,6 +32,7 @@ const Cell = ({
   onMove,
   updateDraggingKey,
   updateDragOverKey,
+  modifyAvailableColumns,
 }) => {
   const headerCellRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -141,6 +142,15 @@ const Cell = ({
     window.sfMetadataBody.clearHorizontalScroll();
   }, [updateDraggingKey, updateDragOverKey]);
 
+  const handleDeleteColumn = useCallback((key, column) => {
+    if (key === PRIVATE_COLUMN_KEY.LOCATION) {
+      const updated = view.available_columns.map((column) => column.key).filter((key) => key !== PRIVATE_COLUMN_KEY.LOCATION);
+      modifyAvailableColumns(updated);
+      return;
+    }
+    deleteColumn(column.key);
+  }, [deleteColumn, view, modifyAvailableColumns]);
+
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];
   const canModifyColumnOrder = window.sfMetadataContext.canModifyColumnOrder();
@@ -171,7 +181,7 @@ const Cell = ({
           column={column}
           view={view}
           renameColumn={renameColumn}
-          deleteColumn={deleteColumn}
+          deleteColumn={handleDeleteColumn}
           modifyColumnData={modifyColumnData}
         />
       )}
@@ -232,6 +242,7 @@ Cell.propTypes = {
   modifyLocalColumnWidth: PropTypes.func,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
+  modifyAvailableColumns: PropTypes.func,
 };
 
 export default Cell;

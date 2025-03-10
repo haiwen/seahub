@@ -25,7 +25,7 @@ const _validateColumnName = ({ columnName, oldColumn, metadata, gettext }) => {
   }
   if (
     (!oldColumn || (oldColumn && oldColumn.name !== columnName)) &&
-    getColumnByName(metadata.columns, columnName)
+    getColumnByName(metadata.view.available_columns, columnName)
   ) {
     return {
       type: COMMON_FORM_FIELD_TYPE.COLUMN_NAME,
@@ -36,7 +36,7 @@ const _validateColumnName = ({ columnName, oldColumn, metadata, gettext }) => {
 };
 
 const _validateColumnType = ({ column, metadata, gettext }) => {
-  if (column.unique && getColumnByKey(metadata.columns, column.key)) {
+  if (column.unique && getColumnByKey(metadata.view.available_columns, column.key)) {
     return {
       type: COMMON_FORM_FIELD_TYPE.COLUMN_TYPE,
       tips: gettext('Another property has this property type'),
