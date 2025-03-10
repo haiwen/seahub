@@ -11,7 +11,7 @@ const ParentTagsFormatter = ({ record, column }) => {
 
   return (
     <div className="sf-table-parent-tags-formatter sf-table-cell-formatter sf-metadata-ui cell-formatter-container">
-      <FileTagsFormatter tagsData={tagsData} value={parentTagLinks} />
+      <FileTagsFormatter tagsData={tagsData} value={parentTagLinks} showName={true} />
     </div>
   );
 };

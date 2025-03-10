@@ -118,7 +118,7 @@ const Formatter = ({ field, value, isSample, queryUserAPI, emptyTip, tagsData, .
     }
     case CellType.TAGS: {
       return (
-        <FileTagsFormatter value={value} tagsData={tagsData} className={className}>
+        <FileTagsFormatter value={value} tagsData={tagsData} className={className} showName={true}>
           <Empty fieldType={fieldType} placeholder={emptyTip} />
         </FileTagsFormatter>
       );
