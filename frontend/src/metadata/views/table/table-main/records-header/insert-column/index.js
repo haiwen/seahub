@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ColumnPopover from '../../../../../components/popover/column-popover';
 import Icon from '../../../../../../components/icon';
 import { getEventClassName } from '../../../../../../utils/dom';
-import CustomDropdownMenu from '../../../../../components/popover/column-popover/custom-dropdown-menu';
+import CustomDropdownMenu from '../../../../../components/popover/column-popover/dropdown-menu';
 
 import './index.css';
 
@@ -25,7 +25,6 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
       position: 'absolute',
     };
   }, [lastColumn, height, groupOffsetLeft]);
-
 
   const toggleAddColumn = useCallback(() => {
     setColumnMenuOpen(!isColumnMenuOpen);
@@ -54,7 +53,9 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     const className = getEventClassName(event);
     if (className.indexOf('column-type-item') > -1) return;
     const popover = document.querySelector('.sf-metadata-column-popover');
-    if ((popover && popover.contains(event.target))) return;
+    if (popover && popover.contains(event.target)) return;
+    const dropdownMenu = document.querySelector('.sf-metadata-column-type-dropdown-menu');
+    if (dropdownMenu && event.target.closest('.sf-metadata-column-type-dropdown-menu')) return;
     setColumnPopoverShow(false);
   }, [isColumnPopoverShow]);
 

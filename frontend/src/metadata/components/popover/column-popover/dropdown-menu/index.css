@@ -1,0 +1,30 @@
+.search-column-container {
+  padding: 8px 16px;
+}
+
+.search-column-container .form-control {
+  height: 2rem;
+}
+
+.column-type-item.active {
+  background: #20a0ff;
+}
+
+.column-type-item.active .sf-metadata-icon {
+  fill: #fff;
+}
+
+.column-type-item:not(.active):hover {
+  color: #212529;
+  background-color: #f5f5f5;
+}
+
+.column-type-item:hover .sf3-font-down {
+  color: #666;
+}
+
+.column-type-item .sf-metadata-icon {
+  fill: #aaa;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
