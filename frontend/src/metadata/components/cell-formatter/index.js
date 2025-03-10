@@ -26,7 +26,7 @@ const CellFormatter = ({ readonly, value, field, record, ...params }) => {
   }
 
   return (
-    <Formatter { ...props } { ...params } tagsData={tagsData} />
+    <Formatter { ...props } { ...params } tagsData={tagsData} record={record} />
   );
 };
 

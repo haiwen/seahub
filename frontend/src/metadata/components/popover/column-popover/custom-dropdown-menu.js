@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
-import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_RATE_DATA, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_RATE_DATA, DEFAULT_SHOOTING_TIME_FORMAT, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnDisplayName } from '../../../utils/column';
 
 const COLUMNS = [
@@ -74,6 +74,15 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_RATE,
     canChangeName: false,
     data: DEFAULT_RATE_DATA,
+    groupby: 'predefined'
+  }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.GEOLOCATION],
+    type: CellType.GEOLOCATION,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.LOCATION_DISPLAY,
+    canChangeName: false,
+    data: { geo_format: GEOLOCATION_FORMAT.LNG_LAT },
     groupby: 'predefined'
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],

@@ -284,21 +284,47 @@ const ContextMenu = ({
     const recordIds = records.map(record => getRecordIdFromRecord(record));
     extractFilesDetails(recordObjIds, {
       success_callback: ({ details }) => {
-        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
-        if (!captureColumn) return;
         let idOldRecordData = {};
         let idOriginalOldRecordData = {};
-        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
-        records.forEach(record => {
-          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-        });
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
+        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+        const locationColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.LOCATION_DISPLAY);
+
+        records.forEach(record => {
+          const recordId = record[PRIVATE_COLUMN_KEY.ID];
+          idOldRecordData[recordId] = {};
+          idOriginalOldRecordData[recordId] = {};
+
+          if (captureColumn) {
+            const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
+            idOldRecordData[recordId][captureColumnKey] = record[captureColumnKey];
+            idOriginalOldRecordData[recordId][captureColumnKey] = record[captureColumnKey];
+          }
+
+          if (locationColumn) {
+            const locationColumnKey = PRIVATE_COLUMN_KEY.LOCATION_DISPLAY;
+            idOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
+            idOriginalOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
+          }
+        });
         details.forEach(detail => {
           const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
-          idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
-          idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+          idRecordUpdates[updateRecordId] = {};
+          idOriginalRecordUpdates[updateRecordId] = {};
+
+          if (captureColumn) {
+            const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
+            idRecordUpdates[updateRecordId][captureColumnKey] = detail[captureColumnKey];
+            idOriginalRecordUpdates[updateRecordId][captureColumnKey] = detail[captureColumnKey];
+          }
+
+          if (locationColumn) {
+            const locationColumnKey = PRIVATE_COLUMN_KEY.LOCATION_DISPLAY;
+            const locationData = { ...detail[PRIVATE_COLUMN_KEY.LOCATION], ...detail[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] };
+            idRecordUpdates[updateRecordId][locationColumnKey] = locationData;
+            idOriginalRecordUpdates[updateRecordId][locationColumnKey] = locationData;
+          }
         });
         updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
       }
