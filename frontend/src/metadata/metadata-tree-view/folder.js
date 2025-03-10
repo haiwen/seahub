@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ViewItem from './view';
-import ItemDropdownMenu from '../../components/dropdown-menu/item-dropdown-menu';
+import ItemDropdownMenu from '../../components/dropdown-menu/metadata-item-dropdown-menu';
 import toaster from '../../components/toast';
 import NewView from './new-view';
 import InlineNameEditor from './inline-name-editor';

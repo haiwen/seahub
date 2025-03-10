@@ -200,7 +200,7 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown tag="span" direction='down' isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
@@ -216,6 +216,9 @@ class ItemDropdownMenu extends React.Component {
         <ModalPortal>
           <DropdownMenu
             style={menuStyle}
+            className={`${this.props.menuClassname} position-fixed`}
+            flip={false}
+            modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
           >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
@@ -238,7 +241,11 @@ class ItemDropdownMenu extends React.Component {
                       <span className="mr-auto">{menuItem.value}</span>
                       <i className="sf3-font-down sf3-font rotate-270"></i>
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu
+                      className="position-fixed"
+                      flip={false}
+                      modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+                    >
                       {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}
                       {menuItem.subOpList.map((item, index) => {
                         if (item == 'Divider') {
