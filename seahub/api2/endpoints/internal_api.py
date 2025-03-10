@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from django.contrib.sessions.backends.db import SessionStore
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +16,7 @@ from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
 from seahub.utils import normalize_file_path
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -195,3 +197,60 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'user': rat.app_name})
+
+class CheckThumbnailAccess(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
+
+    def post(self, request, repo_id):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        path = request.data.get('path')
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not path:
+            error_msg = 'path invalid'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        return Response({'success': True})
+    
+class CheckShareLinkThumbnailAccess(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication,)
+    
+    def post(self, request):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        link_token = request.data.get('token')
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        
+        share_obj = FileShare.objects.filter(token=link_token).first()
+
+        if not share_obj:
+            error_msg = 'Link does not exist.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_obj.is_expired():
+            error_msg = 'Link is expired.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if share_obj.is_encrypted() and not check_share_link_access(request,
+                                                                    link_token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not check_share_link_access_by_scope(request, share_obj):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        resp_json = {
+            'success': True,
+            'repo_id': share_obj.repo_id,
+            'share_path': share_obj.path,
+            'share_type': share_obj.s_type
+        }
+        return Response(resp_json)

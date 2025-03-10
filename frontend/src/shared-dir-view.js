@@ -149,8 +149,9 @@ class SharedDirView extends React.Component {
         isLoading: false,
         errorMsg: '',
         items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder)
+      }, () => {
+        this.getThumbnails(thumbnailSize);
       });
-      this.getThumbnails(thumbnailSize);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
@@ -517,7 +518,7 @@ class SharedDirView extends React.Component {
       'parentDir': item.file_path.slice(0, item.file_path.indexOf(name)),
       'thumbnail': `${siteRoot}thumbnail/${token}/${thumbnailSizeForOriginal}${Utils.encodePath(item.file_path)}?mtime=${mtime}`,
       'src': src,
-      'downloadURL': fileURL + '&dl=1',
+      'downloadURL': fileURL + '&dl=1'
     };
   };
 
