@@ -83,7 +83,7 @@ export const gcj02_to_bd09 = (lng, lat) => {
 export const wgs84_to_gcj02 = (lng, lat) => {
   const _lat = +lat;
   const _lng = +lng;
-  if (out_of_china(_lng, _lat)) return { _lng, _lat };
+  if (out_of_china(_lng, _lat)) return { lng: _lng, lat: _lat };
   let dLat = transformLat(_lng - 105.0, _lat - 35.0);
   let dLng = transformLng(_lng - 105.0, _lat - 35.0);
   const radLat = lat / 180.0 * PI;
