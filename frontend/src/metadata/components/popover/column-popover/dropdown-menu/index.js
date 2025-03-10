@@ -226,7 +226,7 @@ const CustomDropdownMenu = ({ column, modifiers, onSelect }) => {
                     <span className="mr-auto">{gettext('Custom properties')}</span>
                     <i className="sf3-font-down sf3-font rotate-270"></i>
                   </DropdownToggle>
-                  <DropdownMenu>
+                  <DropdownMenu container="body" style={{ zIndex: 1061 }}>
                     {basicsColumns.map((item, index) => (
                       <DropdownItem
                         key={index}

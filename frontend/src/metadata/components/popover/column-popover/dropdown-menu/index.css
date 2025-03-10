@@ -28,7 +28,3 @@
   margin-right: 8px;
   flex-shrink: 0;
 }
-
-.sf-metadata-column-type-dropdown-menu .dropdown-menu {
-  z-index: 1061;
-}
