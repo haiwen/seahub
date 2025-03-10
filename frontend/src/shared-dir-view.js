@@ -26,6 +26,7 @@ import ViewModes from './components/view-modes';
 import SortMenu from './components/sort-menu';
 import { TreeHelper, TreeNode, TreeView } from './components/shared-dir-tree-view';
 import ResizeBar from './components/resize-bar';
+import MobileItemMenu from './components/mobile-item-menu';
 import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
 } from './components/resize-bar/constants';
@@ -1151,25 +1152,9 @@ class Item extends React.Component {
           </td>
           <td>
             {showDownloadIcon &&
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <DropdownMenu
-                container={document.body}
-                className="mobile-dropdown-menu"
-              >
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.zipDownloadFolder}>{gettext('Download')}</DropdownItem>
-                </div>
-              </DropdownMenu>
-            </Dropdown>
+              <MobileItemMenu>
+                <DropdownItem className="mobile-menu-item" onClick={this.zipDownloadFolder}>{gettext('Download')}</DropdownItem>
+              </MobileItemMenu>
             }
           </td>
         </tr>
@@ -1234,25 +1219,9 @@ class Item extends React.Component {
           </td>
           <td>
             {showDownloadIcon &&
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <DropdownMenu
-                container={document.body}
-                className="mobile-dropdown-menu"
-              >
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" tag="a" href={`${fileURL}&dl=1`}>{gettext('Download')}</DropdownItem>
-                </div>
-              </DropdownMenu>
-            </Dropdown>
+              <MobileItemMenu>
+                <DropdownItem className="mobile-menu-item" tag="a" href={`${fileURL}&dl=1`}>{gettext('Download')}</DropdownItem>
+              </MobileItemMenu>
             }
           </td>
         </tr>
