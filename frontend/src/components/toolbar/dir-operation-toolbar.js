@@ -326,7 +326,7 @@ class DirOperationToolbar extends React.Component {
                         <span className="mr-auto">{item.text}</span>
                         <i className="sf3-font-down sf3-font rotate-270"></i>
                       </DropdownToggle>
-                      <DropdownMenu>
+                      <DropdownMenu flip={false} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}>
                         {item.subOpList.map((item, index) => {
                           if (item == 'Divider') {
                             return <DropdownItem key={index} divider />;
