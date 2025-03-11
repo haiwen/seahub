@@ -9,6 +9,7 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
+from seahub.organizations.signals import org_last_activity
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -305,6 +306,17 @@ def update_last_login(sender, user, **kwargs):
 
 user_logged_in.connect(update_last_login)
 
+class OrgLastActivityTime(models.Model):
+    org_id = models.IntegerField(unique=True, db_index=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = 'org_last_active_time'
+
+def update_org_last_activity_time(sender, org_id, **kwargs):
+    OrgLastActivityTime.objects.update_or_create(org_id=org_id, defaults={'timestamp': timezone.now})
+
+org_last_activity.connect(update_org_last_activity_time)
 
 class CommandsLastCheck(models.Model):
     """Record last check time for Django/custom commands.
