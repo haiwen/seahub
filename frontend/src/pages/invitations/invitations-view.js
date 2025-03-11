@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
@@ -11,6 +11,7 @@ import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-di
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 import '../../css/invitations.css';
 
@@ -20,16 +21,9 @@ class Item extends React.Component {
     super(props);
     this.state = {
       isOpIconShown: false,
-      isOpMenuOpen: false, // for mobile
       isRevokeDialogOpen: false
     };
   }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
-  };
 
   onMouseEnter = () => {
     this.setState({
@@ -116,25 +110,12 @@ class Item extends React.Component {
               <span className="item-meta-info">{item.accept_time && gettext('Accepted')}</span>
             </td>
             <td>
-              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownToggle
-                  tag="i"
-                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isOpMenuOpen}
-                />
-                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                  <div className="mobile-operation-menu-bg-layer"></div>
-                  <div className="mobile-operation-menu">
-                    {item.accept_time ?
-                      <DropdownItem className="mobile-menu-item" onClick={this.toggleRevokeDialog}>{gettext('Revoke Access')}</DropdownItem> :
-                      <DropdownItem className="mobile-menu-item" onClick={this.deleteItem}>{gettext('Delete')}</DropdownItem>
-                    }
-                  </div>
-                </div>
-              </Dropdown>
+              <MobileItemMenu>
+                {item.accept_time
+                  ? <DropdownItem className="mobile-menu-item" onClick={this.toggleRevokeDialog}>{gettext('Revoke Access')}</DropdownItem>
+                  : <DropdownItem className="mobile-menu-item" onClick={this.deleteItem}>{gettext('Delete')}</DropdownItem>
+                }
+              </MobileItemMenu>
             </td>
           </tr>
         }
