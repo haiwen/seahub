@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -18,6 +18,7 @@ import CommonOperationConfirmationDialog from '../../components/dialog/common-op
 import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import FixedWidthTable from '../../components/common/fixed-width-table';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -137,7 +138,6 @@ class Item extends Component {
     this.state = {
       highlight: false,
       isOpIconShown: false,
-      isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
       isLinkDialogOpen: false,
       permissionOptions: [],
@@ -160,12 +160,6 @@ class Item extends Component {
     this.setState({
       permissionOptions: permissionOptions,
       currentPermission: currentPermission
-    });
-  };
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
     });
   };
 
@@ -333,24 +327,15 @@ class Item extends Component {
                 <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
               </td>
               <td>
-                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                  <DropdownToggle
-                    tag="i"
-                    className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                    title={gettext('More operations')}
-                    aria-label={gettext('More operations')}
-                    data-toggle="dropdown"
-                    aria-expanded={this.state.isOpMenuOpen}
-                  />
-                  <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                    <div className="mobile-operation-menu-bg-layer"></div>
-                    <div className="mobile-operation-menu">
-                      {(isPro && !item.is_expired) && <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>}
-                      {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
-                      <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
-                    </div>
-                  </div>
-                </Dropdown>
+                <MobileItemMenu>
+                  {(isPro && !item.is_expired) &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
+                  }
+                  {!item.is_expired &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
+                  }
+                  <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
+                </MobileItemMenu>
               </td>
             </tr>
             {isPermSelectDialogOpen &&
