@@ -15,7 +15,7 @@
     "@seafile/seafile-calendar": "0.0.28",
     "@seafile/seafile-editor": "1.0.133",
     "@seafile/sf-metadata-ui-component": "^0.0.68",
-    "@seafile/stldraw-editor": "1.0.1",
+    "@seafile/stldraw-editor": "0.1.7",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/codemirror-themes": "^4.23.5",
     "@uiw/react-codemirror": "^4.19.4",
