@@ -9,7 +9,6 @@ import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
-import EventBus from '../../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
@@ -19,6 +18,7 @@ import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getParentLinks } from '../../../utils/cell';
 
 import './index.css';
+import EventBus from '../../../../components/common/event-bus';
 
 const TABLE_ID = 'metadata_tas';
 const DEFAULT_TABLE_DATA = {
@@ -36,6 +36,7 @@ const TagsTable = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   setDisplayTag,
   loadMore,
+  toggleShowDirentToolbar,
 }) => {
   const { tagsData, updateTag, deleteTags, addTagLinks, deleteTagLinks, deleteTagsLinks, addChildTag, mergeTags } = useTags();
 
@@ -45,6 +46,8 @@ const TagsTable = ({
 
   const parentTagIdRef = useRef(null);
   const mergeTagsSelectorProps = useRef({});
+
+  const eventBus = EventBus.getInstance();
 
   const table = useMemo(() => {
     if (!tagsData) {
@@ -108,10 +111,9 @@ const TagsTable = ({
 
   const onDeleteTags = useCallback((tagsIds) => {
     deleteTags(tagsIds);
-
-    const eventBus = EventBus.getInstance();
+    toggleShowDirentToolbar(false);
     eventBus.dispatch(TABLE_EVENT_BUS_TYPE.SELECT_NONE);
-  }, [deleteTags]);
+  }, [eventBus, deleteTags, toggleShowDirentToolbar]);
 
   const onNewSubTag = useCallback((parentTagId) => {
     parentTagIdRef.current = parentTagId;
@@ -260,13 +262,27 @@ const TagsTable = ({
     }
   }, [table, addTagLinks, deleteTagsLinks]);
 
+  const updateSelectedTagIds = useCallback((ids) => {
+    toggleShowDirentToolbar(ids.length > 0);
+    setTimeout(() => {
+      eventBus && eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TAGS, ids);
+    }, 0);
+  }, [eventBus, toggleShowDirentToolbar]);
+
   useEffect(() => {
-    const eventBus = EventBus.getInstance();
     const unsubscribeUpdateSearchResult = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, updateSearchResult);
+    const unsubscribeDeleteTags = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAGS, onDeleteTags);
+    const unsubscribeMergeTags = eventBus.subscribe(EVENT_BUS_TYPE.MERGE_TAGS, onMergeTags);
+    const unsubscribeNewSubTag = eventBus.subscribe(EVENT_BUS_TYPE.NEW_SUB_TAG, onNewSubTag);
+    const unsubscribeUnselectTags = eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAGS, () => updateSelectedTagIds([]));
     return () => {
       unsubscribeUpdateSearchResult();
+      unsubscribeDeleteTags();
+      unsubscribeMergeTags();
+      unsubscribeNewSubTag();
+      unsubscribeUnselectTags();
     };
-  }, [updateSearchResult]);
+  }, [eventBus, updateSearchResult, onDeleteTags, onMergeTags, onNewSubTag, updateSelectedTagIds]);
 
   return (
     <>
@@ -296,6 +312,7 @@ const TagsTable = ({
         loadMore={loadMore}
         renderCustomDraggedRows={renderCustomDraggedRows}
         moveRecords={moveTags}
+        updateSelectedRecordIds={updateSelectedTagIds}
       />
       {isShowNewSubTagDialog && (
         <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />
@@ -314,6 +331,7 @@ TagsTable.propTypes = {
   modifyColumnWidth: PropTypes.func,
   setDisplayTag: PropTypes.func,
   loadMore: PropTypes.func,
+  toggleShowDirentToolbar: PropTypes.func,
 };
 
 export default TagsTable;

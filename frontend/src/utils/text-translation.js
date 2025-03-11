@@ -256,6 +256,28 @@ const TextTranslation = {
     key: 'OCR',
     value: gettext('OCR'),
   },
+
+  // tag view
+  MERGE_TAGS: {
+    key: 'Merge tags',
+    value: gettext('Merge tags'),
+  },
+  EDIT_TAG: {
+    key: 'Edit tag',
+    value: gettext('Edit tag'),
+  },
+  DELETE_TAG: {
+    key: 'Delete tag',
+    value: gettext('Delete tag'),
+  },
+  NEW_CHILD_TAG: {
+    key: 'New child tag',
+    value: gettext('New child tag'),
+  },
+  ADD_CHILD_TAGS: {
+    key: 'Add child tags',
+    value: gettext('Add child tags'),
+  }
 };
 
 export default TextTranslation;

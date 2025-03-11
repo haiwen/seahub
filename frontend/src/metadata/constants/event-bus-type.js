@@ -99,6 +99,12 @@ export const EVENT_BUS_TYPE = {
   SELECT_TAG_FILES: 'select_tag_files',
   UNSELECT_TAG_FILES: 'unselect_tag_files',
 
+  // tags
+  SELECT_TAGS: 'select_tags',
+  DELETE_TAGS: 'delete_tags',
+  MERGE_TAGS: 'merge_tags',
+  NEW_SUB_TAG: 'new_sub_tag',
+
   // file
   FILE_HISTORY: 'file_history',
   FILE_ACCESS_LOG: 'file_access_log',

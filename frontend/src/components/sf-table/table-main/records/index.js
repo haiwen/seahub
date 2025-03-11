@@ -411,6 +411,7 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
+    this.props.updateSelectedRecordIds([]);
   };
 
   selectCell = (cellPosition) => {
@@ -603,6 +604,7 @@ class Records extends Component {
     const { treeMetrics } = this.state;
     let updatedTreeMetrics = { ...treeMetrics };
     TreeMetrics.selectTreeNodesByKeys(nodesKeys, updatedTreeMetrics);
+    this.props.updateSelectedRecordIds(TreeMetrics.getSelectedIds(updatedTreeMetrics, this.props.treeNodeKeyRecordIdMap));
     this.setState({ treeMetrics: updatedTreeMetrics });
   };
 
@@ -614,6 +616,7 @@ class Records extends Component {
 
     let updatedTreeMetrics = { ...treeMetrics };
     TreeMetrics.selectTreeNode(nodeKey, updatedTreeMetrics);
+    this.props.updateSelectedRecordIds(TreeMetrics.getSelectedIds(updatedTreeMetrics, this.props.treeNodeKeyRecordIdMap));
     this.setState({ treeMetrics: updatedTreeMetrics });
   };
 
@@ -624,6 +627,7 @@ class Records extends Component {
     }
     let updatedTreeMetrics = { ...treeMetrics };
     TreeMetrics.deselectTreeNode(nodeKey, updatedTreeMetrics);
+    this.props.updateSelectedRecordIds(TreeMetrics.getSelectedIds(updatedTreeMetrics, this.props.treeNodeKeyRecordIdMap));
     this.setState({ treeMetrics: updatedTreeMetrics });
   };
 
@@ -633,6 +637,7 @@ class Records extends Component {
     let updatedTreeMetrics = { ...treeMetrics };
     const allNodesKeys = recordsTree.map((node) => getTreeNodeKey(node)).filter(Boolean);
     TreeMetrics.selectTreeNodesByKeys(allNodesKeys, updatedTreeMetrics);
+    this.props.updateSelectedRecordIds(TreeMetrics.getSelectedIds(updatedTreeMetrics, this.props.treeNodeKeyRecordIdMap));
     this.setState({ recordMetrics: updatedTreeMetrics });
   };
 
@@ -1063,6 +1068,7 @@ Records.propTypes = {
   moveRecord: PropTypes.func,
   addFolder: PropTypes.func,
   moveRecords: PropTypes.func,
+  updateSelectedRecordIds: PropTypes.func,
 };
 
 export default Records;
