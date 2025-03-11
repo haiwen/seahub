@@ -478,7 +478,7 @@ class RepoTransfer(models.Model):
         db_table = 'RepoTransfer'
 
 
-class FullDiskEmailRecordManager(models.Manager):
+class QuotaAlertEmailRecordManager(models.Manager):
 
     def get_records_within_days(self, days=3):
         today_now = datetime.datetime.now()
@@ -494,11 +494,11 @@ class FullDiskEmailRecordManager(models.Manager):
             obj.save()
         
 
-class FullDiskEmailRecord(models.Model):
+class QuotaAlertEmailRecord(models.Model):
 
     email = models.CharField(max_length=255, db_index=True, unique=True)
     last_emailed_at = models.DateTimeField(default=timezone.now, db_index=True)
-    objects = FullDiskEmailRecordManager()
+    objects = QuotaAlertEmailRecordManager()
 
     class Meta:
         db_table = 'full_disk_email_record'
