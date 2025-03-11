@@ -501,4 +501,4 @@ class QuotaAlertEmailRecord(models.Model):
     objects = QuotaAlertEmailRecordManager()
 
     class Meta:
-        db_table = 'full_disk_email_record'
+        db_table = 'quota_alert_email_record'
