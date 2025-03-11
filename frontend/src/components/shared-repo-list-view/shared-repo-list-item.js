@@ -12,6 +12,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
@@ -455,28 +456,15 @@ class SharedRepoListItem extends React.Component {
     if (!operations.length) {
       return null;
     }
+
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle
-          tag="i"
-          className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-          title={gettext('More operations')}
-          aria-label={gettext('More operations')}
-          data-toggle="dropdown"
-          aria-expanded={this.state.isItemMenuShow}
-          onClick={this.clickOperationMenuToggle}
-        />
-        <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
-          <div className="mobile-operation-menu-bg-layer"></div>
-          <div className="mobile-operation-menu">
-            {operations.map((item, index) => {
-              return (
-                <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
-              );
-            })}
-          </div>
-        </div>
-      </Dropdown>
+      <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+        {operations.map((item, index) => {
+          return (
+            <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
+          );
+        })}
+      </MobileItemMenu>
     );
   };
 
