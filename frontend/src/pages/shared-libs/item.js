@@ -11,6 +11,7 @@ import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 dayjs.extend(relativeTime);
@@ -314,24 +315,23 @@ class Item extends Component {
               <span className="item-meta-info" title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</span>
             </td>
             <td>
-              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownToggle
-                  tag="i"
-                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                  title={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isOpMenuOpen}
-                />
-                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                  <div className="mobile-operation-menu-bg-layer"></div>
-                  <div className="mobile-operation-menu">
-                    <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
-                    {(isPro && data.is_admin) && <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>}
-                    <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-                    {enableMonitorRepo && <DropdownItem className="mobile-menu-item" onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>}
-                  </div>
-                </div>
-              </Dropdown>
+              <MobileItemMenu isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
+                  {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                </DropdownItem>
+                {(isPro && data.is_admin) &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
+                }
+                <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+                {enableMonitorRepo &&
+                <DropdownItem
+                  className="mobile-menu-item"
+                  onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}
+                >
+                  {data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}
+                </DropdownItem>
+                }
+              </MobileItemMenu>
             </td>
           </tr>
           {this.state.isShowSharedDialog && (
