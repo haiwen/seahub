@@ -142,7 +142,7 @@ from seaserv import seafserv_threaded_rpc, \
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     remove_share, get_group, get_file_id_by_path, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
-    create_org, ccnet_api
+    create_org, ccnet_api, get_org_id_by_repo_id
 
 from constance import config
 
@@ -1871,7 +1871,7 @@ class RepoOwner(APIView):
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
-            org_id = seafile_api.get_org_id_by_repo_id(repo_id)
+            org_id = get_org_id_by_repo_id(repo_id)
             RepoTransfer.objects.create(from_user=repo_owner,
                                         to=new_owner,
                                         repo_id=repo_id,
