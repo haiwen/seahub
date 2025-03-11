@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import { Utils } from '../../utils/utils';
 
@@ -73,18 +74,11 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpMenuOpen: false, // for mobile
       isOpIconShown: false,
       unlinked: false,
       isConfirmUnlinkDialogOpen: false
     };
   }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
-  };
 
   handleMouseOver = () => {
     this.setState({
@@ -159,22 +153,9 @@ class Item extends Component {
           <span className="item-meta-info">{data.platform}</span>
         </td>
         <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                <DropdownItem className="mobile-menu-item" onClick={this.handleClick}>{gettext('Unlink')}</DropdownItem>
-              </div>
-            </div>
-          </Dropdown>
+          <MobileItemMenu>
+            <DropdownItem className="mobile-menu-item" onClick={this.handleClick}>{gettext('Unlink')}</DropdownItem>
+          </MobileItemMenu>
         </td>
       </tr>
     );
