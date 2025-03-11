@@ -11,8 +11,8 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
         get_site_name
-from seahub.base.models import FullDiskEmailRecord
-from seahub.settings import FULL_DISK_EMAIL_NOTICE_DAY_INTERVAL
+from seahub.base.models import QuotaAlertEmailRecord
+from seahub.settings import QUOTA_ALERT_DAY_INTERVAL
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ class Command(BaseCommand):
                         'user_quota_full.html', data, None, [contact_email])
 
             if record:
-                FullDiskEmailRecord.objects.create_or_update(email)
+                QuotaAlertEmailRecord.objects.create_or_update(email)
 
         # restore current language
         translation.activate(cur_language)
@@ -102,12 +102,12 @@ class Command(BaseCommand):
             user_obj_email_list = [u.email for u in user_obj_list]
             email_should_handle = []
             # get users from send records
-            if FULL_DISK_EMAIL_NOTICE_DAY_INTERVAL <= 0:
+            if QUOTA_ALERT_DAY_INTERVAL <= 0:
                 # ignore the users which already have records
-                records = FullDiskEmailRecord.objects.all()
+                records = QuotaAlertEmailRecord.objects.all()
             else:
                 # ignore the users which have records within n days
-                records = FullDiskEmailRecord.objects.get_records_within_days(days=FULL_DISK_EMAIL_NOTICE_DAY_INTERVAL)
+                records = QuotaAlertEmailRecord.objects.get_records_within_days(days=QUOTA_ALERT_DAY_INTERVAL)
                 
             email_records = [r.email for r in records]
             email_should_handle = list(set(user_obj_email_list) - set(email_records))

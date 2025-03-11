@@ -946,8 +946,8 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 ###########################
 # Full disk email sending #
 ##########################
-ENABLE_FULL_DISK_EMAIL_NOTICE = False 
-FULL_DISK_EMAIL_NOTICE_DAY_INTERVAL = 0
+ENABLE_QUOTA_ALERT = False
+QUOTA_ALERT_DAY_INTERVAL = 0
 
 
 ##########################
