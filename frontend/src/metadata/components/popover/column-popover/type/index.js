@@ -4,7 +4,7 @@ import Icon from '@/components/icon';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../../../utils/constants';
-import CustomDropdownMenu from '../custom-dropdown-menu';
+import CustomDropdownMenu from '../dropdown-menu';
 
 import './index.css';
 
