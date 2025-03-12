@@ -13,7 +13,7 @@ import { ALL_TAGS_ID } from '../../constants';
 
 import './index.css';
 
-const AllTags = ({ updateCurrentPath, ...params }) => {
+const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
   const [isLoadingMore, setLoadingMore] = useState(false);
 
@@ -99,6 +99,7 @@ const AllTags = ({ updateCurrentPath, ...params }) => {
         setDisplayTag={onChangeDisplayTag}
         isLoadingMoreRecords={isLoadingMore}
         loadMore={loadMore}
+        toggleShowDirentToolbar={toggleShowDirentToolbar}
       />
     </div>
   );

@@ -30,8 +30,7 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
-import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
-import TableFilesToolbar from '../../components/toolbar/table-files-toolbar';
+import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -2193,7 +2192,7 @@ class LibContentView extends React.Component {
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
-      path, usedRepoTags, isDirentSelected } = this.state;
+      path, usedRepoTags, isDirentSelected, currentMode } = this.state;
 
     if (this.state.libNeedDecrypt) {
       return (
@@ -2278,10 +2277,8 @@ class LibContentView extends React.Component {
                         'animation-children': isDirentSelected
                       })}>
                       {isDirentSelected ? (
-                        this.state.currentMode === TAGS_MODE ? (
-                          <TagFilesToolbar currentRepoInfo={this.state.currentRepoInfo} />
-                        ) : this.state.currentMode === METADATA_MODE ? (
-                          <TableFilesToolbar repoID={this.props.repoID} />
+                        currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
+                          <MetadataPathToolbar repoID={repoID} repoInfo={currentRepoInfo} mode={currentMode} path={path} />
                         ) : (
                           <SelectedDirentsToolbar
                             repoID={this.props.repoID}

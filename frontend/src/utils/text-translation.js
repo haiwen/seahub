@@ -256,6 +256,16 @@ const TextTranslation = {
     key: 'OCR',
     value: gettext('OCR'),
   },
+
+  // tag view
+  MERGE_TAGS: {
+    key: 'Merge tags',
+    value: gettext('Merge tags'),
+  },
+  NEW_CHILD_TAG: {
+    key: 'New child tag',
+    value: gettext('New child tag'),
+  },
 };
 
 export default TextTranslation;
