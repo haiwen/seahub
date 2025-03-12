@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getGeolocationDisplayString } from '../../utils/cell/column/geolocation';
 
-const GeolocationFormatter = ({ isBaiduMap, format, value, children: emptyFormatter, className, hyphen = ' ' }) => {
+const GeolocationFormatter = ({ isBaiduMap, format, value, children: emptyFormatter, className, hyphen = ' ', record }) => {
   const displayValue = useMemo(() => {
     if (typeof value !== 'object') return null;
+    const translatedLocation = record._location_translated;
+    if (translatedLocation && translatedLocation.address) {
+      return translatedLocation.address;
+    }
     return getGeolocationDisplayString(value, { geo_format: format }, { isBaiduMap, hyphen });
-  }, [value, format, isBaiduMap, hyphen]);
+  }, [value, format, isBaiduMap, hyphen, record]);
 
   if (!displayValue) return emptyFormatter || null;
   return (
