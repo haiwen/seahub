@@ -38,6 +38,7 @@ import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
 import OrgLogsFileTransfer from './org-logs-file-transfer';
+import OrgLogsGroupInvite from './org-logs-group-invite';
 import OrgSAMLConfig from './org-saml-config';
 import OrgSubscription from './org-subscription';
 
@@ -128,6 +129,7 @@ class Org extends React.Component {
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
               <OrgLogsFileTransfer path='repo-transfer' />
+              <OrgLogsGroupInvite path='group-invite' />
             </OrgLogs>
             {enableMultiADFS &&
               <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>

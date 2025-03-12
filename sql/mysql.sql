@@ -1599,3 +1599,16 @@ CREATE TABLE `group_invite_link` (
   KEY `group_invite_link_group_id` (`group_id`),
   KEY `group_invite_link_token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `GroupInvite` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `operator` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `action_type` enum('INVITE','LEAVE') NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_group_invite_org_id` (`org_id`),
+  KEY `idx_group_invite_timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
