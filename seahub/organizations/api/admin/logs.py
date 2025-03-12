@@ -17,12 +17,11 @@ from seahub.api2.endpoints.utils import get_user_name_dict, \
     get_user_contact_email_dict, get_repo_dict, get_group_dict
 
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.base.models import RepoTransfer
+from seahub.base.models import RepoTransfer, GroupInvite
 from seahub.utils import EVENTS_ENABLED, get_file_audit_events, get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
 from seahub.organizations.api.permissions import IsOrgAdmin
-from seahub.organizations.views import org_user_exists
 from seahub.organizations.api.utils import update_log_perm_audit_type
 logger = logging.getLogger(__name__)
 
@@ -393,6 +392,104 @@ class OrgAdminLogsFileTransfer(APIView):
                 data['to_group_id'] = to_group_id
                 data['to_group_name'] = group_name_dict.get(to_group_id, '')
                 data['to_type'] = 'group'
+
+            event_list.append(data)
+
+        return Response({
+                'log_list': event_list,
+                'page': page,
+                'page_next': page_next,
+                })
+
+
+class OrgAdminLogsGroupInvite(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdmin)
+
+    def get(self, request):
+        """List organization group invite in logs
+        """
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+
+        start = per_page * (page - 1)
+        limit = per_page
+
+        org_id = request.user.org.org_id
+        events = GroupInvite.objects.filter(org_id=org_id).all().order_by('-timestamp')[start:start+limit+1]
+        if len(events) > limit:
+            page_next = True
+            events = events[:limit]
+        else:
+            page_next = False
+
+        event_list = []
+        if not events:
+            return Response({
+                'log_list': event_list,
+                'page': page,
+                'page_next': False
+                })
+        
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        group_name_dict = {}
+
+        user_email_set = set()
+        group_id_set = set()
+
+        for event in events:
+            if is_valid_email(event.user):
+                user_email_set.add(event.user)
+            if is_valid_email(event.operator):
+                user_email_set.add(event.operator)
+            if event.group_id not in group_id_set:
+                group_id_set.add(event.group_id)
+
+        for e in user_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+
+        for group_id in group_id_set:
+            if group_id not in group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                if group:
+                    group_name_dict[group_id] = group.group_name
+        event_list = []
+        for ev in events:
+            data = {
+                'user_email': '',
+                'user_name': '',
+                'user_contact_email': '',
+                'group_id': '',
+                'group_name': '',
+                'operator_email': '',
+                'operator_name': '',
+                'operator_contact_email': '',
+            }
+            user_email = ev.user
+            data['user_email'] = user_email
+            data['user_name'] = nickname_dict.get(user_email, '')
+            data['user_contact_email'] = contact_email_dict.get(user_email, '')
+
+            operator_email = ev.operator
+            data['operator_email'] = operator_email
+            data['operator_name'] = nickname_dict.get(operator_email, '')
+            data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
+
+            data['group_id'] = ev.group_id
+            data['group_name'] = group_name_dict.get(ev.group_id, '')
+            data['action_type'] = ev.action_type
+            data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
 
             event_list.append(data)
 

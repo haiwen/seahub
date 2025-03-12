@@ -25,8 +25,10 @@ from seahub.group.models import GroupInviteLinkModel
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.base.accounts import User
+from seahub.base.models import GroupInvite
 from seahub.group.signals import add_user_to_group
 from seahub.group.views import group_invite
+from seahub.organizations.views import get_org_id_by_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 from seahub.profile.models import Profile
@@ -242,12 +244,19 @@ class GroupMember(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         username = request.user.username
+        org_id = get_org_id_by_group(group_id)
         # user leave group
         if username == email:
             try:
                 ccnet_api.quit_group(group_id, username)
                 # remove repo-group share info of all 'email' owned repos
                 seafile_api.remove_group_repos_by_owner(group_id, email)
+                # add group invite log
+                GroupInvite.objects.create(org_id=org_id,
+                                        group_id=group_id,
+                                        user=email,
+                                        operator=username,
+                                        action_type='leave')
                 return Response({'success': True})
             except SearpcError as e:
                 logger.error(e)
@@ -260,6 +269,11 @@ class GroupMember(APIView):
                 # group owner can delete all group member
                 ccnet_api.group_remove_member(group_id, username, email)
                 seafile_api.remove_group_repos_by_owner(group_id, email)
+                GroupInvite.objects.create(org_id=org_id,
+                                        group_id=group_id,
+                                        user=email,
+                                        operator=username,
+                                        action_type='leave')
                 return Response({'success': True})
 
             elif is_group_admin(group_id, username):
@@ -267,6 +281,11 @@ class GroupMember(APIView):
                 if not is_group_admin_or_owner(group_id, email):
                     ccnet_api.group_remove_member(group_id, username, email)
                     seafile_api.remove_group_repos_by_owner(group_id, email)
+                    GroupInvite.objects.create(org_id=org_id,
+                                        group_id=group_id,
+                                        user=email,
+                                        operator=username,
+                                        action_type='leave')
                     return Response({'success': True})
                 else:
                     error_msg = 'Permission denied.'
@@ -371,6 +390,12 @@ class GroupMembersBulk(APIView):
                                    group_staff=username,
                                    group_id=group_id,
                                    added_user=email)
+            # add group invite log
+            GroupInvite.objects.create(org_id=org_id if org_id else -1,
+                                    group_id=group_id,
+                                    user=email,
+                                    operator=username,
+                                    action_type='invite')
         return Response(result)
 
 

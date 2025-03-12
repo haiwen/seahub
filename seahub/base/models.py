@@ -475,3 +475,15 @@ class RepoTransfer(models.Model):
 
     class Meta:
         db_table = 'RepoTransfer'
+
+
+class GroupInvite(models.Model):
+    org_id = models.IntegerField(db_index=True)
+    group_id = models.IntegerField()
+    user = models.EmailField(db_index=True)
+    operator = models.CharField(max_length=255)
+    action_type = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        db_table = 'GroupInvite'

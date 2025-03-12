@@ -481,6 +481,14 @@ class OrgAdminAPI {
   }
 
   // org admin logs
+  orgAdminListGroupInvite(page, perPage) {
+    let url = this.server + '/api/v2.1/org/admin/logs/group-invite/';
+    let params = {
+      page: page,
+      per_page: perPage
+    };
+    return this.req.get(url, { params: params });
+  }
   orgAdminListFileTransfer(page, perPage) {
     let url = this.server + '/api/v2.1/org/admin/logs/repo-transfer/';
     let params = {
