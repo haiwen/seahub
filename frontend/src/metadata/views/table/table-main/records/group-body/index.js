@@ -899,7 +899,7 @@ class GroupBody extends Component {
             modifyRecord={this.props.modifyRecord}
             recordGetterByIndex={this.props.recordGetterByIndex}
             recordGetterById={this.props.recordGetterById}
-            updateRecords={this.props.updateRecords}
+            modifyRecords={this.props.modifyRecords}
             paste={this.props.paste}
             editMobileCell={this.props.editMobileCell}
             frozenColumnsWidth={this.props.frozenColumnsWidth}
@@ -967,7 +967,7 @@ GroupBody.propTypes = {
   modifyRecord: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
-  updateRecords: PropTypes.func,
+  modifyRecords: PropTypes.func.isRequired,
   paste: PropTypes.func,
   selectNone: PropTypes.func,
   onSelectRecord: PropTypes.func,
