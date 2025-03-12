@@ -543,7 +543,7 @@ class RecordsBody extends Component {
             modifyRecord={this.props.modifyRecord}
             recordGetterByIndex={this.props.recordGetterByIndex}
             recordGetterById={this.props.recordGetterById}
-            updateRecords={this.props.updateRecords}
+            modifyRecords={this.props.modifyRecords}
             paste={this.props.paste}
             editMobileCell={this.props.editMobileCell}
             frozenColumnsWidth={this.props.frozenColumnsWidth}
@@ -611,7 +611,7 @@ RecordsBody.propTypes = {
   onCellClick: PropTypes.func,
   onCellRangeSelectionUpdated: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  updateRecords: PropTypes.func,
+  modifyRecords: PropTypes.func.isRequired,
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,

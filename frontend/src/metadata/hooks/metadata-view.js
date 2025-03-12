@@ -343,7 +343,7 @@ export const MetadataViewProvider = ({
             idOriginalRecordUpdates[updateRecordId][locationColumnKey] = detail[locationColumnKey];
           }
         });
-        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+        modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
       }
     });
   }, [metadata, extractFilesDetails, modifyRecords]);
@@ -366,7 +366,7 @@ export const MetadataViewProvider = ({
         let idOriginalRecordUpdates = {};
         idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
         idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
-        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+        modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
       }
     });
   }, [modifyRecords, generateDescription]);
@@ -388,7 +388,7 @@ export const MetadataViewProvider = ({
         let idOriginalRecordUpdates = {};
         idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
         idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-        modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+        modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
       },
     });
   }, [modifyRecords, onOCR]);

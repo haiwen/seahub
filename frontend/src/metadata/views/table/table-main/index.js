@@ -77,6 +77,7 @@ const TableMain = ({
         modifyColumnData={modifyColumnData}
         insertColumn={handelInsertColumn}
         updateFileTags={updateFileTags}
+        modifyRecords={modifyRecords}
         {...props}
       />
     </div>

@@ -562,11 +562,7 @@ class InteractionMasks extends React.Component {
     }
 
     if (updateRecordIds.length > 0) {
-      const isCopyPaste = true;
-      this.props.updateRecords({
-        recordIds: updateRecordIds, idRecordUpdates, idOriginalRecordUpdates,
-        idOldRecordData, idOriginalOldRecordData, isCopyPaste,
-      });
+      this.props.modifyRecords(updateRecordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
     }
   };
 
@@ -1025,10 +1021,11 @@ class InteractionMasks extends React.Component {
   };
 
   handleDragCopy = (draggedRange) => {
-    const { columns, groupMetrics, table: { rows, id_row_map }, gridUtils, updateRecords } = this.props;
+    const { columns, groupMetrics, table: { rows, id_row_map }, gridUtils, modifyRecords } = this.props;
     // compute the new records
     const newRecords = gridUtils.getUpdateDraggedRecords(draggedRange, columns, rows, id_row_map, groupMetrics);
-    updateRecords({ ...newRecords, isCopyPaste: true });
+    const { recordIds, idRecordUpdates, idOriginalRecordUpdates, idOriginalOldRecordData, idOldRecordData } = newRecords;
+    modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
   };
 
   handleDragStart = (e) => {
@@ -1216,7 +1213,7 @@ InteractionMasks.propTypes = {
   modifyRecord: PropTypes.func.isRequired,
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
-  updateRecords: PropTypes.func,
+  modifyRecords: PropTypes.func.isRequired,
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   editMobileCell: PropTypes.func,
