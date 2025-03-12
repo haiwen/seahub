@@ -1,6 +1,15 @@
 .modal .seahub-modal-btn.close {
   padding: 14px 16px;
   opacity: 1;
+  margin: -1rem -1rem -1rem auto;
+  background-color: transparent;
+  border: 0;
+  float: right;
+  font-size: 1.40625rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
 }
 
 .modal .seahub-modal-btn.close:not(:disabled):not(.disabled):hover {
