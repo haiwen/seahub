@@ -11,6 +11,7 @@ import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
 import AI from './ai';
 import Settings from './settings';
+import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 
 import './index.css';
 
@@ -30,6 +31,7 @@ const MetadataDetails = () => {
   return (
     <>
       {displayColumns.map(field => {
+        if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
         if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage && value) {
           return (<Location key={field.key} position={value} record={record} />);
