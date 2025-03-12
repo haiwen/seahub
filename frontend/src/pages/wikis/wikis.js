@@ -358,8 +358,8 @@ class Wikis extends Component {
                   title={gettext('No Wikis')}
                   text={
                     <>
-                      <p>{gettext('You do not have any Wikis yet.')}</p>
-                      <p>{gettext('You can add a Wiki by clicking the "Add Wiki" item in the dropdown menu.')}</p>
+                      <p className="m-0">{gettext('You can click the "Add Wiki" button below to add a new Wiki.')}</p>
+                      <button className="btn btn-primary mt-6" onClick={this.toggleAddWikiDialog}><i className="sf3-font-new sf3-font mr-2"></i>{gettext('Add Wiki')}</button>
                     </>
                   }
                 />
