@@ -6,7 +6,6 @@ import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_RATE_DATA, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { getColumnDisplayName } from '../../../../utils/column';
-import ModalPortal from '../../../../../components/modal-portal';
 
 import './index.css';
 
