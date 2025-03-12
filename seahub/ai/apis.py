@@ -324,10 +324,11 @@ class WritingAssistant(APIView):
 
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
+        instruction = request.data.get('instruction')
 
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
-        if not writing_type:
+        if not instruction and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
         params = {
