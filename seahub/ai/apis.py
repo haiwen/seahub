@@ -334,6 +334,7 @@ class WritingAssistant(APIView):
         params = {
             'text': text,
             'writing_type': writing_type,
+            'instruction': instruction,
         }
 
         try:
