@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
 import './index.css';
 
@@ -24,7 +25,7 @@ const AllTags = ({ currentPath, selectAllTags }) => {
       <div className="tree-node-text">{gettext('All tags')}</div>
       <div className="left-icon">
         <div className="tree-node-icon">
-          <i className="sf3-font sf3-font-tag"></i>
+          <Icon symbol="tag" className="metadata-views-icon" />
         </div>
       </div>
     </div>
