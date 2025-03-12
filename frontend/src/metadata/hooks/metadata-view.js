@@ -305,21 +305,43 @@ export const MetadataViewProvider = ({
     const recordIds = records.map(record => getRecordIdFromRecord(record));
     extractFilesDetails(recordObjIds, {
       success_callback: ({ details }) => {
-        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
-        if (!captureColumn) return;
         let idOldRecordData = {};
         let idOriginalOldRecordData = {};
-        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
-        records.forEach(record => {
-          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [captureColumnKey]: record[captureColumnKey] };
-        });
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
+        const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
+        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+        const locationColumnKey = PRIVATE_COLUMN_KEY.LOCATION;
+        const locationColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.LOCATION);
+        records.forEach(record => {
+          const recordId = record[PRIVATE_COLUMN_KEY.ID];
+          idOldRecordData[recordId] = {};
+          idOriginalOldRecordData[recordId] = {};
+
+          if (captureColumn) {
+            idOldRecordData[recordId][captureColumnKey] = record[captureColumnKey];
+            idOriginalOldRecordData[recordId][captureColumnKey] = record[captureColumnKey];
+          }
+
+          if (locationColumn) {
+            idOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
+            idOriginalOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
+          }
+        });
         details.forEach(detail => {
           const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
-          idRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
-          idOriginalRecordUpdates[updateRecordId] = { [captureColumnKey]: detail[captureColumnKey] };
+          idRecordUpdates[updateRecordId] = {};
+          idOriginalRecordUpdates[updateRecordId] = {};
+
+          if (captureColumn) {
+            idRecordUpdates[updateRecordId][captureColumnKey] = detail[captureColumnKey];
+            idOriginalRecordUpdates[updateRecordId][captureColumnKey] = detail[captureColumnKey];
+          }
+
+          if (locationColumn) {
+            idRecordUpdates[updateRecordId][locationColumnKey] = detail[locationColumnKey];
+            idOriginalRecordUpdates[updateRecordId][locationColumnKey] = detail[locationColumnKey];
+          }
         });
         modifyRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
       }
