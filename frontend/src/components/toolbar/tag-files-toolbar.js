@@ -5,7 +5,7 @@ import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
 import { getFileById, getFileName, getTagFileOperationList } from '../../tag/utils/file';
 
-const TagFilesToolbar = ({ repoInfo }) => {
+const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
   const tagFilesRef = useRef([]);
 
@@ -42,13 +42,13 @@ const TagFilesToolbar = ({ repoInfo }) => {
     const fileId = selectedFileIds[0];
     const file = getFileById(tagFilesRef.current, fileId);
     const fileName = getFileName(file);
-    const allOperations = getTagFileOperationList(fileName, repoInfo, canModify);
+    const allOperations = getTagFileOperationList(fileName, currentRepoInfo, canModify);
     const excludesOperations = ['Move', 'Copy', 'Delete', 'Download'];
     const validOperations = allOperations.filter((item) => {
       return excludesOperations.indexOf(item.key) == -1;
     });
     return validOperations;
-  }, [canModify, repoInfo, selectedFileIds, selectedFilesLen]);
+  }, [canModify, currentRepoInfo, selectedFileIds, selectedFilesLen]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
@@ -100,8 +100,7 @@ const TagFilesToolbar = ({ repoInfo }) => {
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [eventBus]);
 
   return (
     <div className="selected-dirents-toolbar">

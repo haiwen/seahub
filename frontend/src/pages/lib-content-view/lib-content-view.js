@@ -30,11 +30,9 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
-import TagFilesToolbar from '../../components/toolbar/tag-files-toolbar';
-import TableFilesToolbar from '../../components/toolbar/table-files-toolbar';
+import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
 
 import '../../css/lib-content-view.css';
-import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
 
 dayjs.extend(relativeTime);
 

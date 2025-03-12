@@ -11,7 +11,7 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path }) => {
     const isAllTagsView = path.split('/').pop() === ALL_TAGS_ID;
     if (isAllTagsView) return <AllTagsToolbar />;
 
-    return <TagFilesToolbar repoInfo={repoInfo} />;
+    return <TagFilesToolbar currentRepoInfo={repoInfo} />;
   }
   return (
     <TableFilesToolbar repoID={repoID} />
