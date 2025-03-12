@@ -55,7 +55,6 @@ class PublishWikiDialog extends React.Component {
       });
     } else {
       this.props.onPublish(DEFAULT_URL + this.state.url.trim());
-      this.toggle();
     }
   };
 
