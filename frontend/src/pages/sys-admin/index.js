@@ -68,7 +68,7 @@ import FileAccessLogs from './logs-page/file-access-logs';
 import FileUpdateLogs from './logs-page/file-update-logs';
 import SharePermissionLogs from './logs-page/share-permission-logs';
 import FIleTransferLogs from './logs-page/file-transfer-log';
-
+import GroupInviteLogs from './logs-page/group-invite-logs';
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -253,6 +253,7 @@ class SysAdmin extends React.Component {
             <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
             <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
             <FIleTransferLogs path={siteRoot + 'sys/logs/repo-transfer'} {...commonProps} />
+            <GroupInviteLogs path={siteRoot + 'sys/logs/group-invite'} {...commonProps} />
             <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />

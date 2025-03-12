@@ -20,7 +20,7 @@ from seahub.utils import get_file_audit_events, generate_file_audit_event_type, 
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
-from seahub.base.models import RepoTransfer
+from seahub.base.models import RepoTransfer, GroupInvite
 
 logger = logging.getLogger(__name__)
 
@@ -563,4 +563,108 @@ class AdminLogsFileTransferLogs(APIView):
             'has_next_page': has_next_page,
         }
 
+        return Response(resp)
+
+
+class AdminLogsGroupInviteLogs(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all group invite logs.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        if not request.user.admin_permissions.can_view_user_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = per_page * (current_page - 1)
+        limit = per_page
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        events = GroupInvite.objects.all().order_by('-timestamp')[start:start+limit+1]
+        if len(events) > limit:
+            has_next_page = True
+            events = events[:limit]
+        else:
+            has_next_page = False
+
+         # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        contact_email_dict = {}
+        group_name_dict = {}
+
+        user_email_set = set()
+        group_id_set = set()
+
+        for event in events:
+            if is_valid_email(event.user):
+                user_email_set.add(event.user)
+            if is_valid_email(event.operator):
+                user_email_set.add(event.operator)
+            if event.group_id not in group_id_set:
+                group_id_set.add(event.group_id)
+
+        for e in user_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+
+        for group_id in group_id_set:
+            if group_id not in group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                if group:
+                    group_name_dict[group_id] = group.group_name
+        
+
+        events_info = []
+        for ev in events:
+            data = {
+                'user_email': '',
+                'user_name': '',
+                'user_contact_email': '',
+                'group_id': '',
+                'group_name': '',
+                'operator_email': '',
+                'operator_name': '',
+                'operator_contact_email': '',
+            }
+            user_email = ev.user
+            data['user_email'] = user_email
+            data['user_name'] = nickname_dict.get(user_email, '')
+            data['user_contact_email'] = contact_email_dict.get(user_email, '')
+
+            operator_email = ev.operator
+            data['operator_email'] = operator_email
+            data['operator_name'] = nickname_dict.get(operator_email, '')
+            data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
+            data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
+
+            data['action_type'] = ev.action_type
+            data['group_id'] = ev.group_id
+            data['group_name'] = group_name_dict.get(ev.group_id, '')
+
+            events_info.append(data)
+
+        resp = {
+            'group_invite_log_list': events_info,
+            'has_next_page': has_next_page,
+        }
         return Response(resp)

@@ -40,7 +40,7 @@ class OrgLogs extends Component {
     const { isExportExcelDialogOpen, logType } = this.state;
     return (
       <Fragment>
-        {this.props.currentTab === 'repo-transfer' ?
+        {this.props.currentTab === 'repo-transfer' || this.props.currentTab === 'group-invite' ?
           <MainPanelTopbar />
           :
           <MainPanelTopbar>
@@ -73,6 +73,12 @@ class OrgLogs extends Component {
                   <Link
                     className={`nav-link ${this.props.currentTab === 'repo-transfer' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/repo-transfer/'} title={gettext('Repo Transfer')}>{gettext('Repo Transfer')}
+                  </Link>
+                </li>
+                <li className="nav-item" onClick={() => this.tabItemClick('group-invite')}>
+                  <Link
+                    className={`nav-link ${this.props.currentTab === 'group-invite' ? 'active' : ''}`}
+                    to={siteRoot + 'org/logadmin/group-invite/'} title={gettext('Group Invite')}>{gettext('Group Invite')}
                   </Link>
                 </li>
               </ul>
