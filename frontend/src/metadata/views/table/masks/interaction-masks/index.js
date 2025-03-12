@@ -561,7 +561,7 @@ class InteractionMasks extends React.Component {
       this.props.updateFileTags(tagsUpdate);
     }
 
-    if (updateRecordIds.length > 0) {      
+    if (updateRecordIds.length > 0) {
       this.props.modifyRecords(updateRecordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
     }
   };
