@@ -85,11 +85,13 @@
 
 .departments-tree-panel .new-dept-btn {
   padding: 0 6px;
+  margin-top: 10px;
 }
 
 .departments-tree-panel .new-dept-btn-icon {
   font-size: 1rem;
   color: #666;
+  margin-right: 2px;
 }
 
 .department-content-main {
