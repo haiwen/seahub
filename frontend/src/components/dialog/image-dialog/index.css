@@ -52,7 +52,7 @@
   width: 100%;
   height: fit-content;
   display: flex;
-  padding: 26px 16px;
+  padding: 20px 16px;
   border: none;
   font-size: 1rem;
 }
@@ -67,10 +67,6 @@
 .lightbox-side-panel .detail-body {
   scrollbar-color: #666 #333;
   padding: 0 16px 8px;
-}
-
-.lightbox-side-panel .file-details-collapse+.dirent-detail-people {
-  margin-top: 20px;
 }
 
 .lightbox-side-panel .sf-metadata-ui.collaborator-item,
@@ -96,6 +92,9 @@
   background-color: #666;
 }
 
-.lightbox-side-panel .dirent-detail-people {
-  border-top: 1px solid #999;
+.lightbox-side-panel .detail-body .dirent-detail-people {
+  position: relative;
+  transform: none;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #999;
 }

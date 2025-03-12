@@ -108,6 +108,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
 
     component = (
       <>
+        {enableMetadata && enableFaceRecognition && <People repoID={repoID} record={record} />}
         <Collapse title={gettext('General information')}>
           {dom}
         </Collapse>
@@ -130,9 +131,6 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   return (
     <>
       {component}
-      {enableFaceRecognition && Utils.imageCheck(dirent.name) && (
-        <People repoID={repoID} record={record} />
-      )}
     </>
   );
 }, (props, nextProps) => {
