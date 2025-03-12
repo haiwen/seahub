@@ -40,7 +40,7 @@ class DepartmentsTreePanel extends Component {
           className='btn btn-secondary btn-block text-left border-0 font-weight-normal new-dept-btn shadow-none'
           onClick={() => {this.props.toggleAddDepartment(null);}}
         >
-          <i className="sf3-font sf3-font-new mr-2 new-dept-btn-icon"></i>
+          <i className="sf3-font sf3-font-new new-dept-btn-icon"></i>
           {gettext('New Department')}
         </button>
       </div>
