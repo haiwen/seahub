@@ -35,7 +35,7 @@ const FileTagsFormatter = ({ tagsData, value: oldValue, className, children: emp
 
 FileTagsFormatter.propTypes = {
   value: PropTypes.array,
-  tagsData: PropTypes.array,
+  tagsData: PropTypes.object,
   className: PropTypes.string,
   showName: PropTypes.bool,
 };
