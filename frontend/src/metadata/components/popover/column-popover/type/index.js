@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../../../utils/constants';
 import CustomDropdownMenu from '../dropdown-menu';
+import ModalPortal from '../../../../../components/modal-portal';
 
 import './index.css';
 
@@ -54,16 +55,18 @@ const Type = forwardRef(({ column, onChange }, ref) => {
             <span className="mr-auto">{column.name}</span>
             <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
           </DropdownToggle>
-          <CustomDropdownMenu
-            column={column}
-            modifiers={[{
-              name: 'offset',
-              options: {
-                offset: [0, 17],
-              }
-            }]}
-            onSelect={onChange}
-          />
+          <ModalPortal>
+            <CustomDropdownMenu
+              column={column}
+              modifiers={[{
+                name: 'offset',
+                options: {
+                  offset: [0, 17],
+                }
+              }]}
+              onSelect={onChange}
+            />
+          </ModalPortal>
         </Dropdown>
         {error && (<FormFeedback>{error}</FormFeedback>)}
       </FormGroup>

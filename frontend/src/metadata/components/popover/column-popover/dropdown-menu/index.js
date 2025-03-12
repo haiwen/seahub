@@ -189,62 +189,60 @@ const CustomDropdownMenu = ({ column, modifiers, onSelect }) => {
   }, [onSelect]);
 
   return (
-    <ModalPortal>
-      <DropdownMenu className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers}>
-        <div className="search-column-container">
-          <Input onChange={onSearchColumn} placeholder={gettext('Search properties')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
-        </div>
-        {displayColumns.length > 0 && predefinedColumns.length > 0 && (
-          <>
-            {predefinedColumns.map(item => (
-              <DropdownItem
-                key={item.key}
-                className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
-                onMouseEnter={() => setCustomPropertiesOpen(false)}
-                onClick={() => handleSelect(item)}
+    <DropdownMenu className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers} style={{ zIndex: 1061 }}>
+      <div className="search-column-container">
+        <Input onChange={onSearchColumn} placeholder={gettext('Search properties')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
+      </div>
+      {displayColumns.length > 0 && predefinedColumns.length > 0 && (
+        <>
+          {predefinedColumns.map(item => (
+            <DropdownItem
+              key={item.key}
+              className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
+              onMouseEnter={() => setCustomPropertiesOpen(false)}
+              onClick={() => handleSelect(item)}
+            >
+              <Icon symbol={item.icon} className="sf-metadata-icon" />
+              <span>{item.name}</span>
+            </DropdownItem>
+          ))}
+          {basicsColumns.length > 0 && (
+            <>
+              <DropdownItem className="w-100" divider />
+              <Dropdown
+                className="w-100"
+                direction="end"
+                isOpen={isCustomPropertiesOpen}
+                toggle={toggleCustomProperties}
+                onMouseEnter={() => setCustomPropertiesOpen(true)}
+                onMouseMove={(e) => {e.stopPropagation();}}
               >
-                <Icon symbol={item.icon} className="sf-metadata-icon" />
-                <span>{item.name}</span>
-              </DropdownItem>
-            ))}
-            {basicsColumns.length > 0 && (
-              <>
-                <DropdownItem className="w-100" divider />
-                <Dropdown
-                  className="w-100"
-                  direction="end"
-                  isOpen={isCustomPropertiesOpen}
-                  toggle={toggleCustomProperties}
-                  onMouseEnter={() => setCustomPropertiesOpen(true)}
-                  onMouseMove={(e) => {e.stopPropagation();}}
+                <DropdownToggle
+                  tag='span'
+                  className="column-type-item dropdown-item text-truncate d-flex align-items-center"
                 >
-                  <DropdownToggle
-                    tag='span'
-                    className="column-type-item dropdown-item text-truncate d-flex align-items-center"
-                  >
-                    <Icon symbol="edit" className="sf-metadata-icon" />
-                    <span className="mr-auto">{gettext('Custom properties')}</span>
-                    <i className="sf3-font-down sf3-font rotate-270"></i>
-                  </DropdownToggle>
-                  <DropdownMenu container="body" style={{ zIndex: 1061 }}>
-                    {basicsColumns.map((item, index) => (
-                      <DropdownItem
-                        key={index}
-                        className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
-                        onClick={() => handleSelect(item)}
-                      >
-                        <Icon symbol={item.icon} className="sf-metadata-icon" />
-                        <span>{item.name}</span>
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-              </>
-            )}
-          </>
-        )}
-      </DropdownMenu>
-    </ModalPortal>
+                  <Icon symbol="edit" className="sf-metadata-icon" />
+                  <span className="mr-auto">{gettext('Custom properties')}</span>
+                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                </DropdownToggle>
+                <DropdownMenu>
+                  {basicsColumns.map((item, index) => (
+                    <DropdownItem
+                      key={index}
+                      className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
+                      onClick={() => handleSelect(item)}
+                    >
+                      <Icon symbol={item.icon} className="sf-metadata-icon" />
+                      <span>{item.name}</span>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </>
+          )}
+        </>
+      )}
+    </DropdownMenu>
   );
 };
 
