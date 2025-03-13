@@ -279,10 +279,7 @@ class LibContentView extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.path !== this.state.path) {
-      this.setState({ currentDirent: null });
-    }
+  componentDidUpdate() {
     this.lastModifyTime = new Date();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: this.props.repoID,
@@ -1089,7 +1086,7 @@ class LibContentView extends React.Component {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(nodePath);
       tree.expandNode(node);
-      this.setState({ treeData: tree, currentNode: node });
+      this.setState({ treeData: tree, currentNode: nodePath !== '/' ? node : null });
     }
 
     this.showDir(nodePath);
@@ -1853,6 +1850,7 @@ class LibContentView extends React.Component {
       this.setState({
         isTreeDataLoading: false,
         treeData: tree,
+        currentNode: tree.getNodeByPath(path),
         userPerm: user_perm,
       });
     }).catch(() => {
@@ -1869,6 +1867,7 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) {
+      this.setState({ currentNode: node, path: node.path });
       let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
@@ -1907,10 +1906,12 @@ class LibContentView extends React.Component {
       this.showDir(node.path);
     } else {
       if (Utils.isFileMetadata(node?.object?.type)) {
+        this.setState({ currentNode: null });
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000');
         }
       } else if (Utils.isTags(node?.object?.type)) {
+        this.setState({ currentNode: null });
         if (node.path !== this.state.path) {
           this.showTagsView(node.path, node.tag_id);
         }
@@ -1956,7 +1957,9 @@ class LibContentView extends React.Component {
 
   renameTreeNode = (path, newName) => {
     let tree = treeHelper.renameNodeByPath(this.state.treeData, path, newName);
-    this.setState({ treeData: tree });
+    const newPath = Utils.joinPath(Utils.getDirName(path), newName);
+    const currentNode = path === this.state.currentNode?.path ? tree.getNodeByPath(newPath) : this.state.currentNode;
+    this.setState({ treeData: tree, currentNode });
   };
 
   deleteTreeNode = (path) => {
@@ -2192,7 +2195,7 @@ class LibContentView extends React.Component {
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
-      path, usedRepoTags, isDirentSelected, currentMode } = this.state;
+      path, usedRepoTags, isDirentSelected, currentMode, currentNode } = this.state;
 
     if (this.state.libNeedDecrypt) {
       return (
@@ -2258,6 +2261,11 @@ class LibContentView extends React.Component {
       currentDirent = currentDirent.toJson();
     }
 
+    let detailPath = this.state.path;
+    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
+      detailPath = Utils.getDirName(this.state.path);
+    }
+    const detailDirent = currentDirent || currentNode?.object || null;
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
@@ -2443,10 +2451,10 @@ class LibContentView extends React.Component {
                     }
                     {!isCustomPermission && this.state.isDirentDetailShow && (
                       <Detail
-                        path={this.state.path}
+                        path={detailPath}
                         repoID={this.props.repoID}
                         currentRepoInfo={{ ...this.state.currentRepoInfo }}
-                        dirent={currentDirent}
+                        dirent={detailDirent}
                         repoTags={this.state.repoTags}
                         fileTags={this.state.isViewFile ? this.state.fileTags : []}
                         onFileTagChanged={this.onFileTagChanged}

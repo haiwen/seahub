@@ -43,6 +43,8 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
     return (<LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />);
   }
 
+  if (!dirent) return null;
+
   return (
     <DirentDetail
       repoID={repoID}
