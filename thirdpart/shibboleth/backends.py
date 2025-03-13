@@ -56,9 +56,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
         if not shib_user and SSO_LDAP_USE_SAME_UID:
             shib_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, remote_user)
-            if shib_user:
-                SocialAuthUser.objects.add_if_not_exists(shib_user.username, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
-                
+            
         if shib_user:
             try:
                 user = User.objects.get(email=shib_user.username)
