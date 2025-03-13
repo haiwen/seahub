@@ -41,7 +41,7 @@ from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
-from seahub.api2.utils import get_search_repos
+from seahub.api2.utils import get_search_repos, is_wiki_repo
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -858,6 +858,9 @@ class Repos(APIView):
                 if r.is_virtual:
                     continue
 
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -914,6 +917,10 @@ class Repos(APIView):
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -979,6 +986,10 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in group_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -1024,6 +1035,10 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
