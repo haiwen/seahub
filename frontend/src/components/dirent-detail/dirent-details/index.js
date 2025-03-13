@@ -11,7 +11,6 @@ import FileDetails from './file-details';
 import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { Settings, AI } from '../../../metadata/components/metadata-details';
-import { getDirentPath } from './utils';
 
 import './index.css';
 
@@ -103,7 +102,7 @@ class DirentDetails extends React.Component {
 
   render() {
     const { dirent, direntDetail } = this.state;
-    const { repoID, fileTags } = this.props;
+    const { repoID, fileTags, path } = this.props;
 
     if (!dirent || !direntDetail) {
       return (
@@ -116,16 +115,11 @@ class DirentDetails extends React.Component {
       );
     }
 
-    let path = this.props.path;
-    if (dirent?.type !== 'file') {
-      path = this.props.dirent ? Utils.joinPath(path, dirent.name) : path;
-    }
-
     return (
       <MetadataDetailsProvider
         repoID={repoID}
         repoInfo={this.props.currentRepoInfo}
-        path={getDirentPath(dirent, path)}
+        path={path}
         dirent={dirent}
         direntDetail={direntDetail}
         direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
