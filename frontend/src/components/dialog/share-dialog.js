@@ -326,7 +326,9 @@ class ShareDialog extends React.Component {
       <div>
         <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog} tag="div">
-            <h5 className="text-truncate">{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></h5>
+            <h5 className="text-truncate m-0">
+              {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
+            </h5>
             {this.renderExternalShareMessage()}
           </SeahubModalHeader>
           <ModalBody className="share-dialog-content" role="tablist">
