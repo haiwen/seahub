@@ -614,5 +614,10 @@
   "Image_cannot_be_copied_Please_download_the_source_image": "L'image ne peut pas être copiée. Télécharger l'image.",
   "And_select_insert_-_image_to_upload": "et sélectionner 「insert」 - 「image」 pour importer.",
   "Image_copy_error": "Erreur copie de l'image",
-  "Image_is_uploading": "Image is uploading..."
+  "Image_is_uploading": "Image is uploading...",
+  "Select_at_least_one_row_record": "Select at least one row record",
+  "Selected_row_records_cannot_exceed_10_rows": "Selected row records cannot exceed 10 rows",
+  "Select_seatable_rows": "Select seatable rows",
+  "Add_rows_record": "Add rows record",
+  "Double_click_then_adjust_field_width": "Double click, then adjust field width"
 }

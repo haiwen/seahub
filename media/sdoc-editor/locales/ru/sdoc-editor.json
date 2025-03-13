@@ -614,5 +614,10 @@
   "Image_cannot_be_copied_Please_download_the_source_image": "Изображение не может быть скопировано. Скачайте исходное изображение,",
   "And_select_insert_-_image_to_upload": "и выбрать 「вставить」 - 「изображение」 для загрузки.",
   "Image_copy_error": "Ошибка копирования изображения",
-  "Image_is_uploading": "Изображение загружается..."
+  "Image_is_uploading": "Изображение загружается...",
+  "Select_at_least_one_row_record": "Выберите хотя бы одну запись",
+  "Selected_row_records_cannot_exceed_10_rows": "Выбранные записи строк не могут превышать 10 строк",
+  "Select_seatable_rows": "Выберите доступные для размещения строки",
+  "Add_rows_record": "Добавить записи строк",
+  "Double_click_then_adjust_field_width": "Дважды щелкните, затем отрегулируйте ширину поля"
 }

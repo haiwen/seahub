@@ -594,7 +594,7 @@
   "Try_again": "再试一次",
   "Deprecation": "弃用",
   "Generated_content_x_words": "已生成内容 {{count}} 字",
-  "Ask_AI_anything": "询问 AI 任何事情...",
+  "Ask_AI_anything": "请输入指令...",
   "Thinking": "思考中...",
   "Translation_error_message": "翻译出错，请重试",
   "The_translation_content_cannot_be_empty": "翻译内容不能为空",
@@ -614,5 +614,10 @@
   "Image_cannot_be_copied_Please_download_the_source_image": "此照片不支持复制，请下载原图",
   "And_select_insert_-_image_to_upload": "后点击工具栏「插入」- 「照片」上传",
   "Image_copy_error": "图片复制错误",
-  "Image_is_uploading": "图片正在上传..."
+  "Image_is_uploading": "图片正在上传...",
+  "Select_at_least_one_row_record": "选择至少一行记录",
+  "Selected_row_records_cannot_exceed_10_rows": "选择的行记录不能超过10条",
+  "Select_seatable_rows": "选择 Seatable 行",
+  "Add_rows_record": "添加行记录",
+  "Double_click_then_adjust_field_width": "双击后调节字段宽度"
 }

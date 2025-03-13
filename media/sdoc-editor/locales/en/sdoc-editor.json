@@ -594,7 +594,7 @@
   "Try_again": "Try again",
   "Deprecation": "Deprecation",
   "Generated_content_x_words": "Generated content {{count}} words",
-  "Ask_AI_anything": "Ask AI anything...",
+  "Ask_AI_anything": "Please enter the command...",
   "Thinking": "Thinking...",
   "Translation_error_message": "Translation error, please try again.",
   "The_translation_content_cannot_be_empty": "The translation content cannot be empty",
