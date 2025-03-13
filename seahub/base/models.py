@@ -480,9 +480,11 @@ class RepoTransfer(models.Model):
 
 class QuotaAlertEmailRecordManager(models.Manager):
 
-    def get_records_within_days(self, days=3):
+    def get_records_within_days(self, days=3, emails=None):
         today_now = datetime.datetime.now()
         n_days_before = today_now - datetime.timedelta(days=days)
+        if emails:
+            return self.filter(last_emailed_at__gt=n_days_before, email__in=emails)
         return self.filter(last_emailed_at__gt=n_days_before)
     
     def create_or_update(self, email):

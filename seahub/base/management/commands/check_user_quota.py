@@ -96,24 +96,31 @@ class Command(BaseCommand):
 
         elif auto_run == 'true':
             # get total users
-            user_obj_list = ccnet_api.get_emailusers('DB', -1, -1) + \
-                            ccnet_api.get_emailusers('LDAPImport', -1, -1)
-            
-            user_obj_email_list = [u.email for u in user_obj_list]
-            email_should_handle = []
-            # get users from send records
-            if QUOTA_ALERT_DAY_INTERVAL <= 0:
-                # ignore the users which already have records
-                records = QuotaAlertEmailRecord.objects.all()
-            else:
-                # ignore the users which have records within n days
-                records = QuotaAlertEmailRecord.objects.get_records_within_days(days=QUOTA_ALERT_DAY_INTERVAL)
+            start = 0
+            limit = 100
+            while True:
+                user_obj_list = ccnet_api.get_emailusers('DB', start, limit)
                 
-            email_records = [r.email for r in records]
-            email_should_handle = list(set(user_obj_email_list) - set(email_records))
-
-            for email in email_should_handle:
-                self.send_email(email, True)
+                user_obj_email_list = [u.email for u in user_obj_list]
+                email_should_handle = []
+                # get users from send records
+                if QUOTA_ALERT_DAY_INTERVAL <= 0:
+                    # ignore the users which already have records
+                    records = QuotaAlertEmailRecord.objects.filter(email__in=user_obj_email_list)
+                else:
+                    # ignore the users which have records within n days
+                    records = QuotaAlertEmailRecord.objects.get_records_within_days(days=QUOTA_ALERT_DAY_INTERVAL, emails=user_obj_email_list)
+                    
+                email_records = [r.email for r in records]
+                email_should_handle = list(set(user_obj_email_list) - set(email_records))
+    
+                for email in email_should_handle:
+                    self.send_email(email, True)
+                    
+                if len(user_obj_email_list) < limit:
+                    break
+                
+                start += limit
             
         else:
             user_obj_list = ccnet_api.get_emailusers('DB', -1, -1) + \
