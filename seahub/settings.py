@@ -961,6 +961,12 @@ FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
 ENABLE_WHITEBOARD = False
 
+##########################
+# Settings for exceldraw    #
+##########################
+
+ENABLE_EXCELDRAW = False
+
 ############################
 # Settings for Seahub Priv #
 ############################
