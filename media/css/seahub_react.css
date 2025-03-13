@@ -790,7 +790,7 @@ a, a:hover {
 .nav-pills .nav-item .nav-link.active {
   background-color: #ff9800;
   color: #fff;
-  border: none;
+  border-bottom: 0.125rem solid transparent;
 }
 
 .cur-view-path.tab-nav-container {
@@ -1190,6 +1190,11 @@ table td {
   color: #212529;
   font-size: 0.875rem;
   word-break: break-all;
+}
+
+.table>:not(caption)>*>*,
+.text-wrap table>:not(caption)>*>* {
+  box-shadow: none;
 }
 
 .table-thead-hidden thead tr {
