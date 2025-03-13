@@ -560,6 +560,7 @@ class LibContentView extends React.Component {
     this.setState({
       isDirentListLoading: true,
       direntList: [],
+      path,
     });
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
       const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
@@ -1080,8 +1081,6 @@ class LibContentView extends React.Component {
   };
 
   onMainNavBarClick = (nodePath) => {
-    // just for dir
-    this.resetSelected(nodePath);
     if (this.state.isTreePanelShown) {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(nodePath);
