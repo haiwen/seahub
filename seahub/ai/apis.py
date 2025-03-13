@@ -324,15 +324,17 @@ class WritingAssistant(APIView):
 
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
+        custom_prompt = request.data.get('custom_prompt')
 
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
-        if not writing_type:
+        if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
         params = {
             'text': text,
             'writing_type': writing_type,
+            'custom_prompt': custom_prompt,
         }
 
         try:
