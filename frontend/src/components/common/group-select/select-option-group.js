@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from '../../search-input';
-import ClickOutside from '../../click-outside';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
 
@@ -26,6 +25,7 @@ class SelectOptionGroup extends Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this.onHotKey);
+    document.addEventListener('mousedown', this.handleDocumentClick);
     setTimeout(() => {
       this.resetMenuStyle();
     }, 1);
@@ -35,7 +35,12 @@ class SelectOptionGroup extends Component {
     this.filterOptions = null;
     this.timer && clearTimeout(this.timer);
     window.removeEventListener('keydown', this.onHotKey);
+    document.removeEventListener('mousedown', this.handleDocumentClick);
   }
+
+  handleDocumentClick = (e) => {
+    this.props.onClickOutside(e);
+  };
 
   resetMenuStyle = () => {
     const { isInModal, position } = this.props;
@@ -170,27 +175,25 @@ class SelectOptionGroup extends Component {
       };
     }
     return (
-      <ClickOutside onClickOutside={this.props.onClickOutside}>
-        <div
-          className={classnames('pt-0 option-group', className ? 'option-group-' + className : '')}
-          ref={(ref) => this.optionGroupRef = ref}
-          style={style}
-          onMouseDown={this.onMouseDown}
-        >
-          <div className="option-group-search position-relative">
-            <SearchInput
-              className="option-search-control"
-              autoFocus={isInModal}
-              placeholder={searchPlaceholder}
-              onChange={this.onChangeSearch}
-              ref={this.searchInputRef}
-            />
-          </div>
-          <div className="option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>
-            {this.renderOptGroup(searchVal)}
-          </div>
+      <div
+        className={classnames('pt-0 option-group', className ? 'option-group-' + className : '')}
+        ref={(ref) => this.optionGroupRef = ref}
+        style={style}
+        onMouseDown={this.onMouseDown}
+      >
+        <div className="option-group-search position-relative">
+          <SearchInput
+            className="option-search-control"
+            autoFocus={isInModal}
+            placeholder={searchPlaceholder}
+            onChange={this.onChangeSearch}
+            ref={this.searchInputRef}
+          />
         </div>
-      </ClickOutside>
+        <div className="option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>
+          {this.renderOptGroup(searchVal)}
+        </div>
+      </div>
     );
   }
 }
