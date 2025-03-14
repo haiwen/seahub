@@ -169,9 +169,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     setLoading(true);
     direntRef.current = dirent;
 
-    const dirName = Utils.getDirName(path);
-    const fileName = Utils.getFileName(path);
-    let parentDir = direntType === 'file' ? dirName : dirName.slice(0, dirName.length - fileName.length - 1);
+    const fileName = dirent.name;
+    let parentDir = path;
 
     if (!parentDir.startsWith('/')) {
       parentDir = '/' + parentDir;

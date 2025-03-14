@@ -4,14 +4,12 @@ import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
-import Dirent from '../../../models/dirent';
 import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { Settings, AI } from '../../../metadata/components/metadata-details';
-import { getDirentPath } from './utils';
 
 import './index.css';
 
@@ -21,40 +19,12 @@ class DirentDetails extends React.Component {
     super(props);
     this.state = {
       direntDetail: '',
-      dirent: null,
     };
   }
 
   updateDetail = (repoID, dirent, direntPath) => {
-    if (!dirent) {
-      this.setState({ dirent: null, direntDetail: '' });
-      return;
-    }
     seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, direntPath).then(res => {
-      this.setState(({
-        direntDetail: res.data,
-        dirent,
-      }));
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  loadDetail = (repoID, dirent, path) => {
-    if (dirent) {
-      const direntPath = Utils.joinPath(path, dirent.name);
-      this.updateDetail(repoID, dirent, direntPath);
-      return;
-    }
-    const dirPath = Utils.getDirName(path);
-    seafileAPI.listDir(repoID, dirPath).then(res => {
-      const direntList = res.data.dirent_list;
-      let folderDirent = direntList.find(item => item.parent_dir + item.name === path) || null;
-      if (folderDirent) {
-        folderDirent = new Dirent(folderDirent);
-      }
-      this.updateDetail(repoID, folderDirent, path);
+      this.setState({ direntDetail: res.data });
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -62,7 +32,8 @@ class DirentDetails extends React.Component {
   };
 
   componentDidMount() {
-    this.loadDetail(this.props.repoID, this.props.dirent, this.props.path);
+    const fullPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    this.updateDetail(this.props.repoID, this.props.dirent, fullPath);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -71,19 +42,16 @@ class DirentDetails extends React.Component {
         !ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name']) ||
         JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
         JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
-        path !== nextProps.path ||
+        (path !== nextProps.path && !ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name'])) ||
         repoID !== nextProps.repoID
     ) {
-      this.setState({ dirent: null }, () => {
-        this.loadDetail(nextProps.repoID, nextProps.dirent, nextProps.path);
-      });
-    } else if (nextProps.dirent && ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name'])) {
-      this.setState({ dirent: nextProps.dirent });
+      const fullPath = Utils.joinPath(nextProps.path, nextProps.dirent.name);
+      this.updateDetail(nextProps.repoID, nextProps.dirent, fullPath);
     }
   }
 
   renderImage = () => {
-    const { dirent } = this.state;
+    const { dirent } = this.props;
     if (!dirent) return null;
     const isImg = Utils.imageCheck(dirent.name);
     if (!isImg) return null;
@@ -102,9 +70,8 @@ class DirentDetails extends React.Component {
   };
 
   render() {
-    const { dirent, direntDetail } = this.state;
-    const { repoID, fileTags } = this.props;
-
+    const { direntDetail } = this.state;
+    const { repoID, fileTags, path, dirent } = this.props;
     if (!dirent || !direntDetail) {
       return (
         <Detail>
@@ -116,16 +83,11 @@ class DirentDetails extends React.Component {
       );
     }
 
-    let path = this.props.path;
-    if (dirent?.type !== 'file') {
-      path = this.props.dirent ? Utils.joinPath(path, dirent.name) : path;
-    }
-
     return (
       <MetadataDetailsProvider
         repoID={repoID}
         repoInfo={this.props.currentRepoInfo}
-        path={getDirentPath(dirent, path)}
+        path={path}
         dirent={dirent}
         direntDetail={direntDetail}
         direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
@@ -163,7 +125,7 @@ class DirentDetails extends React.Component {
 
 DirentDetails.propTypes = {
   repoID: PropTypes.string.isRequired,
-  dirent: PropTypes.object,
+  dirent: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
