@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
-import { Utils } from '../../utils/utils';
+import { Utils, isMobile } from '../../utils/utils';
 import { gettext, wikiId } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import ModalPortal from '../../components/modal-portal';
@@ -137,13 +137,22 @@ class Content extends React.Component {
 
   constructor(props) {
     super(props);
-    this.theadData = [
-      { width: '5%', text: gettext('Name') },
-      { width: '20%', text: '' },
-      { width: '30%', text: gettext('Size') },
-      { width: '35%', text: gettext('Delete Time') },
-      { width: '10%', text: '' }
-    ];
+    if (isMobile) {
+      this.theadData = [
+        { width: '30%', text: gettext('Name') },
+        { width: '20%', text: gettext('Size') },
+        { width: '30%', text: gettext('Delete Time') },
+        { width: '20%', text: '' }
+      ];
+    } else {
+      this.theadData = [
+        { width: '5%', text: gettext('Name') },
+        { width: '20%', text: '' },
+        { width: '30%', text: gettext('Size') },
+        { width: '35%', text: gettext('Delete Time') },
+        { width: '10%', text: '' }
+      ];
+    }
   }
 
   getPreviousPage = () => {
@@ -251,6 +260,16 @@ class Item extends React.Component {
       return null;
     }
     const { isAdmin } = window.wiki.config;
+    if (isMobile) {
+      return (
+        <tr>
+          <td>{item.name}</td>
+          <td>{Utils.bytesToSize(item.size)}</td>
+          <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
+          <td>{isAdmin && <a href="#" onClick={this.restoreItem} role="button">{gettext('Restore')}</a>}</td>
+        </tr>
+      );
+    }
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><NavItemIcon symbol={'file'} disable={true} /></td>
