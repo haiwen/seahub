@@ -1,7 +1,10 @@
 import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
-import { getRowsByIds } from '../../components/sf-table/utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import { getParentLinks, getChildLinks } from './cell';
+import { PRIVATE_COLUMN_KEY } from '../constants';
+import { compareTwoString } from '../../utils/compare-two-string';
+import { ALL_TAGS_SORT_KEY, TAGS_DEFAULT_SORT } from '../constants/sort';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';
 
@@ -95,4 +98,72 @@ export const buildTagsTree = (rows, table) => {
 
 export const getAllChildTagsIdsFromNode = (node) => {
   return (node && node[KEY_ALL_CHILD_TAGS_IDS]) || [];
+};
+
+export const sortTree = (table, tree, sort = TAGS_DEFAULT_SORT) => {
+  const getAllFileCount = (node) => {
+    let count = 0;
+    count += getRowById(table, getTreeNodeId(node))[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]?.length || 0;
+    node.all_child_tags_ids.forEach((id) => {
+      const row = getRowById(table, id);
+      const links = row[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS] || [];
+      count += links.length;
+    });
+    return count;
+  };
+
+  const compare = (a, b) => {
+    let valueA;
+    let valueB;
+
+    switch (sort.sortBy) {
+      case ALL_TAGS_SORT_KEY.NAME:
+        const rowA = getRowById(table, getTreeNodeId(a));
+        const rowB = getRowById(table, getTreeNodeId(b));
+        valueA = rowA[PRIVATE_COLUMN_KEY.TAG_NAME] || '';
+        valueB = rowB[PRIVATE_COLUMN_KEY.TAG_NAME] || '';
+        break;
+      case ALL_TAGS_SORT_KEY.CHILD_TAGS_COUNT:
+        valueA = (a.children || []).length;
+        valueB = (b.children || []).length;
+        break;
+      case ALL_TAGS_SORT_KEY.TAG_FILE_COUNT:
+        valueA = getAllFileCount(a);
+        valueB = getAllFileCount(b);
+        break;
+      default:
+        throw new Error(`Unsupported sortBy parameter: ${sort.sortBy}`);
+    }
+
+    const result =
+    sort.sortBy === ALL_TAGS_SORT_KEY.NAME
+      ? compareTwoString(valueA, valueB) // String comparison for name
+      : valueA - valueB; // Numeric comparison for count
+
+    return sort.order === 'asc' ? result : -result;
+  };
+
+  const sortNodesRecursively = (nodes, allNodes) => {
+    const sortedNodes = [];
+
+    nodes.forEach((node) => {
+      sortedNodes.push(node);
+
+      const children = allNodes.filter(
+        (child) => child.node_key.startsWith(node.node_key) && child.node_depth === node.node_depth + 1
+      );
+
+      if (children.length > 0) {
+        const sortedChildren = sortNodesRecursively(children, allNodes);
+        sortedNodes.push(...sortedChildren);
+      }
+    });
+
+    return sortedNodes;
+  };
+
+  tree.sort(compare);
+
+  const topLevelNodes = tree.filter((node) => node.node_depth === 0);
+  return sortNodesRecursively(topLevelNodes, tree);
 };
