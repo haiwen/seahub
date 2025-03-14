@@ -27,13 +27,14 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   }, []);
 
   useEffect(() => {
-    seafileAPI.getFileInfo(repoID, path).then(res => {
+    const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
+    seafileAPI.getFileInfo(repoID, fullPath).then(res => {
       setDirentDetail(res.data);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, path]);
+  }, [repoID, path, dirent]);
 
   useEffect(() => {
     if (isView || isTag) return;
