@@ -55,7 +55,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
 
   const renderSidePanel = () => {
     const dirent = { id, name, type: 'file' };
-    const path = Utils.joinPath(mainImg.parentDir, name);
+    const path = mainImg.parentDir;
 
     return (
       <div
