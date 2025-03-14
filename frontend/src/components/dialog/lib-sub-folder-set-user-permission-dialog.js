@@ -242,18 +242,21 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
     if (this.state.showFileChooser) {
       return (
-        <div>
+        <>
+          <div className="d-flex align-items-center justify-content-between pb-2 border-bottom">
+            <h6 className="font-weight-normal m-0">
+              <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.toggleFileChooser} title={gettext('Back')} aria-label={gettext('Back')}></button>
+              {gettext('Add Folder')}
+            </h6>
+            <Button color="primary" size="sm" outline={true} onClick={this.handleFileChooserSubmit}>{gettext('Submit')}</Button>
+          </div>
           <FileChooser
             repoID={this.props.repoID}
             mode={'only_current_library'}
             onDirentItemClick={this.toggleSubFolder}
             onRepoItemClick={this.onRepoItemClick}
           />
-          <div className="modal-footer">
-            <Button color="secondary" onClick={this.toggleFileChooser}>{gettext('Cancel')}</Button>
-            <Button color="primary" onClick={this.handleFileChooserSubmit}>{gettext('Submit')}</Button>
-          </div>
-        </div>
+        </>
       );
     }
 

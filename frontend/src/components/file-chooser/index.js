@@ -448,7 +448,7 @@ class FileChooser extends React.Component {
     return (
       <>
         {(isPro && mode !== 'recently_used') && (
-          <div className="file-chooser-search-input">
+          <div className="file-chooser-search-input py-4">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
               <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
