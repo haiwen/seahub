@@ -44,6 +44,7 @@ class SortMenu extends React.Component {
         isSelected: item.value == `${sortBy}-${sortOrder}`
       };
     });
+
     return (
       <Dropdown
         isOpen={isDropdownMenuOpen}
