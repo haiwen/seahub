@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -13,6 +13,7 @@ import SharePermissionEditor from '../../components/select-editor/share-permissi
 import SharedFolderInfo from '../../models/shared-folder-info';
 import PermSelect from '../../components/dialog/perm-select';
 import FixedWidthTable from '../../components/common/fixed-width-table';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 class Content extends Component {
 
@@ -88,7 +89,6 @@ class Item extends Component {
       share_permission: this.props.item.share_permission,
       share_permission_name: this.props.item.share_permission_name,
       isOpIconShown: false,
-      isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
       unshared: false,
       isShowPermEditor: false,
@@ -99,12 +99,6 @@ class Item extends Component {
       this.permissions.push('cloud-edit', 'preview');
     }
   }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
-  };
 
   togglePermSelectDialog = () => {
     this.setState({
@@ -260,23 +254,10 @@ class Item extends Component {
               <span className="item-meta-info">{`${gettext('Share To:')} ${item.share_type == 'personal' ? item.user_name : item.group_name}`}</span>
             </td>
             <td>
-              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownToggle
-                  tag="i"
-                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isOpMenuOpen}
-                />
-                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                  <div className="mobile-operation-menu-bg-layer"></div>
-                  <div className="mobile-operation-menu">
-                    <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
-                    <DropdownItem className="mobile-menu-item" onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>
-                  </div>
-                </div>
-              </Dropdown>
+              <MobileItemMenu>
+                <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
+                <DropdownItem className="mobile-menu-item" onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>
+              </MobileItemMenu>
             </td>
           </tr>
           {isPermSelectDialogOpen && (

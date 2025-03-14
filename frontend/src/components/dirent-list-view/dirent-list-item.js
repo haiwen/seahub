@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -22,6 +22,7 @@ import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import FileTag from './file-tag';
 
 import '../../css/dirent-list-item.css';
@@ -95,8 +96,7 @@ class DirentListItem extends React.Component {
       isDragTipShow: false,
       isDropTipshow: false,
       isEditFileTagShow: false,
-      isPermissionDialogOpen: false,
-      isOpMenuOpen: false // for mobile
+      isPermissionDialogOpen: false
     };
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
     this.isGeneratingThumbnail = false;
@@ -190,12 +190,6 @@ class DirentListItem extends React.Component {
     let dirent = this.state.dirent;
     dirent.encoded_thumbnail_src = encoded_thumbnail_src;
     this.setState({ dirent });
-  };
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
   };
 
   // UI Interactive
@@ -947,42 +941,27 @@ class DirentListItem extends React.Component {
               <span className="item-meta-info">{dirent.mtime_relative}</span>
             </td>
             <td>
-              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownToggle
-                  tag="i"
-                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isOpMenuOpen}
-                />
-                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                  <div className="mobile-operation-menu-bg-layer"></div>
-                  <div className="mobile-operation-menu">
-                    {dirent.starred !== undefined &&
-                      <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
-                        {dirent.starred ? gettext('Unstar') : gettext('Star')}
+              <MobileItemMenu>
+                {dirent.starred !== undefined &&
+                <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
+                  {dirent.starred ? gettext('Unstar') : gettext('Star')}
+                </DropdownItem>
+                }
+                {this.props.getDirentItemMenuList(dirent, true)
+                  .filter(item => item != 'Divider' && item.key != 'Open via Client')
+                  .map((item, index) => {
+                    return (
+                      <DropdownItem
+                        className="mobile-menu-item"
+                        key={index}
+                        data-op={item.key}
+                        onClick={this.onMobileMenuItemClick}
+                      >
+                        {item.value}
                       </DropdownItem>
-                    }
-                    {this.props.getDirentItemMenuList(dirent, true).map((item, index) => {
-                      if (item != 'Divider' && item.key != 'Open via Client') {
-                        return (
-                          <DropdownItem
-                            className="mobile-menu-item"
-                            key={index}
-                            data-op={item.key}
-                            onClick={this.onMobileMenuItemClick}
-                          >
-                            {item.value}
-                          </DropdownItem>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
-                  </div>
-                </div>
-              </Dropdown>
+                    );
+                  })}
+              </MobileItemMenu>
             </td>
           </tr>
         }

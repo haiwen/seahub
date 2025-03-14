@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -10,6 +10,7 @@ import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail, thumbnailD
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 dayjs.extend(relativeTime);
 
@@ -135,16 +136,9 @@ class Item extends Component {
     super(props);
     this.state = {
       showOpIcon: false,
-      unstarred: false,
-      isOpMenuOpen: false // for mobile
+      unstarred: false
     };
   }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
-  };
 
   handleMouseOver = () => {
     this.setState({
@@ -205,21 +199,9 @@ class Item extends Component {
           <span className="item-meta-info" dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></span>
         </td>
         <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                <DropdownItem className="mobile-menu-item" onClick={this.unstar}>{gettext('Unstar')}</DropdownItem>
-              </div>
-            </div>
-          </Dropdown>
+          <MobileItemMenu>
+            <DropdownItem className="mobile-menu-item" onClick={this.unstar}>{gettext('Unstar')}</DropdownItem>
+          </MobileItemMenu>
         </td>
       </tr>
     );

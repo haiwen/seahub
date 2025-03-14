@@ -1426,6 +1426,11 @@ a.table-sort-op:hover {
     font-size: 0.75rem;
   }
 
+  .mobile-dropdown-menu {
+    position: static!important;
+    transform: none!important;
+  }
+
   .mobile-operation-menu-bg-layer {
     position: fixed;
     left: 0;
@@ -1434,7 +1439,7 @@ a.table-sort-op:hover {
     bottom: 0;
     background: #000;
     opacity: 0.4;
-    z-index: 103;
+    z-index: 1051; /* higher than 1050 which was set for .modal */
   }
 
   .mobile-operation-menu {
@@ -1445,7 +1450,7 @@ a.table-sort-op:hover {
     padding: .5em 0;
     background: #fff;
     text-align: center;
-    z-index: 104;
+    z-index: 1052;
   }
 
   /* toolbar icon */

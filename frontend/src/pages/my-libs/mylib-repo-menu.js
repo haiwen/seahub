@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -251,27 +252,11 @@ class MylibRepoMenu extends React.Component {
     this.props.isStarred ? operations.unshift('Unstar') : operations.unshift('Star');
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle
-          tag="i"
-          className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-          title={gettext('More operations')}
-          aria-label={gettext('More operations')}
-          data-toggle="dropdown"
-          aria-expanded={this.state.isItemMenuShow}
-        />
-        <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
-          <div className="mobile-operation-menu-bg-layer"></div>
-          <div className="mobile-operation-menu">
-            {operations.map((item, index) => {
-              if (item != 'Divider') {
-                return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
-              }
-              return null;
-            })}
-          </div>
-        </div>
-      </Dropdown>
+      <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+        {operations.filter(item => item != 'Divider').map((item, index) => {
+          return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
+        })}
+      </MobileItemMenu>
     );
   }
 }

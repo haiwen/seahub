@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { Utils, isMobile } from '../../../../../utils/utils';
 import { gettext, siteRoot } from '../../../../../utils/constants';
 import { seafileAPI } from '../../../../../utils/seafile-api';
 import toaster from '../../../../toast';
+import MobileItemMenu from '../../../../../components/mobile-item-menu';
 
 class FileRecord extends React.Component {
 
@@ -13,16 +14,9 @@ class FileRecord extends React.Component {
     super(props);
     this.state = {
       restored: false,
-      isIconShown: false,
-      isOpMenuOpen: false // for mobile
+      isIconShown: false
     };
   }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
-  };
 
   handleMouseOver = () => {
     this.setState({ isIconShown: true });
@@ -121,24 +115,11 @@ class FileRecord extends React.Component {
             <span className="item-meta-info" title={dayjs(record.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(record.deleted_time).format('YYYY-MM-DD')}</span>
           </td>
           <td>
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.restoreItem}>
-                    {gettext('Restore')}
-                  </DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
+            <MobileItemMenu>
+              <DropdownItem className="mobile-menu-item" onClick={this.restoreItem}>
+                {gettext('Restore')}
+              </DropdownItem>
+            </MobileItemMenu>
           </td>
         </tr>
       ) : (
@@ -157,24 +138,11 @@ class FileRecord extends React.Component {
             </span>
           </td>
           <td>
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.restoreItem}>
-                    {gettext('Restore')}
-                  </DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
+            <MobileItemMenu>
+              <DropdownItem className="mobile-menu-item" onClick={this.restoreItem}>
+                {gettext('Restore')}
+              </DropdownItem>
+            </MobileItemMenu>
           </td>
         </tr>
       );
