@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { gettext, isPro, cloudMode, isOrgContext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
+import { Utils, isMobile } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
@@ -52,6 +52,65 @@ class UserItem extends React.Component {
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen } = this.state;
+    if (isMobile) {
+      return (
+        <tr>
+          <td className="name">
+            <div className="position-relative d-flex align-items-center">
+              <img
+                src={item.user_info.avatar_url}
+                width="24"
+                alt={item.user_info.nickname}
+                className="rounded-circle mr-2 cursor-pointer"
+                onMouseEnter={this.userAvatarOnMouseEnter}
+                onMouseLeave={this.userAvatarOnMouseLeave}
+              />
+              <span>{item.user_info.nickname}</span>
+              {isUserDetailsPopoverOpen && (
+                <div className="user-details-popover p-4 position-absolute w-100 mt-1">
+                  <div className="user-details-main pb-3">
+                    <img
+                      src={item.user_info.avatar_url}
+                      width="40"
+                      alt={item.user_info.nickname}
+                      className="rounded-circle mr-2"
+                    />
+                    <span className="user-details-name">{item.user_info.nickname}</span>
+                  </div>
+                  <dl className="m-0 mt-3 d-flex">
+                    <dt className="m-0 mr-3">{gettext('Email')}</dt>
+                    <dd className="m-0">{item.user_info.contact_email}</dd>
+                  </dl>
+                </div>
+              )}
+            </div>
+          </td>
+          <td>
+            <SharePermissionEditor
+              repoID={this.props.repoID}
+              isTextMode={true}
+              autoFocus={true}
+              isEditIconShow={true}
+              currentPermission={currentPermission}
+              permissions={this.props.permissions}
+              onPermissionChanged={this.onChangeUserPermission}
+            />
+          </td>
+          <td>
+            <span
+              tabIndex="0"
+              role="button"
+              className='sf2-icon-x3 action-icon'
+              onClick={this.deleteShareItem}
+              onKeyDown={Utils.onKeyDown}
+              title={gettext('Delete')}
+              aria-label={gettext('Delete')}
+            >
+            </span>
+          </td>
+        </tr>
+      );
+    }
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
@@ -438,7 +497,7 @@ class ShareToUser extends React.Component {
       showDeptBtn = false;
     }
     let { sharedItems } = this.state;
-    const thead = (
+    let thead = (
       <thead>
         <tr>
           <th width="47%">{gettext('User')}</th>
@@ -447,9 +506,20 @@ class ShareToUser extends React.Component {
         </tr>
       </thead>
     );
+    if (isMobile) {
+      thead = (
+        <thead>
+          <tr>
+            <th width="43%">{gettext('User')}</th>
+            <th width="35%">{gettext('Permission')}</th>
+            <th width="22%"></th>
+          </tr>
+        </thead>
+      );
+    }
     return (
       <div className="share-link-container">
-        <table className="w-xs-200">
+        <table>
           {thead}
           <tbody>
             <tr>
@@ -485,7 +555,7 @@ class ShareToUser extends React.Component {
                 />
               </td>
               <td>
-                <Button color="primary" onClick={this.shareToUser}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.shareToUser} size={isMobile ? 'sm' : 'md'}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&
@@ -506,7 +576,7 @@ class ShareToUser extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-200">
+          <table className="table-thead-hidden">
             {thead}
             <UserList
               repoID={this.props.repoID}
