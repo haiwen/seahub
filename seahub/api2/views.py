@@ -1264,7 +1264,8 @@ class Repos(APIView):
                                                           pwd_hash_params=pwd_hash_params)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return repo_id, None
 
