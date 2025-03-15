@@ -8,6 +8,7 @@ import '../css/item-dropdown-menu.css';
 const propTypes = {
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
+  sortOptions: PropTypes.array,
   onSelectSortOption: PropTypes.func.isRequired
 };
 
@@ -15,7 +16,7 @@ class SortMenu extends React.Component {
 
   constructor(props) {
     super(props);
-    this.sortOptions = [
+    this.sortOptions = this.props.sortOptions || [
       { value: 'name-asc', text: gettext('By name ascending') },
       { value: 'name-desc', text: gettext('By name descending') },
       { value: 'size-asc', text: gettext('By size ascending') },
@@ -43,6 +44,7 @@ class SortMenu extends React.Component {
         isSelected: item.value == `${sortBy}-${sortOrder}`
       };
     });
+
     return (
       <Dropdown
         isOpen={isDropdownMenuOpen}

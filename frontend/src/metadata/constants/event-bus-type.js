@@ -104,6 +104,7 @@ export const EVENT_BUS_TYPE = {
   DELETE_TAGS: 'delete_tags',
   MERGE_TAGS: 'merge_tags',
   NEW_SUB_TAG: 'new_sub_tag',
+  MODIFY_TAGS_SORT: 'modify_tags_sort',
 
   // file
   FILE_HISTORY: 'file_history',
