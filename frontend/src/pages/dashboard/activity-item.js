@@ -220,7 +220,7 @@ class ActivityItem extends Component {
               <p className="m-0 text-secondary">{op}</p>
               {details}
             </td>
-            <td className="text-right align-top">
+            <td className="text-end align-top">
               <span className="text-secondary mobile-activity-time">
                 <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
               </span>

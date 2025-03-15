@@ -37,7 +37,7 @@ class DepartmentsTreePanel extends Component {
           );
         })}
         <button
-          className='btn btn-secondary btn-block text-left border-0 font-weight-normal new-dept-btn shadow-none'
+          className='btn btn-secondary btn-block text-start border-0 font-weight-normal new-dept-btn shadow-none'
           onClick={() => {this.props.toggleAddDepartment(null);}}
         >
           <i className="sf3-font sf3-font-new new-dept-btn-icon"></i>
