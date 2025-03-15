@@ -617,6 +617,7 @@ CREATE TABLE `organizations_orgsettings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `role` varchar(100) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organizations_orgsettings_org_id_630f6843_uniq` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1465,7 +1466,8 @@ CREATE TABLE `sdoc_notification` (
   `seen` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `sdoc_notification_doc_uuid_username` (`doc_uuid`, `username`),
-  KEY `sdoc_notification_created_at` (`created_at`)
+  KEY `sdoc_notification_created_at` (`created_at`),
+  KEY `idx_user_seen` (`username`, `seen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `base_clientssotoken` (
@@ -1598,4 +1600,23 @@ CREATE TABLE `group_invite_link` (
   PRIMARY KEY (`id`),
   KEY `group_invite_link_group_id` (`group_id`),
   KEY `group_invite_link_token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `repo_extra_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `config_type` varchar(50) NOT NULL,
+  `config_details` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_repo_extra_repo_id` (`repo_id`),
+  UNIQUE KEY `ix_repo_extra_repo_idconfig_type` (`repo_id`, `config_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `org_last_active_time` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `timestamp` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `org_id` (`org_id`),
+  KEY `ix_org_last_active_time_org_id` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
