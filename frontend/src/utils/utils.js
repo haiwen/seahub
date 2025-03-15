@@ -1088,7 +1088,7 @@ export const Utils = {
 
   isInternalMarkdownLink: function (url, repoID) {
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '.*(\\.md)$');
     return re.test(url);
   },
 
@@ -1099,7 +1099,7 @@ export const Utils = {
 
   getPathFromInternalMarkdownLink: function (url, repoID) {
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '.*(\\.md)$');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
@@ -1117,7 +1117,7 @@ export const Utils = {
   isWikiInternalMarkdownLink: function (url, slug) {
     slug = encodeURIComponent(slug);
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*(\\.md)$');
     return re.test(url);
   },
 
@@ -1130,7 +1130,7 @@ export const Utils = {
   getPathFromWikiInternalMarkdownLink: function (url, slug) {
     slug = encodeURIComponent(slug);
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*(\\.md)$');
     var array = re.exec(url);
     var path = array[1];
     try {
