@@ -85,34 +85,3 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
             words[i] = escape(word)
     return ''.join(words)
 urlize = allow_lazy(urlize, str)
-
-
-def xss_risk_check(name):
-    """
-    Check if the input name has the risk of XSS attack.
-
-    :param name: The input string to be checked.
-    :return: True if there is an XSS risk, False otherwise.
-    """
-    # Check if it contains common XSS - related tags
-    xss_tags_pattern = re.compile(r'<(script|img|iframe|a|form|input|select|textarea)[^>]*>|</(script|img|iframe|a|form|input|select|textarea)>', re.IGNORECASE)
-    if xss_tags_pattern.search(name):
-        return True
-
-    # Check if it contains keywords related to event handlers
-    event_handler_pattern = re.compile(r'on\w+\s*=', re.IGNORECASE)
-    if event_handler_pattern.search(name):
-        return True
-
-    # Check if it contains dangerous protocols
-    dangerous_protocols_pattern = re.compile(r'(javascript|data|vbscript):', re.IGNORECASE)
-    if dangerous_protocols_pattern.search(name):
-        return True
-
-    # Check if it contains some special characters that may be used to construct malicious expressions
-    special_chars_pattern = re.compile(r'[<>/\\&"\'%#]')
-    if special_chars_pattern.search(name):
-        return True
-
-    return False
-
