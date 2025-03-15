@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { gettext, isPro, enableShareToDepartment } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
+import { Utils, isMobile } from '../../utils/utils';
 import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import EventBus from '../common/event-bus';
@@ -40,6 +40,36 @@ class GroupItem extends React.Component {
   render() {
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
+    if (isMobile) {
+      return (
+        <tr>
+          <td className='name'>{item.group_info.name}</td>
+          <td>
+            <SharePermissionEditor
+              repoID={this.props.repoID}
+              isTextMode={true}
+              autoFocus={true}
+              isEditIconShow={this.state.isOperationShow}
+              currentPermission={currentPermission}
+              permissions={this.props.permissions}
+              onPermissionChanged={this.onChangeUserPermission}
+            />
+          </td>
+          <td>
+            <span
+              tabIndex="0"
+              role="button"
+              className='sf2-icon-x3 action-icon'
+              onClick={this.deleteShareItem}
+              onKeyDown={Utils.onKeyDown}
+              title={gettext('Delete')}
+              aria-label={gettext('Delete')}
+            >
+            </span>
+          </td>
+        </tr>
+      );
+    }
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className='name'>{item.group_info.name}</td>
@@ -352,7 +382,7 @@ class ShareToGroup extends React.Component {
   };
 
   render() {
-    const thead = (
+    let thead = (
       <thead>
         <tr>
           <th width="47%">{gettext('Group')}</th>
@@ -361,9 +391,20 @@ class ShareToGroup extends React.Component {
         </tr>
       </thead>
     );
+    if (isMobile) {
+      thead = (
+        <thead>
+          <tr>
+            <th width="43%">{gettext('Group')}</th>
+            <th width="35%">{gettext('Permission')}</th>
+            <th width="22%"></th>
+          </tr>
+        </thead>
+      );
+    }
     return (
       <Fragment>
-        <table className="w-xs-200">
+        <table>
           {thead}
           <tbody>
             <tr>
@@ -392,7 +433,7 @@ class ShareToGroup extends React.Component {
                 />
               </td>
               <td>
-                <Button color="primary" onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.shareToGroup} size={isMobile ? 'sm' : 'md'}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&
@@ -408,7 +449,7 @@ class ShareToGroup extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-200">
+          <table className="table-thead-hidden">
             {thead}
             <GroupList
               repoID={this.props.repoID}
