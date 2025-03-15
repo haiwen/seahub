@@ -53,7 +53,7 @@ class OrgStatisticReports extends React.Component {
     this.setState({
       errorMessage: ''
     });
-    window.location.href = url;
+    window.location.href = new URL(url);
   };
 
   render() {
