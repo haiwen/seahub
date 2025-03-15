@@ -47,10 +47,13 @@ class NoticeItem extends React.Component {
       let groupName = detail.group_name;
       let username = detail.group_staff_name;
       let notice = gettext('User {user_link} has added you to {group_link}');
-      let userLink = '<a href=' + userHref + '>' + groupStaff + '</a>';
-      let groupLink = '<a href=' + groupHref + '>' + groupName + '</a>';
-      notice = notice.replace('{user_link}', userLink);
-      notice = notice.replace('{group_link}', groupLink);
+      notice = notice.replace('{user_link}', `{tagA}${groupStaff}{/tagA}`);
+      notice = notice.replace('{group_link}', `{tagB}${groupName}{/tagB}`);
+      notice = Utils.HTMLescape(notice);
+      notice = notice.replace('{tagA}', `<a href='${userHref}'>`);
+      notice = notice.replace('{/tagA}', '</a>');
+      notice = notice.replace('{tagB}', `<a href='${groupHref}'>`);
+      notice = notice.replace('{/tagB}', '</a>');
       return { avatar_url, notice, username };
     }
 
@@ -347,7 +350,7 @@ class NoticeItem extends React.Component {
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
       const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
@@ -375,7 +378,7 @@ class NoticeItem extends React.Component {
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
       const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
