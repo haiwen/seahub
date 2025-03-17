@@ -51,7 +51,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
-  const enableMetadataOtherSettings = enableExtendedPropertiesSetting && enableMetadata;
 
   return (
     <div>
@@ -63,48 +62,98 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
           <Fragment>
             <div className="lib-setting-nav p-4">
               <Nav pills className="flex-column">
-                {enableHistorySetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.HISTORY_SETTING} aria-controls="history-setting-panel">
-                    <NavLink className={activeTab === TAB.HISTORY_SETTING ? 'active' : ''} onClick={(toggleTab.bind(this, TAB.HISTORY_SETTING))} tabIndex="0" onKeyDown={onTabKeyDown}>
+                {enableHistorySetting &&
+                  <NavItem
+                    role="tab"
+                    aria-selected={activeTab === TAB.HISTORY_SETTING}
+                    aria-controls="history-setting-panel"
+                  >
+                    <NavLink
+                      className={activeTab === TAB.HISTORY_SETTING ? 'active' : ''}
+                      onClick={toggleTab.bind(this, TAB.HISTORY_SETTING)}
+                      tabIndex="0"
+                      onKeyDown={onTabKeyDown}
+                    >
                       {gettext('History')}
                     </NavLink>
                   </NavItem>
-                )}
-                {enableAutoDelSetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.AUTO_DEL_SETTING} aria-controls="auto-del-setting-panel">
-                    <NavLink className={activeTab === TAB.AUTO_DEL_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.AUTO_DEL_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
+                }
+                {enableAutoDelSetting &&
+                  <NavItem
+                    role="tab"
+                    aria-selected={activeTab === TAB.AUTO_DEL_SETTING}
+                    aria-controls="auto-del-setting-panel"
+                  >
+                    <NavLink
+                      className={activeTab === TAB.AUTO_DEL_SETTING ? 'active' : ''}
+                      onClick={toggleTab.bind(this, TAB.AUTO_DEL_SETTING)}
+                      tabIndex="0"
+                      onKeyDown={onTabKeyDown}
+                    >
                       {gettext('Auto deletion')}
                     </NavLink>
                   </NavItem>
-                )}
-                {enableExtendedPropertiesSetting && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.EXTENDED_PROPERTIES_SETTING} aria-controls="extended-properties-setting-panel">
-                    <NavLink className={activeTab === TAB.EXTENDED_PROPERTIES_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.EXTENDED_PROPERTIES_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
-                      {gettext('Extended properties')}
-                    </NavLink>
-                  </NavItem>
-                )}
-                {enableMetadataOtherSettings && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING} aria-controls="face-recognition-setting-panel">
-                    <NavLink className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
-                      {gettext('Face recognition')}
-                    </NavLink>
-                  </NavItem>
-                )}
-                {enableMetadataOtherSettings && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.TAGS_SETTING} aria-controls="tags-setting-panel">
-                    <NavLink className={activeTab === TAB.TAGS_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.TAGS_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
-                      {gettext('Tags')}
-                    </NavLink>
-                  </NavItem>
-                )}
-                {enableMetadataOtherSettings && (
-                  <NavItem role="tab" aria-selected={activeTab === TAB.OCR_SETTING} aria-controls="ocr-setting-panel">
-                    <NavLink className={activeTab === TAB.OCR_SETTING ? 'active' : ''} onClick={toggleTab.bind(this, TAB.OCR_SETTING)} tabIndex="0" onKeyDown={onTabKeyDown}>
-                      {gettext('OCR')}
-                    </NavLink>
-                  </NavItem>
-                )}
+                }
+                {enableExtendedPropertiesSetting &&
+                  <>
+                    <NavItem
+                      role="tab"
+                      aria-selected={activeTab === TAB.EXTENDED_PROPERTIES_SETTING}
+                      aria-controls="extended-properties-setting-panel"
+                    >
+                      <NavLink
+                        className={activeTab === TAB.EXTENDED_PROPERTIES_SETTING ? 'active' : ''}
+                        onClick={toggleTab.bind(this, TAB.EXTENDED_PROPERTIES_SETTING)}
+                        tabIndex="0"
+                        onKeyDown={onTabKeyDown}
+                      >
+                        {gettext('Extended properties')}
+                      </NavLink>
+                    </NavItem>
+                    <NavItem
+                      role="tab"
+                      aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}
+                      aria-controls="face-recognition-setting-panel"
+                    >
+                      <NavLink
+                        className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
+                        onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
+                        tabIndex="0"
+                        onKeyDown={onTabKeyDown}
+                      >
+                        {gettext('Face recognition')}
+                      </NavLink>
+                    </NavItem>
+                    <NavItem
+                      role="tab"
+                      aria-selected={activeTab === TAB.TAGS_SETTING}
+                      aria-controls="tags-setting-panel"
+                    >
+                      <NavLink
+                        className={activeTab === TAB.TAGS_SETTING ? 'active' : ''}
+                        onClick={toggleTab.bind(this, TAB.TAGS_SETTING)}
+                        tabIndex="0"
+                        onKeyDown={onTabKeyDown}
+                      >
+                        {gettext('Tags')}
+                      </NavLink>
+                    </NavItem>
+                    <NavItem
+                      role="tab"
+                      aria-selected={activeTab === TAB.OCR_SETTING}
+                      aria-controls="ocr-setting-panel"
+                    >
+                      <NavLink
+                        className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
+                        onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
+                        tabIndex="0"
+                        onKeyDown={onTabKeyDown}
+                      >
+                        {gettext('OCR')}
+                      </NavLink>
+                    </NavItem>
+                  </>
+                }
               </Nav>
             </div>
             <TabContent activeTab={activeTab} className="flex-fill">
@@ -134,17 +183,18 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                   />
                 </TabPane>
               )}
-              {(enableMetadataOtherSettings && activeTab === TAB.FACE_RECOGNITION_SETTING) && (
+              {(enableExtendedPropertiesSetting && activeTab === TAB.FACE_RECOGNITION_SETTING) && (
                 <TabPane tabId={TAB.FACE_RECOGNITION_SETTING} role="tabpanel" id="face-recognition-setting-panel">
                   <LibFaceRecognitionSettingPanel
                     repoID={repoID}
                     value={enableFaceRecognition}
                     submit={updateEnableFaceRecognition}
                     toggleDialog={toggleDialog}
+                    enableMetadata={enableMetadata}
                   />
                 </TabPane>
               )}
-              {(enableMetadataOtherSettings && activeTab === TAB.TAGS_SETTING) && (
+              {(enableExtendedPropertiesSetting && activeTab === TAB.TAGS_SETTING) && (
                 <TabPane tabId={TAB.TAGS_SETTING} role="tabpanel" id="tags-setting-panel">
                   <LibMetadataTagsStatusSettingPanel
                     repoID={repoID}
@@ -152,10 +202,11 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                     lang={tagsLang}
                     submit={updateEnableTags}
                     toggleDialog={toggleDialog}
+                    enableMetadata={enableMetadata}
                   />
                 </TabPane>
               )}
-              {(enableMetadataOtherSettings && activeTab === TAB.OCR_SETTING) && (
+              {(enableExtendedPropertiesSetting && activeTab === TAB.OCR_SETTING) && (
                 <TabPane tabId={TAB.OCR_SETTING} role="tabpanel" id="ocr-setting-panel">
                   <LibMetadataOCRStatusSettingPanel
                     repoID={repoID}
@@ -163,6 +214,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                     lang={tagsLang}
                     submit={updateEnableOCR}
                     toggleDialog={toggleDialog}
+                    enableMetadata={enableMetadata}
                   />
                 </TabPane>
               )}

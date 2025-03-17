@@ -9,10 +9,6 @@
   cursor: pointer;
 }
 
-.seahub-switch.small .custom-switch-indicator.disabled {
-  cursor: default;
-}
-
 .seahub-switch.small .custom-switch-indicator:before {
   height: 8px;
   width: 8px;
@@ -20,4 +16,9 @@
 
 .seahub-switch.small .custom-switch-input:checked~.custom-switch-indicator:before {
   left: 12px;
+}
+
+.seahub-switch.disabled .custom-switch,
+.seahub-switch .custom-switch-indicator.disabled {
+  cursor: not-allowed;
 }

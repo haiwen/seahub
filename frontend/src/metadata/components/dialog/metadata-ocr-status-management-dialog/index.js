@@ -9,7 +9,7 @@ import metadataAPI from '../../../api';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 
-const MetadataOCRStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
+const MetadataOCRStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit, enableMetadata }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
@@ -62,9 +62,10 @@ const MetadataOCRStatusManagementDialog = ({ value: oldValue, repoID, toggleDial
       {!showTurnOffConfirmDialog && (
         <>
           <ModalBody className="metadata-status-management-dialog">
+            {!enableMetadata && <p className="tip">{gettext('Please enable the extended properties setting first')}</p>}
             <Switch
               checked={value}
-              disabled={submitting}
+              disabled={submitting || !enableMetadata}
               size="large"
               textPosition="right"
               className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
@@ -95,6 +96,7 @@ MetadataOCRStatusManagementDialog.propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
+  enableMetadata: PropTypes.bool.isRequired,
 };
 
 export default MetadataOCRStatusManagementDialog;

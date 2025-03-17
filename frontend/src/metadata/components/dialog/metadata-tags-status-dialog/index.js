@@ -22,7 +22,7 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
@@ -81,9 +81,10 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
       {!showTurnOffConfirmDialog && (
         <>
           <ModalBody className="metadata-face-recognition-dialog">
+            {!enableMetadata && <p className="tip">{gettext('Please enable the extended properties setting first')}</p>}
             <Switch
               checked={value}
-              disabled={submitting}
+              disabled={submitting || !enableMetadata}
               size="large"
               textPosition="right"
               className={classnames('change-face-recognition-status-management w-100', { 'disabled': submitting || oldValue })}
@@ -126,6 +127,7 @@ MetadataTagsStatusDialog.propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
+  enableMetadata: PropTypes.bool.isRequired,
 };
 
 export default MetadataTagsStatusDialog;
