@@ -20,6 +20,7 @@ const propTypes = {
   isSidePanelFolded: PropTypes.bool,
 };
 
+// 维基卡片视图
 class WikiCardView extends Component {
 
   constructor(props) {
@@ -32,6 +33,7 @@ class WikiCardView extends Component {
   componentDidMount() {
     if (!canCreateWiki || !isPro) return;
     let departmentMap = {};
+    // 列出部门信息
     wikiAPI.listWikiDepartments().then(res => {
       res.data.forEach(item => departmentMap[item.id] = true);
       this.setState({ departmentMap });
@@ -41,11 +43,13 @@ class WikiCardView extends Component {
     });
   }
 
+  // 分类维基
   classifyWikis = (wikis) => {
     let v1Wikis = [];
     let myWikis = [];
     let sharedWikis = [];
     let department2WikisMap = {};
+    // 新版，旧版，共享，我的，部门
     for (let i = 0; i < wikis.length; i++) {
       if (wikis[i].version === 'v1') {
         v1Wikis.push(wikis[i]);
@@ -74,8 +78,10 @@ class WikiCardView extends Component {
     if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     }
+    // 先区分不同的危机
     const { v1Wikis, myWikis, sharedWikis } = this.classifyWikis(wikis);
     let wikiCardGroups = [];
+    // 然后渲染不同的节点
     wikiCardGroups.push(
       <WikiCardGroup
         key='my-Wikis'
