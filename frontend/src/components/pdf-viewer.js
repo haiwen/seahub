@@ -329,7 +329,7 @@ class PDFViewer extends React.Component {
           </div>
           {/* <!-- mainContainer -->*/}
 
-          <div id="dialogContainer" className="modal d-block">
+          <div id="dialogContainer" className="modal">
             <dialog id="passwordDialog" className="modal-dialog p-0 rounded border-0 shadow-none">
               <div className="modal-content">
                 <div className="modal-header">
