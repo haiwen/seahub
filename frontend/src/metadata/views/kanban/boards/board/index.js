@@ -7,6 +7,7 @@ import Draggable from '../../dnd/draggable';
 import { useMetadataView } from '../../../../hooks/metadata-view';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 
@@ -73,7 +74,9 @@ const Board = ({
         isCollapsed={isCollapsed}
         onCollapse={onCollapse}
       />
-      {!isCollapsed && (
+      {isCollapsed ?
+        <div className="tip m-2">{gettext('This list is collapsed')}</div>
+        :
         <Container
           className='react-trello-board'
           orientation="vertical"
@@ -124,7 +127,7 @@ const Board = ({
             );
           })}
         </Container>
-      )}
+      }
     </section>
   );
 };
