@@ -172,7 +172,10 @@ def get_office_feature_by_repo(repo):
         repo_feature = _check_feature(repo.repo_id)
 
     if not repo_feature and '@seafile_group' not in repo_owner:
-        user = User.objects.get(email=repo_owner)
+        try:
+            user = User.objects.get(email=repo_owner)
+        except User.DoesNotExist:
+            return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
         role = get_user_role(user)
         repo_feature = ROLES_DEFAULT_OFFCICE_SUITE.get(role)
 
