@@ -1578,21 +1578,34 @@ export const Utils = {
     }
   },
 
-  generatePassword: function (length, hasNum = 1, hasChar = 1, hasSymbol = 1) {
+  generateSecureRandomInRange: function (min, max) {
+    const start = Math.min(min, max);
+    const end = Math.max(min, max);
+    const range = end - start + 1;
+    const byteSize = Math.ceil(Math.log2(range) / 8);
+
+    const randomBytes = new Uint8Array(byteSize);
+    window.crypto.getRandomValues(randomBytes);
+
+    const randomValue = Array.from(randomBytes).reduce((pre, byte) => (pre << 8) | byte, 0);
+    return start + (randomValue % range);
+  },
+
+  generatePassword: function (length) {
 
     var password = '';
 
     // 65~90：A~Z
-    password += String.fromCharCode(Math.floor((Math.random() * (90 - 65)) + 65));
+    password += String.fromCharCode(this.generateSecureRandomInRange(65, 90));
 
     // 97~122：a~z
-    password += String.fromCharCode(Math.floor((Math.random() * (122 - 97)) + 97));
+    password += String.fromCharCode(this.generateSecureRandomInRange(97, 122));
 
     // 48~57：0~9
-    password += String.fromCharCode(Math.floor((Math.random() * (57 - 48)) + 48));
+    password += String.fromCharCode(this.generateSecureRandomInRange(48, 57));
 
     // 33~47：!~/
-    password += String.fromCharCode(Math.floor((Math.random() * (47 - 33)) + 33));
+    password += String.fromCharCode(this.generateSecureRandomInRange(33, 47));
 
     // 33~47：!~/
     // 48~57：0~9
@@ -1602,8 +1615,7 @@ export const Utils = {
     // 97~122：a~z
     // 123~127：{~
     for (var i = 0; i < length - 4; i++) {
-      var num = Math.floor((Math.random() * (127 - 33)) + 33);
-      password += String.fromCharCode(num);
+      password += String.fromCharCode(this.generateSecureRandomInRange(33, 127));
     }
 
     return password;
