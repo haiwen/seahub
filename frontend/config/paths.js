@@ -1,4 +1,4 @@
-'use strict';
+
 
 const path = require('path');
 const fs = require('fs');
@@ -22,7 +22,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // );
 
 // reset by custom
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = '127.0.0.1';
 const PORT = process.env.PORT || '3000';
 const publicPath = process.env.PUBLIC_PATH || '/assets/bundles/';
 const publicUrlOrPath = `http://${HOST}:${PORT}${publicPath}`;
@@ -77,7 +77,6 @@ module.exports = {
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
 };
-
 
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
