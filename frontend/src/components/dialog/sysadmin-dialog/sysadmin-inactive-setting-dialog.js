@@ -31,7 +31,7 @@ class SysAdminInactiveSettingDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <SeahubModalHeader toggle={this.props.toggleDialog}>
-          {gettext('Inactive setting')}
+          {gettext('Set user inactive')}
         </SeahubModalHeader>
         <ModalBody>
           <Form>
@@ -67,7 +67,7 @@ class SysAdminInactiveSettingDialog extends React.Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('取消')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
