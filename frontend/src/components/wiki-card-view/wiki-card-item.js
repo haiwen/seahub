@@ -32,6 +32,7 @@ const propTypes = {
   isShowAvatar: PropTypes.bool.isRequired,
 };
 
+// 维基卡片
 class WikiCardItem extends Component {
   constructor(props) {
     super(props);
@@ -126,6 +127,7 @@ class WikiCardItem extends Component {
     this.setState({ isShowTransferDialog: false });
   };
 
+  // 发布维基
   publishWiki = (url, enableServerRender = false) => {
     const urlIndex = url.indexOf('/publish/');
     const publish_url = url.substring(urlIndex + '/publish/'.length);

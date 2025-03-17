@@ -78,7 +78,7 @@ https://github.com/haiwen/seahub/pull/7273
 │   ├── editor-api.js API 处理文件下载和上传
 │   └── index.js 画板编辑器的套壳，处理快捷键，保存内容等
 
-## 02 markdown 普通字符编辑器（刘宏博 2024 重构）
+## 02 普通 markdown 编辑器（刘宏博 2024 重构）
 
 https://github.com/haiwen/seahub/pull/5998
 
@@ -87,7 +87,7 @@ https://github.com/haiwen/seahub/pull/5998
 │   ├── helper.js API 获取文件信息封装后的函数
 │   ├── index.js 普通文本编辑器入口，左侧是格式化编辑代码，右侧显示预览
 
-## markdown 03 富文本编辑器
+## 03 富文本编辑器
 
 ├── markdown-editor
 │   ├── detail-list-view：右侧栏（文件编辑标签和文件元信息）
@@ -101,6 +101,14 @@ https://github.com/haiwen/seahub/pull/5998
 │   │   └── more-menu.js 更多按钮，便于切换模式
 │   └── index.js markdown 富文本编辑器的外壳（实际有很多废弃代码，例如多人协同，协作人等变量）
 
+## 04 维基列表
+
+└── wikis
+    └── wikis.js
+        components/wiki-card-view/wiki-card-view.js
+        components/wiki-card-view/wiki-card-item.js
+        components/wiki-card-view/wiki-card-group.js
+
 —————————————————————————————————————————————————没有查看—————————————————————————————————————————————————
 
 ## sdoc 编辑器
@@ -108,28 +116,18 @@ https://github.com/haiwen/seahub/pull/5998
 ├── sdoc
 │   ├── sdoc-editor
 │   │   ├── external-operations.js
-│   │   ├── index.css
+│   │   ├── index.css
 │   │   └── index.js
 │   ├── sdoc-file-history
 │   │   ├── helper.js
 │   │   ├── history-version.js
-│   │   ├── index.css
+│   │   ├── index.css
 │   │   ├── index.js
 │   │   └── side-panel.js
 │   └── sdoc-published-revision
 │       └── index.js
-
-## sdoc 历史版本
-
-├── sdoc-revision
+├── sdoc-revision sdoc 历史版本
 │   └── index.js
-
-
-
-## 维基列表
-
-└── wikis
-    └── wikis.js
 
 ## 旧版维基
 
