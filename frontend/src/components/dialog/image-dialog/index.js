@@ -5,7 +5,6 @@ import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
-import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 
 import '@seafile/react-image-lightbox/style.css';
