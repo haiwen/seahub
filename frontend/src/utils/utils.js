@@ -1587,10 +1587,7 @@ export const Utils = {
     const randomBytes = new Uint8Array(byteSize);
     window.crypto.getRandomValues(randomBytes);
 
-    let randomValue = 0;
-    for (let i = 0; i < byteSize; i++) {
-      randomValue = (randomValue << 8) | randomBytes[i];
-    }
+    const randomValue = Array.from(randomBytes).reduce((pre, byte) => (pre << 8) | byte, 0);
     return start + (randomValue % range);
   },
 
