@@ -79,7 +79,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" disabled={oldValue === value || submitting || !enableMetadata} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
         </>
       )}

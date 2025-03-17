@@ -109,7 +109,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={(oldValue === value && oldLang === lang.value) || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" disabled={(oldValue === value && oldLang === lang.value) || submitting || !enableMetadata} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
         </>
       )}
