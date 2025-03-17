@@ -43,6 +43,7 @@ class WikiCardGroup extends Component {
     return isSidePanelFolded ? window.innerWidth - SIDE_PANEL_FOLDED_WIDTH : window.innerWidth * (1 - sidePanelRate);
   };
 
+  // 处理缩放浏览器后，每一个维基卡片的宽度
   onResize = () => {
     if (isMobile) return;
     const containerWidth = this.getContainerWidth();
@@ -64,6 +65,7 @@ class WikiCardGroup extends Component {
       isGroup = true;
       depIcon = group.owner === 'system admin';
     }
+    // 渲染维基卡片列表
 
     let iconSymbol = 'share-with-me';
     if (isDepartment && depIcon) {
