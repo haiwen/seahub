@@ -75,6 +75,12 @@ class UserAPI {
     form.append('suite_id', suiteID);
     return this.req.put(url, form);
   }
+
+  getNotificationToken(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/repo-notification-jwt-token/';
+    return this.req.get(url);
+  }
+
 }
 
 let userAPI = new UserAPI();

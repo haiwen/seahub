@@ -181,6 +181,7 @@ def base(request):
         'enable_seadoc': ENABLE_SEADOC,
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
         'enable_whiteboard': ENABLE_WHITEBOARD,
+        'notification_server_url': os.environ.get('NOTIFICATION_SERVER_URL', ''),
     }
 
     if request.user.is_staff:
