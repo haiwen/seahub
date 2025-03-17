@@ -136,15 +136,15 @@ class Item extends Component {
         detailText = gettext('Created library {library_name} with {owner} as its owner')
           .replace('{owner}', '<a href="' + ownerPageUrl + '">' + detail.owner + '</a>');
         if (isPro && enableSysAdminViewRepo) {
-          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + detail.name + '</a>');
+          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + Utils.HTMLescape(detail.name) + '</a>');
         } else {
-          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         }
         return detailText;
 
       case 'repo_delete':
         detailText = gettext('Deleted library {library_name}')
-          .replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          .replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         return detailText;
 
       case 'repo_transfer':
@@ -152,9 +152,9 @@ class Item extends Component {
           .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
           .replace('{user_to}', '<span class="font-weight-bold">' + detail.to+ '</span>');
         if (isPro && enableSysAdminViewRepo) {
-          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + detail.name + '</a>');
+          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + Utils.HTMLescape(detail.name) + '</a>');
         } else {
-          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         }
         return detailText;
 
