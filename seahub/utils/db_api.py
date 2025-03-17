@@ -551,10 +551,10 @@ class SeafileDB:
 
     def delete_all_received_shares(self, username, org_id=''):
         if org_id:
-            sql = f"""
+            delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email="{username}" AND org_id="{org_id}"
             """
-            sql2 = f"""
+            delete_virtual_sharl_sql = f"""
             DELETE s, v FROM `{self.db_name}`.`OrgSharedRepo` s 
             LEFT JOIN 
                 `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
@@ -563,44 +563,46 @@ class SeafileDB:
             """
 
         else:
-            sql = f"""
+            delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`SharedRepo` WHERE to_email="{username}"
             """
-            sql2 = f"""
+            delete_virtual_sharl_sql = f"""
             DELETE s, v FROM `{self.db_name}`.`SharedRepo` s 
             LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
             WHERE s.to_email="{username}"
             """
 
         with connection.cursor() as cursor:
-            cursor.execute(sql2)
-            cursor.execute(sql)
+            cursor.execute(delete_virtual_sharl_sql)
+            cursor.execute(delete_share_sql)
+
+
     def delete_all_my_shares(self, username, org_id=''):
         if org_id:
-            sql = f"""
+            delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE from_email="{username}" AND org_id="{org_id}"
             """
-            sql2 = f"""
+            delete_virtual_sharl_sql = f"""
             DELETE s, v FROM `{self.db_name}`.`OrgSharedRepo` s 
             LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
             WHERE s.from_email="{username}" AND s.org_id="{org_id}"
             """
-            sql3 = f"""
+            delete_group_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE owner="{username}" AND org_id="{org_id}"
             """
         else:
-            sql = f"""
+            delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`SharedRepo` WHERE from_email="{username}"
             """
-            sql2 = f"""
+            delete_virtual_sharl_sql = f"""
             DELETE s, v FROM `{self.db_name}`.`SharedRepo` s 
             LEFT JOIN `{self.db_name}`.`VirtualRepo` v ON s.repo_id = v.origin_repo
             WHERE s.from_email="{username}"
             """
-            sql3 = f"""
+            delete_group_share_sql = f"""
             DELETE FROM `{self.db_name}`.`RepoGroup` WHERE user_name="{username}"
             """
         with connection.cursor() as cursor:
-            cursor.execute(sql2)
-            cursor.execute(sql)
-            cursor.execute(sql3)
+            cursor.execute(delete_virtual_sharl_sql)
+            cursor.execute(delete_share_sql)
+            cursor.execute(delete_group_share_sql)

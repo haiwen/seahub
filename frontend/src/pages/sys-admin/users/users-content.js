@@ -222,7 +222,6 @@ class Item extends Component {
       isResetUserPasswordDialogOpen: false,
       isRevokeAdminDialogOpen: false,
       isConfirmInactiveDialogOpen: false,
-      keepSharing: 'yes' // 默认选择"是"
     };
   }
 
@@ -291,9 +290,6 @@ class Item extends Component {
     this.toggleConfirmInactiveDialog();
   };
 
-  handleOptionChange = (e) => {
-    this.setState({ keepSharing: e.target.value });
-  };
 
   updateRole = (roleOption) => {
     this.props.updateUser(this.props.item.email, 'role', roleOption.value);
