@@ -17,7 +17,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 100;
+  /* sdoc-outline z-index is 102, wiki header should higher than sdoc-outline */
+  z-index: 103;
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content {
