@@ -9,6 +9,7 @@ import { CellType } from '../../../../../constants';
 import './index.css';
 
 const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
+  // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(false);
 
   const headerRef = useRef();
