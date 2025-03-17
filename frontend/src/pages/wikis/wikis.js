@@ -20,11 +20,13 @@ const propTypes = {
 };
 
 class Wikis extends Component {
+  //  Initializes the component's state with various properties, such as loading status, error messages, and wiki data.
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       errorMsg: '',
+      // 可以新建某个部门的 wiki 所以这里设置了当前的部门 ID
       currentDeptID: '',
       wikis: [],
       groupWikis: [],
@@ -34,19 +36,23 @@ class Wikis extends Component {
     };
   }
 
+  // Calls the getWikis() method to fetch wiki data when the component mounts.
   componentDidMount() {
     this.getWikis();
   }
 
+  // Fetches wiki data from the API, processes the data, and updates the component's state with the fetched data.
   getWikis = () => {
     let wikis = [];
     let groupWikis = [];
     wikiAPI.listWikis().then(res => {
+      // 旧版本 wikis
       wikis = wikis.concat(res.data.data);
       wikis.map(wiki => {
         return wiki['version'] = 'v1';
       });
       wikiAPI.listWikis2().then(res => {
+        // 新版本 wikis
         let wikis2 = res.data.wikis;
         groupWikis = res.data.group_wikis;
         groupWikis.forEach(group => {
@@ -58,6 +64,7 @@ class Wikis extends Component {
         wikis2.map(wiki => {
           return wiki['version'] = 'v2';
         });
+        // 拼起来作为 wikis
         this.setState({
           loading: false,
           wikis: wikis.concat(wikis2),
@@ -77,15 +84,18 @@ class Wikis extends Component {
     });
   };
 
+  // Toggles the visibility of the add wiki menu.
   clickMenuToggle = (e) => {
     e.preventDefault();
     this.onMenuToggle();
   };
 
+  // Updates the component's state to toggle the visibility of the add wiki menu.
   onMenuToggle = () => {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
+  // Toggles the visibility of the add wiki dialog and updates the component's state with the current department ID.
   toggleAddWikiDialog = (currentDeptID) => {
     if (this.state.isShowAddDialog) {
       this.setState({
@@ -100,6 +110,7 @@ class Wikis extends Component {
     }
   };
 
+  // Adds a new wiki to the component's state and updates the wiki data.
   addWiki = (wikiName, currentDeptID) => {
     wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
@@ -130,6 +141,7 @@ class Wikis extends Component {
     });
   };
 
+  // Deletes a wiki from the component's state and updates the wiki data.
   deleteWiki = (wiki) => {
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
@@ -172,6 +184,7 @@ class Wikis extends Component {
     }
   };
 
+  // Leaves a shared wiki 
   leaveSharedWiki = (wiki) => {
     if (!wiki.owner.includes('@seafile_group')) {
       let options = {
@@ -205,6 +218,7 @@ class Wikis extends Component {
 
   };
 
+  // Unshares a group wiki 
   unshareGroupWiki = (wiki, groupId) => {
     seafileAPI.unshareRepoToGroup(wiki.repo_id, groupId).then(() => {
       let groupWikis = this.state.groupWikis.map(group => {
@@ -223,6 +237,7 @@ class Wikis extends Component {
     });
   };
 
+  // Renames a wiki 
   renameWiki = (wiki, newName) => {
     if (wiki.version === 'v1') {
       wikiAPI.renameWiki(wiki.id, newName).then(() => {
@@ -251,11 +266,13 @@ class Wikis extends Component {
     }
   };
 
+  // Converts a wiki 转换旧版 wiki 到新版 wiki
   convertWiki = (wiki, wikiName, departmentID) => {
     let task_id = '';
     this.setState({
       isShowConvertStatusDialog: true,
     });
+    // 
     wikiAPI.convertWiki(wiki.id, wikiName, departmentID).then((res) => {
       task_id = res.data.task_id;
       return userAPI.queryIOStatus(task_id);
@@ -285,7 +302,9 @@ class Wikis extends Component {
     });
   };
 
+  // Queries the convert status of a wiki 
   queryConvertStatus = (task_id) => {
+    // 这里查询 IO 的状态，最好不要写在 userAPI 中
     userAPI.queryIOStatus(task_id).then(res => {
       if (res.data.is_finished === true) {
         this.setState({
@@ -307,14 +326,17 @@ class Wikis extends Component {
     });
   };
 
+  // Renders the component's UI, including the wiki list, add wiki dialog, and convert status dialog.
   render() {
     return (
       <Fragment>
+        {/* 转换维基 */}
         {this.state.isShowConvertStatusDialog &&
           <WikiConvertStatusDialog
             toggle={this.onConvertStatusToggle}
           />
         }
+        {/* 增加维基 */}
         {this.state.isShowAddDialog &&
           <ModalPortal>
             <AddWikiDialog
@@ -337,6 +359,7 @@ class Wikis extends Component {
                 }
               </div>
             </div>
+            {/* 卡片视图 */}
             {(this.state.loading || this.state.wikis.length !== 0 || this.state.groupWikis.length !== 0) &&
               <div className="cur-view-content pb-4">
                 <WikiCardView
