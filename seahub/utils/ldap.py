@@ -48,7 +48,7 @@ if ENABLE_LDAP:
             'LDAP_LOGIN_ATTR': LDAP_LOGIN_ATTR,
         }.items():
         if not value:
-            logger.error(key + ' import failed, please check LDAP settings.')
+            logger.error('LDAP import failed, please check LDAP settings.')
 
 if ENABLE_MULTI_LDAP:
     for key, value in {
@@ -59,7 +59,7 @@ if ENABLE_MULTI_LDAP:
             'MULTI_LDAP_1_LOGIN_ATTR': MULTI_LDAP_1_LOGIN_ATTR,
         }.items():
         if not value:
-            logger.error(key + ' import failed, please check MULTI_LDAP settings.')
+            logger.error('MULTI_LDAP import failed, please check MULTI_LDAP settings.')
 
 def get_ldap_info():
     """Get LDAP config from seahub_settings.py.

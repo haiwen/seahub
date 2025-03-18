@@ -42,7 +42,6 @@ def dingtalk_get_orgapp_token():
     if not access_token:
         logger.warning('failed to get dingtalk access_token')
         logger.warning(DINGTALK_GET_ORGAPP_TOKEN_URL)
-        logger.warning(data)
         logger.warning(resp_json)
         return ''
 
@@ -119,7 +118,6 @@ def dingtalk_get_access_token():
     if not access_token:
         logger.error('failed to get dingtalk access_token')
         logger.error(DINGTALK_DEPARTMENT_GET_ACCESS_TOKEN_URL)
-        logger.error(data)
         logger.error(resp_json)
         return ''
 
