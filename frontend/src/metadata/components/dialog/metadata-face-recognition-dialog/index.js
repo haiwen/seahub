@@ -63,7 +63,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
       {!showTurnOffConfirmDialog && (
         <>
           <ModalBody className="metadata-face-recognition-dialog">
-            {!enableMetadata && <p className="tip">{gettext('Please enable the extended properties setting first')}</p>}
+            {!enableMetadata && <p className="tip">{gettext('Please turn on extended properties setting first')}</p>}
             <Switch
               checked={value}
               disabled={submitting || !enableMetadata}
