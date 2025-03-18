@@ -76,7 +76,8 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
 
   const handelClickFileName = useCallback((event) => {
     event.preventDefault();
-    if (isRenameing) return;
+    const canPreview = window.sfTagsDataContext.canPreview();
+    if (isRenameing || !canPreview) return;
     openFile(repoID, file, () => {
       openImagePreview(file);
     });
