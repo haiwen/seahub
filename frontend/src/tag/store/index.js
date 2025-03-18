@@ -43,12 +43,16 @@ class Store {
     this.startIndex = 0;
   };
 
+  getInitialSort() {
+    const storedSort = window.sfTagsDataContext?.localStorage?.getItem(ALL_TAGS_SORT);
+    return (storedSort && JSON.parse(storedSort)) || TAGS_DEFAULT_SORT;
+  }
+
   async loadTagsData(limit) {
     const res = await this.context.getTags({ start: this.startIndex, limit });
     const rows = res?.data?.results || [];
     const columns = normalizeColumns(res?.data?.metadata);
-    const storedSort = window.sfTagsDataContext?.localStorage?.getItem(ALL_TAGS_SORT);
-    const sort = storedSort ? JSON.parse(storedSort) : TAGS_DEFAULT_SORT;
+    const sort = this.getInitialSort();
     let data = new TagsData({ rows, columns, sort });
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
@@ -209,12 +213,14 @@ class Store {
     const lastOperation = this.undos.pop();
     const lastInvertOperation = lastOperation.invert();
     if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastInvertOperation.op_type)) {
-      this.applyOperation(lastInvertOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
-        if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
-          lastOperation.row_id = operation.row_data._id;
+      this.applyOperation(lastInvertOperation, {
+        handleUndo: false, asyncUndoRedo: (operation) => {
+          if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
+            lastOperation.row_id = operation.row_data._id;
+          }
+          this.redos.push(lastOperation);
         }
-        this.redos.push(lastOperation);
-      } });
+      });
       return;
     }
     this.redos.push(lastOperation);
@@ -225,12 +231,14 @@ class Store {
     if (this.isReadonly || this.redos.length === 0) return;
     let lastOperation = this.redos.pop();
     if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastOperation.op_type)) {
-      this.applyOperation(lastOperation, { handleUndo: false, asyncUndoRedo: (operation) => {
-        if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
-          lastOperation = operation;
+      this.applyOperation(lastOperation, {
+        handleUndo: false, asyncUndoRedo: (operation) => {
+          if (operation.op_type === OPERATION_TYPE.INSERT_RECORD) {
+            lastOperation = operation;
+          }
+          this.undos.push(lastOperation);
         }
-        this.undos.push(lastOperation);
-      } });
+      });
       return;
     }
     this.undos.push(lastOperation);

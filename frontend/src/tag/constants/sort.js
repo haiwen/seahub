@@ -1,7 +1,7 @@
 export const ALL_TAGS_SORT = 'all_tags_sort';
 
 export const TAGS_DEFAULT_SORT = {
-  sortBy: 'name',
+  sort_by: 'name',
   order: 'asc'
 };
 

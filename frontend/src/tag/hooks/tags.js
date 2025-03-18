@@ -116,7 +116,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     };
     setDisplayNodeKey(nodeKey || '');
     selectTagsView(node);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectTagsView]);
 
   const addTag = useCallback((row, callback) => {
@@ -158,7 +158,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     });
   }, [tagsData, addTag, handleSelectTag]);
 
-  const updateTag = useCallback((tagId, update, { success_callback, fail_callback } = { }) => {
+  const updateTag = useCallback((tagId, update, { success_callback, fail_callback } = {}) => {
     const tag = getRowById(tagsData, tagId);
     const tagIds = [tagId];
     const idTagUpdates = { [tagId]: update };
@@ -176,7 +176,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     modifyTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyTags]);
 
-  const updateLocalTag = useCallback((tagId, update, { success_callback, fail_callback } = { }) => {
+  const updateLocalTag = useCallback((tagId, update, { success_callback, fail_callback } = {}) => {
     const tag = getRowById(tagsData, tagId);
     const tagIds = [tagId];
     const idTagUpdates = { [tagId]: update };
@@ -194,7 +194,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     modifyLocalTags(tagIds, idTagUpdates, { [tagId]: originalRowUpdates }, { [tagId]: oldRowData }, { [tagId]: originalOldRowData }, { success_callback, fail_callback });
   }, [tagsData, modifyLocalTags]);
 
-  const updateLocalTags = useCallback((tagIds, idTagUpdates, { success_callback, fail_callback } = { }) => {
+  const updateLocalTags = useCallback((tagIds, idTagUpdates, { success_callback, fail_callback } = {}) => {
     if (!Array.isArray(tagIds) || tagIds.length === 0) {
       return;
     }
@@ -243,7 +243,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
 
   const modifyTagsSort = useCallback((sort) => {
     storeRef.current.modifyTagsSort(sort);
-  }, []);
+  }, [storeRef]);
 
   useEffect(() => {
     if (!handleSelectTag) return;
@@ -266,7 +266,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
 
       handleSelectTag({ [PRIVATE_COLUMN_KEY.ID]: ALL_TAGS_ID });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   useEffect(() => {
@@ -293,7 +293,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
     }
     document.title = originalTitleRef.current;
     updateFavicon('default');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath, tagsData]);
 
   return (

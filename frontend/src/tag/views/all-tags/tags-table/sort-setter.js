@@ -3,6 +3,7 @@ import { gettext } from '../../../../utils/constants';
 import SortMenu from '../../../../components/sort-menu';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { ALL_TAGS_SORT, ALL_TAGS_SORT_KEY, TAGS_DEFAULT_SORT } from '../../../constants/sort';
+import { getSortBy, getSortOrder } from '../../../utils/sort';
 
 const SortSetter = () => {
   const [sort, setSort] = useState(TAGS_DEFAULT_SORT);
@@ -23,7 +24,7 @@ const SortSetter = () => {
 
   const onSelectSortOption = useCallback((item) => {
     const [sortBy, order] = item.value.split('-');
-    const newSort = { sortBy, order };
+    const newSort = { sort_by: sortBy, order };
     setSort(newSort);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAGS_SORT, newSort);
   }, [eventBus]);
@@ -35,7 +36,7 @@ const SortSetter = () => {
   }, [localStorage]);
 
   return (
-    <SortMenu sortBy={sort.sortBy} sortOrder={sort.order} sortOptions={options} onSelectSortOption={onSelectSortOption} />
+    <SortMenu sortBy={getSortBy(sort)} sortOrder={getSortOrder(sort)} sortOptions={options} onSelectSortOption={onSelectSortOption} />
   );
 };
 

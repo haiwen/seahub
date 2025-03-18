@@ -2,8 +2,9 @@ import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubT
 import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import { getParentLinks, getChildLinks, getTagName, getTagFilesCount } from './cell';
-import { ALL_TAGS_SORT_KEY, TAGS_DEFAULT_SORT } from '../constants/sort';
+import { ALL_TAGS_SORT_KEY } from '../constants/sort';
 import { compareString } from '../../metadata/utils/sort';
+import { getSortBy, getSortOrder } from './sort';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';
 
@@ -92,15 +93,17 @@ export const buildTagsTree = (rows, table) => {
     key_tree_node_map[getTreeNodeKey(node)] = node;
   });
 
-  const sortedTree = sortTree(table, tree, table.sort);
-  return { tree: sortedTree, key_tree_node_map };
+  return { tree, key_tree_node_map };
 };
 
 export const getAllChildTagsIdsFromNode = (node) => {
   return (node && node[KEY_ALL_CHILD_TAGS_IDS]) || [];
 };
 
-export const sortTree = (table, tree, sort = TAGS_DEFAULT_SORT) => {
+export const sortTree = (tree, sort, table) => {
+  const sortBy = getSortBy(sort);
+  const sortOrder = getSortOrder(sort);
+
   const getAllFileCount = (node) => {
     let count = 0;
     const root = getRowById(table, getTreeNodeId(node));
@@ -118,7 +121,7 @@ export const sortTree = (table, tree, sort = TAGS_DEFAULT_SORT) => {
     const rowA = getRowById(table, getTreeNodeId(a));
     const rowB = getRowById(table, getTreeNodeId(b));
 
-    switch (sort.sortBy) {
+    switch (sortBy) {
       case ALL_TAGS_SORT_KEY.NAME:
         valueA = getTagName(rowA);
         valueB = getTagName(rowB);
@@ -136,11 +139,11 @@ export const sortTree = (table, tree, sort = TAGS_DEFAULT_SORT) => {
     }
 
     const result =
-    sort.sortBy === ALL_TAGS_SORT_KEY.NAME
-      ? compareString(valueA, valueB) // String comparison for name
-      : valueA - valueB; // Numeric comparison for count
+      sortBy === ALL_TAGS_SORT_KEY.NAME
+        ? compareString(valueA, valueB) // String comparison for name
+        : valueA - valueB; // Numeric comparison for count
 
-    return sort.order === 'asc' ? result : -result;
+    return sortOrder === 'asc' ? result : -result;
   };
 
   const sortNodesRecursively = (nodes, allNodes) => {
