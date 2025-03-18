@@ -37,6 +37,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const { repoID, updateCurrentDirent } = useMetadataView();
   const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
+  const canPreview = window.sfMetadataContext.canPreview();
 
   const images = useMemo(() => {
     if (isFirstLoading) return [];
@@ -65,12 +66,22 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const day = date.slice(-2,);
 
         const isVideo = Utils.videoCheck(fileName);
-        const src = isVideo && !enableVideoThumbnail
+        const useFallbackIcon = isVideo && !enableVideoThumbnail;
+
+        const baseThumbnailPath = `${siteRoot}thumbnail/${repoID}`;
+        let src = useFallbackIcon
           ? Utils.getFileIconUrl(fileName)
-          : `${siteRoot}thumbnail/${repoID}/${size}${path}`;
-        const thumbnail = isVideo && !enableVideoThumbnail
+          : `${baseThumbnailPath}/${size}${path}`;
+
+        let thumbnail = useFallbackIcon
           ? Utils.getFileIconUrl(fileName)
-          : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
+          : `${baseThumbnailPath}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
+
+        if (!canPreview) {
+          const fileIcon = Utils.getFileIconUrl(fileName);
+          src = fileIcon;
+          thumbnail = fileIcon;
+        }
 
         return {
           id,
@@ -206,6 +217,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
     const record = getRowById(metadata, image.id);
+    if (!canPreview) return;
     openFile(repoID, record, () => {
       const index = images.findIndex(item => item.id === image.id);
       setImageIndex(index);
