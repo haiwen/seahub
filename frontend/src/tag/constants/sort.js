@@ -1,4 +1,4 @@
-export const ALL_TAGS_SORT_OPTIONS = 'all_tags_sort_options';
+export const ALL_TAGS_SORT = 'all_tags_sort';
 
 export const TAGS_DEFAULT_SORT = {
   sortBy: 'name',

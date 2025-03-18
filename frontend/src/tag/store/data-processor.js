@@ -3,7 +3,7 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import { getGroupRows } from '../../metadata/utils/group';
 import { getRowsByIds } from '../../components/sf-table/utils/table';
 import { OPERATION_TYPE } from './operations';
-import { buildTagsTree, setNodeAllChildTagsIds } from '../utils/tree';
+import { buildTagsTree, setNodeAllChildTagsIds, sortTree } from '../utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import {
   addTreeChildNode, checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
@@ -37,7 +37,8 @@ class DataProcessor {
       updated_rows_tree.push(node);
       updatedKeyTreeNodeMap(nodeKey, node, table.key_tree_node_map);
     });
-    table.rows_tree = updated_rows_tree;
+    const sortedTree = sortTree(table, updated_rows_tree, table.sort);
+    table.rows_tree = sortedTree;
   }
 
   static updateTagsTreeWithDeletedTagsIds(deletedTagsIds, table) {
@@ -240,6 +241,13 @@ class DataProcessor {
       case OPERATION_TYPE.DELETE_TAGS_LINKS:
       case OPERATION_TYPE.MERGE_TAGS: {
         this.buildTagsTree(table.rows, table);
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_TAGS_SORT: {
+        const { sort } = operation;
+        const oldTree = table.rows_tree;
+        const sortedTree = sortTree(table, oldTree, sort);
+        table.rows_tree = sortedTree;
         break;
       }
       default: {

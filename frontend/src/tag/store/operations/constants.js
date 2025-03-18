@@ -14,6 +14,7 @@ export const OPERATION_TYPE = {
   MODIFY_LOCAL_FILE_TAGS: 'modify_local_file_tags',
 
   MODIFY_COLUMN_WIDTH: 'modify_column_width',
+  MODIFY_TAGS_SORT: 'modify_tags_sort',
 };
 
 export const OPERATION_ATTRIBUTES = {
@@ -30,6 +31,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_LOCAL_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'is_rename', 'id_obj_id'],
   [OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS]: ['file_id', 'tags_ids'],
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
+  [OPERATION_TYPE.MODIFY_TAGS_SORT]: ['sort'],
 };
 
 export const UNDO_OPERATION_TYPE = [
@@ -42,6 +44,7 @@ export const LOCAL_APPLY_OPERATION_TYPE = [
   OPERATION_TYPE.MODIFY_LOCAL_RECORDS,
   OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS,
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
+  OPERATION_TYPE.MODIFY_TAGS_SORT,
 ];
 
 // apply operation after exec operation on the server

@@ -11,6 +11,7 @@ import LocalOperator from './local-operator';
 import TagsData from '../model/tagsData';
 import { normalizeColumns } from '../utils/column';
 import { getColumnByKey } from '../../components/sf-table/utils/column';
+import { ALL_TAGS_SORT, TAGS_DEFAULT_SORT } from '../constants/sort';
 
 class Store {
 
@@ -46,7 +47,9 @@ class Store {
     const res = await this.context.getTags({ start: this.startIndex, limit });
     const rows = res?.data?.results || [];
     const columns = normalizeColumns(res?.data?.metadata);
-    let data = new TagsData({ rows, columns });
+    const storedSort = window.sfTagsDataContext?.localStorage?.getItem(ALL_TAGS_SORT);
+    const sort = storedSort ? JSON.parse(storedSort) : TAGS_DEFAULT_SORT;
+    let data = new TagsData({ rows, columns, sort });
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
     this.data = data;
@@ -424,6 +427,12 @@ class Store {
   modifyLocalFileTags(file_id, tags_ids) {
     const type = OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS;
     const operation = this.createOperation({ type, file_id, tags_ids });
+    this.applyOperation(operation);
+  }
+
+  modifyTagsSort(sort) {
+    const type = OPERATION_TYPE.MODIFY_TAGS_SORT;
+    const operation = this.createOperation({ type, sort });
     this.applyOperation(operation);
   }
 }

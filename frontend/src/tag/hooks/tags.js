@@ -12,8 +12,6 @@ import { getRowById } from '../../components/sf-table/utils/table';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';
-import { sortTree } from '../utils/tree';
-import { ALL_TAGS_SORT_OPTIONS, TAGS_DEFAULT_SORT } from '../constants/sort';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagsContext = React.createContext(null);
@@ -24,7 +22,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   const [isReloading, setReloading] = useState(false);
   const [tagsData, setTagsData] = useState(null);
   const [displayNodeKey, setDisplayNodeKey] = useState('');
-  const [sort, setSort] = useState({ sortBy: 'name', order: 'asc' });
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
@@ -67,15 +64,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       window.sfTagsDataStore = storeRef.current;
       storeRef.current.initStartIndex();
       storeRef.current.load(PER_LOAD_NUMBER).then(() => {
-        const sort = JSON.parse(contextRef.current.localStorage.getItem(ALL_TAGS_SORT_OPTIONS)) || TAGS_DEFAULT_SORT;
-        setSort(sort);
-        const data = storeRef.current.data;
-        const tree = sortTree(data, data.rows_tree, sort);
-        const sortedData = {
-          ...data,
-          rows_tree: tree,
-        };
-        setTagsData(sortedData);
+        setTagsData(storeRef.current.data);
         setLoading(false);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
@@ -253,7 +242,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   }, [storeRef]);
 
   const modifyTagsSort = useCallback((sort) => {
-    setSort(sort);
+    storeRef.current.modifyTagsSort(sort);
   }, []);
 
   useEffect(() => {
@@ -307,17 +296,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath, tagsData]);
 
-  useEffect(() => {
-    if (!tagsData) return;
-    const { rows_tree } = tagsData;
-    if (!rows_tree || rows_tree.length === 0) return;
-    const sortedTree = sortTree(tagsData, rows_tree, sort);
-    setTagsData({
-      ...tagsData,
-      rows_tree: sortedTree,
-    });
-  }, [tagsData, sort]);
-
   return (
     <TagsContext.Provider value={{
       isLoading,
@@ -345,7 +323,8 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
       updateLocalTags,
       selectTag: handleSelectTag,
       modifyColumnWidth,
-      modifyLocalFileTags
+      modifyLocalFileTags,
+      modifyTagsSort,
     }}>
       {children}
     </TagsContext.Provider>

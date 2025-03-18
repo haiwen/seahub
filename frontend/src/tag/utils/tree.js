@@ -1,10 +1,9 @@
 import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
 import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { getParentLinks, getChildLinks } from './cell';
-import { PRIVATE_COLUMN_KEY } from '../constants';
-import { compareTwoString } from '../../utils/compare-two-string';
+import { getParentLinks, getChildLinks, getTagName, getTagFilesCount } from './cell';
 import { ALL_TAGS_SORT_KEY, TAGS_DEFAULT_SORT } from '../constants/sort';
+import { compareString } from '../../metadata/utils/sort';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';
 
@@ -93,7 +92,8 @@ export const buildTagsTree = (rows, table) => {
     key_tree_node_map[getTreeNodeKey(node)] = node;
   });
 
-  return { tree, key_tree_node_map };
+  const sortedTree = sortTree(table, tree, table.sort);
+  return { tree: sortedTree, key_tree_node_map };
 };
 
 export const getAllChildTagsIdsFromNode = (node) => {
@@ -103,41 +103,41 @@ export const getAllChildTagsIdsFromNode = (node) => {
 export const sortTree = (table, tree, sort = TAGS_DEFAULT_SORT) => {
   const getAllFileCount = (node) => {
     let count = 0;
-    count += getRowById(table, getTreeNodeId(node))[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]?.length || 0;
-    node.all_child_tags_ids.forEach((id) => {
+    const root = getRowById(table, getTreeNodeId(node));
+    count += getTagFilesCount(root);
+    getAllChildTagsIdsFromNode(node).forEach((id) => {
       const row = getRowById(table, id);
-      const links = row[PRIVATE_COLUMN_KEY.TAG_FILE_LINKS] || [];
-      count += links.length;
+      count += getTagFilesCount(row);
     });
     return count;
   };
 
   const compare = (a, b) => {
-    let valueA;
-    let valueB;
+    let valueA = '';
+    let valueB = '';
+    const rowA = getRowById(table, getTreeNodeId(a));
+    const rowB = getRowById(table, getTreeNodeId(b));
 
     switch (sort.sortBy) {
       case ALL_TAGS_SORT_KEY.NAME:
-        const rowA = getRowById(table, getTreeNodeId(a));
-        const rowB = getRowById(table, getTreeNodeId(b));
-        valueA = rowA[PRIVATE_COLUMN_KEY.TAG_NAME] || '';
-        valueB = rowB[PRIVATE_COLUMN_KEY.TAG_NAME] || '';
+        valueA = getTagName(rowA);
+        valueB = getTagName(rowB);
         break;
       case ALL_TAGS_SORT_KEY.CHILD_TAGS_COUNT:
-        valueA = (a.children || []).length;
-        valueB = (b.children || []).length;
+        valueA = getChildLinks(rowA).length;
+        valueB = getChildLinks(rowB).length;
         break;
       case ALL_TAGS_SORT_KEY.TAG_FILE_COUNT:
         valueA = getAllFileCount(a);
         valueB = getAllFileCount(b);
         break;
       default:
-        throw new Error(`Unsupported sortBy parameter: ${sort.sortBy}`);
+        break;
     }
 
     const result =
     sort.sortBy === ALL_TAGS_SORT_KEY.NAME
-      ? compareTwoString(valueA, valueB) // String comparison for name
+      ? compareString(valueA, valueB) // String comparison for name
       : valueA - valueB; // Numeric comparison for count
 
     return sort.order === 'asc' ? result : -result;

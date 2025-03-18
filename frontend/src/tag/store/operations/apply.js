@@ -414,6 +414,11 @@ export default function apply(data, operation) {
       data.rows = updatedRows;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_TAGS_SORT: {
+      const { sort } = operation;
+      data.sort = sort;
+      return data;
+    }
     default: {
       return data;
     }
