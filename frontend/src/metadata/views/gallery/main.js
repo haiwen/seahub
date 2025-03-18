@@ -8,12 +8,13 @@ import GalleryContextmenu from './context-menu';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
-import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../../utils/constants';
+import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize, enableVideoThumbnail } from '../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
 import { getRowById } from '../../../components/sf-table/utils/table';
 import { getEventClassName } from '../../../utils/dom';
 import { getColumns, getImageSize, getRowHeight } from './utils';
 import ObjectUtils from '../../../utils/object';
+import { openFile } from '../../utils/file';
 
 import './index.css';
 
@@ -42,7 +43,10 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
     const firstSort = metadata.view.sorts[0] || VIEW_TYPE_DEFAULT_SORTS[VIEW_TYPE.GALLERY];
     return metadata.rows
-      .filter(record => Utils.imageCheck(getFileNameFromRecord(record)))
+      .filter(record => {
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+      })
       .map(record => {
         const id = getRecordIdFromRecord(record);
         const fileName = getFileNameFromRecord(record);
@@ -59,13 +63,22 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         const year = date.slice(0, 4);
         const month = date.slice(0, -3);
         const day = date.slice(-2,);
+
+        const isVideo = Utils.videoCheck(fileName);
+        const src = isVideo && !enableVideoThumbnail
+          ? Utils.getFileIconUrl(fileName)
+          : `${siteRoot}thumbnail/${repoID}/${size}${path}`;
+        const thumbnail = isVideo && !enableVideoThumbnail
+          ? Utils.getFileIconUrl(fileName)
+          : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
+
         return {
           id,
           name: fileName,
           parentDir,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: `${siteRoot}thumbnail/${repoID}/${size}${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`,
+          src,
+          thumbnail,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           year,
           month,
@@ -192,10 +205,13 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
-    const index = images.findIndex(item => item.id === image.id);
-    setImageIndex(index);
-    setIsImagePopupOpen(true);
-  }, [images]);
+    const record = getRowById(metadata, image.id);
+    openFile(repoID, record, () => {
+      const index = images.findIndex(item => item.id === image.id);
+      setImageIndex(index);
+      setIsImagePopupOpen(true);
+    });
+  }, [repoID, metadata, images]);
 
   const handleContextMenu = useCallback((event, image) => {
     event.preventDefault();
