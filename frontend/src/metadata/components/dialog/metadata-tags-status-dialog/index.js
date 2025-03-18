@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { ModalBody, ModalFooter, Button } from 'reactstrap';
+import { ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
 import classnames from 'classnames';
 import Switch from '../../../../components/switch';
 import { gettext } from '../../../../utils/constants';
@@ -9,8 +9,6 @@ import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 import { SeahubSelect } from '../../../../components/common/select';
-
-import './index.css';
 
 const langOptions = [
   {
@@ -91,21 +89,21 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
               onChange={onValueChange}
               placeholder={gettext('Tags')}
             />
-            <p className="tip m-0">
+            <p className="tip">
               {gettext('Enable tags to add tags to files and search files by tags.')}
             </p>
-            {value && (
-              <div className="tags-language-container">
-                <span>{gettext('Tags language:')}</span>
+            {value &&
+              <FormGroup className="mt-6">
+                <Label>{gettext('Language for labels generated AI')}</Label>
                 <SeahubSelect
-                  className='tags-language-selector'
+                  className='tags-language-selector w-75'
                   value={langOptions.find(o => o.value === lang) || langOptions[1]}
                   options={langOptions}
                   onChange={onSelectChange}
                   isClearable={false}
                 />
-              </div>
-            )}
+              </FormGroup>
+            }
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
