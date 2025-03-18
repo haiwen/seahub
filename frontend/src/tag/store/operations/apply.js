@@ -8,7 +8,6 @@ import { addRowLinks, removeRowLinks } from '../../utils/link';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import { getRowById, getRowsByIds } from '../../../components/sf-table/utils/table';
 import { getChildLinks, getParentLinks, getTagFilesLinks } from '../../utils/cell';
-import { sortTree } from '../../utils/tree';
 
 dayjs.extend(utc);
 
