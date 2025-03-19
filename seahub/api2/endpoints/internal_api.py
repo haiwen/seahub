@@ -160,9 +160,12 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         filename = os.path.basename(file_path)
-        filetype, _ = get_file_type_and_ext(filename)
+        filetype, ext = get_file_type_and_ext(filename)
         
-        # new file download link can ignore the download file permissions
+        # The download permission can be ignored when the permission check
+        # called from seaf-server for some file types such as video, markdown and pdf
+        # which is viewed / downloaded directly by requesting seaf-server.
+        
         ignore_download_perms = filetype in FILE_TYPE_FOR_NEW_FILE_LINK
         
         token = request.data.get('token') # account token or repo token
