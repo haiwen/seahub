@@ -1747,3 +1747,7 @@ a.table-sort-op:hover {
   font-weight: 400;
   font-size: 15px;
 }
+
+.input-group .input-group-text:not(:first-child) {
+  border-left: none;
+}
