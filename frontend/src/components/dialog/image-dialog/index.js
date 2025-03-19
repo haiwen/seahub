@@ -38,6 +38,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
   const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
 
+  // TODO: GIF, HEIC, SVG images are not supported to rotate
   // The backend server does not support rotating HEIC images
   let enableRotate = oldEnableRotate;
   const urlParts = mainImg.src.split('?')[0].split('.');
