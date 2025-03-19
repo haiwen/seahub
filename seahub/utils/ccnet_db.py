@@ -28,11 +28,13 @@ class CcnetUsers(object):
         self.role = kwargs.get('role')
         self.passwd = kwargs.get('passwd')
 
+
 class CcnetUserRole(object):
-    
+
     def __init__(self, **kwargs):
         self.role = kwargs.get('role')
         self.is_manual_set = kwargs.get('is_manual_set')
+
 
 class CcnetDB:
 
@@ -50,11 +52,11 @@ class CcnetDB:
             `{self.db_name}`.`Group` g
         ON o.group_id=g.group_id
         WHERE
-          org_id={org_id} AND parent_group_id<>0;
+          org_id=%s AND parent_group_id<>0;
         """
         groups = []
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [org_id])
             for item in cursor.fetchall():
                 group_id = item[0]
                 group_name = item[1]
@@ -75,60 +77,52 @@ class CcnetDB:
     def list_eligible_users(self, start, limit,
                             is_active=None, role=None, q=None):
 
-        def status(is_active):
-            return f'AND t1.is_active={is_active} '
+        conditions = []
+        params = []
 
-        def is_role(role):
-            if role == 'default':
-                return 'AND (t2.role is null or t2.role = "default") '
-            else:
-                return f'AND t2.role = "{role}" '
+        if is_active is not None:
+            conditions.append("t1.is_active = %s")
+            params.append(is_active)
 
-        def search(q):
-            return f'AND t1.email LIKE "%{q}%" '
-
-        search_clause = ''
-        if is_active:
-            search_clause += status(is_active)
         if role:
-            search_clause += is_role(role)
+            if role == 'default':
+                conditions.append("(t2.role IS NULL OR t2.role = 'default')")
+            else:
+                conditions.append("t2.role = %s")
+                params.append(role)
+
         if q:
-            search_clause += search(q)
+            conditions.append("t1.email LIKE %s")
+            params.append(f"%{q}%")
+
+        base_condition = "t1.email NOT LIKE '%%@seafile_group'"
+        where_clause = f"WHERE {base_condition}"
+        if conditions:
+            where_clause += " AND " + " AND ".join(conditions)
 
         count_sql = f"""
-        SELECT count(1)
-        FROM
-            `{self.db_name}`.`EmailUser` t1
-        LEFT JOIN
-            `{self.db_name}`.`UserRole` t2
-        ON
-            t1.email = t2.email
-        WHERE
-            t1.email NOT LIKE '%%@seafile_group' %s
-        ORDER BY t1.id
-        """ % search_clause
+            SELECT COUNT(1)
+            FROM `{self.db_name}`.`EmailUser` t1
+            LEFT JOIN `{self.db_name}`.`UserRole` t2 ON t1.email = t2.email
+            {where_clause}
+            ORDER BY t1.id
+        """
 
         sql = f"""
-        SELECT t1.id, t1.email, t1.is_staff, t1.is_active, t1.ctime, t2.role, t1.passwd
-        FROM
-            `{self.db_name}`.`EmailUser` t1
-        LEFT JOIN
-            `{self.db_name}`.`UserRole` t2
-        ON
-            t1.email = t2.email
-        WHERE
-            t1.email NOT LIKE '%%@seafile_group' %s
-        ORDER BY t1.id
-        LIMIT {limit} OFFSET {start};
-        """ % search_clause
+            SELECT t1.id, t1.email, t1.is_staff, t1.is_active, t1.ctime, t2.role, t1.passwd
+            FROM `{self.db_name}`.`EmailUser` t1
+            LEFT JOIN `{self.db_name}`.`UserRole` t2 ON t1.email = t2.email
+            {where_clause}
+            ORDER BY t1.id
+            LIMIT %s OFFSET %s;
+        """
 
         users = []
         with connection.cursor() as cursor:
-            cursor.execute(count_sql)
-            cursor.execute(count_sql)
+            cursor.execute(count_sql, params)
             total_count = int(cursor.fetchone()[0])
 
-            cursor.execute(sql)
+            cursor.execute(sql, params + [limit, start])
             for item in cursor.fetchall():
                 user_id = item[0]
                 email = item[1]
@@ -159,10 +153,10 @@ class CcnetDB:
         FROM
             `{self.db_name}`.`GroupUser`
         WHERE
-            group_id IN ({group_ids_str}) AND is_staff = 1
+            group_id IN (%s) AND is_staff = 1
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [group_ids_str])
             result = cursor.fetchall()
         for user, group_id in result:
             if group_id in group_admins:
@@ -178,16 +172,16 @@ class CcnetDB:
             g.creator_name = 'system admin',
             g.parent_group_id = -1
         WHERE
-            g.group_id = {group_id}
+            g.group_id = %s
         """
         structure_sql = f"""
         INSERT INTO `{self.db_name}`.`GroupStructure` (group_id, path)
-        VALUES ('{group_id}', '{group_id}')
+        VALUES (%s, %s)
         """
 
         with connection.cursor() as cursor:
-            cursor.execute(sql)
-            cursor.execute(structure_sql)
+            cursor.execute(sql, [group_id])
+            cursor.execute(structure_sql, [group_id, group_id])
 
     def get_active_users_by_user_list(self, user_list):
         if not user_list:
@@ -198,10 +192,12 @@ class CcnetDB:
         SELECT `email`
         FROM `{self.db_name}`.`EmailUser`
         WHERE
-            email IN ({user_list_str}) AND is_active = 1 AND email NOT LIKE '%%@seafile_group'
+            email IN (%s)
+        AND is_active = 1
+        AND email NOT LIKE '%%@seafile_group'
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [user_list_str])
             for user in cursor.fetchall():
                 active_users.append(user[0])
 
@@ -209,21 +205,25 @@ class CcnetDB:
 
     def get_org_user_count(self, org_id):
         sql = f"""
-        SELECT COUNT(1) FROM `{self.db_name}`.`OrgUser` WHERE org_id={org_id}
+        SELECT COUNT(1)
+        FROM `{self.db_name}`.`OrgUser`
+        WHERE org_id=%s
         """
         user_count = 0
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [org_id])
             user_count = cursor.fetchone()[0]
         return user_count
-    
+
     def get_user_role_from_db(self, email):
 
         sql = f"""
-        SELECT `role`, `is_manual_set` FROM `{self.db_name}`.`UserRole` WHERE email = '{email}';
+        SELECT `role`, `is_manual_set`
+        FROM `{self.db_name}`.`UserRole`
+        WHERE email = %s;
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [email])
             row = cursor.fetchone()
             if not row:
                 role = None
