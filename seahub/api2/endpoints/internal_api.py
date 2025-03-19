@@ -185,11 +185,11 @@ class InternalCheckFileOperationAccess(APIView):
             if op == OP_DOWNLOAD:
                 if not (ignore_download_perms or op_perms.can_download):
                     error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                
             if op == OP_UPLOAD and not op_perms.can_upload:
                 error_msg = 'Permission denied.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             
             send_file_access_msg(request, repo, file_path, 'web', custom_ip=ip_addr, custom_agent=user_agent)
             return Response({'user': username})
