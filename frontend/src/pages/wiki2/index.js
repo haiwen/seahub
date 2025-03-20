@@ -40,6 +40,7 @@ class Wiki extends Component {
       permission: '',
       isConfigLoading: true,
       currentPageId: '',
+      currentPageLocked: false,
       config: new WikiConfig({}),
       repoId: '',
       seadoc_access_token: '',
@@ -154,6 +155,34 @@ class Wiki extends Component {
     });
   }, 1000);
 
+  updatePageLockedToServer = (pageId, locked) => {
+    wikiAPI.updateWiki2PageLocked(wikiId, pageId, locked).then(res => {
+      this.setState(prevState => {
+        // 更新 wikiConfig 中的 pages
+        const updatedPages = prevState.config.pages.map(page => {
+          if (page.id === pageId) {
+            return {
+              ...page,
+              locked: !prevState.currentPageLocked
+            };
+          }
+          return page;
+        });
+
+        return {
+          currentPageLocked: !prevState.currentPageLocked,
+          config: new WikiConfig({
+            ...prevState.config,
+            pages: updatedPages
+          })
+        };
+      });
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
     this.setState({
       config: new WikiConfig(wikiConfig),
@@ -215,6 +244,7 @@ class Wiki extends Component {
     } else {
       getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
     }
+    // TODO: fix wiki2 page locked
     getWikiPage.then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
       this.setState({
@@ -222,6 +252,7 @@ class Wiki extends Component {
         seadoc_access_token,
         assets_url,
         path: filePath,
+        // currentPageLocked: res.data.is_freezed,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
       this.getSdocFileContent(docUuid, seadoc_access_token);
@@ -281,6 +312,7 @@ class Wiki extends Component {
     this.setState({
       currentPageId: pageId,
       path: path,
+      currentPageLocked: currentPage.locked,
     }, () => {
       callback && callback();
       eventBus.dispatch('update-wiki-current-page');
@@ -408,6 +440,8 @@ class Wiki extends Component {
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
+          currentPageLocked={this.state.currentPageLocked}
+          updatePageLockedToServer={this.updatePageLockedToServer}
           setCurrentPage={this.setCurrentPage}
           isUpdateBySide={this.state.isUpdateBySide}
           style={mainPanelStyle}
