@@ -5,13 +5,13 @@ import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
 import { gettext, username, wikiPermission, wikiId, siteRoot } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
-import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
-import { getCurrentPageConfig, getCurrentPageLocked } from './utils';
+import { getCurrentPageConfig } from './utils';
 import RightHeader from './wiki-right-header';
+import { eventBus } from '../../components/common/event-bus';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -67,6 +67,21 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
+  componentDidMount() {
+    eventBus.subscribe('wiki-editor-state-change', this.handleEditorStateChange);
+  }
+
+  componentWillUnmount() {
+    eventBus.unsubscribe('wiki-editor-state-change', this.handleEditorStateChange);
+    if (this.editor) {
+      this.editor = null;
+    }
+  }
+
+  handleEditorStateChange = ({ pageId, locked }) => {
+    this.forceUpdate();
+  };
+
   openHistory = () => {
     window.location.href = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${this.state.currentPageConfig.id}`;
   };
@@ -103,49 +118,15 @@ class MainPanel extends Component {
   };
 
   toggleFreezeStatus = () => {
-    // console.log(this.state.currentPageConfig.locked, '----currentPageConfig.locked')
-    console.log(!this.props.currentPageLocked, '----currentPageLocked');
     this.props.updatePageLockedToServer(this.state.currentPageConfig.id, !this.props.currentPageLocked);
-    // this.setState({
-    //   locked: !this.state.locked
-    // }, () => {
-    //   console.log(this.state.locked, '----locked')
-    // });
-
-  };
-
-  toggleLockFile = () => {
-    // if (this.state.isLocked) {
-    //   seafileAPI.unlockfile(repoID, filePath).then((res) => {
-    //     this.setState({
-    //       isLocked: false,
-    //       lockedByMe: false
-    //     });
-    //   }).catch((error) => {
-    //     const errorMsg = Utils.getErrorMsg(error);
-    //     toaster.danger(errorMsg);
-    //   });
-    // } else {
-    //   seafileAPI.lockfile(repoID, filePath).then((res) => {
-    //     this.setState({
-    //       isLocked: true,
-    //       lockedByMe: true
-    //     });
-    //   }).catch((error) => {
-    //     const errorMsg = Utils.getErrorMsg(error);
-    //     toaster.danger(errorMsg);
-    //   });
-    // }
   };
 
   render() {
-    // console.log(this.state.currentPageConfig)
     const menuItems = this.getMenu();
     const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
     const { currentPageConfig = {}, isDropdownMenuOpen } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
-    const isReadOnly = !(permission === 'rw');
-    console.log(currentPageLocked, '----currentPageLocked');
+    const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
       <div className="wiki2-main-panel" style={style}>
         <div className='wiki2-main-panel-north'>
@@ -162,8 +143,9 @@ class MainPanel extends Component {
                 config={config}
                 currentPageId={this.props.currentPageId}
                 currentPageConfig={currentPageConfig}
+                currentPageLocked={currentPageLocked}
                 setCurrentPage={this.props.setCurrentPage}
-                toggleLockFile={this.toggleLockFile}
+                toggleFreezeStatus={this.toggleFreezeStatus}
               />
               {isViewingFile &&
                 <DocInfo key={this.props.currentPageId} initContext={true} />
@@ -209,12 +191,6 @@ class MainPanel extends Component {
               </DropdownMenu>
             </Dropdown>
             }
-            {/* {(wikiPermission === 'rw' && this.state.currentPageConfig) &&
-              <div className='wiki2-file-history-button' onClick={this.openHistory} role="button">
-                <i className='sf3-font sf3-font-history' aria-hidden="true" />
-              </div>
-            } */}
-
             {username && <Account />}
           </div>
         </div>
@@ -229,6 +205,7 @@ class MainPanel extends Component {
                 <div className='wiki-editor-container'>
                   <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
                   <SdocWikiEditor
+                    key={`${this.state.docUuid}-${currentPageLocked}`}
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}

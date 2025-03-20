@@ -8,44 +8,20 @@ import { getPaths } from '../utils/index';
 
 import './index.css';
 
-function WikiTopNav({ config, currentPageId, setCurrentPage, toggleLockFile }) {
+function WikiTopNav({ config, currentPageId, setCurrentPage, toggleFreezeStatus, currentPageLocked }) {
   // handleLockClick
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
-  const { canLockUnlockFile, isLocked, lockedByMe } = window.app.pageOptions;
-  const handleLockClick = async (pageId) => {
-    try {
-      // 发送锁定/解锁请求
-      const response = await fetch('/api/pages/lock', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pageId: pageId
-        })
-      });
+  const { permission } = window.wiki.config;
 
-      if (response.ok) {
-        // 处理成功响应
-        // 可以更新页面状态或显示提示信息
-      }
-    } catch (error) {
-      // 处理错误
-      console.error('Failed to lock/unlock page:', error);
-    }
-  };
-  let showLockUnlockBtn = false;
   let lockUnlockText; let lockUnlockIcon;
-  if (canLockUnlockFile) {
-    if (!isLocked) {
-      showLockUnlockBtn = true;
-      lockUnlockText = gettext('Lock');
-      lockUnlockIcon = 'lock';
-    } else if (lockedByMe) {
-      showLockUnlockBtn = true;
+  if (permission === 'rw') {
+    if (!currentPageLocked) {
       lockUnlockText = gettext('Unlock');
       lockUnlockIcon = 'unlock';
+    } else {
+      lockUnlockText = gettext('lock');
+      lockUnlockIcon = 'lock';
     }
   }
   return (
@@ -65,12 +41,12 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, toggleLockFile }) {
 
         );
       })}
-      {/* <IconButton
-          id="lock-unlock-file"
-          icon={lockUnlockIcon}
-          text={lockUnlockText}
-          onClick={toggleLockFile}
-        /> */}
+      <IconButton
+        id="lock-unlock-file"
+        icon={lockUnlockIcon}
+        text={lockUnlockText}
+        onClick={toggleFreezeStatus}
+      />
     </div>
   );
 }

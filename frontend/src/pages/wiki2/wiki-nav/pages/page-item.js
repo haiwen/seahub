@@ -11,6 +11,7 @@ import DraggedPageItem from './dragged-page-item';
 import CustomIcon from '../../custom-icon';
 import { eventBus } from '../../../../components/common/event-bus';
 import { INSERT_POSITION } from '../constants';
+import IconButton from '../../../../components/icon-button';
 
 class PageItem extends Component {
 
@@ -211,12 +212,10 @@ class PageItem extends Component {
     const { connectDragSource, connectDragPreview, connectDropTarget, page, pagesLength, isOnlyOnePage, pathStr } = this.props;
     const { isShowNameEditor, pageName, isSelected, isMouseEnter } = this.state;
     if (isSelected) this.setDocUuid(page.docUuid);
-
     let navItemId = `page-editor-${page.id}`;
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
     const customIcon = page.icon;
     const folded = this.props.getFoldState(page.id);
-    // console.log('page', page.locked);
     if (wikiPermission === 'rw') {
       return (
         <div>
@@ -240,7 +239,13 @@ class PageItem extends Component {
                     </div>
                   }
                   <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
-                  <span>{page.locked ? '🔒' : '🔓'}</span>
+                  {page.locked &&
+                  <IconButton
+                    id="lock-unlock-file"
+                    icon={'lock'}
+                    text={'lock'}
+                  />
+                  }
                   {isShowNameEditor && (
                     <NameEditPopover
                       oldName={pageName}
