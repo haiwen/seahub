@@ -85,9 +85,10 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
         <Editor
           saveImmediately={true}
           value={value}
-          column={{ ...field, width: Math.max(width - 2, 200) }}
+          column={{ ...field, width: Math.max(width - 2, 400) }}
           record={record}
           updateFileTags={updateFileTags}
+          showTagsAsTree={true}
         />
       </Popover>
     );
