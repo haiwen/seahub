@@ -16,9 +16,19 @@
   padding: 10px 10px 0;
 }
 
+.sf-metadata-tags-editor.tags-tree-container .sf-metadata-search-tags-container {
+  padding: 16px 16px 0;
+}
+
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .sf-metadata-search-tags {
   font-size: 14px;
   max-height: 30px;
+}
+
+.sf-metadata-tags-editor .sf-metadata-search-tags-container .search-control {
+  position: absolute;
+  top: 24px;
+  right: 26px;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container {
@@ -28,20 +38,22 @@
   padding: 10px;
 }
 
+.sf-metadata-tags-editor.tags-tree-container .sf-metadata-tags-editor-container {
+  max-height: 280px;
+  padding: 10px 16px;
+}
+
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .none-search-result {
   font-size: 14px;
   opacity: 0.5;
   display: inline-block;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container {
-  align-items: center;
-  border-radius: 2px;
-  color: #212529;
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-title {
+  height: 32px;
   display: flex;
-  font-size: 13px;
-  height: 30px;
-  width: 100%;
+  align-items: center;
+  color: #666;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container-highlight {
@@ -52,25 +64,4 @@
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-check-icon {
   text-align: center;
   width: 20px;
-}
-
-.sf-metadata-tag-color-and-name {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.sf-metadata-tag-color-and-name .sf-metadata-tag-color {
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.sf-metadata-tag-color-and-name .sf-metadata-tag-name {
-  flex: 1;
-  margin-left: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
