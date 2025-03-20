@@ -44,3 +44,9 @@ CREATE TABLE IF NOT EXISTS `org_last_active_time` (
 ALTER TABLE `sdoc_notification` ADD INDEX `idx_user_seen` (`username`, `seen`);
 
 ALTER TABLE organizations_orgsettings ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1;
+
+ALTER TABLE repo_metadata ADD COLUMN tags_enabled tinyint(1) NULL;
+ALTER TABLE repo_metadata ADD COLUMN tags_lang varchar(36) NULL;
+ALTER TABLE repo_metadata ADD COLUMN details_settings longtext NULL;
+ALTER TABLE repo_metadata ADD COLUMN ocr_enabled tinyint(1) NULL;
+ALTER TABLE `repo_metadata` ADD KEY `key_last_face_cluster_time_face_recognition_enabled`(`face_recognition_enabled`, `last_face_cluster_time`);
