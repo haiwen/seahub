@@ -627,6 +627,12 @@ module.exports = function (webpackEnv) {
             // Make sure to add the new loader(s) before the "file" loader.
           ],
         },
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false
+          }
+        }
       ].filter(Boolean),
     },
     plugins: [
