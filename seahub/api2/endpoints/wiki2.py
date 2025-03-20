@@ -40,10 +40,10 @@ from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_vali
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
+from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner, get_locked_files_by_dir
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-    ENCRYPTED_LIBRARY_VERSION
+    ENCRYPTED_LIBRARY_VERSION, FILE_LOCK_EXPIRATION_DAYS
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -459,7 +459,17 @@ class Wiki2ConfigView(APIView):
 
         wiki = wiki.to_dict()
         wiki_config = get_wiki_config(repo.repo_id, request.user.username)
-
+        pages = wiki_config.get('pages', [])
+        locked_files = seafile_api.get_locked_files(wiki_id)
+        locked_file_paths = []
+        for locked_file in locked_files:
+            locked_file_paths.append(locked_file.path)
+        for page in pages:
+            if page['path'][1:] in locked_file_paths:
+                page['locked'] = True
+            else:
+                page['locked'] = False
+        wiki_config['pages'] = pages
         wiki['wiki_config'] = wiki_config
 
         return Response({'wiki': wiki})
@@ -746,13 +756,14 @@ class Wiki2PageView(APIView):
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission, default_title='')
-
+        is_freezed = dirent.expire is not None and dirent.expire < 0
         return Response({
             "latest_contributor": email2nickname(latest_contributor),
             "last_modified": last_modified,
             "permission": permission,
             "seadoc_access_token": seadoc_access_token,
             "assets_url": assets_url,
+            "is_freezed": is_freezed,
         })
 
     def delete(self, request, wiki_id, page_id):
@@ -837,6 +848,65 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response({'success': True})
+
+    def put(self, request, wiki_id, page_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        locked = request.data.get('locked', None)
+        if locked is None:
+            error_msg = 'locked is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        pages = wiki_config.get('pages', [])
+        for page in pages:
+            if page['id'] == page_id:
+                page['locked'] = locked
+                path = page['path']
+                break
+        wiki_config['pages'] = pages
+        wiki_config = json.dumps(wiki_config)
+        save_wiki_config(wiki, username, wiki_config)
+
+        expire = request.data.get('expire', -1)
+        try:
+            expire = int(expire)
+        except ValueError:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if locked:
+            try:
+                seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        else:
+            # unlock file
+            try:
+                seafile_api.unlock_file(repo_id, path.lstrip('/'))
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        return Response('success', status=status.HTTP_200_OK)
 
 
 class Wiki2PublishPageView(APIView):

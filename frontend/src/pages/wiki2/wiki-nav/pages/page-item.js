@@ -216,7 +216,7 @@ class PageItem extends Component {
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
     const customIcon = page.icon;
     const folded = this.props.getFoldState(page.id);
-
+    // console.log('page', page.locked);
     if (wikiPermission === 'rw') {
       return (
         <div>
@@ -240,6 +240,7 @@ class PageItem extends Component {
                     </div>
                   }
                   <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
+                  <span>{page.locked ? '🔒' : '🔓'}</span>
                   {isShowNameEditor && (
                     <NameEditPopover
                       oldName={pageName}
