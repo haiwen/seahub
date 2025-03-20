@@ -98,6 +98,7 @@ export const EVENT_BUS_TYPE = {
   DELETE_TAG_FILES: 'delete_tag_files',
   SELECT_TAG_FILES: 'select_tag_files',
   UNSELECT_TAG_FILES: 'unselect_tag_files',
+  MODIFY_TAG_FILES_SORT: 'modify_tag_files_sort',
 
   // tags
   SELECT_TAGS: 'select_tags',
