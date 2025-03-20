@@ -135,3 +135,24 @@ body {
 .sdoc-editor-container .sdoc-article-container .article #sdoc-editor {
   width: 100%;
 }
+
+.wiki2-file-history-button .freeze-document-switch {
+  padding: 4px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.wiki2-file-history-button .freeze-document-switch .custom-switch-description {
+  margin-left: 0;
+  color: #212529;
+  transition: none;
+}
+
+.wiki2-file-history-button .freeze-document-switch:hover .custom-switch-description {
+  color: #fff;
+  transition: none;
+}
+
+.wiki2-file-history-button .freeze-document-switch  .custom-switch-indicator {
+  margin-left: 30px;
+}

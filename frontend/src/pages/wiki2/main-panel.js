@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
 import { gettext, username, wikiPermission, wikiId, siteRoot } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
+import Switch from '../../components/switch';
+import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
-import { getCurrentPageConfig } from './utils';
+import { getCurrentPageConfig, getCurrentPageLocked } from './utils';
 import RightHeader from './wiki-right-header';
 
 const propTypes = {
@@ -22,6 +26,8 @@ const propTypes = {
   currentPageId: PropTypes.string,
   isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
+  updatePageLockedToServer: PropTypes.func,
+  currentPageLocked: PropTypes.bool,
   onAddWikiPage: PropTypes.func,
   style: PropTypes.object.isRequired,
   mobileOpenSidePanel: PropTypes.func.isRequired
@@ -34,6 +40,7 @@ class MainPanel extends Component {
     this.state = {
       docUuid: '',
       currentPageConfig: {},
+      isDropdownMenuOpen: false,
     };
     this.scrollRef = React.createRef();
   }
@@ -64,11 +71,81 @@ class MainPanel extends Component {
     window.location.href = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${this.state.currentPageConfig.id}`;
   };
 
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
+
+  getMenu = () => {
+    const list = [];
+    if (wikiPermission === 'rw' && this.state.currentPageConfig) {
+      const { HISTORY, FREEZE_DOCUMENT } = TextTranslation;
+      list.push(FREEZE_DOCUMENT);
+      list.push(HISTORY);
+    }
+    return list;
+  };
+
+  onMenuItemClick = (item) => {
+    const { key } = item;
+    switch (key) {
+      case 'History':
+        this.openHistory();
+        break;
+    }
+  };
+
+  onMenuItemKeyDown = (e, item) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(item);
+    }
+  };
+
+  toggleFreezeStatus = () => {
+    // console.log(this.state.currentPageConfig.locked, '----currentPageConfig.locked')
+    console.log(!this.props.currentPageLocked, '----currentPageLocked');
+    this.props.updatePageLockedToServer(this.state.currentPageConfig.id, !this.props.currentPageLocked);
+    // this.setState({
+    //   locked: !this.state.locked
+    // }, () => {
+    //   console.log(this.state.locked, '----locked')
+    // });
+
+  };
+
+  toggleLockFile = () => {
+    // if (this.state.isLocked) {
+    //   seafileAPI.unlockfile(repoID, filePath).then((res) => {
+    //     this.setState({
+    //       isLocked: false,
+    //       lockedByMe: false
+    //     });
+    //   }).catch((error) => {
+    //     const errorMsg = Utils.getErrorMsg(error);
+    //     toaster.danger(errorMsg);
+    //   });
+    // } else {
+    //   seafileAPI.lockfile(repoID, filePath).then((res) => {
+    //     this.setState({
+    //       isLocked: true,
+    //       lockedByMe: true
+    //     });
+    //   }).catch((error) => {
+    //     const errorMsg = Utils.getErrorMsg(error);
+    //     toaster.danger(errorMsg);
+    //   });
+    // }
+  };
+
   render() {
-    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style } = this.props;
-    const { currentPageConfig = {} } = this.state;
+    // console.log(this.state.currentPageConfig)
+    const menuItems = this.getMenu();
+    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
+    const { currentPageConfig = {}, isDropdownMenuOpen } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = !(permission === 'rw');
+    console.log(currentPageLocked, '----currentPageLocked');
     return (
       <div className="wiki2-main-panel" style={style}>
         <div className='wiki2-main-panel-north'>
@@ -86,6 +163,7 @@ class MainPanel extends Component {
                 currentPageId={this.props.currentPageId}
                 currentPageConfig={currentPageConfig}
                 setCurrentPage={this.props.setCurrentPage}
+                toggleLockFile={this.toggleLockFile}
               />
               {isViewingFile &&
                 <DocInfo key={this.props.currentPageId} initContext={true} />
@@ -93,11 +171,50 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
-            {(wikiPermission === 'rw' && this.state.currentPageConfig) &&
+            {menuItems.length > 0 &&
+            <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
+              <DropdownToggle
+                tag="i"
+                id="cur-folder-more-op-toggle"
+                className='wiki2-file-history-button sf3-font-more sf3-font'
+                data-toggle="dropdown"
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                aria-expanded={isDropdownMenuOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu>
+                {menuItems.map((menuItem, index) => {
+                  if (menuItem.key === 'Freeze Document') {
+                    return <Switch
+                      checked={currentPageLocked}
+                      disabled={false}
+                      size="small"
+                      textPosition="left"
+                      className='freeze-document-switch w-100 dropdown-item'
+                      onChange={this.toggleFreezeStatus}
+                      placeholder={gettext('Freeze Document')}
+                    />;
+                  } else {
+                    return (
+                      <DropdownItem
+                        key={index}
+                        onClick={this.onMenuItemClick.bind(this, menuItem)}
+                        onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
+                      >{menuItem.value}
+                      </DropdownItem>
+                    );
+                  }
+                })}
+              </DropdownMenu>
+            </Dropdown>
+            }
+            {/* {(wikiPermission === 'rw' && this.state.currentPageConfig) &&
               <div className='wiki2-file-history-button' onClick={this.openHistory} role="button">
                 <i className='sf3-font sf3-font-history' aria-hidden="true" />
               </div>
-            }
+            } */}
+
             {username && <Account />}
           </div>
         </div>
