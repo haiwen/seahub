@@ -132,12 +132,12 @@ class DirTool extends React.Component {
         <div className="dir-tool d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
           <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
-          {(!isCustomPermission) && (
+          {(!isCustomPermission) &&
             <div className="cur-view-path-btn" onClick={onToggleDetail}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </div>
-          )}
-          {menuItems.length > 0 && (
+          }
+          {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
               <DropdownToggle
                 tag="i"
@@ -166,9 +166,9 @@ class DirTool extends React.Component {
                 })}
               </DropdownMenu>
             </Dropdown>
-          )}
+          }
         </div>
-        {this.state.isRepoTagDialogOpen && (
+        {this.state.isRepoTagDialogOpen &&
           <CustomizePopover
             popoverClassName="list-tag-popover"
             target="cur-folder-more-op-toggle"
@@ -182,7 +182,7 @@ class DirTool extends React.Component {
               onListTagCancel={this.toggleCancel}
             />
           </CustomizePopover>
-        )}
+        }
       </React.Fragment>
     );
   }

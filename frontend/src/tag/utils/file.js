@@ -1,4 +1,3 @@
-import { getFileMTimeFromRecord, getFileSizedFromRecord } from '../../metadata/utils/cell';
 import { compareString } from '../../metadata/utils/sort';
 import { enableSeadoc, fileAuditEnabled, isPro } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
