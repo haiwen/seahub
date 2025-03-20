@@ -76,7 +76,7 @@ class SetWebdavPassword extends Component {
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <InputGroupAddon addonType="append">
               <Button onClick={this.togglePasswordVisible}>
-                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : 'slash'}`}></i>
+                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
               </Button>
               <Button onClick={this.generatePassword}>
                 <i className="sf3-font sf3-font-magic"></i>
