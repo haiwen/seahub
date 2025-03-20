@@ -158,7 +158,6 @@ class Wiki extends Component {
   updatePageLockedToServer = (pageId, locked) => {
     wikiAPI.updateWiki2PageLocked(wikiId, pageId, locked).then(res => {
       this.setState(prevState => {
-        // 更新 wikiConfig 中的 pages
         const updatedPages = prevState.config.pages.map(page => {
           if (page.id === pageId) {
             return {
@@ -176,6 +175,11 @@ class Wiki extends Component {
             pages: updatedPages
           })
         };
+      });
+
+      eventBus.dispatch('wiki-editor-state-change', {
+        pageId,
+        locked: !this.state.currentPageLocked
       });
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
