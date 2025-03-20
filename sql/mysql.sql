@@ -1538,9 +1538,14 @@ CREATE TABLE `repo_metadata`  (
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
+  `tags_enabled` tinyint(1) DEFAULT NULL,
+  `tags_lang` varchar(36) DEFAULT NULL,
+  `details_settings` longtext DEFAULT NULL,
+  `ocr_enabled` tinyint(1) DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
+  KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
