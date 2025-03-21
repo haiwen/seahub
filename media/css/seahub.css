@@ -2202,11 +2202,18 @@ a.sf-popover-item {
   margin-top: 20px;
   margin-bottom: 15px;
 }
+.login-panel-bottom-privacy-policy {
+  font-size: 12px;
+  line-height: 1;
+  margin-top: 12px;
+}
 .login-panel-bottom-privacy-policy a {
   color: #EC8000;
   font-size: 12px;
 }
-
+.login-panel-bottom-privacy-policy .bottom-item {
+  border-right: 1px solid #eb8205;
+}
 
 /*myhome*/
 #quota-bar {
