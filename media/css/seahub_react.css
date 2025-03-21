@@ -772,9 +772,9 @@ a, a:hover {
 }
 
 .nav .nav-item .nav-link.active {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
-  border-bottom-color: #eb8205;
+  border-bottom-color: #EC8000;
   z-index: 1;
 }
 
@@ -1151,7 +1151,7 @@ a.sf-popover-item:hover {
 }
 
 .path-link {
-  color: #eb8205 !important;
+  color: #EC8000 !important;
   text-decoration: none;
 }
 
@@ -1253,7 +1253,7 @@ table td {
   padding: 0.25rem 0.75rem;
   line-height: 2rem;
   text-align: center;
-  color: #eb8205;
+  color: #EC8000;
   cursor: pointer;
 }
 
@@ -1567,7 +1567,7 @@ a.table-sort-op:hover {
 
 .seafile-md-viewer-outline-heading2:hover,
 .seafile-md-viewer-outline-heading3:hover {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 .seafile-markdown-outline {
@@ -1585,8 +1585,8 @@ a.table-sort-op:hover {
 }
 
 .seafile-markdown-outline .active {
-  color: #eb8205;
-  border-left: 1px solid #eb8205;
+  color: #EC8000;
+  border-left: 1px solid #EC8000;
 }
 
 .seafile-markdown-outline .outline-h2,
@@ -1616,7 +1616,7 @@ a.table-sort-op:hover {
 
 #wiki-file-content .seafile-markdown-outline .outline-h2.active,
 #wiki-file-content .seafile-markdown-outline .outline-h3.active {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 #wiki-file-content .seafile-markdown-outline .seafile-markdown-outline {
