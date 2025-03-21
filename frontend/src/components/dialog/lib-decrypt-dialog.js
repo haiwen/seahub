@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, Form } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import SeahubModalCloseIcon from '../../components/common/seahub-modal-close';
 
 import '../../css/lib-decrypt.css';
 
@@ -56,7 +57,7 @@ class LibDecryptDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalBody>
-          <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
+          <SeahubModalCloseIcon className="position-absolute top-0 end-0 m-0" toggle={this.toggle} />
           <Form className="lib-decrypt-form text-center">
             <img src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
             <p className="intro">{gettext('This library is password protected')}</p>
