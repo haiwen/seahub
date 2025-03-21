@@ -2097,7 +2097,9 @@ def view_media_file_via_share_link(request):
     image_file_name = image_file_name.replace(')', '\)')
     encoded_image_file_name = urllib.parse.quote(image_file_name)
 
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, encoded_image_file_name))
+    unsafe_pattern = '(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, encoded_image_file_name)
+    safe_pattern = re.escape(unsafe_pattern)
+    p = re.compile(safe_pattern)
     result = re.search(p, file_content)
     if not result:
         return render_error(request, 'Image does not exist')
