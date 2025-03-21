@@ -410,7 +410,7 @@ dd {
 }
 
 a {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
   font-weight: bold;
 }
@@ -421,7 +421,7 @@ a.normal {
 
 a:focus,
 a:hover {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 img {
@@ -985,7 +985,7 @@ textarea:-moz-placeholder {
 
 /**** btn with link styles ****/
 .sf-link-btn {
-  color: #eb8205;
+  color: #EC8000;
   border: none;
   padding: 0;
   background: none;
@@ -993,7 +993,7 @@ textarea:-moz-placeholder {
 
 .sf-link-btn:focus,
 .sf-link-btn:hover {
-  color: #eb8205;
+  color: #EC8000;
   background: none;
   text-decoration: underline;
 }
@@ -1562,9 +1562,9 @@ textarea:-moz-placeholder {
 
 .cur-view-path .tab-tabs-nav .ui-state-active .a,
 .cur-view-path .tab-tabs-nav .a:hover {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
-  border-bottom-color: #eb8205;
+  border-bottom-color: #EC8000;
 }
 
 .tab-tabs .ui-tabs-panel {
@@ -1883,9 +1883,9 @@ a.sf-popover-item {
 .wiki-nav .link:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
-  border-bottom-color: #eb8205;
+  border-bottom-color: #EC8000;
 }
 
 .tabnav button,
@@ -2087,7 +2087,7 @@ a.sf-popover-item {
 }
 
 #log-in-panel {
-  padding: 30px 25px 15px;
+  padding: 30px 25px 12px;
   width: 336px;
 }
 
@@ -2188,11 +2188,34 @@ a.sf-popover-item {
 }
 
 #login-bottom .bottom-item {
-  border-right: 1px solid #eb8205;
+  border-right: 1px solid #EC8000;
 }
 
 #signup-form .input {
   margin-bottom: 5px;
+}
+
+.login-panel-bottom-divider {
+  border: 0;
+  height: 1px;
+  background-color: #DBDBDB;
+  margin: 20px -25px 0px -25px;
+  opacity: 1;
+}
+
+.login-panel-bottom-privacy-policy {
+  font-size: 12px;
+  line-height: 1;
+  margin-top: 12px;
+}
+
+.login-panel-bottom-privacy-policy a {
+  color: #EC8000;
+  font-size: 12px;
+}
+
+.login-panel-bottom-privacy-policy .bottom-item {
+  border-right: 1px solid #EC8000;
 }
 
 /*myhome*/
