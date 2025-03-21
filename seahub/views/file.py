@@ -2019,7 +2019,6 @@ def office_convert_query_status(request):
 
     return ret
 
-_OFFICE_PAGE_PATTERN = re.compile(r'^file\.css|file\.outline|index.html|index_html_.*.png|[a-z0-9]+\.pdf$')
 def office_convert_get_page(request, repo_id, commit_id, path, filename):
     """Valid static file path inclueds:
     - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
@@ -2027,9 +2026,14 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename):
     """
     if not HAS_OFFICE_CONVERTER:
         raise Http404
-    
 
-    if not _OFFICE_PAGE_PATTERN.match(filename):
+    if not (
+        filename == "file.css" or
+        filename == "file.outline" or
+        filename == "index.html" or
+        (filename.startswith("index_html_") and filename.endswith(".png")) or
+        (filename.endswith(".pdf") and len(filename) > 4 and all(c.islower() or c.isdigit() for c in filename[:-4]))
+    ):
         return HttpResponseForbidden()
 
     path = '/' + path
