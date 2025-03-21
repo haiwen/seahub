@@ -14,7 +14,6 @@ const ExcaliEditor = () => {
   const isChangedRef = useRef(false);
   const [isFetching, setIsFetching] = useState(true);
 
-
   useEffect(() => {
     editorApi.getFileContent().then(res => {
       if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
@@ -24,7 +23,6 @@ const ExcaliEditor = () => {
       setFileContent(res.data);
       setIsFetching(false);
     });
-
   }, []);
 
   const saveSceneContent = useCallback(async () => {
@@ -61,17 +59,8 @@ const ExcaliEditor = () => {
       }
     }, SAVE_INTERVAL_TIME);
 
-    const handleBeforeUnload = (event) => {
-      if (isChangedRef.current) {
-        event.preventDefault();
-        event.returnValue = '';
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       clearInterval(saveInterval);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [saveSceneContent]);
 
@@ -79,8 +68,8 @@ const ExcaliEditor = () => {
     saveSceneContent();
   }, [saveSceneContent]);
 
-  const onChangeContent = useCallback((newSceneElements, newAppState) => {
-    editorRef.current = { elements: newSceneElements, appState: newAppState };
+  const onChangeContent = useCallback((elements) => {
+    editorRef.current = { elements };
     isChangedRef.current = true;
   }, []);
 

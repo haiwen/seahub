@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
+import { langList } from './constants';
 
 import '@excalidraw/excalidraw/index.css';
 
-
-const SimpleEditor = ({ sceneContent, onChangeContent, onSaveContent, isFetching }) => {
+const SimpleEditor = ({
+  sceneContent = null,
+  onChangeContent,
+  onSaveContent,
+  isFetching
+}) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const UIOptions = {
     canvasActions: {
@@ -16,14 +21,9 @@ const SimpleEditor = ({ sceneContent, onChangeContent, onSaveContent, isFetching
     tools: { image: false },
   };
 
-  useEffect(() => {
-    if (excalidrawAPI && sceneContent) {
-      excalidrawAPI.updateScene(sceneContent);
-    }
-  }, [excalidrawAPI, sceneContent]);
-
-  const handleChange = (newElements, newAppState) => {
-    onChangeContent?.(newElements, newAppState);
+  const handleChange = () => {
+    const elements = excalidrawAPI.getSceneElements();
+    onChangeContent(elements);
   };
 
   useEffect(() => {
@@ -52,15 +52,15 @@ const SimpleEditor = ({ sceneContent, onChangeContent, onSaveContent, isFetching
     <>
       <div className='excali-container' style={{ height: '100vh', width: '100vw' }}>
         <Excalidraw
-          initialData={ sceneContent }
+          initialData={sceneContent}
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
           onChange={handleChange}
           UIOptions={UIOptions}
+          langCode={langList[window.app.config.lang] || 'en'}
         >
           <MainMenu>
             <MainMenu.DefaultItems.Export />
             <MainMenu.DefaultItems.SaveAsImage />
-            <MainMenu.DefaultItems.SearchMenu />
             <MainMenu.DefaultItems.Help />
             <MainMenu.DefaultItems.ClearCanvas />
             <MainMenu.DefaultItems.ToggleTheme />
