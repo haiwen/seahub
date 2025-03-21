@@ -431,7 +431,8 @@ class DirentListView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE
+      NEW_TLDRAW_FILE,
+      NEW_EXCELDRAW_FILE,
     } = TextTranslation;
 
     const direntsContainerMenuList = [
@@ -450,6 +451,10 @@ class DirentListView extends React.Component {
 
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
+
+    if (enableWhiteboard) {
+      direntsContainerMenuList.push(NEW_EXCELDRAW_FILE);
     }
 
     if (this.props.selectedDirentList.length === 0) {
@@ -528,6 +533,9 @@ class DirentListView extends React.Component {
         break;
       case 'New Whiteboard File':
         this.onCreateFileToggle('.draw');
+        break;
+      case 'New Exceldraw File':
+        this.onCreateFileToggle('.exdraw');
         break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');

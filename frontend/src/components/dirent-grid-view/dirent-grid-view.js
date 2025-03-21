@@ -412,6 +412,9 @@ class DirentGridView extends React.Component {
       case 'New Whiteboard File':
         this.onCreateFileToggle('.draw');
         break;
+      case 'New Exceldraw File':
+        this.onCreateFileToggle('.exdraw');
+        break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');
         break;
@@ -734,13 +737,15 @@ class DirentGridView extends React.Component {
     if (!['admin', 'rw'].includes(this.props.userPerm)) return;
 
     const {
-      NEW_FOLDER, NEW_FILE,
+      NEW_FOLDER,
+      NEW_FILE,
       NEW_MARKDOWN_FILE,
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE
+      NEW_TLDRAW_FILE,
+      NEW_EXCELDRAW_FILE
     } = TextTranslation;
 
     let direntsContainerMenuList = [
@@ -761,6 +766,10 @@ class DirentGridView extends React.Component {
 
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
+
+    if (enableWhiteboard) {
+      direntsContainerMenuList.push(NEW_EXCELDRAW_FILE);
     }
 
     if (selectedDirentList.length === 0) {

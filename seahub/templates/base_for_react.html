@@ -159,6 +159,7 @@
             officeWebAppEditFileExtension: {% if office_web_app_edit_file_extension %} {{office_web_app_edit_file_extension|safe}} {% else %} [] {% endif %},
             enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
             enableWhiteboard: {% if enable_whiteboard %} true {% else %} false {% endif %},
+            enableExceldraw: {% if enable_exceldraw %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
             enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
             isMultiTenacy: {% if multi_tenancy %} true {% else %} false {% endif %},

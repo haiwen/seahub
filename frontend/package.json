@@ -8,6 +8,7 @@
     "@codemirror/view": "^6.34.1",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
+    "@excalidraw/excalidraw": "^0.18.0",
     "@gatsbyjs/reach-router": "2.0.1",
     "@seafile/react-image-lightbox": "4.0.2",
     "@seafile/resumablejs": "1.1.16",
