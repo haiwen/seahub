@@ -118,9 +118,20 @@ html, body, #wrapper { height:100%; }
         <a href="{{ signup_url }}" class="normal px-2 bottom-item" id="sign-up">{% trans "Signup" %}</a>
         {% endif %}
     </div>
+    {% if privacy_policy_link or terms_of_service_link %}
+    <hr class="login-panel-bottom-divider">
+    <div class="login-panel-bottom-privacy-policy d-flex justify-content-center">
+        {% if privacy_policy_link %}
+        <a href="{{ privacy_policy_link }}" class="normal px-2 bottom-item privacy-policy">{% trans "Privacy Policy" %}</a>
+        {% endif %}
+
+        {% if terms_of_service_link %}
+        <a href="{{ terms_of_service_link }}" class="normal px-2 bottom-item privacy-policy">{% trans "Terms of Service" %}</a>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}

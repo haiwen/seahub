@@ -2195,6 +2195,19 @@ a.sf-popover-item {
   margin-bottom: 5px;
 }
 
+.login-panel-bottom-divider {
+  border: 0;
+  height: 1px;
+  background-color: #DBDBDB;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+.login-panel-bottom-privacy-policy a {
+  color: #EC8000;
+  font-size: 12px;
+}
+
+
 /*myhome*/
 #quota-bar {
   display: block;
