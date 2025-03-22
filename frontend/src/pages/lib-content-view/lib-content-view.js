@@ -1081,6 +1081,7 @@ class LibContentView extends React.Component {
   };
 
   onMainNavBarClick = (nodePath) => {
+    this.resetSelected({ path: nodePath });
     if (this.state.isTreePanelShown) {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(nodePath);
