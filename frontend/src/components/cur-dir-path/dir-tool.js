@@ -12,7 +12,8 @@ import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-searcher';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
-import SortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
+import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
+import TagFilesSortSetter from '../../tag/views/tag-files/sort-setter';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -120,8 +121,8 @@ class DirTool extends React.Component {
     if (isTagView) {
       return (
         <div className="dir-tool">
-          <TagsTableSearcher />
-          {isAllTagsView && <SortSetter />}
+          {isAllTagsView && <TagsTableSearcher />}
+          {isAllTagsView ? <AllTagsSortSetter /> : <TagFilesSortSetter />}
         </div>
       );
     }
@@ -137,50 +138,50 @@ class DirTool extends React.Component {
             </div>
           }
           {menuItems.length > 0 &&
-          <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
-            <DropdownToggle
-              tag="i"
-              id="cur-folder-more-op-toggle"
-              className='cur-view-path-btn sf3-font-more sf3-font'
-              data-toggle="dropdown"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              aria-expanded={isDropdownMenuOpen}
-            >
-            </DropdownToggle>
-            <DropdownMenu>
-              {menuItems.map((menuItem, index) => {
-                if (menuItem === 'Divider') {
-                  return <DropdownItem key={index} divider />;
-                } else {
-                  return (
-                    <DropdownItem
-                      key={index}
-                      onClick={this.onMenuItemClick.bind(this, menuItem)}
-                      onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
-                    >{menuItem.value}
-                    </DropdownItem>
-                  );
-                }
-              })}
-            </DropdownMenu>
-          </Dropdown>
+            <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+              <DropdownToggle
+                tag="i"
+                id="cur-folder-more-op-toggle"
+                className='cur-view-path-btn sf3-font-more sf3-font'
+                data-toggle="dropdown"
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                aria-expanded={isDropdownMenuOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu>
+                {menuItems.map((menuItem, index) => {
+                  if (menuItem === 'Divider') {
+                    return <DropdownItem key={index} divider />;
+                  } else {
+                    return (
+                      <DropdownItem
+                        key={index}
+                        onClick={this.onMenuItemClick.bind(this, menuItem)}
+                        onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
+                      >{menuItem.value}
+                      </DropdownItem>
+                    );
+                  }
+                })}
+              </DropdownMenu>
+            </Dropdown>
           }
         </div>
         {this.state.isRepoTagDialogOpen &&
-        <CustomizePopover
-          popoverClassName="list-tag-popover"
-          target="cur-folder-more-op-toggle"
-          hidePopover={this.hidePopover}
-          hidePopoverWithEsc={this.hidePopover}
-          boundariesElement={document.body}
-          placement={'bottom-end'}
-        >
-          <ListTagPopover
-            repoID={repoID}
-            onListTagCancel={this.toggleCancel}
-          />
-        </CustomizePopover>
+          <CustomizePopover
+            popoverClassName="list-tag-popover"
+            target="cur-folder-more-op-toggle"
+            hidePopover={this.hidePopover}
+            hidePopoverWithEsc={this.hidePopover}
+            boundariesElement={document.body}
+            placement={'bottom-end'}
+          >
+            <ListTagPopover
+              repoID={repoID}
+              onListTagCancel={this.toggleCancel}
+            />
+          </CustomizePopover>
         }
       </React.Fragment>
     );
