@@ -1,6 +1,6 @@
 import logging
 import json
-from seahub.group.utils import is_group_admin
+from seahub.group.utils import is_group_admin, is_group_member
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.utils import is_valid_org_id
@@ -45,7 +45,7 @@ def is_repo_admin(username, repo_id):
         # get all groups that repo is shared to with admin permission
         group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for group_id in group_ids:
-            if is_group_admin(group_id, username):
+            if is_group_member(group_id, username):
                 return True
     except Exception as e:
         logger.error(e)
