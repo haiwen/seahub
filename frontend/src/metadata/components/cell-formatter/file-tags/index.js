@@ -20,7 +20,9 @@ const FileTagsFormatter = ({ tagsData, value: oldValue, className, children: emp
           const tag = getRowById(tagsData, item);
           const tagColor = getTagColor(tag);
           const tagName = getTagName(tag);
-          if (!showName) return <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>;
+          if (!showName) return (
+            <span key={item} className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
+          );
           return (
             <div key={item} className="sf-metadata-ui-tag" title={tagName}>
               <span className="sf-metadata-ui-tag-color mr-1" style={{ backgroundColor: tagColor }}></span>
