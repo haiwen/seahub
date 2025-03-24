@@ -146,23 +146,30 @@ class CcnetDB:
         return users, total_count
 
     def get_group_ids_admins_map(self, group_ids):
-        group_admins = {}
-        group_ids_str = ','.join(str(id) for id in group_ids)
+
+        if not group_ids:
+            return {}
+
+        placeholders = ','.join(['%s'] * len(group_ids))
+
         sql = f"""
         SELECT user_name, group_id
-        FROM
-            `{self.db_name}`.`GroupUser`
-        WHERE
-            group_id IN (%s) AND is_staff = 1
+        FROM `{self.db_name}`.`GroupUser`
+        WHERE group_id IN ({placeholders})
+        AND is_staff = 1
         """
+
+        group_admins = {}
         with connection.cursor() as cursor:
-            cursor.execute(sql, [group_ids_str])
+            cursor.execute(sql, tuple(group_ids))
             result = cursor.fetchall()
+
         for user, group_id in result:
             if group_id in group_admins:
                 group_admins[group_id].append(user)
             else:
                 group_admins[group_id] = [user]
+
         return group_admins
 
     def change_groups_into_departments(self, group_id):
@@ -186,21 +193,21 @@ class CcnetDB:
     def get_active_users_by_user_list(self, user_list):
         if not user_list:
             return []
-        user_list_str = ','.join(["'%s'" % str(user) for user in user_list])
-        active_users = []
+
+        placeholders = ','.join(['%s'] * len(user_list))
         sql = f"""
         SELECT `email`
         FROM `{self.db_name}`.`EmailUser`
-        WHERE
-            email IN (%s)
+        WHERE email IN ({placeholders})
         AND is_active = 1
-        AND email NOT LIKE '%%@seafile_group'
+        AND email NOT LIKE %s
         """
-        with connection.cursor() as cursor:
-            cursor.execute(sql, [user_list_str])
-            for user in cursor.fetchall():
-                active_users.append(user[0])
+        params = list(user_list) + ['%@seafile_group']
 
+        active_users = []
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
+            active_users = [row[0] for row in cursor.fetchall()]
         return active_users
 
     def get_org_user_count(self, org_id):

@@ -326,29 +326,25 @@ class SeafileDB:
         """
         def del_repo_trash(cursor, repo_ids):
 
+            placeholders = ','.join(['%s'] * len(repo_ids))
+
             del_file_count_sql = f"""
-            DELETE FROM
-                `{self.db_name}`.`RepoFileCount`
-            WHERE
-                repo_id in %s;
+            DELETE FROM `{self.db_name}`.`RepoFileCount`
+            WHERE repo_id IN ({placeholders})
             """
-            cursor.execute(del_file_count_sql, [repo_ids])
+            cursor.execute(del_file_count_sql, repo_ids)
 
             del_repo_info_sql = f"""
-            DELETE FROM
-                `{self.db_name}`.`RepoInfo`
-            WHERE
-                repo_id in %s;
+            DELETE FROM `{self.db_name}`.`RepoInfo`
+            WHERE repo_id IN ({placeholders})
             """
-            cursor.execute(del_repo_info_sql, [repo_ids])
+            cursor.execute(del_repo_info_sql, repo_ids)
 
             del_trash_sql = f"""
-            DELETE FROM
-                `{self.db_name}`.`RepoTrash`
-            WHERE
-                repo_id in %s;
+            DELETE FROM `{self.db_name}`.`RepoTrash`
+            WHERE repo_id IN ({placeholders})
             """
-            cursor.execute(del_trash_sql, [repo_ids])
+            cursor.execute(del_trash_sql, repo_ids)  # 移除多余的列表包裹
 
         sql_list_repo_id = f"""
         SELECT
@@ -360,11 +356,10 @@ class SeafileDB:
         """
         with connection.cursor() as cursor:
             cursor.execute(sql_list_repo_id, [org_id])
-            repo_ids = []
-            for item in cursor.fetchall():
-                repo_id = item[0]
-                repo_ids.append(repo_id)
-            del_repo_trash(cursor, repo_ids)
+
+            repo_ids = [item[0] for item in cursor.fetchall()]
+            if repo_ids:
+                del_repo_trash(cursor, repo_ids)
             cursor.close()
 
     def add_repos_to_org_user(self, org_id, username, repo_ids):
@@ -409,29 +404,30 @@ class SeafileDB:
 
     def set_repo_owner(self, repo_id, new_owner, org_id=None):
 
-        # transfert repo to user
+        repo_ids = self.get_repo_ids_in_repo(repo_id)
+        if not repo_ids:
+            return
 
+        # transfert repo to user
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-                UPDATE `{self.db_name}`.`OrgRepo`
-                SET user= %s
-                WHERE org_id =%s AND repo_id IN (%s)
-             """
+            UPDATE `{self.db_name}`.`OrgRepo`
+            SET user = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-                UPDATE `{self.db_name}`.`RepoOwner`
-                SET owner_id= %s
-                WHERE repo_id IN (%s)
-             """
-
-        repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+            UPDATE `{self.db_name}`.`RepoOwner`
+            SET owner_id = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
 
         with connection.cursor() as cursor:
-            if org_id:
-                cursor.execute(sql, [new_owner, org_id, repo_ids_str])
-            else:
-                cursor.execute(sql, [new_owner, repo_ids_str])
+            cursor.execute(sql, params)
 
     def set_repo_group_owner(self, repo_id, group_id, current_group_id=None, org_id=None):
 
@@ -489,47 +485,53 @@ class SeafileDB:
 
     def update_repo_user_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if not repo_ids:
+            return
+
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-              UPDATE `{self.db_name}`.`OrgSharedRepo`
-              SET from_email=%s
-              WHERE org_id=%s
-              AND repo_id IN (%s)
-              """
+            UPDATE `{self.db_name}`.`OrgSharedRepo`
+            SET from_email = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-              UPDATE `{self.db_name}`.`SharedRepo`
-              SET from_email=%s
-              WHERE repo_id IN (%s)
-              """
+            UPDATE `{self.db_name}`.`SharedRepo`
+            SET from_email = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
+
         with connection.cursor() as cursor:
-            if org_id:
-                cursor.execute(sql, [new_owner, org_id, repo_ids_str])
-            else:
-                cursor.execute(sql, [new_owner, repo_ids_str])
+            cursor.execute(sql, params)
 
     def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if not repo_ids:
+            return
+
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-              UPDATE `{self.db_name}`.`OrgGroupRepo`
-              SET owner=%s
-              WHERE org_id=%s
-              AND repo_id IN (%s)
-              """
+            UPDATE `{self.db_name}`.`OrgGroupRepo`
+            SET owner = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-              UPDATE `{self.db_name}`.`RepoGroup`
-              SET user_name=%s
-              WHERE repo_id IN (%s)
-              """
+            UPDATE `{self.db_name}`.`RepoGroup`
+            SET user_name = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
+
         with connection.cursor() as cursor:
-            if org_id:
-                cursor.execute(sql, [new_owner, org_id, repo_ids_str])
-            else:
-                cursor.execute(sql, [new_owner, repo_ids_str])
+            cursor.execute(sql, params)
 
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
