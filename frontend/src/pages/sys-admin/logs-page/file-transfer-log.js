@@ -195,8 +195,8 @@ class FIleTransferLogs extends Component {
     };
 
     systemAdminAPI.sysAdminListFileTransferLogs(
-      page, 
-      perPage, 
+      page,
+      perPage,
       emails,
       selectedRepos
     ).then((res) => {
@@ -355,11 +355,11 @@ class FIleTransferLogs extends Component {
   };
 
   render() {
-    let { 
+    let {
       logList, currentPage, perPage, hasNextPage,
       availableUsers, selectedFromUsers, selectedToUsers, selectedOperators,
       availableRepos, selectedRepos,
-      openSelector 
+      openSelector
     } = this.state;
 
     return (

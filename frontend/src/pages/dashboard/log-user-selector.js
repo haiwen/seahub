@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import '../../css/log-filter.css';
-import { systemAdminAPI } from '../../utils/system-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 
@@ -14,7 +13,7 @@ const propTypes = {
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
-  searchUsersFunc: PropTypes.func,
+  searchUsersFunc: PropTypes.func.isRequired,
 };
 
 class LogUserSelector extends Component {
@@ -67,9 +66,6 @@ class LogUserSelector extends Component {
       isLoading: true
     });
 
-    // const searchFunc = this.props.searchUsersFunc || 
-    //   ((value) => systemAdminAPI.sysAdminSearchUsers(value));
-
     this.props.searchUsersFunc(value).then((res) => {
       const users = res.data.user_list || res.data.users || [];
       this.setState({
@@ -100,7 +96,7 @@ class LogUserSelector extends Component {
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {selectedItems.length > 0 ? (
             <>
-              <span>{gettext(this.props.componentName + ":")}</span>
+              <span>{gettext(this.props.componentName + ':')}</span>
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext(this.props.componentName)}
