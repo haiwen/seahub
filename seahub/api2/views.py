@@ -727,8 +727,8 @@ class ItemsSearch(APIView):
                 all_repos = get_search_repos(username, org_id)
                 cache.set(cache_key, all_repos, self.USER_REPOS_CACHE_TIMEOUT)
 
-            query_result = []
             # Iterator avoids loading all memory at once
+            safe_pattern = re.escape(query_str)
             query_result = [
                 {
                     "fullpath": "/",
@@ -738,7 +738,7 @@ class ItemsSearch(APIView):
                     "name": repo_info[3]
                 }
                 for repo_info in all_repos
-                if re.search(query_str, repo_info[3], re.IGNORECASE)
+                if re.search(safe_pattern, repo_info[3], re.IGNORECASE)
             ]
         return Response({'results': query_result})
 
