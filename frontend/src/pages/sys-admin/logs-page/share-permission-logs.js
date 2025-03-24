@@ -185,11 +185,10 @@ class SharePermissionLogs extends Component {
     const emails = {
       from_emails: fromEmails,
       to_emails: toEmails
-    }
-    console.log(emails)
+    };
     systemAdminAPI.sysAdminListSharePermissionLogs(
-      page, 
-      perPage, 
+      page,
+      perPage,
       emails,
       selectedRepos
     ).then((res) => {
@@ -334,10 +333,10 @@ class SharePermissionLogs extends Component {
   };
 
   render() {
-    let { 
-      logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, 
+    let {
+      logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen,
       availableUsers, selectedFromUsers, selectedToUsers,
-      availableRepos, selectedRepos, openSelector 
+      availableRepos, selectedRepos, openSelector
     } = this.state;
     return (
       <Fragment>

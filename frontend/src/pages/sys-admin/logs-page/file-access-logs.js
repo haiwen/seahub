@@ -48,7 +48,6 @@ class Content extends Component {
       loading, errorMsg, items,
       perPage, currentPage, hasNextPage
     } = this.props;
-    console.log(currentPage)
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -339,7 +338,7 @@ class FileAccessLogs extends Component {
   };
 
   searchRepos = (value) => {
-    return systemAdminAPI.sysAdminSearchRepos(value)
+    return systemAdminAPI.sysAdminSearchRepos(value);
   };
 
   render() {
@@ -369,7 +368,7 @@ class FileAccessLogs extends Component {
                     items={availableUsers}
                     selectedItems={selectedUsers}
                     onSelect={this.handleUserFilter}
-                    isOpen={this.state.openSelector === 'user'}
+                    isOpen={openSelector === 'user'}
                     onToggle={() => this.handleSelectorToggle('user')}
                     searchUsersFunc={this.searchUsers}
                   />
@@ -378,7 +377,7 @@ class FileAccessLogs extends Component {
                     items={availableRepos}
                     selectedItems={selectedRepos}
                     onSelect={this.handleRepoFilter}
-                    isOpen={this.state.openSelector === 'repo'}
+                    isOpen={openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
                     searchReposFunc={this.searchRepos}
                   />

@@ -729,10 +729,10 @@ class SystemAdminAPI {
       per_page: perPage
     };
     if (emails.from_emails && emails.from_emails.length) {
-      params.from_emails = emails.from_emails.join(',')
+      params.from_emails = emails.from_emails.join(',');
     }
     if (emails.to_emails && emails.to_emails.length) {
-      params.to_emails = emails.to_emails.join(',')
+      params.to_emails = emails.to_emails.join(',');
     }
     if (repos && repos.length) {
       params.repos = repos.map(repo => repo.id).join(',');

@@ -5,7 +5,6 @@ import { gettext } from '../../utils/constants';
 import '../../css/log-filter.css';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import { systemAdminAPI } from '../../utils/system-admin-api';
 
 const propTypes = {
   items: PropTypes.array.isRequired,
