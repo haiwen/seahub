@@ -551,9 +551,11 @@ class NewDBConfigurator(AbstractDBConfigurator):
             return cursor.fetchall()[0][0]
         except Exception as e:
             if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to check mysql connection: %s' % e.args[1])
+                Utils.error('Failed to check mysql user %s@%s: %s' % \
+                            (user, self.seafile_mysql_userhost, e.args[1]))
             else:
-                Utils.error('Failed to check mysql connection: %s' % e)
+                Utils.error('Failed to check mysql user %s@%s: %s' % \
+                            (user, self.seafile_mysql_userhost, e))
         finally:
             cursor.close()
 
@@ -715,7 +717,7 @@ class ExistingDBConfigurator(AbstractDBConfigurator):
         user = self.seafile_mysql_user
         password = self.seafile_mysql_password
 
-        print('\nverifying user "%s" database access... ' % user, end=' ')
+        print('\nverifying user "%s" access to database %s ... ' % (user, db_name), end=' ')
         try:
             conn = pymysql.connect(host=self.mysql_host,
                                    port=self.mysql_port,

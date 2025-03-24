@@ -209,7 +209,7 @@ def weixin_oauth_connect_callback(request):
 
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('weixin', openid)
     if auth_user:
-        logger.warning('weixin account already exists')
+        logger.warning('weixin account already exists %s' % openid)
         return render_error(request, '出错了，此微信账号已被绑定')
 
     username = request.user.username
