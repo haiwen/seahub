@@ -11,7 +11,7 @@ SPREADSHEET = 'SpreadSheet'
 XMIND = 'XMind'
 SEADOC = 'SDoc'
 TLDRAW = 'Tldraw'
-EXCELDRAW = 'Exceldraw'
+EXCALIDRAW = 'Excalidraw'
 
 
 MARKDOWN_SUPPORT_CONVERT_TYPES = ['sdoc']

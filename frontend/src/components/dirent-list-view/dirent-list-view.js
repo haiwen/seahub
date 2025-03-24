@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, useGoFileserver } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, useGoFileserver, enableExcalidraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
@@ -432,7 +432,7 @@ class DirentListView extends React.Component {
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
       NEW_TLDRAW_FILE,
-      NEW_EXCELDRAW_FILE,
+      NEW_EXCALIDRAW_FILE,
     } = TextTranslation;
 
     const direntsContainerMenuList = [
@@ -453,8 +453,8 @@ class DirentListView extends React.Component {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
     }
 
-    if (enableWhiteboard) {
-      direntsContainerMenuList.push(NEW_EXCELDRAW_FILE);
+    if (enableExcalidraw) {
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
 
     if (this.props.selectedDirentList.length === 0) {
@@ -534,7 +534,7 @@ class DirentListView extends React.Component {
       case 'New Whiteboard File':
         this.onCreateFileToggle('.draw');
         break;
-      case 'New Exceldraw File':
+      case 'New Excalidraw File':
         this.onCreateFileToggle('.exdraw');
         break;
       case 'New SeaDoc File':

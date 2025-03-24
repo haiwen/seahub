@@ -61,7 +61,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW, EXCELDRAW)
+                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
@@ -859,7 +859,7 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
     
-    if filetype == EXCELDRAW:
+    if filetype == EXCALIDRAW:
 
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain

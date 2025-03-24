@@ -3,7 +3,7 @@
 
 
 {% block extra_style %}
-{% render_bundle 'exceldrawEditor' 'css' %}
+{% render_bundle 'excalidrawEditor' 'css' %}
 {% endblock %}
 
 {% block extra_data %}
@@ -15,5 +15,5 @@ rawPath: '{{ raw_path|escapejs }}',
 {% endblock %}
 
 {% block render_bundle %}
-{% render_bundle 'exceldrawEditor' 'js' %}
+{% render_bundle 'excalidrawEditor' 'js' %}
 {% endblock %}
