@@ -13,7 +13,7 @@ class OrgLogsGroupInviteEvent {
     this.operator_email = object.operator_email;
     this.operator_name = object.operator_name;
     this.operator_contact_email = object.operator_contact_email;
-    this.action_type = object.action_type;
+    this.operation = object.operation;
     this.time = dayjs(object.date).format('YYYY-MM-DD HH:mm:ss');
   }
 }

@@ -488,7 +488,7 @@ class OrgAdminLogsGroupInvite(APIView):
 
             data['group_id'] = ev.group_id
             data['group_name'] = group_name_dict.get(ev.group_id, '')
-            data['action_type'] = ev.action_type
+            data['operation'] = ev.operation
             data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
 
             event_list.append(data)

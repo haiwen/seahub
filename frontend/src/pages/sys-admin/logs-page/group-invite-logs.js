@@ -122,7 +122,7 @@ class Item extends Component {
         <td>{<UserLink email={item.user_email} name={item.user_name} />}</td>
         <td>{this.getGroupName(item)}</td>
         <td>{<UserLink email={item.operator_email} name={item.operator_name} />}</td>
-        <td>{item.action_type}</td>
+        <td>{item.operation}</td>
         <td>{dayjs(item.date).fromNow()}</td>
       </tr>
     );

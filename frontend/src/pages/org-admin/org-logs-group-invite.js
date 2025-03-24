@@ -128,7 +128,7 @@ class GroupInviteItem extends React.Component {
         <td>{<UserLink email={groupEvent.user_email} name={groupEvent.user_name} />}</td>
         <td>{<Link to={`${siteRoot}org/groupadmin/${groupEvent.group_id}/`}>{groupEvent.group_name}</Link>}</td>
         <td>{<UserLink email={groupEvent.operator_email} name={groupEvent.operator_name} />}</td>
-        <td>{gettext(groupEvent.action_type)}</td>
+        <td>{gettext(groupEvent.operation)}</td>
         <td>{dayjs(groupEvent.time).fromNow()}</td>
       </tr>
     );

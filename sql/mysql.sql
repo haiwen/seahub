@@ -1632,7 +1632,7 @@ CREATE TABLE `GroupInvite` (
   `operator` varchar(255) NOT NULL,
   `user` varchar(255) NOT NULL,
   `group_id` int(11) NOT NULL,
-  `action_type` enum('INVITE','LEAVE') NOT NULL,
+  `operation` varchar(128) NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_group_invite_org_id` (`org_id`),

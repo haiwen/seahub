@@ -10,6 +10,7 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
+from seahub.signals import group_invite_log
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -482,8 +483,17 @@ class GroupInvite(models.Model):
     group_id = models.IntegerField()
     user = models.EmailField(db_index=True)
     operator = models.CharField(max_length=255)
-    action_type = models.CharField(max_length=255)
+    operation = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     class Meta:
         db_table = 'GroupInvite'
+
+def add_group_invite_log(sender, org_id, group_id, user, operator, operation, **kwargs):
+    GroupInvite.objects.create(org_id=org_id,
+                                group_id=group_id,
+                                user=user,
+                                operator=operator,
+                                operation=operation)
+
+group_invite_log.connect(add_group_invite_log)

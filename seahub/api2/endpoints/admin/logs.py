@@ -657,7 +657,7 @@ class AdminLogsGroupInviteLogs(APIView):
             data['operator_contact_email'] = contact_email_dict.get(operator_email, '')
             data['date'] = datetime_to_isoformat_timestr(ev.timestamp)
 
-            data['action_type'] = ev.action_type
+            data['operation'] = ev.operation
             data['group_id'] = ev.group_id
             data['group_name'] = group_name_dict.get(ev.group_id, '')
 

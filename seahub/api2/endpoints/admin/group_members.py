@@ -18,6 +18,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.signals import group_invite_log
 
 logger = logging.getLogger(__name__)
 
@@ -239,6 +240,22 @@ class AdminGroupMember(APIView):
             ccnet_api.group_remove_member(group_id, group.creator_name, email)
             # remove repo-group share info of all 'email' owned repos
             seafile_api.remove_group_repos_by_owner(group_id, email)
+            is_org = ccnet_api.is_org_group(group_id)
+            if is_org:
+                org_id = ccnet_api.get_org_id_by_group(group_id)
+                group_invite_log.send(sender=None,
+                                      org_id=org_id,
+                                      group_id=group_id,
+                                      user=email,
+                                      operator=request.user.username,
+                                      operation='Delete')
+            else:
+                group_invite_log.send(sender=None,
+                                      org_id=-1,
+                                      group_id=group_id,
+                                      user=email,
+                                      operator=request.user.username,
+                                      operation='Delete')
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
