@@ -13,7 +13,6 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
-import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
@@ -24,9 +23,6 @@ const contentPropTypes = {
   isLoadingMore: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  sortItems: PropTypes.func.isRequired,
   onRemoveLink: PropTypes.func.isRequired
 };
 
@@ -43,22 +39,8 @@ class Content extends Component {
     this.setState({ isItemFreezed: isFreezed });
   };
 
-  sortByName = (e) => {
-    e.preventDefault();
-    const sortBy = 'name';
-    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
-  };
-
-  sortByTime = (e) => {
-    e.preventDefault();
-    const sortBy = 'time';
-    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
-  };
-
   render() {
-    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -75,11 +57,6 @@ class Content extends Component {
       );
     }
 
-    // sort
-    const sortByName = sortBy == 'name';
-    const sortByTime = sortBy == 'time';
-    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
-
     const isDesktop = Utils.isDesktop();
     // only for some columns
     const columnWidths = isPro ? [0.14, 0.07, 0.14] : [0.21, 0.14, 0.2];
@@ -90,11 +67,11 @@ class Content extends Component {
           className={classnames('', { 'table-thead-hidden': !isDesktop })}
           headers={isDesktop ? [
             { isFixed: true, width: 40 }, // icon
-            { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+            { isFixed: false, width: 0.35, children: gettext('Name') },
             { isFixed: false, width: columnWidths[0], children: gettext('Library') },
             isPro ? { isFixed: false, width: 0.2, children: gettext('Permission') } : null,
             { isFixed: false, width: columnWidths[1], children: gettext('Visits') },
-            { isFixed: false, width: columnWidths[2], children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a>) },
+            { isFixed: false, width: columnWidths[2], children: gettext('Expiration') },
             { isFixed: false, width: 0.1 }, // operations
           ].filter(i => i) : [
             { isFixed: false, width: 0.12 },
@@ -390,68 +367,8 @@ class ShareAdminShareLinks extends Component {
       page: 1,
       errorMsg: '',
       items: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc' // 'asc' or 'desc'
     };
-
-    // for mobile
-    this.sortOptions = [
-      { value: 'name-asc', text: gettext('By name ascending') },
-      { value: 'name-desc', text: gettext('By name descending') },
-      { value: 'time-asc', text: gettext('By expiration ascending') },
-      { value: 'time-desc', text: gettext('By expiration descending') }
-    ];
   }
-
-  _sortItems = (items, sortBy, sortOrder) => {
-    let comparator;
-
-    switch (`${sortBy}-${sortOrder}`) {
-      case 'name-asc':
-        comparator = function (a, b) {
-          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
-          return result;
-        };
-        break;
-      case 'name-desc':
-        comparator = function (a, b) {
-          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
-          return -result;
-        };
-        break;
-      case 'time-asc':
-        comparator = function (a, b) {
-          return a.expire_date < b.expire_date ? -1 : 1;
-        };
-        break;
-      case 'time-desc':
-        comparator = function (a, b) {
-          return a.expire_date < b.expire_date ? 1 : -1;
-        };
-        break;
-
-      // no default
-    }
-
-    items.sort((a, b) => {
-      if (a.is_dir && !b.is_dir) {
-        return -1;
-      } else if (!a.is_dir && b.is_dir) {
-        return 1;
-      } else {
-        return comparator(a, b);
-      }
-    });
-    return items;
-  };
-
-  sortItems = (sortBy, sortOrder) => {
-    this.setState({
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      items: this._sortItems(this.state.items, sortBy, sortOrder)
-    });
-  };
 
   componentDidMount() {
     this.listUserShareLinks();
@@ -466,7 +383,7 @@ class ShareAdminShareLinks extends Component {
       this.setState({
         loading: false,
         hasMore: res.data.length == PER_PAGE,
-        items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
+        items,
       });
     }).catch((error) => {
       this.setState({
@@ -500,7 +417,7 @@ class ShareAdminShareLinks extends Component {
         isLoadingMore: false,
         hasMore: res.data.length == PER_PAGE,
         page: page + 1,
-        items: this._sortItems(this.state.items.concat(moreItems), this.state.sortBy, this.state.sortOrder)
+        items: this.state.items.concat(moreItems),
       });
     }).catch((error) => {
       this.setState({
@@ -521,12 +438,6 @@ class ShareAdminShareLinks extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    });
-  };
-
-  toggleSortOptionsDialog = () => {
-    this.setState({
-      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
   };
 
@@ -564,7 +475,6 @@ class ShareAdminShareLinks extends Component {
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
                 )}
               </ul>
-              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content" onScroll={this.handleScroll}>
               <Content
@@ -572,23 +482,11 @@ class ShareAdminShareLinks extends Component {
                 isLoadingMore={this.state.isLoadingMore}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortItems={this.sortItems}
                 onRemoveLink={this.onRemoveLink}
               />
             </div>
           </div>
         </div>
-        {this.state.isSortOptionsDialogOpen &&
-        <SortOptionsDialog
-          toggleDialog={this.toggleSortOptionsDialog}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortOptions={this.sortOptions}
-          sortItems={this.sortItems}
-        />
-        }
         {this.state.isCleanInvalidShareLinksDialogOpen &&
           <CommonOperationConfirmationDialog
             title={gettext('Clean invalid share links')}
