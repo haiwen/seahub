@@ -344,7 +344,7 @@ class SeafileDB:
             DELETE FROM `{self.db_name}`.`RepoTrash`
             WHERE repo_id IN ({placeholders})
             """
-            cursor.execute(del_trash_sql, repo_ids)  # 移除多余的列表包裹
+            cursor.execute(del_trash_sql, repo_ids)
 
         sql_list_repo_id = f"""
         SELECT
