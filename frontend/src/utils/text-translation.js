@@ -31,6 +31,10 @@ const TextTranslation = {
     key: 'New Whiteboard File',
     value: gettext('New Whiteboard File')
   },
+  NEW_EXCALIDRAW_FILE: {
+    key: 'New Excalidraw File',
+    value: gettext('New Excalidraw File')
+  },
   NEW_SEADOC_FILE: {
     key: 'New SeaDoc File',
     value: gettext('New SeaDoc File')

@@ -144,6 +144,7 @@ PREVIEW_FILEEXT = {
     XMIND: ('xmind',),
     SEADOC: ('sdoc',),
     TLDRAW: ('draw',),
+    EXCALIDRAW: ('exdraw',),
 }
 
 def get_non_sdoc_file_exts():
