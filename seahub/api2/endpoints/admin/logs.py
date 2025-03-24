@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.db.models import Q
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -17,7 +16,7 @@ from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email, translate_commit_desc
 from seahub.utils import get_log_events_by_type_users_repo, generate_file_audit_event_type, \
-    get_file_update_events, get_perm_audit_events, is_valid_email
+    is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.base.models import RepoTransfer, GroupMemberAudit
@@ -132,8 +131,6 @@ class AdminLogsFileAccessLogs(APIView):
         limit = per_page + 1
 
         events = get_log_events_by_type_users_repo('file_audit', emails, repos, start, limit) or []
-        if events is None:
-            events = []
         if len(events) > per_page:
             events = events[:per_page]
             has_next_page = True
@@ -232,9 +229,7 @@ class AdminLogsFileUpdateLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page
 
-        events = get_log_events_by_type_users_repo('file_update', emails, repos, start, limit)
-        if events is None:
-            events = []
+        events = get_log_events_by_type_users_repo('file_update', emails, repos, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
@@ -337,8 +332,6 @@ class AdminLogsSharePermissionLogs(APIView):
 
 
         events = get_log_events_by_type_users_repo('perm_audit', emails, repos, start, limit) or []
-        if events is None:
-            events = []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.

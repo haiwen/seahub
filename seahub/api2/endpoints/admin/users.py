@@ -578,6 +578,7 @@ class AdminUsers(APIView):
 
             info['quota_usage'] = user.quota_usage
             info['quota_total'] = seafile_api.get_user_quota(user.email)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
             if last_login_obj:
                 info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)

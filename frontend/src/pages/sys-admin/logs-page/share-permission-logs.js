@@ -262,30 +262,6 @@ class SharePermissionLogs extends Component {
     });
   };
 
-  getAvailableUsers = () => {
-    systemAdminAPI.sysAdminListUsers().then((res) => {
-      this.setState({
-        availableUsers: res.data.data
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
-    });
-  };
-
-  getAvailableRepos = () => {
-    systemAdminAPI.sysAdminListRepos().then((res) => {
-      this.setState({
-        availableRepos: res.data.repos
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
-    });
-  };
-
   handleSelectorToggle = (selectorType) => {
     const { openSelector } = this.state;
     const wasOpen = openSelector === selectorType;

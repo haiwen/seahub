@@ -205,7 +205,6 @@ class FileAccessLogs extends Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage),
     }, () => {
-      // this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
     });
   }
@@ -246,18 +245,6 @@ class FileAccessLogs extends Component {
     navigate(url.toString());
   };
 
-  getAvailableUsers = () => {
-    systemAdminAPI.sysAdminListUsers().then((res) => {
-      this.setState({
-        availableUsers: res.data.data
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
-    });
-  };
-
   handleUserFilter = (user, shouldFetchData = true) => {
     const { selectedUsers } = this.state;
     let newSelectedUsers;
@@ -280,18 +267,6 @@ class FileAccessLogs extends Component {
       if (shouldFetchData) {
         this.getLogsByPage(1);
       }
-    });
-  };
-
-  getAvailableRepos = () => {
-    systemAdminAPI.sysAdminSearchRepos().then((res) => {
-      this.setState({
-        availableRepos: res.data.repos
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
     });
   };
 
