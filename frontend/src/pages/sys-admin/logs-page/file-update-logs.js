@@ -311,6 +311,14 @@ class FileUpdateLogs extends Component {
     });
   };
 
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
   render() {
     let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
     return (
@@ -331,6 +339,7 @@ class FileUpdateLogs extends Component {
                     onSelect={this.handleUserFilter}
                     isOpen={this.state.openSelector === 'user'}
                     onToggle={() => this.handleSelectorToggle('user')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
@@ -339,6 +348,7 @@ class FileUpdateLogs extends Component {
                     onSelect={this.handleRepoFilter}
                     isOpen={this.state.openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
                   />
                 </div>
                 <Content

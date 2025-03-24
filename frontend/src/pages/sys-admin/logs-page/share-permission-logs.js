@@ -325,6 +325,14 @@ class SharePermissionLogs extends Component {
     });
   };
 
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
   render() {
     let { 
       logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, 
@@ -349,6 +357,7 @@ class SharePermissionLogs extends Component {
                     onSelect={this.handleFromUserFilter}
                     isOpen={openSelector === 'fromUser'}
                     onToggle={() => this.handleSelectorToggle('fromUser')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <LogUserSelector
                     componentName="Share To"
@@ -357,6 +366,7 @@ class SharePermissionLogs extends Component {
                     onSelect={this.handleToUserFilter}
                     isOpen={openSelector === 'toUser'}
                     onToggle={() => this.handleSelectorToggle('toUser')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
@@ -365,6 +375,7 @@ class SharePermissionLogs extends Component {
                     onSelect={this.handleRepoFilter}
                     isOpen={openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
                   />
                 </div>
                 <Content

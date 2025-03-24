@@ -231,6 +231,10 @@ class LoginLogs extends Component {
     });
   };
 
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
   render() {
     let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers } = this.state;
     return (
@@ -250,6 +254,7 @@ class LoginLogs extends Component {
                   onSelect={this.handleUserFilter}
                   isOpen={this.state.isUserSelectorOpen}
                   onToggle={this.toggleUserSelector}
+                  searchUsersFunc={this.searchUsers}
                 />
                 <Content
                   loading={this.state.loading}

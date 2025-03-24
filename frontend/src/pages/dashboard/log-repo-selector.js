@@ -7,6 +7,15 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import { systemAdminAPI } from '../../utils/system-admin-api';
 
+const propTypes = {
+  items: PropTypes.array.isRequired,
+  selectedItems: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  searchReposFunc: PropTypes.func.isRequired,
+};
+
 class LogRepoSelector extends Component {
 
   constructor(props) {
@@ -51,9 +60,10 @@ class LogRepoSelector extends Component {
       this.setState({ isLoading: true });
       setTimeout(() => {
         if (this.finalValue === value) {
-          systemAdminAPI.sysAdminSearchRepos(value).then((res) => {
+          this.props.searchReposFunc(value).then((res) => {
+            const repos = res.data.repo_list || res.data.repos || [];
             this.setState({
-              searchResults: res.data.repo_list,
+              searchResults: repos,
               isLoading: false
             });
           }).catch(error => {
@@ -140,12 +150,6 @@ class LogRepoSelector extends Component {
   }
 }
 
-LogRepoSelector.propTypes = {
-  items: PropTypes.array.isRequired,
-  selectedItems: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired
-};
+LogRepoSelector.propTypes = propTypes;
 
 export default LogRepoSelector;
