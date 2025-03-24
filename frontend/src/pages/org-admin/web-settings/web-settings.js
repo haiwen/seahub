@@ -29,14 +29,22 @@ class OrgWebSettings extends Component {
       force_adfs_login: false,
       disable_org_encrypted_library: false,
       disable_org_user_clean_trash: false,
-      user_default_quota: ''
+      user_default_quota: 0
     };
   }
 
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then((res) => {
-      const user_default_quota = res.data.user_default_quota;
-      const i = parseInt(Math.floor(Math.log(user_default_quota) / Math.log(1000)), 10);
+      const { user_default_quota } = res.data;
+      let user_default_quota_displayed;
+      if (user_default_quota == -1 || // not set
+        user_default_quota == 0 || // default
+        user_default_quota < 0) { // a value less than 0, set by users
+        user_default_quota_displayed = 0;
+      } else {
+        const i = parseInt(Math.floor(Math.log(user_default_quota) / Math.log(1000)), 10);
+        user_default_quota_displayed = (user_default_quota / (1000 ** i));
+      }
       this.setState({
         loading: false,
         config_dict: res.data,
@@ -44,7 +52,7 @@ class OrgWebSettings extends Component {
         force_adfs_login: res.data.force_adfs_login,
         disable_org_encrypted_library: res.data.disable_org_encrypted_library,
         disable_org_user_clean_trash: res.data.disable_org_user_clean_trash,
-        user_default_quota: (user_default_quota / (1000 ** i)).toFixed(1),
+        user_default_quota: user_default_quota_displayed
       });
     }).catch((error) => {
       this.setState({
@@ -80,7 +88,7 @@ class OrgWebSettings extends Component {
 
   orgSaveSetting = (key, value) => {
     orgAdminAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
-      toaster.success(gettext('System settings updated'));
+      toaster.success(gettext('Setting updated'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -194,7 +202,6 @@ class OrgWebSettings extends Component {
                       inputAddon={
                         <InputGroupText>MB</InputGroupText>
                       }
-                      valueFixed={1}
                     />
                   </Fragment>
                 </Section>
