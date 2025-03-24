@@ -346,6 +346,14 @@ class FIleTransferLogs extends Component {
     });
   };
 
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
   render() {
     let { 
       logList, currentPage, perPage, hasNextPage,
@@ -370,6 +378,7 @@ class FIleTransferLogs extends Component {
                     onSelect={this.handleFromUserFilter}
                     isOpen={openSelector === 'fromUser'}
                     onToggle={() => this.handleSelectorToggle('fromUser')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <LogUserSelector
                     componentName="Transfer To"
@@ -378,6 +387,7 @@ class FIleTransferLogs extends Component {
                     onSelect={this.handleToUserFilter}
                     isOpen={openSelector === 'toUser'}
                     onToggle={() => this.handleSelectorToggle('toUser')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <LogUserSelector
                     componentName="Operator"
@@ -386,6 +396,7 @@ class FIleTransferLogs extends Component {
                     onSelect={this.handleOperatorFilter}
                     isOpen={openSelector === 'operator'}
                     onToggle={() => this.handleSelectorToggle('operator')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
@@ -394,6 +405,7 @@ class FIleTransferLogs extends Component {
                     onSelect={this.handleRepoFilter}
                     isOpen={openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
                   />
                 </div>
                 <Content

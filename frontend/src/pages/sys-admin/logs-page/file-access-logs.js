@@ -285,7 +285,7 @@ class FileAccessLogs extends Component {
   };
 
   getAvailableRepos = () => {
-    systemAdminAPI.sysAdminListRepos().then((res) => {
+    systemAdminAPI.sysAdminSearchRepos().then((res) => {
       this.setState({
         availableRepos: res.data.repos
       });
@@ -334,6 +334,14 @@ class FileAccessLogs extends Component {
     });
   };
 
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value)
+  };
+
   render() {
     const {
       logList,
@@ -342,7 +350,8 @@ class FileAccessLogs extends Component {
       availableUsers,
       selectedUsers,
       availableRepos,
-      selectedRepos
+      selectedRepos,
+      openSelector
     } = this.state;
     return (
       <Fragment>
@@ -362,6 +371,7 @@ class FileAccessLogs extends Component {
                     onSelect={this.handleUserFilter}
                     isOpen={this.state.openSelector === 'user'}
                     onToggle={() => this.handleSelectorToggle('user')}
+                    searchUsersFunc={this.searchUsers}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
@@ -370,6 +380,7 @@ class FileAccessLogs extends Component {
                     onSelect={this.handleRepoFilter}
                     isOpen={this.state.openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
                   />
                 </div>
                 <Content

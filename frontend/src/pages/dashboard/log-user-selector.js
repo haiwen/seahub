@@ -7,6 +7,16 @@ import { systemAdminAPI } from '../../utils/system-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 
+const propTypes = {
+  componentName: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  selectedItems: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  searchUsersFunc: PropTypes.func,
+};
+
 class LogUserSelector extends Component {
 
   constructor(props) {
@@ -42,30 +52,37 @@ class LogUserSelector extends Component {
   onQueryChange = (e) => {
     const value = e.target.value;
     this.setState({ query: value });
-    this.searchUsers(value);
+    this.handleSearchUser(value);
   };
 
-  searchUsers = (value) => {
-    this.finalValue = value;
-    if (value.length > 0) {
-      this.setState({ isLoading: true });
-      setTimeout(() => {
-        if (this.finalValue === value) {
-          systemAdminAPI.sysAdminSearchUsers(value).then((res) => {
-            this.setState({
-              searchResults: res.data.user_list,
-              isLoading: false
-            });
-          }).catch(error => {
-            this.setState({ isLoading: false });
-            let errMessage = Utils.getErrorMsg(error);
-            toaster.danger(errMessage);
-          });
-        }
-      }, 500);
-    } else {
-      this.setState({ searchResults: [] });
+  handleSearchUser = (value) => {
+    if (!value.trim()) {
+      this.setState({
+        searchResults: []
+      });
+      return;
     }
+
+    this.setState({
+      isLoading: true
+    });
+
+    // const searchFunc = this.props.searchUsersFunc || 
+    //   ((value) => systemAdminAPI.sysAdminSearchUsers(value));
+
+    this.props.searchUsersFunc(value).then((res) => {
+      const users = res.data.user_list || res.data.users || [];
+      this.setState({
+        searchResults: users,
+        isLoading: false
+      });
+    }).catch((error) => {
+      this.setState({
+        isLoading: false
+      });
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   toggleSelectItem = (e, item) => {
@@ -142,13 +159,6 @@ class LogUserSelector extends Component {
   }
 }
 
-LogUserSelector.propTypes = {
-  componentName: PropTypes.string,
-  items: PropTypes.array.isRequired,
-  selectedItems: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired
-};
+LogUserSelector.propTypes = propTypes;
 
 export default LogUserSelector;
