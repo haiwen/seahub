@@ -157,22 +157,9 @@ class LoginLogs extends Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
-      // this.getAvailableUsers();
       this.getLogsByPage(this.state.currentPage);
     });
   }
-
-  getAvailableUsers = () => {
-    systemAdminAPI.sysAdminListUsers().then((res) => {
-      this.setState({
-        availableUsers: res.data.data
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
-    });
-  };
 
   getLogsByPage = (page) => {
     let { perPage, selectedUsers } = this.state;

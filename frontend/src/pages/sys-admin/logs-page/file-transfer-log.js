@@ -309,17 +309,6 @@ class FIleTransferLogs extends Component {
     });
   };
 
-  getAvailableRepos = () => {
-    systemAdminAPI.sysAdminListRepos().then((res) => {
-      this.setState({
-        availableRepos: res.data.repos
-      });
-    }).catch((error) => {
-      this.setState({
-        errorMsg: Utils.getErrorMsg(error, true)
-      });
-    });
-  };
 
   handleRepoFilter = (repo, shouldFetchData = true) => {
     const { selectedRepos } = this.state;
