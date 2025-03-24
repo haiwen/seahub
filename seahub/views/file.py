@@ -55,7 +55,7 @@ from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, \
     render_permission_error, is_pro_version, is_textual_file, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
-    get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
+    get_conf_text_ext, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
@@ -77,12 +77,6 @@ from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, is_seadoc_revision
 from seahub.seadoc.models import SeadocRevision
-
-if HAS_OFFICE_CONVERTER:
-    from seahub.utils import (
-        query_office_convert_status, get_office_converted_page,
-        prepare_converted_html,
-    )
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
@@ -327,12 +321,7 @@ def handle_textual_file(request, filetype, raw_path, ret_dict):
     ret_dict['file_encoding_list'] = file_encoding_list
 
 def handle_document(raw_path, obj_id, fileext, ret_dict):
-    if HAS_OFFICE_CONVERTER:
-        err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
-        # populate return value dict
-        ret_dict['err'] = err
-    else:
-        ret_dict['filetype'] = 'Unknown'
+    ret_dict['filetype'] = 'Unknown'
 
 def handle_spreadsheet(raw_path, obj_id, fileext, ret_dict):
     handle_document(raw_path, obj_id, fileext, ret_dict)
@@ -410,33 +399,21 @@ def can_preview_file(file_name, file_size, repo):
             error_msg = _('The library is encrypted, can not open file online.')
             return False, error_msg
 
-        if not HAS_OFFICE_CONVERTER and \
-                not ENABLE_OFFICE_WEB_APP and \
+        if not ENABLE_OFFICE_WEB_APP and \
                 not ENABLE_ONLYOFFICE:
             error_msg = "File preview unsupported"
             return False, error_msg
 
         # priority of view office file is:
-        # OOS > OnlyOffice > Seafile integrated
+        # OOS > OnlyOffice
         if ENABLE_OFFICE_WEB_APP:
             if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
                 return False, error_msg
 
-        elif ENABLE_ONLYOFFICE:
+        else:
             if fileext not in ONLYOFFICE_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
-                return False, error_msg
-
-        else:
-            if not HAS_OFFICE_CONVERTER:
-                error_msg = "File preview unsupported"
-                return False, error_msg
-
-            # HAS_OFFICE_CONVERTER
-            if file_size > OFFICE_PREVIEW_MAX_SIZE:
-                error_msg = _('File size surpasses %s, can not be opened online.') % \
-                        filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
                 return False, error_msg
     else:
         # NOT depends on Seafile settings
@@ -978,23 +955,15 @@ def view_lib_file(request, repo_id, path):
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
-        if not HAS_OFFICE_CONVERTER:
-            return_dict['err'] = "File preview unsupported"
-            return render(request, template, return_dict)
-
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
                     filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
-        error_msg = prepare_converted_html(raw_path, file_id, fileext, return_dict)
-        if error_msg:
-            return_dict['err'] = error_msg
-            return render(request, template, return_dict)
-
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
+
     elif getattr(settings, 'ENABLE_CAD', False) and path.endswith('.dwg'):
 
         from seahub.cad.utils import get_cad_dict
@@ -1960,96 +1929,6 @@ def text_diff(request, repo_id):
         'is_new_file': is_new_file,
         'referer': referer,
     })
-
-
-########## office related
-def _check_office_convert_perm(request, repo_id, path, ret):
-    token = request.GET.get('token', '')
-    if not token:
-        # Work around for the images embedded in excel files
-        referer = request.headers.get('referer', '')
-        if referer:
-            token = urllib.parse.parse_qs(
-                urllib.parse.urlparse(referer).query).get('token', [''])[0]
-    if token:
-        fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-        if not fileshare or fileshare.repo_id != repo_id:
-            return False
-        if fileshare.is_file_share_link() and fileshare.path == path:
-            return True
-        if fileshare.is_dir_share_link():
-            ret['dir_share_path'] = fileshare.path
-            return True
-        return False
-    else:
-        return request.user.is_authenticated and \
-            check_folder_permission(request, repo_id, '/') is not None
-
-def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None):
-    repo_id = repo_id or request.GET.get('repo_id', '')
-    commit_id = commit_id or request.GET.get('commit_id', '')
-    path = path or request.GET.get('path', '')
-    if not (repo_id and path and commit_id):
-        raise BadRequestException()
-    if '../' in path:
-        raise BadRequestException()
-
-    ret = {'dir_share_path': None}
-    if not _check_office_convert_perm(request, repo_id, path, ret):
-        raise BadRequestException()
-
-    if ret['dir_share_path']:
-        path = posixpath.join(ret['dir_share_path'], path.lstrip('/'))
-    return seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
-
-@json_response
-def office_convert_query_status(request):
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        raise Http404
-
-    doctype = request.GET.get('doctype', None)
-    file_id = _office_convert_get_file_id(request)
-
-    ret = {'success': False}
-    try:
-        ret = query_office_convert_status(file_id, doctype)
-    except Exception as e:
-        logging.exception('failed to call query_office_convert_status')
-        ret['error'] = str(e)
-
-    return ret
-
-def office_convert_get_page(request, repo_id, commit_id, path, filename):
-    """Valid static file path inclueds:
-    - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
-    - 77e168722458356507a1f373714aa9b575491f09.pdf
-    """
-    if not HAS_OFFICE_CONVERTER:
-        raise Http404
-
-    if not (
-        filename == "file.css" or
-        filename == "file.outline" or
-        filename == "index.html" or
-        (filename.startswith("index_html_") and filename.endswith(".png")) or
-        (filename.endswith(".pdf") and len(filename) > 4 and all(c.islower() or c.isdigit() for c in filename[:-4]))
-    ):
-        return HttpResponseForbidden()
-
-    path = '/' + path
-    file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
-
-    if filename.endswith('.pdf'):
-        filename = "{0}.pdf".format(file_id)
-
-    resp = get_office_converted_page(path, filename, file_id)
-
-    if filename.endswith('.page'):
-        content_type = 'text/html'
-    else:
-        content_type = mimetypes.guess_type(filename)[0] or 'text/html'
-    resp['Content-Type'] = content_type
-    return resp
 
 
 def view_media_file_via_share_link(request):
