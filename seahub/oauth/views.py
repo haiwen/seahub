@@ -86,7 +86,6 @@ def oauth_check(func):
                     or not SCOPE or not OAUTH_PROVIDER:
                 logger.error('OAuth relevant settings invalid.')
                 logger.error('CLIENT_ID: %s' % CLIENT_ID)
-                logger.error('CLIENT_SECRET: %s' % CLIENT_SECRET)
                 logger.error('AUTHORIZATION_URL: %s' % AUTHORIZATION_URL)
                 logger.error('REDIRECT_URL: %s' % REDIRECT_URL)
                 logger.error('TOKEN_URL: %s' % TOKEN_URL)
