@@ -120,11 +120,6 @@ def is_db_sqlite3():
 
 IS_DB_SQLITE3 = is_db_sqlite3()
 
-try:
-    from seahub.settings import OFFICE_CONVERTOR_ROOT
-except ImportError:
-    OFFICE_CONVERTOR_ROOT = ''
-
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
 
@@ -1154,77 +1149,8 @@ if EVENTS_CONFIG_FILE:
 
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
 
-# office convert related
-def check_office_converter_enabled():
-    if OFFICE_CONVERTOR_ROOT:
-        return True
-    return False
-
-HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 OFFICE_PREVIEW_MAX_PAGES = 50
-
-if HAS_OFFICE_CONVERTER:
-
-    import time
-    import requests
-    import jwt
-
-    def add_office_convert_task(file_id, doctype, raw_path):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
-        requests.get(url, params, headers=headers)
-        return {'exists': False}
-
-    def query_office_convert_status(file_id, doctype):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'file_id': file_id, 'doctype': doctype}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
-        d = requests.get(url, params, headers=headers)
-        d = d.json()
-        ret = {}
-        if 'error' in d:
-            ret['error'] = d['error']
-            ret['status'] = 'ERROR'
-        else:
-            ret['success'] = True
-            ret['status'] = d['status']
-        return ret
-
-    def get_office_converted_page(path, static_filename, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'static_filename': static_filename, 'file_id': file_id}
-        try:
-            ret = requests.get(url, params, headers=headers)
-        except urllib.error.HTTPError as e:
-            raise Exception(e)
-
-        content_type = ret.headers.get('content-type', None)
-        if content_type is None:
-            dummy, ext = os.path.splitext(os.path.basename(path))
-            content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
-
-        resp = HttpResponse(ret, content_type=content_type)
-        if 'last-modified' in ret.headers:
-            resp['Last-Modified'] = ret.headers.get('last-modified')
-
-        return resp
-
-    def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
-        try:
-            add_office_convert_task(obj_id, doctype, raw_path)
-        except Exception as e:
-            logging.exception('failed to add_office_convert_task: %s' % e)
-            return _('Internal Server Error')
-        return None
 
 # search realted
 HAS_FILE_SEARCH = False
