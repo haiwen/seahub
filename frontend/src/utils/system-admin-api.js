@@ -728,8 +728,11 @@ class SystemAdminAPI {
       page: page,
       per_page: perPage
     };
-    if (emails && emails.length) {
-      params.emails = emails.join(',');
+    if (emails.from_emails && emails.from_emails.length) {
+      params.from_emails = emails.from_emails.join(',')
+    }
+    if (emails.to_emails && emails.to_emails.length) {
+      params.to_emails = emails.to_emails.join(',')
     }
     if (repos && repos.length) {
       params.repos = repos.map(repo => repo.id).join(',');
@@ -737,17 +740,23 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileTransferLogs(page, perPage, emails, repoID) {
+  sysAdminListFileTransferLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/repo-transfer-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
-    if (emails && emails.length) {
-      params.emails = emails.join(',');
+    if (emails.from_emails && emails.from_emails.length) {
+      params.from_emails = emails.from_emails.join(',');
     }
-    if (repoID != undefined) {
-      params.repo_id = repoID;
+    if (emails.to_emails && emails.to_emails.length) {
+      params.to_emails = emails.to_emails.join(',');
+    }
+    if (emails.operator_emails && emails.operator_emails.length) {
+      params.operator_emails = emails.operator_emails.join(',');
+    }
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
     }
     return this.req.get(url, { params: params });
   }
