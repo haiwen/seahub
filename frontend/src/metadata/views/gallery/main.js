@@ -223,6 +223,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       setImageIndex(index);
       setIsImagePopupOpen(true);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, metadata, images]);
 
   const handleContextMenu = useCallback((event, image) => {
