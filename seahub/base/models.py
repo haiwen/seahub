@@ -490,6 +490,8 @@ class GroupInvite(models.Model):
         db_table = 'GroupInvite'
 
 def add_group_invite_log(sender, org_id, group_id, user, operator, operation, **kwargs):
+    if operation not in ['Add', 'Delete']:
+        return
     GroupInvite.objects.create(org_id=org_id,
                                 group_id=group_id,
                                 user=user,
