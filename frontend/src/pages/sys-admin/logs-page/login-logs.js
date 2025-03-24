@@ -244,6 +244,7 @@ class LoginLogs extends Component {
             <div className="cur-view-content">
               <Fragment>
                 <LogUserSelector
+                  componentName="Users"
                   items={availableUsers}
                   selectedItems={selectedUsers}
                   onSelect={this.handleUserFilter}

@@ -154,7 +154,8 @@ class SharePermissionLogs extends Component {
       hasNextPage: false,
       isExportExcelDialogOpen: false,
       availableUsers: [],
-      selectedUsers: [],
+      selectedFromUsers: [],
+      selectedToUsers: [],
       availableRepos: [],
       selectedRepos: [],
       openSelector: null,
@@ -178,9 +179,20 @@ class SharePermissionLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedUsers, selectedRepos } = this.state;
-    let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage, emails, selectedRepos).then((res) => {
+    let { perPage, selectedFromUsers, selectedToUsers, selectedRepos } = this.state;
+    let fromEmails = selectedFromUsers.map(user => user.email);
+    let toEmails = selectedToUsers.map(user => user.email);
+    const emails = {
+      from_emails: fromEmails,
+      to_emails: toEmails
+    }
+    console.log(emails)
+    systemAdminAPI.sysAdminListSharePermissionLogs(
+      page, 
+      perPage, 
+      emails,
+      selectedRepos
+    ).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,
         loading: false,
@@ -190,7 +202,7 @@ class SharePermissionLogs extends Component {
     }).catch((error) => {
       this.setState({
         loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errorMsg: Utils.getErrorMsg(error, true)
       });
     });
   };
@@ -201,23 +213,48 @@ class SharePermissionLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
-  handleUserFilter = (user, shouldFetchData = true) => {
-    const { selectedUsers } = this.state;
+  handleFromUserFilter = (user, shouldFetchData = true) => {
+    const { selectedFromUsers } = this.state;
     let newSelectedUsers;
 
     if (user === null) {
-      newSelectedUsers = selectedUsers;
+      newSelectedUsers = selectedFromUsers;
     } else {
-      const isSelected = selectedUsers.find(item => item.email === user.email);
+      const isSelected = selectedFromUsers.find(item => item.email === user.email);
       if (isSelected) {
-        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+        newSelectedUsers = selectedFromUsers.filter(item => item.email !== user.email);
       } else {
-        newSelectedUsers = [...selectedUsers, user];
+        newSelectedUsers = [...selectedFromUsers, user];
       }
     }
 
     this.setState({
-      selectedUsers: newSelectedUsers,
+      selectedFromUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleToUserFilter = (user, shouldFetchData = true) => {
+    const { selectedToUsers } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedToUsers;
+    } else {
+      const isSelected = selectedToUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedToUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedToUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedToUsers: newSelectedUsers,
       currentPage: 1
     }, () => {
       if (shouldFetchData) {
@@ -289,7 +326,11 @@ class SharePermissionLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
+    let { 
+      logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, 
+      availableUsers, selectedFromUsers, selectedToUsers,
+      availableRepos, selectedRepos, openSelector 
+    } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -302,18 +343,27 @@ class SharePermissionLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
+                    componentName="Share From"
                     items={availableUsers}
-                    selectedItems={selectedUsers} 
-                    onSelect={this.handleUserFilter}
-                    isOpen={this.state.openSelector === 'user'}
-                    onToggle={() => this.handleSelectorToggle('user')}
+                    selectedItems={selectedFromUsers}
+                    onSelect={this.handleFromUserFilter}
+                    isOpen={openSelector === 'fromUser'}
+                    onToggle={() => this.handleSelectorToggle('fromUser')}
+                  />
+                  <LogUserSelector
+                    componentName="Share To"
+                    items={availableUsers}
+                    selectedItems={selectedToUsers}
+                    onSelect={this.handleToUserFilter}
+                    isOpen={openSelector === 'toUser'}
+                    onToggle={() => this.handleSelectorToggle('toUser')}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
                     items={availableRepos}
                     selectedItems={selectedRepos}
                     onSelect={this.handleRepoFilter}
-                    isOpen={this.state.openSelector === 'repo'}
+                    isOpen={openSelector === 'repo'}
                     onToggle={() => this.handleSelectorToggle('repo')}
                   />
                 </div>

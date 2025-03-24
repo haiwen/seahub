@@ -48,6 +48,7 @@ class Content extends Component {
       loading, errorMsg, items,
       perPage, currentPage, hasNextPage
     } = this.props;
+    console.log(currentPage)
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -328,7 +329,7 @@ class FileAccessLogs extends Component {
       openSelector: wasOpen ? null : selectorType
     }, () => {
       if (wasOpen) {
-        this.getLogsByPage();
+        this.getLogsByPage(1);
       }
     });
   };
@@ -355,6 +356,7 @@ class FileAccessLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
+                    componentName="Users"
                     items={availableUsers}
                     selectedItems={selectedUsers}
                     onSelect={this.handleUserFilter}

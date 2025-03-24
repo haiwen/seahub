@@ -13,6 +13,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
 import LogUserSelector from '../../dashboard/log-user-selector';
+import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
 
@@ -164,7 +165,12 @@ class FIleTransferLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       availableUsers: [],
-      selectedUsers: [],
+      selectedFromUsers: [],
+      selectedToUsers: [],
+      selectedOperators: [],
+      openSelector: null,
+      availableRepos: [],
+      selectedRepos: [],
     };
     this.initPage = 1;
   }
@@ -181,9 +187,19 @@ class FIleTransferLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedUsers } = this.state;
-    let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListFileTransferLogs(page, perPage, emails).then((res) => {
+    let { perPage, selectedFromUsers, selectedToUsers, selectedOperators, selectedRepos } = this.state;
+    const emails = {
+      from_emails: selectedFromUsers.map(user => user.email),
+      to_emails: selectedToUsers.map(user => user.email),
+      operator_emails: selectedOperators.map(user => user.email)
+    };
+
+    systemAdminAPI.sysAdminListFileTransferLogs(
+      page, 
+      perPage, 
+      emails,
+      selectedRepos
+    ).then((res) => {
       this.setState({
         logList: res.data.repo_transfer_log_list,
         loading: false,
@@ -193,7 +209,8 @@ class FIleTransferLogs extends Component {
     }).catch((error) => {
       this.setState({
         loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        currentPage: page,
+        errorMsg: Utils.getErrorMsg(error, true)
       });
     });
   };
@@ -204,23 +221,123 @@ class FIleTransferLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
-  handleUserFilter = (user, shouldFetchData = true) => {
-    const { selectedUsers } = this.state;
+  handleFromUserFilter = (user, shouldFetchData = true) => {
+    const { selectedFromUsers } = this.state;
     let newSelectedUsers;
 
     if (user === null) {
-      newSelectedUsers = selectedUsers;
+      newSelectedUsers = selectedFromUsers;
     } else {
-      const isSelected = selectedUsers.find(item => item.email === user.email);
+      const isSelected = selectedFromUsers.find(item => item.email === user.email);
       if (isSelected) {
-        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+        newSelectedUsers = selectedFromUsers.filter(item => item.email !== user.email);
       } else {
-        newSelectedUsers = [...selectedUsers, user];
+        newSelectedUsers = [...selectedFromUsers, user];
       }
     }
 
     this.setState({
-      selectedUsers: newSelectedUsers,
+      selectedFromUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleToUserFilter = (user, shouldFetchData = true) => {
+    const { selectedToUsers } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedToUsers;
+    } else {
+      const isSelected = selectedToUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedToUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedToUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedToUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleOperatorFilter = (user, shouldFetchData = true) => {
+    const { selectedOperators } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedOperators;
+    } else {
+      const isSelected = selectedOperators.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedOperators.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedOperators, user];
+      }
+    }
+
+    this.setState({
+      selectedOperators: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  getAvailableRepos = () => {
+    systemAdminAPI.sysAdminListRepos().then((res) => {
+      this.setState({
+        availableRepos: res.data.repos
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  };
+
+  handleRepoFilter = (repo, shouldFetchData = true) => {
+    const { selectedRepos } = this.state;
+    let newSelectedRepos;
+
+    if (repo === null) {
+      newSelectedRepos = [];
+    } else {
+      const isSelected = selectedRepos.find(item => item.id === repo.id);
+      if (isSelected) {
+        newSelectedRepos = selectedRepos.filter(item => item.id !== repo.id);
+      } else {
+        newSelectedRepos = [...selectedRepos, repo];
+      }
+    }
+
+    this.setState({
+      selectedRepos: newSelectedRepos,
       currentPage: 1
     }, () => {
       if (shouldFetchData) {
@@ -230,7 +347,13 @@ class FIleTransferLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, availableUsers, selectedUsers } = this.state;
+    let { 
+      logList, currentPage, perPage, hasNextPage,
+      availableUsers, selectedFromUsers, selectedToUsers, selectedOperators,
+      availableRepos, selectedRepos,
+      openSelector 
+    } = this.state;
+
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -239,12 +362,40 @@ class FIleTransferLogs extends Component {
             <LogsNav currentItem="fileTransfer" />
             <div className="cur-view-content">
               <Fragment>
-                <LogUserSelector
-                  label={gettext('User')}
-                  items={availableUsers}
-                  selectedItems={selectedUsers}
-                  onSelect={this.handleUserFilter}
-                />
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    componentName="Transfer From"
+                    items={availableUsers}
+                    selectedItems={selectedFromUsers}
+                    onSelect={this.handleFromUserFilter}
+                    isOpen={openSelector === 'fromUser'}
+                    onToggle={() => this.handleSelectorToggle('fromUser')}
+                  />
+                  <LogUserSelector
+                    componentName="Transfer To"
+                    items={availableUsers}
+                    selectedItems={selectedToUsers}
+                    onSelect={this.handleToUserFilter}
+                    isOpen={openSelector === 'toUser'}
+                    onToggle={() => this.handleSelectorToggle('toUser')}
+                  />
+                  <LogUserSelector
+                    componentName="Operator"
+                    items={availableUsers}
+                    selectedItems={selectedOperators}
+                    onSelect={this.handleOperatorFilter}
+                    isOpen={openSelector === 'operator'}
+                    onToggle={() => this.handleSelectorToggle('operator')}
+                  />
+                  <div className="mx-3"></div>
+                  <LogRepoSelector
+                    items={availableRepos}
+                    selectedItems={selectedRepos}
+                    onSelect={this.handleRepoFilter}
+                    isOpen={openSelector === 'repo'}
+                    onToggle={() => this.handleSelectorToggle('repo')}
+                  />
+                </div>
                 <Content
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}
