@@ -13,7 +13,9 @@ class RepoTrash(object):
         self.size = kwargs.get('size')
         self.del_time = kwargs.get('del_time')
 
+
 class WikiInfo(object):
+
     def __init__(self, **kwargs):
         self.repo_id = kwargs.get('repo_id')
         self.wiki_name = kwargs.get('wiki_name')
@@ -23,7 +25,6 @@ class WikiInfo(object):
         self.status = kwargs.get('status')
         self.file_count = kwargs.get('file_count')
         self.last_modified = kwargs.get('last_modified')
-
 
 
 class SeafileDB:
@@ -67,7 +68,7 @@ class SeafileDB:
             FROM
                 `{self.db_name}`.`SharedRepo` s
             WHERE
-                repo_id = '{repo_id}';
+                repo_id = %s;
             """
         else:
             sql = f"""
@@ -76,13 +77,13 @@ class SeafileDB:
             FROM
                 `{self.db_name}`.`OrgSharedRepo` s
             WHERE
-                repo_id = '{repo_id}';
+                repo_id = %s;
             """
 
         share_info_list = []
         with connection.cursor() as cursor:
 
-            cursor.execute(sql)
+            cursor.execute(sql, [repo_id])
             for item in cursor.fetchall():
 
                 info = {}
@@ -108,7 +109,7 @@ class SeafileDB:
             FROM
                 `{self.db_name}`.`RepoGroup` s
             WHERE
-                repo_id = '{repo_id}';
+                repo_id = %s;
             """
         else:
             sql = f"""
@@ -117,13 +118,13 @@ class SeafileDB:
             FROM
                 `{self.db_name}`.`OrgGroupRepo` s
             WHERE
-                repo_id = '{repo_id}';
+                repo_id = %s;
             """
 
         share_info_list = []
         with connection.cursor() as cursor:
 
-            cursor.execute(sql)
+            cursor.execute(sql, [repo_id])
             for item in cursor.fetchall():
 
                 info = {}
@@ -150,7 +151,7 @@ class SeafileDB:
             ON
                 s.repo_id=v.repo_id
             WHERE
-                v.origin_repo = '{repo_id}';
+                v.origin_repo = %s;
             """
         else:
             sql = f"""
@@ -161,13 +162,13 @@ class SeafileDB:
             ON
                 s.repo_id=v.repo_id
             WHERE
-                v.origin_repo = '{repo_id}';
+                v.origin_repo = %s;
             """
 
         share_info_list = []
         with connection.cursor() as cursor:
 
-            cursor.execute(sql)
+            cursor.execute(sql, [repo_id])
             for item in cursor.fetchall():
 
                 info = {}
@@ -195,7 +196,7 @@ class SeafileDB:
             ON
                 r.repo_id=v.repo_id
             WHERE
-                v.origin_repo = '{repo_id}';
+                v.origin_repo = %s;
             """
         else:
             sql = f"""
@@ -206,13 +207,13 @@ class SeafileDB:
             ON
                 r.repo_id=v.repo_id
             WHERE
-                v.origin_repo = '{repo_id}';
+                v.origin_repo = %s;
             """
 
         share_info_list = []
         with connection.cursor() as cursor:
 
-            cursor.execute(sql)
+            cursor.execute(sql, [repo_id])
             for item in cursor.fetchall():
 
                 info = {}
@@ -260,12 +261,17 @@ class SeafileDB:
                 u.repo_id = o.repo_id
             ORDER BY
                 e.error_time DESC
-            LIMIT {limit} OFFSET {start}
+            LIMIT %s OFFSET %s
             """
 
         device_errors = []
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+
+            if start == -1 and limit == -1:
+                cursor.execute(sql)
+            else:
+                cursor.execute(sql, [limit, start])
+
             for item in cursor.fetchall():
                 info = {}
                 info['repo_id'] = item[0]
@@ -287,13 +293,13 @@ class SeafileDB:
         sql = f"""
         SELECT repo_id, repo_name, head_id, owner_id, `size`, del_time
         FROM `{self.db_name}`.`RepoTrash`
-        WHERE org_id = {org_id}
+        WHERE org_id = %s
         ORDER BY del_time DESC
-        LIMIT {limit} OFFSET {start}
+        LIMIT %s OFFSET %s
         """
         trash_repo_list = []
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [org_id, limit, start])
             for item in cursor.fetchall():
                 repo_id = item[0]
                 repo_name = item[1]
@@ -319,29 +325,26 @@ class SeafileDB:
         empty org repo trash
         """
         def del_repo_trash(cursor, repo_ids):
-            del_file_count_sql = """
-            DELETE FROM
-                `%s`.`RepoFileCount`
-            WHERE
-                repo_id in %%s;
-            """ % self.db_name
-            cursor.execute(del_file_count_sql, (repo_ids, ))
 
-            del_repo_info_sql = """
-            DELETE FROM
-                `%s`.`RepoInfo`
-            WHERE
-                repo_id in %%s;
-            """ % self.db_name
-            cursor.execute(del_repo_info_sql, (repo_ids, ))
+            placeholders = ','.join(['%s'] * len(repo_ids))
 
-            del_trash_sql = """
-            DELETE FROM
-                `%s`.`RepoTrash`
-            WHERE
-                repo_id in %%s;
-            """ % self.db_name
-            cursor.execute(del_trash_sql, (repo_ids,))
+            del_file_count_sql = f"""
+            DELETE FROM `{self.db_name}`.`RepoFileCount`
+            WHERE repo_id IN ({placeholders})
+            """
+            cursor.execute(del_file_count_sql, repo_ids)
+
+            del_repo_info_sql = f"""
+            DELETE FROM `{self.db_name}`.`RepoInfo`
+            WHERE repo_id IN ({placeholders})
+            """
+            cursor.execute(del_repo_info_sql, repo_ids)
+
+            del_trash_sql = f"""
+            DELETE FROM `{self.db_name}`.`RepoTrash`
+            WHERE repo_id IN ({placeholders})
+            """
+            cursor.execute(del_trash_sql, repo_ids)
 
         sql_list_repo_id = f"""
         SELECT
@@ -349,132 +352,196 @@ class SeafileDB:
         FROM
             `{self.db_name}`.`RepoTrash` t
         WHERE
-            org_id={org_id};
+            org_id = %s;
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql_list_repo_id)
-            repo_ids = []
-            for item in cursor.fetchall():
-                repo_id = item[0]
-                repo_ids.append(repo_id)
-            del_repo_trash(cursor, repo_ids)
+            cursor.execute(sql_list_repo_id, [org_id])
+
+            repo_ids = [item[0] for item in cursor.fetchall()]
+            if repo_ids:
+                del_repo_trash(cursor, repo_ids)
             cursor.close()
 
     def add_repos_to_org_user(self, org_id, username, repo_ids):
-        for repo_id in repo_ids:
-            sql = f"""
+
+        sql = f"""
             INSERT INTO `{self.db_name}`.`OrgRepo` (org_id, repo_id, user)
-            VALUES ({org_id}, "{repo_id}", "{username}");
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(sql)
+            VALUES (%s, %s, %s);
+        """
+        with connection.cursor() as cursor:
+            for repo_id in repo_ids:
+                cursor.execute(sql, [org_id, repo_id, username])
 
     def set_repo_type(self, repo_id, repo_type):
-        sql = f"""
-            UPDATE `{self.db_name}`. `RepoInfo`
-            SET `type`= '%s'
-            WHERE  `repo_id`='%s'
-        """ % (repo_type, repo_id)
 
+        sql = f"""
+            UPDATE `{self.db_name}`.`RepoInfo`
+            SET `type` = %s
+            WHERE `repo_id` = %s;
+        """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [repo_type, repo_id])
 
     def get_repo_ids_in_repo(self, repo_id):
+
         repo_ids_sql = f"""
-                SELECT repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{repo_id}"
-                """
+            SELECT repo_id
+            FROM `{self.db_name}`.`VirtualRepo`
+            WHERE origin_repo = %s;
+        """
+
         repo_ids = [repo_id, ]
         with connection.cursor() as cursor:
             try:
-                cursor.execute(repo_ids_sql)
+                cursor.execute(repo_ids_sql, [repo_id])
                 for item in cursor.fetchall():
                     repo_id = item[0]
                     repo_ids.append(repo_id)
-            except:
+            except Exception:
                 return repo_ids
 
         return repo_ids
 
     def set_repo_owner(self, repo_id, new_owner, org_id=None):
-        # transfert repo to user
+
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if not repo_ids:
+            return
+
+        # transfert repo to user
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-             UPDATE `{self.db_name}`.`OrgRepo` SET user="{new_owner}" WHERE org_id ={org_id} AND repo_id IN ({repo_ids_str})
-             """
+            UPDATE `{self.db_name}`.`OrgRepo`
+            SET user = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-             UPDATE `{self.db_name}`.`RepoOwner` SET owner_id="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-             """
+            UPDATE `{self.db_name}`.`RepoOwner`
+            SET owner_id = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
+
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, params)
 
     def set_repo_group_owner(self, repo_id, group_id, current_group_id=None, org_id=None):
+
         # transfer repo to department
+
         group_username = "%s@seafile_group" % group_id
+
         current_group_username = None
         if current_group_id:
             current_group_username = "%s@seafile_group" % current_group_id
+
         if org_id:
-            sql1 = f"""
-            DELETE From `{self.db_name}`.`OrgGroupRepo` where owner="{current_group_username}" AND repo_id="{repo_id}" AND org_id="{org_id}" AND group_id="{current_group_id}"
+            delete_sql = f"""
+                DELETE From `{self.db_name}`.`OrgGroupRepo`
+                WHERE owner=%s
+                AND repo_id=%s
+                AND org_id=%s
+                AND group_id=%s
             """
+
             sql = f"""
-            INSERT INTO `{self.db_name}`.`OrgGroupRepo` (org_id, repo_id, group_id, owner, permission) VALUES ({org_id}, "{repo_id}", {group_id}, "{group_username}", "rw")
-            ON DUPLICATE KEY UPDATE owner="{group_username}"
+                INSERT INTO `{self.db_name}`.`OrgGroupRepo` (org_id, repo_id, group_id, owner, permission)
+                VALUES (%s, %s, %s, %s, "rw")
+                ON DUPLICATE KEY UPDATE owner=%s
             """
         else:
-            sql1 = f"""
-            DELETE From `{self.db_name}`.`RepoGroup` where user_name="{current_group_username}" AND repo_id="{repo_id}" AND group_id="{current_group_id}"
-                        """
+            delete_sql = f"""
+                DELETE FROM `{self.db_name}`.`RepoGroup`
+                WHERE user_name=%s
+                AND repo_id=%s
+                AND group_id=%s
+            """
+
             sql = f"""
-            INSERT INTO `{self.db_name}`.`RepoGroup` (repo_id, group_id, user_name, permission) VALUES ("{repo_id}", {group_id}, "{group_username}", "rw")
-            ON DUPLICATE KEY UPDATE user_name="{group_username}"
+                INSERT INTO `{self.db_name}`.`RepoGroup` (repo_id, group_id, user_name, permission)
+                VALUES (%s, %s, %s, "rw")
+                ON DUPLICATE KEY UPDATE user_name=%s
             """
         with connection.cursor() as cursor:
-            if current_group_id:
-                cursor.execute(sql1)
-            cursor.execute(sql)
+
+            if org_id:
+                if current_group_id:
+                    cursor.execute(delete_sql, [current_group_username,
+                                                repo_id, org_id, current_group_id])
+                cursor.execute(sql, [org_id, repo_id, group_id,
+                                     group_username, group_username])
+            else:
+                if current_group_id:
+                    cursor.execute(delete_sql, [current_group_username,
+                                                repo_id, current_group_id])
+                cursor.execute(sql, [repo_id, group_id,
+                                     group_username, group_username])
+
         self.set_repo_owner(repo_id, group_username, org_id)
 
     def update_repo_user_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if not repo_ids:
+            return
+
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-              UPDATE `{self.db_name}`.`OrgSharedRepo` SET from_email="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
-              """
+            UPDATE `{self.db_name}`.`OrgSharedRepo`
+            SET from_email = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-              UPDATE `{self.db_name}`.`SharedRepo` SET from_email="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-              """
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
+            UPDATE `{self.db_name}`.`SharedRepo`
+            SET from_email = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
 
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
 
     def update_repo_group_shares(self, repo_id, new_owner, org_id=None):
         repo_ids = self.get_repo_ids_in_repo(repo_id)
-        repo_ids_str = ','.join(["'%s'" % str(rid) for rid in repo_ids])
+        if not repo_ids:
+            return
+
+        placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-              UPDATE `{self.db_name}`.`OrgGroupRepo` SET owner="{new_owner}" WHERE org_id={org_id} AND repo_id IN ({repo_ids_str})
-              """
+            UPDATE `{self.db_name}`.`OrgGroupRepo`
+            SET owner = %s
+            WHERE org_id = %s
+            AND repo_id IN ({placeholders})
+            """
+            params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-              UPDATE `{self.db_name}`.`RepoGroup` SET user_name="{new_owner}" WHERE repo_id IN ({repo_ids_str})
-              """
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
+            UPDATE `{self.db_name}`.`RepoGroup`
+            SET user_name = %s
+            WHERE repo_id IN ({placeholders})
+            """
+            params = [new_owner] + repo_ids
 
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
 
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
-          DELETE FROM `{self.db_name}`.`RepoUserToken` where repo_id="{repo_id}" AND email="{owner}"
+          DELETE FROM `{self.db_name}`.`RepoUserToken`
+          WHERE repo_id=%s
+          AND email=%s
           """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
-    
+            cursor.execute(sql, [repo_id, owner])
+
     def get_all_wikis(self, start, limit, order_by):
         order_by_size_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
@@ -488,7 +555,7 @@ class SeafileDB:
                 i.type = 'wiki'
             ORDER BY
                 s.size DESC
-            LIMIT {limit} OFFSET {start}
+            LIMIT %s OFFSET %s
             """
         order_by_filecount_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
@@ -502,7 +569,7 @@ class SeafileDB:
                 i.type = 'wiki'
             ORDER BY
                 c.file_count DESC
-            LIMIT {limit} OFFSET {start}
+            LIMIT %s OFFSET %s
             """
         sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
@@ -514,18 +581,21 @@ class SeafileDB:
             LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
             WHERE
                 i.type = 'wiki'
-            LIMIT {limit} OFFSET {start}
+            LIMIT %s OFFSET %s
         """
-        
+
         with connection.cursor() as cursor:
+
             wikis = []
+
             if order_by == 'size':
-                cursor.execute(order_by_size_sql)
-                
+                cursor.execute(order_by_size_sql, [limit, start])
+
             elif order_by == 'file_count':
-                cursor.execute(order_by_filecount_sql)
+                cursor.execute(order_by_filecount_sql, [limit, start])
             else:
-                cursor.execute(sql)
+                cursor.execute(sql, [limit, start])
+
             for item in cursor.fetchall():
                 repo_id = item[0]
                 wiki_name = item[1]
