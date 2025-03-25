@@ -167,6 +167,7 @@ class FIleTransferLogs extends Component {
       availableUsers: [],
       selectedFromUsers: [],
       selectedToUsers: [],
+      selectedToGroups: [],
       selectedOperators: [],
       openSelector: null,
       availableRepos: [],
@@ -187,10 +188,19 @@ class FIleTransferLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedFromUsers, selectedToUsers, selectedOperators, selectedRepos } = this.state;
+    let {
+      perPage,
+      selectedFromUsers,
+      selectedToUsers,
+      selectedToGroups,
+      selectedOperators,
+      selectedRepos
+    } = this.state;
+
     const emails = {
       from_emails: selectedFromUsers.map(user => user.email),
       to_emails: selectedToUsers.map(user => user.email),
+      to_groups: selectedToGroups.map(group => group.to_group_id || group.id),
       operator_emails: selectedOperators.map(user => user.email)
     };
 
@@ -246,23 +256,51 @@ class FIleTransferLogs extends Component {
     });
   };
 
-  handleToUserFilter = (user, shouldFetchData = true) => {
-    const { selectedToUsers } = this.state;
-    let newSelectedUsers;
+  handleToUserFilter = (item, shouldFetchData = true) => {
+    const { selectedToUsers, selectedToGroups } = this.state;
+    let newSelectedUsers = selectedToUsers;
+    let newSelectedGroups = selectedToGroups;
 
-    if (user === null) {
+    if (item === null) {
       newSelectedUsers = selectedToUsers;
+      newSelectedGroups = selectedToGroups;
     } else {
-      const isSelected = selectedToUsers.find(item => item.email === user.email);
-      if (isSelected) {
-        newSelectedUsers = selectedToUsers.filter(item => item.email !== user.email);
+      if (item.email) {
+        const isSelected = selectedToUsers.find(user => user.email === item.email);
+        if (isSelected) {
+          newSelectedUsers = selectedToUsers.filter(user => user.email !== item.email);
+        } else {
+          newSelectedUsers = [...selectedToUsers, item];
+        }
       } else {
-        newSelectedUsers = [...selectedToUsers, user];
+        const groupId = item.to_group_id || item.id;
+        const groupName = item.to_group_name || item.name;
+
+        const isSelected = selectedToGroups.find(group => {
+          const selectedGroupId = group.to_group_id || group.id;
+          return selectedGroupId === groupId;
+        });
+
+        if (isSelected) {
+          newSelectedGroups = selectedToGroups.filter(group => {
+            const selectedGroupId = group.to_group_id || group.id;
+            return selectedGroupId !== groupId;
+          });
+        } else {
+          const groupItem = {
+            id: groupId,
+            name: groupName,
+            to_group_id: groupId,
+            to_group_name: groupName
+          };
+          newSelectedGroups = [...selectedToGroups, groupItem];
+        }
       }
     }
 
     this.setState({
       selectedToUsers: newSelectedUsers,
+      selectedToGroups: newSelectedGroups,
       currentPage: 1
     }, () => {
       if (shouldFetchData) {
@@ -339,6 +377,10 @@ class FIleTransferLogs extends Component {
     return systemAdminAPI.sysAdminSearchUsers(value);
   };
 
+  searchGroups = (value) => {
+    return systemAdminAPI.sysAdminSearchGroups(value);
+  };
+
   searchRepos = (value) => {
     return systemAdminAPI.sysAdminSearchRepos(value);
   };
@@ -346,10 +388,22 @@ class FIleTransferLogs extends Component {
   render() {
     let {
       logList, currentPage, perPage, hasNextPage,
-      availableUsers, selectedFromUsers, selectedToUsers, selectedOperators,
+      availableUsers, selectedFromUsers,
+      selectedToUsers, selectedToGroups,
+      selectedOperators,
       availableRepos, selectedRepos,
       openSelector
     } = this.state;
+
+    const selectedToItems = [
+      ...selectedToUsers,
+      ...selectedToGroups.map(group => ({
+        id: group.to_group_id || group.id,
+        name: group.to_group_name || group.name,
+        to_group_id: group.to_group_id || group.id,
+        to_group_name: group.to_group_name || group.name
+      }))
+    ];
 
     return (
       <Fragment>
@@ -372,11 +426,12 @@ class FIleTransferLogs extends Component {
                   <LogUserSelector
                     componentName="Transfer To"
                     items={availableUsers}
-                    selectedItems={selectedToUsers}
+                    selectedItems={selectedToItems}
                     onSelect={this.handleToUserFilter}
                     isOpen={openSelector === 'toUser'}
                     onToggle={() => this.handleSelectorToggle('toUser')}
                     searchUsersFunc={this.searchUsers}
+                    searchGroupsFunc={this.searchGroups}
                   />
                   <LogUserSelector
                     componentName="Operator"

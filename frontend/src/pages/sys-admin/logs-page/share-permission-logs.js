@@ -156,6 +156,7 @@ class SharePermissionLogs extends Component {
       availableUsers: [],
       selectedFromUsers: [],
       selectedToUsers: [],
+      selectedToGroups: [],
       availableRepos: [],
       selectedRepos: [],
       openSelector: null,
@@ -179,13 +180,20 @@ class SharePermissionLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedFromUsers, selectedToUsers, selectedRepos } = this.state;
-    let fromEmails = selectedFromUsers.map(user => user.email);
-    let toEmails = selectedToUsers.map(user => user.email);
+    let {
+      perPage,
+      selectedFromUsers,
+      selectedToUsers,
+      selectedToGroups,
+      selectedRepos
+    } = this.state;
+
     const emails = {
-      from_emails: fromEmails,
-      to_emails: toEmails
+      from_emails: selectedFromUsers.map(user => user.email),
+      to_emails: selectedToUsers.map(user => user.email),
+      to_groups: selectedToGroups.map(group => group.id)
     };
+
     systemAdminAPI.sysAdminListSharePermissionLogs(
       page,
       perPage,
@@ -237,23 +245,35 @@ class SharePermissionLogs extends Component {
     });
   };
 
-  handleToUserFilter = (user, shouldFetchData = true) => {
-    const { selectedToUsers } = this.state;
-    let newSelectedUsers;
+  handleToUserFilter = (item, shouldFetchData = true) => {
+    const { selectedToUsers, selectedToGroups } = this.state;
+    let newSelectedUsers = selectedToUsers;
+    let newSelectedGroups = selectedToGroups;
 
-    if (user === null) {
+    if (item === null) {
       newSelectedUsers = selectedToUsers;
+      newSelectedGroups = selectedToGroups;
     } else {
-      const isSelected = selectedToUsers.find(item => item.email === user.email);
-      if (isSelected) {
-        newSelectedUsers = selectedToUsers.filter(item => item.email !== user.email);
+      if (item.email) {
+        const isSelected = selectedToUsers.find(user => user.email === item.email);
+        if (isSelected) {
+          newSelectedUsers = selectedToUsers.filter(user => user.email !== item.email);
+        } else {
+          newSelectedUsers = [...selectedToUsers, item];
+        }
       } else {
-        newSelectedUsers = [...selectedToUsers, user];
+        const isSelected = selectedToGroups.find(group => group.id === item.id);
+        if (isSelected) {
+          newSelectedGroups = selectedToGroups.filter(group => group.id !== item.id);
+        } else {
+          newSelectedGroups = [...selectedToGroups, item];
+        }
       }
     }
 
     this.setState({
       selectedToUsers: newSelectedUsers,
+      selectedToGroups: newSelectedGroups,
       currentPage: 1
     }, () => {
       if (shouldFetchData) {
@@ -308,11 +328,15 @@ class SharePermissionLogs extends Component {
     return systemAdminAPI.sysAdminSearchRepos(value);
   };
 
+  searchGroups = (value) => {
+    return systemAdminAPI.sysAdminSearchGroups(value);
+  };
+
   render() {
     let {
       logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen,
       availableUsers, selectedFromUsers, selectedToUsers,
-      availableRepos, selectedRepos, openSelector
+      selectedToGroups, availableRepos, selectedRepos, openSelector
     } = this.state;
     return (
       <Fragment>
@@ -337,11 +361,12 @@ class SharePermissionLogs extends Component {
                   <LogUserSelector
                     componentName="Share To"
                     items={availableUsers}
-                    selectedItems={selectedToUsers}
+                    selectedItems={[...selectedToUsers, ...selectedToGroups]}
                     onSelect={this.handleToUserFilter}
                     isOpen={openSelector === 'toUser'}
                     onToggle={() => this.handleSelectorToggle('toUser')}
                     searchUsersFunc={this.searchUsers}
+                    searchGroupsFunc={this.searchGroups}
                   />
                   <div className="mx-3"></div>
                   <LogRepoSelector
