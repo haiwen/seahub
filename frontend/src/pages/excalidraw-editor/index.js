@@ -59,8 +59,18 @@ const ExcaliEditor = () => {
       }
     }, SAVE_INTERVAL_TIME);
 
+    const handleBeforeUnload = (event) => {
+      if (isChangedRef.current) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
       clearInterval(saveInterval);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [saveSceneContent]);
 
