@@ -2,6 +2,7 @@ import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, enableRepoAutoDel } from '../../utils/constants';
+import { TAB } from '../../constants/repo-setting-tabs';
 import LibHistorySettingPanel from './lib-settings/lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-setting-panel';
 import {
@@ -16,14 +17,7 @@ import { useMetadataStatus } from '../../hooks';
 
 import '../../css/lib-settings.css';
 
-const TAB = {
-  HISTORY_SETTING: 'history_setting',
-  AUTO_DEL_SETTING: 'auto_delete_setting',
-  EXTENDED_PROPERTIES_SETTING: 'extended_properties_setting',
-  FACE_RECOGNITION_SETTING: 'face_recognition_setting',
-  TAGS_SETTING: 'tags_setting',
-  OCR_SETTING: 'ocr_setting',
-};
+const { enableSeafileAI } = window.app.config;
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
@@ -110,20 +104,22 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                         {gettext('Extended properties')}
                       </NavLink>
                     </NavItem>
-                    <NavItem
-                      role="tab"
-                      aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}
-                      aria-controls="face-recognition-setting-panel"
-                    >
-                      <NavLink
-                        className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
-                        onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
-                        tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                    {enableSeafileAI &&
+                      <NavItem
+                        role="tab"
+                        aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}
+                        aria-controls="face-recognition-setting-panel"
                       >
-                        {gettext('Face recognition')}
-                      </NavLink>
-                    </NavItem>
+                        <NavLink
+                          className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
+                          onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
+                          tabIndex="0"
+                          onKeyDown={onTabKeyDown}
+                        >
+                          {gettext('Face recognition')}
+                        </NavLink>
+                      </NavItem>
+                    }
                     <NavItem
                       role="tab"
                       aria-selected={activeTab === TAB.TAGS_SETTING}
@@ -138,20 +134,22 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                         {gettext('Tags')}
                       </NavLink>
                     </NavItem>
-                    <NavItem
-                      role="tab"
-                      aria-selected={activeTab === TAB.OCR_SETTING}
-                      aria-controls="ocr-setting-panel"
-                    >
-                      <NavLink
-                        className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
-                        onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
-                        tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                    {enableSeafileAI &&
+                      <NavItem
+                        role="tab"
+                        aria-selected={activeTab === TAB.OCR_SETTING}
+                        aria-controls="ocr-setting-panel"
                       >
-                        {gettext('OCR')}
-                      </NavLink>
-                    </NavItem>
+                        <NavLink
+                          className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
+                          onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
+                          tabIndex="0"
+                          onKeyDown={onTabKeyDown}
+                        >
+                          {gettext('OCR')}
+                        </NavLink>
+                      </NavItem>
+                    }
                   </>
                 }
               </Nav>
@@ -229,5 +227,3 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
 LibSettingsDialog.propTypes = propTypes;
 
 export default LibSettingsDialog;
-
-export { TAB };
