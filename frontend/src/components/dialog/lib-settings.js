@@ -16,6 +16,8 @@ import { useMetadataStatus } from '../../hooks';
 
 import '../../css/lib-settings.css';
 
+const { enableSeafileAI } = window.app.config;
+
 const TAB = {
   HISTORY_SETTING: 'history_setting',
   AUTO_DEL_SETTING: 'auto_delete_setting',
@@ -110,20 +112,22 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                         {gettext('Extended properties')}
                       </NavLink>
                     </NavItem>
-                    <NavItem
-                      role="tab"
-                      aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}
-                      aria-controls="face-recognition-setting-panel"
-                    >
-                      <NavLink
-                        className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
-                        onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
-                        tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                    {enableSeafileAI &&
+                      <NavItem
+                        role="tab"
+                        aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}
+                        aria-controls="face-recognition-setting-panel"
                       >
-                        {gettext('Face recognition')}
-                      </NavLink>
-                    </NavItem>
+                        <NavLink
+                          className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
+                          onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
+                          tabIndex="0"
+                          onKeyDown={onTabKeyDown}
+                        >
+                          {gettext('Face recognition')}
+                        </NavLink>
+                      </NavItem>
+                    }
                     <NavItem
                       role="tab"
                       aria-selected={activeTab === TAB.TAGS_SETTING}
@@ -138,20 +142,22 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                         {gettext('Tags')}
                       </NavLink>
                     </NavItem>
-                    <NavItem
-                      role="tab"
-                      aria-selected={activeTab === TAB.OCR_SETTING}
-                      aria-controls="ocr-setting-panel"
-                    >
-                      <NavLink
-                        className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
-                        onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
-                        tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                    {enableSeafileAI &&
+                      <NavItem
+                        role="tab"
+                        aria-selected={activeTab === TAB.OCR_SETTING}
+                        aria-controls="ocr-setting-panel"
                       >
-                        {gettext('OCR')}
-                      </NavLink>
-                    </NavItem>
+                        <NavLink
+                          className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
+                          onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
+                          tabIndex="0"
+                          onKeyDown={onTabKeyDown}
+                        >
+                          {gettext('OCR')}
+                        </NavLink>
+                      </NavItem>
+                    }
                   </>
                 }
               </Nav>
