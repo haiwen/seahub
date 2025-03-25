@@ -943,6 +943,11 @@ FILESERVER_TOKEN_ONCE_ONLY = True
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
+###########################
+# Full disk email sending #
+##########################
+ENABLE_QUOTA_ALERT = False
+QUOTA_ALERT_DAY_INTERVAL = 0
 
 
 ##########################
@@ -960,6 +965,12 @@ FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 ##########################
 
 ENABLE_WHITEBOARD = False
+
+##########################
+# Settings for excalidraw    #
+##########################
+
+ENABLE_EXCALIDRAW = False
 
 ############################
 # Settings for Seahub Priv #

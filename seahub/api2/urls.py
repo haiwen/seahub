@@ -102,16 +102,6 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view(), name="api2-fileops-move"),
 ]
 
-# serve office converter static files
-from seahub.utils import HAS_OFFICE_CONVERTER
-if HAS_OFFICE_CONVERTER:
-    urlpatterns += [
-        path('office-convert/status/', OfficeConvertQueryStatus.as_view()),
-    ]
-    urlpatterns += [
-        re_path(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
-    ]
-
 from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER
 if CLIENT_SSO_VIA_LOCAL_BROWSER:
     urlpatterns += [

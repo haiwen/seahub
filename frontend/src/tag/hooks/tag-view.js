@@ -9,12 +9,13 @@ import { getAllChildTagsIdsFromNode } from '../utils/tree';
 import { seafileAPI } from '../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../constants/file';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
-import { getFileById } from '../utils/file';
+import { getFileById, sortTagFiles } from '../utils/file';
 import { getRowById } from '../../components/sf-table/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import URLDecorator from '../../utils/url-decorator';
 import { fileServerRoot, useGoFileserver } from '../../utils/constants';
+import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
@@ -156,6 +157,14 @@ export const TagViewProvider = ({
     });
   }, [repoID, convertFileCallback]);
 
+  const sortFiles = useCallback((sort) => {
+    const sorted = sortTagFiles(tagFiles, sort);
+    setTagFiles({
+      ...tagFiles,
+      rows: sorted,
+    });
+  }, [tagFiles]);
+
   useEffect(() => {
     setLoading(true);
     const childTagsIds = getChildTagsIds(tagID, nodeKey);
@@ -165,7 +174,10 @@ export const TagViewProvider = ({
     }
     tagsAPI.getTagsFiles(repoID, tagsIds).then(res => {
       const rows = res.data?.results || [];
-      setTagFiles({ columns: res.data?.metadata || [], rows });
+      const savedSort = window.sfTagsDataContext?.localStorage?.getItem(TAG_FILES_SORT);
+      const sort = savedSort ? JSON.parse(savedSort) : TAG_FILES_DEFAULT_SORT;
+      const sorted = sortTagFiles(rows, sort);
+      setTagFiles({ columns: res.data?.metadata || [], rows: sorted });
       setLoading(false);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
@@ -174,6 +186,21 @@ export const TagViewProvider = ({
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, tagID, nodeKey]);
+
+  useEffect(() => {
+    const unsubscribeModifyTagFilesSort = window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, (sort) => {
+      const files = tagFiles?.rows || [];
+      const sorted = sortTagFiles(files, sort);
+      setTagFiles({
+        ...tagFiles,
+        rows: sorted,
+      });
+    });
+
+    return () => {
+      unsubscribeModifyTagFilesSort && unsubscribeModifyTagFilesSort();
+    };
+  }, [tagFiles]);
 
   return (
     <TagViewContext.Provider value={{
@@ -194,6 +221,7 @@ export const TagViewProvider = ({
       downloadTagFiles,
       renameTagFile,
       convertFile,
+      sortFiles,
     }}>
       {children}
     </TagViewContext.Provider>

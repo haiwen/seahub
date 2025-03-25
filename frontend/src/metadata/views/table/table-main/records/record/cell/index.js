@@ -154,6 +154,8 @@ const Cell = React.memo(({
     event.nativeEvent.stopImmediatePropagation();
     if (!isCellSelected) return;
     const repoID = window.sfMetadataContext.getSetting('repoID');
+    const canPreview = window.sfMetadataContext.canPreview();
+    if (!canPreview) return;
     openFile(repoID, record, () => {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });

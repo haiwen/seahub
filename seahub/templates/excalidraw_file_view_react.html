@@ -1,0 +1,19 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+
+
+{% block extra_style %}
+{% render_bundle 'excalidrawEditor' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+docPath: '{{ path|escapejs }}',
+docName: '{{ filename|escapejs }}',
+docUuid: '{{ file_uuid }}',
+lang: '{{ lang }}',
+rawPath: '{{ raw_path|escapejs }}',
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'excalidrawEditor' 'js' %}
+{% endblock %}

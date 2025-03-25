@@ -1,0 +1,8 @@
+.dropdown-menu {
+  display: block !important;
+}
+
+.excalidraw .dropdown-menu {
+  --bs-dropdown-padding-x: auto;
+  border: unset;
+}

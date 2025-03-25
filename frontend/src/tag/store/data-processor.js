@@ -3,13 +3,15 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import { getGroupRows } from '../../metadata/utils/group';
 import { getRowsByIds } from '../../components/sf-table/utils/table';
 import { OPERATION_TYPE } from './operations';
-import { buildTagsTree, setNodeAllChildTagsIds } from '../utils/tree';
+import { buildTagsTree, setNodeAllChildTagsIds, sortTree } from '../utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import {
   addTreeChildNode, checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
   resetTreeHasChildNodesStatus,
   updatedKeyTreeNodeMap,
 } from '../../components/sf-table/utils/tree';
+import { checkIsSortByChildTagsCount, checkIsSortByName } from '../utils/sort';
+import { PRIVATE_COLUMN_KEY } from '../constants';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,
@@ -20,10 +22,16 @@ import {
 // get rendered rows depend on filters/sorts etc.
 class DataProcessor {
 
+  static sortTable(table) {
+    const { rows_tree, sort } = table;
+    table.rows_tree = sortTree(rows_tree, sort, table);
+  }
+
   static buildTagsTree(rows, table) {
     const { tree, key_tree_node_map } = buildTagsTree(rows, table);
     table.rows_tree = tree;
     table.key_tree_node_map = key_tree_node_map;
+    this.sortTable(table);
   }
 
   static updateTagsTreeWithNewTags(tags, table) {
@@ -38,6 +46,7 @@ class DataProcessor {
       updatedKeyTreeNodeMap(nodeKey, node, table.key_tree_node_map);
     });
     table.rows_tree = updated_rows_tree;
+    this.sortTable(table);
   }
 
   static updateTagsTreeWithDeletedTagsIds(deletedTagsIds, table) {
@@ -70,6 +79,7 @@ class DataProcessor {
       updatedKeyTreeNodeMap(getTreeNodeKey(node), node, table.key_tree_node_map);
     });
     table.rows_tree = updated_rows_tree;
+    this.sortTable(table);
   }
 
   static getGroupedRows(table, rows, groupbys, { collaborators }) {
@@ -185,6 +195,11 @@ class DataProcessor {
             }
           }
         });
+
+        const { sort } = table;
+        if (checkIsSortByName(sort) && relatedColumnKeys.includes(PRIVATE_COLUMN_KEY.TAG_NAME)) {
+          this.sortTable(table);
+        }
         this.updateDataWithModifyRecords(table, relatedColumnKeyMap, row_ids, { collaborators });
         this.updateSummaries();
         break;
@@ -221,7 +236,7 @@ class DataProcessor {
         const { tag, parent_tag_id } = operation;
         const tagId = getRecordIdFromRecord(tag);
         if (!tagId || !parent_tag_id) return;
-        const { rows_tree } = table;
+        const { rows_tree, sort } = table;
         rows_tree.forEach((node) => {
           const nodeId = getTreeNodeId(node);
           if (nodeId === parent_tag_id) {
@@ -233,6 +248,10 @@ class DataProcessor {
             updatedKeyTreeNodeMap(subNodeKey, childNode, table.key_tree_node_map);
           }
         });
+
+        if (checkIsSortByChildTagsCount(sort) || checkIsSortByName(sort)) {
+          this.sortTable(table);
+        }
         break;
       }
       case OPERATION_TYPE.ADD_TAG_LINKS:
@@ -240,6 +259,10 @@ class DataProcessor {
       case OPERATION_TYPE.DELETE_TAGS_LINKS:
       case OPERATION_TYPE.MERGE_TAGS: {
         this.buildTagsTree(table.rows, table);
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_TAGS_SORT: {
+        this.sortTable(table);
         break;
       }
       default: {

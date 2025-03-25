@@ -972,18 +972,6 @@ if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
         re_path(r'^sso-auto-login/', login_simple_check),
     ]
 
-# serve office converter static files
-from seahub.utils import HAS_OFFICE_CONVERTER
-if HAS_OFFICE_CONVERTER:
-    from seahub.views.file import (
-        office_convert_query_status, office_convert_get_page
-    )
-    urlpatterns += [
-        re_path(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
-            office_convert_get_page, name='office_convert_get_page'),
-        path('office-convert/status/', office_convert_query_status, name='office_convert_query_status'),
-    ]
-
 if getattr(settings, 'ENABLE_MULTI_ADFS', False):
     from seahub.adfs_auth.views import *
     urlpatterns += [

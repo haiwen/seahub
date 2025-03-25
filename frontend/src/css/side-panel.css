@@ -21,7 +21,7 @@
 }
 
 .side-panel .nav-link.active {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 .side-panel-content {
@@ -57,7 +57,7 @@
   text-align: center;
   line-height: 150px;
   font-size: 30px;
-  color: #eb8205;
+  color: #EC8000;
   -moz-animation: rotate 1.5s ease infinite;
   -webkit-animation: rotate 1.5s ease infinite;
   animation: rotate 1.5s ease infinite;
@@ -82,7 +82,7 @@
 }
 
 .outline-h2:hover {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 .outline-h3 {
@@ -94,7 +94,7 @@
 }
 
 .outline-h3:hover {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 /*tree view */

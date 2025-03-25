@@ -1,4 +1,5 @@
 import Column from '../../metadata/model/column';
+import { ALL_TAGS_SORT } from '../constants/sort';
 
 class TagsData {
   constructor(object) {
@@ -18,6 +19,8 @@ class TagsData {
     });
 
     this.hasMore = true;
+
+    this.sort = object.sort || ALL_TAGS_SORT;
   }
 
 }

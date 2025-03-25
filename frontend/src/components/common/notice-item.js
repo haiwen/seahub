@@ -42,13 +42,13 @@ class NoticeItem extends React.Component {
       let avatar_url = detail.group_staff_avatar_url;
       let groupStaff = detail.group_staff_name;
       // group name does not support special characters
-      let userHref = siteRoot + 'profile/' + detail.group_staff_email + '/';
+      let userHref = siteRoot + 'profile/' + encodeURIComponent(detail.group_staff_email) + '/';
       let groupHref = siteRoot + 'group/' + detail.group_id + '/';
       let groupName = detail.group_name;
       let username = detail.group_staff_name;
       let notice = gettext('User {user_link} has added you to {group_link}');
-      let userLink = '<a href=' + userHref + '>' + groupStaff + '</a>';
-      let groupLink = '<a href=' + groupHref + '>' + groupName + '</a>';
+      let userLink = '<a href=' + userHref + '>' + Utils.HTMLescape(groupStaff) + '</a>';
+      let groupLink = '<a href=' + groupHref + '>' + Utils.HTMLescape(groupName) + '</a>';
       notice = notice.replace('{user_link}', userLink);
       notice = notice.replace('{group_link}', groupLink);
       return { avatar_url, notice, username };

@@ -1,3 +1,4 @@
+import { ALL_TAGS_SORT } from '../constants/sort';
 import { OPERATION_TYPE } from './operations';
 
 class LocalOperator {
@@ -11,6 +12,15 @@ class LocalOperator {
         try {
           const oldValue = window.sfTagsDataContext.localStorage.getItem('columns_width') || {};
           window.sfTagsDataContext.localStorage.setItem('columns_width', { ...oldValue, [column_key]: new_width });
+        } catch (err) {
+          break;
+        }
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_TAGS_SORT: {
+        const { sort } = operation;
+        try {
+          window.sfTagsDataContext.localStorage.setItem(ALL_TAGS_SORT, JSON.stringify(sort));
         } catch (err) {
           break;
         }

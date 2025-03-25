@@ -451,6 +451,7 @@ class InteractionMasks extends React.Component {
   };
 
   handleSpaceKeyDown = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     const repoID = window.sfMetadataContext.getSetting('repoID');

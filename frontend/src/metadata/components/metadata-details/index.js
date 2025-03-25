@@ -45,7 +45,7 @@ const MetadataDetails = () => {
         }
         return (
           <DetailItem key={field.key} field={field} readonly={!canEdit}>
-            {canEdit ? (
+            {canEdit ?
               <DetailEditor
                 field={field}
                 value={value}
@@ -55,9 +55,15 @@ const MetadataDetails = () => {
                 onChange={onChange}
                 updateFileTags={updateFileTags}
               />
-            ) : (
-              <CellFormatter readonly={true} field={field} value={value} emptyTip={gettext('Empty')} className="sf-metadata-property-detail-formatter" />
-            )}
+              :
+              <CellFormatter
+                readonly={true}
+                field={field}
+                value={value}
+                emptyTip={gettext('Empty')}
+                className="sf-metadata-property-detail-formatter"
+              />
+            }
           </DetailItem>
         );
       })}

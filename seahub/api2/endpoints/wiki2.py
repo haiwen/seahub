@@ -1312,8 +1312,6 @@ class Wiki2PublishView(APIView):
 
 
 class WikiSearch(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
@@ -1335,6 +1333,11 @@ class WikiSearch(APIView):
         if not is_valid_repo_id_format(search_wiki):
             error_msg = 'search_wiki invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki_publish = Wiki2Publish.objects.filter(repo_id=search_wiki).first()
+        if not wiki_publish and not request.user.is_authenticated:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         params = {
             'query': query,

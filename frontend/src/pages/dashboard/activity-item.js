@@ -90,7 +90,7 @@ class ActivityItem extends Component {
       }
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
+      let fileLink = `<a href=${fileURL} target="_blank">${Utils.HTMLescape(item.name)}</a>`;
       let fileCount = item.createdFilesCount - 1;
       let firstLine = gettext('{file} and {n} other files')
         .replace('{file}', fileLink)
@@ -220,7 +220,7 @@ class ActivityItem extends Component {
               <p className="m-0 text-secondary">{op}</p>
               {details}
             </td>
-            <td className="text-right align-top">
+            <td className="text-end align-top">
               <span className="text-secondary mobile-activity-time">
                 <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
               </span>

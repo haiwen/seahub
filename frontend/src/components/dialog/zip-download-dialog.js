@@ -47,8 +47,10 @@ class ZipDownloadDialog extends React.Component {
         isLoading: false,
         errorMsg: '',
         zipToken: zipToken
+      }, () => {
+        this.queryZipProgress();
       });
-      this.queryZipProgress();
+
       interval = setInterval(this.queryZipProgress, 1000);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
