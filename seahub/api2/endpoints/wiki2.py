@@ -40,10 +40,10 @@ from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_vali
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner, get_locked_files_by_dir
+from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-    ENCRYPTED_LIBRARY_VERSION, FILE_LOCK_EXPIRATION_DAYS
+    ENCRYPTED_LIBRARY_VERSION
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -459,6 +459,7 @@ class Wiki2ConfigView(APIView):
 
         wiki = wiki.to_dict()
         wiki_config = get_wiki_config(repo.repo_id, request.user.username)
+
         wiki['wiki_config'] = wiki_config
 
         return Response({'wiki': wiki})

@@ -131,7 +131,6 @@ class MainPanel extends Component {
               <WikiTopNav
                 config={config}
                 currentPageId={this.props.currentPageId}
-                currentPageConfig={currentPageConfig}
                 currentPageLocked={currentPageLocked}
                 setCurrentPage={this.props.setCurrentPage}
                 toggleFreezeStatus={this.toggleFreezeStatus}
