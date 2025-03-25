@@ -18,27 +18,29 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
 from seahub.settings import SERVICE_URL
+from seaserv import seafile_api
+
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.profile.models import Profile
+from seahub.utils.repo import is_repo_owner
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 
+from seahub.ocm_via_webdav.models import ReceivedShares, Shares
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV, \
         OCM_VIA_WEBDAV_OCM_ENDPOINT, OCM_VIA_WEBDAV_OCM_PROVIDER_URI, \
-        OCM_VIA_WEBDAV_NOTIFICATIONS_URI
-from seahub.ocm_via_webdav.models import ReceivedShares
-
-from seahub.ocm.settings import ENABLE_OCM, OCM_SEAFILE_PROTOCOL, \
-        OCM_RESOURCE_TYPE_LIBRARY, OCM_API_VERSION, OCM_SHARE_TYPES, \
-        OCM_ENDPOINT
+        OCM_VIA_WEBDAV_NOTIFICATIONS_URI, OCM_VIA_WEBDAV_PROVIDER_ID, \
+        OCM_VIA_WEBDAV_REMOTE_SERVERS
 
 logger = logging.getLogger(__name__)
 
 
 def get_remote_domain_by_shared_by(shared_by):
 
-    return shared_by.split('@')[-1]
+    return f"https://{shared_by.split('@')[-1]}"
 
 
 def get_remote_webdav_root_uri(remote_domain):
@@ -146,11 +148,11 @@ class OCMProviderView(APIView):
                 'apiVersion': '1.0-proposal1',
                 'enabled': True,
                 'endPoint': urljoin(SERVICE_URL, OCM_VIA_WEBDAV_OCM_ENDPOINT),
-                'resourceTypes': {
+                'resourceTypes': [{
                     'name': 'file',
-                    'protocols': {'webdav': 'TODO'},
+                    'protocols': {'webdav': 'seafdav'},
                     'shareTypes': ['user'],
-                }
+                }]
             }
 
         return Response(result)
@@ -167,21 +169,22 @@ class SharesView(APIView):
 
         if not ENABLE_OCM_VIA_WEBDAV:
             error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
             return api_error(501, error_msg)
 
         # {'description': '',
-        #  'name': 'file-3-in-nextcloud-folder.md',
-        #  'owner': 'lian@https://nextcloud.seafile.top/',
-        #  'ownerDisplayName': 'lian',
+        #  'name': 'file-2  in lian-test folder.md',
+        #  'owner': 'seafile@nextcloud.seafile.top',
+        #  'ownerDisplayName': 'seafile',
         #  'protocol': {'name': 'webdav',
         #               'options': {'permissions': '{http://open-cloud-mesh.org/ns}share-permissions',
-        #                           'sharedSecret': 'HdjKpI4o6lamWwN'}},
-        #  'providerId': 9,
+        #                           'sharedSecret': 'O2T5CYSqjPWfaYh'}},
+        #  'providerId': 11,
         #  'resourceType': 'file',
         #  'shareType': 'user',
-        #  'shareWith': 'lian@lian.com@https://demo.seafile.top',  # or 'lian@https://demo.seafile.top',
-        #  'sharedBy': 'lian@https://nextcloud.seafile.top/',
-        #  'sharedByDisplayName': 'lian'}
+        #  'shareWith': 'lian@lian.com@https://test.seafile.com',
+        #  'sharedBy': 'seafile@nextcloud.seafile.top',
+        #  'sharedByDisplayName': 'seafile'}
 
         protocol_dict = request.data.get('protocol', {})
         protocol_name = protocol_dict.get('name')
@@ -200,6 +203,7 @@ class SharesView(APIView):
         shared_by = request.data.get('sharedBy')
         shared_by_display_name = request.data.get('sharedByDisplayName')
 
+        share_with_ccnet_email = Profile.objects.get_username_by_contact_email(share_with)
         share = ReceivedShares(description=description,
                                name=name,
                                owner=owner,
@@ -210,7 +214,7 @@ class SharesView(APIView):
                                provider_id=provider_id,
                                resource_type=resource_type,
                                share_type=share_type,
-                               share_with=share_with,
+                               share_with=share_with_ccnet_email or share_with,
                                shared_by=shared_by,
                                shared_by_display_name=shared_by_display_name)
         share.save()
@@ -291,22 +295,26 @@ class ReceivedShareView(APIView):
 
         if not ENABLE_OCM_VIA_WEBDAV:
             error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
             return api_error(501, error_msg)
 
         path = request.GET.get('path')
         if not path:
             error_msg = 'path invalid.'
+            logger.error(error_msg)
             return api_error(400, error_msg)
 
         try:
             share = ReceivedShares.objects.get(id=share_id)
         except ReceivedShares.DoesNotExist:
             error_msg = "OCM share {} not found.".format(share_id)
+            logger.error(error_msg)
             return api_error(404, error_msg)
 
         username = request.user.username
         if share.share_with != username:
             error_msg = 'Permission denied.'
+            logger.error(error_msg)
             return api_error(403, error_msg)
 
         remote_domain = get_remote_domain_by_shared_by(share.shared_by)
@@ -377,17 +385,20 @@ class ReceivedShareView(APIView):
 
         if not ENABLE_OCM_VIA_WEBDAV:
             error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
             return api_error(501, error_msg)
 
         try:
             share = ReceivedShares.objects.get(id=share_id)
         except ReceivedShares.DoesNotExist:
             error_msg = "OCM share {} not found.".format(share_id)
+            logger.error(error_msg)
             return api_error(404, error_msg)
 
         username = request.user.username
         if share.share_with != username:
             error_msg = 'Permission denied.'
+            logger.error(error_msg)
             return api_error(403, error_msg)
 
         # get remote server endpoint
@@ -395,6 +406,7 @@ class ReceivedShareView(APIView):
         ocm_endpoint = get_remote_ocm_endpoint(remote_domain)
         if not ocm_endpoint:
             error_msg = 'Internal Server Error'
+            logger.error(error_msg)
             return api_error(501, error_msg)
 
         notifications_url = urljoin(ocm_endpoint, OCM_VIA_WEBDAV_NOTIFICATIONS_URI.lstrip('/'))
@@ -440,12 +452,14 @@ class DownloadReceivedFileView(APIView):
 
         if not ENABLE_OCM_VIA_WEBDAV:
             error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
             return api_error(501, error_msg)
 
         # parameter check
         share_id = request.GET.get('share_id')
         if not share_id:
             error_msg = 'share_id invalid.'
+            logger.error(error_msg)
             return api_error(400, error_msg)
 
         try:
@@ -453,11 +467,13 @@ class DownloadReceivedFileView(APIView):
         except ValueError as e:
             logger.error(e)
             error_msg = 'share_id invalid.'
+            logger.error(error_msg)
             return api_error(400, error_msg)
 
         path = request.GET.get('path')
         if not path:
             error_msg = 'path invalid.'
+            logger.error(error_msg)
             return api_error(400, error_msg)
 
         # resource check
@@ -465,11 +481,13 @@ class DownloadReceivedFileView(APIView):
             share = ReceivedShares.objects.get(id=share_id)
         except ReceivedShares.DoesNotExist:
             error_msg = "OCM share {} not found.".format(share_id)
+            logger.error(error_msg)
             return api_error(404, error_msg)
 
         username = request.user.username
         if share.share_with != username:
             error_msg = 'Permission denied.'
+            logger.error(error_msg)
             return api_error(403, error_msg)
 
         # download file via webdav
@@ -505,13 +523,8 @@ class NotificationsView(APIView):
 
         if not ENABLE_OCM_VIA_WEBDAV:
             error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
             return api_error(501, error_msg)
-
-        # {'notification': {'messgage': 'file is no longer shared with you',
-        #                   'sharedSecret': 'QoVQuBhqphvVYvz'},
-        #  'notificationType': 'SHARE_UNSHARED',
-        #  'providerId': '13',
-        #  'resourceType': 'file'}
 
         error_result_not_found = {
             "message": "RESOURCE_NOT_FOUND",
@@ -529,20 +542,472 @@ class NotificationsView(APIView):
         notification_dict = request.data.get('notification')
         shared_secret = notification_dict.get('sharedSecret')
 
+        # {'notification': {'messgage': 'file is no longer shared with you',
+        #                   'sharedSecret': 'QoVQuBhqphvVYvz'},
+        #  'notificationType': 'SHARE_UNSHARED',
+        #  'providerId': '13',
+        #  'resourceType': 'file'}
         if notification_type == 'SHARE_UNSHARED':
 
             try:
                 share = ReceivedShares.objects.get(shared_secret=shared_secret)
             except ReceivedShares.DoesNotExist:
                 error_msg = "OCM share with secret {} not found.".format(shared_secret)
-                error_result_not_found['validationErrors']['name'] = 'sharedSecret'
+                logger.error(error_msg)
+                error_result_not_found['validationErrors'][0]['name'] = 'sharedSecret'
                 return Response(error_result_not_found, status=400)
 
             if share.provider_id != provider_id:
                 error_msg = "OCM share with provider id {} not found.".format(provider_id)
+                logger.error(error_msg)
                 error_result_not_found['validationErrors'][0]['name'] = 'providerID'
                 return Response(error_result_not_found, status=400)
 
             share.delete()
 
+        # {'notification': {'message': 'Recipient declined the share',
+        #                   'sharedSecret': 'ODQyOWZhMGUtMmYxNi00NjMxLWFkZTMtNjE2NzBkYjU5ZDE5Oi8='},
+        #  'notificationType': 'SHARE_DECLINED',
+        #  'providerId': '71687320-6219-47af-82f3-32012707a5ae',
+        #  'resourceType': 'file'}
+        if notification_type == 'SHARE_DECLINED':
+
+            try:
+                share = Shares.objects.get(shared_secret=shared_secret)
+            except Shares.DoesNotExist:
+                error_msg = "OCM share with secret {} not found.".format(shared_secret)
+                logger.error(error_msg)
+                error_result_not_found['validationErrors']['name'] = 'sharedSecret'
+                return Response(error_result_not_found, status=400)
+
+            if share.provider_id != provider_id:
+                error_msg = "OCM share with provider id {} not found.".format(provider_id)
+                logger.error(error_msg)
+                error_result_not_found['validationErrors'][0]['name'] = 'providerID'
+                return Response(error_result_not_found, status=400)
+
+            share.accepted = False
+            share.save()
+
+        # {'notification': {'message': 'Recipient accept the share',
+        #                   'sharedSecret': 'ODQyOWZhMGUtMmYxNi00NjMxLWFkZTMtNjE2NzBkYjU5ZDE5Oi8='},
+        #  'notificationType': 'SHARE_ACCEPTED',
+        #  'providerId': '71687320-6219-47af-82f3-32012707a5ae',
+        #  'resourceType': 'file'}
+        if notification_type == 'SHARE_ACCEPTED':
+
+            try:
+                share = Shares.objects.get(shared_secret=shared_secret)
+            except Shares.DoesNotExist:
+                error_msg = "OCM share with secret {} not found.".format(shared_secret)
+                logger.error(error_msg)
+                error_result_not_found['validationErrors']['name'] = 'sharedSecret'
+                return Response(error_result_not_found, status=400)
+
+            if share.provider_id != provider_id:
+                error_msg = "OCM share with provider id {} not found.".format(provider_id)
+                logger.error(error_msg)
+                error_result_not_found['validationErrors'][0]['name'] = 'providerID'
+                return Response(error_result_not_found, status=400)
+
+            share.accepted = True
+            share.save()
+
         return Response({'success': True}, status=status.HTTP_201_CREATED)
+
+
+class ShareToNextcloud(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """
+        List shares to Nextcloud server.
+        """
+
+        if not ENABLE_OCM_VIA_WEBDAV:
+            error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
+            return api_error(501, error_msg)
+
+        # parameter check
+        repo_id = request.GET.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        if not seafile_api.get_file_id_by_path(repo_id, path):
+            error_msg = 'File %s not found.' % path
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_repo_owner(request, repo_id, username):
+            error_msg = 'Permission denied.'
+            logger.error(error_msg)
+            return api_error(403, error_msg)
+
+        params = {
+            "repo_id": repo_id,
+            "path": path,
+        }
+        shares = Shares.objects.filter(**params)
+
+        ocm_share_list = []
+        for share in shares:
+
+            ocm_info = {}
+
+            share_with = share.share_with
+            to_server_url = share_with.split('@')[-1]
+            to_user = share_with.split('@' + to_server_url)[0]
+
+            ocm_info['id'] = share.id
+            ocm_info['to_server_url'] = to_server_url
+            ocm_info['to_user'] = to_user
+
+            ocm_info['accepte_status'] = ''
+            if share.accepted is None:
+                ocm_info['accepte_status'] = 'waiting'
+            elif share.accepted:
+                ocm_info['accepte_status'] = 'accepted'
+            else:
+                ocm_info['accepte_status'] = 'not accepted'
+
+            ocm_info['repo_id'] = share.repo_id
+            ocm_info['path'] = share.path
+            ocm_info['shared_secret'] = share.shared_secret
+
+            ocm_share_list.append(ocm_info)
+
+        return Response({'data': ocm_share_list})
+
+    def post(self, request):
+        """
+        Share library to Nextcloud server.
+        """
+
+        if not ENABLE_OCM_VIA_WEBDAV:
+            error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
+            return api_error(501, error_msg)
+
+        # parameter check
+        to_server_url = request.data.get('to_server_url')
+        if not to_server_url or \
+                to_server_url not in [item.get('server_url') for item in
+                                      OCM_VIA_WEBDAV_REMOTE_SERVERS]:
+            error_msg = 'to_server_url invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        to_user = request.data.get('to_user')
+        if not to_user:
+            error_msg = 'to_user invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        path = request.data.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_file_id_by_path(repo_id, path):
+            error_msg = 'File %s not found.' % path
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        params = {
+            "repo_id": repo_id,
+            "path": path,
+        }
+        if Shares.objects.filter(**params):
+            error_msg = f'Share for repo_id: {repo_id} path: {path} already exists.'
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_repo_owner(request, repo_id, username):
+            error_msg = 'Permission denied.'
+            logger.error(error_msg)
+            return api_error(403, error_msg)
+
+        # send request to remote service
+        post_data_description = ''
+        filename = os.path.basename(path)
+        post_data_name = filename
+
+        # '{}@{}'.format(username, config.SERVICE_URL),
+        post_data_owner = f'{email2contact_email(username)}@test.seafile.com'
+        post_data_owner_display_name = email2nickname(username)
+
+        post_data_protocol_name = 'webdav'
+        post_data_permissions = "{http://open-cloud-mesh.org/ns}share-permissions"
+
+        # TODO
+        share_info = f"{repo_id}:{path}"
+        post_data_shared_secret = base64.b64encode(share_info.encode('utf-8')).decode('utf-8')
+
+        post_data_resource_type = 'file'
+        post_data_share_type = 'user'
+        post_data_share_with = '{}@{}'.format(to_user, to_server_url)
+        post_data_share_with = '{}@{}'.format(to_user, 'nextcloud.seafile.top')
+
+        # data = {
+        #     "shareWith": "51dc30ddc473d43a6011e9ebba6ca770@geant.org",
+        #     "name": "resource.txt",
+        #     "description": (
+        #         "This is the Open API Specification file (in YAML format) of the Open\n"
+        #         "Cloud Mesh API.\n"
+        #     ),
+        #     "providerId": "7c084226-d9a1-11e6-bf26-cec0c932ce01",
+        #     "owner": "6358b71804dfa8ab069cf05ed1b0ed2a@apiwise.nl",
+        #     "sender": "527bd5b5d689e2c32ae974c6229ff785@apiwise.nl",
+        #     "ownerDisplayName": "Dimitri",
+        #     "senderDisplayName": "John Doe",
+        #     "shareType": "user",
+        #     "resourceType": "file",
+        #     "expiration": 0,
+        #     "protocol": {
+        #         "singleProtocolLegacy": {
+        #             "name": "webdav",
+        #             "options": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
+        #                 "permissions": "some permissions scheme"
+        #             }
+        #         },
+        #         "singleProtocolNew": {
+        #             "name": "webdav",
+        #             "options": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr"
+        #             },
+        #             "webdav": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
+        #                 "permissions": [
+        #                     "read",
+        #                     "write"
+        #                 ],
+        #                 "uri": (
+        #                     "https://open-cloud-mesh.org/remote/dav/ocm/"
+        #                     "7c084226-d9a1-11e6-bf26-cec0c932ce01/path/to/resource.txt"
+        #                 )
+        #             }
+        #         },
+        #         "multipleProtocols": {
+        #             "name": "multi",
+        #             "options": None,
+        #             "webdav": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
+        #                 "permissions": [
+        #                     "read",
+        #                     "mfa-enforced"
+        #                 ],
+        #                 "uri": (
+        #                     "https://open-cloud-mesh.org/remote/dav/ocm/"
+        #                     "7c084226-d9a1-11e6-bf26-cec0c932ce01/path/to/resource.txt"
+        #                 )
+        #             },
+        #             "webapp": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
+        #                 "uriTemplate": (
+        #                     "https://open-cloud-mesh.org/app/ocm/"
+        #                     "7c084226-d9a1-11e6-bf26-cec0c932ce01/{relative-path-to-shared-resource}"
+        #                 ),
+        #                 "viewMode": "read"
+        #             },
+        #             "datatx": {
+        #                 "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
+        #                 "srcUri": (
+        #                     "https://open-cloud-mesh.org/remote/dav/ocm/"
+        #                     "7c084226-d9a1-11e6-bf26-cec0c932ce01/path/to/resource.txt"
+        #                 ),
+        #                 "size": 100000
+        #             }
+        #         }
+        #     }
+        # }
+
+        post_data = {
+            'shareWith': post_data_share_with,
+            'name': post_data_name,
+            'description': post_data_description,
+            'providerId': OCM_VIA_WEBDAV_PROVIDER_ID,
+            'owner': post_data_owner,
+            'sender': post_data_owner,
+            'ownerDisplayName': post_data_owner_display_name,
+            'senderDisplayName': post_data_owner_display_name,
+            'shareType': post_data_share_type,
+            'resourceType': 'file',  # post_data_resource_type,
+            'expiration': 0,
+            'protocol': {
+                'name': post_data_protocol_name,
+                'options': {'permissions': post_data_permissions,
+                            'sharedSecret': post_data_shared_secret}},
+            # "protocol": {
+            #     "singleProtocolLegacy": {
+            #         "name": "webdav",
+            #         "options": {
+            #             "sharedSecret": post_data_shared_secret,
+            #             "permissions": ["read"]
+            #         }
+            #     },
+            #     "singleProtocolNew": {
+            #         "name": "webdav",
+            #         "options": {
+            #             "sharedSecret": post_data_shared_secret
+            #         },
+            #         "webdav": {
+            #             "sharedSecret": post_data_shared_secret,
+            #             "permissions": ["read"],
+            #             "uri": (
+            #                 "https://test.seafile.com/seafdav/lian%20lib%20on%20test.seafile.com/789.md"
+            #             )
+            #         }
+            #     },
+            # },
+            'sharedBy': post_data_owner,
+            'sharedByDisplayName': post_data_owner_display_name
+        }
+
+        remote_ocm_endpoint = get_remote_ocm_endpoint(to_server_url)
+        url = '{}/shares'.format(remote_ocm_endpoint.rstrip('/'))
+
+        resp = requests.post(url, json=post_data)
+
+        if resp.status_code != 201:
+            logger.error(url)
+            logger.error(post_data)
+            logger.error(resp.content)
+            error_msg = 'Internal Server Error'
+            return api_error(501, error_msg)
+
+        share = Shares(description=post_data_description,
+                       name=post_data_name,
+                       owner=post_data_owner,
+                       owner_display_name=post_data_owner_display_name,
+                       protocol_name=post_data_protocol_name,
+                       shared_secret=post_data_shared_secret,
+                       permissions=post_data_permissions,
+                       provider_id=OCM_VIA_WEBDAV_PROVIDER_ID,
+                       resource_type=post_data_resource_type,
+                       share_type=post_data_share_type,
+                       share_with=post_data_share_with,
+                       shared_by=post_data_owner,
+                       shared_by_display_name=post_data_owner_display_name,
+                       repo_id=repo_id,
+                       path=path)
+        share.save()
+
+        ocm_info = {}
+        ocm_info['id'] = share.id
+        ocm_info['to_server_url'] = to_server_url
+        ocm_info['to_user'] = to_user
+
+        ocm_info['accepte_status'] = ''
+        if share.accepted is None:
+            ocm_info['accepte_status'] = 'waiting'
+        elif share.accepted:
+            ocm_info['accepte_status'] = 'accepted'
+        else:
+            ocm_info['accepte_status'] = 'not accepted'
+
+        ocm_info['to_server_name'] = ''
+        for name_domain_dict in OCM_VIA_WEBDAV_REMOTE_SERVERS:
+            if name_domain_dict['server_url'] == to_server_url:
+                ocm_info['to_server_name'] = name_domain_dict['server_name']
+
+        return Response(ocm_info, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        """
+        Delete share to Nextcloud server.
+        """
+
+        if not ENABLE_OCM_VIA_WEBDAV:
+            error_msg = 'OCM via webdav feature is not enabled.'
+            logger.error(error_msg)
+            return api_error(501, error_msg)
+
+        # parameter check
+        share_id = request.data.get('share_id')
+        if not share_id:
+            error_msg = 'share_id invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        # resource check
+        try:
+            share = Shares.objects.get(id=share_id)
+        except Shares.DoesNotExist:
+            error_msg = 'Share %s not found.' % share_id
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_id = share.repo_id
+        if not is_repo_owner(request, repo_id, username):
+            error_msg = 'Permission denied.'
+            logger.error(error_msg)
+            return api_error(403, error_msg)
+
+        # get remote server endpoint
+        remote_domain = share.share_with.split('@')[-1]
+        ocm_endpoint = get_remote_ocm_endpoint(f"https://{remote_domain}")
+        if not ocm_endpoint:
+            error_msg = 'Internal Server Error'
+            logger.error(error_msg)
+            return api_error(501, error_msg)
+
+        notifications_url = urljoin(ocm_endpoint, OCM_VIA_WEBDAV_NOTIFICATIONS_URI.lstrip('/'))
+
+        # send SHARE_UNSHARED notification
+        data = {
+            "notification": {
+                "message": "file is no longer shared with you",
+                "sharedSecret": share.shared_secret
+            },
+            "notificationType": "SHARE_UNSHARED",
+            "providerId": OCM_VIA_WEBDAV_PROVIDER_ID,
+            "resourceType": share.resource_type
+        }
+
+        resp = requests.post(notifications_url, json=data)
+        if resp.status_code != 201:
+            logger.error('Error occurred when send notification to {}'.format(notifications_url))
+            logger.error(resp.content)
+
+        share.delete()
+        return Response({'success': True})

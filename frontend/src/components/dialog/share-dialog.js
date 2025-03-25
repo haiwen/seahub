@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro, canShareRepo } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, enableOCMViaWebdav, isPro, canShareRepo } from '../../utils/constants';
 import ShareLinkPanel from '../share-link-panel';
 import GenerateUploadLink from './generate-upload-link';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import ShareToInvitePeople from './share-to-invite-people';
 import ShareToOtherServer from './share-to-other-server';
+import ShareToNextcloudServer from './share-to-nextcloud-server';
 import InternalLink from './internal-link';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -169,6 +170,13 @@ class ShareDialog extends React.Component {
                 </NavLink>
               </NavItem>
             }
+            {enableOCMViaWebdav && itemType === 'library' && this.state.isRepoOwner &&
+              <NavItem role="tab" aria-selected={activeTab === 'shareToNextcloudServer'} aria-controls="share-to-other-server-panel">
+                <NavLink className={activeTab === 'shareToNextcloudServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToNextcloudServer')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                  {gettext('Share to Nextcloud server')}
+                </NavLink>
+              </NavItem>
+            }
           </Nav>
         </div>
         <div className="share-dialog-main">
@@ -244,6 +252,17 @@ class ShareDialog extends React.Component {
             {enableOCM && itemType === 'library' && activeTab === 'shareToOtherServer' &&
               <TabPane tabId="shareToOtherServer" role="tabpanel" id="share-to-other-server-panel">
                 <ShareToOtherServer itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+              </TabPane>
+            }
+            {enableOCMViaWebdav && itemType === 'library' && activeTab === 'shareToNextcloudServer' &&
+              <TabPane tabId="shareToNextcloudServer" role="tabpanel" id="share-to-nextcloud-server-panel">
+                <ShareToNextcloudServer
+                  itemType={this.props.itemType}
+                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                  itemPath={this.props.itemPath}
+                  repoID={this.props.repoID}
+                  isRepoOwner={this.state.isRepoOwner}
+                />
               </TabPane>
             }
           </TabContent>
