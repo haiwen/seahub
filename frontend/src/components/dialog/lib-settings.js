@@ -2,6 +2,7 @@ import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, enableRepoAutoDel } from '../../utils/constants';
+import { TAB } from '../../constants/repo-setting-tabs';
 import LibHistorySettingPanel from './lib-settings/lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-setting-panel';
 import {
@@ -17,15 +18,6 @@ import { useMetadataStatus } from '../../hooks';
 import '../../css/lib-settings.css';
 
 const { enableSeafileAI } = window.app.config;
-
-const TAB = {
-  HISTORY_SETTING: 'history_setting',
-  AUTO_DEL_SETTING: 'auto_delete_setting',
-  EXTENDED_PROPERTIES_SETTING: 'extended_properties_setting',
-  FACE_RECOGNITION_SETTING: 'face_recognition_setting',
-  TAGS_SETTING: 'tags_setting',
-  OCR_SETTING: 'ocr_setting',
-};
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
@@ -235,5 +227,3 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
 LibSettingsDialog.propTypes = propTypes;
 
 export default LibSettingsDialog;
-
-export { TAB };
