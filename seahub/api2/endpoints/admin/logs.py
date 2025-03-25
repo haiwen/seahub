@@ -314,9 +314,13 @@ class AdminLogsSharePermissionLogs(APIView):
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        to_groups = request.GET.get('to_groups')
+        to_groups = to_groups.split(',') if to_groups else []
         emails = {
             'from_emails': from_emails,
-            'to_emails': to_emails
+            'to_emails': to_emails,
+            'to_groups': to_groups
         }
         
         repos = request.GET.get('repos', None)
@@ -489,7 +493,9 @@ class AdminLogsFileTransferLogs(APIView):
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+        to_groups = request.GET.get('to_groups')
+        to_groups = to_groups.split(',') if to_groups else []
+        to_groups = [group_id + '@seafile_group' for group_id in to_groups]
         repos = request.GET.get('repos', None)
         if repos:
             repos = repos.split(',')
@@ -501,8 +507,8 @@ class AdminLogsFileTransferLogs(APIView):
         queryset = RepoTransfer.objects.all()
         if from_emails:
             queryset = queryset.by_from_user(from_emails)
-        if to_emails:
-            queryset = queryset.by_to_user(to_emails)
+        if to_emails or to_groups:
+            queryset = queryset.by_to_user(to_emails + to_groups)
         if operator_emails:
             queryset = queryset.by_operator(operator_emails)
         if repos:

@@ -14,6 +14,7 @@ const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   searchUsersFunc: PropTypes.func.isRequired,
+  searchGroupsFunc: PropTypes.func
 };
 
 class LogUserSelector extends Component {
@@ -71,6 +72,15 @@ class LogUserSelector extends Component {
       this.setState({
         searchResults: users,
         isLoading: false
+      }, () => {
+        if (this.props.searchGroupsFunc) {
+          this.props.searchGroupsFunc(value).then((res) => {
+            const groups = res.data.group_list || res.data.groups || [];
+            this.setState({
+              searchResults: [...users, ...groups]
+            });
+          });
+        }
       });
     }).catch((error) => {
       this.setState({
@@ -132,7 +142,10 @@ class LogUserSelector extends Component {
                 </li>
               ) : (
                 displayItems.map((item, index) => {
-                  const isSelected = selectedItems.some(selected => selected.email === item.email);
+                  const isSelected = selectedItems.some(selected =>
+                    (item.email && selected.email === item.email) ||
+                    (item.id && selected.id === item.id)
+                  );
                   return (
                     <li key={index}
                       className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
