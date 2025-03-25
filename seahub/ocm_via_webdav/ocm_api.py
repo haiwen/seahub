@@ -4,7 +4,6 @@ import posixpath
 import logging
 import requests
 
-from constance import config
 from urllib.parse import urljoin, quote, unquote
 
 import xml.etree.ElementTree as ET
@@ -126,21 +125,6 @@ class OCMProviderView(APIView):
         """
 
         result = {}
-
-        if ENABLE_OCM:
-
-            result = {
-                'enabled': True,
-                'apiVersion': OCM_API_VERSION,
-                'endPoint': SERVICE_URL + '/' + OCM_ENDPOINT,
-                'resourceTypes': {
-                    'name': OCM_RESOURCE_TYPE_LIBRARY,
-                    'shareTypes': OCM_SHARE_TYPES,
-                    'protocols': {
-                        OCM_SEAFILE_PROTOCOL: OCM_SEAFILE_PROTOCOL,
-                    }
-                }
-            }
 
         if ENABLE_OCM_VIA_WEBDAV:
 
@@ -770,7 +754,7 @@ class ShareToNextcloud(APIView):
         post_data_name = filename
 
         # '{}@{}'.format(username, config.SERVICE_URL),
-        post_data_owner = f'{email2contact_email(username)}@test.seafile.com'
+        post_data_owner = f'{email2contact_email(username)}@ocm-test.seafile.com'
         post_data_owner_display_name = email2nickname(username)
 
         post_data_protocol_name = 'webdav'
