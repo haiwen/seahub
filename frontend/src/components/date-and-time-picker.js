@@ -89,7 +89,7 @@ Picker.propTypes = {
   showHourAndMinute: PropTypes.bool.isRequired,
   disabledDate: PropTypes.func.isRequired,
   value: PropTypes.object,
-  disabled: PropTypes.func.isRequired,
+  disabled: PropTypes.func,
   inputWidth: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired
 };

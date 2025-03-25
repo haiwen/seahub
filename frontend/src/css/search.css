@@ -22,7 +22,7 @@
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   background-color: #fff;
   cursor: default;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 600px;
   padding: 1rem 0rem 0rem 1rem;
 }

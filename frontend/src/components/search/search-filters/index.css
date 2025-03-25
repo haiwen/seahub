@@ -1,0 +1,164 @@
+.search-filters-container {
+  width: calc(100% - 16px);
+  height: 38px;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.search-filters-container .search-filter {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.search-filters-container .search-filter .search-filter-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.search-filters-container .search-filter .search-filter-toggle:hover {
+  background-color: #efefef;
+  border-radius: 3px;
+}
+
+.search-filters-container .search-filter .dropdown-label {
+  width: 100%;
+  max-width: 200px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-filters-container .dropdown-menu {
+  max-height: 400px;
+}
+
+.search-filters-container .filter-by-text-menu,
+.search-filters-container .filter-by-date-menu {
+  width: 280px;
+}
+
+.search-filters-container .search-filters-dropdown-item {
+  width: 100%;
+}
+
+.search-filters-container .dropdown-item,
+.creator-dropdown-menu .dropdown-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-filters-container .dropdown-item .dropdown-item-tick,
+.creator-dropdown-menu .dropdown-item .dropdown-item-tick {
+  width: 1rem;
+  left: auto;
+  right: 16px;
+}
+
+.creator-dropdown-menu .input-container {
+  position: relative;
+  width: 240px;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  padding: 4px 6px;
+  margin: 8px 16px;
+  min-height: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.creator-dropdown-menu .input-container .search-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0px;
+  width: auto;
+  background: transparent;
+  font-size: inherit;
+  line-height: 20px;
+  flex: 1 1 60px;
+  min-width: 60px;
+  border-radius: 4px;
+}
+
+.creator-dropdown-menu .input-container input {
+  border: none;
+  outline: none;
+  width: 100%;
+  display: block;
+  resize: none;
+  padding: 0px;
+  height: 20px;
+}
+
+.creator-dropdown-menu .user-item {
+  height: 20px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.creator-dropdown-menu .user-item .user-avatar {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  border-radius: 50%;
+}
+
+.creator-dropdown-menu .input-container .user-item {
+  background-color: #eaeaea;
+  border-radius: 10px;
+  padding: 0 4px 0 2px;
+  margin-right: 2px;
+  font-size: 13px;
+}
+
+.search-filters-container .filter-by-date-menu-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+}
+
+.search-filters-container .filter-by-date-menu-toolbar .delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.search-filters-container .filter-by-date-custom-date-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px;
+  gap: 8px;
+}
+
+.search-filters-container .filter-by-date-custom-date-container .custom-date-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.search-filters-container .filter-by-date-custom-date-container .custom-date-container .custom-date-label {
+  margin-bottom: 6px;
+}
+
+.search-filters-container .filter-by-date-custom-date-container .custom-date-container .form-control {
+  height: 28px;
+  font-size: 14px;
+}
