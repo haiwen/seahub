@@ -9,7 +9,6 @@ import { getPaths } from '../utils/index';
 import './index.css';
 
 function WikiTopNav({ config, currentPageId, setCurrentPage, toggleFreezeStatus, currentPageLocked }) {
-  // handleLockClick
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
   const { permission } = window.wiki.config;

@@ -47,11 +47,6 @@ const getCurrentPageConfig = (pages, pageId) => {
   return pages.filter(page => page.id === pageId)[0];
 };
 
-const getCurrentPageLocked = (pages, pageId) => {
-  const page = pages.filter(page => page.id === pageId)[0];
-  return page ? page.locked : false;
-};
-
 const getWikPageLink = (pageId) => {
   let { origin, pathname } = window.location;
   let pathArr = pathname.split('/');
@@ -146,7 +141,6 @@ export {
   isObjectNotEmpty,
   getIconURL,
   getCurrentPageConfig,
-  getCurrentPageLocked,
   getWikPageLink,
   throttle,
   getPaths,

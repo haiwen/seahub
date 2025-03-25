@@ -19,6 +19,7 @@ const propTypes = {
 const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
   const [isShowController, setIsShowController] = useState(false);
   const isDesktop = Utils.isDesktop();
+
   const onMouseEnter = useCallback(() => {
     setIsShowController(true);
   }, []);
