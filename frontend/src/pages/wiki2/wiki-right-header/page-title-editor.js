@@ -70,7 +70,6 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
   }, [currentPageConfig, onUpdatePage]);
 
   const handleInput = useCallback((e) => {
-    if (currentPageConfig.locked) return;
     saveSelection();
     if (isChineseInput.current === false) {
       setPageName(e.target.innerText);

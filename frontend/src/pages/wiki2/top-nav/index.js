@@ -56,8 +56,6 @@ WikiTopNav.propTypes = {
   currentPageId: PropTypes.string,
   setCurrentPage: PropTypes.func.isRequired,
   toggleLockFile: PropTypes.func,
-  // handleLockClick: PropTypes.func.isRequired
 };
-
 
 export default WikiTopNav;

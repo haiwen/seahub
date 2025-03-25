@@ -459,17 +459,6 @@ class Wiki2ConfigView(APIView):
 
         wiki = wiki.to_dict()
         wiki_config = get_wiki_config(repo.repo_id, request.user.username)
-        pages = wiki_config.get('pages', [])
-        locked_files = seafile_api.get_locked_files(wiki_id)
-        locked_file_paths = []
-        for locked_file in locked_files:
-            locked_file_paths.append(locked_file.path)
-        for page in pages:
-            if page['path'][1:] in locked_file_paths:
-                page['locked'] = True
-            else:
-                page['locked'] = False
-        wiki_config['pages'] = pages
         wiki['wiki_config'] = wiki_config
 
         return Response({'wiki': wiki})
@@ -756,14 +745,13 @@ class Wiki2PageView(APIView):
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission, default_title='')
-        is_freezed = dirent.expire is not None and dirent.expire < 0
+
         return Response({
             "latest_contributor": email2nickname(latest_contributor),
             "last_modified": last_modified,
             "permission": permission,
             "seadoc_access_token": seadoc_access_token,
             "assets_url": assets_url,
-            "is_freezed": is_freezed,
         })
 
     def delete(self, request, wiki_id, page_id):

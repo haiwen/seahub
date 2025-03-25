@@ -176,11 +176,8 @@ class Wiki extends Component {
           })
         };
       });
-
-      eventBus.dispatch('wiki-editor-state-change', {
-        pageId,
-        locked: !this.state.currentPageLocked
-      });
+      const currentPage = PageUtils.getPageById(this.state.config.pages, pageId);
+      this.updateSdocPage(currentPage.id, currentPage.path);
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -248,7 +245,7 @@ class Wiki extends Component {
     } else {
       getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
     }
-    // TODO: fix wiki2 page locked
+
     getWikiPage.then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
       this.setState({
@@ -256,7 +253,6 @@ class Wiki extends Component {
         seadoc_access_token,
         assets_url,
         path: filePath,
-        // currentPageLocked: res.data.is_freezed,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
       this.getSdocFileContent(docUuid, seadoc_access_token);

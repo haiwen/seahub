@@ -19,7 +19,6 @@ const propTypes = {
 const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
   const [isShowController, setIsShowController] = useState(false);
   const isDesktop = Utils.isDesktop();
-
   const onMouseEnter = useCallback(() => {
     setIsShowController(true);
   }, []);
@@ -72,7 +71,10 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
               </div>
             }
           </div>
-          <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+          {!currentPageConfig.locked ?
+            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} /> :
+            <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>
+          }
         </>
         :
         <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>}
