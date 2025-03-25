@@ -11,7 +11,7 @@ import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
 import RightHeader from './wiki-right-header';
-import { eventBus } from '../../components/common/event-bus';
+
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -65,17 +65,6 @@ class MainPanel extends Component {
     };
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
-  }
-
-  componentDidMount() {
-    eventBus.subscribe('wiki-editor-state-change', this.handleEditorStateChange);
-  }
-
-  componentWillUnmount() {
-    eventBus.unsubscribe('wiki-editor-state-change', this.handleEditorStateChange);
-    if (this.editor) {
-      this.editor = null;
-    }
   }
 
   handleEditorStateChange = ({ pageId, locked }) => {
@@ -205,7 +194,6 @@ class MainPanel extends Component {
                 <div className='wiki-editor-container'>
                   <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
                   <SdocWikiEditor
-                    key={`${this.state.docUuid}-${currentPageLocked}`}
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}
