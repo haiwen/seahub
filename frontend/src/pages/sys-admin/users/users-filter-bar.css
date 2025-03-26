@@ -1,29 +1,4 @@
-.users-filter-bar .users-filter-bar-dropdown-toggle {
-  height: 30px;
-  line-height: 30px;
-  padding-left: 8px;
+.users-filter-bar .filter-item,
+.users-filter-bar .cur-option {
   font-size: 14px;
-  border-radius: 5px;
-}
-
-.users-filter-bar .users-filter-bar-dropdown-toggle .sf3-font-down {
-  color: #999;
-  margin-left: auto;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  width: 24px;
-  height: 24px;
-}
-
-.users-filter-bar .users-filter-bar-dropdown-toggle:hover {
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-
-.users-filter-bar .dropdown-menu .dropdown-item {
-  padding: 0.25rem 0.5rem;
-  display: flex;
-  justify-content: space-between;
 }
