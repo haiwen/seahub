@@ -24,7 +24,7 @@ const SimpleEditor = ({
 
   const handleChange = () => {
     const elements = excalidrawAPI.getSceneElements();
-    if (!areElementsEqual(elements, prevElementsRef.current)) {
+    if (hasChanged(elements, prevElementsRef.current)) {
       onChangeContent(elements);
     }
     prevElementsRef.current = elements;
@@ -44,8 +44,12 @@ const SimpleEditor = ({
     };
   }, [excalidrawAPI, onSaveContent]);
 
-  const areElementsEqual = (a, b) => {
-    return JSON.stringify(a) === JSON.stringify(b);
+  const hasChanged = (prev, current) => {
+    if (prev.length !== current.length) return true;
+
+    return current.some((element, index) => {
+      return element.version !== prev[index]?.version;
+    });
   };
 
   if (isFetching) {
