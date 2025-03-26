@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
@@ -13,6 +13,7 @@ const SimpleEditor = ({
   isFetching
 }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
+  const prevElementsRef = useRef([]);
   const UIOptions = {
     canvasActions: {
       saveToActiveFile: false,
@@ -23,7 +24,10 @@ const SimpleEditor = ({
 
   const handleChange = () => {
     const elements = excalidrawAPI.getSceneElements();
-    onChangeContent(elements);
+    if (hasChanged(elements, prevElementsRef.current)) {
+      onChangeContent(elements);
+    }
+    prevElementsRef.current = elements;
   };
 
   useEffect(() => {
@@ -39,6 +43,14 @@ const SimpleEditor = ({
       document.removeEventListener('keydown', handleHotkeySave, true);
     };
   }, [excalidrawAPI, onSaveContent]);
+
+  const hasChanged = (prev, current) => {
+    if (prev.length !== current.length) return true;
+
+    return current.some((element, index) => {
+      return element.version !== prev[index]?.version;
+    });
+  };
 
   if (isFetching) {
     return (
