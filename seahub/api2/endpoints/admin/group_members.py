@@ -9,6 +9,7 @@ from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 
+from seahub.base.models import GROUP_INVITE_DELETE
 from seahub.group.utils import get_group_member_info, is_group_member, get_group_members_info
 from seahub.group.signals import add_user_to_group
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
@@ -44,6 +45,11 @@ class AdminGroupMembers(APIView):
         if not group:
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        is_org = ccnet_api.is_org_group(group_id)
+        if is_org:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             page = int(request.GET.get('page', '1'))
@@ -100,6 +106,11 @@ class AdminGroupMembers(APIView):
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        is_org = ccnet_api.is_org_group(group_id)
+        if is_org:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         emails = request.POST.getlist('email', '')
         if not emails:
             error_msg = 'Email invalid.'
@@ -130,11 +141,13 @@ class AdminGroupMembers(APIView):
             emails_need_add.append(email)
 
         # Add user to group.
+        emails_added = []
         for email in emails_need_add:
             try:
                 ccnet_api.group_add_member(group_id, group.creator_name, email)
                 member_info = get_group_member_info(request, group_id, email)
                 result['success'].append(member_info)
+                emails_added.append(email)
             except Exception as e:
                 logger.error(e)
                 result['failed'].append({
@@ -146,6 +159,13 @@ class AdminGroupMembers(APIView):
                                    group_staff=request.user.username,
                                    group_id=group_id,
                                    added_user=email)
+
+        group_invite_log.send(sender=None,
+                              org_id=-1,
+                              group_id=group_id,
+                              users=emails_added,
+                              operator=request.user.username,
+                              operation=GROUP_INVITE_DELETE)
 
         return Response(result)
 
@@ -172,6 +192,11 @@ class AdminGroupMember(APIView):
         if not group:
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        is_org = ccnet_api.is_org_group(group_id)
+        if is_org:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             User.objects.get(email=email)
@@ -223,6 +248,11 @@ class AdminGroupMember(APIView):
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        is_org = ccnet_api.is_org_group(group_id)
+        if is_org:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # delete member from group
         try:
             if not is_group_member(group_id, email):
@@ -240,22 +270,13 @@ class AdminGroupMember(APIView):
             ccnet_api.group_remove_member(group_id, group.creator_name, email)
             # remove repo-group share info of all 'email' owned repos
             seafile_api.remove_group_repos_by_owner(group_id, email)
-            is_org = ccnet_api.is_org_group(group_id)
-            if is_org:
-                org_id = ccnet_api.get_org_id_by_group(group_id)
-                group_invite_log.send(sender=None,
-                                      org_id=org_id,
-                                      group_id=group_id,
-                                      user=email,
-                                      operator=request.user.username,
-                                      operation='Delete')
-            else:
-                group_invite_log.send(sender=None,
-                                      org_id=-1,
-                                      group_id=group_id,
-                                      user=email,
-                                      operator=request.user.username,
-                                      operation='Delete')
+            group_invite_log.send(sender=None,
+                                  org_id=-1,
+                                  group_id=group_id,
+                                  users=[email],
+                                  operator=request.user.username,
+                                  operation=GROUP_INVITE_DELETE)
+            
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

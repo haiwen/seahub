@@ -478,6 +478,10 @@ class RepoTransfer(models.Model):
         db_table = 'RepoTransfer'
 
 
+
+GROUP_INVITE_ADD = 'add'
+GROUP_INVITE_DELETE = 'delete'
+
 class GroupInvite(models.Model):
     org_id = models.IntegerField(db_index=True)
     group_id = models.IntegerField()
@@ -488,14 +492,26 @@ class GroupInvite(models.Model):
 
     class Meta:
         db_table = 'GroupInvite'
+        
 
-def add_group_invite_log(sender, org_id, group_id, user, operator, operation, **kwargs):
-    if operation not in ['Add', 'Delete']:
+
+###### signal handler ###############
+        
+from django.dispatch import receiver
+
+
+@receiver(group_invite_log)
+def add_group_invite_log(sender, org_id, group_id, users, operator, operation, **kwargs):
+    if operation not in [GROUP_INVITE_ADD, GROUP_INVITE_DELETE]:
         return
-    GroupInvite.objects.create(org_id=org_id,
-                                group_id=group_id,
-                                user=user,
-                                operator=operator,
-                                operation=operation)
-
-group_invite_log.connect(add_group_invite_log)
+    
+    group_invite_list = []
+    for user in users:
+        group_invite_list.append(GroupInvite(
+            org_id=org_id,
+            group_id=group_id,
+            user=user,
+            operator=operator,
+            operation=operation
+        ))
+    GroupInvite.objects.bulk_create(group_invite_list)

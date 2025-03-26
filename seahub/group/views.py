@@ -16,6 +16,7 @@ from seaserv import ccnet_threaded_rpc, ccnet_api, get_group
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
+from seahub.base.models import GROUP_INVITE_ADD
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError, is_group_member
 from seahub.group.models import GroupInviteLinkModel
@@ -199,9 +200,9 @@ def group_invite(request, token):
         group_invite_log.send(sender=None,
                               org_id=-1,
                               group_id=group_invite_link.group_id,
-                              user=email,
+                              users=[email],
                               operator=group_invite_link.created_by,
-                              operation='Add')
+                              operation=GROUP_INVITE_ADD)
     except Exception as e:
         logger.error(f'group invite add user failed. {e}')
         return render_error(request, 'Internal Server Error')

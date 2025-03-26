@@ -25,7 +25,7 @@ from seahub.group.models import GroupInviteLinkModel
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.base.accounts import User
-from seahub.base.models import GroupInvite
+from seahub.base.models import GroupInvite, GROUP_INVITE_DELETE, GROUP_INVITE_ADD
 from seahub.group.signals import add_user_to_group
 from seahub.group.views import group_invite
 from seahub.organizations.views import get_org_id_by_group
@@ -256,9 +256,9 @@ class GroupMember(APIView):
                 group_invite_log.send(sender=None,
                                       org_id=org_id if org_id else -1,
                                       group_id=group_id,
-                                      user=email,
+                                      users=[email],
                                       operator=username,
-                                      operation='Delete')
+                                      operation=GROUP_INVITE_DELETE)
                 return Response({'success': True})
             except SearpcError as e:
                 logger.error(e)
@@ -274,9 +274,9 @@ class GroupMember(APIView):
                 group_invite_log.send(sender=None,
                                       org_id=org_id if org_id else -1,
                                       group_id=group_id,
-                                      user=email,
+                                      users=[email],
                                       operator=username,
-                                      operation='Delete')
+                                      operation=GROUP_INVITE_DELETE)
                 return Response({'success': True})
 
             elif is_group_admin(group_id, username):
@@ -287,9 +287,9 @@ class GroupMember(APIView):
                     group_invite_log.send(sender=None,
                                           org_id=org_id if org_id else -1,
                                           group_id=group_id,
-                                          user=email,
+                                          users=[email],
                                           operator=username,
-                                          operation='Delete')
+                                          operation=GROUP_INVITE_DELETE)
                     return Response({'success': True})
                 else:
                     error_msg = 'Permission denied.'
@@ -378,11 +378,13 @@ class GroupMembersBulk(APIView):
             emails_need_add.append(email)
 
         # Add user to group.
+        emails_added = []
         for email in emails_need_add:
             try:
                 ccnet_api.group_add_member(group_id, username, email)
                 member_info = get_group_member_info(request, group_id, email)
                 result['success'].append(member_info)
+                emails_added.append(email)
             except SearpcError as e:
                 logger.error(e)
                 result['failed'].append({
@@ -394,13 +396,13 @@ class GroupMembersBulk(APIView):
                                    group_staff=username,
                                    group_id=group_id,
                                    added_user=email)
-            # add group invite log
-            group_invite_log.send(sender=None,
-                                  org_id=org_id if org_id else -1,
-                                  group_id=group_id,
-                                  user=email,
-                                  operator=username,
-                                  operation='Add')
+        # add group invite log
+        group_invite_log.send(sender=None,
+                              org_id=org_id if org_id else -1,
+                              group_id=group_id,
+                              users=emails_added,
+                              operator=username,
+                              operation=GROUP_INVITE_ADD)
         return Response(result)
 
 
@@ -533,11 +535,13 @@ class GroupMembersImport(APIView):
             emails_need_add.append(email)
 
         # Add user to group.
+        emails_added = []
         for email in emails_need_add:
             try:
                 ccnet_api.group_add_member(group_id, username, email)
                 member_info = get_group_member_info(request, group_id, email)
                 result['success'].append(member_info)
+                emails_added.append(email)
             except SearpcError as e:
                 logger.error(e)
                 result['failed'].append({
@@ -549,6 +553,14 @@ class GroupMembersImport(APIView):
                                    group_staff=username,
                                    group_id=group_id,
                                    added_user=email)
+
+        group_invite_log.send(sender=None,
+                              org_id=org_id if org_id else -1,
+                              group_id=group_id,
+                              users=emails_added,
+                              operator=username,
+                              operation=GROUP_INVITE_ADD)
+            
         return Response(result)
 
 
