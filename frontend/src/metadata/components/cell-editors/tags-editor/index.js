@@ -45,20 +45,17 @@ const TagsEditor = forwardRef(({
   const itemHeight = 30;
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
-  const selectItemRef = useRef(null);
+
   const canEditData = window.sfMetadataContext.canModifyColumnData(column);
   const localStorage = window.sfMetadataContext.localStorage;
-  const showRecentlyUsed = showTagsAsTree && recentlyUsed && recentlyUsed.length > 0 && !searchValue;
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
     return tagsData?.rows || [];
   }, [tagsData]);
 
-  const displayTags = useMemo(() => {
-    if (showRecentlyUsed) return recentlyUsed;
-    return getTagsByNameOrColor(tags, searchValue);
-  }, [searchValue, tags, showRecentlyUsed, recentlyUsed]);
+  const displayTags = useMemo(() => getTagsByNameOrColor(tags, searchValue), [searchValue, tags]);
+  const recentlyUsedTags = useMemo(() => recentlyUsed, [recentlyUsed]);
 
   const isShowCreateBtn = useMemo(() => {
     if (!canAddTag) return false;
@@ -145,18 +142,24 @@ const TagsEditor = forwardRef(({
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
-    let selectItemStyle = getComputedStyle(selectItemRef.current, null);
-    let maxSelectItemNum = Math.floor(parseInt(selectContainerStyle.maxHeight) / parseInt(selectItemStyle.height));
+    let maxSelectItemNum = Math.floor(parseInt(selectContainerStyle.maxHeight) / parseInt(itemHeight));
     return maxSelectItemNum - 1;
-  }, [editorContainerRef, selectItemRef]);
+  }, [editorContainerRef]);
 
   const onEnter = useCallback((event) => {
     event.preventDefault();
     let tag;
-    if (displayTags.length === 1) {
-      tag = displayTags[0];
-    } else if (highlightIndex > -1) {
-      tag = displayTags[highlightIndex];
+    if (showTagsAsTree) {
+      if (highlightNodeIndex > -1 && nodes[highlightNodeIndex]) {
+        const tagId = getTreeNodeId(nodes[highlightNodeIndex]);
+        tag = getRowById(tagsData, tagId);
+      }
+    } else {
+      if (displayTags.length === 1) {
+        tag = displayTags[0];
+      } else if (highlightIndex > -1) {
+        tag = displayTags[highlightIndex];
+      }
     }
     if (tag) {
       const newTagId = getTagId(tag);
@@ -166,45 +169,54 @@ const TagsEditor = forwardRef(({
     if (isShowCreateBtn) {
       createTag();
     }
-  }, [displayTags, highlightIndex, isShowCreateBtn, onSelectTag, createTag]);
+  }, [displayTags, highlightIndex, isShowCreateBtn, onSelectTag, createTag, showTagsAsTree, tagsData, highlightNodeIndex, nodes]);
+
+  const updateScroll = useCallback((index) => {
+    const visibleStart = Math.floor(editorContainerRef.current.scrollTop / itemHeight);
+    const visibleEnd = visibleStart + maxItemNum;
+
+    if (index < visibleStart) {
+      editorContainerRef.current.scrollTop -= itemHeight;
+    } else if (index >= visibleEnd) {
+      editorContainerRef.current.scrollTop += itemHeight;
+    }
+  }, [maxItemNum]);
 
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const updateScroll = (index, maxIndex, setIndex) => {
-      if (index === 0) return;
-      const newIndex = index - 1;
-      setIndex(newIndex);
-      if (index > maxIndex - maxItemNum) {
-        editorContainerRef.current.scrollTop -= itemHeight;
-      }
-    };
-
     if (showTagsAsTree) {
-      updateScroll(highlightNodeIndex, nodes.length, setHighlightNodeIndex);
+      const newIndex = highlightNodeIndex - 1;
+      if (newIndex < 0) return;
+      const pos = recentlyUsedTags.length > 0 ? newIndex + recentlyUsedTags.length + 2 : newIndex;
+      updateScroll(pos);
+      setHighlightNodeIndex(newIndex);
     } else {
+      const newIndex = highlightIndex - 1;
+      if (newIndex < 0) return;
       updateScroll(highlightIndex, displayTags.length, setHighlightIndex);
+      setHighlightIndex(newIndex);
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, displayTags, itemHeight, showTagsAsTree, nodes, highlightNodeIndex]);
+  }, [highlightIndex, displayTags, showTagsAsTree, recentlyUsedTags, highlightNodeIndex, updateScroll]);
 
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    const updateScroll = (index, maxIndex, setIndex) => {
-      if (index === maxIndex - 1) return;
-      const newIndex = index + 1;
-      setIndex(newIndex);
-      if (index < maxItemNum) {
-        editorContainerRef.current.scrollTop += itemHeight;
-      }
-    };
+
     if (showTagsAsTree) {
-      updateScroll(highlightNodeIndex, nodes.length, setHighlightNodeIndex);
+      const newIndex = highlightNodeIndex + 1;
+      if (newIndex >= nodes.length) return;
+      const pos = recentlyUsedTags.length > 0 ? newIndex + recentlyUsedTags.length + 2 : newIndex;
+      updateScroll(pos);
+      setHighlightNodeIndex(newIndex);
     } else {
-      updateScroll(highlightIndex, displayTags.length, setHighlightIndex);
+      const newIndex = highlightIndex + 1;
+      if (newIndex >= displayTags.length) return;
+      updateScroll(newIndex);
+      setHighlightIndex(newIndex);
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, displayTags, itemHeight, showTagsAsTree, nodes, highlightNodeIndex]);
+  }, [highlightIndex, displayTags, showTagsAsTree, nodes, recentlyUsedTags, highlightNodeIndex, updateScroll]);
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {
@@ -283,7 +295,7 @@ const TagsEditor = forwardRef(({
         editorRef.current.style.bottom = editorPosition.top + height - window.innerHeight + 'px';
       }
     }
-    if (editorContainerRef.current && selectItemRef.current) {
+    if (editorContainerRef.current) {
       setMaxItemNum(getMaxItemNum());
     }
     document.addEventListener('keydown', onHotKey, true);
@@ -296,7 +308,7 @@ const TagsEditor = forwardRef(({
   useEffect(() => {
     const saved = localStorage.getItem(RECENTLY_USED_TAG_IDS);
     const ids = saved ? JSON.parse(saved) : [];
-    const tags = ids.map(id => getRowById(tagsData, id));
+    const tags = ids.map(id => getRowById(tagsData, id)).filter(Boolean);
     setRecentlyUsed(tags);
   }, [tagsData, localStorage]);
 
@@ -313,8 +325,6 @@ const TagsEditor = forwardRef(({
       return (<span className="none-search-result">{noOptionsTip}</span>);
     }
 
-    if (showTagsAsTree && searchValue) return;
-
     return displayTags.map((tag, i) => {
       const tagId = getTagId(tag);
       return (
@@ -330,13 +340,41 @@ const TagsEditor = forwardRef(({
       );
     });
 
-  }, [displayTags, searchValue, value, highlightIndex, showTagsAsTree, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
+  }, [displayTags, searchValue, value, highlightIndex, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
+
+  const renderRecentlyUsed = useCallback(() => {
+    return recentlyUsedTags.length > 0 && recentlyUsedTags.map((tag, i) => {
+      const tagId = getTagId(tag);
+      return (
+        <TagItem
+          key={tagId}
+          tag={tag}
+          isSelected={value.includes(tagId)}
+          highlight={highlightIndex === i}
+          onSelect={onSelectTag}
+          onMouseEnter={() => onMenuMouseEnter(i, tagId)}
+          onMouseLeave={onMenuMouseLeave}
+        />
+      );
+    });
+
+  }, [recentlyUsedTags, value, highlightIndex, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
 
   const renderOptionsAsTree = useCallback(() => {
+    if (nodes.length === 0) {
+      const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
+      return (<span className="none-search-result">{noOptionsTip}</span>);
+    }
+    const showRecentlyUsed = recentlyUsedTags.length > 0 && !searchValue;
     return (
       <>
-        {showRecentlyUsed && <div className="sf-metadata-tags-editor-title">{gettext('Recently used tags')}</div>}
-        {renderOptions()}
+        {showRecentlyUsed && (
+          <>
+            <div className="sf-metadata-tags-editor-title">{gettext('Recently used tags')}</div>
+            {renderRecentlyUsed()}
+            <div className="sf-metadata-tags-editor-divider"></div>
+          </>
+        )}
         {!searchValue && <div className="sf-metadata-tags-editor-title">{gettext('All tags')}</div>}
         {nodes.map((node, i) => {
           const nodeKey = getTreeNodeKey(node);
@@ -363,7 +401,7 @@ const TagsEditor = forwardRef(({
         })}
       </>
     );
-  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, showRecentlyUsed, renderOptions, toggleExpandTreeNode, keyNodeFoldedMap, onSelectTag, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, onSelectTag, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
     <div className={classnames('sf-metadata-tags-editor', { 'tags-tree-container': showTagsAsTree })} style={style} ref={editorRef}>

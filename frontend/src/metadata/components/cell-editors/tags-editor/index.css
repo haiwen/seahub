@@ -40,7 +40,11 @@
 
 .sf-metadata-tags-editor.tags-tree-container .sf-metadata-tags-editor-container {
   max-height: 280px;
-  padding: 10px 16px;
+  padding: 10px 0;
+}
+
+.sf-metadata-tags-editor.tags-tree-container .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-item {
+  padding: 0 16px;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .none-search-result {
@@ -53,6 +57,7 @@
   height: 32px;
   display: flex;
   align-items: center;
+  padding: 0 16px;
   color: #666;
 }
 
@@ -64,4 +69,12 @@
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-check-icon {
   text-align: center;
   width: 20px;
+}
+
+.sf-metadata-tags-editor .sf-metadata-tags-editor-divider {
+  border-top: 1px solid rgba(0, 40, 100, .12);
+  height: 0;
+  margin: 0.5rem 0;
+  opacity: 1;
+  overflow: hidden;
 }
