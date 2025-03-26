@@ -115,6 +115,16 @@ class Item extends Component {
     }
   };
 
+  getActionTextByEType = (operation) => {
+    if (operation.indexOf('add') != -1) {
+      return gettext('Add');
+    } else if (operation.indexOf('delete') != -1) {
+      return gettext('Delete');
+    } else {
+      return '';
+    }
+  };
+
   render() {
     let { item } = this.props;
     return (
@@ -122,7 +132,7 @@ class Item extends Component {
         <td>{<UserLink email={item.user_email} name={item.user_name} />}</td>
         <td>{this.getGroupName(item)}</td>
         <td>{<UserLink email={item.operator_email} name={item.operator_name} />}</td>
-        <td>{item.operation}</td>
+        <td>{this.getActionTextByEType(item.operation)}</td>
         <td>{dayjs(item.date).fromNow()}</td>
       </tr>
     );

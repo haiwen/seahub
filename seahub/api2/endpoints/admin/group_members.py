@@ -9,7 +9,7 @@ from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 
-from seahub.base.models import GROUP_INVITE_DELETE
+from seahub.base.models import GROUP_INVITE_ADD, GROUP_INVITE_DELETE
 from seahub.group.utils import get_group_member_info, is_group_member, get_group_members_info
 from seahub.group.signals import add_user_to_group
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
@@ -165,7 +165,7 @@ class AdminGroupMembers(APIView):
                               group_id=group_id,
                               users=emails_added,
                               operator=request.user.username,
-                              operation=GROUP_INVITE_DELETE)
+                              operation=GROUP_INVITE_ADD)
 
         return Response(result)
 
