@@ -363,7 +363,7 @@ const TagsEditor = forwardRef(({
   const renderOptionsAsTree = useCallback(() => {
     if (nodes.length === 0) {
       const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
-      return (<span className="none-search-result">{noOptionsTip}</span>);
+      return (<span className="none-search-result px-4">{noOptionsTip}</span>);
     }
     const showRecentlyUsed = recentlyUsedTags.length > 0 && !searchValue;
     return (
