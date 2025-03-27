@@ -2236,7 +2236,7 @@ class SeafileAPI {
   }
 
   sysAdminListGroupInviteLogs(page, perPage) {
-    const url = this.server + '/api/v2.1/admin/logs/group-invite-logs/';
+    const url = this.server + '/api/v2.1/admin/logs/group-member-audit/';
     let params = {
       page: page,
       per_page: perPage

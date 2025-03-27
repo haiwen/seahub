@@ -479,10 +479,10 @@ class RepoTransfer(models.Model):
 
 
 
-GROUP_INVITE_ADD = 'add'
-GROUP_INVITE_DELETE = 'delete'
+GROUP_MEMBER_ADD = 'group_member_add'
+GROUP_MEMBER_DELETE = 'group_member_delete'
 
-class GroupInvite(models.Model):
+class GroupMemberAudit(models.Model):
     org_id = models.IntegerField(db_index=True)
     group_id = models.IntegerField()
     user = models.EmailField(db_index=True)
@@ -491,7 +491,7 @@ class GroupInvite(models.Model):
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     class Meta:
-        db_table = 'GroupInvite'
+        db_table = 'group_member_audit'
         
 
 
@@ -502,16 +502,16 @@ from django.dispatch import receiver
 
 @receiver(group_invite_log)
 def add_group_invite_log(sender, org_id, group_id, users, operator, operation, **kwargs):
-    if operation not in [GROUP_INVITE_ADD, GROUP_INVITE_DELETE]:
+    if operation not in [GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE]:
         return
     
-    group_invite_list = []
+    group_member_audit_list = []
     for user in users:
-        group_invite_list.append(GroupInvite(
+        group_member_audit_list.append(GroupMemberAudit(
             org_id=org_id,
             group_id=group_id,
             user=user,
             operator=operator,
             operation=operation
         ))
-    GroupInvite.objects.bulk_create(group_invite_list)
+    GroupMemberAudit.objects.bulk_create(group_member_audit_list)

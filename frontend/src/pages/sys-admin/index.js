@@ -253,7 +253,7 @@ class SysAdmin extends React.Component {
             <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
             <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
             <FIleTransferLogs path={siteRoot + 'sys/logs/repo-transfer'} {...commonProps} />
-            <GroupInviteLogs path={siteRoot + 'sys/logs/group-invite'} {...commonProps} />
+            <GroupInviteLogs path={siteRoot + 'sys/logs/group-member-audit'} {...commonProps} />
             <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />

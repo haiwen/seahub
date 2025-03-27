@@ -1626,7 +1626,7 @@ CREATE TABLE `org_last_active_time` (
   KEY `ix_org_last_active_time_org_id` (`org_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `GroupInvite` (
+CREATE TABLE `group_member_audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `operator` varchar(255) NOT NULL,
@@ -1635,6 +1635,6 @@ CREATE TABLE `GroupInvite` (
   `operation` varchar(128) NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_group_invite_org_id` (`org_id`),
-  KEY `idx_group_invite_timestamp` (`timestamp`)
+  KEY `idx_group_member_audit_org_id` (`org_id`),
+  KEY `idx_group_member_audit_timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -129,7 +129,7 @@ class Org extends React.Component {
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
               <OrgLogsFileTransfer path='repo-transfer' />
-              <OrgLogsGroupInvite path='group-invite' />
+              <OrgLogsGroupInvite path='group-member-audit' />
             </OrgLogs>
             {enableMultiADFS &&
               <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>

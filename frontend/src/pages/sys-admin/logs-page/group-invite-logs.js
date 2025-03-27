@@ -116,9 +116,9 @@ class Item extends Component {
   };
 
   getActionTextByEType = (operation) => {
-    if (operation.indexOf('add') != -1) {
+    if (operation.indexOf('group_member_add') != -1) {
       return gettext('Add');
-    } else if (operation.indexOf('delete') != -1) {
+    } else if (operation.indexOf('group_member_delete') != -1) {
       return gettext('Delete');
     } else {
       return '';

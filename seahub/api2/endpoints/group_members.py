@@ -25,7 +25,7 @@ from seahub.group.models import GroupInviteLinkModel
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.base.accounts import User
-from seahub.base.models import GroupInvite, GROUP_INVITE_DELETE, GROUP_INVITE_ADD
+from seahub.base.models import GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE
 from seahub.group.signals import add_user_to_group
 from seahub.group.views import group_invite
 from seahub.organizations.views import get_org_id_by_group
@@ -258,7 +258,7 @@ class GroupMember(APIView):
                                       group_id=group_id,
                                       users=[email],
                                       operator=username,
-                                      operation=GROUP_INVITE_DELETE)
+                                      operation=GROUP_MEMBER_DELETE)
                 return Response({'success': True})
             except SearpcError as e:
                 logger.error(e)
@@ -276,7 +276,7 @@ class GroupMember(APIView):
                                       group_id=group_id,
                                       users=[email],
                                       operator=username,
-                                      operation=GROUP_INVITE_DELETE)
+                                      operation=GROUP_MEMBER_DELETE)
                 return Response({'success': True})
 
             elif is_group_admin(group_id, username):
@@ -289,7 +289,7 @@ class GroupMember(APIView):
                                           group_id=group_id,
                                           users=[email],
                                           operator=username,
-                                          operation=GROUP_INVITE_DELETE)
+                                          operation=GROUP_MEMBER_DELETE)
                     return Response({'success': True})
                 else:
                     error_msg = 'Permission denied.'
@@ -402,7 +402,7 @@ class GroupMembersBulk(APIView):
                               group_id=group_id,
                               users=emails_added,
                               operator=username,
-                              operation=GROUP_INVITE_ADD)
+                              operation=GROUP_MEMBER_ADD)
         return Response(result)
 
 
@@ -559,7 +559,7 @@ class GroupMembersImport(APIView):
                               group_id=group_id,
                               users=emails_added,
                               operator=username,
-                              operation=GROUP_INVITE_ADD)
+                              operation=GROUP_MEMBER_ADD)
             
         return Response(result)
 

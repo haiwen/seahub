@@ -9,9 +9,10 @@ from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 
-from seahub.base.models import GROUP_INVITE_ADD, GROUP_INVITE_DELETE
+from seahub.admin_log.models import GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE
 from seahub.group.utils import get_group_member_info, is_group_member, get_group_members_info
 from seahub.group.signals import add_user_to_group
+from seahub.admin_log.signals import admin_operation
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -19,7 +20,6 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.signals import group_invite_log
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +45,6 @@ class AdminGroupMembers(APIView):
         if not group:
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        is_org = ccnet_api.is_org_group(group_id)
-        if is_org:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             page = int(request.GET.get('page', '1'))
@@ -160,12 +155,13 @@ class AdminGroupMembers(APIView):
                                    group_id=group_id,
                                    added_user=email)
 
-        group_invite_log.send(sender=None,
-                              org_id=-1,
-                              group_id=group_id,
-                              users=emails_added,
-                              operator=request.user.username,
-                              operation=GROUP_INVITE_ADD)
+        admin_op_detail = {
+            'id': group_id,
+            'name': group.group_name,
+            'users': emails_added
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                             operation=GROUP_MEMBER_ADD, detail=admin_op_detail)
 
         return Response(result)
 
@@ -270,12 +266,13 @@ class AdminGroupMember(APIView):
             ccnet_api.group_remove_member(group_id, group.creator_name, email)
             # remove repo-group share info of all 'email' owned repos
             seafile_api.remove_group_repos_by_owner(group_id, email)
-            group_invite_log.send(sender=None,
-                                  org_id=-1,
-                                  group_id=group_id,
-                                  users=[email],
-                                  operator=request.user.username,
-                                  operation=GROUP_INVITE_DELETE)
+            admin_op_detail = {
+                'id': group_id,
+                'name': group.group_name,
+                'user': email
+            }
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                                 operation=GROUP_MEMBER_DELETE, detail=admin_op_detail)
             
         except Exception as e:
             logger.error(e)

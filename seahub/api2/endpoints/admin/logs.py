@@ -20,7 +20,7 @@ from seahub.utils import get_file_audit_events, generate_file_audit_event_type, 
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
-from seahub.base.models import RepoTransfer, GroupInvite
+from seahub.base.models import RepoTransfer, GroupMemberAudit
 
 logger = logging.getLogger(__name__)
 
@@ -598,7 +598,7 @@ class AdminLogsGroupInviteLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        events = GroupInvite.objects.all().order_by('-timestamp')[start:start+limit+1]
+        events = GroupMemberAudit.objects.all().order_by('-timestamp')[start:start+limit+1]
         if len(events) > limit:
             has_next_page = True
             events = events[:limit]

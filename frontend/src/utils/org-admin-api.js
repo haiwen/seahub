@@ -482,7 +482,7 @@ class OrgAdminAPI {
 
   // org admin logs
   orgAdminListGroupInvite(page, perPage) {
-    let url = this.server + '/api/v2.1/org/admin/logs/group-invite/';
+    let url = this.server + '/api/v2.1/org/admin/logs/group-member-audit/';
     let params = {
       page: page,
       per_page: perPage

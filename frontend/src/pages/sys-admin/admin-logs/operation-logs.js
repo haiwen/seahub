@@ -108,6 +108,8 @@ class Item extends Component {
       case 'user_add': return gettext('Add User');
       case 'user_delete': return gettext('Delete User');
       case 'user_migrate': return gettext('Migrate User');
+      case 'group_member_add': return gettext('Invite User to Group');
+      case 'group_member_delete': return gettext('Remove User from Group');
       default: return '';
     }
   };
@@ -191,6 +193,18 @@ class Item extends Component {
         detailText = gettext('User migrate from {user_from} to {user_to}')
           .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
           .replace('{user_to}', '<span class="font-weight-bold">' + detail.to + '</span>');
+        return detailText;
+
+      case 'group_member_add':
+        detailText = gettext('Invited user {user} to group {group}')
+          .replace('{user}', '<span class="font-weight-bold">' + detail.users + '</span>')
+          .replace('{group}', '<span class="font-weight-bold">' + detail.name + '</span>');
+        return detailText;
+
+      case 'group_member_delete':
+        detailText = gettext('Removed user {user} from group {group}')
+          .replace('{user}', '<span class="font-weight-bold">' + detail.user + '</span>')
+          .replace('{group}', '<span class="font-weight-bold">' + detail.name + '</span>');
         return detailText;
 
       default: return '';

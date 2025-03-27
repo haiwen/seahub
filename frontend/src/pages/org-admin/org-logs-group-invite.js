@@ -120,6 +120,16 @@ class GroupInviteItem extends React.Component {
     });
   };
 
+  getActionTextByEType = (operation) => {
+    if (operation.indexOf('group_member_add') != -1) {
+      return gettext('Add');
+    } else if (operation.indexOf('group_member_delete') != -1) {
+      return gettext('Delete');
+    } else {
+      return '';
+    }
+  };
+
   render() {
     let { groupEvent } = this.props;
     return (
@@ -128,7 +138,7 @@ class GroupInviteItem extends React.Component {
         <td>{<UserLink email={groupEvent.user_email} name={groupEvent.user_name} />}</td>
         <td>{<Link to={`${siteRoot}org/groupadmin/${groupEvent.group_id}/`}>{groupEvent.group_name}</Link>}</td>
         <td>{<UserLink email={groupEvent.operator_email} name={groupEvent.operator_name} />}</td>
-        <td>{gettext(groupEvent.operation)}</td>
+        <td>{this.getActionTextByEType(groupEvent.operation)}</td>
         <td>{dayjs(groupEvent.time).fromNow()}</td>
       </tr>
     );
