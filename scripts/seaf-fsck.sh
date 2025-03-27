@@ -5,7 +5,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
 seaf_fsck=${INSTALLPATH}/seafile/bin/seaf-fsck
@@ -67,7 +66,7 @@ function run_seaf_fsck () {
     echo
 
     LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_fsck} \
-        -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" \
+        -d "${default_seafile_data_dir}" \
         -F "${default_conf_dir}" \
         ${seaf_fsck_opts}
 

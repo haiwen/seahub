@@ -15,7 +15,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 seafile_rpc_pipe_path=${INSTALLPATH}/runtime
@@ -231,7 +230,6 @@ function prepare_env() {
         export LC_ALL='en_US.UTF-8'
     fi
 
-    export CCNET_CONF_DIR=${default_ccnet_conf_dir}
     export SEAFILE_CONF_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
     export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
