@@ -6,8 +6,6 @@ import json
 from urllib.parse import urlparse
 from constance import config
 
-
-from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.core.cache import cache
@@ -38,7 +36,6 @@ from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
         ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.utils import get_or_create_invitation_link
 from seahub.subscription.utils import subscription_check
-from constance import config
 
 # Get an instance of a logger
 
@@ -47,46 +44,58 @@ logger = logging.getLogger(__name__)
 ENABLE_MULTI_ADFS = getattr(settings, 'ENABLE_MULTI_ADFS', False)
 
 
-########## ccnet rpc wrapper
+# ccnet rpc wrapper
 def create_org(org_name, url_prefix, creator):
     return seaserv.create_org(org_name, url_prefix, creator)
+
 
 def count_orgs():
     return seaserv.ccnet_threaded_rpc.count_orgs()
 
+
 def get_org_by_url_prefix(url_prefix):
     return seaserv.ccnet_threaded_rpc.get_org_by_url_prefix(url_prefix)
+
 
 def set_org_user(org_id, username, is_staff=False):
     return seaserv.ccnet_threaded_rpc.add_org_user(org_id, username,
                                                    int(is_staff))
 
+
 def unset_org_user(org_id, username):
     return seaserv.ccnet_threaded_rpc.remove_org_user(org_id, username)
+
 
 def org_user_exists(org_id, username):
     return seaserv.ccnet_threaded_rpc.org_user_exists(org_id, username)
 
+
 def get_org_groups(org_id, start, limit):
     return seaserv.ccnet_threaded_rpc.get_org_groups(org_id, start, limit)
 
+
 def get_org_id_by_group(group_id):
     return seaserv.ccnet_threaded_rpc.get_org_id_by_group(group_id)
+
 
 def remove_org_group(org_id, group_id, username):
     remove_group_common(group_id, username)
     seaserv.ccnet_threaded_rpc.remove_org_group(org_id, group_id)
 
+
 def is_org_staff(org_id, username):
     return seaserv.ccnet_threaded_rpc.is_org_staff(org_id, username)
+
 
 def set_org_staff(org_id, username):
     return seaserv.ccnet_threaded_rpc.set_org_staff(org_id, username)
 
+
 def unset_org_staff(org_id, username):
     return seaserv.ccnet_threaded_rpc.unset_org_staff(org_id, username)
 
-########## seafile rpc wrapper
+
+# seafile rpc wrapper
 def get_org_user_self_usage(org_id, username):
     """
 
@@ -96,17 +105,21 @@ def get_org_user_self_usage(org_id, username):
     """
     return seaserv.seafserv_threaded_rpc.get_org_user_quota_usage(org_id, username)
 
+
 def get_org_user_quota(org_id, username):
     return seaserv.seafserv_threaded_rpc.get_org_user_quota(org_id, username)
 
+
 def get_org_quota(org_id):
     return seaserv.seafserv_threaded_rpc.get_org_quota(org_id)
+
 
 def is_org_repo(org_id, repo_id):
     return True if seaserv.seafserv_threaded_rpc.get_org_id_by_repo_id(
         repo_id) == org_id else False
 
-########## views
+
+# views
 @login_required_ajax
 def org_add(request):
     """Handle ajax request to add org, and create org owner.
@@ -149,6 +162,7 @@ def org_add(request):
         return HttpResponse(json.dumps({'error': str(err_msg)}),
                             status=400, content_type=content_type)
 
+
 def gen_org_url_prefix(max_trial=None):
     """Generate organization url prefix automatically.
     If ``max_trial`` is large than 0, then re-try that times if failed.
@@ -182,6 +196,7 @@ def gen_org_url_prefix(max_trial=None):
 
     logger.warning("Failed to generate org url prefix, retry: %d" % max_trial)
     return None
+
 
 def org_register(request):
     """Allow a new user to register an organization account. A new
@@ -245,8 +260,8 @@ def org_register(request):
         'service_url_remaining': service_url_remaining,
         'org_auto_url_prefix': ORG_AUTO_URL_PREFIX,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED
-        
     })
+
 
 @login_required
 @org_staff_required
@@ -270,6 +285,7 @@ def react_fake_view(request, **kwargs):
         'sys_enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
         'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY
         })
+
 
 @login_required
 def org_associate(request, token):
