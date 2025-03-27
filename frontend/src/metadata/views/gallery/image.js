@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../../utils/utils';
 
 const Image = ({
   isSelected,
@@ -13,10 +14,16 @@ const Image = ({
   onContextMenu,
 }) => {
   const [background, setBackground] = useState('#f1f1f1');
+  const [useFallback, setUseFallback] = useState(false);
 
   const onLoad = useCallback(() => {
     setBackground('unset');
   }, []);
+
+  let src = useOriginalThumbnail ? img.thumbnail : img.src;
+  if (useFallback) {
+    src = Utils.getFileIconUrl(img.name);
+  }
 
   return (
     <div
@@ -32,10 +39,11 @@ const Image = ({
     >
       <img
         className="metadata-gallery-grid-image"
-        src={useOriginalThumbnail ? img.thumbnail : img.src}
+        src={src}
         alt={img.name}
         draggable="false"
         onLoad={onLoad}
+        onError={() => setUseFallback(true)}
       />
     </div>
   );
