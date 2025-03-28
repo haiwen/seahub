@@ -1624,4 +1624,20 @@ CREATE TABLE `org_last_active_time` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`),
   KEY `ix_org_last_active_time_org_id` (`org_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `group_member_audit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `operator` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `operation` varchar(128) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_group_member_audit_org_id` (`org_id`),
+  KEY `idx_group_member_audit_timestamp` (`timestamp`),
+  KEY `idx_group_member_audit_operator` (`operator`),
+  KEY `idx_group_member_audit_user` (`user`),
+  KEY `idx_group_member_audit_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
