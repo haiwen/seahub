@@ -572,7 +572,7 @@ class AdminLogGroupMemberAuditLogs(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """ Get all group invite logs.
+        """ Get all group member audit logs.
 
         Permission checking:
         1. only admin can perform this action.

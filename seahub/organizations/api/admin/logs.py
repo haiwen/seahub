@@ -402,14 +402,14 @@ class OrgAdminLogsFileTransfer(APIView):
                 })
 
 
-class OrgAdminLogsGroupInvite(APIView):
+class OrgAdminLogsGroupMemberAudit(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsProVersion, IsOrgAdmin)
 
     def get(self, request):
-        """List organization group invite in logs
+        """List organization group member audit logs
         """
         try:
             page = int(request.GET.get('page', '1'))
