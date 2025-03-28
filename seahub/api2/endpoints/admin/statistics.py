@@ -28,6 +28,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.endpoints.utils import get_seafevents_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -474,3 +475,76 @@ class SystemUserStorageExcelView(APIView):
         wb.save(response)
 
         return response
+
+
+class SystemMetricsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def parse_prometheus_metrics(self, metrics_raw):
+        """Parse prometheus metrics"""
+        metrics_dict = {}
+        
+        for line in metrics_raw.split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+                
+            if line.startswith('# HELP'):
+                metric_name = line.split(' ')[2]
+                help_text = line.split(' ', 3)[3] if len(line.split(' ', 3)) > 3 else ''
+                if metric_name not in metrics_dict:
+                    metrics_dict[metric_name] = {
+                        'name': metric_name,
+                        'help': help_text,
+                        'type': '',
+                        'data_points': []
+                    }
+            elif line.startswith('# TYPE'):
+                metric_name = line.split(' ')[2]
+                metric_type = line.split(' ')[3]
+                if metric_name not in metrics_dict:
+                    metrics_dict[metric_name] = {
+                        'name': metric_name,
+                        'help': '',
+                        'type': '',
+                        'data_points': []
+                    }
+                metrics_dict[metric_name]['type'] = metric_type
+            elif not line.startswith('#'):
+                metric_name = line.split('{')[0]
+                if metric_name not in metrics_dict:
+                    metrics_dict[metric_name] = {
+                        'name': metric_name,
+                        'help': '',
+                        'type': '',
+                        'data_points': []
+                    }
+                
+                labels = {}
+                if '{' in line:
+                    labels_str = line[line.index('{')+1:line.index('}')]
+                    for label in labels_str.split(','):
+                        key, value = label.split('=')
+                        labels[key] = value.strip('"')
+                
+                value = float(line.split('}')[1].strip())
+                
+                metrics_dict[metric_name]['data_points'].append({
+                    'labels': labels,
+                    'value': value
+                })
+        
+        return list(metrics_dict.values())
+
+    def get(self, request):
+        res = get_seafevents_metrics()
+        metrics_raw = res.content.decode('utf-8')
+        
+        metrics_data = self.parse_prometheus_metrics(metrics_raw)
+        
+        return Response({
+            'metrics': metrics_data,
+            'timestamp': datetime.datetime.now().isoformat()
+        })

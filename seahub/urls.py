@@ -141,7 +141,7 @@ from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
     SystemUserTrafficExcelView, SystemUserStorageExcelView, SystemUserTrafficView, \
-    SystemOrgTrafficView
+    SystemOrgTrafficView, SystemMetricsView
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
@@ -627,6 +627,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/statistics/system-org-traffic/$', SystemOrgTrafficView.as_view(), name='api-v2.1-admin-statistics-system-org-traffic'),
     re_path(r'^api/v2.1/admin/statistics/system-user-traffic/excel/$', SystemUserTrafficExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-traffic-excel'),
     re_path(r'^api/v2.1/admin/statistics/system-user-storage/excel/$', SystemUserStorageExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-storage-excel'),
+    re_path(r'^api/v2.1/admin/statistics/system-metrics/$', SystemMetricsView.as_view(), name='api-v2.1-admin-statistics-system-metrics'),
     ## admin::users
     re_path(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     re_path(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
@@ -840,6 +841,7 @@ urlpatterns = [
     path('sys/statistics/user/', sysadmin_react_fake_view, name="sys_statistics_user"),
     path('sys/statistics/traffic/', sysadmin_react_fake_view, name="sys_statistics_traffic"),
     path('sys/statistics/reports/', sysadmin_react_fake_view, name="sys_statistics_reports"),
+    path('sys/statistics/metrics/', sysadmin_react_fake_view, name="sys_statistics_metrics"),
     path('sys/desktop-devices/', sysadmin_react_fake_view, name="sys_desktop_devices"),
     path('sys/mobile-devices/', sysadmin_react_fake_view, name="sys_mobile_devices"),
     path('sys/device-errors/', sysadmin_react_fake_view, name="sys_device_errors"),

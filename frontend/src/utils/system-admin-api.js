@@ -1116,6 +1116,11 @@ class SystemAdminAPI {
     return this.req.post(url, formData);
   }
 
+  sysAdminStatisticMetrics() {
+    const url = this.server + '/api/v2.1/admin/statistics/system-metrics/';
+    return this.req.get(url);
+  }
+
   sysAdminStatisticFiles(startTime, endTime, groupBy) {
     const url = this.server + '/api/v2.1/admin/statistics/file-operations/';
     let params = {
