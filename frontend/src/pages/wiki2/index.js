@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission, gettext } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
@@ -304,7 +304,7 @@ class Wiki extends Component {
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
     if (newPage.name === '') {
-      newPage.name = DEFAULT_PAGE_NAME;
+      newPage.name = gettext(DEFAULT_PAGE_NAME);
     }
     if (this.state.currentPageId === pageId) {
       this.updateDocumentTitle(newPage.name);
