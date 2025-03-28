@@ -2,8 +2,8 @@
 {% load i18n %}
 
 {% block main_content %}
-<div class="new-narrow-panel">
-  <h2 class="hd">{% trans "Backup Tokens" %}</h2>
+<div class="tfa-panel">
+  <h2 class="hd fw-normal mb-4">{% trans "Backup Tokens" %}</h2>
   <div class="con">
   <p>{% blocktrans %}Backup tokens can be used when your primary and backup
       phone numbers aren't available. The backup tokens below can be used
@@ -23,8 +23,8 @@
   {% endif %}
 
   <form method="post">{% csrf_token %}{{ form }}
-      <a href="{{ SITE_ROOT }}" class="sf-btn-link">{% trans "Back" %}</a>
-      <button type="submit" style="margin-top:5px;">{% trans "Generate Tokens" %}</button>
+      <button type="submit" class="btn btn-primary btn-block">{% trans "Generate Tokens" %}</button>
+      <a href="{{ SITE_ROOT }}profile/" class="btn btn-secondary btn-block mt-3">{% trans "Back" %}</a>
   </form>
     </div>
 </div>
