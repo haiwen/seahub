@@ -18,6 +18,7 @@ from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.repo_api_tokens.utils import permission_check_admin_owner
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +159,7 @@ class RepoAPITokenView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))
-    
+
 class RepoNotificationJwtTokenView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -173,10 +174,11 @@ class RepoNotificationJwtTokenView(APIView):
 
         username = request.user.username
         # permission check
-        if not seafile_api.check_permission_by_path(repo_id, '/', username):
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         try:
             payload = {
                 'username': username,

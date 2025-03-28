@@ -64,7 +64,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
-from seahub.constants import PERMISSION_READ
+from seahub.constants import PERMISSION_READ, PERMISSION_INVISIBLE
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -131,7 +131,10 @@ def check_folder_permission(request, repo_id, path):
         return PERMISSION_READ
 
     username = request.user.username
-    return seafile_api.check_permission_by_path(repo_id, path, username)
+    permission = seafile_api.check_permission_by_path(repo_id, path, username)
+    if permission == PERMISSION_INVISIBLE:
+        return None
+    return permission
 
 def get_seadoc_file_uuid(repo, path):
     repo_id = repo.repo_id
@@ -1162,7 +1165,7 @@ def react_fake_view(request, **kwargs):
         return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
         return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
         return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
-    
+
     return render(request, "react_app.html", return_dict)
 
 
