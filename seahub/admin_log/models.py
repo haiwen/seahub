@@ -22,7 +22,7 @@ GROUP_CREATE = 'group_create'
 GROUP_TRANSFER = 'group_transfer'
 # 'group_delete': {'id': group_id, 'name': group_name, 'owner': group_owner}
 GROUP_DELETE = 'group_delete'
-# 'group_invite': {'id': group_id, 'name': group_name, 'users': users}
+# 'group_invite': {'id': group_id, 'name': group_name, 'user': user}
 GROUP_MEMBER_ADD = 'group_member_add'
 # 'group_member_delete': {'id': group_id, 'name': group_name, 'user': user}
 GROUP_MEMBER_DELETE = 'group_member_delete'
