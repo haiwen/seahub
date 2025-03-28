@@ -484,9 +484,9 @@ GROUP_MEMBER_DELETE = 'group_member_delete'
 
 class GroupMemberAudit(models.Model):
     org_id = models.IntegerField(db_index=True)
-    group_id = models.IntegerField()
+    group_id = models.IntegerField(db_index=True)
     user = models.EmailField(db_index=True)
-    operator = models.CharField(max_length=255)
+    operator = models.CharField(max_length=255, db_index=True)
     operation = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 

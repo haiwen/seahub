@@ -1636,5 +1636,8 @@ CREATE TABLE `group_member_audit` (
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_group_member_audit_org_id` (`org_id`),
-  KEY `idx_group_member_audit_timestamp` (`timestamp`)
+  KEY `idx_group_member_audit_timestamp` (`timestamp`),
+  KEY `idx_group_member_audit_operator` (`operator`),
+  KEY `idx_group_member_audit_user` (`user`),
+  KEY `idx_group_member_audit_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
