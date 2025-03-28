@@ -259,7 +259,7 @@ const TagsEditor = forwardRef(({
         const tagColor = getTagColor(row).toLowerCase();
         if (!tagName.includes(value) && !tagColor.includes(value)) return;
         if (showTagsAsTree) {
-          const nodesWithAncestors = getNodesWithAncestors(node, tree);
+          const nodesWithAncestors = getNodesWithAncestors(node, tree).filter(node => checkIsTreeNodeShown(getTreeNodeKey(node), keyNodeFoldedMap));
           shownNodes = [...shownNodes, ...nodesWithAncestors];
           return;
         }
