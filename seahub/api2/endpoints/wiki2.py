@@ -884,7 +884,7 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         is_locked = seafile_api.check_file_lock(repo_id, path.lstrip('/'), '')
         if is_locked == locked:
-            return Response('success', status=status.HTTP_200_OK)
+            return Response({'is_locked': locked}, status=status.HTTP_200_OK)
         if locked:
             try:
                 seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
@@ -899,7 +899,7 @@ class Wiki2PageView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        return Response('success', status=status.HTTP_200_OK)
+        return Response({'is_locked': locked}, status=status.HTTP_200_OK)
 
 
 class Wiki2PublishPageView(APIView):

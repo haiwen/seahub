@@ -162,14 +162,14 @@ class Wiki extends Component {
           if (page.id === pageId) {
             return {
               ...page,
-              locked: !prevState.currentPageLocked
+              locked: res.data.is_locked
             };
           }
           return page;
         });
 
         return {
-          currentPageLocked: !prevState.currentPageLocked,
+          currentPageLocked: res.data.is_locked,
           config: new WikiConfig({
             ...prevState.config,
             pages: updatedPages
