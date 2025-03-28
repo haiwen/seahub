@@ -31,6 +31,8 @@ const Card = ({
     if (titleColumn?.type !== CellType.FILE_NAME) return;
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
+    const canPreview = window.sfMetadataContext.canPreview();
+    if (!canPreview) return;
     onOpenFile(record);
   }, [titleColumn, record, onOpenFile]);
 

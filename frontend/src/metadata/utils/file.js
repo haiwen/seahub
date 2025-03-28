@@ -101,7 +101,6 @@ export const openFile = (repoID, record, _openImage = () => {}) => {
 };
 
 export const openInNewTab = (repoID, record) => {
-  if (!record) return;
   const isDir = checkIsDir(record);
   const fileName = getFileNameFromRecord(record);
   const parentDir = _getParentDir(record);

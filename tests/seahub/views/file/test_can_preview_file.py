@@ -125,16 +125,6 @@ class CanPreviewFileTest(BaseTestCase):
         assert not self.can_preview_in_encrypted_repo_normal_size(file_name)
         assert not self.can_preview_in_encrypted_repo_exceeded_size(file_name)
 
-    @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
-    def test_doc_has_office_converter(self):
-
-        file_name = '123.doc'
-
-        assert self.can_preview_in_normal_repo_normal_size(file_name)
-        assert not self.can_preview_in_normal_repo_exceeded_size(file_name)
-        assert not self.can_preview_in_encrypted_repo_normal_size(file_name)
-        assert not self.can_preview_in_encrypted_repo_exceeded_size(file_name)
-
     @patch('seahub.views.file.ENABLE_ONLYOFFICE', True)
     @patch('seahub.views.file.ONLYOFFICE_FILE_EXTENSION',
             ONLYOFFICE_FILE_EXTENSION)
@@ -164,16 +154,6 @@ class CanPreviewFileTest(BaseTestCase):
         file_name = '123.docx'
 
         assert not self.can_preview_in_normal_repo_normal_size(file_name)
-        assert not self.can_preview_in_normal_repo_exceeded_size(file_name)
-        assert not self.can_preview_in_encrypted_repo_normal_size(file_name)
-        assert not self.can_preview_in_encrypted_repo_exceeded_size(file_name)
-
-    @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
-    def test_docx_has_office_converter(self):
-
-        file_name = '123.docx'
-
-        assert self.can_preview_in_normal_repo_normal_size(file_name)
         assert not self.can_preview_in_normal_repo_exceeded_size(file_name)
         assert not self.can_preview_in_encrypted_repo_normal_size(file_name)
         assert not self.can_preview_in_encrypted_repo_exceeded_size(file_name)

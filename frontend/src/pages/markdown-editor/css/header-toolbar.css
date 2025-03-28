@@ -40,7 +40,7 @@
 }
 
 .btn-active[data-active=true]#saveButton {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 .sf-md-viewer-topbar .btn:focus,

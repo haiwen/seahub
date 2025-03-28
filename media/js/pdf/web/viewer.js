@@ -3959,6 +3959,10 @@ class OverlayManager {
         throw new Error("Another overlay is currently active.");
       }
     }
+    var $dialogContainer = document.getElementById("dialogContainer");
+    if ($dialogContainer.className.indexOf('d-block') == -1) {
+      $dialogContainer.className += ' d-block';
+    }
     this.#active = dialog;
     dialog.showModal();
   }
@@ -3972,6 +3976,10 @@ class OverlayManager {
     }
     dialog.close();
     this.#active = null;
+    var $dialogContainer = document.getElementById("dialogContainer");
+    if ($dialogContainer.className.indexOf('d-block') != -1) {
+      $dialogContainer.className = 'modal';
+    }
   }
 }
 exports.OverlayManager = OverlayManager;

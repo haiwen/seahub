@@ -7,6 +7,7 @@ import {
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
 import { username, lang } from '../utils/constants';
+import { Utils } from '../utils/utils';
 
 class Context {
 
@@ -41,6 +42,8 @@ class Context {
     this.eventBus = eventBus;
 
     this.permission = repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.permission);
+    this.customPermission = isCustomPermission ? customPermission : null;
 
     this.hasInit = true;
   }
@@ -183,6 +186,14 @@ class Context {
     const viewId = this.getSetting('viewID');
     if (this.permission === 'r' || viewId !== FACE_RECOGNITION_VIEW_ID) {
       return false;
+    }
+    return true;
+  };
+
+  canPreview = () => {
+    if (this.customPermission) {
+      const { preview, modify } = this.customPermission.permission;
+      return preview || modify;
     }
     return true;
   };

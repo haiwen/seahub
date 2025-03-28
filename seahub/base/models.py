@@ -10,6 +10,7 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
+from seahub.signals import group_member_audit
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -475,3 +476,42 @@ class RepoTransfer(models.Model):
 
     class Meta:
         db_table = 'RepoTransfer'
+
+
+
+GROUP_MEMBER_ADD = 'group_member_add'
+GROUP_MEMBER_DELETE = 'group_member_delete'
+
+class GroupMemberAudit(models.Model):
+    org_id = models.IntegerField(db_index=True)
+    group_id = models.IntegerField(db_index=True)
+    user = models.EmailField(db_index=True)
+    operator = models.CharField(max_length=255, db_index=True)
+    operation = models.CharField(max_length=128)
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        db_table = 'group_member_audit'
+        
+
+
+###### signal handler ###############
+        
+from django.dispatch import receiver
+
+
+@receiver(group_member_audit)
+def add_group_invite_log(sender, org_id, group_id, users, operator, operation, **kwargs):
+    if operation not in [GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE]:
+        return
+    
+    group_member_audit_list = []
+    for user in users:
+        group_member_audit_list.append(GroupMemberAudit(
+            org_id=org_id,
+            group_id=group_id,
+            user=user,
+            operator=operator,
+            operation=operation
+        ))
+    GroupMemberAudit.objects.bulk_create(group_member_audit_list)

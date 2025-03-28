@@ -194,7 +194,7 @@ from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
 from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
 from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
-    AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs
+    AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs, AdminLogGroupMemberAuditLogs
 from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
@@ -699,6 +699,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/logs/file-update-logs/$', AdminLogsFileUpdateLogs.as_view(), name='api-v2.1-admin-logs-file-update-logs'),
     re_path(r'^api/v2.1/admin/logs/share-permission-logs/$', AdminLogsSharePermissionLogs.as_view(), name='api-v2.1-admin-logs-share-permission-logs'),
     re_path(r'^api/v2.1/admin/logs/repo-transfer-logs/$', AdminLogsFileTransferLogs.as_view(), name='api-v2.1-admin-logs-repo-transfer-logs'),
+    re_path(r'^api/v2.1/admin/logs/group-member-audit/$', AdminLogGroupMemberAuditLogs.as_view(), name='api-v2.1-admin-logs-group-member-audit'),
 
     ## admin::admin logs
     re_path(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
@@ -875,6 +876,7 @@ urlpatterns = [
     path('sys/logs/file-update/', sysadmin_react_fake_view, name="sys_logs_file_update"),
     path('sys/logs/share-permission/', sysadmin_react_fake_view, name="sys_logs_share_permission"),
     path('sys/logs/repo-transfer/', sysadmin_react_fake_view, name="sys_logs_file_transfer"),
+    path('sys/logs/group-member-audit/', sysadmin_react_fake_view, name="sys_logs_group_member_audit"),
     path('sys/admin-logs/operation/', sysadmin_react_fake_view, name="sys_admin_logs_operation"),
     path('sys/admin-logs/login/', sysadmin_react_fake_view, name="sys_admin_logs_login"),
     path('sys/organizations/', sysadmin_react_fake_view, name="sys_organizations"),
@@ -970,18 +972,6 @@ if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
 if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
     urlpatterns += [
         re_path(r'^sso-auto-login/', login_simple_check),
-    ]
-
-# serve office converter static files
-from seahub.utils import HAS_OFFICE_CONVERTER
-if HAS_OFFICE_CONVERTER:
-    from seahub.views.file import (
-        office_convert_query_status, office_convert_get_page
-    )
-    urlpatterns += [
-        re_path(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
-            office_convert_get_page, name='office_convert_get_page'),
-        path('office-convert/status/', office_convert_query_status, name='office_convert_query_status'),
     ]
 
 if getattr(settings, 'ENABLE_MULTI_ADFS', False):

@@ -94,33 +94,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'document_file_view_react.html')
 
-    # @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
-    # @patch('seahub.views.file.can_preview_file')
-    # @patch('seahub.views.file.prepare_converted_html', create=True)
-    # def test_ms_doc_with_office_converter(self, mock_prepare_converted_html,
-    #                                       mock_can_preview_file):
-    #     mock_prepare_converted_html.return_value = None
-    #     mock_can_preview_file.return_value = (True, None)
-
-    #     self.login_as(self.user)
-
-    #     file_path = self.create_file(repo_id=self.repo.id, parent_dir='/',
-    #                                  filename="foo.doc", username=self.user.email)
-    #     url = reverse('view_lib_file', args=[self.repo.id, file_path])
-
-    #     resp = self.client.get(url)
-    #     self.assertEqual(200, resp.status_code)
-    #     self.assertTemplateUsed(resp, 'view_file_document.html')
-    #     assert resp.context['filetype'].lower() == 'document'
-    #     assert resp.context['err'] == ''
-
-    #     # token for doc file is one time only
-    #     raw_path = resp.context['raw_path']
-    #     r = requests.get(raw_path)
-    #     self.assertEqual(200, r.status_code)
-    #     r = requests.get(raw_path)
-    #     self.assertEqual(400, r.status_code)
-
     def test_pdf_file(self):
         self.login_as(self.user)
 

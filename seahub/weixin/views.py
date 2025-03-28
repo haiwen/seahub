@@ -81,8 +81,6 @@ def weixin_oauth_callback(request):
     access_token = access_token_json.get('access_token', '')
     if not access_token or not openid:
         logger.error('invalid access_token or openid')
-        logger.error(access_token_url)
-        logger.error(access_token_json)
         return render_error(request, _('Error, please contact administrator.'))
 
     # login user in
@@ -206,8 +204,7 @@ def weixin_oauth_connect_callback(request):
     access_token = access_token_json.get('access_token', '')
     if not access_token or not openid:
         logger.error('invalid access_token or openid')
-        logger.error(access_token_url)
-        logger.error(access_token_json)
+
         return render_error(request, _('Error, please contact administrator.'))
 
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('weixin', openid)
