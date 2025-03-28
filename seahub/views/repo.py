@@ -37,6 +37,7 @@ from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.constants import PERMISSION_INVISIBLE
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -282,8 +283,8 @@ def view_shared_dir(request, fileshare):
     if not repo:
         raise Http404
 
-    if repo.encrypted or not \
-            seafile_api.check_permission_by_path(repo_id, '/', username):
+    permission = seafile_api.check_permission_by_path(repo_id, '/', username)
+    if repo.encrypted or not permission or permission == PERMISSION_INVISIBLE:
         return render_error(request, _('Permission denied'))
 
     # Check path still exist, otherwise show error
