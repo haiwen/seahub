@@ -122,9 +122,9 @@ class GroupInviteItem extends React.Component {
 
   getActionTextByEType = (operation) => {
     if (operation.indexOf('group_member_add') != -1) {
-      return gettext('Add');
+      return gettext('Add member');
     } else if (operation.indexOf('group_member_delete') != -1) {
-      return gettext('Delete');
+      return gettext('Delete member');
     } else {
       return '';
     }

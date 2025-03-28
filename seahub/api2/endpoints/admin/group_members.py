@@ -136,13 +136,11 @@ class AdminGroupMembers(APIView):
             emails_need_add.append(email)
 
         # Add user to group.
-        emails_added = []
         for email in emails_need_add:
             try:
                 ccnet_api.group_add_member(group_id, group.creator_name, email)
                 member_info = get_group_member_info(request, group_id, email)
                 result['success'].append(member_info)
-                emails_added.append(email)
             except Exception as e:
                 logger.error(e)
                 result['failed'].append({
@@ -155,13 +153,13 @@ class AdminGroupMembers(APIView):
                                    group_id=group_id,
                                    added_user=email)
 
-        admin_op_detail = {
-            'id': group_id,
-            'name': group.group_name,
-            'users': emails_added
-        }
-        admin_operation.send(sender=None, admin_name=request.user.username,
-                             operation=GROUP_MEMBER_ADD, detail=admin_op_detail)
+            admin_op_detail = {
+                'id': group_id,
+                'name': group.group_name,
+                'user': email
+            }
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                                 operation=GROUP_MEMBER_ADD, detail=admin_op_detail)
 
         return Response(result)
 

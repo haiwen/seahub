@@ -566,7 +566,7 @@ class AdminLogsFileTransferLogs(APIView):
         return Response(resp)
 
 
-class AdminLogsGroupInviteLogs(APIView):
+class AdminLogGroupMemberAuditLogs(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)

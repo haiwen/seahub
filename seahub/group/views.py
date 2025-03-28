@@ -24,7 +24,7 @@ from seahub.settings import SITE_ROOT, SERVICE_URL, MULTI_TENANCY
 from seahub.utils import send_html_email, is_org_context, \
     get_site_name, render_error
 from seahub.share.models import ExtraGroupsSharePermission
-from seahub.signals import group_invite_log
+from seahub.signals import group_member_audit
 
 
 # Get an instance of a logger
@@ -197,7 +197,7 @@ def group_invite(request, token):
 
     try:
         ccnet_api.group_add_member(group_invite_link.group_id, group_invite_link.created_by, email)
-        group_invite_log.send(sender=None,
+        group_member_audit.send(sender=None,
                               org_id=-1,
                               group_id=group_invite_link.group_id,
                               users=[email],

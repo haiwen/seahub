@@ -33,7 +33,7 @@ from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 from seahub.profile.models import Profile
 from seahub.settings import MULTI_TENANCY
-from seahub.signals import group_invite_log
+from seahub.signals import group_member_audit
 
 from .utils import api_check_group
 
@@ -253,7 +253,7 @@ class GroupMember(APIView):
                 # remove repo-group share info of all 'email' owned repos
                 seafile_api.remove_group_repos_by_owner(group_id, email)
                 # add group invite log
-                group_invite_log.send(sender=None,
+                group_member_audit.send(sender=None,
                                       org_id=org_id if org_id else -1,
                                       group_id=group_id,
                                       users=[email],
@@ -271,7 +271,7 @@ class GroupMember(APIView):
                 # group owner can delete all group member
                 ccnet_api.group_remove_member(group_id, username, email)
                 seafile_api.remove_group_repos_by_owner(group_id, email)
-                group_invite_log.send(sender=None,
+                group_member_audit.send(sender=None,
                                       org_id=org_id if org_id else -1,
                                       group_id=group_id,
                                       users=[email],
@@ -284,7 +284,7 @@ class GroupMember(APIView):
                 if not is_group_admin_or_owner(group_id, email):
                     ccnet_api.group_remove_member(group_id, username, email)
                     seafile_api.remove_group_repos_by_owner(group_id, email)
-                    group_invite_log.send(sender=None,
+                    group_member_audit.send(sender=None,
                                           org_id=org_id if org_id else -1,
                                           group_id=group_id,
                                           users=[email],
@@ -397,7 +397,7 @@ class GroupMembersBulk(APIView):
                                    group_id=group_id,
                                    added_user=email)
         # add group invite log
-        group_invite_log.send(sender=None,
+        group_member_audit.send(sender=None,
                               org_id=org_id if org_id else -1,
                               group_id=group_id,
                               users=emails_added,
@@ -554,7 +554,7 @@ class GroupMembersImport(APIView):
                                    group_id=group_id,
                                    added_user=email)
 
-        group_invite_log.send(sender=None,
+        group_member_audit.send(sender=None,
                               org_id=org_id if org_id else -1,
                               group_id=group_id,
                               users=emails_added,

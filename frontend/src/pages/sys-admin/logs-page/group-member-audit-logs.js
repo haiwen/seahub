@@ -117,9 +117,9 @@ class Item extends Component {
 
   getActionTextByEType = (operation) => {
     if (operation.indexOf('group_member_add') != -1) {
-      return gettext('Add');
+      return gettext('Add member');
     } else if (operation.indexOf('group_member_delete') != -1) {
-      return gettext('Delete');
+      return gettext('Delete member');
     } else {
       return '';
     }
@@ -143,7 +143,7 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
 };
 
-class GroupInviteLogs extends Component {
+class GroupMemberAuditLogs extends Component {
 
   constructor(props) {
     super(props);
@@ -199,7 +199,7 @@ class GroupInviteLogs extends Component {
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LogsNav currentItem="groupInvite" />
+            <LogsNav currentItem="groupMember" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -219,4 +219,4 @@ class GroupInviteLogs extends Component {
   }
 }
 
-export default GroupInviteLogs;
+export default GroupMemberAuditLogs;

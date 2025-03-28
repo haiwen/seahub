@@ -10,7 +10,7 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
-from seahub.signals import group_invite_log
+from seahub.signals import group_member_audit
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -500,7 +500,7 @@ class GroupMemberAudit(models.Model):
 from django.dispatch import receiver
 
 
-@receiver(group_invite_log)
+@receiver(group_member_audit)
 def add_group_invite_log(sender, org_id, group_id, users, operator, operation, **kwargs):
     if operation not in [GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE]:
         return

@@ -108,7 +108,7 @@ class Item extends Component {
       case 'user_add': return gettext('Add User');
       case 'user_delete': return gettext('Delete User');
       case 'user_migrate': return gettext('Migrate User');
-      case 'group_member_add': return gettext('Invite User to Group');
+      case 'group_member_add': return gettext('Add User to Group');
       case 'group_member_delete': return gettext('Remove User from Group');
       default: return '';
     }
@@ -196,8 +196,8 @@ class Item extends Component {
         return detailText;
 
       case 'group_member_add':
-        detailText = gettext('Invited user {user} to group {group}')
-          .replace('{user}', '<span class="font-weight-bold">' + detail.users + '</span>')
+        detailText = gettext('Added user {user} to group {group}')
+          .replace('{user}', '<span class="font-weight-bold">' + detail.user + '</span>')
           .replace('{group}', '<span class="font-weight-bold">' + detail.name + '</span>');
         return detailText;
 
