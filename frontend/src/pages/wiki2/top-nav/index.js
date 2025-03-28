@@ -40,12 +40,14 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, toggleFreezeStatus,
 
         );
       })}
-      <IconButton
-        id="lock-unlock-file"
-        icon={lockUnlockIcon}
-        text={lockUnlockText}
-        onClick={toggleFreezeStatus}
-      />
+      {paths.length > 0 && (
+        <IconButton
+          id="lock-unlock-file"
+          icon={lockUnlockIcon}
+          text={lockUnlockText}
+          onClick={toggleFreezeStatus}
+        />
+      )}
     </div>
   );
 }
