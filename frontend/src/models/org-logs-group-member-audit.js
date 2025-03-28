@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 dayjs.locale(lang);
 
-class OrgLogsGroupInviteEvent {
+class OrgGroupMemberAuditLog {
   constructor(object) {
     this.group_id = object.group_id;
     this.group_name = object.group_name;
@@ -18,4 +18,4 @@ class OrgLogsGroupInviteEvent {
   }
 }
 
-export default OrgLogsGroupInviteEvent;
+export default OrgGroupMemberAuditLog;

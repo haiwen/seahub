@@ -5,14 +5,14 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import OrgLogsGroupInviteEvent from '../../models/org-logs-group-invite';
+import OrgGroupMemberAuditLog from '../../models/org-logs-group-member-audit';
 import '../../css/org-logs.css';
 import UserLink from './user-link';
 import { Link } from '@gatsbyjs/reach-router';
 
 dayjs.locale(lang);
 
-class OrgLogsGroupInvite extends React.Component {
+class OrgLogsGroupMemberAudit extends React.Component {
 
   constructor(props) {
     super(props);
@@ -33,7 +33,7 @@ class OrgLogsGroupInvite extends React.Component {
   initData = (page, perPage) => {
     orgAdminAPI.orgAdminListGroupInvite(page, perPage).then(res => {
       let eventList = res.data.log_list.map(item => {
-        return new OrgLogsGroupInviteEvent(item);
+        return new OrgGroupMemberAuditLog(item);
       });
 
       this.setState({
@@ -147,4 +147,4 @@ class GroupInviteItem extends React.Component {
 
 GroupInviteItem.propTypes = propTypes;
 
-export default OrgLogsGroupInvite;
+export default OrgLogsGroupMemberAudit;
