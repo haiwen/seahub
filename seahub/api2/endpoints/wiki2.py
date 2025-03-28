@@ -510,6 +510,7 @@ class Wiki2PagesView(APIView):
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(file_path),
             'obj_name': file_name,
+            'locked': False,
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else ''
         }
 
@@ -603,7 +604,8 @@ class Wiki2PagesView(APIView):
                 'name': page_name,
                 'path': path,
                 'icon': '',
-                'docUuid': str(sdoc_uuid)
+                'docUuid': str(sdoc_uuid),
+                'locked': False
             }
             pages.append(new_page)
 
@@ -880,7 +882,9 @@ class Wiki2PageView(APIView):
         except ValueError:
             error_msg = 'expire invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+        is_locked = seafile_api.check_file_lock(repo_id, path.lstrip('/'), '')
+        if is_locked == locked:
+            return Response('success', status=status.HTTP_200_OK)
         if locked:
             try:
                 seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
