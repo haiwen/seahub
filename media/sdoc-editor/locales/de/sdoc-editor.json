@@ -619,5 +619,8 @@
   "Selected_row_records_cannot_exceed_10_rows": "Sie können höchstens zehn Einträge in einer Zeile auswählen",
   "Select_seatable_rows": "Seatable-Zeilen auswählen",
   "Add_rows_record": "Zeileneintrag hinzufügen",
-  "Double_click_then_adjust_field_width": "Klicken Sie doppelt, dann passen Sie die Breite des Felds an"
+  "Double_click_then_adjust_field_width": "Klicken Sie doppelt, dann passen Sie die Breite des Felds an",
+  "Insert_chart": "Insert chart",
+  "Edit_chart": "Edit chart",
+  "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first"
 }
