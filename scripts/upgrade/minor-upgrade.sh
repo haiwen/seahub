@@ -18,7 +18,6 @@ orig_avatar_dir=${INSTALLPATH}/seahub/media/avatars
 dest_avatar_dir=${TOPDIR}/seahub-data/avatars
 seafile_server_symlink=${TOPDIR}/seafile-server-latest
 default_conf_dir=${TOPDIR}/conf
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 seahub_data_dir=${TOPDIR}/seahub-data
 elasticsearch_config_file=${seafile_server_symlink}/pro/elasticsearch/config/jvm.options

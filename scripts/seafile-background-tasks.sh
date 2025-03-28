@@ -5,7 +5,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 
 logdir=${TOPDIR}/logs
@@ -101,7 +100,6 @@ function before_start() {
     ensure_single_instance;
     prepare_log_dir;
 
-    export CCNET_CONF_DIR=${default_ccnet_conf_dir}
     export SEAFILE_CONF_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
     export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime

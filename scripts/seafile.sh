@@ -15,7 +15,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 pro_pylibs_dir=${INSTALLPATH}/pro/python
@@ -28,7 +27,6 @@ export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
-export CCNET_CONF_DIR=${default_ccnet_conf_dir}
 export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 export SEAHUB_DIR=$seahubdir
@@ -156,7 +154,6 @@ function start_seafile_server () {
     if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -c ${CCNET_CONF_DIR} \
             -d ${SEAFILE_CONF_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \
@@ -165,7 +162,6 @@ function start_seafile_server () {
     else
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -c ${CCNET_CONF_DIR} \
             -d ${SEAFILE_CONF_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \

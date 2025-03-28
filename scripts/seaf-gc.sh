@@ -5,7 +5,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
@@ -125,7 +124,6 @@ function run_seaf_gc () {
     echo "Starting seafserv-gc, please wait ..."
 
     LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_gc} \
-        -c "${default_ccnet_conf_dir}" \
         -d "${default_seafile_data_dir}" \
         -F "${default_conf_dir}" \
         ${seaf_gc_opts}

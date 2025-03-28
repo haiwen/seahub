@@ -3,7 +3,6 @@
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 pro_pylibs_dir=${INSTALLPATH}/pro/python
@@ -59,7 +58,6 @@ check_python_executable;
 validate_seafile_data_dir;
 prepare_seahub_log_dir;
 
-export CCNET_CONF_DIR=${default_ccnet_conf_dir}
 export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH

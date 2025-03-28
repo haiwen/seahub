@@ -335,7 +335,6 @@ class EnvManager(object):
     def get_seahub_env(self):
         '''Prepare for seahub syncdb'''
         env = dict(os.environ)
-        env['CCNET_CONF_DIR'] = self.ccnet_dir
         env['SEAFILE_CONF_DIR'] = self.seafile_dir
         env['SEAFILE_CENTRAL_CONF_DIR'] = self.central_config_dir
         env['SEAFILE_RPC_PIPE_PATH'] = self.seafile_rpc_pipe_path
@@ -345,7 +344,7 @@ class EnvManager(object):
         return env
 
     def setup_python_path(self, env):
-        '''And PYTHONPATH and CCNET_CONF_DIR/SEAFILE_CONF_DIR to env, which is
+        '''And PYTHONPATH and SEAFILE_CONF_DIR to env, which is
         needed by seahub
 
         '''
