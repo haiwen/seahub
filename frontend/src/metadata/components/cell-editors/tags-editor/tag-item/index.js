@@ -49,7 +49,7 @@ const TagItem = ({
           <div className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }} />
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
-        <div className="sf-metadata-tags-editor-tag-check-icon">
+        <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
           {isSelected && <Icon className="sf-metadata-icon" symbol="check-mark" />}
         </div>
       </div>

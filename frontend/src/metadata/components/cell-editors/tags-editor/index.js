@@ -41,6 +41,7 @@ const TagsEditor = forwardRef(({
   const [maxItemNum, setMaxItemNum] = useState(0);
   const [nodes, setNodes] = useState([]);
   const [keyNodeFoldedMap, setKeyNodeFoldedMap] = useState({});
+  const [searchedKeyNodeFoldedMap, setSearchedKeyNodeFoldedMap] = useState({});
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const itemHeight = 30;
   const editorContainerRef = useRef(null);
@@ -243,7 +244,8 @@ const TagsEditor = forwardRef(({
     }
   }, []);
 
-  const getShownNodes = useCallback((tree, keyNodeFoldedMap) => {
+  const getShownNodes = useCallback(() => {
+    const tree = tagsData?.rows_tree;
     if (!Array.isArray(tree)) {
       return [];
     }
@@ -253,17 +255,6 @@ const TagsEditor = forwardRef(({
       const nodeId = getTreeNodeId(node);
       const row = getRowById(tagsData, nodeId);
       if (!row) return;
-      if (searchValue) {
-        const value = searchValue.toLowerCase();
-        const tagName = getTagName(row).toLowerCase();
-        const tagColor = getTagColor(row).toLowerCase();
-        if (!tagName.includes(value) && !tagColor.includes(value)) return;
-        if (showTagsAsTree) {
-          const nodesWithAncestors = getNodesWithAncestors(node, tree).filter(node => checkIsTreeNodeShown(getTreeNodeKey(node), keyNodeFoldedMap));
-          shownNodes = [...shownNodes, ...nodesWithAncestors];
-          return;
-        }
-      }
       const nodeKey = getTreeNodeKey(node);
       if (row && checkIsTreeNodeShown(nodeKey, keyNodeFoldedMap)) {
         shownNodes.push({
@@ -273,19 +264,47 @@ const TagsEditor = forwardRef(({
       }
     });
     return shownNodes;
-  }, [tagsData, searchValue, showTagsAsTree]);
+  }, [tagsData, keyNodeFoldedMap]);
+
+  const getSearchedNodes = useCallback(() => {
+    const tree = tagsData?.rows_tree;
+    if (!Array.isArray(tree)) {
+      return [];
+    }
+    let searchedNodes = [];
+    tree.forEach((node, index) => {
+      const nodeId = getTreeNodeId(node);
+      const row = getRowById(tagsData, nodeId);
+      if (!row) return;
+      const value = searchValue.toLowerCase();
+      const tagName = getTagName(row).toLowerCase();
+      const tagColor = getTagColor(row).toLowerCase();
+      if (!tagName.includes(value) && !tagColor.includes(value)) return;
+      const nodesWithAncestors = getNodesWithAncestors(node, tree).filter(node => checkIsTreeNodeShown(getTreeNodeKey(node), searchedKeyNodeFoldedMap));
+      searchedNodes = [...searchedNodes, ...nodesWithAncestors];
+    });
+    return searchedNodes;
+  }, [tagsData, searchValue, searchedKeyNodeFoldedMap]);
 
   const toggleExpandTreeNode = useCallback((nodeKey) => {
-    const updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
-    if (updatedKeyNodeFoldedMap[nodeKey]) {
-      delete updatedKeyNodeFoldedMap[nodeKey];
+    if (!searchValue) {
+      const updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
+      if (updatedKeyNodeFoldedMap[nodeKey]) {
+        delete updatedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedKeyNodeFoldedMap[nodeKey] = true;
+      }
+      setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
     } else {
-      updatedKeyNodeFoldedMap[nodeKey] = true;
+      const updatedSearchedKeyNodeFoldedMap = { ...searchedKeyNodeFoldedMap };
+      if (updatedSearchedKeyNodeFoldedMap[nodeKey]) {
+        delete updatedSearchedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedSearchedKeyNodeFoldedMap[nodeKey] = true;
+      }
+      setSearchedKeyNodeFoldedMap(updatedSearchedKeyNodeFoldedMap);
     }
-    const updatedNodes = getShownNodes(tagsData.rows_tree, updatedKeyNodeFoldedMap);
-    setNodes(updatedNodes);
-    setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
-  }, [tagsData, keyNodeFoldedMap, getShownNodes]);
+  }, [keyNodeFoldedMap, searchedKeyNodeFoldedMap, searchValue]);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -313,11 +332,25 @@ const TagsEditor = forwardRef(({
   }, [tagsData, localStorage]);
 
   useEffect(() => {
+    if (tagsData?.rows_tree && showTagsAsTree) {
+      const updatedKeyNodeFoldedMap = tagsData.rows_tree.reduce((acc, node) => {
+        const nodeKey = getTreeNodeKey(node);
+        if (checkTreeNodeHasChildNodes(node)) {
+          acc[nodeKey] = true;
+        }
+        return acc;
+      }, {});
+      setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (tagsData?.rows_tree) {
-      const shownNodes = getShownNodes(tagsData.rows_tree, keyNodeFoldedMap);
+      const shownNodes = searchValue ? getSearchedNodes() : getShownNodes();
       setNodes(shownNodes);
     }
-  }, [tagsData, keyNodeFoldedMap, getShownNodes]);
+  }, [tagsData, searchValue, getSearchedNodes, getShownNodes]);
 
   const renderOptions = useCallback(() => {
     if (displayTags.length === 0) {
@@ -394,14 +427,14 @@ const TagsEditor = forwardRef(({
               onMouseLeave={onTreeMenuMouseLeave}
               depth={getTreeNodeDepth(node)}
               hasChildren={checkTreeNodeHasChildNodes(node)}
-              isFolded={keyNodeFoldedMap[nodeKey]}
+              isFolded={!searchValue ? keyNodeFoldedMap[nodeKey] : searchedKeyNodeFoldedMap[nodeKey]}
               onToggleExpand={() => toggleExpandTreeNode(nodeKey)}
             />
           );
         })}
       </>
     );
-  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, onSelectTag, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, searchedKeyNodeFoldedMap, onSelectTag, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
     <div className={classnames('sf-metadata-tags-editor', { 'tags-tree-container': showTagsAsTree })} style={style} ref={editorRef}>
