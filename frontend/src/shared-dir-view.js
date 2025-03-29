@@ -141,6 +141,7 @@ class SharedDirView extends React.Component {
   listItems = () => {
     const { path, currentMode } = this.state;
     const thumbnailSize = currentMode == LIST_MODE ? thumbnailDefaultSize : thumbnailSizeForGrid;
+      this.setState({ isLoading: true });
     seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'].map(item => {
         item.isSelected = false;
@@ -639,8 +640,7 @@ class SharedDirView extends React.Component {
       return;
     } else {
       this.setState({
-        currentMode: mode,
-        isLoading: true
+        currentMode: mode
       }, () => {
         this.listItems();
       });
