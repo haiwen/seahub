@@ -130,6 +130,7 @@ class CadApiFileContentView(APIView):
                                       WEBCAD_DWG_PATH,
                                       dwg_filename)
 
+        dwg_filepath = os.path.normpath(dwg_filepath)
         if not os.path.exists(dwg_filepath):
 
             try:
@@ -166,6 +167,7 @@ class CadApiFileContentView(APIView):
                                       WEBCAD_OCF_PATH,
                                       ocf_filename)
 
+        ocf_filepath = os.path.normpath(ocf_filepath)
         if not os.path.exists(ocf_filepath):
             success = dwg_to_ocf(dwg_filename, ocf_filename)
             if not success:

@@ -20,8 +20,6 @@ from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.decorators import org_staff_required
 from seahub.settings import ADMIN_LOGS_EXPORT_MAX_DAYS
 
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -70,11 +68,20 @@ def org_log_export_excel(request):
     else:
         error_msg = 'log_type invalid'
         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
     target_dir = os.path.join('/tmp/seafile_events/', task_id)
     tmp_excel_path = os.path.join(target_dir, excel_name)
+
+    target_dir = os.path.normpath(target_dir)
+    tmp_excel_path = os.path.normpath(tmp_excel_path)
+
     if not os.path.isfile(tmp_excel_path):
         return api_error(status.HTTP_400_BAD_REQUEST, excel_name + ' not found.')
-    response = FileResponse(open(tmp_excel_path, 'rb'), content_type='application/ms-excel', as_attachment=True)
+
+    response = FileResponse(open(tmp_excel_path, 'rb'),
+                            content_type='application/ms-excel',
+                            as_attachment=True)
+
     try:
         rmtree(target_dir)
     except OSError:
