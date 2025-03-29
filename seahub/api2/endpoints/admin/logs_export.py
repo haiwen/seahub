@@ -20,7 +20,6 @@ from seahub.base.decorators import sys_staff_required
 from seahub.settings import ADMIN_LOGS_EXPORT_MAX_DAYS
 
 
-
 class SysLogsExport(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser, IsProVersion)
@@ -49,15 +48,13 @@ class SysLogsExport(APIView):
         return Response(res_data)
 
 
-
-
 @login_required
 @sys_staff_required
 @api_view(('GET',))
 def sys_log_export_excel(request):
     task_id = request.GET.get('task_id', None)
     log_type = request.GET.get('log_type', None)
-    
+
     if not task_id:
         error_msg = 'task_id invalid.'
         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -74,12 +71,23 @@ def sys_log_export_excel(request):
         error_msg = 'log_type invalid'
         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-    target_dir = os.path.join('/tmp/seafile_events/', task_id)
+    base_dir = '/tmp/seafile_events/'
+    target_dir = os.path.join(base_dir, task_id)
     tmp_excel_path = os.path.join(target_dir, excel_name)
+
+    target_dir = os.path.normpath(target_dir)
+    tmp_excel_path = os.path.normpath(tmp_excel_path)
+
+    if not target_dir.startswith(base_dir) or not tmp_excel_path.startswith(base_dir):
+        return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path.')
+
     if not os.path.isfile(tmp_excel_path):
         return api_error(status.HTTP_400_BAD_REQUEST, excel_name + ' not found.')
 
-    response = FileResponse(open(tmp_excel_path, 'rb'), content_type='application/ms-excel', as_attachment=True)
+    response = FileResponse(open(tmp_excel_path, 'rb'),
+                            content_type='application/ms-excel',
+                            as_attachment=True)
+
     try:
         rmtree(target_dir)
     except OSError:
