@@ -137,8 +137,8 @@ body {
 }
 
 .wiki2-file-history-button .freeze-document-switch {
-  padding: 4px 16px;
-  display: flex;
+  padding: 0.25rem 1rem;
+  /* display: flex; */
   justify-content: center;
 }
 
@@ -154,5 +154,5 @@ body {
 }
 
 .wiki2-file-history-button .freeze-document-switch  .custom-switch-indicator {
-  margin-left: 30px;
+  margin-left: 60px;
 }

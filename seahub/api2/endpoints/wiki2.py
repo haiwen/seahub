@@ -841,6 +841,10 @@ class Wiki2PageView(APIView):
         return Response({'success': True})
 
     def put(self, request, wiki_id, page_id):
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
