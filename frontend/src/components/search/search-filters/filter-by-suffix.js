@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import ModalPortal from '../../modal-portal';
@@ -6,7 +6,6 @@ import ModalPortal from '../../modal-portal';
 const FilterBySuffix = ({ onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
-  const filterRef = useRef();
   const inputRef = useRef(null);
 
   const label = useMemo(() => {
@@ -28,18 +27,6 @@ const FilterBySuffix = ({ onSelect }) => {
     if (e.key === 'Enter') {
       setIsOpen(false);
     }
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (inputRef.current && !filterRef.current.contains(e.target) && !inputRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
 
   return (
