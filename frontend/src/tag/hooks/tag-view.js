@@ -14,7 +14,7 @@ import { getRowById } from '../../components/sf-table/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import URLDecorator from '../../utils/url-decorator';
-import { fileServerRoot, useGoFileserver } from '../../utils/constants';
+import { fileServerRoot, gettext, useGoFileserver } from '../../utils/constants';
 import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
@@ -64,8 +64,9 @@ export const TagViewProvider = ({
     });
   }, [repoID, copyFileCallback, updateSelectedFileIds]);
 
-  const deleteTagFiles = useCallback(() => {
-    const files = selectedFileIds.map(id => getFileById(tagFiles, id));
+  const deleteTagFiles = useCallback((ids) => {
+    const tagIds = ids?.length ? ids : selectedFileIds;
+    const files = tagIds.map(id => getFileById(tagFiles, id));
     const paths = files.map(f => Utils.joinPath(f[TAG_FILE_KEY.PARENT_DIR], f[TAG_FILE_KEY.NAME]));
     const fileNames = files.map(f => f[TAG_FILE_KEY.NAME]);
     metadataAPI.batchDeleteFiles(repoID, paths).then(() => {
@@ -79,7 +80,7 @@ export const TagViewProvider = ({
         const row = getRowById(tagsData, tagID);
         const oldTagFileLinks = getTagFilesLinks(row);
         if (Array.isArray(oldTagFileLinks) && oldTagFileLinks.length > 0) {
-          const newTagFileLinks = oldTagFileLinks.filter(link => !selectedFileIds.includes(link.row_id));
+          const newTagFileLinks = oldTagFileLinks.filter(link => !tagIds.includes(link.row_id));
           const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
           idTagUpdates[tagID] = update;
         }
@@ -88,11 +89,17 @@ export const TagViewProvider = ({
 
       setTagFiles(prevTagFiles => ({
         ...prevTagFiles,
-        rows: prevTagFiles.rows.filter(row => !selectedFileIds.includes(row[TAG_FILE_KEY.ID])),
+        rows: prevTagFiles.rows.filter(row => !tagIds.includes(row[TAG_FILE_KEY.ID])),
       }));
 
       deleteFilesCallback && deleteFilesCallback(paths, fileNames);
       updateSelectedFileIds([]);
+      let msg = fileNames.length > 1
+        ? gettext('Successfully deleted {name} and {n} other items')
+        : gettext('Successfully deleted {name}');
+      msg = msg.replace('{name}', fileNames[0])
+        .replace('{n}', fileNames.length - 1);
+      toaster.success(msg);
     });
   }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTags, deleteFilesCallback, updateSelectedFileIds]);
 
