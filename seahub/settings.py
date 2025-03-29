@@ -1057,7 +1057,7 @@ METADATA_FILE_TYPES = {
                'm4v', 'mkv', 'flv', 'vob'),
     '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'rm', 'mp1', 'mp2'),
     '_compressed': ('rar', 'zip', '7z', 'tar', 'gz', 'bz2', 'tgz', 'xz', 'lzma'),
-    '_diagram': ('draw', ),
+    '_diagram': ('draw', 'exdraw'),
 }
 
 ##############################
