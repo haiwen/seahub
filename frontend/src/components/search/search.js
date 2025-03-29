@@ -22,6 +22,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
+  hasFileSearch: PropTypes.bool,
 };
 
 const PER_PAGE = 20;
@@ -53,7 +54,7 @@ class Search extends Component {
       filters: {
         search_filename_only: false,
         creator: [],
-        date: null
+        date: null,
       },
     };
     this.highlightRef = null;
@@ -753,6 +754,7 @@ class Search extends Component {
     let style = {'width': width};
     const { isMaskShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
+    const isFiltersShow = this.props.repoID && isMaskShow && this.props.hasFileSearch;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -782,7 +784,7 @@ class Search extends Component {
                   ></button>
                 }
               </div>
-              {this.props.repoID && isMaskShow && <SearchFilters repoID={this.props.repoID} onChange={this.handleFiltersChange} />}
+              {isFiltersShow && <SearchFilters repoID={this.props.repoID} onChange={this.handleFiltersChange} />}
               <div
                 className="search-result-container dropdown-search-result-container"
                 ref={this.searchContainer}
