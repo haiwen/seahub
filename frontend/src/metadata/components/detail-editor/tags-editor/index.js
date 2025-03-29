@@ -73,7 +73,7 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
     if (!showEditor) return null;
     const { width, bottom } = ref.current.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const shouldPlaceBottom = (viewportHeight - bottom) > 300;
+    const shouldPlaceBottom = (viewportHeight - bottom) > 400;
 
     return (
       <Popover
@@ -84,15 +84,6 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
         fade={false}
         className="sf-metadata-property-editor-popover sf-metadata-tags-property-editor-popover"
         boundariesElement="viewport"
-        popperModifiers={{
-          preventOverflow: {
-            enabled: true,
-            padding: 8
-          },
-          offset: {
-            offset: '0, 8',
-          }
-        }}
       >
         <Editor
           saveImmediately={true}
