@@ -55,6 +55,7 @@ class Search extends Component {
         search_filename_only: false,
         creator: [],
         date: null,
+        suffix: '',
       },
     };
     this.highlightRef = null;
@@ -689,6 +690,11 @@ class Search extends Component {
         return false;
       }
 
+      if (filters.suffix && filters.suffix.length > 0) {
+        const suffix = item.path.includes('.') ? item.path.split('.').pop() : '';
+        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) return false;
+      }
+
       return true;
     });
   };
@@ -754,7 +760,7 @@ class Search extends Component {
     let style = {'width': width};
     const { isMaskShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
-    const isFiltersShow = this.props.repoID && isMaskShow && this.props.hasFileSearch;
+    const isFiltersShow = this.props.repoID && isMaskShow;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -784,7 +790,7 @@ class Search extends Component {
                   ></button>
                 }
               </div>
-              {isFiltersShow && <SearchFilters repoID={this.props.repoID} onChange={this.handleFiltersChange} />}
+              {isFiltersShow && <SearchFilters repoID={this.props.repoID} onChange={this.handleFiltersChange} hasFileSearch={this.props.hasFileSearch} />}
               <div
                 className="search-result-container dropdown-search-result-container"
                 ref={this.searchContainer}

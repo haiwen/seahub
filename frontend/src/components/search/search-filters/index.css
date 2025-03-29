@@ -1,10 +1,13 @@
 .search-filters-container {
-  width: calc(100% - 16px);
-  height: 38px;
+  min-height: 32px;
   position: relative;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 4px;
+  padding: 0 16px;
+  overflow: auto hidden;
+  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
 .search-filters-container .search-filter {
@@ -14,21 +17,22 @@
   margin-right: 8px;
 }
 
-.search-filters-container .search-filter .search-filter-toggle {
+.search-filters-container .search-filter .search-filter-toggle,
+.search-filter-menu .search-filter-toggle {
   display: flex;
   align-items: center;
   cursor: pointer;
   padding: 2px 4px;
 }
 
-.search-filters-container .search-filter .search-filter-toggle:hover {
+.search-filters-container .search-filter .search-filter-toggle:hover,
+.search-filter-menu .search-filter-toggle:hover {
   background-color: #efefef;
   border-radius: 3px;
 }
 
-.search-filters-container .search-filter .dropdown-label {
-  width: 100%;
-  max-width: 200px;
+.search-filters-container .search-filter .filter-label {
+  width: fit-content;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,8 +43,8 @@
   max-height: 400px;
 }
 
-.search-filters-container .filter-by-text-menu,
-.search-filters-container .filter-by-date-menu {
+.search-filter-menu.filter-by-text-menu,
+.search-filter-menu.filter-by-date-menu {
   width: 280px;
 }
 
@@ -48,21 +52,19 @@
   width: 100%;
 }
 
-.search-filters-container .dropdown-item,
-.creator-dropdown-menu .dropdown-item {
+.search-filter-menu .dropdown-item {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.search-filters-container .dropdown-item .dropdown-item-tick,
-.creator-dropdown-menu .dropdown-item .dropdown-item-tick {
+.search-filter-menu .dropdown-item .dropdown-item-tick {
   width: 1rem;
   left: auto;
   right: 16px;
 }
 
-.creator-dropdown-menu .input-container {
+.search-filter-menu .input-container {
   position: relative;
   width: 240px;
   border: 1px solid #eaeaea;
@@ -75,7 +77,7 @@
   gap: 4px;
 }
 
-.creator-dropdown-menu .input-container .search-input-wrapper {
+.search-filter-menu .input-container .search-input-wrapper {
   display: flex;
   align-items: center;
   border: none;
@@ -89,7 +91,7 @@
   border-radius: 4px;
 }
 
-.creator-dropdown-menu .input-container input {
+.search-filter-menu .input-container input {
   border: none;
   outline: none;
   width: 100%;
@@ -99,7 +101,7 @@
   height: 20px;
 }
 
-.creator-dropdown-menu .user-item {
+.search-filter-menu .user-item {
   height: 20px;
   position: relative;
   display: inline-flex;
@@ -107,14 +109,14 @@
   justify-content: flex-start;
 }
 
-.creator-dropdown-menu .user-item .user-avatar {
+.search-filter-menu .user-item .user-avatar {
   width: 16px;
   height: 16px;
   margin-right: 4px;
   border-radius: 50%;
 }
 
-.creator-dropdown-menu .input-container .user-item {
+.search-filter-menu .input-container .user-item {
   background-color: #eaeaea;
   border-radius: 10px;
   padding: 0 4px 0 2px;
@@ -122,14 +124,19 @@
   font-size: 13px;
 }
 
-.search-filters-container .filter-by-date-menu-toolbar {
+.filter-by-date-menu .filter-by-date-menu-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 4px 12px;
 }
 
-.search-filters-container .filter-by-date-menu-toolbar .delete-btn {
+.filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.filter-by-date-menu .filter-by-date-menu-toolbar .delete-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,7 +144,7 @@
   cursor: pointer;
 }
 
-.search-filters-container .filter-by-date-custom-date-container {
+.filter-by-date-menu .filter-by-date-custom-date-container {
   width: 100%;
   display: flex;
   align-items: center;
@@ -146,7 +153,7 @@
   gap: 8px;
 }
 
-.search-filters-container .filter-by-date-custom-date-container .custom-date-container {
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -154,11 +161,11 @@
   font-size: 14px;
 }
 
-.search-filters-container .filter-by-date-custom-date-container .custom-date-container .custom-date-label {
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container .custom-date-label {
   margin-bottom: 6px;
 }
 
-.search-filters-container .filter-by-date-custom-date-container .custom-date-container .form-control {
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container .form-control {
   height: 28px;
   font-size: 14px;
 }

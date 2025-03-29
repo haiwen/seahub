@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Picker from '../../date-and-time-picker';
+import ModalPortal from '../../modal-portal';
 
 const DATE_FILTER_TYPE_KEY = {
   CREATE_TIME: 'create_time',
@@ -181,7 +182,7 @@ const FilterByDate = ({ onSelect }) => {
     <div className="search-filter filter-by-date">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="dropdown-label" title={label}>{label}</div>
+          <div className="filter-label" style={{ maxWidth: 200 }} title={label}>{label}</div>
           <i
             className="sf3-font sf3-font-down sf3-font pl-1"
             onClick={(e) => {
@@ -190,78 +191,80 @@ const FilterByDate = ({ onSelect }) => {
             }}
           />
         </DropdownToggle>
-        <DropdownMenu className="filter-by-date-menu">
-          <div className="filter-by-date-menu-toolbar">
-            <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
-              <DropdownToggle tag="div" className="search-filter-toggle">
-                <div className="dropdown-label">{typeLabel}</div>
-                <i
-                  className="sf3-font sf3-font-down sf3-font pl-1"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleType();
-                  }}
-                />
-              </DropdownToggle>
-              <DropdownMenu>
-                {typeOptions.map((option) => {
-                  const isSelected = option.key === type;
-                  return (
-                    <DropdownItem key={option.key} data-toggle={option.key} onClick={() => setType(option.key)}>
-                      {option.label}
-                      {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
-                    </DropdownItem>
-                  );
-                })}
-              </DropdownMenu>
-            </Dropdown>
-            <div className="delete-btn" onClick={onClearDate}>
-              <i className="op-icon sf3-font-delete1 sf3-font"></i>
-            </div>
-          </div>
-          {options.map((option, i) => {
-            const isSelected = option.key === value;
-            if (option === 'Divider') return <div key={i} className="seafile-divider dropdown-divider"></div>;
-            return (
-              <DropdownItem
-                key={option.key}
-                tag="div"
-                tabIndex="-1"
-                data-toggle={option.key}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={onOptionClick}
-                toggle={false}
-              >
-                {option.label}
-                {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
-              </DropdownItem>
-            );
-          })}
-          {isCustomDate && (
-            <div className="filter-by-date-custom-date-container">
-              <div className="custom-date-container">
-                <div className="custom-date-label">{gettext('Start date')}</div>
-                <Picker
-                  showHourAndMinute={false}
-                  disabledDate={disabledStartDate}
-                  value={customDate.start}
-                  onChange={(value) => onChangeCustomDate({ type: 'start', value })}
-                  inputWidth={DATE_INPUT_WIDTH}
-                />
-              </div>
-              <div className="custom-date-container">
-                <div className="custom-date-label">{gettext('End date')}</div>
-                <Picker
-                  showHourAndMinute={false}
-                  disabledDate={disabledEndDate}
-                  value={customDate.end}
-                  onChange={(value) => onChangeCustomDate({ type: 'end', value })}
-                  inputWidth={DATE_INPUT_WIDTH}
-                />
+        <ModalPortal>
+          <DropdownMenu className="search-filter-menu filter-by-date-menu">
+            <div className="filter-by-date-menu-toolbar">
+              <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
+                <DropdownToggle tag="div" className="search-filter-toggle filter-by-date-type-toggle">
+                  <div className="filter-label">{typeLabel}</div>
+                  <i
+                    className="sf3-font sf3-font-down sf3-font pl-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleType();
+                    }}
+                  />
+                </DropdownToggle>
+                <DropdownMenu>
+                  {typeOptions.map((option) => {
+                    const isSelected = option.key === type;
+                    return (
+                      <DropdownItem key={option.key} data-toggle={option.key} onClick={() => setType(option.key)}>
+                        {option.label}
+                        {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownMenu>
+              </Dropdown>
+              <div className="delete-btn" onClick={onClearDate}>
+                <i className="op-icon sf3-font-delete1 sf3-font"></i>
               </div>
             </div>
-          )}
-        </DropdownMenu>
+            {options.map((option, i) => {
+              const isSelected = option.key === value;
+              if (option === 'Divider') return <div key={i} className="seafile-divider dropdown-divider"></div>;
+              return (
+                <DropdownItem
+                  key={option.key}
+                  tag="div"
+                  tabIndex="-1"
+                  data-toggle={option.key}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={onOptionClick}
+                  toggle={false}
+                >
+                  {option.label}
+                  {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                </DropdownItem>
+              );
+            })}
+            {isCustomDate && (
+              <div className="filter-by-date-custom-date-container">
+                <div className="custom-date-container">
+                  <div className="custom-date-label">{gettext('Start date')}</div>
+                  <Picker
+                    showHourAndMinute={false}
+                    disabledDate={disabledStartDate}
+                    value={customDate.start}
+                    onChange={(value) => onChangeCustomDate({ type: 'start', value })}
+                    inputWidth={DATE_INPUT_WIDTH}
+                  />
+                </div>
+                <div className="custom-date-container">
+                  <div className="custom-date-label">{gettext('End date')}</div>
+                  <Picker
+                    showHourAndMinute={false}
+                    disabledDate={disabledEndDate}
+                    value={customDate.end}
+                    onChange={(value) => onChangeCustomDate({ type: 'end', value })}
+                    inputWidth={DATE_INPUT_WIDTH}
+                  />
+                </div>
+              </div>
+            )}
+          </DropdownMenu>
+        </ModalPortal>
       </Dropdown>
     </div>
   );

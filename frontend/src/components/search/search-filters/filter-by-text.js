@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import ModalPortal from '../../../components/modal-portal';
 import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 
@@ -38,20 +39,22 @@ const FilterByText = ({ onSelect }) => {
     <div className="search-filter filter-by-text-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="dropdown-label" style={{ maxWidth: 160 }} title={label}>{label}</div>
+          <div className="filter-label" title={label}>{label}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
         </DropdownToggle>
-        <DropdownMenu className="filter-by-text-menu">
-          {options.map((option) => {
-            const isSelected = option.key === value;
-            return (
-              <DropdownItem key={option.key} data-toggle={option.key} onClick={onOptionClick}>
-                {option.label}
-                {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
+        <ModalPortal>
+          <DropdownMenu className="search-filter-menu filter-by-text-menu">
+            {options.map((option) => {
+              const isSelected = option.key === value;
+              return (
+                <DropdownItem key={option.key} data-toggle={option.key} onClick={onOptionClick}>
+                  {option.label}
+                  {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                </DropdownItem>
+              );
+            })}
+          </DropdownMenu>
+        </ModalPortal>
       </Dropdown>
     </div>
   );
