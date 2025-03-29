@@ -106,6 +106,7 @@ FILEEXT_ICON_MAP = {
     'ico': 'pic.png',
     'psd': 'psd.png',
     'draw': 'draw.png',
+    'exdraw': 'draw.png',
 
     # zip file
     'zip': 'zip.png',
@@ -403,7 +404,7 @@ def email2contact_email(value):
         return contact_email
 
     contact_email = Profile.objects.get_contact_email_by_user(value)
-    cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT) 
+    cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
     return contact_email
 
 @register.filter(name='email2id')
