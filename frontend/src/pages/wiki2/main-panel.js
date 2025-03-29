@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
-import { gettext, username, wikiPermission, wikiId, siteRoot } from '../../utils/constants';
+import { gettext, username, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
 import Loading from '../../components/loading';
@@ -84,8 +84,10 @@ class MainPanel extends Component {
   getMenu = () => {
     const list = [];
     if (wikiPermission === 'rw' && this.state.currentPageConfig) {
-      const { HISTORY, FREEZE_DOCUMENT } = TextTranslation;
-      list.push(FREEZE_DOCUMENT);
+      const { HISTORY, FREEZE_PAGE } = TextTranslation;
+      if (isPro) {
+        list.push(FREEZE_PAGE);
+      }
       list.push(HISTORY);
     }
     return list;
@@ -155,7 +157,7 @@ class MainPanel extends Component {
               </DropdownToggle>
               <DropdownMenu>
                 {menuItems.map((menuItem, index) => {
-                  if (menuItem.key === 'Freeze Document') {
+                  if (menuItem.key === 'Freeze page') {
                     return <Switch
                       checked={currentPageLocked}
                       disabled={false}
@@ -163,7 +165,7 @@ class MainPanel extends Component {
                       textPosition="left"
                       className='freeze-document-switch w-100 dropdown-item'
                       onChange={this.toggleFreezeStatus}
-                      placeholder={gettext('Freeze Document')}
+                      placeholder={gettext('Freeze page')}
                     />;
                   } else {
                     return (
