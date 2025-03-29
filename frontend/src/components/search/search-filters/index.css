@@ -17,6 +17,11 @@
   margin-right: 8px;
 }
 
+.search-filters-container .search-filter .sf3-font-down,
+.search-filter-menu .sf3-font-down {
+  color: #666;
+}
+
 .search-filters-container .search-filter .search-filter-toggle,
 .search-filter-menu .search-filter-toggle {
   display: flex;
