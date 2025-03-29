@@ -21,11 +21,6 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
     return urlParams.has('view');
   }, []);
 
-  const isTag = useMemo(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('tag');
-  }, []);
-
   useEffect(() => {
     const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
     seafileAPI.getFileInfo(repoID, fullPath).then(res => {
@@ -37,7 +32,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   }, [repoID, path, dirent]);
 
   useEffect(() => {
-    if (isView || isTag) return;
+    if (isView) return;
 
     let isExistContext = true;
     if (!window.sfMetadataContext) {
