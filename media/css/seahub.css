@@ -2856,8 +2856,31 @@ a.sf-popover-item {
 }
 
 /* two-factor-auth */
+.tfa-panel {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.1);
+  padding: 30px 25px 40px;
+  width: 336px;
+  margin: 5rem auto;
+}
+
+.tfa-panel .hd {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.tfa-panel .con {
+  font-size: .875rem;
+  color: #666;
+}
+
+.tfa-panel .qr-code-image {
+  margin: 6px 0 20px;
+}
+
 .two-factor-auth-wizard-btns {
-  margin-top: 8px;
+  margin-top: 1.25rem;
 }
 
 .two-factor-auth-backup-token-list {
@@ -2866,15 +2889,6 @@ a.sf-popover-item {
 
 .input.two-factor-auth-login-token-input {
   margin-bottom: 15px;
-}
-
-#id_generator-token,
-#id_sms-number,
-#id_validation-token {
-  /* token input */
-  width: 260px;
-  padding: 2px 3px;
-  border-radius: 2px;
 }
 
 /* terms & conditions */
