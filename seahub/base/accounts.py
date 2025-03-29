@@ -670,13 +670,6 @@ class User(object):
         Returns a boolean of whether the raw_password was correct. Handles
         encryption formats behind the scenes.
         """
-        # Backwards-compatibility check. Older passwords won't include the
-        # algorithm or salt.
-
-        # if '$' not in self.password:
-        #     is_correct = (self.password == \
-        #                       get_hexdigest('sha1', '', raw_password))
-        #     return is_correct
         return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_password) == 0)
 
     def set_unusable_password(self):
