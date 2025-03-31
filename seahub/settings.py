@@ -1194,13 +1194,12 @@ if CACHE_PROVIDER =='redis':
     cfg_redis_port = 6379
     cfg_redis_pwd = ''
     if 'LOCATION' in CACHES['default']:
+        cache_cfg = CACHES['default'].get('LOCATION').split('://', 1)[-1]
         try:
-            cfg_redis_pwd, redis_host_info = CACHES['default']['LOCATION'].split('@', 1)
+            cfg_redis_pwd, redis_host_info = cache_cfg.split('@', 1)
             cfg_redis_host, cfg_redis_port = redis_host_info.split(':', 1)
         except:
-            cfg_redis_pwd = ''
-            cfg_redis_host, cfg_redis_port = CACHES['default']['LOCATION'].split(':', 1)
-        if not cfg_redis_pwd:
+            cfg_redis_host, cfg_redis_port = cache_cfg.split(':', 1)
             try:
                 cfg_redis_pwd = CACHES['default']['OPTIONS']['PASSWORD']
             except:
