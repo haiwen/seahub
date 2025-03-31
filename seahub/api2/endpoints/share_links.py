@@ -950,10 +950,7 @@ class ShareLinkDirents(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            current_commit = seafile_api.get_commit_list(repo_id, 0, 1)[0]
-            dirent_list = seafile_api.list_dir_by_commit_and_path(repo_id,
-                                                                  current_commit.id,
-                                                                  path, -1, -1)
+            dirent_list = seafile_api.list_dir_by_path(repo_id, path)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
