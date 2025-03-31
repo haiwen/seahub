@@ -6,7 +6,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  REDIS_HOST: localhost  # 默认设置为 localhost，如果需要其他地址可以动态设置
+  REDIS_HOST: localhost
 
 permissions:
   contents: read
