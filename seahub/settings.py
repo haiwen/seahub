@@ -538,11 +538,8 @@ central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(CACHE_DIR, 'seahub_cache'),
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000000
-        }
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379',
     },
 }
 
@@ -1189,53 +1186,52 @@ if 'default' in DATABASES and 'mysql' in DATABASES['default'].get('ENGINE', ''):
             int(DATABASES['default']['PORT'])
         except:
             raise ValueError(f"Invalid database port: {DATABASES['default']['PORT']}")
-        
-match CACHE_PROVIDER := os.getenv('CACHE_PROVIDER', 'redis'):
-    case 'redis':
-        CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
-        cfg_redis_host = 'redis'
-        cfg_redis_port = 6379
-        cfg_redis_pwd = ''
-        if 'LOCATION' in CACHES['default']:
-            try:
-                cfg_redis_pwd, redis_host_info = CACHES['default']['LOCATION'].split('@', 1)
-                cfg_redis_host, cfg_redis_port = redis_host_info.split(':', 1)
-            except:
-                cfg_redis_pwd = ''
-                cfg_redis_host, cfg_redis_port = CACHES['default']['LOCATION'].split(':', 1)
-            if not cfg_redis_pwd:
-                try:
-                    cfg_redis_pwd = CACHES['default']['OPTIONS']['PASSWORD']
-                except:
-                    pass
 
-        redis_host = os.environ.get('REDIS_HOST') or cfg_redis_host
-        redis_port = os.environ.get('REDIS_PORT') or cfg_redis_port
-        redis_pwd = os.environ.get('REDIS_PASSWORD') or cfg_redis_pwd
-
-        CACHES['default']['LOCATION'] = f'redis://{(redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
-        if redis_pwd:
+CACHE_PROVIDER = os.getenv('CACHE_PROVIDER', 'redis')
+if CACHE_PROVIDER =='redis':
+    CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
+    cfg_redis_host = 'redis'
+    cfg_redis_port = 6379
+    cfg_redis_pwd = ''
+    if 'LOCATION' in CACHES['default']:
+        cache_cfg = CACHES['default'].get('LOCATION').split('://', 1)[-1]
+        try:
+            cfg_redis_pwd, redis_host_info = cache_cfg.split('@', 1)
+            cfg_redis_host, cfg_redis_port = redis_host_info.split(':', 1)
+        except:
+            cfg_redis_host, cfg_redis_port = cache_cfg.split(':', 1)
             try:
-                del CACHES['default']['OPTIONS']['PASSWORD']
+                cfg_redis_pwd = CACHES['default']['OPTIONS']['PASSWORD']
             except:
                 pass
 
-    case 'memcached':
+    redis_host = os.environ.get('REDIS_HOST') or cfg_redis_host
+    redis_port = os.environ.get('REDIS_PORT') or cfg_redis_port
+    redis_pwd = os.environ.get('REDIS_PASSWORD') or cfg_redis_pwd
+
+    CACHES['default']['LOCATION'] = f'redis://{(redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
+    if redis_pwd:
         try:
-            conf_mem_host, conf_mem_port = CACHES['default']['LOCATION'].split(':')
+            del CACHES['default']['OPTIONS']['PASSWORD']
         except:
-            conf_mem_host = 'memcached'
-            conf_mem_port = 11211
+            pass
 
-        mem_host = os.getenv('MEMCACHED_HOST') or conf_mem_host
-        mem_port = int(os.getenv('MEMCACHED_PORT', 0)) or conf_mem_port
+elif CACHE_PROVIDER == 'memcached':
+    try:
+        conf_mem_host, conf_mem_port = CACHES['default']['LOCATION'].split(':')
+    except:
+        conf_mem_host = 'memcached'
+        conf_mem_port = 11211
 
-        CACHES['default'] = {
-            'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-            'LOCATION': f'{mem_host}:{mem_port}'
-        }
-    case _:
-        raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
+    mem_host = os.getenv('MEMCACHED_HOST') or conf_mem_host
+    mem_port = int(os.getenv('MEMCACHED_PORT', 0)) or conf_mem_port
+
+    CACHES['default'] = {
+        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+        'LOCATION': f'{mem_host}:{mem_port}'
+    }
+else:
+    raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
 
 if os.environ.get('ENABLE_SEADOC', ''):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'

@@ -6,6 +6,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  REDIS_HOST: localhost
 
 permissions:
   contents: read
@@ -13,6 +14,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:latest
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 3
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -41,6 +48,10 @@ jobs:
           cd $GITHUB_WORKSPACE
           pip install -r test-requirements.txt
           sudo rm -rf /usr/lib/python3/dist-packages/pytz/
+
+      - name: Set REDIS_HOST environment variable
+        run: |
+          echo "REDIS_HOST=localhost" >> $GITHUB_ENV
 
       - name: run pytest
         run: |
