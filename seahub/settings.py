@@ -1168,6 +1168,75 @@ for module in LOGGING_IGNORE_MODULES:
 # config in env
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
+# For database conf., now Seafile only support MySQL, skip for other engine
+if 'default' in DATABASES and 'mysql' in DATABASES['default'].get('ENGINE', ''):
+    
+    ## For dtable_db
+    _rewrite_db_env_key_map = {
+        'HOST': 'SEAFILE_MYSQL_DB_HOST',
+        'PORT': 'SEAFILE_MYSQL_DB_PORT',
+        'USER': 'SEAFILE_MYSQL_DB_USER',
+        'PASSWORD': 'SEAFILE_MYSQL_DB_PASSWORD',
+        'NAME': 'SEAFILE_MYSQL_DB_SEAHUB_DB_NAME'
+    }
+
+    for db_key, env_key in _rewrite_db_env_key_map.items():
+        if env_value := os.environ.get(env_key):
+            DATABASES['default'][db_key] = env_value
+
+    if DATABASES['default'].get('PORT'):
+        try:
+            int(DATABASES['default']['PORT'])
+        except:
+            raise ValueError(f"Invalid database port: {DATABASES['default']['PORT']}")
+        
+match CACHE_PROVIDER := os.getenv('CACHE_PROVIDER', 'redis'):
+    case 'redis':
+        CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
+        cfg_redis_host = 'redis'
+        cfg_redis_port = 6379
+        cfg_redis_pwd = ''
+        if 'LOCATION' in CACHES['default']:
+            try:
+                cfg_redis_pwd, redis_host_info = CACHES['default']['LOCATION'].split('@', 1)
+                cfg_redis_host, cfg_redis_port = redis_host_info.split(':', 1)
+            except:
+                cfg_redis_pwd = ''
+                cfg_redis_host, cfg_redis_port = CACHES['default']['LOCATION'].split(':', 1)
+            if not cfg_redis_pwd:
+                try:
+                    cfg_redis_pwd = CACHES['default']['OPTIONS']['PASSWORD']
+                except:
+                    pass
+
+        redis_host = os.environ.get('REDIS_HOST') or cfg_redis_host
+        redis_port = os.environ.get('REDIS_PORT') or cfg_redis_port
+        redis_pwd = os.environ.get('REDIS_PASSWORD') or cfg_redis_pwd
+
+        CACHES['default']['LOCATION'] = f'redis://{(redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
+        if redis_pwd:
+            try:
+                del CACHES['default']['OPTIONS']['PASSWORD']
+            except:
+                pass
+
+    case 'memcached':
+        try:
+            conf_mem_host, conf_mem_port = CACHES['default']['LOCATION'].split(':')
+        except:
+            conf_mem_host = 'memcached'
+            conf_mem_port = 11211
+
+        mem_host = os.getenv('MEMCACHED_HOST') or conf_mem_host
+        mem_port = int(os.getenv('MEMCACHED_PORT', 0)) or conf_mem_port
+
+        CACHES['default'] = {
+            'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+            'LOCATION': f'{mem_host}:{mem_port}'
+        }
+    case _:
+        raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
+
 if os.environ.get('ENABLE_SEADOC', ''):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
