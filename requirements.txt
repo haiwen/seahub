@@ -28,3 +28,4 @@ python-ldap==3.4.*
 pypinyin==0.52.*
 dnspython==2.6.*
 pillow-heif==0.18.*
+redis==5.0.*
