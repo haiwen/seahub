@@ -963,6 +963,12 @@ ENABLE_WHITEBOARD = False
 
 ENABLE_EXCALIDRAW = False
 
+######################################
+# Settings for notification server   #
+######################################
+ 
+NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
+
 ############################
 # Settings for Seahub Priv #
 ############################
