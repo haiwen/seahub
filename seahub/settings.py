@@ -538,11 +538,8 @@ central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(CACHE_DIR, 'seahub_cache'),
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000000
-        }
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379',
     },
 }
 
