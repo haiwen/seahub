@@ -191,6 +191,22 @@ class LibContentView extends React.Component {
         }
       }
     }
+    else if (data.type === 'repo-update') {
+      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
+        const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
+        const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
+        this.setState({
+          pathExist: true,
+          userPerm,
+          isDirentListLoading: false,
+          direntList,
+          dirID,
+          path: this.state.path,
+          isSessionExpired: false,
+          currentDirent: null,
+        });
+      });
+    }
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
