@@ -40,7 +40,7 @@ from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url, \
     get_password_strength_level, is_valid_password, is_valid_email, string2list, gen_file_get_url_by_sharelink
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND, PDF
+from seahub.utils.file_types import IMAGE, VIDEO, PDF
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
@@ -983,7 +983,7 @@ class ShareLinkDirents(APIView):
                 dirent_info['file_name'] = dirent.obj_name
 
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
-                if file_type in (IMAGE, XMIND) or \
+                if file_type == IMAGE or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL) or \
                         (file_type == PDF and ENABLE_PDF_THUMBNAIL):
 

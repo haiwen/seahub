@@ -19,7 +19,7 @@ from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, XMIND, PDF
+from seahub.utils.file_types import VIDEO, PDF
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
@@ -31,8 +31,6 @@ except ImportError:
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-XMIND_IMAGE_SIZE = 1024
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
@@ -128,8 +126,6 @@ def generate_thumbnail(request, repo_id, size, path):
         # pdf thumbnails
         return create_pdf_thumbnails(repo, file_id, path, size,
                                      thumbnail_file, file_size)
-    if filetype == XMIND:
-        return extract_xmind_image(repo_id, path, size)
 
     # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
@@ -296,38 +292,6 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     icc_profile = image.info.get('icc_profile')
     image.save(thumbnail_file, save_type, icc_profile=icc_profile)
     return (True, 200)
-
-def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
-
-    # get inner path
-    file_name = os.path.basename(path)
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
-    fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
-            file_id, 'view', '')
-    inner_path = gen_inner_file_get_url(fileserver_token, file_name)
-
-    # extract xmind image
-    xmind_file = urllib.request.urlopen(inner_path)
-    xmind_file_str = BytesIO(xmind_file.read())
-    try:
-        xmind_zip_file = zipfile.ZipFile(xmind_file_str, 'r')
-    except Exception as e:
-        return (False, 500)
-    extracted_xmind_image = xmind_zip_file.read('Thumbnails/thumbnail.png')
-    extracted_xmind_image_str = BytesIO(extracted_xmind_image)
-
-    # save origin xmind image to thumbnail folder
-    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
-    if not os.path.exists(thumbnail_dir):
-        os.makedirs(thumbnail_dir)
-    local_xmind_image = os.path.join(thumbnail_dir, file_id)
-
-    try:
-        ret = _create_thumbnail_common(extracted_xmind_image_str, local_xmind_image, size)
-        return ret
-    except Exception as e:
-        logger.error(e)
-        return (False, 500)
 
 def get_thumbnail_image_path(obj_id, image_size):
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))

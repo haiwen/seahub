@@ -33,8 +33,6 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, \
     ENABLE_SHARE_LINK_REPORT_ABUSE, ENABLE_PDF_THUMBNAIL
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND
-from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.constants import PERMISSION_INVISIBLE

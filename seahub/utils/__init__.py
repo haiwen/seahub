@@ -128,7 +128,6 @@ PREVIEW_FILEEXT = {
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
-    XMIND: ('xmind',),
     SEADOC: ('sdoc',),
     TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),

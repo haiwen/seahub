@@ -20,10 +20,10 @@ from seahub.api2.views import get_dir_file_recursively
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
-        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP, get_file_type_and_ext
+        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND, SEADOC, PDF
+from seahub.utils.file_types import IMAGE, VIDEO, PDF
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -162,7 +162,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 fileExt = os.path.splitext(file_name)[1][1:].lower()
                 file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
-                if file_type in (IMAGE, XMIND, PDF) or \
+                if file_type in (IMAGE, PDF) or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
 
                     # if thumbnail has already been created, return its src.

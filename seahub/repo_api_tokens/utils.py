@@ -10,7 +10,7 @@ from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 from seahub.thumbnail.utils import get_thumbnail_src
-from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, XMIND, VIDEO
+from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -212,7 +212,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 fileExt = os.path.splitext(file_name)[1][1:].lower()
                 file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
-                if file_type in (IMAGE, XMIND) or \
+                if file_type == IMAGE or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
 
                     # if thumbnail has already been created, return its src.

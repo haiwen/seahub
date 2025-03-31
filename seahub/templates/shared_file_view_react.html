@@ -19,7 +19,7 @@
     {% render_bundle 'sharedFileViewMarkdown' 'css' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' 'css' %}
-{% elif filetype == 'Image' or filetype == 'XMind' %}
+{% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'css' %}
 {% elif filetype == 'SVG' %}
     {% render_bundle 'sharedFileViewSVG' 'css' %}
@@ -117,7 +117,7 @@ body {
     {% render_bundle 'sharedFileViewMarkdown' 'js' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' 'js' %}
-{% elif filetype == 'Image' or filetype == 'XMind' %}
+{% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'js' %}
 {% elif filetype == 'SVG' %}
     {% render_bundle 'sharedFileViewSVG' 'js' %}

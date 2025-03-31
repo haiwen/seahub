@@ -11,7 +11,6 @@ const {
   thumbnailSizeForOriginal,
   previousImage, nextImage, rawPath,
   lastModificationTime,
-  xmindImageSrc // for xmind file
 } = window.app.pageOptions;
 
 let previousImageUrl;
@@ -62,9 +61,6 @@ class FileContent extends React.Component {
       thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModificationTime}`;
     }
 
-    // for xmind file
-    const xmindSrc = xmindImageSrc ? `${siteRoot}${xmindImageSrc}` : '';
-
     const { scale, angle } = this.props;
     let style = {};
     if (scale && angle != undefined) {
@@ -84,7 +80,7 @@ class FileContent extends React.Component {
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
         )}
-        <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ style } />
+        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ style } />
       </div>
     );
   }

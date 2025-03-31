@@ -61,7 +61,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC, TLDRAW, EXCALIDRAW)
+                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
@@ -73,8 +73,6 @@ from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
-from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
-        XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, is_seadoc_revision
 from seahub.seadoc.models import SeadocRevision
 
@@ -698,7 +696,7 @@ def view_lib_file(request, repo_id, path):
     if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_new(repo_id, path)
 
-    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
+    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, 'Unknown'):
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
@@ -867,16 +865,6 @@ def view_lib_file(request, repo_id, path):
             return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
         if filetype not in FILE_TYPE_FOR_NEW_FILE_LINK:
             send_file_access_msg(request, repo, path, 'web')
-        return render(request, template, return_dict)
-
-    elif filetype == XMIND:
-        xmind_image_path = get_thumbnail_image_path(file_id, XMIND_IMAGE_SIZE)
-        if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
-            error_msg = _('Unable to view file')
-            return_dict['err'] = error_msg
-        else:
-            return_dict['xmind_image_src'] = quote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
-
         return render(request, template, return_dict)
 
     elif filetype == IMAGE:
@@ -1423,13 +1411,6 @@ def view_shared_file(request, fileshare):
             handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(raw_path, obj_id, fileext, ret_dict)
-        elif filetype == XMIND:
-            xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
-            if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
-                error_msg = _('Unable to view file')
-                ret_dict['err'] = error_msg
-            else:
-                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1688,13 +1669,6 @@ def view_file_via_shared_dir(request, fileshare):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
-        elif filetype == XMIND:
-            xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
-            if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, real_path)[0]:
-                error_msg = _('Unable to view file')
-                ret_dict['err'] = error_msg
-            else:
-                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
     else:
         ret_dict['err'] = err_msg
 
