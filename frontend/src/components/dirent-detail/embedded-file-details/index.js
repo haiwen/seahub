@@ -8,9 +8,12 @@ import { Header, Body } from '../detail';
 import FileDetails from '../dirent-details/file-details';
 import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import { AI, Settings } from '../../../metadata/components/metadata-details';
+import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 
 import './index.css';
+
+const { enableSeafileAI } = window.app.config;
 
 const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
@@ -70,8 +73,8 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>
           {onClose && (
             <>
-              <AI />
-              <Settings />
+              {enableSeafileAI && <AIIcon />}
+              <SettingsIcon />
             </>
           )}
         </Header>
