@@ -1,12 +1,10 @@
 import React, { useMemo, useCallback, useState } from 'react';
-import Icon from '../../../../components/icon';
-import HideColumnPopover from '../../popover/hidden-column-popover';
-import { useMetadataDetails } from '../../../hooks';
-import { useMetadataStatus } from '../../../../hooks';
+import Icon from '../../../components/icon';
+import HideColumnPopover from '../popover/hidden-column-popover';
+import { useMetadataDetails } from '../../hooks';
+import { useMetadataStatus } from '../../../hooks';
 
-import './index.css';
-
-const Settings = () => {
+const SettingsIcon = () => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const { enableMetadata } = useMetadataStatus();
@@ -18,9 +16,7 @@ const Settings = () => {
   }, [isShowSetter]);
   const target = useMemo(() => 'detail-control-settings-btn', []);
 
-  if (!enableMetadata) return null;
-  if (!canModifyDetails) return null;
-  if (!record) return null;
+  if (!enableMetadata || !canModifyDetails || !record) return null;
 
   return (
     <>
@@ -41,7 +37,6 @@ const Settings = () => {
       )}
     </>
   );
-
 };
 
-export default Settings;
+export default SettingsIcon;

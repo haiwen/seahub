@@ -9,8 +9,6 @@ import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import Location from './location';
 import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
-import AI from './ai';
-import Settings from './settings';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 
 import './index.css';
@@ -20,9 +18,7 @@ const MetadataDetails = () => {
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
 
-  if (isLoading) return null;
-  if (!record) return null;
-  if (!record._id) return null;
+  if (isLoading || !record || !record._id) return null;
 
   const fileName = getFileNameFromRecord(record);
   const isImage = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
@@ -72,7 +68,3 @@ const MetadataDetails = () => {
 };
 
 export default MetadataDetails;
-export {
-  AI,
-  Settings,
-};

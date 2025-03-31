@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Icon from '../../../../components/icon';
-import { useMetadataDetails } from '../../../hooks';
-import { useMetadataStatus } from '../../../../hooks';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
-import { getColumnByKey } from '../../../utils/column';
-import { PRIVATE_COLUMN_KEY } from '../constants';
-import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
-import FileTagsDialog from '../../dialog/file-tags-dialog';
-import { checkIsDir } from '../../../utils/row';
+import Icon from '../../../components/icon';
+import { useMetadataDetails } from '../../hooks';
+import { useMetadataStatus } from '../../../hooks';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import { getColumnByKey } from '../../utils/column';
+import { PRIVATE_COLUMN_KEY } from './constants';
+import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
+import FileTagsDialog from '../dialog/file-tags-dialog';
+import { checkIsDir } from '../../utils/row';
 
 const OPERATION = {
   GENERATE_DESCRIPTION: 'generate-description',
@@ -19,7 +19,8 @@ const OPERATION = {
   FILE_DETAIL: 'file-detail',
 };
 
-const AI = () => {
+const AIIcon = () => {
+
   const [isMenuShow, setMenuShow] = useState(false);
   const [isFileTagsDialogShow, setFileTagsDialogShow] = useState(false);
 
@@ -28,9 +29,7 @@ const AI = () => {
   const { onOCR, generateDescription, extractFileDetails } = useMetadataAIOperations();
 
   const options = useMemo(() => {
-    if (!canModifyRecord) return [];
-    if (!record) return [];
-    if (checkIsDir(record)) return [];
+    if (!canModifyRecord || !record || checkIsDir(record)) return [];
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const fileName = getFileNameFromRecord(record);
     const isImage = Utils.imageCheck(fileName);
@@ -135,11 +134,7 @@ const AI = () => {
   }, [columns, generateDescription, onOCR, extractFileDetails, onChange, onLocalRecordChange]);
 
   const renderDropdown = useCallback(() => {
-    if (!enableMetadata) return null;
-    if (!canModifyRecord) return null;
-    if (!record) return null;
-    if (options.length === 0) return null;
-
+    if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
     return (
       <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
         <DropdownToggle
@@ -176,4 +171,4 @@ const AI = () => {
   );
 };
 
-export default AI;
+export default AIIcon;
