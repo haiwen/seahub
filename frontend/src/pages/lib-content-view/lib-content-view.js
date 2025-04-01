@@ -31,6 +31,7 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
+import { eventBus } from '../../components/common/event-bus';
 
 import '../../css/lib-content-view.css';
 
@@ -156,6 +157,7 @@ class LibContentView extends React.Component {
 
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
+    this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.calculatePara(this.props);
   }
 
@@ -268,6 +270,7 @@ class LibContentView extends React.Component {
   componentWillUnmount() {
     window.onpopstate = this.oldonpopstate;
     this.unsubscribeEvent();
+    this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
@@ -2170,6 +2173,17 @@ class LibContentView extends React.Component {
     });
 
     e.preventDefault();
+  };
+
+  openTreePanel = (callback) => {
+    if (this.state.isTreePanelShown) {
+      callback();
+    } else {
+      this.toggleTreePanel();
+      setTimeout(() => {
+        callback();
+      }, 100);
+    }
   };
 
   toggleTreePanel = () => {

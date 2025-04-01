@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
-import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
@@ -23,7 +22,6 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
-import FileTag from './file-tag';
 
 import '../../css/dirent-list-item.css';
 
@@ -95,10 +93,8 @@ class DirentListItem extends React.Component {
       isShowTagTooltip: false,
       isDragTipShow: false,
       isDropTipshow: false,
-      isEditFileTagShow: false,
       isPermissionDialogOpen: false
     };
-    this.tagListTitleID = `tag-list-title-${uuidv4()}`;
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
     this.dragIconRef = null;
@@ -350,9 +346,6 @@ class DirentListItem extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
-      case 'Tags':
-        this.onEditFileTagToggle();
-        break;
       case 'Permission':
         this.onPermissionItem();
         break;
@@ -408,12 +401,6 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); // for document event
     this.props.onItemConvert(this.state.dirent, dstType);
-  };
-
-  onEditFileTagToggle = () => {
-    this.setState({
-      isEditFileTagShow: !this.state.isEditFileTagShow
-    });
   };
 
   onFileTagChanged = () => {
@@ -891,18 +878,6 @@ class DirentListItem extends React.Component {
               )}
             </td>
             <td className="tag-list-title">
-              {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
-                <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
-                  {dirent.file_tags.map((fileTag, index) => {
-                    return (
-                      <FileTag fileTag={fileTag} length={dirent.file_tags.length} key={index} index={index}/>
-                    );
-                  })}
-                </div>
-              )}
-              {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) &&
-                <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
-              }
             </td>
             <td className="operation">{this.renderItemOperation()}</td>
             <td className="file-size">{dirent.size || ''}</td>
@@ -993,32 +968,6 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-        <MediaQuery query="(min-width: 768px)">
-          {this.state.isEditFileTagShow &&
-            <EditFileTagPopover
-              repoID={this.props.repoID}
-              repoTags={this.props.repoTags}
-              fileTagList={dirent.file_tags}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-              target={this.tagListTitleID}
-              isEditFileTagShow={this.state.isEditFileTagShow}
-            />
-          }
-        </MediaQuery>
-        <MediaQuery query="(max-width: 767.8px)">
-          {this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              repoTags={this.props.repoTags}
-              fileTagList={dirent.file_tags}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
-          }
-        </MediaQuery>
         {this.state.isZipDialogOpen &&
           <ModalPortal>
             <ZipDownloadDialog

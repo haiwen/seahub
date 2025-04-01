@@ -1180,21 +1180,6 @@ class Item extends React.Component {
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
           </td>
           <td className="tag-list-title">
-            {(item.file_tags && item.file_tags.length > 0) && (
-              <Fragment>
-                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
-                  {item.file_tags.map((fileTag, index) => {
-                    let length = item.file_tags.length;
-                    return (
-                      <span className="file-tag" key={fileTag.file_tag_id} style={{ zIndex: length - index, backgroundColor: fileTag.tag_color }}></span>
-                    );
-                  })}
-                </div>
-                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
-                  {tagTitle}
-                </UncontrolledTooltip>
-              </Fragment>
-            )}
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>

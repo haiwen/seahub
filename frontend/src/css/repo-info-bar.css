@@ -3,11 +3,14 @@
   margin: 10px 16px 0;
   border: 1px solid #e6e6dd;
   border-radius: 5px;
-  /* background: #f8f8f8; */
 }
 
 .used-tag-list {
   list-style: none;
+}
+
+.used-tag-list .used-tag-item:first-child {
+  margin-left: 0;
 }
 
 .used-tag-item {
@@ -59,4 +62,17 @@
 
 .readme-dialog .modal-body {
   padding: 0 30px;
+}
+
+.repo-info-bar .repo-info-bar-migrate .btn-link {
+  font-size: 14px;
+  font-weight: normal;
+  padding: 0px 8px;
+  border: 0;
+  color: #EC8000;
+}
+
+.repo-info-bar .repo-info-bar-migrate .btn-link:active {
+  color: #EC8000;
+  background-color: #fff;
 }

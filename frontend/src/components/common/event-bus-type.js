@@ -10,4 +10,8 @@ export const EVENT_BUS_TYPE = {
 
   RESTORE_IMAGE: 'restore_image',
   OPEN_MARKDOWN: 'open_markdown',
+
+  // migrate tags
+  OPEN_TREE_PANEL: 'open_tree_panel',
+  OPEN_LIBRARY_SETTINGS_TAGS: 'open_library_settings_tags',
 };

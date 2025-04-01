@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import MD5 from 'MD5';
-import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
@@ -297,13 +295,7 @@ class DirentGridItem extends React.Component {
 
   render() {
     let { dirent, isGridDropTipShow } = this.state;
-    let { is_freezed, is_locked, lock_owner_name, file_tags, isSelected } = dirent;
-    let toolTipID = '';
-    let tagTitle = '';
-    if (file_tags && file_tags.length > 0) {
-      toolTipID = MD5(dirent.name).slice(0, 7);
-      tagTitle = file_tags.map(item => item.name).join(' ');
-    }
+    let { is_freezed, is_locked, lock_owner_name, isSelected } = dirent;
     const showName = this.getRenderedText(dirent);
     return (
       <>
@@ -341,21 +333,6 @@ class DirentGridItem extends React.Component {
             }
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
-            {(dirent.type !== 'dir' && file_tags && file_tags.length > 0) && (
-              <>
-                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
-                  {file_tags.map((fileTag, index) => {
-                    let length = file_tags.length;
-                    return (
-                      <span className="file-tag" key={fileTag.id} style={{ zIndex: length - index, backgroundColor: fileTag.color }}></span>
-                    );
-                  })}
-                </div>
-                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
-                  {tagTitle}
-                </UncontrolledTooltip>
-              </>
-            )}
             {(!dirent.isDir() && !this.canPreview) ?
               <a
                 className="sf-link grid-file-name-link"
