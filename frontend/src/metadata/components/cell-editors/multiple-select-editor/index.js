@@ -11,8 +11,6 @@ import { getColumnOptions, generateNewOption } from '../../../utils/column';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 
-import './index.css';
-
 const MultipleSelectEditor = forwardRef(({
   height,
   saveImmediately,
