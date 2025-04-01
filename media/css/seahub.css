@@ -2195,6 +2195,7 @@ a.sf-popover-item {
   margin-bottom: 5px;
 }
 
+/* policy service link */
 .login-panel-bottom-divider {
   border: 0;
   height: 1px;
@@ -2207,15 +2208,25 @@ a.sf-popover-item {
   font-size: 12px;
   line-height: 1;
   margin-top: 12px;
+  display: flex;
+  justify-content: center;
 }
 
 .login-panel-bottom-privacy-policy a {
   color: #EC8000;
   font-size: 12px;
+  font-weight: normal;
+  padding: 0 0.5rem;
 }
 
-.login-panel-bottom-privacy-policy .bottom-item {
+.login-panel-bottom-privacy-policy .login-panel-bottom-seperator {
   border-right: 1px solid #EC8000;
+}
+
+#registration-form .login-panel-bottom-divider,
+#org-register .login-panel-bottom-divider,
+#choose-register .login-panel-bottom-divider {
+  margin: 20px -60px 0px -60px;
 }
 
 /*myhome*/
@@ -2895,25 +2906,6 @@ a.sf-popover-item {
 #tc-content {
   padding-top: 0;
   padding-left: 0;
-}
-
-/* policy, terms link */
-.privacy-policy-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 50px;
-}
-
-.privacy-policy-link-text {
-  color: #666666;
-  font-size: 12px;
-}
-
-.privacy-policy-link-split {
-  width: 1px;
-  background: #6e7687;
-  height: 12px;
 }
 
 #email-audit-form .email-input {
