@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="login-panel-outer-container vh">
+<div class="login-panel-outer-container vh" id="org-register">
     <div class="login-panel">
         <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
         {% if request.user.is_authenticated %}
@@ -54,10 +54,12 @@
         <div class="login-panel-bottom-container">
             {# language will be shown here #}
         </div>
+        <div>
+            {% include "snippets/policy_service_link.html" %}
+        </div>
         {% endif %}
     </div>
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}

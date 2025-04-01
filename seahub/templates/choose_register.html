@@ -3,14 +3,14 @@
 {% block sub_title %}{% trans "Signup" %} - {% endblock %}
 
 {% block main_content %}
-<div class="login-panel-outer-container vh">
+<div class="login-panel-outer-container vh" id="choose-register">
     <div class="login-panel">
         <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
         <button id="personal" class="submit btn btn-primary btn-block">{% trans "Create a personal account" %}</button>
         <button id="org" class="submit btn btn-primary btn-block">{% trans "Create an organization account" %}</button>
+        {% include "snippets/policy_service_link.html" %}
     </div>
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}

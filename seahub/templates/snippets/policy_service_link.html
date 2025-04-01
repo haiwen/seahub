@@ -1,14 +1,15 @@
 {% load i18n %}
 {% if privacy_policy_link or terms_of_service_link %}
-    <div class="privacy-policy-link">
+    <hr class="login-panel-bottom-divider"/>
+    <div class="login-panel-bottom-privacy-policy">
         {% if privacy_policy_link and terms_of_service_link %}
-            <a href="{{ privacy_policy_link }}" class="privacy-policy-link-text px-3">{% trans "Privacy Policy" %}</a>
-            <span class="privacy-policy-link-split  "></span>
-            <a href="{{ terms_of_service_link }}" class="privacy-policy-link-text px-3">{% trans "Terms of Service" %}</a>
+            <a href="{{ privacy_policy_link }}">{% trans "Privacy Policy" %}</a>
+            <span class="login-panel-bottom-seperator"></span>
+            <a href="{{ terms_of_service_link }}">{% trans "Terms of Service" %}</a>
         {% elif privacy_policy_link %}
-            <a href="{{ privacy_policy_link }}" class="privacy-policy-link-text px-3">{% trans "Privacy Policy" %}</a>
+            <a href="{{ privacy_policy_link }}">{% trans "Privacy Policy" %}</a>
         {% elif terms_of_service_link %}
-            <a href="{{ terms_of_service_link }}" class="privacy-policy-link-text px-3">{% trans "Terms of Service" %}</a>
+            <a href="{{ terms_of_service_link }}">{% trans "Terms of Service" %}</a>
         {% endif %}
     </div>
 {% endif %}
