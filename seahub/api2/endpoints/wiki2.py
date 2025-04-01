@@ -871,8 +871,8 @@ class Wiki2PageView(APIView):
 
         wiki_config = get_wiki_config(repo_id, username)
         pages = wiki_config.get('pages', [])
+        page_exists = False
         for page in pages:
-            page_exists = False
             if page['id'] == page_id:
                 page['locked'] = locked
                 path = page['path']
