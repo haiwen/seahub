@@ -666,7 +666,11 @@ class Search(APIView):
                 repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
 
             searched_repos, repos_map = format_repos(repos)
-            results, total = ai_search_files(keyword, searched_repos, per_page, suffixes, search_path=search_path, obj_type=obj_type)
+
+            size_range = [size_from, size_to]
+            time_range = [time_from, time_to]
+            results, total = ai_search_files(keyword, searched_repos, per_page, suffixes,
+                                             search_path=search_path, obj_type=obj_type, time_range=time_range, size_range=size_range)
 
             for f in results:
                 repo_id = f['repo_id']

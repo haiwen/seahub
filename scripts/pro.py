@@ -716,12 +716,12 @@ def update_seasearch_index():
 def update_file_seasearch_index():
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '-m', 'seafevents.seasearch.script.repo_file_index_local',
         '--loglevel', 'debug',
         'update',
     ]
 
-    Utils.info('\nUpdating seasearch filename index, this may take a while...\n')
+    Utils.info('\nUpdating seasearch file index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
 
@@ -755,12 +755,12 @@ def delete_seasearch_index():
 def delete_file_seasearch_index():
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '-m', 'seafevents.seasearch.script.repo_file_index_local',
         '--loglevel', 'debug',
         'clear',
     ]
 
-    Utils.info('\nDelete seasearch filename index, this may take a while...\n')
+    Utils.info('\nDelete seasearch file index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
 
