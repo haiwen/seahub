@@ -2,27 +2,16 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import NavItemIcon from '../common/nav-item-icon';
 import CustomIcon from '../custom-icon';
-import IconButton from '../../../components/icon-button';
-import { gettext } from '../../../utils/constants';
+import { gettext, mediaUrl } from '../../../utils/constants';
 import { getPaths } from '../utils/index';
 
 import './index.css';
 
-function WikiTopNav({ config, currentPageId, setCurrentPage, toggleFreezeStatus, currentPageLocked }) {
+function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }) {
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
-  const { permission } = window.wiki.config;
 
-  let lockUnlockText; let lockUnlockIcon;
-  if (permission === 'rw') {
-    if (!currentPageLocked) {
-      lockUnlockText = gettext('Unlock');
-      lockUnlockIcon = 'unlock';
-    } else {
-      lockUnlockText = gettext('lock');
-      lockUnlockIcon = 'lock';
-    }
-  }
+  const lockedImageUrl = `${mediaUrl}img/file-freezed-32.svg`;
   return (
     <div className="wiki2-top-nav d-flex align-items-center">
       {paths.map((item, index) => {
@@ -40,14 +29,7 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, toggleFreezeStatus,
 
         );
       })}
-      {paths.length > 0 && (
-        <IconButton
-          id="lock-unlock-file"
-          icon={lockUnlockIcon}
-          text={lockUnlockText}
-          onClick={toggleFreezeStatus}
-        />
-      )}
+      {paths.length > 0 && currentPageLocked && <img className="locked" src={lockedImageUrl} alt={gettext('freezed')} title={gettext('Page is frozen')}/>}
     </div>
   );
 }
@@ -56,7 +38,7 @@ WikiTopNav.propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
   setCurrentPage: PropTypes.func.isRequired,
-  toggleLockFile: PropTypes.func,
+  currentPageLocked: PropTypes.bool,
 };
 
 export default WikiTopNav;

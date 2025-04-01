@@ -156,3 +156,10 @@ body {
 .wiki2-file-history-button .freeze-document-switch  .custom-switch-indicator {
   margin-left: 60px;
 }
+
+.wiki2-top-nav .locked {
+  width: 1rem;
+  height: 1rem;
+  top: 60%;
+  left: 50%;
+}

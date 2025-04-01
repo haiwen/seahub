@@ -11,7 +11,6 @@ import DraggedPageItem from './dragged-page-item';
 import CustomIcon from '../../custom-icon';
 import { eventBus } from '../../../../components/common/event-bus';
 import { INSERT_POSITION } from '../constants';
-import IconButton from '../../../../components/icon-button';
 
 class PageItem extends Component {
 
@@ -239,13 +238,6 @@ class PageItem extends Component {
                     </div>
                   }
                   <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
-                  {page.locked &&
-                  <IconButton
-                    id="lock-unlock-file"
-                    icon={'lock'}
-                    text={'lock'}
-                  />
-                  }
                   {isShowNameEditor && (
                     <NameEditPopover
                       oldName={pageName}
