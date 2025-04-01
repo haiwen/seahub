@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SeahubModalCloseIcon from '../seahub-modal-close';
 
 import './index.css';
 
@@ -48,9 +49,9 @@ class NotificationPopover extends React.Component {
         placement="bottom"
       >
         <div className="notification-container" ref={ref => this.notificationContainerRef = ref}>
-          <div className="notification-header">
+          <div className="notification-header modal">
             {headerText}
-            <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.props.onNotificationListToggle}></span>
+            <SeahubModalCloseIcon toggle={this.props.onNotificationListToggle} />
           </div>
           <div className="notification-body">
             <div className="mark-notifications">
