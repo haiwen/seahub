@@ -13,7 +13,7 @@ const propTypes = {
   onSelect: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
-  searchUsersFunc: PropTypes.func.isRequired,
+  searchUsersFunc: PropTypes.func,
   searchGroupsFunc: PropTypes.func
 };
 
@@ -66,29 +66,39 @@ class LogUserSelector extends Component {
     this.setState({
       isLoading: true
     });
-
-    this.props.searchUsersFunc(value).then((res) => {
-      const users = res.data.user_list || res.data.users || [];
-      this.setState({
-        searchResults: users,
-        isLoading: false
-      }, () => {
-        if (this.props.searchGroupsFunc) {
-          this.props.searchGroupsFunc(value).then((res) => {
-            const groups = res.data.group_list || res.data.groups || [];
-            this.setState({
-              searchResults: [...users, ...groups]
+    if (this.props.searchUsersFunc) {
+      this.props.searchUsersFunc(value).then((res) => {
+        const users = res.data.user_list || res.data.users || [];
+        this.setState({
+          searchResults: users,
+          isLoading: false
+        }, () => {
+          if (this.props.searchGroupsFunc) {
+            this.props.searchGroupsFunc(value).then((res) => {
+              const groups = res.data.group_list || res.data.groups || [];
+              this.setState({
+                searchResults: [...users, ...groups]
+              });
             });
-          });
-        }
+          }
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false
+        });
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
-    }).catch((error) => {
-      this.setState({
-        isLoading: false
+    }
+    if (this.props.searchGroupsFunc) {
+      this.props.searchGroupsFunc(value).then((res) => {
+        const groups = res.data.group_list || res.data.groups || [];
+        this.setState({
+          searchResults: groups,
+          isLoading: false
+        });
       });
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    }
   };
 
   toggleSelectItem = (e, item) => {

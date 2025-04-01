@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
+import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
 
@@ -154,6 +155,11 @@ class GroupMemberAuditLogs extends Component {
       perPage: 100,
       currentPage: 1,
       hasNextPage: false,
+      availableUsers: [],
+      selectedUsers: [],
+      selectedOperators: [],
+      selectedGroups: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
@@ -170,8 +176,15 @@ class GroupMemberAuditLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage } = this.state;
-    seafileAPI.sysAdminListGroupInviteLogs(page, perPage).then((res) => {
+    let { perPage, selectedUsers, selectedOperators, selectedGroups } = this.state;
+
+    const emails = {
+      user_emails: selectedUsers.map(user => user.email),
+      operator_emails: selectedOperators.map(user => user.email),
+      group_ids: selectedGroups.map(group => group.id)
+    };
+
+    systemAdminAPI.sysAdminListGroupInviteLogs(page, perPage, emails).then((res) => {
       this.setState({
         logList: res.data.group_invite_log_list,
         loading: false,
@@ -186,6 +199,102 @@ class GroupMemberAuditLogs extends Component {
     });
   };
 
+  handleUserFilter = (user, shouldFetchData = true) => {
+    const { selectedUsers } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedUsers;
+    } else {
+      const isSelected = selectedUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleOperatorFilter = (user, shouldFetchData = true) => {
+    const { selectedOperators } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedOperators;
+    } else {
+      const isSelected = selectedOperators.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedOperators.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedOperators, user];
+      }
+    }
+
+    this.setState({
+      selectedOperators: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleGroupFilter = (group, shouldFetchData = true) => {
+    const { selectedGroups } = this.state;
+    let newSelectedGroups;
+
+    if (group === null) {
+      newSelectedGroups = selectedGroups;
+    } else {
+      const isSelected = selectedGroups.find(item => item.id === group.id);
+      if (isSelected) {
+        newSelectedGroups = selectedGroups.filter(item => item.id !== group.id);
+      } else {
+        newSelectedGroups = [...selectedGroups, group];
+      }
+    }
+
+    this.setState({
+      selectedGroups: newSelectedGroups,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchGroups = (value) => {
+    return systemAdminAPI.sysAdminSearchGroups(value);
+  };
+
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
@@ -193,7 +302,12 @@ class GroupMemberAuditLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage } = this.state;
+    let {
+      logList, currentPage, perPage, hasNextPage,
+      availableUsers, selectedUsers, selectedOperators, selectedGroups,
+      openSelector
+    } = this.state;
+
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -201,16 +315,47 @@ class GroupMemberAuditLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="groupMember" />
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
+              <Fragment>
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    componentName="Member"
+                    items={availableUsers}
+                    selectedItems={selectedUsers}
+                    onSelect={this.handleUserFilter}
+                    isOpen={openSelector === 'user'}
+                    onToggle={() => this.handleSelectorToggle('user')}
+                    searchUsersFunc={this.searchUsers}
+                  />
+                  <LogUserSelector
+                    componentName="Group"
+                    items={availableUsers}
+                    selectedItems={selectedGroups}
+                    onSelect={this.handleGroupFilter}
+                    isOpen={openSelector === 'group'}
+                    onToggle={() => this.handleSelectorToggle('group')}
+                    searchGroupsFunc={this.searchGroups}
+                  />
+                  <LogUserSelector
+                    componentName="Operator"
+                    items={availableUsers}
+                    selectedItems={selectedOperators}
+                    onSelect={this.handleOperatorFilter}
+                    isOpen={openSelector === 'operator'}
+                    onToggle={() => this.handleSelectorToggle('operator')}
+                    searchUsersFunc={this.searchUsers}
+                  />
+                </div>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
+                />
+              </Fragment>
             </div>
           </div>
         </div>

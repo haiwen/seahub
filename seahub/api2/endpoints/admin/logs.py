@@ -660,7 +660,30 @@ class AdminLogGroupMemberAuditLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        events = GroupMemberAudit.objects.all().order_by('-timestamp')[start:start+limit+1]
+        user_emails = request.GET.get('user_emails')
+        user_emails = user_emails.split(',') if user_emails else []
+        for user_selected in user_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        operator_emails = request.GET.get('operator_emails')
+        operator_emails = operator_emails.split(',') if operator_emails else []
+        for user_selected in operator_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        group_ids = request.GET.get('group_ids')
+        group_ids = group_ids.split(',') if group_ids else []
+        
+        queryset = GroupMemberAudit.objects.all()
+        if user_emails:
+            queryset = queryset.by_users(user_emails)
+        if operator_emails:
+            queryset = queryset.by_operators(operator_emails)
+        if group_ids:
+            queryset = queryset.by_group_ids(group_ids)
+        
+        events = queryset.order_by('-timestamp')[start:start+limit+1]
         if len(events) > limit:
             has_next_page = True
             events = events[:limit]

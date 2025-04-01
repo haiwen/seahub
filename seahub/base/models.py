@@ -497,6 +497,16 @@ class RepoTransfer(models.Model):
 GROUP_MEMBER_ADD = 'group_member_add'
 GROUP_MEMBER_DELETE = 'group_member_delete'
 
+class GroupMemberAuditQuerySet(models.QuerySet):
+    def by_users(self, users):
+        return self.filter(user__in=users)
+    
+    def by_operators(self, operators):
+        return self.filter(operator__in=operators)
+    
+    def by_group_ids(self, group_ids):
+        return self.filter(group_id__in=group_ids)
+    
 class GroupMemberAudit(models.Model):
     org_id = models.IntegerField(db_index=True)
     group_id = models.IntegerField(db_index=True)
@@ -504,6 +514,7 @@ class GroupMemberAudit(models.Model):
     operator = models.CharField(max_length=255, db_index=True)
     operation = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = GroupMemberAuditQuerySet.as_manager()
 
     class Meta:
         db_table = 'group_member_audit'

@@ -770,6 +770,24 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
+  sysAdminListGroupInviteLogs(page, perPage, emails) {
+    const url = this.server + '/api/v2.1/admin/logs/group-member-audit/';
+    let params = {
+      page: page,
+      per_page: perPage,
+    };
+    if (emails.user_emails && emails.user_emails.length) {
+      params.user_emails = emails.user_emails.join(',');
+    }
+    if (emails.operator_emails && emails.operator_emails.length) {
+      params.operator_emails = emails.operator_emails.join(',');
+    }
+    if (emails.group_ids && emails.group_ids.length) {
+      params.group_ids = emails.group_ids.join(',');
+    }
+    return this.req.get(url, { params: params });
+  }
+
   sysAdminExportLogsExcel(start, end, logType) {
     const url = this.server + '/api/v2.1/admin/logs/export-excel/';
     const params = {
