@@ -752,14 +752,17 @@ class SystemAdminAPI {
     if (emails.from_emails && emails.from_emails.length) {
       params.from_emails = emails.from_emails.join(',');
     }
+    if (emails.from_groups && emails.from_groups.length) {
+      params.from_groups = emails.from_groups.join(',');
+    }
     if (emails.to_emails && emails.to_emails.length) {
       params.to_emails = emails.to_emails.join(',');
     }
-    if (emails.operator_emails && emails.operator_emails.length) {
-      params.operator_emails = emails.operator_emails.join(',');
-    }
     if (emails.to_groups && emails.to_groups.length) {
       params.to_groups = emails.to_groups.join(',');
+    }
+    if (emails.operator_emails && emails.operator_emails.length) {
+      params.operator_emails = emails.operator_emails.join(',');
     }
     if (repos && repos.length) {
       params.repos = repos.map(repo => repo.id).join(',');

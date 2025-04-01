@@ -493,6 +493,10 @@ class AdminLogsFileTransferLogs(APIView):
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        from_groups = request.GET.get('from_groups')
+        from_groups = from_groups.split(',') if from_groups else []
+        from_groups = [group_id + '@seafile_group' for group_id in from_groups]
         to_groups = request.GET.get('to_groups')
         to_groups = to_groups.split(',') if to_groups else []
         to_groups = [group_id + '@seafile_group' for group_id in to_groups]
@@ -505,8 +509,8 @@ class AdminLogsFileTransferLogs(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 
         queryset = RepoTransfer.objects.all()
-        if from_emails:
-            queryset = queryset.by_from_user(from_emails)
+        if from_emails or from_groups:
+            queryset = queryset.by_from_user(from_emails + from_groups)
         if to_emails or to_groups:
             queryset = queryset.by_to_user(to_emails + to_groups)
         if operator_emails:

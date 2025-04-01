@@ -198,7 +198,8 @@ class FIleTransferLogs extends Component {
     } = this.state;
 
     const emails = {
-      from_emails: selectedFromUsers.map(user => user.email),
+      from_emails: selectedFromUsers.filter(item => item.email).map(user => user.email),
+      from_groups: selectedFromUsers.filter(item => !item.email).map(group => group.id),
       to_emails: selectedToUsers.map(user => user.email),
       to_groups: selectedToGroups.map(group => group.to_group_id || group.id),
       operator_emails: selectedOperators.map(user => user.email)
@@ -231,18 +232,34 @@ class FIleTransferLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
-  handleFromUserFilter = (user, shouldFetchData = true) => {
+  handleFromUserFilter = (item, shouldFetchData = true) => {
     const { selectedFromUsers } = this.state;
     let newSelectedUsers;
 
-    if (user === null) {
+    if (item === null) {
       newSelectedUsers = selectedFromUsers;
     } else {
-      const isSelected = selectedFromUsers.find(item => item.email === user.email);
-      if (isSelected) {
-        newSelectedUsers = selectedFromUsers.filter(item => item.email !== user.email);
+      if (item.email) {
+        const isSelected = selectedFromUsers.find(user => user.email === item.email);
+        if (isSelected) {
+          newSelectedUsers = selectedFromUsers.filter(user => user.email !== item.email);
+        } else {
+          newSelectedUsers = [...selectedFromUsers, item];
+        }
       } else {
-        newSelectedUsers = [...selectedFromUsers, user];
+        const groupId = item.id;
+        const isSelected = selectedFromUsers.find(group => group.id === groupId);
+        if (isSelected) {
+          newSelectedUsers = selectedFromUsers.filter(group => group.id !== groupId);
+        } else {
+          const groupItem = {
+            id: groupId,
+            name: item.name,
+            from_group_id: groupId,
+            from_group_name: item.name
+          };
+          newSelectedUsers = [...selectedFromUsers, groupItem];
+        }
       }
     }
 
@@ -422,6 +439,7 @@ class FIleTransferLogs extends Component {
                     isOpen={openSelector === 'fromUser'}
                     onToggle={() => this.handleSelectorToggle('fromUser')}
                     searchUsersFunc={this.searchUsers}
+                    searchGroupsFunc={this.searchGroups}
                   />
                   <LogUserSelector
                     componentName="Transfer To"
