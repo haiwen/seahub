@@ -81,6 +81,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
     if (!newValue) {
       cancelMetadataURL(true);
       setEnableTags(false);
+      setEnableOCR(false);
+      setEnableFaceRecognition(false);
     }
     setDetailsSettings({});
     setIsBeingBuilt(newValue);
