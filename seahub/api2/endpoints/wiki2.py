@@ -864,7 +864,7 @@ class Wiki2PageView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        locked = request.data.get('locked', None)
+        locked = request.data.get('is_lock_page', None)
         if locked is None:
             error_msg = 'locked is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -872,10 +872,16 @@ class Wiki2PageView(APIView):
         wiki_config = get_wiki_config(repo_id, username)
         pages = wiki_config.get('pages', [])
         for page in pages:
+            page_exists = False
             if page['id'] == page_id:
                 page['locked'] = locked
                 path = page['path']
+                page_exists = True
                 break
+        if not page_exists:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         wiki_config['pages'] = pages
         wiki_config = json.dumps(wiki_config)
         save_wiki_config(wiki, username, wiki_config)

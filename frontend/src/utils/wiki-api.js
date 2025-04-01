@@ -224,10 +224,10 @@ class WikiAPI {
     return this.req.get(url);
   }
 
-  updateWiki2PageLocked(wikiId, pageId, locked) {
+  updateWiki2PageLock(wikiId, pageId, locked) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/';
     let params = {
-      locked: locked
+      is_lock_page: locked
     };
     return this.req.put(url, params);
   }

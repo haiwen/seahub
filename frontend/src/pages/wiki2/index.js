@@ -155,8 +155,8 @@ class Wiki extends Component {
     });
   }, 1000);
 
-  updatePageLockedToServer = (pageId, locked) => {
-    wikiAPI.updateWiki2PageLocked(wikiId, pageId, locked).then(res => {
+  updatePageLock = (pageId, locked) => {
+    wikiAPI.updateWiki2PageLock(wikiId, pageId, locked).then(res => {
       this.setState(prevState => {
         const updatedPages = prevState.config.pages.map(page => {
           if (page.id === pageId) {
@@ -441,7 +441,7 @@ class Wiki extends Component {
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
           currentPageLocked={this.state.currentPageLocked}
-          updatePageLockedToServer={this.updatePageLockedToServer}
+          updatePageLock={this.updatePageLock}
           setCurrentPage={this.setCurrentPage}
           isUpdateBySide={this.state.isUpdateBySide}
           style={mainPanelStyle}

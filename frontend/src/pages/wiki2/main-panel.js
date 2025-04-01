@@ -26,7 +26,7 @@ const propTypes = {
   currentPageId: PropTypes.string,
   isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
-  updatePageLockedToServer: PropTypes.func,
+  updatePageLock: PropTypes.func,
   currentPageLocked: PropTypes.bool,
   onAddWikiPage: PropTypes.func,
   style: PropTypes.object.isRequired,
@@ -109,7 +109,7 @@ class MainPanel extends Component {
   };
 
   toggleFreezeStatus = () => {
-    this.props.updatePageLockedToServer(this.state.currentPageConfig.id, !this.props.currentPageLocked);
+    this.props.updatePageLock(this.state.currentPageConfig.id, !this.props.currentPageLocked);
   };
 
   render() {
