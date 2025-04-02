@@ -33,6 +33,7 @@ import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-to
 import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
 import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
+
 import '../../css/lib-content-view.css';
 
 dayjs.extend(relativeTime);
@@ -190,8 +191,7 @@ class LibContentView extends React.Component {
           this.updateDirent(dirent, 'lock_owner_name', '');
         }
       }
-    }
-    else if (data.type === 'repo-update') {
+    } else if (data.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
@@ -454,7 +454,6 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
-
     // list used FileTags
     this.updateUsedRepoTags();
 

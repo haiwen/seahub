@@ -4,7 +4,6 @@ import { notificationServerUrl } from './constants';
 
 class WebSocketClient {
   constructor(onMessageCallback, repoId) {
-
     this.url = notificationServerUrl; // WebSocket address;
     this.repoId = repoId;
     this.socket = null;
