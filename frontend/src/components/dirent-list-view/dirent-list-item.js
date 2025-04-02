@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import MediaQuery from 'react-responsive';
 import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
@@ -16,8 +15,6 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';

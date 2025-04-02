@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import MD5 from 'MD5';
 import { createRoot } from 'react-dom/client';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
@@ -1113,14 +1112,6 @@ class Item extends React.Component {
   render() {
     const { item, isDesktop, mode } = this.props;
     const { isIconShown } = this.state;
-
-    let toolTipID = '';
-    let tagTitle = '';
-    if (item.file_tags && item.file_tags.length > 0) {
-      toolTipID = MD5(item.file_name).slice(0, 7);
-      tagTitle = item.file_tags.map(item => item.tag_name).join(' ');
-    }
-
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
