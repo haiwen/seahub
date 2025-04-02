@@ -477,67 +477,98 @@ class SystemUserStorageExcelView(APIView):
         return response
 
 
+def parse_prometheus_metrics(metrics_raw):
+    """
+    Parse prometheus metrics and format metric names
+    """
+    formatted_metrics_dict = {}
+    
+    def ensure_metric_exists(raw_name):
+        """
+        Ensure metric entry exists in formatted metrics dict
+        """
+        formatted_name = '_'.join(raw_name.split('_')[1:])
+        if formatted_name not in formatted_metrics_dict:
+            formatted_metrics_dict[formatted_name] = {
+                'name': formatted_name,
+                'help': '',
+                'type': '',
+                'data_points': [],
+                'original_name': raw_name
+            }
+        return formatted_name
+    
+    def parse_labels(line):
+        """
+        Parse labels from metric line
+        """
+        labels = {}
+        if '{' in line and '}' in line:
+            labels_str = line[line.index('{')+1:line.index('}')]
+            for label in labels_str.split(','):
+                key, value = [part.strip() for part in label.split('=', 1)]
+                labels[key] = value.strip('"')
+        return labels
+    
+    def parse_metric_line(line):
+        """
+        Parse a single metric line
+        """
+        if '{' in line:
+            name_part = line.split('{')[0]
+            value_part = line.split('}')[1].strip()
+        else:
+            name_part, value_part = line.split(' ', 1)
+        
+        return (
+            name_part.strip(),
+            parse_labels(line),
+            float(value_part)
+        )
+
+    for line in metrics_raw.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('# HELP'):
+            parts = line.split(' ', 3)
+            if len(parts) > 3:
+                metric_name, help_text = parts[2], parts[3]
+                formatted_name = ensure_metric_exists(metric_name)
+                formatted_metrics_dict[formatted_name]['help'] = help_text
+            
+        elif line.startswith('# TYPE'):
+            parts = line.split(' ')
+            if len(parts) > 3:
+                metric_name, metric_type = parts[2], parts[3]
+                formatted_name = ensure_metric_exists(metric_name)
+                formatted_metrics_dict[formatted_name]['type'] = metric_type
+            
+        elif not line.startswith('#'):
+            # handle metric data
+            parsed_data = parse_metric_line(line)
+            if parsed_data:
+                metric_name, labels, value = parsed_data
+                formatted_name = ensure_metric_exists(metric_name)
+                formatted_metrics_dict[formatted_name]['data_points'].append({
+                    'labels': labels,
+                    'value': value
+                })
+    # check data
+    result = []
+    for metric in formatted_metrics_dict.values():
+        if metric['name'] and metric['type']:
+            result.append(metric)
+    
+    return result
+
 class SystemMetricsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
-    def _parse_prometheus_metrics(self, metrics_raw):
-        """Parse prometheus metrics"""
-        metrics_dict = {}
-        
-        for line in metrics_raw.split('\n'):
-            line = line.strip()
-            if not line:
-                continue
-                
-            if line.startswith('# HELP'):
-                metric_name = line.split(' ')[2]
-                help_text = line.split(' ', 3)[3] if len(line.split(' ', 3)) > 3 else ''
-                if metric_name not in metrics_dict:
-                    metrics_dict[metric_name] = {
-                        'name': metric_name,
-                        'help': help_text,
-                        'type': '',
-                        'data_points': []
-                    }
-            elif line.startswith('# TYPE'):
-                metric_name = line.split(' ')[2]
-                metric_type = line.split(' ')[3]
-                if metric_name not in metrics_dict:
-                    metrics_dict[metric_name] = {
-                        'name': metric_name,
-                        'help': '',
-                        'type': '',
-                        'data_points': []
-                    }
-                metrics_dict[metric_name]['type'] = metric_type
-            elif not line.startswith('#'):
-                metric_name = line.split('{')[0]
-                if metric_name not in metrics_dict:
-                    metrics_dict[metric_name] = {
-                        'name': metric_name,
-                        'help': '',
-                        'type': '',
-                        'data_points': []
-                    }
-                
-                labels = {}
-                if '{' in line:
-                    labels_str = line[line.index('{')+1:line.index('}')]
-                    for label in labels_str.split(','):
-                        key, value = label.split('=')
-                        labels[key] = value.strip('"')
-                
-                value = float(line.split('}')[1].strip())
-                
-                metrics_dict[metric_name]['data_points'].append({
-                    'labels': labels,
-                    'value': value
-                })
-        
-        return list(metrics_dict.values())
-
+    
     def get(self, request):
         if not request.user.admin_permissions.can_view_statistic():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -545,12 +576,10 @@ class SystemMetricsView(APIView):
         try:
             res = get_seafevents_metrics()
             metrics_raw = res.content.decode('utf-8')
-            metrics_data = self._parse_prometheus_metrics(metrics_raw)
+            metrics_data = parse_prometheus_metrics(metrics_raw)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({
-                'metrics': metrics_data,
-            })
+        return Response({ 'metrics': metrics_data })
