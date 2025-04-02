@@ -12,11 +12,16 @@ class MetricCard extends Component {
       <div className="metric-card">
         <div className="card mb-4">
           <div className="card-header">
-            <h5 className="mb-0">
-              {metric.name}
-              <small className="text-muted ml-2">{metric.type}</small>
-            </h5>
-            {metric.help && <p className="text-muted mb-0">{metric.help}</p>}
+            <div className="metric-title-row">
+              <span className="metric-name">{metric.name}</span>
+              <span className="metric-type">{metric.type}</span>
+              {metric.help && (
+                <span className="metric-help">
+                  <span className="help-label">help:</span>
+                  {metric.help}
+                </span>
+              )}
+            </div>
           </div>
           <div className="card-body">
             <table className="table table-hover mb-0">
@@ -103,24 +108,61 @@ class StatisticMetrics extends Component {
   }
 }
 
-// 添加样式
 const style = `
   <style>
-    .metrics-container {
-      padding: 1rem;
-    }
-    
     .metric-card .card-header {
       background-color: #f8f9fa;
+      padding: 15px 20px;
+    }
+    
+    .metric-card .metric-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .metric-card .metric-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .metric-card .metric-type {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 13px;
+      font-weight: normal;
+      color: #fff;
+      background-color: #17a2b8;
+      border-radius: 3px;
+    }
+    
+    .metric-card .metric-help {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .metric-card .help-label {
+      color: #888;
+      margin-right: 6px;
     }
     
     .metric-card .table {
       margin-bottom: 0;
     }
     
-    .metric-card .table td,
     .metric-card .table th {
-      padding: 0.5rem;
+      background-color: #f8f9fa;
+      border-top: none;
+    }
+    
+    .metric-card .table td {
+      vertical-align: middle;
+    }
+    
+    .metrics-container {
+      padding: 1rem;
     }
     
     .loading-tip {

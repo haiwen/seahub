@@ -482,7 +482,7 @@ class SystemMetricsView(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
-    def parse_prometheus_metrics(self, metrics_raw):
+    def _parse_prometheus_metrics(self, metrics_raw):
         """Parse prometheus metrics"""
         metrics_dict = {}
         
@@ -539,12 +539,18 @@ class SystemMetricsView(APIView):
         return list(metrics_dict.values())
 
     def get(self, request):
-        res = get_seafevents_metrics()
-        metrics_raw = res.content.decode('utf-8')
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
-        metrics_data = self.parse_prometheus_metrics(metrics_raw)
-        
+        try:
+            res = get_seafevents_metrics()
+            metrics_raw = res.content.decode('utf-8')
+            metrics_data = self._parse_prometheus_metrics(metrics_raw)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         return Response({
-            'metrics': metrics_data,
-            'timestamp': datetime.datetime.now().isoformat()
-        })
+                'metrics': metrics_data,
+            })

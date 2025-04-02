@@ -1184,8 +1184,8 @@ def check_metric_auth(auth_header):
 def get_metrics(request):
     if not ENABLE_METRIC:
         return Http404
-    # auth_header = request.META.get('HTTP_AUTHORIZATION')
-    # if not auth_header or not check_metric_auth(auth_header):
-    #     return HttpResponseForbidden('Invalid Authentication')
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+    if not auth_header or not check_metric_auth(auth_header):
+        return HttpResponseForbidden('Invalid Authentication')
     metrics = get_seafevents_metrics()
     return HttpResponse(metrics, content_type='text/plain')
