@@ -91,6 +91,10 @@ const TextTranslation = {
     key: 'Unfreeze Document',
     value: gettext('Unfreeze Document')
   },
+  FREEZE_PAGE: {
+    key: 'Freeze page',
+    value: gettext('Freeze page')
+  },
   CONVERT_AND_EXPORT: {
     key: 'Convert & Export',
     value: gettext('Convert & Export')

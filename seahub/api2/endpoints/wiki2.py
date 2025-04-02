@@ -510,6 +510,7 @@ class Wiki2PagesView(APIView):
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(file_path),
             'obj_name': file_name,
+            'locked': False,
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else ''
         }
 
@@ -603,7 +604,8 @@ class Wiki2PagesView(APIView):
                 'name': page_name,
                 'path': path,
                 'icon': '',
-                'docUuid': str(sdoc_uuid)
+                'docUuid': str(sdoc_uuid),
+                'locked': False
             }
             pages.append(new_page)
 
@@ -837,6 +839,77 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response({'success': True})
+
+    def put(self, request, wiki_id, page_id):
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        locked = request.data.get('is_lock_page', None)
+        if locked is None:
+            error_msg = 'locked is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        pages = wiki_config.get('pages', [])
+        page_exists = False
+        for page in pages:
+            if page['id'] == page_id:
+                page['locked'] = locked
+                path = page['path']
+                page_exists = True
+                break
+        if not page_exists:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_config['pages'] = pages
+        wiki_config = json.dumps(wiki_config)
+        save_wiki_config(wiki, username, wiki_config)
+
+        expire = request.data.get('expire', -1)
+        try:
+            expire = int(expire)
+        except ValueError:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_locked = seafile_api.check_file_lock(repo_id, path.lstrip('/'), '')
+        if is_locked == locked:
+            return Response({'is_locked': locked}, status=status.HTTP_200_OK)
+        if locked:
+            try:
+                seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        else:
+            # unlock file
+            try:
+                seafile_api.unlock_file(repo_id, path.lstrip('/'))
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        return Response({'is_locked': locked}, status=status.HTTP_200_OK)
 
 
 class Wiki2PublishPageView(APIView):

@@ -135,3 +135,31 @@ body {
 .sdoc-editor-container .sdoc-article-container .article #sdoc-editor {
   width: 100%;
 }
+
+.wiki2-file-history-button .freeze-document-switch {
+  padding: 0.25rem 1rem;
+  /* display: flex; */
+  justify-content: center;
+}
+
+.wiki2-file-history-button .freeze-document-switch .custom-switch-description {
+  margin-left: 0;
+  color: #212529;
+  transition: none;
+}
+
+.wiki2-file-history-button .freeze-document-switch:hover .custom-switch-description {
+  color: #fff;
+  transition: none;
+}
+
+.wiki2-file-history-button .freeze-document-switch  .custom-switch-indicator {
+  margin-left: 60px;
+}
+
+.wiki2-top-nav .locked {
+  width: 1rem;
+  height: 1rem;
+  top: 60%;
+  left: 50%;
+}

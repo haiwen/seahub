@@ -211,12 +211,10 @@ class PageItem extends Component {
     const { connectDragSource, connectDragPreview, connectDropTarget, page, pagesLength, isOnlyOnePage, pathStr } = this.props;
     const { isShowNameEditor, pageName, isSelected, isMouseEnter } = this.state;
     if (isSelected) this.setDocUuid(page.docUuid);
-
     let navItemId = `page-editor-${page.id}`;
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
     const customIcon = page.icon;
     const folded = this.props.getFoldState(page.id);
-
     if (wikiPermission === 'rw') {
       return (
         <div>

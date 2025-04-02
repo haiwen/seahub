@@ -7,6 +7,7 @@ class Page {
     this.docUuid = object.docUuid;
     this.cover_img_url = object.cover_img_url;
     this.children = Array.isArray(object.children) ? object.children.map(item => new Page(item)) : [];
+    this.locked = object.locked;
   }
 }
 
