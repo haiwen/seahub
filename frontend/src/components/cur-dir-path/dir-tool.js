@@ -13,8 +13,6 @@ import TagFilesSortSetter from '../../tag/views/tag-files/sort-setter';
 const propTypes = {
   userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
-  updateUsedRepoTags: PropTypes.func.isRequired,
-  onDeleteRepoTag: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,

@@ -1363,26 +1363,6 @@ class SeafileAPI {
     return this._sendPostRequest(url, form);
   }
 
-  createRepoTags(repoID, tags) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/';
-    var params = { tags };
-    return this.req.put(url, params);
-  }
-
-  deleteRepoTag(repoID, repo_tag_id) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/' + repo_tag_id + '/';
-    return this.req.delete(url);
-  }
-
-  updateRepoTag(repoID, repo_tag_id, name, color) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/' + repo_tag_id + '/';
-    var params = {
-      name: name,
-      color: color,
-    };
-    return this.req.put(url, params);
-  }
-
   listTaggedFiles(repoID, repoTagId) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/tagged-files/' + repoTagId + '/';
     return this.req.get(url);

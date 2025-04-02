@@ -2145,21 +2145,6 @@ class LibContentView extends React.Component {
     this.onDirentSelected(dirent);
   };
 
-  onDeleteRepoTag = (deletedTagID) => {
-    let direntList = this.state.direntList.map(dirent => {
-      if (dirent.file_tags) {
-        let fileTags = dirent.file_tags.filter(item => {
-          return item.repo_tag_id !== deletedTagID;
-        });
-        dirent.file_tags = fileTags;
-      }
-      return dirent;
-    });
-    this.setState({ direntList: direntList });
-    this.updateUsedRepoTags();
-  };
-
-
   handleSubmit = (e) => {
     let options = {
       'share_type': 'personal',
@@ -2370,8 +2355,6 @@ class LibContentView extends React.Component {
                           repoName={this.state.currentRepoInfo.repo_name}
                           userPerm={userPerm}
                           currentPath={path}
-                          updateUsedRepoTags={this.updateUsedRepoTags}
-                          onDeleteRepoTag={this.onDeleteRepoTag}
                           currentMode={this.state.currentMode}
                           switchViewMode={this.switchViewMode}
                           isCustomPermission={isCustomPermission}
