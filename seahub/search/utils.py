@@ -210,7 +210,7 @@ def search_wikis(wiki_id, keyword, count):
     return es_wiki_search(wiki_id, keyword, count)
 
 
-def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, obj_type=None):
+def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, obj_type=None, time_range=None, size_range=None):
     params = {
         'query': keyword,
         'repos': searched_repos,
@@ -222,6 +222,10 @@ def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, 
         params['search_path'] = search_path
     if obj_type:
         params['obj_type'] = obj_type
+    if time_range:
+        params['time_range'] = time_range
+    if size_range:
+        params['size_range'] = size_range
 
     resp = search(params)
     if resp.status_code == 500:
