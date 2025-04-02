@@ -5,7 +5,6 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -31,7 +30,6 @@ class ViewFileToolbar extends React.Component {
       isDropdownMenuOpen: false,
       isMoreMenuShow: false,
       isShareDialogShow: false,
-      isEditTagDialogShow: false,
     };
   }
 
@@ -90,10 +88,6 @@ class ViewFileToolbar extends React.Component {
     this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
-  onEditFileTagToggle = () => {
-    this.setState({ isEditTagDialogShow: !this.state.isEditTagDialogShow });
-  };
-
   onHistoryClick = () => {
     let historyUrl = siteRoot + 'repo/file_revisions/' + this.props.repoID + '/?p=' + Utils.encodePath(this.props.path);
     location.href = historyUrl;
@@ -111,25 +105,6 @@ class ViewFileToolbar extends React.Component {
       });
     }
     if (filePermission === 'rw') {
-      /*
-      let newSubOpList = [];
-      if (showShareBtn) {
-        newSubOpList.push({
-          'text': gettext('Share'),
-          'onClick': this.onShareToggle
-        });
-      }
-      newSubOpList.push(
-        {'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle},
-        {'text': gettext('History'), 'onClick': this.onHistoryClick}
-      );
-
-      opList.push({
-        'icon': 'more-vertical',
-        'text': gettext('More'),
-        'subOpList': newSubOpList
-      });
-      */
       if (showShareBtn) {
         opList.push({
           'icon': 'share',
@@ -137,9 +112,7 @@ class ViewFileToolbar extends React.Component {
           'onClick': this.onShareToggle
         });
       }
-
       opList.push(
-        { 'icon': 'tag', 'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle },
         { 'icon': 'history', 'text': gettext('History'), 'onClick': this.onHistoryClick }
       );
     }
@@ -217,18 +190,6 @@ class ViewFileToolbar extends React.Component {
               userPerm={this.props.userPerm}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isEditTagDialogShow && (
-          <ModalPortal>
-            <EditFileTagDialog
-              filePath={this.props.path}
-              repoID={this.props.repoID}
-              repoTags={this.props.repoTags}
-              fileTagList={this.props.fileTags}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.props.onFileTagChanged}
             />
           </ModalPortal>
         )}

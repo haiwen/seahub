@@ -33,7 +33,6 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   repoTags: PropTypes.array.isRequired,
   filePermission: PropTypes.string,
-  onFileTagChanged: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   loadDirentList: PropTypes.func.isRequired,
 };

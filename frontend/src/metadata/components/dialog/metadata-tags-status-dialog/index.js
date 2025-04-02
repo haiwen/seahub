@@ -20,7 +20,7 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +45,10 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
       setSubmitting(false);
     });
   }, [lang, repoID, submit, toggle, value]);
+
+  const migrateTag = useCallback(() => {
+    // TODO backend migrate old tags
+  }, []);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -104,6 +108,12 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
                 />
               </FormGroup>
             }
+            {showMigrateTip &&
+              <FormGroup className="mt-6">
+                <p>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
+                <Button color="primary" onClick={migrateTag}>{gettext('Migrate old version tags')}</Button>
+              </FormGroup>
+            }
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
@@ -126,6 +136,7 @@ MetadataTagsStatusDialog.propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
+  showMigrateTip: PropTypes.bool,
 };
 
 export default MetadataTagsStatusDialog;

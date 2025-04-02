@@ -15,7 +15,6 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
@@ -53,7 +52,6 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
   repoTags: PropTypes.array.isRequired,
-  onFileTagChanged: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
@@ -80,7 +78,6 @@ class DirentGridView extends React.Component {
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
-      isEditFileTagShow: false,
       isZipDialogOpen: false,
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
@@ -376,9 +373,6 @@ class DirentGridView extends React.Component {
       case 'Convert to sdoc':
         this.onItemConvert(currentObject, event, 'sdoc');
         break;
-      case 'Tags':
-        this.onEditFileTagToggle();
-        break;
       case 'Permission':
         this.onPermissionItem();
         break;
@@ -451,18 +445,6 @@ class DirentGridView extends React.Component {
     }
 
     hideMenu();
-  };
-
-  onEditFileTagToggle = () => {
-    this.setState({
-      isEditFileTagShow: !this.state.isEditFileTagShow
-    });
-  };
-
-  onFileTagChanged = () => {
-    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
-    let direntPath = Utils.joinPath(this.props.path, dirent.name);
-    this.props.onFileTagChanged(dirent, direntPath);
   };
 
   getDirentPath = (dirent) => {
@@ -1002,16 +984,6 @@ class DirentGridView extends React.Component {
             onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
             onAddFolder={this.props.onAddFolder}
-          />
-        }
-        {this.state.isEditFileTagShow &&
-          <EditFileTagDialog
-            repoID={this.props.repoID}
-            fileTagList={dirent.file_tags}
-            filePath={direntPath}
-            toggleCancel={this.onEditFileTagToggle}
-            repoTags={this.props.repoTags}
-            onFileTagChanged={this.onFileTagChanged}
           />
         }
         {this.state.isShareDialogShow &&

@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import Rename from '../dialog/rename-dirent';
@@ -23,7 +22,6 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
-  repoTags: PropTypes.array.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -54,9 +52,7 @@ class SelectedDirentsToolbar extends React.Component {
       isMultipleOperation: true,
       showLibContentViewDialogs: false,
       showShareDialog: false,
-      showEditFileTagDialog: false,
       fileTagList: [],
-      multiFileTagList: [],
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false
     };
@@ -173,9 +169,6 @@ class SelectedDirentsToolbar extends React.Component {
         break;
       case 'Permission':
         this.onPermissionItem();
-        break;
-      case 'Tags':
-        this.listFileTags(dirent);
         break;
       case 'Lock':
         this.lockFile(dirent);
@@ -297,38 +290,9 @@ class SelectedDirentsToolbar extends React.Component {
     this.setState({
       showLibContentViewDialogs: false,
       showShareDialog: false,
-      showEditFileTagDialog: false,
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false,
     });
-  };
-
-  listFileTags = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listFileTags(this.props.repoID, filePath).then(res => {
-      let fileTagList = res.data.file_tags;
-      for (let i = 0, length = fileTagList.length; i < length; i++) {
-        fileTagList[i].id = fileTagList[i].file_tag_id;
-      }
-      this.setState({
-        fileTagList: fileTagList,
-        showLibContentViewDialogs: true,
-        showEditFileTagDialog: true,
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onMenuFileTagChanged = () => {
-    this.listFileTags(this.props.selectedDirentList[0]);
-    let length = this.props.selectedDirentList.length;
-    for (let i = 0; i < length; i++) {
-      const dirent = this.props.selectedDirentList[i];
-      const direntPath = this.getDirentPath(dirent);
-      this.props.onFilesTagChanged(dirent, direntPath);
-    }
   };
 
   getDirentPath = (dirent) => {
@@ -336,7 +300,7 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   render() {
-    const { repoID, repoTags, userPerm, selectedDirentList } = this.props;
+    const { repoID, userPerm, selectedDirentList } = this.props;
     const dirent = selectedDirentList[0];
     const selectedLen = selectedDirentList.length;
     const direntPath = this.getDirentPath(dirent);
@@ -477,18 +441,6 @@ class SelectedDirentsToolbar extends React.Component {
                   folderPath={direntPath}
                   folderName={dirent.name}
                   isDepartmentRepo={this.props.isGroupOwnedRepo}
-                />
-              </ModalPortal>
-            }
-            {this.state.showEditFileTagDialog &&
-              <ModalPortal>
-                <EditFileTagDialog
-                  repoID={repoID}
-                  repoTags={repoTags}
-                  filePath={direntPath}
-                  fileTagList={this.state.fileTagList}
-                  toggleCancel={this.toggleCancel}
-                  onFileTagChanged={this.onMenuFileTagChanged}
                 />
               </ModalPortal>
             }

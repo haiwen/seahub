@@ -25,7 +25,7 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired
 };
 
-const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
+const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMigrateTip }) => {
   const [activeTab, setActiveTab] = useState(tab || TAB.HISTORY_SETTING);
 
   const toggleTab = useCallback((tab) => {
@@ -201,6 +201,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab }) => {
                     submit={updateEnableTags}
                     toggleDialog={toggleDialog}
                     enableMetadata={enableMetadata}
+                    showMigrateTip={showMigrateTip}
                   />
                 </TabPane>
               )}

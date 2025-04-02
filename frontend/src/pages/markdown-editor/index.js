@@ -57,7 +57,6 @@ class MarkdownEditor extends React.Component {
       saving: false,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      fileTagList: [],
       participants: [],
     };
 
@@ -234,7 +233,6 @@ class MarkdownEditor extends React.Component {
         },
       });
     }
-    this.listFileTags();
 
     this.listFileParticipants();
     window.showParticipants = true;
@@ -272,20 +270,6 @@ class MarkdownEditor extends React.Component {
     const confirmationMessage = gettext('Leave this page? The system may not save your changes.');
     event.returnValue = confirmationMessage;
     return confirmationMessage;
-  };
-
-  listFileTags = () => {
-    seafileAPI.listFileTags(repoID, filePath).then(res => {
-      let fileTagList = res.data.file_tags;
-      for (let i = 0; i < fileTagList.length; i++) {
-        fileTagList[i].id = fileTagList[i].file_tag_id;
-      }
-      this.setState({ fileTagList: fileTagList });
-    });
-  };
-
-  onFileTagChanged = () => {
-    this.listFileTags();
   };
 
   listFileParticipants = () => {
@@ -399,7 +383,7 @@ class MarkdownEditor extends React.Component {
   };
 
   render() {
-    const { loading, markdownContent, fileInfo, fileTagList, isLocked } = this.state;
+    const { loading, markdownContent, fileInfo, isLocked } = this.state;
 
     return (
       <Fragment>
@@ -433,9 +417,8 @@ class MarkdownEditor extends React.Component {
               onSave={this.onSaveEditorContent}
               onContentChanged={this.onContentChanged}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              // isSupportInsertSeafileImage={true}
             >
-              <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
+              <DetailListView fileInfo={fileInfo} />
             </SeafileMarkdownEditor>
           )}
           {isLocked && (
@@ -443,7 +426,6 @@ class MarkdownEditor extends React.Component {
               isFetching={loading}
               value={markdownContent}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              // isSupportInsertSeafileImage={true}
               isShowOutline={true}
             >
             </SeafileMarkdownViewer>
