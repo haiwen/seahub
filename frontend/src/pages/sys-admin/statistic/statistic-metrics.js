@@ -38,7 +38,7 @@ class ComponentMetricsTable extends Component {
                   <th width="40%">{gettext('Metric')}</th>
                   <th width="20%">{gettext('Node')}</th>
                   <th width="15%">{gettext('Value')}</th>
-                  <th width="25%">{gettext('Collected Time')}</th>
+                  <th width="25%">{gettext('Collected time')}</th>
                 </tr>
               </thead>
               <tbody>
