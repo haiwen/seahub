@@ -646,6 +646,7 @@ class Records extends Component {
           addFolder={this.props.addFolder}
           selectNone={this.selectNone}
           updateRecordDetails={this.props.updateRecordDetails}
+          updateFaceRecognition={this.props.updateFaceRecognition}
           updateRecordDescription={this.props.updateRecordDescription}
           ocr={this.props.ocr}
         />

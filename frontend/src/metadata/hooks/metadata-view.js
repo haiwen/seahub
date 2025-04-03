@@ -38,7 +38,7 @@ export const MetadataViewProvider = ({
 
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
-  const { onOCR, generateDescription, extractFilesDetails } = useMetadataAIOperations();
+  const { onOCR, generateDescription, extractFilesDetails, faceRecognition } = useMetadataAIOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -348,6 +348,15 @@ export const MetadataViewProvider = ({
     });
   }, [metadata, extractFilesDetails, modifyRecords]);
 
+  const updateFaceRecognition = useCallback((records) => {
+    const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
+    if (recordObjIds.length > 50) {
+      toaster.danger(gettext('Select up to 50 files'));
+      return;
+    }
+    faceRecognition(recordObjIds);
+  }, [faceRecognition]);
+
   const updateRecordDescription = useCallback((record) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
@@ -429,6 +438,7 @@ export const MetadataViewProvider = ({
     const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
+    const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
     const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, ocr);
 
@@ -454,6 +464,7 @@ export const MetadataViewProvider = ({
       unsubscribeMoveRecord();
       unsubscribeDeleteRecords();
       unsubscribeUpdateDetails();
+      unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
       unsubscribeOCR();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
@@ -493,6 +504,7 @@ export const MetadataViewProvider = ({
         updateCurrentPath: params.updateCurrentPath,
         updateSelectedRecordIds,
         updateRecordDetails,
+        updateFaceRecognition,
         updateRecordDescription,
         ocr,
       }}

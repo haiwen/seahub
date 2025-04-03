@@ -44,6 +44,7 @@ export const EVENT_BUS_TYPE = {
   MOVE_RECORD: 'move_record',
   DELETE_RECORDS: 'delete_records',
   UPDATE_RECORD_DETAILS: 'update_record_details',
+  UPDATE_FACE_RECOGNITION: 'update_face_recognition',
   GENERATE_DESCRIPTION: 'generate_description',
   OCR: 'ocr',
 
