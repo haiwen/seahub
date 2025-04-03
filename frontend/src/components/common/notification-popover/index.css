@@ -29,20 +29,9 @@
   position: relative;
 }
 
-.notification-container .notification-header .notification-close-icon {
+.notification-container .notification-header .seahub-modal-btn {
   position: absolute;
   right: 14px;
-  height: 24px;
-  width: 24px;
-  text-align: center;
-  cursor: pointer;
-  color: #000;
-  opacity: 0.5;
-  font-weight: 700;
-}
-
-.notification-container .notification-header .notification-close-icon:hover {
-  opacity: 0.75;
 }
 
 .notification-container .notification-body {
