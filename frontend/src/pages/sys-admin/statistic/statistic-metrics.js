@@ -5,42 +5,51 @@ import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import { gettext } from '../../../utils/constants';
 
-class MetricCard extends Component {
+const MetricRow = ({ metric, point }) => (
+  <tr>
+    <td>
+      <div className="metric-info">
+        <div className="metric-name">{metric.name}</div>
+      </div>
+    </td>
+    <td>{point.labels.node}</td>
+    <td className="metric-value">{point.value}</td>
+    <td>{dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+  </tr>
+);
+
+class ComponentMetricsTable extends Component {
   render() {
-    const { metric } = this.props;
+    const { componentName, metrics } = this.props;
+
     return (
-      <div className="metric-card">
+      <div className="component-metrics-card">
         <div className="card mb-4">
           <div className="card-header">
-            <div className="metric-title-row">
-              <span className="metric-name">{metric.name}</span>
-              <span className="metric-type">{metric.type}</span>
-              {metric.help && (
-                <span className="metric-help">
-                  <span className="help-label">help:</span>
-                  {metric.help}
-                </span>
-              )}
-            </div>
+            <h4 className="component-title">
+              <i className="fas fa-server mr-2"></i>
+              {componentName}
+            </h4>
           </div>
           <div className="card-body">
-            <table className="table table-hover mb-0">
+            <table className="table table-hover table-striped mb-0">
               <thead>
                 <tr>
-                  <th>{gettext('Node')}</th>
-                  <th>{gettext('Component')}</th>
-                  <th>{gettext('Collected Time')}</th>
-                  <th>{gettext('Value')}</th>
+                  <th width="40%">{gettext('Metric')}</th>
+                  <th width="20%">{gettext('Node')}</th>
+                  <th width="15%">{gettext('Value')}</th>
+                  <th width="25%">{gettext('Collected Time')}</th>
                 </tr>
               </thead>
               <tbody>
-                {metric.data_points.map((point, index) => (
-                  <tr key={index}>
-                    <td>{point.labels.node}</td>
-                    <td>{point.labels.component}</td>
-                    <td>{dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}</td>
-                    <td>{point.value}</td>
-                  </tr>
+                {metrics.map((metric) => (
+                  metric.data_points.map((point, pointIndex) => (
+                    <MetricRow
+                      key={`${metric.name}-${pointIndex}`}
+                      metric={metric}
+                      point={point}
+                    />
+                  ))
                 ))}
               </tbody>
             </table>
@@ -57,7 +66,8 @@ class StatisticMetrics extends Component {
     this.state = {
       metrics: [],
       loading: true,
-      error: null
+      error: null,
+      groupedMetrics: {}
     };
   }
 
@@ -65,12 +75,38 @@ class StatisticMetrics extends Component {
     this.getMetrics();
   }
 
+  groupMetricsByComponent = (metrics) => {
+    const groups = {};
+    metrics.forEach(metric => {
+      if (metric.data_points && metric.data_points.length > 0) {
+        metric.data_points.forEach(point => {
+          const component = point.labels.component || 'Other';
+          if (!groups[component]) {
+            groups[component] = [];
+          }
+          const existingMetric = groups[component].find(m => m.name === metric.name);
+          if (existingMetric) {
+            existingMetric.data_points.push(point);
+          } else {
+            groups[component].push({
+              ...metric,
+              data_points: [point]
+            });
+          }
+        });
+      }
+    });
+    return groups;
+  };
+
   getMetrics = async () => {
     this.setState({ loading: true });
     try {
       const res = await systemAdminAPI.sysAdminStatisticMetrics();
+      const groupedMetrics = this.groupMetricsByComponent(res.data.metrics);
       this.setState({
         metrics: res.data.metrics,
+        groupedMetrics,
         loading: false
       });
     } catch (error) {
@@ -82,7 +118,7 @@ class StatisticMetrics extends Component {
   };
 
   render() {
-    const { metrics, loading, error } = this.state;
+    const { groupedMetrics, loading, error } = this.state;
 
     return (
       <>
@@ -96,8 +132,12 @@ class StatisticMetrics extends Component {
               <div className="error text-danger">{error}</div>
             ) : (
               <div className="metrics-container">
-                {metrics.map((metric, index) => (
-                  <MetricCard key={index} metric={metric} />
+                {Object.entries(groupedMetrics).map(([component, metrics]) => (
+                  <ComponentMetricsTable
+                    key={component}
+                    componentName={component}
+                    metrics={metrics}
+                  />
                 ))}
               </div>
             )}
@@ -110,55 +150,34 @@ class StatisticMetrics extends Component {
 
 const style = `
   <style>
-    .metric-card .card-header {
+    .component-metrics-card .card-header {
       background-color: #f8f9fa;
       padding: 15px 20px;
     }
     
-    .metric-card .metric-title-row {
+    .component-metrics-card .component-title {
+      margin: 0;
+      color: #1e1e1e;
+      font-size: 18px;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
     }
     
-    .metric-card .metric-name {
-      font-size: 16px;
-      font-weight: 600;
+    .metric-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .metric-name {
+      font-weight: 500;
       color: #333;
     }
     
-    .metric-card .metric-type {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 13px;
-      font-weight: normal;
-      color: #fff;
-      background-color: #17a2b8;
-      border-radius: 3px;
-    }
-    
-    .metric-card .metric-help {
-      color: #666;
+    .metric-value {
+      font-family: monospace;
       font-size: 14px;
-    }
-    
-    .metric-card .help-label {
-      color: #888;
-      margin-right: 6px;
-    }
-    
-    .metric-card .table {
-      margin-bottom: 0;
-    }
-    
-    .metric-card .table th {
-      background-color: #f8f9fa;
-      border-top: none;
-    }
-    
-    .metric-card .table td {
-      vertical-align: middle;
     }
     
     .metrics-container {
@@ -168,6 +187,22 @@ const style = `
     .loading-tip {
       margin: 100px auto;
       text-align: center;
+    }
+    
+    .table th {
+      background-color: #f8f9fa;
+      border-top: none;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    
+    .table td {
+      vertical-align: middle;
+    }
+    
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0,0,0,.02);
     }
   </style>
 `;
