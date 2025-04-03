@@ -2215,14 +2215,6 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListGroupInviteLogs(page, perPage) {
-    const url = this.server + '/api/v2.1/admin/logs/group-member-audit/';
-    let params = {
-      page: page,
-      per_page: perPage
-    };
-    return this.req.get(url, { params: params });
-  }
 
 }
 

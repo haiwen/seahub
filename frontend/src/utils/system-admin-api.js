@@ -680,45 +680,111 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
-  sysAdminListLoginLogs(page, perPage) {
+  sysAdminListLoginLogs(page, perPage, emails) {
     const url = this.server + '/api/v2.1/admin/logs/login-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileAccessLogs(page, perPage, email, repoID) {
+  sysAdminListFileAccessLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/file-access-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
-    if (email != undefined) {
-      params.email = email;
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
     }
-    if (repoID != undefined) {
-      params.repo_id = repoID;
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
     }
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListFileUpdateLogs(page, perPage) {
+  sysAdminListFileUpdateLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/file-update-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails && emails.length) {
+      params.emails = emails.join(',');
+    }
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
+    }
     return this.req.get(url, { params: params });
   }
 
-  sysAdminListSharePermissionLogs(page, perPage) {
+  sysAdminListSharePermissionLogs(page, perPage, emails, repos) {
     const url = this.server + '/api/v2.1/admin/logs/share-permission-logs/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (emails.from_emails && emails.from_emails.length) {
+      params.from_emails = emails.from_emails.join(',');
+    }
+    if (emails.to_emails && emails.to_emails.length) {
+      params.to_emails = emails.to_emails.join(',');
+    }
+    if (emails.to_groups && emails.to_groups.length) {
+      params.to_groups = emails.to_groups.join(',');
+    }
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  sysAdminListFileTransferLogs(page, perPage, emails, repos) {
+    const url = this.server + '/api/v2.1/admin/logs/repo-transfer-logs/';
+    let params = {
+      page: page,
+      per_page: perPage
+    };
+    if (emails.from_emails && emails.from_emails.length) {
+      params.from_emails = emails.from_emails.join(',');
+    }
+    if (emails.from_groups && emails.from_groups.length) {
+      params.from_groups = emails.from_groups.join(',');
+    }
+    if (emails.to_emails && emails.to_emails.length) {
+      params.to_emails = emails.to_emails.join(',');
+    }
+    if (emails.to_groups && emails.to_groups.length) {
+      params.to_groups = emails.to_groups.join(',');
+    }
+    if (emails.operator_emails && emails.operator_emails.length) {
+      params.operator_emails = emails.operator_emails.join(',');
+    }
+    if (repos && repos.length) {
+      params.repos = repos.map(repo => repo.id).join(',');
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  sysAdminListGroupInviteLogs(page, perPage, emails) {
+    const url = this.server + '/api/v2.1/admin/logs/group-member-audit/';
+    let params = {
+      page: page,
+      per_page: perPage,
+    };
+    if (emails.user_emails && emails.user_emails.length) {
+      params.user_emails = emails.user_emails.join(',');
+    }
+    if (emails.operator_emails && emails.operator_emails.length) {
+      params.operator_emails = emails.operator_emails.join(',');
+    }
+    if (emails.group_ids && emails.group_ids.length) {
+      params.group_ids = emails.group_ids.join(',');
+    }
     return this.req.get(url, { params: params });
   }
 

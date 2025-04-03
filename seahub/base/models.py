@@ -466,6 +466,20 @@ class ClientSSOToken(models.Model):
         return super(ClientSSOToken, self).save(*args, **kwargs)
 
 
+class RepoTransferQuerySet(models.QuerySet):
+    def by_from_user(self, from_users):
+        return self.filter(from_user__in=from_users)
+
+    def by_to_user(self, to_users):
+        return self.filter(to__in=to_users)
+    
+    def by_operator(self, operators):
+        return self.filter(operator__in=operators)
+    
+    def by_repo_ids(self, repo_ids):
+        return self.filter(repo_id__in=repo_ids)
+    
+
 class RepoTransfer(models.Model):
     repo_id = models.CharField(max_length=36)
     org_id = models.IntegerField(db_index=True)
@@ -473,6 +487,7 @@ class RepoTransfer(models.Model):
     to = models.CharField(max_length=255)
     operator = models.CharField(max_length=255)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = RepoTransferQuerySet.as_manager()
 
     class Meta:
         db_table = 'RepoTransfer'
@@ -482,6 +497,16 @@ class RepoTransfer(models.Model):
 GROUP_MEMBER_ADD = 'group_member_add'
 GROUP_MEMBER_DELETE = 'group_member_delete'
 
+class GroupMemberAuditQuerySet(models.QuerySet):
+    def by_users(self, users):
+        return self.filter(user__in=users)
+    
+    def by_operators(self, operators):
+        return self.filter(operator__in=operators)
+    
+    def by_group_ids(self, group_ids):
+        return self.filter(group_id__in=group_ids)
+    
 class GroupMemberAudit(models.Model):
     org_id = models.IntegerField(db_index=True)
     group_id = models.IntegerField(db_index=True)
@@ -489,6 +514,7 @@ class GroupMemberAudit(models.Model):
     operator = models.CharField(max_length=255, db_index=True)
     operation = models.CharField(max_length=128)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = GroupMemberAuditQuerySet.as_manager()
 
     class Meta:
         db_table = 'group_member_audit'
