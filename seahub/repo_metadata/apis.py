@@ -13,7 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
+from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
@@ -1797,6 +1797,45 @@ class MetadataExtractFileDetails(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'details': resp})
+
+
+class MetadataRecognizeFaces(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        obj_ids = request.data.get('obj_ids')
+        if not obj_ids or not isinstance(obj_ids, list) or len(obj_ids) > 50:
+            error_msg = 'obj_ids is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        params = {
+            'obj_ids': obj_ids,
+            'repo_id': repo_id
+        }
+        try:
+            recognize_faces(params=params)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
 
 
 # tags

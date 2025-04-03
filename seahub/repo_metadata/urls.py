@@ -1,5 +1,5 @@
 from django.urls import re_path
-from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecord, \
+from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, MetadataColumns, MetadataRecord, \
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(r'^people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-get-delete'),
     re_path(r'^people-photos/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-post'),
     re_path(r'^face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
+    re_path(r'^recognize-faces/$', MetadataRecognizeFaces.as_view(), name='api-v2.1-metadata-recognize-faces'),
     re_path(r'^people-cover-photo/(?P<people_id>.+)/$', PeopleCoverPhoto.as_view(), name='api-v2.1-metadata-people-cover-photo'),
 
     re_path(r'^extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
