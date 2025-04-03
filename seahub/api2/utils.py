@@ -295,7 +295,7 @@ def is_wiki_repo(repo):
 def get_search_repos(username, org_id):
     repos = []
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
-    repo_list = owned_repos + public_repos + shared_repos + group_repos
+    repo_list = shared_repos + owned_repos + public_repos + group_repos
 
     repo_id_set = set()
     for repo in repo_list:
