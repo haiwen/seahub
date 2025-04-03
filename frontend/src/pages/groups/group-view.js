@@ -2,35 +2,25 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import classnames from 'classnames';
-import { gettext, username, canAddRepo } from '../../utils/constants';
+import { navigate } from '@gatsbyjs/reach-router';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
 import { Group, Repo } from '../../models';
-import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import GroupMembersDialog from '../../components/dialog/group-members-dialog';
-import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
-import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
-import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
-import ImportMembersDialog from '../../components/dialog/import-members-dialog';
-import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
-import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
-import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import GroupOperationMenu from './group-op-menu';
 
 import '../../css/group-view.css';
 
 const propTypes = {
-  onGroupChanged: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
+  groupID: PropTypes.string
 };
 
 class GroupView extends React.Component {
@@ -43,9 +33,6 @@ class GroupView extends React.Component {
       errMessage: '',
       emptyTip: null,
       currentGroup: null,
-      currentRepo: null,
-      isStaff: false,
-      isOwner: false,
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
@@ -54,19 +41,7 @@ class GroupView extends React.Component {
       currentPage: 1,
       perPage: 300,
       hasNextPage: false,
-      libraryType: 'group',
-      isCreateRepoDialogShow: false,
       isDepartmentGroup: false,
-      isShowDepartmentDetailDialog: false,
-      showGroupDropdown: false,
-      showGroupMembersPopover: false,
-      showRenameGroupDialog: false,
-      showDismissGroupDialog: false,
-      showTransferGroupDialog: false,
-      showImportMembersDialog: false,
-      showManageMembersDialog: false,
-      isLeaveGroupDialogOpen: false,
-      isMembersDialogOpen: false
     };
   }
 
@@ -86,9 +61,7 @@ class GroupView extends React.Component {
       this.setState({
         emptyTip: this.getEmptyTip(currentGroup),
         currentGroup,
-        isStaff: currentGroup.admins.indexOf(username) > -1, // for item operations
         isDepartmentGroup: currentGroup.parent_group_id !== 0,
-        isOwner: currentGroup.owner === username,
         currentPage: 1,
         repoList: [] // empty it for the current group
       }, () => {
@@ -160,45 +133,6 @@ class GroupView extends React.Component {
     return null;
   };
 
-  onCreateRepoToggle = () => {
-    this.setState({ isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow });
-  };
-
-  onCreateRepo = (repo, groupOwnerType) => {
-    let groupId = this.props.groupID;
-    if (groupOwnerType && groupOwnerType === 'department') {
-      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { // need modify endpoint api
-        let object = {
-          repo_id: res.data.id,
-          repo_name: res.data.name,
-          owner_name: res.data.group_name,
-          owner_email: res.data.owner,
-          permission: res.data.permission,
-          mtime: res.data.mtime,
-          size: res.data.size,
-          encrypted: res.data.encrypted,
-        };
-        let repo = new Repo(object);
-        let repoList = this.addRepoItem(repo);
-        this.setState({ repoList: repoList });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-
-    } else {
-      seafileAPI.createGroupRepo(groupId, repo).then(res => {
-        let repo = new Repo(res.data);
-        let repoList = this.addRepoItem(repo);
-        this.setState({ repoList: repoList });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-    this.onCreateRepoToggle();
-  };
-
   onItemDelete = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
@@ -213,12 +147,6 @@ class GroupView extends React.Component {
     });
     this.setState({ repoList: repoList });
     this.loadGroup(this.props.groupID);
-  };
-
-  addRepoItem = (repo) => {
-    let newRepoList = this.state.repoList.map(item => {return item;});
-    newRepoList.unshift(repo);
-    return newRepoList;
   };
 
   onItemUnshare = (repo) => {
@@ -260,59 +188,6 @@ class GroupView extends React.Component {
     this.setState({ repoList: repoList });
   };
 
-  toggleDismissGroupDialog = () => {
-    this.setState({
-      showDismissGroupDialog: !this.state.showDismissGroupDialog,
-      showGroupDropdown: false,
-    });
-  };
-
-  toggleRenameGroupDialog = () => {
-    this.setState({
-      showRenameGroupDialog: !this.state.showRenameGroupDialog,
-      showGroupDropdown: false,
-    });
-  };
-
-  toggleTransferGroupDialog = () => {
-    this.setState({
-      showTransferGroupDialog: !this.state.showTransferGroupDialog,
-      showGroupDropdown: false,
-    });
-  };
-
-  toggleImportMembersDialog = () => {
-    this.setState({
-      showImportMembersDialog: !this.state.showImportMembersDialog
-    });
-  };
-
-  importMembersInBatch = (file) => {
-    toaster.notify(gettext('It may take some time, please wait.'));
-    seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
-      res.data.failed.forEach(item => {
-        toaster.danger(`${item.email}: ${item.error_msg}`);
-      });
-    }).catch((error) => {
-      let errMsg = Utils.getErrorMsg(error);
-      toaster.danger(errMsg);
-    });
-  };
-
-  toggleManageMembersDialog = () => {
-    this.setState({
-      showManageMembersDialog: !this.state.showManageMembersDialog,
-      showGroupDropdown: false,
-    });
-  };
-
-  toggleLeaveGroupDialog = () => {
-    this.setState({
-      isLeaveGroupDialogOpen: !this.state.isLeaveGroupDialogOpen,
-      showGroupDropdown: false,
-    });
-  };
-
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
@@ -321,18 +196,6 @@ class GroupView extends React.Component {
       sortOrder,
       repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
-  };
-
-  translateRole = (role) => {
-    if (role === 'Admin') {
-      return gettext('Admin');
-    }
-    else if (role === 'Member') {
-      return gettext('Member');
-    }
-    else if (role === 'Owner') {
-      return gettext('Owner');
-    }
   };
 
   toggleSortOptionsDialog = () => {
@@ -357,43 +220,6 @@ class GroupView extends React.Component {
     }
   };
 
-  toggleMembersDialog = () => {
-    this.setState({
-      isMembersDialogOpen: !this.state.isMembersDialogOpen
-    });
-  };
-
-  getOpList = () => {
-    const { currentGroup, isDepartmentGroup, isStaff, isOwner } = this.state;
-    const opList = [];
-    if ((!isDepartmentGroup && canAddRepo) ||
-      (isDepartmentGroup && isStaff)) {
-      this.newLibraryEnalbed = true;
-      opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle }, 'Divider');
-    }
-    opList.push({ 'text': gettext('Members'), 'onClick': this.toggleMembersDialog });
-    if (currentGroup) {
-      if (isStaff || isOwner) {
-        opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
-        opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
-        opList.push('Divider');
-        opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
-        if (isOwner) {
-          opList.push({ 'text': gettext('Transfer'), 'onClick': this.toggleTransferGroupDialog });
-        }
-        if (isOwner) {
-          opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog });
-        }
-      }
-
-      if (!isOwner && !isDepartmentGroup) {
-        opList.push({ 'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog });
-      }
-    }
-
-    return opList;
-  };
-
   switchViewMode = (newMode) => {
     this.setState({
       currentViewMode: newMode
@@ -409,16 +235,38 @@ class GroupView extends React.Component {
     });
   };
 
-  toggleDepartmentDetailDialog = () => {
+  addNewRepo = (newRepo) => {
+    let { repoList } = this.state;
+    repoList.unshift(newRepo);
+    this.setState({ repoList: repoList });
+  };
+
+  onGroupNameChanged = (newName) => {
+    const { currentGroup } = this.state;
+    currentGroup.name = newName;
     this.setState({
-      isShowDepartmentDetailDialog: !this.state.isShowDepartmentDetailDialog
+      currentGroup: currentGroup
     });
+  };
+
+  onGroupTransfered = (group) => {
+    this.setState({
+      currentGroup: group
+    });
+  };
+
+  onGroupDeleted = () => {
+    navigate(siteRoot);
+  };
+
+  onLeavingGroup = () => {
+    navigate(siteRoot);
   };
 
   render() {
     const {
       isLoading, repoList, errMessage, emptyTip,
-      currentGroup, isDepartmentGroup, isMembersDialogOpen,
+      currentGroup, isDepartmentGroup,
       currentViewMode, sortBy, sortOrder
     } = this.state;
 
@@ -427,7 +275,6 @@ class GroupView extends React.Component {
       useRate = currentGroup.group_quota_usage / currentGroup.group_quota * 100 + '%';
     }
 
-    const opList = this.getOpList();
     return (
       <Fragment>
         <div className="main-panel-center flex-row">
@@ -440,9 +287,13 @@ class GroupView extends React.Component {
                     <span className="sf3-font-department sf3-font nav-icon" title={gettext('This is a special group representing a department.')}></span>
                     }
                     <span>{currentGroup.name}</span>
-                    <SingleDropdownToolbar
-                      withPlusIcon={this.newLibraryEnalbed}
-                      opList={opList}
+                    <GroupOperationMenu
+                      group={currentGroup}
+                      addNewRepo={this.addNewRepo}
+                      onGroupNameChanged={this.onGroupNameChanged}
+                      onGroupTransfered={this.onGroupTransfered}
+                      onGroupDeleted={this.onGroupDeleted}
+                      onLeavingGroup={this.onLeavingGroup}
                     />
                   </div>
                   <div className="path-tool d-flex align-items-center">
@@ -510,85 +361,6 @@ class GroupView extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
-          <ModalPortal>
-            <CreateRepoDialog
-              libraryType={this.state.libraryType}
-              onCreateToggle={this.onCreateRepoToggle}
-              onCreateRepo={this.onCreateRepo}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCreateRepoDialogShow && this.state.isDepartmentGroup &&
-          <CreateRepoDialog
-            onCreateToggle={this.onCreateRepoToggle}
-            onCreateRepo={this.onCreateRepo}
-            libraryType='department'
-          />
-        }
-        {isMembersDialogOpen &&
-        <GroupMembersDialog
-          groupID={this.props.groupID}
-          toggleDialog={this.toggleMembersDialog}
-        />
-        }
-        {this.state.showRenameGroupDialog &&
-          <RenameGroupDialog
-            showRenameGroupDialog={this.state.showRenameGroupDialog}
-            toggleRenameGroupDialog={this.toggleRenameGroupDialog}
-            loadGroup={this.loadGroup}
-            groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-            currentGroupName={currentGroup.name}
-          />
-        }
-        {this.state.showDismissGroupDialog &&
-          <DismissGroupDialog
-            showDismissGroupDialog={this.state.showDismissGroupDialog}
-            toggleDismissGroupDialog={this.toggleDismissGroupDialog}
-            loadGroup={this.loadGroup}
-            groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-          />
-        }
-        {this.state.showTransferGroupDialog &&
-          <TransferGroupDialog
-            toggleTransferGroupDialog={this.toggleTransferGroupDialog}
-            groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-          />
-        }
-        { this.state.showImportMembersDialog &&
-          <ImportMembersDialog
-            toggleImportMembersDialog={this.toggleImportMembersDialog}
-            importMembersInBatch={this.importMembersInBatch}
-          />
-        }
-        {this.state.showManageMembersDialog &&
-          <ManageMembersDialog
-            toggleManageMembersDialog={this.toggleManageMembersDialog}
-            groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-            isOwner={this.state.isOwner}
-            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
-          />
-        }
-        {this.state.isShowDepartmentDetailDialog &&
-          <DepartmentDetailDialog
-            usedFor='add_group_member'
-            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
-            toggleManageMembersDialog={this.toggleManageMembersDialog}
-            groupID={this.props.groupID}
-            isOwner={this.state.isOwner}
-          />
-        }
-        {this.state.isLeaveGroupDialogOpen &&
-          <LeaveGroupDialog
-            toggleLeaveGroupDialog={this.toggleLeaveGroupDialog}
-            groupID={this.props.groupID}
-            onGroupChanged={this.props.onGroupChanged}
-          />
-        }
       </Fragment>
     );
   }

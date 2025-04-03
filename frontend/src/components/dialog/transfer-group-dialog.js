@@ -11,9 +11,9 @@ import toaster from '../toast';
 import '../../css/transfer-group-dialog.css';
 
 const propTypes = {
-  groupID: PropTypes.string,
-  toggleTransferGroupDialog: PropTypes.func.isRequired,
-  onGroupChanged: PropTypes.func.isRequired
+  groupID: PropTypes.number.isRequired,
+  onGroupTransfered: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 class TransferGroupDialog extends React.Component {
@@ -21,18 +21,14 @@ class TransferGroupDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
-      errMessage: '',
+      selectedOption: null
     };
-    this.options = [];
   }
 
   handleSelectChange = (option) => {
     this.setState({
-      selectedOption: option,
-      errMessage: '',
+      selectedOption: option
     });
-    this.options = [];
   };
 
   transferGroup = () => {
@@ -41,19 +37,21 @@ class TransferGroupDialog extends React.Component {
     if (selectedOption && selectedOption[0]) {
       email = selectedOption[0].email;
     }
-    if (email) {
-      seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
-        this.props.toggleTransferGroupDialog();
-        toaster.success(gettext('Group has been transfered'));
-      }).catch((error) => {
-        let errMessage = Utils.getErrorMsg(error);
-        this.setState({ errMessage: errMessage });
-      });
+    if (!email) {
+      return false;
     }
+    seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
+      toaster.success(gettext('Group has been transfered'));
+      this.props.onGroupTransfered(res.data);
+      this.props.toggleDialog();
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   toggle = () => {
-    this.props.toggleTransferGroupDialog();
+    this.props.toggleDialog();
   };
 
   render() {
@@ -68,7 +66,6 @@ class TransferGroupDialog extends React.Component {
             placeholder={gettext('Please enter 1 or more character')}
             onSelectChange={this.handleSelectChange}
           />
-          <div className="error">{this.state.errMessage}</div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>

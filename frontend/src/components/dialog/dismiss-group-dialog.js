@@ -9,14 +9,11 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class DismissGroupDialog extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   dismissGroup = () => {
-    let that = this;
-    seafileAPI.deleteGroup(this.props.groupID).then((res) => {
-      that.props.onGroupChanged();
+    const { groupID } = this.props;
+    seafileAPI.deleteGroup(groupID).then((res) => {
+      this.props.onGroupDeleted();
+      toaster.success(gettext('Group deleted'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -25,13 +22,13 @@ class DismissGroupDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.showDismissGroupDialog} toggle={this.props.toggleDismissGroupDialog}>
-        <SeahubModalHeader>{gettext('Delete Group')}</SeahubModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Delete Group')}</SeahubModalHeader>
         <ModalBody>
           <span>{gettext('Really want to delete this group?')}</span>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleDismissGroupDialog}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.dismissGroup}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
@@ -40,11 +37,9 @@ class DismissGroupDialog extends React.Component {
 }
 
 const DismissGroupDialogPropTypes = {
-  showDismissGroupDialog: PropTypes.bool.isRequired,
-  toggleDismissGroupDialog: PropTypes.func.isRequired,
-  loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
-  onGroupChanged: PropTypes.func.isRequired,
+  groupID: PropTypes.number.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
+  onGroupDeleted: PropTypes.func.isRequired
 };
 
 DismissGroupDialog.propTypes = DismissGroupDialogPropTypes;
