@@ -32,6 +32,7 @@ import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
 import { eventBus } from '../../components/common/event-bus';
+import WebSocketClient from '../../utils/websocket-service';
 
 import '../../css/lib-content-view.css';
 
@@ -49,7 +50,6 @@ class LibContentView extends React.Component {
 
   constructor(props) {
     super(props);
-
     let isTreePanelShown = true;
     const storedTreePanelState = localStorage.getItem(TREE_PANEL_STATE_KEY);
     if (storedTreePanelState != undefined) {
@@ -59,6 +59,7 @@ class LibContentView extends React.Component {
     const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
     const isDirentDetailShow = storedDirentDetailShowState === 'true';
 
+    this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
@@ -160,6 +161,53 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.calculatePara(this.props);
   }
+
+  onMessageCallback = (data) => {
+    if (data.type === 'file-lock-changed') {
+      const currentUrl = window.location.href;
+      const parsedUrl = new URL(currentUrl);
+      const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
+      const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
+      let notiUrlIndex = '';
+      if (data.content.path.includes('/')) {
+        notiUrlIndex = data.content.path.lastIndexOf('/');
+      }
+      const notifRouter = data.content.path.slice(0, notiUrlIndex);
+      if (dirRouter === notifRouter) {
+        const dirent = { name: data.content.path.split('/').pop() };
+        if (data.content.change_event === 'locked') {
+          if (data.content.expire === -1) {
+            this.updateDirent(dirent, 'is_freezed', true);
+          } else {
+            this.updateDirent(dirent, 'is_freezed', false);
+          }
+          this.updateDirent(dirent, 'is_locked', true);
+          this.updateDirent(dirent, 'locked_by_me', true);
+          let lockName = data.content.lock_user.split('@');
+          this.updateDirent(dirent, 'lock_owner_name', lockName[0]);
+        } else if (data.content.change_event === 'unlocked') {
+          this.updateDirent(dirent, 'is_locked', false);
+          this.updateDirent(dirent, 'locked_by_me', false);
+          this.updateDirent(dirent, 'lock_owner_name', '');
+        }
+      }
+    } else if (data.type === 'repo-update') {
+      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
+        const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
+        const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
+        this.setState({
+          pathExist: true,
+          userPerm,
+          isDirentListLoading: false,
+          direntList,
+          dirID,
+          path: this.state.path,
+          isSessionExpired: false,
+          currentDirent: null,
+        });
+      });
+    }
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.repoID !== this.props.repoID) {
@@ -280,6 +328,7 @@ class LibContentView extends React.Component {
       isLibView: false,
       currentRepoInfo: null,
     });
+    this.socket.close();
   }
 
   componentDidUpdate() {
