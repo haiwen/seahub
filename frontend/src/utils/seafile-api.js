@@ -2226,16 +2226,6 @@ class SeafileAPI {
     return this._sendPostRequest(url, formData);
   }
 
-  sysAdminListFileTransferLogs(page, perPage) {
-    const url = this.server + '/api/v2.1/admin/logs/repo-transfer-logs/';
-    let params = {
-      page: page,
-      per_page: perPage
-    };
-    return this.req.get(url, { params: params });
-  }
-
-
 }
 
 let seafileAPI = new SeafileAPI();

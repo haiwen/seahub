@@ -47,13 +47,12 @@ class AdminLogsLoginLogs(APIView):
         except ValueError:
             current_page = 1
             per_page = 100
-        emails = request.GET.get('emails', None)
+        emails = request.GET.getlist('email')
         start = (current_page - 1) * per_page
         end = start + per_page
 
         from seahub.sysadmin_extra.models import UserLoginLog
         if emails:
-            emails = emails.split(',')
             logs = UserLoginLog.objects.filter(username__in=emails).order_by('-login_date')[start:end]
             count = UserLoginLog.objects.filter(username__in=emails).count()
         else:
@@ -113,15 +112,13 @@ class AdminLogsFileAccessLogs(APIView):
             current_page = 1
             per_page = 100
 
-        emails = request.GET.get('emails')
-        emails = emails.split(',') if emails else []
+        emails = request.GET.getlist('email')
         for user_selected in emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        repos = request.GET.get('repos', None)
+        repos = request.GET.getlist('repo')
         if repos:
-            repos = repos.split(',') if repos else []
             for repo_selected in repos:
                 if not is_valid_repo_id_format(repo_selected):
                     error_msg = 'repo_id %s invalid.' % repo_selected
@@ -211,16 +208,14 @@ class AdminLogsFileUpdateLogs(APIView):
             current_page = 1
             per_page = 100
 
-        emails = request.GET.get('emails')
-        emails = emails.split(',') if emails else []
+        emails = request.GET.getlist('email')
         for user_selected in emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        repos = request.GET.get('repos', None)
+        repos = request.GET.getlist('repo')
         if repos:
-            repos = repos.split(',')
             for repo_selected in repos:
                 if not is_valid_repo_id_format(repo_selected):
                     error_msg = 'repo_id %s invalid.' % repo_selected
@@ -301,31 +296,27 @@ class AdminLogsSharePermissionLogs(APIView):
             per_page = 100
 
 
-        from_emails = request.GET.get('from_emails')
-        from_emails = from_emails.split(',') if from_emails else []
+        from_emails = request.GET.getlist('from_email')
         for user_selected in from_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        to_emails = request.GET.get('to_emails')
-        to_emails = to_emails.split(',') if to_emails else []
+        to_emails = request.GET.getlist('to_email')
         for user_selected in to_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        to_groups = request.GET.get('to_groups')
-        to_groups = to_groups.split(',') if to_groups else []
+        to_groups = request.GET.getlist('to_group')
         emails = {
             'from_emails': from_emails,
             'to_emails': to_emails,
             'to_groups': to_groups
         }
         
-        repos = request.GET.get('repos', None)
+        repos = request.GET.getlist('repo')
         if repos:
-            repos = repos.split(',')
             for repo_selected in repos:
                 if not is_valid_repo_id_format(repo_selected):
                     error_msg = 'repo_id %s invalid.' % repo_selected
@@ -475,34 +466,28 @@ class AdminLogsFileTransferLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        from_emails = request.GET.get('from_emails')
-        from_emails = from_emails.split(',') if from_emails else []
+        from_emails = request.GET.getlist('from_email')
         for user_selected in from_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        to_emails = request.GET.get('to_emails')
-        to_emails = to_emails.split(',') if to_emails else []
+        to_emails = request.GET.getlist('to_email')
         for user_selected in to_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        operator_emails = request.GET.get('operator_emails')
-        operator_emails = operator_emails.split(',') if operator_emails else []
+        operator_emails = request.GET.getlist('operator_email')
         for user_selected in operator_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        from_groups = request.GET.get('from_groups')
-        from_groups = from_groups.split(',') if from_groups else []
+        from_groups = request.GET.getlist('from_group')
         from_groups = [group_id + '@seafile_group' for group_id in from_groups]
-        to_groups = request.GET.get('to_groups')
-        to_groups = to_groups.split(',') if to_groups else []
+        to_groups = request.GET.getlist('to_group')
         to_groups = [group_id + '@seafile_group' for group_id in to_groups]
-        repos = request.GET.get('repos', None)
+        repos = request.GET.getlist('repo')
         if repos:
-            repos = repos.split(',')
             for repo_selected in repos:
                 if not is_valid_repo_id_format(repo_selected):
                     error_msg = 'repo_id %s invalid.' % repo_selected
@@ -660,20 +645,17 @@ class AdminLogGroupMemberAuditLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        user_emails = request.GET.get('user_emails')
-        user_emails = user_emails.split(',') if user_emails else []
+        user_emails = request.GET.getlist('user_email')
         for user_selected in user_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        operator_emails = request.GET.get('operator_emails')
-        operator_emails = operator_emails.split(',') if operator_emails else []
+        operator_emails = request.GET.getlist('operator_email')
         for user_selected in operator_emails:
             if not is_valid_email(user_selected):
                 error_msg = 'email %s invalid.' % user_selected
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        group_ids = request.GET.get('group_ids')
-        group_ids = group_ids.split(',') if group_ids else []
+        group_ids = request.GET.getlist('group_id')
         
         queryset = GroupMemberAudit.objects.all()
         if user_emails:

@@ -197,19 +197,18 @@ class FIleTransferLogs extends Component {
       selectedRepos
     } = this.state;
 
-    const emails = {
-      from_emails: selectedFromUsers.filter(item => item.email).map(user => user.email),
-      from_groups: selectedFromUsers.filter(item => !item.email).map(group => group.id),
-      to_emails: selectedToUsers.map(user => user.email),
-      to_groups: selectedToGroups.map(group => group.to_group_id || group.id),
-      operator_emails: selectedOperators.map(user => user.email)
+    const options = {
+      'from_email': selectedFromUsers.filter(item => item.email).map(user => user.email),
+      'from_group': selectedFromUsers.filter(item => !item.email).map(group => group.id),
+      'to_email': selectedToUsers.map(user => user.email),
+      'to_group': selectedToGroups.map(group => group.to_group_id || group.id),
+      'operator_email': selectedOperators.map(user => user.email),
+      'repo': selectedRepos.map(repo => repo.id)
     };
-
     systemAdminAPI.sysAdminListFileTransferLogs(
       page,
       perPage,
-      emails,
-      selectedRepos
+      options
     ).then((res) => {
       this.setState({
         logList: res.data.repo_transfer_log_list,

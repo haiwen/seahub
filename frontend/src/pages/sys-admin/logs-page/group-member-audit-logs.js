@@ -179,9 +179,9 @@ class GroupMemberAuditLogs extends Component {
     let { perPage, selectedUsers, selectedOperators, selectedGroups } = this.state;
 
     const emails = {
-      user_emails: selectedUsers.map(user => user.email),
-      operator_emails: selectedOperators.map(user => user.email),
-      group_ids: selectedGroups.map(group => group.id)
+      'user_email': selectedUsers.map(user => user.email),
+      'operator_email': selectedOperators.map(user => user.email),
+      'group_id': selectedGroups.map(group => group.id)
     };
 
     systemAdminAPI.sysAdminListGroupInviteLogs(page, perPage, emails).then((res) => {

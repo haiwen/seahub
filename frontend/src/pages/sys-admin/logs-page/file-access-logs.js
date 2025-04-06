@@ -212,7 +212,8 @@ class FileAccessLogs extends Component {
   getLogsByPage = (page) => {
     const { perPage, selectedUsers, selectedRepos } = this.state;
     let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, emails, selectedRepos).then((res) => {
+    let repos = selectedRepos.map(repo => repo.id);
+    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, { 'email': emails, 'repo': repos }).then((res) => {
       this.setState({
         logList: res.data.file_access_log_list,
         loading: false,

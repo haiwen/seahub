@@ -188,17 +188,16 @@ class SharePermissionLogs extends Component {
       selectedRepos
     } = this.state;
 
-    const emails = {
-      from_emails: selectedFromUsers.map(user => user.email),
-      to_emails: selectedToUsers.map(user => user.email),
-      to_groups: selectedToGroups.map(group => group.id)
+    const options = {
+      'from_email': selectedFromUsers.map(user => user.email),
+      'to_email': selectedToUsers.map(user => user.email),
+      'to_group': selectedToGroups.map(group => group.id),
+      'repo': selectedRepos.map(repo => repo.id)
     };
-
     systemAdminAPI.sysAdminListSharePermissionLogs(
       page,
       perPage,
-      emails,
-      selectedRepos
+      options
     ).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,

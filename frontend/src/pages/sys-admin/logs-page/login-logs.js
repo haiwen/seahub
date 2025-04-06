@@ -165,7 +165,7 @@ class LoginLogs extends Component {
     let { perPage, selectedUsers } = this.state;
     let emails = selectedUsers.map(user => user.email);
 
-    systemAdminAPI.sysAdminListLoginLogs(page, perPage, emails).then((res) => {
+    systemAdminAPI.sysAdminListLoginLogs(page, perPage, { 'email': emails }).then((res) => {
       this.setState({
         logList: res.data.login_log_list,
         loading: false,

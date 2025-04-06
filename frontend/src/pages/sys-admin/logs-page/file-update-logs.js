@@ -202,7 +202,8 @@ class FileUpdateLogs extends Component {
   getLogsByPage = (page) => {
     let { perPage, selectedUsers, selectedRepos } = this.state;
     let emails = selectedUsers.map(user => user.email);
-    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage, emails, selectedRepos).then((res) => {
+    let repos = selectedRepos.map(repo => repo.id);
+    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage, { 'email': emails, 'repo': repos }).then((res) => {
       this.setState({
         logList: res.data.file_update_log_list,
         loading: false,
