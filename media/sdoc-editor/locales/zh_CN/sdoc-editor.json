@@ -622,5 +622,7 @@
   "Double_click_then_adjust_field_width": "双击后调节字段宽度",
   "Insert_chart": "插入图表",
   "Edit_chart": "编辑图表",
-  "Please_complete_the_chart_configuration_first": "请先完成图表配置"
+  "Please_complete_the_chart_configuration_first": "请先完成图表配置",
+  "chart": "图表",
+  "Image_is_upload_error": "图片上传失败，请删除后重新尝试"
 }
