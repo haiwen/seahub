@@ -34,6 +34,7 @@ class ItemDropdownMenu extends React.Component {
       currentItem: ''
     };
     this.dropdownRef = React.createRef();
+    this.mainMenuDirection = 'down';
     this.subMenuDirection = 'right';
   }
 
@@ -47,6 +48,24 @@ class ItemDropdownMenu extends React.Component {
     });
     setTimeout(() => {
       if (this.dropdownRef.current) {
+        const rect = this.dropdownRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        const spaceBelow = windowHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        const menuHeightThreshold = 400;
+
+        let mainMenuDirection;
+        if (spaceBelow < menuHeightThreshold && spaceAbove < menuHeightThreshold) {
+          const spaceRight = window.innerWidth - rect.right;
+          mainMenuDirection = spaceRight >= 200 ? 'right' : 'left';
+        } else if (spaceBelow < menuHeightThreshold) {
+          mainMenuDirection = 'up';
+        } else {
+          mainMenuDirection = 'down';
+        }
+
+        this.mainMenuDirection = mainMenuDirection;
         this.subMenuDirection = (window.innerWidth - this.dropdownRef.current.getBoundingClientRect().right < 400) ? 'left' : 'right';
       }
     }, 1);
@@ -196,7 +215,12 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown
+        isOpen={this.state.isItemMenuShow}
+        toggle={this.onDropdownToggleClick}
+        className="vam"
+        direction={this.mainMenuDirection}
+      >
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
