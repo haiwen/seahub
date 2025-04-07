@@ -8,7 +8,7 @@ import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../../tag/hooks';
-import { getTagColor, getTagId, getTagName, getTagsByNameOrColor, getTagByNameOrColor } from '../../../../tag/utils/cell';
+import { getTagId, getTagName, getTagsByName, getTagByName } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { SELECT_OPTION_COLORS } from '../../../constants';
@@ -55,13 +55,13 @@ const TagsEditor = forwardRef(({
     return tagsData?.rows || [];
   }, [tagsData]);
 
-  const displayTags = useMemo(() => getTagsByNameOrColor(tags, searchValue), [searchValue, tags]);
+  const displayTags = useMemo(() => getTagsByName(tags, searchValue), [searchValue, tags]);
   const recentlyUsedTags = useMemo(() => recentlyUsed, [recentlyUsed]);
 
   const isShowCreateBtn = useMemo(() => {
     if (!canAddTag) return false;
     if (!canEditData || !searchValue) return false;
-    return !getTagByNameOrColor(displayTags, searchValue);
+    return !getTagByName(displayTags, searchValue);
   }, [canEditData, displayTags, searchValue, canAddTag]);
 
   const style = useMemo(() => {
@@ -278,8 +278,7 @@ const TagsEditor = forwardRef(({
       if (!row) return;
       const value = searchValue.toLowerCase();
       const tagName = getTagName(row).toLowerCase();
-      const tagColor = getTagColor(row).toLowerCase();
-      if (!tagName.includes(value) && !tagColor.includes(value)) return;
+      if (!tagName.includes(value)) return;
       const nodesWithAncestors = getNodesWithAncestors(node, tree).filter(node => checkIsTreeNodeShown(getTreeNodeKey(node), searchedKeyNodeFoldedMap));
       searchedNodes = [...searchedNodes, ...nodesWithAncestors];
     });
