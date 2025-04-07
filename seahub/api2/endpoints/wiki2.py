@@ -1605,35 +1605,35 @@ class WikiPageExport(APIView):
         if permission != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         page_path = ''
+        page_name = ''
+        doc_uuid = ''
         for page in pages:
             if page_id == page.get('id'):
                 page_path = page.get('path')
                 page_name = page.get('name')
                 doc_uuid = page.get('docUuid')
                 break
-        if export_type == 'markdown':
+        try:
             file_id = seafile_api.get_file_id_by_path(repo_id, page_path)
             filename = os.path.basename(page_path)
             download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
             download_url = gen_file_get_url(download_token, filename)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        response = HttpResponse(content_type='application/octet-stream')
+        if export_type == 'markdown':
             resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, download_url, 'sdoc', 'md')
             new_filename = f'{page_name}.md'
             encoded_filename = quote(new_filename.encode('utf-8'))
-
-            response = HttpResponse(content_type='application/octet-stream')
-            response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
             response.write(resp_with_md_file.content)
         elif export_type == 'sdoc':
-            file_id = seafile_api.get_file_id_by_path(repo_id, page_path)
-            filename = os.path.basename(page_path)
-            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
-            download_url = gen_file_get_url(download_token, filename)
             sdoc_content = requests.get(download_url).content
             new_filename = f'{page_name}.sdoc'
             encoded_filename = quote(new_filename)
-
-            response = HttpResponse(content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment;filename*=utf-8'f'{encoded_filename};filename="{encoded_filename}"'
             response.write(sdoc_content)
+
+        response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
 
         return response
