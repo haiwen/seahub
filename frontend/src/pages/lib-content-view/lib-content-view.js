@@ -420,6 +420,14 @@ class LibContentView extends React.Component {
     });
   };
 
+  clearRepoTags = () => {
+    this.setState({
+      fileTags: [],
+      repoTags: [],
+      usedRepoTags: [],
+    });
+  };
+
   updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
@@ -454,9 +462,6 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
-    // list used FileTags
-    this.updateUsedRepoTags();
-
     if (this.state.isTreePanelShown) {
       this.loadSidePanel(path);
     }
@@ -2315,7 +2320,7 @@ class LibContentView extends React.Component {
     }
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
-      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView}>
+      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} updateUsedRepoTags={this.updateUsedRepoTags} clearRepoTags={this.clearRepoTags} >
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>

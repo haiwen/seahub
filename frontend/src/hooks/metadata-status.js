@@ -7,7 +7,7 @@ import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, children }) => {
+export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, updateUsedRepoTags, clearRepoTags, children }) => {
   const enableMetadataManagement = useMemo(() => {
     if (repoInfo?.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -60,6 +60,9 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
       if (!enableMetadata) {
         cancelMetadataURL();
       }
+      if (enableTags) {
+        updateUsedRepoTags();
+      }
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
@@ -93,10 +96,12 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, chi
     if (newValue === enableTags && lang === tagsLang) return;
     if (!newValue) {
       cancelMetadataURL(true);
+      clearRepoTags();
     }
     setEnableTags(newValue);
+    if (newValue) updateUsedRepoTags();
     setTagsLang(lang);
-  }, [enableTags, tagsLang, cancelMetadataURL]);
+  }, [enableTags, tagsLang, cancelMetadataURL, clearRepoTags, updateUsedRepoTags]);
 
   const updateEnableOCR = useCallback((newValue) => {
     if (newValue === enableOCR) return;
