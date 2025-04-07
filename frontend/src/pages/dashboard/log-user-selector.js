@@ -66,39 +66,46 @@ class LogUserSelector extends Component {
     this.setState({
       isLoading: true
     });
-    if (this.props.searchUsersFunc) {
-      this.props.searchUsersFunc(value).then((res) => {
-        const users = res.data.user_list || res.data.users || [];
-        this.setState({
-          searchResults: users,
-          isLoading: false
-        }, () => {
-          if (this.props.searchGroupsFunc) {
-            this.props.searchGroupsFunc(value).then((res) => {
-              const groups = res.data.group_list || res.data.groups || [];
-              this.setState({
-                searchResults: [...users, ...groups]
-              });
+
+    this.finalValue = value;
+
+    setTimeout(() => {
+      if (this.finalValue === value) {
+        if (this.props.searchUsersFunc) {
+          this.props.searchUsersFunc(value).then((res) => {
+            const users = res.data.user_list || res.data.users || [];
+            this.setState({
+              searchResults: users,
+              isLoading: false
+            }, () => {
+              if (this.props.searchGroupsFunc) {
+                this.props.searchGroupsFunc(value).then((res) => {
+                  const groups = res.data.group_list || res.data.groups || [];
+                  this.setState({
+                    searchResults: [...users, ...groups]
+                  });
+                });
+              }
             });
-          }
-        });
-      }).catch((error) => {
-        this.setState({
-          isLoading: false
-        });
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-    if (this.props.searchGroupsFunc) {
-      this.props.searchGroupsFunc(value).then((res) => {
-        const groups = res.data.group_list || res.data.groups || [];
-        this.setState({
-          searchResults: groups,
-          isLoading: false
-        });
-      });
-    }
+          }).catch((error) => {
+            this.setState({
+              isLoading: false
+            });
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
+        if (this.props.searchGroupsFunc && !this.props.searchUsersFunc) {
+          this.props.searchGroupsFunc(value).then((res) => {
+            const groups = res.data.group_list || res.data.groups || [];
+            this.setState({
+              searchResults: groups,
+              isLoading: false
+            });
+          });
+        }
+      }
+    }, 500);
   };
 
   toggleSelectItem = (e, item) => {
