@@ -223,7 +223,8 @@ class LibContentView extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.repoID !== this.props.repoID) {
-      this.setState({ path: '/', viewId: '', tagID: '', currentMode: cookie.load('seafile_view_mode') || LIST_MODE }, () => {
+      this.isRepoChanged = true;
+      this.setState({ path: '/', viewId: '', tagID: '', currentMode: cookie.load('seafile_view_mode') || LIST_MODE, treeData: treeHelper.buildTree() }, () => {
         this.calculatePara(nextProps);
       });
     }
