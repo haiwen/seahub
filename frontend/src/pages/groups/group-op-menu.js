@@ -34,7 +34,6 @@ class GroupOperationMenu extends React.Component {
     this.state = {
       isCreateRepoDialogOpen: false,
       isShowDepartmentDetailDialog: false,
-      showGroupMembersPopover: false,
       isRenameGroupDialogOpen: false,
       isDeleteGroupDialogOpen: false,
       isTransferGroupDialogOpen: false,
@@ -207,10 +206,10 @@ class GroupOperationMenu extends React.Component {
           />
         }
         {isMembersDialogOpen &&
-        <GroupMembersDialog
-          groupID={groupID}
-          toggleDialog={this.toggleMembersDialog}
-        />
+          <GroupMembersDialog
+            groupID={groupID}
+            toggleDialog={this.toggleMembersDialog}
+          />
         }
         {this.state.isRenameGroupDialogOpen &&
           <RenameGroupDialog
