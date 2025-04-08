@@ -677,10 +677,12 @@ class Search extends Component {
   };
 
   filterResults = (results) => {
-    const {filters} = this.state;
+    const { filters } = this.state;
     return results.filter(item => {
       if (filters.creator && filters.creator.length > 0) {
-        if (!filters.creator.includes(item.repo_owner_email)) return false;
+        if (!filters.creator.includes(item.repo_owner_email)) {
+          return false;
+        }
       }
 
       if (filters.date?.start && item.last_modified < filters.date.start) {
@@ -692,7 +694,9 @@ class Search extends Component {
 
       if (filters.suffix && filters.suffix.length > 0) {
         const suffix = item.path.includes('.') ? item.path.split('.').pop() : '';
-        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) return false;
+        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) {
+          return false;
+        }
       }
 
       return true;
@@ -790,7 +794,13 @@ class Search extends Component {
                   ></button>
                 }
               </div>
-              {isFiltersShow && <SearchFilters repoID={this.props.repoID} onChange={this.handleFiltersChange} hasFileSearch={this.props.hasFileSearch} />}
+              {isFiltersShow &&
+                <SearchFilters
+                  repoID={this.props.repoID}
+                  onChange={this.handleFiltersChange}
+                  hasFileSearch={this.props.hasFileSearch}
+                />
+              }
               <div
                 className="search-result-container dropdown-search-result-container"
                 ref={this.searchContainer}

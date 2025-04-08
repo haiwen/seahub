@@ -33,7 +33,7 @@ const FilterBySuffix = ({ onSelect }) => {
     <div className="search-filter filter-by-suffix-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="filter-label" style={{ maxWidth: 120 }} title={label}>{label}</div>
+          <div className="filter-label" title={label}>{label}</div>
           {!value && <i className="sf3-font sf3-font-down sf3-font pl-1" />}
         </DropdownToggle>
         <ModalPortal>

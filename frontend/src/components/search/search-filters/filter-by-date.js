@@ -111,7 +111,7 @@ const FilterByDate = ({ onSelect }) => {
     const today = dayjs().endOf('day');
 
     switch (option) {
-      case DATE_OPTION_KEY.TODAY:
+      case DATE_OPTION_KEY.TODAY: {
         setValue(option);
         setIsCustomDate(false);
         onSelect('date', {
@@ -119,7 +119,8 @@ const FilterByDate = ({ onSelect }) => {
           end: today.unix()
         });
         break;
-      case DATE_OPTION_KEY.LAST_7_DAYS:
+      }
+      case DATE_OPTION_KEY.LAST_7_DAYS: {
         setValue(option);
         setIsCustomDate(false);
         onSelect('date', {
@@ -127,7 +128,8 @@ const FilterByDate = ({ onSelect }) => {
           end: today.unix()
         });
         break;
-      case DATE_OPTION_KEY.LAST_30_DAYS:
+      }
+      case DATE_OPTION_KEY.LAST_30_DAYS: {
         setValue(option);
         setIsCustomDate(false);
         onSelect('date', {
@@ -135,10 +137,12 @@ const FilterByDate = ({ onSelect }) => {
           end: today.unix()
         });
         break;
-      case DATE_OPTION_KEY.CUSTOM:
+      }
+      case DATE_OPTION_KEY.CUSTOM: {
         setValue(DATE_OPTION_KEY.CUSTOM);
         setIsCustomDate(true);
         break;
+      }
     }
   }, [onSelect]);
 

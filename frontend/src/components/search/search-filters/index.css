@@ -44,6 +44,11 @@
   white-space: nowrap;
 }
 
+.search-filters-container .search-filter.filter-by-suffix-container .filter-label,
+.search-filters-container .search-filter.filter-by-creator-container .filter-label {
+  max-width: 120px;
+}
+
 .search-filters-container .dropdown-menu {
   max-height: 400px;
 }

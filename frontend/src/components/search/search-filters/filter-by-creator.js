@@ -5,6 +5,7 @@ import { Utils } from '../../../utils/utils';
 import UserItem from './user-item';
 import { seafileAPI } from '../../../utils/seafile-api';
 import ModalPortal from '../../modal-portal';
+import toaster from '../../toast';
 
 const FilterByCreator = ({ repoID, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +72,7 @@ const FilterByCreator = ({ repoID, onSelect }) => {
         });
         setOptions(options);
       } catch (err) {
-        //
+        toaster.danger(Utils.getErrorMsg(err));
       }
     };
     getUsers();
@@ -81,7 +82,7 @@ const FilterByCreator = ({ repoID, onSelect }) => {
     <div className="search-filter filter-by-creator-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="filter-label" style={{ maxWidth: 120 }} title={label}>{label}</div>
+          <div className="filter-label" title={label}>{label}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
         </DropdownToggle>
         <ModalPortal>
