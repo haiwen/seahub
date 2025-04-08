@@ -7,7 +7,7 @@ import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, updateUsedRepoTags, clearRepoTags, children }) => {
+export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, statusCallback, children }) => {
   const enableMetadataManagement = useMemo(() => {
     if (repoInfo?.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -60,9 +60,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, upd
       if (!enableMetadata) {
         cancelMetadataURL();
       }
-      if (enableTags) {
-        updateUsedRepoTags();
-      }
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
@@ -78,6 +75,11 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, upd
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadataManagement]);
+
+  useEffect(() => {
+    statusCallback && statusCallback({ enableMetadata, enableTags });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableMetadata, enableTags]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;
@@ -96,12 +98,10 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, upd
     if (newValue === enableTags && lang === tagsLang) return;
     if (!newValue) {
       cancelMetadataURL(true);
-      clearRepoTags();
     }
     setEnableTags(newValue);
-    if (newValue) updateUsedRepoTags();
     setTagsLang(lang);
-  }, [enableTags, tagsLang, cancelMetadataURL, clearRepoTags, updateUsedRepoTags]);
+  }, [enableTags, tagsLang, cancelMetadataURL]);
 
   const updateEnableOCR = useCallback((newValue) => {
     if (newValue === enableOCR) return;
