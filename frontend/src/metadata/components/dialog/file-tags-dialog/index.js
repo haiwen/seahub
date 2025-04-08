@@ -140,7 +140,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       style={{ marginRight: lastSettingsValue }}
     >
       <div onClick={(e) => e.stopPropagation()} className="modal-content">
-        <ModalHeader>{fileName + gettext('\'s tags')}</ModalHeader>
+        <ModalHeader>{fileName + ' ' + gettext('tags')}</ModalHeader>
         <ModalBody>
           {isLoading ?
             <CenteredLoading />
