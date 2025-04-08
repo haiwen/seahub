@@ -147,7 +147,7 @@ const AIIcon = () => {
           tabIndex={0}
         >
           <div className="detail-control mr-2">
-            <Icon symbol="ai" className="detail-control-close" />
+            <Icon symbol="ai" className="detail-control-icon" />
           </div>
         </DropdownToggle>
         {isMenuShow && (
