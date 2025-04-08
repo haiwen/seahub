@@ -13,6 +13,7 @@ import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import SearchFilters from './search-filters';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -21,6 +22,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
+  hasFileSearch: PropTypes.bool,
 };
 
 const PER_PAGE = 20;
@@ -49,6 +51,12 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
+      filters: {
+        search_filename_only: false,
+        creator: [],
+        date: null,
+        suffix: '',
+      },
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -415,7 +423,7 @@ class Search extends Component {
     this.queryData = queryData;
 
     if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE).then(res => {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE, queryData.search_filename_only).then(res => {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
@@ -483,6 +491,8 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
+      items[i]['last_modified'] = data[i].last_modified || '';
+      items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
     }
     return items;
   }
@@ -524,6 +534,7 @@ class Search extends Component {
       }
     }
 
+    const filteredItems = this.filterResults(resultItems);
     if (isLoading) {
       return <Loading />;
     }
@@ -533,8 +544,8 @@ class Search extends Component {
     else if (!isResultGotten) {
       return this.renderSearchTypes(this.state.inputValue.trim());
     }
-    else if (resultItems.length > 0) {
-      return this.renderResults(resultItems);
+    else if (filteredItems.length > 0) {
+      return this.renderResults(filteredItems);
     }
     else {
       return <div className="search-result-none">{gettext('No results matching')}</div>;
@@ -632,34 +643,64 @@ class Search extends Component {
   }
 
   searchRepo = () => {
-    const { value } = this.state;
+    const { value, filters } = this.state;
     const queryData = {
       q: value,
       search_repo: this.props.repoID,
       search_ftypes: 'all',
+      search_filename_only: filters.search_filename_only,
     };
     this.getSearchResult(queryData);
   };
 
   searchFolder = () => {
-    const { value } = this.state;
+    const { value, filters } = this.state;
     const queryData = {
       q: value,
       search_repo: this.props.repoID,
       search_ftypes: 'all',
       search_path: this.props.path,
+      search_filename_only: filters.search_filename_only,
     };
     this.getSearchResult(queryData);
   };
 
   searchAllRepos = () => {
-    const { value } = this.state;
+    const { value, filters } = this.state;
     const queryData = {
       q: value,
       search_repo: 'all',
       search_ftypes: 'all',
+      search_filename_only: filters.search_filename_only,
     };
     this.getSearchResult(queryData);
+  };
+
+  filterResults = (results) => {
+    const { filters } = this.state;
+    return results.filter(item => {
+      if (filters.creator && filters.creator.length > 0) {
+        if (!filters.creator.includes(item.repo_owner_email)) {
+          return false;
+        }
+      }
+
+      if (filters.date?.start && item.last_modified < filters.date.start) {
+        return false;
+      }
+      if (filters.date?.end && item.last_modified > filters.date.end) {
+        return false;
+      }
+
+      if (filters.suffix && filters.suffix.length > 0) {
+        const suffix = item.path.includes('.') ? item.path.split('.').pop() : '';
+        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) {
+          return false;
+        }
+      }
+
+      return true;
+    });
   };
 
   renderResults = (resultItems, isVisited) => {
@@ -704,11 +745,26 @@ class Search extends Component {
     });
   };
 
+  handleFiltersChange = (key, value) => {
+    const newFilters = { ...this.state.filters, [key]: value};
+    if (newFilters.search_filename_only !== this.state.filters.search_filename_only) {
+      this.setState({ filters: newFilters }, () => {
+        const newQueryData = {
+          ...this.queryData,
+          search_filename_only: newFilters.search_filename_only,
+        }
+        this.getSearchResult(newQueryData);
+      });
+    }
+    this.setState({ filters: newFilters }, () => this.forceUpdate());
+  }
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { isMaskShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
+    const isFiltersShow = this.props.repoID && isMaskShow;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -738,6 +794,13 @@ class Search extends Component {
                   ></button>
                 }
               </div>
+              {isFiltersShow &&
+                <SearchFilters
+                  repoID={this.props.repoID}
+                  onChange={this.handleFiltersChange}
+                  hasFileSearch={this.props.hasFileSearch}
+                />
+              }
               <div
                 className="search-result-container dropdown-search-result-container"
                 ref={this.searchContainer}

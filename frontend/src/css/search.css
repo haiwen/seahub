@@ -22,9 +22,13 @@
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   background-color: #fff;
   cursor: default;
-  overflow: hidden;
   width: 600px;
-  padding: 1rem 0rem 0rem 1rem;
+  padding: 16px 0;
+}
+
+.search-container .input-icon {
+  position: relative;
+  margin: 0 16px;
 }
 
 .search-container .input-icon svg.input-icon-addon {
@@ -47,7 +51,7 @@
   min-width: 20px;
   color: #666;
   height: 20px;
-  margin: 9px 25px 9px 0;
+  margin: 9px;
   border: 0;
   background-color: transparent;
   padding: 0;
@@ -87,6 +91,7 @@
   border-radius: 0 0 3px 3px;
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   top: 60px;
+  padding: 0 16px;
 }
 
 .dropdown-search-result-container {

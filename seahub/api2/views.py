@@ -438,6 +438,15 @@ class RegDevice(APIView):
         return Response("success")
 
 
+class SearchInfoView(APIView):
+    @json_response
+    def get(self, request, format=None):
+        return {
+            'has_file_search': HAS_FILE_SEARCH,
+            'has_file_seasearch': HAS_FILE_SEASEARCH
+        }
+
+
 class Search(APIView):
     """ Search all the repos
     """
