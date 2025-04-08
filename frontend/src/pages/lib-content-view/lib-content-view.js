@@ -2245,6 +2245,14 @@ class LibContentView extends React.Component {
     this.setState({ isDirentSelected });
   };
 
+  metadataStatusCallback = ({ enableMetadata, enableTags }) => {
+    if (enableMetadata && enableTags) {
+      this.updateUsedRepoTags();
+      return;
+    }
+    this.clearRepoTags();
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2320,7 +2328,7 @@ class LibContentView extends React.Component {
     }
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
-      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} updateUsedRepoTags={this.updateUsedRepoTags} clearRepoTags={this.clearRepoTags} >
+      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} callback={this.metadataStatusCallback} >
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
