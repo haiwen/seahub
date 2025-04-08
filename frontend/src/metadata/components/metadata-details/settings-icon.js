@@ -21,7 +21,7 @@ const SettingsIcon = () => {
   return (
     <>
       <div className="detail-control mr-2" id={target} onClick={onSetterToggle}>
-        <Icon symbol="set-up" className="detail-control-close" />
+        <Icon symbol="set-up" className="detail-control-icon" />
       </div>
       {isShowSetter && (
         <HideColumnPopover
