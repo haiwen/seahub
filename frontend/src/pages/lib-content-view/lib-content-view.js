@@ -704,9 +704,13 @@ class LibContentView extends React.Component {
       let newAddedDirents = newDirentList.filter(item => {
         return !nodeChildrenNames.includes(item.name);
       });
+
+      let updatedTree = tree.clone();
       newAddedDirents.forEach(item => {
-        this.addNodeToTree(item.name, path, item.type);
+        const node = this.createTreeNode(item.name, item.type);
+        updatedTree = treeHelper.addNodeToParentByPath(updatedTree, node, path);
       });
+      this.setState({ treeData: updatedTree });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -833,15 +837,25 @@ class LibContentView extends React.Component {
       }
 
       if (repoID === destRepo.repo_id) {
-        if (this.state.isTreePanelShown) {
-          this.deleteTreeNodes(direntPaths);
-        }
-
         this.moveDirents(dirNames);
 
-        // 2. tow columns mode need update left tree
         if (this.state.isTreePanelShown) {
-          this.updateMoveCopyTreeNode(destDirentPath);
+          const updatedTree = treeHelper.moveNodeListByPaths(this.state.treeData, direntPaths, destDirentPath);
+
+          const destNode = updatedTree.getNodeByPath(destDirentPath);
+          if (destNode) {
+            const sortedChildren = Utils.sortDirents(
+              destNode.children.map(n => n.object),
+              'name',
+              'asc'
+            ).map(dirent => {
+              return destNode.children.find(n => n.object.name === dirent.name);
+            });
+
+            destNode.children = sortedChildren;
+          }
+
+          this.setState({ treeData: updatedTree });
         }
 
         // show tip message if move to current repo
