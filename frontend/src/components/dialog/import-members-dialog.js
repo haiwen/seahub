@@ -5,7 +5,7 @@ import { gettext, siteRoot, groupImportMembersExtraMsg } from '../../utils/const
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
-  toggleImportMembersDialog: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
   importMembersInBatch: PropTypes.func.isRequired,
 };
 
@@ -19,7 +19,7 @@ class ImportMembersDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.toggleImportMembersDialog();
+    this.props.toggleDialog();
   };
 
   openFileInput = () => {
@@ -49,9 +49,8 @@ class ImportMembersDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Import members from a .xlsx file')}</SeahubModalHeader>
-
         <ModalBody>
-          <p>{groupImportMembersExtraMsg}</p>
+          {groupImportMembersExtraMsg && <p>{groupImportMembersExtraMsg}</p>}
           <p><a className="text-secondary small" href={`${siteRoot}api/v2.1/group-members-import-example/`}>{gettext('Download an example file')}</a></p>
           <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload file')}</button>
           <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInputRef} />

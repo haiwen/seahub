@@ -10,7 +10,7 @@ import OpIcon from './op-icon';
 
 const propTypes = {
   groupMembers: PropTypes.array.isRequired,
-  groupID: PropTypes.string,
+  groupID: PropTypes.number.isRequired,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
@@ -61,7 +61,7 @@ const MemberPropTypes = {
   changeMember: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
+  groupID: PropTypes.number.isRequired,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired
 };
