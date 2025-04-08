@@ -69,10 +69,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     setShowInput(true);
   }, [generateNewViewDefaultName]);
 
-  const closeNewView = useCallback(() => {
-    setShowInput(false);
-  }, []);
-
   const closeNewFolder = useCallback(() => {
     setShowInput(false);
   }, []);
@@ -89,7 +85,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   }, [getFolders]);
 
   const handleAddView = useCallback((name, type) => {
-    addView({ name, type });
+    addView({ name, type, successCallback: () => setShowInput(false) });
   }, [addView]);
 
   const handleDuplicateView = useCallback((viewId) => {
@@ -163,7 +159,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
             return renderView(view, index);
           })}
           {showInput && (newView ?
-            <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 2} closeNewView={closeNewView} addView={handleAddView} /> :
+            <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 2} addView={handleAddView} /> :
             <NewFolder closeNewFolder={closeNewFolder} />
           )}
         </div>

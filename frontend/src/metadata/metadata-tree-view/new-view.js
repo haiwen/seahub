@@ -7,7 +7,7 @@ import { useMetadata } from '../hooks';
 import { validateName } from '../utils/validate';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
 
-const NewView = ({ newView, leftIndent, closeNewView, addView }) => {
+const NewView = ({ newView, leftIndent, addView }) => {
   const { type: newViewType } = newView;
   const { idViewMap } = useMetadata();
   const editorRef = useRef(null);
@@ -22,8 +22,7 @@ const NewView = ({ newView, leftIndent, closeNewView, addView }) => {
       return;
     }
     addView(message, newViewType);
-    closeNewView();
-  }, [newViewType, idViewMap, addView, closeNewView]);
+  }, [newViewType, idViewMap, addView]);
 
   return (
     <div className="tree-node">
@@ -48,7 +47,6 @@ const NewView = ({ newView, leftIndent, closeNewView, addView }) => {
 NewView.propTypes = {
   newView: PropTypes.object,
   leftIndent: PropTypes.number,
-  closeNewView: PropTypes.func,
 };
 
 export default NewView;
