@@ -20,7 +20,7 @@ import './css/markdown-editor.css';
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
-const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
+const { repoID, filePath, fileName, isLocked, lockedByMe, filePerm } = window.app.pageOptions;
 const { siteRoot, serviceUrl } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
@@ -386,7 +386,7 @@ class MarkdownEditor extends React.Component {
     const { loading, markdownContent, fileInfo, isLocked } = this.state;
 
     return (
-      <Fragment>
+      <>
         <HeaderToolbar
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
@@ -407,7 +407,7 @@ class MarkdownEditor extends React.Component {
           toggleLockFile={this.toggleLockFile}
         />
         <div className={`sf-md-viewer-content ${isLocked ? 'locked' : ''}`}>
-          {!isLocked && (
+          {(filePerm === 'rw' && !isLocked) ?
             <SeafileMarkdownEditor
               ref={this.editorRef}
               isFetching={loading}
@@ -420,19 +420,17 @@ class MarkdownEditor extends React.Component {
             >
               <DetailListView fileInfo={fileInfo} />
             </SeafileMarkdownEditor>
-          )}
-          {isLocked && (
+            :
             <SeafileMarkdownViewer
               isFetching={loading}
               value={markdownContent}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
               isShowOutline={true}
-            >
-            </SeafileMarkdownViewer>
-          )}
+            />
+          }
         </div>
         {this.state.showMarkdownEditorDialog && (
-          <React.Fragment>
+          <>
             {this.state.showInsertFileDialog &&
               <InsertFileDialog
                 repoID={repoID}
@@ -452,9 +450,9 @@ class MarkdownEditor extends React.Component {
                 repoEncrypted={false}
               />
             }
-          </React.Fragment>
+          </>
         )}
-      </Fragment>
+      </>
     );
   }
 }
