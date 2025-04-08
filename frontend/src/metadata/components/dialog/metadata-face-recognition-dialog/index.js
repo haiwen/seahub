@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalFooter, Button } from 'reactstrap';
-import classnames from 'classnames';
 import Switch from '../../../../components/switch';
 import { gettext } from '../../../../utils/constants';
 import metadataAPI from '../../../api';
@@ -69,7 +68,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
               disabled={submitting || !enableMetadata}
               size="large"
               textPosition="right"
-              className={classnames('change-face-recognition-status-management w-100', { 'disabled': submitting || oldValue })}
+              className="change-face-recognition-status-management w-100"
               onChange={onValueChange}
               placeholder={gettext('Face recognition')}
             />

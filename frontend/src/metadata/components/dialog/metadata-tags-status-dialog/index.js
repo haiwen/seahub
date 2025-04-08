@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
-import classnames from 'classnames';
 import Switch from '../../../../components/switch';
 import { gettext } from '../../../../utils/constants';
 import tagsAPI from '../../../../tag/api';
@@ -89,7 +88,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
               disabled={submitting || !enableMetadata}
               size="large"
               textPosition="right"
-              className={classnames('change-face-recognition-status-management w-100', { 'disabled': submitting || oldValue })}
+              className="change-face-recognition-status-management w-100"
               onChange={onValueChange}
               placeholder={gettext('Tags')}
             />
