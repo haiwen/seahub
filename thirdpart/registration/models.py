@@ -122,7 +122,7 @@ class RegistrationManager(models.Manager):
         if isinstance(username, str):
             username = username.encode('utf-8')
 
-        # Take the first 16 character to avoid errors.
+        # Take the first 40 character to avoid errors.
         # (1406, "Data too long for column 'activation_key' at row 1")
         activation_key = hashlib.sha256(salt+username).hexdigest()[:40]
         return self.create(emailuser_id=user.id,
