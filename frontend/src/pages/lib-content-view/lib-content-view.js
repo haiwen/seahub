@@ -2328,7 +2328,7 @@ class LibContentView extends React.Component {
     }
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
-      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} callback={this.metadataStatusCallback} >
+      <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
         <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>

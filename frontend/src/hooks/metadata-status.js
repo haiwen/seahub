@@ -7,7 +7,7 @@ import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, callback, children }) => {
+export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, statusCallback, children }) => {
   const enableMetadataManagement = useMemo(() => {
     if (repoInfo?.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -77,7 +77,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, cal
   }, [repoID, enableMetadataManagement]);
 
   useEffect(() => {
-    callback && callback({ enableMetadata, enableTags });
+    statusCallback && statusCallback({ enableMetadata, enableTags });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableMetadata, enableTags]);
 
