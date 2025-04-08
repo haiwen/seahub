@@ -25,6 +25,7 @@ jobs:
           sudo apt-get install -y libfuse-dev cmake re2c flex sqlite3
           sudo apt-get install -y libssl-dev libsasl2-dev libldap2-dev libonig-dev
           sudo apt-get install -y libxml2 libxml2-dev libjwt-dev
+          sudo apt-get install -y libhiredis-dev
 
       - name: clone and build
         run: |
