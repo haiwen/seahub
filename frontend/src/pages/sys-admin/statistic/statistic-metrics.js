@@ -5,57 +5,38 @@ import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import { gettext } from '../../../utils/constants';
 
-const MetricRow = ({ metric, point }) => (
-  <tr>
-    <td>
-      <div className="metric-info">
-        <div className="metric-name">{metric.name}</div>
-      </div>
-    </td>
-    <td>{point.labels.node}</td>
-    <td className="metric-value">{point.value}</td>
-    <td>{dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}</td>
-  </tr>
-);
-
 class ComponentMetricsTable extends Component {
   render() {
     const { componentName, metrics } = this.props;
 
     return (
-      <div className="component-metrics-card">
-        <div className="card mb-4">
-          <div className="card-header">
-            <h4 className="component-title">
-              <i className="fas fa-server mr-2"></i>
-              {componentName}
-            </h4>
-          </div>
-          <div className="card-body">
-            <table className="table table-hover table-striped mb-0">
-              <thead>
-                <tr>
-                  <th width="40%">{gettext('Metric')}</th>
-                  <th width="20%">{gettext('Node')}</th>
-                  <th width="15%">{gettext('Value')}</th>
-                  <th width="25%">{gettext('Collected time')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {metrics.map((metric) => (
-                  metric.data_points.map((point, pointIndex) => (
-                    <MetricRow
-                      key={`${metric.name}-${pointIndex}`}
-                      metric={metric}
-                      point={point}
-                    />
-                  ))
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <>
+        <tr className="component-header">
+          <td colSpan="4">
+            <div className="component-title">
+              <span>{componentName}</span>
+            </div>
+          </td>
+        </tr>
+        {metrics.map((metric) => (
+          metric.data_points.map((point, pointIndex) => (
+            <tr key={`${metric.name}-${pointIndex}`} className="metric-row">
+              <td>
+                <div className="metric-info">
+                  <div className="metric-name">{metric.name}</div>
+                </div>
+              </td>
+              <td>{point.labels.node}</td>
+              <td className="metric-value">{point.value}</td>
+              <td>
+                <span className="collected-time">
+                  {dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}
+                </span>
+              </td>
+            </tr>
+          ))
+        ))}
+      </>
     );
   }
 }
@@ -123,22 +104,38 @@ class StatisticMetrics extends Component {
     return (
       <>
         <MainPanelTopbar {...this.props} />
-        <div className="cur-view-container">
+        <div className="">
           <StatisticNav currentItem="metricsStatistic" />
-          <div className="cur-view-content">
+          <div className="cur-metrics-content">
             {loading ? (
               <div className="loading-icon loading-tip"></div>
             ) : error ? (
               <div className="error text-danger">{error}</div>
             ) : (
               <div className="metrics-container">
-                {Object.entries(groupedMetrics).map(([component, metrics]) => (
-                  <ComponentMetricsTable
-                    key={component}
-                    componentName={component}
-                    metrics={metrics}
-                  />
-                ))}
+                <div className="card">
+                  <div className="card-body">
+                    <table className="table table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th width="40%">{gettext('Metrics')}</th>
+                          <th width="20%">{gettext('Node')}</th>
+                          <th width="15%">{gettext('Value')}</th>
+                          <th width="25%">{gettext('Collected time')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(groupedMetrics).map(([component, metrics]) => (
+                          <ComponentMetricsTable
+                            key={component}
+                            componentName={component}
+                            metrics={metrics}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -150,59 +147,85 @@ class StatisticMetrics extends Component {
 
 const style = `
   <style>
-    .component-metrics-card .card-header {
-      background-color: #f8f9fa;
-      padding: 15px 20px;
+    .cur-metrics-content {
+      padding: 10px 16px;
+      border: none;
     }
-    
-    .component-metrics-card .component-title {
-      margin: 0;
-      color: #1e1e1e;
-      font-size: 18px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
+
+    .cur-metrics-content .card {
+      margin-bottom: 20px;
+    }
+
+    .component-metrics-card .card-header {
+      background-color: #fff;
+      padding: 16px 20px;
     }
     
     .metric-info {
       display: flex;
       flex-direction: column;
-      gap: 4px;
     }
     
     .metric-name {
-      font-weight: 500;
-      color: #333;
-    }
-    
-    .metric-value {
-      font-family: monospace;
       font-size: 14px;
     }
-    
+
     .metrics-container {
-      padding: 1rem;
+      padding: 0;
     }
     
     .loading-tip {
       margin: 100px auto;
       text-align: center;
     }
-    
-    .table th {
-      background-color: #f8f9fa;
-      border-top: none;
-      position: sticky;
-      top: 0;
-      z-index: 1;
+
+    .card {
+      box-shadow: none;
+      border: none;
     }
-    
-    .table td {
+
+    .card-body {
+      border: none;
+      padding: 0;
+    }
+
+    .component-header {
+      background-color: #fafafa !important;
+    }
+
+    .component-header td {
+      padding-top: 24px !important;
+      padding-bottom: 2px !important;
+      }
+
+    .component-title {
+      color: #212529;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .metric-row td {
+      padding: 0;
+      font-size: 14px;
+    }
+
+    .metrics-container .table {
+      margin-bottom: 0;
+      border: none;
+    }
+
+    .metrics-container .table td {
       vertical-align: middle;
+      background-color: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      padding-left: 8px;
     }
-    
-    .table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(0,0,0,.02);
+
+    .metrics-container .table th {
+      background-color: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      color: #666;
+      font-size: 14px;
     }
   </style>
 `;
