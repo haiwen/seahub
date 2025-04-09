@@ -168,26 +168,6 @@ class LibContentView extends React.Component {
         return path.replace(/^\/+/, '');
       };
 
-      const getCurrentPath = () => {
-        const currentUrl = window.location.href;
-        const parsedUrl = new URL(currentUrl);
-        const libraryIndex = parsedUrl.pathname.indexOf('/library/');
-        if (libraryIndex === -1) {
-          return '';
-        }
-        const pathAfterLibrary = parsedUrl.pathname.slice(libraryIndex + 9);
-
-        const pathParts = pathAfterLibrary.split('/').filter(part => part.length > 0);
-
-        if (pathParts.length < 2) {
-          return '';
-        }
-
-        const targetPath = pathParts.slice(2).join('/');
-
-        return getStandardizedPath(decodeURIComponent(targetPath));
-      };
-
       const getNotificationPath = (data) => {
         if (!data.content || !data.content.path) {
           return '';
@@ -197,7 +177,8 @@ class LibContentView extends React.Component {
         return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
       };
 
-      const dirRouter = getCurrentPath();
+      let dirRouter = this.state.path;
+      dirRouter = dirRouter.slice(1);
       const notifRouter = getNotificationPath(data);
 
       if (dirRouter === notifRouter) {
