@@ -25,6 +25,7 @@ const entryFiles = {
   sharedFileViewAudio: '/shared-file-view-audio.js',
   sharedFileViewDocument: '/shared-file-view-document.js',
   sharedFileViewSpreadsheet: '/shared-file-view-spreadsheet.js',
+  sharedFileViewExdraw: '/shared-file-view-exdraw.js',
   sharedFileViewSdoc: '/shared-file-view-sdoc.js',
   sharedFileViewUnknown: '/shared-file-view-unknown.js',
   historyTrashFileView: '/history-trash-file-view.js',
