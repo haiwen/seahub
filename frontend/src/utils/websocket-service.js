@@ -22,7 +22,7 @@ class WebSocketClient {
     this.socket.onopen = async () => {
       const msg = await this.formatSubscriptionMsg();
       // eslint-disable-next-line no-console
-      console.log(JSON.stringify(msg), 'msg')
+      console.log(JSON.stringify(msg), 'msg');
       this.socket.send(JSON.stringify(msg));
     };
 
@@ -30,7 +30,7 @@ class WebSocketClient {
     this.socket.onmessage = async (event) => {
       const parsedData = JSON.parse(event.data);
       // eslint-disable-next-line no-console
-      console.log(JSON.stringify(parsedData), 'parsedData')
+      console.log(JSON.stringify(parsedData), 'parsedData');
       // jwt-expire reconnect
       if (parsedData.type === 'jwt-expired') {
         const msg = await this.formatSubscriptionMsg();

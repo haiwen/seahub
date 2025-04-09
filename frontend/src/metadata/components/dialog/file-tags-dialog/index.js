@@ -144,7 +144,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
         <ModalBody>
           {isLoading ?
             <CenteredLoading />
-          :
+            :
             <div>
               <div className="mb-6">
                 <div className='mb-1'>{gettext('Matching tags')}</div>
