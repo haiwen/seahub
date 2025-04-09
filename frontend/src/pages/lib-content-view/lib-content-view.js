@@ -171,15 +171,11 @@ class LibContentView extends React.Component {
      * }
      */
     if (noticeData.type === 'file-lock-changed') {
-      const getStandardizedPath = (path) => {
-        return path.replace(/^\/+/, '');
-      };
-
       const getNotificationPath = (noticeData) => {
         if (!noticeData.content || !noticeData.content.path) {
           return '';
         }
-        const path = getStandardizedPath(noticeData.content.path);
+        const path = noticeData.content.path.replace(/^\/+/, '');
         const lastSlashIndex = path.lastIndexOf('/');
         return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
       };
@@ -188,7 +184,7 @@ class LibContentView extends React.Component {
       dirPath = dirPath.slice(1);
       const noticePath = getNotificationPath(noticeData);
 
-      if (dirPath === noticePath) {
+      if (dirPath === noticePath) { // Check if the notification path is the same as the current path
         const dirent = { name: noticeData.content.path.split('/').pop() };
         if (noticeData.content.change_event === 'locked') {
           if (noticeData.content.expire === -1) {
