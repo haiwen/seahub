@@ -7,7 +7,6 @@ import Notification from '../common/notification';
 import Account from '../common/account';
 import Logout from '../common/logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
-import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -33,7 +32,6 @@ class CommonToolbar extends React.Component {
       path: props.path,
       isViewFile: props.isViewFile,
       currentRepoInfo: props.currentRepoInfo,
-      hasFileSearch: false
     };
   }
 
@@ -41,9 +39,6 @@ class CommonToolbar extends React.Component {
     if (this.props.eventBus) {
       this.unsubscribeLibChange = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, this.onRepoChange);
     }
-    seafileAPI.getSearchInfo().then(res => {
-      this.setState({ hasFileSearch: res.data.has_file_search });
-    });
   }
 
   componentWillUnmount() {
@@ -64,7 +59,7 @@ class CommonToolbar extends React.Component {
   };
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, path, isViewFile, hasFileSearch } = this.state;
+    const { repoID, repoName, isLibView, path, isViewFile } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
@@ -77,7 +72,6 @@ class CommonToolbar extends React.Component {
           isViewFile={isViewFile}
           isPublic={false}
           path={path}
-          hasFileSearch={hasFileSearch}
         />
       );
     } else {

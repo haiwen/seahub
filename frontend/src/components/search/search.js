@@ -22,7 +22,6 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
-  hasFileSearch: PropTypes.bool,
 };
 
 const PER_PAGE = 20;
@@ -798,7 +797,6 @@ class Search extends Component {
                 <SearchFilters
                   repoID={this.props.repoID}
                   onChange={this.handleFiltersChange}
-                  hasFileSearch={this.props.hasFileSearch}
                 />
               }
               <div
