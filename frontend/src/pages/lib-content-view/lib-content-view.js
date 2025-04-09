@@ -162,36 +162,48 @@ class LibContentView extends React.Component {
     this.calculatePara(this.props);
   }
 
-  onMessageCallback = (data) => {
-    if (data.type === 'file-lock-changed') {
-      const currentUrl = window.location.href;
-      const parsedUrl = new URL(currentUrl);
-      const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
-      const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
-      let notiUrlIndex = '';
-      if (data.content.path.includes('/')) {
-        notiUrlIndex = data.content.path.lastIndexOf('/');
-      }
-      const notifRouter = data.content.path.slice(0, notiUrlIndex);
-      if (dirRouter === notifRouter) {
-        const dirent = { name: data.content.path.split('/').pop() };
-        if (data.content.change_event === 'locked') {
-          if (data.content.expire === -1) {
-            this.updateDirent(dirent, 'is_freezed', true);
+  onMessageCallback = (noticeData) => {
+    /**
+     * noticeData structure:
+     * {
+     *  type: 'file-lock-changed', // opertaion type
+     *  content: {}
+     * }
+     */
+    if (noticeData.type === 'file-lock-changed') {
+      const getFilePath = (noticeData) => {
+        if (!noticeData.content || !noticeData.content.path) {
+          return '';
+        }
+        const path = noticeData.content.path.replace(/^\/+/, '');
+        const lastSlashIndex = path.lastIndexOf('/');
+        return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
+      };
+
+      let currentPath = this.state.path;
+      currentPath = currentPath.slice(1); // remove the leading '/'
+      const noticeFilePath = getFilePath(noticeData);
+
+      if (currentPath === noticeFilePath) {
+        // update file status
+        const fileNameObj = { name: noticeData.content.path.split('/').pop() };
+        if (noticeData.content.change_event === 'locked') {
+          if (noticeData.content.expire === -1) {
+            this.updateDirent(fileNameObj, 'is_freezed', true);
           } else {
-            this.updateDirent(dirent, 'is_freezed', false);
+            this.updateDirent(fileNameObj, 'is_freezed', false);
           }
-          this.updateDirent(dirent, 'is_locked', true);
-          this.updateDirent(dirent, 'locked_by_me', true);
-          let lockName = data.content.lock_user.split('@');
-          this.updateDirent(dirent, 'lock_owner_name', lockName[0]);
-        } else if (data.content.change_event === 'unlocked') {
-          this.updateDirent(dirent, 'is_locked', false);
-          this.updateDirent(dirent, 'locked_by_me', false);
-          this.updateDirent(dirent, 'lock_owner_name', '');
+          this.updateDirent(fileNameObj, 'is_locked', true);
+          this.updateDirent(fileNameObj, 'locked_by_me', true);
+          let lockOwnerName = noticeData.content.lock_user.split('@')[0];
+          this.updateDirent(fileNameObj, 'lock_owner_name', lockOwnerName);
+        } else if (noticeData.content.change_event === 'unlocked') {
+          this.updateDirent(fileNameObj, 'is_locked', false);
+          this.updateDirent(fileNameObj, 'locked_by_me', false);
+          this.updateDirent(fileNameObj, 'lock_owner_name', '');
         }
       }
-    } else if (data.type === 'repo-update') {
+    } else if (noticeData.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
