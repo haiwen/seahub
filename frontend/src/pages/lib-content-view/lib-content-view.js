@@ -165,6 +165,8 @@ class LibContentView extends React.Component {
   onMessageCallback = (data) => {
     if (data.type === 'file-lock-changed') {
       const currentUrl = window.location.href;
+      // eslint-disable-next-line no-console
+      console.log(currentUrl, 'currentUrl')
       const parsedUrl = new URL(currentUrl);
       const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
       const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
@@ -173,6 +175,8 @@ class LibContentView extends React.Component {
         notiUrlIndex = data.content.path.lastIndexOf('/');
       }
       const notifRouter = data.content.path.slice(0, notiUrlIndex);
+      // eslint-disable-next-line no-console
+      console.log(dirRouter, notifRouter, 'dirRouter, notifRouter')
       if (dirRouter === notifRouter) {
         const dirent = { name: data.content.path.split('/').pop() };
         if (data.content.change_event === 'locked') {
