@@ -164,15 +164,42 @@ class LibContentView extends React.Component {
 
   onMessageCallback = (data) => {
     if (data.type === 'file-lock-changed') {
-      const currentUrl = window.location.href;
-      const parsedUrl = new URL(currentUrl);
-      const pathParts = parsedUrl.pathname.split('/').filter(part => part.length > 0);
-      const dirRouter = decodeURIComponent(pathParts.slice(3).join('/'));
-      let notiUrlIndex = '';
-      if (data.content.path.includes('/')) {
-        notiUrlIndex = data.content.path.lastIndexOf('/');
-      }
-      const notifRouter = data.content.path.slice(0, notiUrlIndex);
+      const getStandardizedPath = (path) => {
+        return path.replace(/^\/+/, '');
+      };
+
+      const getCurrentPath = () => {
+        const currentUrl = window.location.href;
+        const parsedUrl = new URL(currentUrl);
+        const libraryIndex = parsedUrl.pathname.indexOf('/library/');
+        if (libraryIndex === -1) {
+          return '';
+        }
+        const pathAfterLibrary = parsedUrl.pathname.slice(libraryIndex + 9);
+
+        const pathParts = pathAfterLibrary.split('/').filter(part => part.length > 0);
+
+        if (pathParts.length < 2) {
+          return '';
+        }
+
+        const targetPath = pathParts.slice(2).join('/');
+
+        return getStandardizedPath(decodeURIComponent(targetPath));
+      };
+
+      const getNotificationPath = (data) => {
+        if (!data.content || !data.content.path) {
+          return '';
+        }
+        const path = getStandardizedPath(data.content.path);
+        const lastSlashIndex = path.lastIndexOf('/');
+        return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
+      };
+
+      const dirRouter = getCurrentPath();
+      const notifRouter = getNotificationPath(data);
+
       if (dirRouter === notifRouter) {
         const dirent = { name: data.content.path.split('/').pop() };
         if (data.content.change_event === 'locked') {
