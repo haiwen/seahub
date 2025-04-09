@@ -670,7 +670,20 @@ class Search(APIView):
             size_range = [size_from, size_to]
             time_range = [time_from, time_to]
             results, total = ai_search_files(keyword, searched_repos, per_page, suffixes,
-                                             search_path=search_path, obj_type=obj_type, time_range=time_range, size_range=size_range)
+                                             search_path=search_path, obj_type=obj_type, time_range=time_range, size_range=size_range, search_filename_only=search_filename_only)
+
+            repo_ids = {f['repo_id'] for f in results}
+            owner_map = {}
+            for repo_id in repo_ids:
+                try:
+                    if is_org_context(request):
+                        owner = seafile_api.get_org_repo_owner(repo_id)
+                    else:
+                        owner = seafile_api.get_repo_owner(repo_id)
+                except Exception as e:
+                    logger.error(e)
+                    owner = ''
+                owner_map[repo_id] = owner
 
             for f in results:
                 repo_id = f['repo_id']
@@ -690,6 +703,8 @@ class Search(APIView):
                     else:
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
+
+                f['repo_owner_email'] = owner_map.get(repo_id, '')
 
             return Response({"total": total, "results": results, "has_more": False})
 

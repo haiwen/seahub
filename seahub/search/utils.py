@@ -210,12 +210,13 @@ def search_wikis(wiki_id, keyword, count):
     return es_wiki_search(wiki_id, keyword, count)
 
 
-def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, obj_type=None, time_range=None, size_range=None):
+def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, obj_type=None, time_range=None, size_range=None, search_filename_only=None):
     params = {
         'query': keyword,
         'repos': searched_repos,
         'count': count,
         'suffixes': suffixes,
+        'search_filename_only': search_filename_only,
     }
 
     if search_path:
