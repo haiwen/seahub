@@ -171,7 +171,7 @@ class LibContentView extends React.Component {
      * }
      */
     if (noticeData.type === 'file-lock-changed') {
-      const getNotificationPath = (noticeData) => {
+      const getFilePath = (noticeData) => {
         if (!noticeData.content || !noticeData.content.path) {
           return '';
         }
@@ -180,26 +180,27 @@ class LibContentView extends React.Component {
         return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
       };
 
-      let dirPath = this.state.path;
-      dirPath = dirPath.slice(1);
-      const noticePath = getNotificationPath(noticeData);
+      let currentPath = this.state.path;
+      currentPath = currentPath.slice(1); // remove the leading '/'
+      const noticeFilePath = getFilePath(noticeData);
 
-      if (dirPath === noticePath) { // Check if the notification path is the same as the current path
-        const dirent = { name: noticeData.content.path.split('/').pop() };
+      if (currentPath === noticeFilePath) {
+        // update file status
+        const fileNameObj = { name: noticeData.content.path.split('/').pop() };
         if (noticeData.content.change_event === 'locked') {
           if (noticeData.content.expire === -1) {
-            this.updateDirent(dirent, 'is_freezed', true);
+            this.updateDirent(fileNameObj, 'is_freezed', true);
           } else {
-            this.updateDirent(dirent, 'is_freezed', false);
+            this.updateDirent(fileNameObj, 'is_freezed', false);
           }
-          this.updateDirent(dirent, 'is_locked', true);
-          this.updateDirent(dirent, 'locked_by_me', true);
-          let lockName = noticeData.content.lock_user.split('@');
-          this.updateDirent(dirent, 'lock_owner_name', lockName[0]);
+          this.updateDirent(fileNameObj, 'is_locked', true);
+          this.updateDirent(fileNameObj, 'locked_by_me', true);
+          let lockOwnerName = noticeData.content.lock_user.split('@');
+          this.updateDirent(fileNameObj, 'lock_owner_name', lockOwnerName[0]);
         } else if (noticeData.content.change_event === 'unlocked') {
-          this.updateDirent(dirent, 'is_locked', false);
-          this.updateDirent(dirent, 'locked_by_me', false);
-          this.updateDirent(dirent, 'lock_owner_name', '');
+          this.updateDirent(fileNameObj, 'is_locked', false);
+          this.updateDirent(fileNameObj, 'locked_by_me', false);
+          this.updateDirent(fileNameObj, 'lock_owner_name', '');
         }
       }
     } else if (noticeData.type === 'repo-update') {
