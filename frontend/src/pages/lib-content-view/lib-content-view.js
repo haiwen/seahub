@@ -162,55 +162,51 @@ class LibContentView extends React.Component {
     this.calculatePara(this.props);
   }
 
-  onMessageCallback = (data) => {
+  onMessageCallback = (noticeData) => {
     /**
-     * data structure:
+     * noticeData structure:
      * {
-     *  type: 'file-lock-changed',
-     *  content: {
-     *    path: '/1/2/a.sdoc',
-     *    change_event: 'locked',
-     *    expire: -1
-     *  }
+     *  type: 'file-lock-changed', // opertaion type
+     *  content: {}
      * }
      */
-    if (data.type === 'file-lock-changed') {
+    if (noticeData.type === 'file-lock-changed') {
       const getStandardizedPath = (path) => {
         return path.replace(/^\/+/, '');
       };
 
-      const getNotificationPath = (data) => {
-        if (!data.content || !data.content.path) {
+      const getNotificationPath = (noticeData) => {
+        if (!noticeData.content || !noticeData.content.path) {
           return '';
         }
-        const path = getStandardizedPath(data.content.path);
+        const path = getStandardizedPath(noticeData.content.path);
         const lastSlashIndex = path.lastIndexOf('/');
         return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
       };
 
       let dirPath = this.state.path;
       dirPath = dirPath.slice(1);
-      const notifPath = getNotificationPath(data);
+      const noticePath = getNotificationPath(noticeData);
 
-      if (dirPath === notifPath) {
-        const dirent = { name: data.content.path.split('/').pop() };
-        if (data.content.change_event === 'locked') {
-          if (data.content.expire === -1) {
+      if (dirPath === noticePath) {
+        const dirent = { name: noticeData.content.path.split('/').pop() };
+        if (noticeData.content.change_event === 'locked') {
+          if (noticeData.content.expire === -1) {
             this.updateDirent(dirent, 'is_freezed', true);
           } else {
             this.updateDirent(dirent, 'is_freezed', false);
           }
           this.updateDirent(dirent, 'is_locked', true);
           this.updateDirent(dirent, 'locked_by_me', true);
-          let lockName = data.content.lock_user.split('@');
+          let lockName = noticeData.content.lock_user.split('@');
           this.updateDirent(dirent, 'lock_owner_name', lockName[0]);
-        } else if (data.content.change_event === 'unlocked') {
+        } else if (noticeData.content.change_event === 'unlocked') {
           this.updateDirent(dirent, 'is_locked', false);
           this.updateDirent(dirent, 'locked_by_me', false);
           this.updateDirent(dirent, 'lock_owner_name', '');
         }
       }
-    } else if (data.type === 'repo-update') {
+    } else if (noticeData.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
