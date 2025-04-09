@@ -92,9 +92,7 @@ def activate(request, backend,
     for key, value in list(extra_context.items()):
         context[key] = callable(value) and value() or value
 
-    return render(request, template_name,
-                              kwargs,
-                              context=context)
+    return render(request, template_name, context=context)
 
 
 def register(request, backend, success_url=None, form_class=None,
