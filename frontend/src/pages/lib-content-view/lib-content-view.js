@@ -195,8 +195,8 @@ class LibContentView extends React.Component {
           }
           this.updateDirent(fileNameObj, 'is_locked', true);
           this.updateDirent(fileNameObj, 'locked_by_me', true);
-          let lockOwnerName = noticeData.content.lock_user.split('@');
-          this.updateDirent(fileNameObj, 'lock_owner_name', lockOwnerName[0]);
+          let lockOwnerName = noticeData.content.lock_user.split('@')[0];
+          this.updateDirent(fileNameObj, 'lock_owner_name', lockOwnerName);
         } else if (noticeData.content.change_event === 'unlocked') {
           this.updateDirent(fileNameObj, 'is_locked', false);
           this.updateDirent(fileNameObj, 'locked_by_me', false);
