@@ -163,6 +163,17 @@ class LibContentView extends React.Component {
   }
 
   onMessageCallback = (data) => {
+    /**
+     * data structure:
+     * {
+     *  type: 'file-lock-changed',
+     *  content: {
+     *    path: '/1/2/a.sdoc',
+     *    change_event: 'locked',
+     *    expire: -1
+     *  }
+     * }
+     */
     if (data.type === 'file-lock-changed') {
       const getStandardizedPath = (path) => {
         return path.replace(/^\/+/, '');
@@ -177,11 +188,11 @@ class LibContentView extends React.Component {
         return lastSlashIndex === -1 ? '' : path.slice(0, lastSlashIndex);
       };
 
-      let dirRouter = this.state.path;
-      dirRouter = dirRouter.slice(1);
-      const notifRouter = getNotificationPath(data);
+      let dirPath = this.state.path;
+      dirPath = dirPath.slice(1);
+      const notifPath = getNotificationPath(data);
 
-      if (dirRouter === notifRouter) {
+      if (dirPath === notifPath) {
         const dirent = { name: data.content.path.split('/').pop() };
         if (data.content.change_event === 'locked') {
           if (data.content.expire === -1) {
