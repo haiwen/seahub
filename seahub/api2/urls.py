@@ -30,7 +30,6 @@ urlpatterns = [
     re_path(r'^accounts/(?P<email>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/$', Account.as_view(), name="api2-account"),
     path('account/info/', AccountInfo.as_view()),
     path('regdevice/', RegDevice.as_view(), name="regdevice"),
-    path('search-info/', SearchInfoView.as_view(), name="search-info"),
     path('search/', Search.as_view(), name='api_search'),
     path('items-search/', ItemsSearch.as_view(), name='api-items-search'),
     path('search-user/', SearchUser.as_view(), name='search-user'),

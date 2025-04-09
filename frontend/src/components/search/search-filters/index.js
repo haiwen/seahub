@@ -9,12 +9,12 @@ import './index.css';
 
 const SCROLLABLE_CONTAINER_HEIGHT = 44;
 
-const SearchFilters = ({ repoID, onChange, hasFileSearch }) => {
+const SearchFilters = ({ repoID, onChange }) => {
   return (
-    <div className="search-filters-container" style={{ height: hasFileSearch && SCROLLABLE_CONTAINER_HEIGHT }}>
-      {hasFileSearch && <FilterByText onSelect={onChange} />}
-      {hasFileSearch && <FilterByCreator repoID={repoID} onSelect={onChange} />}
-      {hasFileSearch && <FilterByDate onSelect={onChange} />}
+    <div className="search-filters-container" style={{ height: SCROLLABLE_CONTAINER_HEIGHT }}>
+      <FilterByText onSelect={onChange} />
+      <FilterByCreator repoID={repoID} onSelect={onChange} />
+      <FilterByDate onSelect={onChange} />
       <FilterBySuffix onSelect={onChange} />
     </div>
   );
@@ -23,7 +23,6 @@ const SearchFilters = ({ repoID, onChange, hasFileSearch }) => {
 SearchFilters.propTypes = {
   repoID: PropTypes.string,
   onChange: PropTypes.func,
-  hasFileSearch: PropTypes.bool,
 };
 
 export default SearchFilters;
