@@ -235,7 +235,7 @@ class FilesActivities extends Component {
     const { onlyMine } = this.props;
     const { targetUsers, availableUsers } = this.state;
     return (
-      <div className="main-panel-center">
+      <div className="mt-4">
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
             <ul className="nav">

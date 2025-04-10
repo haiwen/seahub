@@ -721,9 +721,11 @@ class AdminUsers(APIView):
                 social_auth_user_dict[item.username] = [item]
 
         for user in users:
+            url, _, _ = api_avatar_url(user.email)
             profile = Profile.objects.get_profile_by_user(user.email)
 
             info = {}
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)
@@ -1161,6 +1163,8 @@ class AdminSearchUser(APIView):
                 has_appended.append(user.email)
 
             info = {}
+            url, is_default, date_uploaded = api_avatar_url(user.email)
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)

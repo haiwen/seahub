@@ -684,7 +684,7 @@ if EVENTS_CONFIG_FILE:
         """Return log events list by start/end timestamp. (If no logs, return 'None')
         """
         with _get_seafevents_session() as session:
-            events = seafevents_api.get_event_log_by_time(session, log_type, tstart, tend)
+            events = seafevents_api.get_events_by_time(session, log_type, tstart, tend)
 
         return events if events else None
 
@@ -730,6 +730,12 @@ if EVENTS_CONFIG_FILE:
         """
         with _get_seafevents_session() as session:
             events = seafevents_api.get_file_audit_events(session, email, org_id, repo_id, start, limit)
+
+        return events if events else None
+    
+    def get_log_events_by_users_and_repos(type, emails, repo_ids, start, limit):
+        with _get_seafevents_session() as session:
+            events = seafevents_api.get_events_by_users_and_repos(session, type, emails, repo_ids, start, limit)
 
         return events if events else None
 
@@ -885,6 +891,8 @@ else:
     def get_file_audit_events_by_path():
         pass
     def get_file_audit_events():
+        pass
+    def get_log_events_by_users_and_repos():
         pass
     def get_file_ops_stats_by_day():
         pass

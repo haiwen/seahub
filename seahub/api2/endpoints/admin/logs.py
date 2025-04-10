@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -16,8 +15,8 @@ from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email, translate_commit_desc
-from seahub.utils import get_file_audit_events, generate_file_audit_event_type, \
-    get_file_update_events, get_perm_audit_events, is_valid_email
+from seahub.utils import get_log_events_by_users_and_repos, generate_file_audit_event_type, \
+    is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.base.models import RepoTransfer, GroupMemberAudit
@@ -48,13 +47,17 @@ class AdminLogsLoginLogs(APIView):
         except ValueError:
             current_page = 1
             per_page = 100
-
+        emails = request.GET.getlist('email')
         start = (current_page - 1) * per_page
         end = start + per_page
 
         from seahub.sysadmin_extra.models import UserLoginLog
-        logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
-        count = UserLoginLog.objects.all().count()
+        if emails:
+            logs = UserLoginLog.objects.filter(username__in=emails).order_by('-login_date')[start:end]
+            count = UserLoginLog.objects.filter(username__in=emails).count()
+        else:
+            logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
+            count = UserLoginLog.objects.all().count()
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
@@ -109,32 +112,22 @@ class AdminLogsFileAccessLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo_id_selected = request.GET.get('repo_id', None)
-        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
-            error_msg = 'repo_id %s invalid.' % repo_id_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        emails = request.GET.getlist('email')
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        repos = request.GET.getlist('repo')
+        if repos:
+            for repo_selected in repos:
+                if not is_valid_repo_id_format(repo_selected):
+                    error_msg = 'repo_id %s invalid.' % repo_selected
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
         limit = per_page + 1
 
-        if user_selected:
-            org_id = -1
-            orgs = ccnet_api.get_orgs_by_user(user_selected)
-            if orgs:
-                org_id = orgs[0].org_id
-        elif repo_id_selected:
-            org_id = seafile_api.get_org_id_by_repo_id(repo_id_selected)
-        else:
-            org_id = 0
-
-        # org_id = 0, show all file audit
-        events = get_file_audit_events(user_selected, org_id, repo_id_selected, start, limit) or []
-
+        events = get_log_events_by_users_and_repos('file_audit', emails, repos, start, limit) or []
         if len(events) > per_page:
             events = events[:per_page]
             has_next_page = True
@@ -215,22 +208,23 @@ class AdminLogsFileUpdateLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        emails = request.GET.getlist('email')
+        for user_selected in emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        repo_id_selected = request.GET.get('repo_id', None)
-        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
-            error_msg = 'repo_id %s invalid.' % repo_id_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        repos = request.GET.getlist('repo')
+        if repos:
+            for repo_selected in repos:
+                if not is_valid_repo_id_format(repo_selected):
+                    error_msg = 'repo_id %s invalid.' % repo_selected
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
         limit = per_page
 
-        # org_id = 0, show all file audit
-        events = get_file_update_events(user_selected, 0, repo_id_selected, start, limit) or []
-
+        events = get_log_events_by_users_and_repos('file_update', emails, repos, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
@@ -301,22 +295,38 @@ class AdminLogsSharePermissionLogs(APIView):
             current_page = 1
             per_page = 100
 
-        user_selected = request.GET.get('email', None)
-        if user_selected and not is_valid_email(user_selected):
-            error_msg = 'email %s invalid.' % user_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        repo_id_selected = request.GET.get('repo_id', None)
-        if repo_id_selected and not is_valid_repo_id_format(repo_id_selected):
-            error_msg = 'repo_id %s invalid.' % repo_id_selected
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        from_emails = request.GET.getlist('from_email')
+        for user_selected in from_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        to_emails = request.GET.getlist('to_email')
+        for user_selected in to_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        to_groups = request.GET.getlist('to_group')
+        emails = {
+            'from_emails': from_emails,
+            'to_emails': to_emails,
+            'to_groups': to_groups
+        }
+        
+        repos = request.GET.getlist('repo')
+        if repos:
+            for repo_selected in repos:
+                if not is_valid_repo_id_format(repo_selected):
+                    error_msg = 'repo_id %s invalid.' % repo_selected
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
         limit = per_page
 
-        # org_id = 0, show all file audit
-        events = get_perm_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
 
+        events = get_log_events_by_users_and_repos('perm_audit', emails, repos, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
@@ -456,8 +466,45 @@ class AdminLogsFileTransferLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        events = RepoTransfer.objects.all().order_by('-timestamp')[start:start+limit+1]
-        if len(events) > limit:
+        from_emails = request.GET.getlist('from_email')
+        for user_selected in from_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        to_emails = request.GET.getlist('to_email')
+        for user_selected in to_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        operator_emails = request.GET.getlist('operator_email')
+        for user_selected in operator_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        from_groups = request.GET.getlist('from_group')
+        from_groups = [group_id + '@seafile_group' for group_id in from_groups]
+        to_groups = request.GET.getlist('to_group')
+        to_groups = [group_id + '@seafile_group' for group_id in to_groups]
+        repos = request.GET.getlist('repo')
+        if repos:
+            for repo_selected in repos:
+                if not is_valid_repo_id_format(repo_selected):
+                    error_msg = 'repo_id %s invalid.' % repo_selected
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                
+        queryset = RepoTransfer.objects.all()
+        if from_emails or from_groups:
+            queryset = queryset.by_from_user(from_emails + from_groups)
+        if to_emails or to_groups:
+            queryset = queryset.by_to_user(to_emails + to_groups)
+        if operator_emails:
+            queryset = queryset.by_operator(operator_emails)
+        if repos:
+            queryset = queryset.by_repo_ids(repos)
+        events = queryset.order_by('-timestamp')[start:start+limit+1]
+        
+        if events and len(events) > limit:
             has_next_page = True
             events = events[:limit]
         else:
@@ -598,7 +645,27 @@ class AdminLogGroupMemberAuditLogs(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        events = GroupMemberAudit.objects.all().order_by('-timestamp')[start:start+limit+1]
+        user_emails = request.GET.getlist('user_email')
+        for user_selected in user_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        operator_emails = request.GET.getlist('operator_email')
+        for user_selected in operator_emails:
+            if not is_valid_email(user_selected):
+                error_msg = 'email %s invalid.' % user_selected
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        group_ids = request.GET.getlist('group_id')
+        
+        queryset = GroupMemberAudit.objects.all()
+        if user_emails:
+            queryset = queryset.by_users(user_emails)
+        if operator_emails:
+            queryset = queryset.by_operators(operator_emails)
+        if group_ids:
+            queryset = queryset.by_group_ids(group_ids)
+        
+        events = queryset.order_by('-timestamp')[start:start+limit+1]
         if len(events) > limit:
             has_next_page = True
             events = events[:limit]
