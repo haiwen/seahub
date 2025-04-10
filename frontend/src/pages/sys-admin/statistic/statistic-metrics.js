@@ -4,11 +4,34 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import { gettext } from '../../../utils/constants';
+import { Tooltip } from 'reactstrap';
 
 class ComponentMetricsTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hoveredRow: null,
+      tooltipOpen: null
+    };
+  }
+
+  toggleTooltip = (id) => {
+    this.setState(prevState => ({
+      tooltipOpen: prevState.tooltipOpen === id ? null : id
+    }));
+  };
+
+  handleRowHover = (id) => {
+    this.setState({ hoveredRow: id });
+  };
+
+  handleRowLeave = () => {
+    this.setState({ hoveredRow: null });
+  };
+
   render() {
     const { componentName, metrics } = this.props;
-
+    const { hoveredRow, tooltipOpen } = this.state;
     return (
       <>
         <tr className="component-header">
@@ -19,22 +42,55 @@ class ComponentMetricsTable extends Component {
           </td>
         </tr>
         {metrics.map((metric) => (
-          metric.data_points.map((point, pointIndex) => (
-            <tr key={`${metric.name}-${pointIndex}`} className="metric-row">
-              <td>
-                <div className="metric-info">
-                  <div className="metric-name">{metric.name}</div>
-                </div>
-              </td>
-              <td>{point.labels.node}</td>
-              <td className="metric-value">{point.value}</td>
-              <td>
-                <span className="collected-time">
-                  {dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}
-                </span>
-              </td>
-            </tr>
-          ))
+          metric.data_points.map((point, pointIndex) => {
+            const rowId = `${metric.name}-${point.labels.node}-${pointIndex}`;
+            return (
+              <tr key={rowId} className="metric-row">
+                <td
+                  onMouseEnter={() => this.handleRowHover(rowId)}
+                  onMouseLeave={this.handleRowLeave}
+                >
+                  <div className="metric-info">
+                    <div className="metric-name">
+                      {metric.name.substring(metric.name.indexOf('_') + 1)}
+                      {metric.help && (
+                        <>
+                          <i
+                            className="sf3-font-help sf3-font"
+                            id={rowId}
+                            aria-hidden="true"
+                            style={{
+                              visibility: hoveredRow === rowId ? 'visible' : 'hidden',
+                            }}
+                          >
+                          </i>
+                          <Tooltip
+                            placement='right'
+                            isOpen={tooltipOpen === rowId && hoveredRow === rowId}
+                            toggle={() => this.toggleTooltip(rowId)}
+                            target={rowId}
+                            delay={{ show: 200, hide: 0 }}
+                            fade={true}
+                            className="metric-tooltip"
+                            hideArrow={true}
+                          >
+                            {metric.help}
+                          </Tooltip>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td>{point.labels.node}</td>
+                <td className="metric-value">{point.value}</td>
+                <td>
+                  <span className="collected-time">
+                    {dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}
+                  </span>
+                </td>
+              </tr>
+            );
+          })
         ))}
       </>
     );
@@ -226,6 +282,15 @@ const style = `
       border-bottom: 1px solid #e8e8e8;
       color: #666;
       font-size: 14px;
+    }
+
+    .sf3-font-help {
+      font-size: 14px;
+      color: #666;
+      margin-left: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+
     }
   </style>
 `;

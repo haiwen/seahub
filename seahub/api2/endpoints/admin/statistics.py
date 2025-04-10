@@ -487,16 +487,14 @@ def parse_prometheus_metrics(metrics_raw):
         """
         Ensure metric entry exists in formatted metrics dict
         """
-        formatted_name = '_'.join(raw_name.split('_')[1:])
-        if formatted_name not in formatted_metrics_dict:
-            formatted_metrics_dict[formatted_name] = {
-                'name': formatted_name,
+        if raw_name not in formatted_metrics_dict:
+            formatted_metrics_dict[raw_name] = {
+                'name': raw_name,
                 'help': '',
                 'type': '',
-                'data_points': [],
-                'original_name': raw_name
+                'data_points': []
             }
-        return formatted_name
+        return raw_name
     
     def parse_labels(line):
         """
@@ -535,23 +533,23 @@ def parse_prometheus_metrics(metrics_raw):
             parts = line.split(' ', 3)
             if len(parts) > 3:
                 metric_name, help_text = parts[2], parts[3]
-                formatted_name = ensure_metric_exists(metric_name)
-                formatted_metrics_dict[formatted_name]['help'] = help_text
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['help'] = help_text
             
         elif line.startswith('# TYPE'):
             parts = line.split(' ')
             if len(parts) > 3:
                 metric_name, metric_type = parts[2], parts[3]
-                formatted_name = ensure_metric_exists(metric_name)
-                formatted_metrics_dict[formatted_name]['type'] = metric_type
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['type'] = metric_type
             
         elif not line.startswith('#'):
             # handle metric data
             parsed_data = parse_metric_line(line)
             if parsed_data:
                 metric_name, labels, value = parsed_data
-                formatted_name = ensure_metric_exists(metric_name)
-                formatted_metrics_dict[formatted_name]['data_points'].append({
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['data_points'].append({
                     'labels': labels,
                     'value': value
                 })
