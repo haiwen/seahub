@@ -17,10 +17,10 @@ const FilterByText = ({ onSelect }) => {
     return [
       {
         key: TEXT_FILTER_KEY.SEARCH_FILENAME_AND_CONTENT,
-        label: gettext('Search filename and content'),
+        label: gettext('File name and content'),
       }, {
         key: TEXT_FILTER_KEY.SEARCH_FILENAME_ONLY,
-        label: gettext('Search filename only'),
+        label: gettext('File name only'),
       }
     ];
   }, []);

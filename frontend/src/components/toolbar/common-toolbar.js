@@ -7,6 +7,7 @@ import Notification from '../common/notification';
 import Account from '../common/account';
 import Logout from '../common/logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import tagsAPI from '../../tag/api';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -32,18 +33,45 @@ class CommonToolbar extends React.Component {
       path: props.path,
       isViewFile: props.isViewFile,
       currentRepoInfo: props.currentRepoInfo,
+      isTagEnabled: false,
+      tagsData: null,
     };
   }
 
   componentDidMount() {
     if (this.props.eventBus) {
       this.unsubscribeLibChange = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, this.onRepoChange);
+      this.unsubscribeTagStatus = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAG_STATUS, (status) => this.onTagStatus(status));
+      this.unsubscribeTagsChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAGS_CHANGED, this.onTagsChanged);
     }
   }
 
   componentWillUnmount() {
     this.unsubscribeLibChange && this.unsubscribeLibChange();
+    this.unsubscribeMetadataStatus && this.unsubscribeMetadataStatus();
+    this.unsubscribeTagsChanged && this.unsubscribeTagsChanged();
   }
+
+  onTagStatus = (status) => {
+    this.setState({ isTagEnabled: status });
+    if (status) {
+      tagsAPI.getTags(this.state.repoID).then((res) => {
+        const tags = res?.data?.results || null;
+        this.setState({ tagsData: tags });
+      });
+    }
+  };
+
+  onTagsChanged = () => {
+    tagsAPI.getTags(this.state.repoID).then((res) => {
+      const tags = res?.data?.results || null;
+      this.setState({ tagsData: tags });
+    });
+  };
+
+  onSelectTag = (tag) => {
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TAG, tag);
+  };
 
   onRepoChange = ({ repoID, repoName, isLibView, path, isViewFile, currentRepoInfo }) => {
     this.setState({ repoID, repoName, isLibView, path, isViewFile, currentRepoInfo });
@@ -59,7 +87,7 @@ class CommonToolbar extends React.Component {
   };
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, path, isViewFile } = this.state;
+    const { repoID, repoName, isLibView, path, isViewFile, isTagEnabled, tagsData } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
@@ -72,6 +100,9 @@ class CommonToolbar extends React.Component {
           isViewFile={isViewFile}
           isPublic={false}
           path={path}
+          isTagEnabled={isTagEnabled}
+          tagsData={tagsData}
+          onSelectTag={this.onSelectTag}
         />
       );
     } else {

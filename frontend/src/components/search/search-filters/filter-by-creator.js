@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import UserItem from './user-item';
@@ -7,7 +8,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';
 
-const FilterByCreator = ({ repoID, onSelect }) => {
+const FilterByCreator = ({ onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
@@ -30,7 +31,7 @@ const FilterByCreator = ({ repoID, onSelect }) => {
   }, [isOpen]);
 
   const displayOptions = useMemo(() => {
-    if (!searchValue) return options;
+    if (!searchValue) return null;
     return options.filter((option) => {
       return option.name.toLowerCase().includes(searchValue.toLowerCase());
     });
@@ -48,8 +49,10 @@ const FilterByCreator = ({ repoID, onSelect }) => {
     }
     setValue(updated);
     onSelect('creator', updated);
-    setSearchValue('');
-  }, [value, onSelect]);
+    if (displayOptions.length === 1) {
+      setSearchValue('');
+    }
+  }, [value, displayOptions, onSelect]);
 
   const handleCancel = useCallback((v) => {
     const updated = value.filter((item) => item !== v);
@@ -57,26 +60,39 @@ const FilterByCreator = ({ repoID, onSelect }) => {
     onSelect('creator', updated);
   }, [value, onSelect]);
 
+  const handleInputChange = useCallback((e) => {
+    const v = e.target.value;
+    setSearchValue(v);
+    if (!value) {
+      setOptions([]);
+    }
+  }, [value]);
+
   useEffect(() => {
+    if (!searchValue) return;
+
     const getUsers = async () => {
       try {
-        const res = await seafileAPI.listRepoRelatedUsers(repoID);
-        const users = res.data.user_list;
-        const options = users.map((user) => {
-          return {
+        const res = await seafileAPI.searchUsers(searchValue);
+        const userList = res.data.users
+          .filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()))
+          .map(user => ({
             key: user.email,
             value: user.email,
             name: user.name,
             label: <UserItem user={user} />,
-          };
-        });
-        setOptions(options);
+          }))
+          .filter(user => !options.some(option => option.key === user.key));
+
+        setOptions(prevOptions => [...prevOptions, ...userList]);
       } catch (err) {
         toaster.danger(Utils.getErrorMsg(err));
       }
     };
+
     getUsers();
-  }, [repoID]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
 
   return (
     <div className="search-filter filter-by-creator-container">
@@ -104,11 +120,11 @@ const FilterByCreator = ({ repoID, onSelect }) => {
                   type="text"
                   placeholder={value.length ? '' : gettext('Search user')}
                   value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
-            {displayOptions.map((option) => (
+            {displayOptions && displayOptions.map((option) => (
               <DropdownItem
                 key={option.key}
                 tag="div"
@@ -127,6 +143,10 @@ const FilterByCreator = ({ repoID, onSelect }) => {
       </Dropdown>
     </div>
   );
+};
+
+FilterByCreator.propTypes = {
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default FilterByCreator;

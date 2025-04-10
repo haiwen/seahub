@@ -104,6 +104,21 @@ const TagsTreeView = ({ currentPath }) => {
     setKeyTreeNodeExpandedMap(getKeyTreeNodeExpandedMap());
   }, [getKeyTreeNodeExpandedMap]);
 
+  useEffect(() => {
+    window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG, (tagId) => {
+      if (tagId) {
+        const node = recordsTree.find((node) => getTreeNodeId(node) === tagId);
+        const nodeKey = getTreeNodeKey(node);
+        if (!nodeKey) return;
+        setCurrSelectedNodeKey(nodeKey);
+      }
+    });
+
+    return () => {
+      window.sfTagsDataContext?.eventBus?.unsubscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG);
+    };
+  }, [recordsTree]);
+
   return (
     <div className="tree-view tree metadata-tree-view metadata-tree-view-tag">
       <div className="tree-node">

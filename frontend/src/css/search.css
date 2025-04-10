@@ -91,7 +91,7 @@
   border-radius: 0 0 3px 3px;
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   top: 60px;
-  padding: 0 16px;
+  padding-left: 16px;
 }
 
 .dropdown-search-result-container {
@@ -118,10 +118,12 @@
 
 .search-result-container .search-result-list-container {
   overflow: auto;
+  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
   flex: 1;
 }
 
 .search-result-container .search-result-item {
+  height: 58px;
   display: flex;
   padding: 10px 0 10px 8px;
   font-size: 0.8125rem;
@@ -149,7 +151,7 @@
 .search-result-item .item-content {
   flex: 1;
   margin-left: 0.25rem;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .item-content .item-name a {
@@ -405,11 +407,12 @@
   cursor: pointer;
 }
 
+.search-results-title,
 .visited-search-results-title {
   color: #999;
   font-size: .875rem;
   font-weight: normal;
-  margin: 7px 0 10px;
+  margin: 10px 0 4px;
 }
 
 .search-types {

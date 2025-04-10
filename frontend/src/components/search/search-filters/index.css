@@ -3,11 +3,12 @@
   position: relative;
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 4px;
-  padding: 0 16px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 16px 10px;
   overflow: auto hidden;
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
+  border-bottom: 1px solid #eee;
 }
 
 .search-filters-container .search-filter {

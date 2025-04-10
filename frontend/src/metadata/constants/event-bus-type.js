@@ -6,6 +6,7 @@ export const EVENT_BUS_TYPE = {
   // folder/views
   ADD_FOLDER: 'add_folder',
   ADD_VIEW: 'add_view',
+  UPDATE_SELECTED_TAG: 'update_selected_tag',
 
   QUERY_COLLABORATORS: 'query_collaborators',
   QUERY_COLLABORATOR: 'query_collaborator',
