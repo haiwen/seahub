@@ -648,8 +648,9 @@ class Search(APIView):
                 key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
                 repos = cache.get(key, [])
                 if not repos:
-                    repos = get_search_repos(username, org_id)[:SEARCH_REPOS_LIMIT]
+                    repos = get_search_repos(username, org_id)
                     cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
+                repos = repos[: SEARCH_REPOS_LIMIT]
             else:
                 try:
                     repo = seafile_api.get_repo(search_repo)
@@ -714,9 +715,6 @@ class ItemsSearch(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    USER_REPOS_CACHE_PREFIX = 'user_repos_'
-    USER_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
-
     def get(self, request):
         """search items"""
         QUERY_TYPES = [
@@ -738,11 +736,11 @@ class ItemsSearch(APIView):
         org_id = request.user.org.org_id if is_org_context(request) else None
 
         if query_type == 'library':
-            cache_key = normalize_cache_key(username, self.USER_REPOS_CACHE_PREFIX)
-            all_repos = cache.get(cache_key)
+            cache_key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
+            all_repos = cache.get(cache_key, [])
             if not all_repos:
                 all_repos = get_search_repos(username, org_id)
-                cache.set(cache_key, all_repos, self.USER_REPOS_CACHE_TIMEOUT)
+                cache.set(cache_key, all_repos, RELATED_REPOS_CACHE_TIMEOUT)
 
             # Iterator avoids loading all memory at once
             safe_pattern = re.escape(query_str)
