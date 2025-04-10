@@ -293,25 +293,41 @@ def is_wiki_repo(repo):
     return repo.repo_type == REPO_TYPE_WIKI
 
 def get_search_repos(username, org_id):
-    repos = []
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
     repo_list = owned_repos + public_repos + shared_repos + group_repos
 
-    repo_id_set = set()
+    # filter duplicate repo search scopes
+    # for example, repo1 belongs to the group of user user1, and a folder under this repo is shared with this user,
+    # so there is no need to search in the shared subfolder
+    search_repo_id_to_repo_info = {}  # {search_repo_id: (repo_id, origin_repo_id, origin_path, repo_name)}
     for repo in repo_list:
         # Skip the special repo
         if repo.repo_type == REPO_TYPE_WIKI:
             continue
         repo_id = repo.id
+        origin_path = repo.origin_path
         if repo.origin_repo_id:
             repo_id = repo.origin_repo_id
 
-        if repo_id in repo_id_set:
-            continue
-        repo_id_set.add(repo_id)
-        repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
+        pre_search_repo_info = search_repo_id_to_repo_info.get(repo_id)
+        if pre_search_repo_info:
+            pre_origin_path = pre_search_repo_info[2]
+            # pre_repo is not shared subfolder
+            if pre_origin_path is None:
+                continue
 
-    return repos
+            if origin_path is None:
+                # current repo is not shared subfolder
+                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+            elif len(pre_origin_path.split('/')) > len(origin_path.split('/')):
+                # the pre shared subfolder level is deeper than current shared subfolder
+                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+        else:
+            search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+
+    search_repos = list(search_repo_id_to_repo_info.values())
+
+    return search_repos
 
 def send_share_link_emails(emails, fs, shared_from):
     subject = _("A share link for you")
