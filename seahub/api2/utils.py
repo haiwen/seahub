@@ -297,8 +297,8 @@ def get_search_repos(username, org_id):
     repo_list = owned_repos + public_repos + shared_repos + group_repos
 
     # filter duplicate repo search scopes
-    # for example, repo1 belongs to the group of user user1, and a folder under this repo is shared with this user,
-    # so there is no need to search in the shared subfolder
+    # for example, repo1 and a subfolder in repo1 are both shared with a user,
+    # there is no need to search in the shared subfolder
     search_repo_id_to_repo_info = {}  # {search_repo_id: (repo_id, origin_repo_id, origin_path, repo_name)}
     for repo in repo_list:
         # Skip the special repo
@@ -312,15 +312,15 @@ def get_search_repos(username, org_id):
         pre_search_repo_info = search_repo_id_to_repo_info.get(repo_id)
         if pre_search_repo_info:
             pre_origin_path = pre_search_repo_info[2]
-            # pre_repo is not shared subfolder
+            # pre_repo is not a shared subfolder
             if pre_origin_path is None:
                 continue
 
             if origin_path is None:
-                # current repo is not shared subfolder
+                # current repo is not a shared subfolder
                 search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
             elif len(pre_origin_path.split('/')) > len(origin_path.split('/')):
-                # the pre shared subfolder level is deeper than current shared subfolder
+                # the previously shared subfolder level is deeper than current shared subfolder
                 search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
         else:
             search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
