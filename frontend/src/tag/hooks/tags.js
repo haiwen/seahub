@@ -31,7 +31,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
 
   const tagsChanged = useCallback(() => {
     setTagsData(storeRef.current.data);
-    tagsChangedCallback && tagsChangedCallback();
+    tagsChangedCallback && tagsChangedCallback(storeRef.current.data.rows);
   }, [tagsChangedCallback]);
 
   const handleTableError = useCallback((error) => {

@@ -42,7 +42,7 @@ class CommonToolbar extends React.Component {
     if (this.props.eventBus) {
       this.unsubscribeLibChange = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, this.onRepoChange);
       this.unsubscribeTagStatus = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAG_STATUS, (status) => this.onTagStatus(status));
-      this.unsubscribeTagsChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAGS_CHANGED, this.onTagsChanged);
+      this.unsubscribeTagsChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAGS_CHANGED, (tags) => this.setState({ tagsData: tags }));
     }
   }
 
@@ -60,13 +60,6 @@ class CommonToolbar extends React.Component {
         this.setState({ tagsData: tags });
       });
     }
-  };
-
-  onTagsChanged = () => {
-    tagsAPI.getTags(this.state.repoID).then((res) => {
-      const tags = res?.data?.results || null;
-      this.setState({ tagsData: tags });
-    });
   };
 
   onSelectTag = (tag) => {

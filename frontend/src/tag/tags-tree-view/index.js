@@ -105,7 +105,7 @@ const TagsTreeView = ({ currentPath }) => {
   }, [getKeyTreeNodeExpandedMap]);
 
   useEffect(() => {
-    window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG, (tagId) => {
+    const unsubscribeUpdateSelectedTag = window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG, (tagId) => {
       if (tagId) {
         const node = recordsTree.find((node) => getTreeNodeId(node) === tagId);
         const nodeKey = getTreeNodeKey(node);
@@ -115,7 +115,7 @@ const TagsTreeView = ({ currentPath }) => {
     });
 
     return () => {
-      window.sfTagsDataContext?.eventBus?.unsubscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG);
+      unsubscribeUpdateSelectedTag && unsubscribeUpdateSelectedTag();
     };
   }, [recordsTree]);
 

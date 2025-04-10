@@ -2273,8 +2273,8 @@ class LibContentView extends React.Component {
     this.clearRepoTags();
   };
 
-  tagsChangedCallback = () => {
-    this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAGS_CHANGED);
+  tagsChangedCallback = (tags) => {
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAGS_CHANGED, tags);
   };
 
   render() {

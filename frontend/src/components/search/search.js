@@ -14,7 +14,7 @@ import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import SearchFilters from './search-filters';
-import Tags from './tags';
+import SearchTags from './search-tags';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -807,7 +807,7 @@ class Search extends Component {
                 <SearchFilters onChange={this.handleFiltersChange} />
               }
               {isTagsShow &&
-                <Tags repoID={repoID} data={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
+                <SearchTags repoID={repoID} data={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
               }
               <div
                 className="search-result-container dropdown-search-result-container"
