@@ -733,9 +733,9 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
     
-    def get_log_events_by_type_users_repo(type, emails, repo_ids, start, limit):
+    def get_log_events_by_users_and_repos(type, emails, repo_ids, start, limit):
         with _get_seafevents_session() as session:
-            events = seafevents_api.get_log_events_by_type_users_repo(session, type, emails, repo_ids, start, limit)
+            events = seafevents_api.get_event_log_by_users_and_repos(session, type, emails, repo_ids, start, limit)
 
         return events if events else None
 
@@ -892,7 +892,7 @@ else:
         pass
     def get_file_audit_events():
         pass
-    def get_log_events_by_type_users_repo():
+    def get_log_events_by_users_and_repos():
         pass
     def get_file_ops_stats_by_day():
         pass

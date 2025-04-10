@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email, translate_commit_desc
-from seahub.utils import get_log_events_by_type_users_repo, generate_file_audit_event_type, \
+from seahub.utils import get_log_events_by_users_and_repos, generate_file_audit_event_type, \
     is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import is_valid_repo_id_format
@@ -127,7 +127,7 @@ class AdminLogsFileAccessLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page + 1
 
-        events = get_log_events_by_type_users_repo('file_audit', emails, repos, start, limit) or []
+        events = get_log_events_by_users_and_repos('file_audit', emails, repos, start, limit) or []
         if len(events) > per_page:
             events = events[:per_page]
             has_next_page = True
@@ -224,7 +224,7 @@ class AdminLogsFileUpdateLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page
 
-        events = get_log_events_by_type_users_repo('file_update', emails, repos, start, limit) or []
+        events = get_log_events_by_users_and_repos('file_update', emails, repos, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
@@ -326,7 +326,7 @@ class AdminLogsSharePermissionLogs(APIView):
         limit = per_page
 
 
-        events = get_log_events_by_type_users_repo('perm_audit', emails, repos, start, limit) or []
+        events = get_log_events_by_users_and_repos('perm_audit', emails, repos, start, limit) or []
         has_next_page = True if len(events) == per_page else False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
