@@ -11,11 +11,10 @@ import logging
 import hashlib
 import tempfile
 import configparser
-import mimetypes
 import contextlib
 import json
 from datetime import datetime
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
 
 from constance import config
 import seaserv
@@ -26,7 +25,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import loader
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
@@ -39,6 +38,7 @@ from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.db_api import SeafileDB
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_FILE_EXTENSION
 
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -420,6 +420,12 @@ def get_file_type_and_ext(filename):
     otherwise, return unknown type.
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
+
+    if fileExt == 'csv' \
+            and ENABLE_ONLYOFFICE \
+            and fileExt in ONLYOFFICE_FILE_EXTENSION:
+        return (SPREADSHEET, fileExt)
+
     if fileExt in get_conf_text_ext():
         return (TEXT, fileExt)
 

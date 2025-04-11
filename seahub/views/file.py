@@ -17,16 +17,14 @@ import chardet
 import logging
 import posixpath
 import re
-import mimetypes
 
 from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import F
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
-from urllib.parse import quote
 from django.utils.translation import get_language, gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
@@ -36,7 +34,6 @@ from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc, get_org_id_by_repo_id
 
-from seahub.settings import SITE_ROOT
 from seahub.share.utils import check_share_link_user_access
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
@@ -64,8 +61,6 @@ from seahub.utils.file_types import (IMAGE, PDF, SVG,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
-from seahub.utils.http import json_response, \
-        BadRequestException
 from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.utils.user_permissions import get_user_role
@@ -85,8 +80,6 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, ENABLE_MULTIPLE_OFFICE_SUITE, \
     OFFICE_SUITE_LIST
 from seahub.constants import PERMISSION_INVISIBLE
-
-
 
 # wopi
 try:
@@ -190,7 +183,6 @@ def get_office_feature_by_repo(repo):
             enable_office_app = True
 
     return enable_onlyoffice,  enable_office_app
-
 
 
 def gen_path_link(path, repo_name):
@@ -732,9 +724,6 @@ def view_lib_file(request, repo_id, path):
         seadoc_perm = 'rw' if can_edit_file else 'r'
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
 
-        # draft
-
-
         # revision
         revision_info = is_seadoc_revision(file_uuid)
         return_dict.update(revision_info)
@@ -742,46 +731,7 @@ def view_lib_file(request, repo_id, path):
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
-    if filetype == TEXT or fileext in get_conf_text_ext():
-
-        # get file size
-        if file_size > FILE_PREVIEW_MAX_SIZE:
-            error_msg = _('File size surpasses %s, can not be opened online.') % \
-                filesizeformat(FILE_PREVIEW_MAX_SIZE)
-
-            return_dict['err'] = error_msg
-            return render(request, template, return_dict)
-
-        file_enc = request.GET.get('file_enc', 'auto')
-        if file_enc not in FILE_ENCODING_LIST:
-            file_enc = 'auto'
-
-        error_msg, file_content, encoding = get_file_content(filetype, inner_path, file_enc)
-        if error_msg:
-            return_dict['err'] = error_msg
-            return render(request, template, return_dict)
-
-        file_encoding_list = FILE_ENCODING_LIST
-        if encoding and encoding not in FILE_ENCODING_LIST:
-            file_encoding_list.append(encoding)
-
-        return_dict['file_enc'] = file_enc
-        # return_dict['encoding'] = encoding
-        # return_dict['file_encoding_list'] = file_encoding_list
-        return_dict['file_content'] = file_content
-
-        can_edit_file = True
-        if parse_repo_perm(permission).can_edit_on_web is False:
-            can_edit_file = False
-        elif is_locked and not locked_by_me:
-            can_edit_file = False
-
-        return_dict['can_edit_file'] = can_edit_file
-
-        send_file_access_msg(request, repo, path, 'web')
-        return render(request, template, return_dict)
-
-    if filetype == MARKDOWN:
+    elif filetype == MARKDOWN:
 
         mode = request.GET.get('mode', '')
         if mode not in ('edit', 'viewer', 'plain'):
@@ -808,7 +758,7 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
 
-    if filetype == TLDRAW:
+    elif filetype == TLDRAW:
 
         mode = request.GET.get('mode', '')
         if mode not in ('edit', 'viewer', 'plain'):
@@ -826,7 +776,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
         return_dict['raw_path'] = raw_path
 
-
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
             can_edit_file = False
@@ -836,7 +785,7 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
 
-    if filetype == EXCALIDRAW:
+    elif filetype == EXCALIDRAW:
 
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
@@ -846,7 +795,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
         return_dict['raw_path'] = raw_path
-
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
@@ -971,6 +919,45 @@ def view_lib_file(request, repo_id, path):
                     filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
+
+        send_file_access_msg(request, repo, path, 'web')
+        return render(request, template, return_dict)
+
+    elif filetype == TEXT or fileext in get_conf_text_ext():
+
+        # get file size
+        if file_size > FILE_PREVIEW_MAX_SIZE:
+            error_msg = _('File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+
+            return_dict['err'] = error_msg
+            return render(request, template, return_dict)
+
+        file_enc = request.GET.get('file_enc', 'auto')
+        if file_enc not in FILE_ENCODING_LIST:
+            file_enc = 'auto'
+
+        error_msg, file_content, encoding = get_file_content(filetype, inner_path, file_enc)
+        if error_msg:
+            return_dict['err'] = error_msg
+            return render(request, template, return_dict)
+
+        file_encoding_list = FILE_ENCODING_LIST
+        if encoding and encoding not in FILE_ENCODING_LIST:
+            file_encoding_list.append(encoding)
+
+        return_dict['file_enc'] = file_enc
+        # return_dict['encoding'] = encoding
+        # return_dict['file_encoding_list'] = file_encoding_list
+        return_dict['file_content'] = file_content
+
+        can_edit_file = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_edit_file = False
+        elif is_locked and not locked_by_me:
+            can_edit_file = False
+
+        return_dict['can_edit_file'] = can_edit_file
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
