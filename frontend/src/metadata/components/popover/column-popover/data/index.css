@@ -2,3 +2,7 @@
   background-color: #f5f5f5;
   margin: 0 -1rem -1rem;
 }
+
+.sf-metadata-column-popover .sf-metadata-column-data-settings .selected-option {
+  background: transparent;
+}
