@@ -6,6 +6,7 @@ import { langList } from './constants';
 import '@excalidraw/excalidraw/index.css';
 
 const SimpleViewer = ({ sceneContent = null, isFetching }) => {
+  // eslint-disable-next-line
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const UIOptions = {
     canvasActions: {
