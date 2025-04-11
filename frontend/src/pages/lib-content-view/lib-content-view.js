@@ -257,11 +257,11 @@ class LibContentView extends React.Component {
         viewId,
         tagId,
         currentMode,
+      }, () => {
+        if (this.state.isTreePanelShown) {
+          this.loadSidePanel(path);
+        }
       });
-
-      if (this.state.isTreePanelShown) {
-        this.loadSidePanel(path);
-      }
 
       if (repoInfo.permission.startsWith('custom-')) {
         await this.setCustomPermission(repoID, repoInfo.permission);
@@ -474,10 +474,6 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
-    if (this.state.isTreePanelShown) {
-      this.loadSidePanel(path);
-    }
-
     if (!(path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES))) {
       this.showDir(path);
     }
