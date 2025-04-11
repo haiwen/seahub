@@ -1,15 +1,24 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from seahub.settings import ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, OFFICE_SUITE_ENABLED_FILE_TYPES, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
+from seahub.settings import ENABLE_MULTIPLE_OFFICE_SUITE, \
+        OFFICE_SUITE_LIST, OFFICE_SUITE_ENABLED_FILE_TYPES, \
+        OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
 
 ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
 ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/documents/api.js",
                                                         "/ConvertService.ashx")
-ONLYOFFICE_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_FILE_EXTENSION', ())
-ONLYOFFICE_FILE_EXTENSION = ONLYOFFICE_FILE_EXTENSION + ('csv',)
-ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_EDIT_FILE_EXTENSION', ())
-ONLYOFFICE_EDIT_FILE_EXTENSION = ONLYOFFICE_EDIT_FILE_EXTENSION + ('csv',)
+
+ONLYOFFICE_FILE_EXTENSION = getattr(settings,
+                                    'ONLYOFFICE_FILE_EXTENSION',
+                                    ('doc', 'docx', 'ppt', 'pptx',
+                                     'xls', 'xlsx', 'odt', 'fodt',
+                                     'odp', 'fodp', 'ods', 'fods',
+                                     'ppsx', 'pps', 'csv'))
+ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings,
+                                         'ONLYOFFICE_EDIT_FILE_EXTENSION',
+                                         ('docx', 'pptx', 'xlsx', 'csv'))
+
 VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
 ONLYOFFICE_JWT_HEADER = getattr(settings, 'ONLYOFFICE_JWT_HEADER', 'Authorization')
 ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')
