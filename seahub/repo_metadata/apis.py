@@ -1830,12 +1830,13 @@ class MetadataRecognizeFaces(APIView):
             'repo_id': repo_id
         }
         try:
-            recognize_faces(params=params)
+            resp = recognize_faces(params=params)
+            resp_json = resp.json()
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'success': True})
+        return Response(resp_json, resp.status_code)
 
 
 # tags

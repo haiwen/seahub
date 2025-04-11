@@ -48,7 +48,7 @@ def recognize_faces(params):
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/recognize-faces')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
-    return json.loads(resp.content)
+    return resp
 
 
 def update_people_cover_photo(params):
