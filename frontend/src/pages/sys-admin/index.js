@@ -18,6 +18,7 @@ import StatisticStorage from './statistic/statistic-storage';
 import StatisticTraffic from './statistic/statistic-traffic';
 import StatisticUsers from './statistic/statistic-users';
 import StatisticReport from './statistic/statistic-reports';
+import StatisticMetrics from './statistic/statistic-metrics';
 
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
@@ -112,7 +113,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'statistic',
-        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports']
+        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports', 'statistics/metrics']
       },
       {
         tab: 'users',
@@ -222,6 +223,7 @@ class SysAdmin extends React.Component {
             <StatisticUsers path={siteRoot + 'sys/statistics/user'} {...commonProps} />
             <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} {...commonProps} />
             <StatisticReport path={siteRoot + 'sys/statistics/reports'} {...commonProps} />
+            <StatisticMetrics path={siteRoot + 'sys/statistics/metrics'} {...commonProps} />
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} {...commonProps} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />

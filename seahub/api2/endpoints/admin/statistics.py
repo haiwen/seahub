@@ -28,6 +28,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.endpoints.utils import get_seafevents_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -474,3 +475,109 @@ class SystemUserStorageExcelView(APIView):
         wb.save(response)
 
         return response
+
+
+def parse_prometheus_metrics(metrics_raw):
+    """
+    Parse prometheus metrics and format metric names
+    """
+    formatted_metrics_dict = {}
+    
+    def ensure_metric_exists(raw_name):
+        """
+        Ensure metric entry exists in formatted metrics dict
+        """
+        if raw_name not in formatted_metrics_dict:
+            formatted_metrics_dict[raw_name] = {
+                'name': raw_name,
+                'help': '',
+                'type': '',
+                'data_points': []
+            }
+        return raw_name
+    
+    def parse_labels(line):
+        """
+        Parse labels from metric line
+        """
+        labels = {}
+        if '{' in line and '}' in line:
+            labels_str = line[line.index('{')+1:line.index('}')]
+            for label in labels_str.split(','):
+                key, value = [part.strip() for part in label.split('=', 1)]
+                labels[key] = value.strip('"')
+        return labels
+    
+    def parse_metric_line(line):
+        """
+        Parse a single metric line
+        """
+        if '{' in line:
+            name_part = line.split('{')[0]
+            value_part = line.split('}')[1].strip()
+        else:
+            name_part, value_part = line.split(' ', 1)
+        
+        return (
+            name_part.strip(),
+            parse_labels(line),
+            float(value_part)
+        )
+
+    for line in metrics_raw.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('# HELP'):
+            parts = line.split(' ', 3)
+            if len(parts) > 3:
+                metric_name, help_text = parts[2], parts[3]
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['help'] = help_text
+            
+        elif line.startswith('# TYPE'):
+            parts = line.split(' ')
+            if len(parts) > 3:
+                metric_name, metric_type = parts[2], parts[3]
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['type'] = metric_type
+            
+        elif not line.startswith('#'):
+            # handle metric data
+            parsed_data = parse_metric_line(line)
+            if parsed_data:
+                metric_name, labels, value = parsed_data
+                ensure_metric_exists(metric_name)
+                formatted_metrics_dict[metric_name]['data_points'].append({
+                    'labels': labels,
+                    'value': value
+                })
+    # check data
+    result = []
+    for metric in formatted_metrics_dict.values():
+        if metric['name'] and metric['type']:
+            result.append(metric)
+    
+    return result
+
+class SystemMetricsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    
+    def get(self, request):
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
+        try:
+            res = get_seafevents_metrics()
+            metrics_raw = res.content.decode('utf-8')
+            metrics_data = parse_prometheus_metrics(metrics_raw)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({ 'metrics': metrics_data })
