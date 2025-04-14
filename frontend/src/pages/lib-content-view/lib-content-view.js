@@ -221,14 +221,6 @@ class LibContentView extends React.Component {
     }
   };
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.repoID !== this.props.repoID) {
-      this.setState({ path: '/', viewId: '', tagID: '', currentMode: cookie.load('seafile_view_mode') || LIST_MODE }, () => {
-        this.calculatePara(nextProps);
-      });
-    }
-  }
-
   calculatePara = async (props) => {
     const { repoID } = props;
 
@@ -343,7 +335,10 @@ class LibContentView extends React.Component {
     this.socket.close();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.repoID !== this.props.repoID) {
+      this.calculatePara(this.props);
+    }
     this.lastModifyTime = new Date();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: this.props.repoID,
