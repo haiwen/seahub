@@ -10,10 +10,10 @@ import './index.css';
 const SearchFilters = ({ onChange }) => {
   return (
     <div className="search-filters-container">
+      <FilterBySuffix onSelect={onChange} />
       <FilterByText onSelect={onChange} />
       <FilterByCreator onSelect={onChange} />
       <FilterByDate onSelect={onChange} />
-      <FilterBySuffix onSelect={onChange} />
     </div>
   );
 };
