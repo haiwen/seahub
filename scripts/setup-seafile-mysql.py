@@ -986,6 +986,7 @@ class SeahubConfigurator(AbstractConfigurator):
         self.admin_email = ''
         self.admin_password = ''
         self.seahub_settings_py = os.path.join(env_mgr.central_config_dir, 'seahub_settings.py')
+        self.seahub_settings_extra_py = os.path.join(env_mgr.central_config_dir, 'seahub_settings_extra.py')
 
     def ask_questions(self):
         pass
@@ -1009,6 +1010,7 @@ class SeahubConfigurator(AbstractConfigurator):
             fp.write('SERVICE_URL = "%s://%s"' % (self.get_proto(), ccnet_config.ip_or_domain))
             fp.write('\n')
             self.write_database_config(fp)
+            self.write_extra_config(fp)
 
     def write_utf8_comment(self, fp):
         fp.write('# -*- coding: utf-8 -*-')
@@ -1044,6 +1046,14 @@ class SeahubConfigurator(AbstractConfigurator):
                                port=db_config.mysql_port)
 
         fp.write(text)
+
+    def write_extra_config(self, fp):
+        try:
+            with open(self.seahub_settings_extra_py) as fp_extra:
+                fp.write('\n')
+                fp.writelines(fp_extra.readlines())
+        except FileNotFoundError:
+            pass
 
     def ask_admin_email(self):
         print()
