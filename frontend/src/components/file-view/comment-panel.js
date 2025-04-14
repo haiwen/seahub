@@ -22,6 +22,7 @@ class CommentPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       commentsList: [],
       showResolvedComment: true,
       participants: null,
@@ -34,7 +35,8 @@ class CommentPanel extends React.Component {
   listComments = () => {
     seafileAPI.listComments(repoID, docUuid, filePath).then((res) => {
       this.setState({
-        commentsList: res.data.comments
+        commentsList: res.data.comments,
+        isLoading: false,
       });
       if (this.state.currentComment) {
         let newCurrentComment = res.data.comments.find(comment => comment.id === this.state.currentComment.id);
@@ -198,6 +200,7 @@ class CommentPanel extends React.Component {
               addComment={this.addComment}
               toggleCommentList={this.props.toggleCommentPanel}
               onParticipantsChange={this.onParticipantsChange}
+              isLoading={this.state.isLoading}
             />
         }
       </div>

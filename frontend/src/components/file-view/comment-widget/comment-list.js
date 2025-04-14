@@ -7,6 +7,7 @@ import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
+import Loading from '../../loading';
 import { MentionsInput, Mention } from 'react-mentions';
 import { defaultStyle } from '../../../css/react-mentions-default-style';
 import CommentItemReadOnly from './comment-item-readonly';
@@ -163,7 +164,7 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { commentsList } = this.props;
+    const { commentsList, isLoading } = this.props;
     const filteredComments = this.getFilteredComments();
     return (
       <div className="seafile-comment-page h-100">
@@ -192,7 +193,8 @@ class CommentList extends React.Component {
             commentType={this.state.commentType}
             setCommentType={this.setCommentType}
           />
-          {filteredComments.length > 0 ?
+          {isLoading && <Loading/>}
+          {!isLoading && filteredComments.length > 0 &&
             <ul className="seafile-comment-list">
               {filteredComments.map((item) => {
                 let oldTime = (new Date(item.created_at)).getTime();
@@ -207,7 +209,8 @@ class CommentList extends React.Component {
                 );
               })}
             </ul>
-            :
+          }
+          {!isLoading && filteredComments.length === 0 &&
             <p className="text-center my-4">{gettext('No comment yet.')}</p>
           }
         </div>
