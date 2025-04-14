@@ -9,6 +9,7 @@ import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTre
 import { getRowById } from '../../components/sf-table/utils/table';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../constants/sidebar-tree';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { EVENT_BUS_TYPE as COMMON_EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 import './index.css';
 
@@ -105,7 +106,7 @@ const TagsTreeView = ({ currentPath }) => {
   }, [getKeyTreeNodeExpandedMap]);
 
   useEffect(() => {
-    const unsubscribeUpdateSelectedTag = window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_TAG, (tagId) => {
+    const unsubscribeUpdateSelectedTag = window.sfTagsDataContext?.eventBus?.subscribe(COMMON_EVENT_BUS_TYPE.UPDATE_SELECTED_TAG, (tagId) => {
       if (tagId) {
         const node = recordsTree.find((node) => getTreeNodeId(node) === tagId);
         const nodeKey = getTreeNodeKey(node);

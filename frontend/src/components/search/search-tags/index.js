@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { getTagColor, getTagId, getTagName } from '../../../tag/utils/cell';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 
 import './index.css';
 
-const SearchTags = ({ repoID, data, keyword, onSelectTag }) => {
+const SearchTags = ({ repoID, tagsData, keyword, onSelectTag }) => {
   const [displayTags, setDisplayTags] = useState([]);
 
   const handleClick = useCallback((e, tagId) => {
@@ -35,12 +35,12 @@ const SearchTags = ({ repoID, data, keyword, onSelectTag }) => {
   }, [repoID, onSelectTag]);
 
   useEffect(() => {
-    if (!data || !keyword) return;
-    const tags = data?.filter((tag) => getTagName(tag).toLowerCase().includes(keyword.toLowerCase()));
+    if (!tagsData || tagsData.length === 0 || !keyword) return;
+    const tags = tagsData?.filter((tag) => getTagName(tag).toLowerCase().includes(keyword.toLowerCase()));
     setDisplayTags(tags);
-  }, [data, keyword]);
+  }, [tagsData, keyword]);
 
-  if (!data || !keyword || displayTags.length === 0) return null;
+  if (!tagsData || tagsData.length === 0 || !keyword || displayTags.length === 0) return null;
 
   return (
     <div className="search-tags-container">
@@ -64,7 +64,7 @@ const SearchTags = ({ repoID, data, keyword, onSelectTag }) => {
 };
 
 SearchTags.propTypes = {
-  data: PropTypes.object.isRequired,
+  tagsData: PropTypes.array.isRequired,
 };
 
 export default SearchTags;

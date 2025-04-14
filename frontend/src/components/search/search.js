@@ -769,7 +769,7 @@ class Search extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { repoID, isTagEnabled,tagsData } = this.props;
+    const { repoID, isTagEnabled, tagsData } = this.props;
     const { isMaskShow, isResultGotten  } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
     const isFiltersShow = isMaskShow && isResultGotten;
@@ -807,7 +807,7 @@ class Search extends Component {
                 <SearchFilters onChange={this.handleFiltersChange} />
               }
               {isTagsShow &&
-                <SearchTags repoID={repoID} data={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
+                <SearchTags repoID={repoID} tagsData={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
               }
               <div
                 className="search-result-container dropdown-search-result-container"

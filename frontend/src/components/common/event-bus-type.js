@@ -19,4 +19,5 @@ export const EVENT_BUS_TYPE = {
   TAG_STATUS: 'tag_status',
   TAGS_DATA: 'tags_data',
   SELECT_TAG: 'select_tag',
+  UPDATE_SELECTED_TAG: 'update_selected_tag',
 };

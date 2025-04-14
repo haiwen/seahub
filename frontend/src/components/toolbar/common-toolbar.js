@@ -34,7 +34,7 @@ class CommonToolbar extends React.Component {
       isViewFile: props.isViewFile,
       currentRepoInfo: props.currentRepoInfo,
       isTagEnabled: false,
-      tagsData: null,
+      tagsData: [],
     };
   }
 
@@ -56,7 +56,7 @@ class CommonToolbar extends React.Component {
     this.setState({ isTagEnabled: status });
     if (status) {
       tagsAPI.getTags(this.state.repoID).then((res) => {
-        const tags = res?.data?.results || null;
+        const tags = res?.data?.results || [];
         this.setState({ tagsData: tags });
       });
     }
