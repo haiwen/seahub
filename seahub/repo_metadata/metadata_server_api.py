@@ -77,7 +77,7 @@ def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit
     response_results = metadata_server_api.query_rows(sql, [])
     return response_results
 
-def list_dir_metadata_records(repo_id, user, view):
+def list_eligible_metadata_records(repo_id, user, view, filter_columns):
     from seafevents.repo_metadata.constants import METADATA_TABLE
     from seafevents.repo_metadata.utils import gen_view_data_sql
     metadata_server_api = MetadataServerAPI(repo_id, user)
@@ -89,10 +89,7 @@ def list_dir_metadata_records(repo_id, user, view):
     query_fields_str = ''
     for column in columns:
         column_name = column.get('name')
-        if column_name == METADATA_TABLE.columns.file_name.name:
-            column_name_str = '`%s`, ' % column_name
-            query_fields_str += column_name_str
-        elif column_name == METADATA_TABLE.columns.size.name:
+        if column_name in filter_columns:
             column_name_str = '`%s`, ' % column_name
             query_fields_str += column_name_str
     query_fields_str = query_fields_str.strip(', ')

@@ -31,7 +31,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.repo_metadata.utils import can_read_metadata
-from seahub.repo_metadata.metadata_server_api import list_dir_metadata_records
+from seahub.repo_metadata.metadata_server_api import list_eligible_metadata_records
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 
 from seaserv import seafile_api
@@ -603,7 +603,8 @@ class DirDetailView(APIView):
                     'filters': filters,
                     'basic_filters': basic_filters
                 }
-                results = list_dir_metadata_records(repo_id, request.user.username, view)
+                selected_columns = [METADATA_TABLE.columns.file_name.name, METADATA_TABLE.columns.size.name]
+                results = list_eligible_metadata_records(repo_id, request.user.username, view, selected_columns)
                 dir_records = results.get('results')
                 file_count = len(dir_records)
                 size = sum(record.get(METADATA_TABLE.columns.size.name) for record in dir_records)
