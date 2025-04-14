@@ -31,6 +31,7 @@ revisionUpdatedAt: '{{ revision_updated_at }}',
 isFreezed: {% if is_freezed %}true{% else %}false{% endif %},
 lang: '{{ LANGUAGE_CODE }}',
 enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
 {% endblock %}
 
 {% block render_bundle %}

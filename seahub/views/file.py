@@ -77,8 +77,8 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
-    ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, ENABLE_MULTIPLE_OFFICE_SUITE, \
-    OFFICE_SUITE_LIST
+    ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
+    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, ENABLE_SEADOC
 from seahub.constants import PERMISSION_INVISIBLE
 
 # wopi
@@ -383,6 +383,10 @@ def can_preview_file(file_name, file_size, repo):
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             return False, error_msg
 
+    elif filetype in (SEADOC) and not ENABLE_SEADOC:
+        error_msg = "File preview unsupported"
+        return False, error_msg
+
     elif filetype in (DOCUMENT, SPREADSHEET) or \
             fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             fileext in ONLYOFFICE_FILE_EXTENSION:
@@ -427,6 +431,9 @@ def can_edit_file(file_name, file_size, repo):
     file_type, file_ext = get_file_type_and_ext(file_name)
 
     if file_type in (TEXT, MARKDOWN) or file_ext in get_conf_text_ext():
+        return True, ''
+
+    if file_type in (SEADOC) and ENABLE_SEADOC:
         return True, ''
 
     if file_type in (DOCUMENT, SPREADSHEET):
@@ -696,6 +703,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_uuid'] = file_uuid
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        return_dict['enable_seadoc'] = ENABLE_SEADOC
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:

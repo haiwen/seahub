@@ -177,7 +177,7 @@ export const Utils = {
         permissionOptions.push('download_upload');
       }
     } else {
-      if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin') && canEdit) {
+      if ((this.isEditableOfficeFile(path) || this.isEditableSdocFile(path)) && (permission == 'rw' || permission == 'admin') && canEdit) {
         permissionOptions.push('edit_download');
       }
 
@@ -217,6 +217,20 @@ export const Utils = {
       return onlyofficeEditFileExtension.includes(file_ext);
     } else if (enableOfficeWebApp) {
       return officeWebAppEditFileExtension.includes(file_ext);
+    } else {
+      return false;
+    }
+  },
+
+  isEditableSdocFile: function (filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+
+    if (enableSeadoc && file_ext == 'sdoc') {
+      return true;
     } else {
       return false;
     }
