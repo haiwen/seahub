@@ -77,6 +77,29 @@ def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit
     response_results = metadata_server_api.query_rows(sql, [])
     return response_results
 
+def list_dir_metadata_records(repo_id, user, view):
+    from seafevents.repo_metadata.constants import METADATA_TABLE
+    from seafevents.repo_metadata.utils import gen_view_data_sql
+    metadata_server_api = MetadataServerAPI(repo_id, user)
+    columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
+
+    tags_data = {'metadata': [], 'results': []}
+
+    sql = gen_view_data_sql(METADATA_TABLE, columns, view, 0, 0, {'tags_data': tags_data, 'username': user})
+    query_fields_str = ''
+    for column in columns:
+        column_name = column.get('name')
+        if column_name == METADATA_TABLE.columns.file_name.name:
+            column_name_str = '`%s`, ' % column_name
+            query_fields_str += column_name_str
+        elif column_name == METADATA_TABLE.columns.size.name:
+            column_name_str = '`%s`, ' % column_name
+            query_fields_str += column_name_str
+    query_fields_str = query_fields_str.strip(', ')
+    sql = sql.replace('*', query_fields_str)
+    response_results = metadata_server_api.query_rows(sql, [])
+    return response_results 
+
 
 def parse_response(response):
     if response.status_code >= 300 or response.status_code < 200:
