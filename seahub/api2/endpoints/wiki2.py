@@ -7,8 +7,10 @@ import posixpath
 import datetime
 import uuid
 import re
+import requests
 from copy import deepcopy
 from constance import config
+from urllib.parse import quote
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -18,11 +20,13 @@ from rest_framework.views import APIView
 from seaserv import seafile_api
 from pysearpc import SearpcError
 from django.utils.translation import gettext as _
+from django.http import HttpResponse
 
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, get_service_url
+from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 from seahub.utils.db_api import SeafileDB
@@ -35,7 +39,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
 
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -55,6 +59,7 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 from seahub.share.utils import is_repo_admin
+
 
 HTTP_520_OPERATION_FAILED = 520
 
@@ -1564,3 +1569,71 @@ class WikiConvertView(APIView):
 
         return Response({"task_id": task_id})
 
+
+class WikiPageExport(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, wiki_id, page_id):
+        types = ['sdoc', 'markdown']
+        export_type = request.GET.get('exportType')
+        if export_type not in types:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid export type')
+
+        # resource check
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        username = request.user.username
+        wiki_config = get_wiki_config(repo_id, username)
+        navigation = wiki_config.get('navigation', [])
+        pages = wiki_config.get('pages', [])
+        id_set = get_all_wiki_ids(navigation)
+        if page_id not in id_set:
+            error_msg = "Page not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        page_path = ''
+        page_name = ''
+        doc_uuid = ''
+        for page in pages:
+            if page_id == page.get('id'):
+                page_path = page.get('path')
+                page_name = page.get('name')
+                doc_uuid = page.get('docUuid')
+                break
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, page_path)
+            filename = os.path.basename(page_path)
+            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
+            download_url = gen_file_get_url(download_token, filename)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        response = HttpResponse(content_type='application/octet-stream')
+        if export_type == 'markdown':
+            resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, download_url, 'sdoc', 'md')
+            new_filename = f'{page_name}.md'
+            encoded_filename = quote(new_filename.encode('utf-8'))
+            response.write(resp_with_md_file.content)
+        elif export_type == 'sdoc':
+            sdoc_content = requests.get(download_url).content
+            new_filename = f'{page_name}.sdoc'
+            encoded_filename = quote(new_filename)
+            response.write(sdoc_content)
+
+        response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
+
+        return response
