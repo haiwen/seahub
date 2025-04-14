@@ -157,7 +157,6 @@ class FileCommentRepliesView(APIView):
         if not file_comment:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found.')
 
-        # 临时借用 SeadocCommentReply 数据库的表结构，未来看是否重构数据库表
         total_count = SeadocCommentReply.objects.list_by_comment_id(comment_id).count()
         replies = []
         reply_queryset = SeadocCommentReply.objects.list_by_comment_id(comment_id)[start: end]
@@ -185,8 +184,6 @@ class FileCommentRepliesView(APIView):
         author = request.data.get('author', '')
         username = author
 
-        print(183, reply_content, type_content, author, username)
-
         if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
         if not username:
@@ -198,7 +195,6 @@ class FileCommentRepliesView(APIView):
         if not file_comment:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found.')
 
-        # 临时借用 SeadocCommentReply 数据库的表结构，未来看是否重构数据库表
         reply = SeadocCommentReply.objects.create(
             author=username,
             reply=str(reply_content),
@@ -269,7 +265,6 @@ class FileCommentReplyView(APIView):
         if not file_comment:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found.')
 
-        # 临时借用 SeadocCommentReply 数据库的表结构，未来看是否重构数据库表
         reply = SeadocCommentReply.objects.filter(
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
