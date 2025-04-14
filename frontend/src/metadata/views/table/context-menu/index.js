@@ -30,13 +30,14 @@ const OPERATION = {
   RENAME_FILE: 'rename-file',
   FILE_DETAIL: 'file-detail',
   FILE_DETAILS: 'file-details',
+  DETECT_FACES: 'detect-faces',
   MOVE: 'move',
 };
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
   getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder, updateRecordDetails,
-  updateRecordDescription, ocr,
+  updateFaceRecognition, updateRecordDescription, ocr,
 }) => {
   const currentRecord = useRef(null);
 
@@ -119,6 +120,13 @@ const ContextMenu = ({
       if (imageOrVideoRecords.length > 0) {
         list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
       }
+      const imageRecords = records.filter(record => {
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName);
+      });
+      if (imageRecords.length > 0) {
+        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+      }
       return list;
     }
 
@@ -147,6 +155,17 @@ const ContextMenu = ({
       });
       if (imageOrVideoRecords.length > 0) {
         list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+      }
+      const imageRecords = records.filter(record => {
+        const isFolder = checkIsDir(record);
+        if (isFolder) return false;
+        const canModifyRow = checkCanModifyRow(record);
+        if (!canModifyRow) return false;
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName);
+      });
+      if (imageRecords.length > 0) {
+        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
       }
       return list;
     }
@@ -192,6 +211,9 @@ const ContextMenu = ({
 
       if (isImage || isVideo) {
         aiOptions.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+      }
+      if (isImage) {
+        aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
       }
 
       if (descriptionColumn && isDescribableFile) {
@@ -305,6 +327,11 @@ const ContextMenu = ({
         updateRecordDetails([record]);
         break;
       }
+      case OPERATION.DETECT_FACES: {
+        const { records } = option;
+        updateFaceRecognition(records);
+        break;
+      }
       case OPERATION.MOVE: {
         const { record } = option;
         if (!record) break;
@@ -315,7 +342,7 @@ const ContextMenu = ({
         break;
       }
     }
-  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, toggleFileTagsRecord, toggleMoveDialog]);
+  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, toggleFileTagsRecord, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition, toggleMoveDialog]);
 
   useEffect(() => {
     const unsubscribeToggleMoveDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, toggleMoveDialog);
