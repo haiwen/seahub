@@ -597,7 +597,8 @@ class Search extends Component {
     if (this.props.repoID) {
       const { path } = this.props;
       const isMetadataView = path && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
-      if (path && path !== '/' && !this.props.isViewFile && !isMetadataView) {
+      const isTagView = path && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES);
+      if (path && path !== '/' && !this.props.isViewFile && !isMetadataView && !isTagView) {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
