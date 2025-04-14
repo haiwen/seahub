@@ -93,14 +93,14 @@ export const MetadataAIOperationsProvider = ({
   }, [extractFilesDetails]);
 
   const faceRecognition = useCallback((objIds, { success_callback, fail_callback } = {}) => {
-    const inProgressToaster = toaster.notifyInProgress(gettext('Recognize faces by AI...'), { duration: null });
+    const inProgressToaster = toaster.notifyInProgress(gettext('Detecting faces by AI...'), { duration: null });
     metadataAPI.recognizeFaces(repoID, objIds).then(res => {
       inProgressToaster.close();
-      toaster.success(gettext('Faces recognized'));
+      toaster.success(gettext('Faces detected'));
       success_callback && success_callback();
     }).catch(error => {
       inProgressToaster.close();
-      const errorMessage = gettext('Failed to recognize faces');
+      const errorMessage = gettext('Failed to detect faces');
       toaster.danger(errorMessage);
       fail_callback && fail_callback();
     });

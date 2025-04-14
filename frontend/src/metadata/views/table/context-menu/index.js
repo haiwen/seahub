@@ -30,7 +30,7 @@ const OPERATION = {
   RENAME_FILE: 'rename-file',
   FILE_DETAIL: 'file-detail',
   FILE_DETAILS: 'file-details',
-  FACE_RECOGNITION: 'face-recognition',
+  DETECT_FACES: 'detect-faces',
   MOVE: 'move',
 };
 
@@ -125,7 +125,7 @@ const ContextMenu = ({
         return Utils.imageCheck(fileName);
       });
       if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.FACE_RECOGNITION, label: gettext('Face recognition'), records: imageRecords });
+        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
       }
       return list;
     }
@@ -165,7 +165,7 @@ const ContextMenu = ({
         return Utils.imageCheck(fileName);
       });
       if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.FACE_RECOGNITION, label: gettext('Face recognition'), records: imageRecords });
+        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
       }
       return list;
     }
@@ -213,7 +213,7 @@ const ContextMenu = ({
         aiOptions.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
       }
       if (isImage) {
-        aiOptions.push({ value: OPERATION.FACE_RECOGNITION, label: gettext('Face recognition'), records: [record] });
+        aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
       }
 
       if (descriptionColumn && isDescribableFile) {
@@ -327,7 +327,7 @@ const ContextMenu = ({
         updateRecordDetails([record]);
         break;
       }
-      case OPERATION.FACE_RECOGNITION: {
+      case OPERATION.DETECT_FACES: {
         const { records } = option;
         updateFaceRecognition(records);
         break;
