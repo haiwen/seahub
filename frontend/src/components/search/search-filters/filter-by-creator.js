@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import UserItem from './user-item';
@@ -13,18 +14,6 @@ const FilterByCreator = ({ onSelect }) => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-
-  const label = useMemo(() => {
-    if (!value || value.length === 0) return gettext('Creator');
-    const label = [];
-    value.forEach((v) => {
-      const option = options.find((o) => o.key === v);
-      if (option) {
-        label.push(option.name);
-      }
-    });
-    return `Creator: ${label.join(',')}`;
-  }, [options, value]);
 
   const toggle = useCallback((e) => {
     setIsOpen(!isOpen);
@@ -94,11 +83,16 @@ const FilterByCreator = ({ onSelect }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
+  if (!repoID) return null;
+
   return (
     <div className="search-filter filter-by-creator-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="filter-label" title={label}>{label}</div>
+        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
+          'active': isOpen || value.length > 0,
+          'highlighted': isOpen,
+        })}>
+          <div className="filter-label" title={gettext('Creator')}>{gettext('Creator')}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
         </DropdownToggle>
         <ModalPortal>
@@ -106,7 +100,8 @@ const FilterByCreator = ({ onSelect }) => {
             <div className="input-container">
               {value.map((v) => {
                 const option = options.find((o) => o.key === v);
-                return option && (
+                if (!option) return null;
+                return (
                   <UserItem
                     key={option.key}
                     user={option}
@@ -134,7 +129,7 @@ const FilterByCreator = ({ onSelect }) => {
                 onClick={onSelectOption}
                 toggle={false}
               >
-                {option.label}
+                {isOpen && option.label}
                 {value.includes(option.key) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
               </DropdownItem>
             ))}

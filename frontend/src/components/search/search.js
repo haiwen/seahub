@@ -15,6 +15,7 @@ import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
+import IconBtn from '../icon-btn';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -52,11 +53,12 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
+      isFilterControllerActive: true,
       filters: {
         search_filename_only: false,
         creator: [],
         date: null,
-        suffix: '',
+        suffixes: [],
       },
     };
     this.highlightRef = null;
@@ -128,7 +130,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.setState({ width: '570px', isMaskShow: true });
     this.calculateHighlightType();
   };
 
@@ -364,7 +366,7 @@ class Search extends Component {
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    this.setState({ value: newValue });
+    this.setState({ value: newValue, isCloseShow: newValue.length > 0 });
     setTimeout(() => {
       const trimmedValue = newValue.trim();
       const isInRepo = this.props.repoID;
@@ -521,6 +523,7 @@ class Search extends Component {
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
+      isCloseShow: false,
     });
   }
 
@@ -694,9 +697,10 @@ class Search extends Component {
         return false;
       }
 
-      if (filters.suffix && filters.suffix.length > 0) {
-        const suffix = item.path.includes('.') ? item.path.split('.').pop() : '';
-        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) {
+      if (filters.suffixes && filters.suffixes.length > 0) {
+        const pathParts = item.path.split('.');
+        const suffix = pathParts.length > 1 ? `.${pathParts.pop()}` : '';
+        if (!filters.suffixes.includes(suffix)) {
           return false;
         }
       }
@@ -771,9 +775,9 @@ class Search extends Component {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { repoID, isTagEnabled, tagsData } = this.props;
-    const { isMaskShow, isResultGotten  } = this.state;
+    const { isMaskShow, isResultGotten, isCloseShow, isFilterControllerActive  } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
-    const isFiltersShow = isMaskShow && isResultGotten;
+    const isFiltersShow = isMaskShow && isResultGotten && isFilterControllerActive;
     const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
       <Fragment>
@@ -795,14 +799,26 @@ class Search extends Component {
                   autoComplete="off"
                   ref={this.inputRef}
                 />
-                {this.state.isCloseShow &&
+                {isCloseShow &&
                   <button
                     type="button"
-                    className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    className="search-icon-right sf3-font sf3-font-x-01"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
                   ></button>
                 }
+                {isMaskShow && (
+                  <IconBtn
+                    symbol="filter-circled"
+                    size={20}
+                    className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFiltersShow })}
+                    onClick={() => this.setState({ isFilterControllerActive: !isFilterControllerActive })}
+                    title={gettext('Open advanced search')}
+                    aria-label={gettext('Open advanced search')}
+                    tabIndex={0}
+                    id="search-filter-controller"
+                  />
+                )}
               </div>
               {isFiltersShow &&
                 <SearchFilters onChange={this.handleFiltersChange} />

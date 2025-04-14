@@ -183,9 +183,9 @@ const FilterByDate = ({ onSelect }) => {
   }, [customDate, onSelect]);
 
   return (
-    <div className="search-filter filter-by-date">
+    <div className="search-filter filter-by-date-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className="search-filter-toggle">
+        <DropdownToggle tag="div" className="search-filter-toggle" onClick={toggle}>
           <div className="filter-label" style={{ maxWidth: 200 }} title={label}>{label}</div>
           <i
             className="sf3-font sf3-font-down sf3-font pl-1"
