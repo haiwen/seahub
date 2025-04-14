@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import '../../css/log-filter.css';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
+
+import '../../css/log-filter.css';
 
 const propTypes = {
   items: PropTypes.array.isRequired,
