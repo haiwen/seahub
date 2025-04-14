@@ -1,0 +1,28 @@
+.comments-panel-body__header {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
+.comments-panel-body__header .comments-types-count {
+  height: 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.comments-panel-body__header .comment-type {
+  color: #212529;
+  font-size: 12px;
+}
+
+.comments-panel-body__header .comment-type {
+  color: #212529;
+  font-size: 12px;
+}
+
+.comments-panel-body__header .comment-count-tip {
+  color: #999;
+  font-size: 12px;
+}

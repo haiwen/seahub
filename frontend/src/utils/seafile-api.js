@@ -1283,9 +1283,12 @@ class SeafileAPI {
     return this.req.delete(url);
   }
 
-  listComments(repoID, filePath, resolved) {
+  listComments(repoID, docUuid, filePath, resolved) {
     const path = encodeURIComponent(filePath);
     let url = this.server + '/api2/repos/' + repoID + '/file/comments/?p=' + path;
+    if (docUuid) {
+      url = url + '&docuuid=' + docUuid;
+    }
     if (resolved) {
       url = url + '&resolved=' + resolved;
     }
@@ -1317,6 +1320,30 @@ class SeafileAPI {
     if (comment) params.comment = comment;
     return this.req.put(url, params);
   }
+
+  listReplies = (repoID, docUuid, commentID) => {
+    let url = this.server + '/api2/repos/' + repoID + '/file/comments/' + docUuid + '/' + commentID + '/replies/';
+    return this.req.get(url);
+  };
+
+  insertReply = (repoID, docUuid, commentID, replyData) => {
+    let url = this.server + '/api2/repos/' + repoID + '/file/comments/' + docUuid + '/' + commentID + '/replies/';
+    let form = new FormData();
+    for (let key in replyData) {
+      form.append(key, replyData[key]);
+    }
+    return this._sendPostRequest(url, form);
+  };
+
+  deleteReply = (repoID, docUuid, commentID, replyId) => {
+    let url = this.server + '/api2/repos/' + repoID + '/file/comments/' + docUuid + '/' + commentID + '/replies/' + replyId + '/';
+    return this.req.delete(url);
+  };
+
+  updateReply = (repoID, docUuid, commentID, replyId, replyData) => {
+    let url = this.server + '/api2/repos/' + repoID + '/file/comments/' + docUuid + '/' + commentID + '/replies/' + replyId + '/';
+    return this.req.put(url, replyData);
+  };
 
   // starred
   listStarredItems() {
