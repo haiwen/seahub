@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { InputGroupText } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
@@ -8,10 +9,9 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
-import { InputGroupText } from 'reactstrap';
+import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
 import '../../../css/system-admin-web-settings.css';
-import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
 const { sysEnableUserCleanTrash, sysEnableEncryptedLibrary } = window.org.pageOptions;
 

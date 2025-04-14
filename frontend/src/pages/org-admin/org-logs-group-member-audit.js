@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import { Link } from '@gatsbyjs/reach-router';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgGroupMemberAuditLog from '../../models/org-logs-group-member-audit';
-import '../../css/org-logs.css';
 import UserLink from './user-link';
-import { Link } from '@gatsbyjs/reach-router';
+
+import '../../css/org-logs.css';
 
 dayjs.locale(lang);
 
