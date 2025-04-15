@@ -1,23 +1,23 @@
 import axios from 'axios';
 
-class SDocServerApi {
+class ExdrawServerApi {
 
   constructor(options) {
-    this.server = options.sdocServer;
-    this.docUuid = options.docUuid;
+    this.server = options.exdrawServer;
+    this.docUuid = options.exdrawUuid;
     this.accessToken = options.accessToken;
   }
 
-  getDocContent() {
+  getSceneContent() {
     const { server, docUuid, accessToken } = this;
-    const url = `${server}/api/v1/docs/${docUuid}/`;
+    const url = `${server}/api/v1/docs/read/${docUuid}/`;
 
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
 
-  saveDocContent(content) {
+  saveSceneContent(content) {
     const { server, docUuid, accessToken } = this;
-    const url = `${server}/api/v1/docs/${docUuid}/`;
+    const url = `${server}/api/v1/docs/update/${docUuid}/`;
 
     const formData = new FormData();
     formData.append('doc_content', content);
@@ -26,4 +26,4 @@ class SDocServerApi {
   }
 }
 
-export default SDocServerApi;
+export default ExdrawServerApi;
