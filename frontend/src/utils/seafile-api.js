@@ -2231,24 +2231,6 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
-  getTestUrl(content) {
-    const url = `http://127.0.0.1:9000/read/${window.app.pageOptions.docName.split('.')[0]}`;
-
-    return this.req.get(url);
-  }
-
-  updateTestUrl(content) {
-    const url = `http://127.0.0.1:9000/update/${window.app.pageOptions.docName.split('.')[0]}`;
-
-    return (
-      axios.create()({
-        method: 'post',
-        url: url,
-        data: { data: content },
-      })
-    );
-  }
-
   getExdrawToken(repoID, filePath) {
     const url = `/api/v2.1/exdraw/access-token/${repoID}/?p=${filePath}`;
 

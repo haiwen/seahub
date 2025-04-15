@@ -7,24 +7,23 @@ let dirPath = Utils.getDirName(filePath);
 class EditorApi {
 
   saveContent(content) {
-    // return seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
-    //   const uploadLink = res.data;
-    return seafileAPI.updateTestUrl(content);
-    //   return seafileAPI.updateFile(uploadLink, filePath, fileName, content);
-    // });
+    return seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
+      const uploadLink = res.data;
+      return seafileAPI.updateFile(uploadLink, filePath, fileName, content);
+    });
   }
 
   getFileContent = () => {
-    // return seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-    //   const downLoadUrl = res.data;
-    return seafileAPI.getTestUrl();
-    // return seafileAPI.getFileContent(downLoadUrl);
-    // });
+    return seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
+      const downLoadUrl = res.data;
+      return seafileAPI.getFileContent(downLoadUrl);
+    });
   };
 
   getExdrawToken = () => {
-    console.log(seafileAPI.getExdrawToken(repoID, filePath));
-
+    return seafileAPI.getExdrawToken(repoID, filePath).then((res => {
+      return res.data.access_token;
+    }));
   };
 }
 
