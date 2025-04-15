@@ -21,7 +21,6 @@ const SimpleEditor = ({
     },
     tools: { image: false },
   };
-
   const handleChange = () => {
     const elements = excalidrawAPI.getSceneElements();
     if (hasChanged(elements, prevElementsRef.current)) {
@@ -73,6 +72,10 @@ const SimpleEditor = ({
           <MainMenu>
             <MainMenu.DefaultItems.Export />
             <MainMenu.DefaultItems.SaveAsImage />
+            <MainMenu.DefaultItems.LiveCollaborationTrigger
+              // isCollaborating={isCollaborating}
+              // onSelect={() => onCollabDialogOpen()}
+            />
             <MainMenu.DefaultItems.Help />
             <MainMenu.DefaultItems.ClearCanvas />
             <MainMenu.DefaultItems.ToggleTheme />
