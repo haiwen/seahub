@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import CommentDeletePopover from './comment-delete-popover';
 
 const commentItemPropTypes = {
   time: PropTypes.string,
@@ -24,6 +25,7 @@ class CommentItem extends React.Component {
       html: '',
       newComment: this.props.item.comment,
       editable: false,
+      isShowDeletePopover: false,
     };
   }
 
@@ -86,10 +88,17 @@ class CommentItem extends React.Component {
     }
   };
 
+  toggleShowDeletePopover = () => {
+    this.setState({
+      isShowDeletePopover: !this.state.isShowDeletePopover
+    });
+  };
+
   render() {
     const item = this.props.item;
     let oldTime = (new Date(item.created_at)).getTime();
     let time = dayjs(oldTime).format('YYYY-MM-DD HH:mm');
+    const commentOpToolsId = `commentOpTools_${item?.id}`;
     if (this.state.editable) {
       return (
         <li className="seafile-comment-item" id={item.id}>
@@ -126,6 +135,7 @@ class CommentItem extends React.Component {
             size="sm"
             className="seafile-comment-dropdown"
             toggle={this.toggleDropDownMenu}
+            id={commentOpToolsId}
           >
             <DropdownToggle
               tag="i"
@@ -141,7 +151,7 @@ class CommentItem extends React.Component {
             <DropdownMenu>
               {(item.user_email === username) &&
                 <DropdownItem
-                  onClick={() => this.props.deleteComment(this.props.item)}
+                  onClick={this.toggleShowDeletePopover}
                   className="delete-comment"
                   id={item.id}
                 >
@@ -184,6 +194,14 @@ class CommentItem extends React.Component {
           onClick={e => this.onCommentContentClick(e)}
         >
         </div>
+        {this.state.isShowDeletePopover && (
+          <CommentDeletePopover
+            type="comment"
+            targetId={commentOpToolsId}
+            deleteConfirm={() => this.props.deleteComment(this.props.item)}
+            setIsShowDeletePopover={this.toggleShowDeletePopover}
+          />
+        )}
       </li>
     );
   }
