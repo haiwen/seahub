@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-28 14:59+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020,2022\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7733,7 +7733,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users.js:243
 #, javascript-format
 msgid "Deleted user %s"
-msgstr ""
+msgstr "ユーザー%sを削除しました"
 
 #: frontend/src/pages/org-admin/org-users-admins.js:58
 #, javascript-format
@@ -7912,32 +7912,32 @@ msgstr "システム"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
 #| msgid "Traffic"
 msgid "Total Traffic"
-msgstr ""
+msgstr "総トラフィック"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:167
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
 #| msgid "Traffic"
 msgid "Web Traffic"
-msgstr ""
+msgstr "ウェブトラフィック"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:180
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
 #| msgid "Share Link"
 msgid "Share Link Traffic"
-msgstr ""
+msgstr "共有リンクのトラフィック"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:193
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
 #| msgid "Traffic"
 msgid "Sync Traffic"
-msgstr ""
+msgstr "同期トラフィック"
 
 #: frontend/src/pages/org-admin/statistic/statistic-users.js:36
 #: frontend/src/pages/org-admin/statistic/statistic-users.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:36
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:69
 msgid "Active Users"
-msgstr ""
+msgstr "アクティブユーザー"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:28
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
@@ -7962,12 +7962,12 @@ msgstr "Webダウンロード"
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:32
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
 msgid "Share link upload"
-msgstr ""
+msgstr "共有リンクアップロード"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:33
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
 msgid "Share link download"
-msgstr ""
+msgstr "共有リンクのダウンロード"
 
 #: frontend/src/pages/org-admin/web-settings/file-item.js:47
 #: frontend/src/pages/sys-admin/web-settings/file-item.js:47
@@ -7995,93 +7995,93 @@ msgstr "ファイルアップロード"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:144
 msgid "File extension white list"
-msgstr ""
+msgstr "ファイル拡張子ホワイトリスト"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:147
 msgid ""
 "File extension white list for file upload via web UI and API. For example, "
 "\"md;txt;docx\". Empty means no limit."
-msgstr ""
+msgstr "Web UIおよびAPI経由でファイルをアップロードするためのファイル拡張子ホワイトリスト。たとえば、\"md;txt;docx\"。空の場合は制限がないことを意味します。"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:155
 msgid "Disable SAML user email / password login"
-msgstr ""
+msgstr "SAMLユーザーのメール/パスワードログインを無効にする"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:158
 msgid "Force user to use SSO login if SAML account is bound"
-msgstr ""
+msgstr "SAMLアカウントがバインドされている場合、ユーザーにSSOログインの使用を強制する"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:171
 msgid "Not allow user to create encrypted libraries"
-msgstr ""
+msgstr "ユーザーが暗号化されたライブラリを作成することを許可しない"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:177
 #| msgid "Allow user to clean library trash"
 msgid "Disable user clean trash"
-msgstr ""
+msgstr "ユーザーのゴミ箱のクリーンを無効にする"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:180
 msgid "Not allow user to clean library trash"
-msgstr ""
+msgstr "ユーザーがライブラリのゴミ箱をクリーンすることを許可しない"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:191
 #| msgid "Set user default quota"
 msgid "User default quota"
-msgstr ""
+msgstr "ユーザーのデフォルトクォータ"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:193
 #| msgid "Tip: 0 means default limit"
 msgid "Tip: 0 means default limit, the unit is MB"
-msgstr ""
+msgstr "ヒント：0はデフォルトの制限を意味し、単位はMBです"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:279
 msgid "No changes"
-msgstr ""
+msgstr "変更なし"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:292
 msgid "Changes"
-msgstr ""
+msgstr "変更"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:311
 #| msgid "Last modified time"
 msgid "Last modification"
-msgstr ""
+msgstr "最終変更"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:314
 #| msgid "Notifications"
 msgid "Next modification"
-msgstr ""
+msgstr "次の変更"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:200
 msgid "No version history"
-msgstr ""
+msgstr "バージョン履歴はありません"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:284
 msgid "Show changes"
-msgstr ""
+msgstr "変更を表示"
 
 #: frontend/src/pages/share-admin/folders.js:176
 #: frontend/src/pages/share-admin/libraries.js:147
 #: frontend/src/pages/share-admin/share-links.js:234
 #| msgid "Successfully edited labels."
 msgid "Successfully modified permission."
-msgstr ""
+msgstr "権限の変更に成功しました。"
 
 #: frontend/src/pages/share-admin/folders.js:260
 #: frontend/src/pages/share-admin/libraries.js:269
 msgid "Share To:"
-msgstr ""
+msgstr "共有先："
 
 #: frontend/src/pages/share-admin/libraries.js:38
 msgid "No libraries shared"
-msgstr ""
+msgstr "共有されたライブラリはありません"
 
 #: frontend/src/pages/share-admin/libraries.js:39
 msgid ""
 "You have not shared any libraries with other users yet. You can share a "
 "library with other users by clicking the share icon to the right of a "
 "library's name in \"My Libraries\"."
-msgstr ""
+msgstr "まだ他のユーザーと共有しているライブラリはありません。「マイドキュメント」でライブラリの名前の右にある共有アイコンをクリックすると、他のユーザーとライブラリを共有できます。"
 
 #: frontend/src/pages/share-admin/libraries.js:209
 #| msgid "No members"
@@ -8218,87 +8218,87 @@ msgstr "ライブラリの移転"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:105
 msgid "Create Group"
-msgstr ""
+msgstr "グループを作成"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:110
 msgid "Migrate User"
-msgstr ""
+msgstr "ユーザーを移行"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:138
 msgid "Created library {library_name} with {owner} as its owner"
-msgstr ""
+msgstr "{owner}を所有者として、ライブラリ{library_name}を作成しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:148
 msgid "Deleted library {library_name}"
-msgstr ""
+msgstr "ライブラリ{library_name}を削除しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:153
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
-msgstr ""
+msgstr "ライブラリ{library_name}を{user_from}から{user_to}に転送しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:164
 msgid "Created group {group_name}"
-msgstr ""
+msgstr "グループ{group_name}を作成しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:169
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
-msgstr ""
+msgstr "グループ{group_name}を{user_from}から{user_to}に転送しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:176
 msgid "Deleted group {group_name}"
-msgstr ""
+msgstr "グループ{group_name}を削除しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:181
 msgid "Added user {user}"
-msgstr ""
+msgstr "ユーザー{user}を追加しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:186
 msgid "Deleted user {user}"
-msgstr ""
+msgstr "ユーザー{user}を削除しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:191
 msgid "User migrate from {user_from} to {user_to}"
-msgstr ""
+msgstr "ユーザーを{user_from}から{user_to}に移行しました"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
-msgstr ""
+msgstr "パス"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:32
 msgid "Label"
-msgstr ""
+msgstr "ラベル"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:33
 msgid "Suggestion"
-msgstr ""
+msgstr "提案"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:111
 msgid "Content Scan Records"
-msgstr ""
+msgstr "コンテンツスキャン記録"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:149
 msgid "Are you sure you want to remove {placeholder} ?"
-msgstr ""
+msgstr "{placeholder}を削除してもよろしいですか？"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:183
 #| msgid "Delete Member"
 msgid "Remove Member"
-msgstr ""
+msgstr "メンバーを削除"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:268
 #| msgid "Successfully sent to {placeholder}"
 msgid "Successfully added {email_placeholder}"
-msgstr ""
+msgstr "{email_placeholder}を追加しました"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:274
 #| msgid "Failed to send to {email_placeholder}: {errorMsg_placeholder}"
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
-msgstr ""
+msgstr "{email_placeholder}の追加に失敗しました：{errorMsg_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:293
 #| msgid "Successfully sent to {placeholder}"
 msgid "Successfully removed {placeholder}."
-msgstr ""
+msgstr "{placeholder}を削除しました。"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:127
 #| msgid "Are you sure you want to remove {placeholder} ?"
@@ -8497,7 +8497,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "サイドナビゲーションメニュー"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:47
 #: frontend/src/translate.js:13

@@ -8496,7 +8496,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Hliðarvalmynd"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:47
 #: frontend/src/translate.js:13

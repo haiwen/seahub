@@ -6,6 +6,7 @@
 # Translators:
 # zheng xie <xiez1989@gmail.com>, 2024
 # Qubit Bit, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Qubit Bit, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Latvian (https://app.transifex.com/haiwen/teams/5086/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Sānu navigācijas izvēlne"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -33,28 +34,28 @@ msgstr "Ieviešana"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Failu un mapju pārvaldība"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Failu pārvaldīšana ar bibliotēkām"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Izdzēsto failu atjaunošana"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Veco failu versiju atrašana"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Bibliotēkas vēsture un momentuzņēmumi"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Vēstures saglabāšanas perioda iestatīšana"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -63,15 +64,15 @@ msgstr "Dzēst bibliotēku"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Failu skatīšana tīmekļa lietotnē"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Pilna teksta failu meklēšana"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Dalīšanās un sadarbība"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
@@ -221,6 +222,9 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Koplietošanas vietai vajadzētu piederēt un pārvaldīt to organizācijai, bet "
+"ne atsevišķiem darbiniekiem. Lai nebūtu jāmaina failu īpašumtiesības, "
+"darbiniekam atstājot organizāciju."
 
 #: templates/help/departments.html:11
 msgid ""
@@ -230,11 +234,11 @@ msgstr ""
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Sistēmas administrators"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Nodaļas admin"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
@@ -254,13 +258,15 @@ msgstr ""
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Izveidojiet un pārvaldiet koplietojamās bibliotēkas nodaļās"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Sistēmas administrators var iestatīt nodaļas hierarhiju divos veidos: "
+"manuāla iestatīšana vai importēšana no Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""

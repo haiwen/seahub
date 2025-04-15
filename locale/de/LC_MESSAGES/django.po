@@ -6,6 +6,7 @@
 # Translators:
 # c8102f0c763e951b80d487a98493a3a2_3f82ce6 <bf9ed76f9d8770f1cf25632d32d927f8_249767>, 2016
 # c8102f0c763e951b80d487a98493a3a2_3f82ce6 <bf9ed76f9d8770f1cf25632d32d927f8_249767>, 2016
+# Achim Leitner <git@fjl.de>, 2025
 # A. Heß <schnuecks78@gmail.com>, 2015
 # Andreas Schmidt <as@walljet.de>, 2015
 # Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024
@@ -82,7 +83,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-28 14:59+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Ralf Dyllick <rdb@datamate.org>, 2021-2025\n"
+"Last-Translator: Achim Leitner <git@fjl.de>, 2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1293,7 +1294,7 @@ msgstr "Die Bibliothek wurde zurückgesetzt auf den Stand von"
 #: seahub/base/templatetags/seahub_tags.py:239
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
-msgstr "Die Datei %(file)s wurde auf den Stand von %(time)s zurückgesetzt."
+msgstr "Die Datei \"%(file)s\" wurde auf den Stand von %(time)s zurückgesetzt."
 
 #: seahub/base/templatetags/seahub_tags.py:172
 #: seahub/base/templatetags/seahub_tags.py:243
@@ -1649,7 +1650,7 @@ msgstr "Sie wurden eingeladen, dem Team %(org_name)s beizutreten. Bitte klicken 
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr "%(inviter_name)s hat Sie eingeladen, %(site_name)sbeizutreten. Bitte klicken Sie dazu auf diesen Link:"
+msgstr "%(inviter_name)s hat Sie eingeladen, %(site_name)s beizutreten. Bitte klicken Sie dazu auf diesen Link:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format

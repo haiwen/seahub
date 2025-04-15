@@ -4991,7 +4991,7 @@ msgstr "متقدم"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:367
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:178
 msgid "SeaTable integration"
-msgstr "التكامل مع سيتيبل SeaTable"
+msgstr "التكامل مع سيتايبل SeaTable"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:604
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:153
@@ -6365,7 +6365,7 @@ msgstr "فشل في إضافة صور الأشخاص"
 #: frontend/src/metadata/store/server-operator.js:242
 #| msgid "Failed to rename property"
 msgid "Failed to set people cover photo"
-msgstr ""
+msgstr "فشل في تعيين صورة الغلاف للأشخاص"
 
 #: frontend/src/metadata/store/server-operator.js:259
 #: frontend/src/tag/store/server-operator.js:63
@@ -6536,7 +6536,7 @@ msgstr "أضف إلى المجموعة"
 #: frontend/src/metadata/views/gallery/context-menu/index.js:52
 #| msgid "Set user quota"
 msgid "Set as cover photo"
-msgstr ""
+msgstr "تعيين كصورة غلاف"
 
 #: frontend/src/metadata/views/kanban/add-board/index.js:38
 #: frontend/src/metadata/views/kanban/add-board/index.js:40
