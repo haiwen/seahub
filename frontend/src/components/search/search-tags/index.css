@@ -36,6 +36,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: 0 16px;
+  border-radius: 3px;
 }
 
 .search-tags-container .tags-content .tag-item:hover {
