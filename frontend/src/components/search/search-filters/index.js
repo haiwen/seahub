@@ -7,13 +7,11 @@ import FilterBySuffix from './filter-by-suffix';
 
 import './index.css';
 
-const SCROLLABLE_CONTAINER_HEIGHT = 44;
-
-const SearchFilters = ({ repoID, onChange }) => {
+const SearchFilters = ({ onChange }) => {
   return (
-    <div className="search-filters-container" style={{ height: SCROLLABLE_CONTAINER_HEIGHT }}>
+    <div className="search-filters-container">
       <FilterByText onSelect={onChange} />
-      <FilterByCreator repoID={repoID} onSelect={onChange} />
+      <FilterByCreator onSelect={onChange} />
       <FilterByDate onSelect={onChange} />
       <FilterBySuffix onSelect={onChange} />
     </div>
@@ -21,7 +19,6 @@ const SearchFilters = ({ repoID, onChange }) => {
 };
 
 SearchFilters.propTypes = {
-  repoID: PropTypes.string,
   onChange: PropTypes.func,
 };
 

@@ -160,6 +160,7 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.calculatePara(this.props);
+    this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
   }
 
   onMessageCallback = (noticeData) => {
@@ -324,6 +325,7 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent();
     this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
+    this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -2263,11 +2265,16 @@ class LibContentView extends React.Component {
   };
 
   metadataStatusCallback = ({ enableMetadata, enableTags }) => {
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
     if (enableMetadata && enableTags) {
       this.updateUsedRepoTags();
       return;
     }
     this.clearRepoTags();
+  };
+
+  tagsChangedCallback = (tags) => {
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAGS_CHANGED, tags);
   };
 
   render() {
@@ -2346,7 +2353,7 @@ class LibContentView extends React.Component {
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
-        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} >
+        <TagsProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} tagsChangedCallback={this.tagsChangedCallback} >
           <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
             <CollaboratorsProvider repoID={repoID}>
               <div className="main-panel-center flex-row">

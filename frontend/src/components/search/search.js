@@ -14,6 +14,7 @@ import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import SearchFilters from './search-filters';
+import SearchTags from './search-tags';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -22,6 +23,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
+  onSelectTag: PropTypes.func,
 };
 
 const PER_PAGE = 20;
@@ -729,6 +731,7 @@ class Search extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
+          {!isVisited && <h4 className="search-results-title">{gettext('Files')}</h4>}
           <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
@@ -759,12 +762,19 @@ class Search extends Component {
     this.setState({ filters: newFilters }, () => this.forceUpdate());
   }
 
+  handleSelectTag = (tag) => {
+    this.props.onSelectTag(tag);
+    this.resetToDefault();
+  }
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow } = this.state;
+    const { repoID, isTagEnabled, tagsData } = this.props;
+    const { isMaskShow, isResultGotten  } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
-    const isFiltersShow = this.props.repoID && isMaskShow;
+    const isFiltersShow = isMaskShow && isResultGotten;
+    const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -795,10 +805,10 @@ class Search extends Component {
                 }
               </div>
               {isFiltersShow &&
-                <SearchFilters
-                  repoID={this.props.repoID}
-                  onChange={this.handleFiltersChange}
-                />
+                <SearchFilters onChange={this.handleFiltersChange} />
+              }
+              {isTagsShow &&
+                <SearchTags repoID={repoID} tagsData={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
               }
               <div
                 className="search-result-container dropdown-search-result-container"

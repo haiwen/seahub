@@ -16,7 +16,7 @@ import { getColumnOriginName } from '../../metadata/utils/column';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagsContext = React.createContext(null);
 
-export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ...params }) => {
+export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedCallback, children, ...params }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [isReloading, setReloading] = useState(false);
@@ -31,7 +31,8 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, children, ..
 
   const tagsChanged = useCallback(() => {
     setTagsData(storeRef.current.data);
-  }, []);
+    tagsChangedCallback && tagsChangedCallback(storeRef.current.data.rows);
+  }, [tagsChangedCallback]);
 
   const handleTableError = useCallback((error) => {
     toaster.danger(error.error);
