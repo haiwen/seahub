@@ -9,7 +9,7 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import Loading from '../loading';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.number.isRequired,
   toggleDialog: PropTypes.func.isRequired
 };
 

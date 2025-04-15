@@ -15,7 +15,6 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-import UsersFilterBar from './users-filter-bar';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -42,11 +41,11 @@ class Content extends Component {
   };
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1, this.props.is_active, this.props.role);
+    this.props.getListByPage(this.props.currentPage - 1);
   };
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1, this.props.is_active, this.props.role);
+    this.props.getListByPage(this.props.currentPage + 1);
   };
 
   sortByQuotaUsage = (e) => {
@@ -164,14 +163,6 @@ class Content extends Component {
 
       return (
         <div>
-          {this.props.currentItem === 'database' &&
-            <UsersFilterBar
-              isActive={this.props.is_active}
-              role={this.props.role}
-              onStatusChange={this.props.onStatusChange}
-              onRoleChange={this.props.onRoleChange}
-            />
-          }
           {items.length ? table : <EmptyTip text={gettext('No users')} />}
         </div>
       );
@@ -201,12 +192,7 @@ Content.propTypes = {
   onUserSelected: PropTypes.func,
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
-  sortOrder: PropTypes.string,
-  is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  role: PropTypes.string,
-  currentItem: PropTypes.string,
-  onStatusChange: PropTypes.func,
-  onRoleChange: PropTypes.func
+  sortOrder: PropTypes.string
 };
 
 class Item extends Component {

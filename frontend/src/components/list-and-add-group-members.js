@@ -12,7 +12,7 @@ import GroupMembers from './group-members';
 const propTypes = {
   toggleManageMembersDialog: PropTypes.func,
   toggleDepartmentDetailDialog: PropTypes.func,
-  groupID: PropTypes.string,
+  groupID: PropTypes.number.isRequired,
   isOwner: PropTypes.bool.isRequired
 };
 

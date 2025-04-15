@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { Modal, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input, Label, Button } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import toaster from '../toast';
 
@@ -12,7 +12,7 @@ class RenameGroupDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newGroupName: this.props.currentGroupName,
+      newGroupName: this.props.groupName,
       isSubmitBtnActive: false,
     };
   }
@@ -30,48 +30,42 @@ class RenameGroupDialog extends React.Component {
     });
   };
 
-  renameGroup = () => {
-    let name = this.state.newGroupName.trim();
-    if (name) {
-      let that = this;
-      seafileAPI.renameGroup(this.props.groupID, name).then((res) => {
-        that.props.loadGroup(this.props.groupID);
-        that.props.onGroupChanged(res.data.id);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-    this.setState({
-      newGroupName: '',
+  handleSubmit = () => {
+    const { groupID } = this.props;
+    const { newGroupName } = this.state;
+    seafileAPI.renameGroup(groupID, newGroupName.trim()).then((res) => {
+      const { name } = res.data;
+      this.props.onGroupNameChanged(name);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
-    this.props.toggleRenameGroupDialog();
+    this.props.toggleDialog();
   };
 
   handleKeyDown = (event) => {
     if (event.keyCode === 13) {
-      this.renameGroup();
+      this.handleSubmit();
     }
   };
 
   render() {
     return (
-      <Modal isOpen={this.props.showRenameGroupDialog} toggle={this.props.toggleRenameGroupDialog}>
-        <SeahubModalHeader>{gettext('Rename Group')}</SeahubModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Rename Group')}</SeahubModalHeader>
         <ModalBody>
-          <label htmlFor="newGroupName">{gettext('Rename group to')}</label>
+          <Label for="group-name">{gettext('Rename group to')}</Label>
           <Input
             type="text"
-            id="newGroupName"
-            name="new-group-name"
+            id="group-name"
             value={this.state.newGroupName}
             onChange={this.handleGroupNameChange}
             onKeyDown={this.handleKeyDown}
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleRenameGroupDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.renameGroup} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
@@ -79,12 +73,10 @@ class RenameGroupDialog extends React.Component {
 }
 
 const RenameGroupDialogPropTypes = {
-  showRenameGroupDialog: PropTypes.bool.isRequired,
-  toggleRenameGroupDialog: PropTypes.func.isRequired,
-  loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
-  onGroupChanged: PropTypes.func.isRequired,
-  currentGroupName: PropTypes.string.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
+  groupID: PropTypes.number,
+  onGroupNameChanged: PropTypes.func.isRequired,
+  groupName: PropTypes.string.isRequired,
 };
 
 RenameGroupDialog.propTypes = RenameGroupDialogPropTypes;
