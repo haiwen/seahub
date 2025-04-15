@@ -287,6 +287,7 @@ INSTALLED_APPS = [
     'seahub.django_cas_ng',
     'seahub.seadoc',
     'seahub.subscription',
+    'seahub.exdraw',
 ]
 
 
@@ -966,7 +967,7 @@ ENABLE_EXCALIDRAW = False
 ######################################
 # Settings for notification server   #
 ######################################
- 
+
 NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
 
 ############################
@@ -1173,7 +1174,7 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
 # For database conf., now Seafile only support MySQL, skip for other engine
 if 'default' in DATABASES and 'mysql' in DATABASES['default'].get('ENGINE', ''):
-    
+
     ## For dtable_db
     _rewrite_db_env_key_map = {
         'HOST': 'SEAFILE_MYSQL_DB_HOST',
@@ -1244,6 +1245,10 @@ if os.environ.get('ENABLE_SEADOC', ''):
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
+
+if os.environ.get('ENABLE_EXCALIDRAW', ''):
+    ENABLE_EXCALIDRAW = os.environ.get('ENABLE_EXCALIDRAW', '').lower() == 'true'
+EXCALIDRAW_PRIVATE_KEY = JWT_PRIVATE_KEY
 
 if os.environ.get('SITE_ROOT', ''):
     SITE_ROOT = os.environ.get('SITE_ROOT', '')
