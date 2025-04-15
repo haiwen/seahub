@@ -18,11 +18,6 @@
   margin-right: 8px;
 }
 
-/* .search-filters-container .search-filter .sf3-font-down,
-.search-filter-menu .sf3-font-down {
-  color: #666;
-} */
-
 .search-filters-container .search-filter .search-filter-toggle,
 .search-filter-menu .search-filter-toggle {
   display: flex;
@@ -55,7 +50,8 @@
 }
 
 .search-filter-menu.filter-by-text-menu,
-.search-filter-menu.filter-by-date-menu{
+.search-filter-menu.filter-by-date-menu,
+.search-filter-menu.filter-by-creator-menu {
   width: 280px;
 }
 
@@ -188,11 +184,11 @@
   font-size: 14px;
 }
 
-.search-filters-container .search-filter-toggle.active {
-  color: #ff9800;
+.search-filters-container .search-filter-toggle.active,
+.search-filters-container .search-filter-toggle.active:hover {
+  background-color: rgba(255, 152, 0, 0.2);
 }
 
-.search-filters-container .search-filter-toggle.highlighted,
-.search-filters-container .search-filter-toggle.highlighted:hover {
-  background-color: rgba(255, 152, 0, 0.2);
+.search-filters-container .search-filter-toggle.highlighted {
+  color: #ff9800;
 }

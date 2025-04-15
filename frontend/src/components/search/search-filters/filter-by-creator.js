@@ -2,17 +2,19 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import isHotkey from 'is-hotkey';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import UserItem from './user-item';
 import { seafileAPI } from '../../../utils/seafile-api';
 import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';
+import { SEARCH_FILTERS_KEY } from '../../../constants';
 
-const FilterByCreator = ({ onSelect }) => {
+const FilterByCreator = ({ creatorList, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
-  const [value, setValue] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState(creatorList || []);
   const [searchValue, setSearchValue] = useState('');
 
   const toggle = useCallback((e) => {
@@ -29,33 +31,43 @@ const FilterByCreator = ({ onSelect }) => {
   const onSelectOption = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
-    let updated = [...value];
-    if (!updated.includes(option)) {
-      updated = [...updated, option];
+    const name = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
+    let updated = [...selectedOptions];
+    if (!updated.some((item) => item.name === name)) {
+      const newOption = options.find((option) => option.name === name);
+      updated = [...updated, newOption];
     } else {
-      updated = updated.filter((v) => v !== option);
+      updated = updated.filter((option) => option.name !== name);
     }
-    setValue(updated);
-    onSelect('creator', updated);
+    setSelectedOptions(updated);
+    onSelect(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
     if (displayOptions.length === 1) {
       setSearchValue('');
     }
-  }, [value, displayOptions, onSelect]);
+  }, [selectedOptions, displayOptions, options, onSelect]);
 
-  const handleCancel = useCallback((v) => {
-    const updated = value.filter((item) => item !== v);
-    setValue(updated);
-    onSelect('creator', updated);
-  }, [value, onSelect]);
+  const handleCancel = useCallback((e, name) => {
+    const updated = selectedOptions.filter((option) => option.name !== name);
+    setSelectedOptions(updated);
+    onSelect(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
+  }, [selectedOptions, onSelect]);
 
   const handleInputChange = useCallback((e) => {
     const v = e.target.value;
     setSearchValue(v);
-    if (!value) {
+    if (!selectedOptions) {
       setOptions([]);
     }
-  }, [value]);
+  }, [selectedOptions]);
+
+  const handleInputKeyDown = useCallback((e) => {
+    if (isHotkey('enter')(e)) {
+      e.preventDefault();
+      e.stopPropagation();
+      setSearchValue('');
+      toggle();
+    }
+  }, [toggle]);
 
   useEffect(() => {
     if (!searchValue) return;
@@ -64,16 +76,9 @@ const FilterByCreator = ({ onSelect }) => {
       try {
         const res = await seafileAPI.searchUsers(searchValue);
         const userList = res.data.users
-          .filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()))
-          .map(user => ({
-            key: user.email,
-            value: user.email,
-            name: user.name,
-            label: <UserItem user={user} />,
-          }))
-          .filter(user => !options.some(option => option.key === user.key));
+          .filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()));
 
-        setOptions(prevOptions => [...prevOptions, ...userList]);
+        setOptions(userList);
       } catch (err) {
         toaster.danger(Utils.getErrorMsg(err));
       }
@@ -83,54 +88,49 @@ const FilterByCreator = ({ onSelect }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
-  if (!repoID) return null;
-
   return (
     <div className="search-filter filter-by-creator-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen || value.length > 0,
-          'highlighted': isOpen,
+          'active': isOpen && selectedOptions.length > 0,
+          'highlighted': selectedOptions.length > 0,
         })}>
           <div className="filter-label" title={gettext('Creator')}>{gettext('Creator')}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu creator-dropdown-menu">
+          <DropdownMenu className="search-filter-menu filter-by-creator-menu">
             <div className="input-container">
-              {value.map((v) => {
-                const option = options.find((o) => o.key === v);
-                if (!option) return null;
-                return (
-                  <UserItem
-                    key={option.key}
-                    user={option}
-                    isCancellable={true}
-                    onCancel={() => handleCancel(v)}
-                  />
-                );
-              })}
+              {selectedOptions.map((option) => (
+                <UserItem
+                  key={option.name}
+                  user={option}
+                  isCancellable={true}
+                  onCancel={handleCancel}
+                />
+              ))}
               <div className="search-input-wrapper">
                 <input
                   type="text"
-                  placeholder={value.length ? '' : gettext('Search user')}
+                  placeholder={selectedOptions.length ? '' : gettext('Search user')}
                   value={searchValue}
                   onChange={handleInputChange}
+                  onKeyDown={handleInputKeyDown}
                 />
               </div>
             </div>
             {displayOptions && displayOptions.map((option) => (
               <DropdownItem
-                key={option.key}
+                key={option.name}
                 tag="div"
                 tabIndex="-1"
-                data-toggle={option.key}
+                data-toggle={option.name}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={onSelectOption}
                 toggle={false}
               >
-                {isOpen && option.label}
-                {value.includes(option.key) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                {isOpen && <UserItem user={option} />}
+                {selectedOptions.includes(option.name) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
               </DropdownItem>
             ))}
           </DropdownMenu>
@@ -141,6 +141,7 @@ const FilterByCreator = ({ onSelect }) => {
 };
 
 FilterByCreator.propTypes = {
+  creatorList: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
 };
 

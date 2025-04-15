@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
@@ -53,11 +53,17 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
-      isFilterControllerActive: true,
+      isFiltersShow: true,
+      isFilterControllerActive: false,
       filters: {
         search_filename_only: false,
-        creator: [],
-        date: null,
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          start: null,
+          end: null,
+        },
         suffixes: [],
       },
     };
@@ -494,7 +500,7 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
-      items[i]['last_modified'] = data[i].last_modified || '';
+      items[i]['mtime'] = data[i].mtime || '';
       items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
     }
     return items;
@@ -512,6 +518,19 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
+      isFiltersShow: true,
+      isFilterControllerActive: false,
+      filters: {
+        search_filename_only: false,
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          start: null,
+          end: null,
+        },
+        suffixes: [],
+      }
     });
   }
 
@@ -684,16 +703,23 @@ class Search extends Component {
   filterResults = (results) => {
     const { filters } = this.state;
     return results.filter(item => {
-      if (filters.creator && filters.creator.length > 0) {
-        if (!filters.creator.includes(item.repo_owner_email)) {
+      if (filters.creator_list && filters.creator_list.length > 0) {
+        if (!filters.creator_list.some(creator => creator.email === item.repo_owner_email)) {
           return false;
         }
       }
 
-      if (filters.date?.start && item.last_modified < filters.date.start) {
+      let startDate = filters.date.start;
+      let endDate = filters.date.end;
+      if (filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM) {
+        startDate = filters.date.start?.unix();
+        endDate = filters.date.end?.unix();
+      }
+
+      if (startDate && item.mtime < startDate) {
         return false;
       }
-      if (filters.date?.end && item.last_modified > filters.date.end) {
+      if (endDate && item.mtime > endDate) {
         return false;
       }
 
@@ -763,7 +789,13 @@ class Search extends Component {
         this.getSearchResult(newQueryData);
       });
     }
-    this.setState({ filters: newFilters }, () => this.forceUpdate());
+
+    let isFilterControllerActive = false;
+    if (newFilters.creator_list.length > 0 || newFilters.date || newFilters.suffixes.length > 0) {
+      isFilterControllerActive = true;
+    }
+
+    this.setState({ filters: newFilters, isFilterControllerActive }, () => this.forceUpdate());
   }
 
   handleSelectTag = (tag) => {
@@ -775,9 +807,8 @@ class Search extends Component {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { repoID, isTagEnabled, tagsData } = this.props;
-    const { isMaskShow, isResultGotten, isCloseShow, isFilterControllerActive  } = this.state;
+    const { isMaskShow, isResultGotten, isCloseShow, isFiltersShow, isFilterControllerActive, filters  } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
-    const isFiltersShow = isMaskShow && isResultGotten && isFilterControllerActive;
     const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
       <Fragment>
@@ -811,8 +842,8 @@ class Search extends Component {
                   <IconBtn
                     symbol="filter-circled"
                     size={20}
-                    className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFiltersShow })}
-                    onClick={() => this.setState({ isFilterControllerActive: !isFilterControllerActive })}
+                    className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
+                    onClick={() => this.setState({ isFiltersShow: !isFiltersShow })}
                     title={gettext('Open advanced search')}
                     aria-label={gettext('Open advanced search')}
                     tabIndex={0}
@@ -820,8 +851,8 @@ class Search extends Component {
                   />
                 )}
               </div>
-              {isFiltersShow &&
-                <SearchFilters onChange={this.handleFiltersChange} />
+              {isMaskShow && isFiltersShow &&
+                <SearchFilters filters={filters} onChange={this.handleFiltersChange} />
               }
               {isTagsShow &&
                 <SearchTags repoID={repoID} tagsData={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />

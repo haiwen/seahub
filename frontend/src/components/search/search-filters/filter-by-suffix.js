@@ -1,20 +1,22 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import ModalPortal from '../../modal-portal';
-import classNames from 'classnames';
+import { SEARCH_FILTERS_KEY } from '../../../constants';
 
-const FilterBySuffix = ({ onSelect }) => {
+const FilterBySuffix = ({ suffixes, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState(suffixes.join(', '));
   const inputRef = useRef(null);
 
   const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
   const handleInput = useCallback((e) => {
-    setValue(e.target.value);
+    setInputValue(e.target.value);
     const suffixes = e.target.value.split(',').map(suffix => suffix.trim()).filter(Boolean);
-    onSelect('suffixes', suffixes);
+    onSelect(SEARCH_FILTERS_KEY.SUFFIXES, suffixes);
   }, [onSelect]);
 
   const handleKeyDown = useCallback((e) => {
@@ -28,8 +30,8 @@ const FilterBySuffix = ({ onSelect }) => {
     <div className="search-filter filter-by-suffix-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen || value,
-          'highlighted': isOpen,
+          'active': isOpen && suffixes.length > 0,
+          'highlighted': suffixes.length > 0,
         })} onClick={toggle}>
           <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
@@ -41,7 +43,7 @@ const FilterBySuffix = ({ onSelect }) => {
                 ref={inputRef}
                 type="text"
                 placeholder={gettext('Seperate multiple suffixes by ","(like .sdoc, .pdf)')}
-                value={value}
+                value={inputValue}
                 autoFocus
                 width={120}
                 onChange={handleInput}
@@ -53,6 +55,11 @@ const FilterBySuffix = ({ onSelect }) => {
       </Dropdown>
     </div>
   );
+};
+
+FilterBySuffix.propTypes = {
+  suffixes: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default FilterBySuffix;
