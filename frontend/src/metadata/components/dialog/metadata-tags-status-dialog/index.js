@@ -19,10 +19,11 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, usedRepoTags, onMigrateSuccess }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
+  const [migrated, setMigrated] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
 
   const onToggle = useCallback(() => {
@@ -46,8 +47,16 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
   }, [lang, repoID, submit, toggle, value]);
 
   const migrateTag = useCallback(() => {
-    // TODO backend migrate old tags
-  }, []);
+    tagsAPI.migrateTags(repoID, usedRepoTags).then(res => {
+      setMigrated(true);
+      toaster.success(gettext('Tags migrated successfully'));
+      onMigrateSuccess && onMigrateSuccess();
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setMigrated(false);
+    });
+  }, [repoID, usedRepoTags, onMigrateSuccess]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -110,7 +119,13 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
             {showMigrateTip &&
               <FormGroup className="mt-6">
                 <p>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
-                <Button color="primary" onClick={migrateTag}>{gettext('Migrate old version tags')}</Button>
+                <Button
+                  color="primary"
+                  onClick={migrateTag}
+                  disabled={migrated}
+                >
+                  {migrated ? gettext('Migrated') : gettext('Migrate old version tags')}
+                </Button>
               </FormGroup>
             }
           </ModalBody>
@@ -136,6 +151,8 @@ MetadataTagsStatusDialog.propTypes = {
   submit: PropTypes.func.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
   showMigrateTip: PropTypes.bool,
+  repoTags: PropTypes.array,
+  onMigrateSuccess: PropTypes.func,
 };
 
 export default MetadataTagsStatusDialog;

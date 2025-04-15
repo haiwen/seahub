@@ -33,6 +33,7 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   updateDirent: PropTypes.func,
   updateTreeNode: PropTypes.func,
+  usedRepoTags: PropTypes.array,
 };
 
 class DirColumnNav extends React.Component {
@@ -43,7 +44,7 @@ class DirColumnNav extends React.Component {
 
   render() {
     const {
-      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25
+      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25, usedRepoTags
     } = this.props;
     const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
@@ -74,9 +75,9 @@ class DirColumnNav extends React.Component {
               updateDirent={this.props.updateDirent}
               updateTreeNode={this.props.updateTreeNode}
             />
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} usedRepoTags={usedRepoTags} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} usedRepoTags={usedRepoTags} />
           </>
         )}
       </div>

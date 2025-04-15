@@ -138,6 +138,14 @@ class TagsManagerAPI {
     return this.req.post(url, params);
   };
 
+  migrateTags = (repoID, usedRepoTags) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/migrate-tags/';
+    const params = {
+      tag_ids: usedRepoTags.map(tag => tag.id),
+    };
+    return this.req.post(url, params);
+  };
+
 }
 
 const tagsAPI = new TagsManagerAPI();

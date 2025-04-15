@@ -7,15 +7,15 @@ import { EVENT_BUS_TYPE } from '../components/common/event-bus-type';
 
 const RepoInfoBarMigrate = () => {
 
-  const { enableMetadata } = useMetadataStatus();
-
+  const { enableMetadata, detailsSettings } = useMetadataStatus();
+  const tagsMigrated = detailsSettings?.tags_migrated;
   const openMigrate = () => {
     eventBus.dispatch(EVENT_BUS_TYPE.OPEN_TREE_PANEL, () => eventBus.dispatch(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS));
   };
 
   return (
     <div className="repo-info-bar-migrate mt-2">
-      {enableMetadata ?
+      {enableMetadata && !tagsMigrated ?
         (
           <>
             {gettext('Tips: There are tags of old version. Please migrate tags to new version.')}

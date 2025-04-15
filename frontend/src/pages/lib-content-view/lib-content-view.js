@@ -2350,6 +2350,7 @@ class LibContentView extends React.Component {
     if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
       detailPath = Utils.getDirName(this.state.path);
     }
+
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
       <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
