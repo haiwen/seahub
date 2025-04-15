@@ -594,7 +594,7 @@
   "Try_again": "再试一次",
   "Deprecation": "弃用",
   "Generated_content_x_words": "已生成内容 {{count}} 字",
-  "Ask_AI_anything": "请输入指令...",
+  "Ask_AI_anything": "请输入命令...",
   "Thinking": "思考中...",
   "Translation_error_message": "翻译出错，请重试",
   "The_translation_content_cannot_be_empty": "翻译内容不能为空",
@@ -620,9 +620,11 @@
   "Select_seatable_rows": "选择 Seatable 行",
   "Add_rows_record": "添加行记录",
   "Double_click_then_adjust_field_width": "双击后调节字段宽度",
+  "SeaTable_row": "SeaTable 行",
+  "Please_select_one_row_record": "请选择一行记录",
+  "No_linked_records": "没有链接的记录",
   "Insert_chart": "插入图表",
   "Edit_chart": "编辑图表",
   "Please_complete_the_chart_configuration_first": "请先完成图表配置",
-  "chart": "图表",
-  "Image_is_upload_error": "图片上传失败，请删除后重新尝试"
+  "chart": "图表"
 }

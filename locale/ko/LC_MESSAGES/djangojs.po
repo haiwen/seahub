@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Translators:
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2024
+# Seafile Info <info@seafile.com>, 2025
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2025
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-28 14:59+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2024\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2025\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -275,7 +276,7 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-path.js:146
 #| msgid "Refresh"
 msgid "Refresh the view"
-msgstr ""
+msgstr "보기 새로 고침"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:160
 #: frontend/src/components/dialog/lib-settings.js:97
@@ -835,7 +836,7 @@ msgstr "이름"
 #: frontend/src/components/dialog/add-wiki-dialog.js:98
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
 msgid "Wiki owner"
-msgstr ""
+msgstr "위키 소유자"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:98
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
@@ -856,12 +857,12 @@ msgstr "부서를 선택하십시오"
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:460
 #: frontend/src/metadata/components/popover/options-popover/index.js:161
 msgid "No options available"
-msgstr ""
+msgstr "옵션이 없습니다"
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:128
 msgid "New page"
-msgstr ""
+msgstr "새 페이지"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
@@ -2300,7 +2301,7 @@ msgstr "폴더"
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
-msgstr ""
+msgstr "폴더 권한은 라이브러리가 사용자나 그룹에 공유된 경우에만 유효합니다.하위 폴더 권한을 미세하게 조정하는 데 사용됩니다."
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:322
 #: frontend/src/components/dialog/share-to-group.js:376
@@ -2316,7 +2317,7 @@ msgstr "그룹 검색"
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:189
 #: frontend/src/metadata/components/popover/sort-popover/index.js:213
 msgid "No results"
-msgstr ""
+msgstr "결과 없음"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:282
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:62
@@ -3540,7 +3541,7 @@ msgstr ""
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared to another user, the sharing will be kept."
-msgstr ""
+msgstr "라이브러리가 다른 사용자에게 공유되는 경우 공유는 유지됩니다."
 
 #: frontend/src/components/dialog/transfer-dialog.js:178
 #: frontend/src/pages/org-admin/departments/departments.js:299
@@ -3555,7 +3556,7 @@ msgstr "부서"
 #| " library is shared to another department, the sharing will be ketp."
 msgid ""
 "If the library is shared to another department, the sharing will be kept."
-msgstr ""
+msgstr "도서관이 다른 부서에 공유되면 공유는 유지됩니다."
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:47
 msgid "Group has been transfered"
@@ -3657,7 +3658,7 @@ msgid ""
 "Password must be at least 8 characters long and contain different "
 "characters: uppercase letters, lowercase letters, numbers, and special "
 "symbols"
-msgstr ""
+msgstr "암호 길이는 8자 이상이어야 하며 대문자, 소문자, 숫자 및 특수 기호와 같은 다른 문자를 포함해야 합니다."
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:23
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:28
@@ -3667,7 +3668,7 @@ msgstr "암호는 비워둘 수 없습니다"
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:35
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:43
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "비밀번호 강도가 강하거나 강할 거예요."
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:42
 msgid "Password set"
@@ -3774,7 +3775,7 @@ msgstr ""
 msgid ""
 "Turn on extensible properties and views to experience a new way of managing "
 "files"
-msgstr ""
+msgstr "확장 가능한 속성과 뷰를 열어 파일을 관리하는 새로운 방법을 경험하십시오."
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:83
 #: frontend/src/components/dirent-detail/detail-list-view.js:107
@@ -3786,7 +3787,7 @@ msgstr "위치"
 #: frontend/src/components/dirent-detail/detail-list-view.js:90
 #: frontend/src/components/dirent-detail/detail-list-view.js:122
 msgid "Edit metadata properties"
-msgstr ""
+msgstr "메타데이터 속성 편집"
 
 #: frontend/src/components/dirent-detail/dirent-details/dir-details.js:13
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:71
@@ -3794,19 +3795,19 @@ msgstr ""
 #: frontend/src/components/dirent-detail/lib-details.js:21
 #: frontend/src/metadata/utils/column/index.js:171
 msgid "Last modified time"
-msgstr ""
+msgstr "마지막 수정 시간"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:25
 msgid "Dimensions"
-msgstr ""
+msgstr "치수"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:27
 msgid "Device make"
-msgstr ""
+msgstr "장비 제조업체"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:29
 msgid "Device model"
-msgstr ""
+msgstr "장치 모델"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:31
 msgid "Color space"
@@ -5666,31 +5667,31 @@ msgid ""
 "After enable extended properties for files, you can add different properties"
 " to files, like collaborators, file expiring time, file description. You can"
 " also create different views for files based extended properties."
-msgstr ""
+msgstr "파일에 대해 확장 속성을 활성화한 후에는 공동 작성자, 파일 만료 시간, 파일 설명 등의 다른 속성을 파일에 추가할 수 있습니다.파일 기반 확장 기능에 대해 다른 뷰를 만들 수도 있습니다."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:87
 msgid "Turn off extended properties"
-msgstr ""
+msgstr "확장 속성 닫기"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:88
 msgid ""
 "Do you really want to turn off extended properties? Existing properties will"
 " all be deleted."
-msgstr ""
+msgstr "확장 속성을 닫으시겠습니까?기존 속성이 모두 삭제됩니다."
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:94
 msgid "Enable tags to add tags to files and search files by tags."
-msgstr ""
+msgstr "레이블을 활성화하여 파일에 레이블을 추가하고 레이블별로 파일을 검색합니다."
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:98
 #| msgid "Language"
 msgid "Tags language:"
-msgstr ""
+msgstr "태그 언어:"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:116
 #| msgid "Turn off"
 msgid "Turn off tags"
-msgstr ""
+msgstr "탭 닫기"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:117
 #| msgid ""
@@ -5698,7 +5699,7 @@ msgstr ""
 #| "deleted."
 msgid ""
 "Do you really want to turn off tags? Existing tags will all be deleted."
-msgstr ""
+msgstr "탭을 닫으시겠습니까?기존 태그가 모두 삭제됩니다."
 
 #: frontend/src/metadata/components/dialog/peoples-dialog/index.js:44
 #: frontend/src/metadata/components/dialog/peoples-dialog/index.js:47
@@ -5714,23 +5715,23 @@ msgstr ""
 
 #: frontend/src/metadata/components/dialog/turn-off-confirm-dialog.js:16
 msgid "Turn off"
-msgstr ""
+msgstr "끄다"
 
 #: frontend/src/metadata/components/metadata-details/ai/index.js:47
 #: frontend/src/metadata/views/table/context-menu/index.js:203
 msgid "Generate description"
-msgstr ""
+msgstr "생성 설명"
 
 #: frontend/src/metadata/components/metadata-details/ai/index.js:57
 #: frontend/src/metadata/views/table/context-menu/index.js:197
 msgid "Extract file detail"
-msgstr ""
+msgstr "파일 세부내용 추출"
 
 #: frontend/src/metadata/components/metadata-details/ai/index.js:61
 #: frontend/src/metadata/views/table/context-menu/index.js:209
 #| msgid "Generate image description"
 msgid "Generate file tags"
-msgstr ""
+msgstr "파일 레이블 생성"
 
 #: frontend/src/metadata/components/metadata-details/location/index.js:149
 msgid "No address found for the given coordinates."
