@@ -6,6 +6,7 @@ class DepartmentNode {
     this.children = props.children || [];
     this.parentNode = props.parentNode || null;
     this.orgId = props.orgId || '';
+    this.quota = props.quota || -2;
   }
 
   findNodeById(nodeId) {
