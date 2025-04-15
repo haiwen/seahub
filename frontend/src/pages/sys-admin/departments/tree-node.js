@@ -11,6 +11,7 @@ const departmentsTreeNodePropTypes = {
   listSubDepartments: PropTypes.func,
   onChangeDepartment: PropTypes.func,
   toggleAddDepartment: PropTypes.func,
+  toggleSetQuotaDialog: PropTypes.func,
   toggleAddLibrary: PropTypes.func,
   toggleAddMembers: PropTypes.func,
   toggleRename: PropTypes.func,
@@ -81,6 +82,7 @@ class DepartmentsTreeNode extends Component {
             checkedDepartmentId={this.props.checkedDepartmentId}
             listSubDepartments={this.props.listSubDepartments}
             toggleAddDepartment={this.props.toggleAddDepartment}
+            toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
             toggleAddMembers={this.props.toggleAddMembers}
             toggleRename={this.props.toggleRename}
             toggleDelete={this.props.toggleDelete}
@@ -149,6 +151,7 @@ class DepartmentsTreeNode extends Component {
               <DepartmentNodeMenu
                 node={node}
                 toggleAddDepartment={this.props.toggleAddDepartment}
+                toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
                 toggleAddLibrary={this.props.toggleAddLibrary}
                 toggleAddMembers={this.props.toggleAddMembers}
                 toggleRename={this.props.toggleRename}

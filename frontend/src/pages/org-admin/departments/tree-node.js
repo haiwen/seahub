@@ -11,6 +11,7 @@ const departmentsV2TreeNodePropTypes = {
   listSubDepartments: PropTypes.func,
   onChangeDepartment: PropTypes.func,
   toggleAddDepartment: PropTypes.func,
+  toggleSetQuotaDialog: PropTypes.func,
   toggleAddLibrary: PropTypes.func,
   toggleAddMembers: PropTypes.func,
   toggleRename: PropTypes.func,
@@ -85,6 +86,7 @@ class DepartmentsV2TreeNode extends Component {
             toggleRename={this.props.toggleRename}
             toggleDelete={this.props.toggleDelete}
             toggleAddLibrary={this.props.toggleAddLibrary}
+            toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
           />
         );
       });
@@ -151,6 +153,7 @@ class DepartmentsV2TreeNode extends Component {
                 toggleAddDepartment={this.props.toggleAddDepartment}
                 toggleAddLibrary={this.props.toggleAddLibrary}
                 toggleAddMembers={this.props.toggleAddMembers}
+                toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
                 toggleRename={this.props.toggleRename}
                 toggleDelete={this.props.toggleDelete}
               />
