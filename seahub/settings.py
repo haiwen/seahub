@@ -962,7 +962,7 @@ ENABLE_WHITEBOARD = False
 # Settings for excalidraw    #
 ##########################
 
-ENABLE_EXCALIDRAW = False
+ENABLE_EXCALIDRAW = True
 
 ######################################
 # Settings for notification server   #

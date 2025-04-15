@@ -16,6 +16,7 @@ const ExcaliEditor = () => {
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
+    editorApi.getExdrawToken();
     editorApi.getFileContent().then(res => {
       if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
         // collaborators.forEach is not a function
