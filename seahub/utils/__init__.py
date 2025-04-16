@@ -78,7 +78,7 @@ else:
 
 def is_pro_version():
     return getattr(seahub.settings, 'IS_PRO_VERSION', False) is True
-    
+
 def is_cluster_mode():
     cfg = configparser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
@@ -738,7 +738,7 @@ if EVENTS_CONFIG_FILE:
             events = seafevents_api.get_file_audit_events(session, email, org_id, repo_id, start, limit)
 
         return events if events else None
-    
+
     def get_log_events_by_users_and_repos(type, emails, repo_ids, start, limit):
         with _get_seafevents_session() as session:
             events = seafevents_api.get_events_by_users_and_repos(session, type, emails, repo_ids, start, limit)
@@ -1497,3 +1497,17 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
+
+
+def uuid_str_to_32_chars(file_uuid):
+    if len(file_uuid) == 36:
+        return uuid.UUID(file_uuid).hex
+    else:
+        return file_uuid
+
+
+def uuid_str_to_36_chars(file_uuid):
+    if len(file_uuid) == 32:
+        return str(uuid.UUID(file_uuid))
+    else:
+        return file_uuid
