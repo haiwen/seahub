@@ -10,15 +10,14 @@ class ExdrawServerApi {
 
   getSceneContent() {
     const { server, docUuid, accessToken } = this;
-    const url = `${server}/api/v1/docs/read/${docUuid}/`;
+    const url = `${server}/api/v1/docs/${docUuid}/`;
 
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
 
   saveSceneContent(content) {
     const { server, docUuid, accessToken } = this;
-    const url = `${server}/api/v1/docs/update/${docUuid}/`;
-
+    const url = `${server}/api/v1/docs/${docUuid}/`;
     const formData = new FormData();
     formData.append('doc_content', content);
 

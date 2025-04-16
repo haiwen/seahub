@@ -69,6 +69,7 @@ from seahub.views import check_folder_permission, \
 from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, is_seadoc_revision
+from seahub.exdraw.utils import get_exdraw_file_uuid
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -787,7 +788,8 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
 
     elif filetype == EXCALIDRAW:
-
+        file_uuid = get_exdraw_file_uuid(repo, path)
+        return_dict['file_uuid'] = file_uuid
         return_dict['protocol'] = request.is_secure() and 'https' or 'http'
         return_dict['domain'] = get_current_site(request).domain
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
