@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { UncontrolledTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
@@ -8,11 +9,13 @@ import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
 import { getTagId, getTagName, getTagColor } from '../../../../../tag/utils/cell';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
+import IconBtn from '../../../../../components/icon-btn';
 
 const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
 
   const { tagsData } = useTags();
   const { enableTags } = useMetadataStatus();
+  const invalidFilterTip = React.createRef();
 
   const value = useMemo(() => {
     if (!enableTags) return [];
@@ -79,20 +82,67 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
     }
   }, [value, onChangeAPI]);
 
-  if (!enableTags) return null;
+  const onDeleteFilter = useCallback((event) => {
+    event.nativeEvent.stopImmediatePropagation();
+    onChangeAPI([]);
+    oldValue = [];
+  }, [value, onChangeAPI, oldValue]);
+
+
+  const renderErrorMessage = () => {
+    return (
+      <div className="ml-2">
+        <div ref={invalidFilterTip}>
+          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
+        </div>
+        <UncontrolledTooltip
+          target={invalidFilterTip}
+          placement='bottom'
+          fade={false}
+          className="sf-metadata-tooltip"
+        >
+          {gettext('Invalid filter')}
+        </UncontrolledTooltip>
+      </div>
+    );
+  };
+
+  const renderCustomizeSelect = () => {
+    return (
+      <CustomizeSelect
+        readOnly={readOnly}
+        searchable={true}
+        supportMultipleSelect={true}
+        className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
+        value={displayValue}
+        options={options}
+        onSelectOption={onChange}
+        searchPlaceholder={gettext('Search tag')}
+        noOptionsPlaceholder={gettext('No tags')}
+      />
+    );
+  };
+
+  if (!enableTags) {
+    if (oldValue.length !== 0) {
+      return (
+        <div>
+          {renderCustomizeSelect()}
+          {renderErrorMessage()}
+          <div className="delete-filter" onClick={onDeleteFilter}>
+            <Icon className="sf-metadata-icon" symbol="fork-number"/>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
 
   return (
-    <CustomizeSelect
-      readOnly={readOnly}
-      searchable={true}
-      supportMultipleSelect={true}
-      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
-      value={displayValue}
-      options={options}
-      onSelectOption={onChange}
-      searchPlaceholder={gettext('Search tag')}
-      noOptionsPlaceholder={gettext('No tags')}
-    />
+    <div>
+      {renderCustomizeSelect()}
+    </div>
   );
 
 };
