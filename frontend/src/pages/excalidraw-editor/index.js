@@ -24,33 +24,20 @@ const ExcaliEditor = () => {
     editorApi.getExdrawToken().then(res => {
       exdrawServerConfigRef.current = {
         exdrawServer: 'http://127.0.0.1:9000',
-        exdrawUuid: window.app.pageOptions.docName.split('.')[0],
+        exdrawUuid: window.app.pageOptions.docUuid,
         accessToken: res
       };
       const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
       exdrawServerApi.getSceneContent().then(res => {
-        if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
-          // collaborators.forEach is not a function
-          res.data['appState']['collaborators'] = [];
-        }
         setFileContent(res.data);
         setIsFetching(false);
       });
     });
-    // editorApi.getFileContent().then(res => {
-    //   if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
-    //     // collaborators.forEach is not a function
-    //     res.data['appState']['collaborators'] = [];
-    //   }
-    //   setFileContent(res.data);
-    //   setIsFetching(false);
-    // });
   }, []);
 
   const saveSceneContent = useCallback(async () => {
     if (isChangedRef.current) {
       try {
-        // await editorApi.saveContent(JSON.stringify(editorRef.current));
         const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
         await exdrawServerApi.saveSceneContent(JSON.stringify(editorRef.current));
         isChangedRef.current = false;
