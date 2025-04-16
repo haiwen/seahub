@@ -17,7 +17,7 @@ import { useMetadataStatus } from '../../hooks';
 
 import '../../css/lib-settings.css';
 
-const { enableSeafileAI } = window.app.config;
+const { enableSeafileAI, enableOCR: enableSeafileOCR } = window.app.config;
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
@@ -134,7 +134,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         {gettext('Tags')}
                       </NavLink>
                     </NavItem>
-                    {enableSeafileAI &&
+                    {enableSeafileAI && enableSeafileOCR &&
                       <NavItem
                         role="tab"
                         aria-selected={activeTab === TAB.OCR_SETTING}
