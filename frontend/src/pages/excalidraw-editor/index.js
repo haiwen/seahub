@@ -5,6 +5,7 @@ import isHotkey from 'is-hotkey';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
+import { Utils } from '../../utils/utils';
 
 import './index.css';
 
@@ -23,6 +24,7 @@ const ExcaliEditor = () => {
       setFileContent(res.data);
       setIsFetching(false);
     });
+    onSetFavicon();
   }, []);
 
   const saveSceneContent = useCallback(async () => {
@@ -81,6 +83,12 @@ const ExcaliEditor = () => {
   const onChangeContent = useCallback((elements) => {
     editorRef.current = { elements };
     isChangedRef.current = true;
+  }, []);
+
+  const onSetFavicon = useCallback(() => {
+    const { docName } = window.app.pageOptions;
+    const fileIcon = Utils.getFileIconUrl(docName);
+    document.getElementById('favicon').href = fileIcon;
   }, []);
 
   return (
