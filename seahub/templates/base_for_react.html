@@ -58,6 +58,7 @@
             cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
             enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+            enableSeafileOCR: {% if enable_seafile_ocr %} true {% else %} false {% endif %},
             notificationServerUrl: '{{ notification_server_url }}'
         },
         pageOptions: {
