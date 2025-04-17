@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 4097705 */
-  src: url('iconfont.eot?t=1740817787686'); /* IE9 */
-  src: url('iconfont.eot?t=1740817787686#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1740817787686') format('woff2'),
-       url('iconfont.woff?t=1740817787686') format('woff'),
-       url('iconfont.ttf?t=1740817787686') format('truetype'),
-       url('iconfont.svg?t=1740817787686#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1744104550669'); /* IE9 */
+  src: url('iconfont.eot?t=1744104550669#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1744104550669') format('woff2'),
+       url('iconfont.woff?t=1744104550669') format('woff'),
+       url('iconfont.ttf?t=1744104550669') format('truetype'),
+       url('iconfont.svg?t=1744104550669#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-presentation:before {
+  content: "\e688";
+}
+
+.sdoc-close-presentation:before {
+  content: "\e689";
 }
 
 .sdoc-seatable-row:before {
@@ -547,3 +555,4 @@
 .sdoc-user:before {
   content: "\e629";
 }
+
