@@ -3,6 +3,8 @@ from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant
+from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentView, FileCommentRepliesView, \
+    FileCommentReplyView
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess, CheckThumbnailAccess, CheckShareLinkThumbnailAccess
@@ -477,7 +479,15 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
-
+    
+    
+    ## user: repo file comments
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/$', FileCommentsView.as_view(), name='api-v2.1-file-comments'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api-v2.1-file-comment'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/$', FileCommentRepliesView.as_view(), name='api-v2.1-file-comment-replies'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', FileCommentReplyView.as_view(), name='api-v2.1-file-comment-repolies'),
+    
+    
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/(?P<app_name>.*)/$', RepoAPITokenView.as_view(), name='api-v2.1-repo-api-token'),
