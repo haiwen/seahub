@@ -26,7 +26,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, ENABLE_SEAFILE_AI, ENABLE_EXCALIDRAW, \
-    NOTIFICATION_SERVER_URL, ENABLE_OCR
+    NOTIFICATION_SERVER_URL, ENABLE_SEAFILE_OCR
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -184,7 +184,7 @@ def base(request):
         'enable_whiteboard': ENABLE_WHITEBOARD,
         'enable_excalidraw': ENABLE_EXCALIDRAW,
         'notification_server_url': NOTIFICATION_SERVER_URL,
-        'enable_ocr': ENABLE_OCR,
+        'enable_seafile_ocr': ENABLE_SEAFILE_OCR,
     }
 
     if request.user.is_staff:

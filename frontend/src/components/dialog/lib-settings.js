@@ -17,7 +17,7 @@ import { useMetadataStatus } from '../../hooks';
 
 import '../../css/lib-settings.css';
 
-const { enableSeafileAI, enableOCR: enableSeafileOCR } = window.app.config;
+const { enableSeafileAI, enableSeafileOCR } = window.app.config;
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,

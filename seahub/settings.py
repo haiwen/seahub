@@ -1070,7 +1070,7 @@ SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
 
 ENABLE_SEAFILE_AI = False
-ENABLE_OCR = False
+ENABLE_SEAFILE_OCR = False
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
