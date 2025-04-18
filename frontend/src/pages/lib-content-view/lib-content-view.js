@@ -1543,36 +1543,48 @@ class LibContentView extends React.Component {
         newSelectedDirentList = [clickedDirent];
       }
 
-      this.setState({
-        direntList: direntList.map(dirent => {
-          dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
-          return dirent;
-        }),
-        isDirentSelected: newSelectedDirentList.length > 0,
-        isAllDirentSelected: newSelectedDirentList.length === direntList.length,
-        selectedDirentList: newSelectedDirentList,
-        lastSelectedIndex: clickedIndex,
+      this.setState(prevState => {
+        const newDirentList = prevState.direntList.map(dirent => {
+          const isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
+          return new Dirent({
+            ...dirent,
+            isSelected: isSelected,
+          });
+        });
+
+        const updatedSelectedDirents = newSelectedDirentList.map(selected =>
+          newDirentList.find(dirent => dirent.name === selected.name)
+        );
+
+        return {
+          direntList: newDirentList,
+          isDirentSelected: updatedSelectedDirents.length > 0,
+          isAllDirentSelected: updatedSelectedDirents.length === newDirentList.length,
+          selectedDirentList: updatedSelectedDirents,
+          lastSelectedIndex: clickedIndex,
+        };
       });
     } else {
-      this.setState({
-        direntList: direntList.map(dirent => {
-          dirent.isSelected = false;
-          return dirent;
-        }),
+      this.setState(prevState => ({
+        direntList: prevState.direntList.map(dirent => new Dirent({...dirent, isSelected: false})),
         isDirentSelected: false,
         isAllDirentSelected: false,
         selectedDirentList: [],
         lastSelectedIndex: null,
-      });
+      }));
     }
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
     this.setState({
       direntList: this.state.direntList.map(dirent => {
-        dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
-        return dirent;
-      }),
+        return new Dirent({
+            ...dirent,
+            isSelected: newSelectedDirentList.some(
+                selected => selected.name === dirent.name
+            )
+        });
+    }),
       isDirentSelected: newSelectedDirentList.length > 0,
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,

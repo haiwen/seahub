@@ -72,6 +72,23 @@ class DirentGridItem extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.dirent !== this.props.dirent) {
+      this.setState({ dirent: this.props.dirent });
+    }
+
+    const { repoID, path } = this.props;
+    const { dirent } = this.state;
+    if (this.checkGenerateThumbnail(dirent) && !this.isGeneratingThumbnail) {
+      this.isGeneratingThumbnail = true;
+      this.thumbnailCenter.createThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+        callback: this.updateDirentThumbnail,
+      });
+    }
+  }
+
   componentWillUnmount() {
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
