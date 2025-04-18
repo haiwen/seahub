@@ -113,6 +113,7 @@ class ReplyItem extends React.Component {
             <div className="comment-author-name ellipsis">{item.user_name}</div>
             <div className="comment-author-time">{this.props.time}</div>
           </div>
+          {(item.user_email === username) &&
           <Dropdown
             isOpen={this.state.dropdownOpen}
             size="sm"
@@ -132,26 +133,23 @@ class ReplyItem extends React.Component {
               aria-haspopup={true}
             />
             <DropdownMenu>
-              {(item.user_email === username) &&
-                <DropdownItem
-                  onClick={this.toggleShowDeletePopover}
-                  className="delete-comment"
-                  id={item.id}
-                >
-                  {gettext('Delete')}
-                </DropdownItem>
-              }
-              {(item.user_email === username) &&
-                <DropdownItem
-                  onClick={this.toggleEditComment}
-                  className="edit-comment"
-                  id={item.id}
-                >
-                  {gettext('Edit')}
-                </DropdownItem>
-              }
+              <DropdownItem
+                onClick={this.toggleShowDeletePopover}
+                className="delete-comment"
+                id={item.id}
+              >
+                {gettext('Delete')}
+              </DropdownItem>
+              <DropdownItem
+                onClick={this.toggleEditComment}
+                className="edit-comment"
+                id={item.id}
+              >
+                {gettext('Edit')}
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+          }
         </div>
         <div
           className="seafile-comment-content"

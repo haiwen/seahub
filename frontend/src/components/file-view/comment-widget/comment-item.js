@@ -130,6 +130,7 @@ class CommentItem extends React.Component {
               }
             </div>
           </div>
+          {(item.user_email === username) &&
           <Dropdown
             isOpen={this.state.dropdownOpen}
             size="sm"
@@ -149,25 +150,21 @@ class CommentItem extends React.Component {
               aria-haspopup={true}
             />
             <DropdownMenu>
-              {(item.user_email === username) &&
-                <DropdownItem
-                  onClick={this.toggleShowDeletePopover}
-                  className="delete-comment"
-                  id={item.id}
-                >
-                  {gettext('Delete')}
-                </DropdownItem>
-              }
-              {(item.user_email === username) &&
-                <DropdownItem
-                  onClick={this.toggleEditComment}
-                  className="edit-comment"
-                  id={item.id}
-                >
-                  {gettext('Edit')}
-                </DropdownItem>
-              }
-              {(!item.resolved && item.user_email === username) &&
+              <DropdownItem
+                onClick={this.toggleShowDeletePopover}
+                className="delete-comment"
+                id={item.id}
+              >
+                {gettext('Delete')}
+              </DropdownItem>
+              <DropdownItem
+                onClick={this.toggleEditComment}
+                className="edit-comment"
+                id={item.id}
+              >
+                {gettext('Edit')}
+              </DropdownItem>
+              {!item.resolved &&
                 <DropdownItem
                   onClick={() => this.props.resolveComment(this.props.item, 'true')}
                   className="resolve-comment"
@@ -176,7 +173,7 @@ class CommentItem extends React.Component {
                   {gettext('Mark as resolved')}
                 </DropdownItem>
               }
-              {(item.resolved && item.user_email === username) &&
+              {item.resolved &&
                 <DropdownItem
                   onClick={() => this.props.resolveComment(this.props.item, 'false')}
                   className="resolve-comment"
@@ -187,6 +184,7 @@ class CommentItem extends React.Component {
               }
             </DropdownMenu>
           </Dropdown>
+          }
         </div>
         <div
           className="seafile-comment-content"
