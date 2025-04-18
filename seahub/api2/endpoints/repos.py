@@ -157,6 +157,7 @@ class ReposView(APIView):
                 repo_info_list.append(repo_info)
 
         if filter_by['shared']:
+
             if org_id:
                 shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
                                                                       email, -1, -1)
@@ -185,6 +186,7 @@ class ReposView(APIView):
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
+
                 if is_wiki_repo(r):
                     continue
 
