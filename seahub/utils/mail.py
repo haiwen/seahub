@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
-from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.serialization import pkcs7
 from cryptography import x509
@@ -52,7 +52,7 @@ def add_smime_sign(msg):
     signature_b64 = base64.b64encode(pkcs7_signature).decode()
     
     # Create the S/MIME signature part
-    sig_part = MIMEText(
+    sig_part = MIMEApplication(
         signature_b64,
         "pkcs7-signature",
         _charset="utf-8"
