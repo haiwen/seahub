@@ -32,6 +32,7 @@ from seahub.api2.endpoints.utils import is_org_user
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.db_api import SeafileDB
+from seahub.utils.repo import delete_all_my_shares
 from seahub.share.models import ExtraSharePermission
 
 try:
@@ -313,10 +314,10 @@ class AdminOrgUser(APIView):
                 if orgs:
                     org_id = orgs[0].org_id
                     seafile_db.delete_all_received_shares(email, org_id)
-                    seafile_db.delete_all_my_shares(email, org_id)
+                    delete_all_my_shares(email, org_id)
                 else:
                     seafile_db.delete_all_received_shares(email)
-                    seafile_db.delete_all_my_shares(email)
+                    delete_all_my_shares(email)
                 ExtraSharePermission.objects.filter(share_to=username).delete()
 
             try:

@@ -18,7 +18,7 @@ from seahub.base.models import RepoSecretKey
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.share.models import CustomSharePermissions
 
-from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
+from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, CLOUD_MODE
 
 logger = logging.getLogger(__name__)
 
@@ -376,6 +376,76 @@ def repo_has_been_shared_out(request, repo_id):
             has_been_shared_out = True
 
     return has_been_shared_out
+
+
+
+def delete_all_my_shares(username, org_id=None):
+    shared_repos = []
+    try:
+        if org_id:
+            shared_repos += seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
+            shared_repos += seafile_api.get_org_group_repos_by_owner(org_id, username)
+            shared_repos += seafile_api.list_org_inner_pub_repos_by_owner(org_id, username)
+        else:
+            shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+            shared_repos += seafile_api.get_group_repos_by_owner(username)
+            if not CLOUD_MODE:
+                shared_repos += seafile_api.list_inner_pub_repos_by_owner(username)
+    except Exception as e:
+        logger.error(e)
+        return
+
+    shared_repos_info = []
+    for repo in shared_repos:
+        repo_info = {
+            'repo_id': repo.origin_repo_id if repo.is_virtual else repo.id,
+            'repo_name': repo.repo_name,
+            'is_virtual': repo.is_virtual,
+            'share_type': repo.share_type,
+            'user': repo.user,
+            'group_id': repo.group_id,
+            'origin_path': repo.origin_path,
+        }
+        shared_repos_info.append(repo_info)
+
+    # remove all shared repos
+    for repo in shared_repos_info:
+        if org_id:
+            if repo['is_virtual']:
+                if repo['share_type'] == 'personal':
+                    seafile_api.org_unshare_subdir_for_user(
+                            org_id, repo['repo_id'], repo['origin_path'], username, repo['user'])
+                    
+                elif repo['share_type'] == 'group':
+                    seafile_api.org_unshare_subdir_for_group(
+                            org_id, repo['repo_id'], repo['origin_path'], username, repo['group_id'])
+            else:
+                if repo['share_type'] == 'personal':
+                    seafile_api.org_remove_share(org_id, repo['repo_id'],
+                                                 username, repo['user'])
+                elif repo['share_type'] == 'group':
+                    seaserv.del_org_group_repo(repo['repo_id'], org_id, repo['group_id'])
+                elif repo['share_type'] == 'public':
+                    seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id, repo['repo_id'])
+        else:
+            if repo['is_virtual']:
+                print(111)
+                if repo['share_type'] == 'personal':
+                    print(222, repo)
+                    seafile_api.unshare_subdir_for_user(
+                            repo['repo_id'], repo['origin_path'], username, repo['user'])
+                elif repo['share_type'] == 'group':
+                    print(333, repo)
+                    seafile_api.unshare_subdir_for_group(
+                            repo['repo_id'], repo['origin_path'], username, repo['group_id'])
+            else:
+                if repo['share_type'] == 'personal':
+                    seafile_api.remove_share(repo['repo_id'], username, repo['user'])
+                elif repo['share_type'] == 'group':
+                    seafile_api.unset_group_repo(repo['repo_id'], repo['group_id'], username)
+                elif repo['share_type'] == 'public':
+                    seafile_api.remove_inner_pub_repo(repo['repo_id'])
+    return
 
 # TODO
 from seahub.share.utils import is_repo_admin

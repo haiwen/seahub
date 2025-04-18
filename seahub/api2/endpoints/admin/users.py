@@ -49,7 +49,7 @@ from seahub.utils.file_size import get_file_size_unit, byte_to_kb
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
-from seahub.utils.repo import normalize_repo_status_code
+from seahub.utils.repo import normalize_repo_status_code, delete_all_my_shares
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.constants import DEFAULT_ADMIN, DEFAULT_ORG
 from seahub.role_permissions.models import AdminRole
@@ -1271,10 +1271,10 @@ class AdminUser(APIView):
                 if orgs:
                     org_id = orgs[0].org_id
                     seafile_db.delete_all_received_shares(email, org_id)
-                    seafile_db.delete_all_my_shares(email, org_id)
+                    delete_all_my_shares(email, org_id)
                 else:
                     seafile_db.delete_all_received_shares(email)
-                    seafile_db.delete_all_my_shares(email)
+                    delete_all_my_shares(email)
                 ExtraSharePermission.objects.filter(share_to=username).delete()
             try:
                 is_active = to_python_boolean(is_active)
