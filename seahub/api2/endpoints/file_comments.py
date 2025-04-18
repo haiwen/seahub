@@ -455,7 +455,7 @@ class FileCommentView(APIView):
             file_comment.author, request=request))
         return Response(comment)
 
-    def delete(self, request, file_uuid, comment_id):
+    def delete(self, request, repo_id, file_uuid, comment_id):
 
         # resource check
         try:
