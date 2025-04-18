@@ -424,18 +424,15 @@ def delete_all_my_shares(username, org_id=None):
                     seafile_api.org_remove_share(org_id, repo['repo_id'],
                                                  username, repo['user'])
                 elif repo['share_type'] == 'group':
-                    seaserv.del_org_group_repo(repo['repo_id'], org_id, repo['group_id'])
+                    seafile_api.del_org_group_repo(repo['repo_id'], org_id, repo['group_id'])
                 elif repo['share_type'] == 'public':
-                    seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id, repo['repo_id'])
+                    seafile_api.unset_org_inner_pub_repo(org_id, repo['repo_id'])
         else:
             if repo['is_virtual']:
-                print(111)
                 if repo['share_type'] == 'personal':
-                    print(222, repo)
                     seafile_api.unshare_subdir_for_user(
                             repo['repo_id'], repo['origin_path'], username, repo['user'])
                 elif repo['share_type'] == 'group':
-                    print(333, repo)
                     seafile_api.unshare_subdir_for_group(
                             repo['repo_id'], repo['origin_path'], username, repo['group_id'])
             else:
