@@ -90,6 +90,17 @@
   margin-left: auto;
 }
 
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle {
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:focus,
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:hover {
+  color: #999;
+  background-color: #efefef;
+}
+
 .seafile-comment-item .seafile-comment-content {
   margin-left: 24px;
   padding: 5px 10px;
@@ -169,6 +180,10 @@
 .seafile-comment-footer .sdoc-comment-btn {
   color: #ff8e03;
   cursor: pointer;
+}
+
+.seafile-comment-footer .sdoc-comment-btn:hover {
+  color: #d47604;
 }
 
 .seafile-edit-comment .comment-btn {

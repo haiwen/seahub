@@ -174,9 +174,6 @@ class CommentList extends React.Component {
             {gettext('Comments')}
           </div>
           <div className="comments-panel-header-right">
-            <span className="sdoc-icon-btn">
-              <i className="sdocfont sdoc-all-read"></i>
-            </span>
             <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
               <i className="sdocfont sdoc-sm-close"></i>
             </span>
