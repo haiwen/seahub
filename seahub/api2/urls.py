@@ -9,9 +9,6 @@ from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.admin.account import Account
 from .endpoints.shared_upload_links import SharedUploadLinksView
 from .endpoints.be_shared_repo import BeSharedRepo
-from .endpoints.file_comment import FileCommentView
-from .endpoints.file_comments import FileCommentsView, FileCommentReplyView, FileCommentRepliesView
-from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
@@ -57,11 +54,6 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='FileView'),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/metadata/$', FileMetaDataView.as_view(), name='FileMetaDataView'),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/files/(?P<file_id>[0-9a-f]{40})/blks/(?P<block_id>[0-9a-f]{40})/download-link/$', FileBlockDownloadLinkView.as_view()),
-    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/$', FileCommentsView.as_view(), name='api2-file-comments'),
-    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/counts/$', FileCommentsCounts.as_view(), name='api2-file-comments-counts'),
-    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api2-file-comment'),
-    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/$', FileCommentRepliesView.as_view(), name='file_comment_replies'),
-    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', FileCommentReplyView.as_view(), name='file_comment_reply'),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),
