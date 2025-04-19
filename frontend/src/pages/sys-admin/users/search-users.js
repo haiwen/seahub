@@ -204,8 +204,8 @@ class SearchUsers extends Component {
     });
   };
 
-  updateUser = (email, key, value) => {
-    systemAdminAPI.sysAdminUpdateUser(email, key, value).then(res => {
+  updateUser = (email, key, value, options) => {
+    systemAdminAPI.sysAdminUpdateUser(email, key, value, options).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item[key] = res.data[key];

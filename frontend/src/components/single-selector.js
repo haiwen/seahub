@@ -56,7 +56,7 @@ class Selector extends Component {
   selectItem = (e, targetItem) => {
     e.stopPropagation();
     if (this.props.operationBeforeSelect) {
-      this.props.operationBeforeSelect();
+      this.props.operationBeforeSelect(targetItem);
     } else {
       this.props.selectOption(targetItem);
     }
