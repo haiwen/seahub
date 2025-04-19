@@ -9,7 +9,7 @@ const propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
 
-class SysAdminInactiveSettingDialog extends React.Component {
+class SysAdminUserDeactivateDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -75,6 +75,6 @@ class SysAdminInactiveSettingDialog extends React.Component {
   }
 }
 
-SysAdminInactiveSettingDialog.propTypes = propTypes;
+SysAdminUserDeactivateDialog.propTypes = propTypes;
 
-export default SysAdminInactiveSettingDialog;
+export default SysAdminUserDeactivateDialog;

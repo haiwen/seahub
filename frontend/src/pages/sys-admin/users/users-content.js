@@ -15,8 +15,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-import UsersFilterBar from './users-filter-bar';
-import SysAdminInactiveSettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-inactive-setting-dialog';
+import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -590,7 +589,7 @@ class Item extends Component {
           />
         }
         {isConfirmInactiveDialogOpen &&
-          <SysAdminInactiveSettingDialog
+          <SysAdminUserDeactivateDialog
             toggleDialog={this.toggleConfirmInactiveDialog}
             onSubmit={this.setUserInactive}
           />

@@ -16,7 +16,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import OrgNav from './org-nav';
-import SysAdminInactiveSettingDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-inactive-setting-dialog';
+import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
 
 dayjs.extend(relativeTime);
 
@@ -311,7 +311,7 @@ class Item extends Component {
           />
         }
         {isConfirmInactiveDialogOpen &&
-          <SysAdminInactiveSettingDialog
+          <SysAdminUserDeactivateDialog
             toggleDialog={this.toggleConfirmInactiveDialog}
             onSubmit={this.setUserInactive}
           />
