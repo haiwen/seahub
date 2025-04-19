@@ -1098,7 +1098,7 @@ class LibContentView extends React.Component {
       this.loadSidePanel(this.state.path);
     }
     this.isNeedUpdateHistoryState = false;
-    this.setState({ currentMode: mode });
+    this.setState({ currentMode: mode, isDirentSelected: false });
     this.showDir(path);
   };
 
