@@ -40,6 +40,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.db_api import SeafileDB
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_FILE_EXTENSION
 
+
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -1001,6 +1002,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
     """
 
     # get logo path
+    from seahub.utils.mail import add_smime_sign
     logo_path = LOGO_PATH
     custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
     if os.path.exists(custom_logo_file):
@@ -1023,6 +1025,10 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
     msg = EmailMessage(subject, t.render(con_context), from_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
+
+    sig_part = add_smime_sign(msg)
+    if sig_part:
+        msg.attach(sig_part)
     msg.send()
 
 def gen_dir_share_link(token):
