@@ -1270,11 +1270,11 @@ class AdminUser(APIView):
                 orgs = ccnet_api.get_orgs_by_user(email)
                 if orgs:
                     org_id = orgs[0].org_id
-                    seafile_db.delete_all_received_shares(email, org_id)
-                    seafile_db.delete_all_my_shares(email, org_id)
+                    seafile_db.delete_received_share_by_user(email, org_id)
+                    seafile_db.delete_share_by_user(email, org_id)
                 else:
-                    seafile_db.delete_all_received_shares(email)
-                    seafile_db.delete_all_my_shares(email)
+                    seafile_db.delete_received_share_by_user(email)
+                    seafile_db.delete_share_by_user(email)
                 ExtraSharePermission.objects.filter(share_to=username).delete()
             try:
                 is_active = to_python_boolean(is_active)

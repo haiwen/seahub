@@ -619,7 +619,8 @@ class SeafileDB:
                 wikis.append(wiki_info)
             return wikis
 
-    def delete_all_received_shares(self, username, org_id=''):
+    def delete_received_share_by_user(self, username, org_id=''):
+        # Delete the share content shared to <username>
         if org_id:
             delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email=%s AND org_id=%s
@@ -632,7 +633,8 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(delete_share_sql, [username, org_id] if org_id else [username])
 
-    def delete_all_my_shares(self, username, org_id=''):
+    def delete_share_by_user(self, username, org_id=''):
+        # Delete the share content shared from <username>
         if org_id:
             delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE from_email=%s AND org_id=%s
