@@ -604,7 +604,10 @@ class DirDetailView(APIView):
                     FROM `{METADATA_TABLE.name}`
                     WHERE 
                         (`{METADATA_TABLE.columns.is_dir.name}` = False) AND 
-                        (`{METADATA_TABLE.columns.parent_dir.name}` ILIKE '%{path[:-1]}%')
+                        (
+                          `{METADATA_TABLE.columns.parent_dir.name}` ILIKE '{path}%' OR
+                          `{METADATA_TABLE.columns.parent_dir.name}` = '{path[:-1]}'
+                        )
                     """
                 results = metadata_server_api.query_rows(sql, [])
                 result_row = results.get('results')[0]
