@@ -30,8 +30,6 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.repo_metadata.utils import can_read_metadata
-from seahub.repo_metadata.metadata_server_api import list_eligible_metadata_records
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 
 from seaserv import seafile_api
@@ -594,17 +592,18 @@ class DirDetailView(APIView):
 
         # metadata enable check
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if metadata and metadata.enabled and can_read_metadata(request, repo_id):
+        if metadata and metadata.enabled:
             from seafevents.repo_metadata.constants import METADATA_TABLE
+            from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
             try:
-                filters = [{'column_key': METADATA_TABLE.columns.parent_dir.name, 'filter_predicate': 'contains', 'filter_term': path[:-1]}] 
-                basic_filters = [{'column_key': METADATA_TABLE.columns.is_dir.name, 'filter_predicate': 'is', 'filter_term': 'file'}]
-                view = {
-                    'filters': filters,
-                    'basic_filters': basic_filters
-                }
-                selected_columns = [METADATA_TABLE.columns.file_name.name, METADATA_TABLE.columns.size.name]
-                results = list_eligible_metadata_records(repo_id, request.user.username, view, selected_columns)
+                sql = f"""
+                    SELECT `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.size.name}` 
+                    FROM `{METADATA_TABLE.name}`
+                    WHERE ((`{METADATA_TABLE.columns.is_dir.name}` = False or `{METADATA_TABLE.columns.is_dir.name}` is null)) AND 
+                    (`{METADATA_TABLE.columns.parent_dir.name}` ilike '%{path[:-1]}%')
+                    """
+                results = metadata_server_api.query_rows(sql, [])
                 dir_records = results.get('results')
                 file_count = len(dir_records)
                 size = sum(record.get(METADATA_TABLE.columns.size.name) for record in dir_records)
