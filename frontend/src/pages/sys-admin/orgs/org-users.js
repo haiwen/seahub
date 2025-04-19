@@ -161,7 +161,10 @@ class Item extends Component {
     this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen });
   };
 
-  toggleConfirmInactiveDialog = () => {
+  toggleConfirmInactiveDialog = (targetItem) => {
+    if (targetItem?.value === 'active') {
+      return;
+    }
     this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 

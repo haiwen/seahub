@@ -253,7 +253,10 @@ class Item extends Component {
     this.setState({ isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen });
   };
 
-  toggleConfirmInactiveDialog = () => {
+  toggleConfirmInactiveDialog = (targetItem) => {
+    if (targetItem?.value === 'active') {
+      return;
+    }
     this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
