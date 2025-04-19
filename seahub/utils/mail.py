@@ -55,7 +55,6 @@ def add_smime_sign(msg):
     sig_part = MIMEApplication(
         signature_b64,
         "pkcs7-signature",
-        _charset="utf-8"
     )
     sig_part.set_param("name", "smime.p7s")
     sig_part.add_header("Content-Disposition", "attachment", filename="smime.p7s")
