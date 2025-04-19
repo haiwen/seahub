@@ -598,17 +598,18 @@ class DirDetailView(APIView):
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
             try:
                 sql = f"""
-                    SELECT `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.size.name}` 
+                    SELECT 
+                        COUNT(*) AS file_count,
+                        SUM(`{METADATA_TABLE.columns.size.name}`) AS total_size
                     FROM `{METADATA_TABLE.name}`
-                    WHERE ((`{METADATA_TABLE.columns.is_dir.name}` = False or `{METADATA_TABLE.columns.is_dir.name}` is null)) AND 
-                    (`{METADATA_TABLE.columns.parent_dir.name}` ilike '%{path[:-1]}%')
+                    WHERE 
+                        (`{METADATA_TABLE.columns.is_dir.name}` = False) AND 
+                        (`{METADATA_TABLE.columns.parent_dir.name}` ILIKE '%{path[:-1]}%')
                     """
                 results = metadata_server_api.query_rows(sql, [])
-                dir_records = results.get('results')
-                file_count = len(dir_records)
-                size = sum(record.get(METADATA_TABLE.columns.size.name) for record in dir_records)
-                dir_info['file_count'] = file_count
-                dir_info['size'] = size
+                result_row = results.get('results')[0]
+                dir_info['file_count'] = result_row.get('file_count', 0)
+                dir_info['size'] = result_row.get('total_size', 0)
             except Exception as e:
                 logger.exception(e)
                 error_msg = 'Internal Server Error'
