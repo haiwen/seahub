@@ -40,6 +40,8 @@ def add_smime_sign(msg):
     # Load the certificate
     with open(cert_file, "rb") as f:
         certificate = x509.load_pem_x509_certificate(f.read())
+
+    msg.mixed_subtype = "signed"
     
     msg_payload = msg.message().as_string().encode()
     
