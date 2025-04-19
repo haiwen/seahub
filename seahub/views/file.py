@@ -670,6 +670,9 @@ def view_lib_file(request, repo_id, path):
     return_dict['fileext'] = fileext
     return_dict['filetype'] = filetype
 
+    file_uuid = get_seadoc_file_uuid(repo, path)
+    return_dict['file_uuid'] = file_uuid
+
     # get file raw url
     raw_path = ''
     inner_path = ''
@@ -692,8 +695,6 @@ def view_lib_file(request, repo_id, path):
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
-        file_uuid = get_seadoc_file_uuid(repo, path)
-        return_dict['file_uuid'] = file_uuid
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
 

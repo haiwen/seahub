@@ -10,6 +10,7 @@ import toaster from '../toast';
 import IconButton from '../icon-button';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
+import CommentPanel from './comment-panel';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { MetadataStatusProvider } from '../../hooks';
@@ -43,6 +44,7 @@ class FileView extends React.Component {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
+      isCommentPanelOpen: false,
       isHeaderShown: (storedIsHeaderShown === null) || (storedIsHeaderShown == 'true'),
       isDetailsPanelOpen: false
     };
@@ -53,8 +55,18 @@ class FileView extends React.Component {
     document.getElementById('favicon').href = fileIcon;
   }
 
+  toggleCommentPanel = () => {
+    this.setState({
+      isCommentPanelOpen: !this.state.isCommentPanelOpen,
+      isDetailsPanelOpen: false,
+    });
+  };
+
   toggleDetailsPanel = () => {
-    this.setState({ isDetailsPanelOpen: !this.state.isDetailsPanelOpen });
+    this.setState({
+      isDetailsPanelOpen: !this.state.isDetailsPanelOpen,
+      isCommentPanelOpen: false,
+    });
   };
 
   toggleStar = () => {
@@ -142,6 +154,7 @@ class FileView extends React.Component {
                   isSaving={this.props.isSaving}
                   needSave={this.props.needSave}
                   toggleLockFile={this.toggleLockFile}
+                  toggleCommentPanel={this.toggleCommentPanel}
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   setImageScale={this.props.setImageScale}
                   rotateImage={this.props.rotateImage}
@@ -158,6 +171,13 @@ class FileView extends React.Component {
                 />
               }
               {this.props.content}
+              {this.state.isCommentPanelOpen &&
+                <CommentPanel
+                  toggleCommentPanel={this.toggleCommentPanel}
+                  participants={this.props.participants}
+                  onParticipantsChange={this.props.onParticipantsChange}
+                />
+              }
               {isDetailsPanelOpen && (
                 <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
                   <CollaboratorsProvider repoID={repoID}>

@@ -52,6 +52,10 @@ body {
   align-items: center;
 }
 
+.file-view-header .file-toolbar-btn .sdocfont {
+  color: #666;
+}
+
 .file-view-header .file-toolbar-btn .seafile-multicolor-icon {
   fill: #666;
 }
@@ -145,7 +149,7 @@ body {
 
 @media (min-width: 768px) {
   .file-view-body .seafile-comment {
-    width: 300px;
+    width: 360px;
     border-left: 1px solid #e6e6dd;
   }
 }
