@@ -44,7 +44,11 @@ class ServerOperator {
           window.sfMetadataContext.modifyRecords(repo_id, recordsData, is_copy_paste).then(res => {
             callback({ operation });
           }).catch(error => {
-            callback({ error: gettext('Failed to modify records') });
+            if (error.response && error.response.status === 413) {
+              callback({ error: gettext('Number of records exceeds the limit of 1000') });
+            } else {
+              callback({ error: gettext('Failed to modify records') });
+            }
           });
         }
         break;

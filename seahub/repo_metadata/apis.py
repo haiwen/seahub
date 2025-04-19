@@ -21,7 +21,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
-from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 
 
 logger = logging.getLogger(__name__)
@@ -374,6 +374,10 @@ class MetadataRecords(APIView):
         if not records_data:
             error_msg = 'records_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if len(records_data) > METADATA_RECORD_UPDATE_LIMIT:
+            error_msg = 'Number of records exceeds the limit of 1000.'
+            return api_error(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
