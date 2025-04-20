@@ -31,6 +31,8 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.endpoints.utils import is_org_user
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
+from seahub.utils.db_api import SeafileDB
+from seahub.share.models import ExtraSharePermission
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -302,6 +304,20 @@ class AdminOrgUser(APIView):
                 user.is_active = True
             else:
                 user.is_active = False
+
+            keep_sharing = request.data.get("keep_sharing", None)
+            username = request.user.username
+            if keep_sharing and keep_sharing == 'false':
+                seafile_db = SeafileDB()
+                orgs = ccnet_api.get_orgs_by_user(email)
+                if orgs:
+                    org_id = orgs[0].org_id
+                    seafile_db.delete_received_share_by_user(email, org_id)
+                    seafile_db.delete_share_by_user(email, org_id)
+                else:
+                    seafile_db.delete_received_share_by_user(email)
+                    seafile_db.delete_share_by_user(email)
+                ExtraSharePermission.objects.filter(share_to=username).delete()
 
             try:
                 # update user status
