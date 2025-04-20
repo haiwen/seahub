@@ -21,7 +21,8 @@ const DirDetails = ({ direntDetail }) => {
   let size = Utils.bytesToSize(direntDetail.size);
   let special_folder = false;
   if (direntDetail.path !== undefined) {
-    special_folder = SYSTEM_FOLDERS.some(folder => direntDetail.path.startsWith(folder));
+    const path = direntDetail.path;
+    special_folder = SYSTEM_FOLDERS.some(prefix => path === prefix || path.startsWith(prefix + '/'));
   }
 
   return (
