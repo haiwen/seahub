@@ -19,19 +19,22 @@ const DirDetails = ({ direntDetail }) => {
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
   let file_count = direntDetail.file_count || 0;
   let size = Utils.bytesToSize(direntDetail.size);
-  const path = direntDetail.path.replace(/\/$/, '');
+  let special_folder = false;
+  if (direntDetail.path !== undefined) {
+    special_folder = SYSTEM_FOLDERS.some(folder => direntDetail.path.startsWith(folder));
+  }
 
   return (
     <>
       {enableMetadataManagement && enableMetadata && (
         <>
           <DetailItem field={filesField} value={file_count} className="sf-metadata-property-detail-formatter">
-            {SYSTEM_FOLDERS.includes(path) ?
+            {special_folder ?
               <Formatter field={CellType.TEXT} value={'--'} /> :
               <Formatter field={filesField} value={file_count} />}
           </DetailItem>
           <DetailItem field={sizeField} value={size} className="sf-metadata-property-detail-formatter">
-            {SYSTEM_FOLDERS.includes(path) ?
+            {special_folder ?
               <Formatter field={CellType.TEXT} value={'--'} /> :
               <Formatter field={sizeField} value={size} />}
           </DetailItem>
