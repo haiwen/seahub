@@ -40,7 +40,6 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.db_api import SeafileDB
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_FILE_EXTENSION
 
-
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:

@@ -130,5 +130,5 @@ def send_html_email_with_dj_template(recipients, subject, dj_template, context={
         mail.send()
         return True
     except Exception as e:
-        logger.exception(e)
+        logger.error(e)
         return False
