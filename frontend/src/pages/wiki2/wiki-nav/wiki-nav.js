@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { DropTarget, DragLayer } from 'react-dnd';
-import html5DragDropContext from './html5DragDropContext';
+import { useDragLayer, useDrop } from 'react-dnd';
 import DraggedPageItem from './pages/dragged-page-item';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -158,14 +157,14 @@ class WikiNav extends Component {
   };
 
   render() {
-    const StructureBody = html5DragDropContext(
-      DropTarget('WikiNav', {}, connect => ({
-        connectDropTarget: connect.dropTarget()
-      }))(DragLayer(this.collect)(this.renderStructureBody))
-    );
+    // const StructureBody = html5DragDropContext(
+    //   DropTarget('WikiNav', {}, connect => ({
+    //     connectDropTarget: connect.dropTarget()
+    //   }))(DragLayer(this.collect)(this.renderStructureBody))
+    // );
     return (
       <div className='wiki-nav'>
-        <StructureBody />
+        {this.renderStructureBody()}
       </div>
     );
   }

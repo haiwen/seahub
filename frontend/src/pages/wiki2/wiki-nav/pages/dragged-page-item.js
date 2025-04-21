@@ -1,4 +1,4 @@
-import { DragSource, DropTarget } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import PageItem from './page-item';
 import wikiAPI from '../../../../utils/wiki-api';
 import { wikiId, gettext } from '../../../../utils/constants';
@@ -77,6 +77,4 @@ const dropCollect = (connect, monitor) => ({
   draggedPage: monitor.getItem()
 });
 
-export default DropTarget('WikiNav', dropTarget, dropCollect)(
-  DragSource('WikiNav', dragSource, dragCollect)(PageItem)
-);
+export default PageItem;

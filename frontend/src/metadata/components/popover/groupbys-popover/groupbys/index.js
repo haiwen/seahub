@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
+import { useDrop } from 'react-dnd';
 import GroupbyItem from './groupby-item';
 import { gettext } from '../../../../../utils/constants';
 
@@ -17,8 +16,20 @@ const Groupbys = ({ readOnly, groupbys, columns, onDelete, onUpdate, onMove }) =
     return groupbys.length > 1;
   }, [readOnly, groupbys]);
 
+  const [, drop] = useDrop({
+    accept: 'sfMetadataGroupbyItem',
+    drop: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        onMove(item, { idx: groupbys.length });
+      }
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
   return (
-    <div className={classnames('groupbys-list', { 'empty-groupbys-container': isEmpty })}>
+    <div ref={drop} className={classnames('groupbys-list', { 'empty-groupbys-container': isEmpty })}>
       {isEmpty && <div className="empty-groupbys-list">{gettext('No groupings applied to this view.')}</div>}
       {!isEmpty && groupbys.map((groupby, index) => {
         return (
@@ -47,8 +58,4 @@ Groupbys.propTypes = {
   onMove: PropTypes.func,
 };
 
-const DndGroupbysContainer = DropTarget('sfMetadataGroupbyItem', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(Groupbys);
-
-export default html5DragDropContext(DndGroupbysContainer);
+export default Groupbys;

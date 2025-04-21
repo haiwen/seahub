@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { Router, navigate, LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from './utils/constants';
 import { Utils, isMobile } from './utils/utils';
 import SystemNotification from './components/system-notification';
@@ -315,44 +317,46 @@ class App extends Component {
             />
           }
           <div className="main-panel" style={mainPanelStyle}>
-            <Router className="reach-router">
-              <Libraries path={siteRoot} />
-              <Libraries path={siteRoot + 'libraries'} />
-              <MyLibraries path={siteRoot + 'my-libs'} />
-              <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
-              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
-              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
-              <SharedWithAll path={siteRoot + 'org/'} />
-              <Wikis
-                path={siteRoot + 'published'}
-                sidePanelRate={sidePanelRate}
-                isSidePanelFolded={isSidePanelFolded}
-              />
-              <Starred path={siteRoot + 'starred'} />
-              <InvitationsView path={siteRoot + 'invitations/'} />
-              <FilesActivities path={siteRoot + 'dashboard'} />
-              <MyFileActivities path={siteRoot + 'my-activities'} />
-              <GroupView path={siteRoot + 'group/:groupID'} />
-              <LinkedDevices path={siteRoot + 'linked-devices'} />
-              <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
-              <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
-              <SharedLibraries path={siteRoot + 'shared-libs'} />
-              <ShareWithOCM path={siteRoot + 'shared-with-ocm'} />
-              <OCMViaWebdav path={siteRoot + 'ocm-via-webdav'} />
-              <OCMRepoDir
-                path={siteRoot + 'remote-library/:providerID/:repoID/*'}
-                pathPrefix={this.state.pathPrefix}
-                onTabNavClick={this.tabItemClick}
-              />
-              <LibContentView
-                path={siteRoot + 'library/:repoID/*'}
-                pathPrefix={this.state.pathPrefix}
-                isSidePanelFolded={isSidePanelFolded}
-                onTabNavClick={this.tabItemClick}
-                eventBus={this.eventBus}
-                resetTitle={this.resetTitle}
-              />
-            </Router>
+            <DndProvider backend={HTML5Backend}>
+              <Router className="reach-router">
+                <Libraries path={siteRoot} />
+                <Libraries path={siteRoot + 'libraries'} />
+                <MyLibraries path={siteRoot + 'my-libs'} />
+                <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
+                <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
+                <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
+                <SharedWithAll path={siteRoot + 'org/'} />
+                <Wikis
+                  path={siteRoot + 'published'}
+                  sidePanelRate={sidePanelRate}
+                  isSidePanelFolded={isSidePanelFolded}
+                />
+                <Starred path={siteRoot + 'starred'} />
+                <InvitationsView path={siteRoot + 'invitations/'} />
+                <FilesActivities path={siteRoot + 'dashboard'} />
+                <MyFileActivities path={siteRoot + 'my-activities'} />
+                <GroupView path={siteRoot + 'group/:groupID'} />
+                <LinkedDevices path={siteRoot + 'linked-devices'} />
+                <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
+                <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
+                <SharedLibraries path={siteRoot + 'shared-libs'} />
+                <ShareWithOCM path={siteRoot + 'shared-with-ocm'} />
+                <OCMViaWebdav path={siteRoot + 'ocm-via-webdav'} />
+                <OCMRepoDir
+                  path={siteRoot + 'remote-library/:providerID/:repoID/*'}
+                  pathPrefix={this.state.pathPrefix}
+                  onTabNavClick={this.tabItemClick}
+                />
+                <LibContentView
+                  path={siteRoot + 'library/:repoID/*'}
+                  pathPrefix={this.state.pathPrefix}
+                  isSidePanelFolded={isSidePanelFolded}
+                  onTabNavClick={this.tabItemClick}
+                  eventBus={this.eventBus}
+                  resetTitle={this.resetTitle}
+                />
+              </Router>
+            </DndProvider>
           </div>
           <MediaQuery query="(max-width: 767.8px)">
             <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
