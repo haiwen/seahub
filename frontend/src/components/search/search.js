@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../constants';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
@@ -81,6 +81,8 @@ class Search extends Component {
     document.addEventListener('keydown', this.onDocumentKeydown);
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
+    const isFiltersShow = localStorage.getItem(SEARCH_FILTERS_SHOW_KEY) === 'true';
+    this.setState({ isFiltersShow });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -518,7 +520,6 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
-      isFiltersShow: true,
       isFilterControllerActive: false,
       filters: {
         search_filename_only: false,
@@ -778,6 +779,12 @@ class Search extends Component {
     });
   };
 
+  handleFiltersShow = () => {
+    const { isFiltersShow  } = this.state;
+    localStorage.setItem(SEARCH_FILTERS_SHOW_KEY, !isFiltersShow);
+    this.setState({ isFiltersShow: !isFiltersShow });
+  }
+
   handleFiltersChange = (key, value) => {
     const newFilters = { ...this.state.filters, [key]: value};
     if (newFilters.search_filename_only !== this.state.filters.search_filename_only) {
@@ -843,9 +850,9 @@ class Search extends Component {
                     symbol="filter-circled"
                     size={20}
                     className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
-                    onClick={() => this.setState({ isFiltersShow: !isFiltersShow })}
-                    title={gettext('Open advanced search')}
-                    aria-label={gettext('Open advanced search')}
+                    onClick={this.handleFiltersShow}
+                    title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
                     tabIndex={0}
                     id="search-filter-controller"
                   />

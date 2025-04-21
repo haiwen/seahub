@@ -24,12 +24,12 @@
   align-items: center;
   cursor: pointer;
   padding: 2px 4px;
+  border-radius: 3px;
 }
 
 .search-filters-container .search-filter .search-filter-toggle:hover,
 .search-filter-menu .search-filter-toggle:hover {
   background-color: #efefef;
-  border-radius: 3px;
 }
 
 .search-filters-container .search-filter .filter-label {

@@ -73,3 +73,5 @@ export const SEARCH_FILTER_BY_DATE_TYPE_KEY = {
   CREATE_TIME: 'create_time',
   LAST_MODIFIED_TIME: 'last_modified_time',
 };
+
+export const SEARCH_FILTERS_SHOW_KEY = 'search_filters_show';
