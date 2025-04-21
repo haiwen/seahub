@@ -1,41 +1,27 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
-
-const DATE_FILTER_TYPE_KEY = {
-  CREATE_TIME: 'create_time',
-  LAST_MODIFIED_TIME: 'last_modified_time',
-};
-
-const DATE_OPTION_KEY = {
-  TODAY: 'today',
-  LAST_7_DAYS: 'last_7_days',
-  LAST_30_DAYS: 'last_30_days',
-  CUSTOM: 'custom',
-};
+import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
 
 const DATE_INPUT_WIDTH = 118;
 
-const FilterByDate = ({ onSelect }) => {
-  const [value, setValue] = useState('');
+const FilterByDate = ({ date, onSelect }) => {
+  const [value, setValue] = useState(date.value);
   const [isOpen, setIsOpen] = useState(false);
   const [isTypeOpen, setIsTypeOpen] = useState(false);
-  const [isCustomDate, setIsCustomDate] = useState(false);
-  const [customDate, setCustomDate] = useState({
-    start: null,
-    end: null,
-  });
-  const [type, setType] = useState(DATE_FILTER_TYPE_KEY.CREATE_TIME);
+  const [isCustomDate, setIsCustomDate] = useState(date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM);
+  const [type, setType] = useState(date.type);
 
   const typeLabel = useMemo(() => {
     switch (type) {
-      case DATE_FILTER_TYPE_KEY.CREATE_TIME:
+      case SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME:
         return gettext('Create time');
-      case DATE_FILTER_TYPE_KEY.LAST_MODIFIED_TIME:
+      case SEARCH_FILTER_BY_DATE_TYPE_KEY.LAST_MODIFIED_TIME:
         return gettext('Last modified time');
       default:
         return gettext('Create time');
@@ -45,10 +31,10 @@ const FilterByDate = ({ onSelect }) => {
   const typeOptions = useMemo(() => {
     return [
       {
-        key: DATE_FILTER_TYPE_KEY.CREATE_TIME,
+        key: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
         label: gettext('Create time'),
       }, {
-        key: DATE_FILTER_TYPE_KEY.LAST_MODIFIED_TIME,
+        key: SEARCH_FILTER_BY_DATE_TYPE_KEY.LAST_MODIFIED_TIME,
         label: gettext('Last modified time'),
       }
     ];
@@ -61,36 +47,36 @@ const FilterByDate = ({ onSelect }) => {
     const prefix = `${typeLabel}: `;
 
     switch (value) {
-      case DATE_OPTION_KEY.TODAY:
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.TODAY:
         return `${prefix}${formatDate(today)}`;
-      case DATE_OPTION_KEY.LAST_7_DAYS:
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_7_DAYS:
         return `${prefix}${formatDate(today.subtract(6, 'day'))} - ${formatDate(today)}`;
-      case DATE_OPTION_KEY.LAST_30_DAYS:
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS:
         return `${prefix}${formatDate(today.subtract(29, 'day'))} - ${formatDate(today)}`;
-      case DATE_OPTION_KEY.CUSTOM:
-        return customDate.start && customDate.end
-          ? `${prefix}${formatDate(customDate.start)} - ${formatDate(customDate.end)}`
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM:
+        return date.start && date.end
+          ? `${prefix}${formatDate(date.start)} - ${formatDate(date.end)}`
           : gettext('Select date range');
       default:
         return gettext('Date');
     }
-  }, [value, customDate, typeLabel]);
+  }, [date, value, typeLabel]);
 
   const options = useMemo(() => {
     return [
       {
-        key: DATE_OPTION_KEY.TODAY,
+        key: SEARCH_FILTER_BY_DATE_OPTION_KEY.TODAY,
         label: gettext('Today'),
       }, {
-        key: DATE_OPTION_KEY.LAST_7_DAYS,
+        key: SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_7_DAYS,
         label: gettext('Last 7 days'),
       }, {
-        key: DATE_OPTION_KEY.LAST_30_DAYS,
+        key: SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS,
         label: gettext('Last 30 days'),
       },
       'Divider',
       {
-        key: DATE_OPTION_KEY.CUSTOM,
+        key: SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM,
         label: gettext('Custom time'),
       },
     ];
@@ -100,93 +86,98 @@ const FilterByDate = ({ onSelect }) => {
 
   const toggleType = useCallback(() => setIsTypeOpen(!isTypeOpen), [isTypeOpen]);
 
+  const onChangeType = useCallback((e) => {
+    const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
+    if (option === type) return;
+    setType(option);
+    onSelect(SEARCH_FILTERS_KEY.DATE, {
+      ...date,
+      type: option,
+    });
+  }, [type, onSelect, date]);
+
   const onClearDate = useCallback(() => {
     setValue('');
     setIsCustomDate(false);
-    onSelect('date', '');
+    onSelect(SEARCH_FILTERS_KEY.DATE, '');
   }, [onSelect]);
 
   const onOptionClick = useCallback((e) => {
     const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
+    if (option === value) return;
     const today = dayjs().endOf('day');
-
+    setIsCustomDate(option === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM);
+    setValue(option);
     switch (option) {
-      case DATE_OPTION_KEY.TODAY: {
-        setValue(option);
-        setIsCustomDate(false);
-        onSelect('date', {
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.TODAY: {
+        onSelect(SEARCH_FILTERS_KEY.DATE, {
+          value: option,
           start: dayjs().startOf('day').unix(),
           end: today.unix()
         });
         break;
       }
-      case DATE_OPTION_KEY.LAST_7_DAYS: {
-        setValue(option);
-        setIsCustomDate(false);
-        onSelect('date', {
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_7_DAYS: {
+        onSelect(SEARCH_FILTERS_KEY.DATE, {
+          value: option,
           start: dayjs().subtract(6, 'day').startOf('day').unix(),
           end: today.unix()
         });
         break;
       }
-      case DATE_OPTION_KEY.LAST_30_DAYS: {
-        setValue(option);
-        setIsCustomDate(false);
-        onSelect('date', {
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS: {
+        onSelect(SEARCH_FILTERS_KEY.DATE, {
+          value: option,
           start: dayjs().subtract(30, 'day').startOf('day').unix(),
           end: today.unix()
         });
         break;
       }
-      case DATE_OPTION_KEY.CUSTOM: {
-        setValue(DATE_OPTION_KEY.CUSTOM);
-        setIsCustomDate(true);
+      case SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM: {
+        onSelect(SEARCH_FILTERS_KEY.DATE, {
+          value: option,
+          start: null,
+          end: null,
+        });
         break;
       }
     }
-  }, [onSelect]);
+  }, [value, onSelect]);
 
   const disabledStartDate = useCallback((startDate) => {
     if (!startDate) return false;
     const today = dayjs();
-    const endValue = customDate.end;
+    const endValue = date.end;
 
     if (!endValue) {
       return startDate.isAfter(today);
     }
     return endValue.isBefore(startDate) || startDate.isAfter(today);
-  }, [customDate]);
+  }, [date]);
 
   const disabledEndDate = useCallback((endDate) => {
     if (!endDate) return false;
     const today = dayjs();
-    const startValue = customDate.start;
+    const startValue = date.start;
     if (!startValue) {
       return endDate.isAfter(today);
     }
     return endDate.isBefore(startValue) || endDate.isAfter(today);
-  }, [customDate]);
+  }, [date]);
 
-  const onChangeCustomDate = useCallback((date) => {
+  const onChangeCustomDate = useCallback((customDate) => {
     const newDate = {
+      ...date,
       ...customDate,
-      [date.type]: date.value,
     };
-    setCustomDate(newDate);
-
-    if (newDate.start && newDate.end) {
-      onSelect('date', {
-        start: newDate.start.unix(),
-        end: newDate.end.unix(),
-      });
-    }
-  }, [customDate, onSelect]);
+    onSelect(SEARCH_FILTERS_KEY.DATE, newDate);
+  }, [date, onSelect]);
 
   return (
-    <div className="search-filter filter-by-date">
+    <div className="search-filter filter-by-date-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="filter-label" style={{ maxWidth: 200 }} title={label}>{label}</div>
+        <DropdownToggle tag="div" className="search-filter-toggle" onClick={toggle}>
+          <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
           <i
             className="sf3-font sf3-font-down sf3-font pl-1"
             onClick={(e) => {
@@ -213,7 +204,7 @@ const FilterByDate = ({ onSelect }) => {
                   {typeOptions.map((option) => {
                     const isSelected = option.key === type;
                     return (
-                      <DropdownItem key={option.key} data-toggle={option.key} onClick={() => setType(option.key)}>
+                      <DropdownItem key={option.key} data-toggle={option.key} onClick={onChangeType}>
                         {option.label}
                         {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
                       </DropdownItem>
@@ -250,8 +241,8 @@ const FilterByDate = ({ onSelect }) => {
                   <Picker
                     showHourAndMinute={false}
                     disabledDate={disabledStartDate}
-                    value={customDate.start}
-                    onChange={(value) => onChangeCustomDate({ type: 'start', value })}
+                    value={date.start}
+                    onChange={(value) => onChangeCustomDate({ start: value })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -260,8 +251,8 @@ const FilterByDate = ({ onSelect }) => {
                   <Picker
                     showHourAndMinute={false}
                     disabledDate={disabledEndDate}
-                    value={customDate.end}
-                    onChange={(value) => onChangeCustomDate({ type: 'end', value })}
+                    value={date.end}
+                    onChange={(value) => onChangeCustomDate({ end: value })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -272,6 +263,16 @@ const FilterByDate = ({ onSelect }) => {
       </Dropdown>
     </div>
   );
+};
+
+FilterByDate.propTypes = {
+  date: PropTypes.shape({
+    type: PropTypes.string,
+    value: PropTypes.string,
+    start: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    end: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  }),
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default FilterByDate;

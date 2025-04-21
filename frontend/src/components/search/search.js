@@ -12,9 +12,10 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
+import IconBtn from '../icon-btn';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -52,11 +53,18 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
+      isFiltersShow: true,
+      isFilterControllerActive: false,
       filters: {
         search_filename_only: false,
-        creator: [],
-        date: null,
-        suffix: '',
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          start: null,
+          end: null,
+        },
+        suffixes: [],
       },
     };
     this.highlightRef = null;
@@ -73,6 +81,8 @@ class Search extends Component {
     document.addEventListener('keydown', this.onDocumentKeydown);
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
+    const isFiltersShow = localStorage.getItem(SEARCH_FILTERS_SHOW_KEY) === 'true';
+    this.setState({ isFiltersShow });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -128,7 +138,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.setState({ width: '570px', isMaskShow: true });
     this.calculateHighlightType();
   };
 
@@ -364,7 +374,7 @@ class Search extends Component {
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    this.setState({ value: newValue });
+    this.setState({ value: newValue, isCloseShow: newValue.length > 0 });
     setTimeout(() => {
       const trimmedValue = newValue.trim();
       const isInRepo = this.props.repoID;
@@ -492,7 +502,7 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
-      items[i]['last_modified'] = data[i].last_modified || '';
+      items[i]['mtime'] = data[i].mtime || '';
       items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
     }
     return items;
@@ -510,6 +520,18 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
+      isFilterControllerActive: false,
+      filters: {
+        search_filename_only: false,
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          start: null,
+          end: null,
+        },
+        suffixes: [],
+      }
     });
   }
 
@@ -521,6 +543,7 @@ class Search extends Component {
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
+      isCloseShow: false,
     });
   }
 
@@ -681,22 +704,30 @@ class Search extends Component {
   filterResults = (results) => {
     const { filters } = this.state;
     return results.filter(item => {
-      if (filters.creator && filters.creator.length > 0) {
-        if (!filters.creator.includes(item.repo_owner_email)) {
+      if (filters.creator_list && filters.creator_list.length > 0) {
+        if (!filters.creator_list.some(creator => creator.email === item.repo_owner_email)) {
           return false;
         }
       }
 
-      if (filters.date?.start && item.last_modified < filters.date.start) {
+      let startDate = filters.date.start;
+      let endDate = filters.date.end;
+      if (filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM) {
+        startDate = filters.date.start?.unix();
+        endDate = filters.date.end?.unix();
+      }
+
+      if (startDate && item.mtime < startDate) {
         return false;
       }
-      if (filters.date?.end && item.last_modified > filters.date.end) {
+      if (endDate && item.mtime > endDate) {
         return false;
       }
 
-      if (filters.suffix && filters.suffix.length > 0) {
-        const suffix = item.path.includes('.') ? item.path.split('.').pop() : '';
-        if (!suffix.toLocaleLowerCase().includes(filters.suffix.toLocaleLowerCase())) {
+      if (filters.suffixes && filters.suffixes.length > 0) {
+        const pathParts = item.path.split('.');
+        const suffix = pathParts.length > 1 ? `.${pathParts.pop()}` : '';
+        if (!filters.suffixes.includes(suffix)) {
           return false;
         }
       }
@@ -748,6 +779,12 @@ class Search extends Component {
     });
   };
 
+  handleFiltersShow = () => {
+    const { isFiltersShow  } = this.state;
+    localStorage.setItem(SEARCH_FILTERS_SHOW_KEY, !isFiltersShow);
+    this.setState({ isFiltersShow: !isFiltersShow });
+  }
+
   handleFiltersChange = (key, value) => {
     const newFilters = { ...this.state.filters, [key]: value};
     if (newFilters.search_filename_only !== this.state.filters.search_filename_only) {
@@ -759,7 +796,13 @@ class Search extends Component {
         this.getSearchResult(newQueryData);
       });
     }
-    this.setState({ filters: newFilters }, () => this.forceUpdate());
+
+    let isFilterControllerActive = false;
+    if (newFilters.creator_list.length > 0 || newFilters.date || newFilters.suffixes.length > 0) {
+      isFilterControllerActive = true;
+    }
+
+    this.setState({ filters: newFilters, isFilterControllerActive }, () => this.forceUpdate());
   }
 
   handleSelectTag = (tag) => {
@@ -771,9 +814,8 @@ class Search extends Component {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { repoID, isTagEnabled, tagsData } = this.props;
-    const { isMaskShow, isResultGotten  } = this.state;
+    const { isMaskShow, isResultGotten, isCloseShow, isFiltersShow, isFilterControllerActive, filters  } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
-    const isFiltersShow = isMaskShow && isResultGotten;
     const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
       <Fragment>
@@ -795,17 +837,29 @@ class Search extends Component {
                   autoComplete="off"
                   ref={this.inputRef}
                 />
-                {this.state.isCloseShow &&
+                {isCloseShow &&
                   <button
                     type="button"
-                    className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    className="search-icon-right sf3-font sf3-font-x-01"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
                   ></button>
                 }
+                {isMaskShow && (
+                  <IconBtn
+                    symbol="filter-circled"
+                    size={20}
+                    className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
+                    onClick={this.handleFiltersShow}
+                    title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    tabIndex={0}
+                    id="search-filter-controller"
+                  />
+                )}
               </div>
-              {isFiltersShow &&
-                <SearchFilters onChange={this.handleFiltersChange} />
+              {isMaskShow && isFiltersShow &&
+                <SearchFilters filters={filters} onChange={this.handleFiltersChange} />
               }
               {isTagsShow &&
                 <SearchTags repoID={repoID} tagsData={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />

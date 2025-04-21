@@ -40,6 +40,19 @@
   padding: 12px;
 }
 
+.search-container.show .input-icon .search-icon-right.sf3-font-x-01 {
+  position: absolute;
+  top: 0;
+  right: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-container.show .input-icon .search-icon-right.search-filter-controller.active {
+  color: #ff9800;
+}
+
 .search-icon-left {
   display: flex;
 }

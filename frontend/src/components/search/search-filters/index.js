@@ -7,19 +7,20 @@ import FilterBySuffix from './filter-by-suffix';
 
 import './index.css';
 
-const SearchFilters = ({ onChange }) => {
+const SearchFilters = ({ filters, onChange }) => {
   return (
     <div className="search-filters-container">
-      <FilterByText onSelect={onChange} />
-      <FilterByCreator onSelect={onChange} />
-      <FilterByDate onSelect={onChange} />
-      <FilterBySuffix onSelect={onChange} />
+      <FilterBySuffix suffixes={filters.suffixes} onSelect={onChange} />
+      <FilterByText searchFilenameOnly={filters.search_filename_only} onSelect={onChange} />
+      <FilterByCreator creatorList={filters.creator_list} onSelect={onChange} />
+      <FilterByDate date={filters.date} onSelect={onChange} />
     </div>
   );
 };
 
 SearchFilters.propTypes = {
-  onChange: PropTypes.func,
+  filters: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default SearchFilters;
