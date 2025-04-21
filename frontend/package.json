@@ -55,7 +55,8 @@
     "unified": "^7.0.0",
     "url-parse": "^1.4.3",
     "uuid": "9.0.1",
-    "video.js": "^7.4.1",
+    "video.js": "^8.22.0",
+    "videojs-hotkeys": "^0.2.30",
     "watermark-dom": "^1.0.0"
   },
   "scripts": {
