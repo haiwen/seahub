@@ -185,7 +185,8 @@
 }
 
 .search-filters-container .search-filter-toggle.active,
-.search-filters-container .search-filter-toggle.active:hover {
+.search-filters-container .search-filter-toggle.active:hover,
+.search-filters-container .search-filter-toggle.highlighted:hover {
   background-color: rgba(255, 152, 0, 0.2);
 }
 
