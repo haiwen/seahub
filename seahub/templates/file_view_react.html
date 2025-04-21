@@ -28,7 +28,7 @@ window.app.pageOptions = {
   latestContributorName: '{{ latest_contributor|email2nickname|escapejs }}',
   lastModificationTime: '{{ last_modified }}',
   repoID: '{{ repo.id }}',
-  docUuid: '{{ file_uuid }}',
+  fileUuid: '{{ file_uuid }}',
   repoName: '{{ repo.name|escapejs }}',
   repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
   isRepoAdmin: {% if is_repo_admin %}true{% else %}false{% endif %},

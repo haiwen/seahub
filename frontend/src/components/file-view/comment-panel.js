@@ -9,7 +9,7 @@ import ReplyList from './comment-widget/reply-list';
 
 import '../../css/comments-list.css';
 
-const { username, repoID, filePath, docUuid } = window.app.pageOptions;
+const { username, repoID, filePath, fileUuid } = window.app.pageOptions;
 
 const CommentPanelPropTypes = {
   toggleCommentPanel: PropTypes.func.isRequired,
@@ -33,7 +33,7 @@ class CommentPanel extends React.Component {
   }
 
   listComments = () => {
-    seafileAPI.listComments(repoID, docUuid).then((res) => {
+    seafileAPI.listComments(repoID, fileUuid).then((res) => {
       this.setState({
         commentsList: res.data.comments,
         isLoading: false,
@@ -66,7 +66,7 @@ class CommentPanel extends React.Component {
   };
 
   addComment = (comment) => {
-    seafileAPI.postComment(repoID, docUuid, comment).then(() => {
+    seafileAPI.postComment(repoID, fileUuid, comment).then(() => {
       this.listComments();
     }).catch(err => {
       toaster.danger(Utils.getErrorMsg(err));
@@ -80,7 +80,7 @@ class CommentPanel extends React.Component {
       type: 'reply',
       updated_at: dayjs().format('YYYY-MM-DD HH:mm:ss')
     };
-    seafileAPI.insertReply(repoID, docUuid, this.state.currentComment.id, replyData).then(() => {
+    seafileAPI.insertReply(repoID, fileUuid, this.state.currentComment.id, replyData).then(() => {
       this.listComments();
     }).catch(err => {
       toaster.danger(Utils.getErrorMsg(err));
@@ -88,7 +88,7 @@ class CommentPanel extends React.Component {
   };
 
   resolveComment = (comment, resolveState = 'true') => {
-    seafileAPI.updateComment(repoID, docUuid, comment.id, resolveState, null, null).then(() => {
+    seafileAPI.updateComment(repoID, fileUuid, comment.id, resolveState, null, null).then(() => {
       this.listComments();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -97,7 +97,7 @@ class CommentPanel extends React.Component {
   };
 
   deleteComment = (comment) => {
-    seafileAPI.deleteComment(repoID, docUuid, comment.id).then(() => {
+    seafileAPI.deleteComment(repoID, fileUuid, comment.id).then(() => {
       this.clearCurrentComment();
       this.listComments();
     }).catch(error => {
@@ -107,7 +107,7 @@ class CommentPanel extends React.Component {
   };
 
   deleteReply = (commentId, replyId) => {
-    seafileAPI.deleteReply(repoID, docUuid, commentId, replyId).then(() => {
+    seafileAPI.deleteReply(repoID, fileUuid, commentId, replyId).then(() => {
       this.listComments();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -122,7 +122,7 @@ class CommentPanel extends React.Component {
       type: 'reply',
       updated_at: dayjs().format('YYYY-MM-DD HH:mm:ss')
     };
-    seafileAPI.updateReply(repoID, docUuid, commentId, replyId, replyData).then(() => {
+    seafileAPI.updateReply(repoID, fileUuid, commentId, replyId, replyData).then(() => {
       this.listComments();
     }).catch(err => {
       toaster.danger(Utils.getErrorMsg(err));
@@ -130,7 +130,7 @@ class CommentPanel extends React.Component {
   };
 
   editComment = (comment, newComment) => {
-    seafileAPI.updateComment(repoID, docUuid, comment.id, null, null, newComment).then((res) => {
+    seafileAPI.updateComment(repoID, fileUuid, comment.id, null, null, newComment).then((res) => {
       this.listComments();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

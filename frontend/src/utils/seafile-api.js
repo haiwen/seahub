@@ -1277,25 +1277,25 @@ class SeafileAPI {
     return this.req.post(url, form);
   }
 
-  listComments(repoID, docUuid) {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/`;
+  listComments(repoID, fileUuid) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/`;
     return this.req.get(url);
   }
 
-  postComment(repoID, docUuid, comment) {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/`;
+  postComment(repoID, fileUuid, comment) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/`;
     let form = new FormData();
     form.append('comment', comment);
     return this._sendPostRequest(url, form);
   }
 
-  deleteComment(repoID, docUuid, commentID) {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/`;
+  deleteComment(repoID, fileUuid, commentID) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/`;
     return this.req.delete(url);
   }
 
-  updateComment(repoID, docUuid, commentID, resolved, detail, comment) {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/`;
+  updateComment(repoID, fileUuid, commentID, resolved, detail, comment) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/`;
     let params = {};
     if (resolved) {
       params.resolved = resolved;
@@ -1309,13 +1309,13 @@ class SeafileAPI {
     return this.req.put(url, params);
   }
 
-  listReplies = (repoID, docUuid, commentID) => {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/replies/`;
+  listReplies = (repoID, fileUuid, commentID) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/`;
     return this.req.get(url);
   };
 
-  insertReply = (repoID, docUuid, commentID, replyData) => {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/replies/`;
+  insertReply = (repoID, fileUuid, commentID, replyData) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/`;
     let form = new FormData();
     for (let key in replyData) {
       form.append(key, replyData[key]);
@@ -1323,13 +1323,13 @@ class SeafileAPI {
     return this._sendPostRequest(url, form);
   };
 
-  deleteReply = (repoID, docUuid, commentID, replyId) => {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/replies/${replyId}/`;
+  deleteReply = (repoID, fileUuid, commentID, replyId) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/${replyId}/`;
     return this.req.delete(url);
   };
 
-  updateReply = (repoID, docUuid, commentID, replyId, replyData) => {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${docUuid}/comments/${commentID}/replies/${replyId}/`;
+  updateReply = (repoID, fileUuid, commentID, replyId, replyData) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/${replyId}/`;
     return this.req.put(url, replyData);
   };
 
