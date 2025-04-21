@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.db import models
 from django.conf import settings
 from django.forms import ModelForm, Textarea
-from django.utils.html import escape
+from django.utils.html import escape, urlize
 from django.utils.translation import gettext as _
 from django.core.cache import cache
 from django.template.loader import render_to_string
@@ -17,8 +17,9 @@ from django.template.loader import render_to_string
 from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.invitations.models import Invitation
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils import normalize_cache_key, get_site_scheme_and_netloc
 from seahub.constants import HASH_URLS
 from seahub.file_participants.utils import list_file_participants
@@ -42,6 +43,9 @@ class NotificationManager(models.Manager):
 
 ########## system notification
 class Notification(models.Model):
+    """
+        global system notification
+    """
     message = models.CharField(max_length=512)
     primary = models.BooleanField(default=False, db_index=True)
     objects = NotificationManager()
@@ -59,6 +63,62 @@ class NotificationForm(ModelForm):
         fields = ('message', 'primary')
         widgets = {
             'message': Textarea(),
+        }
+
+
+class SysUserNotificationManager(models.Manager):
+    def create_sys_user_notificatioin(self, msg, user):
+        notification = self.create(
+            message = msg,
+            to_user = user,
+        )
+        return notification
+
+    def unseen_notes(self, user):
+        notes = self.filter(to_user=user, seen=0)
+        return notes
+
+
+class SysUserNotification(models.Model):
+    """
+    system notification to designated user
+    """
+    message = models.TextField(null=False, blank=False)
+    to_user = models.CharField(max_length=255, db_index=True)
+    seen = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    objects = SysUserNotificationManager()
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def update_notification_to_seen(self):
+        self.seen = True
+        self.save()
+
+    @property
+    def format_msg(self):
+        return urlize(self.message, autoescape=True)
+
+    def to_dict(self):
+        email = self.to_user
+        orgs = ccnet_api.get_orgs_by_user(email)
+        org_name = ''
+        try:
+            if orgs:
+                org_name = orgs[0].org_name
+        except Exception as e:
+            logger.error(e)
+        return {
+            'id': self.id,
+            'msg': self.message,
+            'username': self.to_user,
+            'name': email2nickname(self.to_user),
+            'contact_email': email2contact_email(self.to_user),
+            'seen': self.seen,
+            'org_name': org_name,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'msg_format': self.format_msg
         }
 
 ########## user notification

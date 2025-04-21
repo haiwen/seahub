@@ -1641,3 +1641,15 @@ CREATE TABLE `group_member_audit` (
   KEY `idx_group_member_audit_user` (`user`),
   KEY `idx_group_member_audit_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `notifications_sysusernotification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` longtext NOT NULL,
+  `to_user` varchar(255) NOT NULL,
+  `seen` tinyint(1) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_sysusernotification_to_user_e0c9101e` (`to_user`),
+  KEY `notifications_sysusernotification_seen_9d851bf7` (`seen`),
+  KEY `notifications_sysusernotification_created_at_56ffd2a0` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
