@@ -429,14 +429,6 @@ class LibContentView extends React.Component {
     });
   };
 
-  clearRepoTags = () => {
-    this.setState({
-      fileTags: [],
-      repoTags: [],
-      usedRepoTags: [],
-    });
-  };
-
   updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
@@ -471,6 +463,7 @@ class LibContentView extends React.Component {
 
   // load data
   loadDirData = (path) => {
+    this.updateUsedRepoTags();
     if (!(path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES))) {
       this.showDir(path);
     }
@@ -2276,13 +2269,8 @@ class LibContentView extends React.Component {
     this.setState({ isDirentSelected });
   };
 
-  metadataStatusCallback = ({ enableMetadata, enableTags }) => {
+  metadataStatusCallback = ({ enableTags }) => {
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
-    if (enableMetadata && enableTags) {
-      this.updateUsedRepoTags();
-      return;
-    }
-    this.clearRepoTags();
   };
 
   tagsChangedCallback = (tags) => {
