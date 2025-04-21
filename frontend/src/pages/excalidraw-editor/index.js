@@ -25,6 +25,7 @@ const ExcaliEditor = () => {
       setIsFetching(false);
     });
     onSetFavicon();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const saveSceneContent = useCallback(async () => {

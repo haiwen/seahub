@@ -1566,7 +1566,7 @@ class LibContentView extends React.Component {
       });
     } else {
       this.setState(prevState => ({
-        direntList: prevState.direntList.map(dirent => new Dirent({...dirent, isSelected: false})),
+        direntList: prevState.direntList.map(dirent => new Dirent({ ...dirent, isSelected: false })),
         isDirentSelected: false,
         isAllDirentSelected: false,
         selectedDirentList: [],
@@ -1579,12 +1579,12 @@ class LibContentView extends React.Component {
     this.setState({
       direntList: this.state.direntList.map(dirent => {
         return new Dirent({
-            ...dirent,
-            isSelected: newSelectedDirentList.some(
-                selected => selected.name === dirent.name
-            )
+          ...dirent,
+          isSelected: newSelectedDirentList.some(
+            selected => selected.name === dirent.name
+          )
         });
-    }),
+      }),
       isDirentSelected: newSelectedDirentList.length > 0,
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
