@@ -82,14 +82,14 @@ class UserAPI {
   }
 
   updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail) {
-  let url = this.server + '/api2/account/info/';
-  let data = {
-    'file_updates_email_interval': fileUpdatesEmailInterval,
-    'collaborate_email_interval': collaborateEmailInterval,
-    'enable_password_update_email': enablePasswordUpdateEmail,
-    'enable_login_email': enableLoginEmail
-  };
-  return this.req.put(url, data);
+    let url = this.server + '/api2/account/info/';
+    let data = {
+      'file_updates_email_interval': fileUpdatesEmailInterval,
+      'collaborate_email_interval': collaborateEmailInterval,
+      'enable_password_update_email': enablePasswordUpdateEmail,
+      'enable_login_email': enableLoginEmail
+    };
+    return this.req.put(url, data);
   }
 
   updateEmailNotificationConfig(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail) {
