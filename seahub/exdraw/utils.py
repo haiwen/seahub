@@ -19,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 def gen_exdraw_access_token(file_uuid, filename, username, permission='rw'):
-    nickname = email2nickname(username)
+    name = email2nickname(username)
     url, is_default, date_uploaded = api_avatar_url(username)
     access_token = jwt.encode({
         'file_uuid': file_uuid,
         'filename': filename,
         'username': username,
-        'nickname': nickname,
+        'name': name,
         'avatar_url': url,
         'permission': permission,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
