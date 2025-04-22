@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useRef } from 'react';
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useDrag, useDrop } from 'react-dnd';
@@ -19,34 +19,41 @@ import { getGroupbyGranularityByColumn, isShowGroupCountType, getSelectedCountTy
 const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete, onUpdate, onMove }) => {
   const ref = useRef(null);
 
-  // drag and drop
-  const [{ isDragging }, drag] = useDrag({
+  const [dropPosition, setDropPosition] = useState(null);
+
+  const [, drag] = useDrag({
     type: 'sfMetadataGroupbyItem',
     item: () => ({
       idx: index,
       data: groupby,
     }),
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
   });
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'sfMetadataGroupbyItem',
-    hover: (item) => {
-      if (item.idx !== index) {
-        onMove(
-          { idx: item.idx, data: item.data },
-          { idx: index, data: groupby }
-        );
-        item.idx = index;
-      }
+    hover: (item, monitor) => {
+      if (!ref.current) return;
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      const newPosition = hoverClientY < hoverMiddleY ? 'top' : 'bottom';
+      setDropPosition(newPosition);
+    },
+    drop: (item) => {
+      if (item.idx === index) return;
+      if (item.idx === index - 1 && dropPosition === 'top') return;
+      if (item.idx === index + 1 && dropPosition === 'bottom') return;
+      onMove(item, { idx: index, data: groupby });
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
     })
   });
+
   const dragDropRef = drag(drop(ref));
 
   const column = useMemo(() => {
@@ -155,8 +162,8 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     <div
       ref={dragDropRef}
       className={classnames('groupby-item',
-        { 'group-can-drop-top': isOver && canDrop && isDragging },
-        { 'group-can-drop': isOver && canDrop && !isDragging }
+        { 'drop-over-top': isOver && canDrop && dropPosition === 'top' },
+        { 'drop-over-bottom': isOver && canDrop && dropPosition === 'bottom' }
       )}
     >
       {!readOnly && (
