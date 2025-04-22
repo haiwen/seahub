@@ -133,12 +133,25 @@ class SelectedDirentsToolbar extends React.Component {
     });
   };
 
+  getDirentSharePerm = () => {
+    const { selectedDirentList, currentRepoInfo } = this.props;
+    const dirent = selectedDirentList[0];
+    return Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
+  };
+
+  shareDirent = () => {
+    this.setState({
+      showLibContentViewDialogs: true,
+      showShareDialog: true
+    });
+  };
+
   getDirentMenuList = (dirent) => {
     const isRepoOwner = this.props.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
     const isContextmenu = true;
     let opList = Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
-    const list = ['Move', 'Copy', 'Delete', 'Download'];
+    const list = ['Move', 'Copy', 'Delete', 'Download', 'Share'];
     if (dirent.type == 'dir') {
       opList = opList.filter((item, index) => {
         return list.indexOf(item.key) == -1 && item != 'Divider';
@@ -155,12 +168,6 @@ class SelectedDirentsToolbar extends React.Component {
     const dirents = this.props.selectedDirentList;
     const dirent = dirents[0];
     switch (operation) {
-      case 'Share':
-        this.setState({
-          showLibContentViewDialogs: true,
-          showShareDialog: true,
-        });
-        break;
       case 'Rename':
         this.setState({
           showLibContentViewDialogs: true,
@@ -344,29 +351,24 @@ class SelectedDirentsToolbar extends React.Component {
             <span>{selectedLen}{' '}{gettext('selected')}</span>
           </span>
           {canModify &&
-            <span className="cur-view-path-btn" onClick={this.onMoveToggle}>
-              <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
-            </span>
+            <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMoveToggle}></span>
           }
           {canCopy &&
-            <span className="cur-view-path-btn" onClick={this.onCopyToggle}>
-              <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')}></span>
-            </span>
+            <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopyToggle}></span>
           }
           {canDelete &&
-            <span className="cur-view-path-btn" onClick={this.onItemsDelete}>
-              <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
-            </span>
+            <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
           }
           {canDownload &&
-            <span className="cur-view-path-btn" onClick={this.onItemsDownload}>
-              <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
-            </span>
+            <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onItemsDownload}></span>
+          }
+          {selectedLen == 1 && this.getDirentSharePerm() &&
+            <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.shareDirent}></span>
           }
           {selectedLen === 1 &&
             <ItemDropdownMenu
               item={this.props.selectedDirentList[0]}
-              toggleClass={'cur-view-path-btn sf3-font-more-vertical sf3-font'}
+              toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
               onMenuItemClick={this.onMenuItemClick}
               getMenuList={this.getDirentMenuList}
             />
