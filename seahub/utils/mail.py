@@ -57,9 +57,7 @@ class SmimeEmailMessage(EmailMessage):
         builder = pkcs7.PKCS7SignatureBuilder() \
             .set_data(msg_payload) \
             .add_signer(certificate, private_key, hashes.SHA256())
-        pkcs7_signature = builder.sign(serialization.Encoding.SMIME, [pkcs7.PKCS7Options.DetachedSignature])
-
-        signature = base64.b64encode(pkcs7_signature).decode()
+        pkcs7_signature = builder.sign(serialization.Encoding.DER, [pkcs7.PKCS7Options.DetachedSignature])
 
         signed_msg = SafeMIMEMultipart(
             _subtype='signed',
@@ -75,7 +73,7 @@ class SmimeEmailMessage(EmailMessage):
         signed_msg.attach(original_msg)
 
         sig_part = MIMEApplication(
-            signature,
+            pkcs7_signature,
             'pkcs7-signature',
             name='smime.p7s',
         )
