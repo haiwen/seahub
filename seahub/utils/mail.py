@@ -48,7 +48,7 @@ class SmimeEmailMessage(EmailMessage):
             with open(cert_file, "rb") as f:
                 certificate = x509.load_pem_x509_certificate(f.read())
         except Exception as e:
-            logger.error(e)
+            logger.warning(f'smime key/certificates invalid, error: {e}')
             return msg
 
         original_msg = msg
