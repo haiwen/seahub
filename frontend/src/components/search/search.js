@@ -798,7 +798,7 @@ class Search extends Component {
     }
 
     let isFilterControllerActive = false;
-    if (newFilters.creator_list.length > 0 || newFilters.date || newFilters.suffixes.length > 0) {
+    if (newFilters.creator_list.length > 0 || newFilters.date.value || newFilters.suffixes.length > 0) {
       isFilterControllerActive = true;
     }
 

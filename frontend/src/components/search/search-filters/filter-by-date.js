@@ -99,7 +99,12 @@ const FilterByDate = ({ date, onSelect }) => {
   const onClearDate = useCallback(() => {
     setValue('');
     setIsCustomDate(false);
-    onSelect(SEARCH_FILTERS_KEY.DATE, '');
+    onSelect(SEARCH_FILTERS_KEY.DATE, {
+      type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+      value: '',
+      start: null,
+      end: null,
+    });
   }, [onSelect]);
 
   const onOptionClick = useCallback((e) => {
@@ -179,7 +184,7 @@ const FilterByDate = ({ date, onSelect }) => {
         <DropdownToggle tag="div" className="search-filter-toggle" onClick={toggle}>
           <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
           <i
-            className="sf3-font sf3-font-down sf3-font pl-1"
+            className="sf3-font sf3-font-down pl-1"
             onClick={(e) => {
               e.stopPropagation();
               toggle();
@@ -193,7 +198,7 @@ const FilterByDate = ({ date, onSelect }) => {
                 <DropdownToggle tag="div" className="search-filter-toggle filter-by-date-type-toggle">
                   <div className="filter-label">{typeLabel}</div>
                   <i
-                    className="sf3-font sf3-font-down sf3-font pl-1"
+                    className="sf3-font sf3-font-down pl-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleType();

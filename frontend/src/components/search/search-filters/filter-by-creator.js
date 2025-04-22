@@ -16,6 +16,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState(creatorList || []);
   const [searchValue, setSearchValue] = useState('');
+  const [inputFocus, setInputFocus] = useState(false);
 
   const toggle = useCallback((e) => {
     setIsOpen(!isOpen);
@@ -100,7 +101,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">
-            <div className="input-container">
+            <div className={classNames('input-container', { 'focus': inputFocus })}>
               {selectedOptions.map((option) => (
                 <UserItem
                   key={option.name}
@@ -114,8 +115,11 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
                   type="text"
                   placeholder={selectedOptions.length ? '' : gettext('Search user')}
                   value={searchValue}
+                  autoFocus
                   onChange={handleInputChange}
                   onKeyDown={handleInputKeyDown}
+                  onFocus={() => setInputFocus(true)}
+                  onBlur={() => setInputFocus(false)}
                 />
               </div>
             </div>

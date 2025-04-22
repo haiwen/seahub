@@ -34,22 +34,29 @@ const FilterBySuffix = ({ suffixes, onSelect }) => {
           'highlighted': suffixes.length > 0,
         })} onClick={toggle}>
           <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
-          <i className="sf3-font sf3-font-down sf3-font pl-1" />
+          <i className="sf3-font sf3-font-down pl-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-suffix-menu">
-            <div className="input-container">
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder={gettext('Seperate multiple suffixes by ","(like .sdoc, .pdf)')}
-                value={inputValue}
-                autoFocus
-                width={120}
-                onChange={handleInput}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
+          <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
+            <input
+              ref={inputRef}
+              type="text"
+              className="form-control"
+              placeholder={gettext('Seperate multiple suffixes by ","(like .sdoc, .pdf)')}
+              value={inputValue}
+              autoFocus
+              onChange={handleInput}
+              onKeyDown={handleKeyDown}
+            />
+            {inputValue.length > 0 && (
+              <button
+                type="button"
+                className="clear-icon-right sf3-font sf3-font-x-01"
+                onClick={() => setInputValue('')}
+                aria-label={gettext('Clear')}
+              >
+              </button>
+            )}
           </DropdownMenu>
         </ModalPortal>
       </Dropdown>

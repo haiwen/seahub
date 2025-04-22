@@ -53,6 +53,10 @@
   color: #ff9800;
 }
 
+.search-container.show .input-icon .search-icon-right.search-filter-controller.active:hover {
+  background-color: rgba(255, 152, 0, 0.2);
+}
+
 .search-icon-left {
   display: flex;
 }
