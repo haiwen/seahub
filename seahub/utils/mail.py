@@ -51,7 +51,7 @@ class SmimeEmailMessage(EmailMessage):
             with open(cert_file, "rb") as f:
                 certificate = x509.load_pem_x509_certificate(f.read())
         except Exception as e:
-            logger.error(e)
+            logger.warning(f'smime key/certificates invalid, error: {e}')
             return msg
     
         original_msg = msg
@@ -60,10 +60,8 @@ class SmimeEmailMessage(EmailMessage):
         builder = pkcs7.PKCS7SignatureBuilder() \
             .set_data(msg_payload) \
             .add_signer(certificate, private_key, hashes.SHA256())
-        pkcs7_signature = builder.sign(serialization.Encoding.SMIME, [pkcs7.PKCS7Options.DetachedSignature])
-    
-        signature = base64.b64encode(pkcs7_signature).decode()
-    
+        pkcs7_signature = builder.sign(serialization.Encoding.DER, [pkcs7.PKCS7Options.DetachedSignature])
+        
         signed_msg = SafeMIMEMultipart(
             _subtype='signed',
             protocol='application/pkcs7-signature',
@@ -78,7 +76,7 @@ class SmimeEmailMessage(EmailMessage):
         signed_msg.attach(original_msg)
     
         sig_part = MIMEApplication(
-            signature,
+            pkcs7_signature,
             'pkcs7-signature',
             name='smime.p7s',
         )
