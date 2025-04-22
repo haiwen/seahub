@@ -19,7 +19,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
     remove_ocr_column, get_update_record, update_people_cover_photo, gen_unique_tag_name
-from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records, list_eligible_metadata_records
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
@@ -2794,12 +2794,12 @@ class MetadataMigrateTags(APIView):
         if not tag_ids:
             error_msg = 'tag_ids invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled or not metadata.tags_enabled:
             error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -2808,137 +2808,158 @@ class MetadataMigrateTags(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # get all records
-        from seafevents.repo_metadata.constants import METADATA_TABLE
-        from seafevents.repo_metadata.constants import TAGS_TABLE
-
-        try:
-            basic_filters = [{'column_key': METADATA_TABLE.columns.is_dir.name, 'filter_predicate': 'is', 'filter_term': 'file'}]
-            view = {
-                'filters': [],
-                'basic_filters': basic_filters
-            }
-            filter_columns = [METADATA_TABLE.columns.id.name, METADATA_TABLE.columns.file_name.name, METADATA_TABLE.columns.parent_dir.name]
-            results = list_eligible_metadata_records(repo_id, request.user.username, view, filter_columns)
-            records = results.get('results')
-        except Exception as e:
-            logger.exception(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        # 每个record对应的文件路径
-        records_dict = {} # {file_path: record_id}
-        for record in records:
-            file_path = posixpath.join(record.get(METADATA_TABLE.columns.parent_dir.name), record.get(METADATA_TABLE.columns.file_name.name))
-            records_dict[file_path] = record.get(METADATA_TABLE.columns.id.name)
         
         # list old tag info
-        old_repo_tag_info = {} # {repo_tag_id: {name: '', color: '', file_paths: [file_path1, file_path2]}}
+        source_tags_info = {} # {tag_id: {name: '', color: '', file_paths: [file_path1, file_path2]}}
+        file_paths_set = set() # Used for querying metadata later
         try:
-            tagged_file_objs = FileTags.objects.filter(
+            tagged_files = FileTags.objects.filter(
                 repo_tag__id__in=tag_ids).select_related('repo_tag', 'file_uuid')
-            for tagged_file_obj in tagged_file_objs:
-                repo_tag_id = tagged_file_obj.repo_tag.id
-                parent_path = tagged_file_obj.file_uuid.parent_path
-                filename = tagged_file_obj.file_uuid.filename
+                
+            for tagged_file in tagged_files:
+                tag_id = tagged_file.repo_tag.id
+                parent_path = tagged_file.file_uuid.parent_path
+                filename = tagged_file.file_uuid.filename
                 file_path = posixpath.join(parent_path, filename)
-                if repo_tag_id not in old_repo_tag_info:
-                    old_repo_tag_info[repo_tag_id] = {
-                        'name': tagged_file_obj.repo_tag.name,
-                        'color': tagged_file_obj.repo_tag.color,
+                
+                if tag_id not in source_tags_info:
+                    source_tags_info[tag_id] = {
+                        'name': tagged_file.repo_tag.name,
+                        'color': tagged_file.repo_tag.color,
                         'file_paths': []
                     }
-                old_repo_tag_info[repo_tag_id]['file_paths'].append(file_path)
+                
+                source_tags_info[tag_id]['file_paths'].append(file_path)
+                file_paths_set.add(file_path)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        print(old_repo_tag_info, '---old_repo_tag_info')
 
-        # file_path to record_id
-        repo_tag_id_map = {} # {repo_tag_id: [record_id1, record_id2]}
-        tags_data = [] # [{name: '', color: ''}]
-        for repo_tag_id, tag_data in old_repo_tag_info.items():
-            repo_tag_id_map[repo_tag_id] = []
-            for file_path in tag_data['file_paths']:
-                record_id = records_dict.get(file_path, '')
-                if record_id:
-                    repo_tag_id_map[repo_tag_id].append(record_id)
-            tags_data.append({
-                TAGS_TABLE.columns.name.name: tag_data['name'],
-                TAGS_TABLE.columns.color.name: tag_data['color'],
-            })
-
-        # {"tags_data":[{"_tag_color":"#46A1FD","_tag_name":"va"}]}
+        # query records
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
-            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            dir_paths = [os.path.dirname(path) for path in file_paths_set]
+            filenames = [os.path.basename(path) for path in file_paths_set]
+            
+            filenames_str = ', '.join([f'"{name}"' for name in filenames])
+            dir_paths_str = ', '.join([f'"{path}"' for path in dir_paths])
 
-        if not tags_table:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
-        
-        tags_table_id = tags_table['id']
-        exist_tags = []
-        new_tags = []
-        sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM {TAGS_TABLE.name}'
-
-        try:
-            exist_rows = metadata_server_api.query_rows(sql)
-            exist_tags = exist_rows.get('results', [])
-            if exist_tags:
-                exist_tags = [tag_data.get(TAGS_TABLE.columns.name.name, '') for tag_data in exist_tags]
+            sql = f'''
+            SELECT `{METADATA_TABLE.columns.id.name}`, 
+                   `{METADATA_TABLE.columns.file_name.name}`, 
+                   `{METADATA_TABLE.columns.parent_dir.name}` 
+            FROM `{METADATA_TABLE.name}` 
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = False
+            AND `{METADATA_TABLE.columns.file_name.name}` IN ({filenames_str})
+            AND `{METADATA_TABLE.columns.parent_dir.name}` IN ({dir_paths_str})
+            '''
+            
+            query_result = metadata_server_api.query_rows(sql, [])
+            metadata_records = query_result.get('results', [])
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        # handle exist tags
-        if exist_tags:
-            for index, tag_data in enumerate(tags_data):
-                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
-                if tag_name not in exist_tags:
-                    new_tags.append(tag_data)
-                else:
-                    unique_tag_name = gen_unique_tag_name(tag_name, exist_tags)
-                    new_tags.append({
-                        TAGS_TABLE.columns.color.name: tag_data.get(TAGS_TABLE.columns.color.name, ''),
-                        TAGS_TABLE.columns.name.name: unique_tag_name
-                    })
-        else:
-            new_tags = tags_data
+
+
+        file_to_record_map = {}  # {file_path: record_id}
+        for record in metadata_records:
+            parent_dir = record.get(METADATA_TABLE.columns.parent_dir.name)
+            file_name = record.get(METADATA_TABLE.columns.file_name.name)
+            record_id = record.get(METADATA_TABLE.columns.id.name)
+            
+            file_path = posixpath.join(parent_dir, file_name)
+            file_to_record_map[file_path] = record_id
+        
+        tags_data = []  # [{name: '', color: ''}]
+        for tag_id, tag_info in source_tags_info.items():
+            tags_data.append({
+                TAGS_TABLE.columns.name.name: tag_info['name'],
+                TAGS_TABLE.columns.color.name: tag_info['color'],
+            })
 
         try:
-            resp = metadata_server_api.insert_rows(tags_table_id, new_tags)
-            row_ids = resp.get('row_ids', [])
+            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
+            if not tags_table:
+                return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+            
+            sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM {TAGS_TABLE.name}'
+            existing_tags_result = metadata_server_api.query_rows(sql)
+            existing_tag_records = existing_tags_result.get('results', [])
+            
+            existing_tag_names = []
+            if existing_tag_records:
+                existing_tag_names = [
+                    tag_dict.get(TAGS_TABLE.columns.name.name, '') 
+                    for tag_dict in existing_tag_records
+                ]
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        # record_id : tags
-        # handle file_tags_data
-        new_tags_info_array = []
-        for index, old_tag_id in enumerate(repo_tag_id_map):
-            new_tag_id = row_ids[index]
-            record_ids = repo_tag_id_map[old_tag_id]
-            new_tags_info_array.append({
-                'record_ids': record_ids,
-                'tag_id': new_tag_id
-            })
-        record_id_tag_id_map = {}
-        for tag_info in new_tags_info_array:
-            record_ids = tag_info.get('record_ids', [])
-            tag_id = tag_info.get('tag_id', '')
-            for record_id in record_ids:
-                if record_id not in record_id_tag_id_map:
-                    record_id_tag_id_map[record_id] = []
-                record_id_tag_id_map[record_id].append(tag_id)
+
+        # handle tag name conflict
+        tags_table_id = tags_table['id']
+        tags_to_create = []
+        
+        if existing_tag_names:
+            for idx, tag_data in enumerate(tags_data):
+                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
+                tag_color = tag_data.get(TAGS_TABLE.columns.color.name, '')
+                
+                if tag_name not in existing_tag_names:
+                    tags_to_create.append(tag_data)
+                else:
+                    unique_name = gen_unique_tag_name(tag_name, existing_tag_names)
+                    
+                    tags_to_create.append({
+                        TAGS_TABLE.columns.color.name: tag_color,
+                        TAGS_TABLE.columns.name.name: unique_name
+                    })
+        else:
+            tags_to_create = tags_data
+
+        try:
+            response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
+            new_tag_ids = response.get('row_ids', [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # create new old tag id mapping
+        destination_tags_info = {}  # new tag info
+        for idx, old_tag_id in enumerate(source_tags_info):
+            new_tag_id = new_tag_ids[idx]
+            
+            file_paths = source_tags_info[old_tag_id]['file_paths']
+            destination_tags_info[new_tag_id] = {
+                'file_paths': file_paths
+            }
+            
+        # create record id to tag id mapping
+        record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
+        
+        for tag_id, tag_info in destination_tags_info.items():
+            for file_path in tag_info['file_paths']:
+                record_id = file_to_record_map.get(file_path)
+                if not record_id:
+                    continue
+                    
+                if record_id not in record_to_tags_map:
+                    record_to_tags_map[record_id] = []
+                    
+                record_to_tags_map[record_id].append(tag_id)
                 
         try:
-            metadata_server_api.insert_link(TAGS_TABLE.file_link_id, METADATA_TABLE.id, record_id_tag_id_map)
+            metadata_server_api.insert_link(
+                TAGS_TABLE.file_link_id, 
+                METADATA_TABLE.id, 
+                record_to_tags_map
+            )
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if not record.details_settings: 
                 details_settings = {}
@@ -2946,7 +2967,6 @@ class MetadataMigrateTags(APIView):
                 details_settings = json.loads(record.details_settings)
             details_settings['tags_migrated'] = True
             record.details_settings = json.dumps(details_settings)
-
             record.save()
         except Exception as e:
             logger.error(e)
