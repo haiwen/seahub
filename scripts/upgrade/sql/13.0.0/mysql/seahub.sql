@@ -41,6 +41,34 @@ CREATE TABLE IF NOT EXISTS `org_last_active_time` (
   KEY `ix_org_last_active_time_org_id` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS `group_member_audit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `operator` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `operation` varchar(128) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_group_member_audit_org_id` (`org_id`),
+  KEY `idx_group_member_audit_timestamp` (`timestamp`),
+  KEY `idx_group_member_audit_operator` (`operator`),
+  KEY `idx_group_member_audit_user` (`user`),
+  KEY `idx_group_member_audit_group_id` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `notifications_sysusernotification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` longtext NOT NULL,
+  `to_user` varchar(255) NOT NULL,
+  `seen` tinyint(1) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_sysusernotification_to_user_e0c9101e` (`to_user`),
+  KEY `notifications_sysusernotification_seen_9d851bf7` (`seen`),
+  KEY `notifications_sysusernotification_created_at_56ffd2a0` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 ALTER TABLE `sdoc_notification` ADD INDEX `idx_user_seen` (`username`, `seen`);
 
 ALTER TABLE organizations_orgsettings ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1;
