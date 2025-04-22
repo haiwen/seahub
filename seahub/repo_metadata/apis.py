@@ -2960,6 +2960,7 @@ class MetadataMigrateTags(APIView):
                 METADATA_TABLE.id, 
                 record_to_tags_map
             )
+            # Record that the old version tags have been migrated
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if not record.details_settings: 
                 details_settings = {}
