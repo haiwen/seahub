@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
@@ -61,10 +61,10 @@ class Search extends Component {
         date: {
           type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
           value: '',
-          start: null,
-          end: null,
+          from: null,
+          to: null,
         },
-        suffixes: [],
+        suffixes: '',
       },
     };
     this.highlightRef = null;
@@ -530,7 +530,7 @@ class Search extends Component {
           start: null,
           end: null,
         },
-        suffixes: [],
+        suffixes: '',
       }
     });
   }
@@ -558,7 +558,6 @@ class Search extends Component {
       }
     }
 
-    const filteredItems = this.filterResults(resultItems);
     if (isLoading) {
       return <Loading />;
     }
@@ -568,8 +567,8 @@ class Search extends Component {
     else if (!isResultGotten) {
       return this.renderSearchTypes(this.state.inputValue.trim());
     }
-    else if (filteredItems.length > 0) {
-      return this.renderResults(filteredItems);
+    else if (resultItems.length > 0) {
+      return this.renderResults(resultItems);
     }
     else {
       return <div className="search-result-none">{gettext('No results matching')}</div>;
@@ -673,9 +672,8 @@ class Search extends Component {
       q: value,
       search_repo: this.props.repoID,
       search_ftypes: 'all',
-      search_filename_only: filters.search_filename_only,
     };
-    this.getSearchResult(queryData);
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   searchFolder = () => {
@@ -685,9 +683,8 @@ class Search extends Component {
       search_repo: this.props.repoID,
       search_ftypes: 'all',
       search_path: this.props.path,
-      search_filename_only: filters.search_filename_only,
     };
-    this.getSearchResult(queryData);
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   searchAllRepos = () => {
@@ -696,44 +693,8 @@ class Search extends Component {
       q: value,
       search_repo: 'all',
       search_ftypes: 'all',
-      search_filename_only: filters.search_filename_only,
     };
-    this.getSearchResult(queryData);
-  };
-
-  filterResults = (results) => {
-    const { filters } = this.state;
-    return results.filter(item => {
-      if (filters.creator_list && filters.creator_list.length > 0) {
-        if (!filters.creator_list.some(creator => creator.email === item.repo_owner_email)) {
-          return false;
-        }
-      }
-
-      let startDate = filters.date.start;
-      let endDate = filters.date.end;
-      if (filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM) {
-        startDate = filters.date.start?.unix();
-        endDate = filters.date.end?.unix();
-      }
-
-      if (startDate && item.mtime < startDate) {
-        return false;
-      }
-      if (endDate && item.mtime > endDate) {
-        return false;
-      }
-
-      if (filters.suffixes && filters.suffixes.length > 0) {
-        const pathParts = item.path.split('.');
-        const suffix = pathParts.length > 1 ? `.${pathParts.pop()}` : '';
-        if (!filters.suffixes.includes(suffix)) {
-          return false;
-        }
-      }
-
-      return true;
-    });
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   renderResults = (resultItems, isVisited) => {
@@ -785,24 +746,64 @@ class Search extends Component {
     this.setState({ isFiltersShow: !isFiltersShow });
   }
 
+  buildSearchParams = (baseParams) => {
+    const { filters } = this.state;
+    const params = { ...baseParams };
+
+    if (filters.search_filename_only) {
+      params.search_filename_only = filters.search_filename_only;
+    }
+
+    if (filters.date.value) {
+      const isCustom = filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
+      params.time_from = isCustom ? filters.date.start?.unix() : filters.date.from;
+      params.time_to = isCustom ? filters.date.end?.unix() : filters.date.to;
+    }
+
+    if (filters.suffixes) {
+      params.input_fexts = filters.suffixes;
+      params.search_ftypes = 'custom';
+    }
+
+    if (filters.creator_list.length > 0) {
+      params.creator_emails = filters.creator_list.map(c => c.email).join(',');
+    }
+
+    return params;
+  };
+
   handleFiltersChange = (key, value) => {
-    const newFilters = { ...this.state.filters, [key]: value};
-    if (newFilters.search_filename_only !== this.state.filters.search_filename_only) {
-      this.setState({ filters: newFilters }, () => {
-        const newQueryData = {
-          ...this.queryData,
-          search_filename_only: newFilters.search_filename_only,
-        }
-        this.getSearchResult(newQueryData);
-      });
+    const queryUpdates = {};
+
+    if (key === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY) {
+      queryUpdates.search_filename_only = value;
+    }
+    if (key === SEARCH_FILTERS_KEY.SUFFIXES) {
+      queryUpdates.search_ftypes = 'custom';
+      queryUpdates.input_fexts = value;
+      if (!value) {
+        queryUpdates.search_ftypes = 'all';
+      }
+    }
+    if (key === SEARCH_FILTERS_KEY.DATE) {
+      const date = value;
+      const isCustom = date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
+      queryUpdates.time_from = isCustom ? value.from.unix() : value.from;
+      queryUpdates.time_to = isCustom ? value.to.unix() : value.to;
     }
 
-    let isFilterControllerActive = false;
-    if (newFilters.creator_list.length > 0 || newFilters.date.value || newFilters.suffixes.length > 0) {
-      isFilterControllerActive = true;
-    }
+    const newQueryData = {
+      ...this.queryData,
+      ...queryUpdates,
+    };
 
-    this.setState({ filters: newFilters, isFilterControllerActive }, () => this.forceUpdate());
+    this.getSearchResult(newQueryData);
+
+    const newFilters = { ...this.state.filters, [key]: value };
+
+    const hasActiveFilter = newFilters.suffixes || newFilters.creator_list.length > 0 || newFilters.date.value;
+
+    this.setState({ filters: newFilters, isFilterControllerActive: hasActiveFilter });
   }
 
   handleSelectTag = (tag) => {

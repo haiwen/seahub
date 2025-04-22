@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import dayjs from 'dayjs';
@@ -10,11 +10,15 @@ import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_
 
 const DATE_INPUT_WIDTH = 118;
 
-const FilterByDate = ({ date, onSelect }) => {
+const FilterByDate = ({ date, onChange }) => {
   const [value, setValue] = useState(date.value);
   const [isOpen, setIsOpen] = useState(false);
   const [isTypeOpen, setIsTypeOpen] = useState(false);
   const [isCustomDate, setIsCustomDate] = useState(date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM);
+  const [time, setTime] = useState({
+    from: date.from,
+    to: date.to,
+  });
   const [type, setType] = useState(date.type);
 
   const typeLabel = useMemo(() => {
@@ -54,13 +58,13 @@ const FilterByDate = ({ date, onSelect }) => {
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS:
         return `${prefix}${formatDate(today.subtract(29, 'day'))} - ${formatDate(today)}`;
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM:
-        return date.start && date.end
-          ? `${prefix}${formatDate(date.start)} - ${formatDate(date.end)}`
+        return time.from && time.to
+          ? `${prefix}${formatDate(time.from)} - ${formatDate(time.to)}`
           : gettext('Select date range');
       default:
         return gettext('Date');
     }
-  }, [date, value, typeLabel]);
+  }, [time, value, typeLabel]);
 
   const options = useMemo(() => {
     return [
@@ -90,93 +94,91 @@ const FilterByDate = ({ date, onSelect }) => {
     const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
     if (option === type) return;
     setType(option);
-    onSelect(SEARCH_FILTERS_KEY.DATE, {
-      ...date,
-      type: option,
-    });
-  }, [type, onSelect, date]);
+  }, [type]);
 
   const onClearDate = useCallback(() => {
     setValue('');
     setIsCustomDate(false);
-    onSelect(SEARCH_FILTERS_KEY.DATE, {
-      type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
-      value: '',
-      start: null,
-      end: null,
+    setTime({
+      from: null,
+      to: null,
     });
-  }, [onSelect]);
+    setIsOpen(false);
+  }, []);
 
   const onOptionClick = useCallback((e) => {
     const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
     if (option === value) return;
     const today = dayjs().endOf('day');
-    setIsCustomDate(option === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM);
+    const isCustomOption = option === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
+    setIsCustomDate(isCustomOption);
     setValue(option);
+    setIsOpen(isCustomOption);
     switch (option) {
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.TODAY: {
-        onSelect(SEARCH_FILTERS_KEY.DATE, {
-          value: option,
-          start: dayjs().startOf('day').unix(),
-          end: today.unix()
+        setTime({
+          from: dayjs().startOf('day').unix(),
+          to: today.unix()
         });
         break;
       }
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_7_DAYS: {
-        onSelect(SEARCH_FILTERS_KEY.DATE, {
-          value: option,
-          start: dayjs().subtract(6, 'day').startOf('day').unix(),
-          end: today.unix()
+        setTime({
+          from: dayjs().subtract(6, 'day').startOf('day').unix(),
+          to: today.unix()
         });
         break;
       }
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS: {
-        onSelect(SEARCH_FILTERS_KEY.DATE, {
-          value: option,
-          start: dayjs().subtract(30, 'day').startOf('day').unix(),
-          end: today.unix()
+        setTime({
+          from: dayjs().subtract(30, 'day').startOf('day').unix(),
+          to: today.unix()
         });
         break;
       }
       case SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM: {
-        onSelect(SEARCH_FILTERS_KEY.DATE, {
-          value: option,
-          start: null,
-          end: null,
+        setTime({
+          from: null,
+          to: null,
         });
         break;
       }
     }
-  }, [value, onSelect]);
+  }, [value]);
 
   const disabledStartDate = useCallback((startDate) => {
     if (!startDate) return false;
     const today = dayjs();
-    const endValue = date.end;
+    const endValue = time.to;
 
     if (!endValue) {
       return startDate.isAfter(today);
     }
     return endValue.isBefore(startDate) || startDate.isAfter(today);
-  }, [date]);
+  }, [time]);
 
   const disabledEndDate = useCallback((endDate) => {
     if (!endDate) return false;
     const today = dayjs();
-    const startValue = date.start;
+    const startValue = time.from;
     if (!startValue) {
       return endDate.isAfter(today);
     }
     return endDate.isBefore(startValue) || endDate.isAfter(today);
-  }, [date]);
+  }, [time]);
 
-  const onChangeCustomDate = useCallback((customDate) => {
-    const newDate = {
-      ...date,
-      ...customDate,
-    };
-    onSelect(SEARCH_FILTERS_KEY.DATE, newDate);
-  }, [date, onSelect]);
+  useEffect(() => {
+    if (!isOpen) {
+      if (type !== date.type || time.from !== date.from || time.to !== date.to) {
+        onChange(SEARCH_FILTERS_KEY.DATE, {
+          type,
+          value,
+          from: time.from,
+          to: time.to,
+        });
+      }
+    }
+  }, [isOpen, date, time, type, value, onChange]);
 
   return (
     <div className="search-filter filter-by-date-container">
@@ -246,8 +248,8 @@ const FilterByDate = ({ date, onSelect }) => {
                   <Picker
                     showHourAndMinute={false}
                     disabledDate={disabledStartDate}
-                    value={date.start}
-                    onChange={(value) => onChangeCustomDate({ start: value })}
+                    value={time.from}
+                    onChange={(value) => setTime({ ...time, from: value })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -256,8 +258,8 @@ const FilterByDate = ({ date, onSelect }) => {
                   <Picker
                     showHourAndMinute={false}
                     disabledDate={disabledEndDate}
-                    value={date.end}
-                    onChange={(value) => onChangeCustomDate({ end: value })}
+                    value={time.to}
+                    onChange={(value) => setTime({ ...time, to: value })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -277,7 +279,7 @@ FilterByDate.propTypes = {
     start: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     end: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   }),
-  onSelect: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default FilterByDate;

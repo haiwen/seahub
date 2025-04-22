@@ -6,7 +6,7 @@ import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
 
-const FilterByText = ({ searchFilenameOnly, onSelect }) => {
+const FilterByText = ({ searchFilenameOnly, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(searchFilenameOnly ? SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY : SEARCH_FILTERS_KEY.SEARCH_FILENAME_AND_CONTENT);
 
@@ -27,8 +27,8 @@ const FilterByText = ({ searchFilenameOnly, onSelect }) => {
     const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
     setValue(option);
     const isSearchFilenameOnly = option === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY;
-    onSelect(SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY, isSearchFilenameOnly);
-  }, [onSelect]);
+    onChange(SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY, isSearchFilenameOnly);
+  }, [onChange]);
 
   const label = options.find((option) => option.key === value).label;
 
@@ -59,7 +59,7 @@ const FilterByText = ({ searchFilenameOnly, onSelect }) => {
 
 FilterByText.propTypes = {
   searchFilenameOnly: PropTypes.bool.isRequired,
-  onSelect: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default FilterByText;
