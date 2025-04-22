@@ -74,6 +74,7 @@
   align-items: flex-start;
   position: relative;
   overflow: hidden;
+  overflow-y: auto;
   user-select: none;
 }
 
