@@ -112,6 +112,8 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     } else {
       this.permissions = ['r', 'rw', 'cloud-edit', 'preview', 'invisible'];
     }
+
+    this.userSelect = React.createRef();
   }
 
   handleUserSelectChange = (option) => {
