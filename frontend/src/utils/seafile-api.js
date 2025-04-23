@@ -2232,7 +2232,7 @@ class SeafileAPI {
   }
 
   getExdrawToken(repoID, filePath) {
-    const url = `/api/v2.1/exdraw/access-token/${repoID}/?p=${filePath}`;
+    const url = this.server + `/api/v2.1/exdraw/access-token/${repoID}/?p=${filePath}`;
 
     return this.req.get(url);
   }
