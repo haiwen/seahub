@@ -558,6 +558,7 @@ class Search extends Component {
       }
     }
 
+    const filteredItems = this.filterByCreator(resultItems);
     if (isLoading) {
       return <Loading />;
     }
@@ -567,8 +568,8 @@ class Search extends Component {
     else if (!isResultGotten) {
       return this.renderSearchTypes(this.state.inputValue.trim());
     }
-    else if (resultItems.length > 0) {
-      return this.renderResults(resultItems);
+    else if (filteredItems.length > 0) {
+      return this.renderResults(filteredItems);
     }
     else {
       return <div className="search-result-none">{gettext('No results matching')}</div>;
@@ -773,8 +774,14 @@ class Search extends Component {
   };
 
   handleFiltersChange = (key, value) => {
+    const newFilters = { ...this.state.filters, [key]: value };
+    const hasActiveFilter = newFilters.suffixes || newFilters.creator_list.length > 0 || newFilters.date.value;
+    this.setState({ filters: newFilters, isFilterControllerActive: hasActiveFilter });
+
+    // build query data
     const queryUpdates = {};
 
+    if (key === SEARCH_FILTERS_KEY.CREATOR_LIST) return;
     if (key === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY) {
       queryUpdates.search_filename_only = value;
     }
@@ -788,8 +795,8 @@ class Search extends Component {
     if (key === SEARCH_FILTERS_KEY.DATE) {
       const date = value;
       const isCustom = date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
-      queryUpdates.time_from = isCustom ? value.from.unix() : value.from;
-      queryUpdates.time_to = isCustom ? value.to.unix() : value.to;
+      queryUpdates.time_from = isCustom ? value.from?.unix() : value.from;
+      queryUpdates.time_to = isCustom ? value.to?.unix() : value.to;
     }
 
     const newQueryData = {
@@ -798,13 +805,19 @@ class Search extends Component {
     };
 
     this.getSearchResult(newQueryData);
-
-    const newFilters = { ...this.state.filters, [key]: value };
-
-    const hasActiveFilter = newFilters.suffixes || newFilters.creator_list.length > 0 || newFilters.date.value;
-
-    this.setState({ filters: newFilters, isFilterControllerActive: hasActiveFilter });
   }
+
+  filterByCreator = (results) => {
+    const { filters } = this.state;
+    return results.filter(item => {
+      if (filters.creator_list && filters.creator_list.length > 0) {
+        if (!filters.creator_list.some(creator => creator.email === item.repo_owner_email)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
 
   handleSelectTag = (tag) => {
     this.props.onSelectTag(tag);

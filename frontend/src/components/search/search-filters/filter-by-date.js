@@ -7,6 +7,7 @@ import { Utils } from '../../../utils/utils';
 import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
+import classNames from 'classnames';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -32,6 +33,11 @@ const FilterByDate = ({ date, onChange }) => {
     }
   }, [type]);
 
+  const label = useMemo(() => {
+    if (!value || value.length === 0) return gettext('Date');
+    return typeLabel;
+  }, [typeLabel, value]);
+
   const typeOptions = useMemo(() => {
     return [
       {
@@ -43,28 +49,6 @@ const FilterByDate = ({ date, onChange }) => {
       }
     ];
   }, []);
-
-  const label = useMemo(() => {
-    if (!value || value.length === 0) return gettext('Date');
-    const formatDate = (date) => dayjs(date).format('YYYY-MM-DD');
-    const today = dayjs();
-    const prefix = `${typeLabel}: `;
-
-    switch (value) {
-      case SEARCH_FILTER_BY_DATE_OPTION_KEY.TODAY:
-        return `${prefix}${formatDate(today)}`;
-      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_7_DAYS:
-        return `${prefix}${formatDate(today.subtract(6, 'day'))} - ${formatDate(today)}`;
-      case SEARCH_FILTER_BY_DATE_OPTION_KEY.LAST_30_DAYS:
-        return `${prefix}${formatDate(today.subtract(29, 'day'))} - ${formatDate(today)}`;
-      case SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM:
-        return time.from && time.to
-          ? `${prefix}${formatDate(time.from)} - ${formatDate(time.to)}`
-          : gettext('Select date range');
-      default:
-        return gettext('Date');
-    }
-  }, [time, value, typeLabel]);
 
   const options = useMemo(() => {
     return [
@@ -183,7 +167,10 @@ const FilterByDate = ({ date, onChange }) => {
   return (
     <div className="search-filter filter-by-date-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className="search-filter-toggle" onClick={toggle}>
+        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
+          'active': isOpen && value,
+          'highlighted': value,
+        })} onClick={toggle}>
           <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
           <i
             className="sf3-font sf3-font-down pl-1"
