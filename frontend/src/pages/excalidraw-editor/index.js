@@ -6,23 +6,35 @@ import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
 import { Utils } from '../../utils/utils';
+import ExdrawServerApi from './collab/exdraw-server-api';
 
 import './index.css';
+
+const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
 
 const ExcaliEditor = () => {
   const [fileContent, setFileContent] = useState(null);
   const editorRef = useRef(null);
   const isChangedRef = useRef(false);
   const [isFetching, setIsFetching] = useState(true);
+  const exdrawServerConfigRef = useRef({
+    exdrawServer: '',
+    exdrawUuid: '',
+    accessToken: ''
+  });
 
   useEffect(() => {
-    editorApi.getFileContent().then(res => {
-      if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
-        // collaborators.forEach is not a function
-        res.data['appState']['collaborators'] = [];
-      }
-      setFileContent(res.data);
-      setIsFetching(false);
+    editorApi.getExdrawToken().then(res => {
+      exdrawServerConfigRef.current = {
+        exdrawServer: excalidrawServerUrl,
+        exdrawUuid: docUuid,
+        accessToken: res
+      };
+      const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
+      exdrawServerApi.getSceneContent().then(res => {
+        setFileContent(res.data);
+        setIsFetching(false);
+      });
     });
     onSetFavicon();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,7 +43,8 @@ const ExcaliEditor = () => {
   const saveSceneContent = useCallback(async () => {
     if (isChangedRef.current) {
       try {
-        await editorApi.saveContent(JSON.stringify(editorRef.current));
+        const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
+        await exdrawServerApi.saveSceneContent(JSON.stringify(editorRef.current));
         isChangedRef.current = false;
         toaster.success(gettext('Successfully saved'), { duration: 2 });
       } catch {

@@ -19,6 +19,12 @@ class EditorApi {
       return seafileAPI.getFileContent(downLoadUrl);
     });
   };
+
+  getExdrawToken = () => {
+    return seafileAPI.getExdrawToken(repoID, filePath).then((res => {
+      return res.data.access_token;
+    }));
+  };
 }
 
 const editorApi = new EditorApi();

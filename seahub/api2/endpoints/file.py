@@ -37,6 +37,7 @@ from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
 from seahub.seadoc.utils import get_seadoc_file_uuid
+from seahub.exdraw.utils import get_exdraw_file_uuid
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -266,6 +267,9 @@ class FileView(APIView):
             if new_file_name.endswith('.sdoc'):
                 doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
                 file_info['doc_uuid'] = doc_uuid
+            if new_file_name.endswith('.exdraw'):
+                file_uuid = get_exdraw_file_uuid(repo, new_file_path)
+                file_info['file_uuid'] = file_uuid
             return Response(file_info)
 
         if operation == 'rename':

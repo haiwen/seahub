@@ -586,7 +586,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     ## user::drafts
-    
+
 
     ## user::activities
     re_path(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
@@ -1049,6 +1049,10 @@ if getattr(settings, 'ENABLE_SEADOC', False):
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
     ]
 
+if getattr(settings, 'ENABLE_EXCALIDRAW', False):
+    urlpatterns += [
+        re_path(r'^api/v2.1/exdraw/', include('seahub.exdraw.urls')),
+    ]
 
 if getattr(settings, 'CLIENT_SSO_VIA_LOCAL_BROWSER', False):
     urlpatterns += [
