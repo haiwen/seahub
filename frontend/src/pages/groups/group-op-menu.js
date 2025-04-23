@@ -169,6 +169,9 @@ class GroupOperationMenu extends React.Component {
     if (isStaff || isOwner) {
       opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
       opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
+      if (isOwner && group.owner !== 'system admin' && !isMultiTenancy) {
+        opList.push({ 'text': gettext('Invite members'), 'onClick': this.toggleInviteMembersDialog });
+      }
       opList.push('Divider');
       opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
       if (isOwner) {
@@ -177,9 +180,7 @@ class GroupOperationMenu extends React.Component {
       if (isOwner) {
         opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDeleteGroupDialog });
       }
-      if (isOwner && group.owner !== 'system admin' && !isMultiTenancy) {
-        opList.push({ 'text': gettext('Invite members'), 'onClick': this.toggleInviteMembersDialog });
-      }
+
     }
 
     if (!isOwner && !isDepartment) {
