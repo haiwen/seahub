@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, canAddRepo } from '../../utils/constants';
+import { gettext, username, canAddRepo, isMultiTenancy } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -15,6 +15,7 @@ import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
 
 import '../../css/group-view.css';
 
@@ -40,7 +41,8 @@ class GroupOperationMenu extends React.Component {
       isImportMembersDialogOpen: false,
       isManageMembersDialogOpen: false,
       isLeaveGroupDialogOpen: false,
-      isMembersDialogOpen: false
+      isMembersDialogOpen: false,
+      isInviteMembersDialogOpen: false
     };
   }
 
@@ -106,6 +108,12 @@ class GroupOperationMenu extends React.Component {
     });
   };
 
+  toggleInviteMembersDialog = () => {
+    this.setState({
+      isInviteMembersDialogOpen: !this.state.isInviteMembersDialogOpen
+    });
+  };
+
   importMembersInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'), { 'id': 'importing-members' });
     const { group } = this.props;
@@ -161,6 +169,9 @@ class GroupOperationMenu extends React.Component {
     if (isStaff || isOwner) {
       opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
       opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
+      if (isOwner && group.owner !== 'system admin' && !isMultiTenancy) {
+        opList.push({ 'text': gettext('Invite members'), 'onClick': this.toggleInviteMembersDialog });
+      }
       opList.push('Divider');
       opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
       if (isOwner) {
@@ -169,6 +180,7 @@ class GroupOperationMenu extends React.Component {
       if (isOwner) {
         opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDeleteGroupDialog });
       }
+
     }
 
     if (!isOwner && !isDepartment) {
@@ -261,6 +273,12 @@ class GroupOperationMenu extends React.Component {
             groupID={groupID}
             toggleDialog={this.toggleLeaveGroupDialog}
             onLeavingGroup={this.props.onLeavingGroup}
+          />
+        }
+        {this.state.isInviteMembersDialogOpen &&
+          <InviteMembersDialog
+            groupID={groupID}
+            toggleInviteMembersDialog={this.toggleInviteMembersDialog}
           />
         }
       </Fragment>
