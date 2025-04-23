@@ -21,7 +21,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
 
   const [dropPosition, setDropPosition] = useState(null);
 
-  const [, drag] = useDrag({
+  const [, drag, preview] = useDrag({
     type: 'sfMetadataGroupbyItem',
     item: () => ({
       idx: index,
@@ -54,7 +54,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     })
   });
 
-  const dragDropRef = drag(drop(ref));
+  drop(preview(ref));
 
   const column = useMemo(() => {
     return getColumnByKey(columns, groupby.column_key);
@@ -160,7 +160,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
 
   return (
     <div
-      ref={dragDropRef}
+      ref={ref}
       className={classnames('groupby-item',
         { 'drop-over-top': isOver && canDrop && dropPosition === 'top' },
         { 'drop-over-bottom': isOver && canDrop && dropPosition === 'bottom' }
@@ -205,7 +205,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
         </div>
       </div>
       {!readOnly && showDragBtn && (
-        <div className="groupby-drag">
+        <div ref={drag} className="groupby-drag">
           <Icon symbol="drag" />
         </div>
       )}
