@@ -11,11 +11,12 @@ import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
 
-const FilterByCreator = ({ creatorList, onSelect }) => {
+const FilterByCreator = ({ creatorList, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState(creatorList || []);
   const [searchValue, setSearchValue] = useState('');
+  const [inputFocus, setInputFocus] = useState(false);
 
   const toggle = useCallback((e) => {
     setIsOpen(!isOpen);
@@ -28,7 +29,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
     });
   }, [options, searchValue]);
 
-  const onSelectOption = useCallback((e) => {
+  const onChangeOption = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     const name = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
@@ -40,17 +41,17 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
       updated = updated.filter((option) => option.name !== name);
     }
     setSelectedOptions(updated);
-    onSelect(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
+    onChange(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
     if (displayOptions.length === 1) {
       setSearchValue('');
     }
-  }, [selectedOptions, displayOptions, options, onSelect]);
+  }, [selectedOptions, displayOptions, options, onChange]);
 
   const handleCancel = useCallback((e, name) => {
     const updated = selectedOptions.filter((option) => option.name !== name);
     setSelectedOptions(updated);
-    onSelect(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
-  }, [selectedOptions, onSelect]);
+    onChange(SEARCH_FILTERS_KEY.CREATOR_LIST, updated);
+  }, [selectedOptions, onChange]);
 
   const handleInputChange = useCallback((e) => {
     const v = e.target.value;
@@ -100,7 +101,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">
-            <div className="input-container">
+            <div className={classNames('input-container', { 'focus': inputFocus })}>
               {selectedOptions.map((option) => (
                 <UserItem
                   key={option.name}
@@ -114,8 +115,11 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
                   type="text"
                   placeholder={selectedOptions.length ? '' : gettext('Search user')}
                   value={searchValue}
+                  autoFocus
                   onChange={handleInputChange}
                   onKeyDown={handleInputKeyDown}
+                  onFocus={() => setInputFocus(true)}
+                  onBlur={() => setInputFocus(false)}
                 />
               </div>
             </div>
@@ -126,7 +130,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
                 tabIndex="-1"
                 data-toggle={option.name}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={onSelectOption}
+                onClick={onChangeOption}
                 toggle={false}
               >
                 {isOpen && <UserItem user={option} />}
@@ -142,7 +146,7 @@ const FilterByCreator = ({ creatorList, onSelect }) => {
 
 FilterByCreator.propTypes = {
   creatorList: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default FilterByCreator;

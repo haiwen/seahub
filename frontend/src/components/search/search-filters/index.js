@@ -10,10 +10,10 @@ import './index.css';
 const SearchFilters = ({ filters, onChange }) => {
   return (
     <div className="search-filters-container">
-      <FilterBySuffix suffixes={filters.suffixes} onSelect={onChange} />
-      <FilterByText searchFilenameOnly={filters.search_filename_only} onSelect={onChange} />
-      <FilterByCreator creatorList={filters.creator_list} onSelect={onChange} />
-      <FilterByDate date={filters.date} onSelect={onChange} />
+      <FilterBySuffix suffixes={filters.suffixes} onChange={onChange} />
+      <FilterByText searchFilenameOnly={filters.search_filename_only} onChange={onChange} />
+      <FilterByCreator creatorList={filters.creator_list} onChange={onChange} />
+      <FilterByDate date={filters.date} onChange={onChange} />
     </div>
   );
 };
