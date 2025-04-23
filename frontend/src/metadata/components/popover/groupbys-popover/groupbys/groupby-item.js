@@ -162,8 +162,8 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     <div
       ref={ref}
       className={classnames('groupby-item',
-        { 'drop-over-top': isOver && canDrop && dropPosition === 'top' },
-        { 'drop-over-bottom': isOver && canDrop && dropPosition === 'bottom' }
+        { 'group-can-drop-top': isOver && canDrop && dropPosition === 'top' },
+        { 'group-can-drop-bottom': isOver && canDrop && dropPosition === 'bottom' }
       )}
     >
       {!readOnly && (

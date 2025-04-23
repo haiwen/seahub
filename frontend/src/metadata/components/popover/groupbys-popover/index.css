@@ -27,7 +27,7 @@
   position: relative;
 }
 
-.sf-metadata-groupbys-popover .groupbys-list .groupby-item.drop-over-top::before {
+.sf-metadata-groupbys-popover .groupbys-list .groupby-item.group-can-drop-top::before {
   content: '';
   position: absolute;
   top: 0;
@@ -39,7 +39,7 @@
   z-index: 1;
 }
 
-.sf-metadata-groupbys-popover .groupbys-list .groupby-item.drop-over-bottom::after {
+.sf-metadata-groupbys-popover .groupbys-list .groupby-item.group-can-drop-bottom::after {
   content: '';
   position: absolute;
   bottom: 0;

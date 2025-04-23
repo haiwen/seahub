@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useDrop } from 'react-dnd';
 import GroupbyItem from './groupby-item';
 import { gettext } from '../../../../../utils/constants';
 
@@ -16,20 +15,8 @@ const Groupbys = ({ readOnly, groupbys, columns, onDelete, onUpdate, onMove }) =
     return groupbys.length > 1;
   }, [readOnly, groupbys]);
 
-  const [, drop] = useDrop({
-    accept: 'sfMetadataGroupbyItem',
-    drop: (item, monitor) => {
-      if (!monitor.didDrop()) {
-        onMove(item, { idx: groupbys.length });
-      }
-    },
-    collect: monitor => ({
-      isOver: monitor.isOver(),
-    }),
-  });
-
   return (
-    <div ref={drop} className={classnames('groupbys-list', { 'empty-groupbys-container': isEmpty })}>
+    <div className={classnames('groupbys-list', { 'empty-groupbys-container': isEmpty })}>
       {isEmpty && <div className="empty-groupbys-list">{gettext('No groupings applied to this view.')}</div>}
       {!isEmpty && groupbys.map((groupby, index) => {
         return (
