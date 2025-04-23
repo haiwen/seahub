@@ -668,7 +668,7 @@ class Search extends Component {
   }
 
   searchRepo = () => {
-    const { value, filters } = this.state;
+    const { value } = this.state;
     const queryData = {
       q: value,
       search_repo: this.props.repoID,
@@ -678,7 +678,7 @@ class Search extends Component {
   };
 
   searchFolder = () => {
-    const { value, filters } = this.state;
+    const { value } = this.state;
     const queryData = {
       q: value,
       search_repo: this.props.repoID,
@@ -689,7 +689,7 @@ class Search extends Component {
   };
 
   searchAllRepos = () => {
-    const { value, filters } = this.state;
+    const { value } = this.state;
     const queryData = {
       q: value,
       search_repo: 'all',
@@ -779,6 +779,7 @@ class Search extends Component {
     this.setState({ filters: newFilters, isFilterControllerActive: hasActiveFilter });
 
     // build query data
+    if (!this.state.value || !this.state.isResultGotten) return;
     const queryUpdates = {};
 
     if (key === SEARCH_FILTERS_KEY.CREATOR_LIST) return;
