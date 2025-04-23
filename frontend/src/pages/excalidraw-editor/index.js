@@ -10,6 +10,8 @@ import ExdrawServerApi from './collab/exdraw-server-api';
 
 import './index.css';
 
+const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
+
 const ExcaliEditor = () => {
   const [fileContent, setFileContent] = useState(null);
   const editorRef = useRef(null);
@@ -24,8 +26,8 @@ const ExcaliEditor = () => {
   useEffect(() => {
     editorApi.getExdrawToken().then(res => {
       exdrawServerConfigRef.current = {
-        exdrawServer: 'http://127.0.0.1:9000',
-        exdrawUuid: window.app.pageOptions.docUuid,
+        exdrawServer: excalidrawServerUrl,
+        exdrawUuid: docUuid,
         accessToken: res
       };
       const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
