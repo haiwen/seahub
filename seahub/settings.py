@@ -963,6 +963,7 @@ ENABLE_WHITEBOARD = False
 ##########################
 
 ENABLE_EXCALIDRAW = False
+EXCALIDRAW_SERVER_URL = 'http://127.0.0.1:7070'
 
 ######################################
 # Settings for notification server   #
