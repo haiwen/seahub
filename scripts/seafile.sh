@@ -21,7 +21,6 @@ pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
 seahubdir=${INSTALLPATH}/seahub
 seafile_rpc_pipe_path=${INSTALLPATH}/runtime
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
@@ -151,7 +150,7 @@ function start_seafile_server () {
     mkdir -p $TOPDIR/pids
 
     # seaf-server
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
             -d ${SEAFILE_CONF_DIR} \

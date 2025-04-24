@@ -10,7 +10,6 @@ default_conf_dir=${TOPDIR}/conf
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
 seaf_gc_opts=""
 pro_pylibs_dir=${INSTALLPATH}/pro/python
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
@@ -19,7 +18,7 @@ export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
 script_name=$0
 function usage () {
     echo "usage : "
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
     else
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
