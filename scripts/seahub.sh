@@ -28,7 +28,6 @@ gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
 seahubdir=${INSTALLPATH}/seahub
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 script_name=$0
 function usage () {
@@ -150,7 +149,7 @@ function before_start() {
     validate_seahub_running;
     prepare_seahub_log_dir;
 
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         if [[ -z "$LANG" ]]; then
             echo "LANG is not set in ENV, set to en_US.UTF-8"
             export LANG='en_US.UTF-8'
