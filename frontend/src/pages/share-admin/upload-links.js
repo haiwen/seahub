@@ -6,6 +6,7 @@ import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { repoShareAdminAPI } from '../../utils/repo-share-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
@@ -21,10 +22,16 @@ const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
+  toggleSelectAllLinks: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired,
   onRemoveLink: PropTypes.func.isRequired
 };
 
 class Content extends Component {
+
+  toggleSelectAllLinks = (e) => {
+    this.props.toggleSelectAllLinks(e.target.checked);
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -44,11 +51,20 @@ class Content extends Component {
       );
     }
 
+    const selectedItems = items.filter(item => item.isSelected);
+    const isAllLinksSelected = selectedItems.length == items.length;
+
     const isDesktop = Utils.isDesktop();
     return (
       <FixedWidthTable
         className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
         headers={isDesktop ? [
+          {
+            isFixed: true,
+            width: 30,
+            className: 'text-center',
+            children: (<input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />)
+          }, // checkbox
           { isFixed: true, width: 40 }, // icon
           { isFixed: false, width: 0.33, children: gettext('Name') },
           { isFixed: false, width: 0.25, children: gettext('Library') },
@@ -62,7 +78,7 @@ class Content extends Component {
         ]}
       >
         {items.map((item, index) => {
-          return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink}/>);
+          return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} toggleSelectLink={this.props.toggleSelectLink} />);
         })}
       </FixedWidthTable>
     );
@@ -74,7 +90,8 @@ Content.propTypes = contentPropTypes;
 const itemPropTypes = {
   isDesktop: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
-  onRemoveLink: PropTypes.func.isRequired
+  onRemoveLink: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired
 };
 
 class Item extends Component {
@@ -121,8 +138,18 @@ class Item extends Component {
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
   };
 
+  onCheckboxClicked = (e) => {
+    e.stopPropagation();
+  };
+
+  toggleSelectLink = (e) => {
+    const { item } = this.props;
+    this.props.toggleSelectLink(item, e.target.checked);
+  };
+
   render() {
-    let item = this.props.item;
+    const { item } = this.props;
+    const { isSelected = false } = item;
     const { isOpIconShown, isLinkDialogOpen } = this.state;
 
     const iconUrl = Utils.getFolderIconUrl(false);
@@ -133,6 +160,15 @@ class Item extends Component {
       <Fragment>
         {this.props.isDesktop ?
           <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+            <td className="text-center">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                className="vam"
+                onClick={this.onCheckboxClicked}
+                onChange={this.toggleSelectLink}
+              />
+            </td>
             <td className="pl-2 pr-2"><img src={iconUrl} alt="" width="24" /></td>
             <td>
               <Link to={objUrl}>{item.obj_name}</Link>
@@ -184,10 +220,11 @@ class ShareAdminUploadLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCleanInvalidUploadLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
+      isCleanInvalidUploadLinksDialogOpen: false,
+      isDeleteShareLinksDialogOpen: false
     };
   }
 
@@ -241,7 +278,70 @@ class ShareAdminUploadLinks extends Component {
     });
   };
 
+  toggleDeleteShareLinksDialog = () => {
+    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
+  };
+
+  cancelSelectAllLinks = () => {
+    this.toggleSelectAllLinks(false);
+  };
+
+  toggleSelectAllLinks = (isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        item.isSelected = isSelected;
+        return item;
+      })
+    });
+  };
+
+  toggleSelectLink = (link, isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        if (item.token == link.token) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    });
+  };
+
+  deleteShareLinks = () => {
+    const { items: shareLinks } = this.state;
+    const tokens = shareLinks.filter(item => item.isSelected).map(link => link.token);
+    repoShareAdminAPI.deleteUploadLinks(tokens).then(res => {
+      const { success, failed } = res.data;
+      if (success.length) {
+        let newShareLinkList = shareLinks.filter(shareLink => {
+          return !success.some(deletedShareLink => {
+            return deletedShareLink.token == shareLink.token;
+          });
+        });
+        this.setState({
+          items: newShareLinkList
+        });
+        const length = success.length;
+        const msg = length == 1 ?
+          gettext('Successfully deleted 1 upload link') :
+          gettext('Successfully deleted {number_placeholder} upload links')
+            .replace('{number_placeholder}', length);
+        toaster.success(msg);
+      }
+      failed.forEach(item => {
+        const msg = `${item.token}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
+    const { items } = this.state;
+    const selectedLinks = items.filter(item => item.isSelected);
     return (
       <Fragment>
         <div className="main-panel-center">
@@ -260,6 +360,13 @@ class ShareAdminUploadLinks extends Component {
                   </Link>
                 </li>
               </ul>
+
+              {selectedLinks.length > 0 &&
+              <div className="d-flex">
+                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
+                <button className="btn btn-sm btn-secondary" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
+              </div>
+              }
             </div>
             <div className="cur-view-content">
               <Content
@@ -267,6 +374,8 @@ class ShareAdminUploadLinks extends Component {
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
                 onRemoveLink={this.onRemoveLink}
+                toggleSelectAllLinks={this.toggleSelectAllLinks}
+                toggleSelectLink={this.toggleSelectLink}
               />
             </div>
           </div>
@@ -280,6 +389,15 @@ class ShareAdminUploadLinks extends Component {
           toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
         />
         }
+        {this.state.isDeleteShareLinksDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete upload links')}
+            message={gettext('Are you sure you want to delete the selected upload link(s) ?')}
+            executeOperation={this.deleteShareLinks}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteShareLinksDialog}
+          />
+        )}
       </Fragment>
     );
   }
