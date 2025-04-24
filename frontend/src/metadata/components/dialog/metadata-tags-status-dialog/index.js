@@ -19,13 +19,11 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, usedRepoTags, onMigrateSuccess }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, usedRepoTags, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
-  const [migrated, setMigrated] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
-
   const onToggle = useCallback(() => {
     toggle();
   }, [toggle]);
@@ -47,16 +45,16 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
   }, [lang, repoID, submit, toggle, value]);
 
   const migrateTag = useCallback(() => {
+    onMigrateStart && onMigrateStart();
     tagsAPI.migrateTags(repoID, usedRepoTags).then(res => {
-      setMigrated(true);
       toaster.success(gettext('Tags migrated successfully'));
       onMigrateSuccess && onMigrateSuccess();
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      setMigrated(false);
+      onMigrateError && onMigrateError();
     });
-  }, [repoID, usedRepoTags, onMigrateSuccess]);
+  }, [repoID, usedRepoTags, onMigrateSuccess, onMigrateStart, onMigrateError]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -122,9 +120,8 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
                 <Button
                   color="primary"
                   onClick={migrateTag}
-                  disabled={migrated}
                 >
-                  {migrated ? gettext('Migrated') : gettext('Migrate old version tags')}
+                  {gettext('Migrate old version tags')}
                 </Button>
               </FormGroup>
             }
@@ -153,6 +150,8 @@ MetadataTagsStatusDialog.propTypes = {
   showMigrateTip: PropTypes.bool,
   repoTags: PropTypes.array,
   onMigrateSuccess: PropTypes.func,
+  onMigrateError: PropTypes.func,
+  onMigrateStart: PropTypes.func,
 };
 
 export default MetadataTagsStatusDialog;
