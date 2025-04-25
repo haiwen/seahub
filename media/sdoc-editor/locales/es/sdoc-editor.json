@@ -626,5 +626,6 @@
   "Insert_chart": "Insert chart",
   "Edit_chart": "Edit chart",
   "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first",
-  "chart": "chart"
+  "chart": "chart",
+  "Image_is_upload_error": "Image upload failed, please delete it and try again"
 }
