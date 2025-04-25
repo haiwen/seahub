@@ -626,5 +626,6 @@
   "Insert_chart": "Chart einfügen",
   "Edit_chart": "Chart bearbeiten",
   "Please_complete_the_chart_configuration_first": "Bitte schließen Sie erst die Konfiguration des Chart ab",
-  "chart": "Chart"
+  "chart": "Chart",
+  "Image_is_upload_error": "Der Upload des Bildes ist fehlgeschlagen. Bitte löschen Sie es und versuchen Sie es erneut."
 }
