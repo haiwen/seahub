@@ -21,12 +21,10 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               <div className="d-flex align-items-center">
                 <span className='text-truncate' title={item.name} aria-label={item.name}>{item.name}</span>
-
               </div>
             </div>
             {index !== paths.length - 1 && <span className="item-split">/</span>}
           </Fragment>
-
         );
       })}
       {paths.length > 0 && currentPageLocked && <img className="locked" src={lockedImageUrl} alt={gettext('freezed')} title={gettext('Page is frozen')}/>}

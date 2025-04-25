@@ -438,12 +438,17 @@ module.exports = function (webpackEnv) {
                     ref: true,
                   },
                 },
-                {
-                  loader: require.resolve('file-loader'),
+                { loader: 'svgo-loader',
                   options: {
-                    name: 'static/media/[name].[hash].[ext]',
-                  },
-                },
+                    plugins: [
+                      'removeTitle',
+                      'removeStyleElement',
+                      'cleanupIDs',
+                      'inlineStyles',
+                      'removeXMLProcInst',
+                    ]
+                  }
+                }
               ],
               issuer: {
                 and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
@@ -596,7 +601,16 @@ module.exports = function (webpackEnv) {
               test: /\.svg$/,
               use: [
                 {
-                  loader: 'svg-sprite-loader', options: {}
+                  loader: require.resolve('@svgr/webpack'),
+                  options: {
+                    prettier: false,
+                    svgo: false,
+                    svgoConfig: {
+                      plugins: [{ removeViewBox: false }],
+                    },
+                    titleProp: true,
+                    ref: true,
+                  },
                 },
                 { loader: 'svgo-loader', options: {
                   plugins: [
