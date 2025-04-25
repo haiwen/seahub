@@ -289,6 +289,7 @@ INSTALLED_APPS = [
     'seahub.django_cas_ng',
     'seahub.seadoc',
     'seahub.subscription',
+    'seahub.stripe_subscription',
     'seahub.exdraw',
 ]
 
