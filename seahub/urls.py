@@ -217,6 +217,8 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
     WikiSearch, WikiConvertView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
+from seahub.api2.endpoints.stripe_subscription import StripeSubscriptionView, \
+        StripeSubscriptionPlansView, StripeSubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
@@ -1066,6 +1068,14 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/$', SubscriptionView.as_view(), name='api-v2.1-subscription'),
         re_path(r'^api/v2.1/subscription/plans/$', SubscriptionPlansView.as_view(), name='api-v2.1-subscription-plans'),
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
+    ]
+
+if getattr(settings, 'ENABLE_STRIPE_SUBSCRIPTION', False):
+    urlpatterns += [
+        re_path(r'^stripe-subscription/', include('seahub.stripe_subscription.urls')),
+        re_path(r'^api/v2.1/stripe-subscription/$', StripeSubscriptionView.as_view(), name='api-v2.1-stripe-subscription'),
+        re_path(r'^api/v2.1/stripe-subscription/plans/$', StripeSubscriptionPlansView.as_view(), name='api-v2.1-stripe-subscription-plans'),
+        re_path(r'^api/v2.1/stripe-subscription/logs/$', StripeSubscriptionLogsView.as_view(), name='api-v2.1-stripe-subscription-logs'),
     ]
 
 if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):

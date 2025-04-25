@@ -41,6 +41,7 @@ import OrgLogsFileTransfer from './org-logs-file-transfer';
 import OrgLogsGroupMemberAudit from './org-logs-group-member-audit';
 import OrgSAMLConfig from './org-saml-config';
 import OrgSubscription from './org-subscription';
+import OrgStripeSubscription from './org-stripe-subscription';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
@@ -78,6 +79,9 @@ class Org extends React.Component {
         currentTab = 'fileaudit';
       }
     }
+    if (location.href.indexOf(`${siteRoot}org/stripe-subscription/`) != -1) {
+      currentTab = 'stripesubscription';
+    }
     this.setState({
       currentTab: currentTab
     });
@@ -109,6 +113,7 @@ class Org extends React.Component {
             <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
             <OrgWebSettings path={siteRoot + 'org/web-settings'} />
             <OrgSubscription path={siteRoot + 'org/subscription'} onCloseSidePanel={this.onCloseSidePanel} />
+            <OrgStripeSubscription path={siteRoot + 'org/stripe-subscription'} onCloseSidePanel={this.onCloseSidePanel} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />

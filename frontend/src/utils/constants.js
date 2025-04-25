@@ -174,6 +174,7 @@ export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgE
 export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
 export const enableSubscription = window.org ? window.org.pageOptions.enableSubscription : false;
+export const enableStripeSubscription = window.org ? window.org.pageOptions.enableStripeSubscription : false;
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';

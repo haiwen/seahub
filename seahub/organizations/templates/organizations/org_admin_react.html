@@ -20,6 +20,7 @@
          enableMultiADFS: '{{ enable_multi_adfs }}',
          isOrgContext: true,
          enableSubscription: {% if enable_subscription %} true {% else %} false {% endif %},
+         enableStripeSubscription: {% if enable_stripe_subscription %} true {% else %} false {% endif %},
          sysEnableUserCleanTrash: {% if sys_enable_user_clean_trash %} true {% else %} false {% endif %},
          sysEnableEncryptedLibrary: {% if sys_enable_encrypted_library %} true {% else %} false {% endif %}
        }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
 import Icon from '../../components/icon';
-import { gettext, siteRoot, enableSubscription, enableMultiADFS } from '../../utils/constants';
+import { gettext, siteRoot, enableSubscription, enableStripeSubscription, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -86,6 +86,14 @@ class SidePanel extends React.Component {
                     <Link className={`nav-link ellipsis ${this.getActiveClass('subscription')}`} to={siteRoot + 'org/subscription/'} onClick={() => this.tabItemClick('subscription')} >
                       <Icon symbol='currency' />
                       <span className="nav-text">{'付费管理'}</span>
+                    </Link>
+                  </li>
+                }
+                {enableStripeSubscription &&
+                  <li className={`nav-item ${this.getActiveClass('stripesubscription')}`}>
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('stripesubscription')}`} to={siteRoot + 'org/stripe-subscription/'} onClick={() => this.tabItemClick('stripesubscription')} >
+                      <Icon symbol='currency' />
+                      <span className="nav-text">Payment</span>
                     </Link>
                   </li>
                 }

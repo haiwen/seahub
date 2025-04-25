@@ -46,4 +46,5 @@ urlpatterns = [
     path('samlconfig/', react_fake_view, name='saml_config'),
 
     re_path(r'^subscription/$', react_fake_view, name='org_subscription'),
+    re_path(r'^stripe-subscription/$', react_fake_view, name='org_stripe_subscription'),
 ]
