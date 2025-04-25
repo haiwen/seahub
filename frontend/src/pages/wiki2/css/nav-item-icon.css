@@ -20,6 +20,10 @@
   width: 16px;
 }
 
+.nav-item-icon .seafile-multicolor-icon path {
+  fill: #666666;
+}
+
 .nav-item-icon:hover:not(.nav-item-icon-disable) {
   background-color: #DFDFDD;
 }
