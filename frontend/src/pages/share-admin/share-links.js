@@ -19,6 +19,8 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 
+import '../../css/share-admin-links.css';
+
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
   isLoadingMore: PropTypes.bool.isRequired,
@@ -537,31 +539,39 @@ class ShareAdminShareLinks extends Component {
 
   render() {
     const { items } = this.state;
-    const selectedLinks = items.filter(item => item.isSelected);
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
     return (
       <Fragment>
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <div className="cur-view-path share-upload-nav">
-              <ul className="nav">
-                <li className="nav-item">
-                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
-                    {gettext('Share Links')}
-                    <SingleDropdownToolbar
-                      opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
-                    />
-                  </Link>
-                </li>
-                {canGenerateUploadLink && (
-                  <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
-                )}
-              </ul>
-
-              {selectedLinks.length > 0 &&
-              <div className="d-flex">
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
-                <button className="btn btn-sm btn-secondary" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
-              </div>
+            <div className={classnames('cur-view-path share-upload-nav', { 'o-hidden': selectedLinksLen > 0 })}>
+              {selectedLinksLen > 0
+                ? (
+                  <div className="selected-items-toolbar">
+                    <span className="cur-view-path-btn px-1" onClick={this.cancelSelectAllLinks}>
+                      <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+                      <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
+                    </span>
+                    <span className="cur-view-path-btn ml-4" onClick={this.toggleDeleteShareLinksDialog}>
+                      <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+                    </span>
+                  </div>
+                )
+                : (
+                  <ul className="nav">
+                    <li className="nav-item">
+                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
+                        {gettext('Share Links')}
+                        <SingleDropdownToolbar
+                          opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
+                        />
+                      </Link>
+                    </li>
+                    {canGenerateUploadLink && (
+                      <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                    )}
+                  </ul>
+                )
               }
             </div>
             <div className="cur-view-content" onScroll={this.handleScroll}>

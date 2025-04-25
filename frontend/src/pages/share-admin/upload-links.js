@@ -18,6 +18,8 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 
+import '../../css/share-admin-links.css';
+
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
@@ -224,7 +226,7 @@ class ShareAdminUploadLinks extends Component {
       errorMsg: '',
       items: [],
       isCleanInvalidUploadLinksDialogOpen: false,
-      isDeleteShareLinksDialogOpen: false
+      isDeleteLinksDialogOpen: false
     };
   }
 
@@ -278,8 +280,8 @@ class ShareAdminUploadLinks extends Component {
     });
   };
 
-  toggleDeleteShareLinksDialog = () => {
-    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
+  toggleDeleteLinksDialog = () => {
+    this.setState({ isDeleteLinksDialogOpen: !this.state.isDeleteLinksDialogOpen });
   };
 
   cancelSelectAllLinks = () => {
@@ -308,19 +310,19 @@ class ShareAdminUploadLinks extends Component {
     });
   };
 
-  deleteShareLinks = () => {
-    const { items: shareLinks } = this.state;
-    const tokens = shareLinks.filter(item => item.isSelected).map(link => link.token);
+  deleteLinks = () => {
+    const { items } = this.state;
+    const tokens = items.filter(item => item.isSelected).map(link => link.token);
     repoShareAdminAPI.deleteUploadLinks(tokens).then(res => {
       const { success, failed } = res.data;
       if (success.length) {
-        let newShareLinkList = shareLinks.filter(shareLink => {
-          return !success.some(deletedShareLink => {
-            return deletedShareLink.token == shareLink.token;
+        let newItems = items.filter(item => {
+          return !success.some(deletedItem => {
+            return deletedItem.token == item.token;
           });
         });
         this.setState({
-          items: newShareLinkList
+          items: newItems
         });
         const length = success.length;
         const msg = length == 1 ?
@@ -341,31 +343,39 @@ class ShareAdminUploadLinks extends Component {
 
   render() {
     const { items } = this.state;
-    const selectedLinks = items.filter(item => item.isSelected);
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
     return (
       <Fragment>
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <div className="cur-view-path share-upload-nav">
-              <ul className="nav">
-                {canGenerateShareLink && (
-                  <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
-                )}
-                <li className="nav-item">
-                  <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
-                    {gettext('Upload Links')}
-                    <SingleDropdownToolbar
-                      opList={[{ 'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog }]}
-                    />
-                  </Link>
-                </li>
-              </ul>
-
-              {selectedLinks.length > 0 &&
-              <div className="d-flex">
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
-                <button className="btn btn-sm btn-secondary" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
-              </div>
+            <div className={classnames('cur-view-path share-upload-nav', { 'o-hidden': selectedLinksLen > 0 })}>
+              {selectedLinksLen > 0
+                ? (
+                  <div className="selected-items-toolbar">
+                    <span className="cur-view-path-btn px-1" onClick={this.cancelSelectAllLinks}>
+                      <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+                      <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
+                    </span>
+                    <span className="cur-view-path-btn ml-4" onClick={this.toggleDeleteLinksDialog}>
+                      <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+                    </span>
+                  </div>
+                )
+                : (
+                  <ul className="nav">
+                    {canGenerateShareLink && (
+                      <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
+                    )}
+                    <li className="nav-item">
+                      <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
+                        {gettext('Upload Links')}
+                        <SingleDropdownToolbar
+                          opList={[{ 'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog }]}
+                        />
+                      </Link>
+                    </li>
+                  </ul>
+                )
               }
             </div>
             <div className="cur-view-content">
@@ -389,13 +399,13 @@ class ShareAdminUploadLinks extends Component {
           toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
         />
         }
-        {this.state.isDeleteShareLinksDialogOpen && (
+        {this.state.isDeleteLinksDialogOpen && (
           <CommonOperationConfirmationDialog
             title={gettext('Delete upload links')}
             message={gettext('Are you sure you want to delete the selected upload link(s) ?')}
-            executeOperation={this.deleteShareLinks}
+            executeOperation={this.deleteLinks}
             confirmBtnText={gettext('Delete')}
-            toggleDialog={this.toggleDeleteShareLinksDialog}
+            toggleDialog={this.toggleDeleteLinksDialog}
           />
         )}
       </Fragment>
