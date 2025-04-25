@@ -101,6 +101,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      highlight: false,
       isOpIconShown: false,
       isLinkDialogOpen: false
     };
@@ -113,11 +114,17 @@ class Item extends Component {
   };
 
   handleMouseOver = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      highlight: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseOut = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      highlight: false,
+      isOpIconShown: false
+    });
   };
 
   viewLink = (e) => {
@@ -152,7 +159,7 @@ class Item extends Component {
   render() {
     const { item } = this.props;
     const { isSelected = false } = item;
-    const { isOpIconShown, isLinkDialogOpen } = this.state;
+    const { highlight, isOpIconShown, isLinkDialogOpen } = this.state;
 
     const iconUrl = Utils.getFolderIconUrl(false);
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
@@ -161,7 +168,15 @@ class Item extends Component {
     return (
       <Fragment>
         {this.props.isDesktop ?
-          <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+          <tr
+            className={classnames({
+              'tr-highlight': highlight,
+              'tr-active': isSelected
+            })}
+            onMouseOver={this.handleMouseOver}
+            onMouseOut={this.handleMouseOut}
+            onFocus={this.handleMouseOver}
+          >
             <td className="text-center">
               <input
                 type="checkbox"

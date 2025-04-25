@@ -236,7 +236,7 @@ class Item extends Component {
   render() {
     const { item } = this.props;
     const { isSelected = false } = item;
-    const { currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    const { highlight, currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
     this.permOptions = permissionOptions.map(item => {
       return {
         value: item,
@@ -261,7 +261,10 @@ class Item extends Component {
       <Fragment>
         {this.props.isDesktop ?
           <tr
-            className={this.state.highlight ? 'tr-highlight' : ''}
+            className={classnames({
+              'tr-highlight': highlight,
+              'tr-active': isSelected
+            })}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
             onFocus={this.handleMouseEnter}
