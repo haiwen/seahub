@@ -1001,6 +1001,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
     """
 
     # get logo path
+    from seahub.utils.mail import SmimeEmailMessage
     logo_path = LOGO_PATH
     custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
     if os.path.exists(custom_logo_file):
@@ -1020,9 +1021,10 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
         if reply_to is not None:
             headers['Reply-to'] = reply_to
 
-    msg = EmailMessage(subject, t.render(con_context), from_email,
+    msg = SmimeEmailMessage(subject, t.render(con_context), from_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
+
     msg.send()
 
 def gen_dir_share_link(token):

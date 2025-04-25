@@ -941,6 +941,7 @@ FILESERVER_TOKEN_ONCE_ONLY = True
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
+ENABLE_SMIME = False
 
 ##########################
 # Settings for seadoc    #
