@@ -147,6 +147,14 @@ const TextTranslation = {
     key: 'Export sdoc',
     value: gettext('Export as zip')
   },
+  STAR: {
+    key: 'Star',
+    value: gettext('Star')
+  },
+  UNSTAR: {
+    key: 'Unstar',
+    value: gettext('Unstar')
+  },
 
   // repo operations
   TRANSFER: {

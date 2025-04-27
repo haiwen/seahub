@@ -491,7 +491,7 @@ export const Utils = {
   getFolderOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
 
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, STAR, UNSTAR } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -533,6 +533,12 @@ export const Utils = {
       list.push(COPY);
     }
 
+    if (dirent.starred) {
+      list.push(UNSTAR);
+    } else {
+      list.push(STAR);
+    }
+
     if (permission == 'rw') {
       if (folderPermEnabled && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
@@ -557,7 +563,8 @@ export const Utils = {
     const {
       SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT,
-      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC
+      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC,
+      STAR, UNSTAR
     } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -610,6 +617,12 @@ export const Utils = {
       if (customPermission.permission.copy) {
         list.push(COPY);
       }
+    }
+
+    if (dirent.starred) {
+      list.push(UNSTAR);
+    } else {
+      list.push(STAR);
     }
 
     if (permission == 'rw') {

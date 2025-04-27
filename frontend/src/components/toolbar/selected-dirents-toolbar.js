@@ -114,6 +114,35 @@ class SelectedDirentsToolbar extends React.Component {
     this.props.onItemRename(dirent, newName);
   };
 
+  onToggleStarItem = () => {
+    const { repoID, selectedDirentList } = this.props;
+    const dirent = selectedDirentList[0];
+    const filePath = this.getDirentPath(dirent);
+    const itemName = dirent.name;
+
+    if (dirent.starred) {
+      seafileAPI.unstarItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', false);
+        const msg = gettext('Successfully unstarred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', true);
+        const msg = gettext('Successfully starred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  };
+
   onPermissionItem = () => {
     this.setState({
       showLibContentViewDialogs: !this.state.showLibContentViewDialogs,
@@ -173,6 +202,12 @@ class SelectedDirentsToolbar extends React.Component {
           showLibContentViewDialogs: true,
           isRenameDialogOpen: true
         });
+        break;
+      case 'Star':
+        this.onToggleStarItem();
+        break;
+      case 'Unstar':
+        this.onToggleStarItem();
         break;
       case 'Permission':
         this.onPermissionItem();
