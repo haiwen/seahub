@@ -352,6 +352,12 @@ class DirentGridView extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Star':
+        this.onToggleStarItem();
+        break;
+      case 'Unstar':
+        this.onToggleStarItem();
+        break;
       case 'Unfreeze Document':
         this.onUnlockItem(currentObject);
         break;
@@ -505,6 +511,35 @@ class DirentGridView extends React.Component {
 
   onItemCopyToggle = () => {
     this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
+  };
+
+  onToggleStarItem = () => {
+    const { activeDirent: dirent } = this.state;
+    const { repoID } = this.props;
+    const filePath = this.getDirentPath(dirent);
+    const itemName = dirent.name;
+
+    if (dirent.starred) {
+      seafileAPI.unstarItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', false);
+        const msg = gettext('Successfully unstarred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', true);
+        const msg = gettext('Successfully starred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
   };
 
   onPermissionItem = () => {

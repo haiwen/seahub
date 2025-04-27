@@ -234,21 +234,28 @@ class DirentListItem extends React.Component {
     this.props.onItemSelected(this.state.dirent, event);
   };
 
-  onItemStarred = (e) => {
-    let dirent = this.state.dirent;
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
+  onItemStarred = () => {
+    const { dirent } = this.state;
+    const { repoID } = this.props;
+    const filePath = this.getDirentPath(dirent);
+    const itemName = dirent.name;
 
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
-        this.props.updateDirent(this.state.dirent, 'starred', false);
+        this.props.updateDirent(dirent, 'starred', false);
+        const msg = gettext('Successfully unstarred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
     } else {
       seafileAPI.starItem(repoID, filePath).then(() => {
-        this.props.updateDirent(this.state.dirent, 'starred', true);
+        this.props.updateDirent(dirent, 'starred', true);
+        const msg = gettext('Successfully starred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
