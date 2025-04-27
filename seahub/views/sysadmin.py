@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -153,6 +154,9 @@ def sys_useradmin_export_excel(request):
 
     next_page = request.headers.get('referer', None)
     if not next_page:
+        next_page = SITE_ROOT
+        
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = SITE_ROOT
 
     try:
@@ -342,6 +346,8 @@ def user_remove(request, email):
     """Remove user"""
     referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('sys_info')
 
     try:
         user = User.objects.get(email=email)
@@ -399,6 +405,8 @@ def user_remove_admin(request, email):
 
     referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('sys_info')
 
     return HttpResponseRedirect(next_page)
 
@@ -528,6 +536,8 @@ def user_reset(request, email):
 
     referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('sys_info')
 
     return HttpResponseRedirect(next_page)
 
@@ -632,6 +642,9 @@ def sys_group_admin_export_excel(request):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
+        
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = SITE_ROOT
 
     try:
         groups = ccnet_threaded_rpc.get_all_groups(-1, -1)
@@ -690,6 +703,9 @@ def sys_repo_delete(request, repo_id):
     """
     next_page = request.headers.get('referer', None)
     if not next_page:
+        next_page = HASH_URLS['SYS_REPO_ADMIN']
+        
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = HASH_URLS['SYS_REPO_ADMIN']
 
     if get_system_default_repo_id() == repo_id:
@@ -760,6 +776,10 @@ def batch_add_user_example(request):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
+        
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = SITE_ROOT
+
     data_list = []
     if not is_org_context(request):
         head = [_('Email'),
@@ -808,6 +828,9 @@ def sys_sudo_mode(request):
         raise Http404
 
     next_page = request.GET.get('next', reverse('sys_info'))
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('sys_info')
+
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')

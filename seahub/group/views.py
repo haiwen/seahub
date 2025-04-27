@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from urllib.parse import quote
+
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 from seahub.auth.decorators import login_required
@@ -121,6 +123,8 @@ def group_remove(request, group_id):
     """
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next_page = request.headers.get('referer', SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = SITE_ROOT
 
     try:
         group_id_int = int(group_id)

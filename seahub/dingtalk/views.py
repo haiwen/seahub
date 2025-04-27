@@ -12,6 +12,7 @@ from hashlib import sha256
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 from seahub.api2.utils import get_api_token
@@ -264,8 +265,11 @@ def dingtalk_disconnect(request):
         Profile.objects.filter(user=username).delete()
 
     SocialAuthUser.objects.delete_by_username_and_provider(username, 'dingtalk')
+    redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
+        redirect_to = '/'
 
-    return HttpResponseRedirect(request.GET.get(auth.REDIRECT_FIELD_NAME, '/'))
+    return HttpResponseRedirect(redirect_to)
 
 
 # for 10.0 or later
@@ -411,7 +415,11 @@ def dingtalk_connect_new(request):
 
     state = str(uuid.uuid4())
     request.session['dingtalk_connect_state'] = state
-    request.session['dingtalk_connect_redirect'] = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
+    redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
+        redirect_to = '/'
+    request.session['dingtalk_connect_redirect'] = redirect_to
+    
 
     data = {
         'redirect_uri': get_site_scheme_and_netloc() + reverse('dingtalk_connect_callback'),

@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib import messages
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 import seaserv
@@ -271,6 +272,8 @@ def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT or is_org_context(request):
         messages.error(request, _('Permission denied.'))
         next_page = request.headers.get('referer', settings.SITE_ROOT)
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+            next_page = settings.SITE_ROOT
         return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
@@ -281,6 +284,8 @@ def delete_user_account(request):
     if username == 'demo@seafile.com':
         messages.error(request, _('Demo account can not be deleted.'))
         next_page = request.headers.get('referer', settings.SITE_ROOT)
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+            next_page = settings.SITE_ROOT
         return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
@@ -303,6 +308,8 @@ def default_repo(request):
     repo_id = request.POST.get('dst_repo', '')
     referer = request.headers.get('referer', None)
     next_page = settings.SITE_ROOT if referer is None else referer
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = settings.SITE_ROOT
 
     repo = seafile_api.get_repo(repo_id)
     if repo is None:

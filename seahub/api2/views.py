@@ -5074,19 +5074,6 @@ class UserAvatarView(APIView):
             "mtime": get_timestamp(date_uploaded) }
         return Response(ret)
 
-class GroupAvatarView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, group_id, size, format=None):
-        url, is_default, date_uploaded = api_grp_avatar_url(group_id, int(size))
-        ret = {
-            "url": request.build_absolute_uri(url),
-            "is_default": is_default,
-            "mtime": get_timestamp(date_uploaded)}
-        return Response(ret)
-
 class RepoHistoryChange(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
