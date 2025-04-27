@@ -544,11 +544,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://redis:6379',
     },
-    'locmem': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    },
 }
-COMPRESS_CACHE_BACKEND = 'locmem'
 _preset_cache_cfg = copy.deepcopy(CACHES)
 
 # rest_framwork
