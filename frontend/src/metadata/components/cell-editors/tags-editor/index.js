@@ -272,16 +272,37 @@ const TagsEditor = forwardRef(({
       return [];
     }
     let searchedNodes = [];
-    tree.forEach((node, index) => {
+    const processedNodes = new Set();
+
+    tree.forEach((node) => {
       const nodeId = getTreeNodeId(node);
       const row = getRowById(tagsData, nodeId);
       if (!row) return;
+
       const value = searchValue.toLowerCase();
       const tagName = getTagName(row).toLowerCase();
       if (!tagName.includes(value)) return;
-      const nodesWithAncestors = getNodesWithAncestors(node, tree).filter(node => checkIsTreeNodeShown(getTreeNodeKey(node), searchedKeyNodeFoldedMap));
-      searchedNodes = [...searchedNodes, ...nodesWithAncestors];
+
+      const nodesWithAncestors = getNodesWithAncestors(node, tree);
+
+      nodesWithAncestors.forEach(ancestor => {
+        const ancestorKey = getTreeNodeKey(ancestor);
+
+        if (!processedNodes.has(ancestorKey)) {
+          if (checkIsTreeNodeShown(ancestorKey, searchedKeyNodeFoldedMap)) {
+            searchedNodes.push(ancestor);
+            processedNodes.add(ancestorKey);
+          }
+        }
+      });
+
+      const currentNodeKey = getTreeNodeKey(node);
+      if (!processedNodes.has(currentNodeKey)) {
+        searchedNodes.push(node);
+        processedNodes.add(currentNodeKey);
+      }
     });
+
     return searchedNodes;
   }, [tagsData, searchValue, searchedKeyNodeFoldedMap]);
 
