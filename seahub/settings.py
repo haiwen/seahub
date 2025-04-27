@@ -5,6 +5,7 @@
 import sys
 import os
 import re
+import copy
 
 from seaserv import FILE_SERVER_PORT
 
@@ -35,6 +36,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+_preset_db_cfg = copy.deepcopy(DATABASES)
 
 # New in Django 3.2
 # Default primary key field type to use for models that don’t have a field with primary_key=True.
@@ -542,7 +544,12 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://redis:6379',
     },
+    'locmem': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
 }
+COMPRESS_CACHE_BACKEND = 'locmem'
+_preset_cache_cfg = copy.deepcopy(CACHES)
 
 # rest_framwork
 REST_FRAMEWORK = {
@@ -1175,7 +1182,13 @@ for module in LOGGING_IGNORE_MODULES:
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
 # For database conf., now Seafile only support MySQL, skip for other engine
-if 'default' in DATABASES and 'mysql' in DATABASES['default'].get('ENGINE', ''):
+
+## use update methods to get user's cfg
+_tmp_db_cfg = copy.deepcopy(_preset_db_cfg)
+_tmp_db_cfg.update(DATABASES)
+DATABASES = _tmp_db_cfg
+    
+if 'mysql' in DATABASES['default'].get('ENGINE', ''):
 
     ## For dtable_db
     _rewrite_db_env_key_map = {
@@ -1197,6 +1210,12 @@ if 'default' in DATABASES and 'mysql' in DATABASES['default'].get('ENGINE', ''):
             raise ValueError(f"Invalid database port: {DATABASES['default']['PORT']}")
 
 CACHE_PROVIDER = os.getenv('CACHE_PROVIDER', 'redis')
+
+## use update methods to get user's cfg
+_tmp_cache_cfg = copy.deepcopy(_preset_cache_cfg)
+_tmp_cache_cfg.update(CACHES)
+CACHES = _tmp_cache_cfg
+
 if CACHE_PROVIDER =='redis':
     CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
     cfg_redis_host = 'redis'
