@@ -18,6 +18,8 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 
+import '../../css/share-admin-links.css';
+
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
