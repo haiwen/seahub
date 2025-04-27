@@ -1008,7 +1008,6 @@ class SeahubConfigurator(AbstractConfigurator):
             fp.write('\n')
             fp.write('SERVICE_URL = "%s://%s"' % (self.get_proto(), ccnet_config.ip_or_domain))
             fp.write('\n')
-            self.write_database_config(fp)
 
     def write_utf8_comment(self, fp):
         fp.write('# -*- coding: utf-8 -*-')
@@ -1021,29 +1020,6 @@ class SeahubConfigurator(AbstractConfigurator):
         ]
         key = Utils.get_command_output(cmd).strip()
         fp.write('SECRET_KEY = "%s"' % key.decode())
-
-    def write_database_config(self, fp):
-        template = '''\
-\nDATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '%(name)s',
-        'USER': '%(username)s',
-        'PASSWORD': '%(password)s',
-        'HOST': '%(host)s',
-        'PORT': '%(port)s',
-        'OPTIONS': {'charset': 'utf8mb4'},
-    }
-}
-
-'''
-        text = template % dict(name=db_config.seahub_db_name,
-                               username=db_config.seafile_mysql_user,
-                               password=db_config.seafile_mysql_password,
-                               host=db_config.mysql_host,
-                               port=db_config.mysql_port)
-
-        fp.write(text)
 
     def ask_admin_email(self):
         print()
