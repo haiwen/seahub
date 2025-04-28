@@ -87,7 +87,7 @@ function warning_if_seafile_not_running () {
 }
 
 function prepare_log_dir() {
-    if ! [[ -d ${logsdir} ]]; then
+    if ! [[ -d ${logdir} ]]; then
         if ! mkdir -p "${logdir}"; then
             echo "ERROR: failed to create logs dir \"${logdir}\""
             exit 1

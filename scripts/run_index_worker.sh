@@ -46,7 +46,7 @@ function check_python_executable() {
 
 function prepare_log_dir() {
     logdir=${TOPDIR}/logs
-    if ! [[ -d ${logsdir} ]]; then
+    if ! [[ -d ${logdir} ]]; then
         if ! mkdir -p "${logdir}"; then
             echo "ERROR: failed to create logs dir \"${logdir}\""
             exit 1
