@@ -182,7 +182,7 @@ class UserSelect extends React.Component {
   };
 
   onDeleteSelectedCollaborator = (collaborator) => {
-    const { selectedUsers } = this.props;
+    const { selectedUsers = [] } = this.props;
     const newSelectedCollaborator = selectedUsers.filter(item => item.email !== collaborator.email);
     this.props.onSelectChange(newSelectedCollaborator);
   };
@@ -196,12 +196,12 @@ class UserSelect extends React.Component {
 
   render() {
     const { searchValue, highlightIndex, searchedUsers } = this.state;
-    const { className = '' } = this.props;
+    const { className = '', selectedUsers = [] } = this.props;
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div className={classnames('selected-user-item-container form-control d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })} id="user-select" onClick={this.onTogglePopover}>
-            {this.props.selectedUsers.map((collaborator, index) => {
+            {selectedUsers.map((collaborator, index) => {
               return (
                 <CollaboratorItem
                   key={index}
@@ -211,6 +211,11 @@ class UserSelect extends React.Component {
                 />
               );
             })}
+            {selectedUsers.length === 0 && (
+              <div className="user-select-placeholder">
+                {this.props.placeholder || gettext('Select users')}
+              </div>
+            )}
           </div>
           <Popover
             placement="bottom-start"

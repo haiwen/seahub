@@ -1,3 +1,12 @@
+.selected-user-item-container {
+  flex-wrap: wrap;
+  min-height: 38px;
+}
+
+.selected-user-item-container .user-select-placeholder {
+  color: #808080;
+}
+
 .user-select-container {
   position: relative;
 }
