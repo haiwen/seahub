@@ -21,7 +21,6 @@ class UserItem extends React.Component {
       isOperationShow: false,
       isUserDetailsPopoverOpen: false
     };
-    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -225,7 +224,7 @@ class ShareToUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: [],
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
@@ -253,7 +252,7 @@ class ShareToUser extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+    this.setState({ selectedUsers: option });
     this.options = [];
   };
 
@@ -287,9 +286,9 @@ class ShareToUser extends React.Component {
     let users = [];
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        users[i] = this.state.selectedOption[i].email;
+    if (this.state.selectedUsers && this.state.selectedUsers.length > 0) {
+      for (let i = 0; i < this.state.selectedUsers.length; i ++) {
+        users[i] = this.state.selectedUsers[i].email;
       }
     }
     if (this.props.isGroupOwnedRepo) {
@@ -312,10 +311,9 @@ class ShareToUser extends React.Component {
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
-          selectedOption: null,
+          selectedUsers: [],
           permission: 'rw',
         });
-        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -323,7 +321,7 @@ class ShareToUser extends React.Component {
           errMessage.push(message);
           this.setState({
             errorMsg: errMessage,
-            selectedOption: null,
+            selectedUsers: [],
           });
         }
       });
@@ -338,10 +336,9 @@ class ShareToUser extends React.Component {
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
-          selectedOption: null,
+          selectedUsers: [],
           permission: 'rw',
         });
-        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -349,7 +346,7 @@ class ShareToUser extends React.Component {
           errMessage.push(message);
           this.setState({
             errorMsg: errMessage,
-            selectedOption: null,
+            selectedUsers: [],
           });
         }
       });
@@ -443,10 +440,9 @@ class ShareToUser extends React.Component {
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(items),
-          selectedOption: null,
+          selectedUsers: [],
           permission: 'rw',
         });
-        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -454,7 +450,7 @@ class ShareToUser extends React.Component {
           errMessage.push(message);
           this.setState({
             errorMsg: errMessage,
-            selectedOption: null,
+            selectedUsers: [],
           });
         }
       });
@@ -469,10 +465,9 @@ class ShareToUser extends React.Component {
         this.setState({
           errorMsg: errorMsg,
           sharedItems: this.state.sharedItems.concat(res.data.success),
-          selectedOption: null,
+          selectedUsers: [],
           permission: 'rw',
         });
-        this.userSelect.current.clearSelect();
       }).catch(error => {
         if (error.response) {
           let message = gettext('Library can not be shared to owner.');
@@ -480,7 +475,7 @@ class ShareToUser extends React.Component {
           errMessage.push(message);
           this.setState({
             errorMsg: errMessage,
-            selectedOption: null,
+            selectedUsers: [],
           });
         }
       });
@@ -526,12 +521,11 @@ class ShareToUser extends React.Component {
               <td>
                 <div className='add-members'>
                   <UserSelect
-                    ref={this.userSelect}
                     isMulti={true}
                     className={classnames('reviewer-select', { 'user-select-right-btn': showDeptBtn })}
                     placeholder={gettext('Search users...')}
                     onSelectChange={this.handleSelectChange}
-                    excludeCurrentUser={false}
+                    selectedUsers={this.state.selectedUsers}
                   />
                   {showDeptBtn &&
                     <span

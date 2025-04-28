@@ -15,17 +15,17 @@ class AddMemberDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: [],
+      selectedUsers: [],
     };
   }
 
   handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+    this.setState({ selectedUsers: option });
   };
 
   handleSubmit = () => {
-    if (!this.state.selectedOption) return;
-    const emails = this.state.selectedOption.map(item => item.email);
+    if (!this.state.selectedUsers) return;
+    const emails = this.state.selectedUsers.map(item => item.email);
     this.props.addUser(emails);
   };
 
@@ -39,6 +39,7 @@ class AddMemberDialog extends React.Component {
             onSelectChange={this.handleSelectChange}
             isMulti={true}
             className='org-add-member-select'
+            selectedUsers={this.state.selectedUsers}
           />
         </ModalBody>
         <ModalFooter>
