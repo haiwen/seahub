@@ -27,14 +27,13 @@ class ManageMembersDialog extends React.Component {
       page: 1,
       perPage: 100,
       hasNextPage: false,
-      selectedOption: null,
+      selectedUsers: [],
       errMessage: [],
       isItemFreezed: false,
       searchActive: false,
       keyword: '',
       membersFound: []
     };
-    this.userSelect = React.createRef();
   }
 
   componentDidMount() {
@@ -66,23 +65,22 @@ class ManageMembersDialog extends React.Component {
 
   onSelectChange = (option) => {
     this.setState({
-      selectedOption: option,
+      selectedUsers: option,
       errMessage: [],
     });
   };
 
   addGroupMember = () => {
     let emails = [];
-    for (let i = 0; i < this.state.selectedOption.length; i++) {
-      emails.push(this.state.selectedOption[i].email);
+    for (let i = 0; i < this.state.selectedUsers.length; i++) {
+      emails.push(this.state.selectedUsers[i].email);
     }
     seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
       const newMembers = res.data.success;
       this.setState({
         groupMembers: [].concat(newMembers, this.state.groupMembers),
-        selectedOption: null,
+        selectedUsers: [],
       });
-      this.userSelect.current.clearSelect();
       if (res.data.failed.length > 0) {
         this.setState({
           errMessage: res.data.failed
@@ -186,14 +184,14 @@ class ManageMembersDialog extends React.Component {
           <UserSelect
             placeholder={gettext('Search users')}
             onSelectChange={this.onSelectChange}
-            ref={this.userSelect}
+            selectedUsers={this.state.selectedUsers}
             isMulti={true}
             className="add-members-select"
           />
           {showDeptBtn &&
             <span onClick={this.onClickDeptBtn} className="sf3-font sf3-font-invite-visitors toggle-detail-btn"></span>
           }
-          {this.state.selectedOption ?
+          {this.state.selectedUsers.length > 0 ?
             <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
             <Button color="primary" disabled>{gettext('Submit')}</Button>
           }
