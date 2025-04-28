@@ -1,0 +1,59 @@
+.collaborator-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0 8px 0 2px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 10px;
+  background: #eaeaea;
+}
+
+.collaborator-item .collaborator-avatar,
+.collaborator-item .collaborator-name,
+.collaborator-item .collaborator-remove {
+  height: 20px;
+  line-height: 20px;
+}
+
+.collaborator-item .collaborator-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  flex-shrink: 0;
+}
+
+.collaborator-item .collaborator-name {
+  margin-left: 5px;
+}
+
+.collaborator-item .collaborator-avatar img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.collaborator-item .collaborator-remove {
+  display: inline-block;
+  width: 14px;
+  margin: 0 -2px 0 2px;
+}
+
+.collaborator-item .collaborator-remove .sf3-font {
+  display: inline-block;
+  font-size: 12px;
+  color: #909090;
+  transform: scale(.8);
+  cursor: pointer;
+}
+
+.collaborator-item .collaborator-remove .sf3-font:hover {
+  color: #666666;
+  cursor: pointer;
+}
+
+.collaborator-item .user-option-email {
+  font-size: 12px;
+  margin-left: 4px;
+}
