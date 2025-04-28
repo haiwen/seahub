@@ -10,6 +10,7 @@ import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import Loading from '../../loading';
 
 import './index.css';
 
@@ -18,6 +19,7 @@ const { enableSeafileAI } = window.app.config;
 const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
+  const [isFetching, setIsFetching] = useState(true);
 
   const isView = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,6 +30,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
     const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
     seafileAPI.getFileInfo(repoID, fullPath).then(res => {
       setDirentDetail(res.data);
+      setIsFetching(false);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -79,11 +82,15 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
           )}
         </Header>
         <Body>
-          {dirent && direntDetail && (
-            <div className="detail-content">
-              <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
-            </div>
-          )}
+          {isFetching ?
+            (<div className="detail-content">
+              <Loading />
+             </div>) :
+            dirent && direntDetail && (
+              <div className="detail-content">
+                <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
+              </div>
+            )}
         </Body>
       </div>
     </MetadataDetailsProvider>
