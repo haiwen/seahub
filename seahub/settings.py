@@ -1101,7 +1101,7 @@ BAIDU_MAP_URL = ''
 # google map
 GOOGLE_MAP_KEY = ''
 GOOGLE_MAP_URL = ''
-GOOGLE_MAP_ID = ''
+GOOGLE_MAP_ID = 'google_map_id'
 
 
 #####################
