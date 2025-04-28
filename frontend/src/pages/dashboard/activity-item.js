@@ -81,9 +81,9 @@ class ActivityItem extends Component {
         case 'clean-up-trash':
           op = gettext('Cleaned trash');
           if (item.days == 0) {
-            details = gettext('Removed all items from trash.');
+            details = gettext('Removed all items from trash');
           } else {
-            details = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
+            details = gettext('Removed items older than {n} days from trash').replace('{n}', item.days);
           }
           moreDetails = true;
           break;
