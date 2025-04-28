@@ -8,7 +8,7 @@ import { Utils } from '../utils/utils';
 import toaster from './toast';
 import KeyCodes from '../constants/keyCodes';
 import SearchInput from './search-input';
-import CollaboratorItem from '../components/CollaboratorItem';
+import UserItem from '../components/user-item';
 import ClickOutside from './click-outside';
 
 import '../css/user-select.css';
@@ -63,10 +63,10 @@ class UserSelect extends React.Component {
         this.ref.style.top = `${window.innerHeight - bottom}px`;
       }
     }
-    if (this.container && this.collaboratorItem) {
+    if (this.container && this.userItem) {
       this.setState({
         maxItemNum: this.getMaxItemNum(),
-        itemHeight: parseInt(getComputedStyle(this.collaboratorItem, null).height)
+        itemHeight: parseInt(getComputedStyle(this.userItem, null).height)
       });
     }
     document.addEventListener('keydown', this.onHotKey, true);
@@ -88,9 +88,9 @@ class UserSelect extends React.Component {
   };
 
   getMaxItemNum = () => {
-    let collaboratorContainerStyle = getComputedStyle(this.container, null);
-    let collaboratorItemStyle = getComputedStyle(this.collaboratorItem, null);
-    let maxContainerItemNum = Math.floor(parseInt(collaboratorContainerStyle.maxHeight) / parseInt(collaboratorItemStyle.height));
+    let userContainerStyle = getComputedStyle(this.container, null);
+    let userItemStyle = getComputedStyle(this.userItem, null);
+    let maxContainerItemNum = Math.floor(parseInt(userContainerStyle.maxHeight) / parseInt(userItemStyle.height));
     return maxContainerItemNum - 1;
   };
 
@@ -108,14 +108,14 @@ class UserSelect extends React.Component {
 
   onEnter = (e) => {
     e.preventDefault();
-    let collaborator;
+    let user;
     if (this.state.searchedUsers.length === 1) {
-      collaborator = this.state.searchedUsers[0];
+      user = this.state.searchedUsers[0];
     } else if (this.state.highlightIndex > -1) {
-      collaborator = this.state.searchedUsers[this.state.highlightIndex];
+      user = this.state.searchedUsers[this.state.highlightIndex];
     }
-    if (collaborator) {
-      this.onCollaboratorClick(collaborator);
+    if (user) {
+      this.onUserClick(user);
     }
   };
 
@@ -159,18 +159,18 @@ class UserSelect extends React.Component {
     this.setState({ isPopoverOpen: false });
   };
 
-  onCollaboratorClick = (collaborator) => {
+  onUserClick = (user) => {
     const { isMulti = true } = this.props;
     let selectedUsers = this.props.selectedUsers.slice(0);
     if (isMulti) {
-      const index = selectedUsers.findIndex(item => item.email === collaborator.email);
+      const index = selectedUsers.findIndex(item => item.email === user.email);
       if (index > -1) {
         selectedUsers.splice(index, 1);
       } else {
-        selectedUsers.push(collaborator);
+        selectedUsers.push(user);
       }
     } else {
-      selectedUsers = [collaborator];
+      selectedUsers = [user];
     }
     this.props.onSelectChange(selectedUsers);
   };
@@ -181,9 +181,9 @@ class UserSelect extends React.Component {
     }
   };
 
-  onDeleteSelectedCollaborator = (collaborator) => {
+  onDeleteSelectedCollaborator = (user) => {
     const { selectedUsers = [] } = this.props;
-    const newSelectedCollaborator = selectedUsers.filter(item => item.email !== collaborator.email);
+    const newSelectedCollaborator = selectedUsers.filter(item => item.email !== user.email);
     this.props.onSelectChange(newSelectedCollaborator);
   };
 
@@ -201,13 +201,13 @@ class UserSelect extends React.Component {
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div className={classnames('selected-user-item-container form-control d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })} id="user-select" onClick={this.onTogglePopover}>
-            {selectedUsers.map((collaborator, index) => {
+            {selectedUsers.map((user, index) => {
               return (
-                <CollaboratorItem
+                <UserItem
                   key={index}
-                  collaborator={collaborator}
-                  enableDeleteCollaborator={true}
-                  onDeleteCollaborator={this.onDeleteSelectedCollaborator}
+                  user={user}
+                  enableDeleteUser={true}
+                  onDeleteUser={this.onDeleteSelectedCollaborator}
                 />
               );
             })}
@@ -237,15 +237,15 @@ class UserSelect extends React.Component {
               </div>
               <div className="user-list-container" ref={ref => this.container = ref}>
                 {searchedUsers.length > 0 && (
-                  searchedUsers.map((collaborator, index) => {
+                  searchedUsers.map((user, index) => {
                     return (
                       <div
-                        key={collaborator.email}
+                        key={user.email}
                         className={classnames('user-item-container', { 'user-item-container-highlight': index === highlightIndex })}
-                        ref={ref => this.collaboratorItem = ref}
-                        onClick={this.onCollaboratorClick.bind(this, collaborator)}
+                        ref={ref => this.userItem = ref}
+                        onClick={this.onUserClick.bind(this, user)}
                       >
-                        <CollaboratorItem collaborator={collaborator} enableDeleteCollaborator={false} />
+                        <UserItem user={user} enableDeleteUser={false} />
                       </div>
                     );
                   })
