@@ -203,7 +203,7 @@ const Icon = (props) => {
       return <InfoIcon {...commonProps} />;
     case 'kanban':
       return <KanbanIcon {...commonProps} />;
-    case 'left-arrow':
+    case 'left_arrow':
       return <LeftArrowIcon {...commonProps} />;
     case 'like':
       return <LikeIcon {...commonProps} />;
