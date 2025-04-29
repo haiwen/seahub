@@ -2195,6 +2195,12 @@ a.sf-popover-item {
   margin-bottom: 5px;
 }
 
+.reg-logged-panel {
+  margin: 40px 0 28px;
+  font-size: 14px;
+  text-align: center;
+}
+
 /* policy service link */
 .login-panel-bottom-divider {
   border: 0;
