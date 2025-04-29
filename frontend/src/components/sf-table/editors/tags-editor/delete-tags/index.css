@@ -6,7 +6,7 @@
   padding: 2px 10px;
   line-height: 1;
   max-height: 150px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
