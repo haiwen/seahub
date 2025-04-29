@@ -83,9 +83,8 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         </Header>
         <Body>
           {isFetching ?
-            (<div className="detail-content">
-              <Loading />
-             </div>) :
+            <div className="detail-content"><Loading /></div>
+            :
             dirent && direntDetail && (
               <div className="detail-content">
                 <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
