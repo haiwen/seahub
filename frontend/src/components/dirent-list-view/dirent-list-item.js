@@ -856,10 +856,11 @@ class DirentListItem extends React.Component {
                     className="thumbnail cursor-pointer"
                     onClick={this.onItemClick}
                     alt=""
+                    draggable={false}
                   /> :
-                  <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' />
+                  <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
                 }
-                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
+                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} draggable={false} />}
                 <div ref={ref => this.emptyContentRef = ref} className="empty-content"></div>
               </div>
             </td>

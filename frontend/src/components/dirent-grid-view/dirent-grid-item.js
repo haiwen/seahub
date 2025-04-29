@@ -38,7 +38,7 @@ class DirentGridItem extends React.Component {
       this.canPreview = preview || modify;
       this.canDrag = modify;
     }
-
+    this.ref = React.createRef();
     this.clickTimeout = null;
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
@@ -206,6 +206,11 @@ class DirentGridItem extends React.Component {
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
+
+    if (this.ref.current && this.ref.current.contains(e.relatedTarget)) {
+      return;
+    }
+
     this.setState({ isGridDropTipShow: false });
   };
 
@@ -323,6 +328,7 @@ class DirentGridItem extends React.Component {
           onClick={this.onItemClick}
         >
           <div
+            ref={this.ref}
             className={classnames('grid-file-img-link', { 'grid-drop-show': isGridDropTipShow })}
             draggable={this.canDrag}
             onDragStart={this.onGridItemDragStart}
@@ -337,8 +343,9 @@ class DirentGridItem extends React.Component {
                 className="thumbnail"
                 onClick={this.onItemClick}
                 alt=""
+                draggable={false}
               /> :
-              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' />
+              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
             }
             {is_locked &&
               <img
@@ -346,6 +353,7 @@ class DirentGridItem extends React.Component {
                 src={`${mediaUrl}img/file-${is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`}
                 alt={is_freezed ? gettext('freezed') : gettext('locked')}
                 title={(is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}')).replace('{name}', lock_owner_name)}
+                draggable={false}
               />
             }
           </div>
