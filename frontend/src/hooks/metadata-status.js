@@ -3,6 +3,7 @@ import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
 import { MetadataAIOperationsProvider } from './metadata-ai-operation';
+import Loading from '../components/loading';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
@@ -122,6 +123,15 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
       setDetailsSettings(newDetailsSettings);
     });
   }, [repoID, detailsSettings]);
+
+  if (isLoading) {
+    return (
+      <div style={{ width: '300px' }}>
+        <Loading/>
+      </div>
+    );
+
+  }
 
   return (
     <MetadataStatusContext.Provider

@@ -85,6 +85,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
   const onDeleteFilter = useCallback((event) => {
     event.nativeEvent.stopImmediatePropagation();
     onChangeAPI([]);
+    // eslint-disable-next-line
     oldValue = [];
   }, [value, onChangeAPI, oldValue]);
 
