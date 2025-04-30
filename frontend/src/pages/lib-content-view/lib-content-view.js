@@ -1123,20 +1123,15 @@ class LibContentView extends React.Component {
       } else {
         this.loadNodeAndParentsByPath(path);
       }
-
-      // load mainPanel
-      if (item.is_dir) {
-        this.showDir(path);
-      } else {
-        this.openSearchedNewTab(item);
-      }
-    } else {
-      if (item.is_dir) {
-        this.showDir(path);
-      } else {
-        this.openSearchedNewTab(item);
-      }
     }
+
+    if (item.is_dir) {
+      this.setState({ currentMode: LIST_MODE });
+      this.showDir(path);
+    } else {
+      this.openSearchedNewTab(item);
+    }
+
   };
 
   openSearchedNewTab = (item) => {
