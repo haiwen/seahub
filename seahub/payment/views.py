@@ -30,8 +30,7 @@ def payment(request):
     contact_email = profile.contact_email if profile and profile.contact_email else ''
     nickname = profile.nickname if profile and profile.nickname else ''
 
-    seafile_service_url = get_service_url()
-    seafile_parsed_url = urlparse(seafile_service_url)
+    seafile_parsed_url = urlparse(get_service_url())
     seafile_domain = seafile_parsed_url.netloc.split(':')[0]
 
     payment_parsed_url = urlparse(PAYMENT_SERVICE_URL)
