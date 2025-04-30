@@ -150,8 +150,9 @@ export const MetadataViewProvider = ({
     if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
     let paths = [];
     let fileNames = [];
+    const table = storeRef.current?.data || metadata;
     recordsIds.forEach((recordId) => {
-      const record = getRowById(metadata, recordId);
+      const record = getRowById(table, recordId);
       const { _parent_dir, _name } = record || {};
       if (_parent_dir && _name) {
         const path = Utils.joinPath(_parent_dir, _name);
