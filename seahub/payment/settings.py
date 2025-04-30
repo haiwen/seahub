@@ -1,0 +1,13 @@
+from django.conf import settings
+
+ENABLE_PAYMENT = getattr(settings, 'ENABLE_PAYMENT', False)
+
+PAYMENT_SERVER_DOMAIN = getattr(settings, 'PAYMENT_SERVER_DOMAIN', '')
+PAYMENT_SERVER_DOMAIN = PAYMENT_SERVER_DOMAIN.rstrip('/')
+
+PAYMENT_SERVER_JWT_AUTH_URL = getattr(settings, 'PAYMENT_SERVER_JWT_AUTH_URL', '')
+PAYMENT_SERVER_JWT_AUTH_URL = f"/{PAYMENT_SERVER_JWT_AUTH_URL.strip('/')}/"
+
+PAYMENT_JWT_SECRET_KEY = getattr(settings, 'PAYMENT_JWT_SECRET_KEY', '')
+PAYMENT_JWT_ALGORITHM = getattr(settings, 'PAYMENT_JWT_ALGORITHM', 'HS256')
+PAYMENT_JWT_EXPIRATION = getattr(settings, 'PAYMENT_JWT_EXPIRATION', 5*60)  # in seconds

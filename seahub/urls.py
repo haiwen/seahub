@@ -1068,6 +1068,11 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
     ]
 
+if getattr(settings, 'ENABLE_PAYMENT', False):
+    urlpatterns += [
+        re_path(r'^payment/', include('seahub.payment.urls')),
+    ]
+
 if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
     urlpatterns += [
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/', include('seahub.repo_metadata.urls')),

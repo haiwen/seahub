@@ -36,6 +36,7 @@ from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
         ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.utils import get_or_create_invitation_link
 from seahub.subscription.utils import subscription_check
+from seahub.payment.settings import ENABLE_PAYMENT
 from registration.models import RegistrationProfile
 
 # Get an instance of a logger
@@ -296,6 +297,7 @@ def react_fake_view(request, **kwargs):
         'invitation_link': invitation_link,
         'enable_multi_adfs': ENABLE_MULTI_ADFS,
         'enable_subscription': subscription_check(),
+        'enable_payment': ENABLE_PAYMENT,
         'sys_enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
         'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY
         })
