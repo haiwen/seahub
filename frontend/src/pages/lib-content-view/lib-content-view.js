@@ -1126,7 +1126,7 @@ class LibContentView extends React.Component {
     }
 
     if (item.is_dir) {
-      this.setState({ currentMode: LIST_MODE });
+      this.setState({ currentMode: cookie.load('seafile_view_mode') || LIST_MODE });
       this.showDir(path);
     } else {
       this.openSearchedNewTab(item);
