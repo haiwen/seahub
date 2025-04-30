@@ -19,22 +19,21 @@ class AddMemberDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: [],
       errMessage: '',
     };
   }
 
   handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+    this.setState({ selectedUsers: option });
   };
 
   handleSubmit = () => {
-    if (!this.state.selectedOption) return;
-    const emails = this.state.selectedOption.map(item => item.email);
-    this.refs.orgSelect.clearSelect();
+    if (!this.state.selectedUsers) return;
+    const emails = this.state.selectedUsers.map(item => item.email);
     this.setState({ errMessage: [] });
     systemAdminAPI.sysAdminAddGroupMember(this.props.groupID, emails).then((res) => {
-      this.setState({ selectedOption: null });
+      this.setState({ selectedUsers: [] });
       if (res.data.failed.length > 0) {
         this.setState({ errMessage: res.data.failed[0].error_msg });
       }
@@ -56,9 +55,9 @@ class AddMemberDialog extends React.Component {
           <UserSelect
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
-            ref="orgSelect"
             isMulti={true}
             className='org-add-member-select'
+            selectedUsers={this.state.selectedUsers}
           />
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>

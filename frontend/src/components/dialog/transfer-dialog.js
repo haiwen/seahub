@@ -34,22 +34,26 @@ class TransferDialog extends React.Component {
     this.state = {
       options: [],
       selectedOption: null,
+      selectedUsers: [],
       errorMsg: [],
       transferToUser: true,
       transferToGroup: false,
       reshare: false,
       activeTab: !this.props.isDepAdminTransfer ? TRANS_USER : TRANS_DEPART
     };
-    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
   };
 
+  onUsersChange = (selectedUsers) => {
+    this.setState({ selectedUsers });
+  };
+
   submit = () => {
-    const { activeTab, reshare, selectedOption } = this.state;
-    const email = activeTab === TRANS_DEPART ? selectedOption.email : selectedOption[0].email;
+    const { activeTab, reshare, selectedOption, selectedUsers } = this.state;
+    const email = activeTab === TRANS_DEPART ? selectedOption.email : selectedUsers[0].email;
     this.props.onTransferRepo(email, reshare);
   };
 
@@ -106,6 +110,7 @@ class TransferDialog extends React.Component {
         activeTab: tab,
         reshare: false,
         selectedOption: null,
+        selectedUsers: [],
       });
     }
   };
@@ -158,10 +163,10 @@ class TransferDialog extends React.Component {
               <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
                 <Label className='transfer-repo-label'>{gettext('Users')}</Label>
                 <UserSelect
-                  ref={this.userSelect}
                   isMulti={false}
                   placeholder={gettext('Select a user')}
-                  onSelectChange={this.handleSelectChange}
+                  onSelectChange={this.onUsersChange}
+                  selectedUsers={this.state.selectedUsers}
                 />
                 <Switch
                   checked={reshare}
@@ -207,13 +212,19 @@ class TransferDialog extends React.Component {
   };
 
   render() {
-    const { selectedOption } = this.state;
+    const { selectedOption, activeTab } = this.state;
     const { itemName: repoName } = this.props;
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     let buttonDisabled = false;
-    if (selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)) {
-      buttonDisabled = true;
+    if (activeTab === TRANS_DEPART) {
+      if (selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)) {
+        buttonDisabled = true;
+      }
+    } else {
+      if (this.state.selectedUsers.length === 0) {
+        buttonDisabled = true;
+      }
     }
     return (
       <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">

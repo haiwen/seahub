@@ -21,21 +21,21 @@ class TransferGroupDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null
+      selectedUsers: []
     };
   }
 
   handleSelectChange = (option) => {
     this.setState({
-      selectedOption: option
+      selectedUsers: option
     });
   };
 
   transferGroup = () => {
-    let selectedOption = this.state.selectedOption;
+    let selectedUsers = this.state.selectedUsers;
     let email;
-    if (selectedOption && selectedOption[0]) {
-      email = selectedOption[0].email;
+    if (selectedUsers && selectedUsers[0]) {
+      email = selectedUsers[0].email;
     }
     if (!email) {
       return false;
@@ -61,10 +61,10 @@ class TransferGroupDialog extends React.Component {
         <ModalBody>
           <p>{gettext('Transfer group to')}</p>
           <UserSelect
-            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Please enter 1 or more character')}
             onSelectChange={this.handleSelectChange}
+            selectedUsers={this.state.selectedUsers}
           />
         </ModalBody>
         <ModalFooter>

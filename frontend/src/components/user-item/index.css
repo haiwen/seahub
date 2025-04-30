@@ -1,0 +1,59 @@
+.user-item {
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 10px 2px 0;
+  padding: 0 8px 0 2px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 10px;
+  background: #eaeaea;
+}
+
+.user-item .user-avatar,
+.user-item .user-name,
+.user-item .user-remove {
+  height: 20px;
+  line-height: 20px;
+}
+
+.user-item .user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  flex-shrink: 0;
+}
+
+.user-item .user-name {
+  margin-left: 5px;
+}
+
+.user-item .user-avatar img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.user-item .user-remove {
+  display: inline-block;
+  width: 14px;
+  margin: 0 -2px 0 2px;
+}
+
+.user-item .user-remove .sf3-font {
+  display: inline-block;
+  font-size: 12px;
+  color: #909090;
+  transform: scale(.8);
+  cursor: pointer;
+}
+
+.user-item .user-remove .sf3-font:hover {
+  color: #666666;
+  cursor: pointer;
+}
+
+.user-item .user-option-email {
+  font-size: 12px;
+  margin-left: 4px;
+}
