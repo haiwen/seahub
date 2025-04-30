@@ -11,7 +11,7 @@ from seahub.auth.decorators import login_required
 from seahub.organizations.decorators import org_staff_required
 
 from seahub.payment.settings import ENABLE_PAYMENT, \
-        PAYMENT_SERVER_DOMAIN, PAYMENT_SERVER_JWT_AUTH_URL, \
+        PAYMENT_SERVICE_URL, PAYMENT_JWT_AUTH_URL, \
         PAYMENT_JWT_SECRET_KEY, PAYMENT_JWT_ALGORITHM, PAYMENT_JWT_EXPIRATION
 
 
@@ -34,7 +34,7 @@ def payment(request):
     seafile_parsed_url = urlparse(seafile_service_url)
     seafile_domain = seafile_parsed_url.netloc.split(':')[0]
 
-    payment_parsed_url = urlparse(PAYMENT_SERVER_DOMAIN)
+    payment_parsed_url = urlparse(PAYMENT_SERVICE_URL)
     payment_domain = payment_parsed_url.netloc.split(':')[0]
 
     now = int(time.time())
@@ -53,7 +53,7 @@ def payment(request):
     token = jwt.encode(payload, PAYMENT_JWT_SECRET_KEY,
                        algorithm=PAYMENT_JWT_ALGORITHM)
 
-    payment_jwt_url = f'{PAYMENT_SERVER_DOMAIN}{PAYMENT_SERVER_JWT_AUTH_URL}'
+    payment_jwt_url = f'{PAYMENT_SERVICE_URL}{PAYMENT_JWT_AUTH_URL}'
     html = f'''
     <html>
         <body>
