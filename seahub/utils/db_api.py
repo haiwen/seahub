@@ -474,7 +474,7 @@ class SeafileDB:
           """
         with connection.cursor() as cursor:
             cursor.execute(sql)
-    
+
     def get_all_wikis(self, start, limit, order_by):
         order_by_size_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
@@ -516,12 +516,12 @@ class SeafileDB:
                 i.type = 'wiki'
             LIMIT {limit} OFFSET {start}
         """
-        
+
         with connection.cursor() as cursor:
             wikis = []
             if order_by == 'size':
                 cursor.execute(order_by_size_sql)
-                
+
             elif order_by == 'file_count':
                 cursor.execute(order_by_filecount_sql)
             else:
@@ -548,10 +548,10 @@ class SeafileDB:
                 wiki_info = WikiInfo(**params)
                 wikis.append(wiki_info)
             return wikis
-        
+
     def get_virtual_repo_id(self, original_repo_id, path):
         from seahub.utils import normalize_file_path
-    
+
         path = normalize_file_path(path)
         sql = f"""
         select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{original_repo_id}" AND path="{path}"
@@ -559,6 +559,49 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
             res = cursor.fetchone()
-        
+
         return res and res[0] or None
-    
+
+
+    def get_share_to_user_invisible_repos_info(self, username):
+
+        repo_ids_sql = f"""
+            SELECT repo_id, `path`
+            FROM `{self.db_name}`.`FolderUserPerm`
+            WHERE user = %s  AND permission='invisible';
+        """
+
+        repo_id_to_invisible_paths = {}
+        with connection.cursor() as cursor:
+            cursor.execute(repo_ids_sql, [username])
+            for repo in cursor.fetchall():
+                repo_id = repo[0]
+                invisible_path = repo[1]
+                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
+                if invisible_paths_set:
+                    invisible_paths_set.add(invisible_path)
+                else:
+                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
+
+            return repo_id_to_invisible_paths
+
+    def get_share_to_group_invisible_repos_info_by_group_ids(self, group_ids):
+        placeholders = ','.join(['%s'] * len(group_ids))
+        repo_ids_sql = f"""
+            SELECT repo_id, `path`
+            FROM `{self.db_name}`.`FolderGroupPerm`
+            WHERE group_id in ({placeholders}) AND permission='invisible';
+        """
+        repo_id_to_invisible_paths = {}
+        with connection.cursor() as cursor:
+            cursor.execute(repo_ids_sql, tuple(group_ids))
+            for repo in cursor.fetchall():
+                repo_id = repo[0]
+                invisible_path = repo[1]
+                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
+                if invisible_paths_set:
+                    invisible_paths_set.add(invisible_path)
+                else:
+                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
+
+            return repo_id_to_invisible_paths
