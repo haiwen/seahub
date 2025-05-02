@@ -199,19 +199,31 @@ $('#login-form').on('submit', function(){
 
 {% if enable_sso %}
 $(function() {
+    const sso_path = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+
+    {% if enable_sso_auto %}
+    window.location = sso_path;
+    {% else %}
     $('#sso').on('click', function() {
-        window.location = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+        window.location = sso_path;
         return false;
     });
+    {% endif %}
 });
 {% endif %}
 
 {% if enable_multi_adfs %}
 $(function() {
+    const adfs_sso_path = "{% url 'multi_adfs_sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+
+    {% if enable_sso_auto %}
+    window.location = adfs_sso_path;
+    {% else %}
     $('#multi_adfs_sso').on('click', function() {
-        window.location = "{% url 'multi_adfs_sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+        window.location = adfs_sso_path;
         return false;
     });
+    {% endif %}
 });
 {% endif %}
 
