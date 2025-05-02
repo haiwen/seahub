@@ -1,13 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
 from django.core.cache import cache
 from django.conf import settings
+from django.utils.translation import gettext as _
 
 from seahub.profile.models import Profile
-from seahub.utils import normalize_cache_key
+from seahub.utils import normalize_cache_key, get_site_name, send_html_email
 from seahub.utils.ip import get_remote_ip
 
 LOGIN_ATTEMPT_PREFIX = 'UserLoginAttempt_'
-
+logger = logging.getLogger(__name__)
 
 def get_login_failed_attempts(username=None, ip=None):
     """Get login failed attempts base on username and ip.
@@ -84,3 +86,19 @@ def get_virtual_id_by_email(email):
         return email
     else:
         return p.user
+    
+    
+def send_login_email(username):
+    from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
+    email_template_name = 'registration/login_email.html'
+    send_to = email2contact_email(username)
+    site_name = get_site_name()
+    c = {
+        'name': email2nickname(username)
+    }
+    try:
+        send_html_email(_("Welcome to %s") % site_name,
+                        email_template_name, c, None,
+                        [send_to])
+    except Exception as e:
+        logger.error('Failed to send notification to %s, %s' % (send_to, e))

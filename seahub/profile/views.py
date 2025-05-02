@@ -90,6 +90,9 @@ def edit_profile(request):
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
     collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else DEFAULT_COLLABORATE_EMAIL_INTERVAL
+    enable_login_email = UserOptions.objects.get_login_email_enable_status(username)
+    enable_login_email = enable_login_email if enable_login_email is not None else 0
+    enable_password_update_email = UserOptions.objects.get_password_update_email_enable_status(username)
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
@@ -168,6 +171,8 @@ def edit_profile(request):
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
+            'enable_password_update_email': enable_password_update_email,
+            'enable_login_email': enable_login_email,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
             'social_connected': social_connected,
