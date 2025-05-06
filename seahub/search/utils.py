@@ -15,9 +15,18 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
 from seahub.constants import REPO_TYPE_WIKI
 from seahub.utils import HAS_FILE_SEARCH
+from seahub.utils.db_api import SeafileDB
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
+
+
+SEARCH_REPOS_LIMIT = 200
+RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
+RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
+USER_REPO_INVISIBLE_PATH_PREFIX = 'REPO_INVISIBLE_PATH_'
+USER_REPO_INVISIBLE_PATH_CACHE_TIMEOUT = 24 * 60 * 60
 
 os.environ['EVENTS_CONFIG_FILE'] = EVENTS_CONFIG_FILE
 
@@ -251,10 +260,6 @@ def ai_search_wikis(params):
     total = resp_json.get('total')
     return results, total
 
-SEARCH_REPOS_LIMIT = 200
-RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
-RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
-
 
 def search(params):
     payload = {'exp': int(time.time()) + 300, }
@@ -280,3 +285,43 @@ def format_repos(repos):
             continue
         repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
     return searched_repos, repos_map
+
+
+def get_user_group_ids(username, org_id):
+    if org_id:
+        user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
+    else:
+        user_groups = ccnet_api.get_groups(username, return_ancestors=True)
+
+    return [group.id for group in user_groups]
+
+
+def get_invisible_repos_info_by_username(username, org_id):
+    """
+    return: a dict of invisible repo paths, like {repo_id: {invisible_path1, invisible_path2, ...}, ...}
+    """
+    seafile_db_api = SeafileDB()
+    repo_id_to_invisible_path_set = {}
+
+    user_repo_invisible_path_set = seafile_db_api.get_share_to_user_invisible_repos_info(username)
+    group_ids = get_user_group_ids(username, org_id)
+    group_repo_invisible_path_set = seafile_db_api.get_share_to_group_invisible_repos_info_by_group_ids(group_ids)
+
+    for repo_id, path_set in user_repo_invisible_path_set.items():
+        group_invisible_path_set = group_repo_invisible_path_set.get(repo_id)
+        if group_invisible_path_set:
+            path_set.update(group_invisible_path_set)
+            group_repo_invisible_path_set.pop(repo_id)
+        repo_id_to_invisible_path_set[repo_id] = path_set
+
+    repo_id_to_invisible_path_set.update(group_repo_invisible_path_set)
+
+    return repo_id_to_invisible_path_set
+
+
+def is_invisible_path(repo_id_to_invisible_paths, repo_id, path):
+    invisible_path_set = repo_id_to_invisible_paths.get(repo_id, set())
+    for invisible_path in invisible_path_set:
+        if path.startswith(invisible_path):
+            return True
+    return False
