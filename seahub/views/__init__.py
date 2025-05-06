@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.utils.html import escape
 from django.urls import reverse, resolve
 from django.shortcuts import render, redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 from django.http import HttpResponse, Http404, \
@@ -446,6 +447,9 @@ def repo_revert_history(request, repo_id):
     if not next_page:
         next_page = settings.SITE_ROOT
 
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = settings.SITE_ROOT
+
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _("Library does not exist"))
@@ -764,6 +768,9 @@ def i18n(request):
     """
     from django.conf import settings
     next_page = request.headers.get('referer', settings.SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = settings.SITE_ROOT
+    
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -1012,8 +1019,13 @@ def client_token_login(request):
         else:
             request.client_token_login = True
             auth_login(request, user)
+    
+    
+    next_page = request.GET.get("next", reverse('libraries'))
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('libraries')
 
-    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
+    return HttpResponseRedirect(next_page)
 
 def choose_register(request):
     """

@@ -383,10 +383,6 @@ class AdminDepartments(APIView):
         
         result = []
         for group in all_groups:
-            try:
-                avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
-            except:
-                avatar_url = get_default_group_avatar_url()
             created_at = timestamp_to_isoformat_timestr(group.timestamp)
             department_info = {
                 "id": group.id,
@@ -395,7 +391,6 @@ class AdminDepartments(APIView):
                 "name": group.group_name,
                 "owner": group.creator_name,
                 "created_at": created_at,
-                "avatar_url": request.build_absolute_uri(avatar_url),
             }
             result.append(department_info)
 

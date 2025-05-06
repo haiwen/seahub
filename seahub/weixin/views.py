@@ -8,6 +8,7 @@ import requests
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.files.base import ContentFile
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.shortcuts import render
 
@@ -42,6 +43,8 @@ def weixin_oauth_login(request):
     state = str(uuid.uuid4())
     request.session['weixin_oauth_login_state'] = state
     redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
+        redirect_to = SITE_ROOT
     request.session['weixin_oauth_login_redirect'] = redirect_to
 
     redirect_uri = get_site_scheme_and_netloc() + reverse('weixin_oauth_callback')
@@ -164,6 +167,7 @@ def weixin_oauth_connect(request):
     state = str(uuid.uuid4())
     request.session['weixin_oauth_connect_state'] = state
     redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, SITE_ROOT)
+    
     request.session['weixin_oauth_connect_redirect'] = redirect_to
 
     redirect_uri = get_site_scheme_and_netloc() + reverse('weixin_oauth_connect_callback')
@@ -235,5 +239,10 @@ def weixin_oauth_disconnect(request):
     SocialAuthUser.objects.delete_by_username_and_provider(username, 'weixin')
 
     # redirect user to page
-    response = HttpResponseRedirect(request.GET.get(auth.REDIRECT_FIELD_NAME, SITE_ROOT))
+    redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
+        redirect_to = SITE_ROOT
+
+    response = HttpResponseRedirect(redirect_to)
+    
     return response

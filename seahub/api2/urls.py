@@ -88,8 +88,6 @@ urlpatterns = [
     path('unseen_messages/', UnseenMessagesCountView.as_view()),
 
     re_path(r'^avatars/user/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', UserAvatarView.as_view()),
-    path('avatars/group/<int:group_id>/resized/<int:size>/', GroupAvatarView.as_view()),
-
     path('groups/', Groups.as_view()),
     path('groups/<int:group_id>/', Groups.as_view()),
     path('groups/<int:group_id>/members/', GroupMembers.as_view()),
