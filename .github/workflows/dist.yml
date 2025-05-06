@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - "13.0"
+      - "payment"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
