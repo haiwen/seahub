@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../../icon';
 import TextTranslation from '../../../utils/text-translation';
-import { gettext } from '../../../utils/constants';
+import { baiduMapKey, gettext } from '../../../utils/constants';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../../../metadata/constants';
 
 export const KEY_ADD_VIEW_MAP = {
@@ -25,10 +25,6 @@ const ADD_VIEW_OPTIONS = [
     key: KEY_ADD_VIEW_MAP.ADD_KANBAN,
     type: VIEW_TYPE.KANBAN,
   },
-  {
-    key: KEY_ADD_VIEW_MAP.ADD_MAP,
-    type: VIEW_TYPE.MAP,
-  },
 ];
 
 const translateLabel = (type) => {
@@ -47,7 +43,17 @@ const translateLabel = (type) => {
 };
 
 export const getNewViewSubMenu = () => {
-  return ADD_VIEW_OPTIONS.map((option) => {
+  const options = [...ADD_VIEW_OPTIONS];
+  const hasMapOption = options.some(opt => opt.type === VIEW_TYPE.MAP);
+
+  if (!hasMapOption && baiduMapKey) {
+    options.push({
+      key: KEY_ADD_VIEW_MAP.ADD_MAP,
+      type: VIEW_TYPE.MAP,
+    });
+  }
+
+  return options.map((option) => {
     const { key, type } = option;
     return {
       key,
