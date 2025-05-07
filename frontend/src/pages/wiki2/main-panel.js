@@ -114,7 +114,7 @@ class MainPanel extends Component {
   exportPage = (exportType) => {
     const serviceUrl = window.app.config.serviceURL;
     const pageId = this.state.currentPageConfig.id;
-    let exportPageUrl = serviceUrl + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/export/?exportType=' + exportType;
+    let exportPageUrl = serviceUrl + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/export/?export_type=' + exportType;
     window.location.href = exportPageUrl;
     this.setState({ showExportSubmenu: false });
   };

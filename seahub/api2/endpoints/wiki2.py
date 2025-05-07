@@ -26,9 +26,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
-if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.utils import search_wikis, ai_search_wikis
+
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -40,6 +38,8 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_wikis, ai_search_wikis
 
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -62,7 +62,7 @@ from seahub.share.utils import is_repo_admin
 
 
 HTTP_520_OPERATION_FAILED = 520
-
+WIKI_PAGE_EXPORT_TYPES = ['sdoc', 'markdown']
 
 logger = logging.getLogger(__name__)
 
@@ -1576,9 +1576,8 @@ class WikiPageExport(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, wiki_id, page_id):
-        types = ['sdoc', 'markdown']
-        export_type = request.GET.get('exportType')
-        if export_type not in types:
+        export_type = request.GET.get('export_type')
+        if export_type not in WIKI_PAGE_EXPORT_TYPES:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid export type')
 
         # resource check
@@ -1586,13 +1585,8 @@ class WikiPageExport(APIView):
         if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_id = wiki.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        repo_id = wiki.repo_id
         username = request.user.username
         wiki_config = get_wiki_config(repo_id, username)
         navigation = wiki_config.get('navigation', [])
@@ -1601,8 +1595,7 @@ class WikiPageExport(APIView):
         if page_id not in id_set:
             error_msg = "Page not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        permission = check_wiki_permission(wiki, username)
-        if permission != 'rw':
+        if not check_wiki_permission(wiki, username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         page_path = ''
         page_name = ''
@@ -1626,7 +1619,7 @@ class WikiPageExport(APIView):
         if export_type == 'markdown':
             resp_with_md_file = sdoc_export_to_md(page_path, doc_uuid, download_url, 'sdoc', 'md')
             new_filename = f'{page_name}.md'
-            encoded_filename = quote(new_filename.encode('utf-8'))
+            encoded_filename = quote(new_filename)
             response.write(resp_with_md_file.content)
         elif export_type == 'sdoc':
             sdoc_content = requests.get(download_url).content
