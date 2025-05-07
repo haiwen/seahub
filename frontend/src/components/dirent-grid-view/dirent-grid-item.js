@@ -45,7 +45,7 @@ class DirentGridItem extends React.Component {
   }
 
   checkGenerateThumbnail = (dirent) => {
-    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src) {
+    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src || dirent.encoded_thumbnail_src === '') {
       return false;
     }
     if (enableVideoThumbnail && Utils.videoCheck(dirent.name)) {
