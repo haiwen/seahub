@@ -18,7 +18,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
-    remove_ocr_column, get_update_record, update_people_cover_photo, gen_unique_tag_name
+    remove_ocr_column, get_update_record, update_people_cover_photo
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api

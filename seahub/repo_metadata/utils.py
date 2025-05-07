@@ -73,12 +73,6 @@ def gen_unique_id(id_set, length=4):
             return _id
         _id = generator_base64_code(length)
 
-def gen_unique_tag_name(tag_name, exist_tags, counter=1):
-    new_name = f'{tag_name}({counter})'
-    if new_name not in exist_tags:
-        return new_name
-    return gen_unique_tag_name(tag_name, exist_tags, counter + 1)
-
 def get_face_columns():
     from seafevents.repo_metadata.constants import FACES_TABLE
     columns = [
