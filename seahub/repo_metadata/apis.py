@@ -2876,20 +2876,30 @@ class MetadataMigrateTags(APIView):
     def _get_metadata_records(self, metadata_server_api, file_paths_set, METADATA_TABLE):
         if not file_paths_set:
             return []
-            
-        file_paths_str = ', '.join([f'"{path}"' for path in file_paths_set])
-        print(file_paths_str)
+        dir_paths = []
+        filenames = []
+        for file_path in file_paths_set:
+            parent_dir = os.path.dirname(file_path)
+            filename = os.path.basename(file_path)
+            dir_paths.append(parent_dir)
+            filenames.append(filename)
+        
+        where_conditions = []
+        parameters = []
+        for i in range(len(dir_paths)):
+            where_conditions.append(f"(`{METADATA_TABLE.columns.parent_dir.name}` = ? AND `{METADATA_TABLE.columns.file_name.name}` = ?)")
+            parameters.append(dir_paths[i])
+            parameters.append(filenames[i])
+        where_clause = " OR ".join(where_conditions)
         sql = f'''
             SELECT `{METADATA_TABLE.columns.id.name}`, 
             `{METADATA_TABLE.columns.file_name.name}`, 
             `{METADATA_TABLE.columns.parent_dir.name}` 
             FROM `{METADATA_TABLE.name}` 
             WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
-            AND CONCAT(`{METADATA_TABLE.columns.parent_dir.name}`, `/`, `{METADATA_TABLE.columns.file_name.name}`)
-            IN ({file_paths_str})
+            AND ({where_clause})
             '''
-        
-        query_result = metadata_server_api.query_rows(sql, [])
+        query_result = metadata_server_api.query_rows(sql, parameters)
         metadata_records = query_result.get('results', [])
 
         return metadata_records
@@ -2985,16 +2995,16 @@ class MetadataMigrateTags(APIView):
                 record_to_tags_map
             )
             # Record that the old version tags have been migrated
-            # record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-            # if not record.details_settings: 
-            #     details_settings = {}
-            # else:
-            #     details_settings = json.loads(record.details_settings)
-            # details_settings['tags_migrated'] = True
-            # record.details_settings = json.dumps(details_settings)
-            # record.save()
-            # tagged_files.delete()
-            # RepoTags.objects.get_all_by_repo_id(repo_id).delete()
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            if not record.details_settings: 
+                details_settings = {}
+            else:
+                details_settings = json.loads(record.details_settings)
+            details_settings['tags_migrated'] = True
+            record.details_settings = json.dumps(details_settings)
+            record.save()
+            tagged_files.delete()
+            RepoTags.objects.get_all_by_repo_id(repo_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
