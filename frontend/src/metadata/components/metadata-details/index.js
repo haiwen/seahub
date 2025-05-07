@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
@@ -13,10 +13,23 @@ import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 
 import './index.css';
 
-const MetadataDetails = (onPositionChange) => {
+const MetadataDetails = ({ onPositionChange }) => {
   const { isLoading, canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
+
+  useEffect(() => {
+    if (!record) return;
+    const fileName = getFileNameFromRecord(record);
+    const isImage = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+
+    if (isImage) {
+      const position = getCellValueByColumn(record, {
+        key: PRIVATE_COLUMN_KEY.LOCATION
+      });
+      onPositionChange?.(position);
+    }
+  }, [record, onPositionChange]);
 
   if (isLoading || !record || !record._id) return null;
 
@@ -29,10 +42,8 @@ const MetadataDetails = (onPositionChange) => {
       {displayColumns.map(field => {
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage) {
-          onPositionChange?.(value);
-          return null;
-        }
+
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage) return null;
 
         let canEdit = canModifyRecord && field.editable;
         if (!isImage && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
