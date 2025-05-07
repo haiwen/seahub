@@ -61,6 +61,7 @@
 }
 
 .sf-metadata-result-container {
+  height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
 }
@@ -127,10 +128,6 @@
 
 .sf-metadata-result-table-content .sf-metadata-result-table-row {
   background-color: #fff;
-}
-
-.sf-metadata-result-table-content .sf-metadata-result-table-row.sf-metadata-last-table-row {
-  border-bottom: none;
 }
 
 .sf-metadata-result-content .frozen-columns .sf-metadata-result-table-cell {
@@ -397,6 +394,7 @@
 }
 
 .sf-metadata-wrapper .sf-metadata-main .sf-metadata-container {
+  display: flex;
   height: 100%;
   width: 100%;
   overflow: hidden;
