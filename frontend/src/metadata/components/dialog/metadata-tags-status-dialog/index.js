@@ -19,7 +19,7 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, usedRepoTags, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
@@ -46,7 +46,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
 
   const migrateTag = useCallback(() => {
     onMigrateStart && onMigrateStart();
-    tagsAPI.migrateTags(repoID, usedRepoTags).then(res => {
+    tagsAPI.migrateTags(repoID).then(res => {
       toaster.success(gettext('Tags migrated successfully'));
       onMigrateSuccess && onMigrateSuccess();
     }).catch(error => {
@@ -54,7 +54,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
       toaster.danger(errorMsg);
       onMigrateError && onMigrateError();
     });
-  }, [repoID, usedRepoTags, onMigrateSuccess, onMigrateStart, onMigrateError]);
+  }, [repoID, onMigrateSuccess, onMigrateStart, onMigrateError]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);

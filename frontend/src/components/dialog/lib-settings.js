@@ -24,10 +24,9 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  usedRepoTags: PropTypes.array,
 };
 
-const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMigrateTip, usedRepoTags, onMigrateSuccess }) => {
+const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMigrateTip, onMigrateSuccess }) => {
   const [activeTab, setActiveTab] = useState(tab || TAB.HISTORY_SETTING);
   const [isMigrating, setIsMigrating] = useState(false);
   const toggleTab = useCallback((tab) => {
@@ -233,7 +232,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                     toggleDialog={toggleDialog}
                     enableMetadata={enableMetadata}
                     showMigrateTip={showMigrateTip}
-                    usedRepoTags={usedRepoTags}
                     onMigrateSuccess={handleMigrateEnd}
                     onMigrateError={handleMigrateError}
                     onMigrateStart={handleMigrateStart}

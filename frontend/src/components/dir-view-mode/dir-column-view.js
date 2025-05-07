@@ -185,7 +185,6 @@ class DirColumnView extends React.Component {
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}
               updateTreeNode={this.props.updateTreeNode}
-              usedRepoTags={this.props.usedRepoTags}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}

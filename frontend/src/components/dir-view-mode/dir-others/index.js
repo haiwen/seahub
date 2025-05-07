@@ -12,7 +12,7 @@ import { TAB } from '../../../constants/repo-setting-tabs';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, usedRepoTags }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
 
   const showSettings = currentRepoInfo.is_admin; // repo owner, department admin, shared with 'Admin' permission
   const repoName = currentRepoInfo.repo_name;
@@ -86,7 +86,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, usedRepoTags }) => {
           toggleDialog={toggleSettingsDialog}
           tab={activeTab}
           showMigrateTip={showMigrateTip}
-          usedRepoTags={usedRepoTags}
           onMigrateSuccess={handleMigrateSuccess}
         />
       )}
@@ -106,7 +105,6 @@ DirOthers.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
-  usedRepoTags: PropTypes.array,
 };
 
 export default DirOthers;

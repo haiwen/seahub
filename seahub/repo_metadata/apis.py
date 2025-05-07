@@ -24,6 +24,7 @@ from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
+from seahub.repo_tags.models import RepoTags
 
 
 logger = logging.getLogger(__name__)
@@ -2789,12 +2790,10 @@ class MetadataMigrateTags(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
+    def _list_old_tags(self):
+        pass
+
     def post(self, request, repo_id):
-        tag_ids = request.data.get('tag_ids')
-        if not tag_ids:
-            error_msg = 'tag_ids invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled or not metadata.tags_enabled:
             error_msg = f'The tags is disabled for repo {repo_id}.'
@@ -2813,9 +2812,7 @@ class MetadataMigrateTags(APIView):
         source_tags_info = {} # {tag_id: {name: '', color: '', file_paths: [file_path1, file_path2]}}
         file_paths_set = set() # Used for querying metadata later
         try:
-            tagged_files = FileTags.objects.filter(
-                repo_tag__id__in=tag_ids).select_related('repo_tag', 'file_uuid')
-                
+            tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
             for tagged_file in tagged_files:
                 tag_id = tagged_file.repo_tag.id
                 parent_path = tagged_file.file_uuid.parent_path
@@ -2877,6 +2874,7 @@ class MetadataMigrateTags(APIView):
         tags_data = []  # [{name: '', color: ''}]
         for tag_id, tag_info in source_tags_info.items():
             tags_data.append({
+                TAGS_TABLE.columns.id.name: tag_id,
                 TAGS_TABLE.columns.name.name: tag_info['name'],
                 TAGS_TABLE.columns.color.name: tag_info['color'],
             })
@@ -2886,16 +2884,16 @@ class MetadataMigrateTags(APIView):
             if not tags_table:
                 return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
             
-            sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM {TAGS_TABLE.name}'
+            sql = f'SELECT `{TAGS_TABLE.columns.name.name}`,`{TAGS_TABLE.columns.id.name}` FROM {TAGS_TABLE.name}'
             existing_tags_result = metadata_server_api.query_rows(sql)
             existing_tag_records = existing_tags_result.get('results', [])
-            
-            existing_tag_names = []
+            existing_tag_map = {}
             if existing_tag_records:
-                existing_tag_names = [
-                    tag_dict.get(TAGS_TABLE.columns.name.name, '') 
+                existing_tag_map = {
+                    tag_dict.get(TAGS_TABLE.columns.name.name, '') :
+                    tag_dict.get(TAGS_TABLE.columns.id.name, '')
                     for tag_dict in existing_tag_records
-                ]
+                }
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2904,45 +2902,58 @@ class MetadataMigrateTags(APIView):
         # handle tag name conflict
         tags_table_id = tags_table['id']
         tags_to_create = []
-        
-        if existing_tag_names:
+        tags_to_create_info = []
+        tags_not_to_create = []
+        if existing_tag_map:
             for idx, tag_data in enumerate(tags_data):
                 tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
-                tag_color = tag_data.get(TAGS_TABLE.columns.color.name, '')
-                
-                if tag_name not in existing_tag_names:
-                    tags_to_create.append(tag_data)
-                else:
-                    unique_name = gen_unique_tag_name(tag_name, existing_tag_names)
-                    
+                tag_color = tag_data.get(TAGS_TABLE.columns.color.name)
+                if tag_name not in existing_tag_map:
                     tags_to_create.append({
-                        TAGS_TABLE.columns.color.name: tag_color,
-                        TAGS_TABLE.columns.name.name: unique_name
+                    TAGS_TABLE.columns.name.name: tag_name,
+                    TAGS_TABLE.columns.color.name: tag_color
+                    })
+                    tags_to_create_info.append(tag_data)
+                else:
+                    tags_not_to_create.append({
+                        'old_tag_id': tag_data.get(TAGS_TABLE.columns.id.name),
+                        TAGS_TABLE.columns.id.name: existing_tag_map.get(tag_name),
+                        TAGS_TABLE.columns.name.name: tag_name
                     })
         else:
-            tags_to_create = tags_data
-
+            for tag_data in tags_data:
+                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
+                tag_color = tag_data.get(TAGS_TABLE.columns.color.name)
+                tags_to_create.append({
+                    TAGS_TABLE.columns.name.name: tag_name,
+                    TAGS_TABLE.columns.color.name: tag_color
+                })
+            tags_to_create_info = tags_data
         try:
-            response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
-            new_tag_ids = response.get('row_ids', [])
+            destination_tags_info = {}  # new tag info
+            if tags_to_create:
+                response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
+                new_tag_ids = response.get('row_ids', [])
+                # create new old tag id mapping
+                for idx, tag in enumerate(tags_to_create):
+                    new_tag_id = new_tag_ids[idx]
+                    file_paths = source_tags_info[tags_to_create_info[idx].get(TAGS_TABLE.columns.id.name)].get('file_paths')
+                    destination_tags_info[new_tag_id] = {
+                        'file_paths': file_paths
+                    }
+            if tags_not_to_create:
+                for tag in tags_not_to_create:
+                    file_paths = source_tags_info[tag['old_tag_id']].get('file_paths')
+                    destination_tags_info[tag.get(TAGS_TABLE.columns.id.name)] = {
+                        'file_paths': file_paths
+                    }
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # create new old tag id mapping
-        destination_tags_info = {}  # new tag info
-        for idx, old_tag_id in enumerate(source_tags_info):
-            new_tag_id = new_tag_ids[idx]
-            
-            file_paths = source_tags_info[old_tag_id]['file_paths']
-            destination_tags_info[new_tag_id] = {
-                'file_paths': file_paths
-            }
-            
         # create record id to tag id mapping
         record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
-        
         for tag_id, tag_info in destination_tags_info.items():
             for file_path in tag_info['file_paths']:
                 record_id = file_to_record_map.get(file_path)
@@ -2961,14 +2972,14 @@ class MetadataMigrateTags(APIView):
                 record_to_tags_map
             )
             # Record that the old version tags have been migrated
-            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-            if not record.details_settings: 
-                details_settings = {}
-            else:
-                details_settings = json.loads(record.details_settings)
-            details_settings['tags_migrated'] = True
-            record.details_settings = json.dumps(details_settings)
-            record.save()
+            # record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            # if not record.details_settings: 
+            #     details_settings = {}
+            # else:
+            #     details_settings = json.loads(record.details_settings)
+            # details_settings['tags_migrated'] = True
+            # record.details_settings = json.dumps(details_settings)
+            # record.save()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
