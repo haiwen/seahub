@@ -586,6 +586,7 @@
   "Create_a_new_file": "新建文件",
   "Suggestion": "建议",
   "Continuation": "继续写",
+  "More_fluent": "更加流畅",
   "More_details": "更加详细",
   "More_concise": "更加简单",
   "More_vivid": "更加生动",
@@ -627,5 +628,7 @@
   "Edit_chart": "编辑图表",
   "Please_complete_the_chart_configuration_first": "请先完成图表配置",
   "chart": "图表",
-  "Image_is_upload_error": "图片上传失败，请删除后重新尝试"
+  "Image_is_upload_error": "图片上传失败，请删除后重新尝试",
+  "Table_not_exist": "表格不存在，请删除当前表格元素",
+  "Row_not_exist": "表格不存在，请删除当前行元素"
 }
