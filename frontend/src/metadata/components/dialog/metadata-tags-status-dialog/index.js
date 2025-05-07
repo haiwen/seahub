@@ -148,7 +148,6 @@ MetadataTagsStatusDialog.propTypes = {
   submit: PropTypes.func.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
   showMigrateTip: PropTypes.bool,
-  repoTags: PropTypes.array,
   onMigrateSuccess: PropTypes.func,
   onMigrateError: PropTypes.func,
   onMigrateStart: PropTypes.func,

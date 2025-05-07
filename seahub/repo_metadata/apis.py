@@ -2822,19 +2822,18 @@ class MetadataMigrateTags(APIView):
             file_path = posixpath.join(parent_dir, file_name)
             file_to_record_map[file_path] = record_id
         
-        tags_data = []  # [{name: '', color: ''}]
+        tags_data = []  # [{id: '', name: '', color: ''}]
         for tag_id, tag_info in source_tags_info.items():
             tags_data.append({
                 TAGS_TABLE.columns.id.name: tag_id,
                 TAGS_TABLE.columns.name.name: tag_info['name'],
                 TAGS_TABLE.columns.color.name: tag_info['color'],
             })
-        
 
         sql = f'SELECT `{TAGS_TABLE.columns.name.name}`,`{TAGS_TABLE.columns.id.name}` FROM {TAGS_TABLE.name}'
         existing_tags_result = metadata_server_api.query_rows(sql)
         existing_tag_records = existing_tags_result.get('results', [])
-        existing_tag_map = {}
+        existing_tag_map = {} # {name:id, ...}
         if existing_tag_records:
             existing_tag_map = {
                 tag_dict.get(TAGS_TABLE.columns.name.name, '') :
@@ -2842,9 +2841,9 @@ class MetadataMigrateTags(APIView):
                 for tag_dict in existing_tag_records
             }
         
-        tags_to_create = []
-        tags_to_create_info = []
-        tags_not_to_create = []
+        tags_to_create = [] # [{name:'', color:''}] Tags that need to be created
+        tags_to_create_info = [] # Tags information that needs to be created
+        tags_not_to_create = [] # [{old_tag_id:'', id:'', name:''}] Existing tags
         if existing_tag_map:
             for tag_data in tags_data:
                 tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
@@ -2937,7 +2936,6 @@ class MetadataMigrateTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-
         try:
             # preare tags data
             tags_to_create, tags_to_create_info, tags_not_to_create, file_to_record_map = \
@@ -2994,15 +2992,7 @@ class MetadataMigrateTags(APIView):
                 METADATA_TABLE.id, 
                 record_to_tags_map
             )
-            # Record that the old version tags have been migrated
-            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-            if not record.details_settings: 
-                details_settings = {}
-            else:
-                details_settings = json.loads(record.details_settings)
-            details_settings['tags_migrated'] = True
-            record.details_settings = json.dumps(details_settings)
-            record.save()
+            # clear old tag data
             tagged_files.delete()
             RepoTags.objects.get_all_by_repo_id(repo_id).delete()
         except Exception as e:
