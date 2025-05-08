@@ -2791,36 +2791,26 @@ class MetadataMigrateTags(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def _create_metadata_tags(self, repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE):
-        old_tags = []  # [{id: '', name: '', color: ''}]
-        for repo_tag in repo_tags:
-            old_tags.append({
-                TAGS_TABLE.columns.id.name: repo_tag.id,
-                TAGS_TABLE.columns.name.name: repo_tag.name,
-                TAGS_TABLE.columns.color.name: repo_tag.color,
-            })
-
         sql = f'SELECT `{TAGS_TABLE.columns.name.name}`,`{TAGS_TABLE.columns.id.name}` FROM {TAGS_TABLE.name}'
         existing_tags_result = metadata_server_api.query_rows(sql)
         existing_tag_records = existing_tags_result.get('results', [])
-        existing_tag_map = {} # {name:id, ...}
-        if existing_tag_records:
-            existing_tag_map = {
-                tag_dict.get(TAGS_TABLE.columns.name.name, '') :
-                tag_dict.get(TAGS_TABLE.columns.id.name, '')
-                for tag_dict in existing_tag_records
-            }
+        existing_tag_map = {
+            tag_dict.get(TAGS_TABLE.columns.name.name, '') :
+            tag_dict.get(TAGS_TABLE.columns.id.name, '')
+            for tag_dict in existing_tag_records
+        }
         
         tags_to_create = [] # [{name:'', color:''}, ...]
-        old_exist_tags = {} # {old_tag_name:id,} Existing tags
+        old_tag_name_to_metadata_tag_id = {} # {old_tag_name:id,} Existing tags
 
-        for tag_data in old_tags:
-            tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
-            tag_color = tag_data.get(TAGS_TABLE.columns.color.name)
+        for repo_tag in repo_tags:
+            tag_name = repo_tag.name
+            tag_color = repo_tag.color
             
             if tag_name in existing_tag_map:
                 # Tag already exists, no need to create it
                 new_tag_id = existing_tag_map.get(tag_name)
-                old_exist_tags[tag_name] = new_tag_id
+                old_tag_name_to_metadata_tag_id[tag_name] = new_tag_id
             else:
                 # Tag needs to be created
                 tags_to_create.append({
@@ -2828,17 +2818,16 @@ class MetadataMigrateTags(APIView):
                     TAGS_TABLE.columns.color.name: tag_color
                 })
         
-        tags_created = {} # {name:id,...}
+        tags_created_name_to_metadata_tag_id = {} # {name:id,...}
         if tags_to_create:
             response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
             new_tag_ids = response.get('row_ids', [])
-            
             for idx, tag in enumerate(tags_to_create):
                 new_tag_id = new_tag_ids[idx]
                 tag_name = tag.get(TAGS_TABLE.columns.name.name)
-                tags_created[tag_name] = new_tag_id
-
-        return tags_created, old_exist_tags
+                tags_created_name_to_metadata_tag_id[tag_name] = new_tag_id
+        metadata_tags = {**tags_created_name_to_metadata_tag_id, **old_tag_name_to_metadata_tag_id}
+        return metadata_tags
     
     def _get_old_tags_info(self, tagged_files):
         old_tags_info = {} # {old_tag_name: {file_path,....}}
@@ -2888,19 +2877,19 @@ class MetadataMigrateTags(APIView):
         return metadata_records
     
     def _handle_tags_link(self, metadata_records, destination_tags_info, METADATA_TABLE):
-        file_to_record_map = {}  # {file_path: record_id}
+        file_path_to_record_id = {}  # {file_path: record_id}
         for record in metadata_records:
             parent_dir = record.get(METADATA_TABLE.columns.parent_dir.name)
             file_name = record.get(METADATA_TABLE.columns.file_name.name)
             record_id = record.get(METADATA_TABLE.columns.id.name)
             
             file_path = posixpath.join(parent_dir, file_name)
-            file_to_record_map[file_path] = record_id
+            file_path_to_record_id[file_path] = record_id
         # create record id to tag id mapping
         record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
         for tag_id, file_paths in destination_tags_info.items():
             for file_path in file_paths:
-                record_id = file_to_record_map.get(file_path)
+                record_id = file_path_to_record_id.get(file_path)
                 if not record_id:
                     continue
                     
@@ -2937,7 +2926,7 @@ class MetadataMigrateTags(APIView):
         try:
             # create new tags
             repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
-            tags_created, old_exist_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
+            metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
 
             tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
             old_tags_info, file_paths_set = self._get_old_tags_info(tagged_files)
@@ -2948,12 +2937,7 @@ class MetadataMigrateTags(APIView):
         
         try:
             destination_tags_info = {}  # {tag_id: file_paths}
-            for tag_name, tag_id in tags_created.items():
-                if tag_name not in old_tags_info:
-                    continue
-                file_paths = old_tags_info[tag_name]
-                destination_tags_info[tag_id] = file_paths
-            for tag_name, tag_id in old_exist_tags.items():
+            for tag_name, tag_id in metadata_tags.items():
                 if tag_name not in old_tags_info:
                     continue
                 file_paths = old_tags_info[tag_name]
@@ -2971,7 +2955,6 @@ class MetadataMigrateTags(APIView):
                 METADATA_TABLE.id, 
                 record_to_tags_map
             )
-            
             # clear old tag data
             tagged_files.delete()
             repo_tags.delete()
