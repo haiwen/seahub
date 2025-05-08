@@ -5398,7 +5398,7 @@ msgstr "Dépublier le wiki"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:277
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
-msgstr "Etes-vous sûr de vouloir dépublier le wiki"
+msgstr "Êtes-vous sûr de vouloir dépublier le wiki?"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:284
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:296
@@ -5410,7 +5410,7 @@ msgstr "Supprimer le Wiki"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:297
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
-msgstr "Etes-vous sûr de vouloir supprimer Wiki"
+msgstr "Êtes-vous sûr de vouloir supprimer Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:290
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:302
@@ -5422,7 +5422,7 @@ msgstr "Quitter Partager Wiki"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:303
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
-msgstr "Etes-vous sûr de vouloir quitter le partage Wiki"
+msgstr "Êtes-vous sûr de vouloir quitter le partage Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:88
 msgid "My Wikis"
@@ -7424,7 +7424,7 @@ msgstr "Bibliothèque en lecture / écriture"
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:254
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:258
 msgid "Are you sure you want to delete {placeholder} completely?"
-msgstr "Êtes-vous certain de vouloir supprimer complètement la bibliothèque {placeholder}?"
+msgstr "Êtes-vous certain de vouloir supprimer complètement la bibliothèque {placeholder}?"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:265
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:269

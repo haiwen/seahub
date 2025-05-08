@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-28 14:59+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020,2022\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2657,7 +2657,7 @@ msgstr ""
 msgid ""
 "The custom part of the URL must be between 5 and 30 characters long and may "
 "only contain letters (a-z), numbers, and hyphens."
-msgstr ""
+msgstr "URLのカスタムパートは5〜30文字の長さでなければならず、文字（a〜z）、数字、ハイフンのみを含むことができます。"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:134
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
