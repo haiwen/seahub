@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
-import DeleteTags from './delete-tags';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
@@ -94,17 +93,6 @@ const TagsEditor = forwardRef(({
     const newIds = updated.map(tag => getTagId(tag));
     localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
   }, [value, record, tagsData, updateFileTags, recentlyUsed, localStorage]);
-
-  const onDeleteTag = useCallback((tagId) => {
-    const newValue = value.slice(0);
-    let optionIdx = value.indexOf(tagId);
-    if (optionIdx > -1) {
-      newValue.splice(optionIdx, 1);
-    }
-    setValue(newValue);
-    const recordId = getRecordIdFromRecord(record);
-    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
-  }, [value, record, updateFileTags]);
 
   const onMenuMouseEnter = useCallback((i, id) => {
     setHighlightIndex(i);
@@ -306,7 +294,9 @@ const TagsEditor = forwardRef(({
     return searchedNodes;
   }, [tagsData, searchValue, searchedKeyNodeFoldedMap]);
 
-  const toggleExpandTreeNode = useCallback((nodeKey) => {
+  const toggleExpandTreeNode = useCallback((e, nodeKey) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!searchValue) {
       const updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
       if (updatedKeyNodeFoldedMap[nodeKey]) {
@@ -448,7 +438,7 @@ const TagsEditor = forwardRef(({
               depth={getTreeNodeDepth(node)}
               hasChildren={checkTreeNodeHasChildNodes(node)}
               isFolded={!searchValue ? keyNodeFoldedMap[nodeKey] : searchedKeyNodeFoldedMap[nodeKey]}
-              onToggleExpand={() => toggleExpandTreeNode(nodeKey)}
+              onToggleExpand={(e) => toggleExpandTreeNode(e, nodeKey)}
             />
           );
         })}
@@ -458,7 +448,6 @@ const TagsEditor = forwardRef(({
 
   return (
     <div className={classnames('sf-metadata-tags-editor', { 'tags-tree-container': showTagsAsTree })} style={style} ref={editorRef}>
-      <DeleteTags value={value} tags={tagsData} onDelete={onDeleteTag} />
       <div className="sf-metadata-search-tags-container">
         <SearchInput
           placeholder={gettext('Search tag')}
