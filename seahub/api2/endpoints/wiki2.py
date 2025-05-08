@@ -20,7 +20,8 @@ from rest_framework.views import APIView
 from seaserv import seafile_api
 from pysearpc import SearpcError
 from django.utils.translation import gettext as _
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
@@ -1622,10 +1623,8 @@ class WikiPageExport(APIView):
             encoded_filename = quote(new_filename)
             response.write(resp_with_md_file.content)
         elif export_type == 'sdoc':
-            sdoc_content = requests.get(download_url).content
-            new_filename = f'{page_name}.sdoc'
-            encoded_filename = quote(new_filename)
-            response.write(sdoc_content)
+            sdoc_export_redirect = reverse('seadoc_export', args=[doc_uuid])
+            return HttpResponseRedirect(f'{sdoc_export_redirect}?wiki_page_name={page_name}.sdoc')
 
         response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
 
