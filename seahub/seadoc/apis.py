@@ -3010,6 +3010,7 @@ class SeadocExportView(APIView):
 
     def get(self, request, file_uuid):
         username = request.user.username
+        wiki_page_name = request.GET.get('wiki_page_name')
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -3039,7 +3040,10 @@ class SeadocExportView(APIView):
         response = FileResponse(open(tmp_zip_path, 'rb'),
                                 content_type="application/x-zip-compressed",
                                 as_attachment=True)
+        
         response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-4] + ZSDOC)
+        if wiki_page_name:
+            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(wiki_page_name[:-4] + ZSDOC)
 
         tmp_dir = os.path.join('/tmp/sdoc', str(uuid_map.uuid))
         tmp_dict = os.path.normpath(tmp_dir)
