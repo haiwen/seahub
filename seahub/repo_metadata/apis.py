@@ -2789,43 +2789,14 @@ class MetadataMigrateTags(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
-    
-    # return old tag info
-    def _get_old_tags_info(self, repo_tags, tagged_files):
-        old_tags_info = {} # {tag_id: {name: '', color: '', file_paths: [file_path1, file_path2]}}
-        file_paths_set = set() # Used for querying metadata later
-        for tagged_file in tagged_files:
-            tag_id = tagged_file.repo_tag.id
-            parent_path = tagged_file.file_uuid.parent_path
-            filename = tagged_file.file_uuid.filename
-            file_path = posixpath.join(parent_path, filename)
-            
-            if tag_id not in old_tags_info:
-                old_tags_info[tag_id] = {
-                    'name': tagged_file.repo_tag.name,
-                    'color': tagged_file.repo_tag.color,
-                    'file_paths': []
-                }
-            
-            old_tags_info[tag_id]['file_paths'].append(file_path)
-            file_paths_set.add(file_path)
-        for repo_tag in repo_tags:
-            repo_tag_id = repo_tag.id
-            if repo_tag_id not in old_tags_info:
-                old_tags_info[repo_tag_id] = {
-                    'name': repo_tag.name,
-                    'color': repo_tag.color,
-                    'file_paths': []
-                }
-        return old_tags_info, file_paths_set
-    
-    def _prepare_tags_data_for_creation(self, old_tags_info, metadata_server_api, TAGS_TABLE):
+
+    def _create_metadata_tags(self, repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE):
         old_tags = []  # [{id: '', name: '', color: ''}]
-        for tag_id, tag_info in old_tags_info.items():
+        for repo_tag in repo_tags:
             old_tags.append({
-                TAGS_TABLE.columns.id.name: tag_id,
-                TAGS_TABLE.columns.name.name: tag_info['name'],
-                TAGS_TABLE.columns.color.name: tag_info['color'],
+                TAGS_TABLE.columns.id.name: repo_tag.id,
+                TAGS_TABLE.columns.name.name: repo_tag.name,
+                TAGS_TABLE.columns.color.name: repo_tag.color,
             })
 
         sql = f'SELECT `{TAGS_TABLE.columns.name.name}`,`{TAGS_TABLE.columns.id.name}` FROM {TAGS_TABLE.name}'
@@ -2839,35 +2810,51 @@ class MetadataMigrateTags(APIView):
                 for tag_dict in existing_tag_records
             }
         
-        tags_to_create = [] # [{name:'', color:''}] Tags that need to be created
-        tags_details = [] # Tags information that needs to be created
-        exist_tags = [] # [{old_tag_id:'', id:'', name:''}] Existing tags
+        tags_to_create = [] # [{name:'', color:''}, ...]
+        old_exist_tags = {} # {old_tag_name:id,} Existing tags
 
         for tag_data in old_tags:
             tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
             tag_color = tag_data.get(TAGS_TABLE.columns.color.name)
-            tag_id = tag_data.get(TAGS_TABLE.columns.id.name)
             
             if tag_name in existing_tag_map:
                 # Tag already exists, no need to create it
-                exist_tags.append({
-                    'old_tag_id': tag_id,
-                    TAGS_TABLE.columns.id.name: existing_tag_map.get(tag_name),
-                    TAGS_TABLE.columns.name.name: tag_name
-                })
+                new_tag_id = existing_tag_map.get(tag_name)
+                old_exist_tags[tag_name] = new_tag_id
             else:
                 # Tag needs to be created
                 tags_to_create.append({
                     TAGS_TABLE.columns.name.name: tag_name,
                     TAGS_TABLE.columns.color.name: tag_color
                 })
-                tags_details.append(tag_data)
         
-        # If no existing tags, all tag data should be used for creation
-        if not existing_tag_map and not tags_details:
-            tags_details = old_tags
+        tags_created = {} # {name:id,...}
+        if tags_to_create:
+            response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
+            new_tag_ids = response.get('row_ids', [])
+            
+            for idx, tag in enumerate(tags_to_create):
+                new_tag_id = new_tag_ids[idx]
+                tag_name = tag.get(TAGS_TABLE.columns.name.name)
+                tags_created[tag_name] = new_tag_id
 
-        return tags_to_create, tags_details, exist_tags
+        return tags_created, old_exist_tags
+    
+    def _get_old_tags_info(self, tagged_files):
+        old_tags_info = {} # {old_tag_name: {file_path,....}}
+        file_paths_set = set() # Used for querying metadata later
+        for tagged_file in tagged_files:
+            old_tag_name = tagged_file.repo_tag.name
+            parent_path = tagged_file.file_uuid.parent_path
+            filename = tagged_file.file_uuid.filename
+            file_path = posixpath.join(parent_path, filename)
+            
+            if old_tag_name not in old_tags_info:
+                old_tags_info[old_tag_name] = set()
+            
+            old_tags_info[old_tag_name].add(file_path)
+            file_paths_set.add(file_path)
+        return old_tags_info, file_paths_set
 
     def _get_metadata_records(self, metadata_server_api, file_paths_set, METADATA_TABLE):
         if not file_paths_set:
@@ -2909,11 +2896,10 @@ class MetadataMigrateTags(APIView):
             
             file_path = posixpath.join(parent_dir, file_name)
             file_to_record_map[file_path] = record_id
-
         # create record id to tag id mapping
         record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
-        for tag_id, tag_info in destination_tags_info.items():
-            for file_path in tag_info['file_paths']:
+        for tag_id, file_paths in destination_tags_info.items():
+            for file_path in file_paths:
                 record_id = file_to_record_map.get(file_path)
                 if not record_id:
                     continue
@@ -2939,61 +2925,53 @@ class MetadataMigrateTags(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
+        if not tags_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+        tags_table_id = tags_table['id']
         
         try:
-            tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
+            # create new tags
             repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
-            old_tags_info, file_paths_set = self._get_old_tags_info(repo_tags, tagged_files)
+            tags_created, old_exist_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
+
+            tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
+            old_tags_info, file_paths_set = self._get_old_tags_info(tagged_files)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        from seafevents.repo_metadata.constants import METADATA_TABLE
-        from seafevents.repo_metadata.constants import TAGS_TABLE
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        
         try:
-            # query records
-            metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
-
-            # Prepare the data required to create the tag
-            tags_to_create, tags_details, exist_tags = \
-            self._prepare_tags_data_for_creation(old_tags_info, metadata_server_api, TAGS_TABLE)
-
-            # create new tags
-            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
-            if not tags_table:
-                return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
-            tags_table_id = tags_table['id']
-            destination_tags_info = {}  # new tag info
-            if tags_to_create:
-                response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
-                # create new old tag id mapping
-                new_tag_ids = response.get('row_ids', [])
-                for idx, tag in enumerate(tags_to_create):
-                    new_tag_id = new_tag_ids[idx]
-                    file_paths = old_tags_info[tags_details[idx].get(TAGS_TABLE.columns.id.name)].get('file_paths')
-                    destination_tags_info[new_tag_id] = {
-                        'file_paths': file_paths
-                    }
-            if exist_tags:
-                for tag in exist_tags:
-                    file_paths = old_tags_info[tag['old_tag_id']].get('file_paths')
-                    destination_tags_info[tag.get(TAGS_TABLE.columns.id.name)] = {
-                        'file_paths': file_paths
-                    }
+            destination_tags_info = {}  # {tag_id: file_paths}
+            for tag_name, tag_id in tags_created.items():
+                if tag_name not in old_tags_info:
+                    continue
+                file_paths = old_tags_info[tag_name]
+                destination_tags_info[tag_id] = file_paths
+            for tag_name, tag_id in old_exist_tags.items():
+                if tag_name not in old_tags_info:
+                    continue
+                file_paths = old_tags_info[tag_name]
+                destination_tags_info[tag_id] = file_paths
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         try:
+            # query records
+            metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
             record_to_tags_map = self._handle_tags_link(metadata_records, destination_tags_info, METADATA_TABLE)
             metadata_server_api.insert_link(
                 TAGS_TABLE.file_link_id, 
                 METADATA_TABLE.id, 
                 record_to_tags_map
             )
+            
             # clear old tag data
             tagged_files.delete()
             repo_tags.delete()
