@@ -4,7 +4,6 @@
   margin: 2px 10px 2px 0;
   padding: 0 8px 0 2px;
   height: 20px;
-  font-size: 13px;
   border-radius: 10px;
   background: #eaeaea;
 }
@@ -44,7 +43,6 @@
   display: inline-block;
   font-size: 12px;
   color: #909090;
-  transform: scale(.8);
   cursor: pointer;
 }
 

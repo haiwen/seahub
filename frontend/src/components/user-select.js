@@ -14,7 +14,8 @@ import ClickOutside from './click-outside';
 import '../css/user-select.css';
 
 const propTypes = {
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  searchPlaceholder: PropTypes.string,
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool,
   className: PropTypes.string,
@@ -162,15 +163,19 @@ class UserSelect extends React.Component {
   onUserClick = (user) => {
     const { isMulti = true } = this.props;
     let selectedUsers = this.props.selectedUsers.slice(0);
+    const index = selectedUsers.findIndex(item => item.email === user.email);
     if (isMulti) {
-      const index = selectedUsers.findIndex(item => item.email === user.email);
       if (index > -1) {
         selectedUsers.splice(index, 1);
       } else {
         selectedUsers.push(user);
       }
     } else {
-      selectedUsers = [user];
+      if (index > -1) {
+        selectedUsers = [];
+      } else {
+        selectedUsers = [user];
+      }
     }
     this.props.onSelectChange(selectedUsers);
   };
@@ -229,7 +234,7 @@ class UserSelect extends React.Component {
               <div className="user-search-container">
                 <SearchInput
                   autoFocus={true}
-                  placeholder={this.props.placeholder || gettext('Search users')}
+                  placeholder={this.props.searchPlaceholder || gettext('Search users')}
                   value={searchValue}
                   onChange={this.onValueChanged}
                   onKeyDown={this.onKeyDown}
@@ -246,6 +251,7 @@ class UserSelect extends React.Component {
                         onClick={this.onUserClick.bind(this, user)}
                       >
                         <UserItem user={user} enableDeleteUser={false} />
+                        {selectedUsers.find(u => u.email === user.email) && <i className="sf2-icon-tick"></i>}
                       </div>
                     );
                   })

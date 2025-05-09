@@ -56,6 +56,11 @@
   cursor: pointer;
 }
 
+.seafile-select-option .sf2-icon-tick {
+  right: 10px;
+  position: absolute;
+}
+
 .seafile-select-option.seafile-select-option-active .select-option-name {
   color: #fff;
 }
