@@ -2818,19 +2818,17 @@ class MetadataMigrateTags(APIView):
                     TAGS_TABLE.columns.color.name: tag_color
                 })
         
-        tags_created_name_to_metadata_tag_id = {} # {name:id,...}
         if tags_to_create:
             response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
             new_tag_ids = response.get('row_ids', [])
             for idx, tag in enumerate(tags_to_create):
                 new_tag_id = new_tag_ids[idx]
                 tag_name = tag.get(TAGS_TABLE.columns.name.name)
-                tags_created_name_to_metadata_tag_id[tag_name] = new_tag_id
-        metadata_tags = {**tags_created_name_to_metadata_tag_id, **old_tag_name_to_metadata_tag_id}
-        return metadata_tags
+                old_tag_name_to_metadata_tag_id[tag_name] = new_tag_id
+        return old_tag_name_to_metadata_tag_id
     
     def _get_old_tags_info(self, tagged_files):
-        old_tags_info = {} # {old_tag_name: {file_path,....}}
+        old_tag_name_to_file_paths = {} # {old_tag_name: {file_path,....}}
         file_paths_set = set() # Used for querying metadata later
         for tagged_file in tagged_files:
             old_tag_name = tagged_file.repo_tag.name
@@ -2838,12 +2836,12 @@ class MetadataMigrateTags(APIView):
             filename = tagged_file.file_uuid.filename
             file_path = posixpath.join(parent_path, filename)
             
-            if old_tag_name not in old_tags_info:
-                old_tags_info[old_tag_name] = set()
+            if old_tag_name not in old_tag_name_to_file_paths:
+                old_tag_name_to_file_paths[old_tag_name] = set()
             
-            old_tags_info[old_tag_name].add(file_path)
+            old_tag_name_to_file_paths[old_tag_name].add(file_path)
             file_paths_set.add(file_path)
-        return old_tags_info, file_paths_set
+        return old_tag_name_to_file_paths, file_paths_set
 
     def _get_metadata_records(self, metadata_server_api, file_paths_set, METADATA_TABLE):
         if not file_paths_set:
@@ -2856,27 +2854,37 @@ class MetadataMigrateTags(APIView):
             dir_paths.append(parent_dir)
             filenames.append(filename)
         
-        where_conditions = []
-        parameters = []
-        for i in range(len(dir_paths)):
-            where_conditions.append(f"(`{METADATA_TABLE.columns.parent_dir.name}` = ? AND `{METADATA_TABLE.columns.file_name.name}` = ?)")
-            parameters.append(dir_paths[i])
-            parameters.append(filenames[i])
-        where_clause = " OR ".join(where_conditions)
-        sql = f'''
-            SELECT `{METADATA_TABLE.columns.id.name}`, 
-            `{METADATA_TABLE.columns.file_name.name}`, 
-            `{METADATA_TABLE.columns.parent_dir.name}` 
-            FROM `{METADATA_TABLE.name}` 
-            WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
-            AND ({where_clause})
-            '''
-        query_result = metadata_server_api.query_rows(sql, parameters)
-        metadata_records = query_result.get('results', [])
+        batch_size = 100
+        all_metadata_records = []
+        
+        for i in range(0, len(dir_paths), batch_size):
+            batch_dir_paths = dir_paths[i:i+batch_size]
+            batch_filenames = filenames[i:i+batch_size]
+            
+            where_conditions = []
+            parameters = []
+            for j in range(len(batch_dir_paths)):
+                where_conditions.append(f"(`{METADATA_TABLE.columns.parent_dir.name}` = ? AND `{METADATA_TABLE.columns.file_name.name}` = ?)")
+                parameters.append(batch_dir_paths[j])
+                parameters.append(batch_filenames[j])
+                
+            where_clause = " OR ".join(where_conditions)
+            sql = f'''
+                SELECT `{METADATA_TABLE.columns.id.name}`, 
+                `{METADATA_TABLE.columns.file_name.name}`, 
+                `{METADATA_TABLE.columns.parent_dir.name}` 
+                FROM `{METADATA_TABLE.name}` 
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
+                AND ({where_clause})
+                '''
+                
+            query_result = metadata_server_api.query_rows(sql, parameters)
+            batch_metadata_records = query_result.get('results', [])
+            all_metadata_records.extend(batch_metadata_records)
 
-        return metadata_records
+        return all_metadata_records
     
-    def _handle_tags_link(self, metadata_records, destination_tags_info, METADATA_TABLE):
+    def _handle_tags_link(self, metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE):
         file_path_to_record_id = {}  # {file_path: record_id}
         for record in metadata_records:
             parent_dir = record.get(METADATA_TABLE.columns.parent_dir.name)
@@ -2887,7 +2895,7 @@ class MetadataMigrateTags(APIView):
             file_path_to_record_id[file_path] = record_id
         # create record id to tag id mapping
         record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
-        for tag_id, file_paths in destination_tags_info.items():
+        for tag_id, file_paths in metadata_tag_id_to_file_paths.items():
             for file_path in file_paths:
                 record_id = file_path_to_record_id.get(file_path)
                 if not record_id:
@@ -2915,8 +2923,7 @@ class MetadataMigrateTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         if not tags_table:
@@ -2929,19 +2936,19 @@ class MetadataMigrateTags(APIView):
             metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
 
             tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
-            old_tags_info, file_paths_set = self._get_old_tags_info(tagged_files)
+            old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
         try:
-            destination_tags_info = {}  # {tag_id: file_paths}
+            metadata_tag_id_to_file_paths = {}  # {tag_id: file_paths}
             for tag_name, tag_id in metadata_tags.items():
-                if tag_name not in old_tags_info:
+                if tag_name not in old_tag_name_to_file_paths:
                     continue
-                file_paths = old_tags_info[tag_name]
-                destination_tags_info[tag_id] = file_paths
+                file_paths = old_tag_name_to_file_paths[tag_name]
+                metadata_tag_id_to_file_paths[tag_id] = file_paths
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2949,7 +2956,7 @@ class MetadataMigrateTags(APIView):
         try:
             # query records
             metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
-            record_to_tags_map = self._handle_tags_link(metadata_records, destination_tags_info, METADATA_TABLE)
+            record_to_tags_map = self._handle_tags_link(metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE)
             metadata_server_api.insert_link(
                 TAGS_TABLE.file_link_id, 
                 METADATA_TABLE.id, 
