@@ -2933,9 +2933,13 @@ class MetadataMigrateTags(APIView):
         try:
             # create new tags
             repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
+            if not repo_tags:
+                return Response({'success': True})
             metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
 
             tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
+            if not tagged_files:
+                return Response({'success': True})
             old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
         except Exception as err:
             logger.error(err)
