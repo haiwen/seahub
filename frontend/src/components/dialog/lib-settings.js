@@ -14,6 +14,7 @@ import {
 } from '../../metadata';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { useMetadataStatus } from '../../hooks';
+import Loading from '../../components/loading';
 
 import '../../css/lib-settings.css';
 
@@ -22,12 +23,12 @@ const { enableSeafileAI, enableSeafileOCR } = window.app.config;
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
-  currentRepoInfo: PropTypes.object.isRequired
+  currentRepoInfo: PropTypes.object.isRequired,
 };
 
-const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMigrateTip }) => {
+const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMigrateTip, onMigrateSuccess }) => {
   const [activeTab, setActiveTab] = useState(tab || TAB.HISTORY_SETTING);
-
+  const [isMigrating, setIsMigrating] = useState(false);
   const toggleTab = useCallback((tab) => {
     setActiveTab(tab);
   }, []);
@@ -46,9 +47,38 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
 
+  const handleMigrateStart = useCallback(() => {
+    setIsMigrating(true);
+  }, []);
+
+  const handleMigrateEnd = useCallback(() => {
+    setIsMigrating(false);
+    onMigrateSuccess && onMigrateSuccess();
+  }, [onMigrateSuccess]);
+
+  const handleMigrateError = useCallback(() => {
+    setIsMigrating(false);
+  }, []);
+
   return (
     <div>
       <Modal isOpen={true} className="lib-settings-dialog" toggle={toggleDialog}>
+        {isMigrating && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1050
+          }}>
+            <Loading />
+          </div>
+        )}
         <SeahubModalHeader toggle={toggleDialog}>
           {gettext('Settings')}
         </SeahubModalHeader>
@@ -202,6 +232,9 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                     toggleDialog={toggleDialog}
                     enableMetadata={enableMetadata}
                     showMigrateTip={showMigrateTip}
+                    onMigrateSuccess={handleMigrateEnd}
+                    onMigrateError={handleMigrateError}
+                    onMigrateStart={handleMigrateStart}
                   />
                 </TabPane>
               )}

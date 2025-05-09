@@ -73,7 +73,6 @@ def gen_unique_id(id_set, length=4):
             return _id
         _id = generator_base64_code(length)
 
-
 def get_face_columns():
     from seafevents.repo_metadata.constants import FACES_TABLE
     columns = [

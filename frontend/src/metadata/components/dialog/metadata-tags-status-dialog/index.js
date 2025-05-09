@@ -19,12 +19,11 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip }) => {
+const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, showMigrateTip, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
-
   const onToggle = useCallback(() => {
     toggle();
   }, [toggle]);
@@ -46,8 +45,16 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
   }, [lang, repoID, submit, toggle, value]);
 
   const migrateTag = useCallback(() => {
-    // TODO backend migrate old tags
-  }, []);
+    onMigrateStart && onMigrateStart();
+    tagsAPI.migrateTags(repoID).then(res => {
+      toaster.success(gettext('Tags migrated successfully'));
+      onMigrateSuccess && onMigrateSuccess();
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      onMigrateError && onMigrateError();
+    });
+  }, [repoID, onMigrateSuccess, onMigrateStart, onMigrateError]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -110,7 +117,12 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
             {showMigrateTip &&
               <FormGroup className="mt-6">
                 <p>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
-                <Button color="primary" onClick={migrateTag}>{gettext('Migrate old version tags')}</Button>
+                <Button
+                  color="primary"
+                  onClick={migrateTag}
+                >
+                  {gettext('Migrate old version tags')}
+                </Button>
               </FormGroup>
             }
           </ModalBody>
@@ -136,6 +148,9 @@ MetadataTagsStatusDialog.propTypes = {
   submit: PropTypes.func.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
   showMigrateTip: PropTypes.bool,
+  onMigrateSuccess: PropTypes.func,
+  onMigrateError: PropTypes.func,
+  onMigrateStart: PropTypes.func,
 };
 
 export default MetadataTagsStatusDialog;

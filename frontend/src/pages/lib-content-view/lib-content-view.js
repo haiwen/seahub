@@ -2347,6 +2347,7 @@ class LibContentView extends React.Component {
     if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
       detailPath = Utils.getDirName(this.state.path);
     }
+
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
       <DndProvider backend={HTML5Backend}>
