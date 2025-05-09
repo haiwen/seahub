@@ -2930,33 +2930,25 @@ class MetadataMigrateTags(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
         tags_table_id = tags_table['id']
         
-        try:
-            # create new tags
-            repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
-            if not repo_tags:
-                return Response({'success': True})
-            metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
+        # create new tags
+        repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
+        if not repo_tags:
+            return Response({'success': True})
+        metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
 
-            tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
-            if not tagged_files:
-                return Response({'success': True})
-            old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
-        except Exception as err:
-            logger.error(err)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
+        if not tagged_files:
+            repo_tags.delete()
+            return Response({'success': True})
+        old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
         
-        try:
-            metadata_tag_id_to_file_paths = {}  # {tag_id: file_paths}
-            for tag_name, tag_id in metadata_tags.items():
-                if tag_name not in old_tag_name_to_file_paths:
-                    continue
-                file_paths = old_tag_name_to_file_paths[tag_name]
-                metadata_tag_id_to_file_paths[tag_id] = file_paths
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        metadata_tag_id_to_file_paths = {}  # {tag_id: file_paths}
+        for tag_name, tag_id in metadata_tags.items():
+            if tag_name not in old_tag_name_to_file_paths:
+                continue
+            file_paths = old_tag_name_to_file_paths[tag_name]
+            metadata_tag_id_to_file_paths[tag_id] = file_paths
+        
         try:
             # query records
             metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
