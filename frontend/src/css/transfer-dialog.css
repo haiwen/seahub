@@ -41,12 +41,14 @@
 
 .transfer-dialog-content .transfer-dialog-main {
   display: flex;
+  flex-direction: column;
   flex-basis: 78%;
-  padding: 1rem;
 }
 
 .transfer-dialog-content .transfer-dialog-main .tab-content {
   flex: 1;
+  padding: 1rem;
+  min-height: 400px;
 }
 
 .transfer-dialog-content .transfer-dialog-main .tab-pane {

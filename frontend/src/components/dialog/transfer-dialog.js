@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
@@ -13,6 +13,7 @@ import toaster from '../toast';
 import UserSelect from '../user-select';
 import { SeahubSelect } from '../common/select';
 import Switch from '../switch';
+
 import '../../css/transfer-dialog.css';
 
 const propTypes = {
@@ -128,8 +129,20 @@ class TransferDialog extends React.Component {
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
     }
+
+    const { selectedOption } = this.state;
+    let buttonDisabled = false;
+    if (activeTab === TRANS_DEPART) {
+      if (selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)) {
+        buttonDisabled = true;
+      }
+    } else {
+      if (this.state.selectedUsers.length === 0) {
+        buttonDisabled = true;
+      }
+    }
     return (
-      <Fragment>
+      <>
         <div className="transfer-dialog-side">
           <Nav pills>
             {!this.props.isDepAdminTransfer &&
@@ -145,21 +158,22 @@ class TransferDialog extends React.Component {
               </NavItem>
             }
             {isPro &&
-            <NavItem role="tab" aria-selected={activeTab === TRANS_DEPART} aria-controls="transfer-depart-panel">
-              <NavLink
-                className={activeTab === TRANS_DEPART ? 'active' : ''}
-                onClick={this.toggle.bind(this, TRANS_DEPART)}
-                tabIndex="0"
-                onKeyDown={this.onTabKeyDown}
-              >
-                {gettext('Transfer to department')}
-              </NavLink>
-            </NavItem>}
+              <NavItem role="tab" aria-selected={activeTab === TRANS_DEPART} aria-controls="transfer-depart-panel">
+                <NavLink
+                  className={activeTab === TRANS_DEPART ? 'active' : ''}
+                  onClick={this.toggle.bind(this, TRANS_DEPART)}
+                  tabIndex="0"
+                  onKeyDown={this.onTabKeyDown}
+                >
+                  {gettext('Transfer to department')}
+                </NavLink>
+              </NavItem>
+            }
           </Nav>
         </div>
         <div className="transfer-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
-            <Fragment>
+            <>
               <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
                 <Label className='transfer-repo-label'>{gettext('Users')}</Label>
                 <UserSelect
@@ -173,59 +187,53 @@ class TransferDialog extends React.Component {
                   disabled={false}
                   size="large"
                   textPosition="right"
-                  className='transfer-repo-reshare-switch w-100 mt-3 mb-1'
+                  className='transfer-repo-reshare-switch w-100 mt-6 mb-1'
                   onChange={this.toggleReshareStatus}
                   placeholder={gettext('Keep sharing')}
                 />
                 <div className='tip'>{gettext('If the library is shared to another user, the sharing will be kept.')}</div>
               </TabPane>
               {isPro && canTransferToDept &&
-              <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
-                <Label className='transfer-repo-label'>{gettext('Departments')}</Label>
-                <SeahubSelect
-                  isClearable
-                  maxMenuHeight={200}
-                  hideSelectedOptions={true}
-                  components={makeAnimated()}
-                  placeholder={gettext('Select a department')}
-                  options={this.state.options}
-                  onChange={this.handleSelectChange}
-                  value={this.state.selectedOption}
-                  className="transfer-repo-select-department"
-                />
-                <Switch
-                  checked={reshare}
-                  disabled={false}
-                  size="large"
-                  textPosition="right"
-                  className='transfer-repo-reshare-switch w-100 mt-3 mb-1'
-                  onChange={this.toggleReshareStatus}
-                  placeholder={gettext('Keep sharing')}
-                />
-                <div className='tip'>{gettext('If the library is shared to another department, the sharing will be kept.')}</div>
-              </TabPane>}
-            </Fragment>
+                <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
+                  <Label className='transfer-repo-label'>{gettext('Departments')}</Label>
+                  <SeahubSelect
+                    isClearable
+                    maxMenuHeight={200}
+                    hideSelectedOptions={true}
+                    components={makeAnimated()}
+                    placeholder={gettext('Select a department')}
+                    options={this.state.options}
+                    onChange={this.handleSelectChange}
+                    value={this.state.selectedOption}
+                    className="transfer-repo-select-department"
+                  />
+                  <Switch
+                    checked={reshare}
+                    disabled={false}
+                    size="large"
+                    textPosition="right"
+                    className='transfer-repo-reshare-switch w-100 mt-6 mb-1'
+                    onChange={this.toggleReshareStatus}
+                    placeholder={gettext('Keep sharing')}
+                  />
+                  <div className='tip'>{gettext('If the library is shared to another department, the sharing will be kept.')}</div>
+                </TabPane>
+              }
+            </>
           </TabContent>
+          <ModalFooter>
+            <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+            <Button color="primary" onClick={this.submit} disabled={buttonDisabled}>{gettext('Submit')}</Button>
+          </ModalFooter>
         </div>
-      </Fragment>
+      </>
     );
   };
 
   render() {
-    const { selectedOption, activeTab } = this.state;
-    const { itemName: repoName } = this.props;
+    let { itemName } = this.props;
     let title = gettext('Transfer Library {library_name}');
-    title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
-    let buttonDisabled = false;
-    if (activeTab === TRANS_DEPART) {
-      if (selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)) {
-        buttonDisabled = true;
-      }
-    } else {
-      if (this.state.selectedUsers.length === 0) {
-        buttonDisabled = true;
-      }
-    }
+    title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(itemName) + '</span>');
     return (
       <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">
         <SeahubModalHeader toggle={this.props.toggleDialog}>
@@ -234,10 +242,6 @@ class TransferDialog extends React.Component {
         <ModalBody className="transfer-dialog-content" role="tablist">
           {this.renderTransContent()}
         </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.submit} disabled={buttonDisabled}>{gettext('Submit')}</Button>
-        </ModalFooter>
       </Modal>
     );
   }
