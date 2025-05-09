@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
-import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
 import { orgAdminAPI } from '../../utils/org-admin-api';
@@ -11,8 +10,8 @@ import { gettext, isPro, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
-import { SeahubSelect } from '../common/select';
 import Switch from '../switch';
+import CustomizeSelect from '../customize-select';
 
 import '../../css/transfer-dialog.css';
 
@@ -44,8 +43,19 @@ class TransferDialog extends React.Component {
     };
   }
 
-  handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+  handleSelectDepartment = (value) => {
+    if (this.state.selectedOption && this.state.selectedOption.value === value) {
+      this.setState({ selectedOption: null });
+    } else {
+      const option = this.state.options.find(item => item.value === value);
+      this.setState({ selectedOption: option });
+    }
+  };
+
+  deleteSelectedDepartment = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    this.setState({ selectedOption: null });
   };
 
   onUsersChange = (selectedUsers) => {
@@ -54,7 +64,7 @@ class TransferDialog extends React.Component {
 
   submit = () => {
     const { activeTab, reshare, selectedOption, selectedUsers } = this.state;
-    const email = activeTab === TRANS_DEPART ? selectedOption.email : selectedUsers[0].email;
+    const email = activeTab === TRANS_DEPART ? selectedOption.value : selectedUsers[0].email;
     this.props.onTransferRepo(email, reshare);
   };
 
@@ -90,9 +100,9 @@ class TransferDialog extends React.Component {
   updateOptions = (departmentsRes) => {
     const options = departmentsRes.data.map(item => {
       let option = {
-        value: item.name,
-        email: item.email,
+        value: item.email,
         label: item.name,
+        name: item.name,
       };
       return option;
     });
@@ -196,16 +206,17 @@ class TransferDialog extends React.Component {
               {isPro && canTransferToDept &&
                 <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
                   <Label className='transfer-repo-label'>{gettext('Departments')}</Label>
-                  <SeahubSelect
-                    isClearable
-                    maxMenuHeight={200}
-                    hideSelectedOptions={true}
-                    components={makeAnimated()}
-                    placeholder={gettext('Select a department')}
-                    options={this.state.options}
-                    onChange={this.handleSelectChange}
+                  <CustomizeSelect
+                    readOnly={false}
                     value={this.state.selectedOption}
-                    className="transfer-repo-select-department"
+                    options={this.state.options}
+                    onSelectOption={this.handleSelectDepartment}
+                    searchable={true}
+                    supportMultipleSelect={false}
+                    placeholder={gettext('Select a department')}
+                    searchPlaceholder={gettext('Search department')}
+                    enableDeleteSelected={true}
+                    deleteSelected={this.deleteSelectedDepartment}
                   />
                   <Switch
                     checked={reshare}

@@ -59,8 +59,7 @@
   color: #666;
 }
 
-.transfer-dialog-content .transfer-dialog-main .user-select,
-.transfer-dialog-content .transfer-dialog-main .transfer-repo-select-department {
+.transfer-dialog-content .transfer-dialog-main .user-select {
   padding: 8px 0;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
