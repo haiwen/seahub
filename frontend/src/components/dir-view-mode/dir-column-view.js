@@ -86,6 +86,7 @@ const propTypes = {
   updateCurrentPath: PropTypes.func,
   toggleShowDirentToolbar: PropTypes.func,
   updateTreeNode: PropTypes.func,
+  updateRepoInfo: PropTypes.func
 };
 
 class DirColumnView extends React.Component {
@@ -177,6 +178,7 @@ class DirColumnView extends React.Component {
               navRate={navRate}
               inResizing={inResizing}
               currentRepoInfo={this.props.currentRepoInfo}
+              updateRepoInfo={this.props.updateRepoInfo}
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
               selectedDirentList={this.props.selectedDirentList}

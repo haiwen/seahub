@@ -180,7 +180,6 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    this.toggleTransferDialog();
   };
 
   handleMouseOver = () => {

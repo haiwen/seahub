@@ -2274,6 +2274,12 @@ class LibContentView extends React.Component {
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAGS_CHANGED, tags);
   };
 
+  updateRepoInfo = (updatedData) => {
+    this.setState({
+      currentRepoInfo: { ...this.state.currentRepoInfo, ...updatedData }
+    });
+  };
+
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
@@ -2464,6 +2470,7 @@ class LibContentView extends React.Component {
                           path={this.state.path}
                           repoID={this.props.repoID}
                           currentRepoInfo={this.state.currentRepoInfo}
+                          updateRepoInfo={this.updateRepoInfo}
                           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                           userPerm={userPerm}
                           enableDirPrivateShare={enableDirPrivateShare}

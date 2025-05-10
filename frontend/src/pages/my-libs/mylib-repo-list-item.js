@@ -273,22 +273,6 @@ class MylibRepoListItem extends React.Component {
         toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
       }
     });
-    this.onTransferToggle();
-  };
-
-  onOfficeSuiteChange = (suiteID) => {
-    let repoID = this.props.repo.repo_id;
-    userAPI.setOfficeSuite(repoID, suiteID).then(res => {
-      let message = gettext('Successfully change office suite.');
-      toaster.success(message);
-    }).catch(error => {
-      if (error.response) {
-        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
-      } else {
-        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
-      }
-    });
-    this.onOfficeSuiteToggle();
   };
 
   onDeleteRepo = (repo) => {
@@ -578,8 +562,7 @@ class MylibRepoListItem extends React.Component {
           <ModalPortal>
             <OfficeSuiteDialog
               repoID={repo.repo_id}
-              itemName={repo.repo_name}
-              submit={this.onOfficeSuiteChange}
+              repoName={repo.repo_name}
               toggleDialog={this.onOfficeSuiteToggle}
             />
           </ModalPortal>
