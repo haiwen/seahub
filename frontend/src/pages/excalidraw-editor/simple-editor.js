@@ -1,8 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
+import {
+  CaptureUpdateAction,
+  Excalidraw,
+  getSceneVersion,
+  MainMenu,
+  reconcileElements,
+  restoreElements
+} from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
 import { langList } from './constants';
+import { isSyncableElement } from './collab/utils';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -10,24 +18,26 @@ const SimpleEditor = ({
   sceneContent = null,
   onChangeContent,
   onSaveContent,
-  isFetching
+  isFetching,
+  exdrawClient
 }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const prevElementsRef = useRef([]);
   const UIOptions = {
     canvasActions: {
       saveToActiveFile: false,
-      LoadScene: false
+      LoadScene: true
     },
     tools: { image: false },
   };
-  const handleChange = () => {
-    const elements = excalidrawAPI.getSceneElements();
-    if (hasChanged(elements, prevElementsRef.current)) {
-      onChangeContent(elements);
-    }
-    prevElementsRef.current = elements;
+  const lastBroadcastedOrReceivedSceneVersion = useRef(-1);
+
+  const handleChange = (_elements) => {
+    broadcastElements(_elements);
   };
+
+  useEffect(() => {
+    handleRemoteSceneUpdate(_reconcileElements(sceneContent?.elements));
+  }, [sceneContent]);
 
   useEffect(() => {
     const handleHotkeySave = (event) => {
@@ -43,12 +53,61 @@ const SimpleEditor = ({
     };
   }, [excalidrawAPI, onSaveContent]);
 
-  const hasChanged = (prev, current) => {
-    if (prev.length !== current.length) return true;
+  const handleRemoteSceneUpdate = (elements) => {
+    if (excalidrawAPI) {
+      excalidrawAPI.updateScene({
+        elements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+    }
+  };
 
-    return current.some((element, index) => {
-      return element.version !== prev[index]?.version;
+  const _reconcileElements = (remoteElements) => {
+    if (!remoteElements || !excalidrawAPI) return;
+    const localElements = getSceneElementsIncludingDeleted();
+    const appState = excalidrawAPI.getAppState();
+    const restoredRemoteElements = restoreElements(remoteElements, null);
+    const reconciledElements = reconcileElements(
+      localElements,
+      restoredRemoteElements,
+      appState
+    );
+
+    setLastBroadcastedOrReceivedSceneVersion(
+      getSceneVersion(reconciledElements)
+    );
+    return reconciledElements;
+  };
+
+  const broadcastElements = (elements) => {
+    if (
+      getSceneVersion(elements) >
+      lastBroadcastedOrReceivedSceneVersion.current
+    ) {
+      broadcastScene('SCENE_UPDATE', elements);
+      lastBroadcastedOrReceivedSceneVersion.current = getSceneVersion(elements);
+    }
+  };
+
+  const broadcastScene = (updateType, elements) => {
+    const data = {
+      type: updateType,
+      payload: {
+        elements: elements,
+      },
+    };
+    exdrawClient.emit('update-document', JSON.stringify(data.payload.elements));
+    onChangeContent({
+      elements: data.payload.elements,
     });
+  };
+
+  const getSceneElementsIncludingDeleted = () => {
+    return excalidrawAPI?.getSceneElementsIncludingDeleted();
+  };
+
+  const setLastBroadcastedOrReceivedSceneVersion = (version) => {
+    lastBroadcastedOrReceivedSceneVersion.current = version;
   };
 
   if (isFetching) {

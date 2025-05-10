@@ -7,10 +7,11 @@ import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
 import { Utils } from '../../utils/utils';
 import ExdrawServerApi from './collab/exdraw-server-api';
+import { io } from 'socket.io-client';
 
 import './index.css';
 
-const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
+const { docUuid, excalidrawServerUrl, username } = window.app.pageOptions;
 
 const ExcaliEditor = () => {
   const [fileContent, setFileContent] = useState(null);
@@ -22,6 +23,11 @@ const ExcaliEditor = () => {
     exdrawUuid: '',
     accessToken: ''
   });
+  const exdrawClientConfigRef = useRef({
+    excalidrawServerUrl,
+    username
+  });
+  const exdrawClientRef = useRef(null);
 
   useEffect(() => {
     editorApi.getExdrawToken().then(res => {
@@ -35,6 +41,7 @@ const ExcaliEditor = () => {
         setFileContent(res.data);
         setIsFetching(false);
       });
+      exdrawClientRef.current = ExdrawClient(exdrawClientConfigRef.current);
     });
     onSetFavicon();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,7 +51,9 @@ const ExcaliEditor = () => {
     if (isChangedRef.current) {
       try {
         const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
+        // socket emit event
         await exdrawServerApi.saveSceneContent(JSON.stringify(editorRef.current));
+        exdrawClientRef.current.emit('update-document', JSON.stringify(editorRef.current));
         isChangedRef.current = false;
         toaster.success(gettext('Successfully saved'), { duration: 2 });
       } catch {
@@ -95,7 +104,9 @@ const ExcaliEditor = () => {
   }, [saveSceneContent]);
 
   const onChangeContent = useCallback((elements) => {
-    editorRef.current = { elements };
+    editorRef.current = elements;
+    // socket emit event
+    exdrawClientRef.current.emit('update-document', JSON.stringify(editorRef.current));
     isChangedRef.current = true;
   }, []);
 
@@ -105,8 +116,28 @@ const ExcaliEditor = () => {
     document.getElementById('favicon').href = fileIcon;
   }, []);
 
+  const ExdrawClient = useCallback((options) => {
+    const socket = io(options.excalidrawServerUrl + '/exdraw');
+    socket.on('connect', () => {
+      const name = options.username;
+      const userInfo = { name };
+      socket.emit('join-room', userInfo);
+    });
+
+    socket.on('join-room', (userInfo) => {
+      console.log('join-room', userInfo);
+    });
+
+    socket.on('update-document', function (msg) {
+      setFileContent(JSON.parse(msg.msg));
+    });
+
+    return socket;
+  }, []);
+
   return (
     <SimpleEditor
+      exdrawClient={exdrawClientRef.current}
       isFetching={isFetching}
       sceneContent={fileContent}
       onSaveContent={onSaveContent}
