@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
 import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform';
-import { MAP_TYPE, DOMESTIC_MAP_TYPE } from '../../../../constants';
+import { MAP_TYPE } from '../../../../constants';
 import Loading from '../../../../components/loading';
 import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
 import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
 import { isValidPosition } from '../../../utils/validate';
-import ObjectUtils from '../../../../utils/object';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
 import { createBMapZoomControl } from '../../map-controller';
@@ -18,6 +17,10 @@ import { Utils } from '../../../../utils/utils';
 import './index.css';
 
 class Location extends React.Component {
+  static propTypes = {
+    position: PropTypes.object,
+    record: PropTypes.object,
+  };
 
   constructor(props) {
     super(props);
@@ -30,29 +33,43 @@ class Location extends React.Component {
       address: '',
       isLoading: true,
     };
+    this.initMapTriggered = false;
   }
 
   componentDidMount() {
     this.initMap(this.props.position);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { position } = nextProps;
-    if (!ObjectUtils.isSameObject(position, this.props.position)) {
-      this.initMap(position);
+  componentDidUpdate(prevProps) {
+    const { position: prevPosition } = prevProps;
+    const { position: currPosition } = this.props;
+
+    const isSamePosition = prevPosition?.lng === currPosition?.lng &&
+                          prevPosition?.lat === currPosition?.lat;
+
+    if (isSamePosition) return;
+
+    const shouldUpdateMap = this.map && currPosition?.lng && currPosition?.lat;
+
+    if (shouldUpdateMap) {
+      this.addMarkerByPosition(currPosition.lng, currPosition.lat);
+    } else if (!this.map && currPosition) {
+      if (!this.initMapTriggered) {
+        this.initMapTriggered = true;
+        this.initMap(currPosition);
+      }
     }
   }
 
   componentWillUnmount() {
-    if (this.map && DOMESTIC_MAP_TYPE.includes(this.mapType)) {
-      this.mineMapMarker = null;
-    } else if (this.map && this.mapType === MAP_TYPE.G_MAP) {
-      this.googleMarker = null;
+    if (this.map) {
+      if (this.mapType === MAP_TYPE.B_MAP) {
+        this.map.destroy();
+      } else if (this.mapType === MAP_TYPE.G_MAP) {
+        window.google.maps.event.clearInstanceListeners(this.map);
+      }
     }
     this.map = null;
-    this.setState = (state, callback) => {
-      return;
-    };
   }
 
   initMap = (position) => {
@@ -79,7 +96,13 @@ class Location extends React.Component {
   };
 
   addMarkerByPosition = (lng, lat) => {
+    if (!isValidPosition(lng, lat)) return;
+
     if (this.mapType === MAP_TYPE.B_MAP) {
+      if (this.lastLng === lng && this.lastLat === lat) return;
+      this.lastLng = lng;
+      this.lastLat = lat;
+
       const point = new window.BMapGL.Point(lng, lat);
       const marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
       this.map && this.map.clearOverlays();
@@ -94,6 +117,11 @@ class Location extends React.Component {
           map: this.map,
         });
         return;
+      } else {
+        if (this.googleMarker.position?.lng === lng &&
+            this.googleMarker.position?.lat === lat) {
+          return;
+        }
       }
       this.googleMarker.setPosition({ lng, lat });
       return;
@@ -101,6 +129,8 @@ class Location extends React.Component {
   };
 
   renderBaiduMap = (position = {}) => {
+    if (this.map) return;
+
     this.setState({ isLoading: false }, () => {
       if (!window.BMapGL.Map) return;
       if (!isValidPosition(position?.lng, position?.lat)) return;
@@ -125,6 +155,8 @@ class Location extends React.Component {
   };
 
   renderGoogleMap = (position) => {
+    if (this.map) return;
+
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
       if (!isValidPosition(position?.lng, position?.lat)) return;
@@ -179,9 +211,5 @@ class Location extends React.Component {
   }
 
 }
-
-Location.propTypes = {
-  location: PropTypes.object,
-};
 
 export default Location;
