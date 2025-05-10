@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
+import datetime
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -541,3 +542,31 @@ def add_group_invite_log(sender, org_id, group_id, users, operator, operation, *
             operation=operation
         ))
     GroupMemberAudit.objects.bulk_create(group_member_audit_list)
+
+
+class QuotaAlertEmailRecordManager(models.Manager):
+
+    def get_records_within_days(self, days=3, emails=None):
+        today_now = datetime.datetime.now()
+        n_days_before = today_now - datetime.timedelta(days=days)
+        if emails:
+            return self.filter(last_emailed_at__gt=n_days_before, email__in=emails)
+        return self.filter(last_emailed_at__gt=n_days_before)
+    
+    def create_or_update(self, email):
+        obj = self.filter(email=email).first()
+        if not obj:
+            self.create(email=email)
+        else:
+            obj.last_emailed_at = datetime.datetime.now()
+            obj.save()
+        
+
+class QuotaAlertEmailRecord(models.Model):
+
+    email = models.CharField(max_length=255, db_index=True, unique=True)
+    last_emailed_at = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = QuotaAlertEmailRecordManager()
+
+    class Meta:
+        db_table = 'quota_alert_email_record'
