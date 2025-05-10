@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 14:59+0800\n"
+"POT-Creation-Date: 2025-05-10 17:05+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Harmen <sigmo@sigmo.nl>, 2015-2018,2020\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/haiwen/seahub/language/nl_NL/)\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: frontend/src/components/common/account.js:127
 #: frontend/src/pages/sys-admin/side-panel.js:33
-#: frontend/src/pages/sys-admin/users/users-content.js:313
+#: frontend/src/pages/sys-admin/users/users-content.js:299
 msgid "System Admin"
 msgstr "Systeembeheerder"
 
@@ -70,7 +70,7 @@ msgstr "Gebruikt:"
 #: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:69
 #: frontend/src/metadata/views/kanban/settings/index.js:92
 #: frontend/src/pages/org-admin/side-panel.js:57
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:109
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:117
 #: frontend/src/pages/sys-admin/side-panel.js:78
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:93
 #: frontend/src/settings.js:162
@@ -98,124 +98,124 @@ msgstr ""
 msgid "User {user_link} has added you to {group_link}"
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:71
+#: frontend/src/components/common/notice-item.js:70
 msgid "{share_from} has shared a library named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:73
+#: frontend/src/components/common/notice-item.js:72
 msgid "{share_from} has shared a folder named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:99
+#: frontend/src/components/common/notice-item.js:98
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:101
+#: frontend/src/components/common/notice-item.js:100
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:126
+#: frontend/src/components/common/notice-item.js:125
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:128
+#: frontend/src/components/common/notice-item.js:127
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:154
+#: frontend/src/components/common/notice-item.js:153
 msgid ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:156
+#: frontend/src/components/common/notice-item.js:155
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:182
+#: frontend/src/components/common/notice-item.js:181
 msgid "{user} has transfered a library named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:286
+#: frontend/src/components/common/notice-item.js:285
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:286
+#: frontend/src/components/common/notice-item.js:285
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:289
+#: frontend/src/components/common/notice-item.js:288
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:289
+#: frontend/src/components/common/notice-item.js:288
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:293
+#: frontend/src/components/common/notice-item.js:292
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:296
+#: frontend/src/components/common/notice-item.js:295
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:300
+#: frontend/src/components/common/notice-item.js:299
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:300
+#: frontend/src/components/common/notice-item.js:299
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:303
+#: frontend/src/components/common/notice-item.js:302
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:315
+#: frontend/src/components/common/notice-item.js:314
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:315
+#: frontend/src/components/common/notice-item.js:314
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:318
+#: frontend/src/components/common/notice-item.js:317
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:318
+#: frontend/src/components/common/notice-item.js:317
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:322
+#: frontend/src/components/common/notice-item.js:321
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:325
+#: frontend/src/components/common/notice-item.js:324
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:329
+#: frontend/src/components/common/notice-item.js:328
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:329
+#: frontend/src/components/common/notice-item.js:328
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -253,7 +253,7 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:119
 #: frontend/src/components/dialog/share-admin-link.js:36
 #: frontend/src/components/dialog/share-repo-dialog.js:153
-#: frontend/src/components/dialog/transfer-group-dialog.js:74
+#: frontend/src/components/dialog/transfer-group-dialog.js:71
 #: frontend/src/components/dialog/trash-dialog/index.js:201
 #: frontend/src/components/logo.js:26 frontend/src/components/logo.js:27
 #: frontend/src/components/pdf-viewer.js:337
@@ -301,7 +301,7 @@ msgstr "Tags"
 #: frontend/src/components/dirent-detail/lib-details.js:18
 #: frontend/src/components/main-side-nav.js:236
 #: frontend/src/components/main-side-nav.js:238
-#: frontend/src/pages/libraries/index.js:407
+#: frontend/src/pages/libraries/index.js:433
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:77
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:161
@@ -360,8 +360,8 @@ msgstr "Bestanden"
 #: frontend/src/pages/org-admin/departments/department.js:129
 #: frontend/src/pages/org-admin/departments/member-item.js:117
 #: frontend/src/pages/org-admin/departments/member-item.js:118
-#: frontend/src/pages/org-admin/departments/tree-node.js:143
-#: frontend/src/pages/org-admin/departments/tree-node.js:144
+#: frontend/src/pages/org-admin/departments/tree-node.js:145
+#: frontend/src/pages/org-admin/departments/tree-node.js:146
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:249
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:250
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:107
@@ -378,12 +378,12 @@ msgstr "Bestanden"
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:130
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:165
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:166
-#: frontend/src/pages/share-admin/folders.js:267
-#: frontend/src/pages/share-admin/folders.js:268
+#: frontend/src/pages/share-admin/folders.js:270
+#: frontend/src/pages/share-admin/folders.js:271
 #: frontend/src/pages/share-admin/libraries.js:276
 #: frontend/src/pages/share-admin/libraries.js:277
-#: frontend/src/pages/share-admin/share-links.js:340
-#: frontend/src/pages/share-admin/share-links.js:341
+#: frontend/src/pages/share-admin/share-links.js:317
+#: frontend/src/pages/share-admin/share-links.js:318
 #: frontend/src/pages/share-admin/upload-links.js:170
 #: frontend/src/pages/share-admin/upload-links.js:171
 #: frontend/src/pages/shared-libs/item.js:221
@@ -396,8 +396,8 @@ msgstr "Bestanden"
 #: frontend/src/pages/sys-admin/departments/department.js:152
 #: frontend/src/pages/sys-admin/departments/member-item.js:118
 #: frontend/src/pages/sys-admin/departments/member-item.js:119
-#: frontend/src/pages/sys-admin/departments/tree-node.js:143
-#: frontend/src/pages/sys-admin/departments/tree-node.js:144
+#: frontend/src/pages/sys-admin/departments/tree-node.js:145
+#: frontend/src/pages/sys-admin/departments/tree-node.js:146
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:120
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:121
 #: frontend/src/pages/sys-admin/logs-page/file-access-item-menu.js:35
@@ -494,17 +494,17 @@ msgstr "Beschrijving"
 #: frontend/src/components/dialog/delete-repo-dialog.js:75
 #: frontend/src/components/dialog/delete-wiki-dialog.js:21
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:92
-#: frontend/src/components/dialog/dismiss-group-dialog.js:34
+#: frontend/src/components/dialog/dismiss-group-dialog.js:31
 #: frontend/src/components/dialog/generate-upload-link.js:335
-#: frontend/src/components/dialog/import-members-dialog.js:61
+#: frontend/src/components/dialog/import-members-dialog.js:60
 #: frontend/src/components/dialog/insert-file-dialog.js:67
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:81
 #: frontend/src/components/dialog/internal-link-dialog.js:76
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:57
 #: frontend/src/components/dialog/invite-people-dialog.js:123
 #: frontend/src/components/dialog/label-repo-state-dialog.js:89
-#: frontend/src/components/dialog/leave-group-dialog.js:33
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:140
+#: frontend/src/components/dialog/leave-group-dialog.js:30
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:144
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:120
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:290
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:252
@@ -515,11 +515,11 @@ msgstr "Beschrijving"
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
 #: frontend/src/components/dialog/org-import-users-dialog.js:59
 #: frontend/src/components/dialog/org-rename-department-dialog.js:102
-#: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:83
 #: frontend/src/components/dialog/remove-webdav-password.js:39
 #: frontend/src/components/dialog/rename-dialog.js:113
 #: frontend/src/components/dialog/rename-dirent.js:109
-#: frontend/src/components/dialog/rename-group-dialog.js:73
+#: frontend/src/components/dialog/rename-group-dialog.js:67
 #: frontend/src/components/dialog/rename-wiki-dialog.js:86
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:101
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:296
@@ -555,11 +555,11 @@ msgstr "Beschrijving"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:58
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:60
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:143
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:147
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:180
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:96
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:51
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:83
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:65
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:48
@@ -589,7 +589,7 @@ msgstr "Beschrijving"
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:68
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:31
 #: frontend/src/pages/org-admin/input-item.js:92
-#: frontend/src/pages/org-admin/web-settings/input-item.js:76
+#: frontend/src/pages/org-admin/web-settings/input-item.js:73
 #: frontend/src/pages/sys-admin/web-settings/input-item.js:70
 #: frontend/src/pages/upload-link/upload-list-item.js:144
 #: frontend/src/pages/wiki2/common/delete-dialog.js:26
@@ -621,7 +621,7 @@ msgstr "Annuleren"
 #: frontend/src/components/dialog/invite-people-dialog.js:124
 #: frontend/src/components/dialog/label-repo-state-dialog.js:90
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:141
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:145
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:121
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:291
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:345
@@ -634,11 +634,11 @@ msgstr "Annuleren"
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:80
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:177
 #: frontend/src/components/dialog/org-rename-department-dialog.js:103
-#: frontend/src/components/dialog/org-set-group-quota-dialog.js:79
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:84
 #: frontend/src/components/dialog/publish-wiki-dialog.js:136
 #: frontend/src/components/dialog/rename-dialog.js:114
 #: frontend/src/components/dialog/rename-dirent.js:110
-#: frontend/src/components/dialog/rename-group-dialog.js:74
+#: frontend/src/components/dialog/rename-group-dialog.js:68
 #: frontend/src/components/dialog/rename-wiki-dialog.js:87
 #: frontend/src/components/dialog/repo-api-token-dialog.js:259
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:102
@@ -677,18 +677,18 @@ msgstr "Annuleren"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:89
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:59
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:148
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:181
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:97
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:52
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:79
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:288
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:256
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:62
 #: frontend/src/components/dialog/transfer-dialog.js:227
-#: frontend/src/components/dialog/transfer-group-dialog.js:75
+#: frontend/src/components/dialog/transfer-group-dialog.js:72
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:75
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:87
 #: frontend/src/components/dialog/wiki-clean-trash.js:81
@@ -711,7 +711,7 @@ msgstr "Annuleren"
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:281
 #: frontend/src/pages/org-admin/org-users-search-users.js:183
 #: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:128
-#: frontend/src/pages/org-admin/web-settings/input-item.js:75
+#: frontend/src/pages/org-admin/web-settings/input-item.js:72
 #: frontend/src/pages/sys-admin/groups/search-groups.js:125
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:121
 #: frontend/src/pages/sys-admin/repos/search-repos.js:155
@@ -771,12 +771,12 @@ msgstr "Wiki toevoegen"
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:38
 #: frontend/src/pages/institution-admin/user-list-search/index.js:67
 #: frontend/src/pages/institution-admin/user-list/index.js:108
-#: frontend/src/pages/libraries/index.js:426
+#: frontend/src/pages/libraries/index.js:452
 #: frontend/src/pages/my-libs/my-libs-deleted.js:91
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:126
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:164
-#: frontend/src/pages/org-admin/departments/department.js:163
-#: frontend/src/pages/org-admin/departments/department.js:199
+#: frontend/src/pages/org-admin/departments/department.js:164
+#: frontend/src/pages/org-admin/departments/department.js:200
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:73
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:64
 #: frontend/src/pages/org-admin/org-admin-list.js:50
@@ -793,7 +793,7 @@ msgstr "Wiki toevoegen"
 #: frontend/src/pages/org-admin/org-users-search-users.js:35
 #: frontend/src/pages/share-admin/folders.js:56
 #: frontend/src/pages/share-admin/libraries.js:55
-#: frontend/src/pages/share-admin/share-links.js:93
+#: frontend/src/pages/share-admin/share-links.js:70
 #: frontend/src/pages/share-admin/upload-links.js:52
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:100
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:38
@@ -801,8 +801,8 @@ msgstr "Wiki toevoegen"
 #: frontend/src/pages/starred/starred.js:41
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:47
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
-#: frontend/src/pages/sys-admin/departments/department.js:189
-#: frontend/src/pages/sys-admin/departments/department.js:237
+#: frontend/src/pages/sys-admin/departments/department.js:190
+#: frontend/src/pages/sys-admin/departments/department.js:238
 #: frontend/src/pages/sys-admin/groups/group-members.js:56
 #: frontend/src/pages/sys-admin/groups/group-repos.js:39
 #: frontend/src/pages/sys-admin/groups/groups-content.js:60
@@ -950,7 +950,7 @@ msgstr ""
 #: frontend/src/components/dialog/wiki-clean-trash.js:64
 #: frontend/src/pages/org-admin/devices/devices-errors.js:194
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:375
-#: frontend/src/pages/share-admin/share-links.js:597
+#: frontend/src/pages/share-admin/share-links.js:495
 #: frontend/src/pages/share-admin/upload-links.js:296
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:199
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:402
@@ -1019,7 +1019,7 @@ msgstr "Wil je je account echt verwijderen?"
 #: frontend/src/components/dialog/delete-dialog.js:34
 #: frontend/src/components/dialog/delete-folder-dialog.js:64
 #: frontend/src/components/dialog/delete-repo-dialog.js:76
-#: frontend/src/components/dialog/dismiss-group-dialog.js:35
+#: frontend/src/components/dialog/dismiss-group-dialog.js:32
 #: frontend/src/components/dialog/generate-upload-link.js:357
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:68
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:69
@@ -1135,9 +1135,9 @@ msgstr "Wil je je account echt verwijderen?"
 #: frontend/src/pages/sys-admin/users/user-links.js:135
 #: frontend/src/pages/sys-admin/users/user-repos.js:164
 #: frontend/src/pages/sys-admin/users/user-repos.js:219
-#: frontend/src/pages/sys-admin/users/users-content.js:380
-#: frontend/src/pages/sys-admin/users/users-content.js:579
-#: frontend/src/pages/sys-admin/users/users.js:552
+#: frontend/src/pages/sys-admin/users/users-content.js:366
+#: frontend/src/pages/sys-admin/users/users-content.js:565
+#: frontend/src/pages/sys-admin/users/users.js:568
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:65
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:69
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:402
@@ -1367,9 +1367,8 @@ msgstr "Wachtwoorden komen niet overeen"
 #: frontend/src/components/dialog/org-add-repo-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:65
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:59
-#: frontend/src/pages/groups/group-item.js:108
-#: frontend/src/pages/groups/group-view.js:372
-#: frontend/src/pages/libraries/index.js:444
+#: frontend/src/pages/groups/group-op-menu.js:158
+#: frontend/src/pages/libraries/index.js:470
 #: frontend/src/pages/my-libs/my-libs.js:171
 #: frontend/src/pages/shared-with-all/index.js:260
 #: frontend/src/pages/sys-admin/repos/all-repos.js:153
@@ -1408,12 +1407,12 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-list.js:98
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:83
 #: frontend/src/pages/org-admin/org-logs.js:65
-#: frontend/src/pages/share-admin/folders.js:58
-#: frontend/src/pages/share-admin/folders.js:275
+#: frontend/src/pages/share-admin/folders.js:59
+#: frontend/src/pages/share-admin/folders.js:278
 #: frontend/src/pages/share-admin/libraries.js:57
 #: frontend/src/pages/share-admin/libraries.js:284
-#: frontend/src/pages/share-admin/share-links.js:95
-#: frontend/src/pages/share-admin/share-links.js:348
+#: frontend/src/pages/share-admin/share-links.js:72
+#: frontend/src/pages/share-admin/share-links.js:325
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:18
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:50
 #: frontend/src/utils/text-translation.js:64
@@ -1654,14 +1653,14 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-user-profile.js:145
 #: frontend/src/pages/org-admin/org-user-profile.js:154
 #: frontend/src/pages/sdoc-revision/index.js:121
-#: frontend/src/pages/share-admin/folders.js:227
-#: frontend/src/pages/share-admin/folders.js:228
+#: frontend/src/pages/share-admin/folders.js:230
+#: frontend/src/pages/share-admin/folders.js:231
 #: frontend/src/pages/share-admin/libraries.js:236
 #: frontend/src/pages/share-admin/libraries.js:237
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:28
 #: frontend/src/pages/sys-admin/orgs/org-info.js:41
 #: frontend/src/pages/sys-admin/users/user-info.js:89
-#: frontend/src/pages/sys-admin/users/users-content.js:533
+#: frontend/src/pages/sys-admin/users/users-content.js:519
 #: frontend/src/pages/wiki/main-panel.js:106
 #: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:306
 msgid "Edit"
@@ -1752,19 +1751,24 @@ msgid "Select All"
 msgstr ""
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:159
-#: frontend/src/pages/org-admin/departments/department.js:188
-#: frontend/src/pages/sys-admin/departments/department.js:182
+#: frontend/src/pages/org-admin/departments/department.js:189
+#: frontend/src/pages/sys-admin/departments/department.js:183
 msgid "No members"
 msgstr "Geen leden"
 
-#: frontend/src/components/dialog/dismiss-group-dialog.js:29
+#: frontend/src/components/dialog/dismiss-group-dialog.js:16
+#| msgid "deleted"
+msgid "Group deleted"
+msgstr ""
+
+#: frontend/src/components/dialog/dismiss-group-dialog.js:26
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:107
 #: frontend/src/pages/sys-admin/groups/groups-content.js:259
 #: frontend/src/pages/sys-admin/orgs/org-groups.js:122
 msgid "Delete Group"
 msgstr "Groep verwijderen"
 
-#: frontend/src/components/dialog/dismiss-group-dialog.js:31
+#: frontend/src/components/dialog/dismiss-group-dialog.js:28
 msgid "Really want to delete this group?"
 msgstr "Zeker weten dat je deze groep wilt verwijderen?"
 
@@ -1802,8 +1806,8 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:27
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:152
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:186
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:160
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:194
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:46
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:50
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
@@ -1899,8 +1903,8 @@ msgid "Please enter days"
 msgstr "Voer aantal dagen in"
 
 #: frontend/src/components/dialog/generate-upload-link.js:174
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:63
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:65
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:56
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:58
 #: frontend/src/components/share-link-panel/link-creation.js:220
 msgid "Please enter a non-negative integer"
 msgstr "Voer een niet negatief getal in"
@@ -2043,14 +2047,14 @@ msgstr ""
 msgid "Import members from a .xlsx file"
 msgstr ""
 
-#: frontend/src/components/dialog/import-members-dialog.js:55
+#: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 #| msgid "Download and upload"
 msgid "Download an example file"
 msgstr ""
 
-#: frontend/src/components/dialog/import-members-dialog.js:56
+#: frontend/src/components/dialog/import-members-dialog.js:55
 #: frontend/src/components/dialog/org-import-users-dialog.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:55
 #| msgid "Upload Files"
@@ -2164,15 +2168,15 @@ msgstr ""
 msgid "Label Current State"
 msgstr ""
 
-#: frontend/src/components/dialog/leave-group-dialog.js:28
+#: frontend/src/components/dialog/leave-group-dialog.js:25
 msgid "Leave Group"
 msgstr ""
 
-#: frontend/src/components/dialog/leave-group-dialog.js:30
+#: frontend/src/components/dialog/leave-group-dialog.js:27
 msgid "Really want to leave this group?"
 msgstr ""
 
-#: frontend/src/components/dialog/leave-group-dialog.js:34
+#: frontend/src/components/dialog/leave-group-dialog.js:31
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:256
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:292
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:304
@@ -2216,33 +2220,33 @@ msgstr ""
 msgid "Face recognition"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:52
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:54
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:61
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:63
 msgid "Successfully set library history."
 msgstr "Bibliotheekgeschiedenis instellen gelukt."
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:113
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:117
 msgid "Setting library history is disabled by Admin."
 msgstr ""
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:117
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:120
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
 msgid "Keep full history"
 msgstr "Bewaar volledige geschiedenis"
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:125
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:128
 msgid "Don't keep history"
 msgstr "Bewaar geschiedenis niet"
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:125
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:128
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:129
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:132
 msgid "Only keep a period of history:"
 msgstr "Bewaar alleen geschiedenis over been bepaalde periode:"
 
-#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:134
+#: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:138
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:114
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:141
 #: frontend/src/components/set-link-expiration.js:89
 msgid "days"
 msgstr "dagen"
@@ -2337,7 +2341,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-users-search-users.js:178
 #: frontend/src/pages/org-admin/org-users-users.js:260
 #: frontend/src/pages/sys-admin/users/search-users.js:315
-#: frontend/src/pages/sys-admin/users/users.js:462
+#: frontend/src/pages/sys-admin/users/users.js:472
 msgid "Search users"
 msgstr ""
 
@@ -2380,10 +2384,10 @@ msgstr ""
 #: frontend/src/file-history-old.js:245
 #: frontend/src/metadata/utils/column/index.js:205
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:39
-#: frontend/src/pages/libraries/index.js:428
+#: frontend/src/pages/libraries/index.js:454
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:77
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:128
-#: frontend/src/pages/org-admin/departments/department.js:200
+#: frontend/src/pages/org-admin/departments/department.js:201
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:78
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
 #: frontend/src/pages/org-admin/org-group-repos.js:84
@@ -2391,7 +2395,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:78
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:102
 #: frontend/src/pages/shared-libs/content.js:126
-#: frontend/src/pages/sys-admin/departments/department.js:238
+#: frontend/src/pages/sys-admin/departments/department.js:239
 #: frontend/src/pages/sys-admin/groups/group-repos.js:40
 #: frontend/src/pages/sys-admin/repos/dir-content.js:107
 #: frontend/src/pages/sys-admin/repos/repos.js:81
@@ -2415,7 +2419,7 @@ msgstr "Grootte"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:162
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:40
-#: frontend/src/pages/libraries/index.js:429
+#: frontend/src/pages/libraries/index.js:455
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:79
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:130
 #: frontend/src/pages/org-admin/org-user-repos.js:81
@@ -2498,8 +2502,8 @@ msgstr "Nieuwe subafdeling"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:67
-#: frontend/src/pages/org-admin/departments/departments-tree-panel.js:44
-#: frontend/src/pages/sys-admin/departments/departments-tree-panel.js:44
+#: frontend/src/pages/org-admin/departments/departments-tree-panel.js:46
+#: frontend/src/pages/sys-admin/departments/departments-tree-panel.js:46
 msgid "New Department"
 msgstr "Nieuwe afdeling"
 
@@ -2510,8 +2514,8 @@ msgstr "e-mail is verplicht"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:134
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:108
-#: frontend/src/pages/sys-admin/users/users.js:417
-#: frontend/src/pages/sys-admin/users/users.js:534
+#: frontend/src/pages/sys-admin/users/users.js:427
+#: frontend/src/pages/sys-admin/users/users.js:550
 msgid "Add User"
 msgstr "Gebruiker toevoegen"
 
@@ -2589,7 +2593,7 @@ msgstr "Einddatum"
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:137
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:128
 #: frontend/src/pages/sys-admin/users/user-repos.js:193
-#: frontend/src/pages/sys-admin/users/users-content.js:422
+#: frontend/src/pages/sys-admin/users/users-content.js:408
 msgid "Are you sure you want to delete {placeholder} ?"
 msgstr ""
 
@@ -2604,7 +2608,7 @@ msgid "Import users from a .xlsx file"
 msgstr ""
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:42
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:62
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:70
 msgid "Name updated"
 msgstr ""
 
@@ -2619,20 +2623,31 @@ msgid "Quota is invalid."
 msgstr ""
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:60
-#: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:60
+msgid "The current quota for {group_name} is {quota}"
+msgstr ""
+
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:63
+#: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:50
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:63
 #: frontend/src/pages/sys-admin/users/search-users.js:298
-#: frontend/src/pages/sys-admin/users/users.js:486
+#: frontend/src/pages/sys-admin/users/users.js:499
 msgid "Set Quota"
 msgstr "Quota instellen"
 
-#: frontend/src/components/dialog/org-set-group-quota-dialog.js:72
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:72
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:66
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:66
+#| msgid "Please enter a new password"
+msgid "Please enter a new quota"
+msgstr ""
+
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:77
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:77
 msgid "An integer that is greater than 0 or equal to -2."
 msgstr ""
 
-#: frontend/src/components/dialog/org-set-group-quota-dialog.js:73
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:73
+#: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
 msgid "Tip: -2 means no limit."
 msgstr ""
 
@@ -2701,11 +2716,11 @@ msgstr "Nieuwe bestandsnaam"
 msgid "New folder name"
 msgstr "Nieuwe mapnaam"
 
-#: frontend/src/components/dialog/rename-group-dialog.js:60
+#: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
 msgstr "Groep hernoemen"
 
-#: frontend/src/components/dialog/rename-group-dialog.js:62
+#: frontend/src/components/dialog/rename-group-dialog.js:57
 msgid "Rename group to"
 msgstr "Groep hernoemen in"
 
@@ -2886,7 +2901,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:70
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:292
-#: frontend/src/pages/share-admin/share-links.js:557
+#: frontend/src/pages/share-admin/share-links.js:468
 #: frontend/src/pages/share-admin/upload-links.js:269
 #: frontend/src/pages/sys-admin/links/links-nav.js:15
 msgid "Share Links"
@@ -2894,7 +2909,7 @@ msgstr "Gedeelde links"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:77
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:281
-#: frontend/src/pages/share-admin/share-links.js:564
+#: frontend/src/pages/share-admin/share-links.js:475
 #: frontend/src/pages/share-admin/upload-links.js:273
 #: frontend/src/pages/sys-admin/links/links-nav.js:16
 msgid "Upload Links"
@@ -2915,8 +2930,8 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-list.js:99
 #: frontend/src/pages/invitations/invitations-view.js:115
 #: frontend/src/pages/invitations/invitations-view.js:198
-#: frontend/src/pages/share-admin/share-links.js:97
-#: frontend/src/pages/share-admin/share-links.js:333
+#: frontend/src/pages/share-admin/share-links.js:74
+#: frontend/src/pages/share-admin/share-links.js:310
 #: frontend/src/pages/share-admin/upload-links.js:55
 #: frontend/src/pages/share-admin/upload-links.js:163
 #: frontend/src/pages/sys-admin/links/share-links.js:75
@@ -2977,8 +2992,8 @@ msgid "Link"
 msgstr "Link"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:234
-#: frontend/src/pages/share-admin/share-links.js:96
-#: frontend/src/pages/share-admin/share-links.js:332
+#: frontend/src/pages/share-admin/share-links.js:73
+#: frontend/src/pages/share-admin/share-links.js:309
 #: frontend/src/pages/share-admin/upload-links.js:54
 #: frontend/src/pages/share-admin/upload-links.js:162
 #: frontend/src/pages/sys-admin/users/user-links.js:51
@@ -3184,21 +3199,21 @@ msgid "User Email"
 msgstr ""
 
 #: frontend/src/components/dialog/share-to-other-server.js:193
-#: frontend/src/pages/groups/group-view.js:291
+#: frontend/src/pages/groups/group-op-menu.js:110
 #: frontend/src/pages/org-admin/org-user-item.js:77
 #: frontend/src/pages/org-admin/org-users-users.js:157
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:167
-#: frontend/src/pages/sys-admin/users/users-content.js:280
-#: frontend/src/pages/sys-admin/users/users-content.js:341
-#: frontend/src/pages/sys-admin/users/users-content.js:346
-#: frontend/src/pages/sys-admin/users/users.js:306
-#: frontend/src/pages/sys-admin/users/users.js:330
+#: frontend/src/pages/sys-admin/users/users-content.js:266
+#: frontend/src/pages/sys-admin/users/users-content.js:327
+#: frontend/src/pages/sys-admin/users/users-content.js:332
+#: frontend/src/pages/sys-admin/users/users.js:316
+#: frontend/src/pages/sys-admin/users/users.js:340
 msgid "It may take some time, please wait."
 msgstr ""
 
 #: frontend/src/components/dialog/share-to-other-server.js:199
 #: frontend/src/pages/invitations/invitations-view.js:54
-#: frontend/src/pages/share-admin/share-links.js:519
+#: frontend/src/pages/share-admin/share-links.js:436
 #: frontend/src/pages/share-admin/upload-links.js:238
 #: frontend/src/pages/sys-admin/groups/groups.js:87
 #: frontend/src/pages/sys-admin/groups/search-groups.js:54
@@ -3238,13 +3253,11 @@ msgstr "Zoek gebruikers..."
 
 #: frontend/src/components/dialog/sort-options.js:19
 #: frontend/src/components/sort-menu.js:17
-#: frontend/src/pages/share-admin/share-links.js:399
 msgid "By name ascending"
 msgstr ""
 
 #: frontend/src/components/dialog/sort-options.js:20
 #: frontend/src/components/sort-menu.js:18
-#: frontend/src/pages/share-admin/share-links.js:400
 msgid "By name descending"
 msgstr ""
 
@@ -3293,7 +3306,7 @@ msgstr "Weet je zeker dat je wilt verwijderen"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:240
 #: frontend/src/metadata/metadata-tree-view/view.js:57
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:44
-#: frontend/src/pages/groups/group-view.js:380
+#: frontend/src/pages/groups/group-op-menu.js:165
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:145
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:22
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:152
@@ -3395,9 +3408,8 @@ msgstr "Organisatie toevoegen"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:74
 #: frontend/src/components/group-members.js:125
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:163
-#: frontend/src/pages/groups/group-view.js:334
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:27
-#: frontend/src/pages/libraries/index.js:430
+#: frontend/src/pages/libraries/index.js:456
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:84
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:65
 #: frontend/src/pages/org-admin/org-group-members.js:109
@@ -3434,15 +3446,15 @@ msgstr "Naam(optioneel)"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:141
 #: frontend/src/components/group-members.js:31
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:38
-#: frontend/src/pages/org-admin/departments/department.js:164
+#: frontend/src/pages/org-admin/departments/department.js:165
 #: frontend/src/pages/org-admin/org-group-members.js:82
-#: frontend/src/pages/sys-admin/departments/department.js:190
+#: frontend/src/pages/sys-admin/departments/department.js:191
 #: frontend/src/pages/sys-admin/groups/group-members.js:57
 #: frontend/src/pages/sys-admin/orgs/org-users.js:61
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:57
 #: frontend/src/pages/sys-admin/users/user-groups.js:47
-#: frontend/src/pages/sys-admin/users/users-content.js:91
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:86
+#: frontend/src/pages/sys-admin/users/users-content.js:90
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:68
 msgid "Role"
 msgstr "Rol"
 
@@ -3453,7 +3465,7 @@ msgid ""
 msgstr "Je kunt ook een gebruiker als gast toevoegen die geen permissies heeft om gebruikers en bibliotheken aan te maken."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog.js:41
-#: frontend/src/pages/sys-admin/users/users.js:406
+#: frontend/src/pages/sys-admin/users/users.js:416
 msgid "Add Admin"
 msgstr "Admin toevoegen"
 
@@ -3480,7 +3492,7 @@ msgstr "Lid verwijderen"
 msgid "Transfer Group {placeholder} to"
 msgstr ""
 
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:109
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:113
 msgid "{placeholder} History Setting"
 msgstr "{placeholder} Geschiedenis instellingen"
 
@@ -3547,9 +3559,9 @@ msgid "If the library is shared to another user, the sharing will be kept."
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog.js:178
-#: frontend/src/pages/org-admin/departments/departments.js:299
+#: frontend/src/pages/org-admin/departments/departments.js:325
 #: frontend/src/pages/org-admin/side-panel.js:81
-#: frontend/src/pages/sys-admin/departments/departments.js:332
+#: frontend/src/pages/sys-admin/departments/departments.js:358
 #: frontend/src/pages/sys-admin/side-panel.js:126
 msgid "Departments"
 msgstr "Afdelingen"
@@ -3561,20 +3573,20 @@ msgid ""
 "If the library is shared to another department, the sharing will be kept."
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-group-dialog.js:47
+#: frontend/src/components/dialog/transfer-group-dialog.js:44
 msgid "Group has been transfered"
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-group-dialog.js:62
+#: frontend/src/components/dialog/transfer-group-dialog.js:60
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
 msgid "Transfer Group"
 msgstr "Groep overzetten"
 
-#: frontend/src/components/dialog/transfer-group-dialog.js:64
+#: frontend/src/components/dialog/transfer-group-dialog.js:62
 msgid "Transfer group to"
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-group-dialog.js:68
+#: frontend/src/components/dialog/transfer-group-dialog.js:66
 msgid "Please enter 1 or more character"
 msgstr "Voer 1 of meer tekens in."
 
@@ -3973,10 +3985,10 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:175
 #: frontend/src/components/main-side-nav.js:177
 #: frontend/src/components/org-admin-group-nav.js:23
-#: frontend/src/pages/org-admin/departments/department.js:149
+#: frontend/src/pages/org-admin/departments/department.js:150
 #: frontend/src/pages/org-admin/side-panel.js:63
 #: frontend/src/pages/share-admin/libraries.js:354
-#: frontend/src/pages/sys-admin/departments/department.js:172
+#: frontend/src/pages/sys-admin/departments/department.js:173
 #: frontend/src/pages/sys-admin/groups/group-nav.js:17
 #: frontend/src/pages/sys-admin/info.js:118
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:20
@@ -4206,7 +4218,7 @@ msgstr ""
 
 #: frontend/src/components/files-sub-nav.js:55
 #: frontend/src/components/files-sub-nav.js:57
-#: frontend/src/pages/libraries/index.js:441
+#: frontend/src/pages/libraries/index.js:467
 #: frontend/src/pages/my-libs/my-libs-deleted.js:52
 #: frontend/src/pages/my-libs/my-libs.js:167
 msgid "My Libraries"
@@ -4230,7 +4242,6 @@ msgstr "Gedeeld met iedereen"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
-#: frontend/src/pages/groups/group-view.js:328
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:22
 #: frontend/src/pages/org-admin/departments/member-item.js:28
 #: frontend/src/pages/org-admin/org-group-members.js:111
@@ -4248,7 +4259,6 @@ msgstr "Admin"
 
 #: frontend/src/components/group-members.js:75
 #: frontend/src/components/group-members.js:122
-#: frontend/src/pages/groups/group-view.js:331
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:31
 #: frontend/src/pages/org-admin/departments/member-item.js:29
 #: frontend/src/pages/org-admin/org-group-members.js:113
@@ -4278,7 +4288,7 @@ msgstr "Huidig pad:"
 
 #: frontend/src/components/libs-mobile-thead.js:17
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:158
-#: frontend/src/pages/libraries/index.js:425
+#: frontend/src/pages/libraries/index.js:451
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:125
 #: frontend/src/pages/shared-libs/content.js:123
 msgid "Library Type"
@@ -4286,7 +4296,7 @@ msgstr "Soort bibliotheek"
 
 #: frontend/src/components/libs-mobile-thead.js:19
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:160
-#: frontend/src/pages/libraries/index.js:427
+#: frontend/src/pages/libraries/index.js:453
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:127
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:82
 #: frontend/src/pages/shared-libs/content.js:125
@@ -4361,7 +4371,7 @@ msgstr "Links"
 
 #: frontend/src/components/main-side-nav.js:183
 #: frontend/src/components/main-side-nav.js:185
-#: frontend/src/pages/share-admin/folders.js:367
+#: frontend/src/pages/share-admin/folders.js:370
 #| msgid "Folder"
 msgid "Folders"
 msgstr "Mappen"
@@ -4392,9 +4402,9 @@ msgid "show more"
 msgstr ""
 
 #: frontend/src/components/org-admin-group-nav.js:26
-#: frontend/src/pages/groups/group-view.js:374
-#: frontend/src/pages/org-admin/departments/department.js:146
-#: frontend/src/pages/sys-admin/departments/department.js:169
+#: frontend/src/pages/groups/group-op-menu.js:160
+#: frontend/src/pages/org-admin/departments/department.js:147
+#: frontend/src/pages/sys-admin/departments/department.js:170
 #: frontend/src/pages/sys-admin/groups/group-nav.js:18
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:18
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:18
@@ -4575,8 +4585,8 @@ msgstr ""
 #: frontend/src/pages/sys-admin/invitations/invitations.js:187
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:154
 #: frontend/src/pages/sys-admin/users/user-info.js:324
-#: frontend/src/pages/sys-admin/users/users-content.js:300
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:33
+#: frontend/src/pages/sys-admin/users/users-content.js:286
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:16
 msgid "Default"
 msgstr "Standaard"
 
@@ -4585,8 +4595,8 @@ msgstr "Standaard"
 #: frontend/src/pages/sys-admin/invitations/invitations.js:181
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:156
 #: frontend/src/pages/sys-admin/users/user-info.js:326
-#: frontend/src/pages/sys-admin/users/users-content.js:302
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:35
+#: frontend/src/pages/sys-admin/users/users-content.js:288
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:18
 msgid "Guest"
 msgstr "Gast"
 
@@ -4920,7 +4930,7 @@ msgid "Failed to delete {name}."
 msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:334
-#: frontend/src/pages/groups/group-view.js:382
+#: frontend/src/pages/groups/group-op-menu.js:167
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:148
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:257
 #: frontend/src/pages/sys-admin/groups/groups-content.js:206
@@ -4938,8 +4948,8 @@ msgstr "Map toegangsrechten"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:340
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:494
-#: frontend/src/pages/share-admin/folders.js:248
-#: frontend/src/pages/share-admin/folders.js:276
+#: frontend/src/pages/share-admin/folders.js:251
+#: frontend/src/pages/share-admin/folders.js:279
 #: frontend/src/pages/share-admin/libraries.js:257
 #: frontend/src/pages/share-admin/libraries.js:285
 #: frontend/src/pages/sys-admin/groups/group-repos.js:139
@@ -4959,8 +4969,8 @@ msgstr "Wijzig het wachtwoord"
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:154
 #: frontend/src/pages/sys-admin/orgs/org-users.js:200
 #: frontend/src/pages/sys-admin/orgs/org-users.js:306
-#: frontend/src/pages/sys-admin/users/users-content.js:383
-#: frontend/src/pages/sys-admin/users/users-content.js:585
+#: frontend/src/pages/sys-admin/users/users-content.js:369
+#: frontend/src/pages/sys-admin/users/users-content.js:571
 #: frontend/src/utils/text-translation.js:162
 msgid "Reset Password"
 msgstr "Wachtwoord reset"
@@ -5176,7 +5186,7 @@ msgstr "Platform"
 #: frontend/src/pages/linked-devices/linked-devices.js:38
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:49
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:50
-#: frontend/src/pages/sys-admin/users/users-content.js:86
+#: frontend/src/pages/sys-admin/users/users-content.js:85
 msgid "Last Access"
 msgstr "Laatst gesynchroniseerd"
 
@@ -5545,9 +5555,8 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:116
 #: frontend/src/pages/sys-admin/repos/dir-path-bar.js:57
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:15
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:26
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:37
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:69
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:14
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:36
 #: frontend/src/pages/sys-admin/virus-scan/nav.js:15
 msgid "All"
 msgstr "Alle"
@@ -6871,9 +6880,9 @@ msgid "(current version)"
 msgstr "(huidige versie)"
 
 #: frontend/src/pages/file-history-old/history-item.js:128
-#: frontend/src/pages/share-admin/share-links.js:302
-#: frontend/src/pages/share-admin/share-links.js:303
-#: frontend/src/pages/share-admin/share-links.js:349
+#: frontend/src/pages/share-admin/share-links.js:279
+#: frontend/src/pages/share-admin/share-links.js:280
+#: frontend/src/pages/share-admin/share-links.js:326
 #: frontend/src/pages/share-admin/upload-links.js:151
 #: frontend/src/pages/share-admin/upload-links.js:178
 #: frontend/src/pages/sys-admin/users/user-links.js:132
@@ -6889,22 +6898,43 @@ msgstr ""
 msgid "Successfully restored."
 msgstr ""
 
-#: frontend/src/pages/groups/group-item.js:96
-#: frontend/src/pages/groups/group-view.js:148
-#: frontend/src/pages/groups/group-view.js:153
+#: frontend/src/pages/groups/group-item.js:82
+#: frontend/src/pages/groups/group-view.js:121
+#: frontend/src/pages/groups/group-view.js:126
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:29
-#: frontend/src/pages/libraries/index.js:454
+#: frontend/src/pages/libraries/index.js:480
 #: frontend/src/pages/my-libs/my-libs.js:38
-#: frontend/src/pages/org-admin/departments/department.js:220
-#: frontend/src/pages/sys-admin/departments/department.js:230
+#: frontend/src/pages/org-admin/departments/department.js:221
+#: frontend/src/pages/sys-admin/departments/department.js:231
 msgid "No libraries"
 msgstr "Geen bibliotheken"
 
-#: frontend/src/pages/groups/group-view.js:141
+#: frontend/src/pages/groups/group-op-menu.js:114
+#| msgid "Successfully sent to {placeholder}"
+msgid "Successfully imported {user_placeholder}"
+msgstr ""
+
+#: frontend/src/pages/groups/group-op-menu.js:162
+msgid "Import members"
+msgstr ""
+
+#: frontend/src/pages/groups/group-op-menu.js:163
+msgid "Manage members"
+msgstr ""
+
+#: frontend/src/pages/groups/group-op-menu.js:170
+msgid "Delete group"
+msgstr ""
+
+#: frontend/src/pages/groups/group-op-menu.js:175
+msgid "Leave group"
+msgstr "Verlaat deze groep"
+
+#: frontend/src/pages/groups/group-view.js:114
 msgid "No libraries shared with this group"
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:142
+#: frontend/src/pages/groups/group-view.js:115
 #| msgid ""
 #| "raries have been shared with this group yet. A library shared with roup  be "
 #| "accessed by all group members. You can share a library h a group in  "
@@ -6917,30 +6947,14 @@ msgid ""
 "with this group by clicking the \"New Library\" item in the dropdown menu."
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:154
+#: frontend/src/pages/groups/group-view.js:127
 #| msgid "n create libraries by clicking the \"New Library\" button above."
 msgid ""
 "You can create libraries by clicking the \"New Library\" item in the "
 "dropdown menu."
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:377
-msgid "Import members"
-msgstr ""
-
-#: frontend/src/pages/groups/group-view.js:378
-msgid "Manage members"
-msgstr ""
-
-#: frontend/src/pages/groups/group-view.js:385
-msgid "Delete group"
-msgstr ""
-
-#: frontend/src/pages/groups/group-view.js:390
-msgid "Leave group"
-msgstr "Verlaat deze groep"
-
-#: frontend/src/pages/groups/group-view.js:440
+#: frontend/src/pages/groups/group-view.js:287
 msgid "This is a special group representing a department."
 msgstr ""
 
@@ -6948,7 +6962,7 @@ msgstr ""
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:190
 #: frontend/src/pages/org-admin/org-info.js:54
 #: frontend/src/pages/org-admin/side-panel.js:39
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:118
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:126
 #: frontend/src/pages/sys-admin/info.js:88
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:17
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:17
@@ -7010,7 +7024,7 @@ msgstr ""
 #: frontend/src/pages/institution-admin/user-list-search/index.js:67
 #: frontend/src/pages/institution-admin/user-list/index.js:108
 #: frontend/src/pages/org-admin/org-user-profile.js:142
-#: frontend/src/pages/sys-admin/users/users-content.js:85
+#: frontend/src/pages/sys-admin/users/users-content.js:84
 msgid "Contact Email"
 msgstr "Contact e-mail"
 
@@ -7024,8 +7038,9 @@ msgstr "Contact e-mail"
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:64
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:48
 #: frontend/src/pages/sys-admin/orgs/org-users.js:60
-#: frontend/src/pages/sys-admin/users/users-content.js:90
-#: frontend/src/pages/sys-admin/users/users-content.js:96
+#: frontend/src/pages/sys-admin/users/users-content.js:89
+#: frontend/src/pages/sys-admin/users/users-content.js:95
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:60
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:172
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:190
 msgid "Status"
@@ -7042,7 +7057,7 @@ msgstr "Status"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:62
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:58
 #: frontend/src/pages/sys-admin/users/ldap-users.js:48
-#: frontend/src/pages/sys-admin/users/users-content.js:78
+#: frontend/src/pages/sys-admin/users/users-content.js:77
 msgid "Space Used"
 msgstr "Ruimte Gebruikt"
 
@@ -7061,7 +7076,7 @@ msgstr "Laatste inlog"
 #: frontend/src/pages/institution-admin/user-list-search/index.js:89
 #: frontend/src/pages/institution-admin/user-list/index.js:141
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:109
-#: frontend/src/pages/sys-admin/users/users-content.js:576
+#: frontend/src/pages/sys-admin/users/users-content.js:562
 msgid "Delete User"
 msgstr "Gebruiker verwijderen"
 
@@ -7070,9 +7085,8 @@ msgstr "Gebruiker verwijderen"
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:174
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:210
 #: frontend/src/pages/sys-admin/orgs/org-users.js:210
-#: frontend/src/pages/sys-admin/users/users-content.js:326
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:24
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:72
+#: frontend/src/pages/sys-admin/users/users-content.js:312
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:37
 msgid "Active"
 msgstr "Actief"
 
@@ -7081,9 +7095,8 @@ msgstr "Actief"
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:174
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:210
 #: frontend/src/pages/sys-admin/orgs/org-users.js:212
-#: frontend/src/pages/sys-admin/users/users-content.js:328
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:22
-#: frontend/src/pages/sys-admin/users/users-filter-bar.js:75
+#: frontend/src/pages/sys-admin/users/users-content.js:314
+#: frontend/src/pages/sys-admin/users/users-filter-bar.js:38
 msgid "Inactive"
 msgstr "Inactief"
 
@@ -7290,7 +7303,7 @@ msgid "Office Suite"
 msgstr ""
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:54
-#: frontend/src/pages/share-admin/folders.js:146
+#: frontend/src/pages/share-admin/folders.js:147
 #: frontend/src/pages/share-admin/libraries.js:172
 #: frontend/src/pages/shared-libs/item.js:81
 #: frontend/src/pages/shared-with-all/index.js:76
@@ -7313,8 +7326,8 @@ msgstr ""
 msgid "Shared By"
 msgstr "Gedeeld Door"
 
-#: frontend/src/pages/org-admin/departments/department.js:165
-#: frontend/src/pages/sys-admin/departments/department.js:191
+#: frontend/src/pages/org-admin/departments/department.js:166
+#: frontend/src/pages/sys-admin/departments/department.js:192
 #| msgid "Contact Email"
 msgid "Contact email"
 msgstr ""
@@ -7333,12 +7346,18 @@ msgstr "Voeg bibliotheek toe"
 
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:28
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:28
+#| msgid "Set Quota"
+msgid "Set quota"
+msgstr ""
+
+#: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:31
+#: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:31
 #| msgid "Departments"
 msgid "Department ID"
 msgstr ""
 
-#: frontend/src/pages/org-admin/departments/departments.js:341
-#: frontend/src/pages/sys-admin/departments/departments.js:379
+#: frontend/src/pages/org-admin/departments/departments.js:369
+#: frontend/src/pages/sys-admin/departments/departments.js:407
 #| msgid "Rename Department"
 msgid "Enable departments feature"
 msgstr ""
@@ -7352,8 +7371,9 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:103
 #: frontend/src/pages/org-admin/org-logs-file-update.js:117
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:163
-#: frontend/src/pages/share-admin/share-links.js:94
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:171
+#: frontend/src/pages/share-admin/folders.js:57
+#: frontend/src/pages/share-admin/share-links.js:71
 #: frontend/src/pages/share-admin/upload-links.js:53
 #: frontend/src/pages/starred/starred.js:42
 #: frontend/src/pages/sys-admin/abuse-reports.js:91
@@ -7400,7 +7420,7 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:232
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:168
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:176
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:257
 #: frontend/src/utils/utils.js:449
 msgid "Encrypted library"
@@ -7446,7 +7466,7 @@ msgstr "Wissen"
 #: frontend/src/pages/org-admin/org-users-list.js:75
 #: frontend/src/pages/org-admin/org-users-search-users.js:38
 #: frontend/src/pages/sys-admin/users/ldap-users.js:48
-#: frontend/src/pages/sys-admin/users/users-content.js:83
+#: frontend/src/pages/sys-admin/users/users-content.js:82
 msgid "Quota"
 msgstr ""
 
@@ -7466,7 +7486,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/org-users.js:63
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:59
 #: frontend/src/pages/sys-admin/users/user-groups.js:48
-#: frontend/src/pages/sys-admin/users/users-content.js:86
+#: frontend/src/pages/sys-admin/users/users-content.js:85
 msgid "Created At"
 msgstr "Gemaakt om"
 
@@ -7522,7 +7542,7 @@ msgid "Change to department"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-info.js:61
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:122
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:130
 msgid "Team name"
 msgstr ""
 
@@ -7587,7 +7607,7 @@ msgid "Share From"
 msgstr "Delen Van"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:81
-#: frontend/src/pages/share-admin/folders.js:57
+#: frontend/src/pages/share-admin/folders.js:58
 #: frontend/src/pages/share-admin/libraries.js:56
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:48
 msgid "Share To"
@@ -7607,8 +7627,8 @@ msgstr "Organisatie"
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:223
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:188
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:201
-#: frontend/src/pages/sys-admin/users/users.js:410
-#: frontend/src/pages/sys-admin/users/users.js:418
+#: frontend/src/pages/sys-admin/users/users.js:420
+#: frontend/src/pages/sys-admin/users/users.js:428
 msgid "Export Excel"
 msgstr "Export naar Excel"
 
@@ -7698,7 +7718,7 @@ msgstr "Mislukt"
 
 #: frontend/src/pages/org-admin/org-user-item.js:151
 #: frontend/src/pages/sys-admin/orgs/org-users.js:232
-#: frontend/src/pages/sys-admin/users/users-content.js:425
+#: frontend/src/pages/sys-admin/users/users-content.js:411
 msgid "Are you sure you want to set {user_placeholder} inactive?"
 msgstr ""
 
@@ -7710,21 +7730,21 @@ msgstr "ResetPwd"
 #: frontend/src/pages/org-admin/org-user-item.js:190
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:154
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:194
-#: frontend/src/pages/sys-admin/users/users-content.js:386
-#: frontend/src/pages/sys-admin/users/users-content.js:594
+#: frontend/src/pages/sys-admin/users/users-content.js:372
+#: frontend/src/pages/sys-admin/users/users-content.js:580
 msgid "Revoke Admin"
 msgstr "Intrekken Admin"
 
 #: frontend/src/pages/org-admin/org-user-item.js:198
 #: frontend/src/pages/sys-admin/orgs/org-users.js:315
-#: frontend/src/pages/sys-admin/users/users-content.js:603
+#: frontend/src/pages/sys-admin/users/users-content.js:589
 #| msgid "Set user name"
 msgid "Set user inactive"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-user-item.js:201
 #: frontend/src/pages/sys-admin/orgs/org-users.js:318
-#: frontend/src/pages/sys-admin/users/users-content.js:606
+#: frontend/src/pages/sys-admin/users/users-content.js:592
 #| msgid "Select all"
 msgid "Set"
 msgstr ""
@@ -7733,7 +7753,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-users-search-users.js:115
 #: frontend/src/pages/org-admin/org-users-users.js:202
 #: frontend/src/pages/sys-admin/users/search-users.js:145
-#: frontend/src/pages/sys-admin/users/users.js:243
+#: frontend/src/pages/sys-admin/users/users.js:253
 #, javascript-format
 msgid "Deleted user %s"
 msgstr ""
@@ -7977,62 +7997,61 @@ msgstr ""
 msgid "Change"
 msgstr "Wijzig"
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:74
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:82
 msgid "Logo updated"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:83
-#: frontend/src/pages/sys-admin/web-settings/web-settings.js:48
-#: frontend/src/pages/sys-admin/web-settings/web-settings.js:78
-msgid "System settings updated"
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:91
+#| msgid "System settings updated"
+msgid "Setting updated"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:92
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:100
 #| msgid "Set user default quota"
 msgid "User default quota updated"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:140
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:148
 msgid "File Upload"
 msgstr "Bestandsupload"
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:144
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:152
 msgid "File extension white list"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:147
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:155
 msgid ""
 "File extension white list for file upload via web UI and API. For example, "
 "\"md;txt;docx\". Empty means no limit."
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:155
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:163
 msgid "Disable SAML user email / password login"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:158
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:166
 msgid "Force user to use SSO login if SAML account is bound"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:171
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:179
 msgid "Not allow user to create encrypted libraries"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:177
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:185
 #| msgid "Allow user to clean library trash"
 msgid "Disable user clean trash"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:180
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:188
 msgid "Not allow user to clean library trash"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:191
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:199
 #| msgid "Set user default quota"
 msgid "User default quota"
 msgstr ""
 
-#: frontend/src/pages/org-admin/web-settings/web-settings.js:193
+#: frontend/src/pages/org-admin/web-settings/web-settings.js:201
 #| msgid "Tip: 0 means default limit"
 msgid "Tip: 0 means default limit, the unit is MB"
 msgstr ""
@@ -8063,14 +8082,14 @@ msgstr ""
 msgid "Show changes"
 msgstr ""
 
-#: frontend/src/pages/share-admin/folders.js:176
+#: frontend/src/pages/share-admin/folders.js:177
 #: frontend/src/pages/share-admin/libraries.js:147
-#: frontend/src/pages/share-admin/share-links.js:234
+#: frontend/src/pages/share-admin/share-links.js:211
 #| msgid "Successfully edited labels."
 msgid "Successfully modified permission."
 msgstr ""
 
-#: frontend/src/pages/share-admin/folders.js:260
+#: frontend/src/pages/share-admin/folders.js:263
 #: frontend/src/pages/share-admin/libraries.js:269
 msgid "Share To:"
 msgstr ""
@@ -8091,15 +8110,15 @@ msgstr ""
 msgid "all members"
 msgstr "alle leden"
 
-#: frontend/src/pages/share-admin/share-links.js:279
+#: frontend/src/pages/share-admin/share-links.js:256
 #: frontend/src/pages/share-admin/upload-links.js:145
 #| msgid "deleted"
 msgid "(deleted)"
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:312
-#: frontend/src/pages/share-admin/share-links.js:313
-#: frontend/src/pages/share-admin/share-links.js:350
+#: frontend/src/pages/share-admin/share-links.js:289
+#: frontend/src/pages/share-admin/share-links.js:290
+#: frontend/src/pages/share-admin/share-links.js:327
 #: frontend/src/pages/share-admin/upload-links.js:152
 #: frontend/src/pages/share-admin/upload-links.js:179
 #: frontend/src/pages/sys-admin/groups/group-members.js:177
@@ -8111,28 +8130,18 @@ msgstr ""
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: frontend/src/pages/share-admin/share-links.js:401
-#| msgid "By time ascending"
-msgid "By expiration ascending"
-msgstr ""
-
-#: frontend/src/pages/share-admin/share-links.js:402
-#| msgid "By time descending"
-msgid "By expiration descending"
-msgstr ""
-
-#: frontend/src/pages/share-admin/share-links.js:541
+#: frontend/src/pages/share-admin/share-links.js:452
 #| msgid "Successfully deleted 1 share link"
 msgid "Successfully cleaned invalid share links."
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:559
-#: frontend/src/pages/share-admin/share-links.js:594
+#: frontend/src/pages/share-admin/share-links.js:470
+#: frontend/src/pages/share-admin/share-links.js:492
 #| msgid "Delete share links"
 msgid "Clean invalid share links"
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:595
+#: frontend/src/pages/share-admin/share-links.js:493
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to clean invalid share links?"
 msgstr ""
@@ -8397,20 +8406,20 @@ msgid "Organizations"
 msgstr "Organisaties"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:165
-#: frontend/src/pages/sys-admin/users/users-content.js:424
+#: frontend/src/pages/sys-admin/users/users-content.js:410
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
-#: frontend/src/pages/sys-admin/users/users-content.js:597
+#: frontend/src/pages/sys-admin/users/users-content.js:583
 #| msgid "Revoke Admin"
 msgid "Revoke"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:255
 #: frontend/src/pages/sys-admin/users/search-users.js:249
-#: frontend/src/pages/sys-admin/users/users.js:395
+#: frontend/src/pages/sys-admin/users/users.js:405
 msgid "Successfully revoked the admin permission of {placeholder}."
 msgstr ""
 
@@ -8532,12 +8541,12 @@ msgid "Number of groups"
 msgstr "Aantal groepen"
 
 #: frontend/src/pages/sys-admin/orgs/org-users.js:231
-#: frontend/src/pages/sys-admin/users/users-content.js:423
+#: frontend/src/pages/sys-admin/users/users-content.js:409
 msgid "Are you sure you want to reset the password of {placeholder} ?"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/org-users.js:309
-#: frontend/src/pages/sys-admin/users/users-content.js:588
+#: frontend/src/pages/sys-admin/users/users-content.js:574
 msgid "Reset"
 msgstr ""
 
@@ -8557,8 +8566,8 @@ msgstr "Verwijder Organisatie"
 #: frontend/src/pages/sys-admin/users/search-users.js:217
 #: frontend/src/pages/sys-admin/users/search-users.js:234
 #: frontend/src/pages/sys-admin/users/user-info.js:280
-#: frontend/src/pages/sys-admin/users/users.js:363
-#: frontend/src/pages/sys-admin/users/users.js:380
+#: frontend/src/pages/sys-admin/users/users.js:373
+#: frontend/src/pages/sys-admin/users/users.js:390
 msgid "Edit succeeded"
 msgstr "Wijzigen gelukt"
 
@@ -8639,24 +8648,24 @@ msgid "Update succeeded."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/users/search-users.js:192
-#: frontend/src/pages/sys-admin/users/users.js:290
+#: frontend/src/pages/sys-admin/users/users.js:300
 msgid "Successfully deleted 1 user."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/users/search-users.js:193
-#: frontend/src/pages/sys-admin/users/users.js:291
+#: frontend/src/pages/sys-admin/users/users.js:301
 msgid "Successfully deleted {user_number_placeholder} users."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/users/search-users.js:299
 #: frontend/src/pages/sys-admin/users/search-users.js:360
-#: frontend/src/pages/sys-admin/users/users.js:487
-#: frontend/src/pages/sys-admin/users/users.js:549
+#: frontend/src/pages/sys-admin/users/users.js:500
+#: frontend/src/pages/sys-admin/users/users.js:565
 msgid "Delete Users"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/users/search-users.js:361
-#: frontend/src/pages/sys-admin/users/users.js:550
+#: frontend/src/pages/sys-admin/users/users.js:566
 msgid "Are you sure you want to delete the selected user(s) ?"
 msgstr ""
 
@@ -8672,26 +8681,26 @@ msgstr ""
 msgid "Shared Links"
 msgstr "Gedeelde links"
 
-#: frontend/src/pages/sys-admin/users/users-content.js:102
+#: frontend/src/pages/sys-admin/users/users-content.js:101
 #| msgid "Institution Admin"
 msgid "Institution"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/users-content.js:175
+#: frontend/src/pages/sys-admin/users/users-content.js:166
 msgid "No users"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/users-content.js:311
+#: frontend/src/pages/sys-admin/users/users-content.js:297
 #| msgid "Set Admin"
 msgid "Default Admin"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/users-content.js:315
+#: frontend/src/pages/sys-admin/users/users-content.js:301
 #| msgid "Share Admin"
 msgid "Daily Admin"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/users/users-content.js:317
+#: frontend/src/pages/sys-admin/users/users-content.js:303
 #| msgid "Add Admin"
 msgid "Audit Admin"
 msgstr ""
@@ -8741,6 +8750,11 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:375
 msgid "Failed to ignore %(virus_file) from library %(library): %(error_msg)"
+msgstr ""
+
+#: frontend/src/pages/sys-admin/web-settings/web-settings.js:48
+#: frontend/src/pages/sys-admin/web-settings/web-settings.js:78
+msgid "System settings updated"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:100
@@ -9664,6 +9678,12 @@ msgstr ""
 #: frontend/src/utils/utils.js:1933
 msgid "Name cannot be double dots"
 msgstr ""
+
+#~ msgid "By expiration ascending"
+#~ msgstr "By time ascending"
+
+#~ msgid "By expiration descending"
+#~ msgstr "By time descending"
 
 #~ msgid "you can also press ← "
 #~ msgstr "you can also press ← "
