@@ -32,7 +32,7 @@ const TagItem = ({
           'sf-metadata-tags-editor-tag-container-highlight': highlight,
         })}
         style={{ paddingLeft }}
-        onMouseDown={!node ? () => onSelect(tagId) : () => {}}
+        onClick={() => onSelect(tagId)}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
@@ -45,7 +45,7 @@ const TagItem = ({
             <i className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
           </span>
         )}
-        <div className="sf-metadata-tag-color-and-name" onClick={node ? () => onSelect(tagId) : () => {}}>
+        <div className="sf-metadata-tag-color-and-name">
           <div className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }} />
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
