@@ -2909,22 +2909,30 @@ class MetadataMigrateTags(APIView):
         return record_to_tags_map
     
     def post(self, request, repo_id):
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled or not metadata.tags_enabled:
-            error_msg = f'The tags is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_name = repo.name
 
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'Metadata extension is not enabled for library {repo_name}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        tags_enabled = metadata.tags_enabled
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        if not tags_enabled:
+            metadata.tags_enabled = True
+            metadata.tags_lang = 'en'
+            metadata.save()
+            init_tags(metadata_server_api)
+        
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         if not tags_table:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
