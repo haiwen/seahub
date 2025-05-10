@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import Picker from './picker';
@@ -108,11 +108,11 @@ class StatisticCommonTool extends React.Component {
       <Fragment>
         {this.props.children}
         <div className="system-statistic-time-range">
-          <div className="sys-stat-tool">
-            <div className={`system-statistic-item border-right-0 rounded-left ${statisticType === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</div>
-            <div className={`system-statistic-item border-right-0 ${statisticType === 'oneMonth' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</div>
-            <div className={`system-statistic-item rounded-right ${statisticType === 'oneYear' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</div>
-          </div>
+          <ButtonGroup size="sm" className="sys-stat-tool">
+            <Button className={`font-weight-normal ${statisticType === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</Button>
+            <Button className={`font-weight-normal ${statisticType === 'oneMonth' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</Button>
+            <Button className={`font-weight-normal ${statisticType === 'oneYear' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</Button>
+          </ButtonGroup>
           <div className="system-statistic-input-container">
             <Picker
               disabledDate={this.disabledStartDate}

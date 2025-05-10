@@ -9,13 +9,10 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 class LeaveGroupDialog extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   leaveGroup = () => {
-    seafileAPI.quitGroup(this.props.groupID, username).then((res) => {
-      this.props.onGroupChanged();
+    const { groupID } = this.props;
+    seafileAPI.quitGroup(groupID, username).then((res) => {
+      this.props.onLeavingGroup();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -24,13 +21,13 @@ class LeaveGroupDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggleLeaveGroupDialog}>
-        <SeahubModalHeader toggle={this.props.toggleLeaveGroupDialog}>{gettext('Leave Group')}</SeahubModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+        <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Leave Group')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('Really want to leave this group?')}</p>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleLeaveGroupDialog}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.leaveGroup}>{gettext('Leave')}</Button>
         </ModalFooter>
       </Modal>
@@ -39,9 +36,9 @@ class LeaveGroupDialog extends React.Component {
 }
 
 const LeaveGroupDialogPropTypes = {
-  toggleLeaveGroupDialog: PropTypes.func.isRequired,
-  groupID: PropTypes.string,
-  onGroupChanged: PropTypes.func.isRequired,
+  groupID: PropTypes.number.isRequired,
+  onLeavingGroup: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 LeaveGroupDialog.propTypes = LeaveGroupDialogPropTypes;

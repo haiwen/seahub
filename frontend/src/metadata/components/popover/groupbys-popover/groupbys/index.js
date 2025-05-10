@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 import GroupbyItem from './groupby-item';
 import { gettext } from '../../../../../utils/constants';
 
@@ -47,8 +45,4 @@ Groupbys.propTypes = {
   onMove: PropTypes.func,
 };
 
-const DndGroupbysContainer = DropTarget('sfMetadataGroupbyItem', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(Groupbys);
-
-export default html5DragDropContext(DndGroupbysContainer);
+export default Groupbys;

@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-from django.contrib.sessions.backends.db import SessionStore
+import os
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,8 +14,8 @@ from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
-from seahub.views.file import send_file_access_msg
-from seahub.utils import normalize_file_path
+from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
+from seahub.utils import normalize_file_path, get_file_type_and_ext
 from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
@@ -159,6 +159,15 @@ class InternalCheckFileOperationAccess(APIView):
             error_msg = 'File not found'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
+        filename = os.path.basename(file_path)
+        filetype, ext = get_file_type_and_ext(filename)
+        
+        # The download permission can be ignored when the permission check
+        # called from seaf-server for some file types such as video, markdown and pdf
+        # which is viewed / downloaded directly by requesting seaf-server.
+        
+        ignore_download_perms = filetype in FILE_TYPE_FOR_NEW_FILE_LINK
+        
         token = request.data.get('token') # account token or repo token
         ip_addr = request.data.get('ip_addr')
         user_agent = request.data.get('user_agent')
@@ -176,12 +185,14 @@ class InternalCheckFileOperationAccess(APIView):
             op_perms = parse_repo_perm(seafile_api.check_permission_by_path(
                         repo_id, '/', username))
             
-            if op == OP_DOWNLOAD and not op_perms.can_download:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if op == OP_DOWNLOAD:
+                if not (ignore_download_perms or op_perms.can_download):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+               
             if op == OP_UPLOAD and not op_perms.can_upload:
                 error_msg = 'Permission denied.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             
             send_file_access_msg(request, repo, file_path, 'web', custom_ip=ip_addr, custom_agent=user_agent)
             return Response({'user': username})

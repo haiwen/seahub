@@ -6365,7 +6365,7 @@ msgstr "Не удалось добавить фотографии людей"
 #: frontend/src/metadata/store/server-operator.js:242
 #| msgid "Failed to rename property"
 msgid "Failed to set people cover photo"
-msgstr ""
+msgstr "Не удалось установить фотографию людей на обложке"
 
 #: frontend/src/metadata/store/server-operator.js:259
 #: frontend/src/tag/store/server-operator.js:63
@@ -6536,7 +6536,7 @@ msgstr "Добавить в группу"
 #: frontend/src/metadata/views/gallery/context-menu/index.js:52
 #| msgid "Set user quota"
 msgid "Set as cover photo"
-msgstr ""
+msgstr "Установить в качестве фотографии для обложки"
 
 #: frontend/src/metadata/views/kanban/add-board/index.js:38
 #: frontend/src/metadata/views/kanban/add-board/index.js:40

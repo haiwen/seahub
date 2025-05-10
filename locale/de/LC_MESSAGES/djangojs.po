@@ -7,7 +7,7 @@
 # c8102f0c763e951b80d487a98493a3a2_3f82ce6 <bf9ed76f9d8770f1cf25632d32d927f8_249767>, 2015-2016
 # 3Stadt <matthieu@3-stadt.de>, 2017
 # A. Heß <schnuecks78@gmail.com>, 2016
-# Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2022,2024
+# Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2022,2024-2025
 # Marcus Müller <info@yoursecurecloud.de>, 2015-2016
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # Leonhard Künzler <leonhard@kuenzler.io>, 2017
@@ -6016,7 +6016,7 @@ msgstr "Alle anzeigen"
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:38
 #: frontend/src/metadata/components/popover/options-popover/index.js:55
 msgid "There is another option with this name"
-msgstr "Es gibt eine andere Option mit diesem namen"
+msgstr "Es gibt eine andere Option mit diesem Namen"
 
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:27
 msgid "{name} rows use this option."
@@ -6380,7 +6380,7 @@ msgstr "Das Hinzufügen von Personenfotos ist fehlgeschlagen."
 #: frontend/src/metadata/store/server-operator.js:242
 #| msgid "Failed to rename property"
 msgid "Failed to set people cover photo"
-msgstr ""
+msgstr "Das Setzen von Personenfotos als Deckblatt ist fehlgeschlagen."
 
 #: frontend/src/metadata/store/server-operator.js:259
 #: frontend/src/tag/store/server-operator.js:63
@@ -6551,7 +6551,7 @@ msgstr "Der Gruppe hinzufügen"
 #: frontend/src/metadata/views/gallery/context-menu/index.js:52
 #| msgid "Set user quota"
 msgid "Set as cover photo"
-msgstr ""
+msgstr "Foto als Deckblatt setzen"
 
 #: frontend/src/metadata/views/kanban/add-board/index.js:38
 #: frontend/src/metadata/views/kanban/add-board/index.js:40
@@ -7697,7 +7697,7 @@ msgstr "Kopieren Sie den TXT-Wert und fügen Sie diesen den DNS-Einstellungen Ih
 
 #: frontend/src/pages/org-admin/org-saml-config.js:220
 msgid "Verify"
-msgstr "Anmelden"
+msgstr "Verifizieren"
 
 #: frontend/src/pages/org-admin/org-user-item.js:60
 msgid "Resetting user's password, please wait for a moment."
@@ -8800,7 +8800,7 @@ msgstr "Hintergrundbild der Anmeldeseite"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:147
 msgid "Enable branding CSS"
-msgstr "Custom CSS verwenden"
+msgstr "Custom CSS"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:150
 msgid "Use custom CSS"

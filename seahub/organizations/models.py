@@ -96,7 +96,7 @@ class OrgSettingsManager(models.Manager):
 class OrgSettings(models.Model):
     org_id = models.IntegerField(unique=True)
     role = models.CharField(max_length=100, null=True, blank=True)
-    is_active = models.BooleanField(default=False, db_index=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     objects = OrgSettingsManager()
 

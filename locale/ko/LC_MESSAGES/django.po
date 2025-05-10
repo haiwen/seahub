@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Translators:
+# Lee Bill, 2025
 # 9325254679b58572483e76a836735ed8_cb93a58 <3519b07acca9e77cf8a0d6585a92c7bf_147769>, 2014
 # 9325254679b58572483e76a836735ed8_cb93a58 <3519b07acca9e77cf8a0d6585a92c7bf_147769>, 2014
 # Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2024
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-28 14:59+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2024\n"
+"Last-Translator: Lee Bill, 2025\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +24,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:49
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr "ADFS/SAML 로그인 관련 문자열이 부적절합니다."
+msgstr "ADFS/SAML 로그인 관련 설정이 올바르지 않습니다."
 
 #: seahub/adfs_auth/views.py:132 seahub/adfs_auth/views.py:161
 #: seahub/adfs_auth/views.py:189 seahub/adfs_auth/views.py:410
@@ -291,7 +292,7 @@ msgstr "이름"
 #: seahub/templates/registration/password_set_form.html:17
 #: seahub/views/sysadmin.py:172 seahub/views/sysadmin.py:176
 msgid "Contact Email"
-msgstr "연락 전자메일"
+msgstr "연락 이메일"
 
 #: seahub/api2/endpoints/admin/statistics.py:446
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -853,7 +854,7 @@ msgstr "이미 아바타 %(nb_avatars)d개를 보유하고 있으며, 최대 허
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "WebDAV의 비밀번호 길이가 30자 이하이어야 합니다."
 
 #: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1408
 #: seahub/api2/endpoints/wikis.py:219
@@ -862,15 +863,15 @@ msgstr "이름엔 문자, 숫자, 공백 문자, 음수 기호, 밑줄 문자만
 
 #: seahub/api2/endpoints/wiki2.py:1256
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL이 알맞지 않습니다."
 
 #: seahub/api2/endpoints/wiki2.py:1260
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "URL의 사용자 지정 부분은 5자 이상 30자 이하여야 합니다."
 
 #: seahub/api2/endpoints/wiki2.py:1282
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "이 사용자 지정 도메인은 이미 사용 중이므로 위키에서 사용할 수 없습니다."
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
@@ -1775,7 +1776,7 @@ msgstr "%(user)s 사용자가 <a href=\"%(repo_url)s\">%(repo_name)s</a> 라이�
 #: seahub/notifications/models.py:951
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} 이 {repo_link} 라이브러리에서 {obj_type} {obj_link} 을(를) 만들었습니다."
 
 #: seahub/notifications/models.py:953
 #, python-brace-format
@@ -2686,7 +2687,7 @@ msgstr "다음 페이지로 가서 파일을 업로드할 수 있습니다:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "비밀번호 강도가 강하거나 강할 거예요."
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:97

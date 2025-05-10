@@ -129,7 +129,7 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     setCollapsedFolders(updatedCollapsedFoldersIds);
   }, [getCollapsedFolders, setCollapsedFolders]);
 
-  const addFolder = useCallback((name, successCallback, failCallback) => {
+  const addFolder = useCallback(({ name, successCallback, failCallback }) => {
     metadataAPI.addFolder(repoID, name).then(res => {
       let newNavigation = [...navigation];
       const folder = new Folder(res.data.folder);

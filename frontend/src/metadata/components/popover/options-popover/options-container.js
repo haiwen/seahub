@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
-import html5DragDropContext from '../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 
 const OptionsContainer = ({ inputRef, options }) => {
   if (!Array.isArray(options) || options.length === 0) return null;
@@ -17,8 +15,4 @@ OptionsContainer.propTypes = {
   options: PropTypes.array
 };
 
-const DndOptionsContainer = DropTarget('sfMetadataSingleSelectOption', {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(OptionsContainer);
-
-export default html5DragDropContext(DndOptionsContainer);
+export default OptionsContainer;

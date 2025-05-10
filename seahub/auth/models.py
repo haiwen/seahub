@@ -1,44 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import hashlib
 import logging
 from registration.signals import user_deleted
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from django.utils.encoding import smart_str
 from django.db.models.manager import EmptyManager
 
 logger = logging.getLogger(__name__)
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
-
-
-def get_hexdigest(algorithm, salt, raw_password):
-    """
-    Returns a string of the hexdigest of the given plaintext password and salt
-    using the given algorithm ('md5', 'sha1' or 'crypt').
-    """
-    raw_password, salt = smart_str(raw_password).encode('utf-8'), smart_str(salt).encode('utf-8')
-    if algorithm == 'crypt':
-        try:
-            import crypt
-        except ImportError:
-            raise ValueError('"crypt" password algorithm not supported in this environment')
-        return crypt.crypt(raw_password, salt)
-
-    if algorithm == 'md5':
-        return hashlib.md5(salt + raw_password).hexdigest()
-    elif algorithm == 'sha1':
-        return hashlib.sha1(salt + raw_password).hexdigest()
-    raise ValueError("Got unknown password algorithm type in password.")
-
-
-def check_password(raw_password, enc_password):
-    """
-    Returns a boolean of whether the raw_password was correct. Handles
-    encryption formats behind the scenes.
-    """
-    algo, salt, hsh = enc_password.split('$')
-    return hsh == get_hexdigest(algo, salt, raw_password)
 
 
 class SiteProfileNotAvailable(Exception):

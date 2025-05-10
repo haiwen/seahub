@@ -59,9 +59,6 @@ class InnerFileView extends React.Component {
       case 'Image':
         content = <Image tip={<FileViewTip />} scale={imageScale} angle={imageAngle} />;
         break;
-      case 'XMind':
-        content = <Image tip={<FileViewTip />} />;
-        break;
       case 'SVG':
         content = <SVG />;
         break;

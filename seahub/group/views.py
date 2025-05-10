@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from urllib.parse import quote
+
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 
 from seahub.auth.decorators import login_required
@@ -16,6 +18,7 @@ from seaserv import ccnet_threaded_rpc, ccnet_api, get_group
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
+from seahub.base.models import GROUP_MEMBER_ADD
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError, is_group_member
 from seahub.group.models import GroupInviteLinkModel
@@ -23,6 +26,7 @@ from seahub.settings import SITE_ROOT, SERVICE_URL, MULTI_TENANCY
 from seahub.utils import send_html_email, is_org_context, \
     get_site_name, render_error
 from seahub.share.models import ExtraGroupsSharePermission
+from seahub.signals import group_member_audit
 
 
 # Get an instance of a logger
@@ -119,6 +123,8 @@ def group_remove(request, group_id):
     """
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next_page = request.headers.get('referer', SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = SITE_ROOT
 
     try:
         group_id_int = int(group_id)
@@ -195,6 +201,12 @@ def group_invite(request, token):
 
     try:
         ccnet_api.group_add_member(group_invite_link.group_id, group_invite_link.created_by, email)
+        group_member_audit.send(sender=None,
+                              org_id=-1,
+                              group_id=group_invite_link.group_id,
+                              users=[email],
+                              operator=group_invite_link.created_by,
+                              operation=GROUP_MEMBER_ADD)
     except Exception as e:
         logger.error(f'group invite add user failed. {e}')
         return render_error(request, 'Internal Server Error')

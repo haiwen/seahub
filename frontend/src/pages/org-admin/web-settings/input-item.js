@@ -7,13 +7,12 @@ import SettingItemBase from './setting-item-base';
 const propTypes = {
   inputType: PropTypes.string,
   saveSetting: PropTypes.func.isRequired,
-  keyText: PropTypes.string.isRequired,
+  keyText: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   helpTip: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   inputAddon: PropTypes.node,
-  valueFixed: PropTypes.number,
 };
 
 class WebSettingInput extends Component {
@@ -45,11 +44,9 @@ class WebSettingInput extends Component {
   };
 
   onSubmit = (e) => {
-    const { valueFixed = 0 } = this.props;
     const value = this.state.value.trim();
     if (value != this.props.value) {
       this.props.saveSetting(this.props.keyText, value);
-      this.setState({ value: parseInt(value).toFixed(valueFixed) });
     }
     this.toggleBtns();
   };

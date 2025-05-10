@@ -2,6 +2,7 @@ const paths = require('./paths');
 
 const entryFiles = {
   tldrawEditor: '/tldrawEditor.js',
+  excalidrawEditor: '/excalidraw-editor.js',
   markdownEditor: '/index.js',
   plainMarkdownEditor: '/pages/plain-markdown-editor/index.js',
   TCAccept: '/tc-accept.js',
@@ -24,6 +25,7 @@ const entryFiles = {
   sharedFileViewAudio: '/shared-file-view-audio.js',
   sharedFileViewDocument: '/shared-file-view-document.js',
   sharedFileViewSpreadsheet: '/shared-file-view-spreadsheet.js',
+  sharedFileViewExdraw: '/shared-file-view-exdraw.js',
   sharedFileViewSdoc: '/shared-file-view-sdoc.js',
   sharedFileViewUnknown: '/shared-file-view-unknown.js',
   historyTrashFileView: '/history-trash-file-view.js',

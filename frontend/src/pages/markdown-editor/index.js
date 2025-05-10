@@ -20,7 +20,7 @@ import './css/markdown-editor.css';
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
-const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
+const { repoID, filePath, fileName, isLocked, lockedByMe, filePerm } = window.app.pageOptions;
 const { siteRoot, serviceUrl } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
@@ -57,7 +57,6 @@ class MarkdownEditor extends React.Component {
       saving: false,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      fileTagList: [],
       participants: [],
     };
 
@@ -234,7 +233,6 @@ class MarkdownEditor extends React.Component {
         },
       });
     }
-    this.listFileTags();
 
     this.listFileParticipants();
     window.showParticipants = true;
@@ -272,20 +270,6 @@ class MarkdownEditor extends React.Component {
     const confirmationMessage = gettext('Leave this page? The system may not save your changes.');
     event.returnValue = confirmationMessage;
     return confirmationMessage;
-  };
-
-  listFileTags = () => {
-    seafileAPI.listFileTags(repoID, filePath).then(res => {
-      let fileTagList = res.data.file_tags;
-      for (let i = 0; i < fileTagList.length; i++) {
-        fileTagList[i].id = fileTagList[i].file_tag_id;
-      }
-      this.setState({ fileTagList: fileTagList });
-    });
-  };
-
-  onFileTagChanged = () => {
-    this.listFileTags();
   };
 
   listFileParticipants = () => {
@@ -399,10 +383,10 @@ class MarkdownEditor extends React.Component {
   };
 
   render() {
-    const { loading, markdownContent, fileInfo, fileTagList, isLocked } = this.state;
+    const { loading, markdownContent, fileInfo, isLocked } = this.state;
 
     return (
-      <Fragment>
+      <>
         <HeaderToolbar
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
@@ -423,7 +407,7 @@ class MarkdownEditor extends React.Component {
           toggleLockFile={this.toggleLockFile}
         />
         <div className={`sf-md-viewer-content ${isLocked ? 'locked' : ''}`}>
-          {!isLocked && (
+          {(filePerm === 'rw' && !isLocked) ?
             <SeafileMarkdownEditor
               ref={this.editorRef}
               isFetching={loading}
@@ -433,24 +417,20 @@ class MarkdownEditor extends React.Component {
               onSave={this.onSaveEditorContent}
               onContentChanged={this.onContentChanged}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              // isSupportInsertSeafileImage={true}
             >
-              <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
+              <DetailListView fileInfo={fileInfo} />
             </SeafileMarkdownEditor>
-          )}
-          {isLocked && (
+            :
             <SeafileMarkdownViewer
               isFetching={loading}
               value={markdownContent}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              // isSupportInsertSeafileImage={true}
               isShowOutline={true}
-            >
-            </SeafileMarkdownViewer>
-          )}
+            />
+          }
         </div>
         {this.state.showMarkdownEditorDialog && (
-          <React.Fragment>
+          <>
             {this.state.showInsertFileDialog &&
               <InsertFileDialog
                 repoID={repoID}
@@ -470,9 +450,9 @@ class MarkdownEditor extends React.Component {
                 repoEncrypted={false}
               />
             }
-          </React.Fragment>
+          </>
         )}
-      </Fragment>
+      </>
     );
   }
 }

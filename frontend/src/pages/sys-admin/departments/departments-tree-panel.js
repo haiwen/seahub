@@ -9,6 +9,7 @@ const DepartmentsTreePanelPropTypes = {
   onChangeDepartment: PropTypes.func,
   listSubDepartments: PropTypes.func,
   toggleAddDepartment: PropTypes.func,
+  toggleSetQuotaDialog: PropTypes.func,
   toggleAddLibrary: PropTypes.func,
   toggleAddMembers: PropTypes.func,
   toggleRename: PropTypes.func,
@@ -29,6 +30,7 @@ class DepartmentsTreePanel extends Component {
               onChangeDepartment={this.props.onChangeDepartment}
               listSubDepartments={this.props.listSubDepartments}
               toggleAddDepartment={this.props.toggleAddDepartment}
+              toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
               toggleAddLibrary={this.props.toggleAddLibrary}
               toggleAddMembers={this.props.toggleAddMembers}
               toggleRename={this.props.toggleRename}
@@ -37,7 +39,7 @@ class DepartmentsTreePanel extends Component {
           );
         })}
         <button
-          className='btn btn-secondary btn-block text-left border-0 font-weight-normal new-dept-btn shadow-none'
+          className='btn btn-secondary btn-block text-start border-0 font-weight-normal new-dept-btn shadow-none'
           onClick={() => {this.props.toggleAddDepartment(null);}}
         >
           <i className="sf3-font sf3-font-new new-dept-btn-icon"></i>

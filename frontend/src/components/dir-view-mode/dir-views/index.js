@@ -2,11 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import TreeSection from '../../tree-section';
 import ExtensionPrompts from '../extension-prompts';
-import LibSettingsDialog, { TAB } from '../../dialog/lib-settings';
+import LibSettingsDialog from '../../dialog/lib-settings';
 import ViewsMoreOperations from './views-more-operations';
 import { MetadataTreeView, useMetadata } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
+import { TAB } from '../../../constants/repo-setting-tabs';
 
 import './index.css';
 

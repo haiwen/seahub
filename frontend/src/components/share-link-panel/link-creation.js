@@ -47,10 +47,9 @@ class LinkCreation extends React.Component {
       currentPermission: props.currentPermission,
 
       currentScope: 'all_users',
-      selectedOption: null,
+      selectedUsers: [],
       inputEmails: ''
     };
-    this.userSelect = React.createRef();
   }
 
   setExpType = (e) => {
@@ -128,9 +127,9 @@ class LinkCreation extends React.Component {
         const autoGeneratePassword = shareLinkForceUsePassword || isShowPasswordInput;
         request = seafileAPI.batchCreateMultiShareLink(repoID, itemPath, linkAmount, autoGeneratePassword, expirationTime, permissions);
       } else {
-        const { currentScope, selectedOption, inputEmails } = this.state;
-        if (currentScope === 'specific_users' && selectedOption) {
-          users = selectedOption.map((item, index) => item.email);
+        const { currentScope, selectedUsers, inputEmails } = this.state;
+        if (currentScope === 'specific_users' && selectedUsers) {
+          users = selectedUsers.map((item, index) => item.email);
         }
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
@@ -264,11 +263,11 @@ class LinkCreation extends React.Component {
   };
 
   setScope = (e) => {
-    this.setState({ currentScope: e.target.value, selectedOption: null, inputEmails: '' });
+    this.setState({ currentScope: e.target.value, selectedUsers: [], inputEmails: '' });
   };
 
   handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+    this.setState({ selectedUsers: option });
   };
 
   handleInputChange = (e) => {
@@ -390,10 +389,10 @@ class LinkCreation extends React.Component {
                 </Label>
                 {this.state.currentScope === 'specific_users' &&
                 <UserSelect
-                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
+                  selectedUsers={this.state.selectedUsers}
                 />
                 }
               </FormGroup>

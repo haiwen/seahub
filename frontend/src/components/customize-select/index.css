@@ -47,6 +47,19 @@
   background: #fff;
 }
 
+.seafile-customize-select .selected-option .selected-option-show-container {
+  background: #F2F2F2;
+  border-radius: 10px;
+  padding-right: 6px;
+  padding-left: 12px;
+  margin-right: 6px;
+}
+
+.seafile-customize-select .selected-option .selected-option-show-container .sf3-font-x-01 {
+  font-size: 12px;
+  color: #999;
+}
+
 .seafile-customize-select .selected-option .custom-select-dropdown-icon {
   height: 12px;
   width: 12px;
@@ -97,4 +110,5 @@
   line-height: 1;
   font-size: 14px;
   white-space: nowrap;
+  color: #999;
 }

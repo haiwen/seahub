@@ -42,10 +42,14 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
   }, [insertColumnAPI]);
 
   const handleSelect = useCallback((column) => {
-    setSelectedColumn(column);
     setColumnMenuOpen(false);
+    setSelectedColumn(column);
+    if (column.groupby === 'predefined' && !column.canSetData) {
+      handleSubmit(column.key, column.type, { key: column.key, data: {} });
+      return;
+    }
     setColumnPopoverShow(true);
-  }, []);
+  }, [handleSubmit]);
 
   const handleClickOutside = useCallback((event) => {
     if (!isColumnPopoverShow) return;

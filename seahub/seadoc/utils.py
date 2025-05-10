@@ -3,7 +3,6 @@ import io
 import jwt
 import json
 import time
-import uuid
 import logging
 import posixpath
 import shutil
@@ -22,24 +21,11 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.seadoc.models import SeadocRevision
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
+from seahub.utils import uuid_str_to_36_chars
 
 logger = logging.getLogger(__name__)
 
 ZSDOC = 'sdoczip'
-
-
-def uuid_str_to_32_chars(file_uuid):
-    if len(file_uuid) == 36:
-        return uuid.UUID(file_uuid).hex
-    else:
-        return file_uuid
-
-
-def uuid_str_to_36_chars(file_uuid):
-    if len(file_uuid) == 32:
-        return str(uuid.UUID(file_uuid))
-    else:
-        return file_uuid
 
 
 def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None):

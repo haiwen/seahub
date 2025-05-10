@@ -52,7 +52,7 @@ class Libraries extends Component {
 
     const eventBus = EventBus.getInstance();
     this.unsubscribeAddNewGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_NEW_GROUP, this.addNewGroup);
-    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.insertRepoIntoGroup);
+    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.addRepoToGroup);
     this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UN_SHARE_REPO_TO_GROUP, this.unshareRepoToGroup);
   }
 
@@ -282,7 +282,7 @@ class Libraries extends Component {
   };
   */
 
-  insertRepoIntoGroup = ({ repo, group_id }) => {
+  addRepoToGroup = ({ repo, group_id }) => {
     if (!repo) {
       return;
     }
@@ -299,9 +299,35 @@ class Libraries extends Component {
     }
 
     targetGroup.repos.unshift(repo);
-    targetGroup.repos = Utils.sortRepos(targetGroup.repos, this.state.sortBy, this.state.sortOrder);
     this.groupsReposManager.add(repo.repo_id, group_id);
     this.setState({ groupList: newGroupList });
+  };
+
+  onGroupNameChanged = (newName, groupID) => {
+    const { groupList } = this.state;
+    let newGroupList = [...groupList];
+    let targetGroup = newGroupList.find((group) => group.id === groupID);
+    targetGroup.name = newName;
+    this.setState({ groupList: newGroupList });
+  };
+
+  onGroupTransfered = (group) => {
+    const { groupList } = this.state;
+    let newGroupList = [...groupList];
+    let targetGroup = newGroupList.find((item) => item.id === group.id);
+    targetGroup.owner = group.owner;
+    targetGroup.admins = group.admins;
+    this.setState({ groupList: newGroupList });
+  };
+
+  onGroupDeleted = (groupID) => {
+    const { groupList } = this.state;
+    this.setState({ groupList: groupList.filter(item => item.id != groupID) });
+  };
+
+  onLeavingGroup = (groupID) => {
+    const { groupList } = this.state;
+    this.setState({ groupList: groupList.filter(item => item.id != groupID) });
   };
 
   unshareRepoToGroup = ({ repo_id, group_id }) => {
@@ -498,7 +524,11 @@ class Libraries extends Component {
                         onMonitorRepo={this.onMonitorRepo}
                         renameRelatedGroupsRepos={this.renameRelatedGroupsRepos}
                         deleteRelatedGroupsRepos={this.deleteRelatedGroupsRepos}
-                        insertRepoIntoGroup={this.insertRepoIntoGroup}
+                        addRepoToGroup={this.addRepoToGroup}
+                        onGroupNameChanged={this.onGroupNameChanged}
+                        onGroupTransfered={this.onGroupTransfered}
+                        onGroupDeleted={this.onGroupDeleted}
+                        onLeavingGroup={this.onLeavingGroup}
                         unshareRepoToGroup={this.unshareRepoToGroup}
                         onTransferRepo={this.onGroupTransferRepo}
                         currentViewMode={currentViewMode}

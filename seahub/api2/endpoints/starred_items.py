@@ -25,7 +25,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_types import IMAGE, VIDEO
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class StarredItems(APIView):
             item_info['deleted'] = False if dirent else True
             if dirent and not starred_item.is_dir:
                 file_type, file_ext = get_file_type_and_ext(item_info['obj_name'])
-                if file_type in (IMAGE, XMIND) or \
+                if file_type == IMAGE or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                     thumbnail_size = THUMBNAIL_DEFAULT_SIZE
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,

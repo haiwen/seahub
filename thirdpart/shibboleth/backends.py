@@ -12,6 +12,8 @@ from registration.models import (
 logger = logging.getLogger(__name__)
 
 SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
 
 
 class ShibbolethRemoteUserBackend(RemoteUserBackend):
@@ -52,6 +54,11 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
 
         remote_user = self.clean_username(remote_user)
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+        if not shib_user and SSO_LDAP_USE_SAME_UID:
+            shib_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, remote_user)
+            if shib_user:
+                SocialAuthUser.objects.add(shib_user.username, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+
         if shib_user:
             try:
                 user = User.objects.get(email=shib_user.username)

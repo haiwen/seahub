@@ -13,6 +13,6 @@ const WIKI_COVER_LIST = [
   'wiki-cover-9.jpg',
 ];
 
-const DEFAULT_PAGE_NAME = 'Untitled';
+const DEFAULT_PAGE_NAME = 'New page';
 
 export { FOLDER, PAGE, WIKI_COVER_LIST, DEFAULT_PAGE_NAME };

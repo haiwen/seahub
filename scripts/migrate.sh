@@ -5,7 +5,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
 
@@ -44,7 +43,6 @@ function check_python_executable() {
 }
 
 function do_migrate () {
-    export CCNET_CONF_DIR=${default_ccnet_conf_dir}
     export SEAFILE_CONF_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
     export DEST_SEAFILE_CENTRAL_CONF_DIR=${dest_seafile_central_conf_dir}

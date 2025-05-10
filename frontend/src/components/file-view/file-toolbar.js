@@ -18,6 +18,7 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
+  toggleCommentPanel: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired,
   setImageScale: PropTypes.func,
   rotateImage: PropTypes.func
@@ -157,15 +158,6 @@ class FileToolbar extends React.Component {
               onClick={this.props.toggleLockFile}
             />
           )}
-          {showShareBtn && (
-            <IconButton
-              id="share-file"
-              icon='share'
-              text={gettext('Share')}
-              onClick={this.toggleShareDialog}
-            />
-          )}
-
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
               <div type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn'}>
@@ -198,12 +190,19 @@ class FileToolbar extends React.Component {
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
-          {filePerm == 'rw' && (
+          <div
+            className='file-toolbar-btn'
+            onClick={this.props.toggleCommentPanel}
+            aria-label={gettext('Comment')}
+          >
+            <i className="sdocfont sdoc-comments"></i>
+          </div>
+          {showShareBtn && (
             <IconButton
-              id="open-via-client"
-              icon="client"
-              text={gettext('Open via Client')}
-              href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
+              id="share-file"
+              icon='share'
+              text={gettext('Share')}
+              onClick={this.toggleShareDialog}
             />
           )}
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
@@ -216,6 +215,11 @@ class FileToolbar extends React.Component {
               <Icon symbol="more-vertical" />
             </DropdownToggle>
             <DropdownMenu>
+              {/* {(
+                <DropdownItem onClick={this.props.toggleCommentPanel}>
+                  {gettext('Comment')}
+                </DropdownItem>
+              )} */}
               {filePerm == 'rw' && (
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                   {gettext('History')}
@@ -224,6 +228,11 @@ class FileToolbar extends React.Component {
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
                 {gettext('Open parent folder')}
               </a>
+              {filePerm == 'rw' && (
+                <a href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`} className="dropdown-item">
+                  {gettext('Open via client')}
+                </a>
+              )}
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -273,6 +282,11 @@ class FileToolbar extends React.Component {
                 <a href="?dl=1" className="text-inherit">
                   {gettext('Download')}
                 </a>
+              </DropdownItem>
+            )}
+            {(
+              <DropdownItem onClick={this.props.toggleCommentPanel}>
+                {gettext('Comment')}
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>

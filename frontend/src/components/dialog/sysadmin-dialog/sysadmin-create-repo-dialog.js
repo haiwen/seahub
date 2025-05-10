@@ -15,7 +15,7 @@ class SysAdminCreateRepoDialog extends React.Component {
     super(props);
     this.state = {
       repoName: '',
-      ownerEmail: '',
+      selectedUsers: [],
       errMessage: '',
       isSubmitBtnActive: false
     };
@@ -30,15 +30,14 @@ class SysAdminCreateRepoDialog extends React.Component {
   };
 
   handleSubmit = () => {
-    const { repoName, ownerEmail } = this.state;
-    this.props.createRepo(repoName.trim(), ownerEmail);
+    const { repoName, selectedUsers } = this.state;
+    this.props.createRepo(repoName.trim(), selectedUsers[0].email);
     this.toggle();
   };
 
-  handleSelectChange = (option) => {
-    // option can be `null`, `[{...}]`, or `[]`
+  handleSelectChange = (selectedUsers) => {
     this.setState({
-      ownerEmail: option && option.length ? option[0].email : ''
+      selectedUsers: selectedUsers
     });
   };
 
@@ -72,13 +71,14 @@ class SysAdminCreateRepoDialog extends React.Component {
             <FormGroup>
               <Label for="userSelect">
                 {gettext('Owner')}
-                <span className="small text-secondary">{gettext('(If left blank, owner will be admin)')}</span>
+                <span className="small text-secondary ml-1">{gettext('(If left blank, owner will be admin)')}</span>
               </Label>
               <UserSelect
                 id="userSelect"
                 isMulti={false}
                 placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
+                selectedUsers={this.state.selectedUsers}
               />
             </FormGroup>
           </Form>

@@ -6,7 +6,7 @@ import './index.css';
 
 function Switch({ onChange, checked, placeholder, disabled, className, size, textPosition = 'left', setRef }) {
   return (
-    <div className={classnames('seahub-switch position-relative', className, size)} ref={setRef}>
+    <div className={classnames('seahub-switch position-relative', className, size, { 'disabled': disabled })} ref={setRef}>
       <label className="custom-switch">
         <input
           className="custom-switch-input"

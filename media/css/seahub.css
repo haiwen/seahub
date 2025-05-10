@@ -410,7 +410,7 @@ dd {
 }
 
 a {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
   font-weight: bold;
 }
@@ -421,7 +421,7 @@ a.normal {
 
 a:focus,
 a:hover {
-  color: #eb8205;
+  color: #EC8000;
 }
 
 img {
@@ -735,7 +735,7 @@ table img {
 
 /* highlight */
 .tip {
-  color: #808080;
+  color: #666;
   font-size: 12px;
 }
 
@@ -985,7 +985,7 @@ textarea:-moz-placeholder {
 
 /**** btn with link styles ****/
 .sf-link-btn {
-  color: #eb8205;
+  color: #EC8000;
   border: none;
   padding: 0;
   background: none;
@@ -993,7 +993,7 @@ textarea:-moz-placeholder {
 
 .sf-link-btn:focus,
 .sf-link-btn:hover {
-  color: #eb8205;
+  color: #EC8000;
   background: none;
   text-decoration: underline;
 }
@@ -1562,9 +1562,9 @@ textarea:-moz-placeholder {
 
 .cur-view-path .tab-tabs-nav .ui-state-active .a,
 .cur-view-path .tab-tabs-nav .a:hover {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
-  border-bottom-color: #eb8205;
+  border-bottom-color: #EC8000;
 }
 
 .tab-tabs .ui-tabs-panel {
@@ -1883,9 +1883,9 @@ a.sf-popover-item {
 .wiki-nav .link:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
-  border-bottom-color: #eb8205;
+  border-bottom-color: #EC8000;
 }
 
 .tabnav button,
@@ -2049,7 +2049,7 @@ a.sf-popover-item {
 /* login */
 #lang {
   font-weight: normal;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 12px;
 }
 
@@ -2087,7 +2087,7 @@ a.sf-popover-item {
 }
 
 #log-in-panel {
-  padding: 30px 25px 15px;
+  padding: 30px 25px 12px;
   width: 336px;
 }
 
@@ -2188,11 +2188,51 @@ a.sf-popover-item {
 }
 
 #login-bottom .bottom-item {
-  border-right: 1px solid #eb8205;
+  border-right: 1px solid #EC8000;
 }
 
 #signup-form .input {
   margin-bottom: 5px;
+}
+
+.reg-logged-panel {
+  margin: 40px 0 28px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* policy service link */
+.login-panel-bottom-divider {
+  border: 0;
+  height: 1px;
+  background-color: #DBDBDB;
+  margin: 20px -25px 0px -25px;
+  opacity: 1;
+}
+
+.login-panel-bottom-privacy-policy {
+  font-size: 12px;
+  line-height: 1;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-panel-bottom-privacy-policy a {
+  color: #EC8000;
+  font-size: 12px;
+  font-weight: normal;
+  padding: 0 0.5rem;
+}
+
+.login-panel-bottom-privacy-policy .login-panel-bottom-seperator {
+  border-right: 1px solid #EC8000;
+}
+
+#registration-form .login-panel-bottom-divider,
+#org-register .login-panel-bottom-divider,
+#choose-register .login-panel-bottom-divider {
+  margin: 20px -60px 0px -60px;
 }
 
 /*myhome*/
@@ -2833,50 +2873,41 @@ a.sf-popover-item {
 }
 
 /* two-factor-auth */
+.tfa-panel {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.1);
+  padding: 30px 25px 40px;
+  width: 336px;
+  margin: 5rem auto;
+}
+
+.tfa-panel .hd {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.tfa-panel .con {
+  font-size: .875rem;
+  color: #666;
+}
+
+.tfa-panel .qr-code-image {
+  margin: 6px 0 20px;
+}
+
 .two-factor-auth-wizard-btns {
-  margin-top: 8px;
+  margin-top: 1.25rem;
 }
 
 .two-factor-auth-backup-token-list {
   margin-bottom: 1rem;
 }
 
-.input.two-factor-auth-login-token-input {
-  margin-bottom: 15px;
-}
-
-#id_generator-token,
-#id_sms-number,
-#id_validation-token {
-  /* token input */
-  width: 260px;
-  padding: 2px 3px;
-  border-radius: 2px;
-}
-
 /* terms & conditions */
 #tc-content {
   padding-top: 0;
   padding-left: 0;
-}
-
-/* policy, terms link */
-.privacy-policy-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 50px;
-}
-
-.privacy-policy-link-text {
-  color: #666666;
-  font-size: 12px;
-}
-
-.privacy-policy-link-split {
-  width: 1px;
-  background: #6e7687;
-  height: 12px;
 }
 
 #email-audit-form .email-input {

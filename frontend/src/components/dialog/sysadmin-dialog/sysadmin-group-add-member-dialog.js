@@ -15,21 +15,20 @@ class SysAdminGroupAddMemberDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOptions: null,
+      selectedUsers: [],
       isSubmitBtnDisabled: true
     };
-    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (options) => {
     this.setState({
-      selectedOptions: options,
+      selectedUsers: options,
       isSubmitBtnDisabled: !options.length
     });
   };
 
   addMembers = () => {
-    let emails = this.state.selectedOptions.map(item => item.email);
+    let emails = this.state.selectedUsers.map(item => item.email);
     this.props.addMembers(emails);
     this.props.toggle();
   };
@@ -41,10 +40,10 @@ class SysAdminGroupAddMemberDialog extends React.Component {
         <SeahubModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref={this.userSelect}
             isMulti={true}
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
+            selectedUsers={this.state.selectedUsers}
           />
         </ModalBody>
         <ModalFooter>

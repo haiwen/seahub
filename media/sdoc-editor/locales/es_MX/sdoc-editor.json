@@ -619,5 +619,8 @@
   "Selected_row_records_cannot_exceed_10_rows": "Selected row records cannot exceed 10 rows",
   "Select_seatable_rows": "Select seatable rows",
   "Add_rows_record": "Add rows record",
-  "Double_click_then_adjust_field_width": "Double click, then adjust field width"
+  "Double_click_then_adjust_field_width": "Double click, then adjust field width",
+  "Insert_chart": "Insert chart",
+  "Edit_chart": "Edit chart",
+  "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first"
 }

@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.utils.html import escape
 from django.urls import reverse, resolve
 from django.shortcuts import render, redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 from django.http import HttpResponse, Http404, \
@@ -64,7 +65,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
-from seahub.constants import PERMISSION_READ
+from seahub.constants import PERMISSION_READ, PERMISSION_INVISIBLE
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -131,7 +132,10 @@ def check_folder_permission(request, repo_id, path):
         return PERMISSION_READ
 
     username = request.user.username
-    return seafile_api.check_permission_by_path(repo_id, path, username)
+    permission = seafile_api.check_permission_by_path(repo_id, path, username)
+    if permission == PERMISSION_INVISIBLE:
+        return None
+    return permission
 
 def get_seadoc_file_uuid(repo, path):
     repo_id = repo.repo_id
@@ -441,6 +445,9 @@ def repo_revert_history(request, repo_id):
 
     next_page = request.headers.get('referer', None)
     if not next_page:
+        next_page = settings.SITE_ROOT
+
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = settings.SITE_ROOT
 
     repo = get_repo(repo_id)
@@ -761,6 +768,9 @@ def i18n(request):
     """
     from django.conf import settings
     next_page = request.headers.get('referer', settings.SITE_ROOT)
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = settings.SITE_ROOT
+    
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -1009,8 +1019,13 @@ def client_token_login(request):
         else:
             request.client_token_login = True
             auth_login(request, user)
+    
+    
+    next_page = request.GET.get("next", reverse('libraries'))
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('libraries')
 
-    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
+    return HttpResponseRedirect(next_page)
 
 def choose_register(request):
     """
@@ -1162,7 +1177,7 @@ def react_fake_view(request, **kwargs):
         return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
         return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
         return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
-    
+
     return render(request, "react_app.html", return_dict)
 
 

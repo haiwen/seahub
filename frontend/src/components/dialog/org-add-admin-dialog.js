@@ -18,24 +18,23 @@ class AddOrgAdminDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: [],
       errMessage: '',
     };
     this.options = [];
-    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (option) => {
     this.setState({
-      selectedOption: option,
+      selectedUsers: option,
       errMessage: ''
     });
     this.options = [];
   };
 
   addOrgAdmin = () => {
-    if (!this.state.selectedOption) return;
-    const userEmail = this.state.selectedOption[0].email;
+    if (!this.state.selectedUsers || this.state.selectedUsers.length === 0) return;
+    const userEmail = this.state.selectedUsers[0].email;
     orgAdminAPI.orgAdminSetOrgAdmin(orgID, userEmail, true).then(res => {
       let userInfo = new OrgUserInfo(res.data);
       this.props.onAddedOrgAdmin(userInfo);
@@ -52,13 +51,13 @@ class AddOrgAdminDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <SeahubModalHeader toggle={this.toggle}>{gettext('Add Admins')}</SeahubModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Add Admin')}</SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Select a user as admin')}
             onSelectChange={this.handleSelectChange}
+            selectedUsers={this.state.selectedUsers}
           />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { DropTarget, DragLayer } from 'react-dnd';
-import html5DragDropContext from './html5DragDropContext';
-import DraggedPageItem from './pages/dragged-page-item';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import PageItem from './pages/page-item';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
@@ -30,28 +30,34 @@ class WikiNav extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      idFoldedStatusMap: {}, // Move idFoldedStatusMap to state
+    };
     this.folderClassNameCache = '';
     this.lastScrollTop = 0;
     this.wikiNavBodyRef = React.createRef();
-    // set init pages are all folded
-    this.idFoldedStatusMap = {};
+    // Initialize pages as folded
+    const idFoldedStatusMap = {};
     props.pages.forEach((page) => {
-      this.idFoldedStatusMap[page.id] = true;
+      idFoldedStatusMap[page.id] = true;
     });
+    this.state.idFoldedStatusMap = idFoldedStatusMap;
   }
 
   getFoldState = (pageId) => {
-    return this.idFoldedStatusMap[pageId];
+    return this.state.idFoldedStatusMap[pageId];
   };
 
   toggleExpand = (pageId) => {
-    const idFoldedStatusMap = this.idFoldedStatusMap;
-    if (idFoldedStatusMap[pageId]) {
-      delete idFoldedStatusMap[pageId];
-    } else {
-      idFoldedStatusMap[pageId] = true;
-    }
-    this.idFoldedStatusMap = idFoldedStatusMap;
+    this.setState((prevState) => {
+      const idFoldedStatusMap = { ...prevState.idFoldedStatusMap };
+      if (idFoldedStatusMap[pageId]) {
+        delete idFoldedStatusMap[pageId];
+      } else {
+        idFoldedStatusMap[pageId] = true;
+      }
+      return { idFoldedStatusMap };
+    });
   };
 
   componentDidUpdate(prevProps) {
@@ -72,12 +78,12 @@ class WikiNav extends Component {
     return this.folderClassNameCache;
   };
 
-  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
+  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map) => {
     const { pages } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
     return (
-      <DraggedPageItem
+      <PageItem
         key={id}
         pagesLength={pagesLength}
         isOnlyOnePage={isOnlyOnePage}
@@ -94,10 +100,10 @@ class WikiNav extends Component {
         getCurrentPageId={this.props.getCurrentPageId}
         addPageInside={this.props.addPageInside}
         addSiblingPage={this.props.addSiblingPage}
+        idFoldedStatusMap={this.idFoldedStatusMap}
         getFoldState={this.getFoldState}
         toggleExpand={this.toggleExpand}
         id_page_map={id_page_map}
-        layerDragProps={layerDragProps}
         setClassName={this.setClassName}
         getClassName={this.getClassName}
       />
@@ -105,7 +111,7 @@ class WikiNav extends Component {
   };
 
   // eslint-disable-next-line
-  renderStructureBody = React.forwardRef((layerDragProps, ref) => {
+  renderStructureBody = () => {
     const { navigation, pages } = this.props;
     const pagesLen = pages.length;
     const isOnlyOnePage = pagesLen === 1;
@@ -131,7 +137,7 @@ class WikiNav extends Component {
           }
         </div>
         {navigation.map((item, index) => {
-          return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
+          return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map);
         })}
         {wikiPermission === 'rw' &&
         <>
@@ -146,27 +152,15 @@ class WikiNav extends Component {
         }
       </div>
     );
-  });
-
-  collect = (monitor) => {
-    return {
-      item: monitor.getItem(),
-      itemType: monitor.getItemType(),
-      clientOffset: monitor.getClientOffset(),
-      isDragging: monitor.isDragging()
-    };
   };
 
   render() {
-    const StructureBody = html5DragDropContext(
-      DropTarget('WikiNav', {}, connect => ({
-        connectDropTarget: connect.dropTarget()
-      }))(DragLayer(this.collect)(this.renderStructureBody))
-    );
     return (
-      <div className='wiki-nav'>
-        <StructureBody />
-      </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className='wiki-nav'>
+          {this.renderStructureBody()}
+        </div>
+      </DndProvider>
     );
   }
 }

@@ -128,7 +128,7 @@ class SelectOptionGroup extends Component {
   };
 
   renderOptGroup = (searchVal) => {
-    let { noOptionsPlaceholder, onSelectOption } = this.props;
+    let { noOptionsPlaceholder, onSelectOption, value } = this.props;
     this.filterOptions = this.props.getFilterOptions(searchVal);
     if (this.filterOptions.length === 0) {
       return (
@@ -138,6 +138,7 @@ class SelectOptionGroup extends Component {
     return this.filterOptions.map((opt, i) => {
       let key = opt.value.column ? opt.value.column.key : i;
       let isActive = this.state.activeIndex === i;
+      const isSelected = value && opt.value === value.value;
       return (
         <Option
           key={key}
@@ -150,6 +151,7 @@ class SelectOptionGroup extends Component {
           disableHover={this.state.disableHover}
         >
           {opt.label}
+          {isSelected && <i className="sf2-icon-tick"></i>}
         </Option>
       );
     });

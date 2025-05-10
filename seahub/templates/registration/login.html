@@ -118,9 +118,9 @@ html, body, #wrapper { height:100%; }
         <a href="{{ signup_url }}" class="normal px-2 bottom-item" id="sign-up">{% trans "Signup" %}</a>
         {% endif %}
     </div>
+    {% include "snippets/policy_service_link.html" %}
 </div>
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}

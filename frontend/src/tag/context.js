@@ -2,6 +2,7 @@ import tagsAPI from './api';
 import LocalStorage from '../metadata/utils/local-storage';
 import EventBus from '../components/common/event-bus';
 import { username, lang } from '../utils/constants';
+import { Utils } from '../utils/utils';
 
 class Context {
 
@@ -36,6 +37,8 @@ class Context {
     this.eventBus = eventBus;
 
     this.permission = repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.permission);
+    this.customPermission = isCustomPermission ? customPermission : null;
 
     this.hasInit = true;
   }
@@ -69,6 +72,14 @@ class Context {
 
   canModify = () => {
     if (this.permission === 'r') return false;
+    return true;
+  };
+
+  canPreview = () => {
+    if (this.customPermission) {
+      const { preview, modify } = this.customPermission.permission;
+      return preview || modify;
+    }
     return true;
   };
 

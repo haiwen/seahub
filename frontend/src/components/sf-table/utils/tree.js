@@ -185,3 +185,16 @@ export const getTreeChildNodes = (parentNode, tree) => {
   }
   return childNodes;
 };
+
+export const getNodesWithAncestors = (node, tree) => {
+  const nodeKey = getTreeNodeKey(node);
+
+  let nodesWithAncestors = [];
+  tree.forEach((node, i) => {
+    if (!nodeKey.includes(getTreeNodeKey(node))) {
+      return;
+    }
+    nodesWithAncestors.push({ ...node, node_index: i });
+  });
+  return nodesWithAncestors;
+};

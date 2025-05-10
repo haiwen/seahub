@@ -54,9 +54,10 @@ class Content extends Component {
         className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
         headers={isDesktop ? [
           { isFixed: true, width: 40 }, // icon
-          { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
-          { isFixed: false, width: 0.3, children: gettext('Share To') },
-          { isFixed: false, width: 0.25, children: gettext('Permission') },
+          { isFixed: false, width: 0.25, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+          { isFixed: false, width: 0.25, children: gettext('Library') },
+          { isFixed: false, width: 0.2, children: gettext('Share To') },
+          { isFixed: false, width: 0.2, children: gettext('Permission') },
           { isFixed: false, width: 0.1 },
         ] : [
           { isFixed: false, width: 0.12 },
@@ -196,6 +197,7 @@ class Item extends Component {
       'permission': share_permission
     });
     let folderUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(item.path)}`;
+    let repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`;
 
     // custom defined permission
     if (share_permission.startsWith('custom-')) {
@@ -207,6 +209,7 @@ class Item extends Component {
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
           <td className="pl10 pr-2"><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td><Link to={folderUrl}>{item.folder_name}</Link></td>
+          <td><Link to={repoUrl}>{item.repo_name}</Link></td>
           <td>
             {item.share_type == 'personal' ?
               <span title={item.contact_email}>{item.user_name}</span> : item.group_name}

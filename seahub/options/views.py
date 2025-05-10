@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect, Http404
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils.translation import gettext as _
@@ -49,6 +50,9 @@ def sub_lib_enable_set(request):
 
     next_page = request.headers.get('referer', None)
     if next_page is None:
+        next_page = SITE_ROOT
+        
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = SITE_ROOT
 
     return HttpResponseRedirect(next_page)

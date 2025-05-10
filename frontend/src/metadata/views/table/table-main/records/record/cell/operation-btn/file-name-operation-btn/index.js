@@ -22,6 +22,8 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     const repoID = window.sfMetadataContext.getSetting('repoID');
+    const canPreview = window.sfMetadataContext.canPreview();
+    if (!canPreview) return;
     openFile(repoID, record, () => {
       window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });

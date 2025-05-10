@@ -15,7 +15,6 @@ class UserItem extends React.Component {
       isHighlighted: false,
       isOperationShow: false
     };
-    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -89,7 +88,7 @@ class LinkAuthenticatedUsers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: [],
       authUsers: []
     };
   }
@@ -110,11 +109,11 @@ class LinkAuthenticatedUsers extends React.Component {
 
   addLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
-    const { selectedOption, authUsers } = this.state;
-    if (!selectedOption || !selectedOption.length) {
+    const { selectedUsers, authUsers } = this.state;
+    if (!selectedUsers || !selectedUsers.length) {
       return false;
     }
-    const users = selectedOption.map((item, index) => item.email);
+    const users = selectedUsers.map((item, index) => item.email);
     shareLinkAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
       const { success, failed } = res.data;
       if (success.length) {
@@ -130,9 +129,8 @@ class LinkAuthenticatedUsers extends React.Component {
       }
       this.setState({
         authUsers: success.concat(authUsers),
-        selectedOption: null
+        selectedUsers: []
       });
-      this.userSelect.current.clearSelect();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -160,7 +158,7 @@ class LinkAuthenticatedUsers extends React.Component {
   };
 
   handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+    this.setState({ selectedUsers: option });
   };
 
   render() {
@@ -193,10 +191,10 @@ class LinkAuthenticatedUsers extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
+                  selectedUsers={this.state.selectedUsers}
                 />
               </td>
               <td>

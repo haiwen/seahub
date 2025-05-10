@@ -15,7 +15,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
           {children}
           {onClose && (
             <div className="detail-control" onClick={onClose}>
-              {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-close" />}
+              {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-icon" />}
             </div>
           )}
         </div>

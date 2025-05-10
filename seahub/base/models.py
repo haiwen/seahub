@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
+import datetime
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -10,6 +11,7 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
+from seahub.signals import group_member_audit
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -465,6 +467,20 @@ class ClientSSOToken(models.Model):
         return super(ClientSSOToken, self).save(*args, **kwargs)
 
 
+class RepoTransferQuerySet(models.QuerySet):
+    def by_from_user(self, from_users):
+        return self.filter(from_user__in=from_users)
+
+    def by_to_user(self, to_users):
+        return self.filter(to__in=to_users)
+    
+    def by_operator(self, operators):
+        return self.filter(operator__in=operators)
+    
+    def by_repo_ids(self, repo_ids):
+        return self.filter(repo_id__in=repo_ids)
+    
+
 class RepoTransfer(models.Model):
     repo_id = models.CharField(max_length=36)
     org_id = models.IntegerField(db_index=True)
@@ -472,6 +488,85 @@ class RepoTransfer(models.Model):
     to = models.CharField(max_length=255)
     operator = models.CharField(max_length=255)
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = RepoTransferQuerySet.as_manager()
 
     class Meta:
         db_table = 'RepoTransfer'
+
+
+
+GROUP_MEMBER_ADD = 'group_member_add'
+GROUP_MEMBER_DELETE = 'group_member_delete'
+
+class GroupMemberAuditQuerySet(models.QuerySet):
+    def by_users(self, users):
+        return self.filter(user__in=users)
+    
+    def by_operators(self, operators):
+        return self.filter(operator__in=operators)
+    
+    def by_group_ids(self, group_ids):
+        return self.filter(group_id__in=group_ids)
+    
+class GroupMemberAudit(models.Model):
+    org_id = models.IntegerField(db_index=True)
+    group_id = models.IntegerField(db_index=True)
+    user = models.EmailField(db_index=True)
+    operator = models.CharField(max_length=255, db_index=True)
+    operation = models.CharField(max_length=128)
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = GroupMemberAuditQuerySet.as_manager()
+
+    class Meta:
+        db_table = 'group_member_audit'
+        
+
+
+###### signal handler ###############
+        
+from django.dispatch import receiver
+
+
+@receiver(group_member_audit)
+def add_group_invite_log(sender, org_id, group_id, users, operator, operation, **kwargs):
+    if operation not in [GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE]:
+        return
+    
+    group_member_audit_list = []
+    for user in users:
+        group_member_audit_list.append(GroupMemberAudit(
+            org_id=org_id,
+            group_id=group_id,
+            user=user,
+            operator=operator,
+            operation=operation
+        ))
+    GroupMemberAudit.objects.bulk_create(group_member_audit_list)
+
+
+class QuotaAlertEmailRecordManager(models.Manager):
+
+    def get_records_within_days(self, days=3, emails=None):
+        today_now = datetime.datetime.now()
+        n_days_before = today_now - datetime.timedelta(days=days)
+        if emails:
+            return self.filter(last_emailed_at__gt=n_days_before, email__in=emails)
+        return self.filter(last_emailed_at__gt=n_days_before)
+    
+    def create_or_update(self, email):
+        obj = self.filter(email=email).first()
+        if not obj:
+            self.create(email=email)
+        else:
+            obj.last_emailed_at = datetime.datetime.now()
+            obj.save()
+        
+
+class QuotaAlertEmailRecord(models.Model):
+
+    email = models.CharField(max_length=255, db_index=True, unique=True)
+    last_emailed_at = models.DateTimeField(default=timezone.now, db_index=True)
+    objects = QuotaAlertEmailRecordManager()
+
+    class Meta:
+        db_table = 'quota_alert_email_record'

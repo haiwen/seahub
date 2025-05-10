@@ -43,7 +43,6 @@ SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
 central_config_dir=${TOPDIR}/conf
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 
 
@@ -64,7 +63,6 @@ SEAF_BACKUP_CMD=${INSTALLPATH}/seaf-backup-cmd.py
 
 export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
 export PYTHONPATH=${SEAFILE_PYTHON_PATH}:${PYTHONPATH}
-export CCNET_CONF_DIR=${default_ccnet_conf_dir}
 export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 $PYTHON ${SEAF_BACKUP_CMD} "$@"

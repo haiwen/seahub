@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
+import RepoInfoBarMigrate from './repo-info-bar-migrate';
 
 import '../css/repo-info-bar.css';
 
@@ -39,7 +40,7 @@ class RepoInfoBar extends React.Component {
   };
 
   render() {
-    let { repoID, usedRepoTags, className } = this.props;
+    let { repoID, usedRepoTags, className, shareLinkToken } = this.props;
 
     return (
       <div className={`repo-info-bar ${className ? className : ''}`}>
@@ -67,11 +68,12 @@ class RepoInfoBar extends React.Component {
               toggleCancel={this.onListTaggedFiles}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               onFileTagChanged={this.props.onFileTagChanged}
-              shareLinkToken={this.props.shareLinkToken}
+              shareLinkToken={shareLinkToken}
               enableFileDownload={this.props.enableFileDownload}
             />
           </ModalPortal>
         )}
+        {!shareLinkToken && <RepoInfoBarMigrate />}
       </div>
     );
   }
