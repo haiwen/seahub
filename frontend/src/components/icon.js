@@ -106,7 +106,7 @@ import '../css/icon.css';
 const Icon = (props) => {
   const { className, symbol, style } = props;
   const iconClass = classnames('seafile-multicolor-icon', className, `seafile-multicolor-icon-${symbol}`);
-  const commonProps = { className: iconClass, style: style, ariaHidden: 'true' };
+  const commonProps = { className: iconClass, style: style, 'aria-hidden': 'true' };
 
   switch (symbol) {
     case 'ai-search':
