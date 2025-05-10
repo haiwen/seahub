@@ -53,7 +53,7 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
-      isFiltersShow: true,
+      isFiltersShow: false,
       isFilterControllerActive: false,
       filters: {
         search_filename_only: false,

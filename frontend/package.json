@@ -12,7 +12,7 @@
     "@gatsbyjs/reach-router": "2.0.1",
     "@seafile/react-image-lightbox": "4.0.2",
     "@seafile/resumablejs": "1.1.16",
-    "@seafile/sdoc-editor": "2.0.54",
+    "@seafile/sdoc-editor": "2.0.60",
     "@seafile/seafile-calendar": "0.0.28",
     "@seafile/seafile-editor": "2.0.2",
     "@seafile/stldraw-editor": "1.0.1",
@@ -55,7 +55,8 @@
     "unified": "^7.0.0",
     "url-parse": "^1.4.3",
     "uuid": "9.0.1",
-    "video.js": "^7.4.1",
+    "video.js": "^8.22.0",
+    "videojs-hotkeys": "^0.2.30",
     "watermark-dom": "^1.0.0"
   },
   "scripts": {

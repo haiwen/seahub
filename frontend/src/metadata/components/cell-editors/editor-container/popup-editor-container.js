@@ -12,6 +12,8 @@ const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME,
 ];
 
+const TAGS_EDITOR_WIDTH = 400;
+
 class PopupEditorContainer extends React.Component {
 
   static displayName = 'PopupEditorContainer';
@@ -22,6 +24,9 @@ class PopupEditorContainer extends React.Component {
     let additionalStyles = {};
     if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
       additionalStyles = { width, height };
+    }
+    if (column.type === CellType.TAGS) {
+      additionalStyles = { left: left - (TAGS_EDITOR_WIDTH - column.width) };
     }
     this.state = {
       isInvalid: false,
@@ -82,10 +87,21 @@ class PopupEditorContainer extends React.Component {
       readOnly,
       onPressTab,
       updateFileTags,
+      showTagsAsTree: true,
     };
 
     if (column.type === CellType.DATE) {
       editorProps.format = column?.data?.format;
+    }
+
+    if (column.type === CellType.TAGS) {
+      editorProps = {
+        ...editorProps,
+        column: {
+          ...column,
+          width: TAGS_EDITOR_WIDTH,
+        }
+      };
     }
 
     return (<Editor {...editorProps} />);

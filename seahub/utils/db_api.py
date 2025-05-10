@@ -653,3 +653,46 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(delete_share_sql, [username, org_id] if org_id else [username])
             cursor.execute(delete_group_share_sql, [username, org_id] if org_id else [username])
+
+    def get_share_to_user_invisible_repos_info(self, username):
+
+        repo_ids_sql = f"""
+            SELECT repo_id, `path`
+            FROM `{self.db_name}`.`FolderUserPerm`
+            WHERE user = %s  AND permission='invisible';
+        """
+
+        repo_id_to_invisible_paths = {}
+        with connection.cursor() as cursor:
+            cursor.execute(repo_ids_sql, [username])
+            for repo in cursor.fetchall():
+                repo_id = repo[0]
+                invisible_path = repo[1]
+                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
+                if invisible_paths_set:
+                    invisible_paths_set.add(invisible_path)
+                else:
+                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
+
+            return repo_id_to_invisible_paths
+
+    def get_share_to_group_invisible_repos_info_by_group_ids(self, group_ids):
+        placeholders = ','.join(['%s'] * len(group_ids))
+        repo_ids_sql = f"""
+            SELECT repo_id, `path`
+            FROM `{self.db_name}`.`FolderGroupPerm`
+            WHERE group_id in ({placeholders}) AND permission='invisible';
+        """
+        repo_id_to_invisible_paths = {}
+        with connection.cursor() as cursor:
+            cursor.execute(repo_ids_sql, tuple(group_ids))
+            for repo in cursor.fetchall():
+                repo_id = repo[0]
+                invisible_path = repo[1]
+                invisible_paths_set = repo_id_to_invisible_paths.get(repo_id)
+                if invisible_paths_set:
+                    invisible_paths_set.add(invisible_path)
+                else:
+                    repo_id_to_invisible_paths[repo_id] = {invisible_path}
+
+            return repo_id_to_invisible_paths

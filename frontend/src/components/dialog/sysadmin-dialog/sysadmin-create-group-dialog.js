@@ -16,7 +16,7 @@ class SysAdminCreateGroupDialog extends React.Component {
     super(props);
     this.state = {
       groupName: '',
-      ownerEmail: '',
+      selectedUsers: [],
       errMessage: '',
       isSubmitBtnActive: false
     };
@@ -34,13 +34,12 @@ class SysAdminCreateGroupDialog extends React.Component {
 
   handleSubmit = () => {
     let groupName = this.state.groupName.trim();
-    this.props.createGroup(groupName, this.state.ownerEmail);
+    this.props.createGroup(groupName, this.state.selectedUsers[0].email);
   };
 
-  handleSelectChange = (option) => {
-    // option can be `null`, `[{...}]`, or `[]`
+  handleSelectChange = (selectedUsers) => {
     this.setState({
-      ownerEmail: option && option.length ? option[0].email : ''
+      selectedUsers: selectedUsers
     });
   };
 
@@ -72,12 +71,13 @@ class SysAdminCreateGroupDialog extends React.Component {
               />
               <Label className="mt-2">
                 {gettext('Owner')}
-                <span className="small text-secondary">{gettext('(If left blank, owner will be admin)')}</span>
+                <span className="small text-secondary ml-1">{gettext('(If left blank, owner will be admin)')}</span>
               </Label>
               <UserSelect
                 isMulti={false}
                 placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
+                selectedUsers={this.state.selectedUsers}
               />
             </FormGroup>
           </Form>

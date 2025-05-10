@@ -6,6 +6,7 @@
 # Translators:
 # Hiroshi Miura <miurahr@northside.tokyo>, 2015
 # 8f025fcc52512fb50dbf299060905e4d_56a6c8d <218e254cce57ed862c2851ce655cd83a_203228>, 2014
+# Seafile Info <info@seafile.com>, 2025
 # 8f025fcc52512fb50dbf299060905e4d_56a6c8d <218e254cce57ed862c2851ce655cd83a_203228>, 2014
 # totodoo <totododo@qq.com>, 2014
 # totodoo <totododo@qq.com>, 2014
@@ -14,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 14:59+0800\n"
+"POT-Creation-Date: 2025-05-10 17:05+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -118,7 +119,7 @@ msgstr "0以上の整数である必要があります"
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:274
 #: seahub/api2/endpoints/groups.py:229 seahub/api2/endpoints/groups.py:302
-#: seahub/api2/views.py:4677 seahub/group/forms.py:36
+#: seahub/api2/views.py:4692 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -169,12 +170,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr "システムライブラリーは削除できません。"
 
-#: seahub/api2/endpoints/admin/libraries.py:389 seahub/api2/views.py:1852
+#: seahub/api2/endpoints/admin/libraries.py:389 seahub/api2/views.py:1867
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:415 seahub/api2/views.py:1857
+#: seahub/api2/endpoints/admin/libraries.py:415 seahub/api2/views.py:1872
 msgid "Library can not be transferred to owner."
 msgstr "ライブラリは所有者に転送することはできません"
 
@@ -434,7 +435,7 @@ msgstr "ウイルスファイルが見つかりません"
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:457 seahub/api2/endpoints/wiki2.py:485
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4011
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4026
 #: seahub/notifications/models.py:541 seahub/notifications/models.py:582
 #: seahub/notifications/models.py:624 seahub/notifications/models.py:675
 #: seahub/notifications/models.py:731 seahub/notifications/models.py:761
@@ -442,7 +443,7 @@ msgstr "ウイルスファイルが見つかりません"
 #: seahub/notifications/models.py:826 seahub/notifications/models.py:843
 #: seahub/notifications/models.py:872 seahub/seadoc/apis.py:2764
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
-#: seahub/utils/__init__.py:192 seahub/utils/__init__.py:1225
+#: seahub/utils/__init__.py:192 seahub/utils/__init__.py:1227
 #: seahub/views/__init__.py:819 seahub/views/ajax.py:401
 #: seahub/views/ajax.py:405 seahub/wiki/views.py:210 seahub/wiki/views.py:217
 #: seahub/wiki/views.py:226
@@ -463,11 +464,11 @@ msgstr "行き先パス名が不正です。"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1939
-#: seahub/api2/views.py:1979 seahub/api2/views.py:2041
-#: seahub/api2/views.py:2085 seahub/api2/views.py:2131
-#: seahub/api2/views.py:2180 seahub/api2/views.py:2593
-#: seahub/api2/views.py:2701 seahub/seadoc/apis.py:381
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1954
+#: seahub/api2/views.py:1994 seahub/api2/views.py:2056
+#: seahub/api2/views.py:2100 seahub/api2/views.py:2146
+#: seahub/api2/views.py:2195 seahub/api2/views.py:2608
+#: seahub/api2/views.py:2716 seahub/seadoc/apis.py:381
 #: seahub/seadoc/apis.py:499 seahub/seadoc/apis.py:591
 #: seahub/seadoc/apis.py:3106
 msgid "Out of quota."
@@ -479,9 +480,9 @@ msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:317 seahub/api2/endpoints/file.py:394
-#: seahub/api2/endpoints/file.py:509 seahub/api2/endpoints/file.py:567
-#: seahub/api2/endpoints/file.py:718 seahub/api2/endpoints/file.py:831
+#: seahub/api2/endpoints/file.py:317 seahub/api2/endpoints/file.py:397
+#: seahub/api2/endpoints/file.py:512 seahub/api2/endpoints/file.py:570
+#: seahub/api2/endpoints/file.py:721 seahub/api2/endpoints/file.py:834
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
 #: seahub/api2/endpoints/wiki2.py:796
@@ -506,7 +507,7 @@ msgstr "ユーザー%sが見つかりません"
 #: seahub/api2/endpoints/file.py:202 seahub/api2/endpoints/upload_links.py:530
 #: seahub/api2/endpoints/via_repo_token.py:850
 #: seahub/api2/endpoints/wiki2.py:594 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1987 seahub/seadoc/apis.py:3113
+#: seahub/api2/views.py:2002 seahub/seadoc/apis.py:3113
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -518,7 +519,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1393 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1388 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
 #: seahub/profile/views.py:272 seahub/seadoc/apis.py:2748
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
@@ -530,12 +531,16 @@ msgstr ""
 msgid "Permission denied."
 msgstr "権限がありません。"
 
-#: seahub/api2/endpoints/file.py:736 seahub/api2/endpoints/file.py:756
+#: seahub/api2/endpoints/file.py:328
+msgid "File extension is not in the whitelist"
+msgstr ""
+
+#: seahub/api2/endpoints/file.py:739 seahub/api2/endpoints/file.py:759
 #: seahub/api2/endpoints/via_repo_token.py:1167
 msgid "File is not locked."
 msgstr "ファイルはロックされていません。"
 
-#: seahub/api2/endpoints/file.py:783 seahub/api2/endpoints/share_links.py:881
+#: seahub/api2/endpoints/file.py:786 seahub/api2/endpoints/share_links.py:881
 msgid "You can not refresh this file's lock."
 msgstr "このファイルのロックを更新することはできません"
 
@@ -559,7 +564,7 @@ msgstr "ユーザー%sはすでにグループメンバーです。"
 
 #: seahub/api2/endpoints/group_members.py:110
 #: seahub/api2/endpoints/group_members.py:341
-#: seahub/api2/endpoints/group_members.py:489 seahub/api2/views.py:1847
+#: seahub/api2/endpoints/group_members.py:489 seahub/api2/views.py:1862
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -575,7 +580,7 @@ msgid "User %s is an organization user."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:403 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:521
+#: seahub/group/error_msg.py:23 seahub/views/file.py:524
 msgid "Group does not exist"
 msgstr "グループは存在しません。"
 
@@ -629,8 +634,8 @@ msgstr "メールの送信に失敗しました。"
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
 #: seahub/api2/endpoints/share_links.py:339
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4164
-#: seahub/api2/views.py:4284
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4179
+#: seahub/api2/views.py:4299
 msgid "Password is required."
 msgstr "パスワードは入力必須です"
 
@@ -662,7 +667,7 @@ msgstr ""
 #: seahub/api2/endpoints/share_links.py:376
 #: seahub/api2/endpoints/share_links.py:717
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3572
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3587
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "有効期限は%s以上である必要があります"
@@ -672,7 +677,7 @@ msgstr "有効期限は%s以上である必要があります"
 #: seahub/api2/endpoints/share_links.py:382
 #: seahub/api2/endpoints/share_links.py:723
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3578
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3593
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "有効期限は%s以下である必要があります"
@@ -725,11 +730,11 @@ msgstr "このライブラリのパスワードをリセットできません。
 msgid "New password of library %s"
 msgstr "ライブラリ%sの新しいパスワード"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4008
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4023
 msgid "Wrong password"
 msgstr "パスワードが違います。"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4014
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4029
 msgid "Decrypt library error"
 msgstr "ライブラリ復号化エラー"
 
@@ -858,7 +863,7 @@ msgstr " すでに %(nb_avatars)d このプロフィール画像を有してい�
 msgid "Length of WebDAV password should be less than 30."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1408
+#: seahub/api2/endpoints/wiki2.py:214 seahub/api2/endpoints/wiki2.py:1403
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "名前には、文字、数字、空白、ハイフン、またはアンダースコアのみを含めることができます"
@@ -1501,9 +1506,9 @@ msgstr " %(site_name)s ちーむ"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:451 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1249
-#: seahub/views/file.py:1276 seahub/views/file.py:1500
-#: seahub/views/file.py:1539 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:427 seahub/views/file.py:1252
+#: seahub/views/file.py:1279 seahub/views/file.py:1503
+#: seahub/views/file.py:1542 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:411
 msgid "Permission denied"
@@ -1685,7 +1690,7 @@ msgstr ""
 msgid "Restored folder"
 msgstr ""
 
-#: seahub/notifications/management/commands/send_file_updates.py:279
+#: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
 msgstr ""
@@ -2323,19 +2328,19 @@ msgstr ""
 
 #: seahub/share/views.py:360
 msgid "Share link is not found"
-msgstr ""
+msgstr "共有リンクが見つかりません"
 
 #: seahub/share/views.py:375
 msgid "Verification code"
-msgstr ""
+msgstr "認証コード"
 
 #: seahub/share/views.py:386
 msgid "Failed to send a verification code, please try again later."
-msgstr ""
+msgstr "確認コードを送信できなかったので、後で再試してください。"
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
-msgstr ""
+msgstr "申し訳ありませんが、リクエストのページが見つかりません。"
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
@@ -2947,12 +2952,12 @@ msgid "Disable"
 msgstr ""
 
 #: seahub/utils/__init__.py:176 seahub/utils/__init__.py:191
-#: seahub/views/file.py:502 seahub/views/file.py:524 seahub/views/file.py:529
-#: seahub/views/file.py:582 seahub/views/file.py:871 seahub/views/file.py:1121
-#: seahub/views/file.py:1147 seahub/views/file.py:1177
-#: seahub/views/file.py:1320 seahub/views/file.py:1432
-#: seahub/views/file.py:1575 seahub/views/file.py:1693
-#: seahub/views/file.py:2164
+#: seahub/views/file.py:505 seahub/views/file.py:527 seahub/views/file.py:532
+#: seahub/views/file.py:585 seahub/views/file.py:874 seahub/views/file.py:1124
+#: seahub/views/file.py:1150 seahub/views/file.py:1180
+#: seahub/views/file.py:1323 seahub/views/file.py:1435
+#: seahub/views/file.py:1578 seahub/views/file.py:1696
+#: seahub/views/file.py:2167
 msgid "Unable to view file"
 msgstr "ファイルを閲覧できません"
 
@@ -3010,10 +3015,10 @@ msgstr "repo id不正"
 msgid "Bad upload link token."
 msgstr "アップロードリンクのトークンが不正。"
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:515 seahub/views/file.py:546
-#: seahub/views/file.py:1269 seahub/views/file.py:1534
-#: seahub/views/file.py:2200 seahub/views/file.py:2205
-#: seahub/views/file.py:2212
+#: seahub/views/ajax.py:338 seahub/views/file.py:518 seahub/views/file.py:549
+#: seahub/views/file.py:1272 seahub/views/file.py:1537
+#: seahub/views/file.py:2203 seahub/views/file.py:2208
+#: seahub/views/file.py:2215
 msgid "File does not exist"
 msgstr "ファイルが見つかりません"
 
@@ -3025,65 +3030,65 @@ msgstr "アップロードID中に不正なrepo id"
 msgid "No conflict in the merge."
 msgstr "マージ中に競合が有りません。"
 
-#: seahub/views/file.py:244
+#: seahub/views/file.py:247
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: failed to open file online"
 
-#: seahub/views/file.py:248
+#: seahub/views/file.py:251
 msgid "URLError: failed to open file online"
 msgstr "URLError: failed to open file online"
 
-#: seahub/views/file.py:255
+#: seahub/views/file.py:258
 msgid "The encoding you chose is not proper."
 msgstr "選択した文字コードは正しくありません。"
 
-#: seahub/views/file.py:272 seahub/views/file.py:275
+#: seahub/views/file.py:275 seahub/views/file.py:278
 msgid "Unknown file encoding"
 msgstr "ファイルエンコーディングがわかりません。"
 
-#: seahub/views/file.py:397 seahub/views/file.py:434 seahub/views/file.py:768
-#: seahub/views/file.py:881 seahub/views/file.py:982
+#: seahub/views/file.py:400 seahub/views/file.py:437 seahub/views/file.py:771
+#: seahub/views/file.py:884 seahub/views/file.py:985
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "ファイルサイズが%sを超えています。オンラインで開けません。"
 
-#: seahub/views/file.py:406 seahub/views/file.py:916
+#: seahub/views/file.py:409 seahub/views/file.py:919
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
-#: seahub/views/file.py:940 seahub/views/file.py:1065
-#: seahub/views/file.py:1391 seahub/views/file.py:1631
+#: seahub/views/file.py:943 seahub/views/file.py:1068
+#: seahub/views/file.py:1394 seahub/views/file.py:1634
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:975 seahub/views/file.py:1081
-#: seahub/views/file.py:1411 seahub/views/file.py:1647
+#: seahub/views/file.py:978 seahub/views/file.py:1084
+#: seahub/views/file.py:1414 seahub/views/file.py:1650
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1213
+#: seahub/views/file.py:1216
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:1222
+#: seahub/views/file.py:1225
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:1229
+#: seahub/views/file.py:1232
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1447 seahub/views/file.py:1712
+#: seahub/views/file.py:1450 seahub/views/file.py:1715
 #: seahub/views/repo.py:349
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1848 seahub/views/file.py:1853
+#: seahub/views/file.py:1851 seahub/views/file.py:1856
 msgid "Unable to download file"
 msgstr "ファイルをダウンロードできません"
 
-#: seahub/views/file.py:2193
+#: seahub/views/file.py:2196
 msgid "The original file does not exist"
 msgstr ""
 

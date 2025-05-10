@@ -211,6 +211,7 @@ class Wiki extends Component {
       sdocServer: seadocServerUrl,
       accessToken,
     };
+    window.seafile = { docUuid };
     const sdocServerApi = new SDocServerApi(config);
     sdocServerApi.getDocContent().then(res => {
       this.setState({

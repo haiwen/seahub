@@ -1123,20 +1123,15 @@ class LibContentView extends React.Component {
       } else {
         this.loadNodeAndParentsByPath(path);
       }
-
-      // load mainPanel
-      if (item.is_dir) {
-        this.showDir(path);
-      } else {
-        this.openSearchedNewTab(item);
-      }
-    } else {
-      if (item.is_dir) {
-        this.showDir(path);
-      } else {
-        this.openSearchedNewTab(item);
-      }
     }
+
+    if (item.is_dir) {
+      this.setState({ currentMode: cookie.load('seafile_view_mode') || LIST_MODE });
+      this.showDir(path);
+    } else {
+      this.openSearchedNewTab(item);
+    }
+
   };
 
   openSearchedNewTab = (item) => {
@@ -2358,6 +2353,7 @@ class LibContentView extends React.Component {
     if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
       detailPath = Utils.getDirName(this.state.path);
     }
+
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
       <DndProvider backend={HTML5Backend}>

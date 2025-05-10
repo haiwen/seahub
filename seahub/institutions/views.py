@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from django.utils.translation import gettext as _
 import seaserv
@@ -212,6 +213,8 @@ def user_remove(request, email):
     """
     referer = request.headers.get('referer', None)
     next_page = reverse('institutions:useradmin') if referer is None else referer
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        next_page = reverse('institutions:useradmin')
 
     try:
         user = User.objects.get(email=email)

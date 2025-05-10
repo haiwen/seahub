@@ -2049,7 +2049,7 @@ a.sf-popover-item {
 /* login */
 #lang {
   font-weight: normal;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 12px;
 }
 
@@ -2193,6 +2193,12 @@ a.sf-popover-item {
 
 #signup-form .input {
   margin-bottom: 5px;
+}
+
+.reg-logged-panel {
+  margin: 40px 0 28px;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* policy service link */

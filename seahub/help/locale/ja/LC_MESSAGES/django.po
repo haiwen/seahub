@@ -1321,6 +1321,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafileには、ファイルを管理し共有するためのWebインタフェースが含まれています。デスクトップクライアントは2種類あり、<a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">ファイル同期クライアント</a> と <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">ドライブクライアント</a>. "
+"AndroidやiOS向けのモバイルクライアントも提供しています。"
 
 #: templates/help/introduction.html:10
 msgid ""

@@ -17,22 +17,21 @@ class SysAdminTransferGroupDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOptions: null,
+      selectedUsers: [],
       submitBtnDisabled: true
     };
-    this.userSelect = React.createRef();
   }
 
   handleSelectChange = (options) => {
     this.setState({
-      selectedOptions: options,
+      selectedUsers: options,
       submitBtnDisabled: options == null
     });
   };
 
   submit = () => {
-    if (this.state.selectedOptions) {
-      const receiver = this.state.selectedOptions[0].email;
+    if (this.state.selectedUsers) {
+      const receiver = this.state.selectedUsers[0].email;
       this.props.transferGroup(receiver);
       this.props.toggleDialog();
     }
@@ -49,10 +48,10 @@ class SysAdminTransferGroupDialog extends React.Component {
         </SeahubModalHeader>
         <ModalBody>
           <UserSelect
-            ref={this.userSelect}
             isMulti={false}
             placeholder={gettext('Select a user')}
             onSelectChange={this.handleSelectChange}
+            selectedUsers={this.state.selectedUsers}
           />
         </ModalBody>
         <ModalFooter>

@@ -30,7 +30,7 @@ const propTypes = {
   currentPageLocked: PropTypes.bool,
   onAddWikiPage: PropTypes.func,
   style: PropTypes.object.isRequired,
-  mobileOpenSidePanel: PropTypes.func.isRequired
+  mobileOpenSidePanel: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -41,8 +41,10 @@ class MainPanel extends Component {
       docUuid: '',
       currentPageConfig: {},
       isDropdownMenuOpen: false,
+      showExportSubmenu: false,
     };
     this.scrollRef = React.createRef();
+    this.exportDropdownRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -84,11 +86,12 @@ class MainPanel extends Component {
   getMenu = () => {
     const list = [];
     if (wikiPermission === 'rw' && this.state.currentPageConfig) {
-      const { HISTORY, FREEZE_PAGE } = TextTranslation;
+      const { HISTORY, FREEZE_PAGE, EXPORT_PAGE } = TextTranslation;
       if (isPro) {
         list.push(FREEZE_PAGE);
       }
       list.push(HISTORY);
+      list.push(EXPORT_PAGE);
     }
     return list;
   };
@@ -99,7 +102,29 @@ class MainPanel extends Component {
       case 'History':
         this.openHistory();
         break;
+      case 'ExportAsSdoc':
+        this.exportAsSdoc();
+        break;
+      case 'ExportAsMarkdown':
+        this.exportAsMarkdown();
+        break;
     }
+  };
+
+  exportPage = (exportType) => {
+    const serviceUrl = window.app.config.serviceURL;
+    const pageId = this.state.currentPageConfig.id;
+    let exportPageUrl = serviceUrl + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/export/?export_type=' + exportType;
+    window.location.href = exportPageUrl;
+    this.setState({ showExportSubmenu: false });
+  };
+
+  exportAsSdoc = () => {
+    this.exportPage('sdoc');
+  };
+
+  exportAsMarkdown = () => {
+    this.exportPage('markdown');
   };
 
   onMenuItemKeyDown = (e, item) => {
@@ -112,10 +137,18 @@ class MainPanel extends Component {
     this.props.updatePageLock(this.state.currentPageConfig.id, !this.props.currentPageLocked);
   };
 
+  showExportSubmenu = () => {
+    this.setState({ showExportSubmenu: true });
+  };
+
+  hideExportSubmenu = () => {
+    this.setState({ showExportSubmenu: false });
+  };
+
   render() {
     const menuItems = this.getMenu();
     const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
-    const { currentPageConfig = {}, isDropdownMenuOpen } = this.state;
+    const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
@@ -159,6 +192,7 @@ class MainPanel extends Component {
                 {menuItems.map((menuItem, index) => {
                   if (menuItem.key === 'Freeze page') {
                     return <Switch
+                      key={index}
                       checked={currentPageLocked}
                       disabled={false}
                       size="small"
@@ -167,6 +201,41 @@ class MainPanel extends Component {
                       onChange={this.toggleFreezeStatus}
                       placeholder={gettext('Freeze page')}
                     />;
+                  } else if (menuItem.key === 'Export') {
+                    return (
+                      <div
+                        key={index}
+                        className="position-relative"
+                        onMouseEnter={this.showExportSubmenu}
+                        onMouseLeave={this.hideExportSubmenu}
+                        ref={this.exportDropdownRef}
+                      >
+                        <DropdownItem className="d-flex justify-content-between align-items-center">
+                          <span>{menuItem.value}</span>
+                          <i className="fas fa-caret-right ml-2"></i>
+                        </DropdownItem>
+                        {showExportSubmenu && (
+                          <div
+                            className="dropdown-menu show"
+                            style={{
+                              position: 'absolute',
+                              left: 'auto',
+                              right: '100%',
+                              top: 0,
+                              marginTop: 0,
+                              marginRight: '0'
+                            }}
+                          >
+                            <DropdownItem onClick={this.exportAsSdoc}>
+                              {gettext('Export as sdoc')}
+                            </DropdownItem>
+                            <DropdownItem onClick={this.exportAsMarkdown}>
+                              {gettext('Export as Markdown')}
+                            </DropdownItem>
+                          </div>
+                        )}
+                      </div>
+                    );
                   } else {
                     return (
                       <DropdownItem

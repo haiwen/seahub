@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -14,7 +14,7 @@ import LibraryMoreOperations from './library-more-operations';
 import './index.css';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
-  const { owner_email, is_admin } = currentRepoInfo;
+  const { owner_email, is_admin, repo_name: repoName } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
@@ -24,6 +24,12 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const toggleSettingsDialog = () => {
     setSettingsDialogOpen(!isSettingsDialogOpen);
   };
+
+  const handleMigrateSuccess = useCallback(() => {
+    setShowMigrateTip(false);
+    const serviceUrl = window.app.config.serviceURL;
+    window.location.href = serviceUrl + '/library/' + repoID + '/' + repoName + '/?tag=__all_tags';
+  }, [repoID, repoName]);
 
   useEffect(() => {
     const unsubscribeUnselectFiles = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS, () => {
@@ -90,6 +96,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           toggleDialog={toggleSettingsDialog}
           tab={activeTab}
           showMigrateTip={showMigrateTip}
+          onMigrateSuccess={handleMigrateSuccess}
         />
       )}
       {isRepoHistoryDialogOpen && (

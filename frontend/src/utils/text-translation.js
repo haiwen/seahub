@@ -95,6 +95,10 @@ const TextTranslation = {
     key: 'Freeze page',
     value: gettext('Freeze page')
   },
+  EXPORT_PAGE: {
+    key: 'Export',
+    value: gettext('Export')
+  },
   CONVERT_AND_EXPORT: {
     key: 'Convert & Export',
     value: gettext('Convert & Export')
