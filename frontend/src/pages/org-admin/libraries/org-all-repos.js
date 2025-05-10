@@ -223,7 +223,6 @@ class RepoItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    this.toggleTransfer();
   };
 
   render() {

@@ -51,6 +51,7 @@ class TransferDialog extends React.Component {
     const { activeTab, reshare, selectedOption } = this.state;
     const email = activeTab === TRANS_DEPART ? selectedOption.email : selectedOption[0].email;
     this.props.onTransferRepo(email, reshare);
+    this.props.toggleDialog();
   };
 
   componentDidMount() {

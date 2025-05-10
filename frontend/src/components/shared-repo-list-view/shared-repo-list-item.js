@@ -245,7 +245,6 @@ class SharedRepoListItem extends React.Component {
         toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
       }
     });
-    this.onTransferToggle();
   };
 
   onRenameConfirm = (name) => {
