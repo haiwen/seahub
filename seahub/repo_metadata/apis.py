@@ -2909,10 +2909,15 @@ class MetadataMigrateTags(APIView):
         return record_to_tags_map
     
     def post(self, request, repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_name = repo.name
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        
         if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
+            error_msg = f'Metadata extension is not enabled for library {repo_name}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         tags_enabled = metadata.tags_enabled
@@ -2922,11 +2927,7 @@ class MetadataMigrateTags(APIView):
             metadata.tags_lang = 'en'
             metadata.save()
             init_tags(metadata_server_api)
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+        
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
