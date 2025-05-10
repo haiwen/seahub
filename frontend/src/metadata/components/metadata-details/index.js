@@ -21,7 +21,7 @@ const MetadataDetails = ({ onPositionChange }) => {
   useEffect(() => {
     if (!record) return;
     const fileName = getFileNameFromRecord(record);
-    const isImage = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+    const isImage = Utils.imageCheck(fileName);
 
     if (isImage) {
       const position = getCellValueByColumn(record, {
@@ -34,7 +34,7 @@ const MetadataDetails = ({ onPositionChange }) => {
   if (isLoading || !record || !record._id) return null;
 
   const fileName = getFileNameFromRecord(record);
-  const isImage = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+  const isImageOrVideo = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
   const isDir = checkIsDir(record);
 
   return (
@@ -43,10 +43,10 @@ const MetadataDetails = ({ onPositionChange }) => {
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
 
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && isImage) return null;
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION) return null;
 
         let canEdit = canModifyRecord && field.editable;
-        if (!isImage && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
+        if (!isImageOrVideo && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
           canEdit = false;
         } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
           canEdit = false;
