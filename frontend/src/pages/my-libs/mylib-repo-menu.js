@@ -9,8 +9,8 @@ const propTypes = {
   isPC: PropTypes.bool,
   repo: PropTypes.object.isRequired,
   isStarred: PropTypes.bool,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
@@ -25,7 +25,7 @@ class MylibRepoMenu extends React.Component {
   }
 
   onMenuItemClick = (e) => {
-    let operation = Utils.getEventData(e, 'toggle');
+    const operation = Utils.getEventData(e, 'toggle');
     this.props.onMenuItemClick(operation);
   };
 
@@ -46,6 +46,12 @@ class MylibRepoMenu extends React.Component {
   };
 
   toggleOperationMenu = (e) => {
+    const { isLibView } = this.props;
+    if (isLibView) {
+      this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
+      return;
+    }
+
     let dataset = e.target ? e.target.dataset : null;
     if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
       this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
@@ -175,9 +181,6 @@ class MylibRepoMenu extends React.Component {
       case 'Advanced':
         translateResult = gettext('Advanced');
         break;
-      case 'SeaTable integration':
-        translateResult = gettext('SeaTable integration');
-        break;
       case 'Office Suite':
         translateResult = gettext('Office Suite');
         break;
@@ -192,22 +195,31 @@ class MylibRepoMenu extends React.Component {
     let operations = this.generatorOperations();
     const advancedOperations = this.getAdvancedOperations();
 
+    const { children, isLibView } = this.props;
+
     // pc menu
     if (this.props.isPC) {
       return (
-        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+        <Dropdown
+          isOpen={this.state.isItemMenuShow}
+          toggle={this.toggleOperationMenu}
+          direction={isLibView ? 'end' : 'down'}
+          className={isLibView ? 'd-block' : ''}
+        >
           <DropdownToggle
-            tag="i"
+            tag={isLibView ? 'div' : 'span'}
+            className={isLibView ? 'dir-others-item' : ''}
             role="button"
             tabIndex="0"
-            className="sf-dropdown-toggle sf3-font-more sf3-font"
-            title={gettext('More operations')}
+            title={isLibView ? gettext('More') : gettext('More operations')}
             aria-label={gettext('More operations')}
             onClick={this.onDropdownToggleClick}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
-          />
-          <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
+          >
+            {children || <i className="sf-dropdown-toggle sf3-font-more sf3-font"></i>}
+          </DropdownToggle>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={isLibView ? 'body' : ''}>
             {operations.map((item, index) => {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;

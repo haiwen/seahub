@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
-import SeahubModalHeader from '../common/seahub-modal-header';
 import makeAnimated from 'react-select/animated';
+import toaster from '../toast';
 import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 import { SeahubSelect } from '../common/select';
+import SeahubModalHeader from '../common/seahub-modal-header';
+
 import '../../css/repo-office-suite-dialog.css';
 
 const propTypes = {
-  itemName: PropTypes.string.isRequired,
-  toggleDialog: PropTypes.func.isRequired,
-  submit: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 class OfficeSuiteDialog extends React.Component {
@@ -32,8 +32,21 @@ class OfficeSuiteDialog extends React.Component {
   };
 
   submit = () => {
-    let suite_id = this.state.selectedOption.value;
-    this.props.submit(suite_id);
+    const { repoID } = this.props;
+    const { selectedOption } = this.state;
+    if (!selectedOption) {
+      return false;
+    }
+
+    const { value: suiteID } = selectedOption;
+    userAPI.setOfficeSuite(repoID, suiteID).then(res => {
+      const message = gettext('Successfully changed the office suite.');
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+    this.props.toggleDialog();
   };
 
   componentDidMount() {
@@ -72,7 +85,7 @@ class OfficeSuiteDialog extends React.Component {
                 maxMenuHeight={200}
                 hideSelectedOptions={true}
                 components={makeAnimated()}
-                placeholder={gettext('Select a office suite')}
+                placeholder={gettext('Select an office suite')}
                 options={this.options}
                 onChange={this.handleSelectChange}
                 value={this.state.selectedOption}
@@ -86,7 +99,7 @@ class OfficeSuiteDialog extends React.Component {
   };
 
   render() {
-    const { itemName: repoName } = this.props;
+    const { repoName } = this.props;
     let title = gettext('{library_name} Office Suite');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (

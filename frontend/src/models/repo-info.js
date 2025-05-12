@@ -24,6 +24,7 @@ class RepoInfo {
     this.last_modified = object.last_modified;
     this.status = object.status;
     this.enable_onlyoffice = object.enable_onlyoffice;
+    this.monitored = object.monitored;
   }
 }
 

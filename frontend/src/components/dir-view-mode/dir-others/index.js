@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext, username } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
@@ -9,13 +9,14 @@ import RepoHistoryDialog from '../../dialog/repo-history';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
+import LibraryMoreOperations from './library-more-operations';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
+  const { owner_email, is_admin, repo_name: repoName } = currentRepoInfo;
 
-  const showSettings = currentRepoInfo.is_admin; // repo owner, department admin, shared with 'Admin' permission
-  const repoName = currentRepoInfo.repo_name;
+  const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   let [activeTab, setActiveTab] = useState(TAB.HISTORY_SETTING);
   let [showMigrateTip, setShowMigrateTip] = useState(false);
@@ -51,6 +52,9 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
     setRepoHistoryDialogOpen(!isRepoHistoryDialogOpen);
   };
 
+  const isDesktop = Utils.isDesktop();
+  const isRepoOwner = owner_email == username;
+
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
       {showSettings && (
@@ -65,11 +69,17 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
           <span className="dir-others-item-text">{gettext('Trash')}</span>
         </div>
       )}
-      {Utils.isDesktop() && (
+      {isDesktop && (
         <div className='dir-others-item text-nowrap' title={gettext('History')} onClick={toggleRepoHistoryDialog}>
           <span className="sf3-font-history sf3-font"></span>
           <span className="dir-others-item-text">{gettext('History')}</span>
         </div>
+      )}
+      {isDesktop && isRepoOwner && (
+        <LibraryMoreOperations
+          repo={currentRepoInfo}
+          updateRepoInfo={updateRepoInfo}
+        />
       )}
       {showTrashDialog && (
         <TrashDialog
@@ -105,6 +115,7 @@ DirOthers.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
+  updateRepoInfo: PropTypes.func
 };
 
 export default DirOthers;
