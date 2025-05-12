@@ -310,7 +310,7 @@ class FileUpdateLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
-                    componentName="Users"
+                    componentName={gettext('Users')}
                     items={availableUsers}
                     selectedItems={selectedUsers}
                     onSelect={this.handleUserFilter}

@@ -93,7 +93,7 @@ class LogRepoSelector extends Component {
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {selectedItems.length > 0 ? (
             <>
-              <span>{gettext('Libraries:')}</span>
+              <span>{gettext('Libraries')}{':'}</span>
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Libraries')}

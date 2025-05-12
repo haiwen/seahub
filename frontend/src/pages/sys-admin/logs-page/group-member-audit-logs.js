@@ -318,7 +318,7 @@ class GroupMemberAuditLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
-                    componentName="Member"
+                    componentName={gettext('Member')}
                     items={availableUsers}
                     selectedItems={selectedUsers}
                     onSelect={this.handleUserFilter}
@@ -327,7 +327,7 @@ class GroupMemberAuditLogs extends Component {
                     searchUsersFunc={this.searchUsers}
                   />
                   <LogUserSelector
-                    componentName="Group"
+                    componentName={gettext('Group')}
                     items={availableUsers}
                     selectedItems={selectedGroups}
                     onSelect={this.handleGroupFilter}
@@ -336,7 +336,7 @@ class GroupMemberAuditLogs extends Component {
                     searchGroupsFunc={this.searchGroups}
                   />
                   <LogUserSelector
-                    componentName="Operator"
+                    componentName={gettext('Operator')}
                     items={availableUsers}
                     selectedItems={selectedOperators}
                     onSelect={this.handleOperatorFilter}
