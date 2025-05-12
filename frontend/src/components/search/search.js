@@ -409,8 +409,8 @@ class Search extends Component {
         isLoading: false,
       });
     }).catch(error => {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       this.setState({ isLoading: false });
     });
   };
@@ -482,8 +482,8 @@ class Search extends Component {
         isResultGotten: true,
       });
     }).catch(error => {
-      /* eslint-disable */
-      console.log(error);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       this.setState({ isLoading: false });
     });
   };
@@ -545,7 +545,7 @@ class Search extends Component {
       isSearchInputShow: false,
       isCloseShow: false,
     });
-  }
+  };
 
   renderSearchResult() {
     const { resultItems, width, showRecent, isResultGotten, isLoading } = this.state;
@@ -665,7 +665,7 @@ class Search extends Component {
         );
       }
     }
-  }
+  };
 
   searchRepo = () => {
     const { value } = this.state;
@@ -703,21 +703,21 @@ class Search extends Component {
 
     const results = (
       <>
-      {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
-      <ul className="search-result-list" ref={this.searchResultListRef}>
-        {resultItems.map((item, index) => {
-          const isHighlight = index === highlightIndex;
-          return (
-            <SearchResultItem
-              key={index}
-              item={item}
-              onItemClickHandler={this.onItemClickHandler}
-              isHighlight={isHighlight}
-              setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
-            />
-          );
-        })}
-      </ul>
+        {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
+        <ul className="search-result-list" ref={this.searchResultListRef}>
+          {resultItems.map((item, index) => {
+            const isHighlight = index === highlightIndex;
+            return (
+              <SearchResultItem
+                key={index}
+                item={item}
+                onItemClickHandler={this.onItemClickHandler}
+                isHighlight={isHighlight}
+                setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
+              />
+            );
+          })}
+        </ul>
       </>
     );
 
@@ -732,7 +732,7 @@ class Search extends Component {
         </MediaQuery>
       </>
     );
-  }
+  };
 
   onSearchToggle = () => {
     this.setState({
@@ -742,10 +742,10 @@ class Search extends Component {
   };
 
   handleFiltersShow = () => {
-    const { isFiltersShow  } = this.state;
+    const { isFiltersShow } = this.state;
     localStorage.setItem(SEARCH_FILTERS_SHOW_KEY, !isFiltersShow);
     this.setState({ isFiltersShow: !isFiltersShow });
-  }
+  };
 
   buildSearchParams = (baseParams) => {
     const { filters } = this.state;
@@ -806,7 +806,7 @@ class Search extends Component {
     };
 
     this.getSearchResult(newQueryData);
-  }
+  };
 
   filterByCreator = (results) => {
     const { filters } = this.state;
@@ -823,13 +823,13 @@ class Search extends Component {
   handleSelectTag = (tag) => {
     this.props.onSelectTag(tag);
     this.resetToDefault();
-  }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
-    let style = {'width': width};
+    let style = { 'width': width };
     const { repoID, isTagEnabled, tagsData } = this.props;
-    const { isMaskShow, isResultGotten, isCloseShow, isFiltersShow, isFilterControllerActive, filters  } = this.state;
+    const { isMaskShow, isResultGotten, isCloseShow, isFiltersShow, isFilterControllerActive, filters } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
     const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
@@ -858,7 +858,8 @@ class Search extends Component {
                     className="search-icon-right sf3-font sf3-font-x-01"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
-                  ></button>
+                  >
+                  </button>
                 }
                 {isMaskShow && (
                   <IconBtn
@@ -915,7 +916,8 @@ class Search extends Component {
                       className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}
-                    ></button>
+                    >
+                    </button>
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
