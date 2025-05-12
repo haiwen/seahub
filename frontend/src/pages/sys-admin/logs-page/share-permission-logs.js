@@ -349,7 +349,7 @@ class SharePermissionLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
-                    componentName="Share From"
+                    componentName={gettext('Share From')}
                     items={availableUsers}
                     selectedItems={selectedFromUsers}
                     onSelect={this.handleFromUserFilter}
@@ -358,7 +358,7 @@ class SharePermissionLogs extends Component {
                     searchUsersFunc={this.searchUsers}
                   />
                   <LogUserSelector
-                    componentName="Share To"
+                    componentName={gettext('Share To')}
                     items={availableUsers}
                     selectedItems={[...selectedToUsers, ...selectedToGroups]}
                     onSelect={this.handleToUserFilter}

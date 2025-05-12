@@ -431,7 +431,7 @@ class FIleTransferLogs extends Component {
               <Fragment>
                 <div className="d-flex align-items-center mb-2">
                   <LogUserSelector
-                    componentName="Transfer From"
+                    componentName={gettext('Transfer From')}
                     items={availableUsers}
                     selectedItems={selectedFromUsers}
                     onSelect={this.handleFromUserFilter}
@@ -441,7 +441,7 @@ class FIleTransferLogs extends Component {
                     searchGroupsFunc={this.searchGroups}
                   />
                   <LogUserSelector
-                    componentName="Transfer To"
+                    componentName={gettext('Transfer To')}
                     items={availableUsers}
                     selectedItems={selectedToItems}
                     onSelect={this.handleToUserFilter}
@@ -451,7 +451,7 @@ class FIleTransferLogs extends Component {
                     searchGroupsFunc={this.searchGroups}
                   />
                   <LogUserSelector
-                    componentName="Operator"
+                    componentName={gettext('Operator')}
                     items={availableUsers}
                     selectedItems={selectedOperators}
                     onSelect={this.handleOperatorFilter}

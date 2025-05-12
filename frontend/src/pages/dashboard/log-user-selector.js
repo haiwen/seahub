@@ -124,10 +124,10 @@ class LogUserSelector extends Component {
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {selectedItems.length > 0 ? (
             <>
-              <span>{gettext(this.props.componentName + ':')}</span>
+              <span>{(this.props.componentName + ':')}</span>
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
-          ) : gettext(this.props.componentName)}
+          ) : this.props.componentName}
           <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isOpen && (
