@@ -113,17 +113,14 @@ class Location extends React.Component {
     if (this.mapType === MAP_TYPE.G_MAP) {
       if (!this.googleMarker) {
         this.googleMarker = new window.google.maps.marker.AdvancedMarkerElement({
-          position: { lng, lat },
+          position: { lat, lng },
           map: this.map,
         });
         return;
-      } else {
-        if (this.googleMarker.position?.lng === lng &&
-            this.googleMarker.position?.lat === lat) {
-          return;
-        }
       }
-      this.googleMarker.setPosition({ lng, lat });
+
+      this.googleMarker.position = { lat, lng };
+      this.map.setCenter({ lat, lng });
       return;
     }
   };
