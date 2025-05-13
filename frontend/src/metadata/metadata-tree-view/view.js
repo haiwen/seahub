@@ -76,8 +76,7 @@ const ViewItem = ({
     }
     const convertableViews = Object.values(VIEW_TYPE).filter(type =>
       type !== viewType &&
-      type !== VIEW_TYPE.FACE_RECOGNITION &&
-      !(type === VIEW_TYPE.MAP && !baiduMapKey)
+      type !== VIEW_TYPE.FACE_RECOGNITION
     );
     value.push({
       key: 'turn',
