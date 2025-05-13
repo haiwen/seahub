@@ -327,7 +327,9 @@ class Search extends Component {
   };
 
   onItemClickHandler = (item) => {
-    this.resetToDefault();
+    if (item.is_dir === true) {
+      this.resetToDefault();
+    }
     this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
   };
