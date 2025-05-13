@@ -37,9 +37,19 @@
   background-color: #ccc;
 }
 
+.sf-map-control-container.sf-map-geolocation-control-container {
+  right: 30px!important;
+  bottom: 30px!important;
+}
+
 .sf-map-control-container .sf-map-geolocation-control {
   width: 30px;
   line-height: 30px;
+}
+
+.sf-map-control-container.sf-map-zoom-control-container {
+  right: 66px !important;
+  bottom: 30px !important;
 }
 
 .sf-map-control-container .sf-map-zoom-control {
@@ -63,4 +73,13 @@
 
 .sf-map-control-container .sf-map-control.disabled {
   color: #ccc;
+}
+
+@media (max-width: 768px) {
+  .sf-map-control-container.sf-map-geolocation-control-container {
+    bottom: 90px!important;
+  }
+  .sf-map-control-container.sf-map-zoom-control-container {
+    bottom: 90px !important;
+  }
 }

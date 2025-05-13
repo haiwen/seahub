@@ -5,7 +5,7 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { isValidPosition } from '../../utils/validate';
 import { gcj02_to_bd09, wgs84_to_gcj02 } from '../../../utils/coord-transform';
-import loadBMap, { initMapInfo } from '../../../utils/map-utils';
+import loadBMap, { initMapInfo, loadMapSource } from '../../../utils/map-utils';
 import { appAvatarURL, baiduMapKey, fileServerRoot, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '../../../constants';
 import { EVENT_BUS_TYPE, MAP_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../constants';
@@ -15,6 +15,8 @@ import ModalPortal from '../../../components/modal-portal';
 import ImageDialog from '../../../components/dialog/image-dialog';
 
 import './index.css';
+import { createZoomControl } from '../../components/map-controller/zoom';
+import { createGeolocationControl } from '../../components/map-controller/geolocation';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -99,16 +101,62 @@ const Map = () => {
 
   const addMapController = useCallback(() => {
     const offset = { x: 66, y: Utils.isDesktop() ? 30 : 90 };
-    const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: MAX_ZOOM, minZoom: MIN_ZOOM, offset }, saveMapState);
-    const zoomControl = new ZoomControl();
-    const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (point) => {
-      point && mapRef.current && mapRef.current.setCenter(point);
-    });
 
-    const geolocationControl = new GeolocationControl();
-    mapRef.current.addControl(zoomControl);
-    mapRef.current.addControl(geolocationControl);
-  }, [saveMapState]);
+    const controlConfig = {
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
+      offset,
+      saveState: saveMapState
+    };
+
+    if (mapInfo.type === MAP_PROVIDER.B_MAP) {
+      const ZoomControl = createZoomControl({
+        ...controlConfig,
+        ControlClass: window.BMapGL.Control,
+        Position: window.BMAP_ANCHOR_BOTTOM_RIGHT,
+        getZoom: () => mapRef.current.getZoom(),
+        setZoom: (zoom) => mapRef.current.setZoom(zoom),
+        onZoomChanged: (callback) => mapRef.current.addEventListener('zoomend', callback)
+      });
+      mapRef.current.addControl(new ZoomControl());
+
+      const GeolocationControl = createBMapGeolocationControl(window.BMapGL, (point) => {
+        point && mapRef.current && mapRef.current.setCenter(point);
+      });
+      const geolocationControl = new GeolocationControl();
+      mapRef.current.addControl(geolocationControl);
+    } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
+      const ZoomControl = createZoomControl({
+        ...controlConfig,
+        ControlClass: window.google.maps.ControlPosition,
+        Position: window.google.maps.ControlPosition.RIGHT_BOTTOM,
+        mapInstance: mapRef.current,
+        getZoom: () => mapRef.current.getZoom(),
+        setZoom: (zoom) => mapRef.current.setZoom(zoom),
+        onZoomChanged: (callback) => mapRef.current.addListener('zoom_changed', callback)
+      });
+      new ZoomControl();
+
+      const GeolocationControl = createGeolocationControl({
+        ControlClass: window.google.maps.ControlPosition,
+        Position: window.google.maps.ControlPosition.RIGHT_BOTTOM,
+        mapInstance: mapRef.current,
+        getGeolocation: (resolve, reject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          } else {
+            reject(new Error('Geolocation not supported'));
+          }
+        },
+        callback: (point) => {
+          const gcPosition = wgs84_to_gcj02(point.lng, point.lat);
+          const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
+          mapRef.current.setCenter(new window.google.maps.LatLng(bdPosition.lat, bdPosition.lng));
+        }
+      });
+      new GeolocationControl();
+    }
+  }, [mapInfo.type, saveMapState]);
 
   const initializeUserMarker = useCallback((centerPoint) => {
     if (!window.BMapGL || !mapRef.current) return;
@@ -177,6 +225,31 @@ const Map = () => {
     window.BMapCluster = clusterRef.current;
   }, [getPoints]);
 
+  const initializeGoogleCluster = useCallback(() => {
+    if (!window.MarkerClusterer || !mapRef.current) return;
+
+    const markers = images.map(image => {
+      return new window.google.maps.marker.AdvancedMarkerElement({
+        position: { lat: image.location.lat, lng: image.location.lng },
+        map: mapRef.current,
+        content: document.createElement('div')
+      });
+    });
+
+    new window.MarkerClusterer({
+      map: mapRef.current,
+      markers,
+      renderer: {
+        render: ({ count, position }) => {
+          return new window.google.maps.marker.AdvancedMarkerElement({
+            position,
+            content: `<div class="cluster-marker">${count}</div>`
+          });
+        }
+      }
+    });
+  }, [images]);
+
   const renderBaiduMap = useCallback(() => {
     if (!window.BMapGL.Map) return;
     let { center, zoom } = loadMapState();
@@ -223,6 +296,44 @@ const Map = () => {
     }
   }, [addMapController, initializeCluster, initializeUserMarker, getBMapType, loadMapState, getPoints]);
 
+  const renderGoogleMap = useCallback(() => {
+    if (!window.google?.maps?.Map) return;
+
+    const { center, zoom } = loadMapState();
+    const gcPosition = wgs84_to_gcj02(center?.lng, center?.lat);
+
+    if (!window.GMapInstance) {
+      mapRef.current = new window.google.maps.Map(document.getElementById('sf-metadata-map-container'), {
+        center: gcPosition,
+        zoom,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        cameraControl: false,
+        disableDefaultUI: true,
+        mapTypeId: window.google.maps.MapTypeId.HYBRID,
+        minZoom: MIN_ZOOM,
+        maxZoom: MAX_ZOOM,
+      });
+
+      addMapController();
+      initializeGoogleCluster();
+      window.GMapInstance = mapRef.current;
+    }
+
+    mapRef.current.addListener('center_changed', () => {
+      const center = mapRef.current.getCenter();
+      window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_CENTER_KEY, {
+        lng: center.lng(),
+        lat: center.lat(),
+      });
+    });
+
+    mapRef.current.addListener('zoom_changed', () => {
+      window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_ZOOM_KEY, mapRef.current.getZoom());
+    });
+  }, [loadMapState, addMapController, initializeGoogleCluster]);
+
   const handleClose = useCallback(() => {
     setImageIndex(0);
     setClusterLeaveIds([]);
@@ -244,9 +355,20 @@ const Map = () => {
   useEffect(() => {
     const modifyMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, (newType) => {
       window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
-      const mapType = getBMapType(newType);
-      mapRef.current && mapRef.current.setMapType(mapType);
-      mapRef.current.setCenter(mapRef.current.getCenter());
+
+      if (mapInfo.type === MAP_PROVIDER.B_MAP) {
+        const mapType = getBMapType(newType);
+        mapRef.current?.setMapType(mapType);
+      } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
+        const googleMapType = {
+          [MAP_TYPE.NORMAL]: window.google.maps.MapTypeId.ROADMAP,
+          [MAP_TYPE.SATELLITE]: window.google.maps.MapTypeId.HYBRID
+        }[newType] || window.google.maps.MapTypeId.HYBRID;
+
+        mapRef.current?.setMapTypeId(googleMapType);
+      }
+
+      mapRef.current?.setCenter(mapRef.current.getCenter());
     });
 
     return () => {
@@ -259,11 +381,14 @@ const Map = () => {
   useEffect(() => {
     if (mapInfo.type === MAP_PROVIDER.B_MAP) {
       loadBMap(mapInfo.key).then(() => renderBaiduMap());
-      return () => {
-        window.renderMap = null;
-      };
+    } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
+      loadMapSource(mapInfo.type, mapInfo.key, () => renderGoogleMap());
     }
-    return;
+
+    return () => {
+      window.renderMap = null;
+      window.renderGoogleMap = null;
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
