@@ -11,6 +11,8 @@ import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import { eventBus } from '../../common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
 import './index.css';
 
@@ -51,6 +53,10 @@ class DirentDetails extends React.Component {
       const fullPath = Utils.joinPath(nextProps.path, nextProps.dirent.name);
       this.updateDetail(nextProps.repoID, nextProps.dirent, fullPath);
     }
+  }
+
+  componentWillUnmount() {
+    eventBus.dispatch(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE);
   }
 
   renderImage = () => {
