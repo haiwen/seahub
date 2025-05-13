@@ -106,12 +106,14 @@ const ExcaliEditor = () => {
   }, []);
 
   return (
-    <SimpleEditor
-      isFetching={isFetching}
-      sceneContent={fileContent}
-      onSaveContent={onSaveContent}
-      onChangeContent={onChangeContent}
-    />
+    <div className="file-view-content flex-1 p-0 border-0">
+      <SimpleEditor
+        isFetching={isFetching}
+        sceneContent={fileContent}
+        onSaveContent={onSaveContent}
+        onChangeContent={onChangeContent}
+      />
+    </div>
   );
 };
 

@@ -61,29 +61,13 @@ const SimpleEditor = ({
 
   return (
     <>
-      <div className='excali-container' style={{ height: '100vh', width: '100vw' }}>
+      <div className='excali-container' style={{ height: '100%', width: '100%' }}>
         <Excalidraw
           initialData={sceneContent}
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
           onChange={handleChange}
           UIOptions={UIOptions}
           langCode={langList[window.app.config.lang] || 'en'}
-          renderTopRightUI={() => {
-            return (
-              <button
-                style={{
-                  background: '#70b1ec',
-                  border: 'none',
-                  color: '#fff',
-                  width: 'max-content',
-                  fontWeight: 'bold',
-                }}
-                onClick={() => onSaveContent(excalidrawAPI.getSceneElements())}
-              >
-                Save me
-              </button>
-            );
-          }}
         >
           <MainMenu>
             <MainMenu.DefaultItems.Export />
