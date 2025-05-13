@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
@@ -10,28 +9,16 @@ import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
+import Location from './location';
 
 import './index.css';
 
-const MetadataDetails = ({ onPositionChange }) => {
-  const { isLoading, canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
+const MetadataDetails = () => {
+  const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
 
-  useEffect(() => {
-    if (!record) return;
-    const fileName = getFileNameFromRecord(record);
-    const isImage = Utils.imageCheck(fileName);
-
-    if (isImage) {
-      const position = getCellValueByColumn(record, {
-        key: PRIVATE_COLUMN_KEY.LOCATION
-      });
-      onPositionChange?.(position);
-    }
-  }, [record, onPositionChange]);
-
-  if (isLoading || !record || !record._id) return null;
+  if (!record || !record._id) return null;
 
   const fileName = getFileNameFromRecord(record);
   const isImageOrVideo = Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
@@ -43,7 +30,9 @@ const MetadataDetails = ({ onPositionChange }) => {
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
 
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION) return null;
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName) && value) {
+          return <Location key={field.key} position={value} record={record} />;
+        }
 
         let canEdit = canModifyRecord && field.editable;
         if (!isImageOrVideo && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
@@ -77,10 +66,6 @@ const MetadataDetails = ({ onPositionChange }) => {
       })}
     </>
   );
-};
-
-MetadataDetails.propTypes = {
-  onPositionChange: PropTypes.func,
 };
 
 export default MetadataDetails;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import DetailItem from '../../detail-item';
 import Collapse from './collapse';
@@ -13,7 +13,6 @@ import { useMetadataStatus } from '../../../../hooks';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 import People from '../../people';
 import FileTag from './file-tag';
-import Location from '../../../../metadata/components/metadata-details/location';
 
 import './index.css';
 
@@ -58,7 +57,6 @@ const getImageInfoValue = (key, value) => {
 
 const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepoTags = true, repoTags, fileTagList, onFileTagChanged }) => {
   const [isCaptureInfoShow, setCaptureInfoShow] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(null);
   const { enableFaceRecognition, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
@@ -66,10 +64,6 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
-
-  const onPositionChange = useCallback((position) => {
-    setCurrentPosition(position);
-  }, []);
 
   useEffect(() => {
     const savedValue = window.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) === 'true';
@@ -108,14 +102,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
           />
         </DetailItem>
       )}
-      {enableMetadata && (
-        <div className="sf-metadata-details-wrapper">
-          <div className="sf-metadata-details-map-container">
-            <Location key="singleton-map" position={currentPosition} record={record} />
-          </div>
-          <MetadataDetails onPositionChange={onPositionChange} />
-        </div>
-      )}
+      {enableMetadata && <MetadataDetails />}
     </>
   );
 

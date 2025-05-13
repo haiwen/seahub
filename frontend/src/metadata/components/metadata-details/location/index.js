@@ -6,13 +6,14 @@ import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform
 import { MAP_TYPE } from '../../../../constants';
 import Loading from '../../../../components/loading';
 import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
-import { CellType, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { CellType, EVENT_BUS_TYPE, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
 import { isValidPosition } from '../../../utils/validate';
 import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
 import { createBMapZoomControl } from '../../map-controller';
 import { Utils } from '../../../../utils/utils';
+import { eventBus } from '../../../../components/common/event-bus';
 
 import './index.css';
 
@@ -33,47 +34,38 @@ class Location extends React.Component {
       address: '',
       isLoading: true,
     };
-    this.initMapTriggered = false;
   }
 
   componentDidMount() {
-    this.initMap(this.props.position);
+    this.initMap();
+
+    this.unsubscribeClearMapInstance = eventBus.subscribe(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE, () => {
+      window.mapInstance = null;
+      delete window.mapInstance;
+    });
   }
 
   componentDidUpdate(prevProps) {
-    const { position: prevPosition } = prevProps;
-    const { position: currPosition } = this.props;
-
-    const isSamePosition = prevPosition?.lng === currPosition?.lng &&
-                          prevPosition?.lat === currPosition?.lat;
-
-    if (isSamePosition) return;
-
-    const shouldUpdateMap = this.map && currPosition?.lng && currPosition?.lat;
-
-    if (shouldUpdateMap) {
-      this.addMarkerByPosition(currPosition.lng, currPosition.lat);
-    } else if (!this.map && currPosition) {
-      if (!this.initMapTriggered) {
-        this.initMapTriggered = true;
-        this.initMap(currPosition);
-      }
-    }
+    const { position, record } = this.props;
+    if (!isValidPosition(position?.lng, position?.lat)) return;
+    if (prevProps.position?.lng === position?.lng && prevProps.position?.lat === position?.lat) return;
+    this.currentPosition = position;
+    this.addMarkerByPosition(position.lng, position.lat);
+    this.setState({ address: record._location_translated?.address });
   }
 
   componentWillUnmount() {
-    if (this.map) {
-      if (this.mapType === MAP_TYPE.B_MAP) {
-        this.map.destroy();
-      } else if (this.mapType === MAP_TYPE.G_MAP) {
-        window.google.maps.event.clearInstanceListeners(this.map);
-      }
-    }
-    this.map = null;
+    this.unsubscribeClearMapInstance();
   }
 
-  initMap = (position) => {
-    this.setState({ isLoading: true });
+  initMap = () => {
+    if (this.map) return;
+
+    const { position, record } = this.props;
+    if (!isValidPosition(position?.lng, position?.lat)) return;
+    this.currentPosition = position;
+
+    this.setState({ isLoading: true, address: record._location_translated?.address });
     if (this.mapType === MAP_TYPE.B_MAP) {
       if (!window.BMapGL) {
         window.renderBaiduMap = () => this.renderBaiduMap(position);
@@ -81,23 +73,17 @@ class Location extends React.Component {
       } else {
         this.renderBaiduMap(position);
       }
-      return;
-    }
-    if (this.mapType === MAP_TYPE.G_MAP) {
-      if (!window.google) {
+    } else if (this.mapType === MAP_TYPE.G_MAP) {
+      if (!window.google?.maps.Map) {
         window.renderGoogleMap = () => this.renderGoogleMap(position);
         loadMapSource(this.mapType, this.mapKey);
       } else {
         this.renderGoogleMap(position);
       }
-      return;
     }
-    this.setState({ isLoading: false });
   };
 
   addMarkerByPosition = (lng, lat) => {
-    if (!isValidPosition(lng, lat)) return;
-
     if (this.mapType === MAP_TYPE.B_MAP) {
       if (this.lastLng === lng && this.lastLat === lat) return;
       this.lastLng = lng;
@@ -105,10 +91,9 @@ class Location extends React.Component {
 
       const point = new window.BMapGL.Point(lng, lat);
       const marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
-      this.map && this.map.clearOverlays();
-      this.map && this.map.addOverlay(marker);
-      this.map && this.map.setCenter(point);
-      return;
+      this.map.clearOverlays();
+      this.map.addOverlay(marker);
+      this.map.setCenter(point);
     }
     if (this.mapType === MAP_TYPE.G_MAP) {
       if (!this.googleMarker) {
@@ -126,15 +111,15 @@ class Location extends React.Component {
   };
 
   renderBaiduMap = (position = {}) => {
-    if (this.map) return;
-
     this.setState({ isLoading: false }, () => {
       if (!window.BMapGL.Map) return;
-      if (!isValidPosition(position?.lng, position?.lat)) return;
+
+      window.mapInstance = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
+      this.map = window.mapInstance;
+
       const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
       const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
       const { lng, lat } = bdPosition;
-      this.map = new window.BMapGL.Map(this.ref, { enableMapClick: false });
       const point = new window.BMapGL.Point(lng, lat);
       this.map.centerAndZoom(point, 16);
       this.map.disableScrollWheelZoom(true);
@@ -144,22 +129,16 @@ class Location extends React.Component {
       const zoomControl = new ZoomControl();
       this.map.addControl(zoomControl);
       this.addMarkerByPosition(lng, lat);
-      let location_translated = this.props.record._location_translated;
-      if (location_translated) {
-        this.setState({ address: location_translated.address });
-      }
     });
   };
 
   renderGoogleMap = (position) => {
-    if (this.map) return;
-
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
-      if (!isValidPosition(position?.lng, position?.lat)) return;
+
       const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
       const { lng, lat } = gcPosition || {};
-      this.map = new window.google.maps.Map(this.ref, {
+      window.mapInstance = new window.google.maps.Map(this.ref, {
         zoom: 16,
         center: gcPosition,
         mapId: googleMapId,
@@ -170,12 +149,10 @@ class Location extends React.Component {
         rotateControl: false,
         fullscreenControl: false
       });
+      this.map = window.mapInstance;
+
       this.addMarkerByPosition(lng, lat);
       this.map.setCenter(gcPosition);
-      let location_translated = this.props.record._location_translated;
-      if (location_translated) {
-        this.setState({ address: location_translated.address });
-      }
     });
   };
 
