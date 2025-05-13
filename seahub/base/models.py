@@ -3,7 +3,7 @@ import os
 import logging
 import datetime
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils import timezone
 
 from pysearpc import SearpcError
@@ -11,6 +11,7 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
+from seahub.settings import QUOTA_ALERT_DAY_INTERVAL
 from seahub.signals import group_member_audit
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
@@ -546,11 +547,12 @@ def add_group_invite_log(sender, org_id, group_id, users, operator, operation, *
 
 class QuotaAlertEmailRecordManager(models.Manager):
 
-    def get_records_within_days(self, days=3, emails=None):
+    def get_records_within_days(self, emails=None):
         today_now = datetime.datetime.now()
-        n_days_before = today_now - datetime.timedelta(days=days)
+        n_days_before = today_now - datetime.timedelta(days=QUOTA_ALERT_DAY_INTERVAL)
         if emails:
             return self.filter(last_emailed_at__gt=n_days_before, email__in=emails)
+        
         return self.filter(last_emailed_at__gt=n_days_before)
     
     def create_or_update(self, email):
@@ -570,3 +572,34 @@ class QuotaAlertEmailRecord(models.Model):
 
     class Meta:
         db_table = 'quota_alert_email_record'
+        
+        
+
+class UserQuotaUsageManager(models.Manager):
+    
+    def get_quota_alert_users(self, threshold=0.9):
+        three_days_ago = timezone.now() - datetime.timedelta(days=1)
+        alert_users = self.filter(
+            timestamp__gte=three_days_ago,
+            quota__gt=0,
+            usage__gt=F('quota') * threshold
+        )
+        if not alert_users.exists():
+            return None
+        
+        return alert_users
+    
+    
+
+class UserQuotaUsage(models.Model):
+    username = models.CharField(max_length=255, unique=True, null=False, blank=False)
+    org_id = models.IntegerField(db_index=True)
+    quota = models.BigIntegerField()
+    usage = models.BigIntegerField()
+    timestamp = models.DateTimeField(db_index=True)
+    objects = UserQuotaUsageManager()
+
+    class Meta:
+        db_table = 'user_quota_usage'
+
+

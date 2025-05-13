@@ -11,7 +11,7 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     get_site_name, SeafileDB
-from seahub.base.models import QuotaAlertEmailRecord
+from seahub.base.models import QuotaAlertEmailRecord, UserQuotaUsage
 from seahub.settings import QUOTA_ALERT_DAY_INTERVAL
 from seahub.utils.ccnet_db import CcnetDB
 
@@ -56,9 +56,9 @@ class Command(BaseCommand):
 
         # save current language
         cur_language = translation.get_language()
-        email = user_info.get('email')
-        quota_total = user_info.get('quota_total')
-        quota_usage = user_info.get('quota_usage')
+        email = user_info.username
+        quota_total = user_info.quota
+        quota_usage = user_info.usage
 
         # get and active user language
         user_language = self.get_user_language(email)
@@ -80,13 +80,12 @@ class Command(BaseCommand):
         translation.activate(cur_language)
 
     def handle(self, *args, **options):
-        seafile_db = SeafileDB()
         ccnet_db = CcnetDB()
-        alert_users = seafile_db.get_users_by_quota_alert()
+        alert_users = UserQuotaUsage.objects.get_quota_alert_users()
         if not alert_users:
             return
         
-        alert_users_email_list = [u.get('email') for u in alert_users]
+        alert_users_email_list = [u.username for u in alert_users]
 
         available_alert_user_email_list = ccnet_db.get_active_users_by_user_list(alert_users_email_list)
         if not available_alert_user_email_list:
@@ -106,17 +105,8 @@ class Command(BaseCommand):
                 self.print_msg('User %s not found' % email)
 
         elif auto_run == 'true':
-            if QUOTA_ALERT_DAY_INTERVAL <= 0:
-                # ignore the users which already have records
-                records = QuotaAlertEmailRecord.objects.filter(email__in=user_obj_email_list)
-            else:
-                # ignore the users which have records within n days
-                records = QuotaAlertEmailRecord.objects.get_records_within_days(days=QUOTA_ALERT_DAY_INTERVAL,
-                                                                                emails=user_obj_email_list)
     
-            email_records = [r.email for r in records]
-            email_should_handle = list(set(user_obj_email_list) - set(email_records))
-            for email in email_should_handle:
+            for email in user_obj_email_list:
                 user_info = available_alert_user_email_map.get(email)
                 self.send_email(user_info, True)
             
