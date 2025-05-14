@@ -11,10 +11,6 @@
   line-height: 1.5;
 }
 
-.sdoc-content-right-panel .detail-header .detail-control:hover {
-  background-color: inherit;
-}
-
 .sdoc-content-right-panel .detail-header .seafile-multicolor-icon-set-up,
 .sdoc-content-right-panel .detail-header .seafile-multicolor-icon-ai {
   fill: #999;
