@@ -89,7 +89,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
       {!showTurnOffConfirmDialog && (
         <>
           <ModalBody className="metadata-face-recognition-dialog">
-            {!enableMetadata && <p className="tip">{gettext('Please turn on extended properties setting first')}</p>}
+            {!enableMetadata && <p className="oepn-metadata-tip">{gettext('Please turn on extended properties setting first')}</p>}
             <Switch
               checked={value}
               disabled={submitting || !enableMetadata}

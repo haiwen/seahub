@@ -23,13 +23,6 @@
   border-radius: 50%;
 }
 
-.share-link-container .share-link-tip {
-  background-color: #f6eddf;
-  margin: -1rem -1.5rem 1rem;
-  padding: 0.5rem 1rem;
-}
-
-
 .share-link-container .add-members {
   display: flex;
   justify-content: space-between;
