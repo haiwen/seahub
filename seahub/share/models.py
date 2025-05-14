@@ -57,7 +57,7 @@ def set_share_link_access(request, token, is_upload_link=False):
         request.session[link_key] = True
     else:
         # should never reach here in normal case
-        logger.warn('Failed to remember shared link password, request.session'
+        logger.warning('Failed to remember shared link password, request.session'
                     ' is None when set shared link access.')
 
 
