@@ -10,7 +10,8 @@ export function createZoomControl({
   getZoom,
   setZoom,
   onZoomChanged,
-  saveState
+  saveState,
+  events = { click: 'click' }
 }) {
   return class UniversalZoomControl {
     constructor() {
