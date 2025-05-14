@@ -69,7 +69,6 @@ class NoticeItem extends React.Component {
       let groupLink = '<a href=' + groupHref + '>' + Utils.HTMLescape(groupName) + '</a>';
       notice = notice.replace('{user_link}', userLink);
       notice = notice.replace('{group_link}', groupLink);
-
       return { avatar_url, notice, username };
     }
 
