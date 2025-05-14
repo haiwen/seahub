@@ -32,7 +32,7 @@ class Location extends React.Component {
     this.currentPosition = {};
     this.state = {
       address: '',
-      isLoading: true,
+      isLoading: false,
     };
   }
 
@@ -84,6 +84,10 @@ class Location extends React.Component {
   };
 
   addMarkerByPosition = (lng, lat) => {
+    if (!this.map) {
+      this.initMap(this.props.position);
+      return;
+    }
     if (this.mapType === MAP_TYPE.B_MAP) {
       if (this.lastLng === lng && this.lastLat === lat) return;
       this.lastLng = lng;
