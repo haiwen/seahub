@@ -147,6 +147,13 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     });
   }, [config, wikiId]);
 
+  const onInputChange = useCallback((e) => {
+    const { value } = e.target;
+    setValue(value);
+    setIsResultGotten(false);
+    setResults([]);
+  }, []);
+
   return (
     <>
       <div className="wiki2-search" onClick={() => setIsModalOpen(true)}>
@@ -165,11 +172,17 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 placeholder={gettext('Search')}
                 autoComplete="off"
                 value={value}
-                onChange={(e) => { setValue(e.target.value); setIsResultGotten(false); }}
+                onChange={onInputChange}
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 mr-2" onClick={onClearSearch} aria-label={gettext('Close')}></button>
+              <button
+                type="button"
+                className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 mr-2"
+                onClick={onClearSearch}
+                aria-label={gettext('Close')}
+              >
+              </button>
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
