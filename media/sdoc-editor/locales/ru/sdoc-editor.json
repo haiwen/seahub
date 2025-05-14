@@ -594,7 +594,7 @@
   "Try_again": "Попробовать еще раз",
   "Deprecation": "Устаревание",
   "Generated_content_x_words": "Сгенерированный контент {{count}} слов",
-  "Ask_AI_anything": "Введите команду...",
+  "Ask_AI_anything": "Спросите ИИ о чем угодно...",
   "Thinking": "Думаю...",
   "Translation_error_message": "Ошибка перевода, попробуйте еще раз.",
   "The_translation_content_cannot_be_empty": "Содержание перевода не может быть пустым",
@@ -620,14 +620,7 @@
   "Select_seatable_rows": "Выберите доступные для размещения строки",
   "Add_rows_record": "Добавить записи строк",
   "Double_click_then_adjust_field_width": "Дважды щелкните, затем отрегулируйте ширину поля",
-  "SeaTable_row": "Строка SeaTable",
-  "Please_select_one_row_record": "Выберите одну строку записи",
-  "No_linked_records": "Нет связанных записей",
-  "Insert_chart": "Вставить диаграмму",
-  "Edit_chart": "Редактировать диаграмму",
-  "Please_complete_the_chart_configuration_first": "Сначала завершите настройку диаграммы",
-  "chart": "диаграмма",
-  "Image_is_upload_error": "Не удалось загрузить изображение, удалите его и попробуйте снова",
-  "Table_not_exist": "Таблица не существует, удалите текущий элемент таблицы",
-  "Row_not_exist": "Данные строки не существуют, удалите текущий элемент строки"
+  "Insert_chart": "Insert chart",
+  "Edit_chart": "Edit chart",
+  "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first"
 }

@@ -630,5 +630,9 @@
   "chart": "图表",
   "Image_is_upload_error": "图片上传失败，请删除后重新尝试",
   "Table_not_exist": "表格不存在，请删除当前表格元素",
-  "Row_not_exist": "表格不存在，请删除当前行元素"
+  "Row_not_exist": "表格不存在，请删除当前行元素",
+  "Presentation": "演示",
+  "More_operation": "更多操作",
+  "Property": "属性",
+  "Comment_list": "评论列表"
 }

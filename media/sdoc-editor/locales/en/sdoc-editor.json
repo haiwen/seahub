@@ -629,5 +629,9 @@
   "chart": "chart",
   "Image_is_upload_error": "Image upload failed, please delete it and try again",
   "Table_not_exist": "The table does not exist, please delete the current table element",
-  "Row_not_exist": "The row data does not exist, please delete the current row element"
+  "Row_not_exist": "The row data does not exist, please delete the current row element",
+  "Presentation": "Presentation",
+  "More_operation": "More operation",
+  "Property": "Property",
+  "Comment_list": "Comment list"
 }
