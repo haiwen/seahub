@@ -7,7 +7,8 @@ export function createGeolocationControl({
   mapInstance,
   offset,
   getGeolocation,
-  callback
+  callback,
+  events = { click: 'click' },
 }) {
   return class UniversalGeolocationControl {
     constructor() {
@@ -37,7 +38,7 @@ export function createGeolocationControl({
     }
 
     setupEventHandlers(getGeolocation, callback) {
-      this.container.addEventListener('click', async (e) => {
+      this.container.addEventListener(events.click, async (e) => {
         e.preventDefault();
         const originalClass = this.container.className;
         this.container.className = classnames(originalClass, 'sf-map-control-loading');
@@ -55,7 +56,7 @@ export function createGeolocationControl({
             callback(point);
           }
         } catch (error) {
-          console.error('Geolocation error:', error);
+          // console.error('Geolocation error:', error);
         } finally {
           this.container.className = originalClass;
         }

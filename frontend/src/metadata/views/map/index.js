@@ -5,18 +5,18 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { isValidPosition } from '../../utils/validate';
 import { gcj02_to_bd09, wgs84_to_gcj02 } from '../../../utils/coord-transform';
-import loadBMap, { initMapInfo, loadMapSource } from '../../../utils/map-utils';
-import { appAvatarURL, baiduMapKey, fileServerRoot, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { initMapInfo, loadBMap, loadGMap } from '../../../utils/map-utils';
+import { appAvatarURL, baiduMapKey, fileServerRoot, googleMapId, googleMapKey, mediaUrl, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
 import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '../../../constants';
 import { EVENT_BUS_TYPE, MAP_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY } from '../../constants';
 import { createBMapGeolocationControl, createBMapZoomControl } from '../../components/map-controller';
 import { customAvatarOverlay, customImageOverlay } from './overlay';
 import ModalPortal from '../../../components/modal-portal';
 import ImageDialog from '../../../components/dialog/image-dialog';
-
-import './index.css';
 import { createZoomControl } from '../../components/map-controller/zoom';
 import { createGeolocationControl } from '../../components/map-controller/geolocation';
+
+import './index.css';
 
 const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
 const DEFAULT_ZOOM = 4;
@@ -71,7 +71,8 @@ const Map = () => {
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
           thumbnail,
           parentDir,
-          location: bdPosition
+          wgs_84: { lng, lat },
+          location: bdPosition,
         };
       })
       .filter(Boolean);
@@ -133,7 +134,10 @@ const Map = () => {
         mapInstance: mapRef.current,
         getZoom: () => mapRef.current.getZoom(),
         setZoom: (zoom) => mapRef.current.setZoom(zoom),
-        onZoomChanged: (callback) => mapRef.current.addListener('zoom_changed', callback)
+        onZoomChanged: (callback) => mapRef.current.addListener('zoom_changed', callback),
+        events: {
+          click: 'gmp-click'
+        }
       });
       new ZoomControl();
 
@@ -152,6 +156,9 @@ const Map = () => {
           const gcPosition = wgs84_to_gcj02(point.lng, point.lat);
           const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
           mapRef.current.setCenter(new window.google.maps.LatLng(bdPosition.lat, bdPosition.lng));
+        },
+        events: {
+          click: 'gmp-click'
         }
       });
       new GeolocationControl();
@@ -226,27 +233,50 @@ const Map = () => {
   }, [getPoints]);
 
   const initializeGoogleCluster = useCallback(() => {
-    if (!window.MarkerClusterer || !mapRef.current) return;
+    if (!window.markerClusterer || !mapRef.current) return;
 
     const markers = images.map(image => {
-      return new window.google.maps.marker.AdvancedMarkerElement({
-        position: { lat: image.location.lat, lng: image.location.lng },
+      const marker = new window.google.maps.marker.AdvancedMarkerElement({
+        position: image.wgs_84,
         map: mapRef.current,
-        content: document.createElement('div')
+        gmpClickable: true,
+        content: customImageOverlay({ isCluster: false, src: image.src })
       });
+      marker.addListener('click', () => {
+        setClusterLeaveIds([image.id]);
+      });
+      return marker;
     });
 
-    new window.MarkerClusterer({
+    new window.markerClusterer.MarkerClusterer({
       map: mapRef.current,
       markers,
       renderer: {
-        render: ({ count, position }) => {
-          return new window.google.maps.marker.AdvancedMarkerElement({
+        render: ({ count, position, bounds }) => {
+          const imagesInBounds = images.filter(image => bounds.contains(image.wgs_84));
+          const clusterMarker = new window.google.maps.marker.AdvancedMarkerElement({
             position,
-            content: `<div class="cluster-marker">${count}</div>`
+            gmpClickable: true,
+            content: customImageOverlay({ isCluster: true, reduces: { src: imagesInBounds[0].src }, pointCount: count })
           });
+          clusterMarker.addListener('gmp-click', () => {
+            if (clickTimeoutRef.current) {
+              clearTimeout(clickTimeoutRef.current);
+              clickTimeoutRef.current = null;
+              const zoom = mapRef.current.getZoom();
+              mapRef.current.setZoom(Math.min(zoom + 1, MAX_ZOOM));
+              return;
+            } else {
+              clickTimeoutRef.current = setTimeout(() => {
+                setClusterLeaveIds(imagesInBounds.map(image => image.id));
+                clickTimeoutRef.current = null;
+              }, 500);
+            }
+          });
+          return clusterMarker;
         }
-      }
+      },
+      onClusterClick: () => {} // Prevent default behavior of zooming to bounds
     });
   }, [images]);
 
@@ -267,14 +297,14 @@ const Map = () => {
     }
     const mapTypeValue = window.sfMetadataContext.localStorage.getItem(STORAGE_MAP_TYPE_KEY);
 
-    if (!window.BMapInstance) {
-      mapRef.current = new window.BMapGL.Map('sf-metadata-map-container', {
+    if (!window.mapViewInstance) {
+      window.mapViewInstance = new window.BMapGL.Map('sf-metadata-map-container', {
         enableMapClick: false,
         minZoom: MIN_ZOOM,
         maxZoom: MAX_ZOOM,
         mapType: getBMapType(mapTypeValue),
       });
-      window.BMapInstance = mapRef.current;
+      mapRef.current = window.mapViewInstance;
 
       if (isValidPosition(center?.lng, center?.lat)) {
         mapRef.current.centerAndZoom(center, zoom);
@@ -287,10 +317,10 @@ const Map = () => {
       initializeCluster();
     } else {
       const viewDom = document.getElementById('sf-metadata-view-map');
-      const container = window.BMapInstance.getContainer();
+      const container = window.mapViewInstance.getContainer();
       viewDom.replaceChild(container, mapRef.current);
 
-      mapRef.current = window.BMapInstance;
+      mapRef.current = window.mapViewInstance;
       clusterRef.current = window.BMapCluster;
       clusterRef.current.setData(getPoints());
     }
@@ -302,24 +332,23 @@ const Map = () => {
     const { center, zoom } = loadMapState();
     const gcPosition = wgs84_to_gcj02(center?.lng, center?.lat);
 
-    if (!window.GMapInstance) {
-      mapRef.current = new window.google.maps.Map(document.getElementById('sf-metadata-map-container'), {
-        center: gcPosition,
-        zoom,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-        cameraControl: false,
-        disableDefaultUI: true,
-        mapTypeId: window.google.maps.MapTypeId.HYBRID,
-        minZoom: MIN_ZOOM,
-        maxZoom: MAX_ZOOM,
-      });
+    window.mapViewInstance = new window.google.maps.Map(document.getElementById('sf-metadata-map-container'), {
+      mapId: googleMapId,
+      center: gcPosition,
+      zoom,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      cameraControl: false,
+      disableDefaultUI: true,
+      mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
+    });
+    mapRef.current = window.mapViewInstance;
 
-      addMapController();
-      initializeGoogleCluster();
-      window.GMapInstance = mapRef.current;
-    }
+    addMapController();
+    initializeGoogleCluster();
 
     mapRef.current.addListener('center_changed', () => {
       const center = mapRef.current.getCenter();
@@ -347,32 +376,48 @@ const Map = () => {
     setImageIndex((imageIndex + 1) % clusterLeaves.length);
   }, [imageIndex, clusterLeaves.length]);
 
+  const onMapTypeChange = useCallback((newType) => {
+    window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
+
+    if (mapInfo.type === MAP_PROVIDER.B_MAP) {
+      const mapType = getBMapType(newType);
+      mapRef.current?.setMapType(mapType);
+    } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
+      const googleMapType = {
+        [MAP_TYPE.MAP]: window.google.maps.MapTypeId.ROADMAP,
+        [MAP_TYPE.SATELLITE]: window.google.maps.MapTypeId.HYBRID
+      }[newType] || window.google.maps.MapTypeId.ROADMAP;
+
+      mapRef.current?.setMapTypeId(googleMapType);
+    }
+
+    mapRef.current?.setCenter(mapRef.current.getCenter());
+  }, [mapInfo.type, getBMapType]);
+
+  const onClearMapInstance = useCallback(() => {
+    if (window.mapViewInstance) {
+      if (mapInfo.type === MAP_PROVIDER.B_MAP) {
+        window.mapViewInstance.destroy();
+      } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
+        window.mapViewInstance.setMap(null);
+      }
+      delete window.mapViewInstance;
+    }
+    mapRef.current = null;
+  }, [mapInfo.type]);
+
   useEffect(() => {
     updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewID}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const modifyMapTypeSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, (newType) => {
-      window.sfMetadataContext.localStorage.setItem(STORAGE_MAP_TYPE_KEY, newType);
-
-      if (mapInfo.type === MAP_PROVIDER.B_MAP) {
-        const mapType = getBMapType(newType);
-        mapRef.current?.setMapType(mapType);
-      } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
-        const googleMapType = {
-          [MAP_TYPE.NORMAL]: window.google.maps.MapTypeId.ROADMAP,
-          [MAP_TYPE.SATELLITE]: window.google.maps.MapTypeId.HYBRID
-        }[newType] || window.google.maps.MapTypeId.HYBRID;
-
-        mapRef.current?.setMapTypeId(googleMapType);
-      }
-
-      mapRef.current?.setCenter(mapRef.current.getCenter());
-    });
+    const unsubscribeModifyMapType = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, onMapTypeChange);
+    const unsubscribeClearMapInstance = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE, onClearMapInstance);
 
     return () => {
-      modifyMapTypeSubscribe();
+      unsubscribeModifyMapType();
+      unsubscribeClearMapInstance();
     };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -380,21 +425,24 @@ const Map = () => {
 
   useEffect(() => {
     if (mapInfo.type === MAP_PROVIDER.B_MAP) {
-      loadBMap(mapInfo.key).then(() => renderBaiduMap());
+      if (!window.mapViewInstance) {
+        loadBMap(mapInfo.key).then(() => renderBaiduMap());
+      } else {
+        renderBaiduMap();
+      }
     } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
-      loadMapSource(mapInfo.type, mapInfo.key, () => renderGoogleMap());
+      if (!window.mapViewInstance) {
+        loadGMap(mapInfo.key).then(() => renderGoogleMap());
+      } else {
+        renderGoogleMap();
+      }
     }
-
-    return () => {
-      window.renderMap = null;
-      window.renderGoogleMap = null;
-    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="sf-metadata-view-map" id="sf-metadata-view-map">
-      <div ref={mapRef} className="sf-metadata-map-container" id="sf-metadata-map-container"></div>
+      <div className="sf-metadata-map-container" id="sf-metadata-map-container"></div>
       {clusterLeaveIds.length > 0 && (
         <ModalPortal>
           <ImageDialog
