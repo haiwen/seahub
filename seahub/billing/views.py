@@ -23,9 +23,6 @@ def billing(request):
     if not ENABLE_EXTERNAL_BILLING_SERVICE:
         return render_error(request, 'Billing is not enabled.')
 
-    org = request.user.org
-    org_id = org.org_id
-
     ccnet_email = request.user.username
     profile = Profile.objects.get_profile_by_user(ccnet_email)
     contact_email = profile.contact_email if profile and profile.contact_email else ''
@@ -40,14 +37,18 @@ def billing(request):
     now = int(time.time())
     exp = now + BILLING_SERVICE_JWT_EXPIRATION
 
+    org = request.user.org
+
     payload = {
         "iss": seafile_domain,
         "aud": billing_domain,
         "exp": exp,
         "jti": str(uuid.uuid4()),
-        "email": contact_email or ccnet_email,
+        "uid": ccnet_email,
+        "email": contact_email,
         "name": nickname,
-        "org_id": org_id
+        "org_id": org.org_id,
+        "org_name": org.org_name
     }
 
     token = jwt.encode(payload, BILLING_SERVICE_JWT_SECRET_KEY,
