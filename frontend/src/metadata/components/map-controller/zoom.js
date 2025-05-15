@@ -1,140 +1,97 @@
 import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
+import { MIN_ZOOM, MAX_ZOOM } from '../../constants/view/map';
 
-export function createZoomControl({
-  ControlClass,
-  Position,
-  mapInstance,
-  minZoom,
-  maxZoom,
-  getZoom,
-  setZoom,
-  onZoomChanged,
-  saveState,
-  events = { click: 'click' }
-}) {
-  return class UniversalZoomControl {
-    constructor() {
-      this.container = document.createElement('div');
-      this.container.className = classnames(
-        'sf-map-control-container sf-map-zoom-control-container d-flex align-items-center justify-content-center',
-        { 'sf-map-control-container-mobile': !Utils.isDesktop() }
-      );
+const buttonClassName = 'sf-map-control sf-map-zoom-control d-flex align-items-center justify-content-center';
 
-      this.zoomInButton = this.createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
-      this.divider = this.createDivider();
-      this.zoomOutButton = this.createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>');
+const createZoomContainer = () => {
+  const container = document.createElement('div');
+  container.className = classnames(
+    'sf-map-control-container sf-map-zoom-control-container d-flex align-items-center justify-content-center',
+    { 'sf-map-control-container-mobile': !Utils.isDesktop() }
+  );
+  return container;
+};
 
-      this.container.appendChild(this.zoomInButton);
-      this.container.appendChild(this.divider);
-      this.container.appendChild(this.zoomOutButton);
+const createButton = (innerHTML) => {
+  const button = document.createElement('div');
+  button.className = 'sf-map-control sf-map-zoom-control d-flex align-items-center justify-content-center';
+  button.innerHTML = innerHTML;
+  return button;
+};
 
-      this.updateButtonStates();
-      this.setupPosition(Position);
-      this.setupEventListeners({ getZoom, setZoom, onZoomChanged, saveState });
-    }
+const createDivider = () => {
+  const divider = document.createElement('div');
+  divider.className = 'sf-map-control-divider';
+  return divider;
+};
 
-    createButton(innerHTML) {
-      const button = document.createElement('div');
-      button.className = 'sf-map-control sf-map-zoom-control d-flex align-items-center justify-content-center';
-      button.innerHTML = innerHTML;
-      return button;
-    }
+const updateButtonStates = (map, zoomIn, zoomOut) => {
+  const zoomLevel = map.getZoom();
+  zoomIn.className = classnames(buttonClassName, { 'disabled': zoomLevel >= MAX_ZOOM });
+  zoomOut.className = classnames(buttonClassName, { 'disabled': zoomLevel <= MIN_ZOOM });
+};
 
-    createDivider() {
-      const divider = document.createElement('div');
-      divider.className = 'sf-map-control-divider';
-      return divider;
-    }
+export const createZoomControl = (map) => {
+  const container = createZoomContainer();
 
-    setupPosition(position) {
-      if (ControlClass && mapInstance) {
-        mapInstance.controls[position].push(this.container);
-      }
-    }
+  const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
+  const divider = createDivider();
+  const zoomOutButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>');
 
-    setupEventListeners({ getZoom, setZoom, onZoomChanged, saveState }) {
-      this.zoomInButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const nextZoom = Math.min(getZoom() + 1, maxZoom);
-        setZoom(nextZoom);
-        saveState?.();
-      });
+  container.appendChild(zoomInButton);
+  container.appendChild(divider);
+  container.appendChild(zoomOutButton);
 
-      this.zoomOutButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const nextZoom = Math.max(getZoom() - 1, minZoom);
-        setZoom(nextZoom);
-        saveState?.();
-      });
+  zoomInButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const nextZoom = Math.min(map.getZoom() + 1, MAX_ZOOM);
+    map.setZoom(nextZoom);
+  });
 
-      if (onZoomChanged) {
-        onZoomChanged(() => this.updateButtonStates());
-      }
-    }
+  zoomOutButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const nextZoom = Math.max(map.getZoom() - 1, MIN_ZOOM);
+    map.setZoom(nextZoom);
+  });
 
-    updateButtonStates() {
-      const zoomLevel = getZoom();
-      this.zoomInButton.classList.toggle('disabled', zoomLevel >= maxZoom);
-      this.zoomOutButton.classList.toggle('disabled', zoomLevel <= minZoom);
-    }
+  map.addListener('zoom_changed', () => updateButtonStates(map, zoomInButton, zoomOutButton));
 
-    get() {
-      return this.container;
-    }
-  };
-}
+  return container;
+};
 
-export function createBMapZoomControl(BMapGL, { maxZoom, minZoom, offset }, callback) {
+export function createBMapZoomControl(anchor, offset) {
   function ZoomControl() {
-    this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMapGL.Size(offset.x, offset.y);
+    this.defaultAnchor = anchor || window.BMAP_ANCHOR_BOTTOM_RIGHT;
+    this.defaultOffset = new window.BMapGL.Size(offset?.x || 66, offset?.y || 30);
   }
-  ZoomControl.prototype = new BMapGL.Control();
+  ZoomControl.prototype = new window.BMapGL.Control();
   ZoomControl.prototype.initialize = function (map) {
-    const zoomLevel = map.getZoom();
-    const div = document.createElement('div');
-    div.className = classnames('sf-map-control-container sf-map-zoom-control-container d-flex align-items-center justify-content-center', {
-      'sf-map-control-container-mobile': !Utils.isDesktop()
-    });
+    const container = createZoomContainer();
 
-    const buttonClassName = 'sf-map-control  sf-map-zoom-control d-flex align-items-center justify-content-center';
-    const zoomInButton = document.createElement('div');
-    zoomInButton.className = classnames(buttonClassName, { 'disabled': zoomLevel >= maxZoom });
-    zoomInButton.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>';
-    div.appendChild(zoomInButton);
+    const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
+    const divider = createDivider();
+    const zoomOutButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>');
 
-    const divider = document.createElement('div');
-    divider.className = 'sf-map-control-divider';
-    div.appendChild(divider);
-
-    const zoomOutButton = document.createElement('div');
-    zoomOutButton.className = classnames(buttonClassName, { 'disabled': zoomLevel <= minZoom });
-    zoomOutButton.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>';
-    div.appendChild(zoomOutButton);
-
-    const updateButtonStates = () => {
-      const zoomLevel = map.getZoom();
-      zoomInButton.className = classnames(buttonClassName, { 'disabled': zoomLevel >= maxZoom });
-      zoomOutButton.className = classnames(buttonClassName, { 'disabled': zoomLevel <= minZoom });
-      callback && callback(zoomLevel);
-    };
+    container.appendChild(zoomInButton);
+    container.appendChild(divider);
+    container.appendChild(zoomOutButton);
 
     zoomInButton.onclick = (e) => {
       e.preventDefault();
       const nextZoom = map.getZoom() + 1;
-      map.zoomTo(Math.min(nextZoom, maxZoom));
+      map.zoomTo(Math.min(nextZoom, MAX_ZOOM));
     };
 
     zoomOutButton.onclick = (e) => {
       e.preventDefault();
       const nextZoom = map.getZoom() - 1;
-      map.zoomTo(Math.max(nextZoom, minZoom));
+      map.zoomTo(Math.max(nextZoom, MIN_ZOOM));
     };
 
-    map.addEventListener('zoomend', updateButtonStates);
-    map.getContainer().appendChild(div);
-    return div;
+    map.addEventListener('zoomend', () => updateButtonStates(map, zoomInButton, zoomOutButton));
+    map.getContainer().appendChild(container);
+    return container;
   };
 
   return ZoomControl;

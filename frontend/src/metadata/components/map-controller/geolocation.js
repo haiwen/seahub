@@ -1,80 +1,51 @@
 import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 
-export function createGeolocationControl({
-  ControlClass,
-  Position,
-  mapInstance,
-  offset,
-  getGeolocation,
-  callback,
-  events = { click: 'click' },
-}) {
-  return class UniversalGeolocationControl {
-    constructor() {
-      this.container = document.createElement('div');
-      this.className = classnames(
-        'sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center',
-        { 'sf-map-geolocation-control-mobile': !Utils.isDesktop() }
-      );
+export const createGeolocationControl = (map) => {
+  const container = document.createElement('div');
+  container.className = classnames(
+    'sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center',
+    { 'sf-map-geolocation-control-mobile': !Utils.isDesktop() }
+  );
 
-      this.container.className = this.className;
-      this.setupPosition(Position, offset);
-      this.createButton();
-      this.setupEventHandlers(getGeolocation, callback);
-    }
+  const button = document.createElement('div');
+  button.className = 'sf-map-control sf-map-geolocation-control d-flex align-items-center justify-content-center';
+  button.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-current-location"></i>';
+  container.appendChild(button);
 
-    createButton() {
-      this.button = document.createElement('div');
-      this.button.className = 'sf-map-control sf-map-geolocation-control d-flex align-items-center justify-content-center';
-      this.button.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-current-location"></i>';
-      this.container.appendChild(this.button);
-    }
+  container.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const originalClass = container.className;
+    container.className = classnames(originalClass, 'sf-map-control-loading');
 
-    setupPosition(position, offset) {
-      if (ControlClass && mapInstance) {
-        mapInstance.controls[position].push(this.container);
-      }
-    }
-
-    setupEventHandlers(getGeolocation, callback) {
-      this.container.addEventListener(events.click, async (e) => {
-        e.preventDefault();
-        const originalClass = this.container.className;
-        this.container.className = classnames(originalClass, 'sf-map-control-loading');
-
-        try {
-          const position = await new Promise((resolve, reject) => {
-            getGeolocation(resolve, reject);
-          });
-
-          if (position) {
-            const point = {
-              lng: position.coords.longitude,
-              lat: position.coords.latitude
-            };
-            callback(point);
-          }
-        } catch (error) {
-          // console.error('Geolocation error:', error);
-        } finally {
-          this.container.className = originalClass;
-        }
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
       });
-    }
 
-    get() {
-      return this.container;
+      if (position) {
+        const point = {
+          lng: position.coords.longitude,
+          lat: position.coords.latitude
+        };
+        map.setCenter(point);
+      }
+    } catch (error) {
+      // console.error('Geolocation error:', error);
+    } finally {
+      container.className = originalClass;
     }
-  };
-}
+  });
 
-export function createBMapGeolocationControl(BMapGL, callback) {
+  return container;
+};
+
+export function createBMapGeolocationControl({ anchor, offset, callback }) {
   function GeolocationControl() {
-    this.defaultAnchor = window.BMAP_ANCHOR_BOTTOM_RIGHT;
-    this.defaultOffset = new BMapGL.Size(30, Utils.isDesktop() ? 30 : 90);
+    this.defaultAnchor = anchor || window.BMAP_ANCHOR_BOTTOM_RIGHT;
+    this.defaultOffset = new window.BMapGL.Size(offset?.x || 30, offset?.y || 90);
   }
-  GeolocationControl.prototype = new BMapGL.Control();
+  GeolocationControl.prototype = new window.BMapGL.Control();
   GeolocationControl.prototype.initialize = function (map) {
     const div = document.createElement('div');
     let className = classnames('sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center', {
@@ -89,7 +60,7 @@ export function createBMapGeolocationControl(BMapGL, callback) {
     div.className = className;
     div.onclick = (e) => {
       e.preventDefault();
-      const geolocation = new BMapGL.Geolocation();
+      const geolocation = new window.BMapGL.Geolocation();
       div.className = classnames(className, 'sf-map-control-loading');
       geolocation.getCurrentPosition((result) => {
         div.className = className;
