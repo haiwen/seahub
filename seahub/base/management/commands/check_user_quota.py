@@ -1,5 +1,4 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import datetime
 import logging
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
@@ -10,9 +9,8 @@ from seaserv import ccnet_api, seafile_api
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    get_site_name, SeafileDB
-from seahub.base.models import QuotaAlertEmailRecord, UserQuotaUsage
-from seahub.settings import QUOTA_ALERT_DAY_INTERVAL
+    get_site_name
+from seahub.base.models import UserQuotaUsage
 from seahub.utils.ccnet_db import CcnetDB
 
 logger = logging.getLogger(__name__)
@@ -31,26 +29,12 @@ class Command(BaseCommand):
             '--email',
             help="Only check this user's quota."
         )
-        parser.add_argument(
-            '-a', '--auto',
-            type=str, 
-            choices=['true', 'false'], 
-            default='false',
-        )
+        
 
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
     
-    def print_msg(self, msg, msg_type='info', record=False):
-        if not record:
-            self.stdout.write('[%s] [%s]: %s' % (str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')), msg_type.upper(), msg))
-            return
-        if msg_type == 'info':
-            logger.info(msg)
-        else:
-            logger.error(msg)
-
-    def send_email(self, user_info, record=False):
+    def send_email(self, user_info):
         if not IS_EMAIL_CONFIGURED:
             return
 
@@ -59,7 +43,7 @@ class Command(BaseCommand):
         email = user_info.username
         quota_total = user_info.quota
         quota_usage = user_info.usage
-
+        
         # get and active user language
         user_language = self.get_user_language(email)
         translation.activate(user_language)
@@ -68,16 +52,14 @@ class Command(BaseCommand):
         data = {'email': email, 'quota_total': quota_total, 'quota_usage': quota_usage}
         contact_email = Profile.objects.get_contact_email_by_user(email)
 
-        self.print_msg('Send email to %s(%s)' % (contact_email, email), record=record)
+        logger.info('Send email to %s(%s)' % (contact_email, email))
 
         send_html_email(_(u'Your quota is almost full on %s') % get_site_name(),
                     'user_quota_full.html', data, None, [contact_email])
 
-        if record:
-            QuotaAlertEmailRecord.objects.create_or_update(email)
-
         # restore current language
         translation.activate(cur_language)
+        
 
     def handle(self, *args, **options):
         ccnet_db = CcnetDB()
@@ -93,27 +75,22 @@ class Command(BaseCommand):
         available_alert_user_email_map = {u.get('email'): u for u in alert_users if u.get('email') in available_alert_user_email_list}
         user_obj_email_list = available_alert_user_email_map.keys()
         email = options.get('email', None)
-        auto_run = options.get('auto', None)
+        
         if email:
             try:
                 if email not in available_alert_user_email_list:
                     return
                 User.objects.get(email=email)
-                self.send_email(email)
-                self.print_msg("Done")
-            except User.DoesNotExist:
-                self.print_msg('User %s not found' % email)
-
-        elif auto_run == 'true':
-    
-            for email in user_obj_email_list:
                 user_info = available_alert_user_email_map.get(email)
-                self.send_email(user_info, True)
+                self.send_email(user_info)
+                print("Done")
+            except User.DoesNotExist:
+                print('User %s not found' % email)
+                
             
         else:
-            
             for email in user_obj_email_list:
                 user_info = available_alert_user_email_map.get(email)
                 self.send_email(user_info)
 
-            self.print_msg("Done")
+            print("Done")
