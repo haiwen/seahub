@@ -951,7 +951,6 @@ ENABLE_SMIME = False
 # Full disk email sending #
 ##########################
 ENABLE_QUOTA_ALERT = False
-QUOTA_ALERT_DAY_INTERVAL = 3
 
 
 ##########################

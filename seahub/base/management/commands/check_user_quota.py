@@ -3,9 +3,6 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 from django.utils import translation
-
-from seaserv import ccnet_api, seafile_api
-
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
@@ -30,7 +27,6 @@ class Command(BaseCommand):
             help="Only check this user's quota."
         )
         
-
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
     

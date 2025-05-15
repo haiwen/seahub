@@ -11,7 +11,6 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.organizations.signals import org_last_activity
-from seahub.settings import QUOTA_ALERT_DAY_INTERVAL
 from seahub.signals import group_member_audit
 from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
