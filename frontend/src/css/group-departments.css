@@ -14,10 +14,25 @@
   overflow-y: auto;
 }
 
-.department-dialog-content .department-dialog-group {
+.department-dialog-content .department-dialog-left-panel {
   flex: 0 0 30%;
   padding: 1rem;
   border-right: 1px solid #eee;
+}
+
+.department-dialog-content .department-dialog-left-panel .input-icon-addon {
+  min-width: 2rem;
+}
+
+.department-dialog-content .department-dialog-left-panel .clear-keyword-icon {
+  line-height: 1;
+  padding: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.department-dialog-content .department-dialog-left-panel .clear-keyword-icon:hover {
+  background: #efefef;
 }
 
 .department-dialog-content .department-dialog-member {
