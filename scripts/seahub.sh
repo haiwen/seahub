@@ -172,7 +172,7 @@ function start_seahub () {
     check_init_admin;
 
     export DJANGO_SETTINGS_MODULE=seahub.settings
-    $PYTHON $gunicorn_exe seahub.wsgi:application -c "${gunicorn_conf}" --preload &
+    $PYTHON $gunicorn_exe seahub.wsgi:application -c "${gunicorn_conf}" &
 
     # Ensure seahub is started successfully
     sleep 5
