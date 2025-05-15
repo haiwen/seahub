@@ -76,9 +76,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
     const getUsers = async () => {
       try {
         const res = await seafileAPI.searchUsers(searchValue);
-        const userList = res.data.users
-          .filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()));
-
+        const userList = res.data.users.filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()));
         setOptions(userList);
       } catch (err) {
         toaster.danger(Utils.getErrorMsg(err));
