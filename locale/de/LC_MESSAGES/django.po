@@ -81,7 +81,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 10:57+0800\n"
+"POT-Creation-Date: 2025-05-15 17:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024-2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
@@ -598,7 +598,7 @@ msgstr "Zugriff verweigert."
 
 #: seahub/api2/endpoints/file.py:332
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Dateiendung ist nicht in der Whitelist freigegeben"
 
 #: seahub/api2/endpoints/file.py:743 seahub/api2/endpoints/file.py:763
 #: seahub/api2/endpoints/via_repo_token.py:1167
@@ -965,7 +965,7 @@ msgstr "Ein Freigabelink für Sie"
 #: seahub/api2/views.py:1903
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Sie haben keine Admin-Rechte für diesen Bereich"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -1255,12 +1255,12 @@ msgstr "Standard"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Dieses Team {org_name} ist deaktiviert.."
 
 #: seahub/base/middleware.py:51
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Bitte kontaktieren Sie {SUPPORT_EMAIL}, wenn Sie das Team aktivieren wollen."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1608,11 +1608,11 @@ msgstr "Sie wurden eingeladen, einer Gruppe auf %s beizutreten."
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Für die Gruppe gibt es keinen Einladungslink"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Der Einladungslink für die Gruppe funktioniert nicht"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -2159,7 +2159,7 @@ msgstr "Willkommen zurück! Sie sind bereits angemeldet."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Sie werden in wenigen Sekunden auf die Startseite umgeleitet."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2229,7 +2229,7 @@ msgstr "Nächste Seite"
 msgid "Per page: "
 msgstr "Einträge pro Seite: "
 
-#: seahub/organizations/views.py:314 seahub/thumbnail/views.py:160
+#: seahub/organizations/views.py:316 seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "Ungültiges Token."
 
@@ -3059,7 +3059,7 @@ msgstr "Zwei-Faktor-Authentifizierung deaktivieren"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Wollen Sie die Zwei-Faktor-Authentifizierung wirklich deaktivieren? Dies beeinträchtigt die Sicherheit Ihres Benutzerkontos."
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"

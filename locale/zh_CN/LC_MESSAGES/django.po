@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 10:57+0800\n"
+"POT-Creation-Date: 2025-05-15 17:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2025\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -2168,7 +2168,7 @@ msgstr "下一页"
 msgid "Per page: "
 msgstr "每页："
 
-#: seahub/organizations/views.py:314 seahub/thumbnail/views.py:160
+#: seahub/organizations/views.py:316 seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "非合法 token。"
 
