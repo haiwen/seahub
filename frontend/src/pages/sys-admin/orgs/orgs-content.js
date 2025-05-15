@@ -227,7 +227,7 @@ class Item extends Component {
       };
     });
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
-    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', item.org_name);
+    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', Utils.HTMLescape(item.org_name));
 
     return (
       <Fragment>
