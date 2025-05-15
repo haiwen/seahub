@@ -26,6 +26,13 @@ class Command(BaseCommand):
             '--email',
             help="Only check this user's quota."
         )
+
+        parser.add_argument(
+            '-a', '--auto',
+            type=str,
+            choices=['true', 'false'],
+            default='false',
+        )
         
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
@@ -58,8 +65,16 @@ class Command(BaseCommand):
         
 
     def handle(self, *args, **options):
+        auto_run = options.get('auto', None)
+        email = options.get('email', None)
+        
         ccnet_db = CcnetDB()
-        alert_users = UserQuotaUsage.objects.get_quota_alert_users()
+        if auto_run == 'true':
+            recent_days = 1
+        else:
+            recent_days = -1
+        
+        alert_users = UserQuotaUsage.objects.get_quota_alert_users(recent_days=recent_days)
         if not alert_users:
             return
         
@@ -70,7 +85,7 @@ class Command(BaseCommand):
             return
         available_alert_user_email_map = {u.get('email'): u for u in alert_users if u.get('email') in available_alert_user_email_list}
         user_obj_email_list = available_alert_user_email_map.keys()
-        email = options.get('email', None)
+        
         
         if email:
             try:

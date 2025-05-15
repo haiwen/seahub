@@ -547,13 +547,20 @@ def add_group_invite_log(sender, org_id, group_id, users, operator, operation, *
 
 class UserQuotaUsageManager(models.Manager):
     
-    def get_quota_alert_users(self, threshold=0.9):
-        three_days_ago = timezone.now() - datetime.timedelta(days=1)
-        alert_users = self.filter(
-            timestamp__gte=three_days_ago,
-            quota__gt=0,
-            usage__gt=F('quota') * threshold
-        )
+    def get_quota_alert_users(self, threshold=0.9, recent_days=1):
+        if recent_days == -1:
+            alert_users = self.filter(
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+        else:
+            recent_date = timezone.now() - datetime.timedelta(days=recent_days)
+            alert_users = self.filter(
+                timestamp__gte=recent_date,
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+            
         if not alert_users.exists():
             return None
         
