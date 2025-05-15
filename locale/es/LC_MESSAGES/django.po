@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 10:57+0800\n"
+"POT-Creation-Date: 2025-05-15 17:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015\n"
 "Language-Team: Spanish (http://app.transifex.com/haiwen/seahub/language/es/)\n"
@@ -2171,7 +2171,7 @@ msgstr "Siguiente"
 msgid "Per page: "
 msgstr "Por página:"
 
-#: seahub/organizations/views.py:314 seahub/thumbnail/views.py:160
+#: seahub/organizations/views.py:316 seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "Identificador inválido"
 

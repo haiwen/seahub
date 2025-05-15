@@ -594,7 +594,7 @@
   "Try_again": "Try again",
   "Deprecation": "Deprecation",
   "Generated_content_x_words": "Generated content {{count}} words",
-  "Ask_AI_anything": "Ask AI anything...",
+  "Ask_AI_anything": "Please enter the command...",
   "Thinking": "Thinking...",
   "Translation_error_message": "Translation error, please try again.",
   "The_translation_content_cannot_be_empty": "The translation content cannot be empty",
@@ -620,7 +620,18 @@
   "Select_seatable_rows": "Select seatable rows",
   "Add_rows_record": "Add rows record",
   "Double_click_then_adjust_field_width": "Double click, then adjust field width",
+  "SeaTable_row": "SeaTable row",
+  "Please_select_one_row_record": "Please select one row record",
+  "No_linked_records": "No linked records",
   "Insert_chart": "Insert chart",
   "Edit_chart": "Edit chart",
-  "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first"
+  "Please_complete_the_chart_configuration_first": "Please complete the chart configuration first",
+  "chart": "chart",
+  "Image_is_upload_error": "Image upload failed, please delete it and try again",
+  "Table_not_exist": "The table does not exist, please delete the current table element",
+  "Row_not_exist": "The row data does not exist, please delete the current row element",
+  "Presentation": "Presentation",
+  "More_operation": "More operation",
+  "Property": "Property",
+  "Comment_list": "Comment list"
 }
