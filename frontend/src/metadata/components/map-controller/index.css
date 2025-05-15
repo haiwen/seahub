@@ -38,8 +38,8 @@
 }
 
 .sf-map-control-container.sf-map-geolocation-control-container {
-  right: 30px!important;
-  bottom: 30px!important;
+  right: 30px !important;
+  bottom: 30px !important;
 }
 
 .sf-map-control-container .sf-map-geolocation-control {
@@ -77,7 +77,7 @@
 
 @media (max-width: 768px) {
   .sf-map-control-container.sf-map-geolocation-control-container {
-    bottom: 90px!important;
+    bottom: 90px !important;
   }
   .sf-map-control-container.sf-map-zoom-control-container {
     bottom: 90px !important;
