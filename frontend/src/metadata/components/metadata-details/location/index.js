@@ -18,6 +18,7 @@ import { eventBus } from '../../../../components/common/event-bus';
 import './index.css';
 
 class Location extends React.Component {
+
   static propTypes = {
     position: PropTypes.object,
     record: PropTypes.object,
@@ -47,7 +48,7 @@ class Location extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { position, record } = this.props;
-    if (!isValidPosition(position?.lng, position?.lat)) return;
+    if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
     if (prevProps.position?.lng === position?.lng && prevProps.position?.lat === position?.lat) return;
     this.currentPosition = position;
     this.addMarkerByPosition(position.lng, position.lat);
@@ -62,7 +63,7 @@ class Location extends React.Component {
     if (this.map) return;
 
     const { position, record } = this.props;
-    if (!isValidPosition(position?.lng, position?.lat)) return;
+    if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
     this.currentPosition = position;
 
     this.setState({ isLoading: true, address: record._location_translated?.address });
@@ -166,7 +167,14 @@ class Location extends React.Component {
     const isValid = isValidPosition(position?.lng, position?.lat);
     return (
       <>
-        <DetailItem field={{ key: PRIVATE_COLUMN_KEY.LOCATION, type: CellType.GEOLOCATION, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION) }} readonly={true}>
+        <DetailItem
+          field={{
+            key: PRIVATE_COLUMN_KEY.LOCATION,
+            type: CellType.GEOLOCATION,
+            name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION)
+          }}
+          readonly={true}
+        >
           {isValid ? (
             <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter">
               {!isLoading && this.mapType && address ? (
