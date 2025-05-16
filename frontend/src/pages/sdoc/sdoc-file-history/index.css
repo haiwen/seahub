@@ -56,6 +56,14 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
   padding: 0;
+  height: 28px;
+  width: 28px;
+  border-radius: 3px;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
+  cursor: pointer;
+  background-color: #EFEFEF;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .fas,
@@ -153,7 +161,6 @@
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range-title {
   height: 100%;
-  width: 100%;
   font-size: 1rem;
   font-weight: bolder;
   line-height: 29px;
@@ -162,6 +169,17 @@
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close {
   opacity: 0.7;
   cursor: pointer;
+  width: 24px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 2px;
+}
+
+.sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close:hover {
+  opacity: 1;
+  cursor: pointer;
+  background-color: #EFEFEF;
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-diff-switch {

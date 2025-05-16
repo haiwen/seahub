@@ -591,6 +591,21 @@ a, a:hover {
   color: #666 !important;
 }
 
+.action-icon.sf3-font-copy1,
+.action-icon.sf3-font-delete1 {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon.sf3-font-delete1:hover,
+.action-icon.sf3-font-copy1:hover {
+  background-color: #EFEFEF;
+}
+
 .action-icon:focus,
 .action-icon:hover,
 .attr-action-icon:focus,

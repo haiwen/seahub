@@ -67,8 +67,13 @@
 .sf-md-viewer-topbar .sf-md-header-more-tool {
   width: 28px;
   height: 28px;
+  border-radius: 3px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #666;
+}
+
+.sf-md-viewer-topbar .sf-md-header-more-tool:hover {
+  background-color: #EFEFEF;
 }
