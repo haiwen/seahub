@@ -177,6 +177,23 @@ class DepartmentDetailDialog extends React.Component {
     this.setState({ newMembersTempObj: newMembersTempObj });
   };
 
+  unselectAll = () => {
+    const { keyword, departmentMembers, usersFound } = this.state;
+    const members = keyword ? usersFound : departmentMembers; // 'members': to be compatible with the old code
+
+    let { newMembersTempObj, selectedMemberMap } = this.state;
+
+    for (let member of members) {
+      if (Object.keys(selectedMemberMap).indexOf(member.email) !== -1) {
+        continue;
+      }
+      if (member.email in newMembersTempObj) {
+        delete newMembersTempObj[member.email];
+      }
+    }
+    this.setState({ newMembersTempObj: newMembersTempObj });
+  };
+
   onKeywordChanged = (e) => {
     this.setState({ keyword: e.target.value }, () => {
       const { keyword } = this.state;
@@ -279,6 +296,7 @@ class DepartmentDetailDialog extends React.Component {
             onUserChecked={this.onMemberChecked}
             currentDepartment={this.state.currentDepartment}
             selectAll={this.selectAll}
+            unselectAll={this.unselectAll}
             loading={this.state.membersLoading}
             selectedMemberMap={this.state.selectedMemberMap}
             isLoadingMore={this.state.isLoadingMore}

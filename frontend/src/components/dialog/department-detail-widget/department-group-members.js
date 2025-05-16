@@ -94,6 +94,7 @@ const DepartmentGroupMembersPropTypes = {
   currentDepartment: PropTypes.object.isRequired,
   selectedMemberMap: PropTypes.object,
   selectAll: PropTypes.func.isRequired,
+  unselectAll: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   usedFor: PropTypes.oneOf(['add_group_member', 'add_user_share']),
   keyword: PropTypes.string,
@@ -132,7 +133,7 @@ class DepartmentGroupMembers extends Component {
             {unselectedItems.length > 0 ?
               <div className='select-all' onClick={this.props.selectAll}>{gettext('Select All')}</div>
               :
-              <div className='select-all-disable'>{gettext('Select All')}</div>
+              <div className='select-all' onClick={this.props.unselectAll}>{gettext('Unselect All')}</div>
             }
           </div>
           {itemsShown.length > 0 ?
