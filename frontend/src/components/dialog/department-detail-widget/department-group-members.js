@@ -121,6 +121,7 @@ class DepartmentGroupMembers extends Component {
 
     const itemsShown = keyword ? usersFound : members;
     const unselectedItems = itemsShown.filter(item => !(item.email in memberSelected) && !selectedMemberMap[item.email]);
+    const addedItems = itemsShown.filter(item => selectedMemberMap[item.email]);
 
     const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('It is already shared to user');
     return (
@@ -130,11 +131,16 @@ class DepartmentGroupMembers extends Component {
             <div className='department-name'>
               {keyword ? gettext('Search results') : headerTitle}
             </div>
-            {unselectedItems.length > 0 ?
-              <div className='select-all' onClick={this.props.selectAll}>{gettext('Select All')}</div>
-              :
-              <div className='select-all' onClick={this.props.unselectAll}>{gettext('Unselect All')}</div>
-            }
+            {itemsShown.length > 0 && (
+              <>
+                {unselectedItems.length > 0
+                  ? <div className='select-all' onClick={this.props.selectAll}>{gettext('Select all')}</div>
+                  : itemsShown.length > addedItems.length
+                    ? <div className='select-all' onClick={this.props.unselectAll}>{gettext('Unselect all')}</div>
+                    : ''
+                }
+              </>
+            )}
           </div>
           {itemsShown.length > 0 ?
             <Fragment>
