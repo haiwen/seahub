@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../../icon';
 import TextTranslation from '../../../utils/text-translation';
-import { baiduMapKey, gettext } from '../../../utils/constants';
+import { baiduMapKey, gettext, googleMapKey } from '../../../utils/constants';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../../../metadata/constants';
 
 export const KEY_ADD_VIEW_MAP = {
@@ -46,7 +46,7 @@ export const getNewViewSubMenu = () => {
   const options = [...ADD_VIEW_OPTIONS];
   const hasMapOption = options.some(opt => opt.type === VIEW_TYPE.MAP);
 
-  if (!hasMapOption && baiduMapKey) {
+  if (!hasMapOption && (baiduMapKey || googleMapKey)) {
     options.push({
       key: KEY_ADD_VIEW_MAP.ADD_MAP,
       type: VIEW_TYPE.MAP,

@@ -13,3 +13,11 @@ export const MAP_VIEW_TOOLBAR_MODE = {
   MAP: 'map',
   GALLERY: 'gallery',
 };
+
+export const DEFAULT_POSITION = { lng: 104.195, lat: 35.861 };
+
+export const DEFAULT_ZOOM = 4;
+
+export const MAX_ZOOM = 21;
+
+export const MIN_ZOOM = 3;
